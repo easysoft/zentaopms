@@ -78,6 +78,7 @@ class projectModel extends model
         if($project and $project->type == 'ops')
         {
             unset($this->lang->project->menu->story);
+            unset($this->lang->project->menu->qa);
             unset($this->lang->project->subMenu->qa->bug);
             unset($this->lang->project->subMenu->qa->build);
             unset($this->lang->project->subMenu->qa->testtask);
