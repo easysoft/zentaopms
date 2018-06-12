@@ -1,4 +1,5 @@
 .block-statistic .nav-stacked {overflow: auto; max-height: 220px;}
 .nav > li > .btn {padding: 0 5px; line-height: 24px; margin: 3px; color: #3C4353;}
 .dashboard .panel-body {max-height: 400px; overflow: auto;}
+.dashboard .panel-actions {padding-top: 7px;}
 .dashboard .panel.table-scrolled .table-header-fixed {border-bottom: 1px solid #ddd; box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 4px 0 rgba(0,0,0,0.025);}
