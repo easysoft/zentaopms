@@ -16,7 +16,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->my->myProject;?></span></span>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn'") ?>
+    <?php if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create'), "<i class='icon-plus'></i> " . $lang->my->home->createProject, '', "class='btn btn-primary'") ?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>

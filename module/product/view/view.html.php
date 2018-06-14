@@ -107,11 +107,11 @@
                     <tr>
                       <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
                       <td><em><?php echo zget($users, $product->PO);?></em></td>
-                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->release;?></th>
+                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->qa;?></th>
                       <td><em><?php echo zget($users, $product->QD);?></em></td>
                     </tr>
                     <tr>
-                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->qa;?></th>
+                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->release;?></th>
                       <td><em><?php echo zget($users, $product->RD);?></em></td>
                     </tr>
                   </tbody>

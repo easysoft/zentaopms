@@ -47,7 +47,19 @@ var browseType = '<?php echo $browseType;?>';
       </div>
       <?php if(empty($docs)):?>
       <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?></p>
+        <p>
+          <?php if($libID):?>
+          <span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+          <?php elseif($browseType == 'fastsearch'):?>
+          <span class="text-muted"><?php echo $lang->doc->noSearchedDoc;?></span>
+          <?php elseif($browseType == 'byediteddate'):?>
+          <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
+          <?php elseif($browseType == 'openedbyme'):?>
+          <span class="text-muted"><?php echo $lang->doc->noOpenedDoc;?></span>
+          <?php elseif($browseType == 'collectedbyme'):?>
+          <span class="text-muted"><?php echo $lang->doc->noCollectedDoc;?></span>
+          <?php endif;?>
+        </p>
       </div>
       <?php else:?>
       <div class="panel-body has-table">
