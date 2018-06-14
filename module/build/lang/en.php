@@ -58,3 +58,4 @@ $lang->build->placeholder->filePath = ' Path of this Build package for downloadi
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, created by <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";
+$lang->backhome = 'back';
