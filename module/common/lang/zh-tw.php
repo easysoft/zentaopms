@@ -635,6 +635,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     unset($lang->searchObjects['project']);
     unset($lang->searchObjects['build']);
     unset($lang->searchObjects['testtask']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['testreport']);
 }
 
 if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
@@ -665,14 +667,13 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->product->menu);
     unset($lang->product->menuOrder);
 
-    unset($lang->searchObjects['bug']);
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['product']);
     unset($lang->searchObjects['testcase']);
-    unset($lang->searchObjects['build']);
     unset($lang->searchObjects['release']);
     unset($lang->searchObjects['productplan']);
-    unset($lang->searchObjects['testtask']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['testreport']);
 }
 
 if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
@@ -756,30 +757,26 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->testsuite->menu = new stdclass();
-    $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> 建套件|testsuite|create|productID=%s", 'float' => 'right');
 
     $lang->testsuite->menuOrder[5]  = 'product';
-    $lang->testsuite->menuOrder[10] = 'create';
 
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
+    $lang->testtask->menu->totalStatus = '所有|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
     $lang->testtask->menu->wait        = '待測版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testtask->menu->doing       = '測試中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testtask->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
     $lang->testtask->menu->done        = '已測版本|testtask|browse|productID=%s&branch=%s&type=%s,done';
-    $lang->testtask->menu->totalStatus = '全部|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
     $lang->testtask->menu->report      = array('link' => '報告|testreport|browse', 'alias' => 'view,create,edit');
-    $lang->testtask->menu->create      = array('link' => "<i class='icon-plus'></i> 提交測試|testtask|create|productID=%s", 'float' => 'right');
 
     $lang->testtask->menuOrder[5]  = 'product';
     $lang->testtask->menuOrder[10] = 'scope';
-    $lang->testtask->menuOrder[15] = 'wait';
-    $lang->testtask->menuOrder[20] = 'doing';
-    $lang->testtask->menuOrder[25] = 'blocked';
-    $lang->testtask->menuOrder[30] = 'done';
-    $lang->testtask->menuOrder[35] = 'totalStatus';
+    $lang->testtask->menuOrder[15] = 'totalStatus';
+    $lang->testtask->menuOrder[20] = 'wait';
+    $lang->testtask->menuOrder[25] = 'doing';
+    $lang->testtask->menuOrder[30] = 'blocked';
+    $lang->testtask->menuOrder[35] = 'done';
     $lang->testtask->menuOrder[40] = 'report';
-    $lang->testtask->menuOrder[45] = 'create';
 
     $lang->testreport->menu      = $lang->testtask->menu;
     $lang->testreport->menuOrder = $lang->testtask->menuOrder;
@@ -827,5 +824,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['task']);
     unset($lang->searchObjects['release']);
+    unset($lang->searchObjects['project']);
     unset($lang->searchObjects['productplan']);
 }

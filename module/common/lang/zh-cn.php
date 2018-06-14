@@ -635,6 +635,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     unset($lang->searchObjects['project']);
     unset($lang->searchObjects['build']);
     unset($lang->searchObjects['testtask']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['testreport']);
 }
 
 if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
@@ -665,14 +667,13 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->product->menu);
     unset($lang->product->menuOrder);
 
-    unset($lang->searchObjects['bug']);
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['product']);
     unset($lang->searchObjects['testcase']);
-    unset($lang->searchObjects['build']);
     unset($lang->searchObjects['release']);
     unset($lang->searchObjects['productplan']);
-    unset($lang->searchObjects['testtask']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['testreport']);
 }
 
 if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
@@ -823,5 +824,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['task']);
     unset($lang->searchObjects['release']);
+    unset($lang->searchObjects['project']);
     unset($lang->searchObjects['productplan']);
 }
