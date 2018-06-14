@@ -28,7 +28,7 @@
   {
       if($field) $visibleFields[$field] = '';
   }
-  foreach(explode(',', $this->config->story->create->requiredFields) as $field)
+  foreach(explode(',', $config->story->create->requiredFields) as $field)
   {
       if($field)
       {

@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('flow', $this->config->global->flow);?>
+<?php js::set('flow', $config->global->flow);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='input-group w-150px'>

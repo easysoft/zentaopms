@@ -30,7 +30,7 @@
   {
       if($field)$visibleFields[$field] = '';
   }
-  foreach(explode(',', $this->config->testcase->edit->requiredFields) as $field)
+  foreach(explode(',', $config->testcase->edit->requiredFields) as $field)
   {
       if($field)
       {

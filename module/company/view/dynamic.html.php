@@ -27,7 +27,7 @@
     <?php endforeach;?>
     <div class="input-control space w-150px"><?php echo html::select('account', $users, $account, 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
-    <?php if($this->config->global->flow != 'onlyTest'):?>
+    <?php if($config->global->flow != 'onlyTest'):?>
     <div class="input-control space w-150px"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"'); ?></div>
     <?php endif;?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>

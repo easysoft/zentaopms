@@ -49,7 +49,7 @@
         <div class="detail-title"><?php echo $lang->testtask->legendBasicInfo;?></div>
         <div class="detail-content">
           <table class="table table-data">
-            <?php if($this->config->global->flow != 'onlyTest'):?>
+            <?php if($config->global->flow != 'onlyTest'):?>
             <tr>
               <th class='w-80px'><?php echo $lang->testtask->project;?></th>
               <td><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName);?></td>

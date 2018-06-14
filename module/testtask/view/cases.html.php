@@ -28,7 +28,7 @@
       <?php
       $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
 
       $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
       $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
@@ -39,8 +39,8 @@
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
 
-      $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
-      $this->config->testcase->datatable->fieldList['actions']['width'] = '90';
+      $config->testcase->datatable->defaultField = $config->testtask->datatable->defaultField;
+      $config->testcase->datatable->fieldList['actions']['width'] = '90';
 
       $setting = $this->datatable->getSetting('testtask');
       $widths  = $this->datatable->setFixedFieldWidth($setting);

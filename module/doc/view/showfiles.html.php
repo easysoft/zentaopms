@@ -24,7 +24,7 @@
           <div class="btn-group">
             <form class='input-control has-icon-right table-col' method='get'>
               <?php
-              if($this->config->requestType == 'GET')
+              if($config->requestType == 'GET')
               {
                   echo html::hidden('m',          'doc');
                   echo html::hidden('f',          'showFiles');

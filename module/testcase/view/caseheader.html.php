@@ -1,6 +1,6 @@
-<?php js::set('flow', $this->config->global->flow);?>
+<?php js::set('flow', $config->global->flow);?>
 <?php if(!isset($branch)) $branch = 0;?>
-<?php if($this->config->global->flow == 'full'):?>
+<?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
     <div class="title">
@@ -25,7 +25,7 @@
     if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
     $menuType = $menuItem->name;
     if(!$config->testcase->needReview and empty($config->testcase->forceReview) and $menuType == 'wait') continue;
-    if($this->config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
+    if($config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
     if($hasBrowsePriv and $menuType == 'QUERY')
     {
         if(isset($lang->custom->queryList))

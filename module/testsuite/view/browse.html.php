@@ -12,8 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testsuite->confirmDelete)?>
-<?php js::set('flow', $this->config->global->flow);?>
-<?php if($this->config->global->flow != 'onlyTest'):?>
+<?php js::set('flow', $config->global->flow);?>
+<?php if($config->global->flow != 'onlyTest'):?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <a href class='btn btn-link btn-active-text'>
