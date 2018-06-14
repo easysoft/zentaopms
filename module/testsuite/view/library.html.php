@@ -17,58 +17,9 @@ js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
 js::set('confirmDelete', $lang->testsuite->confirmDelete);
 js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
-js::set('flow',   $this->config->global->flow);
+js::set('flow',          $config->global->flow);
 ?>
-<?php if($this->config->global->flow == 'onlyTest'):?>
-<style>
-.nav > li > .btn-group > a, .nav > li > .btn-group > a:hover, .nav > li > .btn-group > a:focus{background: #1a4f85; border-color: #164270;}
-#querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
-</style>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-  </div>
-  <ul class='submenu hidden'>
-    <?php echo "<li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;{$lang->testcase->bySearch}</a></li> ";?>
-
-    <li class='right'>
-      <div class='btn-group' id='createActionMenu'>
-        <?php
-        $misc = common::hasPriv('testsuite', 'createCase') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
-        $link = common::hasPriv('testsuite', 'createCase') ?  $this->createLink('testsuite', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)) : '#';
-        echo html::a($link, "<i class='icon-plus'></i>" . $lang->testcase->create, '', $misc);
-        ?>
-        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'>
-          <span class='caret'></span>
-        </button>
-        <ul class='dropdown-menu pull-right'>
-        <?php
-        $misc = common::hasPriv('testsuite', 'batchCreateCase') ? '' : "class=disabled";
-        $link = common::hasPriv('testsuite', 'batchCreateCase') ?  $this->createLink('testsuite', 'batchCreateCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)) : '#';
-        echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
-        ?>
-        </ul>
-      </div>
-    </li>
-
-    <li class='right'>
-      <?php
-      $link = common::hasPriv('testsuite', 'import') ?  $this->createLink('testsuite', 'import', "libID=$libID") : '#';
-      if(common::hasPriv('testsuite', 'import')) echo html::a($link, "<i class='icon-upload-alt'></i> " . $lang->testcase->importFile, '', "class='export'");
-      ?>
-    </li>
-
-    <li class='right'>
-      <?php
-      $link = common::hasPriv('testsuite', 'exportTemplet') ?  $this->createLink('testsuite', 'exportTemplet', "libID=$libID") : '#';
-      if(common::hasPriv('testsuite', 'exportTemplet')) echo html::a($link, "<i class='icon-download-alt'></i> " . $lang->testsuite->exportTemplet, '', "class='export'");
-      ?>
-    </li>
-  </ul>
-</div>
-<?php else:?>
-<div id='pageActions'>
-  <?php common::printLink('testsuite', 'libView', "libID=$libID", "<i class='icon icon-list-alt muted'> </i>" . $lang->testsuite->view, '', "class='btn'");?>
-</div>
+<?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
     <div class="title">
@@ -83,7 +34,6 @@ js::set('flow',   $this->config->global->flow);
       ?>
     </div>
   </div>
-<?php endif;?>
   <div class='btn-toolbar pull-left'>
     <?php
     if(common::hasPriv('testsuite', 'library'))
@@ -104,6 +54,7 @@ js::set('flow',   $this->config->global->flow);
     <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -250,11 +201,11 @@ js::set('flow',   $this->config->global->flow);
 </div>
 <script>
 $('#module' + moduleID).addClass('active');
+<?php if($config->global->flow == 'full'):?>
 $('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text').append("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
+<?php endif;?>
 if(flow == 'onlyTest')
 {
-    toggleSearch();
-
     $('#subNavbar > .nav > li').removeClass('active');
     $('#subNavbar > .nav > li[data-id=' + browseType + ']').addClass('active');
 }

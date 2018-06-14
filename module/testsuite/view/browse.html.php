@@ -26,6 +26,11 @@
   </div>
 </div>
 <?php endif;?>
+<?php if(empty($suites)):?>
+<div class="table-empty-tip">
+  <p><span class="text-muted"><?php echo $lang->testsuite->noTestsuite;?></span> <?php common::printLink('testsuite', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-info'");?></p>
+</div>
+<?php else:?>
 <div id='mainContent' class='main-table'>
   <table class='table has-sort-head' id='suiteList'>
     <thead>
@@ -71,4 +76,5 @@
   <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   <?php endif;?>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
