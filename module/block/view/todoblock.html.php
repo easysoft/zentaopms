@@ -50,9 +50,9 @@
         </div>
         <div class="form-group">
           <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
-          <div class="col-sm-9 required">
+          <div class="col-sm-9 ">
             <div class="input-control has-icon-right">
-              <input type="text" class="form-control form-date" id="todoDate" name="date" placeholder="(<?php echo $lang->required;?>)">
+              <input type="text" class="form-control form-date" id="todoDate" name="date" placeholder="">
               <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
@@ -98,7 +98,12 @@
         <span class="todo-check icon icon-check-circle"></span>
         <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' <?php echo $appid?>>
           <span class="todo-title"><?php echo $todo->name;?></span>
-          <span class="todo-pri todo-pri-<?php echo $todo->pri?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span><span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
+          <span class="todo-pri todo-pri-<?php echo $todo->pri?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span>
+          <?php if ($todo->date == '2030-01-01') :?>
+          <span class="c-date"><?php echo $lang->todo->periods['future'] ?></span>
+          <?php else:?>
+          <span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
+          <?php endif;?>
         </a>
       </li>
       <?php endforeach;?>
