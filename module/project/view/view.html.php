@@ -71,7 +71,7 @@
             <div class="panel-body">
               <div class="row row-grid">
                 <?php $i = 9; $j = 0;?>
-                <?php if($this->config->global->flow != 'onlyTask'):?>
+                <?php if($config->global->flow != 'onlyTask'):?>
                 <?php if($project->PM):?>
                 <?php $i--;?>
                 <?php unset($teamMembers[$project->PM]);?>
@@ -166,7 +166,7 @@
                 </p>
               </div>
             </div>
-            <?php if($this->config->global->flow != 'onlyTask'):?>
+            <?php if($config->global->flow != 'onlyTask'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->manageProducts;?></strong>

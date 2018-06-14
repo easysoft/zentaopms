@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php echo $this->fetch('block', 'dashboard', 'module=qa');?>
 <script>
-<?php if($this->config->qa->homepage != 'index'):?>
+<?php if($config->qa->homepage != 'index'):?>
 $(function()
 {
     $('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"index\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->build->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->build->confirmUnlinkBug)?>
-<?php js::set('flow', $this->config->global->flow)?>
+<?php js::set('flow', $config->global->flow)?>
 <?php if(isonlybody()):?>
 <style>
 #stories .action{display:none;}
@@ -38,7 +38,7 @@ tbody tr td:first-child input{display:none;}
     <?php
     if(!$build->deleted)
     {
-        if($this->config->global->flow != 'onlyTest')
+        if($config->global->flow != 'onlyTest')
         {
             if(common::hasPriv('build', 'linkStory')) echo html::a(inlink('view', "buildID=$build->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-link'");
             if(common::hasPriv('build', 'linkBug'))   echo html::a(inlink('view', "buildID=$build->id&type=bug&link=true"), '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-link'");
@@ -50,7 +50,7 @@ tbody tr td:first-child input{display:none;}
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <?php if($this->config->global->flow == 'onlyTest'):?>
+  <?php if($config->global->flow == 'onlyTest'):?>
   <div class='detail'>
     <div class='detail-title'><?php echo $lang->build->desc;?></div>
     <div class='detail-content article-content'><?php echo $build->desc;?></div>
@@ -314,7 +314,7 @@ tbody tr td:first-child input{display:none;}
                   <th><?php echo $lang->build->filePath;?></th>
                   <td style='word-break:break-all;'><?php echo html::a($build->filePath, $build->filePath, '_blank');?></td>
                 </tr>
-                <?php if($this->config->global->flow != 'onlyTest'):?>
+                <?php if($config->global->flow != 'onlyTest'):?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>
                   <td>
@@ -329,7 +329,7 @@ tbody tr td:first-child input{display:none;}
               </table>
             </div>
           </div>
-          <?php if($this->config->global->flow != 'onlyTest'):?>
+          <?php if($config->global->flow != 'onlyTest'):?>
           <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
           <?php endif;?>
           <?php include '../../common/view/action.html.php';?>
@@ -339,7 +339,7 @@ tbody tr td:first-child input{display:none;}
   </div>
   <?php endif;?>
 </div>
-<?php if($this->config->global->flow != 'onlyTest'):?>
+<?php if($config->global->flow != 'onlyTest'):?>
 <?php js::set('param', helper::safe64Decode($param))?>
 <?php js::set('link', $link)?>
 <?php js::set('buildID', $build->id)?>

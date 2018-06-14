@@ -27,7 +27,7 @@
         <nav id='modulemenu'>
           <ul></ul>
         </nav>
-        <?php if($this->config->global->flow != 'onlyTest'):?>
+        <?php if($config->global->flow != 'onlyTest'):?>
         <nav id='featurebar'>
           <ul></ul>
         </nav>

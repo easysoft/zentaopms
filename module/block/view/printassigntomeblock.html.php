@@ -13,11 +13,15 @@
 <div id='assigntomeBlock'>
   <ul class="nav nav-secondary">
     <?php foreach($hasViewPriv as $type => $bool):?>
+    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTask' && $type == 'task') continue;?>
+    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTest' && $type == 'bug') continue;?>
     <li<?php if($type === 'todo') echo ' class="active"';?>><a data-tab href='#assigntomeTab-<?php echo $type;?>'><?php echo $lang->block->availableBlocks->$type;?></a></li>
     <?php endforeach;?>
   </ul>
   <div class="tab-content">
     <?php foreach($hasViewPriv as $type => $bool):?>
+    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTask' && $type == 'task') continue;?>
+    <?php if($config->global->flow != 'full' && $config->global->flow != 'onlyTest' && $type == 'bug') continue;?>
     <div class="tab-pane<?php if($type === 'todo') echo ' active';?>" id="assigntomeTab-<?php echo $type?>">
       <?php include "{$type}block.html.php";?>
     </div>

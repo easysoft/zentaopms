@@ -58,3 +58,4 @@ $lang->build->placeholder->filePath = ' 該版本軟件包下載存儲地址';
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$extra</strong>。' . "\n";
+$lang->backhome = '返回';

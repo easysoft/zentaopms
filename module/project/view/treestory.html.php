@@ -14,7 +14,7 @@
       common::printIcon('story', 'review', $vars, $story, 'list', 'glasses', '', 'btn btn-info btn-icon');
       common::printIcon('story', 'close',  $vars, $story, 'list', 'off', '', 'btn btn-info btn-icon iframe', true);
       common::printIcon('story', 'edit',   $vars, $story, 'list', '', '', 'btn btn-info btn-icon');
-      if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'btn btn-info btn-icon');
+      if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'btn btn-info btn-icon');
       ?>
     </div>
   </div>

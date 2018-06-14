@@ -635,6 +635,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     unset($lang->searchObjects['project']);
     unset($lang->searchObjects['build']);
     unset($lang->searchObjects['testtask']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['testreport']);
 }
 
 if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
@@ -665,14 +667,13 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->product->menu);
     unset($lang->product->menuOrder);
 
-    unset($lang->searchObjects['bug']);
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['product']);
     unset($lang->searchObjects['testcase']);
-    unset($lang->searchObjects['build']);
     unset($lang->searchObjects['release']);
     unset($lang->searchObjects['productplan']);
-    unset($lang->searchObjects['testtask']);
+    unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['testreport']);
 }
 
 if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
@@ -714,32 +715,34 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
-    $lang->bug->menu->unclosed      = '未關閉|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->all           = '所有|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
-    $lang->bug->menu->assigntome    = '指派給我|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
+    $lang->bug->menu->unclosed      = '未關閉|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->openedbyme    = '由我創建|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
+    $lang->bug->menu->assigntome    = '指派給我|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
     $lang->bug->menu->resolvedbyme  = '由我解決|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->toclosed      = '待關閉|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
+    $lang->bug->menu->unresolved    = '未解決|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->unconfirmed   = '未確認|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
     $lang->bug->menu->assigntonull  = '未指派|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
-    $lang->bug->menu->unresolved    = '未解決|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
-    $lang->bug->menu->toclosed      = '待關閉|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
     $lang->bug->menu->longlifebugs  = '久未處理|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
     $lang->bug->menu->postponedbugs = '被延期|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->menu->overduebugs   = '過期Bug|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
+    $lang->bug->menu->needconfirm   = '需求變動|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
 
     $lang->bug->menuOrder[5]  = 'product';
-    $lang->bug->menuOrder[10] = 'unclosed';
-    $lang->bug->menuOrder[15] = 'all';
-    $lang->bug->menuOrder[20] = 'assigntome';
-    $lang->bug->menuOrder[25] = 'openedbyme';
+    $lang->bug->menuOrder[10] = 'all';
+    $lang->bug->menuOrder[15] = 'unclosed';
+    $lang->bug->menuOrder[20] = 'openedbyme';
+    $lang->bug->menuOrder[25] = 'assigntome';
     $lang->bug->menuOrder[30] = 'resolvedbyme';
-    $lang->bug->menuOrder[35] = 'unresolved';
-    $lang->bug->menuOrder[40] = 'assigntonull';
-    $lang->bug->menuOrder[45] = 'unresolved';
-    $lang->bug->menuOrder[50] = 'toclosed';
+    $lang->bug->menuOrder[35] = 'toclosed';
+    $lang->bug->menuOrder[40] = 'unresolved';
+    $lang->bug->menuOrder[45] = 'unconfirmed';
+    $lang->bug->menuOrder[50] = 'assigntonull';
     $lang->bug->menuOrder[55] = 'longlifebugs';
     $lang->bug->menuOrder[60] = 'postponedbugs';
     $lang->bug->menuOrder[65] = 'overduebugs';
+    $lang->bug->menuOrder[70] = 'needconfirm';
 
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
@@ -754,30 +757,26 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of bug module. */
     $lang->testsuite->menu = new stdclass();
-    $lang->testsuite->menu->create  = array('link' => "<i class='icon-plus'></i> 建套件|testsuite|create|productID=%s", 'float' => 'right');
 
     $lang->testsuite->menuOrder[5]  = 'product';
-    $lang->testsuite->menuOrder[10] = 'create';
 
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
+    $lang->testtask->menu->totalStatus = '所有|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
     $lang->testtask->menu->wait        = '待測版本|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testtask->menu->doing       = '測試中版本|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testtask->menu->blocked     = '被阻塞版本|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
     $lang->testtask->menu->done        = '已測版本|testtask|browse|productID=%s&branch=%s&type=%s,done';
-    $lang->testtask->menu->totalStatus = '全部|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
     $lang->testtask->menu->report      = array('link' => '報告|testreport|browse', 'alias' => 'view,create,edit');
-    $lang->testtask->menu->create      = array('link' => "<i class='icon-plus'></i> 提交測試|testtask|create|productID=%s", 'float' => 'right');
 
     $lang->testtask->menuOrder[5]  = 'product';
     $lang->testtask->menuOrder[10] = 'scope';
-    $lang->testtask->menuOrder[15] = 'wait';
-    $lang->testtask->menuOrder[20] = 'doing';
-    $lang->testtask->menuOrder[25] = 'blocked';
-    $lang->testtask->menuOrder[30] = 'done';
-    $lang->testtask->menuOrder[35] = 'totalStatus';
+    $lang->testtask->menuOrder[15] = 'totalStatus';
+    $lang->testtask->menuOrder[20] = 'wait';
+    $lang->testtask->menuOrder[25] = 'doing';
+    $lang->testtask->menuOrder[30] = 'blocked';
+    $lang->testtask->menuOrder[35] = 'done';
     $lang->testtask->menuOrder[40] = 'report';
-    $lang->testtask->menuOrder[45] = 'create';
 
     $lang->testreport->menu      = $lang->testtask->menu;
     $lang->testreport->menuOrder = $lang->testtask->menuOrder;
@@ -825,5 +824,6 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['story']);
     unset($lang->searchObjects['task']);
     unset($lang->searchObjects['release']);
+    unset($lang->searchObjects['project']);
     unset($lang->searchObjects['productplan']);
 }

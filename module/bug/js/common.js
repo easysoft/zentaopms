@@ -1,5 +1,7 @@
 $(function()
 {
+    $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
+
     if(typeof page == 'undefined') page = '';
     if(page == 'create')
     {
@@ -19,6 +21,14 @@ $(function()
     {
         oldProductID = $('#product').val();
         $("#story, #task, #mailto").chosen(defaultChosenOptions);
+    }
+
+    if(flow != 'full')
+    {
+        $('.querybox-toggle').click(function()
+        {
+            $(this).parent().toggleClass('active');
+        });
     }
 });
 

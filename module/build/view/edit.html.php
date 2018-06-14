@@ -70,7 +70,7 @@
           <td colspan="3" class="text-center form-actions">
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
-            <?php echo $this->config->global->flow != 'onlyTest' ? html::hidden('project', $build->project) : '';?>
+            <?php echo $config->global->flow != 'onlyTest' ? html::hidden('project', $build->project) : '';?>
           </td>
         </tr>
       </table>

@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('flow', $this->config->global->flow);?>
+<?php js::set('flow', $config->global->flow);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php common::printBack($this->session->testsuiteList, 'btn btn-link');?>

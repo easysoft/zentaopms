@@ -21,7 +21,7 @@
     if($hasCasesPriv) echo html::a($this->inlink('cases', "taskID=$taskID&browseType=all&param=0"), "<span class='text'>{$lang->testtask->allCases}</span>", '', "id='allTab' class='btn btn-link'");
     if($hasCasesPriv) echo html::a($this->inlink('cases', "taskID=$taskID&browseType=assignedtome&param=0"), "<span class='text'>{$lang->testtask->assignedToMe}</span>", '', "id='assignedtomeTab' class='btn btn-link'");
 
-    if($hasGroupPriv and $this->config->global->flow != 'onlyTest')
+    if($hasGroupPriv and $config->global->flow != 'onlyTest')
     {
         echo "<div class='btn-group'>";
         $active  = $browseType == 'group' ? 'btn-active-text' : '';

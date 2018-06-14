@@ -55,13 +55,13 @@ $(function()
     }, 90 * 1000);
 })
 
-<?php if(!empty($this->config->sso->redirect)):?>
+<?php if(!empty($config->sso->redirect)):?>
 <?php
-$ranzhiAddr = $this->config->sso->addr;
+$ranzhiAddr = $config->sso->addr;
 $ranzhiURL  = substr($ranzhiAddr, 0, strrpos($ranzhiAddr, '/sys/'));
 ?>
 <?php if(!empty($ranzhiURL)):?>
-$(function(){ redirect('<?php echo $ranzhiURL?>', '<?php echo $this->config->sso->code?>'); });
+$(function(){ redirect('<?php echo $ranzhiURL?>', '<?php echo $config->sso->code?>'); });
 <?php endif;?>
 <?php endif;?>
 </script>

@@ -28,11 +28,25 @@ class testreportModel extends model
         /* Remove branch. */
         if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+        $pageNav     = '';
+        $pageActions = '';
+        if($this->config->global->flow == 'full')
+        {
+            $this->app->loadLang('qa');
+            $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+        }
+        else
+        {
+            if(common::hasPriv('testtask', 'create'))
+            {
+                $link = helper::createLink('testtask', 'create', "productID=$productID");
+                $pageActions .= html::a($link, "<i class='icon icon-plus'></i> {$this->lang->testtask->create}", '', "class='btn btn-primary'");
+            }
+        }
+        $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav = $productIndex;
+        $this->lang->modulePageNav     = $pageNav;
+        $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             if($this->config->global->flow != 'onlyTest')

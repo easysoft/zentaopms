@@ -27,11 +27,25 @@ class testsuiteModel extends model
         $selectHtml = $this->select($products, $productID, 'testsuite', 'browse');
         if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+        $pageNav     = '';
+        $pageActions = '';
+        if($this->config->global->flow == 'full')
+        {
+            $this->app->loadLang('qa');
+            $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+        }
+        else
+        {
+            if(common::hasPriv('testsuite', 'create'))
+            {
+                $link = helper::createLink('testsuite', 'create', "productID=$productID");
+                $pageActions .= html::a($link, "<i class='icon icon-plus'></i> {$this->lang->testsuite->create}", '', "class='btn btn-primary'");
+            }
+        }
+        $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav = $productIndex;
+        $this->lang->modulePageNav     = $pageNav;
+        $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testsuite->menu as $key => $value)
         {
             $replace = $productID;
@@ -118,14 +132,53 @@ class testsuiteModel extends model
 
         setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot);
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->qa->index . ' <span class="caret"></span></button>';
-        $productIndex .= '<ul class="dropdown-menu">';
-        if(common::hasPriv('testsuite', 'createLib')) $productIndex .= '<li>' . html::a(helper::createLink('testsuite', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->testsuite->createLib) . '</li>';
-        $productIndex .= '</ul></div></div>';
-        $productIndex .= $selectHtml;
+        $pageNav     = '';
+        $pageActions = '';
+        if($this->config->global->flow == 'full')
+        {
+            $this->app->loadLang('qa');
+            $pageNav .= '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->qa->index . ' <span class="caret"></span></button>';
+            $pageNav .= '<ul class="dropdown-menu">';
+            if(common::hasPriv('testsuite', 'createLib')) $pageNav .= '<li>' . html::a(helper::createLink('testsuite', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->testsuite->createLib) . '</li>';
+            $pageNav .= '</ul></div></div>';
 
-        $this->lang->modulePageNav = $productIndex;
+            if(common::hasPriv('testsuite', 'libView'))
+            {
+                $link = helper::createLink('testsuite', 'libView', "libID=$libID");
+                $pageActions .= html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->testsuite->view, '', "class='btn'");
+            }
+        }
+        else
+        {
+            $this->app->loadLang('testcase');
+            $pageActions .= "<div class='btn-group'>";
+            if(common::hasPriv('testsuite', 'exportTemplet'))
+            {
+                $link = helper::createLink('testsuite', 'exportTemplet', "libID=$libID");
+                $pageActions .= html::a($link, "<i class='icon icon-export muted'> </i>" . $this->lang->testsuite->exportTemplet, '', "class='btn btn-link export'");
+            }
+            if(common::hasPriv('testsuite', 'import'))
+            {
+                $link = helper::createLink('testsuite', 'import', "libID=$libID");
+                $pageActions .= html::a($link, "<i class='icon muted icon-import'> </i>" . $this->lang->testcase->importFile, '', "class='btn btn-link export'");
+            }
+            $pageActions .= '</div>';
+            $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);
+            if(common::hasPriv('testsuite', 'batchCreateCase'))
+            {
+                $link = helper::createLink('testsuite', 'batchCreateCase', $params);
+                $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->testcase->batchCreate, '', "class='btn btn-secondary'");
+            }
+            if(common::hasPriv('testsuite', 'createCase'))
+            {
+                $link = helper::createLink('testsuite', 'createCase', $params);
+                $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->testcase->create, '', "class='btn btn-primary'");
+            }
+        }
+        $pageNav .= $selectHtml;
+
+        $this->lang->modulePageNav     = $pageNav;
+        $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->caselib->menu as $key => $value)
         {
             $replace = '';
@@ -133,8 +186,17 @@ class testsuiteModel extends model
             common::setMenuVars($this->lang->caselib->menu, $key, $replace);
         }
         $this->lang->testsuite->menu = $this->lang->caselib->menu;
+        if($this->config->global->flow != 'full' && $this->app->getMethodName() != 'libview') $this->lang->testsuite->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
     }
 
+    /**
+     * Save lib state.
+     *
+     * @param  int    $libID
+     * @param  array  $libraries
+     * @access public
+     * @return int
+     */
     public function saveLibState($libID = 0, $libraries = array())
     {
         if($libID > 0) $this->session->set('caseLib', (int)$libID);
