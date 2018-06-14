@@ -1023,6 +1023,7 @@ class project extends control
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
+        $this->view->projectID    = $projectID;
         $this->view->products      = $products;
         $this->view->productPlan   = array(0 => '') + $productPlan;
         $this->view->whitelist     = $whitelist;
