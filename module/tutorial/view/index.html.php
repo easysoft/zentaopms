@@ -291,7 +291,7 @@ $(function()
                     if($required.length)
                     {
                         var val = $required.val();
-                        if(val === undefined || val === null || val === '')
+                        if(val === undefined || val === null || val === '' || val === '0')
                         {
                             targetStatus.form = false;
                             if(!targetStatus.waitFeild) targetStatus.waitFeild = $required;
