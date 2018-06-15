@@ -26,6 +26,14 @@ $(function()
         }
     };
 
+
+    var refresh = function()
+    {
+        var selfClose = $.cookie('selfClose');
+        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
+        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
+    };
+
     var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
     var lastOperation;
     var dropTo = function(id, from, to, type)
@@ -37,29 +45,7 @@ $(function()
             {
                 url: $.createLink(type, statusMap[type][from][to], 'id=' + id) + onlybody,
                 shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-                hidden: function()
-                {
-                    var selfClose = $.cookie('selfClose');
-                    $.cookie('selfClose', 0, {expires: config.cookieLife, path: config.webRoot});
-                    $item = $('#' + type + '-' + id);
-                    $item.removeClass('board-' + type + '-' + lastOperation.to).removeClass('drop-in');
-                    if(selfClose != 1 && lastOperation)
-                    {
-                        $item.appendTo($item.closest('.boards').find('.board[data-type="'+ lastOperation.from + '"]'));
-                    }
-                    else
-                    {
-                        $.get($.createLink(type, 'ajaxGetByID', 'id=' + id), function(data)
-                        {
-                            $('#' + type + '-' + id).find('.' + type + '-assignedTo .text').html(data.assignedTo);
-                            if(type == 'task')
-                            {
-                                $('#task-' + id).find('.task-left').html(data.left + 'h');
-                                if(data.story) $('div.board-story[data-id="' + data.story + '"]').find('.story-stage').html(data.storyStage);
-                            }
-                        }, 'json');
-                    }
-                }
+                hidden: refresh
             });
             return true;
         }
@@ -113,13 +99,6 @@ $(function()
         }
     });
 
-    var refresh = function()
-    {
-        var selfClose = $.cookie('selfClose');
-        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
-    }
-
     $kanban.on('click', '.kanbaniframe', function(e)
     {
         var $link = $(this);
@@ -131,7 +110,7 @@ $(function()
         }, $link.data())).show(
         {
             shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-            hidden: function(){refresh();}
+            hidden: refresh
         });
 				return false;
     });
