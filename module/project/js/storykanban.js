@@ -18,12 +18,56 @@ $(function()
         }
     };
 
+    // Get scrollbar width
+    var getScrollbarWidth = function ()
+    {
+        var outer = document.createElement("div");
+        outer.style.visibility = "hidden";
+        outer.style.width = "100px";
+        outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+    
+        document.body.appendChild(outer);
+    
+        var widthNoScroll = outer.offsetWidth;
+        // force scrollbars
+        outer.style.overflow = "scroll";
+    
+        // add innerdiv
+        var inner = document.createElement("div");
+        inner.style.width = "100%";
+        outer.appendChild(inner);        
+    
+        var widthWithScroll = inner.offsetWidth;
+
+        // remove divs
+        outer.parentNode.removeChild(outer);
+    
+        return widthNoScroll - widthWithScroll;
+    };
+
+    var scrollbarWidth = getScrollbarWidth();
+    var fixBoardWidth = function()
+    {
+        var $table = $kanban.find('.table');
+        var kanbanWidth = $table.width();
+        var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
+        var boardCount = $cBoards.length;
+        var $cSide = $table.find('thead>tr>th.c-board.c-side');
+        var totalWidth = kanbanWidth - scrollbarWidth;
+        if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
+        var cBoardWidth = Math.floor(totalWidth/boardCount) - 16;
+        $cBoards.not(':last').width(cBoardWidth);
+        $cBoards.first().width(cBoardWidth + 5);
+        $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
+    };
+    fixBoardWidth();
+    $(window).on('resize', fixBoardWidth);
 
     var refresh = function()
     {
         var selfClose = $.cookie('selfClose');
         $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
+        if(selfClose == 1) $kanban.load(location.href + ' #kanban', fixBoardWidth);
     };
 
     var lastOperation;
