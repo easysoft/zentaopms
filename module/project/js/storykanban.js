@@ -4,6 +4,7 @@ $(function()
     var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
+    var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
 
     var stageMap =
     {
@@ -17,14 +18,24 @@ $(function()
         }
     };
 
+
+    var refresh = function()
+    {
+        var selfClose = $.cookie('selfClose');
+        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
+        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
+    };
+
     var lastOperation;
     var dropTo = function(id, from, to, type)
     {
-      console.log(id);
         if(stageMap[type][from] && stageMap[type][from][to])
         {
             lastOperation = {id: id, from: from, to: to};
-            $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIDList[]':[id]});
+            $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIDList[]':[id]}, function()
+            {
+                refresh();
+            });
             return true;
         }
         return false;
@@ -77,13 +88,6 @@ $(function()
         }
     });
 
-    var refresh = function()
-    {
-        var selfClose = $.cookie('selfClose');
-        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
-    }
-
     $kanban.on('click', '.kanbaniframe', function(e)
     {
         var $link = $(this);
@@ -94,15 +98,9 @@ $(function()
             width: '80%',
         }, $link.data())).show(
         {
-            shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-            hidden: function(){refresh();}
+            shown:  function(){$('.modal-iframe').data('cancel-reload', true)},
+            hidden: refresh
         });
-				return false;
+		return false;
     });
-
-    $.extend({'closeModal':function(callback, location)
-    {
-        kanbanModalTrigger.close();
-        if(callback && $.isFunction(callback)) callback();
-    }});
 });

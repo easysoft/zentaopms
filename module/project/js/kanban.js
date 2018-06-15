@@ -109,7 +109,7 @@ $(function()
             width: '80%',
         }, $link.data())).show(
         {
-            shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
+            shown:  function(){$('.modal-iframe').data('cancel-reload', true)},
             hidden: refresh
         });
 				return false;
