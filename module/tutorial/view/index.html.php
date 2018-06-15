@@ -340,7 +340,7 @@ $(function()
             if(targetStatus.form)
             {
                 $submitTarget.addClass('active');
-                if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text());
+                if(task.nav.submit) showToolTip($form.find(task.nav.submit), $submitTarget.text(), {placement: 'top'});
             }
             else
             {
