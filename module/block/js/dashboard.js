@@ -27,39 +27,67 @@ function deleteBlock(index)
 /**
  * Sort blocks.
  * 
- * @param  object $orders  format is {'block2' : 1, 'block1' : 2, oldOrder : newOrder} 
+ * @param  array $orders  format is {'blockid' : 1, 'block1' : 2} 
+ * @param  function $callback
  * @access public
  * @return void
  */
-function sortBlocks(orders)
+function sortBlocks(newOrders, callback)
 {
-
-    var ordersMap = [];
-    $.each(orders, function(blockId, order) {ordersMap.push({id: blockId, order: order});});
-    ordersMap.sort(function(a, b) {return a.order - b.order;});
-    var newOrders = $.map(ordersMap, function(order, idx) {return order.id});
-
-    $.getJSON(createLink('block', 'sort', 'orders=' + newOrders.join(',') + '&module=' + module), function(data)
-    {
-        // if(data.result == 'success') $.zui.messager.success(config.ordersSaved);
-    });
+    $.getJSON(createLink('block', 'sort', 'orders=' + newOrders.join(',') + '&module=' + module), callback);
 }
 
 /**
  * Resize block
- * @param  object $event
+ * @param  string $blockId
+ * @param  function $callback
  * @access public
  * @return void
  */
-function resizeBlock(event)
+function resizeBlock(blockID, width, callback)
 {
-    var blockID = event.element.find('.panel').data('id');
-    var data = event.type == 'vertical' ? event.height : event.grid;
-    $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=' + event.type + '&data=' + data), function(data)
+    $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=horizontal&data=' + width), function(data)
     {
-        if(data.result !== 'success') event.revert();
+        callback();
     });
-    initTableHeader();
+    refreshBlock($('#block' + blockID));
+}
+
+function refreshBlock($panel, afterRefresh)
+{
+    var url = $panel.data('url');
+    $panel.addClass('load-indicator loading');
+    $.ajax({url: url, dataType: 'html'}).done(function(data)
+    {
+        var $data = $(data);
+        if($data.hasClass('panel')) $panel.empty().append($data.children());
+        else $panel.find('.panel-body').replaceWith($data);
+        if($.isFunction(afterRefresh))
+        {
+            afterRefresh.call(this,
+            {
+                result: true,
+                data: data,
+                $panel: $panel
+            });
+        }
+        $panel.find('.tablesorter').sortTable();
+        initTableHeader();
+    }).fail(function()
+    {
+        $panel.addClass('panel-error');
+        if($.isFunction(afterRefresh))
+        {
+            afterRefresh.call(this,
+            {
+                result: false,
+                $panel: $panel
+            });
+        }
+    }).always(function()
+    {
+        $panel.removeClass('loading');
+    });
 }
 
 /**
@@ -170,29 +198,32 @@ function hiddenBlock(index)
 
 $(function()
 {
-//    var $dashboard = $('#dashboard').dashboard(
-//    {
-//        height            : 240,
-//        draggable         : !useGuest,
-//        shadowType        : false,
-//        afterOrdered      : sortBlocks,
-//        afterPanelRemoved : deleteBlock,
-//        sensitive         : true,
-//        panelRemovingTip  : config.confirmRemoveBlock,
-//        resizable         : !useGuest,
-//        onResize          : resizeBlock,
-//        afterRefresh      : function(e)
-//        {
-//            var $sortTable = e.$panel.find('.tablesorter');
-//            if($sortTable.length) $sortTable.sortTable();
-//            initTableHeader();
-//        }
-//    });
-//
-//    // $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
-//    $dashboard.find('[data-toggle=tooltip]').tooltip({container: 'body'});
+    initTableHeader();
 
-   initTableHeader();
+    // Init dashboard
+    $('#dashboard').sortable(
+    {
+        selector: '.panel',
+        trigger: '.panel-heading',
+        finish: function(e)
+        {
+            var newOrders = [];
+            var isSideCol = e.element.parent().is('.col-side');
+            e.list.each(function(params)
+            {
+                newOrders.push($(this).data('id'));
+            });
+            sortBlocks(newOrders, function()
+            {
+                resizeBlock(e.element.data('id'), isSideCol ? 4 : 8);
+            });
+            
+            e.element.toggleClass('block-sm', isSideCol);
+        }
+    }).on('click', '.refresh-panel', function()
+    {
+        refreshBlock($(this).closest('.panel'));
+    });
 });
 
 
