@@ -1009,8 +1009,12 @@ class block extends control
         {
             foreach($productBuilds as $buildID => $build)
             {
+                /* If don't clone $build, the exploded bugs of build will be stored in dao::$cache and it occurs an error when the qa statistic block be loaded twice. */
+                $build = clone $build;
                 $build->bugs = explode(',', trim($build->bugs, ','));
                 foreach($build->bugs as $bugID) $bugIDList[$bugID] = $bugID;
+
+                $builds[$product][$buildID] = $build;
             }
         }
         foreach($openedBugs as $buildBugs)
