@@ -48,7 +48,7 @@ function resizeBlock(blockID, width, callback)
 {
     $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=horizontal&data=' + width), function(data)
     {
-        callback();
+        callback && callback();
     });
     refreshBlock($('#block' + blockID));
 }
@@ -205,13 +205,15 @@ $(function()
     {
         selector: '.panel',
         trigger: '.panel-heading',
+        containerSelector: '.col-main,.col-side',
         finish: function(e)
         {
+            console.log('e',e);
             var newOrders = [];
             var isSideCol = e.element.parent().is('.col-side');
-            e.list.each(function(params)
+            e.list.each(function(index, data)
             {
-                newOrders.push($(this).data('id'));
+                newOrders.push(data.item.data('id'));
             });
             sortBlocks(newOrders, function()
             {
