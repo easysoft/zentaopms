@@ -2748,7 +2748,7 @@ class projectModel extends model
         $productPlans = array();
         foreach($products as $productID => $product)
         {
-            $productPlans[$productID] = $this->productplan->getPairs($product->id, $product->branch);
+            $productPlans[$productID] = $this->productplan->getPairs($product->id, isset($product->branch) ? $product->branch : '');
         }
         return $productPlans;
     }

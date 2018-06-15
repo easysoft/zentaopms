@@ -2,9 +2,11 @@
 function copyStoryTitle()
 {
     var storyTitle = $('#story option:selected').text();
-    startPosition = storyTitle.indexOf(':') + 1;
-    endPosition   = storyTitle.lastIndexOf('(');
-    storyTitle = storyTitle.substr(startPosition, endPosition - startPosition);
+    var startPosition = storyTitle.indexOf(':') + 1;
+    if (startPosition > 0) {
+        var endPosition   = storyTitle.lastIndexOf('(');
+        storyTitle = storyTitle.substr(startPosition, endPosition - startPosition);
+    }
 
     $('#name').attr('value', storyTitle);
     $('#estimate').val($('#storyEstimate').val());

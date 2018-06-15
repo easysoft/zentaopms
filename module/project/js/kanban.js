@@ -26,6 +26,58 @@ $(function()
         }
     };
 
+    // Get scrollbar width
+    var getScrollbarWidth = function ()
+    {
+        var outer = document.createElement("div");
+        outer.style.visibility = "hidden";
+        outer.style.width = "100px";
+        outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+    
+        document.body.appendChild(outer);
+    
+        var widthNoScroll = outer.offsetWidth;
+        // force scrollbars
+        outer.style.overflow = "scroll";
+    
+        // add innerdiv
+        var inner = document.createElement("div");
+        inner.style.width = "100%";
+        outer.appendChild(inner);        
+    
+        var widthWithScroll = inner.offsetWidth;
+
+        // remove divs
+        outer.parentNode.removeChild(outer);
+    
+        return widthNoScroll - widthWithScroll;
+    };
+
+    var scrollbarWidth = getScrollbarWidth();
+    var fixBoardWidth = function()
+    {
+        var $table = $kanban.find('.table');
+        var kanbanWidth = $table.width();
+        var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
+        var boardCount = $cBoards.length;
+        var $cSide = $table.find('thead>tr>th.c-board.c-side');
+        var totalWidth = kanbanWidth - scrollbarWidth;
+        if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
+        var cBoardWidth = Math.floor(totalWidth/boardCount) - 16;
+        $cBoards.not(':last').width(cBoardWidth);
+        $cBoards.first().width(cBoardWidth + 5);
+        $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
+    };
+    fixBoardWidth();
+    $(window).on('resize', fixBoardWidth);
+
+    var refresh = function()
+    {
+        var selfClose = $.cookie('selfClose');
+        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
+        if(selfClose == 1) $kanban.load(location.href + ' #kanban', fixBoardWidth);
+    };
+
     var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
     var lastOperation;
     var dropTo = function(id, from, to, type)
@@ -37,29 +89,7 @@ $(function()
             {
                 url: $.createLink(type, statusMap[type][from][to], 'id=' + id) + onlybody,
                 shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-                hidden: function()
-                {
-                    var selfClose = $.cookie('selfClose');
-                    $.cookie('selfClose', 0, {expires: config.cookieLife, path: config.webRoot});
-                    $item = $('#' + type + '-' + id);
-                    $item.removeClass('board-' + type + '-' + lastOperation.to).removeClass('drop-in');
-                    if(selfClose != 1 && lastOperation)
-                    {
-                        $item.appendTo($item.closest('.boards').find('.board[data-type="'+ lastOperation.from + '"]'));
-                    }
-                    else
-                    {
-                        $.get($.createLink(type, 'ajaxGetByID', 'id=' + id), function(data)
-                        {
-                            $('#' + type + '-' + id).find('.' + type + '-assignedTo .text').html(data.assignedTo);
-                            if(type == 'task')
-                            {
-                                $('#task-' + id).find('.task-left').html(data.left + 'h');
-                                if(data.story) $('div.board-story[data-id="' + data.story + '"]').find('.story-stage').html(data.storyStage);
-                            }
-                        }, 'json');
-                    }
-                }
+                hidden: refresh
             });
             return true;
         }
@@ -113,13 +143,6 @@ $(function()
         }
     });
 
-    var refresh = function()
-    {
-        var selfClose = $.cookie('selfClose');
-        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
-    }
-
     $kanban.on('click', '.kanbaniframe', function(e)
     {
         var $link = $(this);
@@ -130,8 +153,8 @@ $(function()
             width: '80%',
         }, $link.data())).show(
         {
-            shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-            hidden: function(){refresh();}
+            shown:  function(){$('.modal-iframe').data('cancel-reload', true)},
+            hidden: refresh
         });
 				return false;
     });

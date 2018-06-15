@@ -300,7 +300,7 @@ class commonModel extends model
         echo "<li class='dropdown'>";
         echo "<a data-toggle='dropdown'>" . $lang->help . " <span class='caret'></span></a>";
         echo "<ul class='dropdown-menu'>";
-        if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
+        if(!commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
         echo '<li>' . html::a($lang->manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
