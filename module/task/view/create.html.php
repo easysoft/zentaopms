@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('toTaskList', $this->config->global->flow == 'onlyTask' || !empty($task->id));?>
+<?php js::set('toTaskList', $config->global->flow == 'onlyTask' || !empty($task->id));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -48,7 +48,7 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+        <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
@@ -75,7 +75,7 @@
                 <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
               </div>
               <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off' required");?>
-              <?php if($this->config->global->flow != 'onlyTask'):?>
+              <?php if($config->global->flow != 'onlyTask'):?>
               <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
               <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
               <?php endif;?>
@@ -159,9 +159,9 @@
           </td>
         </tr>
         <?php endif;?>
-        <tr <?php echo $this->config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
+        <tr <?php echo $config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
           <th><?php echo $lang->task->afterSubmit;?></th>
-          <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
+          <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>

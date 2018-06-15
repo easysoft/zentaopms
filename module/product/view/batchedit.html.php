@@ -25,7 +25,7 @@
   {
       if($field) $visibleFields[$field] = '';
   }
-  foreach(explode(',', $this->config->product->edit->requiredFields) as $field)
+  foreach(explode(',', $config->product->edit->requiredFields) as $field)
   {
       if($field)
       {

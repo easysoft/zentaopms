@@ -156,7 +156,7 @@
                 </table>
               </div>
             </div>
-            <?php if($this->config->global->flow != 'onlyTest'):?>
+            <?php if($config->global->flow != 'onlyTest'):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->product->otherInfo;?></strong></div>
               <div class="detail-content">

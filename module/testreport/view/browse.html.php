@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <span class='btn btn-link btn-active-text'>
@@ -19,6 +20,7 @@
     </span>
   </div>
 </div>
+<?php endif;?>
 <div id='mainContent' class='main-table'>
   <table class='table has-sort-head table-fixed' id='reportList'>
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>

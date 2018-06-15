@@ -80,7 +80,7 @@ class testcase extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
-        $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID);
+        $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID, $orderBy);
         $this->session->set('caseList', $this->app->getURI(true));
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);

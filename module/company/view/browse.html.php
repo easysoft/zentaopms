@@ -109,7 +109,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             {
                 echo html::a('javascript:;', "<i class='icon icon-unlink'></i>", '', "class='btn disabled'");
             }
-            if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
+            if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $config->user->lockMinutes * 60)
             {
                 common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
             }

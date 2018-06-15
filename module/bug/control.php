@@ -91,7 +91,7 @@ class bug extends control
         $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu and save session. */
-        $this->bug->setMenu($this->products, $productID, $branch, $moduleID);
+        $this->bug->setMenu($this->products, $productID, $branch, $moduleID, $browseType, $orderBy);
         $this->session->set('bugList', $this->app->getURI(true));
 
         /* Process the order by field. */
