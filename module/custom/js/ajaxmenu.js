@@ -2,9 +2,9 @@ $(function()
 {
     var currentModule = startMenu['module'],
         currentMethod = startMenu['method'],
-        $mainMenu     = $('#mainmenu'),
-        $moduleMenu   = $('#modulemenu'),
-        $featureMenu  = $('#featurebar'),
+        $navbar     = $('#navbar'),
+        $subNavbar   = $('#subNavbar'),
+        $mainMenu  = $('#mainMenu'),
         $loadingIcon  = $('#loadingIcon'),
         $menuEditor   = $('#menuEditor');
     var menuConfig    =
@@ -32,18 +32,18 @@ $(function()
 
     var updateMenu = function(moduleName, methodName, items)
     {
-        var $menu = moduleName === 'main' ? $mainMenu : (methodName ? $featureMenu : $moduleMenu);
+        var $menu = moduleName === 'main' ? $navbar : (methodName ? $mainMenu : $subNavbar);
         var items = items || (moduleName === 'main' ? menuConfig.main : (methodName ? menuConfig['feature'][moduleName][methodName] : menuConfig['module'][moduleName]));
 
         $menu.data({'module': moduleName, 'method': methodName});
 
         if(items)
         {
-            var $nav = $('<ul class="nav"/>');
+            var $nav = $('<ul class="nav nav-default"/>');
             $.each(items, function(idx, item)
             {
                 if(!item.text || item.fixed) return;
-                var $a = $('<a href="#"/>').html(item.text).data('menu', item).append('<i class="item-hidden-icon icon icon-eye-close"></i>');
+                var $a = $('<a href="#"/>').html(item.text).data('menu', item).append('<i class="item-hidden-icon icon icon-eye-off"></i>');
                 $('<li/>').attr('data-id', item.name).toggleClass('right', item.float === 'right').toggleClass('menu-hidden', !!item.hidden).append($a).appendTo($nav);
             });
             $nav.sortable({finish: function(e)
@@ -62,10 +62,10 @@ $(function()
     {
         currentModule = moduleName;
         currentMethod = methodName;
-        $mainMenu.find('li.active').removeClass('active');
-        $mainMenu.find('li[data-id="' + moduleName + '"]:not(.right)').addClass('active');
-        $moduleMenu.find('li.active').removeClass('active');
-        $moduleMenu.find('li[data-id="' + methodName + '"]:not(.right)').addClass('active');
+        $navbar.find('li.active').removeClass('active');
+        $navbar.find('li[data-id="' + moduleName + '"]:not(.right)').addClass('active');
+        $subNavbar.find('li.active').removeClass('active');
+        $subNavbar.find('li[data-id="' + methodName + '"]:not(.right)').addClass('active');
     };
 
     var loadData = function(moduleName, methodName, type, callback)
@@ -119,7 +119,7 @@ $(function()
         var item = $a.data('menu');
         var $menu = $a.closest('nav');
 
-        if($menu.is('#mainmenu'))
+        if($menu.is('#navbar'))
         {
             var moduleName = item.name;
             if(moduleName !== currentModule)
@@ -159,7 +159,7 @@ $(function()
                 }
             }
         }
-        else if($menu.is('#modulemenu'))
+        else if($menu.is('#subNavbar'))
         {
             var moduleName = item.link ? item.link['module'] : $menu.data('module');
             var methodName = item.link ? item.link['method'] : item.name;
@@ -191,7 +191,7 @@ $(function()
         var moduleName = item.link && item.link['module'] ? item.link['module'] : item.name;
         var methodName = item.link && item.link['method'] ? item.link['method'] : '';
         item.hidden    = !!!item.hidden;
-        if($menu.is('#modulemenu'))
+        if($menu.is('#subNavbar'))
         {
             moduleName = currentModule;
             methodName = item.name;
