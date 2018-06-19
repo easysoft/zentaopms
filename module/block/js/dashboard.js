@@ -72,7 +72,7 @@ function refreshBlock($panel, afterRefresh)
             });
         }
         $panel.find('.tablesorter').sortTable();
-        initTableHeader();
+        initTableHeader($panel);
     }).fail(function()
     {
         $panel.addClass('panel-error');
@@ -95,28 +95,33 @@ function refreshBlock($panel, afterRefresh)
  * @access public
  * @return void
  */
-function initTableHeader()
+function initTableHeader($wrapper)
 {
-    $('#dashboard .table-fixed-head').each(function()
+    ($wrapper || $('#dashboard')).find('.panel-body > .table-fixed-head').each(function()
     {
         var $table = $(this);
         var $panel = $table.closest('.panel');
 
         if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
-
+        
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
+        if ($wrapper) console.log('initTableHeader', isFixed, {$wrapper, $table, $header});
         if(!isFixed)
         {
             $table.find('thead').css('visibility', 'visible');
             return;
         }
         var tableWidth = $table.width();
+        var $oldTableHead = $table.find('thead');
+        var updateTh = function()
+        {
+            $header.find('thead').empty().append($oldTableHead.find('tr').clone());
+        };
         if(!$header.length)
         {
             $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
-            var $oldTableHead = $table.find('thead');
             $oldTableHead.find('th').each(function(idx)
             {
                 $(this).attr('data-idx', idx);
@@ -133,10 +138,6 @@ function initTableHeader()
                     $oldTableHead.find('th[data-idx="' + $th.data('idx') + '"]').trigger(e);
                     if(e.type === 'mouseup')
                     {
-                        var updateTh = function()
-                        {
-                            $header.find('thead').empty().append($oldTableHead.find('tr').clone());
-                        };
                         setTimeout(updateTh, 10);
                         setTimeout(updateTh, 200);
                     }
@@ -145,11 +146,7 @@ function initTableHeader()
         }
         else
         {
-            var $fixedTh = $header.css('min-width', tableWidth).css('right', $panel.width() - tableWidth).find('thead > tr > th');
-            $table.find('thead > tr > th').each(function(idx)
-            {
-                $fixedTh.eq(idx).width($(this).width());
-            });
+            updateTh();
         }
 
         var timeoutCall = null;
@@ -199,6 +196,10 @@ function hiddenBlock(index)
 $(function()
 {
     initTableHeader();
+    $(window).on('resize', function()
+    {
+        initTableHeader();
+    });
 
     // Init dashboard
     $('#dashboard').sortable(
@@ -208,7 +209,6 @@ $(function()
         containerSelector: '.col-main,.col-side',
         finish: function(e)
         {
-            console.log('e',e);
             var newOrders = [];
             var isSideCol = e.element.parent().is('.col-side');
             e.list.each(function(index, data)
