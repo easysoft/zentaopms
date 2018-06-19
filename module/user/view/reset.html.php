@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php if($needCreateFile):?>
 <div class='container mw-700px' style='margin-top:100px;'>
-  <div class='panel'>
+  <div class='panel panel-default'>
     <div class='panel-heading'>
     <strong><?php echo $lang->user->resetPassword?></strong>
     </div>
@@ -21,7 +21,7 @@
       <div class='alert alert-info'>
       <?php printf($lang->user->noticeResetFile, $resetFileName);?>
       </div>
-      <p><?php echo html::a(inlink('reset'), $this->lang->refresh, '', "class='btn'")?></p>
+      <div class='text-center'><?php echo html::a(inlink('reset'), $this->lang->refresh, '', "class='btn btn-primary btn-wide'")?></div>
     </div>
   </div>
 </div>
