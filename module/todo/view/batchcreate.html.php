@@ -50,7 +50,7 @@
             <th class='col-name required'><?php echo $lang->todo->name;?></th>
             <th class='col-desc<?php echo zget($visibleFields, 'desc', ' hidden');?>'><?php echo $lang->todo->desc;?></th>
             <th class='col-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-            <th class='w-60px'></th>
+            <th class='w-70px'></th>
           </tr>
         </thead>
         <tbody>
