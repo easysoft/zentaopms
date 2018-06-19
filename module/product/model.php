@@ -869,18 +869,25 @@ class productModel extends model
                 foreach($this->app->user->groups as $group) $groups .= ",$group,";
             }
 
-            $stmt = $this->dao->select('distinct t1.*,t3.type as teamType,t3.account as teamAccount,t4.deleted as projectDeleted')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.root')
-                ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
-                ->where('t1.deleted')->eq(0)
-                ->query();
+            $allProducts     = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
+            $productProjects = $this->dao->select('t1.product,t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in(array_keys($allProducts))
+                ->andWhere('t2.deleted')->eq('0')
+                ->fetchGroup('product', 'project');
+
+            $linkedProjects = array();
+            foreach($productProjects as $product => $projects)
+            {
+                foreach($projects as $projectID => $productProject) $linkedProjects[$projectID] = $projectID;
+            }
+
+            $teams = $this->dao->select('root, account')->from(TABLE_TEAM)->where('root')->in($linkedProjects)->andWhere('type')->eq('project')->fetchGroup('root', 'account');
 
             $products = array();
             $account  = $this->app->user->account;
-            while($product = $stmt->fetch())
+            foreach($allProducts as $id => $product)
             {
-                $id = $product->id;
                 if($this->app->user->admin)
                 {
                     $products[$id] = $id;
@@ -892,22 +899,33 @@ class productModel extends model
                         $products[$id] = $id;
                         continue;
                     }
-                    if($product->teamType == 'project' and $product->teamAccount == $account and $product->projectDeleted == '0')
-                    {
-                        $products[$id] = $id;
-                        continue;
-                    }
                     if($product->acl == 'open')
                     {
                         $products[$id] = $id;
                         continue;
                     }
+
+                    $hasPriv = false;
                     if($product->acl == 'custom')
                     {
                         foreach(explode(',', $product->whitelist) as $whitelist)
                         {
                             if(empty($whitelist)) continue;
                             if(strpos($groups, ",$whitelist,") !== false)
+                            {
+                                $products[$id] = $id;
+                                $hasPriv       = true;
+                                break;
+                            }
+                        }
+                    }
+                    if($hasPriv) continue;
+
+                    if(!empty($productProjects[$id]))
+                    {
+                        foreach($productProjects[$id] as $projectID => $productProject)
+                        {
+                            if(isset($teams[$projectID][$account]))
                             {
                                 $products[$id] = $id;
                                 break;

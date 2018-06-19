@@ -126,8 +126,11 @@ $(document).ready(function()
 
         var resizeCols = function() {
             var $cells = $cols.children('.panel,.cell').height('auto');
-            var bestHeight = $firstCol.height();
-            $cells.css('height', bestHeight);
+            if($firstCol.next('.col-spliter').css('display') != 'none')
+            {
+                var bestHeight = $firstCol.height();
+                $cells.css('height', bestHeight);
+            }
         };
 
         $element.find('.tree').on('resize', resizeCols);

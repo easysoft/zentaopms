@@ -150,7 +150,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->doc->editedBy;?></th>
-                <td><?php echo $users[$doc->editedBy];?></td>
+                <td><?php echo zget($users, $doc->editedBy);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->doc->editedDate;?></th>

@@ -144,23 +144,23 @@ class commonModel extends model
     {
         if($module == 'user' and strpos('login|logout|deny|reset', $method) !== false) return true;
         if($module == 'api'  and $method == 'getsessionid') return true;
-        if($module == 'misc' and $method == 'ping')  return true;
         if($module == 'misc' and $method == 'checktable') return true;
         if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
-        if($module == 'misc' and $method == 'changelog') return true;
         if($module == 'sso' and $method == 'login')  return true;
         if($module == 'sso' and $method == 'logout') return true;
         if($module == 'sso' and $method == 'bind') return true;
         if($module == 'sso' and $method == 'gettodolist') return true;
-        if($module == 'block' and $method == 'main') return true;
         if($module == 'file' and $method == 'read') return true;
 
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
             if(stripos($method, 'downnotify') !== false) return true;
+            if($module == 'block' and $method == 'main') return true;
+            if($module == 'misc' and $method == 'changelog') return true;
+            if($module == 'misc' and $method == 'ping')  return true;
             if($module == 'tutorial') return true;
             if($module == 'block') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
