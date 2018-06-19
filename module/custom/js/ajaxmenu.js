@@ -2,9 +2,9 @@ $(function()
 {
     var currentModule = startMenu['module'],
         currentMethod = startMenu['method'],
-        $navbar     = $('#navbar'),
-        $subNavbar   = $('#subNavbar'),
-        $mainMenu  = $('#mainMenu'),
+        $navbar       = $('#navbar'),
+        $subNavbar    = $('#subNavbar'),
+        $mainMenu     = $('#mainMenu'),
         $loadingIcon  = $('#loadingIcon'),
         $menuEditor   = $('#menuEditor');
     var menuConfig    =
@@ -115,8 +115,8 @@ $(function()
 
     $menuEditor.on('mouseenter', '.nav > li:not(.drag-shadow) > a', function()
     {
-        var $a   = $(this);
-        var item = $a.data('menu');
+        var $a    = $(this);
+        var item  = $a.data('menu');
         var $menu = $a.closest('nav');
 
         if($menu.is('#navbar'))

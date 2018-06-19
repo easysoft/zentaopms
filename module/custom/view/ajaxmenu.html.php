@@ -15,7 +15,7 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <?php echo $lang->customMenu ?>
+        <?php echo $lang->customMenu;?>
         <i class='icon icon-spin icon-spinner' id='loadingIcon'></i>
       </h2>
     </div>

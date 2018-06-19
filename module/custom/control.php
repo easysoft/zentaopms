@@ -407,6 +407,7 @@ class custom extends control
      */
     public function ajaxGetMenu($module = 'main', $method = '', $type = '')
     {
+        $this->loadModel('project')->setMenu(array(), 0);
         if($type === 'all')
         {
             $menu = array();
