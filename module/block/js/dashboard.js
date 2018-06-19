@@ -86,7 +86,7 @@ function refreshBlock($panel, afterRefresh)
         }
     }).always(function()
     {
-        $panel.removeClass('loading');
+        $panel.removeClass('load-indicator loading');
     });
 }
 
