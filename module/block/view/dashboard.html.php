@@ -19,7 +19,7 @@ $useGuest = $this->app->user->account == 'guest';
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
   <div class="row">
-    <div class='col-md-8 col-main'>
+    <div class='col-main'>
       <?php foreach($longBlocks as $index => $block):?>
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='panel block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-order='<?php echo $block->order?>' data-url='<?php echo $block->blockLink?>'>
@@ -55,7 +55,7 @@ $useGuest = $this->app->user->account == 'guest';
       </div>
       <?php endforeach;?>
     </div>
-    <div class='col-md-4 col-side'>
+    <div class='col-side'>
       <?php foreach($shortBlocks as $index => $block):?>
       <?php if(isset($config->block->closed) and strpos(",{$config->block->closed},", ",{$block->source}|{$block->block},") !== false) continue;?>
       <div class='panel block-sm block-<?php echo $block->block;?> <?php if(isset($block->params->color)) echo 'panel-' . $block->params->color;?>' id='block<?php echo $block->id?>' data-id='<?php echo $block->id?>' data-name='<?php echo $block->title?>' data-order='<?php echo $block->order?>' data-url='<?php echo $block->blockLink?>'>
