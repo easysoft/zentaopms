@@ -30,7 +30,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
             <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}' class='small'") . '</li>'; ?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>'; ?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
@@ -66,7 +66,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
             <?php if(!empty($block->actionLink)) echo '<li>' . $block->actionLink . '</li>';?>
-            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, 'MORE', '', "title='{$lang->more}' class='small'") . '</li>';?>
+            <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>';?>
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>

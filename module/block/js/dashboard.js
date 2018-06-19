@@ -205,7 +205,7 @@ $(function()
     $('#dashboard').sortable(
     {
         selector: '.panel',
-        trigger: '.panel-heading',
+        trigger: '.panel-heading,.panel-move-handler',
         containerSelector: '.col-main,.col-side',
         finish: function(e)
         {
