@@ -37,20 +37,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="btn-toolbar pull-left">
     <?php
-    $menus           = customModel::getFeatureMenu($this->moduleName, $this->methodName);
-    $moreLabel       = $lang->more;
-    $moreLabelActive = '';
-    if(strpos(',unconfirmed,assigntonull,longlifebugs,postponedbugs,overduebugs,needconfirm,', $browseType) !== false)
-    {
-        foreach($menus as $menuItem)
-        {
-            if($menuItem->name == $browseType)
-            {
-                $moreLabel       = "<span class='text'>{$menuItem->text}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                $moreLabelActive = 'btn-active-text';
-            }
-        }
-    }
+    $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     foreach($menus as $menuItem)
     {
         if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
@@ -97,22 +84,30 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 echo '</div>';
             }
         }
+        elseif($menuItem->name == 'more')
+        {
+            if(!empty($lang->bug->moreSelects))
+            {
+                $moreLabel       = $lang->more;
+                $moreLabelActive = '';
+                if(isset($lang->bug->moreSelects[$browseType]))
+                {
+                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$browseType]}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabelActive = 'btn-active-text';
+                }
+                echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
+                echo "<ul class='dropdown-menu'>";
+                foreach($lang->bug->moreSelects as $menuBrowseType => $label)
+                {
+                    $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
+                    echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'") . '</li>';
+                }
+                echo '</ul></div>';
+            }
+        }
         else
         {
-            if(strpos(',unconfirmed,assigntonull,longlifebugs,postponedbugs,overduebugs,needconfirm,', $menuItem->name) !== false)
-            {
-                if($menuItem->name == 'unconfirmed')
-                {
-                    echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
-                    echo "<ul class='dropdown-menu'>";
-                }
-                echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active'") . '</li>';
-                if($menuItem->name == 'needconfirm') echo '</ul></div>';
-            }
-            else
-            {
-                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), $label, '', "class='btn btn-link $active'");
-            }
+            echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), $label, '', "class='btn btn-link $active'");
         }
     }
     ?>
