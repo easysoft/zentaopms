@@ -1,6 +1,6 @@
 body {background: #00B1FD linear-gradient(-90deg, #0072F3 0%, #00B1FD 100%);}
 #main {}
-#login {max-width: 600px; margin: 0 auto; margin-top: 5%;}
+#login {max-width: 600px!important; margin: 0 auto; margin-top: 5%;}
 #loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
 #loginPanel > header {padding: 20px; border-bottom: 1px #eee solid; position: relative;}
 #loginPanel > header > h2 {font-size: 16px; margin: 0; line-height: 32px;}
