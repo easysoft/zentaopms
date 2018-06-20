@@ -228,11 +228,11 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list     = array('link' => '%s', 'subModule' => 'task,tree', 'alias' => 'grouptask,importtask,importbug,tree');
+$lang->project->menu->list     = array('link' => '%s', 'subModule' => 'task,grouptask,tree', 'alias' => 'grouptask,importtask,importbug,tree');
 $lang->project->menu->kanban   = array('link' => '看板|project|kanban|projectID=%s');
 $lang->project->menu->burn     = array('link' => '燃盡圖|project|burn|projectID=%s');
 $lang->project->menu->story    = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa       = array('link' => '%s', 'subModule' => 'build');
+$lang->project->menu->qa       = array('link' => '%s', 'subModule' => 'bug,build,testtask');
 $lang->project->menu->doc      = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->action   = array('link' => '%s');
 $lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';

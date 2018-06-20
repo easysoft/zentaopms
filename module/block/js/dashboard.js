@@ -86,7 +86,7 @@ function refreshBlock($panel, afterRefresh)
         }
     }).always(function()
     {
-        $panel.removeClass('loading');
+        $panel.removeClass('load-indicator loading');
     });
 }
 
@@ -205,7 +205,7 @@ $(function()
     $('#dashboard').sortable(
     {
         selector: '.panel',
-        trigger: '.panel-heading',
+        trigger: '.panel-heading,.panel-move-handler',
         containerSelector: '.col-main,.col-side',
         finish: function(e)
         {

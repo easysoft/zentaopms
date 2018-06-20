@@ -272,6 +272,12 @@ class commonModel extends model
             }
             echo '</ul></li>';
 
+            if(!$isGuest and !commonModel::isTutorialMode() and $app->viewType != 'mhtml')
+            {
+                $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
+                echo "<li class='custom-item'><a href='$customLink' data-toggle='modal' data-type='iframe' data-icon='cog' data-width='80%'>$lang->customMenu</a></li>";
+            }
+
             echo '<li class="divider"></li>';
             echo '<li>';
             if($isGuest)
@@ -372,8 +378,6 @@ class commonModel extends model
             if(($lastMenu->name != $menuItem->name) && strpos($lang->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
 
         }
-        $customLink = helper::createLink('custom', 'ajaxMenu', "module={$app->getModuleName()}&method={$app->getMethodName()}", '', true);
-        if(!commonModel::isTutorialMode() and $app->viewType != 'mhtml' and $app->user->account != 'guest') echo "<li class='custom-item'><a href='$customLink' class='hidden' data-toggle='modal' data-type='iframe' title='$lang->customMenu' data-icon='cog' data-width='80%'><i class='icon icon-cog'></i></a></li>";
         echo "</ul>\n";
     }
 
@@ -438,7 +442,7 @@ class commonModel extends model
      */
     public static function printModuleMenu($moduleName)
     {
-        global $lang, $app;
+        global $config, $lang, $app;
 
         if(!isset($lang->$moduleName->menu))
         {
@@ -484,6 +488,15 @@ class commonModel extends model
                     if(isset($menuItem->link['method'])) $method = $menuItem->link['method'];
                 }
                 if($module == $currentModule and ($method == $currentMethod or strpos(",$alias,", ",$currentMethod,") !== false)) $active = 'active';
+
+                /* Avoid user thinking the page is shaking when the menu toggle class 'active' */
+                if($config->global->flow == 'onlyTest')
+                {
+                    if($currentModule == 'bug'       && $currentMethod == 'browse')  $active = '';
+                    if($currentModule == 'testcase'  && $currentMethod == 'browse')  $active = '';
+                    if($currentModule == 'testtask'  && $currentMethod == 'browse')  $active = '';
+                    if($currentModule == 'testsuite' && $currentMethod == 'library') $active = '';
+                }
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
                 if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";

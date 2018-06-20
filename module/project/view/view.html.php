@@ -19,7 +19,7 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $project->name . $lang->project->burn;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'burn', "projectID=$project->id", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'burn', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -43,7 +43,7 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->project->latestDynamic;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -65,7 +65,7 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->project->relatedMember;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'team', "projectID=$project->id", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'team', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -113,7 +113,7 @@
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->project->doclib;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -170,7 +170,7 @@
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->manageProducts;?></strong>
-                <?php common::printLink('project', 'manageproducts', "projectID=$project->id", 'MORE', '', "class='btn btn-link pull-right muted'");?>
+                <?php common::printLink('project', 'manageproducts', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">

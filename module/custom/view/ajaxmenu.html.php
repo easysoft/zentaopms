@@ -11,34 +11,38 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px'>
+<div id='mainContent' class='space'>
+  <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <?php echo $lang->customMenu ?>
+        <?php echo $lang->customMenu;?>
         <i class='icon icon-spin icon-spinner' id='loadingIcon'></i>
       </h2>
     </div>
     <div id='menuEditor'>
-      <div class='panel'>
-        <nav id='mainmenu'>
-          <ul></ul>
+      <div class='panel panel-default'>
+        <nav id='navbar' class='bg-primary'>
+          <ul class='nav nav-default'></ul>
         </nav>
-        <nav id='modulemenu'>
-          <ul></ul>
+        <nav id='subNavbar'>
+          <ul class='nav nav-default'></ul>
         </nav>
         <?php if($config->global->flow != 'onlyTest'):?>
-        <nav id='featurebar'>
-          <ul></ul>
+        <nav id='mainMenu'>
+          <ul class='nav nav-default'></ul>
         </nav>
         <?php endif;?>
       </div>
       <div class='text-left'>
-        <?php if(common::hasPriv('custom', 'setPublic')) echo html::checkbox('setPublic', array(1 => $lang->custom->setPublic));?>
-        <button id='saveMenuBtn' type='button' class='btn btn-primary'><?php echo $lang->save ?></button> &nbsp;
-        <button id='closeModalBtn' type='button' class='btn'><?php echo $lang->close ?></button> &nbsp;
-        <button id='resetMenuBtn' type='button' class='btn'><?php echo $lang->custom->restore ?></button> &nbsp;
-        <span class='text-danger'> &nbsp; <i class="icon exclamation-sign"></i> <?php echo $lang->custom->menuTip ?></span>
+        <?php if(common::hasPriv('custom', 'setPublic')):?>
+        <div class='space-sm'>
+          <?php echo html::checkbox('setPublic', array(1 => $lang->custom->setPublic));?>
+        </div>
+        <?php endif;?>
+        <button id='saveMenuBtn' type='button' class='btn btn-primary btn-wide'><?php echo $lang->save ?></button> &nbsp;
+        <button id='closeModalBtn' type='button' class='btn btn-wide'><?php echo $lang->close ?></button> &nbsp;
+        <button id='resetMenuBtn' type='button' class='btn btn-wide'><?php echo $lang->custom->restore ?></button> &nbsp;
+        <span class='text-danger'> &nbsp; <i class="icon icon-exclamation-sign"></i> <?php echo $lang->custom->menuTip ?></span>
       </div>
     </div>
   </div>

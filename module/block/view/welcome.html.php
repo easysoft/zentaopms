@@ -23,6 +23,7 @@
 .block-welcome .user-notification-icon {position: relative;display: inline-block;margin-left: 5px;}
 .block-welcome .user-notification-icon .label-badge {position: absolute;top: 1px;right: -8px;min-width: 16px;padding: 2px;font-size: 12px;font-weight: normal;}
 </style>
+<div class='panel-move-handler'></div>
 <div class="panel-body conatiner-fluid">
   <div class="row">
     <div class="col col-left">
