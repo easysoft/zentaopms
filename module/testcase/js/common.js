@@ -2,7 +2,7 @@ $(function()
 {
     $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
 
-    if(flow != 'full')
+    if(window.flow != 'full')
     {
         $('.querybox-toggle').click(function()
         {
