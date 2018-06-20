@@ -43,7 +43,9 @@ $(function()
             $.each(items, function(idx, item)
             {
                 if(!item.text || item.fixed) return;
-                var $a = $('<a href="#"/>').html(item.text).data('menu', item).append('<i class="item-hidden-icon icon icon-eye-off"></i>');
+                var $a = $('<a href="#"/>').append(item.text);
+                $a.find('.dropdown-menu').remove();
+                $a.data('menu', item).append('<i class="item-hidden-icon icon icon-eye-off"></i>');
                 $('<li/>').attr('data-id', item.name).toggleClass('right', item.float === 'right').toggleClass('menu-hidden', !!item.hidden).append($a).appendTo($nav);
             });
             $nav.sortable({finish: function(e)
