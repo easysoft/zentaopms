@@ -2,7 +2,6 @@ $(document).ready(function()
 {
     if(flow == 'onlyTest')
     {
-        $('#subNavbar > .nav > li').removeClass('active');
         $('#subNavbar > .nav > li[data-id=' + status + ']').addClass('active');
     }
 });

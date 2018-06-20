@@ -104,10 +104,10 @@ class bugModel extends model
             {
                 $moreKey   = 'more';
                 $moreLabel = $this->lang->more;
-                if(strpos(",unconfirmed,assigntonull,longlifebugs,postponedbugs,overduebugs,needconfirm,", ",$browseType,") !== false)
+                if(isset($this->lang->bug->moreSelects[$browseType]))
                 {
                     $moreKey   = $browseType;
-                    $moreLabel = $this->lang->bug->featureBar['browse'][$browseType];
+                    $moreLabel = $this->lang->bug->moreSelects[$browseType];
                 }
                 $more  = "<a data-toggle='dropdown'>{$moreLabel}<span class='caret'></span></a>";
                 $more .= "<ul class='dropdown-menu'>";
