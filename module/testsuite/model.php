@@ -110,8 +110,8 @@ class testsuiteModel extends model
     public function setLibMenu($libraries, $libID, $moduleID = 0)
     {
         $currentLibName = zget($libraries, $libID, '');
-        $selectHtml = '';
-        $isMobile   = $this->app->viewType == 'mhtml';
+        $isMobile       = $this->app->viewType == 'mhtml';
+        $selectHtml     = '';
         if(!empty($libraries))
         {
             if($isMobile)
@@ -137,7 +137,7 @@ class testsuiteModel extends model
                 $dropMenuLink = helper::createLink('tree', 'ajaxGetDropMenu', "objectID=$libID&module=testsuite&method=library");
                 $selectHtml .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit'>{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                 $selectHtml .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $selectHtml .= "</div></div>";
+                $selectHtml .= "</div></div></div>";
             }
             else
             {
