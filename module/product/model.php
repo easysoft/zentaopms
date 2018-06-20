@@ -56,22 +56,32 @@ class productModel extends model
         if($currentModule == 'product' && $currentMethod == 'all')    $label = $this->lang->product->all;
         if($currentModule == 'product' && $currentMethod == 'create') $label = $this->lang->product->create;
 
-        $pageNav  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
-        $pageNav .= '<ul class="dropdown-menu">';
-        if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
-        if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
-        if(common::isTutorialMode())
+        $pageNav  = '';
+        $isMobile = $this->app->viewType == 'mhtml';
+        if($isMobile)
         {
-            $wizardParams = helper::safe64Encode('');
-            $link = helper::createLink('tutorial', 'wizard', "module=product&method=create&params=$wizardParams");
-            $pageNav .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->product->create}", '', "class='create-product-btn'") . '</li>';
+            $pageNav  = html::a(helper::createLink('product', 'index'), $this->lang->product->index) . $this->lang->colon;
+            $pageNav .= $selectHtml;
         }
         else
         {
-            if(common::hasPriv('product', 'create')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
+            $pageNav  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+            $pageNav .= '<ul class="dropdown-menu">';
+            if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
+            if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
+            if(common::isTutorialMode())
+            {
+                $wizardParams = helper::safe64Encode('');
+                $link = helper::createLink('tutorial', 'wizard', "module=product&method=create&params=$wizardParams");
+                $pageNav .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->product->create}", '', "class='create-product-btn'") . '</li>';
+            }
+            else
+            {
+                if(common::hasPriv('product', 'create')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
+            }
+            $pageNav .= '</ul></div></div>';
+            $pageNav .= $selectHtml;
         }
-        $pageNav .= '</ul></div></div>';
-        $pageNav .= $selectHtml;
 
         $pageActions = '';
         if($this->config->global->flow != 'full')
