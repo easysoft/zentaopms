@@ -30,6 +30,18 @@ class testcaseModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
         $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
 
+<<<<<<< HEAD
+        if($this->app->viewType == 'mhtml')
+        {
+            $productIndex = $selectHtml;
+        }
+        else
+        {
+            $this->app->loadLang('qa');
+            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            $productIndex .= $selectHtml;
+        }
+=======
         $pageNav     = '';
         $pageActions = '';
         if($this->config->global->flow == 'full')
@@ -63,6 +75,7 @@ class testcaseModel extends model
                 }
                 $pageActions .= '</ul>';
                 $pageActions .= '</div>';
+>>>>>>> 6e25725965ce1935d9b2ee004157599f82dcfd15
 
             }
             if($importPriv or $importFromLibPriv)

@@ -30,6 +30,18 @@ class bugModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'bug');
         $selectHtml = $this->product->select($products, $productID, 'bug', 'browse', '', $branch, $moduleID, 'bug');
 
+<<<<<<< HEAD
+        if($this->app->viewType == 'mhtml')
+        {
+            $productIndex = $selectHtml;
+        }
+        else
+        {
+            $this->app->loadLang('qa');
+            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            $productIndex .= $selectHtml;
+        }
+=======
         $pageNav     = '';
         $pageActions = '';
         if($this->config->global->flow == 'full')
@@ -77,6 +89,7 @@ class bugModel extends model
             }
         }
         $pageNav .= $selectHtml;
+>>>>>>> 6e25725965ce1935d9b2ee004157599f82dcfd15
 
         $this->lang->modulePageNav     = $pageNav;
         $this->lang->modulePageActions = $pageActions;

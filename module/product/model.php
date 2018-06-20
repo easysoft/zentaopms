@@ -50,6 +50,35 @@ class productModel extends model
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
+<<<<<<< HEAD
+        if($this->app->viewType == 'mhtml')
+        {
+            $productIndex = $selectHtml;
+        }
+        else
+        {
+            $label = $this->lang->product->index;
+            if($currentModule == 'product' && $currentMethod == 'all')    $label = $this->lang->product->all;
+            if($currentModule == 'product' && $currentMethod == 'create') $label = $this->lang->product->create;
+
+            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+            $productIndex .= '<ul class="dropdown-menu">';
+            if(common::hasPriv('product', 'index'))  $productIndex .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
+            if(common::hasPriv('product', 'all'))    $productIndex .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
+            if(common::isTutorialMode())
+            {
+                $wizardParams = helper::safe64Encode('');
+                $link = helper::createLink('tutorial', 'wizard', "module=product&method=create&params=$wizardParams");
+                $productIndex .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->product->create}", '', "class='create-product-btn'") . '</li>';
+            }
+            else
+            {
+                if(common::hasPriv('product', 'create')) $productIndex .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
+            }
+            $productIndex .= '</ul></div></div>';
+            $productIndex .= $selectHtml;
+        }
+=======
 
         $label = $this->lang->product->index;
         if($this->config->global->flow != 'full') $label = $this->lang->product->all;
@@ -72,6 +101,7 @@ class productModel extends model
         }
         $pageNav .= '</ul></div></div>';
         $pageNav .= $selectHtml;
+>>>>>>> 6e25725965ce1935d9b2ee004157599f82dcfd15
 
         $pageActions = '';
         if($this->config->global->flow != 'full')
