@@ -5,7 +5,7 @@
 #menuEditor .panel {border-color: #ddd;}
 #mainMenu {position: static!important; margin: 0!important; text-align: center; height: 60px;}
 #subNavbar {margin: 0; padding: 10px; height: 60px;}
-#navbar {padding: 10px}
+#navbar {padding: 10px; margin-top: 0!important;}
 #navbar .nav > li > a {padding: 10px 15px; border-radius: 3px;}
 #mainMenu > .nav {display: inline-block;}
 #menuEditor .nav > li > a {cursor: move;}

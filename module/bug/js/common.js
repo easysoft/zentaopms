@@ -1,13 +1,14 @@
 $(function()
 {
-    $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
+    var page = window.page || '';
+    var flow = window.flow;
 
-    if(typeof page == 'undefined') page = '';
+    $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
     if(page == 'create')
     {
-        productID  = $('#product').val();
-        moduleID   = $('#module').val();
-        assignedto = $('#assignedTo').val();
+        var productID  = $('#product').val();
+        var moduleID   = $('#module').val();
+        var assignedto = $('#assignedTo').val();
         changeProductConfirmed = true;
         oldStoryID             = $('#story').val() || 0;
         oldProjectID           = 0;
@@ -23,7 +24,7 @@ $(function()
         $("#story, #task, #mailto").chosen(defaultChosenOptions);
     }
 
-    if(flow != 'full')
+    if(window.flow != 'full')
     {
         $('.querybox-toggle').click(function()
         {

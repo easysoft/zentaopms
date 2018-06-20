@@ -17,7 +17,7 @@
   <div class="main-header">
     <h2><?php echo $lang->testcase->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
-      <?php echo html::commonButton($lang->pasteText, "data-toggle='importLinesModal' ", 'btn btn-info')?>
+      <?php echo html::commonButton($lang->pasteText, "data-toggle='modal' data-target='#importLinesModal' ", 'btn btn-info')?>
     </div>
   </div>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
@@ -48,16 +48,14 @@
         <td><?php echo $i+1;?></td>
         <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
         <td style='overflow:visible'>
-          <div class='input-group'>
-            <div class="input-control has-icon-right">
-              <?php echo html::input("title[$i]", '', "class='form-control' autocomplete='off'");?>
-              <div class="colorpicker">
-                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                <ul class="dropdown-menu clearfix">
-                  <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
-                </ul>
-                <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#title\\[$i\\]'");?>
-              </div>
+          <div class="input-control has-icon-right">
+            <?php echo html::input("title[$i]", '', "class='form-control title-import' autocomplete='off'");?>
+            <div class="colorpicker">
+              <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+              <ul class="dropdown-menu clearfix">
+                <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
+              </ul>
+              <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#title\\[$i\\]'");?>
             </div>
           </div>
         </td>
@@ -75,22 +73,28 @@
     </table>
   </form>
 </div>
-<table class='hide' id='trTemp'>
+<table class='template' id='trTemp'>
   <tbody>
     <tr class='text-center'>
       <td>%s</td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
       <td style='overflow:visible'>
-        <div class='input-group'>
-        <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[%s\\]'");?>
-        <?php echo html::input("title[%s]", '', "class='form-control' autocomplete='off'");?></td>
+        <div class="input-control has-icon-right">
+          <?php echo html::input("title[%s]", '', "class='form-control title-import' autocomplete='off'");?>
+          <div class="colorpicker">
+            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+            <ul class="dropdown-menu clearfix">
+              <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
+            </ul>
+            <?php echo html::hidden("color[%s]", '', "data-provide='colorpicker-later' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#title\\[%s\\]'");?>
+          </div>
         </div>
       </td>
-      <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-      <td><?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control");?></td>
+      <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
+      <td><?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control chosen");?></td>
       <td><?php echo html::textarea("precondition[%s]", '', "class='form-control'")?></td>
       <td><?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
-      <td class='text-left' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control' multiple");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
     </tr>
   </tbody>
 </table>
