@@ -25,9 +25,12 @@ class qaModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'qa', 'index', '', $branch);
 
-        if($this->app->viewType == 'mhtml')
+        $productIndex  = '';
+        $isMobile      = $this->app->viewType == 'mhtml';
+        if($isMobile)
         {
-            $productIndex = $selectHtml;
+            $productIndex  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
+            $productIndex .= $selectHtml;
         }
         else
         {

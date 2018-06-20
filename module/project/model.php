@@ -102,16 +102,20 @@ class projectModel extends model
         }
 
         $selectHtml = $this->select($projects, $projectID, $buildID, $moduleName, $methodName, $extra);
-        if($this->app->viewType == 'mhtml')
+
+        $label = $this->lang->project->index;
+        if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
+        if($moduleName == 'project' && $methodName == 'create') $label = $this->lang->project->create;
+
+        $projectIndex = '';
+        $isMobile     = $this->app->viewType == 'mhtml';
+        if($isMobile)
         {
-            $projectIndex = $selectHtml;
+            $projectIndex  = html::a(helper::createLink('project', 'index'), $this->lang->project->index) . $this->lang->colon;
+            $projectIndex .= $selectHtml;
         }
         else
         {
-            $label = $this->lang->project->index;
-            if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
-            if($moduleName == 'project' && $methodName == 'create') $label = $this->lang->project->create;
-
             $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
             $projectIndex .= '<ul class="dropdown-menu">';
             if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
