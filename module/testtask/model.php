@@ -26,36 +26,28 @@ class testtaskModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
 
-        if($this->app->viewType == 'mhtml')
+        if($testtask)
         {
-            $productIndex = $selectHtml;
+            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
+
+            $selectHtml .= "<div class='btn-group angle-btn'>";
+            $selectHtml .= "<div class='btn-group'>";
+            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
+            $selectHtml .= "<ul class='dropdown-menu'>";
+            foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'cases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
+            $selectHtml .= "</ul>";
+            $selectHtml .= "</div>";
+            $selectHtml .= "</div>";
+
+            $this->lang->modulePageActions = '';
+            if(common::hasPriv('testtask', 'view'))     $this->lang->modulePageActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
+            if(common::hasPriv('testreport', 'browse')) $this->lang->modulePageActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
         }
-        else
-        {
-            if($testtask)
-            {
-                $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
 
-                $selectHtml .= "<div class='btn-group angle-btn'>";
-                $selectHtml .= "<div class='btn-group'>";
-                $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
-                $selectHtml .= "<ul class='dropdown-menu'>";
-                foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'cases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
-                $selectHtml .= "</ul>";
-                $selectHtml .= "</div>";
-                $selectHtml .= "</div>";
+        $this->app->loadLang('qa');
+        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+        $productIndex .= $selectHtml;
 
-                $this->lang->modulePageActions = '';
-                if(common::hasPriv('testtask', 'view'))     $this->lang->modulePageActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
-                if(common::hasPriv('testreport', 'browse')) $this->lang->modulePageActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
-            }
-
-<<<<<<< HEAD
-            $this->app->loadLang('qa');
-            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-            $productIndex .= $selectHtml;
-        }
-=======
         $pageNav     = '';
         $pageActions = '';
         $isMobile    = $this->app->viewType == 'mhtml';
@@ -81,7 +73,6 @@ class testtaskModel extends model
             }
         }
         $pageNav .= $selectHtml;
->>>>>>> 6e25725965ce1935d9b2ee004157599f82dcfd15
 
         $this->lang->modulePageNav     = $pageNav;
         $this->lang->modulePageActions = $pageActions;
