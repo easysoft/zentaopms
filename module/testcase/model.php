@@ -26,9 +26,16 @@ class testcaseModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
         $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+        if($this->app->viewType == 'mhtml')
+        {
+            $productIndex = $selectHtml;
+        }
+        else
+        {
+            $this->app->loadLang('qa');
+            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            $productIndex .= $selectHtml;
+        }
 
         $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->testcase->menu as $key => $menu)

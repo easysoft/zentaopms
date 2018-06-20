@@ -26,27 +26,34 @@ class testtaskModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
 
-        if($testtask)
+        if($this->app->viewType == 'mhtml')
         {
-            $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
-
-            $selectHtml .= "<div class='btn-group angle-btn'>";
-            $selectHtml .= "<div class='btn-group'>";
-            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
-            $selectHtml .= "<ul class='dropdown-menu'>";
-            foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'cases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
-            $selectHtml .= "</ul>";
-            $selectHtml .= "</div>";
-            $selectHtml .= "</div>";
-
-            $this->lang->modulePageActions = '';
-            if(common::hasPriv('testtask', 'view'))     $this->lang->modulePageActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
-            if(common::hasPriv('testreport', 'browse')) $this->lang->modulePageActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
+            $productIndex = $selectHtml;
         }
+        else
+        {
+            if($testtask)
+            {
+                $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+                $selectHtml .= "<div class='btn-group angle-btn'>";
+                $selectHtml .= "<div class='btn-group'>";
+                $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
+                $selectHtml .= "<ul class='dropdown-menu'>";
+                foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'cases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
+                $selectHtml .= "</ul>";
+                $selectHtml .= "</div>";
+                $selectHtml .= "</div>";
+
+                $this->lang->modulePageActions = '';
+                if(common::hasPriv('testtask', 'view'))     $this->lang->modulePageActions .= html::a(helper::createLink('testtask', 'view', "taskID={$testtask->id}"), "<i class='icon icon-file-text'> </i>" . $this->lang->testtask->view, '', "class='btn'");
+                if(common::hasPriv('testreport', 'browse')) $this->lang->modulePageActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
+            }
+
+            $this->app->loadLang('qa');
+            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            $productIndex .= $selectHtml;
+        }
 
         $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->testtask->menu as $key => $value)

@@ -27,9 +27,16 @@ class testsuiteModel extends model
         $selectHtml = $this->select($products, $productID, 'testsuite', 'browse');
         if(strpos($selectHtml, 'currentBranch') !== false) $selectHtml = substr($selectHtml, 0, strrpos($selectHtml, "<div class='btn-group'>")) . '</div>';
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+        if($this->app->viewType == 'mhtml')
+        {
+            $productIndex = $selectHtml;
+        }
+        else
+        {
+            $this->app->loadLang('qa');
+            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            $productIndex .= $selectHtml;
+        }
 
         $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->testsuite->menu as $key => $value)
@@ -87,18 +94,26 @@ class testsuiteModel extends model
     public function setLibMenu($libraries, $libID, $moduleID = 0)
     {
         $currentLibName = zget($libraries, $libID, '');
-        $selectHtml = '';
+        $isMobile       = $this->app->viewType == 'mhtml';
+        $selectHtml     = '';
         if(!empty($libraries))
         {
-            $dropMenuLink = helper::createLink('testsuite', 'ajaxGetDropMenu', "objectID=$libID&module=testsuite&method=library");
-            $selectHtml = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentLibName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-            $selectHtml .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $selectHtml .= "</div></div>";
+            if($isMobile)
+            {
+                $selectHtml = "<a id='currentItem' href=\"javascript:showSearchMenu('testsuite', '$libID', 'testsuite', 'library', '')\">{$currentLibName} <span class='icon-caret-down'> </span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+            }
+            else
+            {
+                $dropMenuLink = helper::createLink('testsuite', 'ajaxGetDropMenu', "objectID=$libID&module=testsuite&method=library");
+                $selectHtml = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentLibName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $selectHtml .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $selectHtml .= "</div></div></div>";
+            }
+
         }
 
         if($this->config->global->flow == 'onlyTest')
         {
-            $isMobile   = $this->app->viewType == 'mhtml';
             $modules    = $this->loadModel('tree')->getModulePairs($libID, 'caselib');
             $moduleName = ($moduleID && isset($modules[$moduleID])) ? $modules[$moduleID] : $this->lang->tree->all;
 
@@ -107,23 +122,29 @@ class testsuiteModel extends model
                 $dropMenuLink = helper::createLink('tree', 'ajaxGetDropMenu', "objectID=$libID&module=testsuite&method=library");
                 $selectHtml .= "<div class='btn-group'><button id='currentModule' data-toggle='dropdown' type='button' class='btn btn-limit'>{$moduleName} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
                 $selectHtml .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $selectHtml .= "</div></div>";
+                $selectHtml .= "</div></div></div>";
             }
             else
             {
                 $selectHtml .= "<a id='currentModule' href=\"javascript:showSearchMenu('tree', '$libID', 'testsuite', 'library', '')\">{$moduleName} <span class='icon-caret-down'></span></a><div id='currentBranchDropMenu' class='hidden affix enter-from-bottom layer'></div>";
             }
         }
-        $selectHtml .= '</div>';
 
         setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot);
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->qa->index . ' <span class="caret"></span></button>';
-        $productIndex .= '<ul class="dropdown-menu">';
-        if(common::hasPriv('testsuite', 'createLib')) $productIndex .= '<li>' . html::a(helper::createLink('testsuite', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->testsuite->createLib) . '</li>';
-        $productIndex .= '</ul></div></div>';
-        $productIndex .= $selectHtml;
+        if($isMobile)
+        {
+            $productIndex = $selectHtml;
+        }
+        else
+        {
+            $this->app->loadLang('qa');
+            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $this->lang->qa->index . ' <span class="caret"></span></button>';
+            $productIndex .= '<ul class="dropdown-menu">';
+            if(common::hasPriv('testsuite', 'createLib')) $productIndex .= '<li>' . html::a(helper::createLink('testsuite', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->testsuite->createLib) . '</li>';
+            $productIndex .= '</ul></div></div>';
+            $productIndex .= $selectHtml;
+        }
 
         $this->lang->modulePageNav = $productIndex;
         foreach($this->lang->caselib->menu as $key => $value)

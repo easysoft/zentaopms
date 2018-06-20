@@ -102,29 +102,35 @@ class projectModel extends model
         }
 
         $selectHtml = $this->select($projects, $projectID, $buildID, $moduleName, $methodName, $extra);
-
-        $label = $this->lang->project->index;
-        if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
-        if($moduleName == 'project' && $methodName == 'create') $label = $this->lang->project->create;
-
-        $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
-        $projectIndex .= '<ul class="dropdown-menu">';
-        if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
-        if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all', 'status=all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
-
-        if(common::isTutorialMode())
+        if($this->app->viewType == 'mhtml')
         {
-            $wizardParams = helper::safe64Encode('');
-            $link = helper::createLink('tutorial', 'wizard', "module=project&method=create&params=$wizardParams");
-            $projectIndex .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->project->create}", '', "class='create-project-btn'") . '</li>';
+            $projectIndex = $selectHtml;
         }
         else
         {
-            if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
-        }
+            $label = $this->lang->project->index;
+            if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
+            if($moduleName == 'project' && $methodName == 'create') $label = $this->lang->project->create;
 
-        $projectIndex .= '</ul></div></div>';
-        $projectIndex .= $selectHtml;
+            $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+            $projectIndex .= '<ul class="dropdown-menu">';
+            if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
+            if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all', 'status=all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
+
+            if(common::isTutorialMode())
+            {
+                $wizardParams = helper::safe64Encode('');
+                $link = helper::createLink('tutorial', 'wizard', "module=project&method=create&params=$wizardParams");
+                $projectIndex .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->project->create}", '', "class='create-project-btn'") . '</li>';
+            }
+            else
+            {
+                if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
+            }
+
+            $projectIndex .= '</ul></div></div>';
+            $projectIndex .= $selectHtml;
+        }
 
         $this->lang->modulePageNav = $projectIndex;
         if($moduleName != 'project') $this->lang->$moduleName->dividerMenu = $this->lang->project->dividerMenu;
