@@ -17,10 +17,6 @@ $(function()
 
     if(flow == 'onlyTest')
     {
-        toggleSearch();
-        $('.export').modalTrigger({width:650, type:'iframe', afterShown: setCheckedCookie})
-
-        $('#subNavbar > .nav > li').removeClass('active');
         $('#subNavbar > .nav > li[data-id=' + browseType + ']').addClass('active');
     }
 });

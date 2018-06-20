@@ -80,7 +80,7 @@ class testcase extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
-        $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID);
+        $this->testcase->setMenu($this->products, $productID, $branch, $moduleID, $suiteID, $orderBy);
         $this->session->set('caseList', $this->app->getURI(true));
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
@@ -1286,7 +1286,7 @@ class testcase extends control
                 {
                     $row = new stdclass();
                     $row->module     = $module . "(#$moduleID)";
-                    $row->stepDesc   = "1. \n2. \n3.";
+                    $row->stepDesc   = "1. \n2. \n3. num:" . $num;
                     $row->stepExpect = "1. \n2. \n3.";
 
                     if(empty($rows))

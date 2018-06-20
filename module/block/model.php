@@ -123,6 +123,9 @@ class blockModel extends model
         $blocks = $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
             ->andWhere('hidden')->eq(0)
+            ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('source')->notin('project,qa')->fi()
+            ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('source')->notin('product,qa')->fi()
+            ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('source')->notin('product,project')->fi()
             ->orderBy('`order`')
             ->fetchAll('id');
 

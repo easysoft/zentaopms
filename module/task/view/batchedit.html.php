@@ -36,7 +36,7 @@
   {
       if($field)$visibleFields[$field] = '';
   }
-  foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
+  foreach(explode(',', $config->task->edit->requiredFields) as $field)
   {
       if($field)
       {

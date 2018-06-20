@@ -32,7 +32,7 @@
           <td class='w-p35-f'><?php echo html::input('product', $productID, "class='form-control'");?></td><td></td>
         </tr>
         <?php endif;?>
-        <?php if($this->config->global->flow != 'onlyTest'):?>
+        <?php if($config->global->flow != 'onlyTest'):?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->project;?></th>
           <td class='w-p35-f'><?php echo html::select('project', $projects, '', "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></td><td></td>

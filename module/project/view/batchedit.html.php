@@ -26,7 +26,7 @@
   {
       if($field)$visibleFields[$field] = '';
   }
-  foreach(explode(',', $this->config->project->edit->requiredFields) as $field)
+  foreach(explode(',', $config->project->edit->requiredFields) as $field)
   {
       if($field)
       {

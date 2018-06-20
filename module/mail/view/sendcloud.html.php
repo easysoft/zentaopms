@@ -53,9 +53,9 @@
           <td colspan='2' class='text-center'>
             <?php 
             echo html::submitButton();
-            if($this->config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
+            if($config->mail->turnon and $mailExist) echo html::linkButton($lang->mail->test, inlink('test'));
             echo html::linkButton($lang->mail->closeSendCloud, inlink('reset'));
-            if($this->config->mail->turnon and common::hasPriv('mail', 'sendcloudUser')) echo html::linkButton($lang->mail->sendcloudUser, inlink('sendcloudUser'));
+            if($config->mail->turnon and common::hasPriv('mail', 'sendcloudUser')) echo html::linkButton($lang->mail->sendcloudUser, inlink('sendcloudUser'));
             if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::linkButton($lang->mail->browse, inlink('browse'));
             ?>
           </td>

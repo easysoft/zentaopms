@@ -63,7 +63,7 @@
           <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
             <?php
-            if($this->config->mail->turnon and $mailExist) echo html::a(inlink('test'), $lang->mail->test, '', "class='btn btn-wide'");
+            if($config->mail->turnon and $mailExist) echo html::a(inlink('test'), $lang->mail->test, '', "class='btn btn-wide'");
             echo html::a(inlink('reset'), $lang->mail->reset, '', "class='btn btn-wide'");
             if(common::hasPriv('mail', 'browse') and !empty($config->mail->async) and !empty($config->global->cron)) echo html::a(inlink('browse'), $lang->mail->browse, '', "class='btn btn-wide'");
             ?>

@@ -4,6 +4,7 @@ $(function()
     var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
+    var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
 
     var stageMap =
     {
@@ -17,14 +18,68 @@ $(function()
         }
     };
 
+    // Get scrollbar width
+    var getScrollbarWidth = function ()
+    {
+        var outer = document.createElement("div");
+        outer.style.visibility = "hidden";
+        outer.style.width = "100px";
+        outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
+    
+        document.body.appendChild(outer);
+    
+        var widthNoScroll = outer.offsetWidth;
+        // force scrollbars
+        outer.style.overflow = "scroll";
+    
+        // add innerdiv
+        var inner = document.createElement("div");
+        inner.style.width = "100%";
+        outer.appendChild(inner);        
+    
+        var widthWithScroll = inner.offsetWidth;
+
+        // remove divs
+        outer.parentNode.removeChild(outer);
+    
+        return widthNoScroll - widthWithScroll;
+    };
+
+    var scrollbarWidth = getScrollbarWidth();
+    var fixBoardWidth = function()
+    {
+        var $table = $kanban.find('.table');
+        var kanbanWidth = $table.width();
+        var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
+        var boardCount = $cBoards.length;
+        var $cSide = $table.find('thead>tr>th.c-board.c-side');
+        var totalWidth = kanbanWidth - scrollbarWidth;
+        if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
+        var cBoardWidth = Math.floor(totalWidth/boardCount) - 16;
+        $cBoards.not(':last').width(cBoardWidth);
+        $cBoards.first().width(cBoardWidth + 5);
+        $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
+    };
+    fixBoardWidth();
+    $(window).on('resize', fixBoardWidth);
+
+    var refresh = function()
+    {
+        var selfClose = $.cookie('selfClose');
+        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
+        if(selfClose == 1) $kanban.load(location.href + ' #kanban', fixBoardWidth);
+    };
+
     var lastOperation;
     var dropTo = function(id, from, to, type)
     {
-      console.log(id);
         if(stageMap[type][from] && stageMap[type][from][to])
         {
             lastOperation = {id: id, from: from, to: to};
-            $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIDList[]':[id]});
+            $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIDList[]':[id]}, function()
+            {
+                refresh();
+            });
             return true;
         }
         return false;
@@ -77,13 +132,6 @@ $(function()
         }
     });
 
-    var refresh = function()
-    {
-        var selfClose = $.cookie('selfClose');
-        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban');
-    }
-
     $kanban.on('click', '.kanbaniframe', function(e)
     {
         var $link = $(this);
@@ -94,15 +142,9 @@ $(function()
             width: '80%',
         }, $link.data())).show(
         {
-            shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-            hidden: function(){refresh();}
+            shown:  function(){$('.modal-iframe').data('cancel-reload', true)},
+            hidden: refresh
         });
-				return false;
+		return false;
     });
-
-    $.extend({'closeModal':function(callback, location)
-    {
-        kanbanModalTrigger.close();
-        if(callback && $.isFunction(callback)) callback();
-    }});
 });

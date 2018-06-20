@@ -24,7 +24,7 @@
       <?php endif;?>
     </h2>
     <div class="pull-right btn-toolbar">
-      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
+      <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>
@@ -36,7 +36,7 @@
   {
       if($field) $visibleFields[$field] = '';
   }
-  foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
+  foreach(explode(',', $config->testcase->create->requiredFields) as $field)
   {
       if($field)
       {
@@ -82,16 +82,14 @@
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
             <td style='overflow:visible'>
-              <div class='input-group'>
-                <div class="input-control has-icon-right">
-                  <?php echo html::input("title[$i]", '', "class='form-control' autocomplete='off'");?>
-                  <div class="colorpicker">
-                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                    <ul class="dropdown-menu clearfix">
-                      <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
-                    </ul>
-                    <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#title\\[$i\\]'");?>
-                  </div>
+              <div class="input-control has-icon-right">
+                <?php echo html::input("title[$i]", '', "class='form-control title-import' autocomplete='off'");?>
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix">
+                    <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
+                  </ul>
+                  <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#title\\[$i\\]'");?>
                 </div>
               </div>
             </td>
@@ -100,38 +98,46 @@
             <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
-            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
           </tr>
           <?php endfor;?>
+        </tbody>
+        <tfoot>
           <tr>
             <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>
           </tr>
-        </tbody>
+        </tfoot>
       </table>
     </div>
   </form>
 </div>
-<table class='hide' id='trTemp'>
+<table class='template' id='trTemp'>
   <tbody>
     <tr>
       <td class="text-center">%s</td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
       <td style='overflow:visible'>
-        <div class='input-group'>
-        <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->testcase->colorTag}' data-update-text='#title\\[%s\\]'");?>
-        <?php echo html::input("title[%s]", '', "class='form-control' autocomplete='off'");?></td>
+        <div class="input-control has-icon-right">
+          <?php echo html::input("title[%s]", '', "class='form-control title-import' autocomplete='off'");?>
+          <div class="colorpicker">
+            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+            <ul class="dropdown-menu clearfix">
+              <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
+            </ul>
+            <?php echo html::hidden("color[%s]", '', "data-provide='colorpicker-later' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#title\\[%s\\]'");?>
+          </div>
         </div>
       </td>
-      <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control");?></td>
-      <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control");?></td>
+      <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class=form-control chosen");?></td>
+      <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class=form-control chosen");?></td>
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "rows='1' class='form-control'")?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control' multiple");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
       <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
     </tr>
   </tbody>

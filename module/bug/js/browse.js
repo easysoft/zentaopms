@@ -4,10 +4,6 @@ $(function()
 
     if(flow == 'onlyTest')
     {
-        toggleSearch();
-        $(".export").modalTrigger({width:650, type:'iframe'});
-
-        $('#subNavbar > .nav > li').removeClass('active');
         $('#subNavbar > .nav > li[data-id=' + browseType + ']').addClass('active');
 
         var navWidth = $('#subNavbar > .nav').width();

@@ -19,7 +19,7 @@
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
         <?php if($longBlock):?>
-        <th class='c-name .c-project'><?php echo $lang->product->currentProject;?></th>
+        <th class='c-name c-project'><?php echo $lang->product->currentProject;?></th>
         <?php endif;?>
         <th class='c-num'><?php echo $lang->product->plans;?></th>
         <th class='c-num'><?php echo $lang->product->releases;?></th>
@@ -36,7 +36,7 @@
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-name text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
         <?php if($longBlock):?>
-        <td class='c-name .c-project text-left'><?php echo zget($projects, $product->id, '');?></td>
+        <td class='c-name c-project text-left'><?php echo zget($projects, $product->id, '');?></td>
         <?php endif;?>
         <td class="c-num"><?php echo $product->plans?></td>
         <td class="c-num"><?php echo $product->releases?></td>

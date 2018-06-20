@@ -35,7 +35,7 @@
 
   foreach($projects as $project)
   {
-      if($project->status == 'done' or $project->status == 'closed') echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "title='{$projectj->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+      if($project->status == 'done' or $project->status == 'closed') echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
   }
   ?>
 </div>

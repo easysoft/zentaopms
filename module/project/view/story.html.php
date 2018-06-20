@@ -100,15 +100,15 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <?php if($canOrder):?>
-            <th class='w-80px'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
+            <th class='w-80px c-sort'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
             <?php endif;?>
             <th class='c-pri'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-            <th> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-            <th class='w-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='w-80px'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-            <th class='w-80px'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-            <th class='w-80px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-70px'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+            <th class='c-name'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+            <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+            <th class='c-estimate w-80px'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+            <th class='c-status'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='c-stage w-70px'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
             <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
@@ -130,23 +130,23 @@
               <?php endif;?>
             </td>
             <?php if($canOrder):?>
-            <td class='sort-handler'><i class='icon-move'></i></td>
+            <td class='sort-handler c-sort'><i class='icon-move'></i></td>
             <?php endif;?>
-            <td><span class='label-pri <?php echo 'label-pri-' . $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-            <td class='text-left' title="<?php echo $story->title?>">
+            <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+            <td class='c-name' title="<?php echo $story->title?>">
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color'");?>
             </td>
-            <td><?php echo $users[$story->openedBy];?></td>
-            <td><?php echo $users[$story->assignedTo];?></td>
-            <td><?php echo $story->estimate;?></td>
-            <td title='<?php echo zget($lang->story->statusList, $story->status);?>'>
+            <td class='c-user'><?php echo $users[$story->openedBy];?></td>
+            <td class='c-user'><?php echo $users[$story->assignedTo];?></td>
+            <td class='c-estimate'><?php echo $story->estimate;?></td>
+            <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
               <span class='status-<?php echo $story->status;?>'>
                 <span class='label label-dot'></span>
                 <span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
               </span>
             </td>
-            <td><?php echo $lang->story->stageList[$story->stage];?></td>
+            <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
             <td class='linkbox'>
               <?php
               $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");

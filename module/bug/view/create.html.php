@@ -62,7 +62,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               </div>
             </td>
           </tr>
-          <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $this->config->global->flow != 'onlyTest');?>
+          <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $config->global->flow != 'onlyTest');?>
           <?php if($showProject):?>
           <tr>
             <th><?php echo $lang->bug->project;?></th>
@@ -148,7 +148,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             </td>
           </tr>
           <?php endif;?>
-          <?php if($this->config->global->flow != 'onlyTest' && $showProject):?>
+          <?php if($config->global->flow != 'onlyTest' && $showProject):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr>
@@ -210,13 +210,13 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           $showStory = strpos(",$showFields,", ',story,') !== false;
           $showTask  = strpos(",$showFields,", ',task,')  !== false;
           ?>
-          <?php if($showStory and $this->config->global->flow != 'onlyTest'):?>
+          <?php if($showStory and $config->global->flow != 'onlyTest'):?>
           <tr>
             <th><?php echo $lang->bug->story;?></th>
             <td colspan='2'><div id='storyIdBox' class='input-group'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></div></td>
           </tr>
           <?php endif;?>
-          <?php if($showTask and $this->config->global->flow != 'onlyTest'):?>
+          <?php if($showTask and $config->global->flow != 'onlyTest'):?>
           <tr>
             <th><?php echo $lang->bug->task;?></th>
             <td colspan='2'><div id='taskIdBox' class='input-group'> <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?></div></td>

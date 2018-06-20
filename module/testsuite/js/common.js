@@ -1,4 +1,10 @@
-$(document).ready(function()
+$(function()
 {
-    if(typeof(flow) != 'undefined' && flow == 'onlyTest') toggleSearch();
+    if(window.flow != 'full')
+    {
+        $('.querybox-toggle').click(function()
+        {
+            $(this).parent().toggleClass('active');
+        });
+    }
 })

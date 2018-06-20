@@ -22,13 +22,13 @@
       <?php echo $lang->task->batchCreate;?>
       <?php endif;?>
     </h2>
-    <?php if($project->type != 'ops' && $this->config->global->flow != 'onlyTask'):?>
+    <?php if($project->type != 'ops' && $config->global->flow != 'onlyTask'):?>
     <a class="checkbox-primary pull-left" id='zeroTaskStory' href='javascript:toggleZeroTaskStory();'>
       <label><?php echo $lang->story->zeroTask;?></label>
     </a>
     <?php endif;?>
     <div class="pull-right btn-toolbar">
-      <button type='button' data-toggle="importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
+      <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>
@@ -40,7 +40,7 @@
   {
       if($field)$visibleFields[$field] = '';
   }
-  foreach(explode(',', $this->config->task->create->requiredFields) as $field)
+  foreach(explode(',', $config->task->create->requiredFields) as $field)
   {
       if($field)
       {
@@ -49,7 +49,7 @@
       }
   }
   $colspan     = count($visibleFields) + 3;
-  $hiddenStory = ((isonlybody() and $storyID) || $this->config->global->flow == 'onlyTask') ? ' hidden' : '';
+  $hiddenStory = ((isonlybody() and $storyID) || $config->global->flow == 'onlyTask') ? ' hidden' : '';
   if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   ?>
   <form method='post' class='load-indicator batch-actions-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
@@ -113,16 +113,14 @@
             </td>
             <?php endif;?>
             <td style='overflow:visible'>
-              <div class='input-group'>
-                <div class="input-control has-icon-right">
-                  <?php echo html::input("name[$i]", '', "class='form-control input-story-title' autocomplete='off'");?>
-                  <div class="colorpicker">
-                    <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                    <ul class="dropdown-menu clearfix pull-right">
-                      <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
-                    </ul>
-                    <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#name\\[$i\\]'");?>
-                  </div>
+              <div class="input-control has-icon-right">
+                <?php echo html::input("name[$i]", '', "class='form-control title-import' autocomplete='off'");?>
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix pull-right">
+                    <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
+                  </ul>
+                  <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#name\\[$i\\]'");?>
                 </div>
               </div>
             </td>
@@ -135,41 +133,50 @@
             <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
           </tr>
           <?php endfor;?>
+        </tbody>
+        <tfoot>
           <tr>
             <td colspan='<?php echo $colspan?>' class='text-center form-actions'>
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>
           </tr>
-        </tbody>
+        </tfoot>
       </table>
     </div>
   </form>
 </div>
-<table class='hide' id='trTemp'>
+<table class='template' id='trTemp'>
   <tbody>
     <tr>
       <td class='text-center'>%s</td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
-        <?php echo html::select("module[%s]", $modules, $module, "class='form-control' onchange='setStories(this.value, $project->id, \"%s\")'")?>
+        <?php echo html::select("module[%s]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $project->id, \"%s\")'")?>
         <?php echo html::hidden("parent[%s]", $parent);?>
       </td>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
         <div class='input-group'>
-          <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control' onchange='setStoryRelated(\"%s\")'");?>
+          <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated(\"%s\")'");?>
           <span class='input-group-btn'>
             <a href='javascript:copyStoryTitle("%s")' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
           </span>
         </div>
       </td>
       <td style='overflow:visible'>
-        <div class='input-group'>
-        <?php echo html::hidden("color[%s]", '', "data-wrapper='input-group-btn fix-border-right' data-pull-menu-right='false' data-btn-tip='{$lang->task->colorTag}' data-update-text='#name\\[%s\\]'");?>
-        <?php echo html::input("name[%s]", '', "class='form-control' autocomplete='off'");?>
+        <div class="input-control has-icon-right">
+          <?php echo html::input("name[%s]", '', "class='form-control title-import' autocomplete='off'");?>
+          <div class="colorpicker">
+            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+            <ul class="dropdown-menu clearfix pull-right">
+              <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
+            </ul>
+            <?php echo html::hidden("color[%s]", '', "data-provide='colorpicker-later' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#name\\[%s\\]'");?>
+          </div>
+        </div>
         </div>
       </td>
-      <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class=form-control');?></td>
-      <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[%s]", $members, $member, "class='form-control'");?></td>
+      <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class="form-control"');?></td>
+      <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[%s]", $members, $member, "class='form-control chosen'");?></td>
       <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[%s]", '', "class='form-control text-center' autocomplete='off'");?></td>
       <td <?php echo zget($visibleFields, 'estStarted', "class='hidden'")?>><?php echo html::input("estStarted[%s]", '', "class='form-control text-center form-date'");?></td>
       <td <?php echo zget($visibleFields, 'deadline', "class='hidden'")?>><?php echo html::input("deadline[%s]", '', "class='form-control text-center form-date'");?></td>

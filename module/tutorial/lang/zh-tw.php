@@ -11,7 +11,7 @@
  */
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = '新手教程';
-$lang->tutorial->desc             = '通過完成一系列任務，快速瞭解禪道的基本使用方法。這可能會花費您10分鐘，你可以隨時退出任務。';
+$lang->tutorial->desc             = '通過完成一系列任務，快速瞭解禪道的基本使用方法。這可能會花費你10分鐘，你可以隨時退出任務。';
 $lang->tutorial->start            = '立即開始';
 $lang->tutorial->exit             = '退出教程';
 $lang->tutorial->congratulation   = '恭喜，你已完成了所有任務！';
@@ -29,7 +29,7 @@ $lang->tutorial->requiredTip      = '【%s】為必填項';
 $lang->tutorial->congratulateTask = '恭喜，你完成了任務 【<span class="task-name-current"></span>】！';
 $lang->tutorial->serverErrorTip   = '發生了一些錯誤。';
 $lang->tutorial->ajaxSetError     = '必須指定已完成的任務，如果要重置任務，請設置值為空。';
-$lang->tutorial->novice           = "您可能初次使用禪道，是否進入新手教程";
+$lang->tutorial->novice           = "你可能初次使用禪道，是否進入新手教程";
 $lang->tutorial->dataNotSave      = "教程任務中，數據不會保存。";
 
 $lang->tutorial->tasks = array();

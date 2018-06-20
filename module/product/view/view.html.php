@@ -46,7 +46,7 @@
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->product->latestDynamic;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}&type=all");?>" title="<?php echo $lang->more;?>">MORE</i></a></li>
+                <li><a href="<?php echo $this->createLink('product', 'dynamic', "productID={$product->id}&type=all");?>" title="<?php echo $lang->more;?>"><i class="icon icon-more icon-sm"></i></i></a></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -88,7 +88,7 @@
             </div>
             <?php if($product->type == 'platform'):?>
             <div class="detail">
-            <div class="detail-title"><strong><?php echo $lang->product->branchName['platform'];?></strong><a class="btn btn-link pull-right muted">MORE</a></div>
+            <div class="detail-title"><strong><?php echo $lang->product->branchName['platform'];?></strong><a class="btn btn-link pull-right muted"><i class="icon icon-more icon-sm"></i></a></div>
               <div class="detail-content">
                 <ul class="clearfix branch-list">
                   <?php foreach($branches as $branchName):?>
@@ -156,7 +156,7 @@
                 </table>
               </div>
             </div>
-            <?php if($this->config->global->flow != 'onlyTest'):?>
+            <?php if($config->global->flow != 'onlyTest'):?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->product->otherInfo;?></strong></div>
               <div class="detail-content">

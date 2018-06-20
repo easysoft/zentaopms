@@ -50,6 +50,7 @@ class productModel extends model
         if($currentMethod == 'report') $currentMethod = 'browse';
 
         $selectHtml = $this->select($products, $productID, $currentModule, $currentMethod, $extra, $branch, $module, $moduleType);
+<<<<<<< HEAD
         if($this->app->viewType == 'mhtml')
         {
             $productIndex = $selectHtml;
@@ -77,8 +78,43 @@ class productModel extends model
             $productIndex .= '</ul></div></div>';
             $productIndex .= $selectHtml;
         }
+=======
 
-        $this->lang->modulePageNav = $productIndex;
+        $label = $this->lang->product->index;
+        if($this->config->global->flow != 'full') $label = $this->lang->product->all;
+        if($currentModule == 'product' && $currentMethod == 'all')    $label = $this->lang->product->all;
+        if($currentModule == 'product' && $currentMethod == 'create') $label = $this->lang->product->create;
+
+        $pageNav  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+        $pageNav .= '<ul class="dropdown-menu">';
+        if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
+        if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
+        if(common::isTutorialMode())
+        {
+            $wizardParams = helper::safe64Encode('');
+            $link = helper::createLink('tutorial', 'wizard', "module=product&method=create&params=$wizardParams");
+            $pageNav .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->product->create}", '', "class='create-product-btn'") . '</li>';
+        }
+        else
+        {
+            if(common::hasPriv('product', 'create')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->product->create) . '</li>';
+        }
+        $pageNav .= '</ul></div></div>';
+        $pageNav .= $selectHtml;
+>>>>>>> 6e25725965ce1935d9b2ee004157599f82dcfd15
+
+        $pageActions = '';
+        if($this->config->global->flow != 'full')
+        {
+            if($currentMethod == 'build' && common::hasPriv('build', 'create'))
+            {
+                $this->app->loadLang('build');
+                $pageActions .= html::a(helper::createLink('build', 'create', "productID=$productID"), "<i class='icon icon-plus'></i> {$this->lang->build->create}", '', "class='btn btn-primary'");
+            }
+        }
+
+        $this->lang->modulePageNav     = $pageNav;
+        $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->product->menu as $key => $menu)
         {
             $replace = $productID;
@@ -863,18 +899,25 @@ class productModel extends model
                 foreach($this->app->user->groups as $group) $groups .= ",$group,";
             }
 
-            $stmt = $this->dao->select('distinct t1.*,t3.type as teamType,t3.account as teamAccount,t4.deleted as projectDeleted')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
-                ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.project = t3.root')
-                ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t2.project = t4.id')
-                ->where('t1.deleted')->eq(0)
-                ->query();
+            $allProducts     = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchAll('id');
+            $productProjects = $this->dao->select('t1.product,t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in(array_keys($allProducts))
+                ->andWhere('t2.deleted')->eq('0')
+                ->fetchGroup('product', 'project');
+
+            $linkedProjects = array();
+            foreach($productProjects as $product => $projects)
+            {
+                foreach($projects as $projectID => $productProject) $linkedProjects[$projectID] = $projectID;
+            }
+
+            $teams = $this->dao->select('root, account')->from(TABLE_TEAM)->where('root')->in($linkedProjects)->andWhere('type')->eq('project')->fetchGroup('root', 'account');
 
             $products = array();
             $account  = $this->app->user->account;
-            while($product = $stmt->fetch())
+            foreach($allProducts as $id => $product)
             {
-                $id = $product->id;
                 if($this->app->user->admin)
                 {
                     $products[$id] = $id;
@@ -886,22 +929,33 @@ class productModel extends model
                         $products[$id] = $id;
                         continue;
                     }
-                    if($product->teamType == 'project' and $product->teamAccount == $account and $product->projectDeleted == '0')
-                    {
-                        $products[$id] = $id;
-                        continue;
-                    }
                     if($product->acl == 'open')
                     {
                         $products[$id] = $id;
                         continue;
                     }
+
+                    $hasPriv = false;
                     if($product->acl == 'custom')
                     {
                         foreach(explode(',', $product->whitelist) as $whitelist)
                         {
                             if(empty($whitelist)) continue;
                             if(strpos($groups, ",$whitelist,") !== false)
+                            {
+                                $products[$id] = $id;
+                                $hasPriv       = true;
+                                break;
+                            }
+                        }
+                    }
+                    if($hasPriv) continue;
+
+                    if(!empty($productProjects[$id]))
+                    {
+                        foreach($productProjects[$id] as $projectID => $productProject)
+                        {
+                            if(isset($teams[$projectID][$account]))
                             {
                                 $products[$id] = $id;
                                 break;

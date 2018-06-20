@@ -50,12 +50,32 @@ class testtaskModel extends model
                 if(common::hasPriv('testreport', 'browse')) $this->lang->modulePageActions .= html::a(helper::createLink('testreport', 'browse', "objectID=$productID&objectType=product&extra={$testtask->id}"), "<i class='icon icon-flag'> </i>" . $this->lang->testtask->reportField, '', "class='btn'");
             }
 
+<<<<<<< HEAD
             $this->app->loadLang('qa');
             $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
             $productIndex .= $selectHtml;
         }
+=======
+        $pageNav     = '';
+        $pageActions = '';
+        if($this->config->global->flow == 'full')
+        {
+            $this->app->loadLang('qa');
+            $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+        }
+        else
+        {
+            if(common::hasPriv('testtask', 'create'))
+            {
+                $link = helper::createLink('testtask', 'create', "productID=$productID");
+                $pageActions .= html::a($link, "<i class='icon icon-plus'></i> {$this->lang->testtask->create}", '', "class='btn btn-primary'");
+            }
+        }
+        $pageNav .= $selectHtml;
+>>>>>>> 6e25725965ce1935d9b2ee004157599f82dcfd15
 
-        $this->lang->modulePageNav = $productIndex;
+        $this->lang->modulePageNav     = $pageNav;
+        $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
             if($this->config->global->flow != 'onlyTest')
