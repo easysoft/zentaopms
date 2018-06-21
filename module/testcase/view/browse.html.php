@@ -41,6 +41,18 @@ js::set('branch',         $branch);
   </div>
   <div class='main-col'>
     <div id='queryBox' class='cell<?php if($browseType == 'bysearch') echo ' show';?>'></div>
+    <?php if(empty($cases)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
+        <?php if(common::hasPriv('testcase', 'create')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
+        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class='main-table table-case' data-ride='table' id='batchForm' method='post'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -81,7 +93,6 @@ js::set('branch',         $branch);
           </tbody>
         </table>
       </div>
-      <?php if($cases):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class='table-actions btn-toolbar'>
@@ -198,12 +209,8 @@ js::set('branch',         $branch);
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php elseif(common::hasPriv('testcase', 'create')):?>
-      <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php common::printLink('testcase', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?></p>
-      </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>

@@ -131,7 +131,7 @@ $lang->bug->resolvedByMeAB = '由我解決';
 $lang->bug->ditto       = '同上';
 $lang->bug->dittoNotice = '該bug與上一bug不屬於同一產品！';
 $lang->bug->noAssigned  = '未指派';
-$lang->bug->noBug       = '暫時沒有Bug，您現在可以';
+$lang->bug->noBug       = '暫時沒有Bug。';
 $lang->bug->noModule    = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
 
 /* 頁面標籤。*/

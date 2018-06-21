@@ -26,6 +26,28 @@
   <div class="tab-content">
     <?php foreach($branches as $branchKey => $branchName):?>
     <div class="tab-pane fade release-paths <?php if($branchKey == 0) echo 'active in';?>" id="tabContent<?php echo $branchKey;?>">
+      <?php
+      $hasRoadmaps = false;
+      foreach($roadmaps as $year => $yearRoadmaps)
+      {
+          if(isset($yearRoadmaps[$branchKey]))
+          {
+              $hasRoadmaps = true;
+              break;
+          }
+      }
+      ?>
+      <?php if(!$hasRoadmaps):?>
+      <div class="table-empty-tip">
+        <p>
+          <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
+          <?php if(common::hasPriv('release', 'create')):?>
+          <span class="text-muted"><?php echo $lang->youCould;?></span>
+          <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branchKey"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+          <?php endif;?>
+        </p>
+      </div>
+      <?php else:?>
       <?php foreach($roadmaps as $year => $yearRoadmaps):?>
       <?php if(!isset($yearRoadmaps[$branchKey])) continue;?>
       <?php $groupRoadmaps = zget($yearRoadmaps, $branchKey, array());?>
@@ -55,6 +77,7 @@
         <?php endforeach;?>
       </div>
       <?php endforeach;?>
+      <?php endif;?>
     </div>
     <?php endforeach;?>
   </div>

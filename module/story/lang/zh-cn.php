@@ -194,6 +194,7 @@ $lang->story->confirmDelete         = "您确认删除该需求吗?";
 $lang->story->errorEmptyChildStory  = '『细分需求』不能为空。';
 $lang->story->mustChooseResult      = '必须选择评审结果';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
+$lang->story->noStory               = '暂时没有需求。';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = '该需求所属范围';

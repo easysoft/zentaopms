@@ -21,7 +21,7 @@
       <table class='table table-form'> 
         <tr>
           <th><?php echo $lang->build->product;?></th>
-          <?php if($products):?>
+          <?php if(!empty($products)):?>
           <td>
             <div class='input-group'>
               <?php echo html::select('product', $products, $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>

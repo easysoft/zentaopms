@@ -165,6 +165,17 @@ js::set('browseType', $browseType);
   </div>
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+    <?php if(empty($tasks)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->task->noTask;?></span>
+        <?php if(common::hasPriv('task', 'create')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class="main-table table-task skip-iframe-modal" method="post" id='projectTaskForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -219,7 +230,6 @@ js::set('browseType', $browseType);
           </tbody>
         </table>
       </div>
-      <?php if($tasks):?>
       <div class="table-footer">
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
@@ -306,8 +316,8 @@ js::set('browseType', $browseType);
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <?php js::set('replaceID', 'taskList')?>

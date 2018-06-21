@@ -21,6 +21,17 @@
 </div>
 <?php endif;?>
 <div id='mainContent' class='main-table'>
+  <?php if(empty($builds)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->build->noBuild;?></span>
+      <?php if(common::hasPriv('build', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('build', 'create', "productID=$product->id"), "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <table class='table' id='buildList'>
     <thead>
       <tr class='text-center'>
@@ -57,5 +68,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

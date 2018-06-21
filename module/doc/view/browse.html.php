@@ -49,7 +49,11 @@ var browseType = '<?php echo $browseType;?>';
       <div class="table-empty-tip">
         <p>
           <?php if($libID):?>
-          <span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+          <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
+          <?php if(common::hasPriv('doc', 'create')):?>
+          <span class="text-muted"><?php echo $lang->youCould;?></span>
+          <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+          <?php endif;?>
           <?php elseif($browseType == 'fastsearch'):?>
           <span class="text-muted"><?php echo $lang->doc->noSearchedDoc;?></span>
           <?php elseif($browseType == 'byediteddate'):?>

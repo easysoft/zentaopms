@@ -171,8 +171,8 @@ $lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer
 $lang->task->noticeLinkStory       = "No story has been linked. You can %s for this project, then %s.";
 $lang->task->noticeSaveRecord      = 'Your Hour is not saved. Please save it first.';
 $lang->task->commentActions        = '%s. %s, commented by <strong>%s</strong>.';
-$lang->task->noData                = 'No Data.';
 $lang->task->deniedNotice          = 'Only the %s can %s the task.';
+$lang->task->noTask                = 'No tasks. ';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Consumed" must be numbers.';

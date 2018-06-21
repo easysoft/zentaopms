@@ -44,6 +44,17 @@ $cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'v
 $account = $this->app->user->account;
 ?>
 <div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
+  <?php if(empty($stories)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->story->noStory;?></span>
+      <?php if(common::hasPriv('project', 'linkStory')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <table class="table table-grouped text-center">
     <thead>
       <tr>
@@ -82,6 +93,7 @@ $account = $this->app->user->account;
       </tr>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php js::set('projectID', $projectID);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -13,10 +13,12 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
+    <?php if(!empty($tasks)):?>
     <div class="pull-left table-group-btns">
       <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-fold-all"></i></button>
       <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-unfold-all"></i></button>
     </div>
+    <?php endif;?>
     <?php if(isset($lang->project->groupFilter[$groupBy])):?>
     <?php foreach($lang->project->groupFilter[$groupBy] as $filterKey => $name):?>
     <?php
@@ -71,6 +73,17 @@
   </div>
 </div>
 <div id='tasksTable' class='main-table' data-ride='table' data-checkable='false' data-group='true' data-hot='true'>
+  <?php if(empty($tasks)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->task->noTask;?></span>
+      <?php if(common::hasPriv('task', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <table class="table table-grouped text-center">
     <thead>
       <tr class="<?php if($allCount) echo 'divider';?>">
@@ -198,5 +211,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

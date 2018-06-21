@@ -11,7 +11,7 @@
  */
 $lang->todo->common       = '待辦';
 $lang->todo->index        = "待辦一覽";
-$lang->todo->create       = "新增";
+$lang->todo->create       = "添加待辦";
 $lang->todo->createCycle  = "創建周期待辦";
 $lang->todo->assignTo     = "指派給";
 $lang->todo->activate     = "激活";

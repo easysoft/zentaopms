@@ -27,6 +27,7 @@ $lang->release->confirmDelete      = "您確認刪除該發佈嗎？";
 $lang->release->confirmUnlinkStory = "您確認移除該需求嗎？";
 $lang->release->confirmUnlinkBug   = "您確認移除該Bug嗎？";
 $lang->release->existBuild         = '『版本』已經有『%s』這條記錄了。您可以更改『發佈名稱』或者選擇一個『版本』。';
+$lang->release->noRelease          = '暫時沒有發佈。';
 
 $lang->release->basicInfo = '基本信息';
 

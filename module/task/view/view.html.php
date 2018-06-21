@@ -41,7 +41,7 @@
       <div class="detail">
         <div class="detail-title"><?php echo $lang->task->legendDesc;?></div>
         <div class="detail-content article-content">
-          <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+          <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
       </div>
       <?php if($project->type != 'ops'):?>
@@ -49,21 +49,21 @@
       <div class="detail">
         <div class="detail-title"><?php echo $lang->bug->steps;?></div>
         <div class="detail-content article-content">
-          <?php echo !empty($task->bugSteps) ? $task->bugSteps : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+          <?php echo !empty($task->bugSteps) ? $task->bugSteps : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
       </div>
       <?php elseif($task->story):?>
       <div class="detail">
         <div class='detail-title'><?php echo $lang->task->storySpec;?></div>
         <div class='detail-content article-content'>
-          <?php echo (!empty($task->storySpec) || !empty($task->storyFiles)) ? $task->storySpec : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+          <?php echo (!empty($task->storySpec) || !empty($task->storyFiles)) ? $task->storySpec : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
         <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
       </div>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->task->storyVerify;?></div>
         <div class='detail-content article-content'>
-          <?php echo !empty($task->storyVerify) ? $task->storyVerify : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+          <?php echo !empty($task->storyVerify) ? $task->storyVerify : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
         </div>
       </div>
       <?php endif;?>
@@ -184,7 +184,7 @@
                 <th><?php echo $lang->task->story;?></th>
                 <td>
                   <?php
-                  if(!$task->storyTitle) echo $lang->task->noData;
+                  if(!$task->storyTitle) echo $lang->noData;
                   if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class='iframe' data-width='80%'", true, true)) echo $task->storyTitle;
                   if($task->needConfirm)
                   {
@@ -203,7 +203,7 @@
               <?php endif;?>
               <tr>
                 <th><?php echo empty($task->team) ? $lang->task->assignTo : $lang->task->transferTo;?></th>
-                <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->task->noData;?></td>
+                <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->type;?></th>
@@ -215,7 +215,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->pri;?></th>
-                <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo $task->pri == '0' ? $lang->task->noData : zget($lang->task->priList, $task->pri)?></span></td>
+                <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo $task->pri == '0' ? $lang->noData : zget($lang->task->priList, $task->pri)?></span></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->mailto;?></th>
@@ -224,7 +224,7 @@
                   $mailto = explode(',', str_replace(' ', '', $task->mailto));
                   if(empty($mainto))
                   {
-                      echo $lang->task->noData;
+                      echo $lang->noData;
                   }
                   else
                   {
@@ -310,27 +310,27 @@
           <table class='table table-data'>
             <tr>
               <th><?php echo $lang->task->openedBy;?></th>
-              <td><?php echo $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->task->noData;?></td>
+              <td><?php echo $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->task->finishedBy;?></th>
-              <td><?php echo ($task->finishedBy) ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->task->noData;?></td>
+              <td><?php echo ($task->finishedBy) ? zget($users, $task->finishedBy, $task->finishedBy) . $lang->at . $task->finishedDate : $lang->noData;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->task->canceledBy;?></th>
-              <td><?php echo $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : $lang->task->noData;?></td>
+              <td><?php echo $task->canceledBy ? zget($users, $task->canceledBy, $task->canceledBy) . $lang->at . $task->canceledDate : $lang->noData;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->task->closedBy;?></th>
-              <td><?php echo $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : $lang->task->noData;?></td>
+              <td><?php echo $task->closedBy ? zget($users, $task->closedBy, $task->closedBy) . $lang->at . $task->closedDate : $lang->noData;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->task->closedReason;?></th>
-              <td><?php echo $task->closedReason ? $lang->task->reasonList[$task->closedReason] : $lang->task->noData;?></td>
+              <td><?php echo $task->closedReason ? $lang->task->reasonList[$task->closedReason] : $lang->noData;?></td>
             </tr>
             <tr>
               <th><?php echo $lang->task->lastEdited;?></th>
-              <td><?php echo $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : $lang->task->noData;?></td>
+              <td><?php echo $task->lastEditedBy ? zget($users, $task->lastEditedBy, $task->lastEditedBy) . $lang->at . $task->lastEditedDate : $lang->noData;?></td>
             </tr>
           </table>
         </div>

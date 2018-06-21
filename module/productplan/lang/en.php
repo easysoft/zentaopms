@@ -37,6 +37,7 @@ $lang->productplan->unlinkedBugs     = 'Unlinked';
 $lang->productplan->confirmDelete      = "Do you want to delete this Plan?";
 $lang->productplan->confirmUnlinkStory = "Do you want to unlink this Story?";
 $lang->productplan->confirmUnlinkBug   = "Do you want to unlink this Bug?";
+$lang->productplan->noPlan             = 'No plans. ';
 
 $lang->productplan->id      = 'ID';
 $lang->productplan->product = $lang->productCommon;

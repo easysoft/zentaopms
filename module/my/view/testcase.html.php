@@ -27,6 +27,11 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($cases)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span></p>
+  </div>
+  <?php else:?>
   <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
     <table class="table has-sort-head" id='caseList'>
       <?php
@@ -93,7 +98,6 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($cases):?>
     <div class="table-footer">
       <?php if($canBatchEdit or $canBatchRun):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -114,8 +118,8 @@
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php js::set('listName', 'caseList')?>
 <?php include '../../common/view/footer.html.php';?>

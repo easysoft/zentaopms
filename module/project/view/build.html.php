@@ -14,10 +14,12 @@
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
+    <?php if(!empty($projectBuilds)):?>
     <div class="pull-left table-group-btns">
       <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-fold-all"> </i></button>
       <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-unfold-all"> </i></button>
     </div>
+    <?php endif;?>
     <span class='btn btn-link btn-active-text'>
       <span class='text'><?php echo $lang->project->build;?></span>
       <span class='label label-light label-badge'><?php echo $buildsTotal;?></span>
@@ -28,6 +30,17 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($projectBuilds)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->build->noBuild;?></span>
+      <?php if(common::hasPriv('build', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('build', 'create', "project=$project->id"), "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <div class='main-table' data-ride="table" data-checkable="false" data-group="true">
     <table class="table table-grouped text-center" id='buildList'>
       <thead>
@@ -99,5 +112,6 @@
       </tbody>
     </table>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

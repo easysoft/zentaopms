@@ -161,6 +161,17 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+    <?php if(empty($bugs)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
+        <?php if(common::hasPriv('bug', 'create')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class='main-table table-bug' data-ride='table' method='post' id='bugForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -200,7 +211,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           </tbody>
         </table>
       </div>
-      <?php if(!empty($bugs)):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
@@ -350,12 +360,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php elseif(common::hasPriv('bug', 'create')):?>
-      <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?></p>
-      </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>

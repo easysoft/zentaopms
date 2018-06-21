@@ -57,6 +57,17 @@
 </div>
 
 <div id="mainContent" class="main-row hide-side">
+  <?php if(empty($tree)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->task->noTask;?></span>
+      <?php if(common::hasPriv('task', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <div class="main-col">
     <div class="cell">
       <ul class="tree" id="taskTree">
@@ -69,5 +80,6 @@
       <div id="itemContent" class="load-indicator loading"></div>
     </div>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
