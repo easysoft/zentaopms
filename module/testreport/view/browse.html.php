@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <span class='btn btn-link btn-active-text'>
@@ -19,6 +20,7 @@
     </span>
   </div>
 </div>
+<?php endif;?>
 <div id='mainContent' class='main-table'>
   <table class='table has-sort-head table-fixed' id='reportList'>
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
@@ -30,7 +32,7 @@
         <th class='w-150px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
         <th class='w-250px text-left'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testreport->project);?></th>
         <th class='w-250px text-left'><?php echo $lang->testreport->testtask;?></th>
-        <th class='w-80px'> <?php echo $lang->actions;?></th>
+        <th class='c-actions-2'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <?php if($reports):?>

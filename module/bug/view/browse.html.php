@@ -16,61 +16,13 @@ include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
 js::set('bugBrowseType', ($browseType == 'bymodule' and $this->session->bugBrowseType == 'bysearch') ? 'all' : $this->session->bugBrowseType);
-js::set('flow', $this->config->global->flow);
-js::set('productID', $productID);
-js::set('branch', $branch);
+js::set('flow',          $config->global->flow);
+js::set('productID',     $productID);
+js::set('branch',        $branch);
 $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($browseType, array_keys($lang->bug->mySelects)) ? $browseType : '';
 ?>
+<?php if($config->global->flow == 'full'):?>
 <div id="mainMenu" class="clearfix">
-  <?php if($this->config->global->flow == 'onlyTest'):?>
-  <div id='featurebar'>
-    <ul class='submenu hidden'>
-      <li id='moreMenus' class='hidden'>
-        <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
-          <?php echo $lang->more;?> <span class='caret'></span>
-        </a>
-        <ul class='dropdown-menu right'>
-        </ul>
-      </li>
-      <li id='bysearchTab'><a href='#'><i class='icon-search icon'></i>&nbsp;<?php echo $lang->bug->byQuery;?></a></li>
-      <li class='right'>
-        <div class='btn-group' id='createActionMenu'>
-          <?php
-          $misc = common::hasPriv('bug', 'create') ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
-          $link = common::hasPriv('bug', 'create') ?  $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '#';
-          echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->bug->create, '', $misc);
-
-          $misc = common::hasPriv('bug', 'batchCreate') ? '' : "disabled";
-          $link = common::hasPriv('bug', 'batchCreate') ?  $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID") : '#';
-          ?>
-          <button type='button' class='btn btn-primary dropdown-toggle <?php echo $misc?>' data-toggle='dropdown'>
-            <span class='caret'></span>
-          </button>
-          <ul class='dropdown-menu right'>
-          <?php echo "<li>" . html::a($link, $lang->bug->batchCreate, '', "class='$misc'") . "</li>";?>
-          </ul>
-        </div>
-      </li>
-      <li class='right'>
-        <?php common::printLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", "<i class='icon icon-bar-chart muted'></i> " . $lang->bug->report->common); ?>
-      </li>
-      <li class='right'>
-        <a href='###' class='dropdown-toggle' data-toggle='dropdown'>
-          <i class='icon-download-alt'></i> <?php echo $lang->export ?>
-          <span class='caret'></span>
-        </a>
-        <ul class='dropdown-menu' id='exportActionMenu'>
-          <?php
-          $misc = common::hasPriv('bug', 'export') ? "class='export'" : "class=disabled";
-          $link = common::hasPriv('bug', 'export') ?  $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy") : '#';
-          echo "<li>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
-          ?>
-        </ul>
-      </li>
-    </ul>
-    <div id='querybox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
-  </div>
-  <?php else:?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -85,24 +37,10 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="btn-toolbar pull-left">
     <?php
-    $menus           = customModel::getFeatureMenu($this->moduleName, $this->methodName);
-    $moreLabel       = $lang->more;
-    $moreLabelActive = '';
-    if(strpos(',unconfirmed,assigntonull,longlifebugs,postponedbugs,overduebugs,needconfirm,', $browseType) !== false)
-    {
-        foreach($menus as $menuItem)
-        {
-            if($menuItem->name == $browseType)
-            {
-                $moreLabel       = "<span class='text'>{$menuItem->text}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                $moreLabelActive = 'btn-active-text';
-            }
-        }
-    }
+    $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     foreach($menus as $menuItem)
     {
         if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
-        if($this->config->global->flow == 'onlyTest' and $menuItem->name == 'needconfirm') continue;
 
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         $label  = "<span class='text'>{$menuItem->text}</span>";
@@ -146,22 +84,30 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 echo '</div>';
             }
         }
+        elseif($menuItem->name == 'more')
+        {
+            if(!empty($lang->bug->moreSelects))
+            {
+                $moreLabel       = $lang->more;
+                $moreLabelActive = '';
+                if(isset($lang->bug->moreSelects[$browseType]))
+                {
+                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$browseType]}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabelActive = 'btn-active-text';
+                }
+                echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
+                echo "<ul class='dropdown-menu'>";
+                foreach($lang->bug->moreSelects as $menuBrowseType => $label)
+                {
+                    $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
+                    echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'") . '</li>';
+                }
+                echo '</ul></div>';
+            }
+        }
         else
         {
-            if(strpos(',unconfirmed,assigntonull,longlifebugs,postponedbugs,overduebugs,needconfirm,', $menuItem->name) !== false)
-            {
-                if($menuItem->name == 'unconfirmed')
-                {
-                    echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
-                    echo "<ul class='dropdown-menu'>";
-                }
-                echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link $active'") . '</li>';
-                if($menuItem->name == 'needconfirm') echo '</ul></div>';
-            }
-            else
-            {
-                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), $label, '', "class='btn btn-link $active'");
-            }
+            echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), $label, '', "class='btn btn-link $active'");
         }
     }
     ?>
@@ -195,9 +141,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     }
     ?>
   </div>
-  <?php endif;?>
 </div>
-<div id="mainContent" class="main-row">
+<?php endif;?>
+<div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -214,14 +160,14 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
     <form class='main-table table-bug' data-ride='table' method='post' id='bugForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       if($useDatatable) include '../../common/view/datatable.html.php';
 
@@ -229,29 +175,31 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <table class='table has-sort-head' id='bugList'>
-        <thead>
-          <tr>
-          <?php
-          foreach($setting as $key => $value)
-          {
-              if($value->show)
-              {
-                  $this->datatable->printHead($value, $orderBy, $vars);
-                  $columns ++;
-              }
-          }
-          ?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($bugs as $bug):?>
-          <tr data-id='<?php echo $bug->id?>'>
-            <?php foreach($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class='table has-sort-head' id='bugList'>
+          <thead>
+            <tr>
+            <?php
+            foreach($setting as $key => $value)
+            {
+                if($value->show)
+                {
+                    $this->datatable->printHead($value, $orderBy, $vars);
+                    $columns ++;
+                }
+            }
+            ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($bugs as $bug):?>
+            <tr data-id='<?php echo $bug->id?>'>
+              <?php foreach($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
       <?php if(!empty($bugs)):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -413,7 +361,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 <script>
 $('#module' + moduleID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
-if($('#query li.active').size() == 0) ajaxGetSearchForm();
+if($('#query li.active').size() == 0) $.toggleQueryBox(true);
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>

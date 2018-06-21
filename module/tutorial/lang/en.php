@@ -35,11 +35,11 @@ $lang->tutorial->dataNotSave      = "Data generated in the Tutorial will not be 
 $lang->tutorial->tasks = array();
 
 $lang->tutorial->tasks['createAccount']         = array('title' => 'Create a User');
-$lang->tutorial->tasks['createAccount']['nav']  = array('module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'addUser', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Add User');
+$lang->tutorial->tasks['createAccount']['nav']  = array('module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => 'Add User');
 $lang->tutorial->tasks['createAccount']['desc'] = "<p>Create a User: </p><ul><li data-target='nav'>Open <span class='task-nav'>Company <i class='icon icon-angle-right'></i> Users<i class='icon icon-angle-right'></i> New;</span></li><li data-target='form'>Fill the form with user information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks['createProduct']         = array('title' => 'Create a Product');
-$lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Product');
+$lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-product-btn', 'targetPageName' => 'Product');
 $lang->tutorial->tasks['createProduct']['desc'] = "<p>Create a product: </p><ul><li data-target='nav'> Open <span class='task-nav'>Product <i class='icon icon-angle-right'></i> New;</span></li><li data-target='form'>Fill the form with product information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks['createStory']         = array('title' => 'Create a Story');
@@ -47,7 +47,7 @@ $lang->tutorial->tasks['createStory']['nav']  = array('module' => 'story', 'meth
 $lang->tutorial->tasks['createStory']['desc'] = "<p>Create a story: </p><ul><li data-target='nav'>Open <span class='task-nav'>Product <i class='icon icon-angle-right'></i>Story <i class='icon icon-angle-right'></i>Create;</span></li><li data-target='form'>Fill the form with story information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks['createProject']         = array('title' => 'Create a Project');
-$lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => 'create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Create Project');
+$lang->tutorial->tasks['createProject']['nav']  = array('module' => 'project', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-project-btn', 'targetPageName' => 'Create Project');
 $lang->tutorial->tasks['createProject']['desc'] = "<p>Create a project: </p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> New</span> Page;</li><li data-target='form'>Fill the form with project information;</li><li data-target='submit'>Save</li></ul>";
 
 $lang->tutorial->tasks['manageTeam']         = array('title' => 'Manage Project Team');

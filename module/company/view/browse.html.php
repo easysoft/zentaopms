@@ -28,10 +28,21 @@ js::set('confirmDelete', $lang->user->confirmDelete);
   <div class='btn-toolbar pull-right'>
     <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550px'");?>
     <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
-    <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");?>
+    <?php
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("dept=$deptID");
+          $link = $this->createLink('tutorial', 'wizard', "module=user&method=create&params=$wizardParams");
+          echo html::a($link, "<i class='icon icon-plus'></i> {$lang->user->create}", '', "class='btn btn-primary create-user-btn'");
+      }
+      else
+      {
+          common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");
+      }
+    ?>
   </div>
 </div>
-<div id='mainContent' class='main-row'>
+<div id='mainContent' class='main-row fade'>
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'>
@@ -65,8 +76,8 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
           <th><?php common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
           <th class="c-date"><?php common::printOrderLink('last', $orderBy, $vars, $lang->user->last);?></th>
-          <th class="c-num"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class="w-90px"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
+          <th class='c-actions'><?php echo $lang->actions;?></th>
         </tr>
         </thead>
         <tbody>
@@ -89,20 +100,31 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='c-date'><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
           <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
-            <div class='more'>
-              <?php
-              if(true or $user->ranzhi) common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
-              if(true or (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $this->config->user->lockMinutes * 60)
-              {
-                  common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
-              }
-              ?>
-            </div>
             <?php
+            if($user->ranzhi) 
+            {
+                common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+            }
+            else
+            {
+                echo html::a('javascript:;', "<i class='icon icon-unlink'></i>", '', "class='btn disabled'");
+            }
+            if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $config->user->lockMinutes * 60)
+            {
+                common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
+            }
+            else
+            {
+                echo html::a('javascript:;', "<i class='icon icon-unlock'></i>", '', "class='btn disabled'");
+            }
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
             if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
             {
                 echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-trash"></i>', '', "title='{$lang->user->delete}' class='btn iframe'");
+            }
+            else
+            {
+                echo html::a('javascript:;', "<i class='icon icon-trash'></i>", '', "class='btn disabled'");
             }
             ?>
           </td>

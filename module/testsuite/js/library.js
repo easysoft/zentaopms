@@ -20,8 +20,3 @@ function confirmBatchDelete(actionLink)
     if(confirm(batchDelete)) setFormAction(actionLink);
     return false;
 }
-
-$(document).ready(function()
-{
-    if(browseType == 'bysearch') ajaxGetSearchForm();
-});

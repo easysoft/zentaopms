@@ -1,7 +1,9 @@
 $(function()
 {
-    $(".chosenBox select").chosen(defaultChosenOptions);
     removeDitto();//Remove 'ditto' in first row.
+
+    var $titleCol = $('#batchCreateForm table thead tr th.c-title');
+    if($titleCol.width() < 150) $titleCol.width(150);
 })
 
 /**

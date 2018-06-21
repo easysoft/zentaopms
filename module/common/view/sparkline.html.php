@@ -1,13 +1,12 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <style>
-.projectline {padding: 2px!important}
+.projectline {padding: 2px!important; text-align: left!important;}
 </style>
 <!--[if lte IE 8]>
 <?php
 js::import($jsRoot . 'chartjs/excanvas.min.js');
 ?>
 <![endif]-->
-<?php js::import($jsRoot . 'chartjs/chart.line.min.js');?>
 <script>
 var isIE = $.zui.browser.isIE();
 jQuery.fn.projectLine = function(setting)
@@ -50,10 +49,10 @@ jQuery.fn.projectLine = function(setting)
             labels : values,
             datasets: 
             [{
-                fillColor : "rgba(0,0,255,0.25)",
-                strokeColor : "rgba(0,0,255,1)",
-                pointColor : "rgba(255,136,0,1)",
-                pointStrokeColor : "#fff",
+                fillColor : $.getThemeColor('pale') || 'rgba(0,0,255,0.25)',
+                strokeColor : 'rgba(0,0,255,1)',
+                pointColor : $.getThemeColor('primary') || 'rgba(255,136,0,1)',
+                pointStrokeColor : '#fff',
                 data : values
             }]
         },

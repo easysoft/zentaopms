@@ -482,6 +482,7 @@ class storyModel extends model
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->setDefault('plan', '')
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
@@ -2354,7 +2355,11 @@ class storyModel extends model
 
             $title = '';
             if($id == 'title') $title = $story->title;
-            if($id == 'plan')  $title = $story->planTitle;
+            if($id == 'plan')
+            {
+                $title  = $story->planTitle;
+                $class .= ' text-ellipsis';
+            }
 
             echo "<td class='" . $class . "' title='$title'>";
             switch($id)
@@ -2466,10 +2471,7 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
-                echo "<div class='more'>";
                 common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-                common::printIcon('story', 'delete',     $vars, $story, 'list', 'trash', 'hiddenwin');
-                echo "</div>";
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
                 common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list');

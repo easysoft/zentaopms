@@ -40,7 +40,7 @@
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=line"), $lang->tree->manageLine, '_blank');
                     echo '&nbsp; ';
-                    echo html::a("javascript:loadProductLines({$rootID})", $lang->refresh, "class='refresh'");
+                    echo html::a("javascript:loadProductLines({$rootID})", $lang->refresh, '', "class='refresh'");
                     echo '</span>';
                 }
                 ?>

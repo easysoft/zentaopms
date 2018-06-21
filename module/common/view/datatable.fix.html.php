@@ -13,7 +13,7 @@ $(function()
     var $btnToolbar = $('#main .table-header .btn-toolbar:first');
     if($btnToolbar.length > 0)
     {
-        <?php $mode = isset($this->config->datatable->$datatableId->mode) ? $this->config->datatable->$datatableId->mode : 'table';?>
+        <?php $mode = isset($config->datatable->$datatableId->mode) ? $config->datatable->$datatableId->mode : 'table';?>
         // $btnToolbar.append("<a href=\"javascript:saveDatatableConfig('mode', 'table', true);\" class='btn btn-link <?php echo $mode == 'table' ? 'btn-active-line' : '';?>'><?php echo $lang->datatable->table?></a>");
         // $btnToolbar.append("<a href=\"javascript:saveDatatableConfig('mode', 'datatable', true);\" class='btn btn-link <?php echo $mode == 'datatable' ? 'btn-active-line' : '';?>'><?php echo $lang->datatable->datatable?></a>");
         $btnToolbar.append("<a id='tableCustomBtn' class='btn btn-link' title='<?php echo $lang->datatable->custom?>' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><i class='icon icon-cog'></i></a>");
@@ -45,11 +45,11 @@ $(function()
 });
 </script>
 
-<div class="modal fade" id="showModuleModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="showModuleModal" tabindex="-1" role="dialog">
   <div class="modal-dialog w-600px">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
         <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->datatable->showModule?></h4>
       </div>
       <div class="modal-body">

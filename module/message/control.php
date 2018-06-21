@@ -98,7 +98,7 @@ class message extends control
 <div class='alert alert-info with-icon alert-dismissable' style='width:380px; position:fixed; bottom:25px; right:15px; z-index: 9999;'>
    <i class='icon icon-envelope-alt'>  </i>
    <div class='content'>{$messages}</div>
-   <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+   <button type="button" class="close" data-dismiss="alert">×</button>
  </div>
 EOT;
         }

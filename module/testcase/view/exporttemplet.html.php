@@ -19,7 +19,7 @@ function closeWindow()
     }
 }
 </script>
-<div class='main-content'>
+<div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->testcase->exportTemplet;?></h2>
   </div>

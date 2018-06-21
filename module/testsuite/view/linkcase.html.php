@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('flow', $this->config->global->flow);?>
+<?php js::set('flow', $config->global->flow);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php common::printBack($this->session->testsuiteList, 'btn btn-link');?>
@@ -24,11 +24,11 @@
     </div>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <div class="cell" id="queryBox"></div>
+<div class="cell show" id="queryBox"></div>
+<div id='mainContent'>
   <form class='main-table table-testcase' data-ride='table' method='post'>
     <div class="table-header">
-      <div class="table-statistic"><i class="icon-unlink"></i> &nbsp;<strong><?php echo $lang->testsuite->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)</div>
+      <i class="icon-unlink"></i> &nbsp;<strong><?php echo $lang->testsuite->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
     </div>
     <table class='table' id='testcaseList'>
       <thead>
@@ -75,9 +75,10 @@
     <?php if($cases):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class='table-actions btn-toolbar'>
-        <?php echo html::submitButton('', '', 'btn');?>
+      <div class='table-actions btn-toolbar show-always'>
+        <?php echo html::submitButton('', '', 'btn btn-secondary');?>
       </div>
+      <div class="table-statistic"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

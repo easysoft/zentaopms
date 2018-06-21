@@ -63,7 +63,7 @@
           </td>
           <?php endif;?>
         </tr>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTest'):?>
+        <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTest'):?>
         <tr>
           <th><?php echo $lang->testcase->lblStory;?></th>
           <td colspan='2'>
@@ -73,7 +73,7 @@
               <?php if($storyID == 0): ?>
                 <a href='' id='preview' class='btn iframe hidden'><?php echo $lang->preview;?></a>
               <?php else:?>
-                <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn iframe' id='preview'");?>
+                <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn' id='preview'");?>
               <?php endif;?>
               </span>
             </div>
@@ -208,7 +208,7 @@
           <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control' autocomplete='off'");?></td>
         </tr>
         <?php endif;?>
-         <tr>
+        <tr>
           <th><?php echo $lang->testcase->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
@@ -228,7 +228,7 @@
   <div class='modal-dialog'>
     <div class='modal-content'>
       <div class='modal-header'>
-        <button type='button' class='close' data-dismiss='modal'>&times;</button>
+        <button type='button' class='close' data-dismiss='modal'><i class='icon icon-close'></i></button>
         <div class='searchInput w-p90'>
           <input id='storySearchInput' type='text' class='form-control' placeholder='<?php echo $lang->testcase->searchStories?>'>
           <i class='icon icon-search'></i>

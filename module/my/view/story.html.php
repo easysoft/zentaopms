@@ -14,10 +14,11 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('story', "type=assignedTo"),  "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>", '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('story', "type=openedBy"),    "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>",   '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('story', "type=reviewedBy"),  "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>", '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('story', "type=closedBy"),    "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>",   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    echo html::a(inlink('story', "type=assignedTo"),  "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('story', "type=openedBy"),    "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('story', "type=reviewedBy"),  "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('story', "type=closedBy"),    "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
     ?>
   </div>
 </div>
@@ -47,7 +48,7 @@
           <th class='c-hours'>    <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-stage'>    <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -57,7 +58,7 @@
           <td class="c-id">
             <?php if($canBatchEdit or $canBatchClose):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
+              <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
               <label></label>
             </div>
             <?php endif;?>
@@ -73,11 +74,12 @@
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php
-            common::printIcon('story', 'change',     "storyID=$story->id", $story, 'list', 'fork');
-            common::printIcon('story', 'review',     "storyID=$story->id", $story, 'list', 'glasses');
-            common::printIcon('story', 'close',      "storyID=$story->id", $story, 'list', 'off', '', 'iframe', true);
-            common::printIcon('story', 'edit',       "storyID=$story->id", $story, 'list');
-            common::printIcon('story', 'createCase', "productID=$story->product&moduleID=0&from=&param=0&storyID=$story->id", '', 'list', 'sitemap');
+            $vars = "story={$story->id}";
+            common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
+            common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
+            common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
+            common::printIcon('story', 'edit',       $vars, $story, 'list');
+            if($config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
             ?>
           </td>
         </tr>

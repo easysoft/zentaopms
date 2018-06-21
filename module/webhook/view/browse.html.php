@@ -22,7 +22,7 @@
           <th class='w-60px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->webhook->type);?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->webhook->name);?></th>
           <th><?php common::printOrderLink('url', $orderBy, $vars, $lang->webhook->url);?></th>
-          <th class='w-110px'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

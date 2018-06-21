@@ -30,20 +30,11 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <div class="btn-group">
-      <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
-      <ul class="dropdown-menu">
-        <?php
-        $misc = common::hasPriv('product', 'export') ? "class='export'" : "class=disabled";
-        $link = common::hasPriv('product', 'export') ? $this->createLink('product', 'export', "status=$status&orderBy=$orderBy") : '#';
-        echo "<li>" . html::a($link, $lang->product->export, '', $misc) . "</li>";
-        ?>
-      </ul>
-    </div>
-    <?php echo html::a($this->createLink('product', 'create'), "<i class='icon-plus'></i> " . $lang->product->create,'', "class='btn btn-primary'") ?>
+    <?php common::printLink('product', 'export', "status=$status&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
+    <?php common::printLink('product', 'create', '', "<i class='icon-plus'></i> " . $lang->product->create, '', "class='btn btn-primary'") ?>
   </div>
 </div>
-<div id="mainContent" class="main-row">
+<div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">

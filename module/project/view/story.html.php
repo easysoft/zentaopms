@@ -36,7 +36,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php
-    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc", "<i class='icon icon-export'> </i>" . $lang->story->export, '', "class='btn btn-link export'");
+    common::printLink('story', 'export', "productID=$productID&orderBy=id_desc", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export'");
 
     if(commonModel::isTutorialMode())
     {
@@ -45,15 +45,15 @@
     }
     else
     {
-        echo "<div class='btn-group' id='createActionMenu'>";
-        common::printIcon('project', 'linkStory', "project=$project->id", '', 'button', 'link', '', 'link-story-btn');
+        echo "<div class='btn-group dropdown-hover' id='createActionMenu'>";
         if(common::hasPriv('project', 'importPlanStories'))
         {
-            echo "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>";
-            echo "<span class='caret'></span>";
+            echo "<button type='button' class='btn btn-link dropdown-toggle btn-icon'>";
+            echo "<i class='icon-link muted'></i> {$lang->project->linkStory} <span class='caret'></span>";
             echo '</button>';
             echo "<ul class='dropdown-menu pull-right'>";
-            echo "<li>" . html::a('###', $lang->project->linkStoryByPlan, '', 'data-toggle="linkStoryByPlan"') . "</li>";
+            echo "<li>" . html::a($this->createLink('project', 'linkStory', "project=$project->id"), $lang->project->linkStory). "</li>";
+            echo "<li>" . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
             echo '</ul>';
         }
         echo '</div>';
@@ -69,7 +69,7 @@
   </div>
 </div>
 
-<div id="mainContent" class="main-row">
+<div id="mainContent" class="main-row fade">
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -100,19 +100,19 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <?php if($canOrder):?>
-            <th class='w-80px'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
+            <th class='w-80px c-sort'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
             <?php endif;?>
             <th class='c-pri'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-            <th> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-            <th class='w-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='w-80px'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-            <th class='w-80px'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
-            <th class='w-80px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='w-70px'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
+            <th class='c-name'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+            <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+            <th class='c-estimate w-80px'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>
+            <th class='c-status'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='c-stage w-70px'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
             <th title='<?php echo $lang->story->taskCount?>' class='w-30px'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='w-30px'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='w-30px'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
+            <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody id='storyTableList' class='sortable'>
@@ -130,23 +130,23 @@
               <?php endif;?>
             </td>
             <?php if($canOrder):?>
-            <td class='sort-handler'><i class='icon-move'></i></td>
+            <td class='sort-handler c-sort'><i class='icon-move'></i></td>
             <?php endif;?>
-            <td><span class='label-pri <?php echo 'label-pri-' . $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-            <td class='text-left' title="<?php echo $story->title?>">
+            <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+            <td class='c-name' title="<?php echo $story->title?>">
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color'");?>
             </td>
-            <td><?php echo $users[$story->openedBy];?></td>
-            <td><?php echo $users[$story->assignedTo];?></td>
-            <td><?php echo $story->estimate;?></td>
-            <td title='<?php echo zget($lang->story->statusList, $story->status);?>'>
+            <td class='c-user'><?php echo $users[$story->openedBy];?></td>
+            <td class='c-user'><?php echo $users[$story->assignedTo];?></td>
+            <td class='c-estimate'><?php echo $story->estimate;?></td>
+            <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
               <span class='status-<?php echo $story->status;?>'>
                 <span class='label label-dot'></span>
                 <span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
               </span>
             </td>
-            <td><?php echo $lang->story->stageList[$story->stage];?></td>
+            <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
             <td class='linkbox'>
               <?php
               $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&projectID=$project->id");
@@ -173,7 +173,7 @@
               if(commonModel::isTutorialMode())
               {
                   $wizardParams = helper::safe64Encode($param);
-                  echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus-border'></i>",'', "class='btn btn-link btn-task-create' title='{$lang->project->wbs}'");
+                  echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$lang->project->wbs}'");
               }
               else
               {
@@ -181,7 +181,7 @@
               }
 
               $lang->task->batchCreate = $lang->project->batchWBS;
-              if($hasDBPriv) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'plus-sign');
+              if($hasDBPriv) common::printIcon('task', 'batchCreate', "projectID={$project->id}&story={$story->id}", '', 'list', 'pluses');
 
               $lang->testcase->batchCreate = $lang->testcase->create;
               if($productID && $hasDBPriv) common::printIcon('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', 'list', 'sitemap');
@@ -197,7 +197,11 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <?php if($stories):?>
+      <?php if(!$stories):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php common::printLink('project', 'linkStory', "project=$project->id", "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?></p>
+      </div>
+      <?php else:?>
       <div class='table-footer'>
         <?php if($canBatchEdit or $canBatchClose):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -230,7 +234,7 @@
             ?>
           </div>
           <?php endif;?>
-          <?php 
+          <?php
           if(common::hasPriv('project', 'batchUnlinkStory'))
           {
               $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
@@ -247,16 +251,16 @@
 </div>
 
 <div class="modal fade" id="linkStoryByPlan">
-  <div class="modal-dialog">
+  <div class="modal-dialog mw-500px">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h4 class="modal-title"><i class="icon-file-text"></i> <?php echo $lang->project->linkStoryByPlan;?></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->project->linkStoryByPlan;?></h4>
       </div>
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'");?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->project->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
@@ -293,6 +297,9 @@ $(function()
                   .replace('%rate%', rate);
         }
     });
+    <?php if(!$stories):?>
+    $("#main").addClass('hide-sidebar');
+    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -115,7 +115,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                     </div>
                   </td>
                 </tr>
-                <?php if($this->config->global->flow != 'onlyTest'):?>
+                <?php if($config->global->flow != 'onlyTest'):?>
                 <tr>
                   <th><?php echo $lang->bug->productplan;?></th>
                   <td>
@@ -184,7 +184,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               </tbody>
             </table>
           </div>
-          <?php if($this->config->global->flow != 'onlyTest'):?>
+          <?php if($config->global->flow != 'onlyTest'):?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->bug->legendPrjStoryTask;?></div>
             <table class='table table-form'>

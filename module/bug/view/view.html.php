@@ -288,7 +288,7 @@
                 </td>
               </tr>
               <?php endif;?>
-              <?php if($this->config->global->flow != 'onlyTest'):?>
+              <?php if($config->global->flow != 'onlyTest'):?>
               <?php if($bug->toStory != 0):?>
               <tr>
                 <th><?php echo $lang->bug->toStory;?></th>
@@ -324,11 +324,11 @@ $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&b
     <?php
     common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
     common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
-    common::printIcon('bug', 'resolve',    $params, $bug, 'button', '', '', 'iframe showinonlybody', true);
+    common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
     common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
     common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
   
-    if($this->config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
+    if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
     common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
   
     echo "<div class='divider'></div>";

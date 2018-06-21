@@ -25,16 +25,19 @@
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php $checked = 'checked';?>
-          <div class='product col-sm-4 <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
-            <label class='text-ellipsis checkbox-inline' for='<?php echo 'products'. $productID?>';>
-              <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked id='products{$productID}'> $productName";?>
-            </label>
-            <?php
-            if(isset($branchGroups[$productID]))
-            {
-                echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='form-control chosen'");
-            }
-            ?>
+          <div class='col-sm-4'>
+            <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
+              <div class="checkbox-primary">
+                <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' $checked id='products{$productID}'>";?>
+                <label class='text-ellipsis checkbox-inline' for='<?php echo 'products'. $productID?>';><?php echo $productName;?></label>
+              </div>
+              <?php
+              if(isset($branchGroups[$productID]))
+              {
+                  echo html::select("branch[$productID]", $branchGroups[$productID], $linkedProducts[$productID]->branch, "class='form-control chosen'");
+              }
+              ?>
+            </div>
           </div>
           <?php unset($allProducts[$productID]);?>
           <?php endif;?>
@@ -45,16 +48,19 @@
         <div class='detail-title'><?php echo $lang->project->unlinkedProducts;?></div>
         <div class='detail-content row'>
           <?php foreach($allProducts as $productID => $productName):?>
-          <div class='col-sm-4 product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
-            <label class='text-ellipsis checkbox-inline' for='<?php echo 'products'. $productID?>';>
-              <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' id='products{$productID}'> $productName";?>
-            </label>
-            <?php
-            if(isset($branchGroups[$productID]))
-            {
-                echo html::select("branch[$productID]", $branchGroups[$productID], '', "class='form-control chosen'");
-            }
-            ?>
+          <div class='col-sm-4'>
+            <div class='product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
+              <div class="checkbox-primary">
+                <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' id='products{$productID}'>";?>
+                <label class='text-ellipsis checkbox-inline' for='<?php echo 'products'. $productID?>';><?php echo $productName;?></label>
+              </div>
+              <?php
+              if(isset($branchGroups[$productID]))
+              {
+                  echo html::select("branch[$productID]", $branchGroups[$productID], '', "class='form-control chosen'");
+              }
+              ?>
+            </div>
           </div>
           <?php endforeach;?>
         </div>

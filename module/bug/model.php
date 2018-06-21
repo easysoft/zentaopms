@@ -15,22 +15,80 @@ class bugModel extends model
 {
     /**
      * Set menu.
-     * 
-     * @param  array  $products 
-     * @param  int    $productID 
+     *
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  string $browseType
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0, $moduleID = 0)
+    public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $browseType = 'unclosed', $orderBy = '')
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'bug');
         $selectHtml = $this->product->select($products, $productID, 'bug', 'browse', '', $branch, $moduleID, 'bug');
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+        $pageNav     = '';
+        $pageActions = '';
+        $isMobile    = $this->app->viewType == 'mhtml';
+        if($isMobile)
+        {
+            $this->app->loadLang('qa');
+            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
+        }
+        else
+        {
+            if($this->config->global->flow == 'full')
+            {
+                $this->app->loadLang('qa');
+                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            }
+            else
+            {
+                if(common::hasPriv('bug', 'report'))
+                {
+                    $link = helper::createLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID");
+                    $pageActions .= html::a($link, "<i class='icon-common-report icon-bar-chart muted'></i> <span class='text'>" . $this->lang->bug->report->common . '</span>', '', "class='btn btn-link'");
+                }
+                if(common::hasPriv('bug', 'export'))
+                {
+                    $link = helper::createLink('bug', 'export', "productID=$productID&orderBy=$orderBy");
+                    $pageActions .= "<div class='btn-group'>";
+                    $pageActions .= "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>";
+                    $pageActions .= "<i class='icon icon-export muted'></i><span class='text'>{$this->lang->export}</span><span class='caret'></span></button>";
+                    $pageActions .= '</button>';
+                    $pageActions .= "<ul class='dropdown-menu' id='exportActionMenu'>";
+                    $pageActions .= '<li>' . html::a($link, $this->lang->bug->export, '', "class='export'") . '</li>';
+                    $pageActions .= '</ul>';
+                    $pageActions .= '</div>';
+                }
+                if(common::hasPriv('bug', 'batchCreate'))
+                {
+                    $link = helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
+                    $pageActions .= html::a($link, "<i class='icon icon-plus'></i>" . $this->lang->bug->batchCreate, '', "class='btn btn-secondary'");
+                }
+                if(commonModel::isTutorialMode())
+                {
+                    $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+                    $link         = helper::createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
+                    $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
+                }
+                else
+                {
+                    if(common::hasPriv('bug', 'create'))
+                    {
+                        $link = helper::createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+                        $pageActions .= html::a($link, "<i class='icon icon-plus'></i>" . $this->lang->bug->create, '', "class='btn btn-primary'");
+                    }
+                }
+            }
+        }
+        $pageNav .= $selectHtml;
 
-        $this->lang->modulePageNav = $productIndex;
+        $this->lang->modulePageNav     = $pageNav;
+        $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->bug->menu as $key => $menu)
         {
             if($this->config->global->flow != 'onlyTest')
@@ -45,6 +103,36 @@ class bugModel extends model
                 $replace['param']     = $moduleID;
             }
             common::setMenuVars($this->lang->bug->menu, $key, $replace);
+        }
+        if($this->config->global->flow != 'full')
+        {
+            $tmpMenu  = (array)$this->lang->bug->menu;
+            $moreMenu = array_slice($tmpMenu, -6);
+            $tmpMenu  = array_slice($tmpMenu, 0, count($tmpMenu) - 6);
+            if($moreMenu)
+            {
+                $moreKey   = 'more';
+                $moreLabel = $this->lang->more;
+                if(isset($this->lang->bug->moreSelects[$browseType]))
+                {
+                    $moreKey   = $browseType;
+                    $moreLabel = $this->lang->bug->moreSelects[$browseType];
+                }
+                $more  = "<a data-toggle='dropdown'>{$moreLabel}<span class='caret'></span></a>";
+                $more .= "<ul class='dropdown-menu'>";
+                foreach($moreMenu as $menu)
+                {
+                    list($label, $module, $method, $params) = explode('|', $menu);
+                    if(common::hasPriv($module, $method))
+                    {
+                        $more .= '<li>' . html::a(helper::createLink($module, $method, $params), $label) . '</li>';
+                    }
+                }
+                $more .= '</ul>';
+                $tmpMenu[$moreKey] = $more;
+            }
+            if($this->app->getMethodName() != 'view') $tmpMenu['bysearch'] = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->bug->byQuery}</a>";
+            $this->lang->bug->menu = (object)$tmpMenu;
         }
     }
 
@@ -2416,6 +2504,7 @@ class bugModel extends model
                 if($bug->assignedTo == $account) $class .= ' red';
             }
             if($id == 'deadline' && isset($bug->delay)) $class .= ' delayed';
+            if(strpos(',project,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='" . $class . "' $title>";
             switch($id)
@@ -2531,9 +2620,8 @@ class bugModel extends model
                 break;
             case 'assignedTo':
                 $btnTextClass   = '';
-                $assignedToText = zget($users, $bug->assignedTo);
+                $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
                 $btnTextClass   = 'text-primary';
-                if(empty($bug->assignedTo)) $assignedToText = $this->lang->bug->noAssigned;
                 if($bug->assignedTo == $account) $btnTextClass = 'text-red';
                 $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
 
@@ -2571,7 +2659,7 @@ class bugModel extends model
                 break;
             case 'actions':
                 $params = "bugID=$bug->id";
-                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);
+                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
                 common::printIcon('bug', 'edit',       $params, $bug, 'list');

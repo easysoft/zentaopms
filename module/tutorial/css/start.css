@@ -1,7 +1,7 @@
-#start {background: #EBF2F9; padding: 40px; text-align: center;}
+#start {padding: 40px; text-align: center; color: #fff;}
 .start-icon {position: relative; width: 140px; height: 140px; margin: 0 auto; line-height: 140px;}
-.start-icon > .icon-back {font-size: 140px; color: #145CCD}
+.start-icon > .icon-back {font-size: 140px;}
+.start-icon > .icon-back:before {content: '\f0a3';}
 .start-icon > .icon-front {font-size: 56px; position: absolute; top: 35px; left: 35px; color: #EBF2F9; z-index: 10; width: 70px; height: 70px; text-align: center; line-height: 70px;}
 .start-icon > .icon-spin {-moz-animation: spin 15s infinite linear;-o-animation: spin 15s infinite linear;-webkit-animation: spin 15s infinite linear;animation: spin 15s infinite linear;}
-#start > h1 {color: #145CCD}
-#start > h1, #start > p {margin-bottom: 20px}
+#start > h1, #start > p {margin-bottom: 30px}

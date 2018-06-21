@@ -47,7 +47,19 @@ var browseType = '<?php echo $browseType;?>';
       </div>
       <?php if(empty($docs)):?>
       <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+        <p>
+          <?php if($libID):?>
+          <span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+          <?php elseif($browseType == 'fastsearch'):?>
+          <span class="text-muted"><?php echo $lang->doc->noSearchedDoc;?></span>
+          <?php elseif($browseType == 'byediteddate'):?>
+          <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
+          <?php elseif($browseType == 'openedbyme'):?>
+          <span class="text-muted"><?php echo $lang->doc->noOpenedDoc;?></span>
+          <?php elseif($browseType == 'collectedbyme'):?>
+          <span class="text-muted"><?php echo $lang->doc->noCollectedDoc;?></span>
+          <?php endif;?>
+        </p>
       </div>
       <?php else:?>
       <div class="panel-body has-table">
@@ -59,7 +71,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions"><?php echo $lang->actions;?></th>
+              <th class="c-actions-3"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -85,12 +97,12 @@ var browseType = '<?php echo $browseType;?>';
             <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <tr>
               <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title);?></td>
-              <td class="c-num"></td>
+              <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d h:i');?></td>
               <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d h:i');?></td>
               <td class="c-actions">
-                <?php common::printLink('doc', 'collect', "objectID=$doc->id&objectType=doc", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$collectTitle}' class='btn btn-link'")?>
+                <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
                 <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
               </td>

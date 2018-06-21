@@ -12,8 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->testsuite->confirmDelete)?>
-<?php js::set('flow', $this->config->global->flow);?>
-<?php if($this->config->global->flow != 'onlyTest'):?>
+<?php js::set('flow', $config->global->flow);?>
+<?php if($config->global->flow != 'onlyTest'):?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <a href class='btn btn-link btn-active-text'>
@@ -26,6 +26,11 @@
   </div>
 </div>
 <?php endif;?>
+<?php if(empty($suites)):?>
+<div class="table-empty-tip">
+  <p><span class="text-muted"><?php echo $lang->testsuite->noTestsuite;?></span> <?php common::printLink('testsuite', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-info'");?></p>
+</div>
+<?php else:?>
 <div id='mainContent' class='main-table'>
   <table class='table has-sort-head' id='suiteList'>
     <thead>
@@ -36,7 +41,7 @@
         <th><?php echo $lang->testsuite->desc;?></th>
         <th class='w-90px'><?php common::printOrderLink('addedBy',   $orderBy, $vars, $lang->testsuite->addedBy);?></th>
         <th class='w-150px'><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->testsuite->addedDate);?></th>
-        <th class='w-130px text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -44,8 +49,8 @@
     <tr class='text-left'>
       <td><?php echo sprintf('%03d', $suite->id);?></td>
       <td class='text-left' title="<?php echo $suite->name?>">
-        <?php if($suite->type == 'public') echo "<span class='label label-info'>{$lang->testsuite->authorList['public']}</span> ";?>
-        <?php if($suite->type == 'private') echo "<span class='label label-warning'>{$lang->testsuite->authorList['private']}</span> ";?>
+        <?php if($suite->type == 'public') echo "<span class='label label-success label-badge'>{$lang->testsuite->authorList['public']}</span> ";?>
+        <?php if($suite->type == 'private') echo "<span class='label label-info label-badge'>{$lang->testsuite->authorList['private']}</span> ";?>
         <?php echo html::a(inlink('view', "suiteID=$suite->id"), $suite->name);?>
       </td>
       <td><?php echo $suite->desc;?></td>
@@ -71,4 +76,5 @@
   <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   <?php endif;?>
 </div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

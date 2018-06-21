@@ -62,7 +62,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               </div>
             </td>
           </tr>
-          <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $this->config->global->flow != 'onlyTest');?>
+          <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $config->global->flow != 'onlyTest');?>
           <?php if($showProject):?>
           <tr>
             <th><?php echo $lang->bug->project;?></th>
@@ -82,10 +82,10 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           <tr>
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
             <td>
-              <div class='input-group'>
-                <div class='input-group' id='assignedToBox'><?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?></div>
-                <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
-              </div>
+              <?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?>
+            </td>
+            <td>
+              <a href='javascript:loadAllUsers();' class='btn btn-link'><?php echo $lang->bug->allUsers;?></a>
             </td>
           </tr>
           <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
@@ -112,9 +112,9 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               }
               ?>
               <?php if($hasCustomSeverity):?>
-              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control chosen'");?> 
+              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control chosen'");?>
               <?php else: ?>
-              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control' data-provide='labelSelector' data-label-class='label-severity'");?> 
+              <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control' data-provide='labelSelector' data-label-class='label-severity'");?>
               <?php endif; ?>
             </td>
           </tr>
@@ -141,14 +141,14 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               }
               ?>
               <?php if($hasCustomPri):?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?> 
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
               <?php else: ?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?> 
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?>
               <?php endif; ?>
             </td>
           </tr>
           <?php endif;?>
-          <?php if($this->config->global->flow != 'onlyTest' && $showProject):?>
+          <?php if($config->global->flow != 'onlyTest' && $showProject):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr>
@@ -210,13 +210,13 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           $showStory = strpos(",$showFields,", ',story,') !== false;
           $showTask  = strpos(",$showFields,", ',task,')  !== false;
           ?>
-          <?php if($showStory and $this->config->global->flow != 'onlyTest'):?>
+          <?php if($showStory and $config->global->flow != 'onlyTest'):?>
           <tr>
             <th><?php echo $lang->bug->story;?></th>
             <td colspan='2'><div id='storyIdBox' class='input-group'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></div></td>
           </tr>
           <?php endif;?>
-          <?php if($showTask and $this->config->global->flow != 'onlyTest'):?>
+          <?php if($showTask and $config->global->flow != 'onlyTest'):?>
           <tr>
             <th><?php echo $lang->bug->task;?></th>
             <td colspan='2'><div id='taskIdBox' class='input-group'> <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?></div></td>
@@ -252,7 +252,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3" class="text-center">
+            <td colspan="3" class="text-center form-actions">
               <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
@@ -264,11 +264,11 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
     </form>
   </div>
 </div>
-<div class="modal fade" id="saveTplModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="saveTplModal" tabindex="-1" role="dialog">
   <div class="modal-dialog w-600px">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
         <h4 class="modal-title"><?php echo $lang->bug->setTemplateTitle;?></h4>
       </div>
       <div class="modal-body">

@@ -18,17 +18,18 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>",       '', "class='btn btn-link'");
-    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>",       '', "class='btn btn-link'");
-    echo html::a(inlink('testcase', "type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>", '', "class='btn btn-link" . ($type == 'assigntome' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('testcase', "type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>", '', "class='btn btn-link" . ($type == 'openedbyme' ? ' btn-active-text' : '') . "'");
+    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>", '', "class='btn btn-link'");
+    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>", '', "class='btn btn-link'");
+    echo html::a(inlink('testcase', "type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>" . ($type == 'assigntome' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assigntome' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('testcase', "type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>" . ($type == 'openedbyme' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedbyme' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
 </div>
 <div id="mainContent">
   <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
     <table class="table has-sort-head" id='caseList'>
-      <?php 
+      <?php
       $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
       $canBatchEdit = common::hasPriv('testcase', 'batchEdit');
@@ -52,7 +53,7 @@
           <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
           <th class='w-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='w-130px'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -80,19 +81,9 @@
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
           <td class='c-actions'>
-            <div class='more'>
-              <?php
-              common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
-              common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
-
-              if(common::hasPriv('testcase', 'delete'))
-              {
-                  $deleteURL = $this->createLink('testcase', 'delete', "caseID=$caseID&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testcase->delete}'");
-              }
-              ?>
-            </div>
             <?php
+            common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug');
+            common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy');
             common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', 'iframe', '', "data-width='95%'");
             common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', '', "data-width='95%'");
             common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit');
@@ -109,12 +100,12 @@
       <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php
-      if($canBatchEdit) 
+      if($canBatchEdit)
       {
           $actionLink = $this->createLink('testcase', 'batchEdit');
           echo html::commonButton($lang->edit, "onclick=setFormAction('$actionLink')");
       }
-      if($canBatchRun and $type != 'assigntome') 
+      if($canBatchRun and $type != 'assigntome')
       {
           $actionLink = $this->createLink('testtask', 'batchRun', "productID=0&orderBy=$orderBy&from=testcase");
           echo html::commonButton($lang->testtask->runCase,  "onclick=setFormAction('$actionLink')");

@@ -17,15 +17,28 @@
 <script>
 $(function()
 {
-    $("button[data-toggle='importLinesModal']").click(function(){$('#importLinesModal').modal('show')})
-    $form = $('#batchCreateForm');
+    var $form = $('#batchCreateForm');
     var batchForm = $form.data('zui.batchActionForm');
+
+    var rowTpl, $formTbody;
+    var createRow = function()
+    {
+        if(!rowTpl) rowTpl = $('#trTemp tbody').html();
+        if(!$formTbody) $formTbody = $form.find('table > tbody');
+        var lastIndex = parseInt($formTbody.find('tr:last > td:first').text());
+        var $newRow = $(rowTpl.replace(/%s/g, lastIndex + 1));
+        $newRow.find('.chosen').chosen();
+        $newRow.find('[data-provide="colorpicker-later"]').colorPicker();
+        $formTbody.append($newRow);
+        return $newRow;
+    };
     
     var $importLines = $('#importLines');
     $('#importLinesBtn').on('click', function()
     {
         var $modal = $('#importLinesModal');
         var $dialog = $modal.find('.modal-dialog').addClass('loading');
+
         setTimeout(function()
         {
             var importText = $importLines.val();
@@ -37,15 +50,16 @@ $(function()
                 if (!line.length) return;
                 if (!$lastRow) $row = $form.find('tbody>tr:first');
                 else $row = $lastRow.next();
-                while ($row.length && $row.find('.input-story-title').val().length)
+                while ($row.length && $row.find('.title-import').val().length)
                 {
                     $row = $row.next();
                 }
                 if (!$row || !$row.length)
                 {
-                    $row = batchForm.createRow();
+                    if (batchForm) $row = batchForm.createRow();
+                    else $row = createRow();
                 }
-                $row.find('.input-story-title').val(line).addClass('highlight');
+                $row.find('.title-import').val(line).addClass('highlight');
                 $lastRow = $row;
                 if(!$firstRow) $firstRow = $row;
             });
@@ -57,7 +71,7 @@ $(function()
             }).modal('hide');
             setTimeout(function()
             {
-                $form.find('.input-story-title.highlight').removeClass('highlight');
+                $form.find('.title-import.highlight').removeClass('highlight');
             }, 3000);
         }, 200);
     });

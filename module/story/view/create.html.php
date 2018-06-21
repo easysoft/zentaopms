@@ -11,7 +11,6 @@
  */
 ?>
 <?php include './header.html.php';?>
-<?php include '../../common/view/form.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
@@ -22,7 +21,7 @@
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
+    <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
         <tbody>
           <tr>
@@ -64,9 +63,10 @@
                 if(count($plans) != 1)
                 {
                     echo "<div class='input-group-btn'>";
-                    echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn' data-toggle='tooltip' title='{$lang->productplan->create}'");
-                    echo '&nbsp; ';
-                    echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn' data-toggle='tooltip' title='{$lang->refresh}'");
+                    echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn btn-icon' data-toggle='tooltip' title='{$lang->productplan->create}'");
+                    echo '</div>';
+                    echo "<div class='input-group-btn'>";
+                    echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon' data-toggle='tooltip' title='{$lang->refresh}'");
                     echo '</div>';
                 }
                 ?>
@@ -126,16 +126,16 @@
               <?php else: ?>
               <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?> 
               <?php endif; ?>
-             </td>
-           </tr>
-           <?php endif;?>
-           <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
-           <tr>
-             <th><?php echo $lang->story->estimateAB;?></th>
-             <td><input type="number" min="0" step="0.5" name="estimate" id="estimate" value="<?php echo $estimate;?>" class="form-control" autocomplete="off"></td>
-             <td class="muted"><?php echo $lang->story->hour;?></td>
-           </tr>
-           <?php endif;?>
+            </td>
+          </tr>
+          <?php endif;?>
+          <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
+          <tr>
+            <th><?php echo $lang->story->estimateAB;?></th>
+            <td><input type="number" min="0" step="0.5" name="estimate" id="estimate" value="<?php echo $estimate;?>" class="form-control" autocomplete="off"></td>
+            <td class="muted"><?php echo $lang->story->hour;?></td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
             <td><?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?></td>
@@ -191,7 +191,6 @@
           </tr>
         </tfoot>
       </table>
-      <span id='responser'></span>
     </form>
   </div>
 </div>

@@ -14,8 +14,8 @@
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <div class="pull-left table-group-btns">
-      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-caret-up"></i></button>
-      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-caret-down"></i></button>
+      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-fold-all"></i></button>
+      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-unfold-all"></i></button>
     </div>
     <?php if(isset($lang->project->groupFilter[$groupBy])):?>
     <?php foreach($lang->project->groupFilter[$groupBy] as $filterKey => $name):?>
@@ -70,10 +70,10 @@
     ?>
   </div>
 </div>
-<div class="main-table" data-ride="table" data-checkable="false" data-group="true">
+<div id='tasksTable' class='main-table' data-ride='table' data-checkable='false' data-group='true' data-hot='true'>
   <table class="table table-grouped text-center">
     <thead>
-      <tr class="divider">
+      <tr class="<?php if($allCount) echo 'divider';?>">
         <th class="c-side text-left has-btn group-menu">
           <div class="dropdown">
             <a href="" data-toggle="dropdown" class="btn text-left btn-block btn-link clearfix">
@@ -96,7 +96,7 @@
         <th class="c-pri"><?php echo $lang->priAB;?></th>
         <th class="c-name"><?php echo $lang->task->name;?></th>
         <th class="c-status"><?php echo $lang->task->status;?></th>
-        <th class="c-assign"><?php echo $lang->task->assignedTo;?></th>
+        <th class="c-assign text-left"><?php echo $lang->task->assignedTo;?></th>
         <th class="c-user"><?php echo $lang->task->finishedBy;?></th>
         <th class="c-hours"><?php echo $lang->task->estimateAB;?></th>
         <th class="c-hours"><?php echo $lang->task->consumedAB;?></th>

@@ -49,4 +49,4 @@ h2.detail-title .label-id, h2.detail-title .label {top: -1px}
 .detail + .detail {padding-top: 10px;}
 .btn-comment.pull-right {z-index: 10;}
 details .btn-comment.pull-right {right: 30px;}
-.modal-comment .modal-dialog {min-width: 600px; margin-left: -200px!important;}
+.modal-comment .modal-dialog {min-width: 600px;}

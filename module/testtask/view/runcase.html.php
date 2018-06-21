@@ -83,7 +83,7 @@
       <tr class='text-center'>
         <td colspan='5' class='form-actions'>
           <?php
-          if($preCase)  echo html::a(inlink('runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}"), $lang->testtask->pre, '', "id='pre' class='btn'");
+          if($preCase)  echo html::a(inlink('runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}"), $lang->testtask->pre, '', "id='pre' class='btn btn-wide'");
           echo html::submitButton('', '', 'btn btn-wide btn-primary');
           if($nextCase)  echo '&nbsp;' . html::a(inlink('runCase', "runID={$nextCase['runID']}&caseID={$nextCase['caseID']}&version={$nextCase['version']}"), $lang->testtask->next, '', "id='next' class='btn btn-wide'");
           echo html::hidden('case',    $run->case->id);
@@ -98,7 +98,7 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
             <h4 class="modal-title"><?php echo $lang->testtask->files;?></h4>
           </div>
           <div class="modal-body">
@@ -107,7 +107,7 @@
                 <td><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1, 'percent' => 0.9, 'filesName' => "files{$step->id}", 'labelsName' => "labels{$step->id}"));?></td>
               </tr>
               <tr>
-                <td class='text-center'><button type="button" class="btn" onclick='loadFilesName()' data-dismiss="modal" aria-hidden="true"><?php echo $lang->save;?></button></td>
+                <td class='text-center'><button type="button" class="btn" onclick='loadFilesName()' data-dismiss="modal"><?php echo $lang->save;?></button></td>
               <tr>
             </table>
           </div>

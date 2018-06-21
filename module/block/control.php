@@ -495,11 +495,19 @@ class block extends control
      */
     public function printTodoBlock()
     {
-        $uri = $this->server->http_referer;
+        $limit = $this->viewType == 'json' ? 0 : (int)$this->params->num;
+        $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
+        $uri   = $this->server->http_referer;
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
-        $this->view->todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $this->viewType == 'json' ? 0 : (int)$this->params->num);
+
+        foreach($todos as $key => $todo)
+        {
+            if($todo->date == '2030-01-01') unset($todos[$key]);
+        }
+
+        $this->view->todos = $todos;
     }
 
     /**
@@ -1009,8 +1017,12 @@ class block extends control
         {
             foreach($productBuilds as $buildID => $build)
             {
+                /* If don't clone $build, the exploded bugs of build will be stored in dao::$cache and it occurs an error when the qa statistic block be loaded twice. */
+                $build = clone $build;
                 $build->bugs = explode(',', trim($build->bugs, ','));
                 foreach($build->bugs as $bugID) $bugIDList[$bugID] = $bugID;
+
+                $builds[$product][$buildID] = $build;
             }
         }
         foreach($openedBugs as $buildBugs)

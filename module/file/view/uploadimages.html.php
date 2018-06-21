@@ -19,33 +19,47 @@ js::set('params', $params);
 js::set('uid', $uid);
 ?>
 <style>
-#uploader{padding: 20px;}
-#uploader > span{display:block; margin-bottom:10px; color: #29a8cd;}
+#uploader .uploader-files {border-bottom: 1px solid #eee; margin: 0 0 10px 0; min-height: 164px;}
+.file-list .file[data-status=queue] .file-status>.icon:before {content: '\e92b'}
+.uploader-files .file-status > .icon:before, .file-list .file-status > .icon:before {content: '\e92f'}
 </style>
-<div class='main-content'>
-  <div class='main-header'>
-    <h2><?php echo $lang->file->uploadImages;?></h2>
-  </div>
-  <div class='uploader' id='uploader' data-url='<?php echo inlink('uploadImages', "module=$module&params=$params&uid=$uid");?>'>
-    <div class='uploader-message text-center'>
-      <div class='content'></div>
-      <button type='button' class='close'>×</button>
+<main id='main'>
+  <div class='container'>
+    <div id='mainContent'>
+      <div class='main-header'>
+        <h2><?php echo $lang->file->uploadImages;?></h2>
+      </div>
+      <div class='uploader' id='uploader' data-url='<?php echo inlink('uploadImages', "module=$module&params=$params&uid=$uid");?>'>
+        <div class='uploader-message text-center'>
+          <div class='content'></div>
+          <button type='button' class='close'>×</button>
+        </div>
+        <div class='uploader-files file-list file-list-grid' data-drag-placeholder="<?php echo $lang->file->dragFile;?>"></div>
+        <div class='text-info space-sm'><?php echo $this->lang->file->uploadImagesExplain?></div>
+        <div class='uploader-footer'>
+          <div class='uploader-status pull-right text-muted'></div>
+          <button type='button' class='btn btn-secondary uploader-btn-browse btn-wide'><i class='icon icon-plus'></i><?php echo $lang->file->addFile;?></button> &nbsp; 
+          <button type='button' class='btn btn-primary uploader-btn-start btn-wide'><i class='icon icon-arrow-up'></i><?php echo $lang->file->beginUpload;?></button>
+        </div>
+      </div>
     </div>
-    <div class='uploader-files file-list file-list-grid' data-drag-placeholder="<?php echo $lang->file->dragFile;?>"></div>
-    <hr/>
-    <span><?php echo $this->lang->file->uploadImagesExplain?></span>
-    <div class='uploader-footer'>
-      <div class='uploader-status pull-right text-muted'></div>
-      <button type='button' class='btn btn-primary uploader-btn-browse'><i class='icon icon-plus'></i><?php echo $lang->file->addFile;?></button>
-      <button type='button' class='btn btn-success uploader-btn-start'><i class='icon icon-cloud-upload'></i><?php echo $lang->file->beginUpload;?></button>
-    </div>
   </div>
-</div>
+</main>
 <script>
 $('#uploader').uploader({
-    onUploadComplete:function()
+    filters:
     {
-        location.href = createLink('file', 'uploadImages', 'module=' + module + '&params=' + params + '&uid=' + uid + '&locate=true');
+        mime_types: [
+            {title: 'uploadImages', extensions: 'jpg,gif,png,jpeg,.bmp'},
+        ],
+        prevent_duplicates: true
+    },
+    onUploadComplete: function(files)
+    {
+        if (files && files.length)
+        {
+            location.href = createLink('file', 'uploadImages', 'module=' + module + '&params=' + params + '&uid=' + uid + '&locate=true');
+        }
     },
     onBeforeUpload: function(file)
     {

@@ -10,11 +10,11 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='querybox' class='show'></div>
+<div id='queryBox' class='show'></div>
 <div id='unlinkStoryList'>
   <form class='main-table table-story' data-ride='table' method='post' id='unlinkedStoriesForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
-    <div class='table-header'>
-      <div class='table-statistic'><?php echo html::icon('unlink');?> &nbsp;<strong><?php echo $lang->productplan->unlinkedStories;?></strong></div>
+    <div class='table-header hl-primary text-primary strong'>
+      <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedStories;?>
     </div>
     <table class='table'> 
       <thead>
@@ -65,17 +65,14 @@
     <?php if($unlinkedCount):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->build->linkStory, '', 'btn');?>
+      <div class="table-actions btn-toolbar show-always">
+        <?php echo html::submitButton($lang->build->linkStory, '', 'btn btn-secondary');?>
       </div>
-      <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
+      <div class="btn-toolbar">
+        <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
+      </div>
+      <div class='table-statistic'></div>
     </div>
     <?php endif;?>
   </form>
 </div>
-<script>
-$(function()
-{
-    ajaxGetSearchForm('#stories .linkBox #querybox');
-})
-</script>

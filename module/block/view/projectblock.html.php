@@ -58,7 +58,7 @@
           </div>
         </td>
         <?php if($longBlock):?>
-        <td id='spark-<?php echo $id++?>' class='no-padding sparkline' values='<?php echo join(',', $project->burns);?>'></td>
+        <td id='spark-<?php echo $id++?>' class='no-padding text-left sparkline' values='<?php echo join(',', $project->burns);?>'></td>
         <?php endif;?>
      </tr>
      <?php endforeach;?>

@@ -107,7 +107,7 @@
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
                 <th><?php echo $lang->task->team;?></th>
-                <td><?php echo html::a('javascript:;', $lang->task->team, '', "class='form-control btn' data-toggle='modalTeam'");?></td>
+                <td><?php echo html::a('#modalTeam', $lang->task->team, '', "class='form-control btn' data-toggle='modal'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->type;?></th>
@@ -128,7 +128,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('mailto[]', $project->acl == 'private' ? $members : $users, str_replace(' ' , '', $task->mailto), 'class="form-control" multiple');?>
-                    <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists');?></div>
+                    <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
               </tr>
@@ -213,52 +213,56 @@
       <div class="modal-dialog">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">
-            <span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->task->close;?></span>
+            <i class="icon icon-close"></i>
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>
         </div>
-        <div class="modal-content with-padding">
+        <div class="modal-content with-padding" id='taskTeamEditor'>
           <table class='table table-form'>
-            <?php foreach($task->team as $member):?>
-            <tr>
-              <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
-              <td>
-                <div class='input-group'>
-                  <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                  <?php echo html::input("teamEstimate[]", $member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                  <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                  <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                </div>
-              </td>
-              <td class='w-90px'>
-                <a href='javascript:;' class='btn btn-icon btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
-                <a href='javascript:;' class='btn btn-icon btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
-              </td>
-            </tr>
-            <?php endforeach;?>
-            <?php for($i = 0; $i < 5; $i++):?>
-            <tr>
-              <td class='w-150px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
-              <td>
-                <div class='input-group'>
-                  <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                  <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                  <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                  <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                  <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
-                </div>
-              </td>
-              <td class='w-90px'>
-                <a class='btn btn-move-add btn-icon btn-sm'><i class='icon-plus'></i></a>
-                <a class='btn btn-icon btn-move-up btn-sm'><i class='icon-arrow-up'></i></a>
-                <a class='btn btn-icon btn-move-down btn-sm'><i class='icon-arrow-down'></i></a>
-              </td>
-            </tr>
-            <?php endfor;?>
-            <tr><td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td></tr>
+            <tbody>
+              <?php foreach($task->team as $member):?>
+              <tr>
+                <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
+                <td>
+                  <div class='input-group'>
+                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
+                    <?php echo html::input("teamEstimate[]", $member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
+                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
+                    <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                  </div>
+                </td>
+                <td class='w-130px'>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-up'><i class='icon-arrow-up'></i></button>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-down'><i class='icon-arrow-down'></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                </td>
+              </tr>
+              <?php endforeach;?>
+              <tr class='template'>
+                <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
+                <td>
+                  <div class='input-group'>
+                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
+                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
+                    <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
+                    <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                  </div>
+                </td>
+                <td class='w-130px'>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-up'><i class='icon-arrow-up'></i></button>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-down'><i class='icon-arrow-down'></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary btn-wide' data-dismiss='modal'");?></td></tr>
+            </tfoot>
           </table>
         </div>
       </div>

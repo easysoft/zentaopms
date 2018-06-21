@@ -22,8 +22,10 @@ var browseType = '<?php echo $browseType;?>';
     <?php echo html::a(inlink('importBug', "projectID=$projectID"), "<span class='text'>{$lang->project->importBug}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
 </div>
-<div id='mainContent' class='main-content'>
-  <div id='querybox' class='show'></div>
+<div id='mainContent'>
+  <div class='cell space-sm'>
+    <div id='queryBox' class='show'></div>
+  </div>
   <form class='main-table' method='post' target='hiddenwin' id='importBugForm' data-ride='table'>
     <table class='table has-sort-head table-fixed'>
       <thead>
@@ -70,10 +72,12 @@ var browseType = '<?php echo $browseType;?>';
     <?php if($bugs):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->import, '', 'btn');?>
+      <div class="table-actions btn-toolbar show-always">
+        <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn btn-secondary');?>
       </div>
-      <?php echo html::backButton();?>
+      <div class='btn-toolbar'>
+        <?php echo html::backButton();?>
+      </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

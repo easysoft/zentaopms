@@ -19,7 +19,7 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $project->name . $lang->project->burn;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'burn', "projectID=$project->id", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'burn', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -43,16 +43,16 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->project->latestDynamic;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
               <ul class="timeline timeline-tag-left">
                 <?php foreach($actions as $action):?>
-                <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>>
-                  <div>
+                <li <?php if($action->major) echo "class='active'";?>>
+                  <div class='text-ellipsis'>
                     <span class="timeline-tag"><?php echo $action->date;?></span>
-                    <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . $action->actionLabel . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName);?></span>
+                    <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . $action->actionLabel . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName, '', "title='$action->objectName'");?></span>
                   </div>
                 </li>
                 <?php endforeach;?>
@@ -65,13 +65,13 @@
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->project->relatedMember;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('project', 'team', "projectID=$project->id", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('project', 'team', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
               <div class="row row-grid">
                 <?php $i = 9; $j = 0;?>
-                <?php if($this->config->global->flow != 'onlyTask'):?>
+                <?php if($config->global->flow != 'onlyTask'):?>
                 <?php if($project->PM):?>
                 <?php $i--;?>
                 <?php unset($teamMembers[$project->PM]);?>
@@ -113,7 +113,7 @@
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->project->doclib;?></div>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project", 'MORE', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('doc', 'objectLibs', "type=project&projectID=$project->id&from=project", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
             <div class="panel-body">
@@ -122,11 +122,17 @@
                 <?php $i = 0;?>
                 <?php foreach($docLibs as $libID => $docLib):?>
                 <?php if($i > 8) break;?>
-                <div class="col-xs-6"><?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseTyp=all&param=&orderBy=&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?></div>
+                <div class="col-xs-6">
+                  <?php if($libID == 'files'):?>
+                  <?php echo html::a($this->createLink('doc', 'showFiles', "type=project&objectID=$project->id"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                  <?php else:?>
+                  <?php echo html::a($this->createLink('doc', 'browse', "libID=$libID&browseType=all&param=0&orderBy=id_desc&from=project"), "<i class='icon icon-folder text-yellow'></i> " . $docLib->name);?>
+                  <?php endif;?>
+                </div>
                 <?php $i++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">
-                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted' data-toggle='modal'");?>
+                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe'");?>
                 </div>
                 <?php endif;?>
               </div>
@@ -160,11 +166,11 @@
                 </p>
               </div>
             </div>
-            <?php if($this->config->global->flow != 'onlyTask'):?>
+            <?php if($config->global->flow != 'onlyTask'):?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->project->manageProducts;?></strong>
-                <?php common::printLink('project', 'manageproducts', "projectID=$project->id", 'MORE', '', "class='btn btn-link pull-right muted'");?>
+                <?php common::printLink('project', 'manageproducts', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">

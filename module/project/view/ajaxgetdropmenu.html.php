@@ -21,7 +21,7 @@
   {
       if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
       {
-          echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+          echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
       }
   }
  
@@ -29,13 +29,13 @@
   {
       if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
       {
-          echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+          echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
       }
   }
 
   foreach($projects as $project)
   {
-      if($project->status == 'done' or $project->status == 'closed') echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "data-key='" . zget($projectsPinYin, $project->name, '') . "'");
+      if($project->status == 'done' or $project->status == 'closed') echo html::a(sprintf($link, $project->id), "<i class='icon-folder-close-alt'></i> " . $project->name, '', "title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'");
   }
   ?>
 </div>

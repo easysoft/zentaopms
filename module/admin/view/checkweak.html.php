@@ -21,18 +21,18 @@
   <div class='main-table pd-0'>
     <table class='table table-condensed table-hover table-striped table-fixed'>
       <thead>
-        <th class='w-id'><?php echo $lang->idAB;?></th>
+        <th class='c-id-sm text-center'><?php echo $lang->idAB;?></th>
         <th class='w-150px'><?php echo $lang->user->realname;?></th>
         <th><?php echo $lang->user->account;?></th>
         <th class='w-150px'><?php echo $lang->user->phone;?></th>
         <th class='w-150px'><?php echo $lang->user->mobile;?></th>
         <th class='w-150px'><?php echo $lang->admin->safe->reason;?></th>
-        <th class='w-50px'><?php echo $lang->actions;?></th>
+        <th class='c-actions-1'><?php echo $lang->actions;?></th>
       </thead>
       <tbody>
         <?php foreach($weakUsers as $user):?>
         <tr>
-          <td class='text-right'><?php echo $user->id?></td>
+          <td class='text-center'><?php echo $user->id?></td>
           <td class='text-left'><?php echo $user->realname?></td>
           <td class='text-left'><?php echo $user->account?></td>
           <td><?php echo $user->phone?></td>

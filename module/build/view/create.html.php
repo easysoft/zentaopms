@@ -44,7 +44,7 @@
           <td><?php echo html::input('name', '', "class='form-control' autocomplete='off' required");?></td>
           <td class='text-muted'>
             <?php if($lastBuild):?>
-            <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <strong>' . $lastBuild->name . '</strong>';?></div>
+            <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <a class="code label label-badge label-light" href="javascript:$(\'#name\').val(\'' . $lastBuild->name . '\').focus();">' . $lastBuild->name . '</a>';?></div>
             <?php endif;?>
           </td>
         </tr>
@@ -75,7 +75,7 @@
         <tr>
           <td colspan="3" class="text-center form-actions">
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
-            <?php echo html::backButton('', '', 'btn btn-wide');?>
+            <?php echo "<a href='/project-build-$projectID.html' class='btn btn-back btn btn-wide'>$lang->backhome</a>";?>
           </td>
         </tr>
       </table>

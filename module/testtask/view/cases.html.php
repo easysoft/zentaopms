@@ -17,7 +17,7 @@
 <?php js::set('taskCaseBrowseType', ($browseType == 'bymodule' and $this->session->taskCaseBrowseType == 'bysearch') ? 'all' : $this->session->taskCaseBrowseType);?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('moduleID', $moduleID);?>
-<div id='mainContent' class='main-row'>
+<div id='mainContent' class='main-row fade'>
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'><?php echo $moduleTree;?></div>
@@ -28,7 +28,7 @@
       <?php
       $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
 
       $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
       $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
@@ -39,36 +39,38 @@
       if($useDatatable) include '../../common/view/datatable.html.php';
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
 
-      $this->config->testcase->datatable->defaultField = $this->config->testtask->datatable->defaultField;
-      $this->config->testcase->datatable->fieldList['actions']['width'] = '90';
+      $config->testcase->datatable->defaultField = $config->testtask->datatable->defaultField;
+      $config->testcase->datatable->fieldList['actions']['width'] = '90';
 
       $setting = $this->datatable->getSetting('testtask');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <table class='table has-sort-table' id='caseList'>
-        <thead>
-          <tr>
-          <?php
-          foreach($setting as $key => $value)
-          {
-              if($value->show)
-              {
-                  $this->datatable->printHead($value, $orderBy, $vars);
-                  $columns ++;
-              }
-          }
-          ?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($runs as $run):?>
-          <tr>
-            <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class='table has-sort-table' id='caseList'>
+          <thead>
+            <tr>
+            <?php
+            foreach($setting as $key => $value)
+            {
+                if($value->show)
+                {
+                    $this->datatable->printHead($value, $orderBy, $vars);
+                    $columns ++;
+                }
+            }
+            ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($runs as $run):?>
+            <tr>
+              <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
       <?php if($runs):?>
       <div class='table-footer'>
         <?php if($hasCheckbox):?>
@@ -128,6 +130,10 @@
         </div>
         <?php endif;?>
         <?php $pager->show('right', 'pagerjs');?>
+      </div>
+      <?php else:?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php common::printLink('testtask', 'linkCase', "taskID={$taskID}", "<i class='icon icon-plus'></i> " . $lang->testtask->linkCase, '', "class='btn btn-info'");?></p>
       </div>
       <?php endif;?>
     </form>

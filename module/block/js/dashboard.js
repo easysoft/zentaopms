@@ -27,39 +27,67 @@ function deleteBlock(index)
 /**
  * Sort blocks.
  * 
- * @param  object $orders  format is {'block2' : 1, 'block1' : 2, oldOrder : newOrder} 
+ * @param  array $orders  format is {'blockid' : 1, 'block1' : 2} 
+ * @param  function $callback
  * @access public
  * @return void
  */
-function sortBlocks(orders)
+function sortBlocks(newOrders, callback)
 {
-
-    var ordersMap = [];
-    $.each(orders, function(blockId, order) {ordersMap.push({id: blockId, order: order});});
-    ordersMap.sort(function(a, b) {return a.order - b.order;});
-    var newOrders = $.map(ordersMap, function(order, idx) {return order.id});
-
-    $.getJSON(createLink('block', 'sort', 'orders=' + newOrders.join(',') + '&module=' + module), function(data)
-    {
-        // if(data.result == 'success') $.zui.messager.success(config.ordersSaved);
-    });
+    $.getJSON(createLink('block', 'sort', 'orders=' + newOrders.join(',') + '&module=' + module), callback);
 }
 
 /**
  * Resize block
- * @param  object $event
+ * @param  string $blockId
+ * @param  function $callback
  * @access public
  * @return void
  */
-function resizeBlock(event)
+function resizeBlock(blockID, width, callback)
 {
-    var blockID = event.element.find('.panel').data('id');
-    var data = event.type == 'vertical' ? event.height : event.grid;
-    $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=' + event.type + '&data=' + data), function(data)
+    $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=horizontal&data=' + width), function(data)
     {
-        if(data.result !== 'success') event.revert();
+        callback && callback();
     });
-    initTableHeader();
+    refreshBlock($('#block' + blockID));
+}
+
+function refreshBlock($panel, afterRefresh)
+{
+    var url = $panel.data('url');
+    $panel.addClass('load-indicator loading');
+    $.ajax({url: url, dataType: 'html'}).done(function(data)
+    {
+        var $data = $(data);
+        if($data.hasClass('panel')) $panel.empty().append($data.children());
+        else $panel.find('.panel-body').replaceWith($data);
+        if($.isFunction(afterRefresh))
+        {
+            afterRefresh.call(this,
+            {
+                result: true,
+                data: data,
+                $panel: $panel
+            });
+        }
+        $panel.find('.tablesorter').sortTable();
+        initTableHeader($panel);
+    }).fail(function()
+    {
+        $panel.addClass('panel-error');
+        if($.isFunction(afterRefresh))
+        {
+            afterRefresh.call(this,
+            {
+                result: false,
+                $panel: $panel
+            });
+        }
+    }).always(function()
+    {
+        $panel.removeClass('load-indicator loading');
+    });
 }
 
 /**
@@ -67,28 +95,33 @@ function resizeBlock(event)
  * @access public
  * @return void
  */
-function initTableHeader()
+function initTableHeader($wrapper)
 {
-    $('#dashboard .table-fixed-head').each(function()
+    ($wrapper || $('#dashboard')).find('.panel-body > .table-fixed-head').each(function()
     {
         var $table = $(this);
         var $panel = $table.closest('.panel');
 
         if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
-
+        
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
+        if ($wrapper) console.log('initTableHeader', isFixed, {$wrapper, $table, $header});
         if(!isFixed)
         {
             $table.find('thead').css('visibility', 'visible');
             return;
         }
         var tableWidth = $table.width();
+        var $oldTableHead = $table.find('thead');
+        var updateTh = function()
+        {
+            $header.find('thead').empty().append($oldTableHead.find('tr').clone());
+        };
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20).css('min-width', tableWidth);
-            var $oldTableHead = $table.find('thead');
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
             $oldTableHead.find('th').each(function(idx)
             {
                 $(this).attr('data-idx', idx);
@@ -102,13 +135,9 @@ function initTableHeader()
                 $header.on('mousedown mouseup', 'th[data-idx]', function(e)
                 {
                     var $th = $(this);
-                    var $targetTh = $oldTableHead.find('th[data-idx="' + $th.data('idx') + '"]').trigger(e);
+                    $oldTableHead.find('th[data-idx="' + $th.data('idx') + '"]').trigger(e);
                     if(e.type === 'mouseup')
                     {
-                        var updateTh = function()
-                        {
-                            $header.find('thead').empty().append($oldTableHead.find('tr').clone());
-                        };
                         setTimeout(updateTh, 10);
                         setTimeout(updateTh, 200);
                     }
@@ -117,11 +146,7 @@ function initTableHeader()
         }
         else
         {
-            var $fixedTh = $header.css('min-width', tableWidth).css('right', $panel.width() - tableWidth).find('thead > tr > th');
-            $table.find('thead > tr > th').each(function(idx)
-            {
-                $fixedTh.eq(idx).width($(this).width());
-            });
+            updateTh();
         }
 
         var timeoutCall = null;
@@ -170,29 +195,37 @@ function hiddenBlock(index)
 
 $(function()
 {
-//    var $dashboard = $('#dashboard').dashboard(
-//    {
-//        height            : 240,
-//        draggable         : !useGuest,
-//        shadowType        : false,
-//        afterOrdered      : sortBlocks,
-//        afterPanelRemoved : deleteBlock,
-//        sensitive         : true,
-//        panelRemovingTip  : config.confirmRemoveBlock,
-//        resizable         : !useGuest,
-//        onResize          : resizeBlock,
-//        afterRefresh      : function(e)
-//        {
-//            var $sortTable = e.$panel.find('.tablesorter');
-//            if($sortTable.length) $sortTable.sortTable();
-//            initTableHeader();
-//        }
-//    });
-//
-//    // $dashboard.find('ul.dashboard-actions').addClass('hide').children('li').addClass('right').appendTo($('#modulemenu > .nav'));
-//    $dashboard.find('[data-toggle=tooltip]').tooltip({container: 'body'});
+    initTableHeader();
+    $(window).on('resize', function()
+    {
+        initTableHeader();
+    });
 
-   initTableHeader();
+    // Init dashboard
+    $('#dashboard').sortable(
+    {
+        selector: '.panel',
+        trigger: '.panel-heading,.panel-move-handler',
+        containerSelector: '.col-main,.col-side',
+        finish: function(e)
+        {
+            var newOrders = [];
+            var isSideCol = e.element.parent().is('.col-side');
+            e.list.each(function(index, data)
+            {
+                newOrders.push(data.item.data('id'));
+            });
+            sortBlocks(newOrders, function()
+            {
+                resizeBlock(e.element.data('id'), isSideCol ? 4 : 8);
+            });
+            
+            e.element.toggleClass('block-sm', isSideCol);
+        }
+    }).on('click', '.refresh-panel', function()
+    {
+        refreshBlock($(this).closest('.panel'));
+    });
 });
 
 

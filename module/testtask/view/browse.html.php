@@ -13,13 +13,13 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
-<?php js::set('flow', $this->config->global->flow);?>
+<?php js::set('flow', $config->global->flow);?>
 <?php
 $scope  = $this->session->testTaskVersionScope;
 $status = $this->session->testTaskVersionStatus;
 ?>
 <?php js::set('status', $status);?>
-<?php if($this->config->global->flow != 'onlyTest'):?>
+<?php if($config->global->flow != 'onlyTest'):?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <div class='btn-group'>
@@ -61,7 +61,7 @@ $status = $this->session->testTaskVersionStatus;
         <th class='c-id text-left'>   <?php common::printOrderLink('id',      $orderBy, $vars, $lang->idAB);?></th>
         <th class='w-200px text-left'><?php common::printOrderLink('name',    $orderBy, $vars, $lang->testtask->name);?></th>
         <th class='text-left'>        <?php common::printOrderLink('product', $orderBy, $vars, $lang->testtask->product);?></th>
-        <?php if($this->config->global->flow != 'onlyTest'):?>
+        <?php if($config->global->flow != 'onlyTest'):?>
         <th class='text-left'>        <?php common::printOrderLink('project', $orderBy, $vars, $lang->testtask->project);?></th>
         <?php endif;?>
         <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
@@ -69,7 +69,7 @@ $status = $this->session->testTaskVersionStatus;
         <th class='w-100px text-left'><?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='w-100px text-left'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
         <th class='w-80px text-left'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-        <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -78,7 +78,7 @@ $status = $this->session->testTaskVersionStatus;
       <td><?php echo html::a(inlink('cases', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
       <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('cases', "taskID=$task->id"), $task->name);?></td>
       <td class='c-name' title="<?php echo $task->productName?>"><?php echo $task->productName?></td>
-      <?php if($this->config->global->flow != 'onlyTest'):?>
+      <?php if($config->global->flow != 'onlyTest'):?>
       <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
       <?php endif;?>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
@@ -93,19 +93,16 @@ $status = $this->session->testTaskVersionStatus;
       </td>
       <td class='c-actions'>
         <?php
-        if(common::hasPriv('testtask', 'delete', $task))
-        {
-            echo "<div class='more'>";
-            $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
-            echo "</div>";
-        }
-
         common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
         common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, 'data-width=800px');
         common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
         common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
         common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true);
+        if(common::hasPriv('testtask', 'delete', $task))
+        {
+            $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
+        }
         ?>
       </td>
     </tr>

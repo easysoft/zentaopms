@@ -23,7 +23,7 @@ js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 js::set('productID',      $productID);
 js::set('branch',         $branch);
 ?>
-<div id="mainContent" class="main-row">
+<div id="mainContent" class="main-row fade">
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'>
@@ -40,14 +40,14 @@ js::set('branch',         $branch);
     </div>
   </div>
   <div class='main-col'>
-    <div id='queryBox' class='cell'></div>
+    <div id='queryBox' class='cell<?php if($browseType == 'bysearch') echo ' show';?>'></div>
     <form class='main-table table-case' data-ride='table' id='batchForm' method='post'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
   
       if($useDatatable)  include '../../common/view/datatable.html.php';
@@ -56,29 +56,31 @@ js::set('branch',         $branch);
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <table class='table has-sort-head <?php echo $useDatatable ? 'datatable' : ''?>' id='caseList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='caseIDList[]'>
-        <thead>
-          <tr>
-          <?php
-          foreach($setting as $key => $value)
-          {
-              if($value->show)
-              {
-                  $this->datatable->printHead($value, $orderBy, $vars);
-                  $columns ++;
-              }
-          }
-          ?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($cases as $case):?>
-          <tr data-id='<?php echo $case->id?>'>
-            <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class='table has-sort-head <?php echo $useDatatable ? 'datatable' : ''?>' id='caseList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='caseIDList[]'>
+          <thead>
+            <tr>
+            <?php
+            foreach($setting as $key => $value)
+            {
+                if($value->show)
+                {
+                    $this->datatable->printHead($value, $orderBy, $vars);
+                    $columns ++;
+                }
+            }
+            ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($cases as $case):?>
+            <tr data-id='<?php echo $case->id?>'>
+              <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
       <?php if($cases):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -207,8 +209,5 @@ js::set('branch',         $branch);
 <script>
 $('#module' + moduleID).closest('li').addClass('active'); 
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
-<?php if($browseType == 'bysearch'):?>
-if($('#query li.active').size() == 0) ajaxGetSearchForm();
-<?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

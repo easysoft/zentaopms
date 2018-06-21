@@ -152,7 +152,7 @@ js::set('browseType', $browseType);
     ?>
   </div>
 </div>
-<div id="mainContent" class="main-row">
+<div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -164,14 +164,14 @@ js::set('browseType', $browseType);
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
     <form class="main-table table-task skip-iframe-modal" method="post" id='projectTaskForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
       $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
 
       $customFields = $this->datatable->getSetting('project');
@@ -185,38 +185,40 @@ js::set('browseType', $browseType);
       $widths  = $this->datatable->setFixedFieldWidth($customFields);
       $columns = 0;
       ?>
-      <table class='table has-sort-head' id='taskList'>
-        <thead>
-          <tr>
-          <?php
-          foreach($customFields as $field)
-          {
-              if($field->show)
-              {
-                  $this->datatable->printHead($field, $orderBy, $vars);
-                  $columns++;
-              }
-          }
-          ?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($tasks as $task):?>
-          <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
-          </tr>
-          <?php if(!empty($task->children)):?>
-          <?php foreach($task->children as $key => $child):?>
-          <?php $class  = $key == 0 ? ' table-child-top' : '';?>
-          <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
-          <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
-          </tr>
-          <?php endforeach;?>
-          <?php endif;?>
-          <?php endforeach;?>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class='table has-sort-head' id='taskList'>
+          <thead>
+            <tr>
+            <?php
+            foreach($customFields as $field)
+            {
+                if($field->show)
+                {
+                    $this->datatable->printHead($field, $orderBy, $vars);
+                    $columns++;
+                }
+            }
+            ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($tasks as $task):?>
+            <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+              <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+            </tr>
+            <?php if(!empty($task->children)):?>
+            <?php foreach($task->children as $key => $child):?>
+            <?php $class  = $key == 0 ? ' table-child-top' : '';?>
+            <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+            <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
+              <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
+            </tr>
+            <?php endforeach;?>
+            <?php endif;?>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
       <?php if($tasks):?>
       <div class="table-footer">
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -310,9 +312,6 @@ js::set('browseType', $browseType);
 </div>
 <?php js::set('replaceID', 'taskList')?>
 <script>
-<?php if($browseType == 'bysearch'):?>
-if($('#query li.active').size() == 0) ajaxGetSearchForm();
-<?php endif;?>
 $(function()
 {
     // Update table summary text

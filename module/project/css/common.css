@@ -13,13 +13,18 @@
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
 .table-children.table-child-top {border-top: 2px solid #cbd0db;}
 .table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
+.table td {overflow:hidden;}
 .table td.has-child > .task-toggle {color: #838a9d; position: relative; top: -1px;}
 .table td.has-child > .task-toggle:hover {color: #006af1; cursor: pointer;}
 .table td.has-child > .task-toggle > .icon {font-size: 16px; display: inline-block; transition: transform .2s;}
 .table td.has-child > .task-toggle > .icon:before {text-align: left;}
 .table td.has-child > .task-toggle.collapsed > .icon {transform: rotate(-90deg);}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
+@-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 
 .chosen-container-single .chosen-single > span{max-width:200px;}
 
 #whitelistBox .checkbox-inline, #whitelistBox .radio-inline{margin-left: 10px; display: inline-block; padding-left: 0px; padding-right: 10px;}
+.main-table > .table-responsive {padding: 0 1px; background: #fff;}
+
+#subNavbar .nav .dropdown-menu {text-align: left;}

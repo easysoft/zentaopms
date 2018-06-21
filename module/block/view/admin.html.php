@@ -33,7 +33,7 @@ include '../../common/view/chosen.html.php';
   <?php endif;?>
   <div id="blocksList"><?php if(!empty($blocks)) echo $blocks;?></div>
   <div id="blockParams"></div>
-  <div class="form-group form-actions">
+  <div class="form-group">
     <div class="col-sm-7 col-sm-offset-3">
       <button type="submit" class="btn btn-wide btn-primary"><?php echo $lang->save;?></button>
       <button type="cancel" class="btn btn-wide" data-dismiss="modal"><?php echo $lang->cancel;?></button>

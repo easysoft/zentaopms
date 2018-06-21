@@ -10,12 +10,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/sparkline.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a(inlink("all", "status=undone&projectID=$project->id&orderBy=$orderBy&productID=$productID"),    "<span class='text'>{$lang->project->undone}</span>", '', "class='btn btn-link' id='undoneTab'");?>
     <?php echo html::a(inlink("all", "status=all&projectID=$project->id&orderBy=$orderBy&productID=$productID"),       "<span class='text'>{$lang->project->all}</span>", '', "class='btn btn-link' id='allTab'");?>
+    <?php echo html::a(inlink("all", "status=undone&projectID=$project->id&orderBy=$orderBy&productID=$productID"),    "<span class='text'>{$lang->project->undone}</span>", '', "class='btn btn-link' id='undoneTab'");?>
     <?php echo html::a(inlink("all", "status=wait&projectID=$project->id&orderBy=$orderBy&productID=$productID"),      "<span class='text'>{$lang->project->statusList['wait']}</span>", '', "class='btn btn-link' id='waitTab'");?>
     <?php echo html::a(inlink("all", "status=doing&projectID=$project->id&orderBy=$orderBy&productID=$productID"),     "<span class='text'>{$lang->project->statusList['doing']}</span>", '', "class='btn btn-link' id='doingTab'");?>
     <?php echo html::a(inlink("all", "status=suspended&projectID=$project->id&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$lang->project->statusList['suspended']}</span>", '', "class='btn btn-link' id='suspendedTab'");?>
@@ -25,8 +24,8 @@
     </div>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('project', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-download-alt'></i> " . $lang->export, '', "class='btn btn-link export'")?>
-    <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-link'")?>
+    <?php common::printLink('project', 'export', "status=$status&productID=$productID&orderBy=$orderBy", "<i class='icon-export muted'> </i>" . $lang->export, '', "class='btn btn-link export'")?>
+    <?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?>
   </div>
 </div>
 <div id='mainContent'>
@@ -64,7 +63,7 @@
           <td class='c-id'>
             <?php if($canBatchEdit):?>
             <div class="checkbox-primary">
-              <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' /> 
+              <input type='checkbox' name='projectIDList[<?php echo $project->id;?>]' value='<?php echo $project->id;?>' />
               <label></label>
             </div>
             <?php endif;?>
@@ -92,11 +91,14 @@
           <td><?php echo $project->hours->totalEstimate;?></td>
           <td><?php echo $project->hours->totalConsumed;?></td>
           <td><?php echo $project->hours->totalLeft;?></td>
-          <td class='text-left w-150px'>
-            <img class='progressbar' src='<?php echo $webRoot;?>theme/default/images/main/green.png' alt='' height='16' width='<?php echo $project->hours->progress == 0 ? 1 : round($project->hours->progress);?>'>
-            <small><?php echo $project->hours->progress;?>%</small>
+          <td class="c-progress">
+            <div class="progress progress-text-left">
+              <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $project->hours->progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->hours->progress;?>%">
+              <span class="progress-text"><?php echo $project->hours->progress;?>%</span>
+              </div>
+            </div>
           </td>
-          <td class='projectline text-left' values='<?php echo join(',', $project->burns);?>'></td>
+          <td id='spark-<?php echo $project->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $project->burns);?>'></td>
           <?php if($canOrder):?>
           <td class='sort-handler'><i class="icon icon-move"></i></td>
           <?php endif;?>

@@ -1,11 +1,14 @@
 $(function()
 {
-    if(typeof page == 'undefined') page = '';
+    var page = window.page || '';
+    var flow = window.flow;
+
+    $('#subNavbar a[data-toggle=dropdown]').parent().addClass('dropdown dropdown-hover');
     if(page == 'create')
     {
-        productID  = $('#product').val();
-        moduleID   = $('#module').val();
-        assignedto = $('#assignedTo').val();
+        var productID  = $('#product').val();
+        var moduleID   = $('#module').val();
+        var assignedto = $('#assignedTo').val();
         changeProductConfirmed = true;
         oldStoryID             = $('#story').val() || 0;
         oldProjectID           = 0;
@@ -19,6 +22,14 @@ $(function()
     {
         oldProductID = $('#product').val();
         $("#story, #task, #mailto").chosen(defaultChosenOptions);
+    }
+
+    if(window.flow != 'full')
+    {
+        $('.querybox-toggle').click(function()
+        {
+            $(this).parent().toggleClass('active');
+        });
     }
 });
 

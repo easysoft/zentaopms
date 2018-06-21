@@ -78,6 +78,7 @@ class projectModel extends model
         if($project and $project->type == 'ops')
         {
             unset($this->lang->project->menu->story);
+            unset($this->lang->project->menu->qa);
             unset($this->lang->project->subMenu->qa->bug);
             unset($this->lang->project->subMenu->qa->build);
             unset($this->lang->project->subMenu->qa->testtask);
@@ -106,13 +107,34 @@ class projectModel extends model
         if($moduleName == 'project' && $methodName == 'all')    $label = $this->lang->project->allProjects;
         if($moduleName == 'project' && $methodName == 'create') $label = $this->lang->project->create;
 
-        $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
-        $projectIndex .= '<ul class="dropdown-menu">';
-        if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
-        if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
-        if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
-        $projectIndex .= '</ul></div></div>';
-        $projectIndex .= $selectHtml;
+        $projectIndex = '';
+        $isMobile     = $this->app->viewType == 'mhtml';
+        if($isMobile)
+        {
+            $projectIndex  = html::a(helper::createLink('project', 'index'), $this->lang->project->index) . $this->lang->colon;
+            $projectIndex .= $selectHtml;
+        }
+        else
+        {
+            $projectIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+            $projectIndex .= '<ul class="dropdown-menu">';
+            if(common::hasPriv('project', 'index'))  $projectIndex .= '<li>' . html::a(helper::createLink('project', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->project->index) . '</li>';
+            if(common::hasPriv('project', 'all'))    $projectIndex .= '<li>' . html::a(helper::createLink('project', 'all', 'status=all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->project->allProjects) . '</li>';
+
+            if(common::isTutorialMode())
+            {
+                $wizardParams = helper::safe64Encode('');
+                $link = helper::createLink('tutorial', 'wizard', "module=project&method=create&params=$wizardParams");
+                $projectIndex .= '<li>' . html::a($link, "<i class='icon icon-plus'></i> {$this->lang->project->create}", '', "class='create-project-btn'") . '</li>';
+            }
+            else
+            {
+                if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
+            }
+
+            $projectIndex .= '</ul></div></div>';
+            $projectIndex .= $selectHtml;
+        }
 
         $this->lang->modulePageNav = $projectIndex;
         if($moduleName != 'project') $this->lang->$moduleName->dividerMenu = $this->lang->project->dividerMenu;
@@ -181,7 +203,7 @@ class projectModel extends model
         $currentProject = $this->getById($projectID);
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");
-        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentProject->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProject->name}'>{$currentProject->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
         $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
@@ -336,6 +358,7 @@ class projectModel extends model
                 $members = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($copyProjectID)->andWhere('type')->eq('project')->fetchAll();
                 foreach($members as $member)
                 {
+                    unset($member->id);
                     $member->root = $projectID;
                     $member->join = $today;
                     $member->days = $project->days;
@@ -2735,7 +2758,7 @@ class projectModel extends model
         $productPlans = array();
         foreach($products as $productID => $product)
         {
-            $productPlans[$productID] = $this->productplan->getPairs($product->id, $product->branch);
+            $productPlans[$productID] = $this->productplan->getPairs($product->id, isset($product->branch) ? $product->branch : '');
         }
         return $productPlans;
     }

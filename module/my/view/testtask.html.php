@@ -15,8 +15,9 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>",       '', "class='btn btn-link" . ($type == 'wait' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>",       '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
+    $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+    echo html::a(inlink('testtask', "type=wait"),       "<span class='text'>{$lang->testtask->wait}</span>" . ($type == 'wait' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'wait' ? ' btn-active-text' : '') . "'");
+    echo html::a(inlink('testtask', "type=done"),       "<span class='text'>{$lang->testtask->done}</span>" . ($type == 'done' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'done' ? ' btn-active-text' : '') . "'");
     echo html::a(inlink('testcase', "type=assigntome"), "<span class='text'>{$lang->testcase->assignToMe}</span>", '', "class='btn btn-link'");
     echo html::a(inlink('testcase', "type=openedbyme"), "<span class='text'>{$lang->testcase->openedByMe}</span>", '', "class='btn btn-link'");
     ?>
@@ -34,7 +35,7 @@
         <th class='w-90px'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='w-90px'> <?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
         <th class='w-80px'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-        <th class='w-150px'><?php echo $lang->actions;?></th>
+        <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -49,14 +50,15 @@
         <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
         <td class='c-actions'>
           <?php
-          common::printIcon('testtask', 'cases',    "taskID=$task->id", 'play', 'list', 'sitemap');
-          common::printIcon('testtask', 'linkCase', "taskID=$task->id", '', 'list', 'link');
-          common::printIcon('testtask', 'edit',     "taskID=$task->id", '', 'list');
-
-          if(common::hasPriv('testtask', 'delete'))
+          common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
+          common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt','','iframe',true, 'data-width=800px');
+          common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
+          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
+          common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list','','','',true);
+          if(common::hasPriv('testtask', 'delete', $task))
           {
               $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
           }
           ?>
         </td>

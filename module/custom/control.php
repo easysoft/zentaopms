@@ -113,6 +113,8 @@ class custom extends control
             }
             else
             {
+                $lang = $_POST['lang'];
+                $oldCustoms = $this->custom->getItems("lang=$lang&module=$module&section=$field");
                 foreach($_POST['keys'] as $index => $key)
                 {
                     if(!empty($key)) $key = trim($key);
@@ -121,7 +123,7 @@ class custom extends control
                     {
                         if(!is_numeric($key) or $key > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
                     }
-                    if(!empty($key) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
+                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
 
                     /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
                     if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
@@ -145,7 +147,6 @@ class custom extends control
                     }
                 }
 
-                $lang = $_POST['lang'];
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
                 foreach($_POST['keys'] as $index => $key)
                 {
@@ -327,9 +328,16 @@ class custom extends control
     public function ajaxSaveCustomFields($module, $section, $key)
     {
         $account = $this->app->user->account;
-        $fields  = $this->post->fields;
-        if(is_array($fields)) $fields = join(',', $fields);
-        $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
+        if($_POST)
+        {
+            $fields  = $this->post->fields;
+            if(is_array($fields)) $fields = join(',', $fields);
+            $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
+        }
+        else
+        {
+            $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
+        }
         die(js::reload('parent'));
     }
 
@@ -399,6 +407,9 @@ class custom extends control
      */
     public function ajaxGetMenu($module = 'main', $method = '', $type = '')
     {
+        if($this->config->global->flow == 'full')     $this->loadModel('project')->setMenu(array(), 0);
+        if($this->config->global->flow == 'onlyTest') $this->loadModel('testcase')->setMenu(array(), 0);
+        if($this->config->global->flow == 'onlyTask') $this->loadModel('project')->setMenu(array(), 0);
         if($type === 'all')
         {
             $menu = array();

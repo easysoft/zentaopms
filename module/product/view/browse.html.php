@@ -29,57 +29,65 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
-    <?php if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;?>
-    <?php $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;?>
-    <?php if($menuItem->name == 'more'):?>
     <?php
-    echo '<div class="btn-group">';
-    $active  = '';
-    $current = $menuItem->text;
-    $storyBrowseType = $this->session->storyBrowseType;
-    if(isset($lang->product->moreSelects[$storyBrowseType]))
+    foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {
-        $active = 'btn-active-text';
-        $current = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-    }
-    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
-    echo "<ul class='dropdown-menu'>";
-    foreach($lang->product->moreSelects as $key => $value)
-    {
-        echo '<li' . ($key == $this->session->storyBrowseType ? " class='active'" : '') . '>';
-        echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key"), $value);
-    }
-    echo '</ul></div>';
-    ?>
-    <?php elseif($menuItem->name == 'QUERY'):?>
-    <?php if(isset($lang->custom->queryList)):?>
-    <?php
-    echo '<div class="btn-group" id="query">';
-    $active  = '';
-    $current = $menuItem->text;
-    $dropdownHtml = "<ul class='dropdown-menu'>";
-    foreach($lang->custom->queryList as $queryID => $queryTitle)
-    {
-        if($this->session->storyBrowseType == 'bysearch' and $queryID == $param)
+        if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
+        $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
+        if($menuItem->name == 'more')
         {
-            $active  = 'btn-active-text';
-            $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+            if(!empty($lang->product->moreSelects))
+            {
+                $moreLabel       = $lang->more;
+                $moreLabelActive = '';
+                $storyBrowseType = $this->session->storyBrowseType;
+                if(isset($lang->product->moreSelects[$storyBrowseType]))
+                {
+                    $moreLabel       = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabelActive = 'btn-active-text';
+                }
+                echo '<div class="btn-group">';
+                echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
+                echo "<ul class='dropdown-menu'>";
+                foreach($lang->product->moreSelects as $key => $value)
+                {
+                    $active = $key == $storyBrowseType ? 'btn-active-text' : '';
+                    echo '<li>' . html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
+                }
+                echo '</ul></div>';
+            }
         }
-        $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
-        $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=$queryID"), $queryTitle);
-    }
-    $dropdownHtml .= '</ul>';
+        elseif($menuItem->name == 'QUERY')
+        {
+            if(isset($lang->custom->queryList))
+            {
+                echo '<div class="btn-group" id="query">';
+                $active  = '';
+                $current = $menuItem->text;
+                $dropdownHtml = "<ul class='dropdown-menu'>";
+                foreach($lang->custom->queryList as $queryID => $queryTitle)
+                {
+                    if($this->session->storyBrowseType == 'bysearch' and $queryID == $param)
+                    {
+                        $active  = 'btn-active-text';
+                        $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    }
+                    $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
+                    $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=$queryID"), $queryTitle);
+                }
+                $dropdownHtml .= '</ul>';
 
-    echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
-    echo $dropdownHtml;
-    echo '</div>';
+                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
+                echo $dropdownHtml;
+                echo '</div>';
+            }
+        }
+        else
+        {
+            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
+        }
+    }
     ?>
-    <?php endif;?>
-    <?php else:?>
-    <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");?>
-    <?php endif;?>
-    <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
@@ -100,7 +108,7 @@
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
         $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
-        echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");
+        echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary create-story-btn'");
     }
     else
     {
@@ -110,7 +118,7 @@
     ?>
   </div>
 </div>
-<div id="mainContent" class="main-row">
+<div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class="cell">
@@ -129,14 +137,14 @@
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
     <form class="main-table table-story skip-iframe-modal" method="post" id='productStoryForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($this->config->datatable->$datatableId->mode) and $this->config->datatable->$datatableId->mode == 'datatable');
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
@@ -144,29 +152,31 @@
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <table class="table has-sort-head" id='storyList'>
-        <thead>
-          <tr>
-          <?php
-          foreach($setting as $key => $value)
-          {
-              if($value->show)
-              {
-                  $this->datatable->printHead($value, $orderBy, $vars);
-                  $columns ++;
-              }
-          }
-          ?>
-          </tr>
-        </thead>
-        <tbody>
-          <?php foreach($stories as $story):?>
-          <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
-          </tr>
-          <?php endforeach;?>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table has-sort-head" id='storyList'>
+          <thead>
+            <tr>
+            <?php
+            foreach($setting as $key => $value)
+            {
+                if($value->show)
+                {
+                    $this->datatable->printHead($value, $orderBy, $vars);
+                    $columns ++;
+                }
+            }
+            ?>
+            </tr>
+          </thead>
+          <tbody>
+            <?php foreach($stories as $story):?>
+            <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
+              <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+            </tr>
+            <?php endforeach;?>
+          </tbody>
+        </table>
+      </div>
       <?php if($stories):?>
       <div class="table-footer">
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -360,9 +370,6 @@
 <script>
 var moduleID = <?php echo $moduleID?>;
 $('#module<?php echo $moduleID;?>').closest('li').addClass('active');
-<?php if($browseType == 'bysearch'):?>
-if($('#query li.active').size() == 0) ajaxGetSearchForm();
-<?php endif;?>
 
 $(function()
 {

@@ -27,16 +27,16 @@
     <?php endforeach;?>
     <div class="input-control space w-150px"><?php echo html::select('account', $users, $account, 'onchange=changeUser(this.value) class="form-control chosen"');?></div>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, 'onchange=changeProduct(this.value) class="form-control chosen"');?></div>
-    <?php if($this->config->global->flow != 'onlyTest'):?>
+    <?php if($config->global->flow != 'onlyTest'):?>
     <div class="input-control space w-150px"><?php echo html::select('project', $projects, $project, 'onchange=changeProject(this.value) class="form-control chosen"'); ?></div>
     <?php endif;?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
 </div>
   
-<div id="mainContent" class="main-content">
-  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
-  <div id="dynamics">
+<div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
+<div id='mainContent' class='main-content'>
+  <div id='dynamics'>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
     <?php $isToday = date(DT_DATE4) == $date;?>
@@ -52,7 +52,7 @@
         <?php if($direction == 'next') $actions = array_reverse($actions);?>
         <?php foreach($actions as $i => $action):?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
-        <li <?php if($action->actor == $this->app->user->account) echo "class='active'";?>>
+        <li <?php if($action->major) echo "class='active'";?>>
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
@@ -68,37 +68,25 @@
     </div>
     <?php endforeach;?>
   </div>
-  <?php if(!empty($firstAction)):?>
-  <?php
-  $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
-  $lastDate  = substr($action->originalDate, 0, 10);
-  $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
-  $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-  ?>
-  <?php if($hasPre or $hasNext):?>
-  <div class='table-footer'>
-    <ul class='pager'>
-      <?php $class = $hasPre ? '' : 'disabled';?>
-      <li class='<?php echo $class;?> pager-item-left'>
-        <?php
-        $link = '###';
-        if($hasPre) $link = inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre');
-        echo html::a($link, '<i class="icon icon-angle-left"></i>', '', "class='pager-item'");
-        ?>
-      </li>
-      <?php $class = $hasNext ? '' : 'disabled';?>
-      <li class='<?php echo $class;?> pager-item-left'>
-        <?php
-        $link = '###';
-        if($hasNext) $link = inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next');
-        echo html::a($link, '<i class="icon icon-angle-right"></i>', '', "class='pager-item'");
-        ?>
-      </li>
-    </ul>
-  </div>
-  <?php endif;?>
-  <?php endif;?>
 </div>
+<?php if(!empty($firstAction)):?>
+<?php
+$firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
+$lastDate  = substr($action->originalDate, 0, 10);
+$hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
+$hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
+$preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+?>
+<?php if($hasPre or $hasNext):?>
+<div id="mainActions">
+  <nav class="container">
+    <a id="prevPage" class="btn btn-info<?php if(!$hasPre) echo ' disabled';?>" href="<?php echo $preLink;?>"><i class="icon icon-chevron-left"></i></a>
+    <a id="nextPage" class="btn btn-info<?php if(!$hasNext) echo ' disabled';?>" href="<?php echo $nextLink;?>"><i class="icon icon-chevron-right"></i></a>
+  </nav>
+</div>
+<?php endif;?>
+<?php endif;?>
 <script>
 var browseType = '<?php echo $browseType;?>';
 $(function()

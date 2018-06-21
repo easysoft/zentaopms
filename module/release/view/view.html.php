@@ -31,7 +31,7 @@
     if(!$release->deleted)
     {
         if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-link'");
-        if(common::hasPriv('release', 'linkBug') and $this->config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn btn-link'");
+        if(common::hasPriv('release', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn btn-link'");
 
         if(common::hasPriv('release', 'changeStatus', $release))
         {
@@ -47,24 +47,24 @@
 <div id='mainContent' class='main-content'>
   <div class='main-col'>
     <div class='main'>
-      <div class='tabs'>
+      <div class='tabs' id='tabsNav'>
         <?php $countStories = count($stories); $countBugs = count($bugs); $countLeftBugs = count($leftBugs);?>
         <ul class='nav nav-tabs'>
-          <li <?php if($type == 'story')   echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'green') . ' ' . $lang->release->stories;?></a></li>
-          <?php if($this->config->global->flow != 'onlyStory'):?>
-          <li <?php if($type == 'bug')     echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'green') . ' ' . $lang->release->bugs;?></a></li>
-          <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'red') . ' ' . $lang->release->generatedBugs;?></a></li>
+          <li <?php if($type == 'story')   echo "class='active'"?>><a href='#stories' data-toggle='tab'><?php echo html::icon($lang->icons['story'], 'text-green') . ' ' . $lang->release->stories;?></a></li>
+          <?php if($config->global->flow != 'onlyStory'):?>
+          <li <?php if($type == 'bug')     echo "class='active'"?>><a href='#bugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-green') . ' ' . $lang->release->bugs;?></a></li>
+          <li <?php if($type == 'leftBug') echo "class='active'"?>><a href='#leftBugs' data-toggle='tab'><?php echo html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->release->generatedBugs;?></a></li>
           <?php endif;?>
-          <li <?php if($type == 'releaseInfo') echo "class='active'"?>><a href='#releaseInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'blue') . ' ' . $lang->release->view;?></a></li>
-          <?php if($countStories or ($this->config->global->flow != 'onlyStory' and ($countBugs or $countLeftBugs))):?>
+          <li <?php if($type == 'releaseInfo') echo "class='active'"?>><a href='#releaseInfo' data-toggle='tab'><?php echo html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->release->view;?></a></li>
+          <?php if($countStories or ($config->global->flow != 'onlyStory' and ($countBugs or $countLeftBugs))):?>
           <li class='pull-right'><div><?php common::printIcon('release', 'export', '', '', 'button', '', '', "export btn-sm");?></div></li>
           <?php endif;?>
         </ul>
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
             <?php if(common::hasPriv('release', 'linkStory')):?>
-            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-sm btn-primary'");?></div>
-            <div class='linkBox'></div>
+            <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
+            <div class='linkBox cell hidden'></div>
             <?php endif;?>
             <form class='main-table table-story' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm' data-ride="table">
               <table class='table has-sort-head' id='storyList'>
@@ -86,7 +86,7 @@
                     <th class='w-80px'>   <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
                     <th class='w-90px'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
                     <th class='w-100px'>  <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
-                    <th class='w-50px'>   <?php echo $lang->actions?></th>
+                    <th class='c-actions-1'>   <?php echo $lang->actions?></th>
                   </tr>
                 </thead>
                 <tbody class='text-center'>
@@ -134,8 +134,8 @@
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
             <?php if(common::hasPriv('release', 'linkBug')):?>
-            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
-            <div class='linkBox'></div>
+            <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
+            <div class='linkBox cell hidden'></div>
             <?php endif;?>
             <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm' data-ride="table">
               <table class='table has-sort-head' id='bugList'>
@@ -205,8 +205,8 @@
           </div>
           <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
             <?php if(common::hasPriv('release', 'linkBug')):?>
-            <div class='action'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-sm btn-primary'");?></div>
-            <div class='linkBox'></div>
+            <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
+            <div class='linkBox cell hidden'></div>
             <?php endif;?>
             <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id&type=leftBug");?>" id='linkedBugsForm' data-ride="table">
               <table class='table has-sort-head' id='leftBugList'>
@@ -276,70 +276,66 @@
           </div>
 
           <div class='tab-pane <?php if($type == 'releaseInfo') echo 'active'?>' id='releaseInfo'>
-            <div class="main-row">
-              <div class="main-col col-8">
-                <div class='cell'>
-                  <div class='detail'>
-                    <div class='detail-title'><?php echo $lang->release->basicInfo?></div>
-                    <div class='detail-content'>
-                      <table class='table table-data'>
+            <div class='cell'>
+              <div class='detail'>
+                <div class='detail-title'><?php echo $lang->release->basicInfo?></div>
+                <div class='detail-content'>
+                  <table class='table table-data'>
+                    <tr>
+                      <th class='w-80px'><?php echo $lang->release->product;?></th>
+                      <td><?php echo $release->productName;?></td>
+                    </tr>
+                      <?php if($release->productType != 'normal'):?>
                         <tr>
-                          <th class='w-80px'><?php echo $lang->release->product;?></th>
-                          <td><?php echo $release->productName;?></td>
+                          <th><?php echo $lang->product->branch;?></th>
+                          <td><?php echo $branchName;?></td>
                         </tr>
-                          <?php if($release->productType != 'normal'):?>
-                            <tr>
-                              <th><?php echo $lang->product->branch;?></th>
-                              <td><?php echo $branchName;?></td>
-                            </tr>
-                          <?php endif;?>
-                        <tr>
-                          <th><?php echo $lang->release->name;?></th>
-                          <td><?php echo $release->name;?></td>
-                        </tr>
-                        <tr>
-                          <th><?php echo $lang->release->build;?></th>
-                          <td title='<?php echo $release->buildName?>'>
-                              <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
-                          </td>
-                        </tr>
-                        <tr>
-                          <th><?php echo $lang->release->status;?></th>
-                          <td><?php echo $lang->release->statusList[$release->status];?></td>
-                        </tr>
-                        <tr>
-                          <th><?php echo $lang->release->date;?></th>
-                          <td><?php echo $release->date;?></td>
-                        </tr>
-                        <tr>
-                          <th><?php echo $lang->release->desc;?></th>
-                          <td><?php echo $release->desc;?></td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div>
-                  <div class='detail'>
-                    <div class='detail-title'><?php echo $lang->files?></div>
-                    <div class='detail-content article-content'>
-                      <?php
-                      if($release->files)
-                      {
-                          echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
-                      }
-                      elseif($release->filePath)
-                      {
-                          echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
-                      }
-                      elseif($release->scmPath)
-                      {
-                          echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
-                      }
-                      ?>
-                    </div>
-                  </div>
-                  <?php include '../../common/view/action.html.php';?>
+                      <?php endif;?>
+                    <tr>
+                      <th><?php echo $lang->release->name;?></th>
+                      <td><?php echo $release->name;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->build;?></th>
+                      <td title='<?php echo $release->buildName?>'>
+                          <?php echo ($release->project) ? html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName, '_blank') : $release->buildName;?>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->status;?></th>
+                      <td><?php echo $lang->release->statusList[$release->status];?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->date;?></th>
+                      <td><?php echo $release->date;?></td>
+                    </tr>
+                    <tr>
+                      <th><?php echo $lang->release->desc;?></th>
+                      <td><?php echo $release->desc;?></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
+              <div class='detail'>
+                <div class='detail-title'><?php echo $lang->files?></div>
+                <div class='detail-content article-content'>
+                  <?php
+                  if($release->files)
+                  {
+                      echo $this->fetch('file', 'printFiles', array('files' => $release->files, 'fieldset' => 'false'));
+                  }
+                  elseif($release->filePath)
+                  {
+                      echo $lang->release->filePath . html::a($release->filePath, $release->filePath, '_blank');
+                  }
+                  elseif($release->scmPath)
+                  {
+                      echo $lang->release->scmPath . html::a($release->scmPath, $release->scmPath, '_blank');
+                  }
+                  ?>
+                </div>
+              </div>
+              <?php include '../../common/view/action.html.php';?>
             </div>
           </div>
         </div>

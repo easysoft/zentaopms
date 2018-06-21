@@ -16,21 +16,100 @@ class testcaseModel extends model
     /**
      * Set menu.
      *
-     * @param  array $products
-     * @param  int   $productID
+     * @param  array  $products
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $suiteID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0)
+    public function setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch, $moduleID, 'case');
         $selectHtml = $this->product->select($products, $productID, 'testcase', 'browse', '', $branch, $moduleID, 'case');
 
-        $this->app->loadLang('qa');
-        $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
-        $productIndex .= $selectHtml;
+        $pageNav     = '';
+        $pageActions = '';
+        $isMobile    = $this->app->viewType == 'mhtml';
+        if($isMobile)
+        {
+            $this->app->loadLang('qa');
+            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
+        }
+        else
+        {
+            if($this->config->global->flow == 'full')
+            {
+                $this->app->loadLang('qa');
+                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            }
+            else
+            {
+                $exportPriv        = common::hasPriv('testcase', 'export');
+                $exportTempletPriv = common::hasPriv('testcase', 'exportTemplet');
+                $importPriv        = common::hasPriv('testcase', 'import');
+                $importFromLibPriv = common::hasPriv('testcase', 'importFromLib');
+                if($exportPriv or $exportTempletPriv)
+                {
+                    $pageActions .= "<div class='btn-group'>";
+                    $pageActions .= "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>";
+                    $pageActions .= "<i class='icon icon-export muted'></i> {$this->lang->export}";
+                    $pageActions .= "<span class='caret'></span>";
+                    $pageActions .= '</button>';
+                    $pageActions .= "<ul class='dropdown-menu' id='exportActionMenu'>";
+                    if($exportPriv)
+                    {
+                        $link = helper::createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy");
+                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->export, '', "class='export'") . '</li>';
+                    }
+                    if($exportTempletPriv)
+                    {
+                        $link = helper::createLink('testcase', 'exportTemplet', "productID=$productID");
+                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->exportTemplet, '', "class='export'") . '</li>';
+                    }
+                    $pageActions .= '</ul>';
+                    $pageActions .= '</div>';
 
-        $this->lang->modulePageNav = $productIndex;
+                }
+                if($importPriv or $importFromLibPriv)
+                {
+                    $pageActions .= "<div class='btn-group'>";
+                    $pageActions .= "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> {$this->lang->import}<span class='caret'></span></button>";
+                    $pageActions .= "<ul class='dropdown-menu' id='importActionMenu'>";
+                    if($importPriv)
+                    {
+                        $link = helper::createLink('testcase', 'import', "productID=$productID&branch=$branch");
+                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->importFile, '', "class='export'") . '</li>';
+                    }
+                    if($importFromLibPriv)
+                    {
+                        $link = helper::createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch");
+                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->importFromLib) . '</li>';
+                    }
+                    $pageActions .= '</ul>';
+                    $pageActions .= '</div>';
+                }
+                $initModule = isset($moduleID) ? (int)$moduleID : 0;
+
+                if(common::hasPriv('testcase', 'batchCreate'))
+                {
+                    $link = helper::createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+                    $pageActions .= html::a($link, "<i class='icon-plus'></i> " . $this->lang->testcase->batchCreate, '', "class='btn btn-secondary'");
+                }
+
+                if(common::hasPriv('testcase', 'create'))
+                {
+                    $link = helper::createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
+                    $pageActions .= html::a($link, "<i class='icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
+                }
+            }
+        }
+        $pageNav .= $selectHtml;
+
+        $this->lang->modulePageNav     = $pageNav;
+        $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testcase->menu as $key => $menu)
         {
             if($this->config->global->flow != 'onlyTest')
@@ -46,18 +125,28 @@ class testcaseModel extends model
                       $currentSuite   = zget($suiteList, $currentSuiteID, '');
                       $currentLable   = empty($currentSuite) ? $this->lang->testsuite->common : $currentSuite->name;
 
-                      $replace  = "<li id='bysuiteTab' class='dropdown'>";
+                      $replace  = "<li id='bysuiteTab' class='dropdown' data-id='bysuite'>";
                       $replace .= html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "data-toggle='dropdown'");
                       $replace .="<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
 
-                      foreach ($suiteList as $suiteID => $suite)
+                      if($suiteList)
                       {
-                          $suiteName = $suite->name;
-                          if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$this->lang->testsuite->authorList[$suite->type]}</span>";
+                          foreach($suiteList as $suiteID => $suite)
+                          {
+                              $suiteName = $suite->name;
+                              if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$this->lang->testsuite->authorList[$suite->type]}</span>";
 
-                          $replace .= '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
-                          $replace .= html::a(helper::createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
-                          $replace .= "</li>";
+                              $replace .= '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
+                              $replace .= html::a(helper::createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
+                              $replace .= "</li>";
+                          }
+                      }
+                      else
+                      {
+                          if(common::hasPriv('testsuite', 'create'))
+                          {
+                              $replace .= '<li>' . html::a(helper::createLink('testsuite', 'create', "productID=$productID"), $this->lang->testsuite->create) . '</li>';
+                          }
                       }
 
                       $replace .= '</ul></li>';
@@ -71,6 +160,7 @@ class testcaseModel extends model
             }
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
+        if($this->config->global->flow != 'full' && $this->app->getMethodName() != 'view') $this->lang->testcase->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
     }
 
     /**
@@ -1031,7 +1121,7 @@ class testcaseModel extends model
                 }
             }
 
-            $cases[$key] =$caseData;
+            $cases[$key] = $caseData;
         }
 
         $forceNotReview = $this->forceNotReview();
@@ -1288,7 +1378,7 @@ class testcaseModel extends model
         $id = $col->id;
         if($col->show)
         {
-            $class = '';
+            $class = 'c-' . $id;
             $title = '';
             if($id == 'title')
             {
@@ -1301,7 +1391,8 @@ class testcaseModel extends model
                 $title  = "title='" . zget($this->lang->testcase->statusList, $case->status) . "'";
             }
             if($id == 'actions') $class .= ' c-actions';
-            if($id == 'lastRunResult') $class .= $case->lastRunResult;
+            if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
+            if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='{$class}' {$title}>";
             switch($id)
@@ -1387,17 +1478,15 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
-                echo "<div class='more'>";
-                if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
-
-                if(common::hasPriv('testcase', 'delete', $case))
+                if($case->needconfirm or $browseType == 'needconfirm')
                 {
-                    $deleteURL = helper::createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"batchForm\",confirmDelete)", '<i class="icon-remove"></i>', '', "title='{$this->lang->testcase->delete}' class='btn-icon'");
+                    common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+                    break;
                 }
-                echo '</div>';
+
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
+                if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
 

@@ -11,29 +11,29 @@
  */
 ?>
 <style>
-.block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible;}
-.block-todoes .todoes-input {position: absolute;top: 0;right: 0;left: 0;padding: 0 20px 20px 20px;}
-.block-todoes .todoes-input .form-control::-webkit-input-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
-.block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
-.block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
-.block-todoes .todoes-input .form-control::placeholder {font-size: 12px;line-height: 20px;color: #a4a8b6;}
-.block-todoes .todoes {padding: 0 10px; margin: 0 -20px; max-height: 350px; overflow: auto;}
-.block-todoes .todoes > li {position: relative;padding: 5px 10px 5px 35px;list-style: none;}
+.block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible; padding-bottom: 0;}
+.block-todoes .todoes-input {position: absolute; top: 0; right: 0; left: 0; padding: 0 20px 20px 20px;}
+.block-todoes .todoes-input .form-control::-webkit-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
+.block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
+.block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
+.block-todoes .todoes-input .form-control::placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
+.block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -20px; max-height: 350px; overflow: auto;}
+.block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
-.block-todoes .todo-title {display: block;padding: 5px;}
-.block-todoes .todo-pri {display: inline-block;padding: 0 5px;font-size: 12px;color: #3c4353;}
-.block-todoes .todo-time {display: inline-block;padding: 0 5px;font-size: 12px;color: #8e939a;}
-.block-todoes .todo-check {position: absolute;top: 10px;left: 10px;display: block;width: 20px;height: 20px;font-size: 20px;color: transparent;cursor: pointer;background: #fff;border: 2px solid #eee;border-radius: 50%;}
+.block-todoes .todo-title {padding: 5px;}
+.block-todoes .todo-pri {margin: 0 5px;}
+.block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 90px;}
+.block-todoes .todo-check {position: absolute; top: 5px; left: 10px; display: block; width: 20px; height: 20px; font-size: 20px; color: transparent; cursor: pointer; background: #fff; border: 2px solid #eee; border-radius: 50%;}
 .block-todoes .todo-check:hover {border-color: #8e939a;}
-.block-todoes .active > .todo-check {color: #00da88;background: transparent;border: none;}
-.block-todoes .todoes-form {position: absolute;top: -45px;right: 0;left: 0;z-index: 15;max-width: 500px;padding: 12px 20px 20px;visibility: hidden;background: #fff;-webkit-box-shadow: 0 0 20px 0 #bdc9d8;box-shadow: 0 0 20px 0 #bdc9d8;opacity: 0;-webkit-transition: .4s cubic-bezier(.175, .885, .32, 1); -o-transition: .4s cubic-bezier(.175, .885, .32, 1);transition: .4s cubic-bezier(.175, .885, .32, 1);-webkit-transition-property: opacity, visibility; -o-transition-property: opacity, visibility;transition-property: opacity, visibility;}
+.block-todoes .active > .todo-check {color: #00da88; background: transparent;border: none;}
+.block-todoes .todoes-form {position: absolute; top: -45px; right: 0; left: 0; z-index: 15; max-width: 500px; padding: 12px 20px 20px; visibility: hidden; background: #fff; -webkit-box-shadow: 0 0 20px 0 #bdc9d8; box-shadow: 0 0 20px 0 #bdc9d8; opacity: 0;-webkit-transition: .4s cubic-bezier(.175, .885, .32, 1); -o-transition: .4s cubic-bezier(.175, .885, .32, 1); transition: .4s cubic-bezier(.175, .885, .32, 1); -webkit-transition-property: opacity, visibility; -o-transition-property: opacity, visibility; transition-property: opacity, visibility;}
 .block-todoes .todoes-form .form-group > label {padding-left: 0;}
 .block-todoes .todoes-form .form-group > label.text-center {text-align: center!important;}
 .block-todoes .todoes-form > .form-group:last-child {margin-bottom: 0;}
-.block-todoes .todoes-form > h3 {padding: 0 20px 15px;margin: 0 -20px 5px;font-size: 14px;line-height: 20px;}
-.block-todoes.show-form .todoes-form {visibility: visible;opacity: 1;}
+.block-todoes .todoes-form > h3 {padding: 0 20px 15px; margin: 0 -20px 5px; font-size: 14px; line-height: 20px;}
+.block-todoes.show-form .todoes-form {visibility: visible; opacity: 1;}
 </style>
-<div class='block-todoes' id="block <?php echo ($block->block)?>">
+<div class='block-todoes'>
   <div class='panel-body'>
     <div class="todoes-input">
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
@@ -49,9 +49,9 @@
         </div>
         <div class="form-group">
           <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
-          <div class="col-sm-9 required">
+          <div class="col-sm-9 ">
             <div class="input-control has-icon-right">
-              <input type="text" class="form-control form-date" id="todoDate" name="date" placeholder="(<?php echo $lang->required;?>)">
+              <input type="text" class="form-control form-date" id="todoDate" name="date" placeholder="">
               <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
@@ -96,8 +96,13 @@
       <li data-id='<?php echo $todo->id?>'>
         <span class="todo-check icon icon-check-circle"></span>
         <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' <?php echo $appid?>>
+          <?php if ($todo->date == '2030-01-01') :?>
+          <span class="todo-time"><?php echo $lang->todo->periods['future'] ?></span>
+          <?php else:?>
+          <span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
+          <?php endif;?>
+          <span class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo $todo->pri;?></span>
           <span class="todo-title"><?php echo $todo->name;?></span>
-          <span class="todo-pri todo-pri-<?php echo $todo->pri?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span><span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
         </a>
       </li>
       <?php endforeach;?>
@@ -172,16 +177,8 @@
           data: $form.serialize(),
           success: function(todo)
           {
-              var item = "<li data-id='" + todo.id + "'>";
-              item += '<span class="todo-check icon icon-check-circle"></span>';
-              item += '<a href="' + createLink('todo', 'view', "todoID=" + todo.id + "&from=my", 'html', true) + '" class="iframe">';
-              item += '<span class="todo-title">' + todo.name + '</span>';
-              item += '<span class="todo-pri todo-pri-' + todo.pri + '">' + todo.priName + '</span><span class="todo-time">' + todo.time + '</span></a></li>';
-              $todoes.find('ul.todoes').prepend(item);
               $todoes.removeClass('show-form');
-              $todoes.find('ul.todoes li:first a').modalTrigger();
-              $form.find('input[name="name"]').val('');
-              $form.find('#todoDate').val('');
+              refreshBlock($todoes.parent());
           }
       });
   }

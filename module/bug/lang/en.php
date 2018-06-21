@@ -139,7 +139,7 @@ $lang->bug->lblAssignedTo = 'Assignee';
 $lang->bug->lblMailto     = 'Mail To';
 $lang->bug->lblLastEdited = 'Last Edited';
 $lang->bug->lblResolved   = 'Resolved By';
-$lang->bug->allUsers      = 'All User';
+$lang->bug->allUsers      = 'Load All User';
 $lang->bug->allBuilds     = 'All';
 $lang->bug->createBuild   = 'New';
 
@@ -171,9 +171,9 @@ $lang->bug->hasSubmittedTest      = 'Development has submitted test application,
 $lang->bug->nowToTest             = 'Now to test';
 
 /* 模板。*/
-$lang->bug->tplStep   = "<p>[Steps]</p>\n";
-$lang->bug->tplResult = "<p>[Results]</p>\n";
-$lang->bug->tplExpect = "<p>[Expectations]</p>";
+$lang->bug->tplStep   = "<p>[Steps]</p><br/>";
+$lang->bug->tplResult = "<p>[Results]</p><br/>";
+$lang->bug->tplExpect = "<p>[Expectations]</p><br/>";
 
 /* 各个字段取值列表。*/
 $lang->bug->severityList[3] = '3';
@@ -379,17 +379,18 @@ $lang->bug->placeholder = new stdclass();
 $lang->bug->placeholder->chooseBuilds = 'Choose Build...';
 $lang->bug->placeholder->newBuildName = 'The name of new build';
 
-$lang->bug->featureBar['browse']['all']           = $lang->bug->allBugs;
-$lang->bug->featureBar['browse']['unclosed']      = $lang->bug->unclosed;
-$lang->bug->featureBar['browse']['openedbyme']    = $lang->bug->openedByMe;
-$lang->bug->featureBar['browse']['assigntome']    = $lang->bug->assignToMe;
-$lang->bug->featureBar['browse']['resolvedbyme']  = $lang->bug->resolvedByMe;
-$lang->bug->featureBar['browse']['toclosed']      = $lang->bug->toClosed;
-$lang->bug->featureBar['browse']['unresolved']    = $lang->bug->unResolved;
+$lang->bug->featureBar['browse']['all']          = $lang->bug->allBugs;
+$lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
+$lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
+$lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
+$lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
+$lang->bug->featureBar['browse']['toclosed']     = $lang->bug->toClosed;
+$lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
+$lang->bug->featureBar['browse']['more']         = $lang->more;
 
-$lang->bug->featureBar['browse']['unconfirmed']   = $lang->bug->unconfirmed;
-$lang->bug->featureBar['browse']['assigntonull']  = $lang->bug->assignToNull;
-$lang->bug->featureBar['browse']['longlifebugs']  = $lang->bug->longLifeBugs;
-$lang->bug->featureBar['browse']['postponedbugs'] = $lang->bug->postponedBugs;
-$lang->bug->featureBar['browse']['overduebugs']   = $lang->bug->overdueBugs;
-$lang->bug->featureBar['browse']['needconfirm']   = $lang->bug->needConfirm;
+$lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
+$lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
+$lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->moreSelects['postponedbugs'] = $lang->bug->postponedBugs;
+$lang->bug->moreSelects['overduebugs']   = $lang->bug->overdueBugs;
+$lang->bug->moreSelects['needconfirm']   = $lang->bug->needConfirm;

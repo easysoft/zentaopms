@@ -12,12 +12,14 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
+<?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <a class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->build;?></span><span class='label label-light label-badge'><?php echo count($builds);?></span></a>
   </div>
   <div class='btn-toolbar pull-right'><?php common::printLink('build', 'create', "product=$product->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?></div>
 </div>
+<?php endif;?>
 <div id='mainContent' class='main-table'>
   <table class='table' id='buildList'>
     <thead>
@@ -28,7 +30,7 @@
         <th><?php echo $lang->build->filePath;?></th>
         <th class='c-date'><?php echo $lang->build->date;?></th>
         <th class='c-user'><?php echo $lang->build->builder;?></th>
-        <th class='w-130px'><?php echo $lang->actions;?></th>
+        <th class='c-actions-3'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -41,7 +43,7 @@
         <td><?php echo $build->date?></td>
         <td><?php echo $users[$build->builder]?></td>
         <td class='c-actions'>
-          <?php 
+          <?php
           common::printIcon('testtask', 'create', "product=$product->id&project=0&build=$build->id", '', 'list', 'bullhorn');
           common::printIcon('build', 'edit', "buildID=$build->id", '', 'list');
           if(common::hasPriv('build', 'delete'))

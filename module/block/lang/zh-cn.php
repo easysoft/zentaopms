@@ -23,6 +23,7 @@ $lang->block->source  = '来源模块';
 $lang->block->block   = '来源区块';
 $lang->block->order   = '排序';
 $lang->block->height  = '高度';
+$lang->block->role    = '角色';
 
 $lang->block->lblModule    = '模块';
 $lang->block->lblBlock     = '区块';
@@ -40,6 +41,7 @@ $lang->block->myBug     = '我的BUG';
 $lang->block->myProject = '进行中的' . $lang->projectCommon;
 $lang->block->myProduct = '未关闭的' . $lang->productCommon;
 $lang->block->delayed   = '已延期';
+$lang->block->noData    = '当前统计类型下暂无数据';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';
@@ -61,7 +63,7 @@ $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
 $lang->block->default['product']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['product']['1']['params']['type']    = 'noclosed';
+$lang->block->default['product']['1']['params']['type']    = 'all';
 $lang->block->default['product']['1']['params']['num']     = 5;
 
 $lang->block->default['product']['2']['title'] = $lang->productCommon . '总览';
@@ -88,7 +90,7 @@ $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
 $lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']    = 'undone';
+$lang->block->default['project']['1']['params']['type']    = 'all';
 $lang->block->default['project']['1']['params']['num']     = 5;
 
 $lang->block->default['project']['2']['title'] = $lang->projectCommon . '总览';

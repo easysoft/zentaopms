@@ -17,9 +17,9 @@
   <div class="center-block">
     <div class="main-header">
       <h2>
-      <span class='prefix' title='USER'><?php echo $user->id;?></span>
-      <strong><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?> (<small><?php echo $user->account;?></small>)</strong>
-      <small><?php echo $lang->arrow . $lang->user->edit;?></small>
+        <span class="label label-id"><?php echo $user->id;?></span>
+        <strong><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname)) echo $user->realname;?> <small>(<?php echo $user->account;?>)</small></strong>
+        <small><?php echo $lang->arrow . $lang->user->edit;?></small>
       </h2>
     </div>
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
@@ -94,7 +94,7 @@
           <th><?php echo $lang->user->mobile;?></th>
           <td><?php echo html::input('mobile', $user->mobile, "class='form-control' autocomplete='off'");?></td>
         </tr>
-         <tr>
+        <tr>
           <th><?php echo $lang->user->phone;?></th>
           <td><?php echo html::input('phone', $user->phone, "class='form-control' autocomplete='off'");?></td>
           <th><?php echo $lang->user->address;?></th>

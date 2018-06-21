@@ -39,7 +39,14 @@ class pager extends basePager
                 if(strtolower($key) == 'recperpage') $params[$key] = '{recPerPage}';
                 if(strtolower($key) == 'pageid')     $params[$key] = '{page}';
             }
-            echo "<ul class='pager' data-ride='pager' data-rec-total='{$this->recTotal}' data-rec-per-page='{$this->recPerPage}' data-page='{$this->pageID}' data-link-creator='" . helper::createLink($this->moduleName, $this->methodName, $params) . "'></ul>";
+            if($this->recTotal == 0)
+            {
+                echo "<div class='pull-right'>" . $this->lang->pager->noRecord . '</div>';
+            }
+            else
+            {
+                echo "<ul class='pager' data-page-cookie='{$this->pageCookie}' data-ride='pager' data-rec-total='{$this->recTotal}' data-rec-per-page='{$this->recPerPage}' data-page='{$this->pageID}' data-link-creator='" . helper::createLink($this->moduleName, $this->methodName, $params) . "'></ul>";
+            }
         }
         else
         {

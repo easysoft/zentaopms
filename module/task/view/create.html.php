@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('toTaskList', $this->config->global->flow == 'onlyTask' || !empty($task->id));?>
+<?php js::set('toTaskList', $config->global->flow == 'onlyTask' || !empty($task->id));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -48,7 +48,7 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $this->config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
+        <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
@@ -75,7 +75,7 @@
                 <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
               </div>
               <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off' required");?>
-              <?php if($this->config->global->flow != 'onlyTask'):?>
+              <?php if($config->global->flow != 'onlyTask'):?>
               <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
               <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
               <?php endif;?>
@@ -108,16 +108,16 @@
             <?php else: ?>
             <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector'");?>
             <?php endif; ?>
-           </td>
-         </tr>
-         <?php endif;?>
-         <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
-         <tr>
-           <th><?php echo $lang->task->estimateAB;?></th>
-           <td><input type="number" min="0" step="0.5" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off"></td>
-           <td class="muted"><?php echo $lang->task->hour;?></td>
-         </tr>
-         <?php endif;?>
+          </td>
+        </tr>
+        <?php endif;?>
+        <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
+        <tr>
+          <th><?php echo $lang->task->estimateAB;?></th>
+          <td><input type="number" min="0" step="0.5" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off"></td>
+          <td class="muted"><?php echo $lang->task->hour;?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->task->desc;?></th>
           <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
@@ -159,9 +159,9 @@
           </td>
         </tr>
         <?php endif;?>
-        <tr <?php echo $this->config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
+        <tr <?php echo $config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
           <th><?php echo $lang->task->afterSubmit;?></th>
-          <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $this->config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
+          <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -175,33 +175,34 @@
         <div class='modal-dialog'>
           <div class='modal-header'>
             <button type='button' class='close' data-dismiss='modal'>
-              <span aria-hidden='true'>×</span><span class='sr-only'><?php echo $lang->task->close;?></span>
+              <i class="icon icon-close"></i>
             </button>
             <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
           </div>
           <div class='modal-content with-padding'>
-            <table class="table table-form">
-              <?php for($i = 0; $i < 5; $i++):?>
-              <tr>
-                <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
-                <td>
-                  <div class='input-group'>
-                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-                    <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
-                  </div>
-                </td>
-                <td class='w-90px'>
-                  <a class='btn btn-move-add btn-icon btn-sm'><i class='icon-plus'></i></a>
-                  <a class='btn btn-move-up btn-sm btn-icon'><i class='icon-arrow-up'></i></a>
-                  <a class='btn btn-move-down btn-sm btn-icon'><i class='icon-arrow-down'></i></a>
-                </td>
-              </tr>
-              <?php endfor;?>
-              <tr>
-                <td colspan='3' class='text-center'>
-                  <?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?>
-                </td>
-              </tr>
+            <table class="table table-form" id='taskTeamEditor'>
+              <tbody>
+                <tr class='template'>
+                  <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+                      <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+                    </div>
+                  </td>
+                  <td class='w-130px'>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-up'><i class='icon-arrow-up'></i></button>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-down'><i class='icon-arrow-down'></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot>
+                <tr>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td>
+                </tr>
+              </tfoot>
             </table>
           </div>
         </div>

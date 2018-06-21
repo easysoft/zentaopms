@@ -5,7 +5,7 @@ function browseByModule()
     $('#bymoduleTab').addClass('active');
     $('#allTab').removeClass('active');
     $('#bysearchTab').removeClass('active');
-    $('#querybox').removeClass('show');
+    $('#queryBox').removeClass('show');
 }
 
 function browseBySearch()
@@ -14,7 +14,7 @@ function browseBySearch()
     $('#bymoduleTab').removeClass('active');
     $('#allTab').addClass('active');
     $('#bysearchTab').addClass('active');
-    $('#querybox').addClass('show');
+    $('#queryBox').addClass('show');
 }
 
 function setBrowseType(type)
@@ -27,7 +27,7 @@ $(function(){
     $('#' + browseType + 'Tab').addClass('active');
     if(browseType == "bysearch")
     {
-        ajaxGetSearchForm();
+        $.toggleQueryBox(true);
         browseBySearch();
     }
 });

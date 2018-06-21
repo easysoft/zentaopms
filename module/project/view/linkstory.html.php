@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.search-form .form-actions {padding-bottom: 10px!important;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->linkStory;?></span></span>
@@ -19,8 +22,10 @@
     <?php common::printBack($this->server->http_referer, 'btn btn-link');?>
   </div>
 </div>
-<div id="mainContent" class="main-content">
-  <div id='queryBox' class='show'></div>
+<div id="mainContent">
+  <div class="cell space-sm">
+    <div id='queryBox' class='show no-margin'></div>
+  </div>
   <form class='main-table table-story' method='post' data-ride='table' id='linkStoryForm'>
     <table class='table table-fixed' id='linkStoryList'> 
       <thead>
@@ -72,22 +77,18 @@
       <?php endforeach;?>
       </tbody>
     </table>
+    <?php if($storyCount):?>
     <div class='table-footer'>
-      <?php if($storyCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class='table-actions btn-toolbar'>
-        <?php echo html::submitButton('', '', 'btn');?>
+      <div class='table-actions btn-toolbar show-always'>
+        <?php echo html::submitButton('', '', 'btn btn-secondary');?>
       </div>
-      <?php else:?>
-      <div class='text'><?php echo $lang->project->whyNoStories;?></div>
-      <?php endif;?>
     </div>
+    <?php else:?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->project->whyNoStories;?></p>
+    </div>
+    <?php endif;?>
   </form>
 </div>
-<script type='text/javascript'>
-$(function()
-{
-    ajaxGetSearchForm();
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>

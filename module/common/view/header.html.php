@@ -13,14 +13,14 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
-<?php if(!empty($this->config->sso->redirect)) js::set('ssoRedirect', $this->config->sso->redirect);?>
+<?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
       <hrgroup id='heading'>
-        <?php if(empty($this->config->sso->redirect)):?>
+        <?php if(empty($config->sso->redirect)):?>
         <?php $heading = sprintf($lang->welcome, $app->company->name);?>
-        <h1 id='companyname' title='<?php echo $heading . strlen($heading);?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo $heading;?></h1>
+        <h1 id='companyname' title='<?php echo $heading . strlen($heading);?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo html::a(helper::createLink('index'), $heading);?></h1>
         <?php endif;?>
       </hrgroup>
       <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>
@@ -30,7 +30,9 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
           <?php common::printSearchBox();?>
           <ul id="userNav" class="nav nav-default">
             <?php list($adminName, $adminModule, $adminMethod) = explode('|', $lang->adminMenu);?>
+            <?php if(common::hasPriv($adminModule, $adminMethod)):?>
             <li><?php echo html::a($this->createLink($adminModule, $adminMethod), $adminName);?></li>
+            <?php endif;?>
             <li><?php common::printUserBar();?></li>
           </ul>
         </div>
@@ -45,7 +47,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
     </div>
   </div>
   <?php
-  if(!empty($this->config->sso->redirect))
+  if(!empty($config->sso->redirect))
   {
       css::import($defaultTheme . 'bindranzhi.css');
       js::import($jsRoot . 'bindranzhi.js');
@@ -54,5 +56,5 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 </header>
 
 <?php endif;?>
-<main id='main' <?php if(!empty($this->config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
+<main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
   <div class='container'>

@@ -35,7 +35,7 @@
         <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
         <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
         <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
-        <th class='w-100px'> <?php echo $lang->actions;?></th>
+        <th class='c-actions-2'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -89,7 +89,9 @@
       <?php endforeach;?>
       <tr data-id='<?php echo $groupIndex;?>' class='group-toggle group-summary hidden divider-top'>
         <td class='c-side text-left'><?php echo html::a('###', "<i class='icon-caret-right'></i> $groupName");?></td>
-        <td colspan='12'></td>
+        <td colspan='12' class="text-left">
+          <div class="small with-padding"><span class="text-muted"><?php echo $lang->testcase->allTestcases;?></span> <?php echo $i;?></div>
+        </td>
       </tr>
       <?php $groupIndex++;?>
       <?php endforeach;?>

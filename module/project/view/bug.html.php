@@ -48,7 +48,7 @@
           <th class='w-110px'>   <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
           <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='w-130px text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -78,10 +78,8 @@
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
         <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
         <td class='c-actions'>
-          <div class='more'>
-            <?php if($bug->status == 'active') common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'search', '', 'iframe', true);?>
-          </div>
           <?php
+          if($bug->status == 'active') common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
           if($bug->status == 'active') common::printIcon('bug', 'resolve', $params, $bug, 'list', 'check', '', 'iframe', true);
           if($bug->status != 'active') common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'create', "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');

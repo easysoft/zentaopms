@@ -11,14 +11,16 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'>
-  <div class='main-header'>
-    <h2>
-      <span class='label label-id'><?php echo $case->id;?></span>
-      <?php echo html::a($this->createLink('case', 'view', 'caseID=' . $case->id), $case->title, '_blank');?>
-    </h2>
+<div id="mainMenu" class="clearfix">
+  <div class='btn-toolbar pull-left'>
+    <div class="page-title">
+      <span class="label label-id"><?php echo $case->id;?></span>
+      <?php echo html::a($this->createLink('case', 'view', 'caseID=' . $case->id), $case->title, '_blank', 'class="text"');?> <span class='text-muted'><i class="icon-angle-right"></i> <span><?php echo $lang->testcase->linkCases;?></span></span>
+    </div>
   </div>
-  <div id='queryBox' class='show'></div>
+</div>
+<div id='queryBox' class='cell show'></div>
+<div id='mainContent'>
   <?php if($cases2Link):?>
   <form class='main-table' method='post' target='hiddenwin' id='linkCasesForm' data-ride='table'>
     <table class='table' id='caseList'>
@@ -60,13 +62,10 @@
     </table>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class='table-actions btn-toolbar'><?php echo html::submitButton();?></div>
+      <div class='table-actions btn-toolbar show-always'><?php echo html::submitButton('', '', 'btn btn-secondary');?></div>
       <?php echo html::hidden('case', $case->id);?>
     </div>
   </form>
   <?php endif;?>
 </div>
-<script>
-$(function(){ajaxGetSearchForm();});
-</script>
 <?php include '../../common/view/footer.html.php';?>
