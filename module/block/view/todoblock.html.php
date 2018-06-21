@@ -97,7 +97,7 @@
         <span class="todo-check icon icon-check-circle"></span>
         <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' <?php echo $appid?>>
           <?php if ($todo->date == '2030-01-01') :?>
-          <span class="c-date"><?php echo $lang->todo->periods['future'] ?></span>
+          <span class="todo-time"><?php echo $lang->todo->periods['future'] ?></span>
           <?php else:?>
           <span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
           <?php endif;?>
