@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-700px'>
+  <div class='center-block'>
     <div class='main-header'>
       <div class='heading'>
         <h2><?php echo $lang->admin->sso;?></h2>
