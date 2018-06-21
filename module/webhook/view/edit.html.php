@@ -13,20 +13,20 @@
 <?php include 'header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-1400px'>
+  <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->webhook->edit;?></h2>
     </div>
     <form id='webhookForm' method='post' class='ajaxForm'>
       <table class='table table-form'>
         <tr>
-          <th class='w-100px'><?php echo $lang->webhook->type;?></th>
-          <td class='w-p50'><?php echo html::select('type', $lang->webhook->typeList, $webhook->type, "class='form-control'");?></td>
+          <th><?php echo $lang->webhook->type;?></th>
+          <td><?php echo html::select('type', $lang->webhook->typeList, $webhook->type, "class='form-control'");?></td>
           <td></td>
         </tr>
         <tr>
-          <th class='w-100px'><?php echo $lang->webhook->name;?></th>
-          <td class='w-p50'><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
+          <th><?php echo $lang->webhook->name;?></th>
+          <td><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
           <td></td>
         </tr>
         <tr>
@@ -68,7 +68,7 @@
         </tr>
         <tr>
           <th></th>
-          <td class='form-actions'>
+          <td colspan='2' class='text-center form-actions'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide')?>
           </td>

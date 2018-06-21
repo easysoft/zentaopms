@@ -18,11 +18,11 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px'>
+  <div class='center-block'>
     <form class="load-indicator main-form form-ajax" method='post'>
       <table class='table table-form'>
         <tr>
-          <th style='width:130px'><?php echo $lang->admin->safe->password?></th>
+          <th class='w-130px'><?php echo $lang->admin->safe->password?></th>
           <td class='w-200px'><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0, "onclick=showModeRule(this.value)")?></td>
           <td><?php echo $lang->admin->safe->noticeMode?></td>
         </tr>
