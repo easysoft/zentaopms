@@ -13,7 +13,7 @@
     <table class='table table-form' id='showData'>
       <thead>
         <tr>
-        <th class='w-50px'><?php echo $lang->lineNumber?></th>
+          <th class='w-50px'><?php echo $lang->lineNumber?></th>
           <th class='w-70px'><?php echo $lang->testcase->id?></th>
           <th><?php echo $lang->testcase->title?></th>
           <?php if(!empty($branches)):?>
