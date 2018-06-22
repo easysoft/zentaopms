@@ -61,6 +61,7 @@ function refreshBlock($panel, afterRefresh)
     {
         var $data = $(data);
         if($data.hasClass('panel')) $panel.empty().append($data.children());
+        else if($panel.find('#assigntomeBlock').length) $panel.find('#assigntomeBlock').empty().append($data.children());
         else $panel.find('.panel-body').replaceWith($data);
         if($.isFunction(afterRefresh))
         {
@@ -107,7 +108,6 @@ function initTableHeader($wrapper)
         
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
-        if ($wrapper) console.log('initTableHeader', isFixed, {$wrapper, $table, $header});
         if(!isFixed)
         {
             $table.find('thead').css('visibility', 'visible');

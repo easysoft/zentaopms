@@ -198,7 +198,7 @@
                 <th><?php echo $lang->bug->resolution;?></th>
                 <td>
                   <?php
-                  echo $lang->bug->resolutionList[$bug->resolution];
+                  if(isset($lang->bug->resolutionList[$bug->resolution])) echo $lang->bug->resolutionList[$bug->resolution];
                   if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
                   ?>
                 </td>
@@ -216,6 +216,7 @@
         </div>
       </details>
     </div>
+    <?php if($config->global->flow != 'onlyTest'):?>
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->bug->legendPrjStoryTask;?></summary>
@@ -249,6 +250,7 @@
         </div>
       </details>
     </div>
+    <?php endif;?>
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->bug->legendMisc;?></summary>
@@ -279,8 +281,8 @@
               <tr>
                 <th><?php echo $lang->bug->toCase;?></th>
                 <td>
-                <?php 
-                foreach($bug->toCases as $caseID => $case) 
+                <?php
+                foreach($bug->toCases as $caseID => $case)
                 {
                     echo '<p style="margin-bottom:0;">' . html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', true), $case, '', "class='iframe' data-width='80%'") . '</p>';
                 }
@@ -327,10 +329,10 @@ $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&b
     common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
     common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
     common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
-  
+
     if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
     common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
-  
+
     echo "<div class='divider'></div>";
     common::printIcon('bug', 'edit', $params, $bug);
     common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');

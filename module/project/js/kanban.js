@@ -1,5 +1,14 @@
 $(function()
 {
+    $('.c-boards').each(function()
+    {
+        var $boardsWrapper = $(this).find('.boards-wrapper');
+        if($boardsWrapper.height() < $(this).height())
+        {
+            $boardsWrapper.find('.boards').css('height', $(this).height());
+        }
+    });
+
     var boardID  = '';
     var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
