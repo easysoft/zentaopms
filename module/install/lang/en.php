@@ -22,12 +22,12 @@ $lang->install->officeDomain     = 'https://www.zentao.pm';
 $lang->install->start            = 'Start to Install';
 $lang->install->keepInstalling   = 'Continue installing this version.';
 $lang->install->seeLatestRelease = 'View Latest Version';
-$lang->install->welcome          = 'Thanks for using ZenTao Project Management Software!';
+$lang->install->welcome          = 'Thanks for choosing ZenTao Project Management Software!';
 $lang->install->license          = 'ZenTao PMS is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao Project Management Software is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> license. It integrates with Product Management, Project Management, QA Management, Document Management, as well as To-Dos Management, Company Management etc. ZenTao is the best choice for software project management.
+ZenTao Project Management Software is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> license. It integrates with Product Management, Project Management, QA Management, Document Management, To-Dos Management, Company Management etc. ZenTao is the best choice for software project management.
 
-ZenTao PMS is built on PHP + MySQL and based on ZenTaoPHP, an independent framework developed by our team. Third party developers/organizations can develop extensions or customize for your needs.
+ZenTao PMS is built on PHP + MySQL and based on ZenTaoPHP, an independent framework developed by our team. Third party developers/organizations can develop extensions or customize for your requirements.
 EOT;
 $lang->install->links = <<<EOT
 ZenTao PMS is developed by <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
@@ -102,23 +102,23 @@ $lang->install->working        = 'Working way';
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
-$lang->install->workingList['full']      = 'Full Management of Dev';
+$lang->install->workingList['full']      = 'Full Development Management';
 $lang->install->workingList['onlyTest']  = 'Only Test Management';
 $lang->install->workingList['onlyStory'] = 'Only Story Management';
 $lang->install->workingList['onlyTask']  = 'Only Task Management';
 
 $lang->install->errorConnectDB      = 'Connection to database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';
-$lang->install->errorCreateDB       = 'Database creation failed.';
-$lang->install->errorTableExists    = 'Data table has existed. If ZenTao has been installed before, please go back to clear data and continue installation.';
-$lang->install->errorCreateTable    = 'Table creation failed.';
-$lang->install->errorImportDemoData = 'Import demo data failed.';
+$lang->install->errorCreateDB       = 'Failed to create the database.';
+$lang->install->errorTableExists    = 'Data table has existed. If ZenTao has been installed before, please return to last step and clear data. Then continue the installation.';
+$lang->install->errorCreateTable    = 'Failed to create the table.';
+$lang->install->errorImportDemoData = 'Failed to import demo data.';
 
 $lang->install->setConfig  = 'Create Config File';
 $lang->install->key        = 'Item';
 $lang->install->value      = 'Value';
 $lang->install->saveConfig = 'Save Config';
-$lang->install->save2File  = '<div class="alert alert-warning">Copy content in the text box above and save it to "<strong> %s </strong>". You can change this config file later.</div>';
+$lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this config file later.</div>';
 $lang->install->saved2File = 'Config file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'Config file is not saved.';
 
@@ -131,25 +131,25 @@ $lang->install->errorEmptyPassword = 'Password should not be blank.';
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
 $lang->install->groupList['ADMIN']['desc']   = 'System Administrator';
 $lang->install->groupList['DEV']['name']     = 'Dev';
-$lang->install->groupList['DEV']['desc']     = 'Dev Team';
+$lang->install->groupList['DEV']['desc']     = 'Developer';
 $lang->install->groupList['QA']['name']      = 'QA';
-$lang->install->groupList['QA']['desc']      = 'QA Team';
+$lang->install->groupList['QA']['desc']      = 'tester';
 $lang->install->groupList['PM']['name']      = 'PM';
-$lang->install->groupList['PM']['desc']      = 'for Project Manager';
+$lang->install->groupList['PM']['desc']      = 'Project Manager';
 $lang->install->groupList['PO']['name']      = 'PO';
-$lang->install->groupList['PO']['desc']      = 'for Product Owner';
+$lang->install->groupList['PO']['desc']      = 'Product Owner';
 $lang->install->groupList['TD']['name']      = 'Dev Manager';
-$lang->install->groupList['TD']['desc']      = 'for Dev Manager';
+$lang->install->groupList['TD']['desc']      = 'Development Manager';
 $lang->install->groupList['PD']['name']      = 'PD';
-$lang->install->groupList['PD']['desc']      = 'for Product Manager';
+$lang->install->groupList['PD']['desc']      = 'Product Director';
 $lang->install->groupList['QD']['name']      = 'QD';
-$lang->install->groupList['QD']['desc']      = 'for QA Manager';
+$lang->install->groupList['QD']['desc']      = 'QA Director';
 $lang->install->groupList['TOP']['name']     = 'Senior';
-$lang->install->groupList['TOP']['desc']     = 'for Senior Manager';
+$lang->install->groupList['TOP']['desc']     = 'Senior Manager';
 $lang->install->groupList['OTHERS']['name']  = 'Other';
-$lang->install->groupList['OTHERS']['desc']  = 'for Other';
+$lang->install->groupList['OTHERS']['desc']  = 'other users';
 $lang->install->groupList['LIMITED']['name'] = 'Limited User';
-$lang->install->groupList['LIMITED']['desc'] = 'Only edit contents related to themselves';
+$lang->install->groupList['LIMITED']['desc'] = 'can only edit contents related to itself';
 
 $lang->install->cronList[''] = 'Monitor cron';
 $lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Chart';
@@ -160,14 +160,14 @@ $lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup 
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Async sending Message';
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Async sending Webhook';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete overdue log';
-$lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create periodic todos';
+$lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create repeat todos';
 
 $lang->install->success  = "Installed!";
 $lang->install->login    = 'Login ZenTao';
 $lang->install->register = 'Register in ZenTao';
 
 $lang->install->joinZentao = <<<EOT
-<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='http://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, register in ZenTao(<a href='http://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'ranzhi');

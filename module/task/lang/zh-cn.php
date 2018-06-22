@@ -171,8 +171,8 @@ $lang->task->confirmTransfer       = '"当前剩余"为0，任务将被转交，
 $lang->task->noticeLinkStory       = "没有可关联的相关需求，您可以为当前项目%s，然后%s";
 $lang->task->noticeSaveRecord      = '您有尚未保存的工时记录，请先将其保存。';
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加备注。';
-$lang->task->noData                = '暂无';
 $lang->task->deniedNotice          = '当前任务只有%s才可以%s。';
+$lang->task->noTask                = '暂时没有任务。';
 
 $lang->task->error                   = new stdclass();
 $lang->task->error->consumedNumber   = '"已经消耗"必须为数字';

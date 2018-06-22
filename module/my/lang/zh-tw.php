@@ -22,6 +22,7 @@ $lang->my->shareContacts  = '共享聯繫人列表';
 $lang->my->limited        = '受限操作(只能編輯與自己相關的內容)';
 $lang->my->score          = '我的積分';
 $lang->my->scoreRule      = '積分規則';
+$lang->my->noTodo         = '暫時沒有待辦。';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = '指派給我';

@@ -24,6 +24,11 @@
   </div>
 </div>
 <div id="mainContent" class='main-table'>
+  <?php if(empty($tasks)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span></p>
+  </div>
+  <?php else:?>
   <table class="table has-sort-head table-fixed" id='taskList'>
     <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
     <thead>
@@ -66,7 +71,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
-  <?php if($tasks):?>
   <div class="table-footer"><?php $pager->show('right', 'pagerjs');?></div>
   <?php endif;?>
 </div>

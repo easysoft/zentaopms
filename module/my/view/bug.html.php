@@ -23,6 +23,11 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($bugs)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span></p>
+  </div>
+  <?php else:?>
   <form class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
     <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
     <table class="table has-sort-head table-fixed". id='bugList'>
@@ -89,7 +94,6 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($bugs):?>
     <div class="table-footer">
       <?php if($canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -146,8 +150,8 @@
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php js::set('listName', 'bugList')?>
 <?php include '../../common/view/footer.html.php';?>

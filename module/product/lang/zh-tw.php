@@ -119,8 +119,7 @@ $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名�
 $lang->product->storySummary   = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時，用例覆蓋率<strong>%s</strong>。";
 $lang->product->checkedSummary = "選中 <strong>%total%</strong> 個需求，預計 <strong>%estimate%</strong> 個工時，用例覆蓋率<strong>%rate%</strong>。";
 $lang->product->noModule       = '<div>您現在還沒有模組信息</div><div>請維護產品模組</div>';
-$lang->product->noProduct      = '暫時沒有產品，您現在可以';
-$lang->product->noStory        = '暫時沒有需求，您現在可以';
+$lang->product->noProduct      = '暫時沒有產品。';
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;

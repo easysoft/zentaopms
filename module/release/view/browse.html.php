@@ -24,6 +24,17 @@
   </div>
 </div>
 <div id="mainContent" class='main-table'>
+  <?php if(empty($releases)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
+      <?php if(common::hasPriv('release', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <table class="table" id='releaseList'>
     <thead>
       <tr>
@@ -75,5 +86,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

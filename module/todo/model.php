@@ -398,8 +398,8 @@ class todoModel extends model
 
         while($todo = $stmt->fetch())
         {
-            if($this->config->global->flow == 'onlyTest' and $todo->type == 'task') continue;
-            if($this->config->global->flow == 'onlyTask' and $todo->type == 'bug') continue;
+            if($this->config->global->flow == 'onlyTest'  and $todo->type == 'task')   continue;
+            if($this->config->global->flow == 'onlyTask'  and $todo->type == 'bug')    continue;
             if($this->config->global->flow == 'onlyStory' and $todo->type != 'custom') continue;
 
             if($todo->type == 'story') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');

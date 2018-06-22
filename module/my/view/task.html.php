@@ -24,6 +24,11 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($tasks)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
+  </div>
+  <?php else:?>
   <form id='myTaskForm' class="main-table table-task" data-ride="table" method="post">
     <?php $canBatchEdit  = common::hasPriv('task', 'batchEdit');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
@@ -117,7 +122,6 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($tasks):?>
     <div class="table-footer">
       <?php if($canBatchEdit or $canBatchClose):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -139,8 +143,8 @@
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php js::set('listName', 'tasktable')?>
 <?php include '../../common/view/footer.html.php';?>

@@ -104,7 +104,7 @@ $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> tim
 $lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testtask->noticeNoOther     = 'There are no other test task for this product';
-$lang->testtask->noTesttask        = 'No test task. You could';
+$lang->testtask->noTesttask        = 'No test tasks. ';
 
 $lang->testtask->assignedToMe  = 'My';
 $lang->testtask->allCases      = 'AllCases';

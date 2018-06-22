@@ -495,11 +495,19 @@ class block extends control
      */
     public function printTodoBlock()
     {
-        $uri = $this->server->http_referer;
+        $limit = $this->viewType == 'json' ? 0 : (int)$this->params->num;
+        $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
+        $uri   = $this->server->http_referer;
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
-        $this->view->todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $this->viewType == 'json' ? 0 : (int)$this->params->num);
+
+        foreach($todos as $key => $todo)
+        {
+            if($todo->date == '2030-01-01') unset($todos[$key]);
+        }
+
+        $this->view->todos = $todos;
     }
 
     /**

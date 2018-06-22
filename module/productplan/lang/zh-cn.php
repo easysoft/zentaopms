@@ -37,6 +37,7 @@ $lang->productplan->unlinkedBugs     = '未关联Bug';
 $lang->productplan->confirmDelete      = "您确认删除该计划吗？";
 $lang->productplan->confirmUnlinkStory = "您确认移除该需求吗？";
 $lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
+$lang->productplan->noPlan             = '暂时没有计划。';
 
 $lang->productplan->id      = '编号';
 $lang->productplan->product = $lang->productCommon;

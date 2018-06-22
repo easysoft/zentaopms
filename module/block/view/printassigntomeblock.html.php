@@ -32,5 +32,5 @@
 #assigntomeBlock {position: relative;}
 #assigntomeBlock .block-todoes {padding-top: 10px}
 #assigntomeBlock > .nav {position: absolute; top: -41px; left: 120px;}
-#assigntomeBlock .block-todoes .todoes-form{top: -55px;}
+#assigntomeBlock .block-todoes .todoes-form{top: -50px;}
 </style>

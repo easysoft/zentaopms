@@ -194,6 +194,7 @@ $lang->story->confirmDelete         = "Do you want to delete this Story?";
 $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';
 $lang->story->mustChooseResult      = 'Select a result.';
 $lang->story->mustChoosePreVersion  = 'Select a Version to revert to.';
+$lang->story->noStory               = 'No stories. ';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Story Scope';

@@ -32,9 +32,9 @@ $(function()
         }
         else if (level === 'story')
         {
+            $('[data-type=story]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-story').parent().parent(), true);
-            $('[data-type=story]').addClass('btn-active-text');
         }
         $('#main').toggleClass('tree-show-root', level === 'root');
     };
