@@ -96,7 +96,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                     $moreLabelActive = 'btn-active-text';
                 }
                 echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";
-                echo "<ul class='dropdown-menu more'>";
+                echo "<ul class='dropdown-menu'>";
                 foreach($lang->bug->moreSelects as $menuBrowseType => $label)
                 {
                     $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
