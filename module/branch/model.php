@@ -24,6 +24,7 @@ class branchModel extends model
         {
             if(empty($productID)) $productID = $this->session->product;
             $product = $this->loadModel('product')->getById($productID);
+            if(empty($product) or !isset($this->lang->product->branchName[$product->type])) return false;
             return $this->lang->branch->all . $this->lang->product->branchName[$product->type];
         }
         return $this->dao->select('*')->from(TABLE_BRANCH)->where('id')->eq($branchID)->fetch('name');
