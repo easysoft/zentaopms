@@ -14,18 +14,17 @@ $lang->index->menuOrder[5]  = 'product';
 $lang->index->menuOrder[10] = 'project';
 
 /* my menu order. */
-$lang->my->menuOrder[5]  = 'account';
-$lang->my->menuOrder[10] = 'index';
-$lang->my->menuOrder[15] = 'calendar';
-$lang->my->menuOrder[20] = 'task';
-$lang->my->menuOrder[25] = 'bug';
-$lang->my->menuOrder[30] = 'testtask';
-$lang->my->menuOrder[35] = 'story';
-$lang->my->menuOrder[40] = 'myProject';
-$lang->my->menuOrder[45] = 'dynamic';
-$lang->my->menuOrder[50] = 'profile';
-$lang->my->menuOrder[55] = 'changePassword';
-$lang->my->menuOrder[60] = 'score';
+$lang->my->menuOrder[5]  = 'index';
+$lang->my->menuOrder[10] = 'calendar';
+$lang->my->menuOrder[15] = 'task';
+$lang->my->menuOrder[20] = 'bug';
+$lang->my->menuOrder[25] = 'testtask';
+$lang->my->menuOrder[30] = 'story';
+$lang->my->menuOrder[35] = 'myProject';
+$lang->my->menuOrder[40] = 'dynamic';
+$lang->my->menuOrder[45] = 'profile';
+$lang->my->menuOrder[50] = 'changePassword';
+$lang->my->menuOrder[55] = 'score';
 $lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* product menu order. */
