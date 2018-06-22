@@ -50,8 +50,9 @@
           </div>
           <?php endif;?>
         </div>
+        <?php $buildIndex = 1;?>
         <?php foreach($product->builds as $build):?>
-        <div class="table-row" id='bugBox<?php echo $build->id;?>'>
+        <div class="table-row <?php if($buildIndex != 1) echo 'hidden';?>" id='bugBox<?php echo $build->id;?>'>
           <div class="col-5 text-middle text-center">
             <div class="progress-pie inline-block space progress-pie-100" data-value="<?php echo $build->assignedRate;?>" data-doughnut-size="80">
               <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
@@ -115,6 +116,7 @@
             </div>
           </div>
         </div>
+        <?php $buildIndex++;?>
         <?php endforeach;?>
       </div>
       <?php $index++;?>
@@ -136,9 +138,10 @@ $(function()
 {
     $('[name^=build]').change(function()
     {
-        $(this).parents('.tab-pane').find('.table-row').addClass('hidden');
-        $('#bugBox' + $(this).val()).removeClass('hidden');
+        var $tab = $('#bugBox' + $(this).val());
+        $tab.removeClass('hidden');
+        $tab.find('.progress-pie').progressPie();
+        $(this).parents('.tab-pane').find('.table-row').not($tab).addClass('hidden');
     });
-    $('[name^=build]').change();
 })
 </script>
