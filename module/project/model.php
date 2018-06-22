@@ -208,7 +208,7 @@ class projectModel extends model
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
-        if($buildID)
+        if($buildID and !$isMobile)
         {
             setCookie('lastBuild', $buildID, $this->config->cookieLife, $this->config->webRoot);
             $currentBuild = $this->loadModel('build')->getById($buildID);
