@@ -198,7 +198,7 @@
                 <th><?php echo $lang->bug->resolution;?></th>
                 <td>
                   <?php
-                  echo $lang->bug->resolutionList[$bug->resolution];
+                  if(isset($lang->bug->resolutionList[$bug->resolution])) echo $lang->bug->resolutionList[$bug->resolution];
                   if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
                   ?>
                 </td>
