@@ -137,7 +137,7 @@ $(function()
     $('[name^=build]').change(function()
     {
         $(this).parents('.tab-pane').find('.table-row').addClass('hidden');
-        $('#bugBox' + $(this).val()) .removeClass('hidden');
+        $('#bugBox' + $(this).val()).removeClass('hidden');
     });
     $('[name^=build]').change();
 })
