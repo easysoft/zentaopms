@@ -38,7 +38,7 @@
       <?php $index = 1;?>
       <?php foreach($products as $product):?>
       <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabContent<?php echo $product->id;?>">
-        <div class="statistic-menu input-group col-sm space">
+        <div class="statistic-menu input-group space w-400px">
           <?php if($product->builds):?>
           <select id='build' name='build' class="form-control chosen">
             <?php foreach($product->builds as $build):?>
@@ -134,11 +134,11 @@
 <script>
 $(function()
 {
-    $('#build').change(function()
+    $('[name^=build]').change(function()
     {
         $(this).parents('.tab-pane').find('.table-row').addClass('hidden');
         $('#bugBox' + $(this).val()) .removeClass('hidden');
     });
-    $('#build').change();
+    $('[name^=build]').change();
 })
 </script>
