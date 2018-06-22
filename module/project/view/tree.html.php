@@ -14,14 +14,16 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach ($lang->project->treeLevel as $name => $btnLevel):?>
-      <?php
-      $icon = '';
-      if($name == 'root') $icon = ' <i class="icon-fold-all"></i>';
-      if($name == 'all') $icon = ' <i class="icon-unfold-all"></i>';
-      ?>
-      <a href='' class='btn btn-link btn-tree-view' data-type='<?php echo $name ?>'><span class='text'><?php echo $btnLevel . $icon;?></span></button>
-    <?php endforeach; ?>
+    <?php
+    foreach($lang->project->treeLevel as $name => $btnLevel)
+    {
+        if(empty($tree) && ($name == 'root' or $name == 'all')) continue;
+        $icon = '';
+        if($name == 'root') $icon = ' <i class="icon-fold-all"></i>';
+        if($name == 'all')  $icon = ' <i class="icon-unfold-all"></i>';
+        echo html::a('javascript:;', "<span class='text'>$btnLevel$icon</span>", '', "class='btn btn-link btn-tree-view' data-type='{$name}'");
+    }
+    ?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
