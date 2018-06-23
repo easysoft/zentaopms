@@ -2,7 +2,6 @@
 <script>$.initSidebar()</script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 
-<div id='divider'></div>
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
 
 <?php if($onlybody != 'yes'):?>

@@ -18,5 +18,4 @@
 <?php else:?>
 <?php echo $this->fetch('block', 'dashboard', 'module=product');?>
 <?php endif;?>
-<script>
 <?php include '../../common/view/footer.html.php';?>
