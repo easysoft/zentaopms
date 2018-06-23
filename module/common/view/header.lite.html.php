@@ -51,12 +51,6 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
 
   echo html::favicon($webRoot . 'favicon.ico');
   ?>
-<!--[if lt IE 9]>
-<?php
-js::import($jsRoot . 'html5shiv/min.js');
-js::import($jsRoot . 'respond/min.js');
-?>
-<![endif]-->
 <!--[if lt IE 10]>
 <?php js::import($jsRoot . 'jquery/placeholder/min.js'); ?>
 <![endif]-->
