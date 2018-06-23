@@ -207,8 +207,13 @@ $(function()
         selector: '.panel',
         trigger: '.panel-heading,.panel-move-handler',
         containerSelector: '.col-main,.col-side',
+        start: function()
+        {
+            $('body').css('overflow', 'hidden');
+        },
         finish: function(e)
         {
+            $('body').css('overflow', 'auto');
             var newOrders = [];
             var isSideCol = e.element.parent().is('.col-side');
             e.list.each(function(index, data)
