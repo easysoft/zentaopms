@@ -265,7 +265,7 @@ js::set('browseType', $browseType);
             <div class="dropdown-menu search-list" data-ride="searchList">
               <?php $withSearch = count($modules) > 10;?>
               <?php if($withSearch):?>
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -294,7 +294,7 @@ js::set('browseType', $browseType);
               echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
               if($withSearch):
               ?>
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
