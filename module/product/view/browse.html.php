@@ -159,35 +159,36 @@
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
+
       $setting = $this->datatable->getSetting('product');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <div class="table-responsive">
-        <table class="table has-sort-head" id='storyList'>
-          <thead>
-            <tr>
-            <?php
-            foreach($setting as $key => $value)
-            {
-                if($value->show)
-                {
-                    $this->datatable->printHead($value, $orderBy, $vars);
-                    $columns ++;
-                }
-            }
-            ?>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($stories as $story):?>
-            <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
-              <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
-      </div>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
+        <thead>
+          <tr>
+          <?php
+          foreach($setting as $key => $value)
+          {
+              if($value->show)
+              {
+                  $this->datatable->printHead($value, $orderBy, $vars);
+                  $columns ++;
+              }
+          }
+          ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($stories as $story):?>
+          <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class="table-footer">
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
@@ -385,7 +386,8 @@ $(function()
     {
         statisticCreator: function(table)
         {
-            var $checkedRows = table.$.find('tbody>tr.checked');
+            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
             var checkedTotal = $checkedRows.length;
             if(!checkedTotal) return;
 
@@ -394,6 +396,10 @@ $(function()
             $checkedRows.each(function()
             {
                 var $row = $(this);
+                if ($originTable)
+                {
+                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                }
                 var data = $row.data();
                 checkedEstimate += data.estimate;
                 checkedCase += data.cases;

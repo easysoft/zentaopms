@@ -185,6 +185,8 @@ js::set('browseType', $browseType);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
       $vars         = "projectID=$project->id&status=$status&parma=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage";
 
+      if($useDatatable) include '../../common/view/datatable.html.php';
+
       $customFields = $this->datatable->getSetting('project');
       if($project->type == 'ops')
       {
@@ -196,40 +198,41 @@ js::set('browseType', $browseType);
       $widths  = $this->datatable->setFixedFieldWidth($customFields);
       $columns = 0;
       ?>
-      <div class="table-responsive">
-        <table class='table has-sort-head' id='taskList'>
-          <thead>
-            <tr>
-            <?php
-            foreach($customFields as $field)
-            {
-                if($field->show)
-                {
-                    $this->datatable->printHead($field, $orderBy, $vars);
-                    $columns++;
-                }
-            }
-            ?>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($tasks as $task):?>
-            <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
-              <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
-            </tr>
-            <?php if(!empty($task->children)):?>
-            <?php foreach($task->children as $key => $child):?>
-            <?php $class  = $key == 0 ? ' table-child-top' : '';?>
-            <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
-            <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
-              <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
-            </tr>
-            <?php endforeach;?>
-            <?php endif;?>
-            <?php endforeach;?>
-          </tbody>
-        </table>
-      </div>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='taskList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
+        <thead>
+          <tr>
+          <?php
+          foreach($customFields as $field)
+          {
+              if($field->show)
+              {
+                  $this->datatable->printHead($field, $orderBy, $vars);
+                  $columns++;
+              }
+          }
+          ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($tasks as $task):?>
+          <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+            <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+          </tr>
+          <?php if(!empty($task->children)):?>
+          <?php foreach($task->children as $key => $child):?>
+          <?php $class  = $key == 0 ? ' table-child-top' : '';?>
+          <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+          <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
+            <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <?php if(!$useDatatable) echo '</div>';?>
+
       <div class="table-footer">
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
@@ -330,7 +333,8 @@ $(function()
     {
         statisticCreator: function(table)
         {
-            var $checkedRows = table.$.find('tbody>tr.checked');
+            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
             var checkedTotal = $checkedRows.length;
             if(!checkedTotal) return;
 
@@ -342,6 +346,10 @@ $(function()
             $checkedRows.each(function()
             {
                 var $row = $(this);
+                if ($originTable)
+                {
+                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                }
                 var data = $row.data();
                 var status = data.status;
                 if(status === 'wait') checkedWait++;
