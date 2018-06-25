@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if(empty($productStats)): ?>
+<div class='empty-tip'><?php common::printLink('product', 'create', '', "<i class='icon-plus'></i> " . $lang->product->create, '', "class='btn btn-primary'") ?></div>
+<?php else:?>
 <style>
 .block-products.block-sm .c-project {display: none;}
 </style>
@@ -47,3 +50,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

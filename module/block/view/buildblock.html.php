@@ -10,6 +10,9 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<?php if(empty($builds)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <div class='panel-body has-table'>
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-builds'>
     <thead>
@@ -40,3 +43,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

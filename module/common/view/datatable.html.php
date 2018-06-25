@@ -12,18 +12,23 @@
 .datatable .flexarea .table-children,
 .datatable .fixed-right .table-children {border-left: none;}
 .datatable tr.hover td.c-actions .more {display: block; background-color: #ebf2f9}
+.datatable .fixed-left .table,
+.datatable .flexarea .table,
 .datatable .flexarea tbody > tr.checked,
 .datatable .fixed-left tbody > tr.checked {border-top-right-radius: 0; border-bottom-right-radius: 0;}
 .datatable .flexarea tbody > tr.checked,
+.datatable .fixed-right .table,
+.datatable .flexarea .table,
 .datatable .fixed-right tbody > tr.checked {border-top-left-radius: 0; border-bottom-left-radius: 0;}
 .datatable .flexarea tbody>tr.checked>td:first-child:before,
 .datatable .fixed-right tbody>tr.checked>td:first-child:before {display: none}
 .datatable>.scroll-wrapper {z-index: 10;}
-.datatable.with-footer-fixed > .scroll-wrapper > .scroll-slide {bottom: 2px}
+.has-fixed-footer .scroll-wrapper {bottom: 97px; position: fixed;}
 .datatable .flexarea thead>tr>th:first-child,
 .datatable .flexarea tbody>tr>td:first-child,
 .datatable .fixed-right thead>tr>th:first-child,
 .datatable .fixed-right tbody>tr>td {padding-left: 5px!important;}
+.datatable .c-actions {white-space: nowrap;}
 </style>
 <script> 
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
@@ -74,6 +79,11 @@ $(document).ready(function()
         }
     });
 
+    $(window).on('fixFooter', function(e, isFixed)
+    {
+        $('body').toggleClass('has-fixed-footer', isFixed);
+    });
+
     window.saveDatatableConfig = function(name, value, reload, global)
     {
         if('<?php echo $this->app->user->account?>' == 'guest') return;
@@ -89,44 +99,7 @@ $(document).ready(function()
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });
     };
-    setTimeout(function(){fixScroll()}, 500);
 });
 </script>
 <?php endif;?>
 
-<script>
-/**
- * Fix scroll bar.
- * 
- * @access public
- * @return void
- */
-function fixScroll()
-{
-    var $scrollwrapper = $('div.datatable').first().find('.scroll-wrapper:first');
-    if($scrollwrapper.size() == 0)return;
-
-    var $tfoot       = $('div.datatable').first().find('table tfoot:last');
-    var scrollOffset = $scrollwrapper.offset().top + $scrollwrapper.find('.scroll-slide').height();
-    if($tfoot.size() > 0) scrollOffset += $tfoot.height();
-    if($('div.datatable.head-fixed').size() == 0) scrollOffset -= '34';
-    var windowH = $(window).height();
-    var bottom  = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
-    if(typeof(ssoRedirect) != "undefined") bottom = 53;
-    if(scrollOffset > windowH + $(window).scrollTop()) $scrollwrapper.css({'position': 'fixed', 'bottom': bottom + 'px'});
-    $(window).scroll(function()
-    {
-       newBottom = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
-       if(typeof(ssoRedirect) != "undefined") newBottom = 53;
-       if(scrollOffset <= windowH + $(window).scrollTop()) 
-       {    
-           $scrollwrapper.css({'position':'relative', 'bottom': '0px'});
-       }    
-       else if($scrollwrapper.css('position') != 'fixed' || bottom != newBottom)
-       {    
-           $scrollwrapper.css({'position': 'fixed', 'bottom': newBottom + 'px'});
-           bottom = newBottom;
-       }
-    });
-}
-</script>

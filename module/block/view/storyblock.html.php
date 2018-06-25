@@ -10,6 +10,9 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<?php if(empty($stories)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <style>
 .block-stories .c-id {width: 55px;}
 .block-stories .c-pri {width: 45px;text-align: center;}
@@ -72,3 +75,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

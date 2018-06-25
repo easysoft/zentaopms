@@ -1,3 +1,4 @@
+
 <?php
 /**
  * The case block view file of block module of RanZhi.
@@ -10,6 +11,9 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<?php if(empty($cases)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <div class='panel-body has-table'>
   <style>
   .block-cases.block-sm .c-status{text-align:center}
@@ -63,3 +67,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

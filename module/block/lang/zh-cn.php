@@ -42,6 +42,7 @@ $lang->block->myProject = '进行中的' . $lang->projectCommon;
 $lang->block->myProduct = '未关闭的' . $lang->productCommon;
 $lang->block->delayed   = '已延期';
 $lang->block->noData    = '当前统计类型下暂无数据';
+$lang->block->emptyTip  = '暂无信息';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = '参数名称';

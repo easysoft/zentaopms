@@ -10,6 +10,9 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<?php if(empty($testtasks)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <div class='panel-body has-table'>
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-testtask'>
     <thead>
@@ -48,3 +51,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>
