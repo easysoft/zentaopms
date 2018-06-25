@@ -7,5 +7,3 @@
 #burnLegend > div:before {content: ' '; display: block; position: absolute; width: 20px; left: 0; top: 8px; height: 2px; background: #EEEEEE;}
 #burnLegend > div.line-real:before {background: #006AF1;}
 
-.panel-heading {padding-right: 55px;}
-
