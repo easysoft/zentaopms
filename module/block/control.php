@@ -1241,7 +1241,6 @@ class block extends control
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end   = date::formatTime($todo->end);
             }
-            if(empty($todos)) unset($hasViewPriv['todo']);
             $this->view->todos = $todos;
         }
         if(isset($hasViewPriv['task']))
@@ -1255,7 +1254,6 @@ class block extends control
             if(isset($params->taskNum)) $stmt->limit($params->taskNum);
             $tasks = $stmt->fetchAll();
 
-            if(empty($tasks)) unset($hasViewPriv['task']);
             $this->view->tasks = $tasks;
         }
         if(isset($hasViewPriv['bug']))
@@ -1269,7 +1267,6 @@ class block extends control
             if(isset($params->bugNum)) $stmt->limit($params->bugNum);
             $bugs = $stmt->fetchAll();
 
-            if(empty($bugs)) unset($hasViewPriv['bug']);
             $this->view->bugs = $bugs;
         }
 
