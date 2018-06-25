@@ -78,6 +78,17 @@
   </div>
   <div class="main-col">
     <div class="cell" id="queryBox"></div>
+    <?php if(empty($stories)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->story->noStory;?></span>
+        <?php if(common::hasPriv('project', 'linkStory')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class='main-table table-story skip-iframe-modal' method='post' id='projectStoryForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -197,11 +208,6 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <?php if(!$stories):?>
-      <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php common::printLink('project', 'linkStory', "project=$project->id", "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?></p>
-      </div>
-      <?php else:?>
       <div class='table-footer'>
         <?php if($canBatchEdit or $canBatchClose):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -245,8 +251,8 @@
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 

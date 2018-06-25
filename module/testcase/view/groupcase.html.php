@@ -15,6 +15,17 @@
 <?php include './caseheader.html.php';?>
 <?php js::set('browseType', $browseType);?>
 <div class="main-table" data-ride="table" data-checkable="false" data-group="true">
+  <?php if(empty($cases)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
+      <?php if(common::hasPriv('testcase', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <table class="table table-grouped text-center">
     <thead>
       <tr class="divider">
@@ -97,5 +108,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

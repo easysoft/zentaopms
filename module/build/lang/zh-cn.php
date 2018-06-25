@@ -46,7 +46,7 @@ $lang->build->stories       = '完成的需求';
 $lang->build->bugs          = '解决的Bug';
 $lang->build->generatedBugs = '产生的Bug';
 $lang->build->noProduct     = " <span style='color:red'>该{$lang->projectCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a href='%s'>关联{$lang->productCommon}</a></span>";
-$lang->build->noData        = '暂无';
+$lang->build->noBuild       = '暂时没有版本。';
 
 $lang->build->finishStories = ' 本次共完成 %s 个需求';
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';

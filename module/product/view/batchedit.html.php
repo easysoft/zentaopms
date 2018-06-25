@@ -40,7 +40,7 @@
         <thead>
           <tr>
             <th class='w-60px'><?php echo $lang->idAB;?></th>
-            <th class='required'><?php echo $lang->product->name;?></th>
+            <th class='w-200px required'><?php echo $lang->product->name;?></th>
             <th class='w-150px required'><?php echo $lang->product->code;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'line',   ' hidden') . zget($requiredFields, 'line',   '', ' required');?>'><?php echo $lang->product->line;?></th>
             <th class='w-150px<?php echo zget($visibleFields, 'PO',     ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->product->PO;?></th>

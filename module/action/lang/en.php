@@ -34,7 +34,7 @@ $lang->action->original       = 'Original Format';
 $lang->action->confirmHideAll = 'Do you want to hide all the records?';
 $lang->action->needEdit       = '%s that you want to restore exists. Please edit it.';
 $lang->action->historyEdit    = 'The history editor cannot be empty.';
-$lang->action->noDynamic      = 'No dynamic.';
+$lang->action->noDynamic      = 'No dynamics. ';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = 'Link';

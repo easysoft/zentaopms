@@ -950,7 +950,7 @@ class baseDAO
     public function getRow($data)
     {
         if(!is_object($data)) return $data;
-        return json_decode(json_encode($data));
+        return clone $data;
     }
 
     //-------------------- 魔术方法(Magic methods) --------------------//

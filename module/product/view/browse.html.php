@@ -138,6 +138,17 @@
   </div>
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+    <?php if(empty($stories)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->story->noStory;?></span>
+        <?php if(common::hasPriv('story', 'create')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class="main-table table-story skip-iframe-modal" method="post" id='productStoryForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -148,36 +159,36 @@
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
+
       $setting = $this->datatable->getSetting('product');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <div class="table-responsive">
-        <table class="table has-sort-head" id='storyList'>
-          <thead>
-            <tr>
-            <?php
-            foreach($setting as $key => $value)
-            {
-                if($value->show)
-                {
-                    $this->datatable->printHead($value, $orderBy, $vars);
-                    $columns ++;
-                }
-            }
-            ?>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($stories as $story):?>
-            <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
-              <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
-      </div>
-      <?php if($stories):?>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
+        <thead>
+          <tr>
+          <?php
+          foreach($setting as $key => $value)
+          {
+              if($value->show)
+              {
+                  $this->datatable->printHead($value, $orderBy, $vars);
+                  $columns ++;
+              }
+          }
+          ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($stories as $story):?>
+          <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class="table-footer">
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
@@ -281,7 +292,7 @@
             <div class="dropdown-menu search-list" data-ride="searchList">
               <?php $withSearch = count($modules) > 8;?>
               <?php if($withSearch):?>
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -309,7 +320,7 @@
               $withSearch = count($plans) > 8;
               ?>
               <?php if($withSearch):?>
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -338,7 +349,7 @@
               echo html::select('assignedTo', $users, '', 'class="hidden"');
               if($withSearch):
               ?>
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -359,12 +370,8 @@
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php elseif(common::hasPriv('story', 'create')):?>
-      <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->product->noStory;?></span> <?php common::printLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}", "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?></p>
-      </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>
@@ -379,7 +386,8 @@ $(function()
     {
         statisticCreator: function(table)
         {
-            var $checkedRows = table.$.find('tbody>tr.checked');
+            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
             var checkedTotal = $checkedRows.length;
             if(!checkedTotal) return;
 
@@ -388,6 +396,10 @@ $(function()
             $checkedRows.each(function()
             {
                 var $row = $(this);
+                if ($originTable)
+                {
+                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                }
                 var data = $row.data();
                 checkedEstimate += data.estimate;
                 checkedCase += data.cases;

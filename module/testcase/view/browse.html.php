@@ -41,6 +41,18 @@ js::set('branch',         $branch);
   </div>
   <div class='main-col'>
     <div id='queryBox' class='cell<?php if($browseType == 'bysearch') echo ' show';?>'></div>
+    <?php if(empty($cases)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
+        <?php if(common::hasPriv('testcase', 'create')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
+        <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class='main-table table-case' data-ride='table' id='batchForm' method='post'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -51,37 +63,36 @@ js::set('branch',         $branch);
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
   
       if($useDatatable)  include '../../common/view/datatable.html.php';
-      if(!$useDatatable) include '../../common/view/tablesorter.html.php';
+      else               include '../../common/view/tablesorter.html.php';
       $setting = $this->datatable->getSetting('testcase');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <div class="table-responsive">
-        <table class='table has-sort-head <?php echo $useDatatable ? 'datatable' : ''?>' id='caseList' data-checkable='true' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-custom-menu='true' data-checkbox-name='caseIDList[]'>
-          <thead>
-            <tr>
-            <?php
-            foreach($setting as $key => $value)
-            {
-                if($value->show)
-                {
-                    $this->datatable->printHead($value, $orderBy, $vars);
-                    $columns ++;
-                }
-            }
-            ?>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($cases as $case):?>
-            <tr data-id='<?php echo $case->id?>'>
-              <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
-      </div>
-      <?php if($cases):?>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
+        <thead>
+          <tr>
+          <?php
+          foreach($setting as $key => $value)
+          {
+              if($value->show)
+              {
+                  $this->datatable->printHead($value, $orderBy, $vars);
+                  $columns ++;
+              }
+          }
+          ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($cases as $case):?>
+          <tr data-id='<?php echo $case->id?>'>
+            <?php foreach($setting as $key => $value) $this->testcase->printCell($value, $case, $users, $branches, $modulePairs, $browseType, $useDatatable ? 'datatable' : 'table');?>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class='table-actions btn-toolbar'>
@@ -148,7 +159,7 @@ js::set('branch',         $branch);
             <?php $withSearch = count($branches) > 10;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list" data-ride="searchList">
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -174,7 +185,7 @@ js::set('branch',         $branch);
             <?php $withSearch = count($modules) > 10;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list" data-ride="searchList">
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -198,12 +209,8 @@ js::set('branch',         $branch);
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php elseif(common::hasPriv('testcase', 'create')):?>
-      <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span> <?php common::printLink('testcase', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?></p>
-      </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>

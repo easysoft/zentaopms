@@ -220,7 +220,8 @@ $lang->project->copyFromProject = "Copy from {$lang->projectCommon} <strong>%s</
 $lang->project->cancelCopy      = 'Cancel Copy';
 $lang->project->byPeriod        = 'By Time';
 $lang->project->byUser          = 'By User';
-$lang->project->noProject       = 'No project. You could ';
+$lang->project->noProject       = 'No projects. ';
+$lang->project->noMembers       = 'No members. ';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Do you want to delete {$lang->projectCommon}[%s]?";

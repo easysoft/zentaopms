@@ -56,8 +56,6 @@ function setPing()
  */
 function setForm()
 {
-    // if(config.debug) alert('[Zentao-ZUI 通知] setForm 方法已被弃用，为表单元素 form 添加 [type="ajax"] 或者 .ajax-form 来自动配置 Ajax 表单。');
-
     var formClicked = false;
     $('form').submit(function()
     {
@@ -103,8 +101,6 @@ function setForm()
  */
 function setFormAction(actionLink, hiddenwin, obj)
 {
-    // if(config.debug) alert('[Zentao-ZUI 通知] setFormAction 方法已被弃用，在表单中使用如下格式会自动初始化表单提交按钮：\n<a data-form-action="要提交的表单地址">编辑</a>');
-
     $form = typeof(obj) == 'undefined' ? $('form') : $(obj).closest('form');
     if(hiddenwin) $form.attr('target', hiddenwin);
     else $form.removeAttr('target');
@@ -146,18 +142,6 @@ function setImageSize(image, maxWidth)
     if($(image).width() > maxWidth) $(image).attr('width', maxWidth);
     $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>');
 }
-
-// /**
-//  * Set the modal trigger to link.
-//  * 
-//  * @access public
-//  * @return void
-//  */
-// function setModalTriggerLink()
-// {
-//     $('.repolink').modalTrigger({width:960, type:'iframe'});
-//     $('.export').modalTrigger({width:800, type:'iframe', afterShown: setCheckedCookie});
-// }
 
 /**
  * Set mailto list from a contact list..

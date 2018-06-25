@@ -61,6 +61,7 @@ function refreshBlock($panel, afterRefresh)
     {
         var $data = $(data);
         if($data.hasClass('panel')) $panel.empty().append($data.children());
+        else if($panel.find('#assigntomeBlock').length) $panel.find('#assigntomeBlock').empty().append($data.children());
         else $panel.find('.panel-body').replaceWith($data);
         if($.isFunction(afterRefresh))
         {
@@ -107,7 +108,6 @@ function initTableHeader($wrapper)
         
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
-        if ($wrapper) console.log('initTableHeader', isFixed, {$wrapper, $table, $header});
         if(!isFixed)
         {
             $table.find('thead').css('visibility', 'visible');
@@ -121,7 +121,7 @@ function initTableHeader($wrapper)
         };
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', 0);
             $oldTableHead.find('th').each(function(idx)
             {
                 $(this).attr('data-idx', idx);
@@ -207,8 +207,13 @@ $(function()
         selector: '.panel',
         trigger: '.panel-heading,.panel-move-handler',
         containerSelector: '.col-main,.col-side',
+        start: function()
+        {
+            $('body').css('overflow', 'hidden');
+        },
         finish: function(e)
         {
+            $('body').css('overflow', 'auto');
             var newOrders = [];
             var isSideCol = e.element.parent().is('.col-side');
             e.list.each(function(index, data)

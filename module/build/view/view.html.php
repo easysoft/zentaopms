@@ -321,7 +321,7 @@ tbody tr td:first-child input{display:none;}
                     <?php if($build->desc):?>
                     <?php echo $build->desc;?>
                     <?php else:?>
-                    <?php echo $lang->build->noData;?>
+                    <?php echo $lang->noData;?>
                     <?php endif;?>
                   </td>
                 </tr>

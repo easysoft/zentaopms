@@ -11,7 +11,7 @@
  */
 ?>
 <style>
-.block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible; padding-bottom: 0;}
+.block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible !important; padding-bottom: 0;}
 .block-todoes .todoes-input {position: absolute; top: 0; right: 0; left: 0; padding: 0 20px 20px 20px;}
 .block-todoes .todoes-input .form-control::-webkit-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
@@ -38,7 +38,7 @@
     <div class="todoes-input">
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
-        <h3><?php echo $lang->todo->create . $lang->todo->common;?></h3>
+        <h3><?php echo $lang->todo->create;?></h3>
         <div class="form-group">
           <label for="todoName" class="col-sm-2"><?php echo $lang->todo->name?></label>
           <div class="col-sm-9 required"><input type="text" class="form-control" name="name"></div>
@@ -178,7 +178,7 @@
           success: function(todo)
           {
               $todoes.removeClass('show-form');
-              refreshBlock($todoes.parent());
+              refreshBlock($todoes.parents('div.panel[id^=block]'));
           }
       });
   }

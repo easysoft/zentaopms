@@ -52,6 +52,28 @@ if($allCols) $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'clos
 $account = $this->app->user->account;
 ?>
 <div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
+  <?php
+  $hasTask = false;
+  foreach($kanbanGroup as $group)
+  {
+      if(count(get_object_vars($group)) > 0)
+      {
+          $hasTask = true;
+          break;
+      }
+  }
+  ?>
+  <?php if(!$hasTask):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->task->noTask;?></span>
+      <?php if(common::hasPriv('task', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <table class="table table-grouped text-center">
     <thead>
       <tr>
@@ -151,6 +173,7 @@ $account = $this->app->user->account;
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php echo js::set('projectID', $projectID);?>
 <?php include '../../common/view/footer.html.php';?>

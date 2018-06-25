@@ -27,6 +27,7 @@ $lang->release->confirmDelete      = "Do you want to delete this Release?";
 $lang->release->confirmUnlinkStory = "Do you want to remove this Story?";
 $lang->release->confirmUnlinkBug   = "Do you want to remove this Bug?";
 $lang->release->existBuild         = '『Build』『%s』existed. You could change『name』or choose a『build』.';
+$lang->release->noRelease          = 'No releases. ';
 
 $lang->release->basicInfo = 'Basic Info';
 

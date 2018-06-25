@@ -161,6 +161,17 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+    <?php if(empty($bugs)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
+        <?php if(common::hasPriv('bug', 'create')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class='main-table table-bug' data-ride='table' method='post' id='bugForm'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
@@ -175,32 +186,31 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <div class="table-responsive">
-        <table class='table has-sort-head' id='bugList'>
-          <thead>
-            <tr>
-            <?php
-            foreach($setting as $key => $value)
-            {
-                if($value->show)
-                {
-                    $this->datatable->printHead($value, $orderBy, $vars);
-                    $columns ++;
-                }
-            }
-            ?>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach($bugs as $bug):?>
-            <tr data-id='<?php echo $bug->id?>'>
-              <?php foreach($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
-            </tr>
-            <?php endforeach;?>
-          </tbody>
-        </table>
-      </div>
-      <?php if(!empty($bugs)):?>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='bugList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
+        <thead>
+          <tr>
+          <?php
+          foreach($setting as $key => $value)
+          {
+              if($value->show)
+              {
+                  $this->datatable->printHead($value, $orderBy, $vars);
+                  $columns ++;
+              }
+          }
+          ?>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach($bugs as $bug):?>
+          <tr data-id='<?php echo $bug->id?>'>
+            <?php foreach($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+          </tr>
+          <?php endforeach;?>
+        </tbody>
+      </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
@@ -272,7 +282,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <?php $withSearch = count($branches) > 8;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list" data-ride="searchList">
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -298,7 +308,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <?php $withSearch = count($modules) > 8;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list" data-ride="searchList">
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -324,7 +334,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <?php $withSearch = count($memberPairs) > 10;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list" data-ride="searchList">
-              <div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">
+              <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
@@ -350,12 +360,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php elseif(common::hasPriv('bug', 'create')):?>
-      <div class="table-empty-tip">
-        <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span> <?php common::printLink('bug', 'create', "productID={$productID}", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?></p>
-      </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>

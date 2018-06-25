@@ -21,16 +21,27 @@
     if(commonModel::isTutorialMode())
     {
         $wizardParams = helper::safe64Encode("projectID=$project->id");
-        echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=managemembers&params=$wizardParams"), $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+        echo html::a($this->createLink('tutorial', 'wizard', "module=project&method=manageMembers&params=$wizardParams"), "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
     }
     else
     {
-        if(!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) common::printLink('project', 'managemembers', "projectID=$project->id", $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
+        if(!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) common::printLink('project', 'manageMembers', "projectID=$project->id", "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-primary manage-team-btn'");
     }
     ?>
   </div>
 </div>
 <div id='mainContent'>
+  <?php if(empty($teamMembers)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->project->noMembers;?></span>
+      <?php if((!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) && common::hasPriv('project', 'manageMembers')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('project', 'manageMembers', "projectID=$project->id"), "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <form class='main-table'>
     <table class='table' id='memberList'>
       <thead>
@@ -79,5 +90,6 @@
       <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->project->workHour}</strong>";?></div>
     </div>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

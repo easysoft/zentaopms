@@ -27,6 +27,17 @@
 </div>
 <div id="mainContent">
   <div class="cell" id="queryBox"></div>
+  <?php if(empty($bugs)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
+      <?php if(common::hasPriv('bug', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=projectID=$project->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <form class='main-table' method='post' id='projectBugForm' data-ride="table">
     <table class='table has-sort-head' id='bugList'>
       <?php $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');?>
@@ -90,7 +101,6 @@
       <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($bugs):?>
     <div class='table-footer'>
       <?php if($canBatchAssignTo):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -103,7 +113,7 @@
           echo "<div class='dropdown-menu search-list' data-ride='searchList'>";
           if($withSearch)
           {
-              echo '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example">';
+              echo '<div class="input-control search-box has-icon-left has-icon-right search-example">';
               echo '<input id="userSearchBox" type="search" class="form-control search-input" autocomplete="off" />';
               echo '<label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>';
               echo '<a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>';
@@ -123,8 +133,8 @@
       <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php js::set('replaceID', 'bugList');?>
 <?php js::set('browseType', $type);?>

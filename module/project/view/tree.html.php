@@ -14,14 +14,16 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach ($lang->project->treeLevel as $name => $btnLevel):?>
-      <?php
-      $icon = '';
-      if($name == 'root') $icon = ' <i class="icon-fold-all"></i>';
-      if($name == 'all') $icon = ' <i class="icon-unfold-all"></i>';
-      ?>
-      <a href='' class='btn btn-link btn-tree-view' data-type='<?php echo $name ?>'><span class='text'><?php echo $btnLevel . $icon;?></span></button>
-    <?php endforeach; ?>
+    <?php
+    foreach($lang->project->treeLevel as $name => $btnLevel)
+    {
+        if(empty($tree) && ($name == 'root' or $name == 'all')) continue;
+        $icon = '';
+        if($name == 'root') $icon = ' <i class="icon-fold-all"></i>';
+        if($name == 'all')  $icon = ' <i class="icon-unfold-all"></i>';
+        echo html::a('javascript:;', "<span class='text'>$btnLevel$icon</span>", '', "class='btn btn-link btn-tree-view' data-type='{$name}'");
+    }
+    ?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php
@@ -57,6 +59,17 @@
 </div>
 
 <div id="mainContent" class="main-row hide-side">
+  <?php if(empty($tree)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->task->noTask;?></span>
+      <?php if(common::hasPriv('task', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <div class="main-col">
     <div class="cell">
       <ul class="tree" id="taskTree">
@@ -69,5 +82,6 @@
       <div id="itemContent" class="load-indicator loading"></div>
     </div>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

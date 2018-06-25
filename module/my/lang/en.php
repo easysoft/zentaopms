@@ -22,6 +22,7 @@ $lang->my->shareContacts  = 'Share the list';
 $lang->my->limited        = 'Restricted operation (editing only content related to itself)';
 $lang->my->score          = 'My Score';
 $lang->my->scoreRule      = 'Score Rule';
+$lang->my->noTodo         = 'No todos. ';
 
 $lang->my->taskMenu = new stdclass();
 $lang->my->taskMenu->assignedToMe = 'AssignedToMe';

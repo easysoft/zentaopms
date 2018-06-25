@@ -40,7 +40,7 @@
 <div class="detail" open>
   <div class="detail-title"><?php echo $lang->task->legendDesc;?></div>
   <div class="detail-content article-content">
-    <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+    <?php echo !empty($task->desc) ? $task->desc : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
 <?php if($project->type != 'ops'):?>
@@ -48,21 +48,21 @@
 <div class="detail" open>
   <div class="detail-title"><?php echo $lang->bug->steps;?></div>
   <div class="detail-content article-content">
-    <?php echo !empty($task->bugSteps) ? $task->bugSteps : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+    <?php echo !empty($task->bugSteps) ? $task->bugSteps : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
 <?php elseif($task->story):?>
 <div class="detail" open>
   <div class='detail-title'><?php echo $lang->task->storySpec;?></div>
   <div class='detail-content article-content'>
-    <?php echo (!empty($task->storySpec) || !empty($task->storyFiles)) ? $task->storySpec : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+    <?php echo (!empty($task->storySpec) || !empty($task->storyFiles)) ? $task->storySpec : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
   <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false'));?>
 </div>
 <div class='detail' open>
   <div class='detail-title'><?php echo $lang->task->storyVerify;?></div>
   <div class='detail-content article-content'>
-    <?php echo !empty($task->storyVerify) ? $task->storyVerify : "<div class='text-center text-muted'>" . $lang->task->noData . '</div>';?>
+    <?php echo !empty($task->storyVerify) ? $task->storyVerify : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
 <?php endif;?>
