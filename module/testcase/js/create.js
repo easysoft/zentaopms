@@ -17,7 +17,6 @@ function setPreview()
 
 $(function()
 {
-    $('#product_chosen .chosen-single').css('max-width', $('#product_chosen').closest('td').width());
     var $searchStories = $('#searchStories');
     var lastSearchFn = false;
     var $searchInput = $('#storySearchInput');
