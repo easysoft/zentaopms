@@ -52,7 +52,7 @@
           <th class="c-url"><?php echo $lang->build->filePath;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>
           <th class="c-user"><?php echo $lang->build->builder;?></th>
-          <th class="c-actions-4"><?php echo $lang->actions;?></th>
+          <th class="c-actions-5"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -76,15 +76,6 @@
           <td class="c-date"><?php echo $build->date?></td>
           <td class="c-user em"><?php echo $users[$build->builder]?></td>
           <td class="c-actions">
-            <div class='more'>
-            <?php
-            if(common::hasPriv('build',  'delete', $build))
-            {
-                $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->build->delete}'");
-            }
-            ?>
-            </div>
             <?php
             if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view'))
             {
@@ -94,6 +85,11 @@
             $lang->project->bug = $lang->project->viewBug;
             common::printIcon('project', 'bug',  "project=$project->id&orderBy=status&build=$build->id", $build, 'list');
             common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
+            if(common::hasPriv('build',  'delete', $build))
+            {
+                $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->build->delete}'");
+            }
             ?>
           </td>
         </tr>
