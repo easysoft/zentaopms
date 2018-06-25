@@ -65,7 +65,7 @@
           <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
           <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -98,20 +98,16 @@
             </span>
           </td>
           <td class='c-actions'>
-            <div class='more'>
-              <?php
-              if(common::hasPriv('testtask', 'delete', $task))
-              {
-                  $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
-              }
-              ?>
-            </div>
             <?php
             common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
             common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
             common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
             common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
+            if(common::hasPriv('testtask', 'delete', $task))
+            {
+                $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+            }
             ?>
           </td>
         </tr>

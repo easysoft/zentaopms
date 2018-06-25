@@ -15,7 +15,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noTodo', $lang->todo->noTodo);?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-1400px'>
+  <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->todo->create;?></h2>
     </div>

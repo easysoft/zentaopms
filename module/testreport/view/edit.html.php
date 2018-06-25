@@ -15,7 +15,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-1400px'>
+  <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->testreport->edit;?></h2>
       <div class='btn-toolbar pull-right'><?php echo html::backButton('<i class="icon icon-back icon-sm"></i>' . $lang->goback, '', 'btn btn-link');?></div>
