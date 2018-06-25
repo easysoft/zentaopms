@@ -214,6 +214,7 @@ class customModel extends model
             $method    = '';
             $class     = '';
             $subModule = '';
+            $subMenu   = '';
             $alias     = '';
 
             $link = (is_array($item) and isset($item['link'])) ? $item['link'] : $item;
@@ -243,6 +244,7 @@ class customModel extends model
                 {
                     if(isset($item['class']))     $class     = $item['class'];
                     if(isset($item['subModule'])) $subModule = $item['subModule'];
+                    if(isset($item['subMenu']))   $subMenu   = $item['subMenu'];
                     if(isset($item['alias']))     $alias     = $item['alias'];
                 }
 
@@ -257,6 +259,7 @@ class customModel extends model
                 if($hidden)   $menuItem->hidden    = $hidden;
                 if($class)    $menuItem->class     = $class;
                 if($subModule)$menuItem->subModule = $subModule;
+                if($subMenu)  $menuItem->subMenu   = $subMenu;
                 if($alias)    $menuItem->alias     = $alias;
                 if($isTutorialMode) $menuItem->tutorial = true;
 

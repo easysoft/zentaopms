@@ -138,6 +138,7 @@ class projectModel extends model
 
         $this->lang->modulePageNav = $projectIndex;
         if($moduleName != 'project') $this->lang->$moduleName->dividerMenu = $this->lang->project->dividerMenu;
+
         foreach($this->lang->project->menu as $key => $menu)
         {
             $replace = $projectID;
@@ -147,6 +148,7 @@ class projectModel extends model
             {
                 $dropTitle = '';
                 $hasActive = false;
+                $subMenu   = array();
                 $replace   = "<ul class='dropdown-menu'>";
                 foreach($this->lang->project->subMenu->$key as $subMenuKey => $subMenuLink)
                 {
@@ -170,12 +172,20 @@ class projectModel extends model
 
                     $replace .= "<li $active>" . html::a(helper::createLink($subMenuModule, $subMenuMethod, sprintf($subMenuParams, $projectID)), $subMenuName) . '</li>';
                     if($active) $hasActive = true;
+
+                    $menu = new stdclass();
+                    $menu->name   = $subMenuKey;
+                    $menu->hidden = false;
+                    $menu->text   = $subMenuName;
+                    $subMenu[] = $menu;
                 }
                 $replace .= '</ul>';
                 $replace  = "<a data-toggle='dropdown'>$dropTitle <span class='caret'></span></a>" . $replace;
 
                 $this->lang->project->menu->{$key}['class'] = 'dropdown dropdown-hover';
                 if($hasActive) $this->lang->project->menu->{$key}['class'] .= ' active';
+
+                if(!empty($subMenu)) $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
             }
             common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
