@@ -1,3 +1,6 @@
+<?php if(empty($actions)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <style>
 .block-dynamic .timeline > li .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .block-dynamic .timeline > li:hover .timeline-text {overflow: visible; text-overflow: normal; white-space: normal;}
@@ -20,3 +23,4 @@
     ?>
   </ul>
 </div>
+<?php endif;?>

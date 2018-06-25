@@ -10,6 +10,9 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<?php if(empty($bugs)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <style>
 .block-bugs .c-id {width: 55px;}
 .block-bugs .c-level {width: 60px;text-align: center;}
@@ -59,3 +62,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

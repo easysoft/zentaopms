@@ -10,6 +10,9 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<?php if(empty($releases)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <div class='panel-body has-table'>
   <table class='table table-borderless table-hover table-fixed tablesorter block-release'>
     <thead>
@@ -53,3 +56,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

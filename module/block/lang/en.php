@@ -42,6 +42,7 @@ $lang->block->myProject = 'My ' . $lang->projectCommon;
 $lang->block->myProduct = 'My ' . $lang->productCommon;
 $lang->block->delayed   = 'Delayed';
 $lang->block->noData    = 'There is no data in this type of reports.';
+$lang->block->emptyTip  = 'No Information';
 
 $lang->block->params = new stdclass();
 $lang->block->params->name  = 'Name';

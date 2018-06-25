@@ -332,7 +332,14 @@ class block extends control
         $html = '';
         if($block->block == 'html')
         {
-            $html = "<div class='panel-body'><div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div></div>';
+            if (empty($block->params->html))
+            {
+                $html = "<div class='empty-tip'>" . $this->lang->block->emptyTip . "</div>";
+            }
+            else
+            {
+                $html = "<div class='panel-body'><div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div></div>';
+            }
         }
         elseif($block->source != '')
         {
