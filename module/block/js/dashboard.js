@@ -121,7 +121,7 @@ function initTableHeader($wrapper)
         };
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', 0);
             $oldTableHead.find('th').each(function(idx)
             {
                 $(this).attr('data-idx', idx);
