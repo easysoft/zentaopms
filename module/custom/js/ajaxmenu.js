@@ -56,6 +56,7 @@ $(function()
                         $('<li/>').attr('data-id', subItem.name).toggleClass('right', subItem.float === 'right').toggleClass('menu-hidden', !!subItem.hidden).append($subA).appendTo($dropmenu);
                     });
                 }
+                if(!$dropmenu.children().length) $dropmenu.remove();
             });
             $nav.sortable({finish: function(e)
             {
