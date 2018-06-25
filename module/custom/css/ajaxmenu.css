@@ -9,6 +9,7 @@
 #navbar .nav > li > a {padding: 10px 15px; border-radius: 3px;}
 #mainMenu > .nav {display: inline-block;}
 #menuEditor .nav > li > a {cursor: move;}
-#menuEditor .nav > li > a .item-hidden-icon {display: none; margin-left: 3px;}
-#menuEditor .nav > li.menu-hidden > a .item-hidden-icon {display: inline-block;}
+#menuEditor li > a .item-hidden-icon {display: none; margin-left: 3px;}
+#menuEditor .dropdown-menu > li > a .item-hidden-icon {margin-left: 10px;}
+#menuEditor li.menu-hidden > a .item-hidden-icon {display: inline-block;}
 #menuEditor .nav > li.menu-hidden > a {opacity: .7; border: 1px dashed #ddd; background: rgba(0,0,0,.1); margin: 0 2px;}
