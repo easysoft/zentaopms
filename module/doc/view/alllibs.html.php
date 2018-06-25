@@ -11,8 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
-  <?php if($this->from == 'doc'):?>
+<?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView && $this->from == 'doc') ? true : false;?>
+<div class="main-row <?php if($spliter) echo 'split-row';?>" id="mainRow">
+  <?php if($spliter):?>
   <?php include './side.html.php';?>
   <?php endif;?>
   <div class="main-col" data-min-width="400">
