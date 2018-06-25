@@ -98,10 +98,20 @@ function refreshBlock($panel, afterRefresh)
  */
 function initTableHeader($wrapper)
 {
-    ($wrapper || $('#dashboard')).find('.panel-body > .table-fixed-head').each(function()
+    ($wrapper || $('#dashboard')).find('.panel-body > table.table-fixed-head').each(function()
     {
         var $table = $(this);
-        var $panel = $table.closest('.panel');
+        var $tabPane = $table.closest('.tab-pane');
+        if ($tabPane.length && !$tabPane.hasClass('active'))
+        {
+            $('[data-tab][href="#' + $tabPane.attr('id') + '"]').one('shown.zui.tab', function()
+            {
+                initTableHeader($tabPane);
+            });
+            return;
+        }
+
+        var $panel = $tabPane.length ? $tabPane : $table.closest('.panel');
 
         if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
@@ -121,7 +131,7 @@ function initTableHeader($wrapper)
         };
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', 0);
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
             $oldTableHead.find('th').each(function(idx)
             {
                 $(this).attr('data-idx', idx);
