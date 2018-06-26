@@ -11,7 +11,7 @@
  */
 $lang->group->common             = 'Privilege';
 $lang->group->browse             = 'Group Privilges';
-$lang->group->create             = 'Add a Group';
+$lang->group->create             = 'Add Group';
 $lang->group->edit               = 'Edit';
 $lang->group->copy               = 'Copy';
 $lang->group->delete             = 'Delete';
