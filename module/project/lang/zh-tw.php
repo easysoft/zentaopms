@@ -220,7 +220,8 @@ $lang->project->copyFromProject = "複製自{$lang->projectCommon} <strong>%s</s
 $lang->project->cancelCopy      = '取消複製';
 $lang->project->byPeriod        = '按時間段';
 $lang->project->byUser          = '按用戶';
-$lang->project->noProject       = '暫時沒有項目，您現在可以';
+$lang->project->noProject       = '暫時沒有項目。';
+$lang->project->noMembers       = '暫時沒有團隊成員。';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "您確定刪除{$lang->projectCommon}[%s]嗎？";

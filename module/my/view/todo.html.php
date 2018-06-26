@@ -41,6 +41,17 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($todos)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->my->noTodo;?></span>
+      <?php if(common::hasPriv('todo', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('todo', 'create'), "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <form class="main-table table-todo" data-ride="table" method="post">
     <table class="table has-sort-head" id='todoList'>
       <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
@@ -103,7 +114,6 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($todos):?>
     <div class="table-footer">
       <?php if($type != 'cycle'):?>
       <?php if(common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture)):?>
@@ -135,8 +145,8 @@
       <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../todo/view/assignto.html.php';?>
 <?php js::set('listName', 'todoList')?>

@@ -11,8 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div class="main-row <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
-  <?php if($this->from == 'doc'):?>
+<?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView && $this->from == 'doc') ? true : false;?>
+<div class="main-row <?php if($spliter) echo 'split-row';?>" id="mainRow">
+  <?php if($spliter):?>
   <?php include './side.html.php';?>
   <?php endif;?>
   <div class="main-col" data-min-width="400">
@@ -27,8 +28,8 @@
       </div>
       <div class="panel-body">
         <div class="row row-grid files-grid" data-size="300">
-          <?php if($type == 'product') $icon = 'icon-cube text-secondary';?>
-          <?php if($type == 'project') $icon = 'icon-stack text-green';?>
+          <?php if($type == 'product') $icon = 'icon-product text-secondary';?>
+          <?php if($type == 'project') $icon = 'icon-project text-green';?>
           <?php if($type == 'custom')  $icon = 'icon-folder text-yellow';?>
           <?php foreach($libs as $lib):?>
           <?php $link = $type != 'custom' ? $this->createLink('doc', 'objectLibs', "type=$type&objectID=$lib->id") : $this->createLink('doc', 'browse', "libID=$lib->id");?>

@@ -672,7 +672,8 @@ class user extends control
             }
 
             if(strpos($this->referer, $loginLink) === false and
-               strpos($this->referer, $denyLink)  === false and $this->referer
+               strpos($this->referer, $denyLink)  === false and
+               strpos($this->referer, 'block')  === false and $this->referer
             )
             {
                 die(js::locate($this->referer, 'parent'));
@@ -716,7 +717,7 @@ class user extends control
                 if($this->post->keepLogin) $this->user->keepLogin($user);
 
                 /* Go to the referer. */
-                if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false)
+                if($this->post->referer and strpos($this->post->referer, $loginLink) === false and strpos($this->post->referer, $denyLink) === false and strpos($this->post->referer, 'block') === false)
                 {
                     if($this->app->getViewType() == 'json')
                     {

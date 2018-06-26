@@ -13,6 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../testcase/view/caseheader.html.php';?>
 <div id='mainContent' class='main-control'>
+  <?php if(empty($stories)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->story->noStory;?></span></p>
+  </div>
+  <?php else:?>
   <form method='post' id='productStoryForm' class='main-table table-story' data-ride='table'>
     <table class='table has-sort-head table-fixed' id='storyList'>
       <thead>
@@ -73,7 +78,6 @@
       <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($stories):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
@@ -136,7 +140,7 @@
         ?>
       </div>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

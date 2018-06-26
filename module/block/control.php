@@ -332,7 +332,14 @@ class block extends control
         $html = '';
         if($block->block == 'html')
         {
-            $html = "<div class='panel-body'><div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div></div>';
+            if (empty($block->params->html))
+            {
+                $html = "<div class='empty-tip'>" . $this->lang->block->emptyTip . "</div>";
+            }
+            else
+            {
+                $html = "<div class='panel-body'><div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div></div>';
+            }
         }
         elseif($block->source != '')
         {
@@ -1241,7 +1248,6 @@ class block extends control
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end   = date::formatTime($todo->end);
             }
-            if(empty($todos)) unset($hasViewPriv['todo']);
             $this->view->todos = $todos;
         }
         if(isset($hasViewPriv['task']))
@@ -1255,7 +1261,6 @@ class block extends control
             if(isset($params->taskNum)) $stmt->limit($params->taskNum);
             $tasks = $stmt->fetchAll();
 
-            if(empty($tasks)) unset($hasViewPriv['task']);
             $this->view->tasks = $tasks;
         }
         if(isset($hasViewPriv['bug']))
@@ -1269,7 +1274,6 @@ class block extends control
             if(isset($params->bugNum)) $stmt->limit($params->bugNum);
             $bugs = $stmt->fetchAll();
 
-            if(empty($bugs)) unset($hasViewPriv['bug']);
             $this->view->bugs = $bugs;
         }
 

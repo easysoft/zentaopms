@@ -6,3 +6,4 @@
 #burnLegend > div {position: relative; padding-left: 30px;}
 #burnLegend > div:before {content: ' '; display: block; position: absolute; width: 20px; left: 0; top: 8px; height: 2px; background: #EEEEEE;}
 #burnLegend > div.line-real:before {background: #006AF1;}
+

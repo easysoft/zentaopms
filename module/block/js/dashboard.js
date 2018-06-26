@@ -61,6 +61,7 @@ function refreshBlock($panel, afterRefresh)
     {
         var $data = $(data);
         if($data.hasClass('panel')) $panel.empty().append($data.children());
+        else if($panel.find('#assigntomeBlock').length) $panel.find('#assigntomeBlock').empty().append($data.children());
         else $panel.find('.panel-body').replaceWith($data);
         if($.isFunction(afterRefresh))
         {
@@ -97,17 +98,26 @@ function refreshBlock($panel, afterRefresh)
  */
 function initTableHeader($wrapper)
 {
-    ($wrapper || $('#dashboard')).find('.panel-body > .table-fixed-head').each(function()
+    ($wrapper || $('#dashboard')).find('.panel-body > table.table-fixed-head').each(function()
     {
         var $table = $(this);
-        var $panel = $table.closest('.panel');
+        var $tabPane = $table.closest('.tab-pane');
+        if ($tabPane.length && !$tabPane.hasClass('active'))
+        {
+            $('[data-tab][href="#' + $tabPane.attr('id') + '"]').one('shown.zui.tab', function()
+            {
+                initTableHeader($tabPane);
+            });
+            return;
+        }
+
+        var $panel = $tabPane.length ? $tabPane : $table.closest('.panel');
 
         if(!$table.length || !$table.children('thead').length || ($panel.find('#assigntomeBlock').length && $panel.find('#assigntomeBlock > div').length > 1)) return;
         var isFixed = $panel.find('.panel-body').height() < $table.outerHeight();
         
         $panel.toggleClass('with-fixed-header', isFixed);
         var $header = $panel.children('.table-header-fixed').toggle(isFixed);
-        if ($wrapper) console.log('initTableHeader', isFixed, {$wrapper, $table, $header});
         if(!isFixed)
         {
             $table.find('thead').css('visibility', 'visible');
@@ -207,8 +217,13 @@ $(function()
         selector: '.panel',
         trigger: '.panel-heading,.panel-move-handler',
         containerSelector: '.col-main,.col-side',
+        start: function()
+        {
+            $('body').css('overflow', 'hidden');
+        },
         finish: function(e)
         {
+            $('body').css('overflow', 'auto');
             var newOrders = [];
             var isSideCol = e.element.parent().is('.col-side');
             e.list.each(function(index, data)

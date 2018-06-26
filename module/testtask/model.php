@@ -26,7 +26,7 @@ class testtaskModel extends model
         $this->loadModel('product')->setMenu($products, $productID, $branch);
         $selectHtml = $this->product->select($products, $productID, 'testtask', 'browse', '', $branch);
 
-        if($testtask)
+        if($testtask and $this->app->viewType != 'mhtml')
         {
             $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
 

@@ -1,18 +1,35 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
+<?php js::import($jsRoot . 'datatable/min.js'); ?>
+<?php css::import($jsRoot . 'datatable/min.css'); ?>
 <?php if(!empty($lang->datatable)):?>
 <style>
-.table-datatable tbody > tr td,
-.table-datatable thead > tr th {height: 35px; line-height: 20px;}
-.table-datatable tbody > tr td .btn-icon > i {line-height: 19px;}
-.hide-side .table-datatable thead > tr > th.check-btn i {visibility: hidden;}
-.hide-side .side-handle {line-height: 33px}
-.table-datatable .checkbox-row {display: none}
-.outer .datatable {border: 1px solid #ddd;}
-.outer .datatable .table, .outer .datatable .table tfoot td {border: none; box-shadow: none}
 .datatable .table>tbody>tr.active>td.col-hover, .datatable .table>tbody>tr.active.hover>td {background-color: #f3eed8 !important;}
-.datatable-span.flexarea .scroll-slide {bottom: -30px}
-
-.panel > .datatable, .panel-body > .datatable {margin-bottom: 0;}
+.datatable {margin-bottom: 0;}
+.datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 3px; padding-bottom: 3px; height: 40px; vertical-align: middle; white-space: nowrap;}
+.datatable .table>tbody>tr.hover {box-shadow: none!important;}
+.datatable .flexarea .table-children,
+.datatable .fixed-left .table-children {border-right: none;}
+.datatable .flexarea .table-children,
+.datatable .fixed-right .table-children {border-left: none;}
+.datatable tr.hover td.c-actions .more {display: block; background-color: #ebf2f9}
+.datatable .fixed-left .table,
+.datatable .flexarea .table,
+.datatable .flexarea tbody > tr.checked,
+.datatable .fixed-left tbody > tr.checked {border-top-right-radius: 0; border-bottom-right-radius: 0;}
+.datatable .flexarea tbody > tr.checked,
+.datatable .fixed-right .table,
+.datatable .flexarea .table,
+.datatable .fixed-right tbody > tr.checked {border-top-left-radius: 0; border-bottom-left-radius: 0;}
+.datatable .flexarea tbody>tr.checked>td:first-child:before,
+.datatable .fixed-right tbody>tr.checked>td:first-child:before {display: none}
+.datatable>.scroll-wrapper {z-index: 10;}
+.has-fixed-footer .scroll-wrapper {bottom: 97px; position: fixed;}
+.datatable .flexarea thead>tr>th:first-child,
+.datatable .flexarea tbody>tr>td:first-child,
+.datatable .fixed-right thead>tr>th:first-child,
+.datatable .fixed-right tbody>tr>td {padding-left: 5px!important;}
+.datatable .c-actions {white-space: nowrap;}
+.datatable.head-fixed {padding-top: 41px;}
 </style>
 <script> 
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
@@ -51,45 +68,21 @@ $(document).ready(function()
         tableClass    : 'tablesorter',
         storage       : false,
         fixCellHeight : false,
-        selectable    : 
-        {
-            clickBehavior: 'multi',
-            start: function(e) 
-            {
-                var $target = $(e.target);
-                if ($target.closest('.task-toggle').length) return false;
-                var $checkRow = $target.closest('.check-row, .check-btn');
-                if($checkRow.length) return true;
-            },
-            startDrag: function(e)
-            {
-                var $target = $(e.target);
-                if(!this.multiKey && !$target.closest('td[data-index="0"]').length) return false;
-            }
-        },
+        selectable     : false,
         fixedHeader: true,
         ready: function()
         {
-            if(!this.$table) return;
-            var customMenu = this.$table.data('customMenu');
-
-            var $dropdown = $("<div class='datatable-menu-wrapper'><div class='dropdown datatable-menu'><button type='button' class='btn btn-link' data-toggle='dropdown'><i class='icon-cogs'></i> <span class='caret'></span></button></div></div>");
-            var $dropmenu = $("<ul class='dropdown-menu pull-right'></ul>");
-            if(customMenu) $dropmenu.append("<li><a id='customBtn' href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
-            $dropmenu.append("<li><a href='javascript:;' id='switchToTable'><?php echo $lang->datatable->switchToTable?></a></li>");
-            $dropdown.children('.dropdown').append($dropmenu);
-            this.$datatable.before($dropdown);
-            this.$datatable.find('[data-toggle="modal"], a.iframe').modalTrigger();
-            if($.fn.progressPie) this.$datatable.find('.progress-pie').progressPie();
-            $('a[data-toggle="showModuleModal"]').click(function(){$('#showModuleModal').modal('show')});
-
-            $('#customBtn').modalTrigger();
-
-            $('#switchToTable').click(function()
+            $datatable.addClass('datatable-origin');
+            if ($datatable.hasClass('has-sort-head'))
             {
-                saveDatatableConfig('mode', 'table', true);
-            });
+                this.$datatable.find('.table').addClass('has-sort-head');
+            }
         }
+    });
+
+    $(window).on('fixFooter', function(e, isFixed)
+    {
+        $('body').toggleClass('has-fixed-footer', isFixed);
     });
 
     window.saveDatatableConfig = function(name, value, reload, global)
@@ -107,44 +100,7 @@ $(document).ready(function()
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });
     };
-    setTimeout(function(){fixScroll()}, 500);
 });
 </script>
 <?php endif;?>
 
-<script>
-/**
- * Fix scroll bar.
- * 
- * @access public
- * @return void
- */
-function fixScroll()
-{
-    var $scrollwrapper = $('div.datatable').first().find('.scroll-wrapper:first');
-    if($scrollwrapper.size() == 0)return;
-
-    var $tfoot       = $('div.datatable').first().find('table tfoot:last');
-    var scrollOffset = $scrollwrapper.offset().top + $scrollwrapper.find('.scroll-slide').height();
-    if($tfoot.size() > 0) scrollOffset += $tfoot.height();
-    if($('div.datatable.head-fixed').size() == 0) scrollOffset -= '34';
-    var windowH = $(window).height();
-    var bottom  = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
-    if(typeof(ssoRedirect) != "undefined") bottom = 53;
-    if(scrollOffset > windowH + $(window).scrollTop()) $scrollwrapper.css({'position': 'fixed', 'bottom': bottom + 'px'});
-    $(window).scroll(function()
-    {
-       newBottom = $tfoot.hasClass('fixedTfootAction') ? 53 + $tfoot.height() : 53;
-       if(typeof(ssoRedirect) != "undefined") newBottom = 53;
-       if(scrollOffset <= windowH + $(window).scrollTop()) 
-       {    
-           $scrollwrapper.css({'position':'relative', 'bottom': '0px'});
-       }    
-       else if($scrollwrapper.css('position') != 'fixed' || bottom != newBottom)
-       {    
-           $scrollwrapper.css({'position': 'fixed', 'bottom': newBottom + 'px'});
-           bottom = newBottom;
-       }
-    });
-}
-</script>

@@ -28,6 +28,17 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($plans)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
+      <?php if(common::hasPriv('productplan', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <form class='main-table table-productplan' data-ride='table' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
     <table class='table has-sort-head' id="productplanList">
       <thead>
@@ -96,7 +107,6 @@
       <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($plans):?>
     <div class="table-footer">
       <?php if(common::hasPriv('productplan', 'batchEdit')):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -106,7 +116,7 @@
       <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

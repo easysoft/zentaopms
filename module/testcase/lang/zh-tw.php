@@ -191,7 +191,7 @@ $lang->testcase->noRequire        = "%s行的“%s”是必填欄位，不能為
 $lang->testcase->noLibrary        = "現在還沒有公共庫，請先創建！";
 $lang->testcase->mustChooseResult = '必須選擇評審結果';
 $lang->testcase->noModule         = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
-$lang->testcase->noCase           = '暫時沒有用例，您現在可以';
+$lang->testcase->noCase           = '暫時沒有用例。';
 
 $lang->testcase->searchStories = '鍵入來搜索需求';
 $lang->testcase->selectLib     = '請選擇庫';

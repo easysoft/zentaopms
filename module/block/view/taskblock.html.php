@@ -10,6 +10,9 @@
  * @link        http://www.ranzhi.org
  */
 ?>
+<?php if(empty($tasks)): ?>
+<div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
+<?php else:?>
 <style>
 .block-tasks .c-id {width: 55px;}
 .block-tasks .c-pri {width: 45px;text-align: center;}
@@ -60,3 +63,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

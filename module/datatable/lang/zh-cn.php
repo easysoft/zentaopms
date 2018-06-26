@@ -6,14 +6,14 @@ $lang->datatable->show   = '显示';
 $lang->datatable->hide   = '隐藏';
 $lang->datatable->reset  = '恢复默认';
 
-$lang->datatable->custom       = '自定义列';
-$lang->datatable->customTip    = '勾选需要显示的列，拖动列名进行排序。';
-$lang->datatable->table        = '简单表格';
-$lang->datatable->datatable    = '高级表格';
-$lang->datatable->required     = '必选';
-$lang->datatable->confirmReset = '是否恢复默认设置？';
-$lang->datatable->setGlobal    = '全局';
-$lang->datatable->resetGlobal  = '全局恢复默认';
+$lang->datatable->custom            = '自定义列';
+$lang->datatable->customTip         = '勾选需要显示的列，拖动列名进行排序。';
+$lang->datatable->switchToTable     = '切换到简单表格';
+$lang->datatable->switchToDatatable = '切换到高级表格';
+$lang->datatable->required          = '必选';
+$lang->datatable->confirmReset      = '是否恢复默认设置？';
+$lang->datatable->setGlobal         = '全局';
+$lang->datatable->resetGlobal       = '全局恢复默认';
 
 $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';

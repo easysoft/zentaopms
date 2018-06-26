@@ -19,10 +19,10 @@ var browseType = '<?php echo $browseType;?>';
 <?php js::set('libID', $libID);?>
 <?php if($this->from != 'doc') js::set('type', 'doc');?>
 
-<div class="main-row fade <?php if($this->from == 'doc') echo 'split-row';?>" id="mainRow">
-  <?php if($this->from == 'doc'):?>
+<?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView && $this->from == 'doc') ? true : false;?>
+<div class="main-row fade <?php if($spliter) echo 'split-row';?>" id="mainRow">
+  <?php if($spliter):?>
   <?php include './side.html.php';?>
-  <div class="col-spliter"></div>
   <?php endif;?>
   <?php if($this->cookie->browseType == 'bygrid'):?>
   <?php include dirname(__FILE__) . '/browsebygrid.html.php';?>
@@ -49,7 +49,11 @@ var browseType = '<?php echo $browseType;?>';
       <div class="table-empty-tip">
         <p>
           <?php if($libID):?>
-          <span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+          <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
+          <?php if(common::hasPriv('doc', 'create')):?>
+          <span class="text-muted"><?php echo $lang->youCould;?></span>
+          <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+          <?php endif;?>
           <?php elseif($browseType == 'fastsearch'):?>
           <span class="text-muted"><?php echo $lang->doc->noSearchedDoc;?></span>
           <?php elseif($browseType == 'byediteddate'):?>

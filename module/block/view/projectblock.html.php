@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if(empty($projectStats)): ?>
+<div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
+<?php else:?>
 <div class="panel-body has-table">
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-projects tablesorter'>
     <thead>
@@ -65,3 +68,4 @@
     </tbody>
   </table>
 </div>
+<?php endif;?>

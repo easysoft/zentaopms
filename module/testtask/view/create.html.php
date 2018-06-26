@@ -15,7 +15,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-1400px'>
+  <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->testtask->create;?></h2>
     </div>

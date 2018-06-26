@@ -138,6 +138,7 @@ class projectModel extends model
 
         $this->lang->modulePageNav = $projectIndex;
         if($moduleName != 'project') $this->lang->$moduleName->dividerMenu = $this->lang->project->dividerMenu;
+
         foreach($this->lang->project->menu as $key => $menu)
         {
             $replace = $projectID;
@@ -147,6 +148,7 @@ class projectModel extends model
             {
                 $dropTitle = '';
                 $hasActive = false;
+                $subMenu   = array();
                 $replace   = "<ul class='dropdown-menu'>";
                 foreach($this->lang->project->subMenu->$key as $subMenuKey => $subMenuLink)
                 {
@@ -170,12 +172,20 @@ class projectModel extends model
 
                     $replace .= "<li $active>" . html::a(helper::createLink($subMenuModule, $subMenuMethod, sprintf($subMenuParams, $projectID)), $subMenuName) . '</li>';
                     if($active) $hasActive = true;
+
+                    $menu = new stdclass();
+                    $menu->name   = $subMenuKey;
+                    $menu->hidden = false;
+                    $menu->text   = $subMenuName;
+                    $subMenu[] = $menu;
                 }
                 $replace .= '</ul>';
                 $replace  = "<a data-toggle='dropdown'>$dropTitle <span class='caret'></span></a>" . $replace;
 
                 $this->lang->project->menu->{$key}['class'] = 'dropdown dropdown-hover';
                 if($hasActive) $this->lang->project->menu->{$key}['class'] .= ' active';
+
+                if(!empty($subMenu)) $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
             }
             common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
@@ -204,11 +214,11 @@ class projectModel extends model
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");
         $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProject->name}'>{$currentProject->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
-        if($buildID)
+        if($buildID and !$isMobile)
         {
             setCookie('lastBuild', $buildID, $this->config->cookieLife, $this->config->webRoot);
             $currentBuild = $this->loadModel('build')->getById($buildID);
@@ -217,7 +227,7 @@ class projectModel extends model
             {
                 $dropMenuLink = helper::createLink('build', 'ajaxGetProjectBuilds', "projectID=$projectID&productID=&varName=dropdownList");
                 $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentBuild->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $output .= '<div class="input-control search-box search-box-circle has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
                 $output .= "</div></div></div>";
             }
         }

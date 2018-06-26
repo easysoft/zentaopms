@@ -191,7 +191,7 @@ $lang->testcase->noRequire        = "Row %s has“%s”which is a required field
 $lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
 $lang->testcase->noModule         = '<div>You have no modules</div><div>Manage now</div>';
-$lang->testcase->noCase           = 'No Case. You could ';
+$lang->testcase->noCase           = 'No cases. ';
 
 $lang->testcase->searchStories = 'Enter to searcu Story';
 $lang->testcase->selectLib     = 'Select Library';

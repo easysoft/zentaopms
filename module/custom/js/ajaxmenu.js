@@ -44,9 +44,26 @@ $(function()
             {
                 if(!item.text || item.fixed) return;
                 var $a = $('<a href="#"/>').append(item.text);
-                $a.find('.dropdown-menu').remove();
                 $a.data('menu', item).append('<i class="item-hidden-icon icon icon-eye-off"></i>');
                 $('<li/>').attr('data-id', item.name).toggleClass('right', item.float === 'right').toggleClass('menu-hidden', !!item.hidden).append($a).appendTo($nav);
+                var $dropmenu = $a.find('.dropdown-menu').empty();
+                if ($dropmenu.length && item.subMenu)
+                {
+                    $.each(item.subMenu, function(subIdx, subItem)
+                    {
+                        subItem.order = subIdx + 1;
+                        var $subA = $('<a href="#"/>').append(subItem.text);
+                        $subA.data('menu', subItem).append('<i class="item-hidden-icon icon icon-eye-off"></i>');
+                        $('<li/>').attr('data-id', subItem.name).toggleClass('right', subItem.float === 'right').toggleClass('menu-hidden', !!subItem.hidden).append($subA).appendTo($dropmenu);
+                    });
+                    var $aInner = $a.children('a');
+                    if ($aInner.length)
+                    {
+                        $aInner.replaceWith($('<span>' + $aInner.text() + ' <span class="caret"></span></span>'));
+                        $a.addClass('dropdown-hover');
+                    }
+                }
+                if(!$dropmenu.children().length) $dropmenu.remove();
             });
             $nav.sortable({finish: function(e)
             {
@@ -106,13 +123,25 @@ $(function()
 
     var formatMenuConfig = function(items)
     {
-        return $.map(items, function(item)
+        var dataList = [];
+        $.each(items, function(idx, item)
         {
             var data = {name: item.name, order: parseInt(item.order)};
             if(item.hidden) data.hidden = true;
             if(item.float) data.float = item.float;
-            return data;
+            dataList.push(data);
+            if (item.subMenu)
+            {
+                $.each(item.subMenu, function(sIdx, subItem)
+                {
+                    var subData = {name: subItem.name, order: parseInt(subItem.order)};
+                    if(subItem.hidden) subData.hidden = true;
+                    if(subItem.float) subData.float = subItem.float;
+                    dataList.push(subData);
+                });
+            }
         });
+        return dataList;
     };
 
     $menuEditor.on('mouseenter', '.nav > li:not(.drag-shadow) > a', function()
@@ -185,14 +214,15 @@ $(function()
                 }
             }
         }
-    }).on('click', '.nav > li > a', function()
+    }).on('click', '.nav>li>a,.dropdown-menu>li>a', function(e)
     {
         var $a         = $(this);
         var item       = $a.data('menu');
+        if (!item) return;
         var $menu      = $a.closest('nav');
         var moduleName = item.link && item.link['module'] ? item.link['module'] : item.name;
         var methodName = item.link && item.link['method'] ? item.link['method'] : '';
-        item.hidden    = !!!item.hidden;
+        item.hidden    = !item.hidden;
         if($menu.is('#subNavbar'))
         {
             moduleName = currentModule;
@@ -200,6 +230,7 @@ $(function()
         }
         $a.parent().toggleClass('menu-hidden', item.hidden);
         updateConfig($menu);
+        e.stopPropagation();
     });
 
     $('#saveMenuBtn').click(function()

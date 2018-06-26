@@ -14,10 +14,12 @@
 <?php js::set('confirmDelete', $lang->testtask->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
+    <?php if(!empty($tasks)):?>
     <div class="pull-left table-group-btns">
       <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->testtask->collapseAll;?> <i class="icon-fold-all muted"></i></button>
       <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->testtask->expandAll;?> <i class="icon-unfold-all muted"></i></button>
     </div>
+    <?php endif;?>
     <?php $total = 0;?>
     <?php foreach($tasks as $productTasks) $total += count($productTasks);?>
     <a href='' class='btn btn-link btn-active-text'>
@@ -31,6 +33,17 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($tasks)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->testtask->noTesttask;?></span>
+      <?php if(common::hasPriv('testtask', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('testtask', 'create', "product=0&project=$projectID"), "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <form class="main-table table-testtask" data-ride="table" data-group="true" method="post" target='hiddenwin' id='testtaskForm'>
     <table class="table table-grouped has-sort-head" id='taskList'>
       <thead>
@@ -52,7 +65,7 @@
           <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->testtask->begin);?></th>
           <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->testtask->end);?></th>
           <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -85,20 +98,16 @@
             </span>
           </td>
           <td class='c-actions'>
-            <div class='more'>
-              <?php
-              if(common::hasPriv('testtask', 'delete', $task))
-              {
-                  $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
-              }
-              ?>
-            </div>
             <?php
             common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
             common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link');
             common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list','flag');
             common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
+            if(common::hasPriv('testtask', 'delete', $task))
+            {
+                $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->testtask->delete}'");
+            }
             ?>
           </td>
         </tr>
@@ -116,7 +125,6 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($tasks):?>
     <div class="table-footer">
       <?php if($canTestReport):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -130,7 +138,7 @@
       <?php endif;?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

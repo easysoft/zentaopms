@@ -19,7 +19,7 @@ js::set('confirmDelete', $lang->testsuite->confirmDelete);
 js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
 js::set('flow',          $config->global->flow);
 ?>
-<?php if($config->global->flow == 'full'):?>
+<?php if($config->global->flow != 'onlyTest'):?>
 <div id='mainMenu' class='clearfix'>
   <div id="sidebarHeader">
     <div class="title">
@@ -75,6 +75,17 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class="main-col">
     <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
+    <?php if(empty($cases)):?>
+    <div class="table-empty-tip">
+      <p>
+        <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
+        <?php if(common::hasPriv('testsuite', 'createCase')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php echo html::a($this->createLink('testsuite', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+      </p>
+    </div>
+    <?php else:?>
     <form class="main-table table-testcase" data-ride="table" method="post" id='testcaseForm'>
       <?php $canBatchEdit         = common::hasPriv('testcase', 'batchEdit');?>
       <?php $canBatchDelete       = common::hasPriv('testcase', 'batchDelete');?>
@@ -103,7 +114,6 @@ js::set('flow',          $config->global->flow);
             </tr>
           </thead>
           <tbody>
-            <?php if($cases):?>
             <?php foreach($cases as $case):?>
             <tr>
               <td class='c-id'>
@@ -135,11 +145,9 @@ js::set('flow',          $config->global->flow);
               </td>
             </tr>
             <?php endforeach;?>
-            <?php endif;?>
           </tbody>
         </table>
       </div>
-      <?php if($cases):?>
       <div class='table-footer'>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
@@ -195,8 +203,8 @@ js::set('flow',          $config->global->flow);
         </div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
-      <?php endif;?>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>

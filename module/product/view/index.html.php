@@ -18,12 +18,4 @@
 <?php else:?>
 <?php echo $this->fetch('block', 'dashboard', 'module=product');?>
 <?php endif;?>
-<script>
-<?php if(isset($config->product->homepage) && $config->product->homepage != 'index'):?>
-$(function()
-{
-    $('#modulemenu .nav li.right:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"product\", \"index\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")
-});
-<?php endif;?>
-</script>
 <?php include '../../common/view/footer.html.php';?>

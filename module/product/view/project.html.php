@@ -16,6 +16,17 @@
   </div>
 </div>
 <div id="mainContent">
+  <?php if(empty($projectStats)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->project->noProject;?></span>
+      <?php if(common::hasPriv('project', 'create')):?>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink('project', 'create'), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
+      <?php endif;?>
+    </p>
+  </div>
+  <?php else:?>
   <form class='main-table table-project'>
     <table class="table table-fixed">
       <thead>
@@ -69,5 +80,6 @@
       </tbody>
     </table>
   </form>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

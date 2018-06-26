@@ -17,6 +17,26 @@
 <div class='form-group'>
   <label for='grid' class='col-sm-3'><?php echo $lang->block->grid;?></label>
   <div class='col-sm-7'>
-    <?php echo html::select('grid', $lang->block->gridOptions, $block ? $block->grid : 8, "class='form-control chosen'")?>
+    <?php
+    $grid = 8;
+    $gridOptions = $lang->block->gridOptions;
+    if($block)
+    {
+        $type   = $block->block;
+        $source = $block->source;
+        $grid   = $block->grid;
+    }
+    if(isset($config->block->longBlock[$source][$type]))
+    {
+        $grid = 8;
+        unset($gridOptions[4]);
+    }
+    elseif(isset($config->block->shortBlock[$source][$type]))
+    {
+        $grid = 4;
+        unset($gridOptions[8]);
+    }
+    echo html::select('grid', $gridOptions, $grid, "class='form-control'");
+    ?>
   </div>
 </div>

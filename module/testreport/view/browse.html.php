@@ -22,6 +22,11 @@
 </div>
 <?php endif;?>
 <div id='mainContent' class='main-table'>
+  <?php if(empty($reports)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->testreport->noReport;?></span></p>
+  </div>
+  <?php else:?>
   <table class='table has-sort-head table-fixed' id='reportList'>
     <?php $vars = "objectID=$objectID&objectType=$objectType&extra=$extra&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
     <thead>
@@ -63,7 +68,6 @@
     <tbody><tr><td colspan='7'><?php echo $lang->testreport->noReport;?></td></tr></tbody>
     <?php endif;?>
   </table>
-  <?php if($reports):?>
   <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   <?php endif;?>
 </div>
