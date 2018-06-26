@@ -9,7 +9,7 @@
         </div>
       </nav>
     </div>
-    <?php if(empty($docs)):?>
+    <?php if(empty($docs) and empty($modules)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?></p>
     </div>
@@ -48,7 +48,9 @@
         <?php endforeach;?>
       </div>
     </div>
+    <?php if(empty($docs) and empty($modules)):?>
     <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+    <?php endif;?>
     <?php endif;?>
   </div>
 </div>
