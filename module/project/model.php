@@ -173,10 +173,16 @@ class projectModel extends model
                     $replace .= "<li $active>" . html::a(helper::createLink($subMenuModule, $subMenuMethod, sprintf($subMenuParams, $projectID)), $subMenuName) . '</li>';
                     if($active) $hasActive = true;
 
+                    $link = array();
+                    $link['module'] = $subMenuModule;
+                    $link['method'] = $subMenuMethod;
+                    $link['vars']   = $subMenuParams;
+
                     $menu = new stdclass();
                     $menu->name   = $subMenuKey;
-                    $menu->hidden = false;
+                    $menu->link   = $link;
                     $menu->text   = $subMenuName;
+                    $menu->hidden = false;
                     $subMenu[] = $menu;
                 }
                 $replace .= '</ul>';

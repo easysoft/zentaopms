@@ -409,6 +409,7 @@ class custom extends control
     {
         if($this->config->global->flow == 'full')     $this->loadModel('project')->setMenu(array(), 0);
         if($this->config->global->flow == 'onlyTest') $this->loadModel('testcase')->setMenu(array(), 0);
+        if($this->config->global->flow == 'onlyTest') $this->loadModel('bug')->setMenu(array(), 0);
         if($this->config->global->flow == 'onlyTask') $this->loadModel('project')->setMenu(array(), 0);
         if($type === 'all')
         {
