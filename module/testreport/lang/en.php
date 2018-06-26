@@ -1,7 +1,7 @@
 <?php
 $lang->testreport->common   = 'Test Report';
 $lang->testreport->browse   = 'Test Report';
-$lang->testreport->create   = 'Create a Report';
+$lang->testreport->create   = 'Create Report';
 $lang->testreport->edit     = 'Edit Report';
 $lang->testreport->delete   = 'Delete';
 $lang->testreport->export   = 'Export';

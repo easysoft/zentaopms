@@ -25,7 +25,7 @@ $lang->action->undelete    = 'Restore';
 $lang->action->hideOne     = 'Hide';
 $lang->action->hideAll     = 'Hide All';
 $lang->action->editComment = 'Edit';
-$lang->action->create      = 'Add a Comment';
+$lang->action->create      = 'Add Comment';
 $lang->action->comment     = 'Comment';
 
 $lang->action->trashTips      = 'Note: All Deletion in ZenTao are logical.';
@@ -153,7 +153,7 @@ $lang->action->label->blocked             = 'Blocked';
 $lang->action->label->resolved            = 'Resolved';
 $lang->action->label->reviewed            = 'Reviewed';
 $lang->action->label->moved               = 'Moved';
-$lang->action->label->confirmed           = 'Confirm a Story';
+$lang->action->label->confirmed           = 'Confirm Story';
 $lang->action->label->bugconfirmed        = 'Confirmed';
 $lang->action->label->tostory             = 'Convert to Story';
 $lang->action->label->frombug             = 'Converted from Bug';

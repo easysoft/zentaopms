@@ -9,7 +9,7 @@
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->story->create      = "Add a Story";
+$lang->story->create      = "Add Story";
 $lang->story->batchCreate = "Batch Add";
 $lang->story->change      = "Change";
 $lang->story->changed     = 'Change';
@@ -92,7 +92,7 @@ $lang->story->keywords       = 'Tags';
 $lang->story->newStory       = 'Continue adding';
 $lang->story->colorTag       = 'Color Tag';
 $lang->story->files          = 'Files';
-$lang->story->copy           = "Copy a Story";
+$lang->story->copy           = "Copy Story";
 $lang->story->total          = "Total Stories";
 $lang->story->allStories     = 'All';
 $lang->story->unclosed       = 'Unclosed';
@@ -192,8 +192,8 @@ $lang->story->needNotReview         = 'No Review';
 $lang->story->successSaved          = "Story is saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
 $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';
-$lang->story->mustChooseResult      = 'Select a result.';
-$lang->story->mustChoosePreVersion  = 'Select a Version to revert to.';
+$lang->story->mustChooseResult      = 'Select Result';
+$lang->story->mustChoosePreVersion  = 'Select the Version to revert to.';
 $lang->story->noStory               = 'No stories. ';
 
 $lang->story->form = new stdclass();
