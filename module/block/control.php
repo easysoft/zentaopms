@@ -872,6 +872,10 @@ class block extends control
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
+        $this->app->loadLang('task');
+        $this->app->loadLang('story');
+        $this->app->loadLang('bug');
+
         $status  = isset($this->params->type) ? $this->params->type : '';
         $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
@@ -976,10 +980,6 @@ class block extends control
             $projects[$project->id]->storyProgress = $project->totalStories ? round(($project->totalStories - $project->unclosedStories) / $project->totalStories, 2) * 100 : 0;
             $projects[$project->id]->bugProgress   = $project->totalBugs ? round(($project->totalBugs - $project->activeBugs) / $project->totalBugs, 2) * 100 : 0;
         }
-
-        $this->app->loadLang('task');
-        $this->app->loadLang('story');
-        $this->app->loadLang('bug');
 
         $this->view->projects = $projects;
     }

@@ -86,7 +86,7 @@ $lang->report->overduePlan   = 'Expired Plan';
 
 /* daily reminder. */
 $lang->report->idAB  = 'ID';
-$lang->report->bugTitle     = 'Bug Title';
+$lang->report->bugTitle     = 'Bug Name';
 $lang->report->taskName     = 'Task Name';
 $lang->report->todoName     = 'Todo Name';
 $lang->report->testTaskName = 'TestTask Name';

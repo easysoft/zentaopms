@@ -61,7 +61,7 @@ $lang->doc->myCollection   = 'My Favorites';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Home';
-$lang->doc->create           = 'Create a Doc';
+$lang->doc->create           = 'Create Doc';
 $lang->doc->edit             = 'Edit';
 $lang->doc->delete           = 'Delete';
 $lang->doc->browse           = 'List';

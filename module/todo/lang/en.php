@@ -11,7 +11,7 @@
  */
 $lang->todo->common       = 'Todo';
 $lang->todo->index        = "Home";
-$lang->todo->create       = "Add a Todo";
+$lang->todo->create       = "Add Todo";
 $lang->todo->createCycle  = "Add Recurring Todo";
 $lang->todo->assignTo     = "Assign";
 $lang->todo->activate     = "Activate";

@@ -67,8 +67,8 @@ $lang->bug->keywords         = 'Tags';
 $lang->bug->lastEditedByAB   = 'Edited By';
 $lang->bug->lastEditedDateAB = 'Edit On';
 $lang->bug->lastEditedDate   = 'Edit On';
-$lang->bug->fromCase         = 'From a Case';
-$lang->bug->toCase           = 'To a Case';
+$lang->bug->fromCase         = 'From Case';
+$lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color Tag';
 
 /* 方法列表。*/

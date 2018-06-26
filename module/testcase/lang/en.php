@@ -72,7 +72,7 @@ $lang->testcase->stepVersion = 'Version';
 
 $lang->testcase->common                  = 'Case';
 $lang->testcase->index                   = "Home";
-$lang->testcase->create                  = "Add a Case";
+$lang->testcase->create                  = "Add Case";
 $lang->testcase->batchCreate             = "Batch Add";
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->view                    = "Overview";

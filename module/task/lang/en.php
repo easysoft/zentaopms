@@ -38,7 +38,7 @@ $lang->task->case                = 'Related Case';
 $lang->task->confirmStoryChange  = "Confirm Story Change";
 $lang->task->progress            = 'Progress';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
-$lang->task->copy                = 'Duplicate a Task';
+$lang->task->copy                = 'Duplicate Task';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
@@ -163,7 +163,7 @@ $lang->task->copyStoryTitle        = "Copy Story";
 $lang->task->afterSubmit           = "After Created,";
 $lang->task->successSaved          = "Created!";
 $lang->task->delayWarning          = " <strong class='text-danger'> Delay %s days </strong>";
-$lang->task->remindBug             = "This Task is converted from a Bug. Do you want to update te Bug:%s?";
+$lang->task->remindBug             = "This Task is converted from a Bug. Do you want to update the Bug:%s?";
 $lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, the related Module, Story and Assignor will be changed. Do you want to do it?";
 $lang->task->confirmFinish         = '"Left Hour" is 0. Do you want to change the Status to "Done"?';
 $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set Task as "Done"?';

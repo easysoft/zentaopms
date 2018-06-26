@@ -49,7 +49,7 @@ $lang->user->resetPassword    = 'Forgot Password?';
 
 $lang->user->index           = "Home";
 $lang->user->view            = "Overview";
-$lang->user->create          = "Add a User";
+$lang->user->create          = "Add User";
 $lang->user->batchCreate     = "Batch Add";
 $lang->user->edit            = "Edit";
 $lang->user->batchEdit       = "Batch Edit";
