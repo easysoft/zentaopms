@@ -1,8 +1,6 @@
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
 <style>
 #setShowModule {margin-left: 30px;}
-#tableCustomBtn {padding: 6px 3px 6px 0;}
-#tableCustomBtn > .icon-cog {position: relative; left: 3px;}
 </style>
 <script>
 $(function()
@@ -16,7 +14,7 @@ $(function()
     if($btnToolbar.length > 0)
     {
         <?php $mode = isset($config->datatable->$datatableId->mode) ? $config->datatable->$datatableId->mode : 'table';?>
-        var $dropdown = $('<div class="dropdown"><button id="tableCustomBtn" type="button" class="btn btn-link" data-toggle="dropdown"><i class="icon-cog"></i><span class="caret"></span></button></div>');
+        var $dropdown = $('<div class="dropdown"><button id="tableCustomBtn" type="button" class="btn btn-link" data-toggle="dropdown"><i class="icon-cog"></i></button></div>');
         var $dropmenu = $('<ul class="dropdown-menu pull-right"></ul>');
         $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
         $dropmenu.append("<li><a href='javascript:saveDatatableConfig(\"mode\", \"<?php echo $mode == 'table' ? 'datatable' : 'table';?>\", true);' id='switchToDatatable'><?php echo $mode == 'table' ? $lang->datatable->switchToDatatable : $lang->datatable->switchToTable;?></a></li>");

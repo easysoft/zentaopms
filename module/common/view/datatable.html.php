@@ -30,6 +30,7 @@
 .datatable .fixed-right tbody>tr>td {padding-left: 5px!important;}
 .datatable .c-actions {white-space: nowrap;}
 .datatable.head-fixed {padding-top: 41px;}
+.datatable .table>thead>tr>th.col-hover {background: rgba(0,0,0,.075);}
 </style>
 <script> 
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
