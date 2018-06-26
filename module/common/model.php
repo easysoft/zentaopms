@@ -27,7 +27,13 @@ class commonModel extends model
             $this->setCompany();
             $this->setUser();
             $this->loadConfigFromDB();
-            if(version_compare($this->config->global->version, '4.3.beta') > 0) $this->loadCustomFromDB();
+            if((strpos($this->config->global->version, 'pro') !== false && version_compare($this->config->global->version, 'pro2.3.beta', '>'))
+                || (strpos($this->config->global->version, 'biz') !== false)
+                || version_compare($this->config->global->version, '4.3.beta', '>'))
+            {
+                $this->loadCustomFromDB();
+            }
+
             if(!$this->checkIP()) die($this->lang->ipLimited);
             $this->app->loadLang('company');
         }
