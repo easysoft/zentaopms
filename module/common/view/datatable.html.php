@@ -5,7 +5,7 @@
 <style>
 .datatable .table>tbody>tr.active>td.col-hover, .datatable .table>tbody>tr.active.hover>td {background-color: #f3eed8 !important;}
 .datatable {margin-bottom: 0;}
-.datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 4px; padding-bottom: 4px; height: 40px; vertical-align: middle;}
+.datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 3px; padding-bottom: 3px; height: 40px; vertical-align: middle; white-space: nowrap;}
 .datatable .table>tbody>tr.hover {box-shadow: none!important;}
 .datatable .flexarea .table-children,
 .datatable .fixed-left .table-children {border-right: none;}
@@ -29,6 +29,7 @@
 .datatable .fixed-right thead>tr>th:first-child,
 .datatable .fixed-right tbody>tr>td {padding-left: 5px!important;}
 .datatable .c-actions {white-space: nowrap;}
+.datatable.head-fixed {padding-top: 41px;}
 </style>
 <script> 
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
