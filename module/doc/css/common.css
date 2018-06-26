@@ -25,6 +25,7 @@ d.split-row > .side-col,
 .col-sm-size .table .c-num,
 .col-md-size .table .c-datetime {display: none;}
 
+.table-files .btn {padding:0 6px;}
 .table-files .c-actions .btn > .icon {opacity: 0;}
 .table-files .c-actions .btn > .icon.text-yellow,
 .table-files tr:hover .c-actions .btn > .icon {opacity: 1;}

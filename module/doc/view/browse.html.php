@@ -45,7 +45,7 @@ var browseType = '<?php echo $browseType;?>';
           </div>
         </nav>
       </div>
-      <?php if(empty($docs)):?>
+      <?php if(empty($docs) and empty($modules)):?>
       <div class="table-empty-tip">
         <p>
           <?php if($libID):?>
@@ -115,7 +115,9 @@ var browseType = '<?php echo $browseType;?>';
           </tbody>
         </table>
       </div>
+      <?php if(empty($docs) and empty($modules)):?>
       <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+      <?php endif;?>
       <?php endif;?>
     </div>
   </div>
