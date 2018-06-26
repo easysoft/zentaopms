@@ -28,8 +28,8 @@
       </div>
       <div class="panel-body">
         <div class="row row-grid files-grid" data-size="300">
-          <?php if($type == 'product') $icon = 'icon-cube text-secondary';?>
-          <?php if($type == 'project') $icon = 'icon-stack text-green';?>
+          <?php if($type == 'product') $icon = 'icon-product text-secondary';?>
+          <?php if($type == 'project') $icon = 'icon-project text-green';?>
           <?php if($type == 'custom')  $icon = 'icon-folder text-yellow';?>
           <?php foreach($libs as $lib):?>
           <?php $link = $type != 'custom' ? $this->createLink('doc', 'objectLibs', "type=$type&objectID=$lib->id") : $this->createLink('doc', 'browse', "libID=$lib->id");?>
