@@ -12,7 +12,7 @@
 $lang->productplan->common     = $lang->productCommon . ' Plan';
 $lang->productplan->browse     = "View";
 $lang->productplan->index      = "List";
-$lang->productplan->create     = "Create";
+$lang->productplan->create     = "Create Plan";
 $lang->productplan->edit       = "Edit";
 $lang->productplan->delete     = "Delete";
 $lang->productplan->view       = "Details";
