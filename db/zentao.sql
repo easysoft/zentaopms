@@ -575,7 +575,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
 CREATE TABLE IF NOT EXISTS `zt_storyspec` (
   `story` mediumint(9) NOT NULL,
   `version` smallint(6) NOT NULL,
-  `title` varchar(90) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `spec` text NOT NULL,
   `verify` text NOT NULL,
   UNIQUE KEY `story` (`story`,`version`)
