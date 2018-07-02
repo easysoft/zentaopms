@@ -16,4 +16,4 @@
 #modulesTree li {padding-left: 20px;}
 #modulesTree li > .list-toggle {top: 0}
 
-#childrenForm table tr > td.text-middle span{display:block; float:right;}
+#childrenForm table tr > td.text-middle span{display:block; float:left;}
