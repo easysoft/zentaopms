@@ -224,6 +224,9 @@ class upgradeModel extends model
                 $this->fixProjectStatisticBlock();
             case '10_0_beta':
                 $this->execSQL($this->getUpgradeFile('10.0.beta'));
+            case '10_0':
+                $this->execSQL($this->getUpgradeFile('10.0'));
+                $this->fixStorySpecTitle();
         }
 
         $this->deletePatch();
@@ -2330,5 +2333,30 @@ class upgradeModel extends model
             }
         }
         return true;
+    }
+
+    /**
+     * Fix story spec title.
+     *
+     * @access public
+     * @return bool
+     */
+    public function fixStorySpecTitle()
+    {
+        $stories = $this->dao->select('story')->from(TABLE_STORYSEPC)->groupBy('story')->having('COUNT(story, version) = 1');
+
+        $stories = $this->dao->select('t1.id, t1.title')->from(TABLE_STORY)->('t1')
+            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+            ->where('t1.id')->in($stories)
+            ->andWhere('t1.title')->ne('t2.title')
+            ->andWhere('t2.version')->eq(1)
+            ->fetchPairs();
+
+        foreach($stories as $story => $title)
+        {
+            $this->dao->update(TABLE_STORYSPEC)->set('title')->eq($title)->where('story')->eq($story)->andWhere('version')->eq(1)->exec();
+        }
+
+        return !dao::isError();
     }
 }
