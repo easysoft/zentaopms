@@ -27,7 +27,8 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
           <?php endforeach;?>
         </ul>
       </li>
-      <li class="open">
+      <?php if($this->config->global->flow != 'onlyTask'):?>
+      <li class='open'>
         <?php echo html::a($this->createLink('doc', 'allLibs', "type=product"), $lang->productCommon, '', "class='text-muted'");?>
         <ul>
           <?php foreach($products as $productMenu):?>
@@ -75,6 +76,8 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
           <?php endforeach;?>
         </ul>
       </li>
+      <?php endif;?>
+      <?php if($this->config->global->flow != 'onlyStory' && $this->config->global->flow != 'onlyTest'):?>
       <li>
         <?php echo html::a($this->createLink('doc', 'allLibs', "type=project"), $lang->projectCommon, '', "class='text-muted'");?>
         <ul>
@@ -117,6 +120,7 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
           <?php endforeach;?>
         </ul>
       </li>
+      <?php endif;?>
       <li <?php if($this->methodName == 'alllibs' && $type == 'custom') echo "class='active'";?>>
         <?php echo html::a($this->createLink('doc', 'allLibs', "type=custom"), $lang->doc->custom, '', "class='text-muted'");?>
         <ul>

@@ -290,6 +290,7 @@ class docModel extends model
             ->where('objectType')->eq('doc')
             ->andWhere('objectID')->in($docIdList)
             ->fetchGroup('objectID');
+
         if($browseType == "all")
         {
             $docs = $this->getDocs($libID, 0, $sort, $pager);
@@ -298,6 +299,8 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
+                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
+                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
                 ->andWhere('addedBy')->eq($this->app->user->account)
@@ -309,6 +312,8 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
+                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
+                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->andWhere('id')->in($docIdList)
                 ->andWhere('lib')->in($allLibs)
                 ->orderBy('editedDate_desc')
@@ -319,6 +324,8 @@ class docModel extends model
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('deleted')->eq(0)
+                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
+                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
                 ->andWhere('collector')->like("%,{$this->app->user->account},%")
@@ -385,6 +392,8 @@ class docModel extends model
             $docs = $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t2.doc = t1.id')
                 ->where('t1.deleted')->eq(0)
+                ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
+                ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->andWhere('t1.id')->in($docIdList)
                 ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
                 ->orWhere('t2.content')->like("%{$this->session->searchDoc}%")->markRight(1)
