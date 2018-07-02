@@ -50,7 +50,8 @@ $(function()
                 toolbar: toolbar,
                 element: $('#' + markdownEditorID)[0],
                 status:  false,
-                spellChecker: false
+                spellChecker: false,
+                forceSync: true
             };
             var markdown = new SimpleMDE(options);
             if(!window.markdownEditor) window.markdownEditor = {};

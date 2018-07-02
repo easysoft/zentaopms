@@ -18,7 +18,7 @@
       <tr>
         <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'>
           <?php $color = empty($bug->color) ? '#333' : $bug->color;?>
-          <?php echo html::a(zget($config->mail, 'domain', common::getSysURL()) . helper::createLink('bug', 'view', "bugID=$bug->id"), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
+          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink('bug', 'view', "bugID=$bug->id"), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
         </td>
       </tr>
     </table>

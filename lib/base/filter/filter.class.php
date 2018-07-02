@@ -945,7 +945,7 @@ class baseFixer
     public function cleanINT($fieldName = '')
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->data->$fieldName = filter_var($this->data->$fieldName, FILTER_SANITIZE_NUMBER_INT);
+        foreach($fields as $fieldName) $this->data->$fieldName = (int)filter_var($this->data->$fieldName, FILTER_SANITIZE_NUMBER_INT);
         return $this;
     }
 
