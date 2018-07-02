@@ -1002,6 +1002,8 @@ class project extends control
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
             $url = $this->createLink('project', 'create', "projectID=$projectID");
+
+            $planID = reset($this->post->plans);
             if(!empty($planID))
             {
                 die(js::confirm($this->lang->project->importPlanStory, $this->createLink('project', 'create', "projectID=$projectID&copyProjectID=&planID=$planID"), $url, 'parent', 'parent'));

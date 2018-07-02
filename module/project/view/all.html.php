@@ -69,25 +69,21 @@
             <?php endif;?>
             <?php printf('%03d', $project->id);?>
           </td>
-          <td class='text-left' title='<?php echo $project->name?>'><?php echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);?></td>
+          <td class='text-left' title='<?php echo $project->name?>'>
+            <?php
+            if(isset($project->delay)) echo "<span class='label label-danger label-badge'>{$lang->project->delayed}</span> ";
+            echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);
+            ?>
+          </td>
           <td class='text-left'><?php echo $project->code;?></td>
           <td><?php echo $users[$project->PM];?></td>
           <td><?php echo $project->end;?></td>
-          <?php if(isset($project->delay)):?>
-          <td class='c-status' title='<?php echo $lang->project->delayed;?>'>
-            <span class="status-delayed">
-              <span class="label label-dot"></span>
-              <span class='status-text'><?php echo $lang->project->delayed;?></span>
-            </span>
-          </td>
-          <?php else:?>
           <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
             <span class="status-<?php echo $project->status?>">
               <span class="label label-dot"></span>
               <span class='status-text'><?php echo zget($lang->project->statusList, $project->status);?></span>
             </span>
           </td>
-          <?php endif;?>
           <td><?php echo $project->hours->totalEstimate;?></td>
           <td><?php echo $project->hours->totalConsumed;?></td>
           <td><?php echo $project->hours->totalLeft;?></td>

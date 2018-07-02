@@ -24,11 +24,11 @@ $status = $this->session->testTaskVersionStatus;
   <div class="btn-toolbar pull-left">
     <div class='btn-group'>
       <?php $viewName = $scope == 'local'? $productName : $lang->testtask->all;?>
-      <a href='javascript:;' class='btn btn-link' data-toggle='dropdown'><span class='text'><?php echo $viewName;?></span> <span class='caret'></span></a>
-      <ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>
+      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
           echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=0&type=all,$status"), $lang->testtask->all) . "</li>";
-          echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName) . "</li>";
+          echo "<li>" . html::a(inlink('browse', "productID=$productID&branch=$branch&type=local,$status"), $productName, '', "title='{$productName}' class='text-ellipsis'") . "</li>";
         ?>
       </ul>
     </div>
