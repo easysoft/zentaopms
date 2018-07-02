@@ -189,7 +189,7 @@
                 <div class="row row-grid">
                   <?php foreach($products as $productID => $product):?>
                   <?php if(isset($planGroups[$productID][$product->plan])):?>
-                  <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$product->id}"), $product->name . '/' . $planGroups[$productID][$product->plan]);?></div>
+                  <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$product->plan}"), $product->name . '/' . $planGroups[$productID][$product->plan]);?></div>
                   <?php endif;?>
                   <?php endforeach;?>
                 </div>
