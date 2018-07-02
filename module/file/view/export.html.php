@@ -73,7 +73,7 @@ function saveTemplate()
             var $drop = $chosen.find('.chosen-drop');
             $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
         });
-        $inputGroup.find('#title').val('');
+        $inputGroup.find('#title').val(title);
     });
 }
 
@@ -112,6 +112,11 @@ function setExportTPL()
 
 $(document).ready(function()
 {
+    $(document).on('change', '#template', function()
+    {
+        $('#title').val($(this).find('option:selected').text());
+    });
+
     $('#fileType').change();
     <?php if($this->cookie->checkedItem):?>
     setTimeout(function()
@@ -190,7 +195,7 @@ if($isCustomExport)
                     <div>
                       <div class='input-group'>
                         <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
-                        <?php echo html::input('title', '', "class='form-control' autocomplete='off'")?>
+                        <?php echo html::input('title', $lang->file->defaultTPL, "class='form-control' autocomplete='off'")?>
                         <?php if(common::hasPriv('file', 'setPublic')):?>
                         <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
                         <?php endif?>
