@@ -154,6 +154,7 @@ class commonModel extends model
         if($module == 'misc' and $method == 'qrcode') return true;
         if($module == 'misc' and $method == 'about') return true;
         if($module == 'misc' and $method == 'checkupdate') return true;
+        if($module == 'misc' and $method == 'ping')  return true;
         if($module == 'sso' and $method == 'login')  return true;
         if($module == 'sso' and $method == 'logout') return true;
         if($module == 'sso' and $method == 'bind') return true;
@@ -166,7 +167,6 @@ class commonModel extends model
             if(stripos($method, 'downnotify') !== false) return true;
             if($module == 'block' and $method == 'main') return true;
             if($module == 'misc' and $method == 'changelog') return true;
-            if($module == 'misc' and $method == 'ping')  return true;
             if($module == 'tutorial') return true;
             if($module == 'block') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
