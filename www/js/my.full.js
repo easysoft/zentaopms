@@ -446,27 +446,27 @@ function checkOnlybodyPage()
  * @access public      
  * @return void
  */
-function fixedTableHead(boxObj)
-{
-    $(boxObj).scroll(function()
-    {
-        var hasFixed  = $(this).find('.fixedHead').size() > 0;
-        if(!hasFixed)
-        {
-            $(this).css('position', 'relative');
-            if($(this).find('table').size() == 1)
-            {
-                var fixed = "<table class='fixedHead' style='position:absolute;top:0px'><thead>" + $(this).find('table thead').html() + '</thead></table>';
-                $(this).prepend(fixed);
-                var $fixTable = $(this).find('table.fixedHead');
-                $fixTable.addClass($(this).find('table:last').attr('class'));
-                var $dataTable = $(this).find('table:last thead th');
-                $fixTable.find('thead th').each(function(i){$fixTable.find('thead th').eq(i).width($dataTable.eq(i).width());})
-            }
-        }
-        $(this).find('table.fixedHead').css('top',$(this).scrollTop());
-    });
-}
+//function fixedTableHead(boxObj)
+//{
+//    $(boxObj).scroll(function()
+//    {
+//        var hasFixed  = $(this).find('.fixedHead').size() > 0;
+//        if(!hasFixed)
+//        {
+//            $(this).css('position', 'relative');
+//            if($(this).find('table').size() == 1)
+//            {
+//                var fixed = "<table class='fixedHead' style='position:absolute;top:0px'><thead>" + $(this).find('table thead').html() + '</thead></table>';
+//                $(this).prepend(fixed);
+//                var $fixTable = $(this).find('table.fixedHead');
+//                $fixTable.addClass($(this).find('table:last').attr('class'));
+//                var $dataTable = $(this).find('table:last thead th');
+//                $fixTable.find('thead th').each(function(i){$fixTable.find('thead th').eq(i).width($dataTable.eq(i).width());})
+//            }
+//        }
+//        $(this).find('table.fixedHead').css('top',$(this).scrollTop());
+//    });
+//}
 
 /**
  * Fixed table head in list when scrolling.

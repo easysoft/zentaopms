@@ -31,8 +31,8 @@
                 <thead>
                   <tr>
                     <th class='chart-label' colspan='2'><?php echo $lang->report->item;?></th>
-                    <th><?php echo $lang->report->value;?></th>
-                    <th><?php echo $lang->report->percent;?></th>
+                    <th class='w-50px'><?php echo $lang->report->value;?></th>
+                    <th class='w-50px'><?php echo $lang->report->percent;?></th>
                   </tr>
                 </thead>
                 <?php
@@ -53,7 +53,7 @@
                 if(empty($label) and empty($data)) continue;
                 ?>
                 <tr class='text-center'>
-                  <td class='chart-color w-20px'><i class='chart-color-dot icon-circle'></i></td>
+                  <td class='chart-color w-20px'><i class='chart-color-dot'></i></td>
                   <td class='chart-label'><?php echo $label;?></td>
                   <td class='chart-value'><?php echo $data;?></td>
                   <td><?php echo round($data / $sum * 100, 2) . '%';?></td>
