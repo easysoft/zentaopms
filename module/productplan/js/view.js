@@ -1,4 +1,4 @@
-function showLink(planID, type, param)
+function showLink(planID, type, orderBy, param)
 {
     var method = type == 'story' ? 'linkStory' : 'linkBug';
     $.get(createLink('productplan', method, 'planID=' + planID + (typeof(param) == 'undefined' ? '' : param) + (typeof(orderBy) == 'undefined' ? '' : "&orderBy=" + orderBy)), function(data)
@@ -42,7 +42,7 @@ $(function()
     $('#storyList').on('sort.sortable', function(e, data)
     {
         var list = '';
-        for(i = 0; i < data.list.length; i++) list += $(data.list[i]).attr('data-id') + ',';
+        for(i = 0; i < data.list.length; i++) list += $(data.list[i].item).attr('data-id') + ',';
         $.post(createLink('productplan', 'ajaxStorySort', 'planID=' + planID), {'storys' : list, 'orderBy' : orderBy}, function()
         {
             var $target = $(data.element[0]);

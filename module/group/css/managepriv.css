@@ -1,4 +1,5 @@
 .table-bymodule select.form-control {height:250px}
-.group-item {display:block; width:200px; float:left; font-size: 14px}
+.group-item {display:block; width:220px; float:left; font-size: 14px}
+.group-item .checkbox-inline label{padding-left:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 .table.table-form tbody > tr:last-child td {border-top: 1px solid #ddd}
 @-moz-document url-prefix(){.table.table-form tbody > tr:last-child td, .table.table-form tbody > tr:last-child th {border-bottom: 1px solid #ddd}}

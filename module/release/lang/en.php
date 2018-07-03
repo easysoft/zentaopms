@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->release->common           = 'Release';
-$lang->release->create           = "Create";
+$lang->release->create           = "Create Release";
 $lang->release->edit             = "Edit";
 $lang->release->linkStory        = "Link Story";
 $lang->release->linkBug          = "Link Bug";

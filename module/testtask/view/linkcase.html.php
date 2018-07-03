@@ -25,6 +25,7 @@
     echo "<div class='btn-group'>";
     $suitViewName = $type == 'bysuite'? $suiteList[$param]->name : $lang->testtask->linkBySuite;
     $suitActive   = $type == 'bysuite' ? 'btn-active-text' : '';
+    $bugActive    = $type == 'bybug' ? 'btn-active-text' : '';
     echo "<a href='javascript:;' class='btn btn-link {$suitActive}' data-toggle='dropdown'><span class='text'>{$suitViewName}</span> <span class='caret'></span></a>";
     echo "<ul class='dropdown-menu' style='max-height:240px;overflow-y:auto'>";
     if($suiteList)
@@ -60,6 +61,7 @@
     }
     echo "</ul></div>";
     ?>
+    <?php common::printLink('testtask', 'linkCase', "taskID=$taskID&type=bybug", "<span class='text'>" . $lang->testtask->linkByBug . '</span>', '', "class='btn btn-link {$bugActive}'");?>
     <?php echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>{$lang->testcase->bySearch}</a>";?>
   </div>
 </div>
