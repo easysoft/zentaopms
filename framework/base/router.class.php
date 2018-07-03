@@ -270,7 +270,7 @@ class baseRouter
      * $post对象，用于访问$_POST变量。
      * The $post object, used to access the $_POST var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $post;
@@ -279,7 +279,7 @@ class baseRouter
      * $get对象，用于访问$_GET变量。
      * The $get object, used to access the $_GET var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $get;
@@ -288,7 +288,7 @@ class baseRouter
      * $session对象，用于访问$_SESSION变量。
      * The $session object, used to access the $_SESSION var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $session;
@@ -297,7 +297,7 @@ class baseRouter
      * $server对象，用于访问$_SERVER变量。
      * The $server object, used to access the $_SERVER var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $server;
@@ -306,7 +306,7 @@ class baseRouter
      * $cookie对象，用于访问$_COOKIE变量。
      * The $cookie object, used to access the $_COOKIE var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $cookie;
@@ -2042,7 +2042,7 @@ class baseRouter
      * @param   string $moduleName     the module name
      * @param   string $appName     the app name
      * @access  public
-     * @return  bool|ojbect the lang object or false.
+     * @return  bool|object the lang object or false.
      */
     public function loadLang($moduleName, $appName = '')
     {
