@@ -143,14 +143,17 @@ function setStories()
  */
 function initSteps(selector)
 {
-    if(navigator.userAgent.indexOf("Firefox") < 0)
+    $(document).on('input keyup paste change', 'textarea.autosize', function()
     {
-        $(document).on('input keyup paste change', 'textarea.autosize', function()
+        var height = (this.scrollHeight + 2) + "px";
+        this.style.height = 'auto';
+        this.style.height = height; 
+        $(this).closest('tr').find('textarea').each(function()
         {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight + 2) + "px"; 
+            this.style.height = height; 
         });
-    }
+    });
+
     var $steps = $(selector || '#steps');
     var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
     var initSortableCallTask = null;

@@ -26,7 +26,7 @@ $lang->user->gender      = 'Gender';
 $lang->user->email       = 'Email';
 $lang->user->basicInfo   = 'Basic Info';
 $lang->user->accountInfo = 'Account';
-$lang->user->verify      = 'Safety Verification';
+$lang->user->verify      = 'Verification';
 $lang->user->contactInfo = 'Contact';
 $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
@@ -92,7 +92,7 @@ $lang->user->testTask2Him = 'Build';
 $lang->user->case2Him     = 'Case Assigned';
 $lang->user->caseByHim    = 'Case Opened';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> Module <b>%s</b> Feature has been denied. Please contact Admin to get permission. Click Back to return.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> has been denied. Please contact your Admin to get permissions. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s mins later.";

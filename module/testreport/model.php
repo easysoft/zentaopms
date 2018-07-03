@@ -158,6 +158,8 @@ class testreportModel extends model
     public function getById($reportID)
     {
         $report = $this->dao->select('*')->from(TABLE_TESTREPORT)->where('id')->eq($reportID)->fetch();
+        if(!$report) return false;
+
         $report = $this->loadModel('file')->replaceImgURL($report, 'report');
         $report->files = $this->file->getByObject('testreport', $reportID);
         return $report;

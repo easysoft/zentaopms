@@ -622,6 +622,12 @@ class docModel extends model
     public function update($docID)
     {
         $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
+        if(!empty($_POST['editedDate']) and $oldDoc->editedDate != $this->post->editedDate)
+        {
+            dao::$errors[] = $this->lang->error->editedByOther;
+            return false;
+        }
+
         $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
@@ -880,12 +886,13 @@ class docModel extends model
 
         if($type == 'product' or $type == 'project')
         {
-            $table = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
-            $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->page($pager, 'id')->fetchAll('id');
+            $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
+            $fields = $type == 'product' ? "createdBy, createdDate" : "openedBy AS createdBy, openedDate AS createdDate";
+            $libs   = $this->dao->select("id, name, `order`, {$fields}")->from($table)->where('id')->in($idList)->orderBy('`order` desc, id desc')->page($pager, 'id')->fetchAll('id');
         }
         else
         {
-            $libs = $this->dao->select('id,name')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->page($pager, 'id')->fetchAll('id');
+            $libs = $this->dao->select('id, name, collector')->from(TABLE_DOCLIB)->where('id')->in($idList)->orderBy('`order`, id desc')->page($pager, 'id')->fetchAll('id');
         }
 
         return $libs;
