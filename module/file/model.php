@@ -613,6 +613,7 @@ class fileModel extends model
      */
     private function removeInterference($matchs)
     {
+        if(strlen($matchs[1]) % 2 == 1) return $matchs[1] . $matchs[2];
         return str_replace('""', '"', $matchs[1]) . str_replace(',', '&comma;', $matchs[2]);
     }
 
