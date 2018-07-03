@@ -27,7 +27,7 @@ class router extends baseRouter
      * @param   string $moduleName     the module name
      * @param   string $appName     the app name
      * @access  public
-     * @return  bool|ojbect the lang object or false.
+     * @return  bool|object the lang object or false.
      */
     public function loadLang($moduleName, $appName = '')
     {

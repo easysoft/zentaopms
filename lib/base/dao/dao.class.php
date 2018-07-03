@@ -1618,7 +1618,7 @@ class baseSQL
      * 
      * @param  int    $count 
      * @access public
-     * @return ojbect the sql object.
+     * @return object the sql object.
      */
     public function markLeft($count = 1)
     {
