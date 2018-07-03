@@ -33,7 +33,7 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
         <ul>
           <?php foreach($products as $productMenu):?>
           <li <?php if($this->methodName == 'objectlibs' && $type == 'product' && $object->id == $productMenu->id) echo "class='active'";?>>
-            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=product&objectID=$productMenu->id"), "<i class='icon icon-cube'></i> " . $productMenu->name);?>
+            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=product&objectID=$productMenu->id"), "<i class='icon icon-cube'></i> " . $productMenu->name, '', "class='text-ellipsis' title='{$productMenu->name}'");?>
             <?php if(isset($productSubLibs[$productMenu->id])):?>
             <ul>
               <?php foreach($productSubLibs[$productMenu->id] as $subLibID => $subLibName):?>
@@ -58,12 +58,12 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
               }
               ?>
               <li <?php echo $activeClass;?>>
-                <?php echo html::a($subLibLink, "<i class='icon {$icon}'></i> " . $subLibName);?>
+                <?php echo html::a($subLibLink, "<i class='icon {$icon}'></i> " . $subLibName, '', "class='text-ellipsis' title='{$subLibName}'");?>
                 <?php if(isset($allModules[$subLibID])):?>
                 <ul>
                   <?php foreach($allModules[$subLibID] as $module):?>
                   <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
-                    <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name);?>
+                    <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
                   </li>
                   <?php endforeach;?>
                 </ul>
@@ -83,7 +83,7 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
         <ul>
           <?php foreach($projects as $project):?>
           <li <?php if($this->methodName == 'objectlibs' && $type == 'project' && $object->id == $project->id) echo "class='active'";?>>
-            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=project&objectID=$project->id"), "<i class='icon icon-stack'></i> " . $project->name);?>
+            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=project&objectID=$project->id"), "<i class='icon icon-stack'></i> " . $project->name, '', "class='text-ellipsis' title='{$project->name}'");?>
             <?php if(isset($projectSubLibs[$project->id])):?>
             <ul>
               <?php foreach($projectSubLibs[$project->id] as $subLibID => $subLibName):?>
@@ -102,12 +102,12 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
               }
               ?>
               <li <?php echo $activeClass;?>>
-                <?php echo html::a($subLibLink, "<i class='icon $icon'></i> " . $subLibName);?>
+                <?php echo html::a($subLibLink, "<i class='icon $icon'></i> " . $subLibName, '', "class='text-ellipsis' title='{$subLibName}'");?>
                 <?php if(isset($allModules[$subLibID])):?>
                 <ul>
                   <?php foreach($allModules[$subLibID] as $module):?>
                   <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
-                    <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name);?>
+                    <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
                   </li>
                   <?php endforeach;?>
                 </ul>
@@ -126,12 +126,12 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
         <ul>
           <?php foreach($customLibs as $subLibID => $subLibName):?>
           <li <?php if($this->methodName == 'browse' && $browseType != 'bymodule' && $libID == $subLibID) echo "class='active'";?>>
-            <?php echo html::a(inlink('browse', "libID=$subLibID"), "<i class='icon icon-folder-outline'></i> " . $subLibName);?>
+            <?php echo html::a(inlink('browse', "libID=$subLibID"), "<i class='icon icon-folder-outline'></i> " . $subLibName, '', "class='text-ellipsis' title='{$subLibName}'");?>
             <?php if(isset($allModules[$subLibID])):?>
             <ul>
               <?php foreach($allModules[$subLibID] as $module):?>
               <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
-                <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name);?>
+                <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
               </li>
               <?php endforeach;?>
             </ul>
