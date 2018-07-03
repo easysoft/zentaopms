@@ -24,6 +24,8 @@ class productplanModel extends model
     public function getByID($planID, $setImgSize = false)
     {
         $plan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+        if(!$plan) return false;
+
         $plan = $this->loadModel('file')->replaceImgURL($plan, 'desc');
         if($setImgSize) $plan->desc = $this->file->setImgSize($plan->desc);
         return $plan;

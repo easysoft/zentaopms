@@ -9,5 +9,4 @@ $(function()
           });
     };
     resizeChartTable();
-    fixedTableHead('.table-wrapper');
 });

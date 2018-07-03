@@ -436,7 +436,7 @@ class taskModel extends model
                 }
                 else
                 {
-                    if($team[$oldTask->assignedTo]->left == 0)
+                    if($team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
                     {
                         if($oldTask->assignedTo != $teams[count($teams) - 1])
                         {
@@ -471,7 +471,7 @@ class taskModel extends model
                     $currentTask->finishedDate = '0000-00-00';
                 }
 
-                if($currentTask->left == 0)
+                if($currentTask->left == 0 && $oldTask->left != 0 && $currentTask->consumed != 0)
                 {
                     $currentTask->status       = 'done';
                     $currentTask->finishedBy   = $this->app->user->account;
