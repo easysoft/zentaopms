@@ -234,6 +234,7 @@ class userModel extends model
             ->batchCheck($this->config->user->create->requiredFields, 'notempty')
             ->check('account', 'unique')
             ->check('account', 'account')
+            ->checkIF($this->post->email != '', 'email', 'email')
             ->exec();
         if($this->post->group)
         {

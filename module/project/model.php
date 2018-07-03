@@ -2082,7 +2082,7 @@ class projectModel extends model
             $taskSum ++;
         }
 
-        return sprintf($this->lang->project->taskSummary, $taskSum, $statusWait, $statusDoing, $totalEstimate, round($totalConsumed, 1), $totalLeft);
+        return sprintf($this->lang->project->taskSummary, $taskSum, $statusWait, $statusDoing, $totalEstimate, round($totalConsumed, 1), round($totalLeft, 1));
     }
 
     /**

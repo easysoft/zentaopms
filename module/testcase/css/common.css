@@ -22,6 +22,7 @@
 #steps.sortable-sorting > tr.drag-row > td {background-color: #edf3fe!important}
 #steps.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 #steps .step-type-toggle {padding: 5px 11px 5px 7px;}
+#steps .step textarea.autosize{resize:none;}
 
 .table-bordered .step-actions {width: 105px;}
 .table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important; border-left-style: dotted!important; border-right-style: dotted!important;}
