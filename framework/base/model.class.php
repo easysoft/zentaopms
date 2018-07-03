@@ -72,7 +72,7 @@ class baseModel
      * $post对象，用于访问$_POST变量。
      * The $post object, used to access the $_POST var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $post;
@@ -81,7 +81,7 @@ class baseModel
      * $get对象，用于访问$_GET变量。
      * The $get object, used to access the $_GET var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $get;
@@ -90,7 +90,7 @@ class baseModel
      * $session对象，用于访问$_SESSION变量。
      * The $session object, used to access the $_SESSION var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $session;
@@ -99,7 +99,7 @@ class baseModel
      * $server对象，用于访问$_SERVER变量。
      * The $server object, used to access the $_SERVER var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $server;
@@ -108,7 +108,7 @@ class baseModel
      * $cookie对象，用于访问$_COOKIE变量。
      * The $cookie object, used to access the $_COOKIE var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $cookie;
@@ -117,7 +117,7 @@ class baseModel
      * $global对象，用于访问$_GLOBAL变量。
      * The $global object, used to access the $_GLOBAL var.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $global;

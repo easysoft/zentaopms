@@ -726,7 +726,7 @@ class productModel extends model
     public function getStatByID($productID)
     {
         $product = $this->getById($productID);
-        if(!$this->checkPriv($product)) return false;
+        if(!$product || !$this->checkPriv($product)) return false;
         $stories = $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->groupBy('product, status')->fetchAll('status');
         /* Padding the stories to sure all status have records. */
         foreach(array_keys($this->lang->story->statusList) as $status)

@@ -226,6 +226,9 @@ class productplan extends control
      */
     public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '')
     {
+        $plan = $this->productplan->getByID($planID, true);
+        if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
+
         $this->session->set('storyList', $this->app->getURI(true) . '&type=' . 'story');
         $this->session->set('bugList', $this->app->getURI(true) . '&type=' . 'bug');
 
@@ -239,8 +242,6 @@ class productplan extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $plan = $this->productplan->getByID($planID, true);
-        if(!$plan) die(js::error($this->lang->notFound) . js::locate('back'));
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getPairs();
 

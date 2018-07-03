@@ -71,7 +71,7 @@ class baseControl
      * $post对象，用户可以通过$this->post->key来引用$_POST变量。
      * The $post object, useer can access a post var by $this->post->key.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $post;
@@ -80,7 +80,7 @@ class baseControl
      * $get对象，用户可以通过$this->get->key来引用$_GET变量。
      * The $get object, useer can access a get var by $this->get->key.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $get;
@@ -89,7 +89,7 @@ class baseControl
      * $session对象，用户可以通过$this->session->key来引用$_SESSION变量。
      * The $session object, useer can access a session var by $this->session->key.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $session;
@@ -98,7 +98,7 @@ class baseControl
      * $server对象，用户可以通过$this->server->key来引用$_SERVER变量。
      * The $server object, useer can access a server var by $this->server->key.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $server;
@@ -107,7 +107,7 @@ class baseControl
      * $cookie对象，用户可以通过$this->cookie->key来引用$_COOKIE变量。
      * The $cookie object, useer can access a cookie var by $this->cookie->key.
      * 
-     * @var ojbect
+     * @var object
      * @access public
      */
     public $cookie;

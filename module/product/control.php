@@ -375,11 +375,12 @@ class product extends control
      */
     public function view($productID)
     {
-        $this->product->setMenu($this->products, $productID);
-
         $product = $this->product->getStatByID($productID);
-        $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
+
+        $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+
+        $this->product->setMenu($this->products, $productID);
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('product')->like("%,$productID,%")->orderBy('date_desc')->limit(6)->fetchAll();
         if($actions) $this->loadModel('action')->transformActions($actions);
