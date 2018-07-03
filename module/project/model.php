@@ -340,6 +340,8 @@ class projectModel extends model
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', helper::now())
             ->setDefault('openedVersion', $this->config->version)
             ->setDefault('team', substr($this->post->name,0, 30))
             ->join('whitelist', ',')

@@ -1074,18 +1074,30 @@ class taskModel extends model
             ->remove('comment,files,labels')
             ->get();
 
-        if(!is_numeric($task->consumed)) die(js::error($this->lang->task->error->consumedNumber));
+        if(!is_numeric($task->consumed))
+        {
+            dao::$errors[] = $this->lang->task->error->consumedNumber;
+            return false;
+        }
 
         /* Record consumed and left. */
         if(empty($oldTask->team))
         {
             $consumed = $task->consumed - $oldTask->consumed;
-            if($consumed < 0) die(js::error($this->lang->task->error->consumedSmall));
+            if($consumed < 0)
+            {
+                dao::$errors[] = $this->lang->task->error->consumedSmall;
+                return false;
+            }
         }
         else
         {
             $consumed = $oldTask->team[$this->app->user->account]->consumed;
-            if($task->consumed < $consumed) die(js::error($this->lang->task->error->consumedSmall));
+            if($task->consumed < $consumed)
+            {
+                dao::$errors[] = $this->lang->task->error->consumedSmall;
+                return false;
+            }
         }
 
         $estimate = fixer::input('post')
