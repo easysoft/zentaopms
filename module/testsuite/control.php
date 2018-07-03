@@ -299,21 +299,14 @@ class testsuite extends control
 
         /* Build the search form. */
         $this->loadModel('testcase');
-        $this->config->testcase->search['params']['product']['values']= array('' => '', $productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&param=myQueryID");
-        if($this->session->currentProductType == 'normal')
-        {
-            unset($this->config->testcase->search['fields']['branch']);
-            unset($this->config->testcase->search['params']['branch']);
-        }
-        else
-        {
-            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($suite->product, 'noempty');
-            $this->config->testcase->search['params']['branch']['values'] = $branches;
-        }
+        unset($this->config->testcase->search['fields']['product']);
+        unset($this->config->testcase->search['params']['product']);
+        unset($this->config->testcase->search['fields']['branch']);
+        unset($this->config->testcase->search['params']['branch']);
+
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
