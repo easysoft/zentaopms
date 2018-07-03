@@ -26,9 +26,9 @@ KindEditor.plugin('insertfile', function(K) {
 			'<label for="keUrl" style="width:60px;">' + lang.url + '</label>',
 			'<input type="text" id="keUrl" name="url" class="ke-input-text" style="width:160px;" /> &nbsp;',
 			'<input type="button" class="ke-upload-button" value="' + lang.upload + '" /> &nbsp;',
-			'<span class="ke-button-common ke-button-outer">',
-			'<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
-			'</span>',
+			//'<span class="ke-button-common ke-button-outer">',
+			//'<input type="button" class="ke-button-common ke-button" name="viewServer" value="' + lang.viewServer + '" />',
+			//'</span>',
 			'</div>',
 			//title
 			'<div class="ke-dialog-row">',

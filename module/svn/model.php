@@ -311,7 +311,7 @@ class svnModel extends model
      * 
      * @param  object    $log 
      * @access public
-     * @return ojbect
+     * @return object
      */
     public function convertLog($log)
     {
