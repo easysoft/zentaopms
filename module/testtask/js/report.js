@@ -9,7 +9,6 @@ $(function()
         });
     };
     resizeChartTable();
-    fixedTableHead('.table-wrapper');
     $(window).resize(resizeChartTable);
 });
 

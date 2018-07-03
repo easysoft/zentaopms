@@ -62,8 +62,8 @@
               <thead>
                 <tr>
                   <th class='chart-label' colspan='2'><?php echo $lang->story->report->$chartType->item;?></th>
-                  <th><?php echo $lang->story->report->value;?></th>
-                  <th><?php echo $lang->report->percent;?></th>
+                  <th class='w-50px'><?php echo $lang->story->report->value;?></th>
+                  <th class='w-50px'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
               <?php foreach($datas[$chartType] as $key => $data):?>
