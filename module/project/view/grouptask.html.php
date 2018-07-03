@@ -140,9 +140,12 @@
       $groupSum = 0;
       foreach($groupTasks as $taskKey => $task)
       {
-          $groupEstimate  += $task->estimate;
-          $groupConsumed  += $task->consumed;
-          $groupLeft      += ($task->status == 'cancel' ? 0 : $task->left);
+          if(!$task->parent && $task->status != 'cancel')
+          {
+              $groupEstimate  += $task->estimate;
+              $groupConsumed  += $task->consumed;
+              $groupLeft      += ($task->status == 'cancel' ? 0 : $task->left);
+          }
 
           if($task->status == 'wait')   $groupWait++;
           if($task->status == 'doing')  $groupDoing++;
