@@ -265,6 +265,8 @@ class testtaskModel extends model
                 ->fetch();
         }
 
+        if(!$task) return false;
+
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->loadModel('file')->setImgSize($task->desc);
         return $task;
