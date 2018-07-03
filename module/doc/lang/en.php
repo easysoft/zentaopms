@@ -94,8 +94,8 @@ $lang->doc->search         = 'Search';
 $lang->doc->allProduct     = 'All' . $lang->productCommon;
 $lang->doc->allProject     = 'All' . $lang->projectCommon;
 
-$lang->doc->libTypeList['product'] = $lang->productCommon . ' Scope';
-$lang->doc->libTypeList['project'] = $lang->projectCommon . ' Scope';
+$lang->doc->libTypeList['product'] = $lang->productCommon . ' Library';
+$lang->doc->libTypeList['project'] = $lang->projectCommon . ' Library';
 $lang->doc->libTypeList['custom']  = 'Custom Library';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon . 'Doc Lib';
