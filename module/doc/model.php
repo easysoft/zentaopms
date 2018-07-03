@@ -622,6 +622,12 @@ class docModel extends model
     public function update($docID)
     {
         $oldDoc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
+        if(!empty($_POST['editedDate']) and $oldDoc->editedDate != $this->post->editedDate)
+        {
+            dao::$errors[] = $this->lang->error->editedByOther;
+            return false;
+        }
+
         $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
