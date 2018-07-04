@@ -619,7 +619,11 @@ class doc extends control
 
         $libs    = $this->doc->getAllLibsByType($type, $pager, $product);
         $subLibs = array();
-        if($type == 'product' or $type == 'project') $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
+        if($type == 'product' or $type == 'project')
+        {
+            $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
+            if($this->cookie->browseType == 'bylist') $this->view->users = $this->loadModel('user')->getPairs('noletter');
+        }
         if($type == 'custom') $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
 
         $this->view->type    = $type;
@@ -739,7 +743,7 @@ class doc extends control
     public function objectLibs($type, $objectID, $from = 'doc')
     {
         $this->from = $from;
-        setcookie('from',  $from, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
