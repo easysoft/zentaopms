@@ -9,3 +9,4 @@
 * @link        http://www.zentao.net
 */
 .divider + .divider{display:none;}
+.body-modal .main-header > h2{width: 100%; overflow:hidden; text-overflow: ellipsis; white-space: nowrap;}
