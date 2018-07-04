@@ -1656,7 +1656,7 @@ class project extends control
             if($from == 'buildCreate' && $this->session->buildCreate) $browseProjectLink = $this->session->buildCreate;
 
             $this->project->updateProducts($projectID);
-            if(dao::isError()) dis(js::error(dao::getError()));
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate($browseProjectLink));
         }
 
