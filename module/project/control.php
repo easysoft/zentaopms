@@ -1090,6 +1090,12 @@ class project extends control
             if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
             if($product->branch) $linkedBranches[$product->branch] = $product->branch;
         }
+        $this->loadModel('productplan');
+        $productPlans = array(0 => '');
+        foreach($linkedProducts as $product)
+        {
+            $productPlans[$product->id] = $this->productplan->getPairs($product->id);
+        }
 
         $this->view->title          = $title;
         $this->view->position       = $position;
@@ -1102,6 +1108,7 @@ class project extends control
         $this->view->groups         = $this->loadModel('group')->getPairs();
         $this->view->allProducts    = $allProducts;
         $this->view->linkedProducts = $linkedProducts;
+        $this->view->productPlans   = $productPlans;
         $this->view->branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
 
         $this->display();
