@@ -383,9 +383,6 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('product')->like("%,$productID,%")->orderBy('date_desc')->limit(6)->fetchAll();
-        if($actions) $this->loadModel('action')->transformActions($actions);
-
         $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->orderBy('date')->fetchAll();
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
@@ -397,7 +394,7 @@ class product extends control
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
-        $this->view->actions    = $actions;
+        $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager = null, $productID);
         $this->view->releases   = $releases;
 
         $this->display();
@@ -465,7 +462,7 @@ class product extends control
     public function dynamic($productID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
         /* Save session. */
-        $uri   = $this->app->getURI(true);
+        $uri = $this->app->getURI(true);
         $this->session->set('productList',     $uri);
         $this->session->set('productPlanList', $uri);
         $this->session->set('releaseList',     $uri);

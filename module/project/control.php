@@ -1362,9 +1362,6 @@ class project extends control
         $this->project->setMenu($this->projects, $project->id);
         $this->app->loadLang('bug');
 
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('project')->eq("$projectID")->orderBy('date_desc')->limit(6)->fetchAll();
-        if($actions) $this->loadModel('action')->transformActions($actions);
-
         list($dateList, $interval) = $this->project->getDateList($project->begin, $project->end, 'noweekend', 0, 'Y-m-d');
         $chartData = $this->project->buildBurnData($projectID, $dateList, 'noweekend');
 
@@ -1377,7 +1374,8 @@ class project extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->planGroups   = $this->project->getPlans($products);
         $this->view->groups       = $this->loadModel('group')->getPairs();
-        $this->view->actions      = $actions;
+        $this->view->actions      = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager = null, 'all', $projectID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->teamMembers  = $this->project->getTeamMembers($projectID);
         $this->view->docLibs      = $this->loadModel('doc')->getLibsByObject('project', $projectID);
