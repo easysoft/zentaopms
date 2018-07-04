@@ -842,7 +842,7 @@ class userModel extends model
         /* Judge whether the project is delayed. */
         foreach($projects as $project)
         {
-            if($project->status != 'done')
+            if($project->status != 'done' and $project->status != 'closed' and $project->status != 'suspended')
             {
                 $delay = helper::diffDate(helper::today(), $project->end);
                 if($delay > 0) $project->delay = $delay;
