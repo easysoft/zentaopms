@@ -1685,6 +1685,7 @@ class storyModel extends model
                 ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$projectID)
+                ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
                 ->fetchAll('id');
