@@ -49,7 +49,7 @@
         <?php $params = isset($testtask) ? ",testtask=$testtask->id,projectID=$testtask->project,buildID=$testtask->build" : '';?>
         <tr class='result-detail hide' id='tr-detail_<?php echo $trCount++; ?>'>
           <td colspan='7' class='pd-0'>
-            <form action='<?php echo $this->createLink('bug', 'create', "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . $params)?>' target='_blank' method='post'>
+            <form data-params='<?php echo "product=$case->product&branch=$case->branch&extras=caseID=$case->id,version=$case->version,resultID=$result->id,runID=$runID" . $params?>' method='post'>
               <table class='table table-condensed resultSteps'>
                 <thead>
                   <tr>
@@ -82,7 +82,7 @@
                   <tr class='step <?php echo $stepClass?>'>
                     <td class='step-id'>
                       <?php if($result->caseResult == 'fail'):?>
-                      <?php $inputName = $stepResult['type'] != 'group' ? 'stepIDList[]' : '';?>
+                      <?php $inputName = $stepResult['type'] != 'group' ? 'stepIdList[]' : '';?>
                       <div class='checkbox-primary'>
                         <input type='checkbox' id='<?php echo $inputName;?>' name='<?php echo $inputName;?>'  value='<?php echo $key;?>'/>
                         <label><?php echo $stepId;?></label>
@@ -113,7 +113,7 @@
                   <?php if($result->caseResult == 'fail'):?>
                   <tr>
                     <td></td><td></td><td></td><td></td><td></td><td></td>
-                    <td><?php echo html::submitButton($lang->testcase->createBug);?></td>
+                    <td><?php echo html::commonButton($lang->testcase->createBug, "onclick='createBug(this)'", "btn btn-primary createBtn");?></td>
                   </tr>
                   <?php endif;?>
                 </tbody>
