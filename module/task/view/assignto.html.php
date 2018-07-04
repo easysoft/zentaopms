@@ -39,10 +39,12 @@
           <th class='w-80px'><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $members, empty($task->team) ? $task->assignedTo : $task->nextUser, "class='form-control chosen'");?></td><td></td>
         </tr>  
+        <?php if($task->status != 'done' and $task->status != 'closed'):?>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td><div class='input-group'><?php echo html::input('left', $task->left, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div></td><td></td>
         </tr>  
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control w-p98'");?></td>
