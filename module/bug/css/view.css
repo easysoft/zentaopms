@@ -1,2 +1,3 @@
 .content .stepTitle{display:block; color: green; margin:0px;}
 .table-fixed td{white-space: unset}
+.table-data tr > td{word-break: break-all; word-wrap: break-word;}

@@ -26,9 +26,6 @@
 .col-md-size .table .c-datetime {display: none;}
 
 .table-files .btn {padding:0 6px;}
-.table-files .c-actions .btn > .icon {opacity: 0;}
-.table-files .c-actions .btn > .icon.text-yellow,
-.table-files tr:hover .c-actions .btn > .icon {opacity: 1;}
 
 #docsTree li > a > .icon {opacity: .65;}
 

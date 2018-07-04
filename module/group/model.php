@@ -114,7 +114,7 @@ class groupModel extends model
      */
     public function getPairs()
     {
-        return $this->dao->select('id, name')->from(TABLE_GROUP)->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)->orderBy('id')->fetchPairs();
     }
 
     /**

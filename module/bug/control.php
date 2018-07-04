@@ -254,7 +254,7 @@ class bug extends control
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         $this->app->loadLang('release');
 
-        if(!empty($_POST) and !isset($_POST['stepIDList']))
+        if(!empty($_POST))
         {
             $response['result']  = 'success';
             $response['message'] = '';
@@ -332,8 +332,8 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras);
 
-        if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID));// If set runID and resultID, get the result info by resultID as template.
-        if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version));// If not set runID but set caseID, get the result info by resultID and case info.
+        if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : ''));// If set runID and resultID, get the result info by resultID as template.
+        if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : ''));// If not set runID but set caseID, get the result info by resultID and case info.
 
         /* If bugID setted, use this bug as template. */
         if(isset($bugID))

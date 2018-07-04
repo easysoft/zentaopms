@@ -1,13 +1,5 @@
 .adbox{margin-top:20px;}
 
-.card.ad{margin-bottom:0px;}
-.card.ad > .img-wrapper {
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 115px;
-  width: 100%;
-}
-
 .card {
   position: relative;
   display: block;
@@ -61,6 +53,9 @@
   height: 115px;
   width: 100%;
 }
+
+.card.ad.ad-ranzhi > .img-wrapper {background-size: 100%;}
+
 .card.ad > .img-wrapper > img{display: none;}
 .card.ad > .card-heading {text-align: center;}
 .card.ad > .card-reveal > .card-heading { padding: 12px 10px 10px 15px;}

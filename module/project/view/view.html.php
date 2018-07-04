@@ -48,7 +48,7 @@
             </div>
             <div class="panel-body">
               <ul class="timeline timeline-tag-left">
-                <?php foreach($actions as $action):?>
+                <?php foreach($dynamics as $action):?>
                 <li <?php if($action->major) echo "class='active'";?>>
                   <div class='text-ellipsis'>
                     <span class="timeline-tag"><?php echo $action->date;?></span>

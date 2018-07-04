@@ -12,7 +12,7 @@
 $lang->company->common   = 'Company';
 $lang->company->index    = "Home";
 $lang->company->edit     = "Edit Company";
-$lang->company->view     = "Company Info";
+$lang->company->view     = "Company Information";
 $lang->company->browse   = "User List";
 $lang->company->dynamic  = "Dynamic";
 $lang->company->orgView  = 'View';
@@ -24,7 +24,7 @@ $lang->company->address  = 'Mailing Address';
 $lang->company->zipcode  = 'Zip Code';
 $lang->company->website  = 'Website';
 $lang->company->backyard = 'Intranet';
-$lang->company->guest    = 'Anonymous Login';
+$lang->company->guest    = 'Guest Login';
 $lang->company->admins   = 'Administrators';
 
 $lang->company->product = $lang->productCommon;

@@ -133,6 +133,17 @@
             </div>
           </td>
         </tr>
+        <tr <?php if($config->global->flow == 'onlyTask') echo "class='hidden'";?>>
+          <th><?php echo $lang->project->linkPlan;?></th>
+          <td id="plansBox" colspan="2">
+            <div class='row'>
+              <?php foreach($linkedProducts as $product):?>
+              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
+              <div class="col-sm-4" id="plan<?php echo $product->id;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+              <?php endforeach;?>
+            </div>
+          </td>
+        </tr>
         <tr>
           <th><?php echo $lang->project->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($project->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>

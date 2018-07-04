@@ -1610,11 +1610,11 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBugInfoFromResult($resultID, $caseID = 0, $version = 0)
+    public function getBugInfoFromResult($resultID, $caseID = 0, $version = 0, $stepIdList = '')
     {
         $title    = '';
         $bugSteps = '';
-        $steps    = zget($_POST, 'stepIDList', array());
+        $steps    = explode('_', trim($stepIdList, '_'));
 
         $result = $this->dao->findById($resultID)->from(TABLE_TESTRESULT)->fetch();
         if($caseID > 0)
@@ -1635,38 +1635,47 @@ class bugModel extends model
             $bugSteps = "<p>[" . $this->lang->testcase->precondition . "]</p>" . "\n" . $run->case->precondition;
         }
 
-        $bugSteps .= $this->lang->bug->tplStep;
         if(!empty($stepResults))
         {
             $i = 1;
+            $bugStep = '';
             foreach($steps as $stepId)
             {
                 if(!isset($caseSteps[$stepId])) continue;
 
                 $step = $caseSteps[$stepId];
-                $bugSteps .= $i . '. '  . $step->desc . "<br />";
+                $bugStep .= $i . '. '  . $step->desc . "<br />";
                 $i++;
             }
+            $bugSteps .= $bugStep ? str_replace('<br/>', '', $this->lang->bug->tplStep) . $bugStep : $this->lang->bug->tplStep;
 
-            $bugSteps .= $this->lang->bug->tplResult;
             $i = 1;
+            $bugResult = '';
             foreach($steps as $stepId)
             {
                 if(!isset($stepResults[$stepId]) or empty($stepResults[$stepId]['real'])) continue;
-                $bugSteps .= $i . '. ' . $stepResults[$stepId]['real'] . "<br />";
+                $bugResult .= $i . '. ' . $stepResults[$stepId]['real'] . "<br />";
                 $i++;
             }
+            $bugSteps .= $bugResult ? str_replace('<br/>', '', $this->lang->bug->tplResult) . $bugResult : $this->lang->bug->tplResult;
 
-            $bugSteps .= $this->lang->bug->tplExpect;
             $i = 1;
+            $bugExpect = '';
             foreach($steps as $stepId)
             {
                 if(!isset($caseSteps[$stepId])) continue;
 
                 $step = $caseSteps[$stepId];
-                if($step->expect) $bugSteps .= $i . '. ' . $step->expect . "<br />";
+                if($step->expect) $bugExpect .= $i . '. ' . $step->expect . "<br />";
                 $i++;
             }
+            $bugSteps .= $bugExpect ? str_replace('<br/>', '', $this->lang->bug->tplExpect) . $bugExpect : $this->lang->bug->tplExpect;
+        }
+        else
+        {
+            $bugSteps .= $this->lang->bug->tplStep;
+            $bugSteps .= $this->lang->bug->tplResult;
+            $bugSteps .= $this->lang->bug->tplExpect;
         }
 
         return array('title' => $title, 'steps' => $bugSteps, 'storyID' => $run->case->story, 'moduleID' => $run->case->module, 'version' => $run->case->version);

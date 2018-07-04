@@ -37,7 +37,7 @@
             <th class='w-150px<?php echo zget($visibleFields, 'dept', ' hidden')?>'>         <?php echo $lang->user->dept;?></th>
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->account;?></th>
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->realname;?></th>
-            <th class='w-120px required'><?php echo $lang->user->role;?></th>
+            <th class='w-120px'><?php echo $lang->user->role;?></th>
             <th class='<?php echo $minWidth . zget($visibleFields, 'commiter', ' hidden')?>'><?php echo $lang->user->commiter;?></th>
             <th class='<?php echo $minWidth . zget($visibleFields, 'email', ' hidden')?>'>   <?php echo $lang->user->email;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'join', ' hidden')?>'>         <?php echo $lang->user->join;?></th>
