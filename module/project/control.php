@@ -2299,7 +2299,7 @@ class project extends control
     public function importPlanStories($projectID, $planID)
     {
         $planStories  = $planProducts = array();
-        $planStory    = $this->loadModel('story')->getPlanStories($planID);
+        $planStory    = $this->loadModel('story')->getPlanStories($planID, 'changed,active,reviewing');
         if(!empty($planStory))
         {
             $planStories = array_keys($planStory);
