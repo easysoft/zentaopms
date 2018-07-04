@@ -530,10 +530,13 @@ class todoModel extends model
      */
     public function close($todoID)
     {
+        $now = helper::now();
         $this->dao->update(TABLE_TODO)
             ->set('status')->eq('closed')
             ->set('closedBy')->eq($this->app->user->account)
-            ->set('closedDate')->eq(helper::now())
+            ->set('closedDate')->eq($now)
+            ->set('assignedTo')->eq('closed')
+            ->set('assignedDate')->eq($now)
             ->where('id')->eq((int)$todoID)
             ->exec();
         $this->loadModel('action')->create('todo', $todoID, 'closed', '', 'closed');
