@@ -44,6 +44,7 @@ $lang->doc->acl            = 'Right';
 $lang->doc->groups         = 'Groups';
 $lang->doc->users          = 'Users';
 $lang->doc->item           = ' Item';
+$lang->doc->num            = 'Docs';
 $lang->doc->searchResult   = 'Search Result';
 
 $lang->doc->moduleDoc      = 'By Module';

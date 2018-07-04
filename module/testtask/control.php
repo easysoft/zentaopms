@@ -260,9 +260,9 @@ class testtask extends control
         if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot);
 
-        if($this->cookie->preProductID != $productID)
+        if($this->cookie->preTaskID != $taskID)
         {
             $_COOKIE['taskCaseModule'] = 0;
             setcookie('taskCaseModule', 0, $this->config->cookieLife, $this->config->webRoot);

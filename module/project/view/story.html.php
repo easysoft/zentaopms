@@ -46,16 +46,13 @@
     else
     {
         echo "<div class='btn-group dropdown-hover' id='createActionMenu'>";
-        if(common::hasPriv('project', 'importPlanStories'))
-        {
-            echo "<button type='button' class='btn btn-link dropdown-toggle btn-icon'>";
-            echo "<i class='icon-link muted'></i> {$lang->project->linkStory} <span class='caret'></span>";
-            echo '</button>';
-            echo "<ul class='dropdown-menu pull-right'>";
-            echo "<li>" . html::a($this->createLink('project', 'linkStory', "project=$project->id"), $lang->project->linkStory). "</li>";
-            echo "<li>" . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
-            echo '</ul>';
-        }
+        echo "<button type='button' class='btn btn-link dropdown-toggle btn-icon'>";
+        echo "<i class='icon-link muted'></i> {$lang->project->linkStory} <span class='caret'></span>";
+        echo '</button>';
+        echo "<ul class='dropdown-menu pull-right'>";
+        if(common::hasPriv('project', 'linkStory')) echo "<li>" . html::a($this->createLink('project', 'linkStory', "project=$project->id"), $lang->project->linkStory). "</li>";
+        if(common::hasPriv('project', 'importPlanStories')) echo "<li>" . html::a('#linkStoryByPlan', $lang->project->linkStoryByPlan, '', 'data-toggle="modal"') . "</li>";
+        echo '</ul>';
         echo '</div>';
     }
 

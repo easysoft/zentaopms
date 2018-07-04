@@ -214,6 +214,7 @@ class product extends control
         }
 
         $rootID = key($this->products);
+        if($this->session->product) $rootID = $this->session->product;
         $this->product->setMenu($this->products, $rootID);
 
         $this->view->title      = $this->lang->product->create;
