@@ -822,6 +822,11 @@ class taskModel extends model
             ->setDefault('assignedDate', $now)
             ->remove('comment,showModule')
             ->get();
+        if($oldTask->status != 'done' and $oldTask->status != 'closed' and $task->left == 0)
+        {
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->task->left);
+            return false;
+        }
 
         if(!empty($oldTask->team))
         {
