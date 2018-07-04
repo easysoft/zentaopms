@@ -155,7 +155,7 @@ $filter->testsuite->library->cookie['libCaseModule'] = 'int';
 $filter->testsuite->library->cookie['preCaseLibID']  = 'int';
 
 $filter->testtask->browse->cookie['preBranch']     = 'int';
-$filter->testtask->cases->cookie['preProductID']   = 'int';
+$filter->testtask->cases->cookie['preTaskID']      = 'int';
 $filter->testtask->cases->cookie['taskCaseModule'] = 'int';
 $filter->testtask->default->cookie['lastProduct']  = 'int';
 $filter->testtask->default->cookie['preProductID'] = 'int';

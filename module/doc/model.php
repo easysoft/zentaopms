@@ -562,12 +562,12 @@ class docModel extends model
             ->add('version', 1)
             ->setDefault('product,project,module', 0)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
-            ->stripTags($this->config->doc->markdown->create['id'], $this->config->allowedTags)
             ->cleanInt('product,project,module')
             ->join('groups', ',')
             ->join('users', ',')
             ->remove('files,labels,uid')
             ->get();
+        $doc->contentMarkdown = strip_tags($this->post->contentMarkdown, $this->config->allowedTags);
         if($doc->acl == 'private') $doc->users = $this->app->user->account;
         $condition = "lib = '$doc->lib' AND module = $doc->module";
 
@@ -638,6 +638,7 @@ class docModel extends model
             ->join('users', ',')
             ->remove('comment,files,labels,uid')
             ->get();
+        if($doc->contentType == 'markdown') $doc->content = strip_tags($this->post->content, $this->config->allowedTags);
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
