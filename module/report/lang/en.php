@@ -38,11 +38,11 @@ $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . ' Deviation';
 $lang->report->productSummary   = $lang->productCommon . ' Summary';
-$lang->report->bugCreate        = 'Bug Submission Report';
-$lang->report->bugAssign        = 'Bug Assignment Report';
-$lang->report->workload         = 'Workload';
-$lang->report->workloadAB       = 'Workload';
-$lang->report->bugOpenedDate    = 'Bug Created From';
+$lang->report->bugCreate        = 'Bug Reported Statement';
+$lang->report->bugAssign        = 'Bug Assigned Statement';
+$lang->report->workload         = 'Team Workload Statement';
+$lang->report->workloadAB       = 'Workload Statement';
+$lang->report->bugOpenedDate    = 'Bug reported from';
 $lang->report->taskAssignedDate = 'From';
 $lang->report->beginAndEnd      = ' From';
 $lang->report->dept             = 'Dept';
@@ -50,9 +50,9 @@ $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
-$lang->reportList->test->lists[10]    = 'Bugs Reported|report|bugcreate';
-$lang->reportList->test->lists[13]    = 'Bugs Assigned|report|bugassign';
-$lang->reportList->staff->lists[10]   = 'Workload|report|workload';
+$lang->reportList->test->lists[10]    = 'Bugs Reported Statement|report|bugcreate';
+$lang->reportList->test->lists[13]    = 'Bugs Assigned Statement|report|bugassign';
+$lang->reportList->staff->lists[10]   = 'Team Workload Statement|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->project       = $lang->projectCommon;
