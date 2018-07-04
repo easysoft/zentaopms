@@ -97,9 +97,11 @@ $filter->bug->default->cookie['preProductID']  = 'int';
 $filter->bug->create->cookie['preBranch']      = 'int';
 $filter->bug->export->cookie['checkedItem']    = 'reg::checked';
 
-$filter->doc->browse->cookie['browseType'] = 'reg::browseType';
-$filter->doc->default->cookie['from']      = 'code';
-$filter->doc->default->cookie['product']   = 'int';
+$filter->doc->browse->cookie['browseType']          = 'reg::browseType';
+$filter->doc->alllibs->cookie['browseType']         = 'reg::browseType';
+$filter->doc->objectlibs->cookie['browseType']      = 'reg::browseType';
+$filter->doc->default->cookie['from']               = 'code';
+$filter->doc->default->cookie['product']            = 'int';
 $filter->doc->showfiles->cookie['docFilesViewType'] = 'code';
 
 $filter->file->download->cookie[$config->sessionVar] = 'code';
