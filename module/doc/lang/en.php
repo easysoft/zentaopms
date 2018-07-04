@@ -24,8 +24,8 @@ $lang->doc->content        = 'Text';
 $lang->doc->keywords       = 'Tags';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
-$lang->doc->addedBy        = 'Creator';
-$lang->doc->addedDate      = 'Create Date';
+$lang->doc->addedBy        = 'Add By';
+$lang->doc->addedDate      = 'Add Date';
 $lang->doc->editedBy       = 'Edit By';
 $lang->doc->editedDate     = 'Edit Date';
 $lang->doc->version        = 'Version';
@@ -43,7 +43,7 @@ $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Right';
 $lang->doc->groups         = 'Groups';
 $lang->doc->users          = 'Users';
-$lang->doc->item           = 'Item';
+$lang->doc->item           = ' Item';
 $lang->doc->searchResult   = 'Search Result';
 
 $lang->doc->moduleDoc      = 'By Module';
@@ -57,11 +57,11 @@ $lang->doc->orderByVisit   = 'Last Visited';
 $lang->doc->todayEdited    = 'Update Today';
 $lang->doc->pastEdited     = 'Updated';
 $lang->doc->myDoc          = 'My Doc';
-$lang->doc->myCollection   = 'My Favorites';
+$lang->doc->myCollection   = 'My Favorite';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Home';
-$lang->doc->create           = 'Create Doc';
+$lang->doc->create           = 'Add Doc';
 $lang->doc->edit             = 'Edit';
 $lang->doc->delete           = 'Delete';
 $lang->doc->browse           = 'List';
@@ -86,7 +86,7 @@ $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Libr
 $lang->doc->showFiles      = 'Doc Library';
 $lang->doc->editLib        = 'Edit Library';
 $lang->doc->deleteLib      = 'Delete Library';
-$lang->doc->fixedMenu      = 'Fixed to Menu';
+$lang->doc->fixedMenu      = 'Fix to Menu';
 $lang->doc->removeMenu     = 'Remove from Menu';
 $lang->doc->search         = 'Search';
 
@@ -94,8 +94,8 @@ $lang->doc->search         = 'Search';
 $lang->doc->allProduct     = 'All' . $lang->productCommon;
 $lang->doc->allProject     = 'All' . $lang->projectCommon;
 
-$lang->doc->libTypeList['product'] = $lang->productCommon . ' Scope';
-$lang->doc->libTypeList['project'] = $lang->projectCommon . ' Scope';
+$lang->doc->libTypeList['product'] = $lang->productCommon . ' Library';
+$lang->doc->libTypeList['project'] = $lang->projectCommon . ' Library';
 $lang->doc->libTypeList['custom']  = 'Custom Library';
 
 $lang->doc->systemLibs['product'] = $lang->productCommon . 'Doc Lib';
@@ -117,7 +117,7 @@ $lang->doc->types['url']  = 'URL';
 $lang->doc->contentTypeList['html']     = 'HTML';
 $lang->doc->contentTypeList['markdown'] = 'MarkDown';
 
-$lang->doc->browseType             = 'Categories';
+$lang->doc->browseType             = 'Category';
 $lang->doc->browseTypeList['list'] = 'List';
 $lang->doc->browseTypeList['grid'] = 'Card';
 
@@ -131,12 +131,12 @@ $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 
-$lang->doc->customObjectLibs['files']       = 'Display File Library';
-$lang->doc->customObjectLibs['customFiles'] = 'Display Custom Library';
+$lang->doc->customObjectLibs['files']       = 'File Library';
+$lang->doc->customObjectLibs['customFiles'] = 'Custom Library';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
-$lang->doc->errorEditSystemDoc = "System Doc Lib needs no modifications.";
+$lang->doc->errorEditSystemDoc = "Ssytem document library doesn't have to be changed.";
 $lang->doc->errorEmptyProduct  = "No {$lang->productCommon}. It cannot be created.";
 $lang->doc->errorEmptyProject  = "No {$lang->projectCommon}. It cannot be created.";
 $lang->doc->errorMainSysLib    = "This library cannot be deleted.";
@@ -144,9 +144,9 @@ $lang->doc->accessDenied       = "Access denied!";
 $lang->doc->versionNotFount    = 'It does not exist in this build.';
 $lang->doc->noDoc              = 'No docs. ';
 $lang->doc->noSearchedDoc      = 'Nothing searched.';
-$lang->doc->noEditedDoc        = 'You have not edited any doc.';
-$lang->doc->noOpenedDoc        = 'You have not created any doc.';
-$lang->doc->noCollectedDoc     = 'You have not collected any doc.';
+$lang->doc->noEditedDoc        = 'You have not edited any document.';
+$lang->doc->noOpenedDoc        = 'You have not created any document.';
+$lang->doc->noCollectedDoc     = 'You have not collected any document.';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'Url';
@@ -162,5 +162,5 @@ $lang->doclib->select  = 'Select';
 $lang->doclib->project = $lang->projectCommon . ' Library';
 $lang->doclib->product = $lang->productCommon . ' Library';
 
-$lang->doclib->main['product'] =  'Main Lib';
-$lang->doclib->main['project'] =  'Main Lib';
+$lang->doclib->main['product'] =  'Main Library';
+$lang->doclib->main['project'] =  'Main Library';
