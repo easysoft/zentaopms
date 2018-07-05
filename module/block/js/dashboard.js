@@ -64,6 +64,7 @@ function refreshBlock($panel, afterRefresh)
         else if($panel.find('#assigntomeBlock').length) $panel.find('#assigntomeBlock').empty().append($data.children());
         else
         {
+            $panel.children('.panel-move-handler,style').remove();
             $panel.find('.panel-body,.empty-tip').replaceWith($data);
         }
         if($.isFunction(afterRefresh))
