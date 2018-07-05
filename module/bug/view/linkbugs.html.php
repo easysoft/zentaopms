@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='space'>
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $bug->id;?></span>
