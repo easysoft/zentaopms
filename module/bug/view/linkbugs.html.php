@@ -23,7 +23,7 @@
   <?php if($bugs2Link):?>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='linkBugsForm'>
     <table class='table' id='bugList'>
-      <thead>
+      <thead class='hl-gray'>
         <tr>
           <th class="c-id">
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
