@@ -18,6 +18,7 @@ $lang->todo->activate     = "Activate";
 $lang->todo->batchCreate  = "Batch Add";
 $lang->todo->edit         = "Edit";
 $lang->todo->close        = "Close";
+$lang->todo->batchClose   = "Batch Close";
 $lang->todo->batchEdit    = "Batch Edit";
 $lang->todo->view         = "Overview";
 $lang->todo->finish       = "Finish";
