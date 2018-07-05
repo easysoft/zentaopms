@@ -9,8 +9,8 @@
   $(function()
   {
       var diffButton = '<button type="button" class="btn btn-mini btn-icon btn-strip"><i class="icon icon-code icon-sm"></i></button>';
-      var newBoxID = ''
-      var oldBoxID = ''
+      var newBoxID = '';
+      var oldBoxID = '';
       $('blockquote.textdiff').each(function()
       {
           newBoxID = $(this).parent().attr('id');
