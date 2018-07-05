@@ -577,6 +577,27 @@ class blockModel extends model
      */
     public function isLongBlock($block)
     {
+        if(empty($block)) return true;
         return $block->grid >= 6;
+    }
+
+    /**
+     * Check API for ranzhi
+     * 
+     * @param  string    $hash 
+     * @access public
+     * @return bool
+     */
+    public function checkAPI($hash)
+    {
+        if(empty($hash)) return false;
+
+        $key = $this->dao->select('value')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('module')->eq('sso')
+            ->andWhere('`key`')->eq('key')
+            ->fetch('value');
+
+        return $key == $hash;
     }
 }
