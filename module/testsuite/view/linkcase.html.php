@@ -19,7 +19,7 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $suite->id;?></span>
-      <?php echo $suite->name;?>
+      <span class='text' title='<?php echo $suite->name;?>'><?php echo $suite->name;?></span>
       <?php echo $lang->arrow . $lang->testsuite->linkCase;?>
     </div>
   </div>

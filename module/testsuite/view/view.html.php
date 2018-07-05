@@ -21,7 +21,7 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $suite->id;?></span>
-      <?php echo $suite->name;?>
+      <span class='text'><?php echo $suite->name;?></span>
       <?php if($suite->deleted):?>
       <span class='label label-danger'><?php echo $lang->suite->deleted;?></span>
       <?php endif; ?>

@@ -20,7 +20,7 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $release->id;?></span>
-      <?php echo $release->name;?>
+      <span class='text' title='<?php echo $release->name;?>'><?php echo $release->name;?></span>
       <?php if($release->deleted):?>
       <span class='label label-danger'><?php echo $lang->release->deleted;?></span>
       <?php endif; ?>
