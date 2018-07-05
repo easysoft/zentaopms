@@ -1,3 +1,4 @@
+#linkButton {border-radius: 4px !important;}
 tbody > tr > td > .btn-icon {margin-right: 4px}
 @media (max-width: 1200px) {#storyList .c-user, #storyList .c-estimate {display: none!important;}}
 @media (max-width: 1000px) {#storyList .c-status, #storyList .c-pri {display: none!important;}}

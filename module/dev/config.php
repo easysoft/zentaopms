@@ -71,6 +71,5 @@ $config->dev->tableMap['usertpl']        = 'user-tpl';
 $config->dev->tableMap['history']        = 'action-history';
 $config->dev->tableMap['lang']           = 'custom';
 $config->dev->tableMap['config']         = 'custom';
-$config->dev->tableMap['mailqueue']      = 'mail';
 $config->dev->tableMap['module']         = 'tree';
 $config->dev->tableMap['suitecase']      = 'testcase';
