@@ -14,7 +14,7 @@
 <?php if(empty($cases)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
-<div class='panel-body has-table'>
+<div class='panel-body has-table scrollbar-hover'>
   <style>
   .block-cases.block-sm .c-status{text-align:center}
   .block-cases.block-sm .c-status .status-text{display:none;}
