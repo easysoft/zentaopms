@@ -291,20 +291,19 @@ class block extends control
      */
     public function welcome()
     {
-        $projects = $this->loadModel('project')->getPairs();
-        $products = $this->loadModel('product')->getPairs();
-
         $this->view->tutorialed = $this->loadModel('tutorial')->getTutorialed();
-        $this->view->tasks      = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
-        $this->view->bugs       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
-        $this->view->stories    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
-        $this->view->projects   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->fetch('count');
-        $this->view->products   = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('status')->ne('closed')->andWhere('id')->in(array_keys($products))->fetch('count');
 
-        $today = date('Y-m-d');
-        $this->view->delay['task']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deadline')->ne('0000-00-00')->andWhere('deadline')->lt($today)->fetch('count');
-        $this->view->delay['bug']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deadline')->ne('0000-00-00')->andWhere('deadline')->lt($today)->fetch('count');
-        $this->view->delay['project'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->andWhere('end')->lt($today)->fetch('count');
+        $data = $this->block->getWelcomeBlockData();
+
+        $this->view->tasks      = $data['tasks'];
+        $this->view->bugs       = $data['bugs'];
+        $this->view->stories    = $data['stories'];
+        $this->view->projects   = $data['projects'];
+        $this->view->products   = $data['products'];
+
+        $this->view->delay['task']    = $data['delayTask']; 
+        $this->view->delay['bug']     = $data['delayBug']; 
+        $this->view->delay['project'] = $data['delayProject']; 
 
         $time = date('H:i');
         $welcomeType = '19:00';
