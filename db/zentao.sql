@@ -12,7 +12,10 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `extra` text NOT NULL,
   `read` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `action` (`objectID`,`product`,`project`,`action`,`date`)
+  KEY `date` (`date`),
+  KEY `actor` (`actor`),
+  KEY `project` (`project`),
+  KEY `objectID` (`objectID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_block`;
 CREATE TABLE IF NOT EXISTS `zt_block` (
@@ -29,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `accountModuleOrder` (`account`,`module`,`order`),
-  KEY `block` (`account`,`module`)
+  KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_branch`;
 CREATE TABLE IF NOT EXISTS `zt_branch` (
@@ -92,7 +95,13 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `bug` (`product`,`module`,`project`,`assignedTo`)
+  KEY `product` (`product`),
+  KEY `project` (`project`),
+  KEY `status` (`status`),
+  KEY `plan` (`plan`),
+  KEY `story` (`story`),
+  KEY `case` (`case`),
+  KEY `assignedTo` (`assignedTo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_build`;
 CREATE TABLE IF NOT EXISTS `zt_build` (
@@ -110,7 +119,8 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `desc` text NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `build` (`product`,`project`)
+  KEY `product` (`product`),
+  KEY `project` (`project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_burn`;
 CREATE TABLE IF NOT EXISTS `zt_burn` (
@@ -161,7 +171,9 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `lastRunDate` datetime NOT NULL,
   `lastRunResult` char(30) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `case` (`product`,`module`,`story`)
+  KEY `product` (`product`),
+  KEY `story` (`story`),
+  KEY `plan` (`plan`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_casestep`;
 CREATE TABLE IF NOT EXISTS `zt_casestep` (
@@ -173,7 +185,8 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
   `desc` text NOT NULL,
   `expect` text NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `case` (`case`,`version`)
+  KEY `case` (`case`),
+  KEY `version` (`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_company`;
 CREATE TABLE IF NOT EXISTS `zt_company` (
@@ -242,7 +255,8 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   `function` char(255) NOT NULL default '',
   `manager` char(30) NOT NULL default '',
   PRIMARY KEY (`id`),
-  KEY `dept` (`parent`,`path`)
+  KEY `parent` (`parent`),
+  KEY `path` (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_doc`;
 CREATE TABLE IF NOT EXISTS `zt_doc` (
@@ -266,7 +280,9 @@ CREATE TABLE IF NOT EXISTS `zt_doc` (
   `version` smallint(5) unsigned NOT NULL DEFAULT '1',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `doc` (`product`,`project`)
+  KEY `product` (`product`),
+  KEY `project` (`project`),
+  KEY `lib` (`lib`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_doccontent`;
 CREATE TABLE IF NOT EXISTS `zt_doccontent` (
@@ -294,7 +310,9 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `collector` text NOT NULL,
   `order` tinyint(5) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY  (`id`),
+  KEY `product` (`product`),
+  KEY `project` (`project`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_effort`;
 CREATE TABLE IF NOT EXISTS `zt_effort` (
@@ -331,7 +349,8 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
   `status` varchar(20) NOT NULL,
   PRIMARY KEY  (`id`),
   UNIQUE KEY `code` (`code`),
-  KEY `extension` (`name`,`installedTime`)
+  KEY `name` (`name`),
+  KEY `installedTime` (`installedTime`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_file`;
 CREATE TABLE IF NOT EXISTS `zt_file` (
@@ -348,7 +367,8 @@ CREATE TABLE IF NOT EXISTS `zt_file` (
   `extra` varchar(255) NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `file` (`objectType`,`objectID`)
+  KEY `objectType` (`objectType`),
+  KEY `objectID` (`objectID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_group`;
 CREATE TABLE IF NOT EXISTS `zt_group` (
@@ -408,7 +428,9 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `short` varchar(30) NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `module` (`root`,`type`,`path`)
+  KEY `root` (`root`),
+  KEY `type` (`type`),
+  KEY `path` (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_notify`;
 CREATE TABLE IF NOT EXISTS `zt_notify` (
@@ -460,7 +482,8 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `order` text NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
-  KEY `plan` (`product`,`end`)
+  KEY `product` (`product`),
+  KEY `end` (`end`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_project`;
 CREATE TABLE IF NOT EXISTS `zt_project` (
@@ -495,7 +518,11 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `order` mediumint(8) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `project` (`parent`,`begin`,`end`,`status`,`order`)
+  KEY `parent` (`parent`),
+  KEY `begin` (`begin`),
+  KEY `end` (`end`),
+  KEY `status` (`status`),
+  KEY `order` (`order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectproduct`;
 CREATE TABLE IF NOT EXISTS `zt_projectproduct` (
@@ -530,6 +557,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `status` varchar(20) NOT NULL default 'normal',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
+  KEY `product` (`product`),
   KEY `build` (`build`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
@@ -569,7 +597,9 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `version` smallint(6) NOT NULL default '1',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
-  KEY `story` (`product`,`module`,`status`,`assignedTo`)
+  KEY `product` (`product`),
+  KEY `status` (`status`),
+  KEY `assignedTo` (`assignedTo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_storyspec`;
 CREATE TABLE IF NOT EXISTS `zt_storyspec` (
@@ -632,7 +662,9 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
    PRIMARY KEY (`id`),
-  KEY `task` (`project`,`module`,`story`,`assignedTo`)
+  KEY `project` (`project`),
+  KEY `story` (`story`),
+  KEY `assignedTo` (`assignedTo`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskestimate`;
 CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
@@ -698,7 +730,9 @@ CREATE TABLE IF NOT EXISTS `zt_testresult` (
   `lastRunner` varchar(30) NOT NULL,
   `date` datetime NOT NULL,
   PRIMARY KEY  (`id`),
-  KEY `testresult` (`case`,`version`, `run`)
+  KEY `case` (`case`),
+  KEY `version` (`version`),
+  KEY `run` (`run`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testrun`;
 CREATE TABLE IF NOT EXISTS `zt_testrun` (
@@ -726,7 +760,8 @@ CREATE TABLE IF NOT EXISTS `zt_testsuite` (
   `lastEditedBy` char(30) NOT NULL,
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `product` (`product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_testtask`;
 CREATE TABLE IF NOT EXISTS `zt_testtask` (
@@ -745,6 +780,7 @@ CREATE TABLE IF NOT EXISTS `zt_testtask` (
   `status` enum('blocked','doing','wait','done') NOT NULL DEFAULT 'wait',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
+  KEY `product` (`product`),
   KEY `build` (`build`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_todo`;
@@ -771,7 +807,10 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `todo` (`account`,`date`)
+  KEY `account` (`account`),
+  KEY `assignedTo` (`assignedTo`),
+  KEY `finishedBy` (`finishedBy`),
+  KEY `date` (`date`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_user`;
 CREATE TABLE IF NOT EXISTS `zt_user` (
@@ -808,7 +847,9 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `account` (`account`),
-  KEY `user` (`dept`,`email`,`commiter`)
+  KEY `dept` (`dept`),
+  KEY `email` (`email`),
+  KEY `commiter` (`commiter`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usercontact`;
 CREATE TABLE IF NOT EXISTS `zt_usercontact` (
@@ -835,7 +876,8 @@ CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `sql` text NOT NULL,
   `shortcut` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
-  KEY `query` (`account`, `module`)
+  KEY `account` (`account`),
+  KEY `module` (`module`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_usertpl`;
 CREATE TABLE IF NOT EXISTS `zt_usertpl` (
