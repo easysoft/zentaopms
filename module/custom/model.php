@@ -447,19 +447,22 @@ class customModel extends model
 
         $data = fixer::input('post')->get();
         $requiredFields = array();
-        foreach($data->requiredFields as $method => $fields)
+        if(!empty($data->requiredFields))
         {
-            $method      = strtolower($method);
-            $systemField = $this->config->$moduleName->$method->requiredFields;
-
-            $fields = join(',', $fields);
-            foreach(explode(',', $systemField) as $field)
+            foreach($data->requiredFields as $method => $fields)
             {
-                $field = trim($field);
-                if(strpos(",$fields,", ",$field,") === false) $fields .= ",$field";
-            }
+                $method      = strtolower($method);
+                $systemField = $this->config->$moduleName->$method->requiredFields;
 
-            $requiredFields[$method]['requiredFields'] = $fields;
+                $fields = join(',', $fields);
+                foreach(explode(',', $systemField) as $field)
+                {
+                    $field = trim($field);
+                    if(strpos(",$fields,", ",$field,") === false) $fields .= ",$field";
+                }
+
+                $requiredFields[$method]['requiredFields'] = $fields;
+            }
         }
 
         $this->loadModel('setting')->setItems("system.{$moduleName}", $requiredFields);
