@@ -37,7 +37,7 @@
         </div>
         <div class='detail-content'><?php echo $todo->desc;?></div>
       </div>
-      <div class='detail'><?php include '../../common/view/action.html.php';?></div>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
   <div class='side-col col-4'>

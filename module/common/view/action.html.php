@@ -1,12 +1,10 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<style>
-.histories-list > li{word-break: break-all; word-wrap: break-word;}
-</style>
 <?php if(!empty($blockHistory)):?>
 <div class="panel block-histories histories" data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
 <?php else:?>
 <div class="detail histories" id='actionbox' data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
 <?php endif;?>
+<style>.histories-list > li{word-break: break-all; word-wrap: break-word;}</style>
   <script>
   $(function()
   {
