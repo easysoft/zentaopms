@@ -13,7 +13,7 @@
 <?php if(empty($plans)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
-<div class='panel-body has-table'>
+<div class='panel-body has-table scrollbar-hover'>
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-plan'>
     <thead>
     <tr>
