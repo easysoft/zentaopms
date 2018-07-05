@@ -118,9 +118,9 @@ js::set('browseType', $browseType);
     common::printIcon('task', 'report', "project=$projectID&browseType=$browseType", '', 'button', 'bar-chart muted');
     ?>
 
-    <div class="btn-group">
+    <div class="btn-group dropdown-hover">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
-      <ul class="dropdown-menu" id='exportActionMenu'>
+      <ul class="dropdown-menu pull-right" id='exportActionMenu'>
         <?php
         $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
         $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
@@ -129,9 +129,9 @@ js::set('browseType', $browseType);
       </ul>
     </div>
 
-    <div class="btn-group">
+    <div class="btn-group dropdown-hover">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
-      <ul class="dropdown-menu" id='importActionMenu'>
+      <ul class="dropdown-menu pull-right" id='importActionMenu'>
         <?php
         $misc = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
         $link = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
