@@ -62,7 +62,10 @@ function refreshBlock($panel, afterRefresh)
         var $data = $(data);
         if($data.hasClass('panel')) $panel.empty().append($data.children());
         else if($panel.find('#assigntomeBlock').length) $panel.find('#assigntomeBlock').empty().append($data.children());
-        else $panel.find('.panel-body').replaceWith($data);
+        else
+        {
+            $panel.find('.panel-body,.empty-tip').replaceWith($data);
+        }
         if($.isFunction(afterRefresh))
         {
             afterRefresh.call(this,

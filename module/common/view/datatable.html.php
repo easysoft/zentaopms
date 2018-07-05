@@ -78,6 +78,7 @@ $(document).ready(function()
             {
                 this.$datatable.find('.table').addClass('has-sort-head');
             }
+            this.$datatable.find('.sparkline').sparkline();
         }
     });
 
