@@ -251,7 +251,7 @@ class todo extends control
     public function activate($todoID)
     {
         $todo = $this->todo->getById($todoID);
-        if($todo->status == 'done') $this->todo->activate($todoID);
+        if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
         if(isonlybody()) die(js::reload('parent.parent'));
         die(js::reload('parent'));
     }
@@ -396,7 +396,7 @@ class todo extends control
     public function finish($todoID)
     {
         $todo = $this->todo->getById($todoID);
-        if($todo->status != 'done') $this->todo->finish($todoID);
+        if($todo->status != 'done' && $todo->status != 'closed') $this->todo->finish($todoID);
         if(in_array($todo->type, array('bug', 'task', 'story')))
         {
             $confirmNote = 'confirm' . ucfirst($todo->type);
@@ -421,7 +421,26 @@ class todo extends control
             foreach($_POST['todoIDList'] as $todoID)
             {
                 $todo = $this->todo->getById($todoID);
-                if($todo->status != 'done') $this->todo->finish($todoID);
+                if($todo->status != 'done' && $todo->status != 'closed') $this->todo->finish($todoID);
+            }
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * Batch close todos.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchClose()
+    {
+        if(!empty($_POST['todoIDList']))
+        {
+            foreach($_POST['todoIDList'] as $todoID)
+            {
+                $todo = $this->todo->getById($todoID);
+                if($todo->status == 'done') $this->todo->close($todoID);
             }
             die(js::reload('parent'));
         }
