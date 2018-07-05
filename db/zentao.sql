@@ -397,21 +397,6 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_mailqueue`;
-CREATE TABLE IF NOT EXISTS `zt_mailqueue` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `toList` varchar(255) NOT NULL,
-  `ccList` varchar(255) NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `body` text NOT NULL,
-  `addedBy` char(30) NOT NULL,
-  `addedDate` datetime NOT NULL,
-  `sendTime` datetime NOT NULL,
-  `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `failReason` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sendTime` (`sendTime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_module`;
 CREATE TABLE IF NOT EXISTS `zt_module` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -924,18 +909,6 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_webhookdatas`;
-CREATE TABLE IF NOT EXISTS `zt_webhookdatas` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `webhook` mediumint(8) unsigned NOT NULL,
-  `action` mediumint(8) unsigned NOT NULL,
-  `data` text NOT NULL,
-  `status` enum('wait', 'sended') NOT NULL DEFAULT 'wait',
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  PRIMARY KEY `id` (`id`),
-  UNIQUE KEY `uniq` (`webhook`, `action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_log`;
 CREATE TABLE IF NOT EXISTS `zt_log` (
