@@ -816,6 +816,13 @@ class docModel extends model
         if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
         if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
 
+        if(isset($object->lib))
+        {
+            static $libs;
+            if(empty($libs)) $libs = $this->getLibs('all');
+            if(!isset($libs[$object->lib])) return false;
+        }
+
         if($object->acl == 'open') return true;
 
         $account = ',' . $this->app->user->account . ',';
@@ -831,14 +838,7 @@ class docModel extends model
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
         }
-
-        if(isset($object->lib))
-        {
-            static $libs;
-            if(empty($libs)) $libs = $this->getLibs('all');
-            if(!isset($libs[$object->lib])) return false;
-
-        }
+        if(isset($object->lib)) return false;
 
         if($object->project)
         {
@@ -1137,19 +1137,26 @@ class docModel extends model
      */
     public function statLibCounts($idList)
     {
-        $moduleCounts= $this->dao->select("root, count(id) as moduleCount")->from(TABLE_MODULE)
+        $moduleCounts = $this->dao->select("root, count(id) as moduleCount")->from(TABLE_MODULE)
             ->where('type')->eq('doc')
             ->andWhere('root')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->groupBy('root')
             ->fetchPairs();
 
-        $docCounts= $this->dao->select("lib, count(id) as docCount")->from(TABLE_DOC)
+        $docs = $this->dao->select("id,lib,acl,users,groups")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)
-            ->groupBy('lib')
-            ->fetchPairs();
+            ->fetchAll();
+
+        $docCounts = array();
+        foreach($docs as $doc)
+        {
+            if(!$this->checkPriv($doc)) continue;
+            if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
+            $docCounts[$doc->lib] ++;
+        }
 
         $itemCounts = array();
         foreach($idList as $libID)
