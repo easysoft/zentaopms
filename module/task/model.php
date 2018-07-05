@@ -2294,6 +2294,7 @@ class taskModel extends model
         $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
 
         $canBatchAction = $canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo;
+        $storyChanged   = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
 
         $canView  = common::hasPriv('task', 'view');
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");
@@ -2349,7 +2350,6 @@ class taskModel extends model
                     echo $this->lang->task->typeList[$task->type];
                     break;
                 case 'status':
-                    $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
                     $storyChanged ? print("<span class='status-changed'><span class='label label-dot'></span> {$this->lang->story->changed}</span>") : print("<span class='status-{$task->status}'><span class='label label-dot'></span> {$this->lang->task->statusList[$task->status]}</span>");
                     break;
                 case 'estimate':
@@ -2445,9 +2445,8 @@ class taskModel extends model
                     echo substr($task->lastEditedDate, 5, 11);
                     break;
                 case 'actions':
-                    if($task->storyStatus == 'changed' or $browseType == 'needconfirm')
+                    if($storyChanged)
                     {
-                        $this->lang->task->confirmStoryChange = $this->lang->confirm;
                         common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
                         break;
                     }

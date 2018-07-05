@@ -19,7 +19,7 @@
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
     <div class="page-title">
-      <span class="label label-id"><?php echo $doc->id;?></span><span class="text"><?php echo $doc->title;?></span>
+      <span class="label label-id"><?php echo $doc->id;?></span><span class="text" title='<?php echo $doc->title;?>'><?php echo $doc->title;?></span>
       <?php if($doc->deleted):?>
       <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
       <?php endif; ?>

@@ -159,6 +159,7 @@ class commonModel extends model
         if($module == 'sso' and $method == 'logout') return true;
         if($module == 'sso' and $method == 'bind') return true;
         if($module == 'sso' and $method == 'gettodolist') return true;
+        if($module == 'block' and $method == 'main' and isset($_GET['hash'])) return true;
         if($module == 'file' and $method == 'read') return true;
 
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
@@ -1312,19 +1313,19 @@ EOD;
         if($module == 'effort' and ($method == 'batchcreate' or $method == 'createforobject')) return true;
 
         // limited project
-        $limitedProject = false;
         if(!empty($module) && $module == 'task' && !empty($object->project) or
             !empty($module) && $module == 'project' && !empty($object->id))
         {
+            $limitedProject = false;
             $objectID = '';
             if(!empty($object->id)) $objectID = $object->id;
             if(!empty($object->id) && !empty($object->project)) $objectID = $object->project;
 
             $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
             if(strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
+            if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
         }
 
-        if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
 
         if(!is_null($method) && strpos($method, 'batch')  === 0) return false;
         if(!is_null($method) && strpos($method, 'link')   === 0) return false;

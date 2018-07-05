@@ -152,7 +152,7 @@ $config->bug->search['params']['openedBy']      = array('operator' => '=',      
 $config->bug->search['params']['closedBy']      = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->bug->search['params']['lastEditedBy']  = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
-$config->bug->search['params']['mailto']        = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->bug->search['params']['mailto']        = array('operator' => 'include',       'control' => 'select', 'values' => 'users');
 
 $config->bug->search['params']['openedBuild']   = array('operator' => 'include', 'control' => 'select', 'values' => 'builds');
 $config->bug->search['params']['resolvedBuild'] = array('operator' => '=',       'control' => 'select', 'values' => 'builds');

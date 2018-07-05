@@ -108,6 +108,7 @@ class productplanModel extends model
      * Get plan pairs.
      *
      * @param  array|int    $product
+     * @param  int          $branch
      * @param  string       $expired
      * @access public
      * @return array
@@ -140,7 +141,41 @@ class productplanModel extends model
         {
             $plans[$key] = str_replace('[2030-01-01 ~ 2030-01-01]', '[' . $this->lang->productplan->future . ']', $value);
         }
-        return array('' => '') + $plans;
+        return array('' => '') + $this->processFuture($plans);
+    }
+
+    /**
+     * Get plan pairs for story.
+     *
+     * @param  array|int    $product
+     * @param  int          $branch
+     * @access public
+     * @return array
+     */
+    public function getPairsForStory($product = 0, $branch = 0)
+    {
+        $date = date('Y-m-d');
+        $plans = $this->dao->select('id, CONCAT(title, " [", begin, " ~ ", end, "]") AS title')->from(TABLE_PRODUCTPLAN)
+            ->where('product')->in($product)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('end')->ge($date)
+            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+            ->orderBy('begin desc')
+            ->fetchPairs();
+
+        if(!$plans)
+        {
+            $plans = $this->dao->select('id, CONCAT(title, " [", begin, " ~ ", end, "]") AS title')->from(TABLE_PRODUCTPLAN)
+                ->where('product')->in($product)
+                ->andWhere('deleted')->eq(0)
+                ->andWhere('end')->lt($date)
+                ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
+                ->orderBy('begin desc')
+                ->limit(5)
+                ->fetchPairs();
+        }
+
+        return array('' => '') + $this->processFuture($plans);
     }
 
     /**
@@ -368,5 +403,21 @@ class productplanModel extends model
         $planID = $this->dao->findByID($bugID)->from(TABLE_BUG)->fetch('plan');
         $this->dao->update(TABLE_BUG)->set('plan')->eq(0)->where('id')->eq((int)$bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'unlinkedfromplan', '', $planID);
+    }
+
+    /**
+     * Process future of plans.
+     *
+     * @param  array  $plans
+     * @access public
+     * @return array
+     */
+    public function processFuture($plans)
+    {
+        foreach($plans as $key => $value)
+        {
+            $plans[$key] = str_replace('[2030-01-01 ~ 2030-01-01]', '[' . $this->lang->productplan->future . ']', $value);
+        }
+        return $plans;
     }
 }

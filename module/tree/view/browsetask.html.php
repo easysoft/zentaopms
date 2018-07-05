@@ -19,7 +19,7 @@
     </a>
     <div class="divider"></div>
     <div class="page-title">
-      <span class='text'><?php echo $lang->tree->common . $lang->colon . $root->name;?></span>
+      <span class='text' title='<?php echo $root->name;?>'><?php echo $lang->tree->common . $lang->colon . $root->name;?></span>
     </div>
   </div>
 </div>

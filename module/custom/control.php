@@ -270,7 +270,7 @@ class custom extends control
     {
         if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
 
-        if($_POST)
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $this->custom->saveRequiredFields($moduleName);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));

@@ -21,7 +21,7 @@
     <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $bug->id?></span>
-      <span class="text" style='color: <?php echo $bug->color; ?>'><?php echo $bug->title;?></span>
+      <span class="text" title="<?php echo $bug->title;?>" style='color: <?php echo $bug->color; ?>'><?php echo $bug->title;?></span>
       <?php if($bug->deleted):?>
       <span class='label label-danger'><?php echo $lang->bug->deleted;?></span>
       <?php endif; ?>

@@ -28,7 +28,7 @@ tbody tr td:first-child input{display:none;}
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $build->id;?></span>
-      <span class='text'><?php echo $build->name;?></span>
+      <span class='text' title='<?php echo $build->name;?>'><?php echo $build->name;?></span>
       <?php if($build->deleted):?>
       <span class='label label-danger'><?php echo $lang->build->deleted;?></span>
       <?php endif; ?>
