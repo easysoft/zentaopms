@@ -17,7 +17,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
 $useGuest = $this->app->user->account == 'guest';
 ?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<div class='dashboard' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
+<div class='dashboard auto-fade-in fade' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
   <div class="row">
     <div class='col-main'>
       <?php foreach($longBlocks as $index => $block):?>
