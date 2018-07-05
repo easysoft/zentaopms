@@ -508,7 +508,7 @@ class productplan extends control
             $allBugs = $this->bug->getBySearch($plan->product, $queryID, 'id_desc', null, $plan->branch);
             foreach($allBugs as $key => $bug)
             {
-                if($bug->status != 'active') unset($allBugs[$key]);
+                if($bug->status != 'active' or $bug->toTask != 0 or $bug->toStory != 0) unset($allBugs[$key]);
             }
         }
         else
