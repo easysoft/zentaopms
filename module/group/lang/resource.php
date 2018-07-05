@@ -121,16 +121,23 @@ $lang->resource->todo->import2Today = 'import2Today';
 $lang->resource->todo->assignTo     = 'assignTo';
 $lang->resource->todo->activate     = 'activate';
 $lang->resource->todo->close        = 'close';
+$lang->resource->todo->batchClose   = 'batchClose';
 
 $lang->todo->methodOrder[5]  = 'create';
 $lang->todo->methodOrder[10] = 'createCycle';
 $lang->todo->methodOrder[15] = 'batchCreate';
 $lang->todo->methodOrder[20] = 'edit';
-$lang->todo->methodOrder[25] = 'view';
-$lang->todo->methodOrder[30] = 'delete';
-$lang->todo->methodOrder[35] = 'export';
-$lang->todo->methodOrder[40] = 'finish';
-$lang->todo->methodOrder[45] = 'import2Today';
+$lang->todo->methodOrder[25] = 'batchEdit';
+$lang->todo->methodOrder[30] = 'view';
+$lang->todo->methodOrder[35] = 'delete';
+$lang->todo->methodOrder[40] = 'export';
+$lang->todo->methodOrder[45] = 'finish';
+$lang->todo->methodOrder[50] = 'batchFinish';
+$lang->todo->methodOrder[55] = 'import2Today';
+$lang->todo->methodOrder[60] = 'assignTo';
+$lang->todo->methodOrder[65] = 'activate';
+$lang->todo->methodOrder[70] = 'close';
+$lang->todo->methodOrder[75] = 'batchClose';
 
 /* Product. */
 $lang->resource->product = new stdclass();

@@ -97,10 +97,23 @@
           <td class="c-status"><span class="status-<?php echo $todo->status;?>"><span class="label label-dot"></span> <?php echo $lang->todo->statusList[$todo->status];?></span></td>
           <td class="c-actions">
             <?php
-            if($todo->status != 'done') common::printIcon('todo', 'assignto', "todoID=$todo->id", $todo, 'list', 'hand-right', '', "btn-icon", '', "data-toggle='assigntoModal' data-width='500'", $lang->todo->assignTo);
-            if($todo->status == 'done') common::printIcon('todo', 'activate', "id=$todo->id", $todo, 'list', 'magic', 'hiddenwin');
-            if($todo->status != 'done') common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', 'checked', 'hiddenwin');
-            if($todo->status == 'done') common::printIcon('todo', 'close', "id=$todo->id", $todo, 'list', 'off', 'hiddenwin');
+            if($todo->status == 'done' or $todo->status == 'closed')
+            {
+                common::printIcon('todo', 'activate', "id=$todo->id", $todo, 'list', 'magic', 'hiddenwin');
+                if($todo->status == 'done')
+                {
+                    common::printIcon('todo', 'close', "id=$todo->id", $todo, 'list', 'off', 'hiddenwin');
+                }
+                else
+                {
+                    echo html::a('javascript:;', "<i class='icon-todo-close icon-off'></i>", '', "class='btn disabled'");
+                }
+            }
+            else
+            {
+                common::printIcon('todo', 'assignto', "todoID=$todo->id", $todo, 'list', 'hand-right', '', "btn-icon", '', "data-toggle='assigntoModal' data-width='500'", $lang->todo->assignTo);
+                common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', 'checked', 'hiddenwin');
+            }
             common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', 'edit', '', 'iframe', true);
 
             if(common::hasPriv('todo', 'delete'))
@@ -130,6 +143,11 @@
       {
           $actionLink = $this->createLink('todo', 'batchFinish');
           echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+      }
+      if(common::hasPriv('todo', 'batchClose'))
+      {
+          $actionLink = $this->createLink('todo', 'batchClose');
+          echo html::commonButton($lang->todo->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
       }
       if(common::hasPriv('todo', 'import2Today') and $importFuture)
       {

@@ -18,6 +18,7 @@ $lang->todo->activate     = "激活";
 $lang->todo->batchCreate  = "批量添加";
 $lang->todo->edit         = "编辑";
 $lang->todo->close        = "关闭";
+$lang->todo->batchClose   = "批量关闭";
 $lang->todo->batchEdit    = "批量编辑";
 $lang->todo->view         = "待办详情";
 $lang->todo->finish       = "完成";

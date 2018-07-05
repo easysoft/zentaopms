@@ -146,6 +146,8 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
+                $index     = 0;
+                $firstLink = '';
                 $dropTitle = '';
                 $hasActive = false;
                 $subMenu   = array();
@@ -170,8 +172,10 @@ class projectModel extends model
                         $dropTitle = $subMenuName;
                     }
 
-                    $replace .= "<li $active>" . html::a(helper::createLink($subMenuModule, $subMenuMethod, sprintf($subMenuParams, $projectID)), $subMenuName) . '</li>';
+                    $link = helper::createLink($subMenuModule, $subMenuMethod, sprintf($subMenuParams, $projectID));
+                    $replace .= "<li $active>" . html::a($link, $subMenuName) . '</li>';
                     if($active) $hasActive = true;
+                    if($index == 0) $firstLink = $link;
 
                     $link = array();
                     $link['module'] = $subMenuModule;
@@ -184,9 +188,11 @@ class projectModel extends model
                     $menu->text   = $subMenuName;
                     $menu->hidden = false;
                     $subMenu[] = $menu;
+
+                    $index++;
                 }
                 $replace .= '</ul>';
-                $replace  = "<a data-toggle='dropdown'>$dropTitle <span class='caret'></span></a>" . $replace;
+                $replace  = "<a href='$firstLink'>$dropTitle <span class='caret'></span></a>" . $replace;
 
                 $this->lang->project->menu->{$key}['class'] = 'dropdown dropdown-hover';
                 if($hasActive) $this->lang->project->menu->{$key}['class'] .= ' active';
