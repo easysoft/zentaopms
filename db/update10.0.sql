@@ -27,7 +27,7 @@ ALTER TABLE `zt_build` ADD INDEX `project` (`project`);
 ALTER TABLE `zt_case` DROP INDEX `case`;
 ALTER TABLE `zt_case` ADD INDEX `product` (`product`);
 ALTER TABLE `zt_case` ADD INDEX `story` (`story`);
-ALTER TABLE `zt_case` ADD INDEX `plan` (`plan`);
+ALTER TABLE `zt_case` ADD INDEX `module` (`module`);
 
 ALTER TABLE `zt_casestep` DROP INDEX `case`;
 ALTER TABLE `zt_casestep` ADD INDEX `case` (`case`);
