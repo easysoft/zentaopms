@@ -1,18 +1,16 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<style>
-.histories-list > li{word-break: break-all; word-wrap: break-word;}
-</style>
 <?php if(!empty($blockHistory)):?>
 <div class="panel block-histories histories" data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
 <?php else:?>
 <div class="detail histories" id='actionbox' data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
 <?php endif;?>
+<style>.histories-list > li{word-break: break-all; word-wrap: break-word;}</style>
   <script>
   $(function()
   {
       var diffButton = '<button type="button" class="btn btn-mini btn-icon btn-strip"><i class="icon icon-code icon-sm"></i></button>';
-      var newBoxID = ''
-      var oldBoxID = ''
+      var newBoxID = '';
+      var oldBoxID = '';
       $('blockquote.textdiff').each(function()
       {
           newBoxID = $(this).parent().attr('id');

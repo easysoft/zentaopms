@@ -397,21 +397,6 @@ CREATE TABLE IF NOT EXISTS `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_mailqueue`;
-CREATE TABLE IF NOT EXISTS `zt_mailqueue` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `toList` varchar(255) NOT NULL,
-  `ccList` varchar(255) NOT NULL,
-  `subject` varchar(255) NOT NULL,
-  `body` text NOT NULL,
-  `addedBy` char(30) NOT NULL,
-  `addedDate` datetime NOT NULL,
-  `sendTime` datetime NOT NULL,
-  `status` varchar(10) NOT NULL DEFAULT 'wait',
-  `failReason` text NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `sendTime` (`sendTime`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_module`;
 CREATE TABLE IF NOT EXISTS `zt_module` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
