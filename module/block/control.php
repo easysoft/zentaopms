@@ -1237,14 +1237,19 @@ class block extends control
             $this->app->loadLang('todo');
             $stmt = $this->dao->select('*')->from(TABLE_TODO)
                 ->where("(assignedTo = '{$this->app->user->account}' or (assignedTo = '' and account='{$this->app->user->account}'))")
-                ->andWhere('status')->ne('done')
                 ->andWhere('cycle')->eq(0)
                 ->orderBy('`date`');
             if(isset($params->todoNum)) $stmt->limit($params->todoNum);
             $todos = $stmt->fetchAll();
 
-            foreach($todos as $todo)
+            foreach($todos as $key => $todo)
             {
+                if($todo->status == 'done' and $todo->finishedBy == $this->app->user->account)
+                {
+                    unset($todos[$key]);
+                    continue;
+                }
+
                 $todo->begin = date::formatTime($todo->begin);
                 $todo->end   = date::formatTime($todo->end);
             }
