@@ -48,7 +48,7 @@ class docModel extends model
 
             $selectHtml .= "<div class='btn-group angle-btn'>";
             $selectHtml .= "<div class='btn-group'>";
-            $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $mainLib . " <span class='caret'></span></a>";
+            $selectHtml .= "<a data-toggle='dropdown' class='btn btn-limit' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
             $selectHtml .= "<ul class='dropdown-menu'>";
             foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
             {
@@ -68,12 +68,13 @@ class docModel extends model
                 if($type == 'project') $currentLib = $projectID;
                 if($currentLib)
                 {
-                    $allLibGroups = $this->getAllLibGroups();
-                    $currentGroups = $allLibGroups[$type];
+                    $allLibGroups   = $this->getAllLibGroups();
+                    $currentGroups  = $allLibGroups[$type];
+                    $currentLibName = is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib];
 
                     $selectHtml .= "<div class='btn-group angle-btn'>";
                     $selectHtml .= "<div class='btn-group'>";
-                    $selectHtml .= '<a data-toggle="dropdown" class="btn">' . (is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib]) . ' <span class="caret"></span></a>';
+                    $selectHtml .= "<a data-toggle='dropdown' class='btn btn-limit' title=$currentLibName>" . $currentLibName . ' <span class="caret"></span></a>';
                     $selectHtml .='<ul class="dropdown-menu">';
                     if($type == 'custom')
                     {
