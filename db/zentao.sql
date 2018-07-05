@@ -925,18 +925,6 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_webhookdatas`;
-CREATE TABLE IF NOT EXISTS `zt_webhookdatas` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `webhook` mediumint(8) unsigned NOT NULL,
-  `action` mediumint(8) unsigned NOT NULL,
-  `data` text NOT NULL,
-  `status` enum('wait', 'sended') NOT NULL DEFAULT 'wait',
-  `createdBy` varchar(30) NOT NULL,
-  `createdDate` datetime NOT NULL,
-  PRIMARY KEY `id` (`id`),
-  UNIQUE KEY `uniq` (`webhook`, `action`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_log`;
 CREATE TABLE IF NOT EXISTS `zt_log` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
