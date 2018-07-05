@@ -13,7 +13,7 @@
 <?php if(empty($projectStats)): ?>
 <div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
-<div class="panel-body has-table">
+<div class="panel-body has-table scrollbar-hover">
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-projects tablesorter'>
     <thead>
       <tr class='text-center'>

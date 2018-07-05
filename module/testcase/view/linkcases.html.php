@@ -15,7 +15,7 @@
   <div class='btn-toolbar pull-left'>
     <div class="page-title">
       <span class="label label-id"><?php echo $case->id;?></span>
-      <?php echo html::a($this->createLink('case', 'view', 'caseID=' . $case->id), $case->title, '_blank', 'class="text"');?> <span class='text-muted'><i class="icon-angle-right"></i> <span><?php echo $lang->testcase->linkCases;?></span></span>
+      <?php echo html::a($this->createLink('case', 'view', 'caseID=' . $case->id), $case->title, '_blank', "class='text' title='{$case->title}'");?> <span class='text-muted'><i class="icon-angle-right"></i> <span><?php echo $lang->testcase->linkCases;?></span></span>
     </div>
   </div>
 </div>

@@ -18,7 +18,7 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $lib->id;?></span>
-      <?php echo $lib->name;?>
+      <span class='text' title='<?php echo $lib->name;?>'><?php echo $lib->name;?></span>
       <?php if($lib->deleted):?>
       <span class='label label-danger'><?php echo $lang->testsuite->deleted;?></span>
       <?php endif; ?>

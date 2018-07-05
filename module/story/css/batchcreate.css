@@ -6,3 +6,4 @@
 #batchCreateForm .col-pri {width: 100px;}
 #batchCreateForm .col-review,
 #batchCreateForm .col-estimate {width: 90px;}
+.body-modal .main-header > h2 {max-width: 80%;}

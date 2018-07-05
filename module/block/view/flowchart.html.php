@@ -20,7 +20,7 @@
 .block-flowchart .flowchart-title {font-size: 14px;font-weight: bold;color: #3c4353;}
 .block-flowchart .flowchart-step {display: inline-block;width: 24px;height: 24px;font-size: 14px;line-height: 24px;color: #fff; border-radius: 50%;}
 </style>
-<div class='panel-body has-table'>
+<div class='panel-body has-table scrollbar-hover'>
   <table class="table table-borderless">
     <thead>
       <tr>
