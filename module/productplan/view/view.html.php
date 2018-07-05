@@ -21,7 +21,7 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $plan->id;?></span>
-      <?php echo $plan->title;?>
+      <span title='<?php echo $plan->name;?>' class='text'><?php echo $plan->title;?></span>
       <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branches[$branch] . '</span>';?>
       <span class='label label-info label-badge'>
         <?php echo ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>

@@ -17,9 +17,7 @@
   <div class="btn-toolbar pull-left">
     <div class="page-title">
       <span class="label label-id"><?php echo $todo->id?></span>
-      <span class="text">
-        <?php echo $todo->name;?>
-      </span>
+      <span class='text' title='<?php echo $todo->name;?>'><?php echo $todo->name;?></span>
     </div>
   </div>
 </div>
