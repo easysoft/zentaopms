@@ -38,9 +38,9 @@
                 if(count($lines) == 1)
                 {
                     echo "<span class='input-group-addon'>";
-                    echo html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=line"), $lang->tree->manageLine, '_blank');
+                    echo html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=line", '', true), $lang->tree->manageLine, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:loadProductLines({$rootID})", $lang->refresh, '', "class='refresh'");
+                    echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductLines($rootID)'");
                     echo '</span>';
                 }
                 ?>
