@@ -74,7 +74,7 @@ $lang->product->qa            = 'QA';
 $lang->product->release       = 'Release';
 $lang->product->latestDynamic = 'Dynamic';
 $lang->product->plan          = 'Plan';
-$lang->product->iteration     = 'Iteration';
+$lang->product->iteration     = 'Version Iteration';
 $lang->product->iterationInfo = '%s Iterations';
 $lang->product->iterationView = 'Details';
 
