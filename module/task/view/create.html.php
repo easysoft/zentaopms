@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', $config->global->flow == 'onlyTask' || !empty($task->id));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -181,7 +182,7 @@
           </div>
           <div class='modal-content with-padding'>
             <table class="table table-form" id='taskTeamEditor'>
-              <tbody>
+              <tbody class='sortable'>
                 <tr class='template'>
                   <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
                   <td>
@@ -190,11 +191,10 @@
                       <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
                     </div>
                   </td>
-                  <td class='w-130px'>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-up'><i class='icon-arrow-up'></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-down'><i class='icon-arrow-down'></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
+                  <td class='w-130px sort-handler'>
+                    <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                    <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+                    <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
                   </td>
                 </tr>
               </tbody>

@@ -209,9 +209,6 @@ $(document).ready(function()
 
     var adjustButtons = function()
     {
-        $taskTeamEditor.find('.btn-move-up.disabled,.btn-move-down.disabled,.btn-delete.disabled').removeClass('disabled').attr('disabled', null);
-        $taskTeamEditor.find('.btn-move-up:first').addClass('disabled').attr('disabled', 'disabled');
-        $taskTeamEditor.find('.btn-move-down:last').addClass('disabled').attr('disabled', 'disabled');
         var $deleteBtn = $taskTeamEditor.find('.btn-delete');
         if ($deleteBtn.length == 1) $deleteBtn.addClass('disabled').attr('disabled', 'disabled');
     };
@@ -233,19 +230,7 @@ $(document).ready(function()
             $row.remove();
             adjustButtons();
         });
-    }).on('click', '.btn-move-up, .btn-move-down', function()
-    {
-        var $this = $(this);
-        if($this.hasClass('btn-move-up'))
-        {
-            $(this).parents('tr').prev().before($(this).parents('tr'));
-        }
-        else
-        {
-            $this.parents('tr').next().after($(this).parents('tr'));
-        }
-        adjustButtons();
-    });;
+    });
 
     adjustButtons();
 });
