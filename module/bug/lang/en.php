@@ -109,7 +109,7 @@ $lang->bug->resolvedByMe       = 'ResolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
 $lang->bug->unResolved         = 'Unresolved';
-$lang->bug->toClosed           = 'ToBeClosed';
+$lang->bug->toClosed           = 'Unclosed';
 $lang->bug->unclosed           = 'Active';
 $lang->bug->unconfirmed        = 'UnConfirmed';
 $lang->bug->longLifeBugs       = 'Pending';
@@ -167,7 +167,7 @@ $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you
 $lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
 $lang->bug->applyTemplate         = 'Template';
 $lang->bug->confirmDeleteTemplate = 'Do you want to delete this template?';
-$lang->bug->hasSubmittedTest      = 'Development has submitted test application,';
+$lang->bug->hasSubmittedTest      = 'Developer has submitted test task,';
 $lang->bug->nowToTest             = 'Now to test';
 
 /* 模板。*/
@@ -252,8 +252,8 @@ $lang->bug->statusList['active']   = 'Active';
 $lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
-$lang->bug->confirmedList[1] = 'Yes';
-$lang->bug->confirmedList[0] = 'No';
+$lang->bug->confirmedList[1] = 'Confirmed';
+$lang->bug->confirmedList[0] = 'Unconfirmed';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'As Design';

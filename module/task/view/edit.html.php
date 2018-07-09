@@ -13,11 +13,13 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('oldStoryID', $task->story); ?>
-<?php js::set('oldAssignedTo', $task->assignedTo); ?>
-<?php js::set('oldProjectID', $task->project); ?>
-<?php js::set('confirmChangeProject', $lang->task->confirmChangeProject); ?>
-<?php js::set('changeProjectConfirmed', false); ?>
+<?php include '../../common/view/sortable.html.php';?>
+<?php js::set('oldStoryID', $task->story);?>
+<?php js::set('oldAssignedTo', $task->assignedTo);?>
+<?php js::set('oldProjectID', $task->project);?>
+<?php js::set('confirmChangeProject', $lang->task->confirmChangeProject);?>
+<?php js::set('changeProjectConfirmed', false);?>
+<?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -219,7 +221,7 @@
         </div>
         <div class="modal-content with-padding" id='taskTeamEditor'>
           <table class='table table-form'>
-            <tbody>
+            <tbody class="sortable">
               <?php foreach($task->team as $member):?>
               <tr>
                 <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
@@ -233,10 +235,10 @@
                     <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                   </div>
                 </td>
-                <td class='w-130px'>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-up'><i class='icon-arrow-up'></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-down'><i class='icon-arrow-down'></i></button>
+                <td class='w-130px sort-handler'>
                   <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+                  <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
                 </td>
               </tr>
               <?php endforeach;?>
@@ -252,10 +254,9 @@
                     <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                   </div>
                 </td>
-                <td class='w-130px'>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-up'><i class='icon-arrow-up'></i></button>
-                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move-down'><i class='icon-arrow-down'></i></button>
+                <td class='w-130px sort-handler'>
                   <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                  <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
                   <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-trash"></i></button>
                 </td>
               </tr>

@@ -52,8 +52,8 @@
           <th><?php echo $lang->team->days;?></th>
           <th><?php echo $lang->team->hours;?></th>
           <th><?php echo $lang->team->totalHours;?></th>
-          <th class='w-80px text-center'><?php echo $lang->team->limited;?></th>
-          <th class='c-actions-1'><?php echo $lang->actions;?></th>
+          <th class='w-100px text-center'><?php echo $lang->team->limited;?></th>
+          <th class='c-actions-1 w-80px'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

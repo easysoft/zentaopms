@@ -28,7 +28,7 @@
       <tr class='text-middle'>
         <?php for($i = 0; $i < 6; $i++):?>
         <?php if($i == 0):?>
-        <th><span class="flowchart-title"><?php echo $lang->block->role?></span></th>
+        <th style='width:110px;'><span class="flowchart-title"><?php echo $lang->block->role?></span></th>
         <?php else:?>
         <th><div><span class="flowchart-step bg-secondary"><?php echo $i?></span></div></th>
         <?php endif;?>
