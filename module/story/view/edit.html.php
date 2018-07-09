@@ -49,8 +49,6 @@
               <?php echo html::textarea('comment', '', "rows='5' class='form-control'");?>
             </div>
           </div>
-          <div id='linkStoriesBOX'><?php echo html::hidden('linkStories', $story->linkStories);?></div>
-          <div id='childStoriesBOX'><?php echo html::hidden('childStories', $story->childStories);?></div>
           <div class='actions form-actions text-center'>
             <?php 
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
@@ -200,23 +198,24 @@
               <tr>
                 <th></th>
                 <td>
-                  <ul class='list-unstyled' id='linkStoriesBox'>
-                  <?php
-                  if($story->linkStories)
-                  {
-                      $linkStories = explode(',', $story->linkStories);
-                      foreach($linkStories as $linkStoryID)
-                      {
-                          if(isset($story->extraStories[$linkStoryID]))
-                          {
-                              echo "<li><div class='checkbox-primary'>";
-                              echo "<input type='checkbox' checked='checked' name='linkStories[]' value=$linkStoryID />";
-                              echo "<label>#{$linkStoryID} {$story->extraStories[$linkStoryID]}</label>";
-                              echo '</div></li>';
-                          }
-                      }
-                  }
-                  ?>
+                  <ul class='list-unstyled'>
+                    <?php
+                    if($story->linkStories)
+                    {
+                        $linkStories = explode(',', $story->linkStories);
+                        foreach($linkStories as $linkStoryID)
+                        {
+                            if(isset($story->extraStories[$linkStoryID]))
+                            {
+                                echo "<li><div class='checkbox-primary'>";
+                                echo "<input type='checkbox' checked='checked' name='linkStories[]' value=$linkStoryID />";
+                                echo "<label>#{$linkStoryID} {$story->extraStories[$linkStoryID]}</label>";
+                                echo '</div></li>';
+                            }
+                        }
+                    }
+                    ?>
+                    <span id='linkStoriesBox'></span>
                   </ul>
                 </td>
               </tr>
@@ -230,23 +229,24 @@
               <tr>
                 <th></th>
                 <td>
-                  <ul class='list-unstyled' id='childStoriesBox'>
-                  <?php
-                  if($story->childStories)
-                  {
-                      $childStories = explode(',', $story->childStories);
-                      foreach($childStories as $childStoryID)
-                      {
-                          if(isset($story->extraStories[$childStoryID]))
-                          {
-                              echo "<li><div class='checkbox-primary'>";
-                              echo "<input type='checkbox' checked='checked' name='childStories[]' value=$childStoryID />";
-                              echo "<label>#{$childStoryID} {$story->extraStories[$childStoryID]}</label>";
-                              echo '</div></li>';
-                          }
-                      }
-                  }
-                  ?>
+                  <ul class='list-unstyled'>
+                    <?php
+                    if($story->childStories)
+                    {
+                        $childStories = explode(',', $story->childStories);
+                        foreach($childStories as $childStoryID)
+                        {
+                            if(isset($story->extraStories[$childStoryID]))
+                            {
+                                echo "<li><div class='checkbox-primary'>";
+                                echo "<input type='checkbox' checked='checked' name='childStories[]' value=$childStoryID />";
+                                echo "<label>#{$childStoryID} {$story->extraStories[$childStoryID]}</label>";
+                                echo '</div></li>';
+                            }
+                        }
+                    }
+                    ?>
+                    <span id='childStoriesBox'></span>
                   </ul>
                 </td>
               </tr>

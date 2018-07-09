@@ -93,7 +93,7 @@ $(function()
             output += checkbox;
         });
         $.closeModal();
-        parent.$('#' + linkType + 'Box').append(output);
+        parent.$('#' + linkType + 'Box').html(output);
         return false;
     });
 });

@@ -272,19 +272,20 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                 <tr>
                   <th></th>
                   <td>
-                    <ul class='list-unstyled' id='linkBugBox'>
-                    <?php
-                    if(isset($bug->linkBugTitles))
-                    {
-                        foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
-                        {
-                            echo '<li>';
-                            echo html::a(inlink('view', "bugID=$linkBugID"), "#$linkBugID " . $linkBugTitle, '_blank');
-                            echo html::a("javascript:unlinkBug($bug->id, $linkBugID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
-                            echo '</li>';
-                        }
-                    }
-                    ?>
+                    <ul class='list-unstyled'>
+                      <?php
+                      if(isset($bug->linkBugTitles))
+                      {
+                          foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                          {
+                              echo "<li><div class='checkbox-primary'>";
+                              echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$linkBugID />";
+                              echo "<label>#{$linkBugID} {$linkBugTitle}</label>";
+                              echo '</div></li>';
+                          }
+                      }
+                      ?>
+                      <span id='linkBugsBox'></span>
                     </ul>
                   </td>
                 </tr>
