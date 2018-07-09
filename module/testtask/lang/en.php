@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->testtask->index            = "Home";
-$lang->testtask->create           = "Create Test";
+$lang->testtask->create           = "Submit Test";
 $lang->testtask->reportChart      = 'Report';
 $lang->testtask->delete           = "Delete";
 $lang->testtask->view             = "Overview";

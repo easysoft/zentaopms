@@ -58,7 +58,7 @@ $lang->project->product       = $lang->project->products;
 $lang->project->readjustTime  = 'Adjust project begin and end time';
 $lang->project->readjustTask  = 'Adjust task start date and deadline';
 $lang->project->effort        = 'Effort';
-$lang->project->relatedMember = 'Related Member';
+$lang->project->relatedMember = 'Team Members';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
@@ -143,7 +143,7 @@ $lang->project->batchUnlinkStory  = 'Batch Unlink Story';
 $lang->project->importTask        = 'Import Tasks';
 $lang->project->importPlanStories = 'Link Story From Plan';
 $lang->project->importBug         = 'Import Bugs';
-$lang->project->updateOrder       = 'Order';
+$lang->project->updateOrder       = 'Sort';
 $lang->project->tree              = 'Tree';
 $lang->project->storyKanban       = 'Story Kanban';
 $lang->project->storySort         = 'Sort Story';
@@ -175,7 +175,7 @@ $lang->project->groups['closedBy']   = 'By ClosedBy';
 $lang->project->groups['type']       = 'By Type';
 
 $lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = 'Task Linked to Story';
+$lang->project->groupFilter['story']['linked']      = 'Tasks Linked to Story';
 $lang->project->groupFilter['pri']['all']           = $lang->project->all;
 $lang->project->groupFilter['pri']['noset']         = 'Not set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';
