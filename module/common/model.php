@@ -944,12 +944,13 @@ EOD;
         $magicQuote = get_magic_quotes_gpc();
         foreach($new as $key => $value)
         {
-            if(strtolower($key) == 'lastediteddate') continue;
-            if(strtolower($key) == 'lasteditedby')   continue;
-            if(strtolower($key) == 'assigneddate')   continue;
-            if(strtolower($key) == 'editedby')       continue;
-            if(strtolower($key) == 'editeddate')     continue;
-            if(strtolower($key) == 'uid')            continue;
+            if(is_object($value) or is_array($value)) continue;
+            if(strtolower($key) == 'lastediteddate')  continue;
+            if(strtolower($key) == 'lasteditedby')    continue;
+            if(strtolower($key) == 'assigneddate')    continue;
+            if(strtolower($key) == 'editedby')        continue;
+            if(strtolower($key) == 'editeddate')      continue;
+            if(strtolower($key) == 'uid')             continue;
             if(strtolower($key) == 'finisheddate' && $value == '')  continue;
             if(strtolower($key) == 'canceleddate' && $value == '')  continue;
             if(strtolower($key) == 'closeddate'   && $value == '')  continue;
