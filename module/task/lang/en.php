@@ -117,7 +117,7 @@ $lang->task->noStory           = 'No Story';
 $lang->task->noAssigned        = 'Unassigned';
 $lang->task->noFinished        = 'Unfinished';
 $lang->task->noClosed          = 'Unclosed';
-$lang->task->yesterdayFinished = 'Finishied Yesterday';
+$lang->task->yesterdayFinished = 'Finished Yesterday';
 $lang->task->allTasks          = 'All Tasks';
 
 $lang->task->statusList['']        = '';
