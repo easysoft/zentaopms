@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 
-<div id="mainContent" class="main-content">
+<div id="mainContent">
   <div class="main-header">
     <h2><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h2>
     <div class="input-group pull-left">
@@ -50,7 +50,7 @@
             <th class='col-name required'><?php echo $lang->todo->name;?></th>
             <th class='col-desc<?php echo zget($visibleFields, 'desc', ' hidden');?>'><?php echo $lang->todo->desc;?></th>
             <th class='col-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-            <th class='w-70px'></th>
+            <th class='col-pending'></th>
           </tr>
         </thead>
         <tbody>
