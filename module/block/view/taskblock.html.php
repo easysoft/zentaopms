@@ -19,9 +19,6 @@
 .block-tasks .c-estimate {width: 60px;}
 .block-tasks .c-deadline {width: 95px;}
 .block-tasks .c-status {width: 80px;}
-.block-tasks.block-sm .estimate,
-.block-tasks.block-sm .c-deadline,
-.block-tasks.block-sm .c-status .label-dot {display: none;}
 .block-tasks.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
@@ -54,7 +51,7 @@
         <?php endif;?>
         <td class='c-status' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
           <span class="status-<?php echo $task->status?>">
-            <span class="label label-dot"></span>
+            <span class="label label-dot hide-in-sm"></span>
             <span class='status-text'><?php echo zget($lang->task->statusList, $task->status);?></span>
           </span>
         </td>
