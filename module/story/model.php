@@ -1271,20 +1271,6 @@ class storyModel extends model
     }
 
     /**
-     * Get linked stories.
-     *
-     * @param  string $storyID
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function getLinkedStories($storyID, $type = 'linkStories')
-    {
-        $story = $this->getById($storyID);
-        return $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($story->$type)->fetchPairs();
-    }
-
-    /**
      * Get stories list of a product.
      *
      * @param  int          $productID

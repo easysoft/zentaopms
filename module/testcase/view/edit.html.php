@@ -225,19 +225,20 @@
               <tr>
                 <th></th>
                 <td>
-                  <ul class='list-unstyled' id='linkCaseBox'>
-                  <?php
-                  if(isset($case->linkCaseTitles))
-                  {
-                      foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
-                      {
-                          echo '<li>';
-                          echo html::a(inlink('view', "caseID=$linkCaseID"), "#$linkCaseID " . $linkCaseTitle, '_blank');
-                          echo html::a("javascript:unlinkCase($case->id, $linkCaseID)", '<i class="icon-trash"></i>', '', "title='{$lang->unlink}' style='float:right'");
-                          echo '</li>';
-                      }
-                  }
-                  ?>
+                  <ul class='list-unstyled'>
+                    <?php
+                    if(isset($case->linkCaseTitles))
+                    {
+                        foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+                        {
+                            echo "<li><div class='checkbox-primary'>";
+                            echo "<input type='checkbox' checked='checked' name='linkCase[]' value=$linkCaseID />";
+                            echo "<label>#{$linkCaseID} {$linkCaseTitle}</label>";
+                            echo '</div></li>';
+                        }
+                    }
+                    ?>
+                    <span id='linkCaseBox'></span>
                   </ul>
                 </td>
               </tr>

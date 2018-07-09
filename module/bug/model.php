@@ -618,6 +618,7 @@ class bugModel extends model
             ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')
             ->join('mailto', ',')
+            ->join('linkBug', ',')
             ->setIF($this->post->assignedTo  != $oldBug->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->resolvedBy  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
             ->setIF($this->post->resolution  != '' and $this->post->resolvedDate == '', 'resolvedDate', $now)
@@ -1160,26 +1161,6 @@ class bugModel extends model
     }
 
     /**
-     * Link related bugs.
-     *
-     * @param  int    $bugID
-     * @access public
-     * @return void
-     */
-    public function linkBugs($bugID)
-    {
-        if($this->post->bugs == false) return;
-
-        $bug       = $this->getById($bugID);
-        $bugs2Link = $this->post->bugs;
-
-        $bugs = implode(',', $bugs2Link) . ',' . trim($bug->linkBug, ',');
-        $this->dao->update(TABLE_BUG)->set('linkBug')->eq(trim($bugs, ','))->where('id')->eq($bugID)->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('bug', $bugID, 'linkRelatedBug', '', implode(',', $bugs2Link));
-    }
-
-    /**
      * Get bugs to link.
      *
      * @param  int    $bugID
@@ -1205,43 +1186,6 @@ class bugModel extends model
         {
             return array();
         }
-    }
-
-    /**
-     * Unlink related bug.
-     *
-     * @param  int    $bugID
-     * @param  int    $bug2Unlink
-     * @access public
-     * @return void
-     */
-    public function unlinkBug($bugID, $bug2Unlink = 0)
-    {
-        $bug = $this->getById($bugID);
-
-        $bugs = explode(',', trim($bug->linkBug, ','));
-        foreach($bugs as $key => $bugId)
-        {
-            if($bugId == $bug2Unlink) unset($bugs[$key]);
-        }
-        $bugs = implode(',', $bugs);
-
-        $this->dao->update(TABLE_BUG)->set('linkBug')->eq($bugs)->where('id')->eq($bugID)->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('bug', $bugID, 'unlinkRelatedBug', '', $bug2Unlink);
-    }
-
-    /**
-     * Get linkBugs.
-     *
-     * @param  int    $bugID
-     * @access public
-     * @return array
-     */
-    public function getLinkBugs($bugID)
-    {
-        $bug = $this->getById($bugID);
-        return $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($bug->linkBug)->fetchPairs();
     }
 
     /**

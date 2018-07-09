@@ -931,14 +931,6 @@ class testcase extends control
      */
     public function linkCases($caseID, $browseType = '', $param = 0)
     {
-        /* Link cases. */
-        if(!empty($_POST))
-        {
-            $this->testcase->linkCases($caseID);
-            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkCases('$caseID')}"));
-            die(js::locate($this->createLink('testcase', 'edit', "caseID=$caseID"), 'parent'));
-        }
-
         /* Get case and queryID. */
         $case    = $this->testcase->getById($caseID);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
@@ -963,47 +955,6 @@ class testcase extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
-    }
-
-    /**
-     * AJAX: get linkCases.
-     *
-     * @param  int    $caseID
-     * @access public
-     * @return string
-     */
-    public function ajaxGetLinkCases($caseID)
-    {
-        /* Get linkCases. */
-        $cases = $this->testcase->getLinkCases($caseID);
-
-        /* Build linkCase list. */
-        $output = '';
-        foreach($cases as $caseId => $caseTitle)
-        {
-            $output .= '<li>';
-            $output .= html::a(inlink('view', "caseID=$caseId"), "#$caseId " . $caseTitle, '_blank');
-            $output .= html::a("javascript:unlinkCase($caseID, $caseId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
-            $output .= '</li>';
-        }
-
-        die($output);
-    }
-
-    /**
-     * Unlink related case.
-     *
-     * @param  int    $caseID
-     * @param  int    $case2Unlink
-     * @access public
-     * @return string
-     */
-    public function unlinkCase($caseID, $case2Unlink = 0)
-    {
-        /* Unlink related case. */
-        $this->testcase->unlinkCase($caseID, $case2Unlink);
-
-        die('success');
     }
 
     /**
