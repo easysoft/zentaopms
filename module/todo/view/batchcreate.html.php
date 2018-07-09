@@ -16,7 +16,7 @@
 <div id="mainContent">
   <div class="main-header">
     <h2><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h2>
-    <div class="input-group pull-left">
+    <div class="input-group pull-left" style='width:255px;'>
       <span class="input-group-addon"><?php echo $lang->todo->date;?></span>
       <input type="text" name="date" value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
       <span class="input-group-addon">

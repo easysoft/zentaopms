@@ -16,10 +16,10 @@ $lang->misc->api    = 'http://api.zentao.net';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
-$lang->misc->zentao->labels['about']   = 'About ZenTao';
-$lang->misc->zentao->labels['support'] = 'Technical Support';
+$lang->misc->zentao->labels['about']   = 'About';
+$lang->misc->zentao->labels['support'] = 'Support';
 $lang->misc->zentao->labels['cowin']   = 'Help Us';
-$lang->misc->zentao->labels['service'] = 'Service List';
+$lang->misc->zentao->labels['service'] = 'Service';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';

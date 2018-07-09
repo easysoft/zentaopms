@@ -2,3 +2,5 @@
 form {position:relative}
 #querybox {float: none!important; width: auto;}
 #moreOrLite {right: 10px!important}
+
+#userList tbody td{white-space: nowrap; overflow:hidden}

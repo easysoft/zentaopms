@@ -11,7 +11,7 @@
  */
 $lang->tutorial = new stdclass();
 $lang->tutorial->common           = 'Tutorial';
-$lang->tutorial->desc             = 'Get to know ZenTao through finishing tasks. It will take about 10 mins, and you can quit it anytime.';
+$lang->tutorial->desc             = 'Get know ZenTao by doing tasks. It takes about 10 minutes, and you can quit it anytime.';
 $lang->tutorial->start            = "Let's go!";
 $lang->tutorial->exit             = 'Quit';
 $lang->tutorial->congratulation   = 'Congratulations! You have finished all tasks.';
