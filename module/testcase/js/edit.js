@@ -20,37 +20,6 @@ $(document).ready(function()
     initSteps();
 });
 
-
-/**
- * Unlink related case.
- *
- * @param  int $caseID
- * @param  int $case2Unlink
- * @access public
- * @return void
- */
-function unlinkCase(caseID, case2Unlink)
-{
-    link = createLink('testcase', 'unlinkCase', 'caseID=' + caseID + '&case2Unlink=' + case2Unlink);
-    $.get(link, function(data)
-    {
-        if(data == 'success') $('#linkCaseBox').load(createLink('testcase', 'ajaxGetLinkCases', 'caseID=' + caseID));
-    });
-}
-
-/**
- * Load linkCases.
- *
- * @param  int    $caseID
- * @access public
- * @return void
- */
-function loadLinkCases(caseID)
-{
-    caseLink = createLink('testcase', 'ajaxGetLinkCases', 'caseID=' + caseID);
-    $('#linkCaseBox').load(caseLink);
-}
-
 /**
  * Load lib modules.
  * 

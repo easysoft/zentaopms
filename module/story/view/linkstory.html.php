@@ -34,7 +34,7 @@
           </div>
           <?php echo $lang->idAB;?>
         </th>
-        <th class='w-pri'><?php echo $lang->priAB;?></th>
+        <th class='c-pri'><?php echo $lang->priAB;?></th>
         <th><?php echo $lang->story->product;?></th>
         <th><?php echo $lang->story->title;?></th>
         <th><?php echo $lang->story->plan;?></th>
@@ -54,7 +54,7 @@
           </div>
           <?php echo html::a($storyLink, sprintf('%03d', $story2Link->id));?>
         </td>
-        <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story2Link->pri, $story2Link->pri)?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
+        <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story2Link->pri?>' title='<?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?>'><?php echo zget($lang->story->priList, $story2Link->pri, $story2Link->pri);?></span></td>
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
         <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title, '_blank');?></td>
         <td><?php echo $story2Link->planTitle;?></td>
@@ -93,7 +93,7 @@ $(function()
             output += checkbox;
         });
         $.closeModal();
-        parent.$('#' + linkType + 'Box').append(output);
+        parent.$('#' + linkType + 'Box').html(output);
         return false;
     });
 });

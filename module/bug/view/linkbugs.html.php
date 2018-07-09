@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='space'>
+<div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $bug->id;?></span>
@@ -19,11 +19,11 @@
       <small class='text-muted'> <?php echo $lang->arrow . $lang->bug->linkBugs;?></small>
     </h2>
   </div>
-  <div id='queryBox' class='show'></div>
+  <div id='queryBox' class='show divider'></div>
   <?php if($bugs2Link):?>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='linkBugsForm'>
     <table class='table' id='bugList'>
-      <thead class='hl-gray'>
+      <thead>
         <tr>
           <th class="c-id">
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -64,10 +64,33 @@
     </table>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar"><?php echo html::submitButton();?></div>
+      <div class="table-actions btn-toolbar"><?php if($bugCount) echo html::submitButton('', '', 'btn btn-default');?></div>
       <?php echo html::hidden('bug', $bug->id);?>
     </div>
   </form>
   <?php endif;?>
 </div>
+<script>
+$(function()
+{
+    <?php if($bugs2Link):?>
+    $('#linkBugsForm').table();
+    setTimeout(function(){$('#linkBugsForm .table-footer').removeClass('fixed-footer');}, 100);
+    <?php endif;?>
+
+    $('#submit').click(function(){
+        var output = '';
+        $('#linkBugsForm').find('tr.checked').each(function(){
+            var bugID    = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
+            var bugTitle = "#" + bugID + ' ' + $(this).find('td').eq(3).attr('title');
+            var checkbox  = "<li><div class='checkbox-primary'><input type='checkbox' checked='checked' name='linkBug[]' " + "value=" + bugID + " /><label>" + bugTitle + "</label></div></li>";
+
+            output += checkbox;
+        });
+        $.closeModal();
+        parent.$('#linkBugsBox').html(output);
+        return false;
+    });
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -26,7 +26,7 @@ class todoModel extends model
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->setDefault('idvalue', 0)
-            ->cleanInt('date, pri, begin, end, private')
+            ->cleanInt('pri, begin, end, private')
             ->setIF($this->post->type == 'bug'  and $this->post->bug,  'idvalue', $this->post->bug)
             ->setIF($this->post->type == 'task' and $this->post->task, 'idvalue', $this->post->task)
             ->setIF($this->post->type == 'story' and $this->post->story, 'idvalue', $this->post->story)
@@ -87,7 +87,7 @@ class todoModel extends model
      */
     public function batchCreate()
     {
-        $todos = fixer::input('post')->cleanInt('date')->get();
+        $todos = fixer::input('post')->get();
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
             if($todos->names[$i] != '' || isset($todos->bugs[$i + 1]) || isset($todos->tasks[$i + 1]))
@@ -149,7 +149,7 @@ class todoModel extends model
         $oldTodo = $this->dao->findById((int)$todoID)->from(TABLE_TODO)->fetch();
         if(in_array($oldTodo->type, array('bug', 'task', 'story'))) $oldTodo->name = '';
         $todo = fixer::input('post')
-            ->cleanInt('date, pri, begin, end, private')
+            ->cleanInt('pri, begin, end, private')
             ->add('account', $oldTodo->account)
             ->setIF(in_array($oldTodo->type, array('bug', 'task', 'story')), 'name', '')
             ->setIF($this->post->date  == false, 'date', '2030-01-01')
@@ -499,7 +499,7 @@ class todoModel extends model
                     $newTodo->date = $newDate;
                     $this->dao->insert(TABLE_TODO)->data($newTodo)->exec();
                     $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
-                    $lastCycleList[$todo->id] = $newTodo;
+                    $lastCycleList[$todoID] = $newTodo;
                 }
             }
         }

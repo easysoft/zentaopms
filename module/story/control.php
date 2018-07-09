@@ -1157,32 +1157,6 @@ class story extends control
     }
 
     /**
-     * AJAX: if type is linkStories, get related stories else get child stories.
-     *
-     * @param  int    $storyID
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function ajaxGetLinkedStories($storyID, $type = '')
-    {
-        /* Get linked stories. */
-        $stories = $this->story->getLinkedStories($storyID, $type);
-
-        /* Build linked stories list. */
-        $output = '';
-        foreach($stories as $storyId => $storyTitle)
-        {
-            $output .= '<li>';
-            $output .= html::a(inlink('view', "storyID=$storyId"), "#$storyId " . $storyTitle, '_blank');
-            $output .= html::a("javascript:unlinkStory($storyID, \"$type\", $storyId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
-            $output .= '</li>';
-        }
-
-        die($output);
-    }
-
-    /**
      * AJAX: get stories of a project in html select.
      * 
      * @param  int    $projectID 
