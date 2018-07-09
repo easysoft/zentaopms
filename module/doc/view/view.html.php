@@ -68,8 +68,8 @@
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
-      <div class="detail">
-        <div class="detail-content article-content">
+      <div class="detail no-margin no-padding">
+        <div class="detail-content article-content no-margin no-padding">
           <?php
           $content = $doc->content;
           if($doc->type == 'url')
