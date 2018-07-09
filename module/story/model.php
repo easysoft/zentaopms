@@ -2362,15 +2362,22 @@ class storyModel extends model
                 echo $story->estimate;
                 break;
             case 'stage':
-                echo "<div" . (isset($storyStages[$story->id]) ? " class='popoverStage' data-toggle='popover' data-placement='bottom' data-target='\$next'" : '') . ">";
-                echo $this->lang->story->stageList[$story->stage];
-                if(isset($storyStages[$story->id])) echo "<span><i class='icon icon-caret-down'></i></span>";
-                echo '</div>';
                 if(isset($storyStages[$story->id]))
                 {
-                    echo "<div class='popover'>";
-                    foreach($storyStages[$story->id] as $storyBranch => $storyStage) echo $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '<br />';
-                    echo "</div>";
+                    echo "<div class='dropdown dropdown-hover'>";
+                    echo $this->lang->story->stageList[$story->stage];
+                    echo "<span class='caret'></span>";
+                    echo "<ul class='dropdown-menu pull-right'>";
+                    foreach($storyStages[$story->id] as $storyBranch => $storyStage)
+                    {
+                        echo '<li class="text-ellipsis">' . $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '</li>';
+                    }
+                    echo "</ul>";
+                    echo '</div>';
+                }
+                else
+                {
+                    echo $this->lang->story->stageList[$story->stage];
                 }
                 break;
             case 'taskCount':

@@ -49,6 +49,7 @@ class productplan extends control
             $planID = $this->productplan->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
+            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$product&branch=$branch")));
         }
 
