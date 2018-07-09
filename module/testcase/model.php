@@ -651,6 +651,7 @@ class testcaseModel extends model
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('story,branch', 0)
             ->join('stage', ',')
+            ->join('linkCase', ',')
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
         if(!$this->forceNotReview() and $stepChanged) $case->status = 'wait';
@@ -750,26 +751,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Link related cases.
-     *
-     * @param  int    $caseID
-     * @access public
-     * @return void
-     */
-    public function linkCases($caseID)
-    {
-        if($this->post->cases == false) return;
-
-        $case       = $this->getById($caseID);
-        $cases2Link = $this->post->cases;
-
-        $cases = implode(',', $cases2Link) . ',' . trim($case->linkCase, ',');
-        $this->dao->update(TABLE_CASE)->set('linkCase')->eq(trim($cases, ','))->where('id')->eq($caseID)->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('case', $caseID, 'linkRelatedCase', '', implode(',', $cases2Link));
-    }
-
-    /**
      * Get cases to link.
      *
      * @param  int    $caseID
@@ -795,43 +776,6 @@ class testcaseModel extends model
         {
             return array();
         }
-    }
-
-    /**
-     * Unlink related case.
-     *
-     * @param  int    $caseID
-     * @param  int    $case2Unlink
-     * @access public
-     * @return void
-     */
-    public function unlinkCase($caseID, $case2Unlink = 0)
-    {
-        $case = $this->getById($caseID);
-
-        $cases = explode(',', trim($case->linkCase, ','));
-        foreach($cases as $key => $caseId)
-        {
-            if($caseId == $case2Unlink) unset($cases[$key]);
-        }
-        $cases = implode(',', $cases);
-
-        $this->dao->update(TABLE_CASE)->set('linkCase')->eq($cases)->where('id')->eq($caseID)->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
-        $this->loadModel('action')->create('case', $caseID, 'unlinkRelatedCase', '', $case2Unlink);
-    }
-
-    /**
-     * Get linkCases.
-     *
-     * @param  int    $caseID
-     * @access public
-     * @return array
-     */
-    public function getLinkCases($caseID)
-    {
-        $case = $this->getById($caseID);
-        return $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->fetchPairs();
     }
 
     /**

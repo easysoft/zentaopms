@@ -1,13 +1,13 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <main id="main">
-  <div class="container">
+  <div class="container" id='<?php echo $version;?>'>
     <div id='mainContent' class='main-content'>
       <div class='center-block mw-800px'>
         <div class='main-header clearfix'>
           <h2 class='pull-left'><?php echo $lang->changeLog ?></h2>
           <div class='btn-toolbar pull-left'>
             <div class='dropdown' id='versionMenu'>
-              <button class='btn dropdown-toggle' type='button' data-toggle='dropdown'><?php echo $version === 'latest' ? $lang->misc->feature->lastest : ($lang->misc->releaseDate[$versionName] . ' ' . $version) ?> <span class='caret'></span></button>
+              <button class='btn dropdown-toggle' type='button' data-toggle='dropdown'><?php echo $version === 'latest' ? $lang->misc->feature->lastest : ($lang->misc->releaseDate[$version] . ' ' . $version) ?> <span class='caret'></span></button>
               <ul class='dropdown-menu'>
                 <?php foreach(array_keys($lang->misc->feature->all) as $versionName):?>
                 <li<?php echo $versionName === $version ? " class='active'" : '' ?>>

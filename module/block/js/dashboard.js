@@ -49,8 +49,8 @@ function resizeBlock(blockID, width, callback)
     $.getJSON(createLink('block', 'resize', 'id=' + blockID + '&type=horizontal&data=' + width), function(data)
     {
         callback && callback();
+        refreshBlock($('#block' + blockID));
     });
-    refreshBlock($('#block' + blockID));
 }
 
 function refreshBlock($panel, afterRefresh)
@@ -64,9 +64,10 @@ function refreshBlock($panel, afterRefresh)
         else if($panel.find('#assigntomeBlock').length) $panel.find('#assigntomeBlock').empty().append($data.children());
         else
         {
-            $panel.children('.panel-move-handler,style').remove();
+            $panel.children('.panel-move-handler,style,script').remove();
             $panel.find('.panel-body,.empty-tip').replaceWith($data);
         }
+        $panel.find('.progress-pie').progressPie();
         if($.isFunction(afterRefresh))
         {
             afterRefresh.call(this,
@@ -135,7 +136,7 @@ function initTableHeader($wrapper)
         };
         if(!$header.length)
         {
-            $header = $('<div class="table-header-fixed" style="position: absolute; left: 0; top: 0; right: 0; padding: 10px 10px 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
+            $header = $('<div class="table-header-fixed" style="position: absolute; left: 10px; top: 0; right: 0; padding: 0 10px 0 0; background: #fff;"><table class="table table-fixed no-margin"></table></div>').css('right', $panel.width() - tableWidth - 20);
             $oldTableHead.find('th').each(function(idx)
             {
                 $(this).attr('data-idx', idx);

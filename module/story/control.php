@@ -1139,14 +1139,6 @@ class story extends control
         $products = $this->product->getPairs();
         $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
 
-        /* Link stories. */
-        if(!empty($_POST))
-        {
-            $this->story->linkStories($storyID, $type);
-            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkedStories('$storyID', '$type')}"));
-            die(js::locate($this->createLink('story', 'edit', "storyID=$storyID"), 'parent'));
-        }
-
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&browseType=bySearch&queryID=myQueryID", '', true);
         $this->loadModel('product')->buildSearchForm($story->product, $products, $queryID, $actionURL);
@@ -1162,49 +1154,6 @@ class story extends control
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
 
         $this->display();
-    }
-
-    /**
-     * AJAX: if type is linkStories, get related stories else get child stories.
-     *
-     * @param  int    $storyID
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function ajaxGetLinkedStories($storyID, $type = '')
-    {
-        /* Get linked stories. */
-        $stories = $this->story->getLinkedStories($storyID, $type);
-
-        /* Build linked stories list. */
-        $output = '';
-        foreach($stories as $storyId => $storyTitle)
-        {
-            $output .= '<li>';
-            $output .= html::a(inlink('view', "storyID=$storyId"), "#$storyId " . $storyTitle, '_blank');
-            $output .= html::a("javascript:unlinkStory($storyID, \"$type\", $storyId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
-            $output .= '</li>';
-        }
-
-        die($output);
-    }
-
-    /**
-     * Unlink story.
-     *
-     * @param  int    $storyID
-     * @param  string $type
-     * @param  int    $story2Unlink
-     * @access public
-     * @return string
-     */
-    public function unlinkStory($storyID, $type = '', $story2Unlink = 0)
-    {
-        /* Unlink related story if type is linkStories else unlink child story. */
-        $this->story->unlinkStory($storyID, $type, $story2Unlink);
-
-        die('success');
     }
 
     /**

@@ -1111,14 +1111,6 @@ class bug extends control
      */
     public function linkBugs($bugID, $browseType = '', $param = 0)
     {
-        /* Link bugs. */
-        if(!empty($_POST))
-        {
-            $this->bug->linkBugs($bugID);
-            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadLinkBugs('$bugID')}"));
-            die(js::locate($this->createLink('bug', 'edit', "bugID=$bugID"), 'parent'));
-        }
-
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;

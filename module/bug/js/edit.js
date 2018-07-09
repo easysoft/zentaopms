@@ -54,33 +54,3 @@ function loadModuleRelated()
     productID = $('#product').val();
     setStories(moduleID, productID);
 }
-
-/**
- * Unlink related bug.
- *
- * @param  int $bugID
- * @param  int $bug2Unlink
- * @access public
- * @return void
- */
-function unlinkBug(bugID, bug2Unlink)
-{
-    link = createLink('bug', 'unlinkBug', 'bugID=' + bugID + '&bug2Unlink=' + bug2Unlink);
-    $.get(link, function(data)
-    {
-        if(data == 'success') $('#linkBugBox').load(createLink('bug', 'ajaxGetLinkBugs', 'bugID=' + bugID));
-    });
-}
-
-/**
- * Load linkBugs.
- *
- * @param  int    $bugID
- * @access public
- * @return void
- */
-function loadLinkBugs(bugID)
-{
-    bugLink = createLink('bug', 'ajaxGetLinkBugs', 'bugID=' + bugID);
-    $('#linkBugBox').load(bugLink);
-}

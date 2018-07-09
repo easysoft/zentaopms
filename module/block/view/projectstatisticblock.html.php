@@ -29,7 +29,40 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .nav-secondary > li.active > a:focus,
 .block-statistic .nav-secondary > li > a:hover {box-shadow: none;}
 .block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li.switch-icon {display: none;}
+.block-statistic.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px; border-radius: 3px;}
+.block-statistic.block-sm .panel-body > .table-row,
+.block-statistic.block-sm .panel-body > .table-row > .col {display: block; width: auto;}
+.block-statistic.block-sm .panel-body > .table-row > .tab-content {padding: 0; margin: 0 -5px;}
+.block-statistic.block-sm .tab-pane > .table-row > .col-5 {width: 125px;}
+.block-statistic.block-sm .tab-pane > .table-row > .col-5 > .table-row {padding: 5px 0;}
+.block-statistic.block-sm .col-nav {border-left: none; position: absolute; top: 0; left: 15px; right: 15px; background: #f5f5f5;}
+.block-statistic.block-sm .nav-secondary {display: table; width: 100%; padding: 0; table-layout: fixed;}
+.block-statistic.block-sm .nav-secondary > li {display: none}
+.block-statistic.block-sm .nav-secondary > li.switch-icon,
+.block-statistic.block-sm .nav-secondary > li.active {display: table-cell; width: 100%; text-align: center;}
+.block-statistic.block-sm .nav-secondary > li.active > a:hover {cursor: default; background: none;}
+.block-statistic.block-sm .nav-secondary > li.switch-icon > a:hover {background: rgba(0,0,0,0.07);}
+.block-statistic.block-sm .nav-secondary > li > a {padding: 5px 10px; border-radius: 4px;}
+.block-statistic.block-sm .nav-secondary > li > a:before {display: none;}
+.block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
 </style>
+<script>
+<?php $blockNavId = 'nav-' . uniqid(); ?>
+$(function()
+{
+    var $nav = $('#<?php echo $blockNavId;?>');
+    $nav.on('click', '.switch-icon', function(e)
+    {
+        var isPrev = $(this).is('.prev');
+        var $activeItem = $nav.children('.active');
+        var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
+        if ($next.length) $next.find('a').trigger('click');
+        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
+        e.preventDefault();
+    });
+});
+</script>
 <div class="panel-body">
   <div class="table-row">
     <?php if(empty($projects)):?>
@@ -117,10 +150,12 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
       <?php endforeach;?>
     </div>
     <div class="col col-nav">
-      <ul class="nav nav-stacked nav-secondary scrollbar-hover">
+      <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
+        <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($projects as $project):?>
         <li <?php if($project == reset($projects)) echo "class='active'";?>><a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a></li>
         <?php endforeach;?>
+        <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
       </ul>
     </div>
     <?php endif;?>

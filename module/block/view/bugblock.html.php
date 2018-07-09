@@ -19,8 +19,6 @@
 .block-bugs .c-pri {width: 35px;text-align: center;}
 .block-bugs .c-deadline {width: 95px;}
 .block-bugs .c-status {width: 80px;}
-.block-bugs.block-sm .c-pri,
-.block-bugs.block-sm .c-status .label-dot {display: none;}
 .block-bugs.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
@@ -53,7 +51,7 @@
         <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
         <td class='c-status' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
           <span class="status-<?php echo $bug->status?>">
-            <span class="label label-dot"></span>
+            <span class="label label-dot hide-in-sm"></span>
             <span class='status-text'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
           </span>
         </td>
