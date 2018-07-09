@@ -31,79 +31,77 @@
   $columns = count($visibleFields) + 4;
   ?>
   <form method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
-    <div class="table-responsive">
-      <table class='table table-form'>
-        <thead>
-          <tr class='text-center'>
-            <th class='w-40px'>   <?php echo $lang->idAB;?></th>
-            <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
-            <th class='w-80px'>  <?php echo $lang->todo->type;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
-            <th><?php echo $lang->todo->name;?></th>
-            <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
-            <th class='w-300px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
-          </tr>
-        </thead>
-        <tbody>
-        <?php foreach($editedTodos as $todo):?>
-        <tr class='text-left'>
-          <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
-          <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
-          <td class='text-center'>
-            <?php echo zget($lang->todo->typeList, $todo->type);?>
-            <?php echo html::hidden("types[$todo->id]", $todo->type);?>
-          </td>
-          <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
-          <td style='overflow:visible'>
-            <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin' autocomplete='off'"); ?></div>
-            <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
-            <?php
-            if($todo->type == 'custom' or $todo->type == 'cycle')
-            {
-              echo html::input("names[$todo->id]", $todo->name, "class='form-control' autocomplete='off'"); ;
-            }
-            elseif($todo->type == 'task')
-            {
-              echo  html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
-            }
-            elseif($todo->type == 'bug')
-            {
-              echo  html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control chosen"');
-            }
-            ?>
-            </div>
-          </td>
-          <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$todo->id]", $todo->desc, "rows='1' class='form-control'");?></td>
-          <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
-            <div class='input-group'>
-              <?php
-              echo html::select("begins[$todo->id]", $times, $todo->begin, "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
-              echo '<span class="input-group-addon fix-border fix-padding"></span>';
-              echo html::select("ends[$todo->id]", $times, $todo->end, "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
-              ?>
-              <span class="input-group-addon">
-                <div class='checkbox-primary dateSwitcher'>
-                  <input type='checkbox' name="switchDate[<?php echo $todo->id;?>]" id="switchDate<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchDateList(<?php echo $todo->id?>);' <?php if($todo->begin == '2400') echo "checked='checked'";?>>
-                  <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
-                </div>
-              </span>
-            </div>
-          </td>
-          <td <?php echo zget($visibleFields, 'status', "class='hidden'")?> style='overflow:visible'><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
+    <table class='table table-form'>
+      <thead>
+        <tr class='text-center'>
+          <th class='w-40px'>   <?php echo $lang->idAB;?></th>
+          <th class='w-100px'>  <?php echo $lang->todo->date;?></th>
+          <th class='w-80px'>  <?php echo $lang->todo->type;?></th>
+          <th class='w-100px<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
+          <th><?php echo $lang->todo->name;?></th>
+          <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
+          <th class='w-300px<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
+          <th class='w-120px<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
         </tr>
-        <?php endforeach;?>
-        </tbody>
-        <tfoot>
-          <tr>
-            <td colspan='<?php echo $columns?>' class='text-center form-actions'>
-              <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
-              <?php echo html::backButton('', '', 'btn btn-wide');?>
-            </td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+      </thead>
+      <tbody>
+      <?php foreach($editedTodos as $todo):?>
+      <tr class='text-left'>
+        <td><?php echo $todo->id . html::hidden("todoIDList[$todo->id]", $todo->id);?></td>
+        <td><?php echo html::input("dates[$todo->id]", $todo->date, "class='form-control form-date'");?></td>
+        <td class='text-center'>
+          <?php echo zget($lang->todo->typeList, $todo->type);?>
+          <?php echo html::hidden("types[$todo->id]", $todo->type);?>
+        </td>
+        <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
+        <td style='overflow:visible'>
+          <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin' autocomplete='off'"); ?></div>
+          <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
+          <?php
+          if($todo->type == 'custom' or $todo->type == 'cycle')
+          {
+            echo html::input("names[$todo->id]", $todo->name, "class='form-control' autocomplete='off'"); ;
+          }
+          elseif($todo->type == 'task')
+          {
+            echo  html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
+          }
+          elseif($todo->type == 'bug')
+          {
+            echo  html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control chosen"');
+          }
+          ?>
+          </div>
+        </td>
+        <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$todo->id]", $todo->desc, "rows='1' class='form-control'");?></td>
+        <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
+          <div class='input-group'>
+            <?php
+            echo html::select("begins[$todo->id]", $times, $todo->begin, "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            echo '<span class="input-group-addon fix-border fix-padding"></span>';
+            echo html::select("ends[$todo->id]", $times, $todo->end, "onchange=\"setBeginsAndEnds($todo->id, 'end');\" class='form-control chosen control-time-end'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '2400') ? '' : " disabled"));
+            ?>
+            <span class="input-group-addon">
+              <div class='checkbox-primary dateSwitcher'>
+                <input type='checkbox' name="switchDate[<?php echo $todo->id;?>]" id="switchDate<?php echo $todo->id;?>" data-key="<?php echo $todo->id;?>" onclick='switchDateList(<?php echo $todo->id?>);' <?php if($todo->begin == '2400') echo "checked='checked'";?>>
+                <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
+              </div>
+            </span>
+          </div>
+        </td>
+        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?> style='overflow:visible'><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
+      </tr>
+      <?php endforeach;?>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan='<?php echo $columns?>' class='text-center form-actions'>
+            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php echo html::backButton('', '', 'btn btn-wide');?>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
   </form>
   <?php endif;?>
 </div>
