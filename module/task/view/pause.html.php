@@ -14,6 +14,14 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
+    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+    <div class="alert with-icon">
+      <i class="icon-exclamation-sign"></i>
+      <div class="content">
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->pause);?></p>
+      </div>
+    </div>
+    <?php else:?>
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
@@ -40,6 +48,7 @@
     </form>
     <hr class='small' />
     <div class='main'><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
