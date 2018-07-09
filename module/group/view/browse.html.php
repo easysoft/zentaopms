@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmDelete', $lang->group->confirmDelete);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -24,7 +25,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-table'>
-  <table class='table' id='groupList'>
+  <table class='table tablesorter' id='groupList'>
     <thead>
       <tr>
         <th class='w-id text-center'><?php echo $lang->group->id;?></th>

@@ -21,7 +21,7 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $plan->id;?></span>
-      <span title='<?php echo $plan->name;?>' class='text'><?php echo $plan->title;?></span>
+      <span title='<?php echo $plan->title;?>' class='text'><?php echo $plan->title;?></span>
       <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branches[$branch] . '</span>';?>
       <span class='label label-info label-badge'>
         <?php echo ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
@@ -67,8 +67,8 @@
     </ul>
     <div class='tab-content'>
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
-        <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
+        <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='actions'>
         <?php echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
         </div>
