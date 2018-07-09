@@ -46,8 +46,8 @@
       <form method='post' target='hiddenwin'>
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
-            <th class='w-100px'><?php echo $lang->install->company;?></th>
-            <td><?php echo html::input('company', '', "class='form-control' autocomplete='off'");?></td>
+            <th class='w-200px'><?php echo $lang->install->company;?></th>
+            <td class='w-300px'><?php echo html::input('company', '', "class='form-control' autocomplete='off'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->install->working;?></th>

@@ -24,6 +24,7 @@ $lang->search->select        = 'Stories/Tasks Filter';
 $lang->search->me            = 'Me';
 $lang->search->noQuery       = 'No query saved!';
 $lang->search->onMenuBar     = 'Show in Menu';
+$lang->search->custom        = 'Custom';
 
 $lang->search->account  = 'Account';
 $lang->search->module   = 'Module';

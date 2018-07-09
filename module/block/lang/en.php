@@ -34,7 +34,7 @@ $lang->block->assignToMe   = 'Assign To Me';
 $lang->block->lblFlowchart = 'Workflow';
 $lang->block->welcome      = 'Welcome';
 
-$lang->block->leftToday = 'Work for Today';
+$lang->block->leftToday = 'Works for Today';
 $lang->block->myTask    = 'My Task';
 $lang->block->myStory   = 'My Story';
 $lang->block->myBug     = 'My Bug';
