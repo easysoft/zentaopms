@@ -16,7 +16,7 @@
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $story->id;?></span>
-      <?php echo isonlybody() ? $story->title : html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
+      <?php echo isonlybody() ? ("<span title='$story->title'>" . $story->title . '</span>') : html::a($this->createLink('story', 'view', "storyID=$story->id"), $story->title);?>
       <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->story->linkStory;?></small>
       <?php endif;?>
@@ -93,7 +93,7 @@ $(function()
             output += checkbox;
         });
         $.closeModal();
-        parent.$('#' + linkType + 'Box').append(output);
+        parent.$('#' + linkType + 'Box').html(output);
         return false;
     });
 });

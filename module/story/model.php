@@ -495,11 +495,29 @@ class storyModel extends model
             ->join('mailto', ',')
             ->join('linkStories', ',')
             ->join('childStories', ',')
-            ->remove('files,labels,comment,contactListMenu')
+            ->remove('files,labels,comment,contactListMenu,stages')
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
         if(empty($_POST['branch']))  $story->branch = 0;
+        if(!empty($_POST['stages']))
+        {
+            $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($storyID)->exec();
+
+            $stageList   = join(',', array_keys($this->lang->story->stageList));
+            $minStagePos = strlen($stageList);
+            $minStage    = '';
+            foreach($this->post->stages as $branch => $stage)
+            {
+                $this->dao->insert(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq($stage)->exec();
+                if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) < $minStagePos)
+                {
+                    $minStage    = $stage;
+                    $minStagePos = strpos($stageList, $stage);
+                }
+            }
+            $story->stage = $minStage;
+        }
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -1268,20 +1286,6 @@ class storyModel extends model
         {
             return array();
         }
-    }
-
-    /**
-     * Get linked stories.
-     *
-     * @param  string $storyID
-     * @param  string $type
-     * @access public
-     * @return array
-     */
-    public function getLinkedStories($storyID, $type = 'linkStories')
-    {
-        $story = $this->getById($storyID);
-        return $this->dao->select('id, title')->from(TABLE_STORY)->where('id')->in($story->$type)->fetchPairs();
     }
 
     /**
@@ -2358,15 +2362,22 @@ class storyModel extends model
                 echo $story->estimate;
                 break;
             case 'stage':
-                echo "<div" . (isset($storyStages[$story->id]) ? " class='popoverStage' data-toggle='popover' data-placement='bottom' data-target='\$next'" : '') . "'>";
-                echo $this->lang->story->stageList[$story->stage];
-                if(isset($storyStages[$story->id])) echo "<span><i class='icon icon-caret-down'></i></span>";
-                echo '</div>';
                 if(isset($storyStages[$story->id]))
                 {
-                    echo "<div class='popover'>";
-                    foreach($storyStages[$story->id] as $storyBranch => $storyStage) echo $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '<br />';
-                    echo "</div>";
+                    echo "<div class='dropdown dropdown-hover'>";
+                    echo $this->lang->story->stageList[$story->stage];
+                    echo "<span class='caret'></span>";
+                    echo "<ul class='dropdown-menu pull-right'>";
+                    foreach($storyStages[$story->id] as $storyBranch => $storyStage)
+                    {
+                        echo '<li class="text-ellipsis">' . $branches[$storyBranch] . ": " . $this->lang->story->stageList[$storyStage->stage] . '</li>';
+                    }
+                    echo "</ul>";
+                    echo '</div>';
+                }
+                else
+                {
+                    echo $this->lang->story->stageList[$story->stage];
                 }
                 break;
             case 'taskCount':

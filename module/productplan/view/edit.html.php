@@ -17,7 +17,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title);?></strong></h2>
+      <h2><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title, '', "title='$plan->title'");?></strong></h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>

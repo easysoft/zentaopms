@@ -1590,6 +1590,7 @@ EOD;
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
         curl_setopt($curl, CURLOPT_ENCODING, "");
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($curl, CURLOPT_HEADER, FALSE);
 
         $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];

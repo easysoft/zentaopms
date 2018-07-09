@@ -505,12 +505,16 @@ class taskModel extends model
                     $currentTask->finishedBy   = '';
                     $currentTask->finishedDate = '0000-00-00';
                 }
+                if($oldTask->assignedTo != $teams[count($teams) - 1] && isset($team[$currentTask->assignedTo]) && $oldTask->status == 'wait') $currentTask->status = 'doing';
 
                 if($currentTask->left == 0 && $oldTask->left != 0 && $currentTask->consumed != 0)
                 {
-                    $currentTask->status       = 'done';
-                    $currentTask->finishedBy   = $this->app->user->account;
-                    $currentTask->finishedDate = $now;
+                    if($oldTask->assignedTo == $teams[count($teams) - 1] && $team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
+                    {
+                        $currentTask->status       = 'done';
+                        $currentTask->finishedBy   = $this->app->user->account;
+                        $currentTask->finishedDate = $now;
+                    }
                 }
 
                 return $currentTask;
@@ -581,6 +585,12 @@ class taskModel extends model
         $teams = array();
         if($this->post->multiple)
         {
+            if(strpos(',done,closed,cancel,', ",{$task->status},") === false && !in_array($this->post->assignedTo, $this->post->team))
+            {
+                dao::$errors[] = $this->lang->task->error->assignedTo;
+                return false;
+            }
+
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account) or isset($team[$account])) continue;
@@ -616,7 +626,7 @@ class taskModel extends model
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
-            ->checkIF($task->status   != 'wait' and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
+            ->checkIF($task->status   != 'wait' and empty($teams) and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
 
             ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
@@ -1123,7 +1133,7 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
-            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status')
+            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
             ->remove('comment,files,labels')
             ->get();
 
@@ -1145,8 +1155,8 @@ class taskModel extends model
         }
         else
         {
-            $consumed = $oldTask->team[$this->app->user->account]->consumed;
-            if($task->consumed < $consumed)
+            $consumed = $task->consumed - $oldTask->team[$this->app->user->account]->consumed;
+            if($consumed < 0)
             {
                 dao::$errors[] = $this->lang->task->error->consumedSmall;
                 return false;

@@ -17,7 +17,7 @@
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $bug->id;?></span>
-        <?php echo isonlybody() ? $bug->title : html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title);?>
+        <?php echo isonlybody() ? ('<span title="' . $bug->title . '">' . $bug->title . '</span>') : html::a($this->createLink('bug', 'view', 'bug=' . $bug->id), $bug->title);?>
 
         <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->bug->close;?></small>

@@ -18,19 +18,17 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
-    <div style="padding: 0 50px 0 0">
-      <div class="alert with-icon no-margin">
-        <i class="icon-exclamation-sign"></i>
-        <div class="content">
-          <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
-        </div>
+    <div class="alert with-icon">
+      <i class="icon-exclamation-sign"></i>
+      <div class="content">
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
       </div>
     </div>
     <?php else:?>
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
-        <?php echo isonlybody() ? $task->name : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
+        <?php echo isonlybody() ? ("<span title='$task->name'>" . $task->name . '</span>') : html::a($this->createLink('task', 'view', 'task=' . $task->id), $task->name);?>
         <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->task->logEfforts;?></small>
         <?php endif;?>
