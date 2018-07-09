@@ -17,7 +17,7 @@
     <div class='main-header'>
       <h2>
         <span class='label-id'><?php echo $build->id;?></span>
-        <?php echo html::a($this->createLink('build', 'view', 'build=' . $build->id), $build->name);?>
+        <?php echo html::a($this->createLink('build', 'view', 'build=' . $build->id), $build->name, '', "title='$build->name'");?>
         <small><?php echo $lang->arrow . $lang->build->edit;?></small>
       </h2>
     </div>

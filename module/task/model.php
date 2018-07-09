@@ -508,9 +508,12 @@ class taskModel extends model
 
                 if($currentTask->left == 0 && $oldTask->left != 0 && $currentTask->consumed != 0)
                 {
-                    $currentTask->status       = 'done';
-                    $currentTask->finishedBy   = $this->app->user->account;
-                    $currentTask->finishedDate = $now;
+                    if($oldTask->assignedTo == $teams[count($teams) - 1] && $team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
+                    {
+                        $currentTask->status       = 'done';
+                        $currentTask->finishedBy   = $this->app->user->account;
+                        $currentTask->finishedDate = $now;
+                    }
                 }
 
                 return $currentTask;
@@ -581,6 +584,12 @@ class taskModel extends model
         $teams = array();
         if($this->post->multiple)
         {
+            if(strpos(',done,closed,cancel,', ",{$task->status},") === false && !in_array($this->post->assignedTo, $this->post->team))
+            {
+                dao::$errors[] = $this->lang->task->error->assignedTo;
+                return false;
+            }
+
             foreach($this->post->team as $row => $account)
             {
                 if(empty($account) or isset($team[$account])) continue;
@@ -1123,7 +1132,7 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
-            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status')
+            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
             ->remove('comment,files,labels')
             ->get();
 
@@ -1145,8 +1154,8 @@ class taskModel extends model
         }
         else
         {
-            $consumed = $oldTask->team[$this->app->user->account]->consumed;
-            if($task->consumed < $consumed)
+            $consumed = $task->consumed - $oldTask->team[$this->app->user->account]->consumed;
+            if($consumed < 0)
             {
                 dao::$errors[] = $this->lang->task->error->consumedSmall;
                 return false;

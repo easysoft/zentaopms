@@ -183,6 +183,7 @@ $lang->task->error->left             = 'Please enter "Left Hour"';
 $lang->task->error->work             = '"Remark" must be less than %d characteres.';
 $lang->task->error->skipClose        = 'Task: %s is not “Done” or “Cancelled”. Do you want to close it?';
 $lang->task->error->consumed         = 'Task: %s Hour must be more than 0. Ignore changes to this Task.';
+$lang->task->error->assignedTo       = 'Multiple task in the current state cannot be assigned to member who outside the task team.';
 
 /* Report. */
 $lang->task->report = new stdclass();
