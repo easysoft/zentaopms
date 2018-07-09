@@ -25,14 +25,15 @@ $lang->install->seeLatestRelease = 'View Latest Version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao Project Management Software!';
 $lang->install->license          = 'ZenTao PMS is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao Project Management Software is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> license. It integrates with Product Management, Project Management, QA Management, Document Management, To-Dos Management, Company Management etc. ZenTao is the best choice for software project management.
+ZenTao Project Management Software is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> license. It integrates with Product Management, Project Management, QA Management, Document Management, Todos Management, Company Management etc. ZenTao is the best choice for software project management.
 
-ZenTao PMS is built on PHP + MySQL and based on ZenTaoPHP, an independent framework developed by our team. Third party developers/organizations can develop extensions or customize for your requirements.
+ZenTao PMS is built on PHP + MySQL and based on ZenTaoPHP framework, an independent framework developed by our team. Third party developers/organizations can develop extensions or customize for their requirements.
 EOT;
 $lang->install->links = <<<EOT
 ZenTao PMS is developed by <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
-Official Website <a href='http://www.zentao.pm' target='_blank'>http://www.zentao.pm</a>
-Technical Support <a href='http://www.zentao.pm/ask/' target='_blank'>http://www.zentao.pm/ask/</a>
+Official Website : <a href='http://www.zentao.pm' target='_blank'>http://www.zentao.pm</a>
+Technical Support : <a href='http://www.zentao.pm/forum/' target='_blank'>http://www.zentao.pm/forum/</a>
+WhatsApp Group : <a href='https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF' target='_blank'>https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF</a>
 Twitter: <a href='https://twitter.com/cneasysoft' target='_blank'>cneasysoft</a>
 
 You are installing ZenTao <strong class='text-danger'>%s</strong> Version.
@@ -97,7 +98,7 @@ $lang->install->dbName         = 'Database Name';
 $lang->install->dbPrefix       = 'Table Prefix';
 $lang->install->clearDB        = 'Clean tables if already exist.';
 $lang->install->importDemoData = 'Import Demo Data';
-$lang->install->working        = 'Working way';
+$lang->install->working        = 'Work Mode';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
@@ -167,7 +168,7 @@ $lang->install->login    = 'Login ZenTao';
 $lang->install->register = 'Register in ZenTao';
 
 $lang->install->joinZentao = <<<EOT
-<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, register in ZenTao(<a href='http://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='http://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'ranzhi');

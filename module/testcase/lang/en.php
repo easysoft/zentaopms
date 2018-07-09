@@ -116,7 +116,7 @@ $lang->testcase->assignToMe   = 'AssignedToMe';
 $lang->testcase->openedByMe   = 'CreatedByMe';
 $lang->testcase->allCases     = 'All';
 $lang->testcase->allTestcases = 'All Cases';
-$lang->testcase->needConfirm  = 'Story Change';
+$lang->testcase->needConfirm  = 'StoryChanged';
 $lang->testcase->bySearch     = 'Search';
 $lang->testcase->unexecuted   = 'Wait';
 
@@ -169,8 +169,8 @@ $lang->testcase->reviewResultList['pass']    = 'Pass';
 $lang->testcase->reviewResultList['clarify'] = 'Clarify';
 
 $lang->testcase->groups['']           = 'Group ';
-$lang->testcase->groups['story']      = 'Story Group';
-$lang->testcase->groups['assignedTo'] = 'Assign Group';
+$lang->testcase->groups['story']      = 'Group by Story';
+$lang->testcase->groups['assignedTo'] = 'Group by Assignee';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = 'Wait';

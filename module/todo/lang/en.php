@@ -89,7 +89,7 @@ if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') 
 
 $lang->todo->confirmDelete  = "Do you want to delete this Todo?";
 $lang->todo->thisIsPrivate  = 'This is a private Todo';
-$lang->todo->lblDisableDate = 'Set later';
+$lang->todo->lblDisableDate = 'Set it later';
 $lang->todo->lblBeforeDays  = "Create a todo %s days(s) earlier";
 $lang->todo->lblClickCreate = "Click to add a todo";
 $lang->todo->noTodo         = 'No todos of this type.';

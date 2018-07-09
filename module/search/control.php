@@ -70,7 +70,9 @@ class search extends control
             $queryID = $this->search->saveQuery();
             if(!$queryID) die(js::error(dao::getError()));
 
-            die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID)}"));
+            $data     = fixer::input('post')->get();
+            $shortcut = empty($data->onMenuBar) ? 0 : 1;
+            die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
         }
         $this->view->module    = $module;
         $this->view->onMenuBar = $onMenuBar;
@@ -109,7 +111,7 @@ class search extends control
         foreach($queries as $queryID => $queryName)
         {
             if(empty($queryID)) continue;
-            $html .= html::a("###", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'");
+            $html .= '<li>' . html::a("javascript:executeQuery({$queryID})", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'") . '</li>';
         }
         die($html);
     }
