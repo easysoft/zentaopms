@@ -81,6 +81,7 @@ rpm:
 en:
 	unzip ZenTaoPMS.${VERSION}.zip
 	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
 	zip -r -9 ZenTaoPMS.$(VERSION).int.zip zentaopms
 	rm -fr zentaopms
 	echo $(VERSION).int > VERSION 
