@@ -16,7 +16,7 @@
   <div class='main-header'>
     <h2>
       <span class='prefix label-id'><strong><?php echo $project->id;?></strong></span>
-      <?php echo isonlybody() ? $project->name : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
+      <?php echo isonlybody() ? ("<span title='$project->name'>" . $project->name . '</span>') : html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name, '_blank');?>
       <?php if(!isonlybody()):?>
       <small><?php echo $lang->arrow . $lang->project->start;?></small>
       <?php endif;?>

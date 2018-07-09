@@ -23,7 +23,7 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <div class='heading'>
-      <h2>
+      <h2 title='<?php echo $entry->name;?>'>
         <?php echo $entry->name;?>
         <span class='label label-info'><?php echo $lang->entry->log;?></span>
       </h2>
