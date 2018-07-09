@@ -44,7 +44,7 @@ $lang->user->last        = 'Last Login';
 $lang->user->ranzhi      = 'Zdoo Account';
 $lang->user->ditto       = 'Ditto';
 $lang->user->originalPassword = 'Old Password';
-$lang->user->verifyPassword   = 'Admin password';
+$lang->user->verifyPassword   = 'Your login password';
 $lang->user->resetPassword    = 'Forgot Password?';
 
 $lang->user->index           = "Home";
@@ -134,7 +134,7 @@ $lang->user->placeholder->password1 = 'six characters at lease ';
 $lang->user->placeholder->role      = "Role affects content and user order.";
 $lang->user->placeholder->group     = "Group decides user privilege.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
-$lang->user->placeholder->verify    = 'Password is required.';
+$lang->user->placeholder->verify    = 'Please input your login password.';
 
 $lang->user->placeholder->passwordStrength[1] = 'Letters and Numbers, at least 6 characters';
 $lang->user->placeholder->passwordStrength[2] = 'Letters, Numbers and special characters, at lease 10 characters';
@@ -148,7 +148,7 @@ $lang->user->error->mail          = "ID %s，please enter valid Email address";
 $lang->user->error->role          = "ID %s，role cannot be null.";
 $lang->user->error->reserved      = "ID %s，account is reserved.";
 
-$lang->user->error->verifyPassword   = "Wrong password. Please enter your Login Password.";
+$lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
 
 $lang->user->contacts = new stdclass();

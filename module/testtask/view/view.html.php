@@ -19,7 +19,7 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $task->id;?></span>
-      <span class='text'><?php echo $task->name;?></span>
+      <span class='text' title='<?php echo $task->name;?>'><?php echo $task->name;?></span>
       <?php if($task->deleted):?>
       <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
       <?php endif; ?>

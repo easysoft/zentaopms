@@ -23,7 +23,7 @@
 .block-bugs.block-sm .c-status .label-dot {display: none;}
 .block-bugs.block-sm .c-status {text-align: center;}
 </style>
-<div class='panel-body has-table'>
+<div class='panel-body has-table scrollbar-hover'>
   <table class='table table-borderless table-fixed-head table-hover tablesorter block-bugs <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>

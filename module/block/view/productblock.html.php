@@ -16,7 +16,7 @@
 <style>
 .block-products.block-sm .c-project {display: none;}
 </style>
-<div class="panel-body has-table block-products">
+<div class="panel-body has-table scrollbar-hover block-products">
   <table class='table table-borderless table-hover table-fixed-head tablesorter table-fixed'>
     <thead>
       <tr>

@@ -19,7 +19,7 @@
     <div class="divider"></div>
     <div class="page-title">
       <span class='label label-id'><?php echo $case->id;?></span>
-      <span class='text' style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></span>
+      <span class='text' title='<?php echo $case->title;?>' style='color: <?php echo $case->color; ?>'><?php echo $case->title;?></span>
 
       <?php if($case->deleted):?>
       <span class='label label-danger'><?php echo $lang->product->deleted;?></span>

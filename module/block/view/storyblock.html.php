@@ -24,7 +24,7 @@
 .block-stories.block-sm .c-status .label-dot {display: none;}
 .block-stories.block-sm .c-status {text-align: center;}
 </style>
-<div class='panel-body has-table'>
+<div class='panel-body has-table scrollbar-hover'>
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-stories <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>

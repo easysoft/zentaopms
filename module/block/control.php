@@ -21,7 +21,7 @@ class block extends control
     {
         parent::__construct($moduleName, $methodName);
         /* Mark the call from zentao or ranzhi. */
-        $this->selfCall = !$this->server->http_referer || strpos($this->server->http_referer, common::getSysURL() . $this->config->webRoot) === 0 || $this->session->blockModule;
+        $this->selfCall = !isset($_GET['hash']);
         if($this->methodName != 'admin' and $this->methodName != 'dashboard' and !$this->selfCall and !$this->loadModel('sso')->checkKey()) die('');
     }
 
@@ -385,9 +385,12 @@ class block extends control
             $this->app->setClientLang($lang);
             $this->app->loadLang('common');
             $this->app->loadLang('block');
+
+            if(!$this->block->checkAPI($this->get->hash)) die();
         }
 
         $mode = strtolower($this->get->mode);
+
         if($mode == 'getblocklist')
         {
             $blocks = $this->block->getAvailableBlocks($module);

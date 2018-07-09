@@ -21,7 +21,7 @@
     <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $story->id?></span>
-      <span class="text" style='color: <?php echo $story->color;?>'><?php echo $story->title;?></span>
+      <span class="text" title='<?php echo $story->title;?>' style='color: <?php echo $story->color;?>'><?php echo $story->title;?></span>
       <?php if($story->version > 1):?>
       <small class='dropdown'>
         <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>
