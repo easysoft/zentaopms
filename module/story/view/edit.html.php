@@ -126,7 +126,21 @@
               <?php if($story->status != 'draft'):?>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
-                <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");?></td>
+                <td>
+                <?php
+                if($story->stages and $branches)
+                {
+                    foreach($story->stages as $branch => $stage)
+                    {
+                        if(isset($branches[$branch])) echo '<p>' . $branches[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
+                    }
+                }
+                else
+                {
+                    echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");
+                }
+                ?>
+                </td>
               </tr>
               <?php endif;?>
               <tr>
