@@ -2344,7 +2344,7 @@ class storyModel extends model
                 echo $story->estimate;
                 break;
             case 'stage':
-                echo "<div" . (isset($storyStages[$story->id]) ? " class='popoverStage' data-toggle='popover' data-placement='bottom' data-target='\$next'" : '') . "'>";
+                echo "<div" . (isset($storyStages[$story->id]) ? " class='popoverStage' data-toggle='popover' data-placement='bottom' data-target='\$next'" : '') . ">";
                 echo $this->lang->story->stageList[$story->stage];
                 if(isset($storyStages[$story->id])) echo "<span><i class='icon icon-caret-down'></i></span>";
                 echo '</div>';
