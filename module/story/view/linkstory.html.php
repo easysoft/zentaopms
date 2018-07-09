@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php js::set('linkType', $type);?>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
     <h2>
@@ -81,6 +82,20 @@ $(function()
     $('#linkStoryForm').table();
     setTimeout(function(){$('#linkStoryForm .table-footer').removeClass('fixed-footer');}, 100);
     <?php endif;?>
+
+    $('#submit').click(function(){
+        var output = '';
+        $('#linkStoryForm').find('tr.checked').each(function(){
+            var storyID   = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
+            var storyName = "#" + storyID + ' ' + $(this).find('td').eq(3).attr('title');
+            var checkbox  = "<li><div class='checkbox-primary'><input type='checkbox' checked='checked' name='" + linkType + "[]' " + "value=" + storyID + " /><label>" + storyName + "</label></div></li>";
+
+            output += checkbox;
+        });
+        $.closeModal();
+        parent.$('#' + linkType + 'Box').append(output);
+        return false;
+    });
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

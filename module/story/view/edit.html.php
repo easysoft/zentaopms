@@ -200,23 +200,24 @@
               <tr>
                 <th></th>
                 <td>
-                  <?php if($story->linkStories):?>
                   <ul class='list-unstyled' id='linkStoriesBox'>
                   <?php
-                  $linkStories = explode(',', $story->linkStories);
-                  foreach($linkStories as $linkStoryID)
+                  if($story->linkStories)
                   {
-                      if(isset($story->extraStories[$linkStoryID]))
+                      $linkStories = explode(',', $story->linkStories);
+                      foreach($linkStories as $linkStoryID)
                       {
-                          echo '<li>';
-                          echo html::a(inlink('view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID], '_blank');
-                          echo html::a("javascript:unlinkStory($story->id, \"linkStories\", $linkStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
-                          echo '</li>';
+                          if(isset($story->extraStories[$linkStoryID]))
+                          {
+                              echo "<li><div class='checkbox-primary'>";
+                              echo "<input type='checkbox' checked='checked' name='linkStories[]' value=$linkStoryID />";
+                              echo "<label>#{$linkStoryID} {$story->extraStories[$linkStoryID]}</label>";
+                              echo '</div></li>';
+                          }
                       }
                   }
                   ?>
                   </ul>
-                  <?php endif;?>
                 </td>
               </tr>
               <?php if($story->status == 'closed'):?>
@@ -224,17 +225,25 @@
                 <th><?php echo $lang->story->childStories;?></th>
                 <td>
                   <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
+                </td>
+              </tr>
+              <tr>
+                <th></th>
+                <td>
                   <ul class='list-unstyled' id='childStoriesBox'>
                   <?php
-                  $childStories = explode(',', $story->childStories);
-                  foreach($childStories as $childStoryID)
+                  if($story->childStories)
                   {
-                      if(isset($story->extraStories[$childStoryID]))
+                      $childStories = explode(',', $story->childStories);
+                      foreach($childStories as $childStoryID)
                       {
-                          echo '<li>';
-                          echo html::a(inlink('view', "storyID=$childStoryID"), "#$childStoryID" . $story->extraStories[$childStoryID], '_blank');
-                          echo html::a("javascript:unlinkStory($story->id, \"childStories\", $childStoryID)", '<i class="icon-remove"></i>', '', "title='{$lang->unlink}' style='float:right'");
-                          echo '</li>';
+                          if(isset($story->extraStories[$childStoryID]))
+                          {
+                              echo "<li><div class='checkbox-primary'>";
+                              echo "<input type='checkbox' checked='checked' name='childStories[]' value=$childStoryID />";
+                              echo "<label>#{$childStoryID} {$story->extraStories[$childStoryID]}</label>";
+                              echo '</div></li>';
+                          }
                       }
                   }
                   ?>
