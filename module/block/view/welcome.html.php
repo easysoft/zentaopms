@@ -14,7 +14,6 @@
 .block-welcome .col-left {width: 25%;}
 .block-welcome .col-left > h4 {margin: 5px 0;line-height: 30px;}
 .block-welcome .col-left .timeline {margin: 10px 0 0;font-size: 12px;}
-.block-welcome .col-right {width: 75%;}
 .block-welcome .col-right > h4 {font-weight: normal;}
 .block-welcome .col-right > h4 small {display: inline-block;margin-right: 8px;font-size: 14px;}
 .block-welcome .col-right .tiles {padding: 10px 0 0 16px;border-left: 1px solid #e5e8ec;}
@@ -22,11 +21,14 @@
 .block-welcome .panel-body {padding-top: 15px;}
 .block-welcome .user-notification-icon {position: relative;display: inline-block;margin-left: 5px;}
 .block-welcome .user-notification-icon .label-badge {position: absolute;top: 1px;right: -8px;min-width: 16px;padding: 2px;font-size: 12px;font-weight: normal;}
+.block-welcome.block-sm .col-right {padding: 0;}
+.block-welcome.block-sm .col-right .tiles {border-left: none; padding-left: 0}
+.block-welcome.block-sm .tile-title {font-size: 12px; margin: 0 -10px;}
 </style>
 <div class='panel-move-handler'></div>
 <div class="panel-body conatiner-fluid">
-  <div class="row">
-    <div class="col col-left">
+  <div class="table-row">
+    <div class="col col-left hide-in-sm">
       <h4><?php printf($lang->block->welcomeList[$welcomeType], $app->user->realname)?></h4>
       <ul class="timeline timeline-sm">
         <?php
