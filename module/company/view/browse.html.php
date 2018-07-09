@@ -70,7 +70,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           </th>
           <th><?php common::printorderlink('realname', $orderBy, $vars, $lang->user->realname);?></th>
           <th><?php common::printOrderLink('account', $orderBy, $vars, $lang->user->account);?></th>
-          <th class="c-type"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
+          <th class="w-90px"><?php common::printOrderLink('role', $orderBy, $vars, $lang->user->role);?></th>
           <th class="c-url"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>
           <th class="c-type"><?php common::printOrderLink('gender', $orderBy, $vars, $lang->user->gender);?></th>
           <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
@@ -92,7 +92,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           </td>
           <td><?php if(!common::printLink('user', 'view', "account=$user->account", $user->realname, '', "title='$user->realname'")) echo $user->realname;?></td>
           <td><?php echo $user->account;?></td>
-          <td class="c-type"><?php echo zget($lang->user->roleList, $user->role, '');?></td>
+          <td class="w-90px" title='<?php echo zget($lang->user->roleList, $user->role, '');?>'><?php echo zget($lang->user->roleList, $user->role, '');?></td>
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
           <td class="c-type"><?php echo zget($lang->user->genderList, $user->gender, $user->gender);?></td>
           <td><?php echo $user->phone;?></td>

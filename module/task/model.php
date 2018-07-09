@@ -1123,7 +1123,7 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
-            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status')
+            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
             ->remove('comment,files,labels')
             ->get();
 
@@ -1145,8 +1145,8 @@ class taskModel extends model
         }
         else
         {
-            $consumed = $oldTask->team[$this->app->user->account]->consumed;
-            if($task->consumed < $consumed)
+            $consumed = $task->consumed - $oldTask->team[$this->app->user->account]->consumed;
+            if($consumed < 0)
             {
                 dao::$errors[] = $this->lang->task->error->consumedSmall;
                 return false;
