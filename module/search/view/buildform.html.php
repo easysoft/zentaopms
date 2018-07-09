@@ -217,6 +217,7 @@ foreach($fieldParams as $fieldName => $param)
   </tbody>
 </table>
 </form>
+<?php js::set('searchCustom', $lang->search->custom);?>
 <script>
 var dtOptions =
 {
@@ -250,9 +251,18 @@ $(function()
     /*
      * Load queries form
      */
-    var loadQueries = window.loadQueries = function(queryID)
+    var loadQueries = window.loadQueries = function(queryID, shortcut, name)
     {
-        $('#userQueries div:first').load($.createLink('search', 'ajaxGetQuery', 'module=' + module + '&queryID=' + queryID));
+        $('#userQueries ul').load($.createLink('search', 'ajaxGetQuery', 'module=' + module + '&queryID=' + queryID));
+        if(shortcut)
+        {
+            if($('#mainMenu .btn-toolbar.pull-left #query').size() == 0)
+            {
+                var html = '<div class="btn-group" id="query"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link " style="border-radius: 2px;">' + searchCustom + ' <span class="caret"></span></a><ul class="dropdown-menu"></ul></div>';
+                $('#mainMenu .btn-toolbar.pull-left #bysearchTab').before(html);
+            }
+            $('#mainMenu .btn-toolbar.pull-left #query ul.dropdown-menu').append("<li><a href='" + actionURL.replace('myQueryID', queryID) + "'>" + name + "</a></li>")
+        }
     };
 
     /*
@@ -431,7 +441,7 @@ $(function()
         var $query = $(this).closest('.user-query');
         var queryId = $query.data('queryId');
         var deleteQueryLink = $.createLink('search', 'deleteQuery', 'queryID=' + queryId);
-        $.getJSON(deleteQueryLink, function(data)
+        $.get(deleteQueryLink, function(data)
         {
             if(data == 'success') $query.remove();
         });
