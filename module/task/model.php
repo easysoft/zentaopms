@@ -505,6 +505,7 @@ class taskModel extends model
                     $currentTask->finishedBy   = '';
                     $currentTask->finishedDate = '0000-00-00';
                 }
+                if($oldTask->assignedTo != $teams[count($teams) - 1] && isset($team[$currentTask->assignedTo]) && $oldTask->status == 'wait') $currentTask->status = 'doing';
 
                 if($currentTask->left == 0 && $oldTask->left != 0 && $currentTask->consumed != 0)
                 {
@@ -625,7 +626,7 @@ class taskModel extends model
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
-            ->checkIF($task->status   != 'wait' and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
+            ->checkIF($task->status   != 'wait' and empty($teams) and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
 
             ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
