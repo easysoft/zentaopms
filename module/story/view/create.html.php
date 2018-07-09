@@ -45,9 +45,9 @@
                 if(count($moduleOptionMenu) == 1)
                 {
                     echo "<div class='input-group-addon'>";
-                    echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch"), $lang->tree->manage, '_blank');
+                    echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                    echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
                     echo '</div>';
                 }
                 ?>
@@ -60,13 +60,13 @@
               <div class='input-group' id='planIdBox'>
                 <?php
                 echo html::select('plan', $plans, $planID, "class='form-control chosen'");
-                if(count($plans) != 1)
+                if(count($plans) == 1)
                 {
                     echo "<div class='input-group-btn'>";
-                    echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch"), "<i class='icon icon-plus'></i>", '_blank', "class='btn btn-icon' data-toggle='tooltip' title='{$lang->productplan->create}'");
+                    echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$lang->productplan->create}'");
                     echo '</div>';
                     echo "<div class='input-group-btn'>";
-                    echo html::a("javascript:loadProductPlans($productID)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon' data-toggle='tooltip' title='{$lang->refresh}'");
+                    echo html::a("#", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$lang->refresh}' onclick='loadProductPlans($productID)'");
                     echo '</div>';
                 }
                 ?>
