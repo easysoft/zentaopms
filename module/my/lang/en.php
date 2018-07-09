@@ -25,7 +25,7 @@ $lang->my->scoreRule      = 'Score Rule';
 $lang->my->noTodo         = 'No todos. ';
 
 $lang->my->taskMenu = new stdclass();
-$lang->my->taskMenu->assignedToMe = 'AssignedToMe';
+$lang->my->taskMenu->assignedToMe = 'Assigned To Me';
 $lang->my->taskMenu->openedByMe   = 'CreatedByMe';
 $lang->my->taskMenu->finishedByMe = 'FinishedByMe';
 $lang->my->taskMenu->closedByMe   = 'ClosedByMe';
