@@ -508,9 +508,12 @@ class taskModel extends model
 
                 if($currentTask->left == 0 && $oldTask->left != 0 && $currentTask->consumed != 0)
                 {
-                    $currentTask->status       = 'done';
-                    $currentTask->finishedBy   = $this->app->user->account;
-                    $currentTask->finishedDate = $now;
+                    if($oldTask->assignedTo == $teams[count($teams) - 1] && $team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
+                    {
+                        $currentTask->status       = 'done';
+                        $currentTask->finishedBy   = $this->app->user->account;
+                        $currentTask->finishedDate = $now;
+                    }
                 }
 
                 return $currentTask;
