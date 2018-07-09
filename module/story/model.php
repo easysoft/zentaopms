@@ -493,7 +493,9 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
-            ->remove('linkStories,childStories,files,labels,comment,contactListMenu')
+            ->join('linkStories', ',')
+            ->join('childStories', ',')
+            ->remove('files,labels,comment,contactListMenu')
             ->get();
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(empty($_POST['product'])) $story->branch = $oldStory->branch;
@@ -1240,28 +1242,6 @@ class storyModel extends model
     }
 
     /**
-     * Link stories.
-     *
-     * @param  int    $storyID
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function linkStories($storyID, $type = 'linkStories')
-    {
-        if($this->post->stories == false) return;
-
-        $story        = $this->getById($storyID);
-        $stories2Link = $this->post->stories;
-
-        $stories = implode(',', $stories2Link) . ',' . trim($story->$type, ',');
-        $this->dao->update(TABLE_STORY)->set($type)->eq(trim($stories, ','))->where('id')->eq($storyID)->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
-        $action = ($type == 'linkStories') ? 'linkRelatedStory' : 'subdivideStory';
-        $this->loadModel('action')->create('story', $storyID, $action, '', implode(',', $stories2Link));
-    }
-
-    /**
      * Get stories to link.
      *
      * @param  int    $storyID
@@ -1288,32 +1268,6 @@ class storyModel extends model
         {
             return array();
         }
-    }
-
-    /**
-     * Unlink story.
-     *
-     * @param  int    $storyID
-     * @param  string $type
-     * @param  int    $story2Unlink
-     * @access public
-     * @return void
-     */
-    public function unlinkStory($storyID, $type = 'linkStories', $story2Unlink = 0)
-    {
-        $story = $this->getById($storyID);
-
-        $oldLinkedStories = explode(',', trim($story->$type, ','));
-        foreach($oldLinkedStories as $key => $storyId)
-        {
-            if($storyId == $story2Unlink) unset($oldLinkedStories[$key]);
-        }
-        $stories = implode(',', $oldLinkedStories);
-
-        $this->dao->update(TABLE_STORY)->set($type)->eq($stories)->where('id')->eq($storyID)->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
-        $action = ($type == 'linkStories') ? 'unlinkRelatedStory' : 'unlinkChildStory';
-        $this->loadModel('action')->create('story', $storyID, $action, '', $story2Unlink);
     }
 
     /**

@@ -148,6 +148,47 @@ class blockModel extends model
     }
 
     /**
+     * Get data of welcome block.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getWelcomeBlockData()
+    {
+        $data = array();
+
+        $projects = $this->loadModel('project')->getPairs();
+        $products = $this->loadModel('product')->getPairs();
+
+        $data['tasks']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $data['bugs']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $data['stories']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->fetch('count');
+        $data['projects'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->fetch('count');
+        $data['products'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('status')->ne('closed')->andWhere('id')->in(array_keys($products))->fetch('count');
+
+        $today = date('Y-m-d');
+        $data['delayTask'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)
+            ->where('assignedTo')->eq($this->app->user->account)
+            ->andWhere('status')->in('wait,doing')
+            ->andWhere('deadline')->ne('0000-00-00')
+            ->andWhere('deadline')->lt($today)
+            ->fetch('count');
+        $data['delayBug'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
+            ->where('assignedTo')->eq($this->app->user->account)
+            ->andWhere('status')->eq('active')
+            ->andWhere('deadline')->ne('0000-00-00')
+            ->andWhere('deadline')->lt($today)
+            ->fetch('count');
+        $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
+            ->where('id')->in(array_keys($projects))
+            ->andWhere('status')->in('wait,doing')
+            ->andWhere('end')->lt($today)
+            ->fetch('count');
+
+        return $data;
+    }
+
+    /**
      * Init block when account use first. 
      * 
      * @param  string    $appName 
