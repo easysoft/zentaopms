@@ -203,6 +203,7 @@ class blockModel extends model
 
         /* Mark this app has init. */
         $this->loadModel('setting')->setItem("$account.$module.common.blockInited", true);
+        $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
         foreach($blocks as $index => $block)
         {
             $block['order']   = $index;

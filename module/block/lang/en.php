@@ -15,6 +15,7 @@ $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
 $lang->block->color  = 'Color';
+$lang->block->reset  = 'Restore the default';
 
 $lang->block->account = 'Account';
 $lang->block->module  = 'Module';
@@ -52,6 +53,8 @@ $lang->block->createBlock        = 'Add Block';
 $lang->block->editBlock          = 'Edit';
 $lang->block->ordersSaved        = 'Order is saved.';
 $lang->block->confirmRemoveBlock = 'Do you want to remove Block?';
+$lang->block->noticeNewBlock     = 'ZenTao 10.+ has a new layout for each view. Do you want to start the new view?';
+$lang->block->confirmReset       = 'Whether to restore the default';
 $lang->block->closeForever       = 'Permanent Close';
 $lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be activiated at Admin->Custom.';
 $lang->block->remove             = 'Remove';
