@@ -42,9 +42,9 @@
             echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
             if(count($moduleOptionMenu) == 1)
             {
-                echo "<span class='input-group-btn'>";
-                echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch"), "<i class='icon icon-cog'></i>", '_blank', "data-toggle='tooltip' class='btn' title='{$lang->tree->manage}'");
-                echo html::a("javascript:loadProductModules($productID)", "<i class='icon icon-refresh'></i>", '', "data-toggle='tooltip' class='btn' title='{$lang->refresh}'");
+                echo "<span class='input-group-addon'>";
+                echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
                 echo '</span>';
             }
             ?>

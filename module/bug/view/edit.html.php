@@ -106,9 +106,9 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                     if(count($moduleOptionMenu) == 1)
                     {
                         echo "<span class='input-group-addon'>";
-                        echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch"), $lang->tree->manage, '_blank');
+                        echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                         echo '&nbsp; ';
-                        echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                        echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
                         echo '</span>';
                     }
                     ?>
