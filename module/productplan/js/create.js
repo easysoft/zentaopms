@@ -50,6 +50,14 @@ $('#end').on('change', function()
     $("input:radio[name='delta']").attr("checked", false);
 });
 
+$('form').submit(function()
+{
+    $('#submit').click(function()
+    {
+        return false;
+    });   
+})
+
 $('#future').on('change', function()
 {
     if($(this).prop('checked'))
