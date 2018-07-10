@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='mainContent' class='main-content'>
 <div class='main-header'>
-<h2><?php echo $lang->project->fixFirst;?></h2>
+  <h2><?php echo $lang->project->fixFirst;?></h2>
 </div>
   <form target='hiddenwin' method='post'>
     <table class='table table-form'>

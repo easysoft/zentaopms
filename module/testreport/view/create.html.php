@@ -32,7 +32,7 @@
                   <span class='input-group-addon'> ~ </span>
                   <?php echo html::input('end', $end, "class='form-control form-date'")?>
                   <?php
-                  echo html::hidden('product', $productIdList) . html::hidden('project', $project->id) . html::hidden('tasks', $tasks);
+                  echo html::hidden('product', $productIdList) . ($config->global->flow != 'onlyTest' ? html::hidden('project', $project->id) : '') . html::hidden('tasks', $tasks);
                   echo html::hidden('objectID', $objectID) . html::hidden('objectType', $objectType);
                   ?>
                 </div>
@@ -55,11 +55,13 @@
               <td colspan='2'><?php echo html::input('title', $reportTitle, "class='form-control'")?></td>
               <td></td>
             </tr>
+            <?php if($config->global->flow != 'onlyTest'):?>
             <tr>
               <th><?php echo $lang->testreport->goal?></th>
               <td colspan='2'><?php echo $project->desc?></td>
               <td></td>
             </tr>
+            <?php endif;?>
             <tr>
               <th><?php echo $lang->testreport->profile?></th>
               <td colspan='2'>

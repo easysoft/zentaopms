@@ -18,7 +18,7 @@
     <div class="main-header">
       <h2>
         <span class='label label-id'><?php echo $product->id;?></span>
-        <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name);?>
+        <?php echo html::a($this->createLink('product', 'view', 'product=' . $product->id), $product->name, '', "title='$product->name'");?>
         <small><?php echo $lang->arrow . ' ' . $lang->product->edit;?></small>
       </h2>
     </div>

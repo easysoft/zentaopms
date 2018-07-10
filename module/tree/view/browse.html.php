@@ -22,7 +22,8 @@
     </a>
     <div class="divider"></div>
     <div class="page-title">
-      <span class="text" title='<?php echo $root->name;?>'>
+    <?php $rootName = $viewType == 'line' ? '' : $root->name;?>
+      <span class="text" title='<?php echo $rootName;?>'>
         <?php
         if($viewType == 'doc')
         {

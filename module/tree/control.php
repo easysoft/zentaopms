@@ -296,6 +296,9 @@ class tree extends control
         if(!empty($_POST))
         {
             $this->tree->manageChild($rootID, $viewType);
+
+            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
+
             die(js::reload('parent'));
         }
     }
@@ -357,9 +360,9 @@ class tree extends control
             if(count($optionMenu) == 1 and $needManage)
             {
                 $output .=  "<span class='input-group-addon'>";
-                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch"), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '_blank');
+                $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                 $output .= '&nbsp; ';
-                $output .= $viewType == 'line' ? html::a("javascript:loadProductLines($rootID)", $this->lang->refresh) : html::a("javascript:loadProductModules($rootID)", $this->lang->refresh);
+                $output .= $viewType == 'line' ? html::a("#", $this->lang->refresh, '', "class='refresh' onclick='loadProductLines($rootID)'") : html::a("#", $this->lang->refresh, '', "class='refresh' onclick='loadProductModules($rootID)'");
                 $output .= '</span>';
             }
             die($output);

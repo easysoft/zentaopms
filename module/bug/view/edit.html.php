@@ -31,7 +31,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $bug->id;?></span>
-        <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', 'class="bug-title"');?>
+        <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', "class='bug-title' title='$bug->title'");?>
         <small><?php echo $lang->arrow . ' ' . $lang->bug->edit;?></small>
       </h2>
       <div class="pull-right btn-toolbar">
@@ -106,9 +106,9 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                     if(count($moduleOptionMenu) == 1)
                     {
                         echo "<span class='input-group-addon'>";
-                        echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch"), $lang->tree->manage, '_blank');
+                        echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                         echo '&nbsp; ';
-                        echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                        echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
                         echo '</span>';
                     }
                     ?>

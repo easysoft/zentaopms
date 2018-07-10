@@ -84,9 +84,9 @@
                   if(count($moduleOptionMenu) == 1)
                   {
                       echo "<span class='input-group-addon'>";
-                      echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story&currentModuleID=0&branch=$story->branch"), $lang->tree->manage, '_blank');
+                      echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story&currentModuleID=0&branch=$story->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:loadProductModules($story->product)", $lang->refresh);
+                      echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($story->product)'");
                       echo '</span>';
                   }
                   ?>
@@ -102,8 +102,8 @@
                   if(count($plans) == 1) 
                   {
                       echo "<span class='input-group-addon'>";
-                      echo html::a($this->createLink('productplan', 'create', "productID=$story->product&branch=$story->branch"), $lang->productplan->create, '_blank');
-                      echo html::a("javascript:loadProductPlans($story->product)", $lang->refresh);
+                      echo html::a($this->createLink('productplan', 'create', "productID=$story->product&branch=$story->branch", '', true), $lang->productplan->create, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                      echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductPlans($story->product)'");
                       echo '</span>';
                   }
                   ?>
@@ -126,7 +126,21 @@
               <?php if($story->status != 'draft'):?>
               <tr>
                 <th><?php echo $lang->story->stage;?></th>
-                <td><?php echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");?></td>
+                <td>
+                <?php
+                if($story->stages and $branches)
+                {
+                    foreach($story->stages as $branch => $stage)
+                    {
+                        if(isset($branches[$branch])) echo '<p>' . $branches[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
+                    }
+                }
+                else
+                {
+                    echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");
+                }
+                ?>
+                </td>
               </tr>
               <?php endif;?>
               <tr>

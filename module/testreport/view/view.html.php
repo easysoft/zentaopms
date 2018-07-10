@@ -60,10 +60,12 @@
           <th><?php echo $lang->testreport->members?></th>
           <td colspan='2'><?php foreach(explode(',', $report->members) as $member)echo zget($users, $member) . ' &nbsp; ';?></td>
         </tr>
+        <?php if($config->global->flow != 'onlyTest' && !empty($project)):?>
         <tr>
           <th><?php echo $lang->testreport->goal?></th>
           <td colspan='2'><?php echo $project->desc?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->testreport->profile?></th>
           <td colspan='2'>
