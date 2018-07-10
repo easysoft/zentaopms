@@ -2430,7 +2430,7 @@ class bugModel extends model
         $canBatchResolve      = common::hasPriv('bug', 'batchResolve');
         $canBatchAssignTo     = common::hasPriv('bug', 'batchAssignTo');
 
-        $canBatchAction = $canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo or $canBatchCancel;
+        $canBatchAction = $canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchActivate or $canBatchChangeBranch or $canBatchChangeModule or $canBatchResolve or $canBatchAssignTo;
 
         $canView = common::hasPriv('bug', 'view');
         $bugLink = inlink('view', "bugID=$bug->id");
