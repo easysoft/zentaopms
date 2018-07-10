@@ -78,10 +78,13 @@ $sessionString .= session_name() . '=' . session_id();
               echo html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle . " ({$fileSize})", '_blank', "onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth)\"");
 
 
-              echo "<span class='right-icon'>&nbsp; ";
-              common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
-              if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
-              echo '</span>';
+              if(common::hasPriv($file->objectType, 'edit', $file->objectID))
+              {
+                  echo "<span class='right-icon'>&nbsp; ";
+                  common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
+                  if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
+                  echo '</span>';
+              }
               echo '</li>';
           }
       }
