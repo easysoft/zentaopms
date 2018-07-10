@@ -1326,7 +1326,7 @@ EOD;
             if(strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
             if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
         }
-
+        if(empty($app->user->rights['rights']['my']['limited'])) return true;
 
         if(!is_null($method) && strpos($method, 'batch')  === 0) return false;
         if(!is_null($method) && strpos($method, 'link')   === 0) return false;
