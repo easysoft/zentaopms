@@ -25,6 +25,7 @@ class build extends control
             $buildID = $this->build->create($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
+            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.loadProjectBuilds($projectID);}"));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
 
@@ -357,7 +358,7 @@ class build extends control
             {
                 if(empty($builds))
                 {
-                    echo html::a($this->createLink('build', 'create', "projectID=$projectID"), $this->lang->build->create, '_blank');
+                    echo html::a($this->createLink('build', 'create', "projectID=$projectID", '', $onlybody = true), $this->lang->build->create, '', "data-toggle='modal' data-type='iframe'");
                     echo '&nbsp; ';
                     echo html::a("javascript:loadProjectBuilds($projectID)", $this->lang->refresh);
                 }
