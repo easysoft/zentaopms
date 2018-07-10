@@ -35,6 +35,11 @@
           <td><?php echo html::input('url', '', "class='form-control'");?></td>
           <td id='urlNote'><?php echo $lang->webhook->note->typeList['default'];?></td>
         </tr>
+        <tr>
+          <th><?php echo $lang->webhook->domain;?></th>
+          <td><?php echo html::input('domain', common::getSysURL(), "class='form-control'");?></td>
+          <td></td>
+        </tr>
         <tr id='sendTypeTR'>
           <th><?php echo $lang->webhook->sendType;?></th>
           <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, '', "class='form-control'");?></td>

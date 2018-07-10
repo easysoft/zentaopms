@@ -34,6 +34,11 @@
           <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
           <td><?php echo zget($lang->webhook->note->typeList, $webhook->type);?></td>
         </tr>
+        <tr>
+          <th><?php echo $lang->webhook->domain;?></th>
+          <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>
+          <td></td>
+        </tr>
         <?php if($webhook->type != 'dingding'):?>
         <tr>
           <th><?php echo $lang->webhook->sendType;?></th>

@@ -16,6 +16,7 @@ $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Type';
 $lang->webhook->name        = 'Name';
 $lang->webhook->url         = 'Webhook Address';
+$lang->webhook->domain      = 'Zentao Domain';
 $lang->webhook->contentType = 'Content Type';
 $lang->webhook->sendType    = 'Send Type';
 $lang->webhook->product     = "{$lang->productCommon}";
