@@ -1314,4 +1314,43 @@ class block extends control
         $this->loadModel('setting')->setItem('system.block.closed', $closedBlock . ",{$block->source}|{$block->block}");
         die(js::reload('parent'));
     }
+
+    /**
+     * Ajax reset.
+     * 
+     * @param  string $module 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function ajaxReset($module, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->block->confirmReset, inlink('ajaxReset', "module=$module&confirm=yes")));
+
+        $this->dao->delete()->from(TABLE_BLOCK)->where('module')->eq($module)->andWhere('account')->eq($this->app->user->account)->exec();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq($module)->andWhere('owner')->eq($this->app->user->account)->andWhere('`key`')->eq('blockInited')->exec();
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Ajax for use new block.
+     * 
+     * @param  string $module 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function ajaxUseNew($module, $confirm = 'no')
+    {
+        if($confirm == 'yes')
+        {
+            $this->dao->delete()->from(TABLE_BLOCK)->where('module')->eq($module)->andWhere('account')->eq($this->app->user->account)->exec();
+            $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq($module)->andWhere('owner')->eq($this->app->user->account)->andWhere('`key`')->eq('blockInited')->exec();
+            die(js::reload('parent'));
+        }
+        elseif($confirm == 'no')
+        {
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.$module.block.initVersion", $this->config->block->version);
+        }
+    }
 }

@@ -10,7 +10,8 @@
  * @link        http://www.ranzhico.com
  */
 $config->block = new stdclass();
-$config->block->editor = new stdclass();
+$config->block->version = 2;
+$config->block->editor  = new stdclass();
 $config->block->editor->set = array('id' => 'html', 'tools' => 'simple');
 
 $config->block->longBlock = array();

@@ -99,7 +99,28 @@ config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
 <?php if(!$useGuest):?>
-$('#subHeader #pageActions .btn-toolbar:last').append(<?php echo json_encode(html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus text-muted'></i> {$lang->block->createBlock}", '', "class='btn' data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'"))?>);
+<?php
+$dropmenu  = "<div class='btn-group'>";
+$dropmenu .= html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus text-muted'></i> {$lang->block->createBlock}", '', "class='btn' data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'");
+$dropmenu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' style='padding-bottom:7px;'><span class='caret'></span></button>";
+$dropmenu .= "<ul class='dropdown-menu pull-right' role='menu'>";
+$dropmenu .= "<li>" . html::a($this->createLink("block", "ajaxReset", "module=$module"), $lang->block->reset, 'hiddenwin') . "</li>";
+$dropmenu .= '</ul></div>';
+?>
+$('#subHeader #pageActions .btn-toolbar:last').append(<?php echo json_encode($dropmenu)?>);
+<?php if(!isset($config->$module->block->initVersion) or $config->$module->block->initVersion < '2'):?>
+$(function()
+{
+    if(confirm('<?php echo $lang->block->noticeNewBlock;?>'))
+    {
+        $('#hiddenwin').attr('src', '<?php echo $this->createLink('block', 'ajaxUseNew', "module=$module&confirm=yes");?>');
+    }
+    else
+    {
+        $('#hiddenwin').attr('src', '<?php echo $this->createLink('block', 'ajaxUseNew', "module=$module&confirm=no");?>');
+    }
+})
+<?php endif;?>
 <?php endif;?>
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>

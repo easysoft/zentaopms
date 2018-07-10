@@ -15,6 +15,7 @@ $lang->block->name   = '区块名称';
 $lang->block->style  = '外观';
 $lang->block->grid   = '位置';
 $lang->block->color  = '颜色';
+$lang->block->reset  = '恢复默认';
 
 $lang->block->account = '所属用户';
 $lang->block->module  = '所属模块';
@@ -52,6 +53,8 @@ $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';
 $lang->block->ordersSaved        = '排序已保存';
 $lang->block->confirmRemoveBlock = '确定移除区块吗？';
+$lang->block->noticeNewBlock     = '10.0版本以后各个视图主页提供了全新的视图，您要启用新的视图布局吗？';
+$lang->block->confirmReset       = '是否恢复默认布局';
 $lang->block->closeForever       = '永久关闭';
 $lang->block->confirmClose       = '确定永久关闭该区块吗？关闭后所有人都将无法使用该区块，可以在后台自定义中打开。';
 $lang->block->remove             = '移除';

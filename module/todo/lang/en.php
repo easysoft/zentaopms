@@ -30,6 +30,7 @@ $lang->todo->import       = "Import";
 $lang->todo->legendBasic  = "Basic Info";
 $lang->todo->cycle        = "Recurrence";
 $lang->todo->cycleConfig  = "Set Recurrence";
+$lang->todo->noName       = "The Name should not be empty.";
 
 $lang->todo->reasonList['story'] = "Transfer Story";
 $lang->todo->reasonList['task']  = "Transfer Task";

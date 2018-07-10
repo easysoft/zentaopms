@@ -30,6 +30,7 @@ $lang->todo->import       = "导入";
 $lang->todo->legendBasic  = "基本信息";
 $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期设置";
+$lang->todo->noName       = "『待办名称』不能为空。";
 
 $lang->todo->reasonList['story'] = "转需求";
 $lang->todo->reasonList['task']  = "转任务";

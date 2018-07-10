@@ -17,14 +17,6 @@
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
-    <div class="alert with-icon">
-      <i class="icon-exclamation-sign"></i>
-      <div class="content">
-        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
-      </div>
-    </div>
-    <?php else:?>
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $task->id;?></span>
@@ -67,6 +59,17 @@
           </tr>
           <?php endforeach;?>
           <?php endif;?>
+      <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+        </tbody>
+      </table>
+    </form>
+    <div class="alert with-icon">
+      <i class="icon-exclamation-sign"></i>
+      <div class="content">
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
+      </div>
+    </div>
+    <?php else:?>
           <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
           <?php for($i = 1; $i <= 3; $i++):?>
           <tr class="text-center">
