@@ -2,6 +2,8 @@ ALTER TABLE `zt_storyspec` CHANGE `title` `title` varchar(255) NOT NULL;
 update `zt_todo` set assignedTo = 'closed', assignedDate = closedDate where status = 'closed';
 DROP TABLE IF EXISTS `zt_webhookdatas`;
 
+ALTER TABLE `zt_webhook` ADD `domain` varchar(255) NOT NULL AFTER `url`;
+
 ALTER TABLE `zt_action` DROP INDEX `action`;
 ALTER TABLE `zt_action` ADD INDEX `date` (`date`);
 ALTER TABLE `zt_action` ADD INDEX `actor` (`actor`);
