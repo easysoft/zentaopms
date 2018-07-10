@@ -468,7 +468,7 @@ class commonModel extends model
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
 
         if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
-        /* Cycling to print every sub menus. */
+        /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)
         {
             if(isset($lang->$moduleName->dividerMenu) and strpos($lang->$moduleName->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
@@ -505,7 +505,44 @@ class commonModel extends model
                     if($currentModule == 'testsuite' && $currentMethod == 'library') $active = '';
                 }
 
-                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
+                $label   = $menuItem->text;
+                $subMenu = '';
+                /* Print sub menus. */
+                if(isset($menuItem->subMenu))
+                {
+                    foreach($menuItem->subMenu as $subMenuItem)
+                    {
+                        if($subMenuItem->hidden) continue;
+
+                        $subActive = '';
+                        $subModule = '';
+                        $subMethod = '';
+                        $subParams = '';
+                        $subLabel  = $subMenuItem->text;
+                        if(isset($subMenuItem->link['module'])) $subModule = $subMenuItem->link['module'];
+                        if(isset($subMenuItem->link['method'])) $subMethod = $subMenuItem->link['method'];
+                        if(isset($subMenuItem->link['vars']))   $subParams = $subMenuItem->link['vars'];
+
+                        $subLink = helper::createLink($subModule, $subMethod, $subParams);
+
+                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
+                        {
+                            $link  = $subLink;
+                            $label = $subLabel;
+                            $subActive = 'active';
+                        }
+
+                        $subMenu .= "<li class='$subActive'>" . html::a($subLink, $subLabel) . '</li>';
+                    }
+
+                    if($subMenu)
+                    {
+                        $label   .= "<span class='caret'></span>";
+                        $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
+                    }
+                }
+
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
                 if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";
                 echo $menuItemHtml;
             }

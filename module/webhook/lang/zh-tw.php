@@ -16,6 +16,7 @@ $lang->webhook->id          = 'ID';
 $lang->webhook->type        = '類型';
 $lang->webhook->name        = '名稱';
 $lang->webhook->url         = 'Hook地址';
+$lang->webhook->domain      = '禪道域名';
 $lang->webhook->contentType = '內容類型';
 $lang->webhook->sendType    = '發送方式';
 $lang->webhook->product     = "關聯{$lang->productCommon}";

@@ -24,6 +24,7 @@ $lang->search->select        = '需求/任務篩選';
 $lang->search->me            = '自己';
 $lang->search->noQuery       = '還沒有保存查詢！';
 $lang->search->onMenuBar     = '顯示在菜單欄';
+$lang->search->custom        = '自定義';
 
 $lang->search->account  = '用戶名';
 $lang->search->module   = '模組';

@@ -141,41 +141,17 @@ class projectModel extends model
 
         foreach($this->lang->project->menu as $key => $menu)
         {
-            $replace = $projectID;
+            common::setMenuVars($this->lang->project->menu, $key, $projectID);
 
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
-                $index     = 0;
-                $firstLink = '';
-                $dropTitle = '';
-                $hasActive = false;
                 $subMenu   = array();
-                $replace   = "<ul class='dropdown-menu'>";
                 foreach($this->lang->project->subMenu->$key as $subMenuKey => $subMenuLink)
                 {
-                    $subModule = '';
-                    if(is_array($subMenuLink))
-                    {
-                        if(isset($subMenuLink['subModule'])) $subModule = $subMenuLink['subModule'];
-                        $subMenuLink = $subMenuLink['link'];
-                    }
+                    if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
+                    $subMenuLink = sprintf($subMenuLink, $projectID);
                     list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
-                    if(!commonModel::hasPriv($subMenuModule, $subMenuMethod)) continue;
-
-                    if(empty($dropTitle)) $dropTitle = $subMenuName;
-
-                    $active = '';
-                    if(($moduleName == $subMenuModule and $methodName == strtolower($subMenuMethod)) or strpos(",$subModule,", ",$moduleName,") !== false)
-                    {
-                        $active    = "class='active'";
-                        $dropTitle = $subMenuName;
-                    }
-
-                    $link = helper::createLink($subMenuModule, $subMenuMethod, sprintf($subMenuParams, $projectID));
-                    $replace .= "<li $active>" . html::a($link, $subMenuName) . '</li>';
-                    if($active) $hasActive = true;
-                    if($index == 0) $firstLink = $link;
 
                     $link = array();
                     $link['module'] = $subMenuModule;
@@ -189,17 +165,10 @@ class projectModel extends model
                     $menu->hidden = false;
                     $subMenu[] = $menu;
 
-                    $index++;
                 }
-                $replace .= '</ul>';
-                $replace  = "<a href='$firstLink'>$dropTitle <span class='caret'></span></a>" . $replace;
-
-                $this->lang->project->menu->{$key}['class'] = 'dropdown dropdown-hover';
-                if($hasActive) $this->lang->project->menu->{$key}['class'] .= ' active';
 
                 if(!empty($subMenu)) $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
             }
-            common::setMenuVars($this->lang->project->menu, $key,  $replace);
         }
     }
 
