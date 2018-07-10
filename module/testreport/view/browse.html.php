@@ -35,7 +35,9 @@
         <th class='text-left'><?php common::printOrderLink('title',     $orderBy, $vars, $lang->testreport->title);?></th>
         <th class='w-user'> <?php common::printOrderLink('createdBy',   $orderBy, $vars, $lang->openedByAB);?></th>
         <th class='w-150px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->testreport->createdDate);?></th>
+        <?php if($config->global->flow != 'onlyTest'):?>
         <th class='w-250px text-left'><?php common::printOrderLink('project', $orderBy, $vars, $lang->testreport->project);?></th>
+        <?php endif;?>
         <th class='w-250px text-left'><?php echo $lang->testreport->testtask;?></th>
         <th class='c-actions-2'> <?php echo $lang->actions;?></th>
       </tr>
@@ -48,8 +50,10 @@
         <td class='text-left' title='<?php $report->title?>'><?php echo html::a(inlink('view', "reportID=$report->id&from=$objectType"), $report->title)?></td>
         <td><?php echo zget($users, $report->createdBy);?></td>
         <td><?php echo substr($report->createdDate, 2);?></td>
-        <?php $projectName = '#' . $report->project . $projects[$report->project];?>
+        <?php if($config->global->flow != 'onlyTest'):?>
+        <?php $projectName = $report->project ? '#' . $report->project . $projects[$report->project] : '';?>
         <td class='text-left' title='<?php echo $projectName?>'><?php echo $projectName;?></td>
+        <?php endif;?>
         <?php
         $taskName = '';
         foreach(explode(',', $report->tasks) as $taskID) $taskName .= '#' . $taskID . $tasks[$taskID] . ' ';

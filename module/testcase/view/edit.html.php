@@ -152,9 +152,9 @@
                   if(count($moduleOptionMenu) == 1)
                   {
                       echo "<span class='input-group-addon'>";
-                      echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0&branch=$case->branch"), $lang->tree->manage, '_blank');
+                      echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0&branch=$case->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:loadLibModules($libID)", $lang->refresh);
+                      echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadLibModules($libID)'");
                       echo '</span>';
                   }
                   ?>
@@ -180,9 +180,9 @@
                   if(count($moduleOptionMenu) == 1)
                   {
                       echo "<span class='input-group-addon'>";
-                      echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$case->branch"), $lang->tree->manage, '_blank');
+                      echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$case->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:loadProductModules($productID)", $lang->refresh);
+                      echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
                       echo '</span>';
                   }
                   ?>

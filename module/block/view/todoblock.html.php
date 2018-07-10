@@ -169,6 +169,15 @@
   {
       var $todoes = $(obj).closest('.block-todoes');
       var $form   = $(obj).closest('form');
+      var $name   = $("input[name='name']").val();
+      if($name == '') 
+      {
+          $("input[name='name']").addClass('has-error');
+          $('#nameLabel').remove();
+          $("input[name='name']").after('<div id="nameLabel" class="text-danger help-text"><?php echo $lang->todo->noName ?></div>');
+          setTimeout('clearError()', 2000)
+          return false;
+      }
       $.ajax(
       {
           type: "POST",
@@ -181,6 +190,12 @@
               refreshBlock($todoes.parents('div.panel[id^=block]'));
           }
       });
+  }
+
+  function clearError()
+  {
+      $("input[name='name']").removeClass('has-error');
+      $('#nameLabel').remove();
   }
   </script>
 </div>
