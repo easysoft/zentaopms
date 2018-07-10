@@ -1040,6 +1040,10 @@ class productModel extends model
         {
             $link = helper::createLink($module, $method, "productID=%s&type=$extra&currentModuleID=0" . ($branch ? "&branch=%s" : ''));
         }
+        else if($module == 'branch')
+        {
+            $link = helper::createLink($module, $method, "productID=%s");
+        }
         else if($module == 'doc')
         {
             $link = helper::createLink('doc', 'objectLibs', "type=product&objectID=%s&from=product");
