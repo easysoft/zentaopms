@@ -18,6 +18,22 @@
   <div class='main' id='resultsContainer'></div>
 </div>
 <script>
+function createBug(obj)
+{
+    var $form  = $(obj).closest('form');
+    var params = $form.data('params');
+    var stepIdList = '';
+    $form.find('.step .step-id :checkbox').each(function()
+    {
+        if($(this).prop('checked')) stepIdList += $(this).val() + '_';
+    });
+
+    var onlybody    = config.onlybody;
+    config.onlybody = 'no';
+    window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_blank');
+    config.onlybody = onlybody;
+}
+
 $(function()
 {
     $('#resultsContainer').load("<?php echo $this->createLink('testtask', 'results', "runID={$runID}&caseID=$caseID&version=$version");?> #casesResults", function()
