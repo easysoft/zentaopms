@@ -31,7 +31,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
     <div class='main-header'>
       <h2>
         <span class='label label-id'><?php echo $bug->id;?></span>
-        <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', 'class="bug-title"');?>
+        <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', "class='bug-title' title='$bug->title'");?>
         <small><?php echo $lang->arrow . ' ' . $lang->bug->edit;?></small>
       </h2>
       <div class="pull-right btn-toolbar">

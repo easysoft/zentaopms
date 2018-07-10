@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2>
+    <h2 title='<?php echo $group->name;?>'>
       <span class='label label-id'><?php echo $group->id;?></span>
       <?php echo $group->name;?>
     </h2>

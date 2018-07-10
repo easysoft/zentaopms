@@ -15,7 +15,7 @@
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $bug->id;?></span>
-      <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?>
+      <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank', "title='$bug->title'");?>
       <small class='text-muted'> <?php echo $lang->arrow . $lang->bug->linkBugs;?></small>
     </h2>
   </div>

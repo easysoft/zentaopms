@@ -17,3 +17,5 @@
 #modulesTree li > .list-toggle {top: 0}
 
 #childrenForm table tr > td.text-middle span{display:block; float:left;}
+
+.body-modal #mainMenu{display: none;}

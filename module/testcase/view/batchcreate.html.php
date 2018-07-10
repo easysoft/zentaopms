@@ -20,7 +20,7 @@
       <?php echo $lang->testcase->batchCreate;?>
       <?php if($this->session->currentProductType !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
       <?php if($story):?>
-      <small class='text'><?php echo $lang->arrow . $story->title ?></small>
+      <small class='text' title='<?php echo $story->title ?>'><?php echo $lang->arrow . $story->title ?></small>
       <?php endif;?>
     </h2>
     <div class="pull-right btn-toolbar">

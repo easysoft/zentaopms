@@ -447,60 +447,76 @@ class todoModel extends model
     public function createByCycle($todoList)
     {
         $this->loadModel('action');
+        $today = helper::today();
         $lastCycleList = $this->dao->select('*')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('idvalue')->in(array_keys($todoList))->orderBy('date_asc')->fetchAll('idvalue');
         foreach($todoList as $todoID => $todo)
         {
             $todo->config = json_decode($todo->config);
-            if(!empty($todo->config->end) and time() > strtotime($todo->config->end)) continue;
-            $lastCycle = zget($lastCycleList, $todoID, '');
-            $time      = time();
-            for($i = 0; $i <= $todo->config->beforeDays; $i++)
-            {
-                $newDate = '';
-                $newTodo = new stdclass();
-                $newTodo->account = $todo->account;
-                $newTodo->begin   = $todo->begin;
-                $newTodo->end     = $todo->end;
-                $newTodo->type    = 'cycle';
-                $newTodo->idvalue = $todoID;
-                $newTodo->pri     = $todo->pri;
-                $newTodo->name    = $todo->name;
-                $newTodo->desc    = $todo->desc;
-                $newTodo->status  = 'wait';
-                $newTodo->private = $todo->private;
+            $begin      = $todo->config->begin;
+            $end        = $todo->config->end;
+            $beforeDays = (int)$todo->config->beforeDays;
+            if(!empty($beforeDays) && $beforeDays > 0) $begin = date('Y-m-d', strtotime("$begin -{$beforeDays} days"));
+            if($today < $begin or (!empty($end) && $today > $end)) continue;
 
-                $date = date('Y-m-d', $time + $i * 24 * 3600);
+            $newTodo = new stdclass();
+            $newTodo->account = $todo->account;
+            $newTodo->begin   = $todo->begin;
+            $newTodo->end     = $todo->end;
+            $newTodo->type    = 'cycle';
+            $newTodo->idvalue = $todoID;
+            $newTodo->pri     = $todo->pri;
+            $newTodo->name    = $todo->name;
+            $newTodo->desc    = $todo->desc;
+            $newTodo->status  = 'wait';
+            $newTodo->private = $todo->private;
+
+            $date   = '';
+            $start  = strtotime($begin);
+            $finish = strtotime("$today +{$beforeDays} days");
+            foreach(range($start, $finish, 86400) as $today)
+            {
+                $today     = date('Y-m-d', $today);
+                $lastCycle = zget($lastCycleList, $todoID, '');
+
                 if($todo->config->type == 'day')
                 {
-                    if(empty($lastCycle)) $newDate = date('Y-m-d', $time + ($todo->config->day - 1) * 24 * 3600);
-                    if(!empty($lastCycle->date)) $newDate = date('Y-m-d', strtotime($lastCycle->date) + $todo->config->day * 24 * 3600);
+                    $day = (int)$todo->config->day;
+                    if($day <= 0) continue;
+
+                    if(empty($lastCycle))        $date = date('Y-m-d', strtotime("{$today} +" . ($day - 1) . " days"));
+                    if(!empty($lastCycle->date)) $date = date('Y-m-d', strtotime("{$lastCycle->date} +{$day} days"));
                 }
                 elseif($todo->config->type == 'week')
                 {
-                    $week = date('w', strtotime($date));
+                    $week = date('w', strtotime($today));
                     if(strpos(",{$todo->config->week},", ",{$week},") !== false)
                     {
-                        if(empty($lastCycle)) $newDate = $date;
-                        if($lastCycle->date < $date) $newDate = $date;
+                        if(empty($lastCycle))         $date = $today;
+                        if($lastCycle->date < $today) $date = $today;
                     }
                 }
                 elseif($todo->config->type == 'month')
                 {
-                    $day = date('j', strtotime($date));
+                    $day = date('j', strtotime($today));
                     if(strpos(",{$todo->config->month},", ",{$day},") !== false)
                     {
-                        if(empty($lastCycle)) $newDate = $date;
-                        if($lastCycle->date < $date) $newDate = $date;
+                        if(empty($lastCycle))         $date = $today;
+                        if($lastCycle->date < $today) $date = $today;
                     }
                 }
 
-                if($date == $newDate)
-                {
-                    $newTodo->date = $newDate;
-                    $this->dao->insert(TABLE_TODO)->data($newTodo)->exec();
-                    $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
-                    $lastCycleList[$todoID] = $newTodo;
-                }
+                if(!$date)                         continue;
+                if($date < $todo->config->begin)   continue;
+                if($date < date('Y-m-d'))          continue;
+                if($date > date('Y-m-d', $finish)) continue;
+                if(!empty($end) && $date > $end)   continue;
+
+                $newTodo->date = $date;
+
+                $this->dao->insert(TABLE_TODO)->data($newTodo)->exec();
+                $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
+
+                $lastCycleList[$todoID] = $newTodo;
             }
         }
     }

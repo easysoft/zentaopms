@@ -16,7 +16,7 @@
     <div class='main-header'>
       <h2>
         <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
-        <strong><?php echo $title;?></strong>
+        <strong title='<?php echo $title;?>'><?php echo $title;?></strong>
         <small class='text-danger'><?php echo html::icon('cog');?> <?php echo $lang->extension->uninstall;?></small>
       </h2>
     </div>
