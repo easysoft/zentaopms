@@ -542,13 +542,13 @@ class fileModel extends model
                     if($pos === false)
                     {
                         $data[$row][$col] .= "\n" . $line;
-                        $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                        $data[$row][$col] = str_replace('&comma;', ',', $data[$row][$col]);
                         continue;
                     }
                     else
                     {
-                        $data[$row][$col] .= "\n" . substr($line, 0, $pos + 1);
-                        $data[$row][$col] = trim(str_replace('&comma;', ',', trim($data[$row][$col], '"')));
+                        $data[$row][$col] .= "\n" . substr($line, 0, $pos);
+                        $data[$row][$col] = trim(str_replace('&comma;', ',', $data[$row][$col]));
                         $line = substr($line, $pos + 2);
                         $col++;
                     }
@@ -561,20 +561,20 @@ class fileModel extends model
                     /* the cell has '"', the delimiter is '",'. */
                     if($line{0} == '"')
                     {
-                        $pos = strpos($line, '",');
+                        $pos  = strpos($line, '",');
                         if($pos === false)
                         {
-                            $data[$row][$col] = $line;
+                            $data[$row][$col] = substr($line, 1);
                             /* if line is not empty, then the data of cell is not end. */
                             if(strlen($line) >= 1) continue 2;
                             $line = '';
                         }
                         else
                         {
-                            $data[$row][$col] = substr($line, 0, $pos + 1);
+                            $data[$row][$col] = substr($line, 1, $pos - 1);
                             $line = substr($line, $pos + 2);
                         }
-                        $data[$row][$col] = str_replace('&comma;', ',', trim($data[$row][$col], '"'));
+                        $data[$row][$col] = str_replace('&comma;', ',', $data[$row][$col]);
                     }
                     else
                     {
@@ -593,7 +593,7 @@ class fileModel extends model
                         }
                     }
 
-                    $data[$row][$col] = trim(str_replace('&comma;', ',', trim($data[$row][$col], '"')));
+                    $data[$row][$col] = trim(str_replace('&comma;', ',', $data[$row][$col]));
                     $col++;
                 }
             }
