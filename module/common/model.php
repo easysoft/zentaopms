@@ -510,6 +510,8 @@ class commonModel extends model
                 /* Print sub menus. */
                 if(isset($menuItem->subMenu))
                 {
+                    $firstLink  = '';
+                    $firstLabel = '';
                     foreach($menuItem->subMenu as $subMenuItem)
                     {
                         if($subMenuItem->hidden) continue;
@@ -525,14 +527,24 @@ class commonModel extends model
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
-                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
-                        {
-                            $link  = $subLink;
-                            $label = $subLabel;
-                            $subActive = 'active';
-                        }
+                        if($config->global->flow != 'onlyTest' && $currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
-                        $subMenu .= "<li class='$subActive'>" . html::a($subLink, $subLabel) . '</li>';
+                        $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
+
+                        if(!$firstLink)  $firstLink  = $subLink;
+                        if(!$firstLabel) $firstLabel = $subLabel;
+                    }
+
+                    if(!$firstLink or !$firstLabel) continue;
+
+                    if($config->global->flow == 'onlyTest')
+                    {
+                        $link = $firstLink;
+                    }
+                    else
+                    {
+                        $link  = $firstLink;
+                        $label = $firstLabel;
                     }
 
                     if($subMenu)

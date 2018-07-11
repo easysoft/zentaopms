@@ -2308,13 +2308,24 @@ class project extends control
     public function importPlanStories($projectID, $planID)
     {
         $planStories  = $planProducts = array();
-        $planStory    = $this->loadModel('story')->getPlanStories($planID, 'changed,active,reviewing');
+        $planStory    = $this->loadModel('story')->getPlanStories($planID);
         if(!empty($planStory))
         {
+            $count = 0;
+            foreach($planStory as $id => $story)
+            {
+                if($story->status == 'draft') 
+                {
+                    $count++; 
+                    unset($planStory[$id]);
+                    continue;
+                }
+                $planProducts[$story->id] = $story->product;
+            }
             $planStories = array_keys($planStory);
-            foreach($planStory as $story) $planProducts[$story->id] = $story->product;
             $this->project->linkStory($projectID, $planStories, $planProducts);
         }
+        if($count != 0) die(js::confirm(sprintf($this->lang->project->haveDraft, $count), $this->createLink('project', 'story', "projectID=$projectID")));
         die(js::locate(helper::createLink('project', 'story', 'projectID=' . $projectID), 'parent'));
     }
 

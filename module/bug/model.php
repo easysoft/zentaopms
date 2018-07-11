@@ -101,38 +101,44 @@ class bugModel extends model
                 $replace['productID'] = $productID;
                 $replace['branch']    = $branch;
                 $replace['param']     = $moduleID;
+
+                /* Replace for dropdown submenu. */
+                if(isset($this->lang->bug->subMenu->$key))
+                {
+                    $subMenu = array();
+                    foreach($this->lang->bug->subMenu->$key as $subMenuKey => $subMenuLink)
+                    {
+                        if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
+                        $subMenuLink = vsprintf($subMenuLink, $replace);
+                        list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
+
+                        $link = array();
+                        $link['module'] = $subMenuModule;
+                        $link['method'] = $subMenuMethod;
+                        $link['vars']   = $subMenuParams;
+
+                        $menu = new stdclass();
+                        $menu->name   = $subMenuKey;
+                        $menu->link   = $link;
+                        $menu->text   = $subMenuName;
+                        $menu->hidden = false;
+                        $subMenu[$subMenuKey] = $menu;
+
+                    }
+
+                    /* Avoid the menu shaking when change it by js. */
+                    if(isset($subMenu[$browseType]))
+                    {
+                        $currentSubMenu = $subMenu[$browseType];
+                        $this->lang->bug->menu->more['link'] = "$currentSubMenu->text|" . implode('|', $currentSubMenu->link);
+                    }
+
+                    if(!empty($subMenu)) $this->lang->bug->menu->{$key}['subMenu'] = $subMenu;
+                }
+
+                if($this->app->getMethodName() != 'view') $this->lang->bug->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->bug->byQuery}</a>";
             }
             common::setMenuVars($this->lang->bug->menu, $key, $replace);
-        }
-        if($this->config->global->flow != 'full')
-        {
-            $tmpMenu  = (array)$this->lang->bug->menu;
-            $moreMenu = array_slice($tmpMenu, -6);
-            $tmpMenu  = array_slice($tmpMenu, 0, count($tmpMenu) - 6);
-            if($moreMenu)
-            {
-                $moreKey   = 'more';
-                $moreLabel = $this->lang->more;
-                if(isset($this->lang->bug->moreSelects[$browseType]))
-                {
-                    $moreKey   = $browseType;
-                    $moreLabel = $this->lang->bug->moreSelects[$browseType];
-                }
-                $more  = "<a data-toggle='dropdown'>{$moreLabel}<span class='caret'></span></a>";
-                $more .= "<ul class='dropdown-menu'>";
-                foreach($moreMenu as $menu)
-                {
-                    list($label, $module, $method, $params) = explode('|', $menu);
-                    if(common::hasPriv($module, $method))
-                    {
-                        $more .= '<li>' . html::a(helper::createLink($module, $method, $params), $label) . '</li>';
-                    }
-                }
-                $more .= '</ul>';
-                $tmpMenu[$moreKey] = $more;
-            }
-            if($this->app->getMethodName() != 'view') $tmpMenu['bysearch'] = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->bug->byQuery}</a>";
-            $this->lang->bug->menu = (object)$tmpMenu;
         }
     }
 

@@ -274,8 +274,6 @@ class storyModel extends model
             $stories->plan[$i]   = $plan;
             $stories->pri[$i]    = (int)$pri;
             $stories->source[$i] = $source;
-
-            if(!empty($stories->title[$i]) && empty($stories->module[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->story->module)));
         }
 
         if(isset($stories->uploadImage)) $this->loadModel('file');

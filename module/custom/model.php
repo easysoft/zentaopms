@@ -201,8 +201,8 @@ class customModel extends model
         /* Merge fileMenu and customMenu. */
         foreach($customMenuMap as $name => $item)
         {
-            if(is_object($allMenu) and !isset($allMenu->$name))$allMenu->$name = $item;
-            if(is_array($allMenu)  and !isset($allMenu[$name]))$allMenu[$name] = $item;
+            if(is_object($allMenu) and !isset($allMenu->$name)) $allMenu->$name = $item;
+            if(is_array($allMenu)  and !isset($allMenu[$name])) $allMenu[$name] = $item;
         }
 
         foreach($allMenu as $name => $item)
@@ -249,6 +249,15 @@ class customModel extends model
                 }
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
+
+                if(isset($item['subMenu']) && isset($customMenuMap[$name]->subMenu))
+                {
+                    foreach($customMenuMap[$name]->subMenu as $subItem)
+                    {
+                        if(isset($subItem->hidden) && $subItem->hidden && isset($item['subMenu'][$subItem->name])) $item['subMenu'][$subItem->name]->hidden = true;
+                    }
+                }
+
                 if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = true;
 
                 $menuItem = new stdclass();

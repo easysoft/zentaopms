@@ -146,7 +146,7 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
-                $subMenu   = array();
+                $subMenu = array();
                 foreach($this->lang->project->subMenu->$key as $subMenuKey => $subMenuLink)
                 {
                     if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
@@ -163,7 +163,7 @@ class projectModel extends model
                     $menu->link   = $link;
                     $menu->text   = $subMenuName;
                     $menu->hidden = false;
-                    $subMenu[] = $menu;
+                    $subMenu[$subMenuKey] = $menu;
 
                 }
 
@@ -1614,15 +1614,26 @@ class projectModel extends model
         {
             foreach($plans as $planID => $productID)
             {
-                $planStory = $this->loadModel('story')->getPlanStories($planID, 'active');
+                $planStory = $this->loadModel('story')->getPlanStories($planID);
                 if(!empty($planStory))
                 {
+                    $count = 0;
+                    foreach($planStory as $id => $story) 
+                    {
+                        if($story->status == 'draft') 
+                        {
+                            $count++;
+                            unset($planStory[$id]);
+                            continue;
+                        }
+                        $planProducts[$story->id] = $story->product;
+                    }
                     $planStories = array_merge($planStories, array_keys($planStory));
-                    foreach($planStory as $story) $planProducts[$story->id] = $story->product;
                 }
             }
         }
         $this->linkStory($projectID, $planStories, $planProducts);
+        if($count != 0) die(js::confirm(sprintf($this->lang->project->haveDraft, $count), helper::createLink('project', 'create', "projectID=$projectID"))); 
     }
 
     /**

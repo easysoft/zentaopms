@@ -98,8 +98,7 @@
 
           if(common::hasPriv('productplan', 'delete', $plan))
           {
-              $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplanList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn btn-icon' title='{$lang->productplan->delete}'");
+              common::printIcon('productplan', 'delete', "planID=$plan->id", $plan, '<i class="icon-link"></i>', '', 'hiddenwin');
           }
           ?>
         </td>
