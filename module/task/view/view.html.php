@@ -222,7 +222,7 @@
                 <td>
                   <?php
                   $mailto = explode(',', str_replace(' ', '', $task->mailto));
-                  if(empty($mainto))
+                  if(empty($mailto))
                   {
                       echo $lang->noData;
                   }

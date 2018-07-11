@@ -46,7 +46,7 @@
           <tr>
             <th class='col-id'><?php echo $lang->idAB;?></th>
             <th class='w-150px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-            <th class='col-module required'><?php echo $lang->story->module;?></th>
+            <th class='col-module'><?php echo $lang->story->module;?></th>
             <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
             <th class='col-name required has-btn'><?php echo $lang->story->title;?></th>
             <th class='w-150px<?php      echo zget($visibleFields, 'spec',     ' hidden') . zget($requiredFields, 'spec',     '', ' required');?>'><?php echo $lang->story->spec;?></th>

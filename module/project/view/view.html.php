@@ -203,7 +203,7 @@
                   <tbody>
                     <tr>
                       <td colspan="2">
-                        <?php $progress = $project->totalHours ? round($project->totalConsumed / $project->totalHours, 3) * 100 : 0;?>
+                        <?php $progress = ($project->totalConsumed + $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;?>
                         <?php echo $lang->projectCommon . $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
                         <div class="progress inline-block">
                           <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
@@ -226,7 +226,7 @@
                       <th><?php echo $lang->project->totalDays;?></th>
                       <td><?php echo $project->days;?></td>
                       <th><?php echo $lang->project->totalLeft;?></th>
-                      <td><em><?php echo $project->totalLeft;?></em></td>
+                      <td><em><?php echo $project->totalLeft . $lang->project->workHour;?></em></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->project->totalHours;?></th>
