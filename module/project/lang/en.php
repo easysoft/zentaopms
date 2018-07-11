@@ -209,6 +209,7 @@ $lang->project->batchWBS        = "Batch Decompose";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} linked {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->productStories  = "{$lang->projectCommon} linked  story is the subeset of {$lang->productCommon}, which can only be linked after review. Please <a href='%s'> Link Story</a>。";
+$lang->project->haveDraft       = "There are %s draft stories can't be linked.";
 $lang->project->doneProjects    = 'Done';
 $lang->project->selectDept      = 'Select Department';
 $lang->project->selectDeptTitle = 'Select Department';
