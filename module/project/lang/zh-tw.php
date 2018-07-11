@@ -209,6 +209,7 @@ $lang->project->batchWBS        = "批量分解";
 $lang->project->howToUpdateBurn = "<a href='http://api.zentao.net/goto.php?item=burndown&lang=zh-tw' target='_blank' title='如何更新燃盡圖？' class='btn btn-link'>幫助 <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories    = "看起來沒有需求可以關聯。請檢查下{$lang->projectCommon}關聯的{$lang->productCommon}中有沒有需求，而且要確保它們已經審核通過。";
 $lang->project->productStories  = "{$lang->projectCommon}關聯的需求是{$lang->productCommon}需求的子集，並且只有評審通過的需求才能關聯。請<a href='%s'>關聯需求</a>。";
+$lang->project->haveDraft       = "有%s條草稿狀態的需求無法關聯到該{$lang->projectCommon}";
 $lang->project->doneProjects    = '已結束';
 $lang->project->selectDept      = '選擇部門';
 $lang->project->selectDeptTitle = '選擇一個部門的成員';
