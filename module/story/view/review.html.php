@@ -32,7 +32,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           </tr>
           <tr>
             <th><?php echo $lang->story->reviewResult;?></th>
-            <td><?php echo html::select('result', $lang->story->reviewResultList, '', 'class=form-control onchange="switchShow(this.value)"');?></td><td></td>
+            <td class = 'required'><?php echo html::select('result', $lang->story->reviewResultList, '', 'class=form-control onchange="switchShow(this.value)"');?></td><td></td>
           </tr>
           <tr id='rejectedReasonBox' class='hide'>
             <th><?php echo $lang->story->rejectedReason;?></th>
