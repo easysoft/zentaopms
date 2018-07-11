@@ -252,7 +252,7 @@ $(function()
                 hidden = $(this).hasClass('menu-hidden') && hidden;
             });
 
-            $a.parent().parent().parent().parent().toggleClass('menu-hidden', item.hidden);
+            $a.parent().parent().parent().parent().toggleClass('menu-hidden', hidden);
         }
 
         updateConfig($menu);

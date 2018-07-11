@@ -118,38 +118,69 @@ class testcaseModel extends model
             }
             else
             {
-                if($key == 'suite' and common::hasPriv('testcase', 'browse'))
+                if($key == 'bysuite')
                 {
-                      $suiteList      = $this->loadModel('testsuite')->getSuites($productID);
-                      $currentSuiteID = isset($suiteID) ? (int)$suiteID : 0;
-                      $currentSuite   = zget($suiteList, $currentSuiteID, '');
-                      $currentLable   = empty($currentSuite) ? $this->lang->testsuite->common : $currentSuite->name;
+                    $subMenu = array();
+                    if(common::hasPriv('testcase', 'browse'))
+                    {
+                        $suiteList      = $this->loadModel('testsuite')->getSuites($productID);
+                        $currentSuiteID = isset($suiteID) ? (int)$suiteID : 0;
 
-                      $replace  = "<li id='bysuiteTab' class='dropdown' data-id='bysuite'>";
-                      $replace .= html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "data-toggle='dropdown'");
-                      $replace .="<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
+                        if($suiteList)
+                        {
+                            foreach($suiteList as $suiteID => $suite)
+                            {
+                                $suiteName = $suite->name;
+                                if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$this->lang->testsuite->authorList[$suite->type]}</span>";
 
-                      if($suiteList)
-                      {
-                          foreach($suiteList as $suiteID => $suite)
-                          {
-                              $suiteName = $suite->name;
-                              if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$this->lang->testsuite->authorList[$suite->type]}</span>";
+                                $link = array();
+                                $link['module'] = 'testcase';
+                                $link['method'] = 'browse';
+                                $link['vars']   = "productID=$productID&branch=$branch&browseType=bysuite&param=$suiteID";
 
-                              $replace .= '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
-                              $replace .= html::a(helper::createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
-                              $replace .= "</li>";
-                          }
-                      }
-                      else
-                      {
-                          if(common::hasPriv('testsuite', 'create'))
-                          {
-                              $replace .= '<li>' . html::a(helper::createLink('testsuite', 'create', "productID=$productID"), $this->lang->testsuite->create) . '</li>';
-                          }
-                      }
+                                $menu = new stdclass();
+                                $menu->name   = $suiteID;
+                                $menu->link   = $link;
+                                $menu->text   = $suiteName;
+                                $menu->hidden = false;
+                                $subMenu[$suiteID] = $menu;
+                            }
+                        }
+                    }
+                    /* Avoid the menu shaking when change it by js. */
+                    if(isset($subMenu[$currentSuiteID]))
+                    {
+                        $currentSubMenu = $subMenu[$currentSuiteID];
+                        $this->lang->testcase->menu->bysuite['link'] = "$currentSubMenu->text|" . implode('|', $currentSubMenu->link);
+                    }
 
-                      $replace .= '</ul></li>';
+                    /* Replace for dropdown submenu. */
+                    if(isset($this->lang->testcase->subMenu->$key))
+                    {
+                        foreach($this->lang->testcase->subMenu->$key as $subMenuKey => $subMenuLink)
+                        {
+                            if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
+                            $subMenuLink = vsprintf($subMenuLink, $productID);
+                            list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
+
+                            $link = array();
+                            $link['module'] = $subMenuModule;
+                            $link['method'] = $subMenuMethod;
+                            $link['vars']   = $subMenuParams;
+
+                            $menu = new stdclass();
+                            $menu->name   = $subMenuKey;
+                            $menu->link   = $link;
+                            $menu->text   = $subMenuName;
+                            $menu->hidden = false;
+                            $subMenu[$subMenuKey] = $menu;
+
+                        }
+
+                    }
+                    if(!empty($subMenu)) $this->lang->testcase->menu->{$key}['subMenu'] = $subMenu;
+
+                    if($this->app->getMethodName() != 'view') $this->lang->testcase->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
                 }
                 else
                 {
@@ -160,7 +191,6 @@ class testcaseModel extends model
             }
             common::setMenuVars($this->lang->testcase->menu, $key, $replace);
         }
-        if($this->config->global->flow != 'full' && $this->app->getMethodName() != 'view') $this->lang->testcase->menu->bysearch = "<a class='querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'> </i>{$this->lang->testcase->bySearch}</a>";
     }
 
     /**
