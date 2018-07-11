@@ -140,11 +140,11 @@ class customModel extends model
     public static function setMenuByConfig($allMenu, $customMenu, $module = '')
     {
         global $app, $lang, $config;
-        $menu            = array();
-        $menuModuleName  = $module;
-        $order           = 1;
-        $customMenuMap   = array();
-        $isTutorialMode  = commonModel::isTutorialMode();
+        $menu           = array();
+        $menuModuleName = $module;
+        $order          = 1;
+        $customMenuMap  = array();
+        $isTutorialMode = commonModel::isTutorialMode();
 
         if($customMenu)
         {
@@ -250,21 +250,31 @@ class customModel extends model
 
                 $hidden = isset($customMenuMap[$name]) && isset($customMenuMap[$name]->hidden) && $customMenuMap[$name]->hidden;
 
-                if(isset($item['subMenu']) && isset($customMenuMap[$name]->subMenu))
+                if(isset($item['subMenu']))
                 {
-                    foreach($customMenuMap[$name]->subMenu as $subItem)
+                    if(isset($customMenuMap[$name]->subMenu))
                     {
-                        if(isset($subItem->hidden) && $subItem->hidden && isset($item['subMenu'][$subItem->name])) $item['subMenu'][$subItem->name]->hidden = true;
+                        foreach($customMenuMap[$name]->subMenu as $subItem)
+                        {
+                            if(isset($subItem->hidden) && $subItem->hidden && isset($item['subMenu'][$subItem->name])) $item['subMenu'][$subItem->name]->hidden = true;
+                        }
+                    }
+                    foreach($item['subMenu'] as $subItem)
+                    {
+                        if(isset($subItem->link['module']) && isset($subItem->link['method']))
+                        {
+                            $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
+                        }
                     }
                 }
 
                 if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = true;
 
                 $menuItem = new stdclass();
-                $menuItem->name   = $name;
-                $menuItem->link   = $itemLink;
-                $menuItem->text   = $label;
-                $menuItem->order  = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order++);
+                $menuItem->name  = $name;
+                $menuItem->link  = $itemLink;
+                $menuItem->text  = $label;
+                $menuItem->order = (isset($customMenuMap[$name]) && isset($customMenuMap[$name]->order) ? $customMenuMap[$name]->order : $order++);
                 if($hidden)   $menuItem->hidden    = $hidden;
                 if($class)    $menuItem->class     = $class;
                 if($subModule)$menuItem->subModule = $subModule;
