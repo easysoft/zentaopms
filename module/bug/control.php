@@ -482,7 +482,7 @@ class bug extends control
         }
 
         /* Set custom. */
-        $product  = $this->product->getById($productID);
+        $product = $this->product->getById($productID);
         foreach(explode(',', $this->config->bug->list->customBatchCreateFields) as $field)
         {
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];

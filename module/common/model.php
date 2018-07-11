@@ -350,6 +350,40 @@ class commonModel extends model
     }
 
     /**
+     * Create sub menu by settings in lang files.
+     *
+     * @param  array    $items
+     * @param  mixed    $replace
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function createSubMenu($items, $replace)
+    {
+        $subMenu = array();
+        foreach($items as $subMenuKey => $subMenuLink)
+        {
+            if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
+            $subMenuLink = vsprintf($subMenuLink, $replace);
+            list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
+
+            $link = array();
+            $link['module'] = $subMenuModule;
+            $link['method'] = $subMenuMethod;
+            $link['vars']   = $subMenuParams;
+
+            $menu = new stdclass();
+            $menu->name   = $subMenuKey;
+            $menu->link   = $link;
+            $menu->text   = $subMenuName;
+            $menu->hidden = false;
+            $subMenu[$subMenuKey] = $menu;
+        }
+
+        return $subMenu;
+    }
+
+    /**
      * Print the main menu.
      *
      * @param  string $moduleName

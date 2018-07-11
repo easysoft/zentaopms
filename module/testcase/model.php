@@ -157,26 +157,7 @@ class testcaseModel extends model
                     /* Replace for dropdown submenu. */
                     if(isset($this->lang->testcase->subMenu->$key))
                     {
-                        foreach($this->lang->testcase->subMenu->$key as $subMenuKey => $subMenuLink)
-                        {
-                            if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
-                            $subMenuLink = vsprintf($subMenuLink, $productID);
-                            list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
-
-                            $link = array();
-                            $link['module'] = $subMenuModule;
-                            $link['method'] = $subMenuMethod;
-                            $link['vars']   = $subMenuParams;
-
-                            $menu = new stdclass();
-                            $menu->name   = $subMenuKey;
-                            $menu->link   = $link;
-                            $menu->text   = $subMenuName;
-                            $menu->hidden = false;
-                            $subMenu[$subMenuKey] = $menu;
-
-                        }
-
+                        $subMenu += common::createSubMenu($this->lang->testcase->subMenu->$key, $productID);
                     }
                     if(!empty($subMenu)) $this->lang->testcase->menu->{$key}['subMenu'] = $subMenu;
 
