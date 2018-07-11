@@ -510,6 +510,8 @@ class commonModel extends model
                 /* Print sub menus. */
                 if(isset($menuItem->subMenu))
                 {
+                    $link  = '';
+                    $label = '';
                     foreach($menuItem->subMenu as $subMenuItem)
                     {
                         if($subMenuItem->hidden) continue;
@@ -525,15 +527,15 @@ class commonModel extends model
 
                         $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
-                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod))
-                        {
-                            $link  = $subLink;
-                            $label = $subLabel;
-                            $subActive = 'active';
-                        }
+                        if($currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
 
                         $subMenu .= "<li class='$subActive'>" . html::a($subLink, $subLabel) . '</li>';
+
+                        if(!$link)  $link  = $subLink;
+                        if(!$label) $label = $subLabel;
                     }
+
+                    if(!$link or !$label) continue;
 
                     if($subMenu)
                     {

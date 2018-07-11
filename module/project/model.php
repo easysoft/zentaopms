@@ -146,7 +146,7 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
-                $subMenu   = array();
+                $subMenu = array();
                 foreach($this->lang->project->subMenu->$key as $subMenuKey => $subMenuLink)
                 {
                     if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
@@ -163,7 +163,7 @@ class projectModel extends model
                     $menu->link   = $link;
                     $menu->text   = $subMenuName;
                     $menu->hidden = false;
-                    $subMenu[] = $menu;
+                    $subMenu[$subMenuKey] = $menu;
 
                 }
 
