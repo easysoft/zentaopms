@@ -182,7 +182,7 @@ function loadPlans(product, branchID)
             if(data)
             {
                 if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-                $("div#plan" + index).width($(product).closest('.col-sm-4').width()).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID).chosen();
+                $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID).chosen();
 
                 adjustPlanBoxMargin();
             }

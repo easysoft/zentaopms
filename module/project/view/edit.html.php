@@ -137,9 +137,11 @@
           <th><?php echo $lang->project->linkPlan;?></th>
           <td id="plansBox" colspan="2">
             <div class='row'>
+              <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
               <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $product->id;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+              <?php $i++;?>
               <?php endforeach;?>
             </div>
           </td>
