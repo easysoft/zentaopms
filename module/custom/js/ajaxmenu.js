@@ -46,8 +46,29 @@ $(function()
                 var $a = $('<a href="#"/>').append(item.text);
                 $a.data('menu', item).append('<i class="item-hidden-icon icon icon-eye-off"></i>');
                 $('<li/>').attr('data-id', item.name).toggleClass('right', item.float === 'right').toggleClass('menu-hidden', !!item.hidden).append($a).appendTo($nav);
-                var $dropmenu = $a.find('.dropdown-menu').empty();
-                return $dropmenu.remove(); // Disable custom submenu, full function see https://github.com/easysoft/zentaopms/blob/c7fdbddfc074ddd7ddf539b1d3b5f108ab13ec7b/module/custom/js/ajaxmenu.js
+                if(item.subMenu)
+                {
+                    $a.addClass('dropdown dropdown-hover').append("<span class='caret'></span><ul class='dropdown-menu'></ul>");
+                    var $dropmenu = $a.find('.dropdown-menu');
+                    $.each(item.subMenu, function(subIdx, subItem)
+                    {
+                        subItem.order = subIdx + 1;
+                        var $subA = $('<a href="#"/>').append(subItem.text);
+                        $subA.data('menu', subItem).append('<i class="item-hidden-icon icon icon-eye-off"></i>');
+                        $('<li/>').attr('data-id', subItem.name).toggleClass('right', subItem.float === 'right').toggleClass('menu-hidden', !!subItem.hidden).append($subA).appendTo($dropmenu);
+                    });
+                    var $aInner = $a.children('a');
+                    if ($aInner.length)
+                    {
+                        $aInner.replaceWith($('<span>' + $aInner.text() + ' <span class="caret"></span></span>'));
+                        $a.addClass('dropdown-hover');
+                    }
+                    if(!$dropmenu.children().length)
+                    {
+                        $a.removeClass('dropdown dropdown-hover').find('.caret').remove();
+                        $dropmenu.remove();
+                    }
+                }
             });
             $nav.sortable({finish: function(e)
             {

@@ -767,9 +767,9 @@ class userModel extends model
                 if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
             }
 
-            if($productAllow && empty($acls['products'])) $acls['products'] = array();
-            if($projectAllow && empty($acls['projects'])) $acls['projects'] = array();
-            if($viewAllow && empty($acl['views']))        $acls['views']    = array();
+            if($productAllow) $acls['products'] = array();
+            if($projectAllow) $acls['projects'] = array();
+            if($viewAllow)    $acls['views']    = array();
 
             $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
                 ->on('t1.group = t2.group')
