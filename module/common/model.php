@@ -1399,11 +1399,12 @@ EOD;
         // limited project
         $limitedProject = false;
         if(!empty($module) && $module == 'task' && !empty($object->project) or
-            !empty($module) && $module == 'project' && !empty($object->id))
+            !empty($module) && $module == 'project' && !empty($object->id)
+        )
         {
             $objectID = '';
-            if(!empty($object->id)) $objectID = $object->id;
-            if(!empty($object->id) && !empty($object->project)) $objectID = $object->project;
+            if($module == 'project' and !empty($object->id))  $objectID = $object->id;
+            if($module == 'task' and !empty($object->project))$objectID = $object->project;
 
             $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
             if(strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;

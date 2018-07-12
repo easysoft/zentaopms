@@ -45,6 +45,14 @@ class task extends control
      */
     public function create($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0)
     {
+        $this->project->getLimitedProject();
+        $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
+        if(strpos(",{$limitedProjects},", ",$projectID,") !== false)
+        {
+            echo js::alert($this->lang->task->createDenied);
+            die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
+        }
+
         $task = new stdClass();
         $task->module     = $moduleID;
         $task->assignedTo = '';
@@ -195,6 +203,14 @@ class task extends control
      */
     public function batchCreate($projectID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0)
     {
+        $this->project->getLimitedProject();
+        $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
+        if(strpos(",{$limitedProjects},", ",$projectID,") !== false)
+        {
+            echo js::alert($this->lang->task->createDenied);
+            die(js::locate($this->createLink('project', 'task', "projectID=$projectID")));
+        }
+
         $project   = $this->project->getById($projectID);
         $taskLink  = $this->createLink('project', 'browse', "projectID=$projectID&tab=task");
         $storyLink = $this->session->storyList ? $this->session->storyList : $this->createLink('project', 'story', "projectID=$projectID");
