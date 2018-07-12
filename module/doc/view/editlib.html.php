@@ -17,7 +17,7 @@
     <div class='main-header'>
     <h2>
       <span class='prefix'><?php echo html::icon($lang->icons['doclib']);?></span>
-      <?php echo $lang->doc->editLib;?>
+      <?php echo $lang->doc->editlib;?>
     </h2>
   </div>
   <form method='post' target='hiddenwin'>

@@ -4,7 +4,15 @@ $(function()
 
     if(flow == 'onlyTest')
     {
-        $('#subNavbar > .nav > li[data-id=' + browseType + ']').addClass('active');
+        $('#subNavbar > .nav li[data-id=' + browseType + ']').addClass('active');
+        var $more = $('#subNavbar > .nav > li[data-id=more]');
+        if($more.find('.dropdown-menu').children().length)
+        {
+            $more.find('.dropdown-menu').children().each(function()
+            {
+                if($(this).hasClass('active')) $more.addClass('active');
+            });
+        }
 
         var navWidth = $('#subNavbar > .nav').width();
         var leftWidth  = 0;

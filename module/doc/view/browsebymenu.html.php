@@ -43,7 +43,7 @@
       <ul class="dropdown-menu" role="menu">
         <?php if(empty($moduleID)):?>
         <?php
-        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editLib, '', "data-toggle='modal' data-type='iframe' data-width='800px'") . '</li>';
+        if(common::hasPriv('doc', 'editLib')) echo '<li>' . html::a(inlink('editLib', "rootID=$libID"), $lang->doc->editlib, '', "data-toggle='modal' data-type='iframe' data-width='800px'") . '</li>';
         if(common::hasPriv('doc', 'deleteLib')) echo '<li>' . html::a(inlink('deleteLib', "rootID=$libID"), $lang->doc->deleteLib, 'hiddenwin') . '</li>';
         ?>
         <?php else:?>

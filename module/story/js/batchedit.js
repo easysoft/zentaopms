@@ -31,11 +31,11 @@ function loadBranches(product, branch, storyID)
     if(!branch) branch = 0;
 
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + storyID);
-    $('#modules' + storyID).parent('td').load(moduleLink, function(){$('#modules' + storyID).chosen(defaultChosenOptions);});
+    $('#modules' + storyID).parent('td').load(moduleLink, function(){$('#modules' + storyID).chosen();});
 
     planID = $('#plans' + storyID).val();
     planLink = createLink('product', 'ajaxGetPlans', 'productID=' + product + '&branch=' + branch + '&planID=' + planID + '&fieldID=' + storyID);
-    $('#plans' + storyID).parent('td').load(planLink, function(){$('#plans' + storyID).chosen(defaultChosenOptions);});
+    $('#plans' + storyID).parent('td').load(planLink, function(){$('#plans' + storyID).chosen();});
 }
 
 $(function()

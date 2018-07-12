@@ -146,26 +146,7 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
-                $subMenu   = array();
-                foreach($this->lang->project->subMenu->$key as $subMenuKey => $subMenuLink)
-                {
-                    if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
-                    $subMenuLink = sprintf($subMenuLink, $projectID);
-                    list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
-
-                    $link = array();
-                    $link['module'] = $subMenuModule;
-                    $link['method'] = $subMenuMethod;
-                    $link['vars']   = $subMenuParams;
-
-                    $menu = new stdclass();
-                    $menu->name   = $subMenuKey;
-                    $menu->link   = $link;
-                    $menu->text   = $subMenuName;
-                    $menu->hidden = false;
-                    $subMenu[] = $menu;
-
-                }
+                $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
                 if(!empty($subMenu)) $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
             }
