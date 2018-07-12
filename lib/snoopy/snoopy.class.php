@@ -1068,7 +1068,7 @@ class Snoopy
 
             $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
             curl_setopt($curl, CURLOPT_URL, $URI);
-            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers );
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
             if(!empty($body))
             {
@@ -1081,6 +1081,21 @@ class Snoopy
 
             $result_headers = curl_getinfo($curl);
             curl_close($curl);
+
+            global $app;
+            $logFile = $app->getLogRoot() . 'saas.' . date('Ymd') . '.log.php';
+            if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+
+            $fh = @fopen($logFile, 'a');
+            if($fh)
+            {
+                fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+                fwrite($fh, "url:    " . $URI . "\n");
+                if(!empty($data)) fwrite($fh, "data:   " . print_r($body, true) . "\n");
+                fwrite($fh, "results:" . print_r($results, true) . "\n");
+                if(!empty($return)) fwrite($fh, "errors: " . $return . "\n");
+                fclose($fh);
+            }
 
             $this->_redirectaddr = false;
             $this->response_code = $result_headers['http_code'];
