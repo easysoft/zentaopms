@@ -10,35 +10,32 @@
  */
 ?>
 <?php include 'header.html.php';?>
-<div id='mainContent' class='main-row'>
-  <div class='side-col' id='sidebar'></div>
-  <div class='main-col main-content'>
-    <form class="load-indicator main-form form-ajax" method='post'>
-      <div class='main-header'>
-        <div class='heading'>
-          <strong><?php echo $lang->custom->score?></strong>
-        </div>
+<div id='mainContent' class='main-content'>
+  <form class="load-indicator main-form form-ajax" method='post'>
+    <div class='main-header'>
+      <div class='heading'>
+        <strong><?php echo $lang->custom->score?></strong>
       </div>
-      <table class='table table-form'>
-        <tr>
-          <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
-          <td>
-            <?php $checkedKey = isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0;?>
-            <?php foreach($lang->custom->scoreStatus as $key => $value):?>
-            <p><label class="radio-inline"><input type="radio" name="score" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="score<?php echo $key;?>"><?php echo $value;?></label></p>
-            <?php endforeach;?>
-          </td>
-        </tr>
-        <tr>
-          <th></th>
-          <td class='form-actions'>
-            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
-            <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn btn-wide iframe" data-width="480"', true, true);?>
-          </td>
-        </tr>
-      </table>
-    </form>
-  </div>
+    </div>
+    <table class='table table-form'>
+      <tr>
+        <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
+        <td>
+          <?php $checkedKey = isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0;?>
+          <?php foreach($lang->custom->scoreStatus as $key => $value):?>
+          <p><label class="radio-inline"><input type="radio" name="score" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="score<?php echo $key;?>"><?php echo $value;?></label></p>
+          <?php endforeach;?>
+        </td>
+      </tr>
+      <tr>
+        <th></th>
+        <td class='form-actions'>
+          <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+          <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn btn-wide iframe" data-width="480"', true, true);?>
+        </td>
+      </tr>
+    </table>
+  </form>
 </div>
 <script>
 $(function()
