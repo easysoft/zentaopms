@@ -1,7 +1,7 @@
 function loadModules(libID)
 {
     link = createLink('doc', 'ajaxGetModules', 'libID=' + libID);
-    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen(defaultChosenOptions)});
+    $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
 }
 
 function toggleAcl(acl)

@@ -101,6 +101,6 @@ function setModules(branchID, productID, num)
         if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';
         $('#module' + num).replaceWith(modules);
         $("#module" + num + "_chosen").remove();
-        $("#module" + num).chosen(defaultChosenOptions);
+        $("#module" + num).chosen();
     });
 }
