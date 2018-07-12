@@ -66,7 +66,7 @@ function saveTemplate()
         var defaultValue = $('#tplBox #template').val();
         $('#tplBox').html(data);
         if(data.indexOf('alert') >= 0) $('#tplBox #template').val(defaultValue);
-        $("#tplBox #template").chosen(defaultChosenOptions).on('chosen:showing_dropdown', function()
+        $("#tplBox #template").chosen().on('chosen:showing_dropdown', function()
         {
             var $this = $(this);
             var $chosen = $this.next('.chosen-container').removeClass('chosen-up');

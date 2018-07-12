@@ -252,18 +252,18 @@ class customModel extends model
 
                 if(isset($item['subMenu']))
                 {
-                    if(isset($customMenuMap[$name]->subMenu))
-                    {
-                        foreach($customMenuMap[$name]->subMenu as $subItem)
-                        {
-                            if(isset($subItem->hidden) && $subItem->hidden && isset($item['subMenu'][$subItem->name])) $item['subMenu'][$subItem->name]->hidden = true;
-                        }
-                    }
                     foreach($item['subMenu'] as $subItem)
                     {
                         if(isset($subItem->link['module']) && isset($subItem->link['method']))
                         {
                             $subItem->hidden = !common::hasPriv($subItem->link['module'], $subItem->link['method']);
+                        }
+                    }
+                    if(isset($customMenuMap[$name]->subMenu))
+                    {
+                        foreach($customMenuMap[$name]->subMenu as $subItem)
+                        {
+                            if(isset($subItem->hidden) && isset($item['subMenu'][$subItem->name])) $item['subMenu'][$subItem->name]->hidden = $subItem->hidden;
                         }
                     }
                 }

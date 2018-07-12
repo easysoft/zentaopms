@@ -1,6 +1,3 @@
-/* Remove width in defaultChosenOptions. */
-delete defaultChosenOptions.width;
-
 /* Remove 'ditto' in first row. */
 $(function()
 {
@@ -32,7 +29,7 @@ function setStories(moduleID, projectID, num)
             })
         }
         $("#story" + num + "_chosen").remove();
-        $("#story" + num).chosen(defaultChosenOptions);
+        $("#story" + num).chosen();
     });
 }
 

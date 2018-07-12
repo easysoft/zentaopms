@@ -17,7 +17,7 @@
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $run->case->id;?></span>
-      <?php echo $run->case->title;?>
+      <span title='<?php echo $run->case->title?>'><?php echo $run->case->title;?></span>
     </h2>
   </div>
   <form method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
