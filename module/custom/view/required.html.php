@@ -39,6 +39,8 @@
           <?php
           $fields = $this->custom->getFormFields($moduleName, $method);
 
+          if($moduleName == 'doc'       and $method == 'createlib')  $method = 'createLib';
+          if($moduleName == 'doc'       and $method == 'editlib')    $method = 'editLib';
           if($moduleName == 'testsuite' and $method == 'createlib')  $method = 'createLib';
           if($moduleName == 'testsuite' and $method == 'createcase')
           {
