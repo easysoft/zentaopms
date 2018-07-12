@@ -498,22 +498,36 @@ class taskModel extends model
 
             if(isset($task))
             {
-                if($currentTask->left > 0 && $currentTask->consumed > 0 && $oldTask->status == 'wait') $currentTask->status = 'doing';
-                if($currentTask->left > 0 && ($currentTask->status == 'done' or $oldTask->status == 'done'))
+                if($currentTask->consumed == 0)
+                {
+                    $currentTask->status       = 'wait';
+                    $currentTask->finishedBy   = '';
+                    $currentTask->finishedDate = '';
+                }
+
+                if($currentTask->consumed > 0 && $currentTask->left > 0)
                 {
                     $currentTask->status       = 'doing';
                     $currentTask->finishedBy   = '';
-                    $currentTask->finishedDate = '0000-00-00';
+                    $currentTask->finishedDate = '';
                 }
-                if($oldTask->assignedTo != $teams[count($teams) - 1] && isset($team[$currentTask->assignedTo]) && $oldTask->status == 'wait') $currentTask->status = 'doing';
 
-                if($currentTask->left == 0 && $oldTask->left != 0 && $currentTask->consumed != 0)
+                if($currentTask->consumed > 0 && $currentTask->left == 0)
                 {
-                    if($oldTask->assignedTo == $teams[count($teams) - 1] && $team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
+                    if(isset($team[$currentTask->assignedTo]) && $oldTask->assignedTo != $teams[count($teams) - 1])
                     {
-                        $currentTask->status       = 'done';
-                        $currentTask->finishedBy   = $this->app->user->account;
-                        $currentTask->finishedDate = $now;
+                        $currentTask->status       = 'doing';
+                        $currentTask->finishedBy   = '';
+                        $currentTask->finishedDate = '';
+                    }
+                    elseif($oldTask->assignedTo == $teams[count($teams) - 1])
+                    {
+                        $currentTask->status = 'done';
+                        if($oldTask->left > 0)
+                        {
+                            $currentTask->finishedBy   = $this->app->user->account;
+                            $currentTask->finishedDate = $now;
+                        }
                     }
                 }
 

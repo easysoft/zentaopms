@@ -98,7 +98,6 @@ $lang->project->otherInfo = 'Other Info';
 $lang->project->statusList['wait']      = 'Wait';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspend';
-$lang->project->statusList['done']      = 'Done';
 $lang->project->statusList['closed']    = 'Closed';
 
 $lang->project->aclList['open']    = "Default (Users who can visit Project have access to it.)";

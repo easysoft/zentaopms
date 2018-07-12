@@ -98,7 +98,6 @@ $lang->project->otherInfo = '其他信息';
 $lang->project->statusList['wait']      = '未開始';
 $lang->project->statusList['doing']     = '進行中';
 $lang->project->statusList['suspended'] = '已掛起';
-$lang->project->statusList['done']      = '已完成';
 $lang->project->statusList['closed']    = '已關閉';
 
 $lang->project->aclList['open']    = "預設設置(有{$lang->projectCommon}視圖權限，即可訪問)";
