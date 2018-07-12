@@ -158,7 +158,7 @@ function setMailto(mailto, contactListID)
     {
         $('#' + mailto).replaceWith(users);
         $('#' + mailto + '_chosen').remove();
-        $('#' + mailto).chosen(defaultChosenOptions);
+        $('#' + mailto).chosen();
     });
 }
 
@@ -179,7 +179,7 @@ function ajaxGetContacts(obj)
         $inputgroup = $(obj).closest('.input-group');
         $inputgroup.find('.input-group-btn').remove();
         $inputgroup.append(contacts);
-        $inputgroup.find('select:last').chosen(defaultChosenOptions).fixInputGroup();
+        $inputgroup.find('select:last').chosen().fixInputGroup();
     });
 }
 

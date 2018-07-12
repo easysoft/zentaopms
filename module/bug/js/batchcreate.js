@@ -23,7 +23,7 @@ function setBranchRelated(branchID, productID, num)
         if(!modules) modules = '<select id="modules' + num + '" name="modules[' + num + ']" class="form-control"></select>';
         $('#modules' + num).replaceWith(modules);
         $("#modules" + num + "_chosen").remove();
-        $("#modules" + num).chosen(defaultChosenOptions);
+        $("#modules" + num).chosen();
     });
 
     projectLink = createLink('product', 'ajaxGetProjects', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
@@ -32,7 +32,7 @@ function setBranchRelated(branchID, productID, num)
         if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
         $('#projects' + num).replaceWith(projects);
         $("#projects" + num + "_chosen").remove();
-        $("#projects" + num).chosen(defaultChosenOptions);
+        $("#projects" + num).chosen();
     });
 
     buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
@@ -63,7 +63,7 @@ function setOpenedBuilds(link, index)
             $('#buildBox' + index + ' select').addClass('select-1');
             $('#buildBox' + index + ' select').attr('name','openedBuilds[' + index + '][]');
             $('#buildBox' + index + ' select').attr('id','openedBuilds' + index);
-            $('#buildBox' + index + ' select').chosen(defaultChosenOptions);
+            $('#buildBox' + index + ' select').chosen();
 
             index++;
             if($('#projects' + index).val() != 'ditto') break;

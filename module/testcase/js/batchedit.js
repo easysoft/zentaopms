@@ -31,7 +31,7 @@ function loadBranches(product, branch, caseID)
     if(!branch) branch = 0;
 
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=true');
-    $('#modules' + caseID).parent('td').load(moduleLink, function(){$('#modules' + caseID).chosen(defaultChosenOptions);})
+    $('#modules' + caseID).parent('td').load(moduleLink, function(){$('#modules' + caseID).chosen();})
 }
 
 $(function()

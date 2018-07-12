@@ -85,7 +85,7 @@ function loadProductModules(productID, branch)
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     $('#moduleIdBox').load(link, function()
     {
-        $(this).find('select').chosen(defaultChosenOptions)
+        $(this).find('select').chosen()
         if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>")
     });
     setStories();
@@ -105,7 +105,7 @@ function loadLibModules(libID, branch)
     link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + libID + '&viewtype=caselib&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     $('#moduleIdBox').load(link, function()
     {
-        $(this).find('select').chosen(defaultChosenOptions)
+        $(this).find('select').chosen()
         if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>")
     });
 }
@@ -130,7 +130,7 @@ function setStories()
         $('#story').replaceWith(stories);
         $('#story').val(value);
         $('#story_chosen').remove();
-        $("#story").chosen(defaultChosenOptions);
+        $("#story").chosen();
     });
 }
 
