@@ -253,7 +253,7 @@ class productplan extends control
             {
                 $stories = array();
                 $order   = explode(',', $plan->order);
-                if(strpos($orderBy, 'asc') !== false) $order = array_reverse($order, true);
+                if(strpos($orderBy, 'desc') !== false) $order = array_reverse($order, true);
                 foreach($order as $id)
                 {
                     if(empty($id)) continue;
