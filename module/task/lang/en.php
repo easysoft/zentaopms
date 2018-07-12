@@ -173,6 +173,7 @@ $lang->task->noticeSaveRecord      = 'Your Hour is not saved. Please save it fir
 $lang->task->commentActions        = '%s. %s, commented by <strong>%s</strong>.';
 $lang->task->deniedNotice          = 'Only the %s can %s the task.';
 $lang->task->noTask                = 'No tasks. ';
+$lang->task->createDenied          = 'Create task is denied in this project';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Consumed" must be numbers.';

@@ -144,11 +144,13 @@ js::set('browseType', $browseType);
       </ul>
     </div>
     <?php
+    $checkObject = new stdclass();
+    $checkObject->project = $projectID;
     $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-    if(common::hasPriv('task', 'batchCreate')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
+    if(common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
 
     $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-    if(common::hasPriv('task', 'create')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
+    if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
   </div>
 </div>
@@ -169,7 +171,7 @@ js::set('browseType', $browseType);
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
-        <?php if(common::hasPriv('task', 'create')):?>
+        <?php if(common::hasPriv('task', 'create', $checkObject)):?>
         <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>

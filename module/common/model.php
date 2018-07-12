@@ -1397,19 +1397,19 @@ EOD;
         if($module == 'effort' and ($method == 'batchcreate' or $method == 'createforobject')) return true;
 
         // limited project
+        $limitedProject = false;
         if(!empty($module) && $module == 'task' && !empty($object->project) or
-            !empty($module) && $module == 'project' && !empty($object->id))
+            !empty($module) && $module == 'project' && !empty($object->id)
+        )
         {
-            $limitedProject = false;
             $objectID = '';
-            if(!empty($object->id)) $objectID = $object->id;
-            if(!empty($object->id) && !empty($object->project)) $objectID = $object->project;
+            if($module == 'project' and !empty($object->id))  $objectID = $object->id;
+            if($module == 'task' and !empty($object->project))$objectID = $object->project;
 
             $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
             if(strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
-            if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
         }
-        if(empty($app->user->rights['rights']['my']['limited'])) return true;
+        if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
 
         if(!is_null($method) && strpos($method, 'batch')  === 0) return false;
         if(!is_null($method) && strpos($method, 'link')   === 0) return false;
