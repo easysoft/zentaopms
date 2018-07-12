@@ -41,7 +41,7 @@
               <div class='input-group' id='moduleIdBox'>
                 <div class="input-group-addon"><?php echo $lang->story->module;?></div>
                 <?php
-                echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen' required");
+                echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");
                 if(count($moduleOptionMenu) == 1)
                 {
                     echo "<div class='input-group-addon'>";
