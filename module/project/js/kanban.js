@@ -100,7 +100,6 @@ $(function()
                 shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
                 hidden: refresh
             });
-            return true;
         }
         return false;
     };

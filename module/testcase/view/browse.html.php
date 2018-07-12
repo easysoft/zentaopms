@@ -22,6 +22,7 @@ js::set('confirmDelete',  $lang->testcase->confirmDelete);
 js::set('batchDelete',    $lang->testcase->confirmBatchDelete);
 js::set('productID',      $productID);
 js::set('branch',         $branch);
+js::set('suiteID',        $suiteID);
 ?>
 <div id="mainContent" class="main-row fade">
   <div class='side-col' id='sidebar'>

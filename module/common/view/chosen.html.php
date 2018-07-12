@@ -4,6 +4,6 @@ var chooseUsersToMail    = '<?php echo $lang->chooseUsersToMail;?>';
 $(document).ready(function()
 {
     $("#mailto").attr('data-placeholder', chooseUsersToMail);
-    $("#mailto, #productID").chosen($.defaultChosenOptions).on('chosen:showing_dropdown');
+    $("#mailto, #productID").chosen();
 });
 </script>

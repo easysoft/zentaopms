@@ -29,7 +29,7 @@ function loadAllUsers()
 function loadProjectTeamMembers(productID)
 {
     var link = createLink('bug', 'ajaxLoadProjectTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen(defaultChosenOptions);});
+    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
 }
 
 /**

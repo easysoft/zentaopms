@@ -350,6 +350,40 @@ class commonModel extends model
     }
 
     /**
+     * Create sub menu by settings in lang files.
+     *
+     * @param  array    $items
+     * @param  mixed    $replace
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function createSubMenu($items, $replace)
+    {
+        $subMenu = array();
+        foreach($items as $subMenuKey => $subMenuLink)
+        {
+            if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
+            $subMenuLink = vsprintf($subMenuLink, $replace);
+            list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
+
+            $link = array();
+            $link['module'] = $subMenuModule;
+            $link['method'] = $subMenuMethod;
+            $link['vars']   = $subMenuParams;
+
+            $menu = new stdclass();
+            $menu->name   = $subMenuKey;
+            $menu->link   = $link;
+            $menu->text   = $subMenuName;
+            $menu->hidden = false;
+            $subMenu[$subMenuKey] = $menu;
+        }
+
+        return $subMenu;
+    }
+
+    /**
      * Print the main menu.
      *
      * @param  string $moduleName
@@ -468,7 +502,7 @@ class commonModel extends model
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
 
         if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
-        /* Cycling to print every sub menus. */
+        /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)
         {
             if(isset($lang->$moduleName->dividerMenu) and strpos($lang->$moduleName->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
@@ -505,7 +539,56 @@ class commonModel extends model
                     if($currentModule == 'testsuite' && $currentMethod == 'library') $active = '';
                 }
 
-                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $menuItem->text, $target) . "</li>\n";
+                $label   = $menuItem->text;
+                $subMenu = '';
+                /* Print sub menus. */
+                if(isset($menuItem->subMenu))
+                {
+                    $firstLink  = '';
+                    $firstLabel = '';
+                    foreach($menuItem->subMenu as $subMenuItem)
+                    {
+                        if($subMenuItem->hidden) continue;
+
+                        $subActive = '';
+                        $subModule = '';
+                        $subMethod = '';
+                        $subParams = '';
+                        $subLabel  = $subMenuItem->text;
+                        if(isset($subMenuItem->link['module'])) $subModule = $subMenuItem->link['module'];
+                        if(isset($subMenuItem->link['method'])) $subMethod = $subMenuItem->link['method'];
+                        if(isset($subMenuItem->link['vars']))   $subParams = $subMenuItem->link['vars'];
+
+                        $subLink = helper::createLink($subModule, $subMethod, $subParams);
+
+                        if($config->global->flow != 'onlyTest' && $currentModule == strtolower($subModule) && $currentMethod == strtolower($subMethod)) $subActive = 'active';
+
+                        $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
+
+                        if(!$firstLink)  $firstLink  = $subLink;
+                        if(!$firstLabel) $firstLabel = $subLabel;
+                    }
+
+                    if(!$firstLink or !$firstLabel) continue;
+
+                    if($config->global->flow == 'onlyTest')
+                    {
+                        $link = $firstLink;
+                    }
+                    else
+                    {
+                        $link  = $firstLink;
+                        $label = $firstLabel;
+                    }
+
+                    if($subMenu)
+                    {
+                        $label   .= "<span class='caret'></span>";
+                        $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
+                    }
+                }
+
+                $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
                 if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";
                 echo $menuItemHtml;
             }
@@ -1326,7 +1409,7 @@ EOD;
             if(strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
             if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
         }
-
+        if(empty($app->user->rights['rights']['my']['limited'])) return true;
 
         if(!is_null($method) && strpos($method, 'batch')  === 0) return false;
         if(!is_null($method) && strpos($method, 'link')   === 0) return false;

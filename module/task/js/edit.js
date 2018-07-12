@@ -1,6 +1,6 @@
 $(function() 
 {
-    $("#story, #mailto").chosen(defaultChosenOptions);
+    $("#story, #mailto").chosen();
     $('.record-estimate-toggle').modalTrigger({width:900, type:'iframe', afterHide: function(){parent.location.href=parent.location.href;}});
 })
 
@@ -41,7 +41,7 @@ function loadAll(projectID)
 function loadModuleMenu(projectID)
 {
     var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + projectID + '&viewtype=task');
-    $('#moduleIdBox').load(link, function(){$('#module').chosen(defaultChosenOptions);});
+    $('#moduleIdBox').load(link, function(){$('#module').chosen();});
 }
 
 /**
@@ -54,7 +54,7 @@ function loadModuleMenu(projectID)
 function loadProjectStories(projectID)
 {
     var link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=0&storyID=' + oldStoryID);
-    $('#storyIdBox').load(link, function(){$('#story').chosen(defaultChosenOptions);});
+    $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
 
 /**
@@ -67,7 +67,7 @@ function loadProjectStories(projectID)
 function loadProjectMembers(projectID)
 {
     var link = createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + oldAssignedTo);
-    $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen(defaultChosenOptions)});
+    $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen()});
 }
 
 /* empty function. */

@@ -229,16 +229,16 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list     = array('link' => '%s', 'subModule' => 'task,grouptask,tree', 'alias' => 'grouptask,importtask,importbug,tree');
-$lang->project->menu->kanban   = array('link' => '看板|project|kanban|projectID=%s');
-$lang->project->menu->burn     = array('link' => '燃盡圖|project|burn|projectID=%s');
-$lang->project->menu->story    = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa       = array('link' => '%s', 'subModule' => 'bug,build,testtask');
-$lang->project->menu->doc      = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->action   = array('link' => '%s');
-$lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
-$lang->project->menu->team     = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
-$lang->project->menu->view     = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
+$lang->project->menu->list    = array('link' => '任務列表|project|task|projectID=%s', 'subModule' => 'task,grouptask,tree', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->kanban  = array('link' => '看板|project|kanban|projectID=%s');
+$lang->project->menu->burn    = array('link' => '燃盡圖|project|burn|projectID=%s');
+$lang->project->menu->story   = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->project->menu->qa      = array('link' => 'Bug|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->doc     = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
+$lang->project->menu->action  = array('link' => '動態|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->product = $lang->productCommon . '|project|manageproducts|projectID=%s';
+$lang->project->menu->team    = array('link' => '團隊|project|team|projectID=%s', 'alias' => 'managemembers');
+$lang->project->menu->view    = array('link' => '概況|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->list = new stdclass();
@@ -723,12 +723,16 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->menu->resolvedbyme  = '由我解決|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
     $lang->bug->menu->toclosed      = '待關閉|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
     $lang->bug->menu->unresolved    = '未解決|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
-    $lang->bug->menu->unconfirmed   = '未確認|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
-    $lang->bug->menu->assigntonull  = '未指派|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
-    $lang->bug->menu->longlifebugs  = '久未處理|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
-    $lang->bug->menu->postponedbugs = '被延期|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
-    $lang->bug->menu->overduebugs   = '過期Bug|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
-    $lang->bug->menu->needconfirm   = '需求變動|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
+    $lang->bug->menu->more          = array('link' => '更多|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');
+
+    $lang->bug->subMenu = new stdclass();
+    $lang->bug->subMenu->more = new stdclass();
+    $lang->bug->subMenu->more->unconfirmed   = '未確認|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
+    $lang->bug->subMenu->more->assigntonull  = '未指派|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
+    $lang->bug->subMenu->more->longlifebugs  = '久未處理|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
+    $lang->bug->subMenu->more->postponedbugs = '被延期|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
+    $lang->bug->subMenu->more->overduebugs   = '過期Bug|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
+    $lang->bug->subMenu->more->needconfirm   = '需求變動|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
 
     $lang->bug->menuOrder[5]  = 'product';
     $lang->bug->menuOrder[10] = 'all';
@@ -747,9 +751,13 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
-    $lang->testcase->menu->all   = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
-    $lang->testcase->menu->wait  = '待評審|testcase|browse|productID=%s&branch=%s&browseType=wait';
-    $lang->testcase->menu->suite = array('link' => '%s', 'fixed' => true);
+    $lang->testcase->menu->all     = '所有|testcase|browse|productID=%s&branch=%s&browseType=all';
+    $lang->testcase->menu->wait    = '待評審|testcase|browse|productID=%s&branch=%s&browseType=wait';
+    $lang->testcase->menu->bysuite = array('link' => '套件|testsuite|create|productID=%s', 'class' => 'dropdown dropdown-hover');
+
+    $lang->testcase->subMenu = new stdclass();
+    $lang->testcase->subMenu->bysuite = new stdclass();
+    $lang->testcase->subMenu->bysuite->create = '建套件|testsuite|create|productID=%s';
 
     $lang->testcase->menuOrder[5]  = 'product';
     $lang->testcase->menuOrder[10] = 'all';

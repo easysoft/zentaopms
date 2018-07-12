@@ -35,11 +35,16 @@ class docModel extends model
             if($libID)
             {
                 $lib = $this->getLibById($libID);
-                if($this->checkPriv($lib))
+                if(!$this->checkPrivLib($lib))
                 {
-                    $type = $lib->product ? 'product' : 'custom';
-                    $type = $lib->project ? 'project' : $type;
+                    echo(js::alert($this->lang->doc->accessDenied));
+                    $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+                    if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
+                    die(js::locate('back'));
                 }
+
+                $type = $lib->product ? 'product' : 'custom';
+                $type = $lib->project ? 'project' : $type;
             }
 
             $mainLib = $type == 'custom' ? $this->lang->doc->customAB : $mainLib;
@@ -191,7 +196,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getLibs($type = '')
+    public function getLibs($type = '', $extra = '')
     {
         if($type == 'product' or $type == 'project')
         {
@@ -215,9 +220,47 @@ class docModel extends model
         $libPairs = array();
         while($lib = $stmt->fetch())
         {
-            if($this->checkPriv($lib)) $libPairs[$lib->id] = $lib->name;
+            if($this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
         }
         return $libPairs;
+    }
+
+    /**
+     * Get grant libs by doc.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getPrivLibsByDoc()
+    {
+        static $libs;
+        if($libs === null)
+        {
+            $libs = array();
+            $stmt = $this->dao->select('lib,groups,users')->from(TABLE_DOC)->where('acl')->ne('open')->andWhere("(groups != '' or users != '')")->query();
+
+            $account    = ",{$this->app->user->account},";
+            $userGroups = $this->app->user->groups;
+            while($lib = $stmt->fetch())
+            {
+                if(strpos(",$lib->users,", $account) !== false)
+                {
+                    $libs[$lib->lib] = $lib->lib;
+                }
+                else
+                {
+                    foreach($userGroups as $groupID)
+                    {
+                        if(strpos(",$lib->groups,", ",$groupID,") !== false)
+                        {
+                            $libs[$lib->lib] = $lib->lib;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return $libs;
     }
 
     /**
@@ -377,7 +420,7 @@ class docModel extends model
                 ->fetchAll('id');
             foreach($docs as $docID => $doc)
             {
-                if(!$this->checkPriv($doc)) unset($docs[$docID]);
+                if(!$this->checkPrivDoc($doc)) unset($docs[$docID]);
             }
             $docs = $this->dao->select('*')->from(TABLE_DOC)
                 ->where('id')->in(array_keys($docs))
@@ -481,7 +524,7 @@ class docModel extends model
         $docIdList = array();
         while($doc = $stmt->fetch())
         {
-            if($this->checkPriv($doc)) $docIdList[$doc->id] = $doc->id;
+            if($this->checkPrivDoc($doc)) $docIdList[$doc->id] = $doc->id;
         }
         return $docIdList;
     }
@@ -498,7 +541,7 @@ class docModel extends model
     {
         $doc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
         if(!$doc) return false;
-        if(!$this->checkPriv($doc))
+        if(!$this->checkPrivDoc($doc))
         {
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
@@ -803,13 +846,14 @@ class docModel extends model
     }
 
     /**
-     * Check priv.
+     * Check priv for lib.
      *
      * @param  object $object
+     * @param  string $extra
      * @access public
      * @return bool
      */
-    public function checkPriv($object, $type = 'lib')
+    public function checkPrivLib($object, $extra = '')
     {
         if($this->app->user->admin) return true;
 
@@ -817,29 +861,26 @@ class docModel extends model
         if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
         if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
 
-        if(isset($object->lib))
-        {
-            static $libs;
-            if(empty($libs)) $libs = $this->getLibs('all');
-            if(!isset($libs[$object->lib])) return false;
-        }
-
         if($object->acl == 'open') return true;
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if($object->acl == 'private' and strpos(",$object->users,", $account) !== false) return true;
+        if(strpos(",$object->users,", $account) !== false) return true;
         if($object->acl == 'custom')
         {
-            if(strpos(",$object->users,", $account) !== false) return true;
-
             $userGroups = $this->app->user->groups;
             foreach($userGroups as $groupID)
             {
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
         }
-        if(isset($object->lib)) return false;
+
+        if(strpos($extra, 'notdoc') === false)
+        {
+            static $extraDocLibs;
+            if($extraDocLibs === null) $extraDocLibs = $this->getPrivLibsByDoc();
+            if(isset($extraDocLibs[$object->id])) return true;
+        }
 
         if($object->project)
         {
@@ -853,6 +894,42 @@ class docModel extends model
             static $products;
             if(empty($products)) $products = $this->loadModel('product')->getPairs();
             return isset($products[$object->product]);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check priv for doc.
+     * 
+     * @param  object    $object 
+     * @access public
+     * @return bool
+     */
+    public function checkPrivDoc($object)
+    {
+        if($this->app->user->admin) return true;
+
+        static $extraDocLibs;
+        if($extraDocLibs === null) $extraDocLibs = $this->getPrivLibsByDoc();
+
+        static $libs;
+        if($libs === null) $libs = $this->getLibs('all', 'notdoc');
+        if(isset($libs[$object->lib]) and isset($extraDocLibs[$object->lib])) unset($extraDocLibs[$object->lib]);
+        if(!isset($libs[$object->lib]) and !isset($extraDocLibs[$object->lib])) return false;
+
+        if($object->acl == 'open' and !isset($extraDocLibs[$object->lib])) return true;
+
+        $account = ',' . $this->app->user->account . ',';
+        if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
+        if(strpos(",$object->users,", $account) !== false) return true;
+        if($object->acl == 'custom')
+        {
+            $userGroups = $this->app->user->groups;
+            foreach($userGroups as $groupID)
+            {
+                if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
+            }
         }
 
         return false;
@@ -1017,7 +1094,7 @@ class docModel extends model
         {
             if($limit && $i > $limit) break;
             $key = ($type == 'product' or $type == 'project') ? $type : 'id';
-            if($this->checkPriv($docLib) and !isset($libs[$docLib->$key]))
+            if($this->checkPrivLib($docLib) and !isset($libs[$docLib->$key]))
             {
                 $libs[$docLib->$key] = $docLib->name;
                 $i++;
@@ -1062,7 +1139,7 @@ class docModel extends model
         {
             foreach($libs as $lib)
             {
-                if($this->checkPriv($lib)) $buildGroups[$objectID][$lib->id] = $lib->name;
+                if($this->checkPrivLib($lib)) $buildGroups[$objectID][$lib->id] = $lib->name;
             }
             if($type == 'product' and isset($hasProject[$objectID]) and common::hasPriv('doc', 'allLibs')) $buildGroups[$objectID]['project'] = $this->lang->doclib->project;
             if(common::hasPriv('doc', 'showFiles')) $buildGroups[$objectID]['files'] = $this->lang->doclib->files;
@@ -1104,7 +1181,7 @@ class docModel extends model
         $libs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPriv($lib)) $libs[$lib->id] = $lib;
+            if($this->checkPrivLib($lib)) $libs[$lib->id] = $lib;
         }
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
@@ -1154,7 +1231,7 @@ class docModel extends model
         $docCounts = array();
         foreach($docs as $doc)
         {
-            if(!$this->checkPriv($doc)) continue;
+            if(!$this->checkPrivDoc($doc)) continue;
             if(!isset($docCounts[$doc->lib])) $docCounts[$doc->lib] = 0;
             $docCounts[$doc->lib] ++;
         }
@@ -1272,7 +1349,7 @@ class docModel extends model
             $docGroups = array();
             foreach($docs as $doc)
             {
-                if($this->checkPriv($doc)) $docGroups[$doc->module][$doc->id] = $doc;
+                if($this->checkPrivDoc($doc)) $docGroups[$doc->module][$doc->id] = $doc;
             }
         }
 
@@ -1326,7 +1403,7 @@ class docModel extends model
         if(empty($libID)) return '';
 
         $lib = $this->getLibById($libID);
-        if(!$this->checkPriv($lib))
+        if(!$this->checkPrivLib($lib))
         {
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
