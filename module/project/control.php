@@ -2325,7 +2325,7 @@ class project extends control
             $planStories = array_keys($planStory);
             $this->project->linkStory($projectID, $planStories, $planProducts);
         }
-        if($count != 0) die(js::confirm(sprintf($this->lang->project->haveDraft, $count), $this->createLink('project', 'story', "projectID=$projectID")));
+        if($count != 0) echo js::alert(sprintf($this->lang->project->haveDraft, $count)) . js::locate($this->createLink('project', 'story', "projectID=$projectID"));
         die(js::locate(helper::createLink('project', 'story', 'projectID=' . $projectID), 'parent'));
     }
 
