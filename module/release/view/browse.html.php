@@ -77,7 +77,8 @@
           common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
           if(common::hasPriv('release', 'delete', $release))
           {
-              common::printIcon('release', 'delete', "releaseID=$release->id", $release, '<i class="icon-link"></i>', '', 'hiddenwin');
+              $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
           }
           ?>
         </td>
