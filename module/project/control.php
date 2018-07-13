@@ -253,6 +253,7 @@ class project extends control
 
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
+        if(($groupBy == 'story') and ($project->type == 'ops'))$groupBy = 'status';
         $sort        = $this->loadModel('common')->appendOrder($groupBy);
         $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $productID = 0, $status = 'all', $modules = 0, $sort);
         $groupBy     = str_replace('`', '', $groupBy);
