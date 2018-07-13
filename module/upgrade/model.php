@@ -227,6 +227,7 @@ class upgradeModel extends model
             case '10_0':
                 $this->execSQL($this->getUpgradeFile('10.0'));
                 $this->fixStorySpecTitle();
+                $this->removeUnlinkPriv();//Remove unlink privilege for story, bug and testcase module.
         }
 
         $this->deletePatch();
@@ -2363,6 +2364,29 @@ class upgradeModel extends model
         {
             $this->dao->update(TABLE_STORYSPEC)->set('title')->eq($title)->where('story')->eq($story)->andWhere('version')->eq(1)->exec();
         }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Remove unlink privilege for story, bug and testcase module.
+     *
+     * @access public
+     * @return bool
+     */
+    public function removeUnlinkPriv()
+    {
+        $this->dao->delete()->from(TABLE_GROUPPRIV)
+            ->where('((module')->eq('story')
+            ->andWhere('method')->eq('unlinkStory')
+            ->markRight(1)
+            ->orWhere('(module')->eq('bug')
+            ->andWhere('method')->eq('unlinkBug')
+            ->markRight(1)
+            ->orWhere('(module')->eq('testcase')
+            ->andWhere('method')->eq('unlinkCase')
+            ->markRight(2)
+            ->exec();
 
         return !dao::isError();
     }
