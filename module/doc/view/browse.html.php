@@ -45,7 +45,7 @@ var browseType = '<?php echo $browseType;?>';
           </div>
         </nav>
       </div>
-      <?php if(empty($docs) and empty($modules)):?>
+      <?php if(empty($docs) and empty($modules) and empty($libs)):?>
       <div class="table-empty-tip">
         <p>
           <?php if($libID):?>
@@ -75,10 +75,28 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions-3"><?php echo $lang->actions;?></th>
+              <th class="c-actions-4"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
+            <?php if(!empty($libs)):?>
+            <?php foreach($libs as $lib):?>
+            <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+            <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
+            <tr>
+              <td class="c-name"><?php echo html::a(inlink('browse', "libID={$lib->id}&browseType=all&param=0&orderBy=$orderBy&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $lib->name);?></td>
+              <td class="c-num"></td>
+              <td class="c-user"></td>
+              <td class="c-datetime"></td>
+              <td class="c-datetime"></td>
+              <td>
+                <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$lib->id&objectType=doclib");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+                <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
+                <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
+              </td>
+            </tr>
+            <?php endforeach;?>
+            <?php endif;?>
             <?php if(isset($modules)):?>
             <?php foreach($modules as $module):?>
             <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
@@ -90,7 +108,7 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-datetime"></td>
               <td class="c-datetime"></td>
               <td>
-                <?php common::printLink('doc', 'collect', "objectID=$module->id&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$collectTitle}' class='btn btn-link'")?>
+                <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$module->id&objectType=module");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
               </td>
             </tr>
