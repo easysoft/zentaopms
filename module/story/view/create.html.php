@@ -47,7 +47,7 @@
                     echo "<div class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     echo '&nbsp; ';
-                    echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
                     echo '</div>';
                 }
                 ?>
@@ -66,7 +66,7 @@
                     echo html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$lang->productplan->create}'");
                     echo '</div>';
                     echo "<div class='input-group-btn'>";
-                    echo html::a("#", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$lang->refresh}' onclick='loadProductPlans($productID)'");
+                    echo html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$lang->refresh}' onclick='loadProductPlans($productID)'");
                     echo '</div>';
                 }
                 ?>

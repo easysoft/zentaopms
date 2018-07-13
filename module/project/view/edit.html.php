@@ -23,7 +23,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->project->edit;?></small>
       </h2>
     </div>
-    <form class='load-indicator main-form' method='post' target='hiddenwin' id='dataform'>
+    <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->project->name;?></th>
