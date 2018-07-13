@@ -2030,11 +2030,9 @@ class projectModel extends model
 
         foreach($tasks as $task)
         {
-            if($task->status != 'cancel')
-            {
-                $totalEstimate  += $task->estimate;
-                $totalConsumed  += $task->consumed;
-            }
+            $totalEstimate  += $task->estimate;
+            $totalConsumed  += $task->consumed;
+
             if($task->status != 'cancel' and $task->status != 'closed') $totalLeft += $task->left;
 
             $statusVar = 'status' . ucfirst($task->status);
