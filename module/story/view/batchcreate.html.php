@@ -67,7 +67,7 @@
             <td style='overflow:visible'>
               <div class="input-group">
                 <div class="input-control has-icon-right">
-                  <input type="text" name="title[$id]" id="title$id" value="" class="form-control title-import" autocomplete="off">
+                  <input type="text" name="title[$id]" id="title$id" value="" class="form-control input-story-title" autocomplete="off">
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">
