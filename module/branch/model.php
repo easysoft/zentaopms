@@ -96,7 +96,6 @@ class branchModel extends model
         $branchGroups = array();
         foreach($branches as $branch)
         {
-            if(!isset($branchGroups[$branch->product]) and strpos($params, 'noempty') === false) $branchGroups[$branch->product][0] = $this->lang->branch->all . $this->lang->product->branchName[$products[$branch->product]->type];
             if($products[$branch->product]->type == 'normal')
             {
                 $branchGroups[$branch->product][0] = '';
@@ -105,6 +104,14 @@ class branchModel extends model
             {
                 $branchGroups[$branch->product][$branch->id] = $branch->name;
             }
+        }
+
+        foreach($products as $product)
+        {
+            if($product->type == 'normal') continue;
+
+            if(!isset($branchGroups[$product->id]))  $branchGroups[$product->id] = array();
+            if(strpos($params, 'noempty') === false) $branchGroups[$product->id] = array('0' => $this->lang->branch->all . $this->lang->product->branchName[$product->type]) + $branchGroups[$product->id];
         }
 
         return $branchGroups;
