@@ -86,7 +86,7 @@
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story&currentModuleID=0&branch=$story->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductModules($story->product)'");
+                      echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($story->product)'");
                       echo '</span>';
                   }
                   ?>
@@ -103,7 +103,7 @@
                   {
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('productplan', 'create', "productID=$story->product&branch=$story->branch", '', true), $lang->productplan->create, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                      echo html::a("#", $lang->refresh, '', "class='refresh' onclick='loadProductPlans($story->product)'");
+                      echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductPlans($story->product)'");
                       echo '</span>';
                   }
                   ?>

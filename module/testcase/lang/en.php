@@ -112,11 +112,11 @@ $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
 $lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe   = 'AssignedToMe';
-$lang->testcase->openedByMe   = 'CreatedByMe';
+$lang->testcase->assignToMe   = 'Assigned To Me';
+$lang->testcase->openedByMe   = 'Created By Me';
 $lang->testcase->allCases     = 'All';
 $lang->testcase->allTestcases = 'All Cases';
-$lang->testcase->needConfirm  = 'StoryChanged';
+$lang->testcase->needConfirm  = 'Story Changed';
 $lang->testcase->bySearch     = 'Search';
 $lang->testcase->unexecuted   = 'Wait';
 
