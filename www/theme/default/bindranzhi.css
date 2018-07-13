@@ -6,3 +6,6 @@ body{padding-bottom:0px;}
 .datatable .scroll-wrapper .scroll-slide {bottom:-55px;}
 .table-footer.fixed-footer{bottom:0px !important;}
 #footer{display:none;}
+
+#header #mainHeader #navbar li[data-id='oa']{display:none;}
+#subNavbar li[data-id='review']{display:none;}

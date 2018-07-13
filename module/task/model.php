@@ -498,6 +498,8 @@ class taskModel extends model
 
             if(isset($task))
             {
+                if($this->post->status) return $currentTask;
+
                 if($currentTask->consumed == 0)
                 {
                     $currentTask->status       = 'wait';

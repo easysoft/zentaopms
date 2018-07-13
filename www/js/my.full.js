@@ -334,6 +334,7 @@ function ajaxDelete(url, replaceID, notice)
                 {
                     $.get(document.location.href, function(data)
                     {
+                        if(!($(data).find('#' + replaceID).length))location.reload();
                         $('#' + replaceID).html($(data).find('#' + replaceID).html());
                         if(typeof sortTable == 'function') sortTable(); 
                         $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
