@@ -246,7 +246,7 @@
                     $linkStories = explode(',', $story->linkStories) ;
                     foreach($linkStories as $linkStoryID)
                     {
-                        if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$linkStoryID", '', true), "#$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
+                        if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "#$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                   </ul>
@@ -260,7 +260,7 @@
                     $childStories = explode(',', $story->childStories) ;
                     foreach($childStories as $childStoryID)
                     {
-                      if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a(inlink('view', "storyID=$childStoryID", '', true), "#$childStoryID " . $story->extraStories[$childStoryID], '', "class='iframe' data-width='80%'") . '</li>';
+                      if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$childStoryID", '', true), "#$childStoryID " . $story->extraStories[$childStoryID], '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                   </ul>

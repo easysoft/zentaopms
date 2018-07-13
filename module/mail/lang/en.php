@@ -73,7 +73,7 @@ $lang->mail->secureList['tls'] = 'tls';
 
 $lang->mail->more           = 'More';
 $lang->mail->noticeResend   = 'Sent it again!';
-$lang->mail->inputFromEmail = 'Enter Sender Email';
+$lang->mail->inputFromEmail = 'Sender Email';
 $lang->mail->nextStep       = 'Next';
 $lang->mail->successSaved   = 'Configuration has been saved.';
 $lang->mail->testSubject    = 'Testing Email';
