@@ -142,11 +142,21 @@
       $groupSum = 0;
       foreach($groupTasks as $taskKey => $task)
       {
-          if(!$task->parent && $task->status != 'cancel')
+          if($groupBy == 'story')
           {
-              $groupEstimate  += $task->estimate;
-              $groupConsumed  += $task->consumed;
-              $groupLeft      += ($task->status == 'cancel' ? 0 : $task->left);
+              if(!$task->parent)
+              {
+                  $groupEstimate += $task->estimate;
+                  $groupConsumed += $task->consumed;
+                  if($task->status != 'cancel' && $task->status != 'closed') $groupLeft += $task->left;
+              }
+          }
+          else
+          {
+              $groupEstimate += $task->estimate;
+              $groupConsumed += $task->consumed;
+
+              if($groupBy == 'status' || ($task->status != 'cancel' && $task->status != 'closed')) $groupLeft += $task->left;
           }
 
           if($task->status == 'wait')   $groupWait++;
