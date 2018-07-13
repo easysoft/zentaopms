@@ -42,7 +42,7 @@
         <button type='button' class='btn btn-link' id='cpmBtn'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
     </div>
-    <form class='form-indicator main-form' method='post' target='hiddenwin' id='dataform'>
+    <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->project->name;?></th>
