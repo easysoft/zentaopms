@@ -28,7 +28,7 @@ $lang->upgrade->warnningContent = <<<EOT
 </pre>
 EOT;
 $lang->upgrade->createFileWinCMD   = 'Open command line, execute <strong style="color:#ed980f">echo > %s</strong>';
-$lang->upgrade->createFileLinuxCMD = 'Execute in command line: <strong style="color:#ed980f">touch %s;</strong>';
+$lang->upgrade->createFileLinuxCMD = 'Execute in command line: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please finish the following action</h4>
                                       <ul style="line-height:1.5;font-size:13px;">
                                       <li>%s</li>

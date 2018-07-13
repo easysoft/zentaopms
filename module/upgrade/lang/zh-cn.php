@@ -28,7 +28,7 @@ $lang->upgrade->warnningContent = <<<EOT
 </pre>
 EOT;
 $lang->upgrade->createFileWinCMD   = '打开命令行，执行<strong style="color:#ed980f">echo > %s</strong>';
-$lang->upgrade->createFileLinuxCMD = '在命令行执行: <strong style="color:#ed980f">touch %s;</strong>';
+$lang->upgrade->createFileLinuxCMD = '在命令行执行: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>升级之前请先完成下面的操作：</h4>
                                       <ul style="line-height:1.5;font-size:13px;">
                                       <li>%s</li>
