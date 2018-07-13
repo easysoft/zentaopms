@@ -103,10 +103,10 @@ $lang->bug->copy               = 'Copy';
 $lang->bug->search             = 'Search';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe         = 'AssignedToMe';
-$lang->bug->openedByMe         = 'CreatedByMe';
-$lang->bug->resolvedByMe       = 'ResolvedByMe';
-$lang->bug->closedByMe         = 'ClosedByMe';
+$lang->bug->assignToMe         = 'Assigned To Me';
+$lang->bug->openedByMe         = 'Created By Me';
+$lang->bug->resolvedByMe       = 'Resolved By Me';
+$lang->bug->closedByMe         = 'Closed By Me';
 $lang->bug->assignToNull       = 'Unassigned';
 $lang->bug->unResolved         = 'Unresolved';
 $lang->bug->toClosed           = 'Unclosed';

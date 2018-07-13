@@ -187,7 +187,7 @@
                   <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+                      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->estimateAB}'") ?>
                       <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
                     </div>
                   </td>

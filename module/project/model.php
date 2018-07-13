@@ -1614,7 +1614,7 @@ class projectModel extends model
             }
         }
         $this->linkStory($projectID, $planStories, $planProducts);
-        if($count != 0) die(js::confirm(sprintf($this->lang->project->haveDraft, $count), helper::createLink('project', 'create', "projectID=$projectID"))); 
+        if($count != 0) echo js::alert(sprintf($this->lang->project->haveDraft, $count)) . js::locate(helper::createLink('project', 'create', "projectID=$projectID"));
     }
 
     /**

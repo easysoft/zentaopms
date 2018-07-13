@@ -79,10 +79,10 @@ $lang->product->iterationInfo = '%s Iterations';
 $lang->product->iterationView = 'Details';
 
 $lang->product->searchStory  = 'Search';
-$lang->product->assignedToMe = 'AssignedToMe';
-$lang->product->openedByMe   = 'CreatedByMe';
-$lang->product->reviewedByMe = 'ReviewedByMe';
-$lang->product->closedByMe   = 'ClosedByMe';
+$lang->product->assignedToMe = 'Assigned To Me';
+$lang->product->openedByMe   = 'Created By Me';
+$lang->product->reviewedByMe = 'Reviewed By Me';
+$lang->product->closedByMe   = 'Closed By Me';
 $lang->product->draftStory   = 'Draft';
 $lang->product->activeStory  = 'Activated';
 $lang->product->changedStory = 'Changed';

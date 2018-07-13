@@ -100,7 +100,7 @@ $lang->user->weakPassword = "Your password does not meet the complexity requirem
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
-$lang->user->roleList['qa']     = 'Tester';
+$lang->user->roleList['qa']     = 'QA';
 $lang->user->roleList['pm']     = 'Scrum Master';
 $lang->user->roleList['po']     = 'Product Owner';
 $lang->user->roleList['td']     = 'Technical Manager';

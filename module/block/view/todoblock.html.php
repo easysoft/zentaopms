@@ -174,7 +174,7 @@
       {
           $("input[name='name']").addClass('has-error');
           $('#nameLabel').remove();
-          $("input[name='name']").after('<div id="nameLabel" class="text-danger help-text"><?php echo $lang->todo->noName ?></div>');
+          $("input[name='name']").after('<div id="nameLabel" class="text-danger help-text"><?php echo sprintf($lang->error->notempty, $lang->todo->name) ?></div>');
           setTimeout('clearError()', 2000)
           return false;
       }
