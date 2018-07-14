@@ -50,7 +50,7 @@ $lang->doc->searchResult   = 'Search Result';
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
 $lang->doc->fast           = 'Qucik Entry';
-$lang->doc->allDoc         = 'All';
+$lang->doc->allDoc         = 'All Doc';
 $lang->doc->openedByMe     = 'My';
 $lang->doc->orderByOpen    = 'Last Added';
 $lang->doc->orderByEdit    = 'Last Modified';
@@ -61,7 +61,7 @@ $lang->doc->myDoc          = 'My Doc';
 $lang->doc->myCollection   = 'My Favorite';
 
 /* 方法列表。*/
-$lang->doc->index            = 'Home';
+$lang->doc->index            = 'Doc Home';
 $lang->doc->create           = 'Add Doc';
 $lang->doc->edit             = 'Edit';
 $lang->doc->delete           = 'Delete';
@@ -79,7 +79,7 @@ $lang->doc->cancelCollection = 'Remove Favorites';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';
-$lang->doc->custom         = 'Custom Library';
+$lang->doc->custom         = 'Custom Doc Library';
 $lang->doc->customAB       = 'Custom Library';
 $lang->doc->createLib      = 'Create Library';
 $lang->doc->allLibs        = 'Library';
