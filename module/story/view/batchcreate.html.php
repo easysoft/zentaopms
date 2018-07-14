@@ -46,7 +46,7 @@
           <tr>
             <th class='col-id'><?php echo $lang->idAB;?></th>
             <th class='w-150px<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-            <th class='col-module'><?php echo $lang->story->module;?></th>
+            <th class='col-module<?php echo zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->story->module;?></th>
             <th class='col-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
             <th class='col-name required has-btn'><?php echo $lang->story->title;?></th>
             <th class='w-150px<?php      echo zget($visibleFields, 'spec',     ' hidden') . zget($requiredFields, 'spec',     '', ' required');?>'><?php echo $lang->story->spec;?></th>
@@ -67,7 +67,7 @@
             <td style='overflow:visible'>
               <div class="input-group">
                 <div class="input-control has-icon-right">
-                  <input type="text" name="title[$id]" id="title$id" value="" class="form-control title-import" autocomplete="off">
+                  <input type="text" name="title[$id]" id="title$id" value="" class="form-control input-story-title" autocomplete="off">
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">

@@ -152,10 +152,17 @@ class doc extends control
             $this->session->set('searchDoc', '');
         }
 
+        $libs = array();
+        if($browseType == 'collectedbyme')
+        {
+            $libs = $this->doc->getAllLibsByType('collector');
+            $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
+        }
+
         $this->view->title      = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
-        $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc');
+        $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc', $browseType);
         $this->view->docs       = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
@@ -164,6 +171,7 @@ class doc extends control
         $this->view->type       = $type;
         $this->view->from       = $from;
         $this->view->pager      = $pager;
+        $this->view->libs       = $libs;
 
         $this->display();
     }

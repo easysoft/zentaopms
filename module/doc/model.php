@@ -789,9 +789,14 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocMenu($libID, $parent, $orderBy = 'name_asc')
+    public function getDocMenu($libID, $parent, $orderBy = 'name_asc', $browseType = '')
     {
-        $modules = $this->dao->select('*')->from(TABLE_MODULE)->where('root')->eq($libID)
+        if($libID == 0 and $browseType != 'collectedbyme') return array();
+
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where(1)
+            ->beginIF($browseType != "collectedbyme")->andWhere('root')->eq($libID)->fi()
+            ->beginIF($browseType == "collectedbyme")->andWhere('collector')->like("%,{$this->app->user->account},%")->fi()
             ->andWhere('type')->eq('doc')
             ->andWhere('parent')->eq($parent)
             ->andWhere('deleted')->eq(0)
@@ -948,12 +953,16 @@ class docModel extends model
     {
         if($product and $type == 'project') $projects = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->fetchPairs('project', 'project');
 
-        $libs = $this->getLibs($type);
+        $libs = $this->getLibs($type == 'collector' ? 'all' : $type);
         $key  = ($type == 'product' or $type == 'project') ? $type : 'id';
         $stmt = $this->dao->select("DISTINCT $key")->from(TABLE_DOCLIB)->where('deleted')->eq(0);
         if($type == 'product' or $type == 'project')
         {
             $stmt = $stmt->andWhere($type)->ne(0);
+        }
+        elseif($type == 'collector')
+        {
+            $stmt = $stmt->andWhere('collector')->like("%,{$this->app->user->account},%");
         }
         else
         {

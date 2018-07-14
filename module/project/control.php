@@ -253,6 +253,7 @@ class project extends control
 
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
+        if(($groupBy == 'story') and ($project->type == 'ops'))$groupBy = 'status';
         $sort        = $this->loadModel('common')->appendOrder($groupBy);
         $tasks       = $this->loadModel('task')->getProjectTasks($projectID, $productID = 0, $status = 'all', $modules = 0, $sort);
         $groupBy     = str_replace('`', '', $groupBy);
@@ -953,11 +954,21 @@ class project extends control
      * @access public
      * @return void
      */
-    public function create($projectID = '', $copyProjectID = '', $planID = 0)
+    public function create($projectID = '', $copyProjectID = '', $planID = 0, $confirm = 'no')
     {
         if($projectID)
         {
-            if(!empty($planID)) $this->project->linkStories($projectID);
+            if(!empty($planID))
+            {
+                if($confirm == 'yes')
+                {
+                    $this->project->linkStories($projectID);
+                }
+                else
+                {
+                    die(js::confirm($this->lang->project->importPlanStory, inlink('create', "projectID=$projectID&copyProjectID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID"), 'parent', 'parent'));
+                }
+            }
             $this->view->title     = $this->lang->project->tips;
             $this->view->tips      = $this->fetch('project', 'tips', "projectID=$projectID");
             $this->view->projectID = $projectID;
@@ -998,19 +1009,18 @@ class project extends control
         {
             $projectID = $copyProjectID == '' ? $this->project->create() : $this->project->create($copyProjectID);
             $this->project->updateProducts($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
-            $url = $this->createLink('project', 'create', "projectID=$projectID");
 
-            $planID = reset($this->post->plans);
+            $planID = reset($_POST['plans']);
             if(!empty($planID))
             {
-                die(js::confirm($this->lang->project->importPlanStory, $this->createLink('project', 'create', "projectID=$projectID&copyProjectID=&planID=$planID"), $url, 'parent', 'parent'));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&copyProjectID=&planID=$planID&confirm=no")));
             }
             else
             {
-                die(js::locate($url, 'parent'));
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID")));
             }
         }
 
@@ -1054,7 +1064,7 @@ class project extends control
         {
             $changes = $this->project->update($projectID);
             $this->project->updateProducts($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
             {
                 $this->loadModel('action');
@@ -1067,7 +1077,7 @@ class project extends control
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('project', 'view', "projectID=$projectID"), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "projectID=$projectID")));
         }
 
         /* Set menu. */

@@ -40,7 +40,7 @@
         <th class='w-90px'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='w-90px'> <?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->end);?></th>
         <th class='w-80px'> <?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
-        <th class='c-actions-3'><?php echo $lang->actions;?></th>
+        <th class='c-actions-6'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
