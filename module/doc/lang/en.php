@@ -43,7 +43,7 @@ $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Right';
 $lang->doc->groups         = 'Groups';
 $lang->doc->users          = 'Users';
-$lang->doc->item           = ' Item';
+$lang->doc->item           = ' Items';
 $lang->doc->num            = 'Docs';
 $lang->doc->searchResult   = 'Search Result';
 
@@ -132,8 +132,8 @@ $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 
-$lang->doc->customObjectLibs['files']       = 'File Library';
-$lang->doc->customObjectLibs['customFiles'] = 'Custom Library';
+$lang->doc->customObjectLibs['files']       = 'Show File Library';
+$lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";

@@ -52,7 +52,7 @@ $lang->day          = 'Day';
 $lang->customConfig = 'Custom Config';
 $lang->public       = 'Public';
 $lang->trunk        = 'Trunk';
-$lang->sort         = 'Order';
+$lang->sort         = 'Sort';
 $lang->required     = 'Required';
 $lang->noData       = 'No record';
 
@@ -495,7 +495,7 @@ $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users that will be notified.";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
-$lang->noticePasteImg     = "Paste images here.";
+$lang->noticePasteImg     = "Support pasting images here.";
 
 /* 时间格式设置。*/
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
