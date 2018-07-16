@@ -173,6 +173,7 @@ $lang->task->noticeSaveRecord      = '您有尚未保存的工時記錄，請先
 $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備註。';
 $lang->task->deniedNotice          = '當前任務只有%s才可以%s。';
 $lang->task->noTask                = '暫時沒有任務。';
+$lang->task->createDenied          = '你不能在該項目添加任務';
 
 $lang->task->error                   = new stdclass();
 $lang->task->error->consumedNumber   = '"已經消耗"必須為數字';

@@ -1138,47 +1138,6 @@ class bug extends control
     }
 
     /**
-     * AJAX: get linkBugs.
-     *
-     * @param  int    $bugID
-     * @access public
-     * @return string
-     */
-    public function ajaxGetLinkBugs($bugID)
-    {
-        /* Get linkbugs. */
-        $bugs = $this->bug->getLinkBugs($bugID);
-
-        /* Build linkBug list.*/
-        $output = '';
-        foreach($bugs as $bugId => $bugTitle)
-        {
-            $output .= '<li>';
-            $output .= html::a(inlink('view', "bugID=$bugId"), "#$bugId " . $bugTitle, '_blank');
-            $output .= html::a("javascript:unlinkBug($bugID, $bugId)", '<i class="icon-remove"></i>', '', "title='{$this->lang->unlink}' style='float:right'");
-            $output .= '</li>';
-        }
-
-        die($output);
-    }
-
-    /**
-     * Unlink related bug.
-     *
-     * @param  int    $bugID
-     * @param  int    $bug2Unlink
-     * @access public
-     * @return string
-     */
-    public function unlinkBug($bugID, $bug2Unlink = 0)
-    {
-        /* Unlink related bug. */
-        $this->bug->unlinkBug($bugID, $bug2Unlink);
-
-        die('success');
-    }
-
-    /**
      * Batch close bugs.
      *
      * @access public
