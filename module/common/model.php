@@ -363,7 +363,7 @@ class commonModel extends model
         $subMenu = array();
         foreach($items as $subMenuKey => $subMenuLink)
         {
-            if(isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
+            if(is_array($subMenuLink) and isset($subMenuLink['link'])) $subMenuLink = $subMenuLink['link'];
             $subMenuLink = vsprintf($subMenuLink, $replace);
             list($subMenuName, $subMenuModule, $subMenuMethod, $subMenuParams) = explode('|', $subMenuLink);
 
