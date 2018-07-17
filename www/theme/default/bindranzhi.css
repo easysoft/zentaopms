@@ -3,7 +3,7 @@ body{padding-bottom:0px;}
 #header #heading{display:none !important;}
 #header #navbar{text-align:left !important;}
 #main{padding-bottom: 45px;}
-.datatable .scroll-wrapper .scroll-slide {bottom:-55px;}
+.datatable .scroll-wrapper .scroll-slide {bottom:-55px !important;}
 .table-footer.fixed-footer{bottom:0px !important;}
 #footer{display:none;}
 
