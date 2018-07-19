@@ -21,6 +21,13 @@
         </div>
       </div>
     </div>
+    <?php if(empty($projects)):?>
+    <div class="cell">
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->error->noData;?></span></p>
+      </div>
+    </div>
+    <?php else:?>
     <div class='cell'>
       <div class='panel'>
         <div class="panel-heading">
@@ -111,7 +118,8 @@
         </div>
       </div>
     </div>
-    <?php if($chartData):?>
+    <?php endif;?>
+    <?php if(!empty($chartData)):?>
     <div class="cell">
       <?php
       if(count($chartData['labels']) > 30)
