@@ -15,7 +15,7 @@
 <?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <a class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->build;?></span><span class='label label-light label-badge'><?php echo count($builds);?></span></a>
+    <a class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->build;?></span> <span class='label label-light label-badge'><?php echo count($builds);?></span></a>
   </div>
   <div class='btn-toolbar pull-right'><?php common::printLink('build', 'create', "product=$product->id", "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-primary'");?></div>
 </div>

@@ -23,7 +23,7 @@
     foreach($lang->product->featureBar['all'] as $key => $label)
     {
         $label   = "<span class='text'>{$label}</span>";
-        $label  .= $key == $status ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        $label  .= $key == $status ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
         $active  = $key == $status ? 'btn-active-text' : '';
         echo html::a(inlink("all", "productID={$productID}&line=&status={$key}"), $label, '', "class='btn btn-link {$active}' id='{$key}'");
     }

@@ -216,6 +216,6 @@ js::set('suiteID',        $suiteID);
 </div>
 <script>
 $('#module' + moduleID).closest('li').addClass('active'); 
-$('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
+$('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
 </script>
 <?php include '../../common/view/footer.html.php';?>

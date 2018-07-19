@@ -18,7 +18,7 @@
     <?php $total = 0;?>
     <?php foreach($stories as $colStories) $total += count($colStories);?>
     <?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "projectID=$project->id"), "<span class='text'>{$lang->story->allStories}</span>", '', "class='btn btn-link'");?>
-    <?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "projectID=$project->id"), "<span class='text'>{$lang->project->kanban}</span><span class='label label-light label-badge'>{$total}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "projectID=$project->id"), "<span class='text'>{$lang->project->kanban}</span> <span class='label label-light label-badge'>{$total}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <div class='btn-group'>
