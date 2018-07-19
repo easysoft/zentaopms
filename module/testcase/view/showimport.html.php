@@ -82,6 +82,14 @@
               </tr>
             <?php endforeach;?>
             </table>
+            <?php else:?>
+            <table class='w-p100 bd-0'>
+              <tr class='step'>
+                <td><?php echo '1' . html::hidden("stepType[$key][1]", 'step')?></td>
+                <td><?php echo html::textarea("desc[$key][1]", '', "class='form-control'")?></td>
+                <td><?php echo html::textarea("expect[$key][1]", '', "class='form-control'")?></td>
+              </tr>
+            </table>
             <?php endif;?>
           </td>
         </tr>
