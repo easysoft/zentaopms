@@ -210,7 +210,7 @@ js::set('flow',          $config->global->flow);
 <script>
 $('#module' + moduleID).addClass('active');
 <?php if($config->global->flow == 'full'):?>
-$('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text').append("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
+$('#<?php echo $this->session->libBrowseType?>Tab').addClass('btn-active-text').append(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
 <?php endif;?>
 if(flow == 'onlyTest')
 {

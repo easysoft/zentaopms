@@ -44,7 +44,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
 
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         $label  = "<span class='text'>{$menuItem->text}</span>";
-        $label .= $menuBrowseType == $browseType ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+        $label .= $menuBrowseType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
         $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
 
         if($menuItem->name == 'my')
@@ -92,7 +92,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 $moreLabelActive = '';
                 if(isset($lang->bug->moreSelects[$browseType]))
                 {
-                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$browseType]}</span><span class='label label-light label-badge'>{$pager->recTotal}</span>";
+                    $moreLabel       = "<span class='text'>{$lang->bug->moreSelects[$browseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                     $moreLabelActive = 'btn-active-text';
                 }
                 echo "<div class='btn-group'><a href='javascript:;' data-toggle='dropdown' class='btn btn-link {$moreLabelActive}'>{$moreLabel} <span class='caret'></span></a>";

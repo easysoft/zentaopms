@@ -118,5 +118,5 @@ $status = $this->session->testTaskVersionStatus;
   <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   <?php endif;?>
 </div>
-<script>$(function(){$('#<?php echo $status?>Tab').addClass('btn-active-text').append("<span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>")})</script>
+<script>$(function(){$('#<?php echo $status?>Tab').addClass('btn-active-text').append(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>")})</script>
 <?php include '../../common/view/footer.html.php';?>
