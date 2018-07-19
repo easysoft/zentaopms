@@ -9,6 +9,13 @@
     </div>
   </div>
   <div class='main-col'>
+    <?php if(empty($assigns)):?>
+    <div class="cell">
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->error->noData;?></span></p>
+      </div>
+    </div>
+    <?php else:?>
     <div class='cell'>
       <div class='panel'>
         <div class="panel-heading">
@@ -49,6 +56,7 @@
         </div>
       </div>
     </div>
+    <?php endif;?>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
