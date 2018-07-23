@@ -194,7 +194,7 @@ class releaseModel extends model
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
-            ->cleanInt('product');
+            ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
             ->get();
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);
