@@ -158,6 +158,8 @@ class testreport extends control
             $tasks = array($task->id => $task);
             $owner = $task->owner;
 
+            $this->setChartDatas($objectID);
+
             $this->view->title       = $task->name . $this->lang->testreport->create;
             $this->view->position[]  = html::a(inlink('browse', "objectID=$productID&objectType=product&extra={$task->id}"), $task->name);
             $this->view->position[]  = $this->lang->testreport->create;
@@ -306,6 +308,8 @@ class testreport extends control
                 $bugs = $this->testreport->getBugs4Test($builds, $report->product, $report->begin, $report->end);
             }
             $tasks = array($task->id => $task);
+
+            $this->setChartDatas($report->objectID);
         }
         else
         {
@@ -390,6 +394,8 @@ class testreport extends control
         $cases   = $this->testreport->getTaskCases($tasks, $report->cases);
         $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
 
+        if($report->objectType == 'testtask') $this->setChartDatas($report->objectID);
+
         $this->view->title      = $report->title;
         $this->view->browseLink = $browseLink;
         $this->view->position[] = $report->title;
@@ -459,6 +465,31 @@ class testreport extends control
             $this->lang->testreport->menu->testtask['subModule'] = 'testreport';
             $this->lang->menugroup->testreport = 'project';
             return $projectID;
+        }
+    }
+
+    /**
+     * Set chart datas of cases.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function setChartDatas($taskID)
+    {
+        $this->loadModel('report');
+        $task   = $this->loadModel('testtask')->getById($taskID);
+        foreach($this->lang->testtask->report->charts as $chart => $title)
+        {
+            if(strpos($chart, 'testTask') === false) continue;
+
+            $chartFunc   = 'getDataOf' . $chart;
+            $chartData   = $this->testtask->$chartFunc($taskID);
+            $chartOption = $this->testtask->mergeChartOption($chart);
+            if(!empty($chartType)) $chartOption->type = $chartType;
+
+            $this->view->charts[$chart] = $chartOption;
+            $this->view->datas[$chart]  = $this->report->computePercent($chartData);
         }
     }
 }

@@ -1353,12 +1353,13 @@ class story extends control
     /**
      * get data to export
      *
-     * @param  int $productID
+     * @param  int    $productID
      * @param  string $orderBy
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy)
+    public function export($productID, $orderBy, $projectID = 0)
     { 
         /* format the fields of every story in order to export data. */
         if($_POST)
@@ -1551,6 +1552,14 @@ class story extends control
 
             }
 
+            if($projectID)
+            {
+                $header = new stdclass();
+                $header->name      = 'project';
+                $header->tableName = TABLE_PROJECT;
+
+                $this->post->set('header', $header);
+            }
             if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
 
             $this->post->set('fields', $fields);

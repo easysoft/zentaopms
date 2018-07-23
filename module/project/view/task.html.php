@@ -82,7 +82,7 @@ js::set('browseType', $browseType);
         elseif($menuType != 'status' and $menuType != 'QUERY')
         {
             $label   = "<span class='text'>{$menuItem->text}</span>";
-            $label  .= $menuType == $browseType ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
+            $label  .= $menuType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
             $active  = $menuType == $browseType ? 'btn-active-text' : '';
             echo html::a(inlink('task', "project=$projectID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active'");
         }

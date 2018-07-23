@@ -18,7 +18,7 @@
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
     <?php if(isset($menuItem->hidden)) continue;?>
     <?php $label   = "<span class='text'>{$menuItem->text}</span>";?>
-    <?php $label  .= $menuItem->name == $browseType ? "<span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';?>
+    <?php $label  .= $menuItem->name == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';?>
     <?php $active  = $menuItem->name == $browseType ? 'btn-active-text' : '';?>
     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType={$menuItem->name}"), $label, '', "class='btn btn-link $active' id='{$menuItem->name}'");?>
     <?php endforeach;?>
