@@ -103,7 +103,9 @@ class releaseModel extends model
      */
     public function create($productID, $branch = 0)
     {
-        $buildID = 0;
+        $productID = (int)$productID;
+        $branch    = (int)$branch;
+        $buildID   = 0;
         if($this->post->build == false && $this->post->name)
         {
             $build = $this->dao->select('*')->from(TABLE_BUILD)
@@ -186,11 +188,13 @@ class releaseModel extends model
      */
     public function update($releaseID)
     {
-        $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
-        $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
+        $releaseID  = (int)$releaseID;
+        $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
+        $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
+            ->cleanInt('product');
             ->remove('files,labels,allchecker,uid')
             ->get();
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->edit['id'], $this->post->uid);

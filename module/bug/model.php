@@ -927,8 +927,8 @@ class bugModel extends model
             if(dao::isError()) return false;
 
             $buildData = new stdclass();
-            $buildData->product = $oldBug->product;
-            $buildData->branch  = $oldBug->branch;
+            $buildData->product = (int)$oldBug->product;
+            $buildData->branch  = (int)$oldBug->branch;
             $buildData->project = $bug->buildProject;
             $buildData->name    = $bug->buildName;
             $buildData->date    = date('Y-m-d');
