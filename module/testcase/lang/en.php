@@ -148,7 +148,7 @@ $lang->testcase->priList[4] = 4;
 
 /* Define the types. */
 $lang->testcase->typeList['']            = '';
-$lang->testcase->typeList['feature']     = 'Function';
+$lang->testcase->typeList['feature']     = 'Feature';
 $lang->testcase->typeList['performance'] = 'Performance';
 $lang->testcase->typeList['config']      = 'Config';
 $lang->testcase->typeList['install']     = 'Install';
