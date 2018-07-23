@@ -433,6 +433,7 @@ class productModel extends model
         $oldProducts = $this->getByIdList($this->post->productIDList);
         foreach($data->productIDList as $productID)
         {
+            $productID = (int)$productID;
             $products[$productID] = new stdClass();
             $products[$productID]->name   = $data->names[$productID];
             $products[$productID]->code   = $data->codes[$productID];
