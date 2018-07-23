@@ -476,7 +476,8 @@ class storyModel extends model
         }
 
         $story = fixer::input('post')
-            ->cleanInt('product,module,pri,duplicateStory,estimate')
+            ->cleanInt('product,module,pri,duplicateStory')
+            ->cleanFloat('estimate')
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
