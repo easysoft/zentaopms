@@ -36,32 +36,7 @@
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
 $(document).ready(function()
 {
-    'use strict';
-
-    var $datatable  = $('table.datatable').first();
-    var datatableId = $datatable.attr('id');
-    var dtSetting   = $.cookie('datatable.<?php echo $datatableId?>' + '.cols') || {};
-    if(dtSetting === 'null') dtSetting = {};
-    if(typeof dtSetting === 'string') dtSetting = $.parseJSON(dtSetting);
-    var $modal = $('#customDatatable');
-    var $checkList = $modal.find('.modal-body > .table > tbody');
-
-    $datatable.find('thead>tr>th').each(function(idx)
-    {
-        var $th = $(this);
-        idx = $th.data('index') || idx;
-        var colSetting = dtSetting[idx];
-        $th.toggleClass('ignore', !!(colSetting && colSetting.ignore));
-    });
-
-    $checkList.on('click', 'tr', function()
-    {
-        var $tr = $(this);
-        if($tr.hasClass('disabled')) return;
-        $tr.toggleClass('checked');
-    });
-
-    $datatable.datatable(
+    var datatableOptions =
     {
         customizable  : false, 
         sortable      : false,
@@ -73,19 +48,46 @@ $(document).ready(function()
         fixedHeader: true,
         ready: function()
         {
-            $datatable.addClass('datatable-origin');
-            if ($datatable.hasClass('has-sort-head'))
+            this.$table.addClass('datatable-origin');
+            if (this.$table.hasClass('has-sort-head'))
             {
                 this.$datatable.find('.table').addClass('has-sort-head');
             }
             this.$datatable.find('.sparkline').sparkline();
         }
-    });
+    };
 
-    $(window).on('fixFooter', function(e, isFixed)
+    window.initDatatable = function($datatable)
     {
-        $('body').toggleClass('has-fixed-footer', isFixed);
-    });
+        $datatable = $datatable || $('table.datatable').first();
+        if(!$datatable.length) return null;
+        var $datatable  = $('table.datatable').first();
+        var datatableId = $datatable.attr('id');
+        var dtSetting   = $.cookie('datatable.<?php echo $datatableId?>' + '.cols') || {};
+        if(dtSetting === 'null') dtSetting = {};
+        if(typeof dtSetting === 'string') dtSetting = $.parseJSON(dtSetting);
+
+        $datatable.datatable(datatableOptions);
+
+
+        $datatable.find('thead>tr>th').each(function(idx)
+        {
+            var $th = $(this);
+            idx = $th.data('index') || idx;
+            var colSetting = dtSetting[idx];
+            $th.toggleClass('ignore', !!(colSetting && colSetting.ignore));
+        });
+        return $datatable;
+    };
+
+    var $datatable = initDatatable();
+    if($datatable && $datatable.length)
+    {
+        $('#main').on('beforeTableReload', '[data-ride="table"]', function()
+        {
+            initDatatable($datatable);
+        });
+    }
 
     window.saveDatatableConfig = function(name, value, reload, global)
     {
@@ -102,6 +104,20 @@ $(document).ready(function()
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });
     };
+    
+    var $modal = $('#customDatatable');
+    var $checkList = $modal.find('.modal-body > .table > tbody');
+    $checkList.on('click', 'tr', function()
+    {
+        var $tr = $(this);
+        if($tr.hasClass('disabled')) return;
+        $tr.toggleClass('checked');
+    });
+
+    $(window).on('fixFooter', function(e, isFixed)
+    {
+        $('body').toggleClass('has-fixed-footer', isFixed);
+    });
 });
 </script>
 <?php endif;?>
