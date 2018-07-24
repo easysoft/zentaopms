@@ -606,7 +606,7 @@ class docModel extends model
             ->add('version', 1)
             ->setDefault('product,project,module', 0)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
-            ->cleanInt('product,project,module')
+            ->cleanInt('product,project,module,lib')
             ->join('groups', ',')
             ->join('users', ',')
             ->remove('files,labels,uid')

@@ -168,7 +168,7 @@ class storyModel extends model
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         if($this->checkForceReview()) $story->status = 'draft';
-        if($story->status == 'draft') $story->stage   = $this->post->plan > 0 ? 'planned' : 'wait';
+        if($story->status == 'draft') $story->stage  = $this->post->plan > 0 ? 'planned' : 'wait';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($this->config->story->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
@@ -476,7 +476,8 @@ class storyModel extends model
         }
 
         $story = fixer::input('post')
-            ->cleanInt('product,module,pri,duplicateStory,estimate')
+            ->cleanInt('product,module,pri,duplicateStory')
+            ->cleanFloat('estimate')
             ->add('assignedDate', $oldStory->assignedDate)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)

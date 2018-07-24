@@ -484,6 +484,8 @@ class customModel extends model
             }
         }
 
-        $this->loadModel('setting')->setItems("system.{$moduleName}", $requiredFields);
+        $this->loadModel('setting');
+        $this->setting->deleteItems("owner=system&module={$moduleName}");
+        $this->setting->setItems("system.{$moduleName}", $requiredFields);
     }
 }
