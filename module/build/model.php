@@ -199,6 +199,7 @@ class buildModel extends model
         $build = fixer::input('post')
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
+            ->cleanInt('product,branch')
             ->add('project', (int)$projectID)
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->remove('resolvedBy,allchecker,files,labels,uid')
@@ -230,8 +231,10 @@ class buildModel extends model
      */
     public function update($buildID)
     {
-        $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$buildID)->fetch();
+        $buildID  = (int)$buildID;
+        $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+            ->cleanInt('product,branch')
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
         if(!isset($build->branch)) $build->branch = $oldBuild->branch;
@@ -240,7 +243,7 @@ class buildModel extends model
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
-            ->where('id')->eq((int)$buildID)
+            ->where('id')->eq($buildID)
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
             ->exec();
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();

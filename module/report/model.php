@@ -95,7 +95,7 @@ class reportModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.parent')->eq(0)
-            ->andWhere('t2.status')->eq('done')
+            ->andWhere('t2.status')->eq('closed')
             ->beginIF($begin)->andWhere('t2.begin')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t2.end')->le($end)->fi()
             ->orderBy('t2.end_desc')
@@ -288,32 +288,45 @@ class reportModel extends model
             ->andWhere('t1.status')->notin('cancel, closed, done, pause')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
+            ->andWhere('assignedTo')->ne('')
             ->beginIF($dept)->andWhere('t3.dept')->in($depts)->fi()
-            ->fetchGroup('assignedTo', 'id');
+            ->fetchAll('id');
 
         if(empty($tasks)) return array();
 
         /* Fix bug for children. */
-        $parents = array();
-        foreach($tasks as $user => $userTasks)
+        $parents       = array();
+        $taskIdList    = array();
+        $taskGroups    = array();
+        foreach($tasks as $task)
         {
-            if($user)
+            if(!empty($task->parent)) $parents[$task->parent] = $task->parent;
+            $taskGroups[$task->assignedTo][$task->id] = $task;
+        }
+
+        $multiTaskTeams = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('task')
+            ->andWhere('root')->in(array_keys($tasks))
+            ->fetchGroup('account', 'root');
+        foreach($multiTaskTeams as $assignedTo => $multiTasks)
+        {
+            foreach($multiTasks as $task)
             {
-                foreach($userTasks as $task)
-                {
-                    if(!empty($task->parent)) $parents[$task->parent] = $task->parent;
-                }
+                $userTask = $tasks[$task->root];
+                $userTask->estimate = $task->estimate;
+                $userTask->consumed = $task->consumed;
+                $userTask->left     = $task->left;
+                $taskGroups[$assignedTo][$task->root] = $userTask;
             }
         }
 
         $workload = array();
-        foreach($tasks as $user => $userTasks)
+        foreach($taskGroups as $user => $userTasks)
         {
             if($user)
             {
                 foreach($userTasks as $task)
                 {
-                    if(!empty($parents) && in_array($task->id, $parents)) continue;
+                    if(isset($parents[$task->id])) continue;
                     $workload[$user]['task'][$task->projectName]['count']     = isset($workload[$user]['task'][$task->projectName]['count']) ? $workload[$user]['task'][$task->projectName]['count'] + 1 : 1;
                     $workload[$user]['task'][$task->projectName]['manhour']   = isset($workload[$user]['task'][$task->projectName]['manhour']) ? $workload[$user]['task'][$task->projectName]['manhour'] + $task->left : $task->left;
                     $workload[$user]['task'][$task->projectName]['projectID'] = $task->project;

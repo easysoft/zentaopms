@@ -378,7 +378,8 @@ class projectModel extends model
      */
     public function update($projectID)
     {
-        $oldProject = $this->dao->findById((int)$projectID)->from(TABLE_PROJECT)->fetch();
+        $projectID  = (int)$projectID;
+        $oldProject = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
         $team = $this->getTeamMemberPairs($projectID);
         $this->lang->project->team = $this->lang->project->teamname;
         $projectID = (int)$projectID;
@@ -443,6 +444,7 @@ class projectModel extends model
         $oldProjects = $this->getByIdList($this->post->projectIDList);
         foreach($data->projectIDList as $projectID)
         {
+            $projectID = (int)$projectID;
             $projects[$projectID] = new stdClass();
             $projects[$projectID]->name   = $data->names[$projectID];
             $projects[$projectID]->code   = $data->codes[$projectID];
