@@ -1,5 +1,5 @@
 <?php include '../../common/view/header.lite.html.php';?>
-<main>
+<main id="main">
   <div class="container">
     <div id="mainContent" class='main-content'>
       <div class='main-header'>
