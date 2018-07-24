@@ -904,7 +904,7 @@ class block extends control
 
         /* Get tasks. */
         $yesterday = date('Y-m-d', strtotime('-1 day'));
-        $tasks = $this->dao->select("project, count(id) as totalTasks, count(status not in ('wait,doing,pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(if(status != 'cancel', consumed, 0)) as totalConsumed, sum(if(status != 'cancel', `left`, 0)) as totalLeft")->from(TABLE_TASK)
+        $tasks = $this->dao->select("project, count(id) as totalTasks, count(status not in ('wait,doing,pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel', `left`, 0)) as totalLeft")->from(TABLE_TASK)
             ->where('project')->in($projectIDList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
