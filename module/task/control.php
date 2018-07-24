@@ -221,11 +221,11 @@ class task extends control
         if(!empty($_POST))
         {
             $mails = $this->task->batchCreate($projectID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            if(!empty($iframe)) die(js::reload('parent.parent'));
-            die(js::locate($storyLink, 'parent'));
+            if(!empty($iframe)) $this->send(array('result' => 'success', 'locate' => 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
         }
 
         /* Set Custom*/
