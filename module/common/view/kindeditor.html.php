@@ -72,6 +72,17 @@ $uid = uniqid('');
         var editorTool  = editorToolsMap[options.tools || editor.tools] || simpleTools;
         var placeholder = $editor.attr('placeholder') || options.placeholder || '';
         
+        /* Remove fullscreen in modal. */
+        if(config.onlybody == 'yes')
+        {
+            var newEditorTool = new Array();
+            for(i in editorTool)
+            {
+                if(editorTool[i] != 'fullscreen') newEditorTool.push(editorTool[i]);
+            }
+            editorTool = newEditorTool;
+        }
+
         $.extend(options, 
         {
             items: editorTool,

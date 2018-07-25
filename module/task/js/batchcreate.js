@@ -3,6 +3,26 @@ $(function()
 {
     removeDitto();
     if($('#batchCreateForm table thead tr th.c-name').width() < 200) $('#batchCreateForm table thead tr th.c-name').width(200);
+
+    $('#batchCreateForm').ajaxForm(
+    {
+        finish:function(response)
+        {
+            if(response.locate)
+            {
+                if(response.locate == 'parent')
+                {
+                    parent.$.cookie('selfClose', 1);
+                    setTimeout(function(){parent.$.closeModal(null, 'this')}, 1200);
+                }
+                else
+                {
+                    setTimeout(function(){window.location.href = response.locate;}, 1200);
+                }
+            }
+            return false;
+        }
+    });
 });
 
 /* Get select of stories.*/
