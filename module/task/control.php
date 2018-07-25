@@ -1289,8 +1289,10 @@ class task extends control
             if(!$this->session->taskWithChildren)
             {
                 $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
-                    ->andWhere('parent')->in(array_keys($tasks))
-                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                    ->andWhere('parent')->ne(0)
+                    ->andWhere('parent', true)->in(array_keys($tasks))
+                    ->beginIF($this->post->exportType == 'selected')->orWhere('id')->in($this->cookie->checkedItem)->fi()
+                    ->markRight(1)
                     ->orderBy($sort)
                     ->fetchGroup('parent', 'id');
                 if(!empty($children))
@@ -1324,7 +1326,12 @@ class task extends control
                         {
                             array_splice($tasks, $position, 0, $children[$task->id]);
                             $position += count($children[$task->id]);
+                            unset($children[$task->id]);
                         }
+                    }
+                    if($children)
+                    {
+                        foreach($children as $childTasks) $tasks += $childTasks;
                     }
                 }
             }
