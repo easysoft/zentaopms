@@ -18,7 +18,7 @@
     <?php echo html::a(inlink("all", "status=wait&projectID=$project->id&orderBy=$orderBy&productID=$productID"),      "<span class='text'>{$lang->project->statusList['wait']}</span>", '', "class='btn btn-link' id='waitTab'");?>
     <?php echo html::a(inlink("all", "status=doing&projectID=$project->id&orderBy=$orderBy&productID=$productID"),     "<span class='text'>{$lang->project->statusList['doing']}</span>", '', "class='btn btn-link' id='doingTab'");?>
     <?php echo html::a(inlink("all", "status=suspended&projectID=$project->id&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$lang->project->statusList['suspended']}</span>", '', "class='btn btn-link' id='suspendedTab'");?>
-    <?php echo html::a(inlink("all", "status=done&projectID=$project->id&orderBy=$orderBy&productID=$productID"),      "<span class='text'>{$lang->project->statusList['done']}</span>", '', "class='btn btn-link' id='doneTab'");?>
+    <?php echo html::a(inlink("all", "status=closed&projectID=$project->id&orderBy=$orderBy&productID=$productID"),    "<span class='text'>{$lang->project->statusList['closed']}</span>", '', "class='btn btn-link' id='closedTab'");?>
     <div class='input-control space w-180px'>
       <?php echo html::select('product', $products, $productID, "class='chosen form-control' onchange='byProduct(this.value, $projectID, \"$status\")'");?>
     </div>
