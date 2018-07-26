@@ -230,7 +230,7 @@
                     <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
                     <?php echo html::input("teamEstimate[]", $member->estimate, "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' autocomplete='off' disabled='false' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
                     <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
                   </div>
