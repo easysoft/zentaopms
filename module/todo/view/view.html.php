@@ -71,7 +71,7 @@
             <?php if(isset($todo->assignedTo)):?>
             <tr>
               <th><?php echo $lang->todo->assignTo;?></th>
-              <td><?php echo $todo->assignedTo;?></td>
+              <td><?php echo zget($users, $todo->assignedTo);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->assignTo . $lang->todo->date;?></th>

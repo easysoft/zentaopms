@@ -1,0 +1,3 @@
+#end_chosen .chosen-single {border-left: none;}
+#begin_chosen .chosen-results, #end_chosen .chosen-results {max-height: 150px}
+#todoAssignForm {margin-bottom: 110px;}

@@ -287,8 +287,14 @@ class todo extends control
             if(empty($_POST['assignedTo'])) die(js::error($this->lang->todo->noAssignedTo));
             $this->todo->assignTo($todoID);
             if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            die(js::reload('parent.parent'));
         }
+
+        $this->view->todo    = $this->todo->getById($todoID);
+        $this->view->members = $this->loadModel('user')->getPairs();
+        $this->view->times   = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
+        $this->view->time    = date::now();
+        $this->display();
     }
 
     /**
