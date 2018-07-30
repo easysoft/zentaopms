@@ -35,7 +35,7 @@
             <th class="w-60px"><?php echo $lang->task->consumedThisTime;?></th>
             <th class="w-60px"><?php echo $lang->task->leftThisTime;?></th>
             <th><?php echo $lang->comment;?></th>
-            <th class='c-actions-2'><?php echo $lang->actions;?></th>
+            <th class='c-actions-2'><?php if(empty($task->team) or $task->assignedTo == $this->app->user->account) echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -47,6 +47,7 @@
             <td><?php echo $estimate->consumed;?></td>
             <td><?php echo $estimate->left;?></td>
             <td class="text-left"><?php echo $estimate->work;?></td>
+            <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account):?>
             <td align='center' class='c-actions'>
               <?php
               if($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing')
@@ -57,6 +58,7 @@
               ?>
             </td>
           </tr>
+          <?php endif;?>
           <?php endforeach;?>
           <?php endif;?>
       <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
