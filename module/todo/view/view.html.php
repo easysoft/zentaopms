@@ -28,9 +28,9 @@
         <div class='detail-title'>
           <?php
           echo $lang->todo->desc;
-          if($todo->type == 'bug')   echo html::a($this->createLink('bug',   'view', "id={$todo->idvalue}"), '  BUG#'   . $todo->idvalue);
-          if($todo->type == 'task')  echo html::a($this->createLink('task',  'view', "id={$todo->idvalue}"), '  TASK#'  . $todo->idvalue);
-          if($todo->type == 'story') echo html::a($this->createLink('story', 'view', "id={$todo->idvalue}"), '  STORY#' . $todo->idvalue);
+          if($todo->type == 'bug')   common::printLink('bug',   'view', "id={$todo->idvalue}", '  BUG#'   . $todo->idvalue);
+          if($todo->type == 'task')  common::printLink('task',  'view', "id={$todo->idvalue}", '  TASK#'  . $todo->idvalue);
+          if($todo->type == 'story') common::printLink('story', 'view', "id={$todo->idvalue}", '  STORY#' . $todo->idvalue);
           ?>
         </div>
         <div class='detail-content'><?php echo $todo->desc;?></div>
@@ -71,7 +71,7 @@
             <?php if(isset($todo->assignedTo)):?>
             <tr>
               <th><?php echo $lang->todo->assignTo;?></th>
-              <td><?php echo $todo->assignedTo;?></td>
+              <td><?php echo zget($users, $todo->assignedTo);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->assignTo . $lang->todo->date;?></th>
@@ -123,15 +123,12 @@
   <div class="container"></div>
   <div class="btn-toolbar">
     <?php
-    if($todo->account == $app->user->account)
-    {
-        if($todo->status != 'closed') echo html::a($this->createLink('todo', 'edit', "todoID=$todo->id"), "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
-        if($todo->status == 'done' || $todo->status == 'closed') echo html::a($this->createLink('todo', 'activate', "todoID=$todo->id"), "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
-        if($todo->status == 'done') echo html::a($this->createLink('todo', 'close', "todoID=$todo->id"), "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
-        echo html::a($this->createLink('todo', 'delete', "todoID=$todo->id"), "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
+    if($todo->status == 'done' || $todo->status == 'closed') common::printLink('todo', 'activate', "todoID=$todo->id", "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
+    if($todo->status == 'done') common::printLink('todo', 'close', "todoID=$todo->id", "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
+    common::printLink('todo', 'edit', "todoID=$todo->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
+    common::printLink('todo', 'delete', "todoID=$todo->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
 
-        echo html::a('#commentModal', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' data-toggle='modal' class='btn'");
-    }
+    echo html::a('#commentModal', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' data-toggle='modal' class='btn'");
 
     if($this->session->todoList)
     {
