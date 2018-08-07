@@ -1688,7 +1688,7 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchPairs();
-        if(!$users) return array();
+        if(!$users) return array('' => '');
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';

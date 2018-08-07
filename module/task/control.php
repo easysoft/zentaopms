@@ -59,7 +59,7 @@ class task extends control
         $task->name       = '';
         $task->story      = $storyID;
         $task->type       = '';
-        $task->pri        = '';
+        $task->pri        = '3';
         $task->estimate   = '';
         $task->desc       = '';
         $task->estStarted = '';
