@@ -148,7 +148,18 @@ class projectModel extends model
             {
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
-                if(!empty($subMenu)) $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
+                if(!empty($subMenu))
+                {
+                    foreach($subMenu as $menu)
+                    {
+                        if($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']))
+                        {
+                            $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                            break;
+                        }
+                    }
+                    $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
+                }
             }
         }
     }
