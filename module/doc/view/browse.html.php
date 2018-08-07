@@ -133,7 +133,7 @@ var browseType = '<?php echo $browseType;?>';
           </tbody>
         </table>
       </div>
-      <?php if(empty($docs) and empty($modules)):?>
+      <?php if(!empty($docs)):?>
       <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
       <?php endif;?>
       <?php endif;?>
