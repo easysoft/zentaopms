@@ -160,7 +160,8 @@ class file extends control
             else
             {
                 /* Down the file. */
-                $fileName = $file->title . '.' . $file->extension;
+                $fileName = $file->title;
+                if(!preg_match("/\.{$file->extension}$/", $fileName)) $fileName .= '.' . $file->extension;
                 $fileData = file_get_contents($file->realPath);
                 $this->sendDownHeader($fileName, $file->extension, $fileData);
             }
