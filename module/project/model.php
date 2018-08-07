@@ -2701,7 +2701,7 @@ class projectModel extends model
      */
     public function getProjectTree($projectID)
     {
-        $fullTrees = $this->loadModel('tree')->getTaskStructure($projectID, 0, $manage = false);
+        $fullTrees = $this->loadModel('tree')->getTaskStructure($projectID, 0);
         array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $projectID));
         foreach($fullTrees as $i => $tree)
         {

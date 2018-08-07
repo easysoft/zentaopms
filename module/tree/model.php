@@ -483,11 +483,10 @@ class treeModel extends model
      * Get full task tree
      * @param  integer $projectID, common value is project id
      * @param  integer $productID
-     * @param  integer $moduleID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getTaskStructure($rootID, $productID = 0, $manage = true)
+    public function getTaskStructure($rootID, $productID = 0)
     {
         $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
 
@@ -502,8 +501,8 @@ class treeModel extends model
             return $this->getDataStructure($stmt, 'task');
         }
 
-        /* if not manage, only get linked modules and ignore others. */
-        $projectModules = $manage ? array() : $this->getTaskTreeModules($rootID, true);
+        /* only get linked modules and ignore others. */
+        $projectModules = $this->getTaskTreeModules($rootID, true);
 
         /* Get module according to product. */
         $fullTrees = array();
