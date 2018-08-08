@@ -51,7 +51,7 @@
           <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
           <div class="col-sm-9 ">
             <div class="input-control has-icon-right">
-              <input type="text" class="form-control form-date" id="todoDate" name="date" placeholder="">
+              <input type="text" class="form-control date" id="todoDate" name="date" placeholder="">
               <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
@@ -131,6 +131,7 @@
                           toggle = !$block.hasClass('show-form');
                       }
                       $block.toggleClass('show-form', toggle);
+                      $block.find('.date').datepicker();
                       if(toggle)
                       {
                           setTimeout(function() {$titleInput.focus();}, 50);
