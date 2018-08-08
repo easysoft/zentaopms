@@ -170,10 +170,12 @@ function formatTime($time, $format = '')
  * @access protected
  * @return void
  */
-function __autoload($class)
+function autoloader($class)
 {
     if(!class_exists($class))
     {
         if($class == 'post_max_size' or $class == 'max_input_vars') eval('class ' . $class . ' {};');
     }
 }
+
+spl_autoload_register('autoloader');
