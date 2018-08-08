@@ -447,5 +447,11 @@ $(function()
         });
         e.stopPropagation();
     });
+
+    /* Init datepicker for search. */
+    $searchForm.find('.table-condensed input.date').each(function()
+    {
+        setDateField($(this), $(this).attr('id').substr(5));
+    })
 });
 </script>
