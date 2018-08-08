@@ -101,7 +101,7 @@
           <?php else:?>
           <span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
           <?php endif;?>
-          <span class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo $todo->pri;?></span>
+          <span class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span>
           <span class="todo-title"><?php echo $todo->name;?></span>
         </a>
       </li>
