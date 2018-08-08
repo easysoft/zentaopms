@@ -206,6 +206,16 @@ class productplanModel extends model
             ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
             ->remove('delta,uid,future')
             ->get();
+        if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'begin') !== false and empty($_POST['begin']))
+        {
+            dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+        }
+        if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'end') !== false and empty($_POST['end']))
+        {
+            dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
+        }
+        if(dao::isError()) return false;
+
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCTPLAN)
             ->data($plan)
@@ -237,6 +247,15 @@ class productplanModel extends model
             ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
             ->remove('delta,uid,future')
             ->get();
+        if(!$this->post->future and strpos($this->config->productplan->edit->requiredFields, 'begin') !== false and empty($_POST['begin']))
+        {
+            dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+        }
+        if(!$this->post->future and strpos($this->config->productplan->edit->requiredFields, 'end') !== false and empty($_POST['end']))
+        {
+            dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
+        }
+        if(dao::isError()) return false;
 
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)
