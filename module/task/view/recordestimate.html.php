@@ -13,8 +13,11 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <style>
-<?php if(empty($estimates) and strpos('done,cancel,closed', $task->status) === false):?>
-#recordForm table{margin-top:60px;}
+<?php if(empty($estimates) and strpos('wait,pause,doing', $task->status) !== false):?>
+#recordForm {margin-top:60px;}
+<?php endif;?>
+<?php if(count($estimates) == 1 and strpos('wait,pause,doing', $task->status) !== false):?>
+#recordForm {margin-top:20px;}
 <?php endif;?>
 #recordForm table .form-actions{padding:25px;}
 </style>
@@ -32,7 +35,7 @@
         <?php endif;?>
       </div>
     </div>
-    <form id="recordForm" method='post' target='hiddenwin' style='margin-top:25px'>
+    <form id="recordForm" method='post' target='hiddenwin'>
       <table class='table table-form table-fixed'>
         <thead>
           <tr class='text-center'>
@@ -89,10 +92,10 @@
             <td></td>
           </tr>
           <?php endfor;?>
-          <?php endif;?>
           <tr>
             <td colspan='6' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td>
           </tr>
+          <?php endif;?>
         </tbody>
       </table>
     </form>
