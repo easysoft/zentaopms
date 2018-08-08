@@ -267,15 +267,17 @@ js::set('browseType', $browseType);
           <?php if($canBatchChangeModule):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
+            <?php $withSearch = count($modules) > 10;?>
+            <?php if($withSearch):?>
             <div class="dropdown-menu search-list" data-ride="searchList">
-              <?php $withSearch = count($modules) > 10;?>
-              <?php if($withSearch):?>
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-              <?php endif;?>
+            <?php else:?>
+            <div class="dropdown-menu">
+            <?php endif;?>
               <div class="list-group">
                 <?php
                 foreach($modules as $moduleId => $module)
@@ -292,19 +294,21 @@ js::set('browseType', $browseType);
           <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
+            <?php
+            $withSearch = count($memberPairs) > 10;
+            $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
+            echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
+            if($withSearch):
+            ?>
             <div class="dropdown-menu search-list" data-ride="searchList">
-              <?php
-              $withSearch = count($memberPairs) > 10;
-              $actionLink = $this->createLink('task', 'batchAssignTo', "projectID=$projectID");
-              echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
-              if($withSearch):
-              ?>
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-              <?php endif;?>
+            <?php else:?>
+            <div class="dropdown-menu">
+            <?php endif;?>
               <div class="list-group">
                 <?php
                 foreach($memberPairs as $key => $value)
