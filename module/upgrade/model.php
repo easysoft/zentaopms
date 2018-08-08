@@ -228,6 +228,9 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('10.0'));
                 $this->fixStorySpecTitle();
                 $this->removeUnlinkPriv();//Remove unlink privilege for story, bug and testcase module.
+            case '10_1':
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
+                $this->execSQL($xuanxuanSql);
         }
 
         $this->deletePatch();
@@ -339,6 +342,7 @@ class upgradeModel extends model
             case '10_0_alpha': $confirmContent .= file_get_contents($this->getUpgradeFile('10.0.alpha'));
             case '10_0_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('10.0.beta'));
             case '10_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('10.0'));
+            case '10_1':       $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql');
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

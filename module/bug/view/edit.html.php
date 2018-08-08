@@ -43,14 +43,14 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <div class='cell'>
           <div class='form-group'>
             <div class="input-control has-icon-right">
-              <?php echo html::input('title', $bug->title, "class='form-control bug-title' autocomplete='off' style='color:{$bug->color}' required");?>
               <div class="colorpicker">
-                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar" style="background:<?php echo $bug->color;?>"></span><i class="ic"></i></button>
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                 <ul class="dropdown-menu clearfix">
                   <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
                 </ul>
-                <input type="hidden" class="colorpicker" id="color" name="color" value="<?php $bug->color;?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".bug-title"  data-provide="colorpicker">
+                <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $bug->color;?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".bug-title"  data-provide="colorpicker">
               </div>
+              <?php echo html::input('title', $bug->title, "class='form-control bug-title' autocomplete='off'");?>
             </div>
           </div>
           <div class='detail'>

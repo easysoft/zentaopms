@@ -28,9 +28,9 @@
     <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span></p>
   </div>
   <?php else:?>
-  <form class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
+  <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
     <?php $canBatchEdit  = common::hasPriv('bug', 'batchEdit');?>
-    <table class="table has-sort-head table-fixed". id='bugList'>
+    <table class="table has-sort-head table-fixed" id='bugList'>
       <?php $vars = "type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>

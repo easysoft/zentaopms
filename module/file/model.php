@@ -152,7 +152,7 @@ class fileModel extends model
                 $title             = isset($_POST[$labelsName][$id]) ? $_POST[$labelsName][$id] : '';
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
-                $file['title']     = !empty($title) ? htmlspecialchars($title) : str_replace('.' . $file['extension'], '', $filename);
+                $file['title']     = (!empty($title) and $title != $filename) ? htmlspecialchars($title) : str_replace('.' . $file['extension'], '', $filename);
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
@@ -167,7 +167,7 @@ class fileModel extends model
             $title             = isset($_POST[$labelsName][0]) ? $_POST[$labelsName][0] : '';
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = !empty($title) ? htmlspecialchars($title) : substr($name, 0, strpos($name, $file['extension']) - 1);
+            $file['title']     = (!empty($title) and $title != $name) ? htmlspecialchars($title) : substr($name, 0, strpos($name, $file['extension']) - 1);
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
@@ -488,7 +488,7 @@ class fileModel extends model
             $file['size']      = strlen($imageData);
             $file['addedBy']   = $this->app->user->account;
             $file['addedDate'] = helper::today();
-            $file['title']     = basename($file['pathname']);
+            $file['title']     = str_replace(".$extension", '', basename($file['pathname']));
 
             file_put_contents($this->savePath . $this->getSaveName($file['pathname']), $imageData);
             $this->dao->insert(TABLE_FILE)->data($file)->exec();

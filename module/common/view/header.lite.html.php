@@ -22,20 +22,22 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
   if($config->debug)
   {
       $timestamp = time();
-      js::import($jsRoot . 'jquery/lib.js');
-      js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
-      js::import($jsRoot . 'my.full.js?t=' . $timestamp);
-
+      
       css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       css::import($defaultTheme . 'style.css?t=' . $timestamp);
 
       css::import($langTheme);
       if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css?t=' . $timestamp);
+
+      js::import($jsRoot . 'jquery/lib.js');
+      js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
+      js::import($jsRoot . 'my.full.js?t=' . $timestamp);
+
   }
   else
   {
-      js::import($jsRoot . 'all.js');
       css::import($defaultTheme . $this->cookie->lang . '.' . $this->cookie->theme . '.css');
+      js::import($jsRoot . 'all.js');
   }
 
   if(!defined('IN_INSTALL') and commonModel::isTutorialMode())

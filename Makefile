@@ -39,6 +39,16 @@ pms:
 	find zentaopms -name tests |xargs rm -fr
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
+	#xuanxuan
+	mkdir xuanxuan
+	cd xuanxuan; svn export https://github.com/easysoft/xuanxuan.git/branches/master/ranzhi/
+	cd xuanxuan; svn export https://github.com/easysoft/xuanxuan.git/branches/master/zentao/
+	mkdir xuanxuan/xxb
+	cd xuanxuan/xxb; svn export https://github.com/easysoft/xuanxuan.git/branches/master/xxb/VERSION
+	cd xuanxuan/zentao; make
+	unzip xuanxuan/zentao/xuanxuan.zentao.*.zip -d zentaoxx
+	cp zentaoxx/build/* zentaopms/ -r
+	cat zentaoxx/build/db/xuanxuan.sql >> zentaopms/db/zentao.sql
 	# change mode.
 	chmod -R 777 zentaopms/tmp/
 	chmod -R 777 zentaopms/www/data
@@ -46,11 +56,11 @@ pms:
 	chmod 777 zentaopms/module
 	chmod 777 zentaopms/www
 	chmod a+rx zentaopms/bin/*
-	mkdir zentaopms/config/ext
-	for module in `ls zentaopms/module/`; do mkdir zentaopms/module/$$module/ext; done
+	if [ ! -d "zentaopms/config/ext" ]; then mkdir zentaopms/config/ext; fi
+	for module in `ls zentaopms/module/`; do if [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
-	zip -r -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	rm -fr zentaopms
+	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
+	rm -fr zentaopms xuanxuan zentaoxx
 deb:
 	mkdir buildroot
 	cp -r build/debian/DEBIAN buildroot

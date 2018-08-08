@@ -148,7 +148,18 @@ class projectModel extends model
             {
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
-                if(!empty($subMenu)) $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
+                if(!empty($subMenu))
+                {
+                    foreach($subMenu as $menu)
+                    {
+                        if($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']))
+                        {
+                            $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                            break;
+                        }
+                    }
+                    $this->lang->project->menu->{$key}['subMenu'] = $subMenu;
+                }
             }
         }
     }
@@ -1688,7 +1699,7 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchPairs();
-        if(!$users) return array();
+        if(!$users) return array('' => '');
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
@@ -2701,7 +2712,7 @@ class projectModel extends model
      */
     public function getProjectTree($projectID)
     {
-        $fullTrees = $this->loadModel('tree')->getTaskStructure($projectID, 0, $manage = false);
+        $fullTrees = $this->loadModel('tree')->getTaskStructure($projectID, 0);
         array_unshift($fullTrees, array('id' => 0, 'name' => '/', 'type' => 'task', 'actions' => false, 'root' => $projectID));
         foreach($fullTrees as $i => $tree)
         {

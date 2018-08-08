@@ -532,7 +532,7 @@ class baseDAO
      */
     public function get()
     {
-        return $this->processKeywords($this->processSQL());
+        return $this->processKeywords($this->processSQL(false));
     }
 
     /**
@@ -569,7 +569,7 @@ class baseDAO
      * @access public
      * @return string the sql string after process.
      */
-    public function processSQL()
+    public function processSQL($record = true)
     {
         $sql = $this->sqlobj->get();
 
@@ -626,7 +626,7 @@ class baseDAO
             }
         }
 
-        self::$querys[] = $this->processKeywords($sql);
+        if($record) self::$querys[] = $this->processKeywords($sql);
         return $sql;
     }
 
@@ -793,13 +793,13 @@ class baseDAO
 
         if(empty($field))
         {
-            $data = $this->query()->fetch();
+            $data = $this->query($sql)->fetch();
             dao::$cache[$table][$key] = $data;
             return $this->getRow($data);
         }
 
         $this->setFields($field);
-        $result = $this->query()->fetch(PDO::FETCH_OBJ);
+        $result = $this->query($sql)->fetch(PDO::FETCH_OBJ);
         dao::$cache[$table][$key] = $this->getRow($result);
         return $result ? $result->$field : '';
     }
@@ -826,7 +826,7 @@ class baseDAO
             return $result;
         }
 
-        $stmt = $this->query();
+        $stmt = $this->query($sql);
         dao::$cache[$table][$key] = array();
         if(empty($keyField))
         {
@@ -872,7 +872,7 @@ class baseDAO
             return $result;
         }
 
-        $stmt = $this->query();
+        $stmt = $this->query($sql);
         $rows = array();
         while($row = $stmt->fetch())
         {
@@ -906,7 +906,7 @@ class baseDAO
 
         $pairs = array();
         $ready = false;
-        $stmt  = $this->query();
+        $stmt  = $this->query($sql);
         while($row = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             if(!$ready)
