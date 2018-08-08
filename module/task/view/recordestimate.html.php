@@ -12,6 +12,12 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<style>
+<?php if(empty($estimates) and strpos('done,cancel,closed', $task->status) === false):?>
+#recordForm table{margin-top:60px;}
+<?php endif;?>
+#recordForm table .form-actions{padding:25px;}
+</style>
 <?php $team = array_keys($task->team);?>
 <?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
