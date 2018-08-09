@@ -56,9 +56,12 @@ $('#uploader').uploader({
     },
     onUploadComplete: function(files)
     {
-        if (files && files.length)
+        if(files && files.length)
         {
-            location.href = createLink('file', 'uploadImages', 'module=' + module + '&params=' + params + '&uid=' + uid + '&locate=true');
+            setTimeout(function()
+            {
+                location.href = createLink('file', 'uploadImages', 'module=' + module + '&params=' + params + '&uid=' + uid + '&locate=true');
+            }, 1000);
         }
     },
     onBeforeUpload: function(file)

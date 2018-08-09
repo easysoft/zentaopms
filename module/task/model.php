@@ -502,7 +502,7 @@ class taskModel extends model
 
                 if($currentTask->consumed == 0)
                 {
-                    $currentTask->status       = 'wait';
+                    if(!isset($task->status)) $currentTask->status = 'wait';
                     $currentTask->finishedBy   = '';
                     $currentTask->finishedDate = '';
                 }

@@ -93,3 +93,4 @@ $lang->upgrade->fromVersions['10_0_alpha'] = '10.0.alpha';
 $lang->upgrade->fromVersions['10_0_beta']  = '10.0.beta';
 $lang->upgrade->fromVersions['10_0']       = '10.0';
 $lang->upgrade->fromVersions['10_1']       = '10.1';
+$lang->upgrade->fromVersions['10_2']       = '10.2';
