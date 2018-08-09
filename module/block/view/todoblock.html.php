@@ -170,7 +170,7 @@
   {
       var $todoes = $(obj).closest('.block-todoes');
       var $form   = $(obj).closest('form');
-      var $name   = $("input[name='name']").val();
+      var $name   = $form.find("input[name='name']").val();
       if($name == '') 
       {
           $("input[name='name']").addClass('has-error');
@@ -188,6 +188,8 @@
           success: function(todo)
           {
               $todoes.removeClass('show-form');
+              $todoes.closest('.show-form').removeClass('show-form');
+              $todoes.find('.show-form').removeClass('show-form');
               refreshBlock($todoes.parents('div.panel[id^=block]'));
           }
       });
