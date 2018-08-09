@@ -41,7 +41,7 @@
         <h3><?php echo $lang->todo->create;?></h3>
         <div class="form-group">
           <label for="todoName" class="col-sm-2"><?php echo $lang->todo->name?></label>
-          <div class="col-sm-9 required"><input type="text" class="form-control" name="name"></div>
+          <div class="col-sm-9 required"><input type="text" class="form-control" name="name" autocomplete='off'></div>
         </div>
         <div class="form-group">
           <label for="todoPri" class="col-sm-2"><?php echo $lang->todo->pri?></label>
@@ -51,7 +51,7 @@
           <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
           <div class="col-sm-9 ">
             <div class="input-control has-icon-right">
-              <input type="text" class="form-control date" id="todoDate" name="date" placeholder="">
+              <input type="text" class="form-control date" id="todoDate" name="date" placeholder="" autocomplete='off'>
               <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>
