@@ -21,7 +21,7 @@ class file extends control
      * @access public
      * @return void
      */
-    public function buildForm()
+    public function buildForm($fileCount = 1, $percent = 0.9, $filesName = "files", $labelsName = "labels")
     {
         if(!file_exists($this->file->savePath))
         {
@@ -34,6 +34,8 @@ class file extends control
             return false;
         }
 
+        $this->view->filesName  = $filesName;
+        $this->view->labelsName = $labelsName;
         $this->display();
     }
 
