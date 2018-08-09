@@ -231,6 +231,7 @@ class upgradeModel extends model
             case '10_1':
                 $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                 $this->execSQL($xuanxuanSql);
+            case '10_2':
         }
 
         $this->deletePatch();
@@ -343,6 +344,7 @@ class upgradeModel extends model
             case '10_0_beta':  $confirmContent .= file_get_contents($this->getUpgradeFile('10.0.beta'));
             case '10_0':       $confirmContent .= file_get_contents($this->getUpgradeFile('10.0'));
             case '10_1':       $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql');
+            case '10_2':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
