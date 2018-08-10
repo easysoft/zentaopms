@@ -52,8 +52,8 @@
             <th class='w-130px<?php echo zget($visibleFields, 'project', ' hidden') . zget($requiredFields, 'project', '', ' required');?>'><?php echo $lang->bug->project;?></th>
             <th class='w-100px required'><?php echo $lang->bug->openedBuild;?></th>
             <th class='c-title required'><?php echo $lang->bug->title;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'deadline', 'hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->bug->deadline;?></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'steps', 'hidden') . zget($requiredFields, 'steps', '', ' required');?>'><?php echo $lang->bug->steps;?></th>
+            <th class='w-100px<?php echo zget($visibleFields, 'deadline', ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->bug->deadline;?></th>
+            <th class='w-150px<?php echo zget($visibleFields, 'steps', ' hidden') . zget($requiredFields, 'steps', '', ' required');?>'><?php echo $lang->bug->steps;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'type', ' hidden') . zget($requiredFields, 'type', '', ' required');?>'><?php echo $lang->typeAB;?></th>
             <th class='w-80px<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->bug->pri;?></th>
             <th class='w-90px<?php echo zget($visibleFields, 'severity', ' hidden') . zget($requiredFields, 'severity', '', ' required');?>'><?php echo $lang->bug->severity;?></th>
