@@ -54,7 +54,7 @@ js::set('suiteID',        $suiteID);
       </p>
     </div>
     <?php else:?>
-    <form class='main-table table-case' id='batchForm' method='post'>
+    <form class='main-table table-case' id='batchForm' method='post' data-ride='table'>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
