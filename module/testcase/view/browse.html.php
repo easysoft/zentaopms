@@ -54,14 +54,16 @@ js::set('suiteID',        $suiteID);
       </p>
     </div>
     <?php else:?>
-    <form class='main-table table-case' id='batchForm' method='post' data-ride='table'>
+    <?php
+    $datatableId  = $this->moduleName . ucfirst($this->methodName);
+    $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+    ?>
+    <form class='main-table table-case' id='caseForm' method='post' <?php if(!$useDatatable) echo "data-ride='table'";?>>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-      $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
   
       if($useDatatable)  include '../../common/view/datatable.html.php';
       else               include '../../common/view/tablesorter.html.php';
@@ -217,5 +219,8 @@ js::set('suiteID',        $suiteID);
 <script>
 $('#module' + moduleID).closest('li').addClass('active'); 
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
+<?php if($useDatatable):?>
+$(function(){$('#caseForm').table();})
+<?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>
