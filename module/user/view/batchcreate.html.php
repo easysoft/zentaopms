@@ -36,7 +36,7 @@
           <tr class='text-center'>
             <th class='w-40px'><?php echo $lang->idAB;?></th> 
             <th class='w-150px<?php echo zget($visibleFields, 'dept', ' hidden')?>'><?php echo $lang->user->dept;?></th>
-            <th class='w-130px required'><?php echo $lang->user->account;?></th>
+            <th class='w-180px required'><?php echo $lang->user->account;?></th>
             <th class='w-130px required'><?php echo $lang->user->realname;?></th>
             <th class='w-120px'><?php echo $lang->user->role;?></th>
             <th class='w-120px'><?php echo $lang->user->group;?></th>
@@ -93,7 +93,7 @@
         <?php endfor;?>
         <tr>
           <th colspan='2'><?php echo $lang->user->verifyPassword?></th>
-          <td colspan='<?php echo count($visibleFields) + 4?>'>
+          <td colspan='<?php echo count($visibleFields) + 3?>'>
             <div class="required required-wrapper"></div>
             <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
             <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
