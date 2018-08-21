@@ -24,16 +24,16 @@
         <th class='w-180px'>
           <?php echo $lang->group->viewList;?>
         </th>
-        <td class='w-p60'>
-          <?php foreach($lang->menu as $menu):?>
+        <td class='w-p80'>
+          <?php foreach($lang->menu as $menuKey => $menu):?>
           <?php if(!is_string($menu)) continue;?>
           <?php list($moduleName, $module) = explode('|', $menu);?>
           <?php if($module == 'my') continue;?>
           <?php $moduleName = strip_tags($moduleName);?>
           <div class='group-item'>
             <div class='checkbox-primary'>
-              <input type='checkbox' id='<?php echo $module?>' name='actions[views][<?php echo strtolower($module);?>]' value='<?php echo $module;?>' <?php if(isset($group->acl['views'][$module]) or empty($group->acl['views'])) echo "checked";?> />
-              <label class='priv' for='<?php echo $module?>'>
+              <input type='checkbox' id='<?php echo $menuKey?>' name='actions[views][<?php echo strtolower($menuKey);?>]' value='<?php echo $menuKey;?>' <?php if(isset($group->acl['views'][$menuKey]) or empty($group->acl['views'])) echo "checked";?> />
+              <label class='priv' for='<?php echo $menuKey?>'>
                 <?php echo $moduleName;?>
               </label>
             </div>
