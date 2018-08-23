@@ -416,7 +416,7 @@ class userModel extends model
         if(!dao::isError())
         {
             $this->loadModel('score')->create('user', 'editProfile');
-            $this->loadModel('action')->create('user', $user->id, 'edited');
+            $this->loadModel('action')->create('user', $userID, 'edited');
             $this->loadModel('mail');
             if($this->config->mail->mta == 'sendcloud' and $user->email != $oldUser->email)
             {
