@@ -617,6 +617,7 @@ class projectModel extends model
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
                 ->where('deadline')->ne('0000-00-00')
                 ->andWhere('status')->in('wait,doing')
+                ->andWhere('project')->eq($project->id)
                 ->fetchAll();
             foreach($tasks as $task)
             {
