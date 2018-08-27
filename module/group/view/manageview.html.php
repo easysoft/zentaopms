@@ -21,10 +21,10 @@
   <form class="load-indicator main-form form-ajax" id="manageViewForm" method="post" target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-180px'>
+        <th class='w-100px'>
           <?php echo $lang->group->viewList;?>
         </th>
-        <td class='w-p80'>
+        <td>
           <?php foreach($lang->menu as $menuKey => $menu):?>
           <?php if(!is_string($menu)) continue;?>
           <?php list($moduleName, $module) = explode('|', $menu);?>
@@ -48,21 +48,27 @@
             </div>
           </div>
         </td>
-        <td></td>
       </tr>
       <tr id='productBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->productList?></th>
-        <td><?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control chosen' multiple")?></td>
-        <td><?php echo $lang->group->noticeVisit?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control chosen' multiple")?>
+            <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
+          </div>
+        </td>
       </tr>
       <tr id='projectBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->projectList?></th>
-        <td><?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control chosen' multiple")?></td>
-        <td><?php echo $lang->group->noticeVisit?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control chosen' multiple")?>
+            <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
+          </div>
+        </td>
       </tr>
       <tr>
-        <th><span class='hidden'><?php echo html::selectAll('', 'checkbox')?></span></th>
-        <td colspan='2' class='form-actions'>
+        <td colspan='2' class='form-actions text-center'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
           <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>
