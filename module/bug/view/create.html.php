@@ -81,7 +81,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           </tr>
           <tr>
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-            <td>
+            <td id='assignedToBox'>
               <?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?>
             </td>
             <td>

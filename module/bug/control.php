@@ -380,15 +380,10 @@ class bug extends control
         }
 
         /* Set team members of the latest project as assignedTo list. */
-        $latestProject = $this->product->getLatestProject($productID);
-        if(!empty($latestProject))
-        {
-            $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
-        }
-        else
-        {
-            $projectMembers = $this->view->users;
-        }
+        $latestProject  = $this->product->getLatestProject($productID);
+        $projectMembers = array();
+        if(!empty($latestProject)) $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
+        if(empty($projectMembers)) $projectMembers = $this->view->users;
 
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
