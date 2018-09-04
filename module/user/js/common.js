@@ -10,7 +10,7 @@ $(document).ready(function()
 {
     $('#verifyPassword').closest('form').find('#submit').click(function()
     {
-        var password = $('input#verifyPassword').val();
+        var password = $('input#verifyPassword').val().trim();
         var rand = $('input#verifyRand').val();
         $('input#verifyPassword').val(md5(md5(password) + rand));
     });
