@@ -68,7 +68,7 @@
             <th class='w-60px<?php  echo zget($visibleFields, 'estimate',   ' hidden') . zget($requiredFields, 'estimate',   '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', '', ' required');?>'><?php echo $lang->task->estStarted;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'deadline',   ' hidden') . zget($requiredFields, 'deadline',   '', ' required');?>'><?php echo $lang->task->deadline;?></th>
-            <th class='w-100px<?php echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       '', ' required');?>'><?php echo $lang->task->desc;?></th>
+            <th class='w-200px<?php echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       '', ' required');?>'><?php echo $lang->task->desc;?></th>
             <th class='w-80px<?php  echo zget($visibleFields, 'pri',        ' hidden') . zget($requiredFields, 'pri',        '', ' required');?>'><?php echo $lang->task->pri;?></th>
           </tr>
         </thead>
