@@ -694,6 +694,7 @@ class user extends control
             if($this->post->password) $password = $this->post->password;
             if($this->get->password)  $password = $this->get->password;
 
+            $account = trim($account);
             if($this->user->checkLocked($account))
             {
                 $failReason = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);

@@ -1016,9 +1016,9 @@ class block extends control
             ->orderBy($orderBy)
             ->fetchAll('id');
 
-        $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->fetchPairs();
-        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->fetchGroup('product', 'id');
-        $openedBugs   = $this->dao->select('id, openedBuild')->from(TABLE_BUG)->where('openedBuild')->in($testedBuilds)->fetchGroup('openedBuild', 'id');
+        $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
+        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('product', 'id');
+        $openedBugs   = $this->dao->select('id, openedBuild')->from(TABLE_BUG)->where('openedBuild')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('openedBuild', 'id');
 
         /* Get bugs. */
         $bugIDList = array();

@@ -1487,8 +1487,9 @@ class treeModel extends model
 
         if($this->isMergeModule($rootID, $viewType) and $viewType != 'task') $viewType .= ',story';
 
-        $existsModules = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->andWhere('branch')->in($branches)->andWhere('deleted')->eq(0)->fetchAll();
-        $repeatName    = '';
+        $existsModules  = $this->dao->select('id,branch,name')->from(TABLE_MODULE)->where('root')->eq($rootID)->andWhere('type')->in($viewType)->andWhere('parent')->eq($parentModuleID)->andWhere('branch')->in($branches)->andWhere('deleted')->eq(0)->fetchAll();
+        $checkedModules = ',';
+        $repeatName     = '';
         foreach($modules as $id => $name)
         {
             $existed = false;
@@ -1497,6 +1498,13 @@ class treeModel extends model
                 $existed  = true;
                 $moduleID = substr($id, 2);
             }
+
+            if(strpos($checkedModules, ",$name,") !== false)
+            {
+                $repeatName = $name;
+                break;
+            }
+
             foreach($existsModules as $existsModule)
             {
                 if($name == $existsModule->name and (!$existed or $moduleID != $existsModule->id) and (!isset($branches[$id]) or $branches[$id] == $existsModule->branch))
@@ -1505,6 +1513,7 @@ class treeModel extends model
                     break 2;
                 }
             }
+            $checkedModules .= "$name,";
         }
         if($repeatName) die(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
         return true;

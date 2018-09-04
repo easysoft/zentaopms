@@ -25,7 +25,7 @@
         <?php echo html::checkbox('fields', $customFields, $showFields);?>
       </div>
       <div>
-        <?php echo html::submitButton($lang->save);?>
+        <button type="submit" class="btn btn-primary" data-loading="<?php echo $lang->submitting;?>"><?php echo $lang->save;?></button>
         <?php echo html::commonButton($lang->cancel, '', "btn close-dropdown");?>
         <?php echo html::a($customLink, $lang->restore, 'hiddenwin', "class='btn'");?>
       </div>
