@@ -976,14 +976,15 @@ class project extends control
             exit;
         }
 
-        $name        = '';
-        $code        = '';
-        $team        = '';
-        $products    = array();
-        $whitelist   = '';
-        $acl         = 'open';
-        $plan        = new stdClass();
-        $productPlan = array();
+        $name         = '';
+        $code         = '';
+        $team         = '';
+        $products     = array();
+        $whitelist    = '';
+        $acl          = 'open';
+        $plan         = new stdClass();
+        $productPlan  = array();
+        $productPlans = array();
         if($copyProjectID)
         {
             $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
@@ -993,6 +994,10 @@ class project extends control
             $acl         = $copyProject->acl;
             $whitelist   = $copyProject->whitelist;
             $products    = $this->project->getProducts($copyProjectID);
+            foreach($products as $product)
+            {
+                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
+            }
         }
 
         if(!empty($planID))
@@ -1038,9 +1043,10 @@ class project extends control
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
-        $this->view->projectID    = $projectID;
+        $this->view->projectID     = $projectID;
         $this->view->products      = $products;
         $this->view->productPlan   = array(0 => '') + $productPlan;
+        $this->view->productPlans  = array(0 => '') + $productPlans;
         $this->view->whitelist     = $whitelist;
         $this->view->copyProjectID = $copyProjectID;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products));
