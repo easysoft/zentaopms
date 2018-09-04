@@ -173,7 +173,7 @@ class taskModel extends model
             else
             {
                 dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common);
-                die(js::error(dao::getError()));
+                return false;
             }
         }
 
@@ -229,11 +229,19 @@ class taskModel extends model
         /* check data. */
         foreach($data as $i => $task)
         {
-            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate)) die(js::alert($this->lang->task->error->estimateNumber));
+            if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
+            {
+                dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
             foreach(explode(',', $requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($task->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->task->$field)));
+                if($field and empty($task->$field))
+                {
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->task->$field);
+                    return false;
+                }
             }
             if($task->estimate) $task->estimate = (float)$task->estimate;
         }
