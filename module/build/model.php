@@ -78,11 +78,13 @@ class buildModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBuildPairs($projectID, $productID, $branch = 0, $params = '')
+    public function getProjectBuildPairs($projectID, $productID, $branch = 0, $params = '', $buildID = 0)
     {
-        $sysBuilds = array();
+        $sysBuilds      = array();
+        $selectedBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
         if(strpos($params, 'notrunk') === false) $sysBuilds = $sysBuilds + array('trunk' => $this->lang->trunk);
+        if($buildID != 0) $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetchPairs();
 
         $projectBuilds = $this->dao->select('t1.id, t1.name, t1.project, t2.status as projectStatus, t3.id as releaseID, t3.status as releaseStatus, t4.name as branchName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -102,7 +104,7 @@ class buildModel extends model
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
             $builds[$buildID] = $build->name;
         }
-        if(!$builds) return $sysBuilds;
+        if(!$builds) return $sysBuilds + $selectedBuilds;
 
         /* if the build has been released, replace build name with release name. */
         $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
@@ -112,7 +114,7 @@ class buildModel extends model
             ->fetchPairs();
         foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
 
-        return $sysBuilds + $builds;
+        return $sysBuilds + $builds + $selectedBuilds;
     }
 
     /**
