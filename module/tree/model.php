@@ -1309,7 +1309,13 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
-        if(isset($module->root) and $module->root != $self->root) $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();
+        if(isset($module->root) and $module->root != $self->root) 
+        {
+            $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();
+            $selfProduct = $this->loadModel('product')->getByID($self->root);
+            $product     = $this->loadModel('product')->getByID($module->root);
+            if($selfProduct->type == 'branch' and $product->type != 'branch') $this->dao->update(TABLE_MODULE)->set('branch')->eq(0)->where('id')->in($childs)->exec();
+        }
         $this->fixModulePath(isset($module->root) ? $module->root : $self->root, $self->type);
         if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);
     }
