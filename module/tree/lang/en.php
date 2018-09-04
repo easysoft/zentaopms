@@ -36,12 +36,12 @@ $lang->tree->syncFromProduct    = 'Copy';
 $lang->tree->dragAndSort        = "Drag and Sort";
 $lang->tree->sort               = "Sort";
 $lang->tree->addChild           = "Add Child";
-
-$lang->tree->confirmDelete = 'Do you want to delete this Module and its Children?';
-$lang->tree->confirmRoot   = "Changes on {$lang->productCommon} will change the Story, Bug, Case of {$lang->productCommon} it belongs to, as well as the realtion of {$lang->projectCommon} and {$lang->productCommon}, which is dangerous, please be aware of it. Do you want to change?";
-$lang->tree->successSave   = 'Saved.';
-$lang->tree->successFixed  = 'Fixed.';
-$lang->tree->repeatName    = 'The name "%s" has existed!';
+$lang->tree->confirmDelete      = 'Do you want to delete this Module and its Children?';
+$lang->tree->confirmDeleteLine  = 'Do you want to delete this Product Line and its Children?';
+$lang->tree->confirmRoot        = "Changes on {$lang->productCommon} will change the Story, Bug, Case of {$lang->productCommon} it belongs to, as well as the realtion of {$lang->projectCommon} and {$lang->productCommon}, which is dangerous, please be aware of it. Do you want to change?";
+$lang->tree->successSave        = 'Saved.';
+$lang->tree->successFixed       = 'Fixed.';
+$lang->tree->repeatName         = 'The name "%s" has existed!';
 
 $lang->tree->module     = 'Module';
 $lang->tree->name       = 'Name';
