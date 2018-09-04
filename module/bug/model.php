@@ -423,8 +423,10 @@ class bugModel extends model
      */
     public function getPlanBugs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('plan')->eq((int)$planID)
+            ->andWhere('project')->in(array_keys($projects))
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
@@ -1293,8 +1295,10 @@ class bugModel extends model
     public function getUserBugs($account, $type = 'assignedTo', $orderBy = 'id_desc', $limit = 0, $pager = null)
     {
         if(!$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
+        $bugs     = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
+            ->andWhere('project')->in(array_keys($projects))
             ->beginIF($type != 'all')->andWhere("`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -1314,12 +1318,14 @@ class bugModel extends model
      */
     public function getUserBugPairs($account, $appendProduct = true, $limit = 0)
     {
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
+            ->andWhere('t1.project')->in(array_keys($projects))
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -1436,9 +1442,11 @@ class bugModel extends model
      */
     public function getProductBugPairs($productID)
     {
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = array('' => '');
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
+            ->andWhere('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll();
