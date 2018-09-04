@@ -111,7 +111,7 @@
             }
             else
             {
-                common::printIcon('todo', 'assignto', "todoID=$todo->id", $todo, 'list', 'hand-right', '', "iframe", false, "data-width='600'");
+                common::printIcon('todo', 'assignTo', "todoID=$todo->id", $todo, 'list', 'hand-right', '', "iframe", false, "data-width='600'");
                 common::printIcon('todo', 'finish', "id=$todo->id", $todo, 'list', 'checked', 'hiddenwin');
             }
             common::printIcon('todo', 'edit',   "id=$todo->id", '', 'list', 'edit', '', 'iframe', true);
