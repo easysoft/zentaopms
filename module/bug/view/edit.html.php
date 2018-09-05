@@ -34,9 +34,6 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
         <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', "class='bug-title' title='$bug->title'");?>
         <small><?php echo $lang->arrow . ' ' . $lang->bug->edit;?></small>
       </h2>
-      <div class="pull-right btn-toolbar">
-        <?php echo html::submitButton($lang->save);?>
-      </div>
     </div>
     <div class='main-row'>
       <div class='main-col col-8'>

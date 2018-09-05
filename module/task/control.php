@@ -1145,7 +1145,7 @@ class task extends control
     public function ajaxGetProjectTasks($projectID, $taskID = 0)
     {
         $tasks = $this->task->getProjectTaskPairs((int)$projectID);
-        die(html::select('task', empty($tasks) ? array('' => '') : $tasks, $taskID));
+        die(html::select('task', empty($tasks) ? array('' => '') : $tasks, $taskID, "class='form-control'"));
     }
 
     /**
