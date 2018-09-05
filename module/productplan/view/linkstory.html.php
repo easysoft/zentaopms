@@ -28,7 +28,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-pri'><?php echo $lang->priAB;?></th>
-          <th class='w-200px'><?php echo $lang->story->plan;?></th>
+          <th class='w-150px'><?php echo $lang->story->plan;?></th>
           <th class='w-150px'><?php echo $lang->story->module;?></th>
           <th class='text-left'><?php echo $lang->story->title;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
@@ -48,7 +48,7 @@
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
           <td><?php echo $story->planTitle;?></td>
-          <td title='<?php echo $modules[$story->module]?>'><?php echo $modules[$story->module];?></td>
+          <td title='<?php echo $modules[$story->module]?>' class='text-left'><?php echo $modules[$story->module];?></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
