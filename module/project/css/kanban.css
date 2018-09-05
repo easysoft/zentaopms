@@ -8,7 +8,7 @@
 .board-item > .info {line-height: 22px; margin-top: 6px;}
 .board-item + .board-item {margin-top: 10px;}
 .board-item .task-left {float: right; font-size: 12px; color: #a6aab8;}
-.boards-wrapper {max-height: 400px; overflow: auto;}
+.boards-wrapper {overflow: auto;}
 .board.can-drop-in {background-color: #fff!important; opacity: 1!important;}
 .c-board.dragging {color: #006af1;}
 .board.drop-to {background-color: #fff0d5!important;}
