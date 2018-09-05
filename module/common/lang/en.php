@@ -267,7 +267,7 @@ $lang->qa->menu = new stdclass();
 
 $lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->qa->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s');
-$lang->qa->menu->testtask  = array('link' => 'Build|testtask|browse|productID=%s');
+$lang->qa->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s');
 $lang->qa->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->qa->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
 $lang->qa->menu->caselib   = array('link' => 'Library|testsuite|library');

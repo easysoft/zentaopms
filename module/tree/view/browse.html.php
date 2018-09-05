@@ -205,8 +205,8 @@ $(function()
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
-                title: '<?php echo $viewType == 'line' ? '': $lang->tree->child ?>',
-                template: '<a><?php echo $viewType == 'line' ? '': (strpos($viewType, 'doc') !== false ? $lang->doc->childType : $lang->tree->child)?></a>',
+                title: '<?php echo $viewType == 'line' ? '' : (strpos($viewType, 'doc') !== false ? $lang->doc->childType : $lang->tree->child) ?>',
+                template: '<a><?php echo $viewType == 'line' ? '' : (strpos($viewType, 'doc') !== false ? $lang->doc->childType : $lang->tree->child)?></a>',
             }
         },
         action: function(event)

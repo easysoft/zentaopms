@@ -184,7 +184,6 @@ class bugModel extends model
         $now        = helper::now();
         $actions    = array();
         $data       = fixer::input('post')->get();
-        $batchNum   = count(reset($data));
 
         $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
         $data   = $result['data'];
@@ -200,7 +199,7 @@ class bugModel extends model
         $pri     = 0;
         $os      = '';
         $browser = '';
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($data->title as $i => $title)
         {
             if($data->modules[$i]  != 'ditto') $module  = (int)$data->modules[$i];
             if($data->projects[$i] != 'ditto') $project = (int)$data->projects[$i];
@@ -219,9 +218,9 @@ class bugModel extends model
 
         if(isset($data->uploadImage)) $this->loadModel('file');
         $bugs = array();
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($data->title as $i => $title)
         {
-            if(empty($data->title[$i])) continue;
+            if(empty($title)) continue;
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
@@ -423,8 +422,10 @@ class bugModel extends model
      */
     public function getPlanBugs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('plan')->eq((int)$planID)
+            ->andWhere('project')->in(array_keys($projects))
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
@@ -798,6 +799,7 @@ class bugModel extends model
         /* Update bugs. */
         foreach($activateBugs as $bugID => $bug)
         {
+            $oldBug = $bugs[$bugID];
             $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(dao::isError()) die(js::error('bug#' . $bugID . dao::getError(true)));
 
@@ -954,9 +956,17 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
-        if(!dao::isError()) $this->loadModel('score')->create('bug', 'resolve', $oldBug);
-        /* Link bug to build and release. */
-        $this->linkBugToBuild($bugID, $bug->resolvedBuild);
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('bug', 'resolve', $oldBug);
+
+            /* Link bug to build and release. */
+            $this->linkBugToBuild($bugID, $bug->resolvedBuild);
+            
+            return common::createChanges($oldBug, $bug);
+        }
+
+        return false;
     }
 
     /**
@@ -1039,6 +1049,7 @@ class bugModel extends model
         $modules   = array();
         while($module = $stmt->fetch()) $modules[$module->id] = $module;
 
+        $changes = array();
         foreach($bugIDList as $i => $bugID)
         {
             $oldBug = $bugs[$bugID];
@@ -1079,12 +1090,14 @@ class bugModel extends model
             $bug->lastEditedDate = $now;
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+
+            $changes[$bugID] = common::createChanges($oldBug, $bug);
         }
 
         /* Link bug to build and release. */
         $this->linkBugToBuild($bugIDList, $resolvedBuild);
 
-        return $bugIDList;
+        return $changes;
     }
 
     /**
@@ -1120,6 +1133,9 @@ class bugModel extends model
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
+
+        $bug->activatedCount += 1;
+        return common::createChanges($oldBug, $bug);
     }
 
     /**
@@ -1131,8 +1147,9 @@ class bugModel extends model
      */
     public function close($bugID)
     {
-        $now = helper::now();
-        $bug = fixer::input('post')
+        $now    = helper::now();
+        $oldBug = $this->getById($bugID);
+        $bug    = fixer::input('post')
             ->add('assignedTo',     'closed')
             ->add('assignedDate',   $now)
             ->add('status',         'closed')
@@ -1145,6 +1162,8 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+
+        return common::createChanges($oldBug, $bug);
     }
 
     /**
@@ -1293,8 +1312,10 @@ class bugModel extends model
     public function getUserBugs($account, $type = 'assignedTo', $orderBy = 'id_desc', $limit = 0, $pager = null)
     {
         if(!$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
+        $bugs     = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
+            ->andWhere('project')->in(array_keys($projects))
             ->beginIF($type != 'all')->andWhere("`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -1314,12 +1335,14 @@ class bugModel extends model
      */
     public function getUserBugPairs($account, $appendProduct = true, $limit = 0)
     {
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
+            ->andWhere('t1.project')->in(array_keys($projects))
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -1436,9 +1459,11 @@ class bugModel extends model
      */
     public function getProductBugPairs($productID)
     {
+        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = array('' => '');
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
+            ->andWhere('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll();

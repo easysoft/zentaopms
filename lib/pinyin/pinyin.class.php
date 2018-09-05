@@ -43,17 +43,7 @@ class pinyin
      */
     public function prepare($string)
     {
-        if(version_compare(PHP_VERSION, '7.2.0') >= 0)
-        {
-            $string = preg_replace_callback('/[a-z0-9_-]+/i', function($matches)
-            {
-                return "\t" . $matches[0];
-            }, $string);
-        }
-        else
-        {
-            $string = preg_replace_callback('/[a-z0-9_-]+/i', create_function('$matches', 'return "\t" . $matches[0];'), $string);
-        }
+        $string = preg_replace_callback('/[a-z0-9_-]+/i', array($this, 'prepareCallback'), $string);
         return preg_replace("/[^\p{Han}\p{P}\p{Z}\p{M}\p{N}\p{L}\t]/u", '', $string);
     }
 
@@ -70,5 +60,17 @@ class pinyin
         $string = $this->prepare($string);
         $string = strtr($string, $this->segments);
         return $string;
+    }
+
+    /**
+     * The callback for prepare method.
+     * 
+     * @param  array    $matches 
+     * @access public
+     * @return string
+     */
+    public function prepareCallback($matches)
+    {
+        return "\t" . $matches[0];
     }
 }

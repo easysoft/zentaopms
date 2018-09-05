@@ -36,12 +36,12 @@ $lang->tree->syncFromProduct    = '複製模組';
 $lang->tree->dragAndSort        = "拖放排序";
 $lang->tree->sort               = "排序";
 $lang->tree->addChild           = "增加子模組";
-
-$lang->tree->confirmDelete = '該模組及其子模組都會被刪除，您確定刪除嗎？';
-$lang->tree->confirmRoot   = "模組的所屬{$lang->productCommon}修改，會關聯修改該模組下的需求、Bug、用例的所屬{$lang->productCommon}，以及{$lang->projectCommon}和{$lang->productCommon}的關聯關係。該操作比較危險，請謹慎操作。是否確認修改？";
-$lang->tree->successSave   = '成功保存';
-$lang->tree->successFixed  = '成功修正數據！';
-$lang->tree->repeatName    = '模組名“%s”已經存在！';
+$lang->tree->confirmDelete      = '該模組及其子模組都會被刪除，您確定刪除嗎？';
+$lang->tree->confirmDeleteLine  = '該產品綫及其子產品綫都會被刪除，您確定刪除嗎？';
+$lang->tree->confirmRoot        = "模組的所屬{$lang->productCommon}修改，會關聯修改該模組下的需求、Bug、用例的所屬{$lang->productCommon}，以及{$lang->projectCommon}和{$lang->productCommon}的關聯關係。該操作比較危險，請謹慎操作。是否確認修改？";
+$lang->tree->successSave        = '成功保存';
+$lang->tree->successFixed       = '成功修正數據！';
+$lang->tree->repeatName         = '模組名“%s”已經存在！';
 
 $lang->tree->module     = '模組';
 $lang->tree->name       = '模組名稱';

@@ -243,12 +243,11 @@ class testcaseModel extends model
         $branch      = (int)$branch;
         $now         = helper::now();
         $cases       = fixer::input('post')->get();
-        $batchNum    = count(reset($cases));
 
         $result = $this->loadModel('common')->removeDuplicate('case', $cases, "product={$productID}");
         $cases  = $result['data'];
 
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($cases->title as $i => $title)
         {
             if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
         }
@@ -257,12 +256,12 @@ class testcaseModel extends model
         $story  = 0;
         $type   = '';
         $pri    = 3;
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($cases->title as $i => $title)
         {
             $module = $cases->module[$i] == 'ditto' ? $module : $cases->module[$i];
             $story  = $cases->story[$i] == 'ditto'  ? $story  : $cases->story[$i];
             $type   = $cases->type[$i] == 'ditto'   ? $type   : $cases->type[$i];
-            $pri    = $cases->pri[$i] == 'ditto'    ?  $pri   : $cases->pri[$i];
+            $pri    = $cases->pri[$i] == 'ditto'    ? $pri    : $cases->pri[$i];
             $cases->module[$i] = (int)$module;
             $cases->story[$i]  = (int)$story;
             $cases->type[$i]   = $type;
@@ -273,9 +272,9 @@ class testcaseModel extends model
         $storyVersions  = array();
         $forceNotReview = $this->forceNotReview();
         $data           = array();
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($cases->title as $i => $title)
         {
-            if(empty($cases->title[$i])) continue;
+            if(empty($title)) continue;
 
             $data[$i] = new stdclass();
             $data[$i]->product      = $productID;

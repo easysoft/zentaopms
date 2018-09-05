@@ -694,6 +694,7 @@ class user extends control
             if($this->post->password) $password = $this->post->password;
             if($this->get->password)  $password = $this->get->password;
 
+            $account = trim($account);
             if($this->user->checkLocked($account))
             {
                 $failReason = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
@@ -705,10 +706,10 @@ class user extends control
 
             if($user)
             {
-                $this->user->cleanLocked($account);
+                $this->user->cleanLocked($user->account);
                 /* Authorize him and save to session. */
-                $user->rights = $this->user->authorize($account);
-                $user->groups = $this->user->getGroups($account);
+                $user->rights = $this->user->authorize($user->account);
+                $user->groups = $this->user->getGroups($user->account);
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
                 $this->loadModel('action')->create('user', $user->id, 'login');

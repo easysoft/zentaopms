@@ -184,6 +184,7 @@ class testreport extends control
 
                 $owners[$task->owner] = $task->owner;
                 $productIdList[$task->product] = $task->product;
+                $this->setChartDatas($task->id);
             }
             if(count($productIdList) > 1)
             {
@@ -212,7 +213,7 @@ class testreport extends control
             $this->view->reportTitle = date('Y-m-d') . " PROJECT#{$project->id} {$project->name} {$this->lang->testreport->common}";
 
         }
-        $cases   = $this->testreport->getTaskCases($tasks);
+        $cases   = $this->testreport->getTaskCases($tasks, $begin, $end);
         $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
 
         $this->view->begin   = $begin;
@@ -231,7 +232,7 @@ class testreport extends control
         $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
 
         $this->view->cases       = $cases;
-        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
+        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
@@ -315,14 +316,18 @@ class testreport extends control
         {
             $tasks = $this->testtask->getProjectTasks($report->project);
             $productIdList = array();
-            foreach($tasks as $task) $productIdList[$task->product] = $task->product;
+            foreach($tasks as $task)
+            {
+                $productIdList[$task->product] = $task->product;
+                $this->setChartDatas($task->id);
+            }
 
             $stories = $this->story->getProjectStories($project->id);
             $builds  = $this->build->getProjectBuilds($project->id);
             $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $report->begin, $report->end, 'project');
         }
 
-        $cases   = $this->testreport->getTaskCases($tasks);
+        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
         $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $report->begin, $report->end, $builds);
 
         $this->view->title = $report->title . $this->lang->testreport->edit;
@@ -339,7 +344,7 @@ class testreport extends control
         $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
 
         $this->view->cases       = $cases;
-        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases);
+        $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
@@ -391,10 +396,17 @@ class testreport extends control
 
         $tasks   = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
         $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
-        $cases   = $this->testreport->getTaskCases($tasks, $report->cases);
+        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases);
         $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
 
-        if($report->objectType == 'testtask') $this->setChartDatas($report->objectID);
+        if($report->objectType == 'testtask')
+        {
+            $this->setChartDatas($report->objectID);
+        }
+        elseif($tasks)
+        {
+            foreach($tasks as $task) $this->setChartDatas($task->id);
+        }
 
         $this->view->title      = $report->title;
         $this->view->browseLink = $browseLink;
@@ -410,7 +422,7 @@ class testreport extends control
         $this->view->actions = $this->loadModel('action')->getList('testreport', $reportID);
 
         $this->view->storySummary = $this->product->summary($stories);
-        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases);
+        $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
@@ -489,7 +501,36 @@ class testreport extends control
             if(!empty($chartType)) $chartOption->type = $chartType;
 
             $this->view->charts[$chart] = $chartOption;
-            $this->view->datas[$chart]  = $this->report->computePercent($chartData);
+            if(isset($this->view->datas[$chart]))
+            {
+                $existDatas = $this->view->datas[$chart];
+                $sum        = 0;
+                foreach($chartData as $key => $data)
+                {
+                    if(isset($existDatas[$key]))
+                    {
+                        $data->value += $existDatas[$key]->value;
+                        $sum += $data->value;
+                        unset($existDatas[$chart][$key]);
+                    }
+                }
+
+                foreach($existDatas as $key => $data)
+                {
+                    $sum += $data->value;
+                    $chartData[$key] = $data;
+                }
+                if($sum)
+                {
+                    foreach($chartData as $data) $data->percent = round($data->value / $sum, 2);
+                }
+                ksort($chartData);
+                $this->view->datas[$chart] = $chartData;
+            }
+            else
+            {
+                $this->view->datas[$chart] = $this->report->computePercent($chartData);
+            }
         }
     }
 }

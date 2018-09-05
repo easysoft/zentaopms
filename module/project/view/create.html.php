@@ -118,6 +118,13 @@
               <?php if(isset($plan) && !empty($plan->begin)):?>
               <div class="col-sm-4" id="plan0"><?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control chosen'");?></div>
               <?php js::set('currentPlanID', $plan->id)?>
+              <?php elseif($copyProjectID):?>
+              <?php $i = 0;?>
+              <?php foreach($products as $product):?>
+              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+              <?php $i++;?>
+              <?php endforeach;?>
               <?php else:?>
               <div class="col-sm-4" id="plan0"><?php echo html::select("plans[]", $productPlan, '', "class='form-control chosen'");?></div>
               <?php js::set('currentPlanID', '')?>

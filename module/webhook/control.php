@@ -159,13 +159,20 @@ class webhook extends control
             return true;
         }
 
-        $now = helper::now();
+        $now  = helper::now();
+        $diff = 0;
         foreach($dataList as $data)
         {
             $webhook = zget($webhooks, $data->objectID, '');
             if($webhook)
             {
-                $result = $this->webhook->fetchHook($webhook, $data->data);
+                /* if connect time is out then ignore it.*/
+                if($diff < 29)
+                {
+                    $time = time();
+                    $result = $this->webhook->fetchHook($webhook, $data->data);
+                    $diff = time() - $time;
+                }
                 $this->webhook->saveLog($webhook, $data->action, $data->data, $result);
             }
             

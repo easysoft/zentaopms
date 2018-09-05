@@ -11,6 +11,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($config->global->flow == 'onlyTest'):?>
+<style>
+.nav > li > .btn-group > a, .nav > li > .btn-group > a:hover, .nav > li > .btn-group > a:focus{background: #1a4f85; border-color: #164270;}
+.outer.with-side #featurebar {background: none; border: none; line-height: 0; margin: 0; min-height: 0; padding: 0; }
+#querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
+</style>
+<?php endif;?>
 <?php
 include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
@@ -172,14 +179,16 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       </p>
     </div>
     <?php else:?>
-    <form class='main-table table-bug' data-ride='table' method='post' id='bugForm'>
+    <?php
+    $datatableId  = $this->moduleName . ucfirst($this->methodName);
+    $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+    ?>
+    <form class='main-table table-bug' method='post' id='bugForm' <?php if(!$useDatatable) echo "data-ride='table'";?>>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-      $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       if($useDatatable) include '../../common/view/datatable.html.php';
 
       $setting = $this->datatable->getSetting('bug');
@@ -369,16 +378,12 @@ $('#module' + moduleID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
 if($('#query li.active').size() == 0) $.toggleQueryBox(true);
 <?php endif;?>
+<?php if($useDatatable):?>
+$(function(){$('#bugForm').table();})
+<?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>
 $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
 </script>
-<?php if($config->global->flow == 'onlyTest'):?>
-<style>
-.nav > li > .btn-group > a, .nav > li > .btn-group > a:hover, .nav > li > .btn-group > a:focus{background: #1a4f85; border-color: #164270;}
-.outer.with-side #featurebar {background: none; border: none; line-height: 0; margin: 0; min-height: 0; padding: 0; }
-#querybox #searchform{border-bottom: 1px solid #ddd; margin-bottom: 20px;}
-</style>
-<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

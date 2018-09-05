@@ -154,6 +154,14 @@ function initSteps(selector)
         });
     });
 
+    /* Fix bug #4832. Auto adjust textarea height. */
+    $('textarea.autosize').each(function()
+    {
+        var height = (this.scrollHeight + 2) + "px";
+        this.style.height = 'auto';
+        this.style.height = height; 
+    });
+
     var $steps = $(selector || '#steps');
     var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
     var initSortableCallTask = null;

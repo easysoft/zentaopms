@@ -1085,7 +1085,8 @@ class productModel extends model
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq((int)$productID)
-            ->andWhere('t2.status')->ne('done')
+            ->andWhere('t2.status')->ne('closed')
+            ->andWhere('t2.deleted')->eq('0')
             ->orderBy('t2.begin desc')
             ->limit(1)
             ->fetch();
