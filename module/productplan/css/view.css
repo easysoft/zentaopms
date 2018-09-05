@@ -1,3 +1,5 @@
+#storyList th{border:none}
+#bugList th{border:none} 
 .hide-side .col-main {width: 100%;}
 .hide-side .col-side .main-side {width: 0; display: none;}
 

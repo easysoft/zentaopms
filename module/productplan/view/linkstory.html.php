@@ -65,7 +65,7 @@
         <?php endforeach;?>
       </tbody>
     </table>
-    <div class='table-footer' style="<?php echo $unlinkedCount ? '' : 'border:none'?>">
+    <div class='table-footer'>
       <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
