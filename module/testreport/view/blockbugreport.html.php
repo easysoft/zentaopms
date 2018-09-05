@@ -18,7 +18,7 @@
               <div class='chart-canvas'><canvas id='chart-<?php echo $chartType ?>' width='<?php echo $chartOption->width;?>' height='<?php echo $chartOption->height;?>' data-responsive='true'></canvas></div>
             </div>
           </td>
-          <td>
+          <td class='text-top'>
             <div class='table-wrapper' style='overflow:auto'>
               <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='<?php echo $chartOption->type; ?>' data-target='#chart-<?php echo $chartType ?>' data-animation='false'>
                 <thead>
@@ -71,7 +71,7 @@
               </div>
             </div>
           </td>
-          <td>
+          <td class='text-top'>
             <div class='table-wrapper' style='overflow:auto'>
               <table class='table table-condensed table-hover table-striped table-bordered table-chart' data-chart='pie' data-target='#chart-<?php echo $infoKey?>' data-animation='false'>
                 <thead>
