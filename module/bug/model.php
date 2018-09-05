@@ -800,6 +800,7 @@ class bugModel extends model
         /* Update bugs. */
         foreach($activateBugs as $bugID => $bug)
         {
+            $oldBug = $bugs[$bugID];
             $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(dao::isError()) die(js::error('bug#' . $bugID . dao::getError(true)));
 
@@ -956,9 +957,17 @@ class bugModel extends model
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
             ->exec();
-        if(!dao::isError()) $this->loadModel('score')->create('bug', 'resolve', $oldBug);
-        /* Link bug to build and release. */
-        $this->linkBugToBuild($bugID, $bug->resolvedBuild);
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('bug', 'resolve', $oldBug);
+
+            /* Link bug to build and release. */
+            $this->linkBugToBuild($bugID, $bug->resolvedBuild);
+            
+            return common::createChanges($oldBug, $bug);
+        }
+
+        return false;
     }
 
     /**
@@ -1041,6 +1050,7 @@ class bugModel extends model
         $modules   = array();
         while($module = $stmt->fetch()) $modules[$module->id] = $module;
 
+        $changes = array();
         foreach($bugIDList as $i => $bugID)
         {
             $oldBug = $bugs[$bugID];
@@ -1081,12 +1091,14 @@ class bugModel extends model
             $bug->lastEditedDate = $now;
 
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+
+            $changes[$bugID] = common::createChanges($oldBug, $bug);
         }
 
         /* Link bug to build and release. */
         $this->linkBugToBuild($bugIDList, $resolvedBuild);
 
-        return $bugIDList;
+        return $changes;
     }
 
     /**
@@ -1122,6 +1134,9 @@ class bugModel extends model
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
+
+        $bug->activatedCount += 1;
+        return common::createChanges($oldBug, $bug);
     }
 
     /**
@@ -1133,8 +1148,9 @@ class bugModel extends model
      */
     public function close($bugID)
     {
-        $now = helper::now();
-        $bug = fixer::input('post')
+        $now    = helper::now();
+        $oldBug = $this->getById($bugID);
+        $bug    = fixer::input('post')
             ->add('assignedTo',     'closed')
             ->add('assignedDate',   $now)
             ->add('status',         'closed')
@@ -1147,6 +1163,8 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+
+        return common::createChanges($oldBug, $bug);
     }
 
     /**
