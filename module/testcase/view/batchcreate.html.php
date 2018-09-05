@@ -120,7 +120,7 @@
       <td class="text-center">%s</td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control"');?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control chosen"');?></td>
       <td style='overflow:visible'>
         <div class="input-control has-icon-right">
           <?php echo html::input("title[%s]", '', "class='form-control title-import' autocomplete='off'");?>
@@ -138,7 +138,7 @@
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "rows='1' class='form-control'")?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
-      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
     </tr>
   </tbody>
 </table>
