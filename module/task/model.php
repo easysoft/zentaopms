@@ -146,7 +146,6 @@ class taskModel extends model
         $now      = helper::now();
         $mails    = array();
         $tasks    = fixer::input('post')->get();
-        $batchNum = count(reset($tasks));
 
         $storyIDs  = array();
         $taskNames = array();
@@ -187,7 +186,7 @@ class taskModel extends model
 
         /* Get task data. */
         $data = array();
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($tasks->name as $i => $name)
         {
             $story      = !isset($tasks->story[$i]) || $tasks->story[$i]           == 'ditto' ? $story     : $tasks->story[$i];
             $module     = !isset($tasks->module[$i]) || $tasks->module[$i]         == 'ditto' ? $module    : $tasks->module[$i];

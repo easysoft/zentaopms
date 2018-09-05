@@ -254,7 +254,6 @@ class storyModel extends model
         $now      = helper::now();
         $mails    = array();
         $stories  = fixer::input('post')->get();
-        $batchNum = count(reset($stories));
 
         $result  = $this->loadModel('common')->removeDuplicate('story', $stories, "product={$productID}");
         $stories = $result['data'];
@@ -264,7 +263,7 @@ class storyModel extends model
         $pri    = 0;
         $source = '';
 
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($stories->title as $i => $title)
         {
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
             $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
@@ -280,9 +279,9 @@ class storyModel extends model
 
         $forceReview = $this->checkForceReview();
         $data        = array();
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($stories->title as $i => $title)
         {
-            if(empty($stories->title[$i])) continue;
+            if(empty($title)) continue;
             $story = new stdclass();
             $story->branch     = $stories->branch[$i];
             $story->module     = $stories->module[$i];

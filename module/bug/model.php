@@ -184,7 +184,6 @@ class bugModel extends model
         $now        = helper::now();
         $actions    = array();
         $data       = fixer::input('post')->get();
-        $batchNum   = count(reset($data));
 
         $result = $this->loadModel('common')->removeDuplicate('bug', $data, "product={$productID}");
         $data   = $result['data'];
@@ -200,7 +199,7 @@ class bugModel extends model
         $pri     = 0;
         $os      = '';
         $browser = '';
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($data->title as $i => $title)
         {
             if($data->modules[$i]  != 'ditto') $module  = (int)$data->modules[$i];
             if($data->projects[$i] != 'ditto') $project = (int)$data->projects[$i];
@@ -219,9 +218,9 @@ class bugModel extends model
 
         if(isset($data->uploadImage)) $this->loadModel('file');
         $bugs = array();
-        for($i = 0; $i < $batchNum; $i++)
+        foreach($data->title as $i => $title)
         {
-            if(empty($data->title[$i])) continue;
+            if(empty($title)) continue;
 
             $bug = new stdClass();
             $bug->openedBy    = $this->app->user->account;
