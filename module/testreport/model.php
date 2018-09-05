@@ -319,14 +319,41 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getTaskCases($tasks, $idList = '')
+    public function getTaskCases($tasks, $begin, $end, $idList = '')
     {
-        return $this->dao->select('t2.*,t1.task,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status')->from(TABLE_TESTRUN)->alias('t1')
+        $cases = $this->dao->select('t2.*,t1.task,t1.assignedTo,t1.status')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t1.task')->in(array_keys($tasks))
             ->beginIF($idList)->andWhere('t2.id')->in($idList)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll('id');
+
+        $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
+            ->where('t2.task')->in(array_keys($tasks))
+            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.date')->ge($begin)
+            ->andWhere('t1.date')->le($end . " 23:59:59")
+            ->orderBy('date')
+            ->fetchAll('case');
+
+        foreach($cases as $caseID => $case)
+        {
+            $case->lastRunner    = '';
+            $case->lastRunDate   = '';
+            $case->lastRunResult = '';
+            $case->status        = 'wait';
+            if(isset($results[$caseID]))
+            {
+                $result = $results[$caseID];
+                $case->lastRunner    = $result->lastRunner;
+                $case->lastRunDate   = $result->date;
+                $case->lastRunResult = $result->caseResult;
+                $case->status        = $result->caseResult == 'blocked' ? 'blocked' : 'done';
+            }
+        }
+
+        return $cases;
     }
 
     /**
@@ -337,13 +364,16 @@ class testreportModel extends model
      * @access public
      * @return string
      */
-    public function getResultSummary($tasks, $cases)
+    public function getResultSummary($tasks, $cases, $begin, $end)
     {
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
             ->where('t2.task')->in(array_keys($tasks))
             ->andWhere('t1.`case`')->in(array_keys($cases))
-            ->fetchAll();
+            ->andWhere('t1.date')->ge($begin)
+            ->andWhere('t1.date')->le($end . " 23:59:59")
+            ->orderBy('date')
+            ->fetchAll('case');
         $failResults = array();
         $runCasesNum = array();
         foreach($results as $result)
