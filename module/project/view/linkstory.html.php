@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <style>
 .search-form .form-actions {padding-bottom: 10px!important;}
 </style>
@@ -27,7 +28,7 @@
     <div id='queryBox' class='show no-margin'></div>
   </div>
   <form class='main-table table-story' method='post' data-ride='table' id='linkStoryForm'>
-    <table class='table table-fixed' id='linkStoryList'> 
+    <table class='table table-fixed tablesorter' id='linkStoryList'> 
       <thead>
         <tr>
           <th class='c-id'>

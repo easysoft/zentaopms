@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->build->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->build->confirmUnlinkBug)?>
 <?php js::set('flow', $config->global->flow)?>

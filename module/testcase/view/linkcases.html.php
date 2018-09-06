@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <div id="mainContent" class="main-content">
   <div class='main-header'>
     <h2>
@@ -22,7 +23,7 @@
   <div id='queryBox' class='show divider'></div>
   <?php if($cases2Link):?>
   <form class='main-table' method='post' target='hiddenwin' id='linkCasesForm' data-ride='table'>
-    <table class='table' id='caseList'>
+    <table class='table tablesorter' id='caseList'>
       <thead>
         <tr>
           <th class='c-id'>

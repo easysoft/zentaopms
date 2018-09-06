@@ -16,7 +16,7 @@
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedStories;?>
     </div>
-    <table class='table'>
+    <table class='table tablesorter'>
       <thead>
         <tr class='text-center'>
           <th class='c-id text-left'>
@@ -79,3 +79,6 @@
     </div>
   </form>
 </div>
+<script>
+$(function(){$('#unlinkStoryList .tablesorter').sortTable();});
+</script>

@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('linkType', $type);?>
 <div class='main-content' id='mainContent'>
   <div class='main-header'>
@@ -25,7 +26,7 @@
   <div id='queryBox' class='show divider'></div>
   <form method='post' target='hiddenwin' id='linkStoryForm' class='main-table table-story'>
     <?php if($stories2Link):?>
-    <table class='table' id='storyList'>
+    <table class='table tablesorter' id='storyList'>
       <thead>
       <tr>
         <th class='c-id'>
