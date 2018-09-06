@@ -283,11 +283,11 @@ class gitModel extends model
         exec("{$this->client} config core.quotepath false");
         if($fromRevision)
         {
-            $cmd = "$this->client log --stat=1024 $fromRevision..HEAD --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log --stat=1024 $fromRevision..HEAD";
         }
         else
         {
-            $cmd = "$this->client log --stat=1024 --pretty=format:%an*_*%cd*_*%H*_*%s";
+            $cmd = "$this->client log --stat=1024";
         }
         exec($cmd, $list, $return);
 
@@ -304,17 +304,11 @@ class gitModel extends model
 
         foreach($list as $line) 
         {
-            if(!$line) 
-            {
-                $i++;
-                continue;
-            }
+            if(strpos($line, 'commit ') === 0) $i++;
             $logs[$i][] = $line;
         }
-        foreach($logs as $log)
-        {
-            $parsedLogs[] = $this->convertLog($log);
-        }
+
+        foreach($logs as $log) $parsedLogs[] = $this->convertLog($log);
         return $parsedLogs;
     }
 
@@ -328,22 +322,36 @@ class gitModel extends model
     public function convertLog($log)
     {
 
-        list($account, $date, $hash, $comment) = explode('*_*', $log[0]);
+        list($hash, $account, $date) = $log;
+
+        $account = preg_replace('/^Author:/', '', $account);
+        $account = trim(preg_replace('/<\w+@\w+\.\w+>/', '', $account));
+        $date    = trim(preg_replace('/^Date:/', '', $date));
+
+        $count   = count($log);
+        $comment = '';
+        $files   = array();
+        for($i = 3; $i < $count; $i++)
+        {
+            $line = $log[$i];
+            if(preg_match('/^\s{2,}/', $line))
+            {
+                $comment .= $line;
+            }
+            else
+            {
+                if(strpos($line, '|') === false) continue;
+                list($entry, $modify) = explode('|', $line);
+                $entry = '/' . trim($entry);
+                $files['M'][] = $entry;
+            }
+        }
         $parsedLog = new stdClass();
         $parsedLog->author    = $account;
-        $parsedLog->revision  = $hash;
-        $parsedLog->msg       = $comment;
+        $parsedLog->revision  = trim(preg_replace('/^commit/', '', $hash));
+        $parsedLog->msg       = trim($comment);
         $parsedLog->date      = date('Y-m-d H:i:s', strtotime($date));
-        $parsedLog->files     = array();
-
-        unset($log[0]);
-        foreach($log as $change)
-        {
-            if(strpos($change, '|') === false) continue;
-            list($entry, $modify) = explode('|', $change);
-            $entry = '/' . trim($entry);
-            $parsedLog->files['M'][] = $entry;
-        }
+        $parsedLog->files     = $files;
 
         return $parsedLog;
     }
