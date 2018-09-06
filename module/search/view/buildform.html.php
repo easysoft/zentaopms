@@ -43,8 +43,12 @@ $formId = 'searchForm-' . uniqid('');
 #userQueries .label > .icon-close {position: absolute; top: 2px; right: 2px; border-radius: 9px; font-size: 12px; line-height: 18px; width: 18px; display: inline-block;}
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
 @media (max-width: 1150px) {#userQueries {display: none}}
+<?php if($style == 'simple'):?>
+#<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 200px;}
+#queryBox.show {min-height: 66px;}
+<?php endif;?>
 </style>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form'>
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
 <?php
 /* Print every field as an html object, select or input. Thus when setFiled is called, copy it's html to build the search form. */
@@ -195,9 +199,9 @@ foreach($fieldParams as $fieldName => $param)
           <?php endforeach;?>
         </ul>
       </td>
-      <?php endif;?>
     </tr>
     <tr>
+      <?php endif;?>
       <td colspan='3' class='text-center form-actions'>
         <?php
         echo html::hidden('module',     $module);
