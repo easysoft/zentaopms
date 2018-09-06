@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/tablesorter.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php common::printBack($this->session->testtaskList, 'btn btn-link');?>
@@ -68,7 +69,7 @@
 <div class="cell show" id="queryBox"></div>
 <div id='mainContent'>
   <form class='main-table table-case' data-ride='table' method='post'>
-    <table class='table'>
+    <table class='table tablesorter'>
       <div class="table-header">
         <i class="icon-unlink"></i> &nbsp;<strong><?php echo $lang->testtask->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
       </div>

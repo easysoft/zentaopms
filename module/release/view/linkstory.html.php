@@ -10,13 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='queryBox' class='show no-margin'></div>
+<div id='queryBox' class='show'></div>
 <div id='unlinkStoryList'>
   <form class='main-table' method='post' target='hiddenwin' id='unlinkedStoriesForm' action='<?php echo $this->createLink('release', 'linkStory', "releaseID=$release->id&browseType=$browseType&param=$param")?>' data-ride='table'>
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedStories;?>
     </div>
-    <table class='table'>
+    <table class='table tablesorter'> 
       <thead>
         <tr class='text-center'>
           <th class='c-id text-left'>
@@ -44,7 +44,7 @@
         <tr>
           <td class='c-id text-left'>
             <div class="checkbox-primary">
-              <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> />
+              <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
               <label></label>
             </div>
             <?php printf('%03d', $story->id);?>
@@ -75,3 +75,6 @@
     </div>
   </form>
 </div>
+<script>
+$(function(){$('#unlinkStoryList .tablesorter').sortTable();});
+</script>
