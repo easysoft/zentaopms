@@ -125,7 +125,7 @@
             <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
             <?php else: ?>
-                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?>
+                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
             <?php endif; ?>
           </td>
         </tr>
@@ -182,7 +182,7 @@
                         <?php if(!isset($step->type)) $step->type = 'step';?>
                         <input type='hidden' name='stepType[]' value='<?php echo $step->type;?>' class='step-type'>
                         <div class='checkbox-primary'>
-                          <input tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>> 
+                          <input tabindex='-1' type="checkbox" class='step-group-toggle'<?php if($step->type === 'group') echo ' checked' ?>>
                           <label><?php echo $lang->testcase->group ?></label>
                         </div>
                       </span>
