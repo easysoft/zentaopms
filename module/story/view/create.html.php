@@ -122,9 +122,9 @@
             <th><?php echo $lang->story->pri;?></th>
             <td colspan="<?php echo $hasCustomPri ? 1 : 4;?>">
               <?php if($hasCustomPri):?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?> 
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
               <?php else: ?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?> 
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
               <?php endif; ?>
             </td>
           </tr>
@@ -147,7 +147,7 @@
               </div>
             </td>
             <?php endif;?>
-          </tr> 
+          </tr>
           <tr>
             <th><?php echo $lang->story->spec;?></th>
             <td colspan="4"><?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
@@ -161,7 +161,7 @@
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
             <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>
-          </tr>  
+          </tr>
           <?php if(strpos(",$showFields,", ',mailto,') !== false):?>
           <tr>
             <th><?php echo $lang->story->mailto;?></th>
