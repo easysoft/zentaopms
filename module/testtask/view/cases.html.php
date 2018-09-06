@@ -24,11 +24,16 @@
   </div>
   <div class='main-col'>
     <div class="cell" id="queryBox"></div>
-    <form class='main-table table-cases' data-ride='table' data-hot='true' method='post' name='casesform' id='casesForm'>
+    <?php
+    $datatableId  = $this->moduleName . ucfirst($this->methodName);
+    $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+    ?>
+    <form class='main-table table-cases' data-hot='true' method='post' name='casesform' id='casesForm' <?php if(!$useDatatable) echo "data-ride='table'";?>>
+      <div class="table-header fixed-right">
+        <nav class="btn-toolbar pull-right"></nav>
+      </div>
       <?php
       $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-      $datatableId  = $this->moduleName . ucfirst($this->methodName);
-      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
 
       $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
       $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
@@ -46,8 +51,8 @@
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
       ?>
-      <div class="table-responsive">
-        <table class='table has-sort-table' id='caseList'>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+        <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
           <thead>
             <tr>
             <?php
@@ -64,13 +69,13 @@
           </thead>
           <tbody>
             <?php foreach($runs as $run):?>
-            <tr>
+            <tr data-id='<?php echo $run->id?>'>
               <?php foreach($setting as $key => $value) $this->testtask->printCell($value, $run, $users, $task, $branches, $useDatatable ? 'datatable' : 'table');?>
             </tr>
             <?php endforeach;?>
           </tbody>
         </table>
-      </div>
+      <?php if(!$useDatatable) echo '</div>';?>
       <?php if($runs):?>
       <div class='table-footer'>
         <?php if($hasCheckbox):?>
@@ -150,6 +155,9 @@ if($shortcut.size() > 0)
     $('#bysearchTab').removeClass('active');
     $('#querybox').removeClass('show');
 }
+<?php endif;?>
+<?php if($useDatatable):?>
+$(function(){$('#casesForm').table();})
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>
