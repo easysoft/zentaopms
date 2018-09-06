@@ -283,11 +283,11 @@ class gitModel extends model
         exec("{$this->client} config core.quotepath false");
         if($fromRevision)
         {
-            $cmd = "$this->client log --stat=1024 $fromRevision..HEAD";
+            $cmd = "$this->client log --stat=1024 --name-status $fromRevision..HEAD";
         }
         else
         {
-            $cmd = "$this->client log --stat=1024";
+            $cmd = "$this->client log --stat=1024 --name-status";
         }
         exec($cmd, $list, $return);
 
@@ -338,12 +338,11 @@ class gitModel extends model
             {
                 $comment .= $line;
             }
-            else
+            elseif(strpos($line, "\t") !== false)
             {
-                if(strpos($line, '|') === false) continue;
-                list($entry, $modify) = explode('|', $line);
+                list($action, $entry) = explode("\t", $line);
                 $entry = '/' . trim($entry);
-                $files['M'][] = $entry;
+                $files[$action][] = $entry;
             }
         }
         $parsedLog = new stdClass();
