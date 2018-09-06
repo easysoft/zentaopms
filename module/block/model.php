@@ -471,11 +471,6 @@ class blockModel extends model
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
 
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['default'] = 'id_desc';
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
-
         return json_encode($params);
     }
 
@@ -492,11 +487,6 @@ class blockModel extends model
         $params->type['options'] = $this->lang->block->typeList->project;
         $params->type['control'] = 'select';
 
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['default'] = 'id_desc';
-        $params->orderBy['options'] = $this->lang->block->orderByList->project;
-        $params->orderBy['control'] = 'select';
-
         return json_encode($params);
     }
 
@@ -512,11 +502,6 @@ class blockModel extends model
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
-
-        $params->orderBy['name']    = $this->lang->block->orderBy;
-        $params->orderBy['default'] = 'id_desc';
-        $params->orderBy['options'] = $this->lang->block->orderByList->product;
-        $params->orderBy['control'] = 'select';
 
         return json_encode($params);
     }
@@ -644,5 +629,89 @@ class blockModel extends model
             ->fetch('value');
 
         return $key == $hash;
+    }
+
+    /**
+     * Get products like drop menu order
+     * 
+     * @param  strint    $status 
+     * @access public
+     * @return array
+     */
+    public function getProductsLikeDropMenu($status)
+    {
+        $products = $this->loadModel('product')->getList($status);
+        if(empty($products)) return $products;
+
+        $lines = $this->loadModel('tree')->getLinePairs();
+        $productList = array();
+        foreach($lines as $id => $name)
+        {
+            foreach($products as $key => $product)
+            {
+                if($product->line == $id)
+                {
+                    $product->name = $name . '/' . $product->name;
+                    $productList[] = $product;
+                    unset($products[$key]);
+                }
+            }
+        }
+        $productList = array_merge($productList, $products);
+
+        $products = $mineProducts = $otherProducts = $closedProducts = array();
+        foreach($productList as $product)
+        {
+            if(!$this->app->user->admin and !$this->product->checkPriv($product)) continue;
+            if($product->status == 'normal' and $product->PO == $this->app->user->account) 
+            {
+                $mineProducts[$product->id] = $product;
+            }
+            elseif($product->status == 'normal' and $product->PO != $this->app->user->account) 
+            {
+                $otherProducts[$product->id] = $product;
+            }
+            elseif($product->status == 'closed')
+            {
+                $closedProducts[$product->id] = $product;
+            }
+        }
+        $products = $mineProducts + $otherProducts + $closedProducts;
+
+        return $products;
+    }
+
+    /**
+     * Get projects like drop menu order
+     * 
+     * @param  string    $status 
+     * @access public
+     * @return array
+     */
+    public function getProjectsLikeDropMenu($status)
+    {
+        $projectList = $this->loadModel('project')->getList($status);
+        if(empty($projectList)) return $projectList;
+
+        $projects = $mineProjects = $otherProjects = $closedProjects = array();
+        foreach($projectList as $project)
+        {
+            if(!$this->app->user->admin and !$this->project->checkPriv($project->id)) continue;
+            if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+            {
+                $mineProjects[$project->id] = $project;
+            }
+            elseif($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+            {
+                $otherProjects[$project->id] = $project;
+            }
+            elseif($project->status == 'done' or $project->status == 'closed')
+            {
+                $closedProjects[$project->id] = $project;
+            }
+        }
+        $projects = $mineProjects + $otherProjects + $closedProjects;
+
+        return $projects;
     }
 }
