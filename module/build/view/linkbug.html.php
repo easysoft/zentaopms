@@ -10,13 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='queryBox' class='show'></div>
+<div id='queryBox' class='show no-margin'></div>
 <div id='unlinkBugList'>
   <form class='main-table table-bug' data-ride='table' method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkBug', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?>  <?php echo $lang->productplan->unlinkedBugs;?>
     </div>
-    <table class='table'> 
+    <table class='table'>
       <thead>
         <tr class='text-center'>
           <th class='c-id text-left'>

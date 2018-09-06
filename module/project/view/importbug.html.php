@@ -51,7 +51,7 @@ var browseType = '<?php echo $browseType;?>';
         <tr>
           <td class='c-id'>
             <div class="checkbox-primary">
-              <input type='checkbox' name='import[<?php echo $bug->id;?>]' value='<?php echo $bug->id;?>' /> 
+              <input type='checkbox' name='import[<?php echo $bug->id;?>]' value='<?php echo $bug->id;?>' />
               <label></label>
             </div>
             <?php echo sprintf('%03d', $bug->id) . html::hidden("id[$bug->id]", $bug->id);?>
