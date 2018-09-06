@@ -12,8 +12,8 @@
 class message extends control
 {
     /**
-     * Index 
-     * 
+     * Index
+     *
      * @access public
      * @return void
      */
@@ -32,8 +32,8 @@ class message extends control
     }
 
     /**
-     * Setting 
-     * 
+     * Setting
+     *
      * @access public
      * @return void
      */
@@ -65,7 +65,7 @@ class message extends control
 
     /**
      * Ajax get message.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -96,7 +96,7 @@ class message extends control
         {
             echo <<<EOT
 <div class='alert alert-info with-icon alert-dismissable' style='width:380px; position:fixed; bottom:25px; right:15px; z-index: 9999;'>
-   <i class='icon icon-envelope-alt'>  </i>
+   <i class='icon icon-envelope-o'>  </i>
    <div class='content'>{$messages}</div>
    <button type="button" class="close" data-dismiss="alert">×</button>
  </div>
