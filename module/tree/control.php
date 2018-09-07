@@ -317,7 +317,8 @@ class tree extends control
         if($confirm == 'no')
         {
             $module = $this->tree->getByID($moduleID);
-            die(js::confirm($module->type == 'line' ? $this->lang->tree->confirmDeleteLine : $this->lang->tree->confirmDelete, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
+            $confirmLang = $module->type == 'line' ? $this->lang->tree->confirmDeleteLine : $this->lang->tree->confirmDelete;
+            die(js::confirm($confirmLang, $this->createLink('tree', 'delete', "rootID=$rootID&moduleID=$moduleID&confirm=yes")));
         }
         else
         {

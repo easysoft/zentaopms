@@ -2,12 +2,12 @@ $(function()
 {
     $('.c-boards').each(function()
     {
-        var height = $(window).height() - $('#header').height() - $('#footer').height() - 40 - 101;
+        var height = $(window).height() - $('#header').height() - $('#footer').height() - 40 - 105;
         var $boardsWrapper = $(this).find('.boards-wrapper');
         $boardsWrapper.height(height);
         if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
         {
-            $boardsWrapper.find('.boards').css('height', $(this).height());
+            $boardsWrapper.find('.boards').css('height', $(this).height() - 1);
         }
     });
 

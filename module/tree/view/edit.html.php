@@ -86,4 +86,5 @@ $(function()
         getProductModules($(this).val());
     })
 })
+$(function(){$('.chosen').chosen();})
 </script>

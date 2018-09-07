@@ -58,8 +58,8 @@
         <?php 
         if(!isset($run->case)) 
         {
-            echo "<td colspan='13'></td>";
-            continue;
+            echo "<td colspan='13'></td></tr>";
+            break;
         }
         ?>
         <td class='c-id-sm'><?php echo sprintf('%03d', $run->case);?></td>
