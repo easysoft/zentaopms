@@ -908,6 +908,11 @@ class actionModel extends model
                 die(js::locate(helper::createLink('project', 'edit', "projectID=$action->objectID&action=undelete&extra=$actionID"), 'parent'));
             }
         }
+        elseif($action->objectType == 'module')
+        {
+            $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
+            $this->loadModel('tree')->checkUnique($module->root, $module->type, $module->parent, array($module->name), array($module->branch));
+        }
 
         /* Update deleted field in object table. */
         $table = $this->config->objectTables[$action->objectType];
