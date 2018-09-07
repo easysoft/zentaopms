@@ -395,7 +395,6 @@ class testtask extends control
         $runs = $this->testtask->getRuns($taskID, 0, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $runs = $this->testcase->appendData($runs, 'run');
-
         $groupCases  = array();
         $groupByList = array();
         foreach($runs as $run)
@@ -408,6 +407,17 @@ class testtask extends control
             elseif($groupBy == 'assignedTo')
             {
                 $groupCases[$run->assignedTo][] = $run;
+            }
+        }
+
+        if($groupBy == 'story' && $task->build)
+        {
+            $buildStoryIDs = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
+            $buildStories  = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($buildStoryIDs)->andWhere('id')->notin(array_keys($groupCases))->fetchAll('id');
+            foreach($buildStories as $buildStory)
+            {
+                $groupCases[$buildStory->id][] = $buildStory;
+                $groupByList[$buildStory->id]  = $buildStory->title;
             }
         }
 

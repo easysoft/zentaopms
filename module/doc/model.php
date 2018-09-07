@@ -1224,14 +1224,14 @@ class docModel extends model
      */
     public function statLibCounts($idList)
     {
-        $moduleCounts = $this->dao->select("root, count(id) as moduleCount")->from(TABLE_MODULE)
+        $moduleCounts = $this->dao->select("`root`, count(id) as moduleCount")->from(TABLE_MODULE)
             ->where('type')->eq('doc')
             ->andWhere('root')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("id,lib,acl,users,groups")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`lib`,`acl`,`users`,`groups`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)

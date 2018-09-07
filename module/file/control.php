@@ -138,9 +138,15 @@ class file extends control
         $file = $this->file->getById($fileID);
 
         /* Judge the mode, down or open. */
-        $mode  = 'down';
+        $mode      = 'down';
         $fileTypes = 'txt|jpg|jpeg|gif|png|bmp|xml|html';
         if(stripos($fileTypes, $file->extension) !== false && $mouse == 'left') $mode = 'open';
+        if($file->extension == 'txt')
+        {
+            $extension = end(explode('.', $file->title));
+            if($extension != 'txt') $mode = 'down';
+            $file->extension = $extension;
+        }
 
         if(file_exists($file->realPath))
         {

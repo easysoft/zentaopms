@@ -19,7 +19,7 @@ class fileModel extends model
 
     /**
      * Construct function.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -33,9 +33,9 @@ class fileModel extends model
 
     /**
      * Get files of an object.
-     * 
-     * @param  string   $objectType 
-     * @param  string   $objectID 
+     *
+     * @param  string   $objectType
+     * @param  string   $objectID
      * @param  string   $extra
      * @access public
      * @return array
@@ -60,8 +60,8 @@ class fileModel extends model
 
     /**
      * Get info of a file.
-     * 
-     * @param  int    $fileID 
+     *
+     * @param  int    $fileID
      * @access public
      * @return object
      */
@@ -77,10 +77,10 @@ class fileModel extends model
 
     /**
      * Save upload.
-     * 
-     * @param  string $objectType 
-     * @param  string $objectID 
-     * @param  string $extra 
+     *
+     * @param  string $objectType
+     * @param  string $objectID
+     * @param  string $extra
      * @param  string $filesName
      * @param  string $labelsName
      * @access public
@@ -113,7 +113,7 @@ class fileModel extends model
 
     /**
      * Get counts of uploaded files.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -124,8 +124,8 @@ class fileModel extends model
 
     /**
      * Get info of uploaded files.
-     * 
-     * @param  string $htmlTagName 
+     *
+     * @param  string $htmlTagName
      * @param  string $labelsName
      * @access public
      * @return array
@@ -152,7 +152,7 @@ class fileModel extends model
                 $title             = isset($_POST[$labelsName][$id]) ? $_POST[$labelsName][$id] : '';
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
-                $file['title']     = (!empty($title) and $title != $filename) ? htmlspecialchars($title) : str_replace('.' . $file['extension'], '', $filename);
+                $file['title']     = (!empty($title) and $title != $filename) ? htmlspecialchars($title) : $filename;
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
@@ -167,7 +167,7 @@ class fileModel extends model
             $title             = isset($_POST[$labelsName][0]) ? $_POST[$labelsName][0] : '';
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = (!empty($title) and $title != $name) ? htmlspecialchars($title) : substr($name, 0, strpos($name, $file['extension']) - 1);
+            $file['title']     = (!empty($title) and $title != $name) ? htmlspecialchars($title) : $name;
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
@@ -287,8 +287,8 @@ class fileModel extends model
 
     /**
      * Get extension of a file.
-     * 
-     * @param  string    $filename 
+     *
+     * @param  string    $filename
      * @access public
      * @return string
      */
@@ -303,8 +303,8 @@ class fileModel extends model
 
     /**
      * Get save name.
-     * 
-     * @param  string    $pathName 
+     *
+     * @param  string    $pathName
      * @access public
      * @return string
      */
@@ -316,8 +316,8 @@ class fileModel extends model
 
     /**
      * Get real path name.
-     * 
-     * @param  string    $pathName 
+     *
+     * @param  string    $pathName
      * @access public
      * @return string
      */
@@ -331,8 +331,8 @@ class fileModel extends model
 
     /**
      * Get export tpl.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return object
      */
@@ -349,8 +349,8 @@ class fileModel extends model
 
     /**
      * Save export template.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return int
      */
@@ -369,9 +369,9 @@ class fileModel extends model
 
     /**
      * Set path name of the uploaded file to be saved.
-     * 
-     * @param  int    $fileID 
-     * @param  string $extension 
+     *
+     * @param  int    $fileID
+     * @param  string $extension
      * @access public
      * @return string
      */
@@ -384,7 +384,7 @@ class fileModel extends model
 
     /**
      * Set save path.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -398,10 +398,10 @@ class fileModel extends model
         }
         $this->savePath = dirname($savePath) . '/';
     }
-    
+
     /**
      * Set the web path of upload files.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -412,9 +412,9 @@ class fileModel extends model
 
     /**
      * Insert the set image size code.
-     * 
-     * @param  string    $content 
-     * @param  int       $maxSize 
+     *
+     * @param  string    $content
+     * @param  int       $maxSize
      * @access public
      * @return string
      */
@@ -463,9 +463,9 @@ class fileModel extends model
     }
 
     /**
-     * Paste image in kindeditor at firefox and chrome. 
-     * 
-     * @param  string    $data 
+     * Paste image in kindeditor at firefox and chrome.
+     *
+     * @param  string    $data
      * @access public
      * @return string
      */
@@ -503,8 +503,8 @@ class fileModel extends model
 
     /**
      * Parse CSV.
-     * 
-     * @param  string    $fileName 
+     *
+     * @param  string    $fileName
      * @access public
      * @return array
      */
@@ -606,8 +606,8 @@ class fileModel extends model
 
     /**
      * Remove interference for parse csv.
-     * 
-     * @param  array    $matchs 
+     *
+     * @param  array    $matchs
      * @access private
      * @return string
      */
@@ -619,9 +619,9 @@ class fileModel extends model
 
     /**
      * Process editor.
-     * 
-     * @param  object    $data 
-     * @param  string    $editorList 
+     *
+     * @param  object    $data
+     * @param  string    $editorList
      * @access public
      * @return object
      */
@@ -662,9 +662,9 @@ class fileModel extends model
     }
 
     /**
-     * Compress image 
-     * 
-     * @param  array    $file 
+     * Compress image
+     *
+     * @param  array    $file
      * @access public
      * @return array
      */
@@ -699,15 +699,15 @@ class fileModel extends model
      * Webpage: de77.com
      * Version: 07.02.2010
      * Source : https://github.com/acustodioo/pic/blob/master/imagecreatefrombmp.function.php
-     * 
-     * @param  string    $filename 
+     *
+     * @param  string    $filename
      * @access public
      * @return resource
      */
     public function imagecreatefrombmp($filename) {
         $f = fopen($filename, "rb");
 
-        //read header    
+        //read header
         $header = fread($f, 54);
         $header = unpack('c2identifier/Vfile_size/Vreserved/Vbitmap_data/Vheader_size/'.
             'Vwidth/Vheight/vplanes/vbits_per_pixel/Vcompression/Vdata_size/'.
@@ -740,9 +740,9 @@ class fileModel extends model
     }
 
     /**
-     * Dwordize for imagecreatefrombmp 
-     * 
-     * @param  streing $str 
+     * Dwordize for imagecreatefrombmp
+     *
+     * @param  streing $str
      * @access private
      * @return int
      */
@@ -756,10 +756,10 @@ class fileModel extends model
 
     /**
      * Update objectID.
-     * 
-     * @param  int    $uid 
-     * @param  int    $objectID 
-     * @param  string $objectType 
+     *
+     * @param  int    $uid
+     * @param  int    $objectID
+     * @param  string $objectType
      * @access public
      * @return bool
      */
@@ -779,10 +779,10 @@ class fileModel extends model
     }
 
     /**
-     * Revert real src. 
-     * 
-     * @param  object    $data 
-     * @param  string    $fields 
+     * Revert real src.
+     *
+     * @param  object    $data
+     * @param  string    $fields
      * @access public
      * @return object
      */
@@ -800,8 +800,8 @@ class fileModel extends model
 
     /**
      * Auto delete useless image.
-     * 
-     * @param  int    $uid 
+     *
+     * @param  int    $uid
      * @access public
      * @return void
      */

@@ -165,7 +165,7 @@ $config->bug->search['params']['lastEditedDate']= array('operator' => '=',      
 $config->bug->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
-$config->bug->datatable->defaultField = array('id', 'pri', 'title', 'severity', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolvedBy', 'resolution', 'actions');
+$config->bug->datatable->defaultField = array('id', 'pri', 'title', 'severity', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
 
 $config->bug->datatable->fieldList['id']['title']    = 'idAB';
 $config->bug->datatable->fieldList['id']['fixed']    = 'left';
@@ -284,12 +284,12 @@ $config->bug->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedByAB';
 $config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedBy']['width']    = '80';
+$config->bug->datatable->fieldList['resolvedBy']['width']    = '70';
 $config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
 $config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolution']['width']    = '80';
+$config->bug->datatable->fieldList['resolution']['width']    = '70';
 $config->bug->datatable->fieldList['resolution']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';

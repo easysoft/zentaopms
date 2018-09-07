@@ -47,7 +47,7 @@ $sessionString .= session_name() . '=' . session_id();
           {
               $uploadDate = $lang->file->uploadDate . substr($file->addedDate, 0, 10);
               $fileTitle  = "<li title='{$uploadDate}'><i class='icon icon-file-text'></i> &nbsp;" . $file->title;
-              if(strpos($file->title, ".{$file->extension}") === false) $fileTitle .= ".{$file->extension}";
+              if(strpos($file->title, ".{$file->extension}") === false && $file->extension != 'txt') $fileTitle .= ".{$file->extension}";
               $imageWidth = 0;
               if(stripos('jpg|jpeg|gif|png|bmp', $file->extension) !== false)
               {
