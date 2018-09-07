@@ -36,15 +36,19 @@ $formId = 'searchForm-' . uniqid('');
 
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
-#userQueries ul {list-style: none; padding-left: 0; margin: 0;max-height:244px; overflow:auto;}
+#userQueries ul {list-style: none; padding-left: 0; margin: 0; max-height:170px; overflow:auto;}
 #userQueries ul li + li {margin-top: 5px;}
 #userQueries .label {line-height: 24px; padding: 0 20px 0 8px; display: inline-block; background-color: #EEEEEE; color: #A6AAB8; border-radius: 12px; max-width: 100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; position: relative;}
 #userQueries .label:hover {background-color: #aaa; color: #fff;}
 #userQueries .label > .icon-close {position: absolute; top: 2px; right: 2px; border-radius: 9px; font-size: 12px; line-height: 18px; width: 18px; display: inline-block;}
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
-@media (max-width: 1150px) {#userQueries {display: none}} 
+@media (max-width: 1150px) {#userQueries {display: none}}
+<?php if($style == 'simple'):?>
+#<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 200px;}
+#queryBox.show {min-height: 66px;}
+<?php endif;?>
 </style>
-<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form'>
+<form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
 <?php
 /* Print every field as an html object, select or input. Thus when setFiled is called, copy it's html to build the search form. */
@@ -195,9 +199,9 @@ foreach($fieldParams as $fieldName => $param)
           <?php endforeach;?>
         </ul>
       </td>
-      <?php endif;?>
     </tr>
     <tr>
+      <?php endif;?>
       <td colspan='3' class='text-center form-actions'>
         <?php
         echo html::hidden('module',     $module);

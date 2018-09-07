@@ -143,7 +143,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               <?php if($hasCustomPri):?>
               <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
               <?php else: ?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector'");?>
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
               <?php endif; ?>
             </td>
           </tr>

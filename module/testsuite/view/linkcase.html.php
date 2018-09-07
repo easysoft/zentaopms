@@ -30,7 +30,7 @@
     <div class="table-header">
       <i class="icon-unlink"></i> &nbsp;<strong><?php echo $lang->testsuite->unlinkedCases;?></strong> (<?php echo $pager->recTotal;?>)
     </div>
-    <table class='table' id='testcaseList'>
+    <table class='table tablesorter' id='testcaseList'>
       <thead>
         <tr>
           <th class='w-id'>

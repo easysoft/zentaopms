@@ -28,6 +28,7 @@ $(function()
             parent.location.href = createLink('project', 'importPlanStories', 'projectID=' + projectID + '&planID=' + planID);
         }
     })
+    $('.sorter-false a').unwrap();
 });
 
 function showCheckedSummary()

@@ -741,29 +741,20 @@ class block extends control
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $status  = isset($this->params->type) ? $this->params->type : '';
-        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
 
-        /* Get products. */
-        $products = $this->loadModel('product')->getList($status);
-        foreach($products as $productID => $product)
-        {
-            if(!$this->product->checkPriv($product)) unset($products[$productID]);
-        }
-        $productIDList = array_keys($products);
-        if(!$productIDList)
+        $products      = $this->block->getProductsLikeDropMenu($status);
+        $productIdList = array_keys($products);
+
+        if(empty($products))
         {
             $this->view->products = $products;
             return false;
         }
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
-            ->where('id')->in($productIDList)
-            ->orderBy($orderBy)
-            ->fetchAll('id');
 
         /* Get stories. */
         $stories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productIDList)
+            ->andWhere('product')->in($productIdList)
             ->groupBy('product, stage')
             ->fetchGroup('product', 'stage');
         /* Padding the stories to sure all status have records. */
@@ -779,7 +770,7 @@ class block extends control
         /* Get plans. */
         $plans = $this->dao->select('product, end')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productIDList)
+            ->andWhere('product')->in($productIdList)
             ->fetchGroup('product');
         foreach($plans as $product => $productPlans)
         {
@@ -802,7 +793,7 @@ class block extends control
         /* Get projects. */
         $projects = $this->dao->select('t1.product, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in($productIDList)
+            ->where('t1.product')->in($productIdList)
             ->andWhere('t2.deleted')->eq(0)
             ->fetchGroup('product');
         foreach($projects as $product => $productProjects)
@@ -829,7 +820,7 @@ class block extends control
         /* Get releases. */
         $releases = $this->dao->select('product, status, COUNT(*) AS count')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productIDList)
+            ->andWhere('product')->in($productIdList)
             ->groupBy('product, status')
             ->fetchGroup('product', 'status');
         foreach($releases as $product => $release)
@@ -843,7 +834,7 @@ class block extends control
         /* Get last releases. */
         $lastReleases = $this->dao->select('product, COUNT(*) AS count')->from(TABLE_RELEASE)
             ->where('date')->eq(date('Y-m-d', strtotime('-1 day')))
-            ->andWhere('product')->in($productIDList)
+            ->andWhere('product')->in($productIdList)
             ->groupBy('product')
             ->fetchPairs();
 
@@ -879,33 +870,23 @@ class block extends control
         $this->app->loadLang('bug');
 
         $status  = isset($this->params->type) ? $this->params->type : '';
-        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get projects. */
-        $projects = $this->loadModel('project')->getList($status);
-        foreach($projects as $projectID => $project)
-        {
-            if(!$this->project->checkPriv($project)) unset($projects[$projectID]);
-        }
-        $projectIDList = array_keys($projects);
-        if(!$projectIDList)
+        $projects = $this->block->getProjectsLikeDropMenu($status);
+        if(empty($projects))
         {
             $this->view->projects = $projects;
             return false;
         }
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('id')->in($projectIDList)
-            ->orderBy($orderBy)
-            ->beginIF($this->viewType != 'json')->limit($num)->fi()
-            ->fetchAll('id');
-        $projectIDList = array_keys($projects);
+
+        $projectIdList = array_keys($projects);
 
 
         /* Get tasks. */
         $yesterday = date('Y-m-d', strtotime('-1 day'));
         $tasks = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel', `left`, 0)) as totalLeft")->from(TABLE_TASK)
-            ->where('project')->in($projectIDList)
+            ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->groupBy('project')
@@ -923,7 +904,7 @@ class block extends control
         /* Get stories. */
         $stories = $this->dao->select("t1.project, count(t2.status) as totalStories, count(t2.status != 'closed' or null) as unclosedStories, count(t2.stage = 'released' or null) as releasedStories")->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where('t1.project')->in($projectIDList)
+            ->where('t1.project')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
             ->groupBy('project')
             ->fetchAll('project');
@@ -939,7 +920,7 @@ class block extends control
 
         /* Get bugs. */
         $bugs = $this->dao->select("project, status, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
-            ->where('project')->in($projectIDList)
+            ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')
             ->fetchAll('project');
@@ -997,24 +978,15 @@ class block extends control
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
         $status  = isset($this->params->type) ? $this->params->type : '';
-        $orderBy = isset($this->params->orderBy) ? $this->params->orderBy : 'id_asc';
 
-        /* Get products. */
-        $products = $this->loadModel('product')->getList($status);
-        foreach($products as $productID => $product)
-        {
-            if(!$this->product->checkPriv($product)) unset($products[$productID]);
-        }
-        $productIDList = array_keys($products);
-        if(!$productIDList)
+        $products      = $this->block->getProductsLikeDropMenu($status);
+        $productIdList = array_keys($products);
+
+        if(empty($products))
         {
             $this->view->products = $products;
             return false;
         }
-        $products = $this->dao->select('*')->from(TABLE_PRODUCT)
-            ->where('id')->in($productIDList)
-            ->orderBy($orderBy)
-            ->fetchAll('id');
 
         $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
         $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('product', 'id');

@@ -24,7 +24,7 @@
       <?php endif;?>
     </h2>
     <div class="pull-right btn-toolbar">
-      <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-info"><?php echo $lang->pasteText;?></button>
+      <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
     </div>

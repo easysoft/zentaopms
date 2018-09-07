@@ -7,7 +7,6 @@
 #batchCreateForm .input-group .form-control {position: static;}
 #batchCreateForm .input-group .colorpicker {z-index: 2;}
 #batchCreateForm .input-group .colorpicker.open {z-index: 5;}
-#batchCreateForm{overflow-x:auto;}
 
 .main-header .pull-left {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
