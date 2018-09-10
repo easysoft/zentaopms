@@ -421,6 +421,7 @@ class projectModel extends model
             {
                 if(!empty($value) and !isset($team[$value]))
                 {
+                    $member = new stdclass();
                     $member->root    = (int)$projectID;
                     $member->account = $value;
                     $member->join    = helper::today();
