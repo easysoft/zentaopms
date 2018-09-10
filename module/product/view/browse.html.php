@@ -270,10 +270,9 @@
                   echo "<li class='dropdown-submenu'>";
                   echo html::a('javascript:;', $lang->story->stageAB, '', "id='stageItem'");
                   echo "<ul class='dropdown-menu'>";
-                  $stageList['verified'] = $lang->story->stageList['verified'];
-                  $stageList['closed']   = $lang->story->stageList['closed'];
-                  foreach($stageList as $key => $stage)
+                  foreach($lang->story->stageList as $key => $stage)
                   {
+                      if(empty($key)) continue;
                       $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                       echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
                   }
