@@ -80,6 +80,11 @@ $(function()
       <?php $index = 1;?>
       <?php foreach($products as $product):?>
       <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabContent<?php echo $product->id;?>">
+        <?php if(!$product->builds):?>
+        <div class="table-empty-tip">
+          <p><span class="text-muted"><?php echo $lang->block->noData;?></span></p>
+        </div>
+        <?php endif;?>
         <div class="statistic-menu input-group space w-400px">
           <?php if($product->builds):?>
           <select id='build' name='build' class="form-control chosen">
