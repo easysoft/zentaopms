@@ -221,7 +221,6 @@ class project extends control
         $this->view->modules       = $this->tree->getTaskOptionMenu($projectID);
         $this->view->moduleID      = $moduleID;
         $this->view->moduleTree    = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'));
-        $this->view->projectTree   = $this->project->tree();
         $this->view->memberPairs   = $memberPairs;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setShowModule = true;

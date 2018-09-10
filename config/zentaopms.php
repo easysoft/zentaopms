@@ -59,6 +59,7 @@ define('TABLE_GROUPPRIV',     '`' . $config->db->prefix . 'grouppriv`');
 define('TABLE_USERGROUP',     '`' . $config->db->prefix . 'usergroup`');
 define('TABLE_USERQUERY',     '`' . $config->db->prefix . 'userquery`');
 define('TABLE_USERCONTACT',   '`' . $config->db->prefix . 'usercontact`');
+define('TABLE_USERVIEW',      '`' . $config->db->prefix . 'userview`');
 
 define('TABLE_BUG',           '`' . $config->db->prefix . 'bug`');
 define('TABLE_CASE',          '`' . $config->db->prefix . 'case`');

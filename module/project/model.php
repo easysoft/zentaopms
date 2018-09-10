@@ -23,40 +23,11 @@ class projectModel extends model
      * @access public
      * @return bool
      */
-    public function checkPriv($project)
+    public function checkPriv($projectID)
     {
         /* If is admin, return true. */
         if($this->app->user->admin) return true;
-
-        $acls = $this->app->user->rights['acls'];
-        if(!empty($acls['projects']) and !in_array($project->id, $acls['projects'])) return false;
-
-        /* If project is open, return true. */
-        if($project->acl == 'open') return true;
-
-        /* Get all teams of all projects and group by projects, save it as static. */
-        static $teams;
-        if(empty($teams)) $teams = $this->dao->select('root, account')->from(TABLE_TEAM)->where('type')->eq('project')->fetchGroup('root', 'account');
-        $currentTeam = isset($teams[$project->id]) ? $teams[$project->id] : array();
-
-        /* If project is private, only members can access. */
-        if($project->acl == 'private')
-        {
-            return isset($currentTeam[$this->app->user->account]);
-        }
-
-        /* Project's acl is custom, check the groups. */
-        if($project->acl == 'custom')
-        {
-            if(isset($currentTeam[$this->app->user->account])) return true;
-            $userGroups    = $this->app->user->groups;
-            $projectGroups = explode(',', $project->whitelist);
-            foreach($userGroups as $groupID)
-            {
-                if(in_array($groupID, $projectGroups)) return true;
-            }
-            return false;
-        }
+        return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
     }
 
     /**
@@ -84,7 +55,7 @@ class projectModel extends model
             unset($this->lang->project->subMenu->qa->testtask);
         }
 
-        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($project))
+        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($projectID))
         {
             echo(js::alert($this->lang->project->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
@@ -375,6 +346,17 @@ class projectModel extends model
             $lib->main    = '1';
             $lib->acl     = $project->acl == 'open' ? 'open' : 'private';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+            $this->loadModel('user')->updateUserView($projectID, 'project');
+            if(isset($_POST['products']))
+            {
+                foreach($this->post->products as $productID)
+                {
+                    if(empty($productID)) continue;
+                    $this->user->updateUserView($productID, 'product');
+                }
+            }
+
             if(!dao::isError()) $this->loadModel('score')->create('project', 'create', $projectID);
             return $projectID;
         }
@@ -437,6 +419,7 @@ class projectModel extends model
             if($project->acl != $oldProject->acl) $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($project->acl == 'open' ? 'open' : 'private')->where('project')->eq($projectID)->exec();
 
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+            if($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }
@@ -694,18 +677,19 @@ class projectModel extends model
         $projects = $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
             ->fetchAll();
         $pairs = array();
         foreach($projects as $project)
         {
             if(strpos($mode, 'noclosed') !== false and ($project->status == 'done' or $project->status == 'closed')) continue;
-            if($this->checkPriv($project)) $pairs[$project->id] = $project->name;
+            $pairs[$project->id] = $project->name;
         }
         if(strpos($mode, 'empty') !== false) $pairs[0] = '';
 
         /* If the pairs is empty, to make sure there's an project in the pairs. */
-        if(empty($pairs) and isset($projects[0]) and $this->checkPriv($projects[0]))
+        if(empty($pairs) and isset($projects[0]))
         {
             $firstProject = $projects[0];
             $pairs[$firstProject->id] = $firstProject->name;
@@ -750,6 +734,7 @@ class projectModel extends model
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($status == 'isdoing')->andWhere('t2.status')->ne('done')->andWhere('t2.status')->ne('suspended')->andWhere('t2.status')->ne('closed')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
@@ -760,6 +745,7 @@ class projectModel extends model
                 ->beginIF($status == 'undone')->andWhere('status')->ne('done')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($status == 'isdoing')->andWhere('status')->ne('done')->andWhere('status')->ne('suspended')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($status != 'all' and $status != 'isdoing' and $status != 'undone')->andWhere('status')->in($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('order_desc')
                 ->beginIF($limit)->limit($limit)->fi()
@@ -788,6 +774,7 @@ class projectModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.iscat')->eq(0)
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
@@ -801,6 +788,7 @@ class projectModel extends model
             return $this->dao->select('t1.*, IF(INSTR(" done,closed", t1.status) < 2, 0, 1) AS isDone')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t2.root=t1.id')
                 ->where('t1.iscat')->eq(0)
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
                 ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
@@ -823,22 +811,17 @@ class projectModel extends model
         $list = $this->dao->select('t1.id, t1.name,t1.status, t2.product')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
             ->fetchGroup('product');
 
         $noProducts = array();
-        $projects   = $this->getList();
-
         foreach($list as $id => $product)
         {
             foreach($product as $ID => $project)
             {
-                if(!$this->checkPriv($projects[$project->id]))
-                {
-                    unset($list[$id][$ID]);
-                }
                 if(!$project->product)
                 {
-                    if($this->checkPriv($projects[$project->id])) $noProducts[] = $project;
+                    if(strpos(",{$this->app->user->view->projects},", ",{$project->id},") !== false) $noProducts[] = $project;
                     unset($list[$id][$ID]);
                 }
             }
@@ -864,10 +847,6 @@ class projectModel extends model
     {
         /* Init vars. */
         $projects = $this->getList($status, 0, $productID, $branch);
-        foreach($projects as $projectID => $project)
-        {
-            if(!$this->checkPriv($project)) unset($projects[$projectID]);
-        }
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projects))
             ->orderBy($orderBy)
@@ -1218,16 +1197,14 @@ class projectModel extends model
     {
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->in($projectIds)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll('id');
 
         $pairs = array();
         $now   = date('Y-m-d');
-        foreach($projects as $id => $project)
-        {
-            if($this->checkPriv($project)) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
-        }
+        foreach($projects as $id => $project) $pairs[$id] = ucfirst(substr($project->code, 0, 1)) . ':' . $project->name;
         return $pairs;
     }
 
@@ -1240,9 +1217,15 @@ class projectModel extends model
      */
     public function updateProducts($projectID)
     {
+        $this->loadModel('user');
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
-        if(!isset($_POST['products'])) return;
+        if(!isset($_POST['products']))
+        {
+            foreach($oldProjectProducts as $productID => $branches) $this->user->updateUserView($productID, 'product');
+            return true;
+        }
+
         $products = $_POST['products'];
         $branches = isset($_POST['branch']) ? $_POST['branch'] : array();
         $plans    = isset($_POST['plans']) ? $_POST['plans'] : array();;
@@ -1268,6 +1251,14 @@ class projectModel extends model
             $data->plan    = isset($plans[$productID]) ? $plans[$productID] : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID] = true;
+        }
+
+        $oldProductKeys = array_keys($oldProjectProducts);
+        $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
+        foreach($needUpdate as $productID)
+        {
+            if(empty($productID)) continue;
+            $this->user->updateUserView($productID, 'product');
         }
     }
 
@@ -1792,6 +1783,14 @@ class projectModel extends model
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
             }
         }
+        $this->loadModel('user')->updateUserView($projectID, 'project', $accounts);
+
+        $products = $this->getProducts($projectID, false);
+        foreach($products as $productID => $productName)
+        {
+            if(empty($productID)) continue;
+            $this->user->updateUserView($productID, 'product', $accounts);
+        }
     }
 
     /**
@@ -1805,6 +1804,14 @@ class projectModel extends model
     public function unlinkMember($projectID, $account)
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
+		
+        $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
+        $products = $this->getProducts($projectID, false);
+        foreach($products as $productID => $productName)
+        {
+            if(empty($productID)) continue;
+            $this->user->updateUserView($productID, 'product', array($account));
+        }
     }
 
     /**

@@ -523,7 +523,7 @@ class bug extends control
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        if($bug->project and !$this->loadModel('project')->checkPriv($this->project->getByID($bug->project)))
+        if($bug->project and !$this->loadModel('project')->checkPriv($bug->project))
         {
             echo(js::alert($this->lang->project->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";

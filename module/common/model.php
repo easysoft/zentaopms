@@ -86,6 +86,7 @@ class commonModel extends model
     {
         if($this->session->user)
         {
+            $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
         }
         elseif($this->app->company->guest or PHP_SAPI == 'cli')
@@ -98,6 +99,7 @@ class commonModel extends model
             $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
             $user->groups     = array('group');
+            $user->view       = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }
@@ -1390,7 +1392,7 @@ EOD;
             if($module == 'task' and !empty($object->project))$objectID = $object->project;
 
             $limitedProjects = !empty($_SESSION['limitedProjects']) ? $_SESSION['limitedProjects'] : '';
-            if(strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
+            if($objectID and strpos(",{$limitedProjects},", ",$objectID,") !== false) $limitedProject = true;
         }
         if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
 

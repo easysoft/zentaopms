@@ -574,12 +574,12 @@ class actionModel extends model
 
         /* Build has priv condition. */
         $condition = 1;
-        if($productID == 'all') $products = $this->loadModel('product')->getPairs();
-        if($projectID == 'all') $projects = $this->loadModel('project')->getPairs();
+        if($productID == 'all') $products = $this->app->user->view->products;
+        if($projectID == 'all') $projects = $this->app->user->view->projects;
         if($productID == 'all' or $projectID == 'all')
         {
-            $projectCondition = $projectID == 'all' ? "project " . helper::dbIN(array_keys($projects)) : '';
-            $productCondition = $productID == 'all' ? "INSTR('," . join(',', array_keys($products)) . ",', product) > 0" : '';
+            $projectCondition = $projectID == 'all' ? "project " . helper::dbIN($projects) : '';
+            $productCondition = $productID == 'all' ? "INSTR('," . $products . ",', product) > 0" : '';
             if(is_numeric($productID)) $productCondition = "product like'%,$productID,%' or product='$productID'";
             if(is_numeric($projectID)) $projectCondition = "project='$projectID'";
 

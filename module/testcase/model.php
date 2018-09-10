@@ -511,7 +511,7 @@ class testcaseModel extends model
         $caseQuery      = '(' . $this->session->testcaseQuery;
         if(strpos($this->session->testcaseQuery, $allProduct) !== false)
         {
-            $products  = array_keys($this->loadModel('product')->getPrivProducts());
+            $products  = $this->app->user->view->products;
             $caseQuery = str_replace($allProduct, '1', $caseQuery);
             $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN($products);
             $queryProductID = 'all';

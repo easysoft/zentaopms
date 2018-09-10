@@ -248,6 +248,7 @@ class userModel extends model
                 $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
             }
 
+            $this->computeUserView($user->account);
             $this->loadModel('action')->create('user', $userID, 'Created');
             $this->loadModel('mail');
             if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
@@ -345,6 +346,7 @@ class userModel extends model
             }
             else
             {
+                $this->computeUserView($user->account);
                 if($this->config->mail->mta == 'sendcloud' and !empty($user->email)) $this->mail->syncSendCloud('sync', $user->email, $user->realname);
             }
         }
@@ -397,6 +399,7 @@ class userModel extends model
         if($this->post->account != $oldUser->account)
         {
             $this->dao->update(TABLE_USERGROUP)->set('account')->eq($this->post->account)->where('account')->eq($oldUser->account)->exec();
+            $this->dao->update(TABLE_USERVIEW)->set('account')->eq($this->post->account)->where('account')->eq($oldUser->account)->exec();
             if(strpos($this->app->company->admins, ',' . $oldUser->account . ',') !== false)
             {
                 $admins = str_replace(',' . $oldUser->account . ',', ',' . $this->post->account . ',', $this->app->company->admins);
@@ -415,6 +418,7 @@ class userModel extends model
                 $data->group   = $groupID;
                 $this->dao->replace(TABLE_USERGROUP)->data($data)->exec();
             }
+            $this->computeUserView($this->post->account, true);
         }
         if(!empty($user->password) and $user->account == $this->app->user->account) $this->app->user->password = $user->password;
         if(!dao::isError())
@@ -520,6 +524,7 @@ class userModel extends model
             {
                 $oldAccount = $oldUser->account;
                 $this->dao->update(TABLE_USERGROUP)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
+                $this->dao->update(TABLE_USERVIEW)->set('account')->eq($user['account'])->where('account')->eq($oldAccount)->exec();
                 if(strpos($this->app->company->admins, ',' . $oldAccount . ',') !== false)
                 {
                     $admins = str_replace(',' . $oldAccount . ',', ',' . $user['account'] . ',', $this->app->company->admins);
@@ -1230,5 +1235,240 @@ class userModel extends model
             return false;
         }
         return true;
+    }
+
+    /**
+     * Compute user view.
+     * 
+     * @param  string $account 
+     * @param  bool   $force 
+     * @access public
+     * @return object
+     */
+    public function computeUserView($account = '', $force = false)
+    {
+        if(empty($account)) $account = $this->session->user->account;
+        if(empty($account)) return array();
+
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
+        if(empty($userView) or $force)
+        {
+            $isAdmin = strpos($this->app->company->admins, ',' . $account . ',') !== false;
+            $groups  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($account)->fetchPairs('group', 'group');
+            $groups  = ',' . join(',', $groups) . ',';
+
+            static $allProducts, $allProjects, $projectProducts, $teams;
+            if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist')->from(TABLE_PRODUCT)->fetchAll('id');
+            if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,whitelist')->from(TABLE_PROJECT)->fetchAll('id');
+            if($projectProducts === null)
+            {
+                $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->query();
+                while($projectProduct = $stmt->fetch())
+                {
+                    $projectProducts[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
+                }
+            }
+            if($teams === null)
+            {
+                $stmt = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')->query();
+                while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
+            }
+
+            $userView = new stdclass();
+            $userView->account  = $account;
+            $userView->products = array();
+            $userView->projects = array();
+            if($isAdmin)
+            {
+                $userView->products = join(',', array_keys($allProducts));
+                $userView->projects = join(',', array_keys($allProjects));
+            }
+            else
+            {
+                $products = array();
+                foreach($allProducts as $id => $product)
+                {
+                    if($this->checkProductPriv($product, $account, $groups, zget($projectProducts, $id, array()), $teams)) $products[$id] = $id;
+                }
+                $userView->products = join(',', $products);
+
+                $projects = array();
+                foreach($allProjects as $id => $project)
+                {
+                    $projectTeams = isset($teams[$id]) ? $teams[$id] : array();
+                    if($this->checkProjectPriv($project, $account, $groups, $projectTeams)) $projects[$id] = $id;
+                }
+                $userView->projects = join(',', $projects);
+            }
+            $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
+        }
+        return $userView;
+    }
+
+    /**
+     * Grant user view.
+     * 
+     * @param  string $account 
+     * @param  array  $acls 
+     * @access public
+     * @return object
+     */
+    public function grantUserView($account = '', $acls = array())
+    {
+        if(empty($account)) $account = $this->session->user->account;
+        if(empty($account)) return array();
+        if(empty($acls) and isset($this->app->user->rights['acls'])) $acls = $this->app->user->rights['acls'];
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
+
+        if(empty($userView)) $userView = $this->computeUserView($account);
+        if(!empty($acls['products']))
+        {
+            $grantProducts = '';
+            foreach($acls['products'] as $productID)
+            {
+                if(strpos(",{$userView->products},", ",{$productID},") !== false) $grantProducts .= ",{$productID}";
+            }
+            $userView->products = $grantProducts;
+        }
+        if(!empty($acls['projects']))
+        {
+            $grantProjects = '';
+            foreach($acls['projects'] as $projectID)
+            {
+                if(strpos(",{$userView->projects},", ",{$projectID},") !== false) $grantProjects .= ",{$projectID}";
+            }
+            $userView->projects = $grantProjects;
+        }
+
+        return $userView;
+    }
+
+    /**
+     * Update user view.
+     * 
+     * @param  int    $objectID 
+     * @param  string $objectType 
+     * @param  array  $users 
+     * @access public
+     * @return void
+     */
+    public function updateUserView($objectID, $objectType, $users = array())
+    {
+        $table = '';
+        if($objectType == 'product') $table = TABLE_PRODUCT;
+        if($objectType == 'project') $table = TABLE_PROJECT;
+        if(empty($table)) return false;
+
+        $object     = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        $allGroups  = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
+        $userGroups = array();
+        foreach($allGroups as $group)
+        {
+            if(!isset($userGroups[$group->account])) $userGroups[$group->account] = '';
+            $userGroups[$group->account] .= "{$group->group},";
+        }
+
+        $linkedProjects = array();
+        if($objectType == 'product')
+        {
+            $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($objectID)->query();
+            while($projectProduct = $stmt->fetch()) $linkedProjects[$projectProduct->project] = $projectProduct->project;
+        }
+
+        $teams = array();
+        $stmt  = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')
+            ->beginIF($objectType == 'product')->andWhere('root')->in($linkedProjects)->fi()
+            ->beginIF($objectType == 'project')->andWhere('root')->eq($objectID)->fi()
+            ->query();
+        while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
+
+        $field = $objectType == 'product' ? 'products' : 'projects';
+        $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)
+            ->beginIF($users)->where('account')->in($users)->fi()
+            ->query();
+        while($userView = $stmt->fetch())
+        {
+            $account = $userView->account;
+            if($objectType == 'product')
+            {
+                $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $teams);
+                if($hasPriv and strpos(",{$userView->products},", ",{$objectID},") === false) $userView->products .= ",{$objectID}";
+                if(!$hasPriv and strpos(",{$userView->products},", ",{$objectID},") !== false) $userView->products = trim(str_replace(",{$objectID},", ',', ",{$userView->products},"), ',');
+                $this->dao->update(TABLE_USERVIEW)->set('products')->eq($userView->products)->where('account')->eq($account)->exec();
+            }
+            elseif($objectType == 'project')
+            {
+                $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
+                if($hasPriv and strpos(",{$userView->projects},", ",{$objectID},") === false) $userView->projects .= ",{$objectID}";
+                if(!$hasPriv and strpos(",{$userView->projects},", ",{$objectID},") !== false) $userView->projects = trim(str_replace(",{$objectID},", ',', ",{$userView->projects},"), ',');
+                $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($userView->projects)->where('account')->eq($account)->exec();
+            }
+        }
+    }
+
+    /**
+     * Check product priv.
+     * 
+     * @param  object $product 
+     * @param  string $account 
+     * @param  string $groups 
+     * @param  array  $linkedProjects 
+     * @param  array  $teams 
+     * @access public
+     * @return bool
+     */
+    public function checkProductPriv($product, $account, $groups, $linkedProjects, $teams) 
+    {
+        if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
+        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account) return true;
+        if($product->acl == 'open') return true;
+
+        if($product->acl == 'custom')
+        {
+            foreach(explode(',', $product->whitelist) as $whitelist)
+            {
+                if(empty($whitelist)) continue;
+                if(strpos(",{$groups},", ",$whitelist,") !== false) return true;
+            }
+        }
+
+        if(!empty($linkedProjects))
+        {
+            foreach($linkedProjects as $projectID)
+            {
+                if(isset($teams[$projectID][$account])) return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check project priv.
+     * 
+     * @param  object    $project 
+     * @param  string    $account 
+     * @param  string    $groups 
+     * @param  array     $teams 
+     * @access public
+     * @return bool
+     */
+    public function checkProjectPriv($project, $account, $groups, $teams)
+    {
+        if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
+        if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
+        if($project->acl == 'open') return true;
+        if(isset($teams[$account])) return true;
+
+        if($project->acl == 'custom')
+        {
+            foreach(explode(',', $project->whitelist) as $whitelist)
+            {
+                if(empty($whitelist)) continue;
+                if(strpos(",{$groups},", ",$whitelist,") !== false) return true;
+            }
+        }
+
+        return false;
     }
 }

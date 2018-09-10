@@ -887,20 +887,8 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->project)
-        {
-            static $projects;
-            if(empty($projects)) $projects = $this->loadModel('project')->getPairs();
-            return isset($projects[$object->project]);
-        }
-
-        if($object->product)
-        {
-            static $products;
-            if(empty($products)) $products = $this->loadModel('product')->getPairs();
-            return isset($products[$object->product]);
-        }
-
+        if($object->project) return strpos(",{$this->app->user->view->projects},", ",{$object->project},") !== false;
+        if($object->product) return strpos(",{$this->app->user->view->products},", ",{$object->product},") !== false;
         return false;
     }
 
