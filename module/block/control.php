@@ -595,14 +595,13 @@ class block extends control
         $this->session->set('testtaskList', $this->server->http_referer);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->app->loadLang('testtask');
-        $products = $this->loadModel('product')->getPairs();
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project=t4.id')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project=t5.project')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->in(array_keys($products))
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.product = t5.product')
             ->beginIF($this->params->type != 'all')->andWhere('t1.status')->eq($this->params->type)->fi()
             ->orderBy('t1.id desc')
@@ -638,11 +637,10 @@ class block extends control
     {
         $this->session->set('productPlanList', $this->server->http_referer);
         $this->app->loadLang('productplan');
-        $products = $this->loadModel('product')->getPairs();
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->in(array_keys($products))
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.begin desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
             ->fetchAll();
@@ -658,12 +656,11 @@ class block extends control
     {
         $this->session->set('releaseList', $this->server->http_referer);
         $this->app->loadLang('release');
-        $products = $this->loadModel('product')->getPairs();
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build=t3.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.product')->in(array_keys($products))
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
             ->fetchAll();
@@ -679,11 +676,10 @@ class block extends control
     {
         $this->session->set('buildList', $this->server->http_referer);
         $this->app->loadLang('build');
-        $projects = $this->loadModel('project')->getPairs();
         $this->view->builds = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.project')->in(array_keys($projects))
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->orderBy('t1.id desc')
             ->beginIF($this->viewType != 'json')->limit((int)$this->params->num)->fi()
             ->fetchAll();

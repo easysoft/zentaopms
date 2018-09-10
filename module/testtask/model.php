@@ -157,7 +157,7 @@ class testtaskModel extends model
      */
     public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
     {
-        $products = $scopeAndStatus[0] == 'all' ? $this->loadModel('product')->getPairs() : array();
+        $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
         if($this->config->global->flow == 'onlyTest')
         {
             return $this->dao->select("t1.*, t2.name AS productName,t4.name AS buildName, t4.branch AS branch")
@@ -166,7 +166,7 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
                 ->where('t1.deleted')->eq(0)
                 ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
-                ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in(array_keys($products))->fi()
+                ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
                 ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in(('blocked,doing,wait,done'))->fi()
                 ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
                 ->beginIF($branch)->andWhere("t4.branch = '$branch'")->fi()
@@ -176,19 +176,17 @@ class testtaskModel extends model
         }
         else
         {
-            $projects = $this->loadModel('project')->getPairs();
             return $this->dao->select("t1.*, t2.name AS productName, t3.name AS projectName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
                 ->from(TABLE_TESTTASK)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
                 ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project and t1.product = t5.product')
 
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t5.product = t1.product')
-                ->andWhere('t3.id')->in(array_keys($projects))
+                ->andWhere('t3.id')->in($this->app->user->view->projects)
                 ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
-                ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in(array_keys($products))->fi()
+                ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
                 ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
                 ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
                 ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
@@ -837,9 +835,8 @@ class testtaskModel extends model
             $caseQuery      = $this->session->testtaskQuery;
             if(strpos($this->session->testtaskQuery, $allProduct) !== false)
             {
-                $products  = array_keys($this->loadModel('product')->getPrivProducts());
                 $caseQuery = str_replace($allProduct, '1', $this->session->testtaskQuery);
-                $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
+                $caseQuery = $caseQuery . ' AND `product` ' . helper::dbIN($this->app->user->view->products);
                 $queryProductID = 'all';
             }
 
