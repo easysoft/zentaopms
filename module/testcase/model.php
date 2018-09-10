@@ -1378,7 +1378,7 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
-                $case->needconfirm ? print("<span class='status-changed'><span class='label label-dot'></span> {$this->lang->story->changed}</span>") : print("<span class='status-{$case->status}'><span class='label label-dot'></span><span class='status-text'>{$this->lang->testcase->statusList[$case->status]}</span></span>");
+                $case->needconfirm ? print("<span class='status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-{$case->status}'><span class='status-text'>{$this->lang->testcase->statusList[$case->status]}</span></span>");
                 break;
             case 'story':
                 static $stories = array();
