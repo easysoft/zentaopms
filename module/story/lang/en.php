@@ -195,6 +195,7 @@ $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';
 $lang->story->mustChooseResult      = 'Select Result';
 $lang->story->mustChoosePreVersion  = 'Select the Version to revert to.';
 $lang->story->noStory               = 'No stories. ';
+$lang->story->failChangeStage       = 'The status of story %s is draft, that fail to change stage.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Story Scope';
