@@ -26,7 +26,6 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printIcon('group', 'create', '', '', 'button', '', '', 'iframe', true, "data-width='550px'");?>
     <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
     <?php
       if(commonModel::isTutorialMode())
@@ -101,14 +100,18 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
             <?php
-            if($user->ranzhi) 
+            if(!empty($config->sso->turnon))
             {
-                common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+                if($user->ranzhi)
+                {
+                    common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
+                }
+                else
+                {
+                    echo html::a('javascript:;', "<i class='icon icon-unlink'></i>", '', "class='btn disabled'");
+                }
             }
-            else
-            {
-                echo html::a('javascript:;', "<i class='icon icon-unlink'></i>", '', "class='btn disabled'");
-            }
+
             if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $config->user->lockMinutes * 60)
             {
                 common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
