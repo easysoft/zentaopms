@@ -22,6 +22,7 @@ class testtask extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+        $this->loadModel('project');
         $this->loadModel('product');
         $this->view->products = $this->products = $this->product->getPairs('nocode');
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testtask")));
@@ -255,7 +256,7 @@ class testtask extends control
 
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
-        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$task) die(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
         $productID = $task->product;
         $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot);
