@@ -105,6 +105,7 @@ $lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testtask->noticeNoOther     = 'There are no other test task for this product';
 $lang->testtask->noTesttask        = 'No test tasks. ';
+$lang->testtask->checkLinked       = "Please check if the testtask product is linked to project.";
 
 $lang->testtask->assignedToMe  = 'My';
 $lang->testtask->allCases      = 'AllCases';
