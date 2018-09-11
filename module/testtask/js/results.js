@@ -6,7 +6,7 @@ $(function()
         $this.toggleClass('show-detail');
         var show = $this.hasClass('show-detail');
         $this.next('.result-detail').toggleClass('hide', !show);
-        $this.find('.collapse-handle').toggleClass('icon-chevron-down', !show).toggleClass('icon-chevron-up', show);;
+        $this.find('.collapse-handle').toggleClass('icon-angle-down', !show).toggleClass('icon-angle-top', show);;
     });
 
     $(".step-group input[type='checkbox']").click(function()
@@ -22,6 +22,5 @@ $(function()
 
     $('#casesResults table caption .result-tip').html($('#resultTip').html());
 
-    $('tr:first').addClass("show-detail");
-    $('#tr-detail_1').removeClass("hide");
+    $('tr:first').click();
 });

@@ -985,7 +985,7 @@ class block extends control
         }
 
         $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
-        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('product', 'id');
+        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchGroup('product', 'id');
         $openedBugs   = $this->dao->select('id, openedBuild')->from(TABLE_BUG)->where('openedBuild')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('openedBuild', 'id');
 
         /* Get bugs. */
