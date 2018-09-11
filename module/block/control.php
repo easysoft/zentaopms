@@ -881,15 +881,17 @@ class block extends control
 
         /* Get tasks. */
         $yesterday = date('Y-m-d', strtotime('-1 day'));
-        $tasks = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel', `left`, 0)) as totalLeft")->from(TABLE_TASK)
+        $tasks     = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel', `left`, 0)) as totalLeft")->from(TABLE_TASK)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->eq(0)
             ->groupBy('project')
             ->fetchAll('project');
-
         foreach($tasks as $projectID => $task)
         {
+            $task->totalEstimate = round($task->totalEstimate, 2);
+            $task->totalConsumed = round($task->totalConsumed, 2);
+            $task->totalLeft     = round($task->totalLeft, 2);
             foreach($task as $key => $value)
             {
                 if($key == 'project') continue;
@@ -985,7 +987,7 @@ class block extends control
         }
 
         $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
-        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('product', 'id');
+        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchGroup('product', 'id');
         $openedBugs   = $this->dao->select('id, openedBuild')->from(TABLE_BUG)->where('openedBuild')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('openedBuild', 'id');
 
         /* Get bugs. */

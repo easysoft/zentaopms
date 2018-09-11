@@ -2097,9 +2097,6 @@ class project extends control
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
         $projectPairs = array();
         foreach($projects as $project) $projectPairs[$project->id] = $project->name;
-        $projectsPinyin = common::convert2Pinyin($projectPairs);
-        foreach($projects as $key => $project) $project->key = $projectsPinyin[$project->name];
-
         $this->view->projects = $projects;
         $this->display();
     }

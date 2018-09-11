@@ -33,7 +33,7 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head'>
+    <table class='table has-sort-head tablesorter'>
       <thead>
         <tr class='colhead'>
           <th class='w-id'>    <?php echo $lang->idAB;?></th>
@@ -56,7 +56,7 @@
           <td><?php echo $story->productTitle;?></td>
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
-          <td><?php echo $users[$story->openedBy];?></td>
+          <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo $story->estimate;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
