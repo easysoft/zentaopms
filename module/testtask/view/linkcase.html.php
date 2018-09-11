@@ -102,7 +102,7 @@
         </td>
         <td class='text-center'><?php echo html::select("versions[$case->id]", array_combine(range($case->version, 1), range($case->version, 1)), '', 'class="form-control"');?> </td>
         <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
-        <td class='text-left'>
+        <td class='text-left title' title='<?php echo $case->title?>'>
           <?php
           echo $case->title . ' ( ';
           for($i = $case->version; $i >= 1; $i --)
