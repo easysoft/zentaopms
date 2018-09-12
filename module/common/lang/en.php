@@ -122,8 +122,7 @@ $lang->menu->qa      = 'QA|qa|index';
 $lang->menu->doc     = 'Doc|doc|index';
 $lang->menu->report  = 'Report|report|index';
 $lang->menu->company = 'Company|company|index';
-
-$lang->adminMenu = 'Admin|admin|index';
+$lang->menu->admin   = 'Admin|admin|index';
 
 $lang->dividerMenu = ',qa,';
 
