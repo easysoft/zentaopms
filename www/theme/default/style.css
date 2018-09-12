@@ -17,3 +17,4 @@
 .tree li.active>a{background-color:#fff}
 .tree li>a:hover{background-color:#fff}
 .detail-content{padding: 5px 0 0 0px;}
+#sidebar>.sidebar-toggle>.icon{color:#2196f3}
