@@ -23,3 +23,4 @@
 #dashboard.sortable-sorting .panel.drag-shadow {box-shadow: 0 1px 3px rgba(0,0,0,.175), 0 3px 8px 0 rgba(0,0,0,.175)}
 
 #dashboard .block-sm .hide-in-sm {display: none;}
+#dashboard .block-dynamic .panel-body{overflow-x:hidden;}

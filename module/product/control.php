@@ -383,7 +383,7 @@ class product extends control
 
         $this->product->setMenu($this->products, $productID);
 
-        $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->orderBy('date')->fetchAll();
+        $plans = $this->loadModel('productplan')->getList($productID, 0, 'unexpired', null, 'begin');
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
@@ -395,7 +395,7 @@ class product extends control
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
         $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager = null, $productID);
-        $this->view->releases   = $releases;
+        $this->view->plans      = $plans;
 
         $this->display();
     }
