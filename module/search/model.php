@@ -308,7 +308,7 @@ class searchModel extends model
             ->from(TABLE_USERQUERY)
             ->where('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
-            ->orderBy('id_asc')
+            ->orderBy('id_desc')
             ->fetchPairs();
         if(!$queries) return array('' => $this->lang->search->myQuery);
         $queries = array('' => $this->lang->search->myQuery) + $queries;
