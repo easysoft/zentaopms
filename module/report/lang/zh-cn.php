@@ -75,10 +75,10 @@ $lang->report->unplanned     = '未计划';
 $lang->report->workday       = '每天工时';
 $lang->report->diffDays      = '工作日天数';
 
-$lang->report->typeList['']     = '默认';
-$lang->report->typeList['pie']  = '饼图';
-$lang->report->typeList['bar']  = '柱状图';
-$lang->report->typeList['line'] = '折线图';
+$lang->report->typeList['default'] = '默认';
+$lang->report->typeList['pie']     = '饼图';
+$lang->report->typeList['bar']     = '柱状图';
+$lang->report->typeList['line']    = '折线图';
 
 $lang->report->conditions    = '筛选条件：';
 $lang->report->closedProduct = '关闭' . $lang->productCommon;
