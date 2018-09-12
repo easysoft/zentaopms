@@ -27,10 +27,6 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
         <div id="userMenu">
           <?php common::printSearchBox();?>
           <ul id="userNav" class="nav nav-default">
-            <?php list($adminName, $adminModule, $adminMethod) = explode('|', $lang->adminMenu);?>
-            <?php if(common::hasPriv($adminModule, $adminMethod)):?>
-            <li><?php echo html::a($this->createLink($adminModule, $adminMethod), $adminName);?></li>
-            <?php endif;?>
             <li><?php common::printUserBar();?></li>
           </ul>
         </div>
