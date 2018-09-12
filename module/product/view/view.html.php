@@ -17,21 +17,20 @@
         <div class="col-sm-6">
           <div class="panel block-release">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $lang->product->plan;?> <span class="label label-badge label-light"><?php printf($lang->product->iterationInfo, count($releases));?></span></div>
+              <div class="panel-title"><?php echo $lang->productplan->unexpired;?> <span class="label label-badge label-light"><?php printf($lang->product->iterationInfo, count($plans));?></span></div>
             </div>
             <div class="panel-body">
               <div class="release-path">
                 <ul class="release-line">
                   <?php $i = 0;?>
-                  <?php foreach($releases as $release):?>
+                  <?php foreach($plans as $plan):?>
                   <?php $i++;?>
                   <?php if($i > 6) break;?>
-                  <li <?php if(date('Y-m-d') < $release->date) echo "class='active'";?>>
-                    <a href="<?php echo $this->createLink('release', 'view', "releaseID={$release->id}");?>">
-                      <?php if(!empty($release->marker)) echo "<i class='icon icon-flag text-primary'></i>";?>
-                      <span class="title"><?php echo $release->name;?></span>
-                      <span class="date"><?php echo $release->date;?></span>
-                      <span class="info text-ellipsis" title="<?php echo strip_tags($release->desc);?>"><?php echo $release->desc;?></span>
+                  <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
+                    <a href="<?php echo $this->createLink('plan', 'view', "planID={$plan->id}");?>">
+                      <span class="title"><?php echo $plan->title;?></span>
+                      <span class="date"><?php echo $plan->begin;?></span>
+                      <span class="info text-ellipsis" title="<?php echo strip_tags($plan->desc);?>"><?php echo $plan->desc;?></span>
                     </a>
                   </li>
                   <?php endforeach;?>
