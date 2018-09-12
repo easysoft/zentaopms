@@ -256,7 +256,7 @@ class taskModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             $taskID = $this->dao->lastInsertID();
-            if($story) $this->story->setStage($tasks->story[$i]);
+            if($story) $this->story->setStage($task->story);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
 
