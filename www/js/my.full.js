@@ -760,5 +760,5 @@ $(document).ready(function()
     checkTutorial();
     revertModuleCookie();
 
-    $(document).on('click', '#helpMenuItem .close-help-tab', function(){$('#helpMenuItem').remove();});
+    $(document).on('click', '#helpMenuItem .close-help-tab', function(){$('#helpMenuItem').prev().remove();$('#helpMenuItem').remove();});
 });
