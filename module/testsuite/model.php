@@ -164,12 +164,6 @@ class testsuiteModel extends model
                 $pageNav .= '<ul class="dropdown-menu">';
                 if(common::hasPriv('testsuite', 'createLib')) $pageNav .= '<li>' . html::a(helper::createLink('testsuite', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->testsuite->createLib) . '</li>';
                 $pageNav .= '</ul></div></div>';
-
-                if(common::hasPriv('testsuite', 'libView'))
-                {
-                    $link = helper::createLink('testsuite', 'libView', "libID=$libID");
-                    $pageActions .= html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->testsuite->view, '', "class='btn'");
-                }
             }
             else
             {

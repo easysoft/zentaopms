@@ -141,7 +141,14 @@ function loadAllProjectBuilds(projectID, productID)
     {
         oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&needCreate=true&type=all');
-        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen();});
+        $.get(link, function(data)
+        {
+            notice();
+            if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
+            $('#openedBuild').replaceWith(data);
+            $('#openedBuild_chosen').remove();
+            $("#openedBuild").chosen();
+        })
     }
     if(page == 'edit')
     {
@@ -172,7 +179,14 @@ function loadAllProductBuilds(productID)
     if(page == 'create') 
     {
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch + '&index=0&type=all');
-        $('#buildBox').load(link, function(){ notice(); $('#openedBuild').chosen();});
+        $.get(link, function(data)
+        {
+            notice();
+            if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
+            $('#openedBuild').replaceWith(data);
+            $('#openedBuild_chosen').remove();
+            $("#openedBuild").chosen();
+        })
     }
     if(page == 'edit')
     {
@@ -268,6 +282,7 @@ function loadProductBuilds(productID)
 
     if(page == 'create')
     {
+        notice();
         $.get(link, function(data)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
@@ -358,6 +373,7 @@ function loadProjectBuilds(projectID)
 
     if(page == 'create')
     {
+        notice();
         link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch + "&index=0&needCreate=true");
         $.get(link, function(data)
         {

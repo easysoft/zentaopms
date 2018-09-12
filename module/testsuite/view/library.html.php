@@ -43,6 +43,13 @@ js::set('flow',          $config->global->flow);
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
+    <?php
+    if(common::hasPriv('testsuite', 'libView'))
+    {   
+        $link = helper::createLink('testsuite', 'libView', "libID=$libID");
+        echo html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->testsuite->view, '', "class='btn btn-link'");
+    } 
+    ?>
   </div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>

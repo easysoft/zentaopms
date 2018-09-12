@@ -16,7 +16,8 @@
 .main-header>h2{font-size: 14px;}
 .tree li.active>a{background-color:#fff}
 .tree li>a:hover{background-color:#fff}
-.detail-content{padding: 5px 0 0 0px;}
+.detail-content{padding: 5px 0 0 0px; margin-left: -5px;}
+.article-content{margin-left: 0px;}
 #sidebar>.sidebar-toggle>.icon{color:#2196f3}
 .body-modal .main-header>h2{font-weight:bold;}
 .timeline > li .timeline-text{white-space: nowrap !important;}
