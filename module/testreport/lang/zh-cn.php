@@ -63,7 +63,7 @@ $lang->testreport->exportNotice   = "由<a href='http://www.zentao.net' target='
 $lang->testreport->noReport       = "报表还没有生成，请稍候查看。";
 $lang->testreport->foundBugTip    = "影响版本在测试轮次内，并且创建时间在测试时间范围内产生的Bug数。";
 $lang->testreport->legacyBugTip   = "Bug状态是激活，或Bug的解决时间在测试结束时间之后。";
-$lang->testreport->fromCaseBugTip = "测试时间范围内，用例执行失败后创建的Bug";
+$lang->testreport->fromCaseBugTip = "测试时间范围内，用例执行失败后创建的Bug。";
 $lang->testreport->errorTrunk     = "主干版本不能创建测试报告，请修改关联版本！";
 $lang->testreport->moreProduct    = "只能对同一个产品生成测试报告。";
 
