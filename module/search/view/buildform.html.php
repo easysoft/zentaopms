@@ -37,7 +37,8 @@ $formId = 'searchForm-' . uniqid('');
 
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
-#userQueries ul {list-style: none; padding-left: 0; margin: 0; max-height:170px; overflow:auto;}
+#userQueries ul {list-style: none; padding-left: 0; margin: 0; max-height:75px; overflow:auto;}
+.showmore #userQueries ul {max-height:170px;}
 #userQueries ul li + li {margin-top: 5px;}
 #userQueries .label {line-height: 24px; padding: 0 20px 0 8px; display: inline-block; background-color: #EEEEEE; color: #A6AAB8; border-radius: 12px; max-width: 100%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; position: relative;}
 #userQueries .label:hover {background-color: #aaa; color: #fff;}

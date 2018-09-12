@@ -19,3 +19,4 @@
 .detail-content{padding: 5px 0 0 0px;}
 #sidebar>.sidebar-toggle>.icon{color:#2196f3}
 .body-modal .main-header>h2{font-weight:bold;}
+.timeline > li .timeline-text{white-space: nowrap !important;}
