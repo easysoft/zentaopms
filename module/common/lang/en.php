@@ -350,8 +350,8 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => 'Group|group|browse', 'subModule' => 'group');
-$lang->company->menu->view        = array('link' => 'Company|company|view');
 $lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
+$lang->company->menu->view        = array('link' => 'Company|company|view');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();

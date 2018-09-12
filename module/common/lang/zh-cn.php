@@ -349,8 +349,8 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => '用户|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => '部门|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '权限|group|browse', 'subModule' => 'group');
-$lang->company->menu->view        = array('link' => '公司|company|view');
 $lang->company->menu->dynamic     = '动态|company|dynamic|';
+$lang->company->menu->view        = array('link' => '公司|company|view');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
