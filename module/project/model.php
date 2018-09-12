@@ -1605,9 +1605,9 @@ class projectModel extends model
                 if(!empty($planStory))
                 {
                     $count = 0;
-                    foreach($planStory as $id => $story) 
+                    foreach($planStory as $id => $story)
                     {
-                        if($story->status == 'draft') 
+                        if($story->status == 'draft')
                         {
                             $count++;
                             unset($planStory[$id]);
@@ -1805,7 +1805,7 @@ class projectModel extends model
     public function unlinkMember($projectID, $account)
     {
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->andWhere('account')->eq($account)->exec();
-		
+
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
         $products = $this->getProducts($projectID, false);
         foreach($products as $productID => $productName)
@@ -2794,6 +2794,11 @@ class projectModel extends model
                     $link = helper::createLink('project', 'treeStory', "storyID={$tree->storyId}");
                     $html .= '<li class="item-story">';
                     $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-id">' . $tree->storyId . '</span><span class="label label-type">' . $this->lang->story->common . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></a>';
+                    break;
+                case 'branch':
+                    $this->app->loadLang('branch');
+                    $html .= "<li class='item-module'>";
+                    $html .= "<a class='tree-toggle'><span class='label label-type'>{$this->lang->branch->common}</span><span class='title' title='{$tree->name}'>{$tree->name}</span></a>";
                     break;
             }
             if(isset($tree->children))
