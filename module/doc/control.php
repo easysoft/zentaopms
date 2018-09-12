@@ -39,6 +39,7 @@ class doc extends control
     {
         $this->doc->setMenu();
 
+        $this->session->set('docList', $this->app->getURI(true));
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
 
