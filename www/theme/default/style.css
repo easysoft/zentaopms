@@ -17,8 +17,6 @@
 .tree li.active>a{background-color:#fff}
 .tree li>a:hover{background-color:#fff}
 .detail-content{padding: 5px 0 0 0px;}
-<<<<<<< HEAD
 #sidebar>.sidebar-toggle>.icon{color:#2196f3}
-=======
 .body-modal .main-header>h2{font-weight:bold;}
->>>>>>> c4e473df148639a9cb9f22676ae4a9bdc6e640ac
+.timeline > li .timeline-text{white-space: nowrap !important;}
