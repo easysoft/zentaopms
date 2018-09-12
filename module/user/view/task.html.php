@@ -36,7 +36,7 @@
   </nav>
 
   <div class='main-table'>
-    <table class='table has-sort-head' id='tasktable'>
+    <table class='table has-sort-head tablesorter' id='tasktable'>
       <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->idAB;?></th>

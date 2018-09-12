@@ -155,9 +155,9 @@ class release extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'leftBugs');
 
         $this->commonAction($release->product);
-        $products = $this->product->getPairs();
+        $product = $this->product->getById($release->product);
 
-        $this->view->title         = "RELEASE #$release->id $release->name/" . $products[$release->product];
+        $this->view->title         = "RELEASE #$release->id $release->name/" . $product->name;
         $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;
         $this->view->stories       = $stories;

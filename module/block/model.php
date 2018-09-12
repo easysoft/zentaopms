@@ -696,7 +696,7 @@ class blockModel extends model
         $projects = $mineProjects = $otherProjects = $closedProjects = array();
         foreach($projectList as $project)
         {
-            if(!$this->app->user->admin and !$this->project->checkPriv($project->id)) continue;
+            if(!$this->app->user->admin and !$this->project->checkPriv($project)) continue;
             if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
             {
                 $mineProjects[$project->id] = $project;

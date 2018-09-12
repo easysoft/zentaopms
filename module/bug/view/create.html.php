@@ -34,8 +34,8 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
       <table class="table table-form">
         <tbody>
           <tr>
-            <th><?php echo $lang->bug->product;?></th>
-            <td>
+            <th class='w-110px'><?php echo $lang->bug->product;?></th>
+            <td class='w-p45-f'>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product' autocomplete='off'");?>
                 <?php if($this->session->currentProductType != 'normal'):?>
@@ -43,11 +43,9 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                 <?php endif;?>
               </div>
             </td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->bug->module;?></th>
             <td>
               <div class='input-group' id='moduleIdBox'>
+              <span class="input-group-addon"><?php echo $lang->bug->module?></span>
                 <?php
                 echo html::select('module', $moduleOptionMenu, $moduleID, "onchange='loadModuleRelated()' class='form-control chosen'");
                 if(count($moduleOptionMenu) == 1)
@@ -63,16 +61,38 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             </td>
           </tr>
           <?php $showProject = (strpos(",$showFields,", ',project,') !== false && $config->global->flow != 'onlyTest');?>
-          <?php if($showProject):?>
           <tr>
-            <th><?php echo $lang->bug->project;?></th>
-            <td><div id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></div></td>
-          </tr>
-          <?php endif;?>
-          <tr>
-            <th><?php echo $lang->bug->openedBuild?></th>
+            <th><?php echo ($showProject) ? $lang->bug->project : $lang->bug->type;?></th>
+
+            <?php if(!$showProject):?>
+            <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
+            <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
+            <td>
+              <div class='input-group' id='bugTypeInputGroup'>
+                <?php
+                /* Remove the unused types. */
+                unset($lang->bug->typeList['designchange']);
+                unset($lang->bug->typeList['newfeature']);
+                unset($lang->bug->typeList['trackthings']);
+                echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
+                ?>  
+                <?php if($showOS):?>
+                <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+                <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
+                <?php endif;?>
+                <?php if($showBrowser):?>
+                <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+                <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control'");?>
+                <?php endif;?>
+              </div>
+            </td>
+            <?php endif;?>
+            <?php if($showProject):?>
+            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>       
+            <?php endif;?>
             <td>
               <div class='input-group' id='buildBox'>
+                <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
                 <?php echo html::select('openedBuild[]', $builds, $buildID, "size=4 multiple=multiple class='chosen form-control'");?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
                 <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
@@ -81,20 +101,47 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           </tr>
           <tr>
             <th><nobr><?php echo $lang->bug->lblAssignedTo;?></nobr></th>
-            <td id='assignedToBox'>
-              <?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?>
-            </td>
             <td>
-              <a href='javascript:loadAllUsers();' class='btn btn-link'><?php echo $lang->bug->allUsers;?></a>
+              <div class='input-group'>
+                <?php echo html::select('assignedTo', $projectMembers, $assignedTo, "class='form-control chosen'");?>
+                <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+              </div>
             </td>
-          </tr>
           <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
           <?php if($showDeadline):?>
-          <tr>
-            <th><?php echo $lang->bug->deadline?></th>
-            <td><?php echo html::input('deadline', $deadline, "class='form-control form-date'");?></td>
+            <td>
+              <div class='input-group'>
+                <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
+                <span><?php echo html::input('deadline', $deadline, "class='form-control form-date'");?></span>
+              </div>
+            </td>
           </tr>
           <?php endif;?>
+
+          <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
+          <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
+          <tr>
+            <th><?php echo $lang->bug->type;?></th>
+            <td>
+              <div class='input-group' id='bugTypeInputGroup'>
+                <?php
+                /* Remove the unused types. */
+                unset($lang->bug->typeList['designchange']);
+                unset($lang->bug->typeList['newfeature']);
+                unset($lang->bug->typeList['trackthings']);
+                echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");
+                ?>
+                <?php if($showOS):?>
+                <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
+                <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
+                <?php endif;?>
+                <?php if($showBrowser):?>
+                <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
+                <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
+                <?php endif;?>
+              </div>
+            </td>
+          </tr>
 
           <?php if(strpos(",$showFields,", ',severity,') !== false):?>
           <tr>
@@ -148,32 +195,6 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             </td>
           </tr>
           <?php endif;?>
-          <?php if($config->global->flow != 'onlyTest' && $showProject):?>
-          <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
-          <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
-          <tr>
-            <th><?php echo $lang->bug->type;?></th>
-            <td colspan='2'>
-              <div class='input-group' id='bugTypeInputGroup'>
-                <?php
-                /* Remove the unused types. */
-                unset($lang->bug->typeList['designchange']);
-                unset($lang->bug->typeList['newfeature']);
-                unset($lang->bug->typeList['trackthings']);
-                echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");
-                ?>
-                <?php if($showOS):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
-                <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control chosen'");?>
-                <?php endif;?>
-                <?php if($showBrowser):?>
-                <span class='input-group-addon fix-border'><?php echo $lang->bug->browser?></span>
-                <?php echo html::select('browser', $lang->bug->browserList, $browser, "class='form-control chosen'");?>
-                <?php endif;?>
-              </div>
-            </td>
-          </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->bug->title;?></th>
             <td colspan='2'>
@@ -207,29 +228,40 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             </td>
           </tr>
           <?php
-          $showStory = strpos(",$showFields,", ',story,') !== false;
-          $showTask  = strpos(",$showFields,", ',task,')  !== false;
+            $showStory = strpos(",$showFields,", ',story,') !== false;
+            $showTask  = strpos(",$showFields,", ',task,')  !== false;
           ?>
-          <?php if($showStory and $config->global->flow != 'onlyTest'):?>
+          <?php if(($showStory or $showTask) and $this->config->global->flow != 'onlyTest'):?>
           <tr>
-            <th><?php echo $lang->bug->story;?></th>
-            <td colspan='2'><div id='storyIdBox' class='input-group'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></div></td>
+            <th><?php echo ($showStory) ? $lang->bug->story : $lang->bug->task;?></th>
+            <?php if($showStory):?>
+            <td>
+              <span id='storyIdBox'><?php echo html::select('story', empty($stories) ? '' : $stories, $storyID, "class='form-control chosen'");?></span>
+            </td>
+            <?php endif;?>
+            <?php if($showTask):?>
+            <td>
+              <div class='input-group'>
+                <?php if($showStory):?>
+                <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+                <?php endif;?>
+                <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?>
+              </div>
+            </td>
+            <?php endif;?>
           </tr>
-          <?php endif;?>
-          <?php if($showTask and $config->global->flow != 'onlyTest'):?>
-          <tr>
-            <th><?php echo $lang->bug->task;?></th>
-            <td colspan='2'><div id='taskIdBox' class='input-group'> <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?></div></td>
-          </tr>
-          <?php endif;?>
+          <?php endif;?>        
+            
           <?php
           $showMailto   = strpos(",$showFields,", ',mailto,')   !== false;
           $showKeywords = strpos(",$showFields,", ',keywords,') !== false;
           ?>
-          <?php if($showMailto):?>
+          <?php if($showMailto or $showKeywords):?>
+          <?php $colspan = ($showMailto and $showKeywords) ? '' : "colspan='2'";?>
           <tr>
-            <th><?php echo $lang->bug->lblMailto;?></th>
-            <td colspan='2'>
+            <th><?php echo ($showMailto) ? $lang->bug->lblMailto : $lang->bug->keywords;?></th>
+            <?php if($showMailto):?>
+            <td>
               <div class='input-group' id='contactListGroup'>
               <?php
               echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
@@ -237,12 +269,17 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               ?>
               </div>
             </td>
-          </tr>
-          <?php endif;?>
-          <?php if($showKeywords):?>
-          <tr>
-            <th><?php echo $lang->bug->keywords;?></th>
-            <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
+            <?php endif;?>
+            <?php if($showKeywords):?>
+            <td <?php echo $colspan?>>
+              <div class='input-group'>
+                <?php if($showMailto):?>
+                <span class='input-group-addon' id='keywordsAddonLabel'><?php echo $lang->bug->keywords;?></span>
+                <?php endif;?>
+                <?php echo html::input('keywords', $keywords, "class='form-control'");?>
+              </div>
+            </td>
+             <?php endif;?>
           </tr>
           <?php endif;?>
           <tr>
@@ -283,4 +320,5 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
     </div>
   </div>
 </div>
+<?php js::set('bugModule', $lang->bug->module);?>
 <?php include '../../common/view/footer.html.php';?>

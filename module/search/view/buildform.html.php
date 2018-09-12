@@ -20,6 +20,7 @@ $formId = 'searchForm-' . uniqid('');
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
+.btn-wide{min-width:65px}
 #<?php echo $formId;?> > table {margin: 0 auto;}
 #<?php echo $formId;?> > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}

@@ -256,7 +256,7 @@ class taskModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             $taskID = $this->dao->lastInsertID();
-            if($story) $this->story->setStage($tasks->story[$i]);
+            if($story) $this->story->setStage($task->story);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
 
@@ -1975,18 +1975,18 @@ class taskModel extends model
      */
     public function getDataOftasksPerProject()
     {
-        $datas = $this->dao->select('project AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,project')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('project')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
-        if(!$datas) return array();
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,project')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'project');
 
         $projects = $this->loadModel('project')->getPairs('all');
         foreach($datas as $projectID => $data)
         {
-            $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+            $data->name  = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
         }
         return $datas;
     }
@@ -1999,16 +1999,19 @@ class taskModel extends model
      */
     public function getDataOftasksPerModule()
     {
-        $datas = $this->dao->select('module AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,module')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('module')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
-        if(!$datas) return array();
+            ->fetchAll('id');
+        if(!$tasks) return array();
 
-        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas),true,true);
-        foreach($datas as $moduleID => $data) $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
+        $children = $this->dao->select('id,parent,module')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'module');
+
+        $modules = $this->loadModel('tree')->getModulesName(array_keys($datas), true, true);
+        foreach($datas as $moduleID => $data)
+        {
+            $data->name = isset($modules[$moduleID]) ? $modules[$moduleID] : '/';
+        }
         return $datas;
     }
 
@@ -2020,13 +2023,13 @@ class taskModel extends model
      */
     public function getDataOftasksPerAssignedTo()
     {
-        $datas = $this->dao->select('assignedTo AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,assignedTo')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('assignedTo')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
-        if(!$datas) return array();
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,assignedTo')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'assignedTo');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
@@ -2044,13 +2047,13 @@ class taskModel extends model
      */
     public function getDataOftasksPerType()
     {
-        $datas = $this->dao->select('type AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,type')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('type')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
-        if(!$datas) return array();
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,type')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'type');
 
         foreach($datas as $type => $data)
         {
@@ -2067,19 +2070,16 @@ class taskModel extends model
      */
     public function getDataOftasksPerPri()
     {
-        $priList = $this->dao->select('pri AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,pri')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('pri')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
-        if(!$priList) return array();
+            ->fetchAll('id');
+        if(!$tasks) return array();
 
-        foreach($priList as $index => $pri)
-        {
-            $priList[$index]->name = $this->lang->task->priList[$pri->name];
-        }
-        return $priList;
+        $children = $this->dao->select('id,parent,pri')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'pri');
+
+        foreach($datas as $index => $pri) $pri->name = $this->lang->task->priList[$pri->name];
+        return $datas;
     }
 
     /**
@@ -2090,12 +2090,13 @@ class taskModel extends model
      */
     public function getDataOftasksPerDeadline()
     {
-        return $this->dao->select('deadline AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,deadline')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('deadline')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,deadline')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        return $this->processData4Report($tasks, $children, 'deadline');
     }
 
     /**
@@ -2106,12 +2107,13 @@ class taskModel extends model
      */
     public function getDataOftasksPerEstimate()
     {
-        return $this->dao->select('estimate AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,estimate')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('estimate')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,estimate')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        return $this->processData4Report($tasks, $children, 'estimate');
     }
 
     /**
@@ -2122,12 +2124,13 @@ class taskModel extends model
      */
     public function getDataOftasksPerLeft()
     {
-        return $this->dao->select('`left` AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,`left`')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('`left`')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,`left`')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        return $this->processData4Report($tasks, $children, 'left');
     }
 
     /**
@@ -2138,12 +2141,13 @@ class taskModel extends model
      */
     public function getDataOftasksPerConsumed()
     {
-        return $this->dao->select('consumed AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,consumed')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('consumed')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,consumed')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        return $this->processData4Report($tasks, $children, 'consumed');
     }
 
     /**
@@ -2154,13 +2158,14 @@ class taskModel extends model
      */
     public function getDataOftasksPerFinishedBy()
     {
-        $datas = $this->dao->select('finishedBy AS name, COUNT(finishedBy) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,finishedBy')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->andWhere('finishedBy')->ne('')
-            ->groupBy('finishedBy')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,finishedBy')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->andWhere('finishedBy')->ne('')->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'finishedBy');
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
         foreach($datas as $account => $data)
@@ -2178,19 +2183,18 @@ class taskModel extends model
      */
     public function getDataOftasksPerClosedReason()
     {
-        $datas = $this->dao->select('closedReason AS name, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,closedReason')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('closedReason')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
+            ->andWhere('closedReason')->ne('')
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,closedReason')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->andWhere('closedReason')->ne('')->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'closedReason');
 
         foreach($datas as $closedReason => $data)
         {
-            if(isset($this->lang->task->reasonList[$closedReason]))
-            {
-                $data->name = $this->lang->task->reasonList[$closedReason];
-            }
+            if(isset($this->lang->task->reasonList[$closedReason])) $data->name = $this->lang->task->reasonList[$closedReason];
         }
         return $datas;
     }
@@ -2203,20 +2207,14 @@ class taskModel extends model
      */
     public function getDataOffinishedTasksPerDay()
     {
-        $datas= $this->dao->select('DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date, COUNT(*) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id, DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('date')
             ->having('date != "0000-00-00"')
-            ->orderBy('finishedDate')
-            ->fetchAll();
+            ->fetchAll('id');
+        if(!$tasks) return array();
 
-        /* Change data to name, because the task table has name field, conflicts. */
-        foreach($datas as $data)
-        {
-            $data->name = $data->date;
-            unset($data->date);
-        }
+        $children = $this->dao->select('id,parent,DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->having('date != "0000-00-00"')->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'date');
         return $datas;
     }
 
@@ -2228,15 +2226,52 @@ class taskModel extends model
      */
     public function getDataOftasksPerStatus()
     {
-        $datas = $this->dao->select('status AS name, COUNT(status) AS value')
-            ->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,status')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
-            ->groupBy('status')
-            ->orderBy('value DESC')
-            ->fetchAll('name');
-        if(!$datas) return array();
+            ->fetchAll('id');
+        if(!$tasks) return array();
+
+        $children = $this->dao->select('id,parent,status')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->fetchAll('id');
+        $datas    = $this->processData4Report($tasks, $children, 'status');
 
         foreach($datas as $status => $data) $data->name = $this->lang->task->statusList[$status];
+        return $datas;
+    }
+
+    /**
+     * Process data for report.
+     * 
+     * @param  array    $tasks 
+     * @param  array    $children 
+     * @param  string   $field 
+     * @access public
+     * @return array
+     */
+    public function processData4Report($tasks, $children, $field)
+    {
+        foreach($children as $taskID => $task)
+        {
+            $tasks[$taskID] = $task;
+            unset($tasks[$task->parent]);
+        }
+
+        $fields = array();
+        $datas  = array();
+        foreach($tasks as $taskID => $task)
+        {
+            if(!isset($fields[$task->$field])) $fields[$task->$field] = 0;
+            $fields[$task->$field] ++;
+        }
+
+        arsort($fields);
+        foreach($fields as $field => $count)
+        {
+            $data = new stdclass();
+            $data->name  = $field;
+            $data->value = $count;
+            $datas[$field] = $data;
+        }
+
         return $datas;
     }
 

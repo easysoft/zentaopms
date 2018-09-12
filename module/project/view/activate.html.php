@@ -26,7 +26,7 @@
   </div>
   <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
-      <tr>
+      <tr style='height:50px;'>
         <th class='w-70px'><?php echo $lang->project->beginAndEnd;?></th>
         <td class='muted' colspan='2'>
           <div id='sourceTimeBox'><?php echo $project->begin . ' ~ ' . $project->end;?></div>
@@ -44,7 +44,7 @@
               <div class="checkbox-primary"><input name="readjustTime" value="1" id="readjustTime" type="checkbox"><label for="readjustTime" class="no-margin"><?php echo $lang->project->readjustTime;?></label></div>
             </div>
             <div class='col-md-6 pull-left'>
-              <div id='readjustTaskBox' class='checkbox-primary hide'><input name="readjustTask" value="1" id="readjustTask" type="checkbox"> <label for='readjustTask' class='no-margin'><?php echo $lang->project->readjustTask?></label></div>
+              <div id='readjustTaskBox' class='checkbox-primary hidden'><input name="readjustTask" value="1" id="readjustTask" type="checkbox"> <label for='readjustTask' class='no-margin'><?php echo $lang->project->readjustTask?></label></div>
             </div>
           </div>
         </td>
@@ -68,7 +68,7 @@ $(function()
     {
         $('#sourceTimeBox').toggle(!$(this).prop('checked'))
         $('#readjustTimeBox').toggle($(this).prop('checked'))
-        $('#readjustTaskBox').toggle($(this).prop('checked'))
+        $('#readjustTaskBox').toggleClass('hidden')
     })
 })
 </script>

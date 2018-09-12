@@ -690,15 +690,13 @@ class doc extends control
             if($type == 'product')
             {
                 $productID = $objectID;
-                $lib = $this->product->getById($objectID);
-                if(!$this->product->checkPriv($lib)) $this->accessDenied();
+                if(!$this->product->checkPriv($objectID)) $this->accessDenied();
             }
 
             if($type == 'project')
             {
                 $projectID = $objectID;
-                $lib = $this->project->getById($objectID);
-                if(!$this->project->checkPriv($lib)) $this->accessDenied();
+                if(!$this->project->checkPriv($objectID)) $this->accessDenied();
             }
 
             $this->doc->setMenu($type, $libID = 0, $moduleID = 0, $productID, $projectID, $crumb);

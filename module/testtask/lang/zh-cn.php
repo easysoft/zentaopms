@@ -105,6 +105,7 @@ $lang->testtask->confirmDelete     = '您确认要删除该版本吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 $lang->testtask->noticeNoOther     = '该产品还没有其他测试版本';
 $lang->testtask->noTesttask        = '暂时没有测试版本。';
+$lang->testtask->checkLinked       = '请检查测试单的产品是否与项目相关联';
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '所有用例';

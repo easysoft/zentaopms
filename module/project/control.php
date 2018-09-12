@@ -221,7 +221,6 @@ class project extends control
         $this->view->modules       = $this->tree->getTaskOptionMenu($projectID);
         $this->view->moduleID      = $moduleID;
         $this->view->moduleTree    = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'));
-        $this->view->projectTree   = $this->project->tree();
         $this->view->memberPairs   = $memberPairs;
         $this->view->branchGroups  = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setShowModule = true;
@@ -2098,9 +2097,6 @@ class project extends control
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->projects))->orderBy('order desc')->fetchAll();
         $projectPairs = array();
         foreach($projects as $project) $projectPairs[$project->id] = $project->name;
-        $projectsPinyin = common::convert2Pinyin($projectPairs);
-        foreach($projects as $key => $project) $project->key = $projectsPinyin[$project->name];
-
         $this->view->projects = $projects;
         $this->display();
     }

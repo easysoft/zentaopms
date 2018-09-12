@@ -328,9 +328,10 @@ class bug extends control
         $pri        = '';
         $color      = '';
 
-        /* Parse the extras. */
+        /* Parse the extras. extract fix php7.2*/
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
-        parse_str($extras);
+        parse_str($extras, $output);
+        extract($output);
 
         if($runID and $resultID) extract($this->bug->getBugInfoFromResult($resultID, 0, 0, isset($stepIdList) ? $stepIdList : ''));// If set runID and resultID, get the result info by resultID as template.
         if(!$runID and $caseID)  extract($this->bug->getBugInfoFromResult($resultID, $caseID, $version, isset($stepIdList) ? $stepIdList : ''));// If not set runID but set caseID, get the result info by resultID and case info.
@@ -523,7 +524,7 @@ class bug extends control
         $bug = $this->bug->getById($bugID, true);
         if(!$bug) die(js::error($this->lang->notFound) . js::locate('back'));
 
-        if($bug->project and !$this->loadModel('project')->checkPriv($this->project->getByID($bug->project)))
+        if($bug->project and !$this->loadModel('project')->checkPriv($bug->project))
         {
             echo(js::alert($this->lang->project->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";

@@ -438,7 +438,7 @@ class docModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
-                ->andWhere('t1.id')->in($docIdList)
+                ->beginIF(!empty($docIdList))->andWhere('t1.id')->in($docIdList)->fi()
                 ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
                 ->orWhere('t2.content')->like("%{$this->session->searchDoc}%")->markRight(1)
                 ->andWhere('t1.lib')->in($allLibs)
@@ -887,20 +887,8 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->project)
-        {
-            static $projects;
-            if(empty($projects)) $projects = $this->loadModel('project')->getPairs();
-            return isset($projects[$object->project]);
-        }
-
-        if($object->product)
-        {
-            static $products;
-            if(empty($products)) $products = $this->loadModel('product')->getPairs();
-            return isset($products[$object->product]);
-        }
-
+        if($object->project) return strpos(",{$this->app->user->view->projects},", ",{$object->project},") !== false;
+        if($object->product) return strpos(",{$this->app->user->view->products},", ",{$object->product},") !== false;
         return false;
     }
 

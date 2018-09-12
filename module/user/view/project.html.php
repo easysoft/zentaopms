@@ -15,7 +15,7 @@
 <?php include './featurebar.html.php';?>
 <div id='mainContent'>
   <div class='main-table'>
-    <table class='table has-sort-head table-fixed'>
+    <table class='table has-sort-head table-fixed tablesorter'>
       <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->idAB;?></th>

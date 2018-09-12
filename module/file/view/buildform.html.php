@@ -1,5 +1,8 @@
 <?php $maxUploadSize = strtoupper(ini_get('upload_max_filesize'));?>
-
+<style>
+.file-input .file-editbox{max-width:40%;}
+.file-input-list .input-group-btn{float:left}
+</style>
 <div class="file-input-list" data-provide="fileInputList" data-each-file-max-size="<?php echo $maxUploadSize;?>" data-file-size-error="<?php echo sprintf($lang->file->errorFileSize, $maxUploadSize);?>">
   <div class="file-input">
     <div class="file-input-empty">

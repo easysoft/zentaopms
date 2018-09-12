@@ -18,7 +18,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
   <div id='mainHeader'>
     <div class='container'>
       <hrgroup id='heading'>
-        <?php $heading = sprintf($lang->welcome, $app->company->name);?>
+        <?php $heading = $app->company->name;?>
         <h1 id='companyname' title='<?php echo $heading;?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo html::a(helper::createLink('index'), $heading);?></h1>
       </hrgroup>
       <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>
@@ -27,10 +27,6 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
         <div id="userMenu">
           <?php common::printSearchBox();?>
           <ul id="userNav" class="nav nav-default">
-            <?php list($adminName, $adminModule, $adminMethod) = explode('|', $lang->adminMenu);?>
-            <?php if(common::hasPriv($adminModule, $adminMethod)):?>
-            <li><?php echo html::a($this->createLink($adminModule, $adminMethod), $adminName);?></li>
-            <?php endif;?>
             <li><?php common::printUserBar();?></li>
           </ul>
         </div>

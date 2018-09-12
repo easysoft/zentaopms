@@ -463,8 +463,7 @@ class productplan extends control
      */
     public function linkBug($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc')
     {
-        $projects = $this->loadModel('project')->getPairs();
-        $projects[0] = '';
+        $projects = $this->app->user->view->projects . ',0';
 
         if(!empty($_POST['bugs']))
         {
@@ -514,9 +513,7 @@ class productplan extends control
         }
         else
         {
-            $projects    = $this->loadModel('project')->getPairs();
-            $projects[0] = '';
-            $allBugs     = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, array_keys($projects));
+            $allBugs = $this->bug->getActiveBugs($this->view->product->id, $plan->branch, $projects);
         }
 
         $this->view->allBugs    = $allBugs;

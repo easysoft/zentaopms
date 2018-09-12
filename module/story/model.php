@@ -1030,23 +1030,26 @@ class storyModel extends model
         $now         = helper::now();
         $allChanges  = array();
         $oldStories  = $this->getByList($storyIDList);
+        $failStories = '';
         foreach($storyIDList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
-            if($oldStory->status == 'draft') continue;
+            if($oldStory->status == 'draft')
+            {
+                $failStories .= "#{$storyID} ";
+                continue;
+            }
 
             $story = new stdclass();
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->stage          = $stage;
 
-            if($stage == 'verified' or $stage == 'closed')
-            {
-                $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
-                $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->where('story')->eq((int)$storyID)->exec();
-                if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
-            }
+            $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->where('story')->eq((int)$storyID)->exec();
+            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
+        if($failStories) echo js::alert(sprintf($this->lang->story->failChangeStage, $failStories));
         return $allChanges;
     }
 
