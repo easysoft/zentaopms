@@ -122,8 +122,7 @@ $lang->menu->qa      = '测试|qa|index';
 $lang->menu->doc     = '文档|doc|index';
 $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
-
-$lang->adminMenu = '后台|admin|index';
+$lang->menu->admin   = '后台|admin|index';
 
 $lang->dividerMenu = ',qa,';
 
