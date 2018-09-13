@@ -22,7 +22,7 @@
 #kanban > .table {min-width: 1100px;}
 #kanban.dragging .boards.dragging .board {background: #eee; opacity: .35; border-color: #f1f1f1}
 #kanban thead .c-side {padding: 5px;}
-#kanban .label-pri {width: 16px; height: 16px; line-height: 16px; min-width: 16px; font-size: 12px;}
+#kanban .label-pri {width: 16px; height: 16px; line-height: 12px; min-width: 16px; font-size: 12px; padding: 0;}
 #kanban tbody > tr > td {line-height: 24px;}
 #kanban .c-board {border-bottom: 4px #EAF3FC solid;}
 #kanban .c-board.s-projected {border-color: #7EC5FF;}
