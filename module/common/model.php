@@ -611,7 +611,7 @@ class commonModel extends model
         if($moduleName != 'index')
         {
             if(!isset($lang->menu->$mainMenu)) return;
-            $menuLink = $mainMenu == 'admin' ? $lang->adminMenu : $lang->menu->$mainMenu;
+            $menuLink = $lang->menu->$mainMenu;
             list($menuLabel, $module, $method) = explode('|', $menuLink);
             echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
         }
