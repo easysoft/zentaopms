@@ -115,6 +115,7 @@ $lang->admin->menuOrder[45] = 'dev';
 $lang->admin->menuOrder[50] = 'safe';
 $lang->admin->menuOrder[53] = 'api';
 $lang->admin->menuOrder[55] = 'sso';
+$lang->admin->menuOrder[57] = 'entry';
 $lang->admin->menuOrder[60] = 'trashes';
 $lang->convert->menuOrder   = $lang->admin->menuOrder;
 $lang->upgrade->menuOrder   = $lang->admin->menuOrder;

@@ -69,10 +69,10 @@
         <td class='text-left'><?php echo nl2br($step->expect);?></td>
         <td class='text-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, 'pass', "class='form-control'");?></td>
         <td>
-          <table class='w-p100 fix-border fix-position'>
+          <table class='w-p100'>
             <tr>
-              <td><?php echo html::textarea("reals[$step->id]", '', "rows=1 class='form-control autosize'");?></td>
-              <td><button type='button' title='<?php echo $lang->testtask->files?>' class='btn' data-toggle='modal' data-target='#fileModal<?php echo $step->id?>'><i class='icon icon-paper-clip'></i></button></td>
+              <td class='no-padding bd-0'><?php echo html::textarea("reals[$step->id]", '', "rows=1 class='form-control autosize'");?></td>
+              <td class='no-padding bd-0 w-50px text-right'><button type='button' title='<?php echo $lang->testtask->files?>' class='btn' data-toggle='modal' data-target='#fileModal<?php echo $step->id?>'><i class='icon icon-paper-clip'></i></button></td>
             </tr>
           </table>
         </td>
@@ -102,14 +102,8 @@
             <h4 class="modal-title"><?php echo $lang->testtask->files;?></h4>
           </div>
           <div class="modal-body">
-            <table class='table table-form'>
-              <tr>
-                <td><?php echo $this->fetch('file', 'buildform', array('fileCount' => 1, 'percent' => 0.9, 'filesName' => "files{$step->id}", 'labelsName' => "labels{$step->id}"));?></td>
-              </tr>
-              <tr>
-                <td class='text-center'><button type="button" class="btn" onclick='loadFilesName()' data-dismiss="modal"><?php echo $lang->save;?></button></td>
-              <tr>
-            </table>
+            <?php echo $this->fetch('file', 'buildform', array('fileCount' => 1, 'percent' => 0.9, 'filesName' => "files{$step->id}", 'labelsName' => "labels{$step->id}"));?>
+            <div class="text-center"><button type="button" class="btn btn-wide btn-primary" onclick='loadFilesName()' data-dismiss="modal"><?php echo $lang->save;?></button></div>
           </div>
         </div>
       </div>

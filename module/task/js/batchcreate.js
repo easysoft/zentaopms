@@ -150,15 +150,6 @@ $(document).on('mousedown', 'select', function()
     }
 })
 
-if(navigator.userAgent.indexOf("Firefox") < 0)
-{
-    $(document).on('input keyup paste change', 'textarea.autosize', function()
-    {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight + 2) + "px"; 
-    });
-}
-
 $(function()
 {
     /* Adjust width for ie chosen width. */

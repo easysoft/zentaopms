@@ -1,6 +1,6 @@
 /**
  * Set the ping url.
- * 
+ *
  * @access public
  * @return void
  */
@@ -9,48 +9,9 @@ function setPing()
     $('#hiddenwin').attr('src', createLink('misc', 'ping'));
 }
 
-
-// /**
-//  * Set the help links of forum's items.
-//  * 
-//  * @access public
-//  * @return void
-//  */
-// function setHelpLink()
-// {
-//     if(!$.cookie('help')) $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
-//     className = $.cookie('help') == 'off' ? 'hidden' : '';
-
-//     $('form input[id], form select[id], form textarea[id]').each(function()
-//     {
-//         if($(this).attr('type') == 'hidden' || $(this).attr('type') == 'file') return;
-//         currentFieldName = $(this).attr('name') ? $(this).attr('name') : $(this).attr('id');
-//         if(currentFieldName == 'submit' || currentFieldName == 'reset') return;
-//         if(currentFieldName.indexOf('[') > 0) currentFieldName = currentFieldName.substr(0, currentFieldName.indexOf('['));
-//         currentFieldName = currentFieldName.toLowerCase();
-//         helpLink = createLink('help', 'field', 'module=' + config.currentModule + '&method=' + config.currentMethod + '&field=' + currentFieldName);
-//         $(this).after(' <a class="helplink ' + className + '" href=' + helpLink + ' target="_blank">?</a> ');
-//     });
-
-//     $("a.helplink").modalTrigger({width:600, type:'iframe'});
-// }
-
-// /**
-//  * Toggle the help links.
-//  * 
-//  * @access public
-//  * @return void
-//  */
-// function toggleHelpLink()
-// {
-//     $('.helplink').toggle();
-//     if($.cookie('help') == 'off') return $.cookie('help', 'on',  {expires:config.cookieLife, path:config.webRoot});
-//     if($.cookie('help') == 'on')  return $.cookie('help', 'off', {expires:config.cookieLife, path:config.webRoot});
-// }
-
 /**
  * Disable the submit button when submit form.
- * 
+ *
  * @access public
  * @return void
  */
@@ -93,8 +54,8 @@ function setForm()
 
 /**
  * Set form action and submit.
- * 
- * @param  url    $actionLink 
+ *
+ * @param  url    $actionLink
  * @param  string $hiddenwin 'hiddenwin'
  * @access public
  * @return void
@@ -126,7 +87,7 @@ function setFormAction(actionLink, hiddenwin, obj)
 
 /**
  * Set the max with of image.
- * 
+ *
  * @access public
  * @return void
  */
@@ -145,9 +106,9 @@ function setImageSize(image, maxWidth)
 
 /**
  * Set mailto list from a contact list..
- * 
- * @param  string $mailto 
- * @param  int    $contactListID 
+ *
+ * @param  string $mailto
+ * @param  int    $contactListID
  * @access public
  * @return void
  */
@@ -164,8 +125,8 @@ function setMailto(mailto, contactListID)
 
 /**
  * Ajax get contacts.
- * 
- * @param  obj $obj 
+ *
+ * @param  obj $obj
  * @access public
  * @return void
  */
@@ -184,10 +145,10 @@ function ajaxGetContacts(obj)
 }
 
 /**
- * add one option of a select to another select. 
- * 
- * @param  string $SelectID 
- * @param  string $TargetID 
+ * add one option of a select to another select.
+ *
+ * @param  string $SelectID
+ * @param  string $TargetID
  * @access public
  * @return void
  */
@@ -219,8 +180,8 @@ function addItem(SelectID,TargetID)
 
 /**
  * Remove one selected option from a select.
- * 
- * @param  string $SelectID 
+ *
+ * @param  string $SelectID
  * @access public
  * @return void
  */
@@ -238,9 +199,9 @@ function delItem(SelectID)
 }
 
 /**
- * move one selected option up from a select. 
- * 
- * @param  string $SelectID 
+ * move one selected option up from a select.
+ *
+ * @param  string $SelectID
  * @access public
  * @return void
  */
@@ -266,9 +227,9 @@ function upItem(SelectID)
 }
 
 /**
- * move one selected option down from a select. 
- * 
- * @param  string $SelectID 
+ * move one selected option down from a select.
+ *
+ * @param  string $SelectID
  * @access public
  * @return void
  */
@@ -294,9 +255,9 @@ function downItem(SelectID)
 }
 
 /**
- * select all items of a select. 
- * 
- * @param  string $SelectID 
+ * select all items of a select.
+ *
+ * @param  string $SelectID
  * @access public
  * @return void
  */
@@ -312,10 +273,10 @@ function selectItem(SelectID)
 
 /**
  * Delete item use ajax.
- * 
- * @param  string url 
- * @param  string replaceID 
- * @param  string notice 
+ *
+ * @param  string url
+ * @param  string replaceID
+ * @param  string notice
  * @access public
  * @return void
  */
@@ -325,18 +286,18 @@ function ajaxDelete(url, replaceID, notice)
     {
         $.ajax(
         {
-            type:     'GET', 
+            type:     'GET',
             url:      url,
-            dataType: 'json', 
-            success:  function(data) 
+            dataType: 'json',
+            success:  function(data)
             {
-                if(data.result == 'success') 
+                if(data.result == 'success')
                 {
                     $.get(document.location.href, function(data)
                     {
                         if(!($(data).find('#' + replaceID).length))location.reload();
                         $('#' + replaceID).html($(data).find('#' + replaceID).html());
-                        if(typeof sortTable == 'function') sortTable(); 
+                        if(typeof sortTable == 'function') sortTable();
                         $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                         if($('#' + replaceID).find('table.datatable').length) $('#' + replaceID).find('table.datatable').datatable();
                     });
@@ -348,7 +309,7 @@ function ajaxDelete(url, replaceID, notice)
 
 /**
  * Judge the string is a integer number
- * 
+ *
  * @access public
  * @return bool
  */
@@ -366,7 +327,7 @@ function isNum(s)
 
 /**
  * Start cron.
- * 
+ *
  * @access public
  * @return void
  */
@@ -426,8 +387,8 @@ function computePasswordStrength(password)
 }
 
 /**
- * Check onlybody page when it is not open in modal then location to on onlybody page. 
- * 
+ * Check onlybody page when it is not open in modal then location to on onlybody page.
+ *
  * @access public
  * @return void
  */
@@ -441,38 +402,9 @@ function checkOnlybodyPage()
 }
 
 /**
- * Fixed table head in div box.
- * 
- * @param  string $boxObj 
- * @access public      
- * @return void
- */
-//function fixedTableHead(boxObj)
-//{
-//    $(boxObj).scroll(function()
-//    {
-//        var hasFixed  = $(this).find('.fixedHead').size() > 0;
-//        if(!hasFixed)
-//        {
-//            $(this).css('position', 'relative');
-//            if($(this).find('table').size() == 1)
-//            {
-//                var fixed = "<table class='fixedHead' style='position:absolute;top:0px'><thead>" + $(this).find('table thead').html() + '</thead></table>';
-//                $(this).prepend(fixed);
-//                var $fixTable = $(this).find('table.fixedHead');
-//                $fixTable.addClass($(this).find('table:last').attr('class'));
-//                var $dataTable = $(this).find('table:last thead th');
-//                $fixTable.find('thead th').each(function(i){$fixTable.find('thead th').eq(i).width($dataTable.eq(i).width());})
-//            }
-//        }
-//        $(this).find('table.fixedHead').css('top',$(this).scrollTop());
-//    });
-//}
-
-/**
  * Fixed table head in list when scrolling.
- * 
- * @param  string $tableID 
+ *
+ * @param  string $tableID
  * @access public
  * @return void
  */
@@ -527,8 +459,8 @@ function applyCssStyle(css, tag)
 }
 
 /**
- * Show browser notice 
- * 
+ * Show browser notice
+ *
  * @access public
  * @return void
  */
@@ -586,8 +518,8 @@ function showBrowserNotice()
 
 /**
  * Remove cookie by key
- * 
- * @param  cookieKey $cookieKey 
+ *
+ * @param  cookieKey $cookieKey
  * @access public
  * @return void
  */
@@ -599,9 +531,9 @@ function removeCookieByKey(cookieKey)
 
 /**
  * Set homepage.
- * 
- * @param  string $module 
- * @param  string $page 
+ *
+ * @param  string $module
+ * @param  string $page
  * @access public
  * @return void
  */
@@ -612,7 +544,7 @@ function setHomepage(module, page)
 
 /**
  * Reload page when tutorial mode setted in this session but not load in iframe
- * 
+ *
  * @access public
  * @return void
  */
@@ -643,7 +575,7 @@ function removeDitto()
 
 /**
  * Revert module cookie.
- * 
+ *
  * @access public
  * @return void
  */
@@ -753,7 +685,7 @@ function notifyMessage(data)
 needPing = true;
 
 /* When body's ready, execute these. */
-$(document).ready(function() 
+$(document).ready(function()
 {
     if(needPing) setTimeout('setPing()', 1000 * 60 * 10);  // After 10 minutes, begin ping.
 
