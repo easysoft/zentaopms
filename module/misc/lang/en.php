@@ -74,19 +74,25 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Details';
 
-$lang->misc->releaseDate['9.8.stable'] = '2018-01-17';
-$lang->misc->releaseDate['9.7.stable'] = '2017-12-22';
-$lang->misc->releaseDate['9.6.stable'] = '2017-11-06';
-$lang->misc->releaseDate['9.5.1']      = '2017-09-27';
-$lang->misc->releaseDate['9.3.beta']   = '2017-06-21';
-$lang->misc->releaseDate['9.1.stable'] = '2017-03-23';
-$lang->misc->releaseDate['9.0.beta']   = '2017-01-03';
-$lang->misc->releaseDate['8.3.stable'] = '2016-11-09';
-$lang->misc->releaseDate['8.2.stable'] = '2016-05-17';
-$lang->misc->releaseDate['7.4.beta']   = '2015-11-13';
-$lang->misc->releaseDate['7.2.stable'] = '2015-05-22';
-$lang->misc->releaseDate['7.1.stable'] = '2015-03-07';
-$lang->misc->releaseDate['6.3.stable'] = '2014-11-07';
+$lang->misc->releaseDate['10.2.stable'] = '2018-08-02';
+$lang->misc->releaseDate['10.0.stable'] = '2018-06-26';
+$lang->misc->releaseDate['9.8.stable']  = '2018-01-17';
+$lang->misc->releaseDate['9.7.stable']  = '2017-12-22';
+$lang->misc->releaseDate['9.6.stable']  = '2017-11-06';
+$lang->misc->releaseDate['9.5.1']       = '2017-09-27';
+$lang->misc->releaseDate['9.3.beta']    = '2017-06-21';
+$lang->misc->releaseDate['9.1.stable']  = '2017-03-23';
+$lang->misc->releaseDate['9.0.beta']    = '2017-01-03';
+$lang->misc->releaseDate['8.3.stable']  = '2016-11-09';
+$lang->misc->releaseDate['8.2.stable']  = '2016-05-17';
+$lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
+$lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
+$lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
+$lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['10.2.stable'][] = array('title'=>'Xuan.im is integrated!', 'desc' => '');
+
+$lang->misc->feature->all['10.0.stable'][] = array('title'=>'New UI/UX and new experience', 'desc' => '<ol><li>My Dashboard</li><li>Dynamic</li><li>Product Home</li><li>Product overview</li><li>Roadmap</li><li>Project Home</li><li>Project overview</li><li>QA Home</li><li>Document Home</li><li>Added work report on My Dashboard</li><li>Add/Edit/Finish todos on My Dashboard</li><li>Add prodcut report on Product Home</li><li>Add prodcut overview on Product Home</li><li>Add project report on Project Home</li><li>Add project overview on Project Home</li><li>Add QA report on QA Home</li><li>All Product/product Home/All Project/Project Home/QA Home is moved from the right of the secondary Narbar to the left.</li><li>Kanban/Burndown/Tree/ByGroup of Project/Task has been moved from the third Navbar to the secondary one; Tree/ByGroup/Task Liat has been integrated to a drop-down.</li><li>Bug/Build of Project on the secondary Navbar has been integrated to a drop-down.</li><li>Display build and list by group, which is more reasonable.</li><li>Added tree to display docuemnt on the left of the page.</li><li>Added quick entry to document, including Last Update, My Doc and My Favorite</li><li>Added My Favorite to Doc module.</li></ol>');
 
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'Message centralized management', 'desc' => '<p>Centring Mail，SMS，webhook into Message</p>');
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'Add Periodic Todo function', 'desc' => '');
