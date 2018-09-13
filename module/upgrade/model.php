@@ -233,6 +233,9 @@ class upgradeModel extends model
                 $this->execSQL($xuanxuanSql);
             case '10_2':
             case '10_3':
+            case '10_3_1':
+                $this->execSQL($this->getUpgradeFile('10.3.1'));
+                $this->removeCustomMenu();
         }
 
         $this->deletePatch();
@@ -347,6 +350,7 @@ class upgradeModel extends model
             case '10_1':       $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql');
             case '10_2':
             case '10_3':
+            case '10_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('10.3.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2396,6 +2400,33 @@ class upgradeModel extends model
             ->markRight(2)
             ->exec();
 
+        return !dao::isError();
+    }
+
+    /**
+     * Remove custom menu.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function removeCustomMenu()
+    {
+        $customMenuMain = $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->eq('full_main')->fetchAll('id');
+        foreach($customMenuMain as $mainMenu)
+        {
+            $mainMenuValue = json_decode($mainMenu->value);
+            foreach($mainMenuValue as $menu)
+            {
+                /* If has admin in custom value, then delete old custom menu config. */
+                if($menu->name == 'admin')
+                {
+                    $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('common')
+                        ->andWhere('section')->eq('customMenu')
+                        ->andWhere('owner')->eq($mainMenu->owner)
+                        ->exec();
+               }
+            }
+        }
         return !dao::isError();
     }
 }

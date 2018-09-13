@@ -372,6 +372,7 @@ $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' =
 $lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
+$lang->admin->menu->entry     = 'Entry|entry|browse';
 $lang->admin->menu->sso       = 'Zdoo|admin|sso';
 
 $lang->convert   = new stdclass();
