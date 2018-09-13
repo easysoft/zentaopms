@@ -611,7 +611,6 @@ class actionModel extends model
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('objectType')->notin('product,productplan,release,story,testcase,testreport,testsuite')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('objectType')->notin('project,productplan,release,story,task')->fi()
             ->orderBy($orderBy)
-            ->beginIF(!$pager)->limit(30)->fi()
             ->page($pager)
             ->fetchAll();
 

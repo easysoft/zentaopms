@@ -278,7 +278,11 @@ class block extends control
      */
     public function dynamic()
     {
-        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today');
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 30, 1);
+
+        $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
