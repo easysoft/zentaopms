@@ -14,10 +14,7 @@
 .table.has-sort-head thead>tr>th>a.sort-down, .table.has-sort-head thead>tr>th>a.sort-up, .table.has-sort-head thead>tr>th>a:hover{color:#000;text-decoration: none;font-weight:bold}
 .table.has-sort-head thead>tr>th>a.sort-down:after,.table.has-sort-head thead>tr>th>a.sort-up:before,.table.has-sort-head thead>tr>th>a:hover:after,.table.has-sort-head thead>tr>th>a:hover:before{color:#000}
 .main-header>h2{font-size: 14px;}
-.tree li.active>a{background-color:#fff}
-.tree li>a:hover{background-color:#fff}
 .detail-content{padding: 5px 0 0 0px; margin-left: -5px;}
 .article-content{margin-left: 0px;}
-#sidebar>.sidebar-toggle>.icon{color:#2196f3}
 .body-modal .main-header>h2{font-weight:bold;}
 .timeline > li .timeline-text{white-space: nowrap !important;}
