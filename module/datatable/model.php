@@ -120,7 +120,7 @@ class datatableModel extends model
      * @access public
      * @return void
      */
-    public function printHead($col, $orderBy, $vars)
+    public function printHead($col, $orderBy, $vars, $checkBox = true)
     {
         $id = $col->id;
         if($col->show)
@@ -143,7 +143,7 @@ class datatableModel extends model
             }
             else
             {
-                if($id == 'id') echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";
+                if($id == 'id' && $checkBox) echo "<div class='checkbox-primary check-all' title='{$this->lang->selectAll}'><label></label></div>";
                 common::printOrderLink($id, $orderBy, $vars, $col->title);
             }
             echo '</th>';
