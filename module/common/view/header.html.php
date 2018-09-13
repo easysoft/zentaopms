@@ -17,13 +17,12 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
-      <hrgroup id='heading'>
+      <hgroup id='heading'>
         <?php $heading = $app->company->name;?>
         <h1 id='companyname' title='<?php echo $heading;?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo html::a(helper::createLink('index'), $heading);?></h1>
-      </hrgroup>
+      </hgroup>
       <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>
       <div id='toolbar'>
-        <?php common::printAboutBar();?>
         <div id="userMenu">
           <?php common::printSearchBox();?>
           <ul id="userNav" class="nav nav-default">
