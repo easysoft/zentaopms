@@ -34,7 +34,7 @@ function loadProjectTeamMembers(productID)
 
 /**
  * load assignedTo and stories of module.
- * 
+ *
  * @access public
  * @return void
  */
@@ -48,7 +48,7 @@ function loadModuleRelated()
 
 /**
  * Set the assignedTo field.
- * 
+ *
  * @access public
  * @return void
  */
@@ -137,4 +137,13 @@ $(function()
     };
     adjustBugTypeGroup();
     $(window).on('resize', adjustBugTypeGroup);
+
+    // init pri and severity selector
+    $('#severity, #pri').on('change', function()
+    {
+        var $select = $(this);
+        var $selector = $select.closest('.pri-selector');
+        var value = $select.val();
+        $selector.find('.pri-text').html($selector.data('type') === 'severity' ? '<span class="label-severity" data-severity="' + value + '" title="' + value + '"></span>' : '<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
+    });
 });
