@@ -777,7 +777,7 @@ class commonModel extends model
         <h4 class="modal-title">{$lang->action->create}</h4>
       </div>
       <div class="modal-body">
-    <form action="$commentFormLink" target='hiddenwin' method='post'>
+    <form class="load-indicator" action="$commentFormLink" target='hiddenwin' method='post'>
           <div class="form-group">
             <textarea id='comment' name='comment' class="form-control" rows="8" autofocus="autofocus"></textarea>
           </div>
