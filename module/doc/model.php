@@ -517,7 +517,7 @@ class docModel extends model
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
-            ->andWhere('module')->in($module)
+            ->beginIF(!empty($module))->andWhere('module')->in($module)->fi()
             ->query();
 
 
