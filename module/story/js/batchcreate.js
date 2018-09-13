@@ -61,15 +61,6 @@ $(document).keydown(function(event)
     }
 });
 
-if(navigator.userAgent.indexOf("Firefox") < 0)
-{
-    $(document).on('input keyup paste change', 'textarea.autosize', function()
-    {
-        this.style.height = 'auto';
-        this.style.height = (this.scrollHeight + 2) + "px"; 
-    });
-}
-
 /**
  * Set modules and plans.
  *

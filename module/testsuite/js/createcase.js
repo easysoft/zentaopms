@@ -12,21 +12,13 @@ function loadLibModules(libID)
 
 /**
  * Init testcase steps in form
- * 
+ *
  * @param  string selector
  * @access public
  * @return void
  */
 function initSteps(selector)
 {
-    if(navigator.userAgent.indexOf("Firefox") < 0)
-    {
-        $(document).on('input keyup paste change', 'textarea.autosize', function()
-        {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight + 2) + "px"; 
-        });
-    }
     var $steps = $(selector || '#steps');
     var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
     var initSortableCallTask = null;
@@ -104,7 +96,7 @@ function initSteps(selector)
         {
             isMouseDown = true;
             $moveStep = $(this).closest('.step').addClass('drag-row');
-            
+
             $(document).off('.sortable').one('mouseup.sortable', function()
             {
                 isMouseDown = false;
@@ -156,7 +148,7 @@ function initSteps(selector)
 
 /**
  * Update the step id.
- * 
+ *
  * @access public
  * @return void
  */
