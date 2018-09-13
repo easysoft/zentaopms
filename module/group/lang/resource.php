@@ -1384,6 +1384,16 @@ $lang->changelog['9.8'][] = 'message-index';
 $lang->changelog['9.8'][] = 'message-setting';
 $lang->changelog['9.8'][] = 'todo-createCycle';
 $lang->changelog['9.8'][] = 'project-importPlanStories';
+$lang->changelog['9.8'][] = 'todo-assignTo';
+$lang->changelog['9.8'][] = 'todo-activate';
+$lang->changelog['9.8'][] = 'todo-close';
+
+$lang->changelog['10.0.alpha'][] = 'my-calendar';
+$lang->changelog['10.0.alpha'][] = 'doc-collect';
+
+$lang->changelog['10.1'][] = 'todo-batchClose';
+$lang->changelog['10.1'][] = 'project-treeTask';
+$lang->changelog['10.1'][] = 'project-treeStory';
 
 global $config;
 if($config->global->flow != 'full')
