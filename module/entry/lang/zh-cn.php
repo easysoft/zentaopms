@@ -14,6 +14,7 @@ $lang->entry->createKey = '重新生成密钥';
 
 $lang->entry->id          = 'ID';
 $lang->entry->name        = '名称';
+$lang->entry->account     = '账号';
 $lang->entry->code        = '代号';
 $lang->entry->key         = '密钥';
 $lang->entry->ip          = 'IP';

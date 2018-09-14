@@ -4,3 +4,6 @@ CREATE TABLE `zt_userview` (
   `projects` text NOT NULL,
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+ALTER TABLE `zt_entry` ADD `account` VARCHAR(30) NOT NULL DEFAULT '' AFTER `code`;
+

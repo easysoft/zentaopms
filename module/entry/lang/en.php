@@ -14,6 +14,7 @@ $lang->entry->createKey = 'Regenerate';
 
 $lang->entry->id          = 'ID';
 $lang->entry->name        = 'Name';
+$lang->entry->account     = 'Account';
 $lang->entry->code        = 'Code';
 $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
