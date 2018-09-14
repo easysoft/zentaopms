@@ -42,4 +42,5 @@ $lang->entry->errmsg['EMPTY_KEY']             = '应用未设置密钥';
 $lang->entry->errmsg['INVALID_TOKEN']         = '无效的token参数';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'session验证失败';
 $lang->entry->errmsg['IP_DENIED']             = '该IP被限制访问';
+$lang->entry->errmsg['ACCOUNT_UNBOUND']       = '未绑定用户';
 $lang->entry->errmsg['EMPTY_ENTRY']           = '应用不存在';
