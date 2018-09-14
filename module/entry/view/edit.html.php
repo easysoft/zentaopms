@@ -32,6 +32,11 @@
         <td><?php echo html::input('code', $entry->code, "class='form-control' title='{$lang->entry->note->code}' placeholder='{$lang->entry->note->code}'");?></td>
       </tr>
       <tr>
+      <tr>
+        <th><?php echo $lang->entry->account;?></th>
+        <td><?php echo html::select("account", $users, $entry->account, "class='form-control chosen'");?></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->entry->key;?></th>
         <td><?php echo html::input('key', $entry->key, "class='form-control' readonly='readonly'");?></td>
         <td><span class="help-inline"><?php echo html::a('javascript:void(0)', $lang->entry->createKey, '', 'onclick="createKey()" tabIndex="-1" class="btn"')?></span></td>
@@ -53,7 +58,7 @@
       <tr>
         <th></th>
         <td>
-          <?php echo html::submitButton();?>
+          <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
           <?php echo html::a($config->entry->help, $lang->entry->help, '_blank', "class='help'");?>
         </td>
       </tr>

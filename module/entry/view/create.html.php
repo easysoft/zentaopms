@@ -33,6 +33,11 @@
           <td></td>
         </tr>
         <tr>
+          <th><?php echo $lang->entry->account;?></th>
+          <td><?php echo html::select("account", $users, '', "class='form-control chosen'");?></td>
+          <td></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->entry->key;?></th>
           <td><?php echo html::input('key', md5(rand()), "class='form-control' readonly='readonly'");?></td>
           <td><span class="help-inline"><?php echo html::a('javascript:void(0)', $lang->entry->createKey, '', 'onclick="createKey()" tabIndex="-1" class="btn"')?></span></td>

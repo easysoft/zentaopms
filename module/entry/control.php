@@ -53,6 +53,7 @@ class entry extends control
         }
 
         $this->view->title      = $this->lang->entry->api . $this->lang->colon . $this->lang->entry->create;
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->api);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->common);
         $this->view->position[] = $this->lang->entry->create;
@@ -83,6 +84,7 @@ class entry extends control
 
         $entry = $this->entry->getById($id);
         $this->view->title      = $this->lang->entry->edit . $this->lang->colon . $entry->name;
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->api);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->entry->common);
         $this->view->position[] = $this->lang->entry->edit;

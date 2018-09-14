@@ -14,6 +14,7 @@ $lang->entry->createKey = 'Regenerate';
 
 $lang->entry->id          = 'ID';
 $lang->entry->name        = 'Name';
+$lang->entry->account     = 'Account';
 $lang->entry->code        = 'Code';
 $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
@@ -41,4 +42,5 @@ $lang->entry->errmsg['EMPTY_KEY']             = 'Key of entry is missing.';
 $lang->entry->errmsg['INVALID_TOKEN']         = 'Invalid token.';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'Session verification failed.';
 $lang->entry->errmsg['IP_DENIED']             = 'IP is denied.';
+$lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Account unbound.';
 $lang->entry->errmsg['EMPTY_ENTRY']           = 'Key of entry is missing.';
