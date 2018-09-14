@@ -117,7 +117,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             </td>
           </tr>
           <?php endif;?>
-
+          <?php if($this->config->global->flow != 'onlyTest' && $showProject):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>
           <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
           <tr>
@@ -142,6 +142,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->bug->title;?></th>
             <td colspan='2'>
