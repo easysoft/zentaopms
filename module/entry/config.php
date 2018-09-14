@@ -14,4 +14,5 @@ $config->entry->errcode['EMPTY_KEY']             = 401;
 $config->entry->errcode['INVALID_TOKEN']         = 401;
 $config->entry->errcode['SESSION_VERIFY_FAILED'] = 401;
 $config->entry->errcode['IP_DENIED']             = 403;
+$config->entry->errcode['ACCOUNT_UNBOUND']       = 403;
 $config->entry->errcode['EMPTY_ENTRY']           = 404;
