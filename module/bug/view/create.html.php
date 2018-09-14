@@ -21,7 +21,7 @@ js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
 js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
 ?>
-<div id="mainContent" class="main-content">
+<div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
       <h2><?php echo $lang->bug->create;?></h2>
