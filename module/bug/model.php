@@ -1335,14 +1335,13 @@ class bugModel extends model
      */
     public function getUserBugPairs($account, $appendProduct = true, $limit = 0)
     {
-        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product=t2.id')
             ->where('t1.assignedTo')->eq($account)
-            ->andWhere('t1.project')->in(array_keys($projects))
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
