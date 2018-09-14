@@ -41,3 +41,6 @@
 
 .title-group.required:after {display: none;}
 .title-group.required > .required:after {display: block; right: 29px; top: 5px;}
+.title-group .chosen-container {width: 1%!important; min-width: 70px;}
+.title-group #severity + .chosen-container > .chosen-single {border-radius: 0!important;}
+.title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
