@@ -171,7 +171,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                 }
                 ?>
                 <?php if($hasCustomSeverity):?>
-                <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control chosen'");?>
+                <?php echo html::select('severity', (array)$lang->bug->severityList, $severity, "class='form-control'");?>
                 <?php else: ?>
                 <div class="input-group-btn pri-selector" data-type="severity">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
@@ -203,7 +203,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
+                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
                 <?php else: ?>
                 <div class="input-group-btn pri-selector" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
