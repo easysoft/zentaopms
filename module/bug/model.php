@@ -477,12 +477,13 @@ class bugModel extends model
      * Get bug list.
      * 
      * @param  int|array|string    $bugIDList 
+     * @param  string              $fields
      * @access public
      * @return array
      */
-    public function getByList($bugIDList = 0)
+    public function getByList($bugIDList = 0, $fields = '*')
     {
-        return $this->dao->select('*')->from(TABLE_BUG)
+        return $this->dao->select($fields)->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF($bugIDList)->andWhere('id')->in($bugIDList)->fi()
             ->fetchAll('id');
