@@ -1016,11 +1016,7 @@ class block extends control
         $today     = date(DT_DATE1);
         $yesterday = date(DT_DATE1, strtotime('yesterday'));
 
-        $this->app->loadLang('bug');
-        $bugs = $this->dao->select('id, assignedTo, resolvedDate, closedDate, status')->from(TABLE_BUG)
-                     ->where('deleted')->eq(0)
-                     ->andWhere('id')->in($bugIDList)
-                     ->fetchAll('id');
+        $bugs = $this->loadModel('bug')->getByList($bugIDList, 'id, assignedTo, resolvedDate, closedDate, status');
         $confirmedBugs = $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('objectType')->eq('bug')
             ->andWhere('action')->eq('bugconfirmed')
