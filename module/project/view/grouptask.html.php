@@ -113,10 +113,10 @@
         <th class="c-status"><?php echo $lang->task->status;?></th>
         <th class="c-assign text-left"><?php echo $lang->task->assignedTo;?></th>
         <th class="c-user"><?php echo $lang->task->finishedBy;?></th>
-        <th class="c-hours"><?php echo $lang->task->estimateAB;?></th>
-        <th class="c-hours"><?php echo $lang->task->consumedAB;?></th>
-        <th class="c-hours"><?php echo $lang->task->leftAB;?></th>
-        <th class="c-num"><?php echo $lang->task->progress;?></th>
+        <th class="w-40px"><?php echo $lang->task->estimateAB;?></th>
+        <th class="w-40px"><?php echo $lang->task->consumedAB;?></th>
+        <th class="w-40px"><?php echo $lang->task->leftAB;?></th>
+        <th class="w-40px"><?php echo $lang->task->progress;?></th>
         <th class="c-type"><?php echo $lang->typeAB;?></th>
         <th class="c-date"><?php echo $lang->task->deadlineAB;?></th>
         <th class="c-actions-2"><?php echo $lang->actions;?></th>
