@@ -603,6 +603,8 @@ class docModel extends model
         $doc = fixer::input('post')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', $now)
             ->add('version', 1)
             ->setDefault('product,project,module', 0)
             ->stripTags($this->config->doc->editor->create['id'], $this->config->allowedTags)
