@@ -1340,6 +1340,8 @@ class userModel extends model
             $userView->projects = $grantProjects;
         }
 
+        $userView->products = trim($userView->products, ',');
+        $userView->projects = trim($userView->projects, ',');
         return $userView;
     }
 

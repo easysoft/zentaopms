@@ -216,6 +216,8 @@ class productModel extends model
      */
     public function checkPriv($productID)
     {
+        if(empty($productID)) return false;
+
         /* Is admin? */
         if($this->app->user->admin) return true;
         return (strpos(",{$this->app->user->view->products},", ",{$productID},") !== false);

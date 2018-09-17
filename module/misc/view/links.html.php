@@ -1,5 +1,6 @@
 <div class='container mw-800px' id="zentaoLinks">
   <div class='row'>
+    <?php $zentaoVersion = $lang->misc->zentao->version;?>
     <?php unset($lang->misc->zentao->version);?>
     <?php foreach($lang->misc->zentao as $label => $groupItems):?>
     <?php if(strpos(',labels,icons,version,', ",$label,") !== false) continue; ?>
@@ -18,6 +19,7 @@
       </div>
     </div>
     <?php endforeach;?>
+    <?php $lang->misc->zentao->version = $zentaoVersion;?>
   </div>
 </div>
 <style>

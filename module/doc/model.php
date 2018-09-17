@@ -889,8 +889,8 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->project) return strpos(",{$this->app->user->view->projects},", ",{$object->project},") !== false;
-        if($object->product) return strpos(",{$this->app->user->view->products},", ",{$object->product},") !== false;
+        if($object->project) return $this->loadModel('project')->checkPriv($object->project);
+        if($object->product) return $this->loadModel('product')->checkPriv($object->product);
         return false;
     }
 

@@ -236,6 +236,7 @@ class upgradeModel extends model
             case '10_3_1':
                 $this->execSQL($this->getUpgradeFile('10.3.1'));
                 $this->removeCustomMenu();
+                $this->initUserView();
         }
 
         $this->deletePatch();
@@ -2428,5 +2429,19 @@ class upgradeModel extends model
             }
         }
         return !dao::isError();
+    }
+
+    /**
+     * Init user view.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function initUserView()
+    {
+        $users = $this->dao->select('account')->from(TABLE_USER)->fetchAll();
+        $this->loadModel('user');
+        foreach($users as $user) $this->user->computeUserView($user->account, $force = true);
+        return true;
     }
 }

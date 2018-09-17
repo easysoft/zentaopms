@@ -25,6 +25,8 @@ class projectModel extends model
      */
     public function checkPriv($projectID)
     {
+        if(empty($projectID)) return false;
+
         /* If is admin, return true. */
         if($this->app->user->admin) return true;
         return (strpos(",{$this->app->user->view->projects},", ",{$projectID},") !== false);
@@ -822,7 +824,7 @@ class projectModel extends model
             {
                 if(!$project->product)
                 {
-                    if(strpos(",{$this->app->user->view->projects},", ",{$project->id},") !== false) $noProducts[] = $project;
+                    if($this->checkPriv($project->id)) $noProducts[] = $project;
                     unset($list[$id][$ID]);
                 }
             }
