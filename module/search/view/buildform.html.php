@@ -21,7 +21,7 @@ $formId = 'searchForm-' . uniqid('');
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
 #<?php echo $formId;?> > table {margin: 0 auto;}
-#<?php echo $formId;?> > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
+#<?php echo $formId;?> > table > tbody > tr > td {padding: 10px 15px;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
 #<?php echo $formId;?> .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
