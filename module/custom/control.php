@@ -334,6 +334,10 @@ class custom extends control
             if(is_array($fields)) $fields = join(',', $fields);
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
         }
+        else
+        {
+            $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
+        }
         die(js::reload('parent'));
     }
 
