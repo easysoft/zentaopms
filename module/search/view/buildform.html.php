@@ -20,7 +20,6 @@ $formId = 'searchForm-' . uniqid('');
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
-.btn-wide{min-width:65px}
 #<?php echo $formId;?> > table {margin: 0 auto;}
 #<?php echo $formId;?> > table > tbody > tr > td {padding: 10px 15px; color: #838A9D;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
@@ -209,11 +208,11 @@ foreach($fieldParams as $fieldName => $param)
         echo html::hidden('module',     $module);
         echo html::hidden('actionURL',  $actionURL);
         echo html::hidden('groupItems', $groupItems);
-        echo html::submitButton($lang->search->common, '', 'btn btn-wide btn-primary') . " &nbsp; ";
+        echo html::submitButton($lang->search->common, '', 'btn btn-primary') . " &nbsp; ";
         if($style != 'simple')
         {
-            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary btn-wide'") . "&nbsp;";
-            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn btn-wide');
+            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary'") . "&nbsp;";
+            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn');
         }
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
         echo html::hidden('formType', 'lite');
