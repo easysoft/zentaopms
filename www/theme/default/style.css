@@ -19,3 +19,6 @@
 .body-modal .main-header>h2{font-weight:bold;}
 .timeline > li .timeline-text{white-space: nowrap !important;}
 .table .tablesorter-header-inner{color:#000}
+
+/* Finish task #4751. */
+.hide-sidebar #sidebar .cell{display:none;}
