@@ -79,7 +79,7 @@ class custom extends control
             $this->view->showDeleted = isset($this->config->user->showDeleted) ? $this->config->user->showDeleted : '0';
         }
 
-        if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
+        if(strtolower($this->server->request_method) == "post")
         {
             if($module == 'story' and $field == 'review')
             {
@@ -270,7 +270,7 @@ class custom extends control
     {
         if(empty($moduleName)) $moduleName = current($this->config->custom->requiredModules);
 
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        if($this->server->request_method == 'POST')
         {
             $this->custom->saveRequiredFields($moduleName);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
@@ -328,7 +328,7 @@ class custom extends control
     public function ajaxSaveCustomFields($module, $section, $key)
     {
         $account = $this->app->user->account;
-        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        if($this->server->request_method == 'POST')
         {
             $fields  = $this->post->fields;
             if(is_array($fields)) $fields = join(',', $fields);

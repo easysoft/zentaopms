@@ -22,7 +22,6 @@ $sessionString .= session_name() . '=' . session_id();
   /* Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it. */
   function downloadFile(fileID, extension, imageWidth, fileTitle)
   {
-      console.log(fileID, extension, imageWidth);
       if(!fileID) return;
       var fileTypes     = 'txt,jpg,jpeg,gif,png,bmp';
       var sessionString = '<?php echo $sessionString;?>';
