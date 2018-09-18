@@ -86,57 +86,6 @@
             <?php endif;?>
           </tr>
           <tr>
-            <th><?php echo $lang->story->title;?></th>
-            <td colspan="4">
-              <div class="input-control has-icon-right">
-                <?php echo html::input('title', $storyTitle, "class='form-control input-story-title' autocomplete='off' required");?>
-                <div class="colorpicker">
-                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                  <ul class="dropdown-menu clearfix">
-                    <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
-                  </ul>
-                  <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
-                </div>
-              </div>
-            </td>
-          </tr>
-          <?php if(strpos(",$showFields,", ',pri,') !== false):?>
-          <?php
-          $hasCustomPri = false;
-          foreach($lang->story->priList as $priKey => $priValue)
-          {
-              if(!empty($priKey) and (string)$priKey != (string)$priValue)
-              {
-                  $hasCustomPri = true;
-                  break;
-              }
-          }
-          $priList = $lang->story->priList;
-          if(end($priList))
-          {
-              unset($priList[0]);
-              $priList[0] = '';
-          }
-          ?>
-          <tr>
-            <th><?php echo $lang->story->pri;?></th>
-            <td colspan="<?php echo $hasCustomPri ? 1 : 4;?>">
-              <?php if($hasCustomPri):?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
-              <?php else: ?>
-              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
-              <?php endif; ?>
-            </td>
-          </tr>
-          <?php endif;?>
-          <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
-          <tr>
-            <th><?php echo $lang->story->estimateAB;?></th>
-            <td><input type="number" min="0" step="0.5" name="estimate" id="estimate" value="<?php echo $estimate;?>" class="form-control" autocomplete="off"></td>
-            <td class="muted"><?php echo $lang->story->hour;?></td>
-          </tr>
-          <?php endif;?>
-          <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
             <td><?php echo html::select('assignedTo', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen'");?></td>
             <?php if(!$this->story->checkForceReview()):?>
@@ -147,6 +96,64 @@
               </div>
             </td>
             <?php endif;?>
+          </tr>
+          <tr>
+            <th><?php echo $lang->story->title;?></th>
+            <td colspan="4">
+              <div class='table-row'>
+                <div class='table-col'>
+                  <div class="input-control has-icon-right">
+                    <?php echo html::input('title', $storyTitle, "class='form-control' autocomplete='off' required");?>
+                    <div class="colorpicker">
+                      <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                      <ul class="dropdown-menu clearfix">
+                        <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
+                      </ul>
+                      <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
+                    </div>
+                  </div>
+                </div>
+                <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
+                <div class='table-col w-150px'>
+                  <div class="input-group">
+                    <span class="input-group-addon fix-border br-0"><?php echo $lang->story->pri;?></span>
+                    <?php
+                    $hasCustomPri = false;
+                    foreach($lang->story->priList as $priKey => $priValue)
+                    {
+                        if(!empty($priKey) and (string)$priKey != (string)$priValue)
+                        {
+                            $hasCustomPri = true;
+                            break;
+                        }
+                    }
+                    $priList = $lang->story->priList;
+                    ?>
+                    <?php if($hasCustomPri):?>
+                    <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
+                    <?php else:?>
+                    <div class="input-group-btn pri-selector" data-type="pri">
+                      <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                        <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
+                      </button>
+                      <div class='dropdown-menu pull-right'>
+                        <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
+                      </div>
+                    </div>
+                    <?php endif;?>
+                  </div>
+                </div>
+                <?php endif; ?>
+                <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
+                <div class='table-col w-120px'>
+                  <div class="input-group">
+                    <span class="input-group-addon fix-border br-0"><?php echo $lang->story->estimateAB;?></span>
+                    <input type="text" name="estimate" id="estimate" value="<?php echo $estimate;?>" class="form-control" autocomplete="off" placeholder='<?php echo $lang->story->hour;?>' />
+                  </div>
+                </div>
+                <?php endif;?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->story->spec;?></th>
