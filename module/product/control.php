@@ -380,10 +380,7 @@ class product extends control
         if(!$product) die(js::error($this->lang->notFound) . js::locate('back'));
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
-
         $this->product->setMenu($this->products, $productID);
-
-        $plans = $this->loadModel('productplan')->getList($productID, 0, 'unexpired', null, 'begin');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -399,7 +396,7 @@ class product extends control
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
         $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
-        $this->view->plans      = $plans;
+        $this->view->plans      = $this->loadModel('productplan')->getList($productID, 0, 'unexpired', null, 'begin');
 
         $this->display();
     }
