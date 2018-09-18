@@ -67,7 +67,7 @@
         <?php endif;?>
         <td class='c-id-sm'><?php echo sprintf('%03d', $case->id);?></td>
         <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-        <td class='text-left'><?php if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
+        <td class='text-left title' title='<?php echo $case->title?>'><?php if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
         <td><?php echo zget($lang->case->typeList, $case->type, '');?></td>
         <td><?php echo zget($users, $case->lastRunner);?></td>
         <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>

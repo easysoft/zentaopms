@@ -43,7 +43,7 @@
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->testcase->precondition;?></div>
-            <div class='detail-content'><?php echo html::textarea('precondition', $case->precondition, "rows='4' class='form-control'");?></div>
+            <div class='detail-content'><?php echo html::textarea('precondition', $case->precondition, "rows='2' class='form-control'");?></div>
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->testcase->steps;?></div>
