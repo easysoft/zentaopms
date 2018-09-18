@@ -47,7 +47,7 @@
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->testcase->steps;?></div>
-            <div class='form-group'>
+            <div class='detail-content'>
               <table class='table table-form table-bordered'>
                 <thead>
                   <tr>
