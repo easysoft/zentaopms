@@ -8,16 +8,6 @@
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.zentao.net
 */
-.article-content, .article>.content{word-wrap: break-word;}
-
-#noticeBox .alert {box-shadow: rgba(0,0,0,.15) 0 0.15rem 0.5rem, rgba(0,0,0,.25) 0 0.15rem 0.5rem;}
-.table.has-sort-head thead>tr>th>a.sort-down, .table.has-sort-head thead>tr>th>a.sort-up, .table.has-sort-head thead>tr>th>a:hover{color:#000;text-decoration: none;font-weight:bold}
-.table.has-sort-head thead>tr>th>a.sort-down:after,.table.has-sort-head thead>tr>th>a.sort-up:before,.table.has-sort-head thead>tr>th>a:hover:after,.table.has-sort-head thead>tr>th>a:hover:before{color:#000}
-.main-header>h2{font-size: 14px;}
-.detail-content{padding: 5px 0 0 0px; margin-left: -5px;}
-.article-content{margin-left: 0px;}
-.body-modal .main-header>h2{font-weight:bold;}
-.timeline > li .timeline-text{white-space: nowrap !important;}
 
 /* Finish task #4751. */
 .hide-sidebar #sidebar .cell{display:none;}
