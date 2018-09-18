@@ -75,7 +75,7 @@
     <div class="table-footer">
       <div class="table-actions btn-toolbar" style=''>
         <?php echo html::linkButton($lang->action->hideAll, inlink('hideAll'), 'hiddenwin');?>
-        <span class='text'><?php echo $lang->action->trashTips;?></span>
+        <span class='table-statistic'><?php echo $lang->action->trashTips;?></span>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
