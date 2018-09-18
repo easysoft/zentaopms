@@ -22,7 +22,6 @@ class testtask extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->loadModel('project');
         $this->loadModel('product');
         $this->view->products = $this->products = $this->product->getPairs('nocode');
         if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', "fromModule=testtask")));
@@ -382,6 +381,8 @@ class testtask extends control
     {
         /* Save the session. */
         $this->loadModel('testcase');
+        $this->app->loadLang('project');
+        $this->app->loadLang('task');
         $this->session->set('caseList', $this->app->getURI(true));
 
         /* Get task and product info, set menu. */
