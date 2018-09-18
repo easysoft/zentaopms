@@ -119,7 +119,7 @@
             if(common::hasPriv('todo', 'delete'))
             {
                 $deleteURL = $this->createLink('todo', 'delete', "todoID=$todo->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->todo->delete}'");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '<i class="icon-close"></i>', '', "class='btn' title='{$lang->todo->delete}'");
             }
             ?>
           </td>

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php 
+<?php
 include '../../common/view/header.html.php';
 js::set('deptID', $deptID);
 js::set('confirmDelete', $lang->user->confirmDelete);
@@ -123,11 +123,11 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
             if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
             {
-                echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-trash"></i>', '', "title='{$lang->user->delete}' class='btn iframe'");
+                echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-close"></i>', '', "title='{$lang->user->delete}' class='btn iframe'");
             }
             else
             {
-                echo html::a('javascript:;', "<i class='icon icon-trash'></i>", '', "class='btn disabled'");
+                echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "class='btn disabled'");
             }
             ?>
           </td>

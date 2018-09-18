@@ -23,7 +23,7 @@ $itemRow = <<<EOT
     </td>
     <td class='c-actions'>
       <a href="javascript:void(0)" class='btn btn-link' onclick="addItem(this)"><i class='icon-plus'></i></a>
-      <a href="javascript:void(0)" class='btn btn-link' onclick="delItem(this)"><i class='icon-trash'></i></a>
+      <a href="javascript:void(0)" class='btn btn-link' onclick="delItem(this)"><i class='icon-close'></i></a>
     </td>
   </tr>
 EOT;
@@ -141,7 +141,7 @@ EOT;
           <?php if($canAdd):?>
           <td class='c-actions'>
             <a href="javascript:void(0)" onclick="addItem(this)" class='btn btn-link'><i class='icon-plus'></i></a>
-            <a href="javascript:void(0)" onclick="delItem(this)" class='btn btn-link'><i class='icon-trash'></i></a>
+            <a href="javascript:void(0)" onclick="delItem(this)" class='btn btn-link'><i class='icon-close'></i></a>
           </td>
           <?php endif;?>
         </tr>

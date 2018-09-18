@@ -167,7 +167,7 @@
                     <div class='btn-group'>
                       <button type='button' class='btn btn-step-add' tabindex='-1'><i class='icon icon-plus'></i></button>
                       <button type='button' class='btn btn-step-move' tabindex='-1'><i class='icon icon-move'></i></button>
-                      <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-trash'></i></button>
+                      <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-close'></i></button>
                     </div>
                   </td>
                 </tr>
@@ -193,7 +193,7 @@
                     <div class='btn-group'>
                       <button type='button' class='btn btn-step-add' tabindex='-1'><i class='icon icon-plus'></i></button>
                       <button type='button' class='btn btn-step-move' tabindex='-1'><i class='icon icon-move'></i></button>
-                      <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-trash'></i></button>
+                      <button type='button' class='btn btn-step-delete' tabindex='-1'><i class='icon icon-close'></i></button>
                     </div>
                   </td>
                 </tr>
