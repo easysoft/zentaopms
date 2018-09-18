@@ -21,18 +21,19 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->testsuite->name;?></th>
-          <td colspan='2'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testsuite->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
+          <td><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testsuite->author;?></th>
           <td><?php echo html::radio('type', $lang->testsuite->authorList, 'private');?></td>
         </tr>
         <tr>
-          <td class='text-center form-actions' colspan='3'>
+          <th></th>
+          <td class='text-left form-actions' colspan='2'>
             <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>

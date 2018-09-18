@@ -51,7 +51,7 @@
               <table class='table table-form table-bordered'>
                 <thead>
                   <tr>
-                    <th class='w-40px'><?php echo $lang->testcase->stepID;?></th>
+                    <th class='w-50px'><?php echo $lang->testcase->stepID;?></th>
                     <th width="45%"><?php echo $lang->testcase->stepDesc;?></th>
                     <th><?php echo $lang->testcase->stepExpect;?></th>
                     <th class='step-actions'><?php echo $lang->actions;?></th>

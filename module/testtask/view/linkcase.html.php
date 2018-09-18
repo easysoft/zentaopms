@@ -63,7 +63,7 @@
     echo "</ul></div>";
     ?>
     <?php common::printLink('testtask', 'linkCase', "taskID=$taskID&type=bybug", "<span class='text'>" . $lang->testtask->linkByBug . '</span>', '', "class='btn btn-link {$bugActive}'");?>
-    <?php echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>{$lang->testcase->bySearch}</a>";?>
+    <?php if($type == 'all') echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>{$lang->testcase->bySearch}</a>";?>
   </div>
 </div>
 <div class="cell show" id="queryBox"></div>
