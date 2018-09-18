@@ -910,8 +910,9 @@ class actionModel extends model
         }
         elseif($action->objectType == 'module')
         {
-            $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
-            $this->loadModel('tree')->checkUnique($module->root, $module->type, $module->parent, array($module->name), array($module->branch));
+            $module     = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
+            $repeatName = $this->loadModel('tree')->checkUnique($module);
+            if($repeatName) die(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
         }
 
         /* Update deleted field in object table. */
