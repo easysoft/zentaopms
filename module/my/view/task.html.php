@@ -78,12 +78,7 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
-          <td class="c-assign">
-            <?php
-            $btnTextClass   = 'text-red';
-            echo "<span class='$btnTextClass'>" . zget($users, $task->assignedTo) . "</span>";
-            ?>
-          </td>
+          <td class="c-assign"><?php echo "<span class='text-red'>" . zget($users, $task->assignedTo) . "</span>";?></td>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <td class='c-hours'><?php echo $task->estimate;?></td>
           <td class='c-hours'><?php echo $task->consumed;?></td>

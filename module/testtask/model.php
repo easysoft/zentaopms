@@ -1249,7 +1249,8 @@ class testtaskModel extends model
                 break;
             case 'lastRunResult':
                 $lastRunResultText = $run->lastRunResult ? zget($this->lang->testcase->resultList, $run->lastRunResult, $run->lastRunResult) : $this->lang->testcase->unexecuted;
-                echo html::a(helper::createLink('testtask', 'results', "id={$run->id}", '', true), "<i class='icon icon-list-alt'></i> <span>{$lastRunResultText}</span>", '', "class='iframe btn btn-icon-left'");
+                $class = 'result-' . $run->lastRunResult;
+                echo "<span class='$class'>" . $lastRunResultText . "</span>";
                 break;
             case 'story':
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);
@@ -1272,6 +1273,7 @@ class testtaskModel extends model
                 common::printIcon('testcase', 'createBug', "product=$run->product&branch=$run->branch&extra=projectID=$task->project,buildID=$task->build,caseID=$run->case,version=$run->version,runID=$run->id,testtask=$task->id", $run, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
                 echo "</div>";
 
+                common::printIcon('testtask', 'results', "id=$run->id", $run, 'list', '', '', 'iframe', '', "data-width='90%'");
                 common::printIcon('testtask', 'runCase', "id=$run->id", $run, 'list', '', '', 'runCase iframe', false, "data-width='95%'");
 
                 if(common::hasPriv('testtask', 'unlinkCase', $run))

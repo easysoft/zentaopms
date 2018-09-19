@@ -59,7 +59,7 @@
           <th class='w-110px'>   <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
           <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -77,19 +77,15 @@
         <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
         <td class='c-assignedTo has-btn text-left'>
-          <?php $assignedTo = zget($users, $bug->assignedTo, $bug->assignedTo);?>
-          <?php $params = "bugID=$bug->id";?>
           <?php $class = $bug->assignedTo == $this->app->user->account ? 'text-red' : 'text-primary';?>
-          <?php if(common::hasPriv('bug', 'assignTo')):?>
-          <?php echo html::a($this->createLink('bug', 'assignTo', $params, '', 'true'), "<i class='icon icon-hand-right'></i> <span class='$class'>$assignedTo</span>", '', "class='iframe btn btn-icon-left btn-sm'");?>
-          <?php else:?>
-          <?php echo $assignedTo;?>
-          <?php endif;?>
+          <?php echo "<span class='$class'>" . zget($users, $bug->assignedTo, $bug->assignedTo) . "</span>";?>
         </td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
         <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
         <td class='c-actions'>
           <?php
+          $params = "bugID=$bug->id";
+          common::printIcon('bug', 'assignTo', $params, $bug, 'list', '', '', 'iframe', true);
           if($bug->status == 'active') common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
           if($bug->status == 'active') common::printIcon('bug', 'resolve', $params, $bug, 'list', 'check', '', 'iframe', true);
           if($bug->status != 'active') common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);

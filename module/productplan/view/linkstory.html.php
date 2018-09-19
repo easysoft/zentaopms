@@ -55,7 +55,6 @@
           <td><?php echo $story->estimate;?></td>
           <td>
             <span class='status-<?php echo $story->status?>'>
-              <span class='label label-dot'></span>
               <?php echo $lang->story->statusList[$story->status];?>
             </span>
           </td>

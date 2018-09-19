@@ -13,8 +13,9 @@
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
 
 .pl-5px{padding-left:5px;}
-.fail a, .fail a .icon{color:#f00 !important}
-.blocked a, .blocked a .icon{color:#f00 !important}
+
+.fail .result-fail, .blocked .result-blocked{color:#f00;}
+.pass .result-pass{color:green;}
 
 tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-bug {margin-left: -8px;}

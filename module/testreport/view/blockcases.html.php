@@ -27,7 +27,6 @@
       <td><?php echo zget($lang->testcase->resultList, $case->lastRunResult);?></td>
       <td title='<?php echo zget($lang->testtask->statusList, $case->status);?>'>
         <span class="status-<?php echo $case->status?>">
-          <span class="label label-dot"></span>
           <span class='status-text'><?php echo zget($lang->testtask->statusList, $case->status);?></span>
         </span>
       </td>
