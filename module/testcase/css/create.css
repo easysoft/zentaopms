@@ -37,3 +37,6 @@
 #branch {border-left-width: 0px;}
 
 .input-group-addon.w-80px{min-width:80px;}
+
+.title-group.required:after {display: none;}
+.title-group.required > .required:after {display: block; right: 29px; top: 5px;}
