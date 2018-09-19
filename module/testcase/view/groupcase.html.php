@@ -82,7 +82,7 @@
           }
           else
           {
-              echo "<span class='status-{$case->status}'><span class='label label-dot'></span><span class='status-text'>";
+              echo "<span class='status-{$case->status}'><span class='status-text'>";
               echo $lang->testcase->statusList[$case->status];
               echo '</span></span>';
           }

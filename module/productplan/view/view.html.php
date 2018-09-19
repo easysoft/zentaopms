@@ -19,7 +19,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->productPlanList ? $this->session->productPlanList : inlink('browse', "planID=$plan->id");?>
-    <?php common::printBack($browseLink, 'btn btn-link');?>
+    <?php common::printBack($browseLink, 'btn btn-primary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $plan->id;?></span>
@@ -142,8 +142,7 @@
                 <td><?php echo $story->estimate;?></td>
                 <td>
                   <span class='status-<?php echo $story->status?>'>
-                    <span class='label label-dot'></span>
-                    <?php echo $lang->story->statusList[$story->status];?><span>
+                    <?php echo $lang->story->statusList[$story->status];?>
                   </span>
                 </td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
@@ -378,7 +377,6 @@
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
                   <span class='status-<?php echo $bug->status?>'>
-                    <span class='label label-dot'></span>
                     <?php echo $lang->bug->statusList[$bug->status];?>
                   </span>
                 </td>

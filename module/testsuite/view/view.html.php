@@ -17,7 +17,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->testsuiteList ? $this->session->testsuiteList : $this->createLink('testsuite', 'browse', "productID=$suite->product");?>
-    <?php common::printBack($browseLink, 'btn btn-link');?>
+    <?php common::printBack($browseLink, 'btn btn-primary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $suite->id;?></span>

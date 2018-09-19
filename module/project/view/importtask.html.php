@@ -61,7 +61,6 @@
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
           <td>
             <span class='status-<?php echo $task->status;?>'>
-              <span class='label label-dot'></span>
               <?php echo $lang->task->statusList[$task->status];?>
             </span>
           </td>

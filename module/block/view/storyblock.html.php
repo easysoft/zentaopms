@@ -21,7 +21,6 @@
 .block-stories .c-stage {width: 80px;}
 .block-stories.block-sm .estimate,
 .block-stories.block-sm .c-stage,
-.block-stories.block-sm .c-status .label-dot {display: none;}
 .block-stories.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
@@ -59,7 +58,6 @@
         <?php endif;?>
         <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
           <span class="status-<?php echo $story->status?>">
-            <span class="label label-dot"></span>
             <span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
           </span>
         </td>

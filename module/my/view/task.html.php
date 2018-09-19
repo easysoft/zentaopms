@@ -78,20 +78,13 @@
             <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, null, "style='color: $task->color'");?>
           </td>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
-          <td class='c-user'>
-            <?php
-            $assignedToText = !empty($task->assignedTo) ? zget($users, $task->assignedTo) : $this->lang->task->noAssigned;
-            $btnTextClass   = 'text-red';
-            $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
-            echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-sm btn-icon-left{$btnClass}'");
-            ?>
-          </td>
+          <td class="c-assign"><?php echo "<span class='text-red'>" . zget($users, $task->assignedTo) . "</span>";?></td>
           <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
           <td class='c-hours'><?php echo $task->estimate;?></td>
           <td class='c-hours'><?php echo $task->consumed;?></td>
           <td class='c-hours'><?php echo $task->left;?></td>
           <td class='c-date <?php if(isset($task->delay)) echo 'text-red';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-          <td class='c-status'><span class="status-<?php echo $task->status;?>"><span class="label label-dot"></span> <?php echo $lang->task->statusList[$task->status];?></span></td>
+          <td class='c-status'><span class="status-<?php echo $task->status;?>"><?php echo $lang->task->statusList[$task->status];?></span></td>
           <td class='c-actions'>
             <?php
             if($task->needConfirm)
@@ -101,9 +94,7 @@
             }
             else
             {
-                echo "<div class='more'>";
-                if($task->status == 'wait') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                echo "</div>";
+                common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
                 if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                 if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);

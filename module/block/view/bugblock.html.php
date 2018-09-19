@@ -51,7 +51,6 @@
         <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
         <td class='c-status' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
           <span class="status-<?php echo $bug->status?>">
-            <span class="label label-dot hide-in-sm"></span>
             <span class='status-text'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
           </span>
         </td>

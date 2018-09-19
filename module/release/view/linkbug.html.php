@@ -52,7 +52,6 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td>
             <span class='status-<?php echo $bug->status?>'>
-              <span class='label label-dot'></span>
               <?php echo $lang->bug->statusList[$bug->status];?>
             </span>
           </td>

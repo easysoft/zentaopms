@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     entry 
+ * @package     entry
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -20,7 +20,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->entry->create;?></small>
       </h2>
     </div>
-    <form class='main-form' id='entryForm' method='post' class='ajaxForm'>
+    <form id='entryForm' method='post' class='ajaxForm'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->entry->name;?></th>
