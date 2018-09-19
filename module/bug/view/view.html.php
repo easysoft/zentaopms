@@ -56,258 +56,260 @@
   </div>
   <div class="side-col col-4">
     <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->bug->legendBasicInfo;?></summary>
-        <div class="detail-content">
-          <table class="table table-data">
-            <tbody>
-              <tr valign='middle'>
-                <th class='w-70px'><?php echo $lang->bug->product;?></th>
-                <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
-              </tr>
-              <?php if($this->session->currentProductType != 'normal'):?>
-              <tr>
-                <th><?php echo $lang->product->branch;?></th>
-                <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch", $branchName)) echo $branchName;?></td>
-              </tr>
-              <?php endif;?>
-              <tr>
-                <th><?php echo $lang->bug->module;?></th>
-                <?php
-                $moduleTitle = '';
-                ob_start();
-                if(empty($modulePath))
-                {
-                    $moduleTitle .= '/';
-                    echo "/";
-                }
-                else
-                {
-                   foreach($modulePath as $key => $module)
-                   {
-                       $moduleTitle .= $module->name;
-                       if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                       if(isset($modulePath[$key + 1]))
-                       {
-                           $moduleTitle .= '/';
-                           echo $lang->arrow;
-                       }
-                   }
-                }
-                $printModule = ob_get_contents();
-                ob_end_clean();
-                ?>
-                <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
-              </tr>
-              <tr valign='middle'>
-                <th><?php echo $lang->bug->productplan;?></th>
-                <td><?php if(!$bug->plan or !common::printLink('productplan', 'view', "planID=$bug->plan&type=bug", $bug->planName)) echo $bug->planName;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->type;?></th>
-                <td><?php if(isset($lang->bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->severity;?></th>
-                <td><span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity)?>'></span></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->pri;?></th>
-                <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->status;?></th>
-                <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo $lang->bug->statusList[$bug->status];?></span></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->activatedCount;?></th>
-                <td><?php echo $bug->activatedCount;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->activatedDate;?></th>
-                <td><?php echo $bug->activatedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->confirmed;?></th>
-                <td><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->lblAssignedTo;?></th>
-                <td><?php if($bug->assignedTo) echo $users[$bug->assignedTo] . $lang->at . $bug->assignedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->deadline;?></th>
-                <td><?php if($bug->deadline) echo  $bug->deadline;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->os;?></th>
-                <td><?php echo $lang->bug->osList[$bug->os];?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->browser;?></th>
-                <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->keywords;?></th>
-                <td><?php echo $bug->keywords;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->mailto;?></th>
-                <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </details>
-    </div>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->bug->legendLife;?></summary>
-        <div class="detail-content">
-          <table class="table table-data">
-            <tbody>
-              <tr>
-                <th class='w-90px'><?php echo $lang->bug->openedBy;?></th>
-                <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->openedBuild;?></th>
-                <td>
+      <div class='tabs'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='#legendBasicInfo' data-toggle='tab'><?php echo $lang->bug->legendBasicInfo;?></a></li>
+          <?php if($config->global->flow != 'onlyTest'):?>
+          <li><a href='#legendPrjStoryTask' data-toggle='tab'><?php echo $lang->bug->legendPrjStoryTask;?></a></li>
+          <?php endif;?>
+        </ul>
+        <div class='tab-content'>
+          <div class='tab-pane active' id='legendBasicInfo'>
+            <table class="table table-data">
+              <tbody>
+                <tr valign='middle'>
+                  <th class='w-70px'><?php echo $lang->bug->product;?></th>
+                  <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
+                </tr>
+                <?php if($this->session->currentProductType != 'normal'):?>
+                <tr>
+                  <th><?php echo $lang->product->branch;?></th>
+                  <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$bug->branch", $branchName)) echo $branchName;?></td>
+                </tr>
+                <?php endif;?>
+                <tr>
+                  <th><?php echo $lang->bug->module;?></th>
                   <?php
-                  if($bug->openedBuild)
+                  $moduleTitle = '';
+                  ob_start();
+                  if(empty($modulePath))
                   {
-                      $openedBuilds = explode(',', $bug->openedBuild);
-                      foreach($openedBuilds as $openedBuild) isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+                      $moduleTitle .= '/';
+                      echo "/";
                   }
                   else
                   {
-                      echo $bug->openedBuild;
+                     foreach($modulePath as $key => $module)
+                     {
+                         $moduleTitle .= $module->name;
+                         if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                         if(isset($modulePath[$key + 1]))
+                         {
+                             $moduleTitle .= '/';
+                             echo $lang->arrow;
+                         }
+                     }
                   }
+                  $printModule = ob_get_contents();
+                  ob_end_clean();
                   ?>
-                </td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->lblResolved;?></th>
-                <td><?php if($bug->resolvedBy) echo zget($users, $bug->resolvedBy) . $lang->at . $bug->resolvedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->resolvedBuild;?></th>
-                <td><?php if(isset($builds[$bug->resolvedBuild])) echo $builds[$bug->resolvedBuild]; else echo $bug->resolvedBuild;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->resolution;?></th>
-                <td>
-                  <?php
-                  echo isset($lang->bug->resolutionList[$bug->resolution]) ? $lang->bug->resolutionList[$bug->resolution] : $bug->resolution;
-                  if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
-                  ?>
-                </td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->closedBy;?></th>
-                <td><?php if($bug->closedBy) echo zget($users, $bug->closedBy) . $lang->at . $bug->closedDate;?></td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->lblLastEdited;?></th>
-                <td><?php if($bug->lastEditedBy) echo zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . $lang->at . $bug->lastEditedDate?></td>
-              </tr>
-            </tbody>
-          </table>
+                  <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
+                </tr>
+                <tr valign='middle'>
+                  <th><?php echo $lang->bug->productplan;?></th>
+                  <td><?php if(!$bug->plan or !common::printLink('productplan', 'view', "planID=$bug->plan&type=bug", $bug->planName)) echo $bug->planName;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->type;?></th>
+                  <td><?php if(isset($lang->bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->severity;?></th>
+                  <td><span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity)?>'></span></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->pri;?></th>
+                  <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->status;?></th>
+                  <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo $lang->bug->statusList[$bug->status];?></span></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->activatedCount;?></th>
+                  <td><?php echo $bug->activatedCount;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->activatedDate;?></th>
+                  <td><?php echo $bug->activatedDate;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->confirmed;?></th>
+                  <td><?php echo $lang->bug->confirmedList[$bug->confirmed];?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->lblAssignedTo;?></th>
+                  <td><?php if($bug->assignedTo) echo $users[$bug->assignedTo] . $lang->at . $bug->assignedDate;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->deadline;?></th>
+                  <td><?php if($bug->deadline) echo  $bug->deadline;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->os;?></th>
+                  <td><?php echo $lang->bug->osList[$bug->os];?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->browser;?></th>
+                  <td><?php echo $lang->bug->browserList[$bug->browser];?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->keywords;?></th>
+                  <td><?php echo $bug->keywords;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->mailto;?></th>
+                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <?php if($config->global->flow != 'onlyTest'):?>
+          <div class='tab-pane' id='legendPrjStoryTask'>
+            <table class='table table-data'>
+              <tbody>
+                <tr>
+                  <th class='w-60px'><?php echo $lang->bug->project;?></th>
+                  <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
+                </tr>
+                <tr class='nofixed'>
+                  <th><?php echo $lang->bug->story;?></th>
+                  <td>
+                    <?php
+                    if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story", '', true), "#$bug->story $bug->storyTitle", '', "class='iframe' data-width='80%'");
+                    if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion)
+                    {
+                        echo "(<span class='warning'>{$lang->story->changed}</span> ";
+                        echo html::a($this->createLink('bug', 'confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin');
+                        echo ")";
+                    }
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->task;?></th>
+                  <td><?php if($bug->task) echo html::a($this->createLink('task', 'view', "taskID=$bug->task", '', true), $bug->taskName, '', "class='iframe' data-width='80%'");?></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <?php endif;?>
         </div>
-      </details>
+      </div>
     </div>
-    <?php if($config->global->flow != 'onlyTest'):?>
     <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->bug->legendPrjStoryTask;?></summary>
-        <div class="detail-content">
-          <table class='table table-data'>
-            <tbody>
-              <tr>
-                <th class='w-60px'><?php echo $lang->bug->project;?></th>
-                <td><?php if($bug->project) echo html::a($this->createLink('project', 'browse', "projectid=$bug->project"), $bug->projectName);?></td>
-              </tr>
-              <tr class='nofixed'>
-                <th><?php echo $lang->bug->story;?></th>
-                <td>
+      <div class='tabs'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='#legendLife' data-toggle='tab'><?php echo $lang->bug->legendLife;?></a></li>
+          <li><a href='#legendMisc' data-toggle='tab'><?php echo $lang->bug->legendMisc;?></a></li>
+        </ul>
+        <div class='tab-content'>
+          <div class='tab-pane active' id='legendLife'>
+            <table class="table table-data">
+              <tbody>
+                <tr>
+                  <th class='w-90px'><?php echo $lang->bug->openedBy;?></th>
+                  <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->openedBuild;?></th>
+                  <td>
+                    <?php
+                    if($bug->openedBuild)
+                    {
+                        $openedBuilds = explode(',', $bug->openedBuild);
+                        foreach($openedBuilds as $openedBuild) isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+                    }
+                    else
+                    {
+                        echo $bug->openedBuild;
+                    }
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->lblResolved;?></th>
+                  <td><?php if($bug->resolvedBy) echo zget($users, $bug->resolvedBy) . $lang->at . $bug->resolvedDate;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->resolvedBuild;?></th>
+                  <td><?php if(isset($builds[$bug->resolvedBuild])) echo $builds[$bug->resolvedBuild]; else echo $bug->resolvedBuild;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->resolution;?></th>
+                  <td>
+                    <?php
+                    echo isset($lang->bug->resolutionList[$bug->resolution]) ? $lang->bug->resolutionList[$bug->resolution] : $bug->resolution;
+                    if(isset($bug->duplicateBugTitle)) echo " #$bug->duplicateBug:" . html::a($this->createLink('bug', 'view', "bugID=$bug->duplicateBug", '', true), $bug->duplicateBugTitle, '', "class='iframe' data-width='80%'");
+                    ?>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->closedBy;?></th>
+                  <td><?php if($bug->closedBy) echo zget($users, $bug->closedBy) . $lang->at . $bug->closedDate;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->lblLastEdited;?></th>
+                  <td><?php if($bug->lastEditedBy) echo zget($users, $bug->lastEditedBy, $bug->lastEditedBy) . $lang->at . $bug->lastEditedDate?></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class='tab-pane' id='legendMisc'>
+            <table class="table table-data">
+              <tbody>
+                <tr class='text-top'>
+                  <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
+                  <td>
+                    <?php
+                    if(isset($bug->linkBugTitles))
+                    {
+                        foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
+                        {
+                            echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID", '', true), "#$linkBugID $linkBugTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                        }
+                    }
+                    ?>
+                  </td>
+                </tr>
+                <?php if($bug->case):?>
+                <tr>
+                  <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
+                  <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case", '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
+                </tr>
+                <?php endif;?>
+                <?php if($bug->toCases):?>
+                <tr>
+                  <th><?php echo $lang->bug->toCase;?></th>
+                  <td>
                   <?php
-                  if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story", '', true), "#$bug->story $bug->storyTitle", '', "class='iframe' data-width='80%'");
-                  if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion)
+                  foreach($bug->toCases as $caseID => $case)
                   {
-                      echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                      echo html::a($this->createLink('bug', 'confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin');
-                      echo ")";
+                      echo '<p style="margin-bottom:0;">' . html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', true), $case, '', "class='iframe' data-width='80%'") . '</p>';
                   }
                   ?>
-                </td>
-              </tr>
-              <tr>
-                <th><?php echo $lang->bug->task;?></th>
-                <td><?php if($bug->task) echo html::a($this->createLink('task', 'view', "taskID=$bug->task", '', true), $bug->taskName, '', "class='iframe' data-width='80%'");?></td>
-              </tr>
-            </tbody>
-          </table>
+                  </td>
+                </tr>
+                <?php endif;?>
+                <?php if($config->global->flow != 'onlyTest'):?>
+                <?php if($bug->toStory != 0):?>
+                <tr>
+                  <th><?php echo $lang->bug->toStory;?></th>
+                  <td><?php echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory", '', true), "#$bug->toStory $bug->toStoryTitle", '', "class='iframe' data-width='80%'");?></td>
+                </tr>
+                <?php endif;?>
+                <?php if($bug->toTask != 0):?>
+                <tr>
+                  <th><?php echo $lang->bug->toTask;?></th>
+                  <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask", '', true), "#$bug->toTask $bug->toTaskTitle", '', "class='iframe' data-width='80%'");?></td>
+                </tr>
+                <?php endif;?>
+                <?php endif;?>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </details>
-    </div>
-    <?php endif;?>
-    <div class="cell">
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->bug->legendMisc;?></summary>
-        <div class="detail-content">
-          <table class="table table-data">
-            <tbody>
-              <tr class='text-top'>
-                <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
-                <td>
-                  <?php
-                  if(isset($bug->linkBugTitles))
-                  {
-                      foreach($bug->linkBugTitles as $linkBugID => $linkBugTitle)
-                      {
-                          echo html::a($this->createLink('bug', 'view', "bugID=$linkBugID", '', true), "#$linkBugID $linkBugTitle", '', "class='iframe' data-width='80%'") . '<br />';
-                      }
-                  }
-                  ?>
-                </td>
-              </tr>
-              <?php if($bug->case):?>
-              <tr>
-                <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
-                <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case", '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
-              </tr>
-              <?php endif;?>
-              <?php if($bug->toCases):?>
-              <tr>
-                <th><?php echo $lang->bug->toCase;?></th>
-                <td>
-                <?php
-                foreach($bug->toCases as $caseID => $case)
-                {
-                    echo '<p style="margin-bottom:0;">' . html::a($this->createLink('testcase', 'view', "caseID=$caseID", '', true), $case, '', "class='iframe' data-width='80%'") . '</p>';
-                }
-                ?>
-                </td>
-              </tr>
-              <?php endif;?>
-              <?php if($config->global->flow != 'onlyTest'):?>
-              <?php if($bug->toStory != 0):?>
-              <tr>
-                <th><?php echo $lang->bug->toStory;?></th>
-                <td><?php echo html::a($this->createLink('story', 'view', "storyID=$bug->toStory", '', true), "#$bug->toStory $bug->toStoryTitle", '', "class='iframe' data-width='80%'");?></td>
-              </tr>
-              <?php endif;?>
-              <?php if($bug->toTask != 0):?>
-              <tr>
-                <th><?php echo $lang->bug->toTask;?></th>
-                <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask", '', true), "#$bug->toTask $bug->toTaskTitle", '', "class='iframe' data-width='80%'");?></td>
-              </tr>
-              <?php endif;?>
-              <?php endif;?>
-            </tbody>
-          </table>
-        </div>
-      </details>
+      </div>
     </div>
   </div>
 </div>

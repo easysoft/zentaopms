@@ -155,7 +155,7 @@
   </div>
 </div>
 <div class='modal fade' id='copyProjectModal'>
-  <div class='modal-dialog mw-800px'>
+  <div class='modal-dialog mw-900px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
