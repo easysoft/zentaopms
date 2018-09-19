@@ -107,7 +107,9 @@
                     <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
                     <td><?php echo $users[$story->openedBy];?></td>
                     <td><?php echo $story->estimate;?></td>
-                    <td><span class='status-<?php echo $story->status;?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
+                    <td>
+                      <span class='status-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span>
+                    </td>
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
                       <?php
@@ -175,7 +177,9 @@
                       <?php echo sprintf('%03d', $bug->id);?>
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-                    <td><span class='status-<?php echo $bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></td>
+                    <td>
+                      <span class='status-<?php echo $bug->status?>'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
+                    </td>
                     <td><?php echo $users[$bug->openedBy];?></td>
                     <td><?php echo substr($bug->openedDate, 5, 11)?></td>
                     <td><?php echo $users[$bug->resolvedBy];?></td>

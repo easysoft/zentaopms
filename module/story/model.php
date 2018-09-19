@@ -2354,7 +2354,7 @@ class storyModel extends model
                 break;
             case 'status':
                 echo "<span class='status-{$story->status}'>";
-                echo "<span class='label label-dot'></span> " . $this->lang->story->statusList[$story->status];
+                echo $this->lang->story->statusList[$story->status];
                 echo '</span>';
                 break;
             case 'estimate':
