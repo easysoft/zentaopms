@@ -60,7 +60,7 @@
           if(common::hasPriv('build', 'delete'))
           {
               $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->build->delete}'");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"buildList\",confirmDelete)", '<i class="icon-close"></i>', '', "class='btn' title='{$lang->build->delete}'");
           }
           ?>
         </td>

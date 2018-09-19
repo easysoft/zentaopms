@@ -62,7 +62,7 @@
               if($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing')
               {
                   common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
-                  common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'trash', 'hiddenwin', 'showinonlybody');
+                  common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'close', 'hiddenwin', 'showinonlybody');
               }
               ?>
             </td>

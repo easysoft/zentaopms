@@ -115,7 +115,7 @@
                     <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'");?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-trash"></i></button>
+                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
                     </div>
                   </div>
                   <?php endfor;?>
@@ -130,7 +130,7 @@
                     <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'");?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-trash"></i></button>
+                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
                     </div>
                   </div>
                 </div>
@@ -147,7 +147,7 @@
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
               </td>
             </tr>
-            </tbody> 
+            </tbody>
           </table>
         </form>
       </div>
@@ -163,7 +163,7 @@ $(function()
     {
         initialState: 'preserve',
         data: data,
-        sortable: 
+        sortable:
         {
             lazy: true,
             nested: true,
@@ -269,8 +269,8 @@ $(function()
     if(window.config.viewType == 'line') $('#modulemenu > .nav > li > a[href*=product][href*=all]').parent('li[data-id=all]').addClass('active');
 });
 </script>
-<?php 
-if(strpos($viewType, 'doc') !== false) 
+<?php
+if(strpos($viewType, 'doc') !== false)
 {
     include '../../doc/view/footer.html.php';
 }

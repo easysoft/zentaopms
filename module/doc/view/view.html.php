@@ -88,7 +88,7 @@
               <img onload="setImageSize(this,0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
             </a>
             <span class='right-icon'>
-              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
+              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-close'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
             </span>
           </div>
           <?php unset($doc->files[$file->id]);?>

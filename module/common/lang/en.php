@@ -228,9 +228,10 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list     = array('link' => 'Task List|project|task|projectID=%s', 'subModule' => 'task,grouptask,tree', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->task     = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree');
 $lang->project->menu->kanban   = array('link' => 'Kanban|project|kanban|projectID=%s');
 $lang->project->menu->burn     = array('link' => 'Burn|project|burn|projectID=%s');
+$lang->project->menu->list     = array('link' => 'More|project|grouptask|projectID=%s', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story    = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->project->menu->qa       = array('link' => 'Bug|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
@@ -241,7 +242,6 @@ $lang->project->menu->view     = array('link' => 'Overview|project|view|projectI
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->list = new stdclass();
-$lang->project->subMenu->list->task      = 'Task List|project|task|projectID=%s';
 $lang->project->subMenu->list->groupTask = 'Group View|project|groupTask|projectID=%s';
 $lang->project->subMenu->list->tree      = 'Tree View|project|tree|projectID=%s';
 
@@ -569,7 +569,7 @@ $lang->icons['batchCreate']        = 'plus-sign';
 $lang->icons['batchEdit']          = 'edit-sign';
 $lang->icons['batchClose']         = 'off';
 $lang->icons['edit']               = 'edit';
-$lang->icons['delete']             = 'trash';
+$lang->icons['delete']             = 'close';
 $lang->icons['copy']               = 'copy';
 $lang->icons['report']             = 'bar-chart';
 $lang->icons['export']             = 'export';

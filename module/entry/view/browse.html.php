@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     entry 
+ * @package     entry
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -37,13 +37,13 @@
           <td title='<?php echo $entry->ip;?>'><?php echo $entry->ip;?></td>
           <td title='<?php echo $entry->desc;?>'><?php echo $entry->desc;?></td>
           <td class='c-actions'>
-            <?php 
+            <?php
             common::printIcon('entry', 'log', "entryID=$id", '', 'list', 'file-text');
             common::printIcon('entry', 'edit', "entryID=$id", '', 'list');
             if(common::hasPriv('entry', 'delete'))
             {
                 $deleteURL = $this->createLink('entry', 'delete', "entryID=$id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"entryList\",confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->entry->delete}' class='btn'");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"entryList\",confirmDelete)", '<i class="icon-close"></i>', '', "title='{$lang->entry->delete}' class='btn'");
             }
             ?>
           </td>

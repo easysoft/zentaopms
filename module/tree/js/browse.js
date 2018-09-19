@@ -9,7 +9,7 @@ function syncModule(rootID, type)
         if(modules.length == 0) return false;
 
         $('.helplink').addClass('hidden');
-        var $inputgroup = $('<div></div>').append($('.col-actions .icon-trash:first').closest('.table-row').clone()).html();
+        var $inputgroup = $('<div></div>').append($('.col-actions .icon-close:first').closest('.table-row').clone()).html();
 
         $.each(modules, function(key, module)
         {
@@ -19,7 +19,7 @@ function syncModule(rootID, type)
                 if(moduleName == module.name) modules[key] = null;
                 if(!moduleName) $(this).closest('#sonModule > .table-row').not('.copy').remove();
             })
-        });  
+        });
 
         $.each(modules, function(key, module)
         {
@@ -54,9 +54,9 @@ function syncProductOrProject(obj, type)
         $('.helplink').addClass('hidden');
         $('#' + type + 'Module').empty();
         $.each(modules, function(key, value)
-        {  
+        {
             $('#' + type + 'Module').append('<option value=' + key + '>' + value + '</option')
-        }); 
+        });
         $('#' + type + 'Module').trigger("chosen:updated");
     })
     $('#copyModule').attr('onclick', null);

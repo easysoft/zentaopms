@@ -78,7 +78,7 @@
           if(common::hasPriv('release', 'delete', $release))
           {
               $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"releaseList\",confirmDelete)", '<i class="icon-close"></i>', '', "class='btn' title='{$lang->release->delete}'");
           }
           ?>
         </td>

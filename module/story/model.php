@@ -1027,16 +1027,16 @@ class storyModel extends model
      */
     public function batchChangeStage($storyIDList, $stage)
     {
-        $now         = helper::now();
-        $allChanges  = array();
-        $oldStories  = $this->getByList($storyIDList);
-        $failStories = '';
+        $now           = helper::now();
+        $allChanges    = array();
+        $oldStories    = $this->getByList($storyIDList);
+        $ignoreStories = '';
         foreach($storyIDList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($oldStory->status == 'draft')
             {
-                $failStories .= "#{$storyID} ";
+                $ignoreStories .= "#{$storyID} ";
                 continue;
             }
 
@@ -1049,7 +1049,7 @@ class storyModel extends model
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->where('story')->eq((int)$storyID)->exec();
             if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
         }
-        if($failStories) echo js::alert(sprintf($this->lang->story->failChangeStage, $failStories));
+        if($ignoreStories) echo js::alert(sprintf($this->lang->story->ignoreChangeStage, $ignoreStories));
         return $allChanges;
     }
 
