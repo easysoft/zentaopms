@@ -7,6 +7,10 @@ body{padding-bottom:0px;}
 .table-footer.fixed-footer{bottom:0px !important;}
 #footer{display:none;}
 
+#pageNav{position: unset;float: left;margin-top: 10px;}
+#subNavbar{text-align:left;}
+#subNavbar ul.nav{margin-left:10px;}
+
 #header #mainHeader #navbar li[data-id='oa']{display:none;}
 #subNavbar li[data-id='review']{display:none;}
 #mainActions .btn-toolbar{top:-50px;}
