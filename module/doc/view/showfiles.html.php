@@ -100,7 +100,7 @@
                   $imageSize  = getimagesize($file->realPath);
                   $imageWidth = $imageSize ? $imageSize[0] : 0;
               }
-        
+
               $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
               $sessionString .= session_name() . '=' . session_id();
               $fileID         = $file->id;
@@ -134,7 +134,7 @@
               </div>
               <div class='actions'>
                 <?php if(common::hasPriv('file', 'delete')): ?>
-                <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete btn btn-link'><i class='icon icon-trash'></i></a>
+                <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete btn btn-link'><i class='icon icon-close'></i></a>
                 <?php endif?>
               </div>
             </div>

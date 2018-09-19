@@ -144,7 +144,9 @@ function setStories()
 function initSteps(selector)
 {
     /* Fix task #4832. Auto adjust textarea height. */
-    $('textarea.autosize').each($.autoResizeTextarea);
+    $('textarea.autosize').each(function() {
+        $.autoResizeTextarea(this);
+    });
 
     var $steps = $(selector || '#steps');
     var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);

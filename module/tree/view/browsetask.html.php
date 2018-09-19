@@ -79,14 +79,14 @@
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
                     </div>
                   </div>
-                  <?php endforeach;?> 
+                  <?php endforeach;?>
                   <?php for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++):?>
                   <div class="table-row row-module row-module-new">
                     <div class='table-col col-module'><?php echo html::input("modules[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->name}'")?></div>
                     <div class='table-col col-shorts'><?php echo html::input("shorts[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->short}'")?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-trash"></i></button>
+                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
                     </div>
                     <?php echo html::hidden('branch[]', empty($module) ? 0 : $module->branch);?>
                   </div>
@@ -98,7 +98,7 @@
                     <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->short}'");?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-trash"></i></button>
+                      <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
                     </div>
                     <?php echo html::hidden('branch[]', empty($module) ? 0 : (int)$module->branch);?>
                   </div>
@@ -108,12 +108,12 @@
             <tr>
               <td></td>
               <td colspan='2' class="form-actions">
-                <?php 
+                <?php
                 echo html::submitButton('', '', 'btn btn-primary btn-wide');
                 echo $this->session->taskList ? html::linkButton($this->lang->goback, $this->session->taskList, '', '', 'btn btn-wide') : html::backButton('', '', 'btn btn-wide');
                 echo html::hidden('parentModuleID', $currentModuleID);
                 echo html::hidden('maxOrder', $maxOrder);
-                ?>      
+                ?>
                 <input type='hidden' value='<?php echo $currentModuleID;?>' name='parentModuleID' />
               </td>
             </tr>
@@ -147,7 +147,7 @@ $(function()
             if(item.nodeType) $li.addClass('tree-item-' + item.nodeType);
             return true;
         },
-        actions: 
+        actions:
         {
             sort:
             {

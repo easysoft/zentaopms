@@ -45,10 +45,10 @@ js::set('flow',          $config->global->flow);
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
     <?php
     if(common::hasPriv('testsuite', 'libView'))
-    {   
+    {
         $link = helper::createLink('testsuite', 'libView', "libID=$libID");
         echo html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->testsuite->view, '', "class='btn btn-link'");
-    } 
+    }
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -146,7 +146,7 @@ js::set('flow',          $config->global->flow);
                 if(common::hasPriv('testcase', 'delete'))
                 {
                     $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-close"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
                 }
                 ?>
               </td>

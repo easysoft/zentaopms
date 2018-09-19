@@ -17,7 +17,7 @@
       <h2>
         <span class='prefix' title='EXTENSION'><?php echo html::icon($lang->icons['extension']);?></span>
         <strong><?php echo $title;?></strong>
-        <small class='text-danger'><?php echo $lang->extension->erase;?> <?php echo html::icon('trash');?></small>
+        <small class='text-danger'><?php echo $lang->extension->erase;?> <?php echo html::icon('close');?></small>
       </h2>
     </div>
     <div class='alert alert-success with-icon'>

@@ -61,7 +61,7 @@
         <?php foreach($teamMembers as $member):?>
         <tr>
           <td>
-          <?php 
+          <?php
           if(!common::printLink('user', 'view', "account=$member->account", $member->realname)) print $member->realname;
           $memberHours = $member->days * $member->hours;
           $totalHours  += $memberHours;
@@ -78,7 +78,7 @@
             if (common::hasPriv('project', 'unlinkMember', $member))
             {
                 $unlinkURL = $this->createLink('project', 'unlinkMember', "projectID=$project->id&account=$member->account&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-trash"></i>', '', "class='btn' title='{$lang->project->unlinkMember}'");
+                echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"memberList\",confirmUnlinkMember)", '<i class="icon-green-project-unlinkMember icon-close"></i>', '', "class='btn' title='{$lang->project->unlinkMember}'");
             }
             ?>
           </td>

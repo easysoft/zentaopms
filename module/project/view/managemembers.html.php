@@ -76,7 +76,7 @@
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
+            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
         </tr>
         <?php $i ++; $memberCount ++;?>
@@ -95,7 +95,7 @@
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
+            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
         </tr>
         <?php unset($users[$deptAccount]);?>
@@ -114,7 +114,7 @@
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
           <td class='c-actions'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
+            <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
         </tr>
         <?php $i ++; $memberCount ++;?>
@@ -139,7 +139,7 @@
       <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, $member->realname ? $member->limited : 'no');?></td>
       <td class='c-actions'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-trash'></i></a>
+        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
   </table>
