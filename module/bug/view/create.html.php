@@ -298,7 +298,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         <tfoot>
           <tr>
             <td colspan="3" class="text-center form-actions">
-              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::submitButton();?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
               <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', (int)$testtask);?>
@@ -322,7 +322,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           <?php if(common::hasPriv('bug', 'setPublic')):?>
           <span class='input-group-addon'><?php echo html::checkbox('public', array('1' => $lang->public))?></span>
           <?php endif;?>
-          <span class='input-group-btn'><?php echo html::submitButton()?></span>
+          <span class='input-group-btn'><?php echo html::submitButton('', '', 'btn btn-primary')?></span>
         </div>
       </div>
     </div>

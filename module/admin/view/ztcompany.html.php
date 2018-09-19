@@ -25,7 +25,7 @@
         </tr>
         <?php endforeach;?>
         <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
     </form>

@@ -38,7 +38,7 @@
         <?php endforeach;?>
       </tbody>
       <tfoot>
-        <tr><td colspan='5' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td></tr>
+        <tr><td colspan='5' class='text-center'><?php echo html::submitButton();?></td></tr>
       </tfoot>
     </table>
   </form>

@@ -67,7 +67,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton($lang->task->start, '', 'btn btn-wide btn-primary');?>
+            <?php echo html::submitButton($lang->task->start);?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide');?>
           </td>
         </tr>

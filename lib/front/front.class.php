@@ -87,7 +87,7 @@ class html extends baseHTML
      * @access public
      * @return string the submit button tag.
      */
-    public static function submitButton($label = '', $misc = '', $class = 'btn btn-primary')
+    public static function submitButton($label = '', $misc = '', $class = 'btn btn-wide btn-primary')
     {
         return parent::submitButton($label, $class, $misc);
     }

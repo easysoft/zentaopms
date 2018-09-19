@@ -45,8 +45,8 @@
             <div class="checkbox-primary">
               <input type='checkbox' name='mailIDList[]'  value='<?php echo $queue->id;?>'/> 
               <label></label>
-              <?php echo $queue->id?>
             </div>
+            <?php echo $queue->id?>
           </td>
           <td><?php echo zget($users, $queue->toList, $queue->toList)?></td>
           <td class='text-left'><?php echo $queue->subject?></td>
@@ -69,7 +69,7 @@
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php if(common::hasPriv('mail', 'batchDelete')) echo html::submitButton($lang->delete);?>
+        <?php if(common::hasPriv('mail', 'batchDelete')) echo html::submitButton($lang->delete, '', 'btn btn-primary');?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>

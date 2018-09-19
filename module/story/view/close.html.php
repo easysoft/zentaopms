@@ -42,7 +42,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::submitButton();?>
             <?php echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');?>
           </td>
         </tr>

@@ -70,7 +70,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
           <div class='actions form-actions text-center'>
             <?php
             echo html::hidden('lastEditedDate', $bug->lastEditedDate);
-            echo html::submitButton('', '', 'btn btn-wide btn-primary');
+            echo html::submitButton();
             $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
             echo html::linkButton($lang->goback, $browseLink, 'self', '', "btn btn-wide");
             ?>

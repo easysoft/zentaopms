@@ -69,7 +69,7 @@
       </tr>
       <tr>
         <td colspan='2' class='form-actions text-center'>
-          <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
+          <?php echo html::submitButton('', "onclick='setNoChecked()'");?>
           <?php echo html::backButton('', '', 'btn btn-wide');?>
           <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>
         </td>

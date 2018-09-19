@@ -67,7 +67,7 @@
         </td>
       </tr>  
       <?php endforeach;?>
-      <tr><td colspan='6' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
+      <tr><td colspan='6' class='text-center'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>

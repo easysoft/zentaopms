@@ -57,7 +57,7 @@
         <?php endforeach;?>
         <tr>
           <td colspan='2' class='text-center form-actions'>
-          <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+          <?php echo html::submitButton();?>
           <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>
         </tr>

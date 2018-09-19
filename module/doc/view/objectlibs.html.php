@@ -46,7 +46,7 @@
                   <?php endforeach;?>
                 </div>
                 <div>
-                  <?php echo html::submitButton($lang->save);?> &nbsp;
+                  <?php echo html::submitButton($lang->save, '', 'btn btn-primary');?> &nbsp;
                   <?php echo html::commonButton($lang->cancel, '', "btn close-dropdown");?>
                 </div>
               </form>

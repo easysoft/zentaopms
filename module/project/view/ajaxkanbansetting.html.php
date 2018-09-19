@@ -51,7 +51,7 @@ form {padding: 30px 0 40px;}
             <tr>
               <td colspan='2' class='form-actions text-center'>
                 <?php
-                echo html::submitButton('', '', 'btn btn-wide btn-primary');
+                echo html::submitButton();
                 echo '&nbsp;' . html::a(inlink('ajaxResetKanban', "projectID=$projectID"), $lang->project->resetKanban, 'hiddenwin', "class='btn btn-wide'");
                 ?>
               </td>

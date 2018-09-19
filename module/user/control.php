@@ -957,7 +957,7 @@ class user extends control
         $users = $this->user->getPairs('noletter, noclosed');
         $html = "<form method='post' target='hiddenwin' action='" . $this->createLink('task', 'assignedTo', "taskID=$taskID&assignedTo=$assignedTo") . "'>";
         $html .= html::select('assignedTo', $users, $assignedTo);
-        $html .= html::submitButton();
+        $html .= html::submitButton('', '', 'btn btn-primary');
         $html .= '</form>';
         echo $html;
     }

@@ -72,7 +72,7 @@
           <?php endif;?>
         </td>
       </tr>
-      <tr><td align='center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td></tr>
+      <tr><td align='center'><?php echo html::submitButton()?></td></tr>
     </table>
   </div>
 </form>

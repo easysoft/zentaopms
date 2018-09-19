@@ -25,12 +25,12 @@
         <?php endforeach;?>
         <tr>
           <td align='center' colspan="2">
-            <?php echo html::submitButton($lang->api->submit, '', 'btn btn-primary btn-wide')?>
+            <?php echo html::submitButton($lang->api->submit)?>
           </td>
         </tr>
       </table>
       <?php else:?>
-      <?php echo html::hidden('noparam', '0') . $lang->api->noParam . html::submitButton($lang->api->submit, '', 'btn btn-primary btn-wide');?>
+      <?php echo html::hidden('noparam', '0') . $lang->api->noParam . html::submitButton($lang->api->submit);?>
       <?php endif;?>
       <?php if($method->post) echo "<p>{$lang->api->post}</p>"?>
     </form>

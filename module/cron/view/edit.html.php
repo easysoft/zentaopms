@@ -59,7 +59,7 @@
           <td><?php echo html::select('type', $lang->cron->typeList, $cron->type, "class='form-control'")?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='3' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
     </form>

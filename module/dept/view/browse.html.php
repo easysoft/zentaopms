@@ -65,7 +65,7 @@
             <tr>
               <td></td>
               <td class='form-actions'>
-                <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+                <?php echo html::submitButton();?>
                 <?php echo html::backButton('', '', 'btn btn-wide');?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>
                 <?php echo html::hidden('parentDeptID', $deptID);?>

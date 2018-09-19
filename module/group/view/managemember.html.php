@@ -61,7 +61,7 @@
           <tr>
             <td class='text-center form-actions' colspan='2'>
               <?php 
-              echo html::submitButton('', '', 'btn btn-wide btn-primary');
+              echo html::submitButton();
               echo html::linkButton($lang->goback, $this->createLink('group', 'browse'));
               echo html::hidden('foo'); // Just a var, to make sure $_POST is not empty.
               ?>

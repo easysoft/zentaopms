@@ -30,7 +30,7 @@
         <td><?php echo html::checkbox('options', $lang->group->copyOptions, '', '', 'inline');?></td>
       </tr>  
       <tr>
-        <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td>
+        <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

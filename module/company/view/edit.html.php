@@ -54,7 +54,7 @@
         <th><?php echo $lang->company->guest;?></th>
         <td><?php echo html::radio('guest', $lang->company->guestOptions, $company->guest);?></td>
       </tr>  
-      <tr><td class='text-center' colspan='2'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
+      <tr><td class='text-center' colspan='2'><?php echo html::submitButton();?></td></tr>
     </table>
   </form>
 </div>

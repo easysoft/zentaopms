@@ -24,7 +24,7 @@
             <strong class='input-group-addon'><?php echo $lang->day;?></strong>
           </div>
         </td>
-        <td><?php echo html::submitButton();?></td>
+        <td><?php echo html::submitButton('', '', 'btn btn-primary');?></td>
       </tr>
     </table>
   </form>

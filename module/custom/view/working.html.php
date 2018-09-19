@@ -28,7 +28,7 @@
           <?php endforeach;?>
         </td>
       </tr>
-      <tr><td></td><td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td></tr>
+      <tr><td></td><td><?php echo html::submitButton()?></td></tr>
     </table>
   </form>
 </div>

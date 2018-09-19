@@ -179,7 +179,7 @@
       <div class="modal-body">
         <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id")?>' target='hiddenwin'>
           <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
-          <div class='text-center'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></div>
+          <div class='text-center'><?php echo html::submitButton();?></div>
         </form>
       </div>
     </div>
