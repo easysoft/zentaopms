@@ -246,7 +246,6 @@ class commonModel extends model
             $isGuest = $app->user->account == 'guest';
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<div class='avatar avatar-sm bg-secondary avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
             echo "<span class='user-name'>" . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</span>';
             echo "<span class='caret'></span>";
             echo '</a>';
@@ -1612,7 +1611,7 @@ EOD;
         $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
         $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
         $this->session->set('user', $user);
-        $this->app->user = $user; 
+        $this->app->user = $user;
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
