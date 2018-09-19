@@ -1361,8 +1361,8 @@ class testcaseModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span> ";
-                if($modulePairs and $case->module) echo "<span class='label label-info label-badge'>{$modulePairs[$case->module]}</span> ";
+                if($case->branch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
+                if($modulePairs and $case->module) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? html::a($caseLink, $case->title, null, "style='color: $case->color'") : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':
