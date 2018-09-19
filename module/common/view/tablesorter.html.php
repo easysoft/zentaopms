@@ -12,7 +12,7 @@ table.tablesorter tr.tablesorter-headerRow .header.headerSortUp .tablesorter-hea
 table.tablesorter tr.tablesorter-headerRow .header.headerSortDown .tablesorter-header-inner{color: #000;font-weight:bold;}
 table.tablesorter tr.tablesorter-headerRow .header.headerSortDown .tablesorter-header-inner:after{font-family: ZentaoIcon; font-weight: normal; content: "\f0d7"; color: #000;}
 table.tablesorter tr.tablesorter-headerRow .header.sorter-false .tablesorter-header-inner:after{content:"";}
-table.tablesorter.table-borderless > thead > tr > th {border-bottom: 1px solid #ddd;}
+table.tablesorter.table-borderless > thead > tr > th {border-bottom: 1px solid #e5e5e5;}
 </style>
 <script>
 function sortTable(selector, options)

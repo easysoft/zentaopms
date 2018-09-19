@@ -3,7 +3,6 @@
 <?php css::import($jsRoot . 'datatable/min.css'); ?>
 <?php if(!empty($lang->datatable)):?>
 <style>
-.datatable .table>tbody>tr.active>td.col-hover, .datatable .table>tbody>tr.active.hover>td {background-color: #f3eed8 !important;}
 .datatable {margin-bottom: 0;}
 .datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 3px; padding-bottom: 3px; height: 40px; vertical-align: middle; white-space: nowrap;}
 .datatable .table>tbody>tr.hover {box-shadow: none!important;}
@@ -30,15 +29,15 @@
 .datatable .fixed-right tbody>tr>td {padding-left: 5px!important;}
 .datatable .c-actions {white-space: nowrap;}
 .datatable.head-fixed {padding-top: 41px;}
-.datatable .table>thead>tr>th.col-hover {background: rgba(0,0,0,.075);}
+.datatable .table>thead>tr>th.col-hover {background: rgba(0,0,0,.07);}
 </style>
-<script> 
+<script>
 <?php $datatableId = $this->moduleName . ucfirst($this->methodName);?>
 $(document).ready(function()
 {
     var datatableOptions =
     {
-        customizable  : false, 
+        customizable  : false,
         sortable      : false,
         scrollPos     : 'out',
         tableClass    : 'tablesorter',
@@ -104,7 +103,7 @@ $(document).ready(function()
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });
     };
-    
+
     var $modal = $('#customDatatable');
     var $checkList = $modal.find('.modal-body > .table > tbody');
     $checkList.on('click', 'tr', function()
