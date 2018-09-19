@@ -100,35 +100,12 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
             <?php
-            if(!empty($config->sso->turnon))
-            {
-                if($user->ranzhi)
-                {
-                    common::printIcon('user', 'unbind', "userID=$user->account", '', 'list', 'unlink', "hiddenwin");
-                }
-                else
-                {
-                    echo html::a('javascript:;', "<i class='icon icon-unlink'></i>", '', "class='btn disabled'");
-                }
-            }
-
-            if((strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) < $config->user->lockMinutes * 60)
-            {
-                common::printIcon('user', 'unlock', "userID=$user->account", '', 'list', 'unlock', "hiddenwin");
-            }
-            else
-            {
-                echo html::a('javascript:;', "<i class='icon icon-unlock'></i>", '', "class='btn disabled'");
-            }
+            if(!empty($config->sso->turnon)) common::printIcon('user', 'unbind', "userID=$user->account", $user, 'list', 'unlink', "hiddenwin");
+            common::printIcon('user', 'unlock', "userID=$user->account", $user, 'list', 'unlock', "hiddenwin");
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
-            if(strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete'))
-            {
-                echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-close"></i>', '', "title='{$lang->user->delete}' class='btn iframe'");
-            }
-            else
-            {
-                echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "class='btn disabled'");
-            }
+
+            $deleteClass = (strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete')) ? 'btn iframe' : 'btn disabled';
+            echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-close"></i>', '', "title='{$lang->user->delete}' class='{$deleteClass}'");
             ?>
           </td>
         </tr>

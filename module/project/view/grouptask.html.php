@@ -113,13 +113,13 @@
         <th class="c-status"><?php echo $lang->task->status;?></th>
         <th class="c-assign text-left"><?php echo $lang->task->assignedTo;?></th>
         <th class="c-user"><?php echo $lang->task->finishedBy;?></th>
-        <th class="w-40px"><?php echo $lang->task->estimateAB;?></th>
-        <th class="w-40px"><?php echo $lang->task->consumedAB;?></th>
-        <th class="w-40px"><?php echo $lang->task->leftAB;?></th>
-        <th class="w-40px"><?php echo $lang->task->progress;?></th>
+        <th class="w-50px"><?php echo $lang->task->estimateAB;?></th>
+        <th class="w-50px"><?php echo $lang->task->consumedAB;?></th>
+        <th class="w-50px"><?php echo $lang->task->leftAB;?></th>
+        <th class="w-50px"><?php echo $lang->task->progress;?></th>
         <th class="c-type"><?php echo $lang->typeAB;?></th>
         <th class="c-date"><?php echo $lang->task->deadlineAB;?></th>
-        <th class="c-actions-2"><?php echo $lang->actions;?></th>
+        <th class="c-actions-3"><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -191,9 +191,8 @@
             if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
           ?>
         </td>
-        <td class="c-status"><span class='status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo $lang->task->statusList[$task->status];?></span></td>
-        <?php $assignedToRealName = $task->assignedToRealName ? $task->assignedToRealName : $lang->task->noAssigned;?>
-        <td class="c-assign text-left has-btn"><?php echo html::a($this->createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", 'html', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', "class='iframe btn btn-icon-left btn-sm' $assignedToClass");?></td>
+        <td class="c-status"><span class='status-<?php echo $task->status;?>'> <?php echo $lang->task->statusList[$task->status];?></span></td>
+        <td class="c-assign"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
         <td class="c-hours em"><?php echo $task->estimate;?></td>
         <td class="c-hours em"><?php echo $task->consumed;?></td>
@@ -202,6 +201,7 @@
         <td class="c-type"><?php echo zget($lang->task->typeList, $task->type);?></td>
         <td class='c-date <?php if(isset($task->delay)) echo 'delayed';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <td class="c-actions">
+          <?php common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('task', 'edit', "taskid=$task->id", '', 'list');?>
           <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', '', 'hiddenwin');?>
         </td>

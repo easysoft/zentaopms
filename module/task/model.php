@@ -1973,7 +1973,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerProject()
+    public function getDataOfTasksPerProject()
     {
         $tasks = $this->dao->select('id,project')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -1997,7 +1997,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerModule()
+    public function getDataOfTasksPerModule()
     {
         $tasks = $this->dao->select('id,module')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2021,7 +2021,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerAssignedTo()
+    public function getDataOfTasksPerAssignedTo()
     {
         $tasks = $this->dao->select('id,assignedTo')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2045,7 +2045,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerType()
+    public function getDataOfTasksPerType()
     {
         $tasks = $this->dao->select('id,type')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2068,7 +2068,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerPri()
+    public function getDataOfTasksPerPri()
     {
         $tasks = $this->dao->select('id,pri')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2088,7 +2088,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerDeadline()
+    public function getDataOfTasksPerDeadline()
     {
         $tasks = $this->dao->select('id,deadline')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2105,7 +2105,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerEstimate()
+    public function getDataOfTasksPerEstimate()
     {
         $tasks = $this->dao->select('id,estimate')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2122,7 +2122,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerLeft()
+    public function getDataOfTasksPerLeft()
     {
         $tasks = $this->dao->select('id,`left`')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2139,7 +2139,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerConsumed()
+    public function getDataOfTasksPerConsumed()
     {
         $tasks = $this->dao->select('id,consumed')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2156,7 +2156,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerFinishedBy()
+    public function getDataOfTasksPerFinishedBy()
     {
         $tasks = $this->dao->select('id,finishedBy')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2181,7 +2181,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerClosedReason()
+    public function getDataOfTasksPerClosedReason()
     {
         $tasks = $this->dao->select('id,closedReason')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2224,7 +2224,7 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getDataOftasksPerStatus()
+    public function getDataOfTasksPerStatus()
     {
         $tasks = $this->dao->select('id,status')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
@@ -2418,7 +2418,7 @@ class taskModel extends model
                     echo $this->lang->task->typeList[$task->type];
                     break;
                 case 'status':
-                    $storyChanged ? print("<span class='status-changed'><span class='label label-dot'></span> {$this->lang->story->changed}</span>") : print("<span class='status-{$task->status}'><span class='label label-dot'></span> {$this->lang->task->statusList[$task->status]}</span>");
+                    $storyChanged ? print("<span class='status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-{$task->status}'> {$this->lang->task->statusList[$task->status]}</span>");
                     break;
                 case 'estimate':
                     echo round($task->estimate, 1);
@@ -2450,15 +2450,8 @@ class taskModel extends model
                 case 'assignedTo':
                     $btnTextClass   = '';
                     $assignedToText = zget($users, $task->assignedTo);
-                    $btnTextClass   = '';
-                    if(empty($task->assignedTo))
-                    {
-                        $btnTextClass = 'text-primary';
-                        $assignedToText = $this->lang->task->noAssigned;
-                    } else if($task->assignedTo == $account) $btnTextClass = 'text-red';
-                    $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
-                    
-                    echo html::a(helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-icon-left btn-sm {$btnClass}'");
+                    if($task->assignedTo == $account) $btnTextClass = 'text-red';
+                    echo "<span class='{$btnTextClass}'>{$assignedToText}</span>";
                     break;
                 case 'assignedDate':
                     echo substr($task->assignedDate, 5, 11);
@@ -2519,10 +2512,8 @@ class taskModel extends model
                         break;
                     }
 
-                    echo "<div class='more'>";
-                    if($task->status == 'wait') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                    echo "</div>";
-                    
+                    common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+
                     if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                     if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                     if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);

@@ -46,6 +46,9 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li > a {padding: 5px 10px; border-radius: 4px;}
 .block-statistic.block-sm .nav-secondary > li > a:before {display: none;}
 .block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
+
+#all-bug{margin-left:11px}
+#undone-task, #unclosed-story, #active-bug{color:#000;font-weight:bold}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -108,10 +111,10 @@ $(function()
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->task->allTasks;?></span> <?php echo DS;?> <span><?php echo $lang->task->noFinished;?></span>
+                  <span><?php echo $lang->task->noFinished;?></span> : <span id='undone-task'><?php echo $project->undoneTasks;?></span>
                 </div>
-                <div class="type-value">
-                  <small><?php echo $project->totalTasks;?></small> <?php echo DS;?> <strong><?php echo $project->undoneTasks;?></strong>
+                <div class="type-label">
+                  <span><?php echo $lang->task->allTasks;?></span> : <span><?php echo $project->totalTasks;?></span>
                 </div>
               </div>
             </div>
@@ -122,10 +125,10 @@ $(function()
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->story->total;?></span> <?php echo DS;?> <span><?php echo $lang->story->unclosed;?></span>
+                  <span><?php echo $lang->story->unclosed;?></span> : <span id='unclosed-story'><?php echo $project->unclosedStories;?></span>
                 </div>
-                <div class="type-value">
-                  <small><?php echo $project->totalStories;?></small> <?php echo DS;?> <strong><?php echo $project->unclosedStories;?></strong>
+                <div class="type-label">
+                  <span><?php echo $lang->story->total;?></span> : <span><?php echo $project->totalStories;?></span>
                 </div>
               </div>
             </div>
@@ -137,10 +140,10 @@ $(function()
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->bug->allBugs;?></span> <?php echo DS;?> <span><?php echo $lang->bug->unResolved;?></span>
+                  <span><?php echo $lang->bug->unResolved;?></span> : <span id='active-bug'><?php echo $project->activeBugs;?></span>
                 </div>
-                <div class="type-value">
-                  <small><?php echo $project->totalBugs;?></small> <?php echo DS;?> <strong><?php echo $project->activeBugs;?></strong>
+                <div class="type-label">
+                  <span id='all-bug'><?php echo $lang->bug->allBugs;?></span> : <span><?php echo $project->totalBugs;?></span>
                 </div>
               </div>
             </div>

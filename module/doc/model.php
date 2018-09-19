@@ -445,6 +445,7 @@ class docModel extends model
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
+            foreach($docs as $doc) $doc->title = str_replace($this->session->searchDoc, "<span style='color:red'>{$this->session->searchDoc}</span>", $doc->title);
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', false);

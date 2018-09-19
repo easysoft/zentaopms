@@ -23,12 +23,13 @@ $sessionString .= session_name() . '=' . session_id();
   function downloadFile(fileID, extension, imageWidth, fileTitle)
   {
       if(!fileID) return;
-      var fileTypes     = 'txt,jpg,jpeg,gif,png,bmp';
-      var sessionString = '<?php echo $sessionString;?>';
-      var windowWidth   = $(window).width();
-      var url           = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
-      width = (windowWidth > imageWidth) ? ((imageWidth < windowWidth*0.5) ? windowWidth*0.5 : imageWidth) : windowWidth;
-      if(fileTypes.indexOf(extension) >= 0 && fileTitle.lastIndexOf('.' + extension) == (fileTitle.length - extension.length - 1))
+      var fileTypes      = 'txt,jpg,jpeg,gif,png,bmp';
+      var sessionString  = '<?php echo $sessionString;?>';
+      var windowWidth    = $(window).width();
+      var url            = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
+      var width          = (windowWidth > imageWidth) ? ((imageWidth < windowWidth * 0.5) ? windowWidth * 0.5 : imageWidth) : windowWidth;
+      var checkExtension = fileTitle.lastIndexOf('.' + extension) == (fileTitle.length - extension.length - 1);
+      if(fileTypes.indexOf(extension) >= 0 && checkExtension)
       {
           $('<a>').modalTrigger({url: url, type: 'iframe', width: width}).trigger('click');
       }
