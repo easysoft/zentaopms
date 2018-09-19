@@ -60,6 +60,9 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li > a:before {display: none;}
 .block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
 .block-statistic.block-sm .types-line > li > div {padding: 18px 2px 5px;}
+
+#unexpired-plan, #doing-project{margin-left:-12px}
+#unexpired-plan + span, #doing-project + span, #total-release + span{color:#000;font-weight:bold}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -128,10 +131,10 @@ $(function()
               <?php endif;?>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->story->planAB;?></span> / <span><?php echo $lang->productplan->featureBar['browse']['unexpired'];?></span>
+                  <span id='unexpired-plan'><?php echo $lang->productplan->featureBar['browse']['unexpired'];?></span> : <span><?php echo $unexpiredPlan;?></span>
                 </div>
-                <div class="type-value">
-                  <small><?php echo $totalPlan;?></small> / <strong><?php echo $unexpiredPlan;?></strong>
+                <div class="type-label">
+                  <span><?php echo $lang->story->planAB;?></span> : <span><?php echo $totalPlan;?></span>
                 </div>
               </div>
             </div>
@@ -156,10 +159,10 @@ $(function()
               <?php endif;?>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->projectCommon;?></span> / <span><?php echo $lang->project->statusList['doing'];?></span>
+                  <span id='doing-project'><?php echo $lang->project->statusList['doing'];?></span> : <span><?php echo $doingProject;?></span>
                 </div>
-                <div class="type-value">
-                  <small><?php echo $totalProject;?></small> / <strong><?php echo $doingProject;?></strong>
+                <div class="type-label">
+                  <span><?php echo $lang->projectCommon;?></span> : <span><?php echo $totalProject;?></span>
                 </div>
               </div>
             </div>
@@ -183,10 +186,10 @@ $(function()
               <?php endif;?>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->release->common;?></span> / <span><?php echo $lang->release->statusList['normal'];?></span>
+                  <span id='total-release'><?php echo $lang->release->common;?></span> : <span><?php echo $totalRelease;?></span>
                 </div>
-                <div class="type-value">
-                  <small><?php echo $totalRelease;?></small> / <strong><?php echo $normalRelease;?></strong>
+                <div class="type-label">
+                  <span><?php echo $lang->release->statusList['normal'];?></span> : <span><?php echo $normalRelease;?></span>
                 </div>
               </div>
             </div>
