@@ -158,7 +158,6 @@
             <td class='c-estimate'><?php echo $story->estimate;?></td>
             <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
               <span class='status-<?php echo $story->status;?>'>
-                <span class='label label-dot'></span>
                 <span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
               </span>
             </td>

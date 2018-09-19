@@ -80,7 +80,6 @@
           <td><?php echo $project->end;?></td>
           <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
             <span class="status-<?php echo $project->status?>">
-              <span class="label label-dot"></span>
               <span class='status-text'><?php echo zget($lang->project->statusList, $project->status);?></span>
             </span>
           </td>

@@ -54,9 +54,11 @@
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
               <?php echo $app->user->realname . ' ' . $action->actionLabel;?>
+              <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text-muted"><?php echo $action->objectLabel;?></span>
-              <span class="label label-id"><?php echo $action->objectID;?></span>
               <?php echo html::a($action->objectLink, $action->objectName);?>
+              <span class="label label-id"><?php echo $action->objectID;?></span>
+              <?php endif;?>
             </span>
           </div>
         </li>

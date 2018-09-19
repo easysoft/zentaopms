@@ -51,7 +51,6 @@
         <?php endif;?>
         <td class='c-status' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
           <span class="status-<?php echo $task->status?>">
-            <span class="label label-dot hide-in-sm"></span>
             <span class='status-text'><?php echo zget($lang->task->statusList, $task->status);?></span>
           </span>
         </td>
