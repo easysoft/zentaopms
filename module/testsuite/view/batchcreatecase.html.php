@@ -68,7 +68,7 @@
       <?php endfor;?>
       </tbody>
       <tfoot>
-        <tr><td colspan='8' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?> <?php echo  html::backButton('', '', 'btn btn-wide');?></td></tr>
+        <tr><td colspan='8' class='text-center form-actions'><?php echo html::submitButton()?> <?php echo  html::backButton('', '', 'btn btn-wide');?></td></tr>
       </tfoot>
     </table>
   </form>

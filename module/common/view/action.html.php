@@ -74,7 +74,7 @@
           <?php echo html::textarea('lastComment', htmlspecialchars($action->comment), "rows='8' autofocus='autofocus'");?>
           </div>
           <div class="form-group form-actions">
-          <?php echo html::submitButton($lang->save, '', 'btn btn-primary btn-wide');?>
+          <?php echo html::submitButton($lang->save);?>
           <?php echo html::commonButton($lang->close, '', 'btn btn-wide btn-hide-form');?>
           </div>
         </form>

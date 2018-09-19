@@ -76,7 +76,7 @@
           <div class='detail text-center form-actions'>
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
             <?php echo html::hidden('consumed', $task->consumed);?>
-            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::submitButton();?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </div>
           <?php include '../../common/view/action.html.php';?>

@@ -23,7 +23,6 @@
       <td><?php if($bug->resolvedDate != '0000-00-00 00:00:00') echo substr($bug->resolvedDate, 2);?></td>
       <td title='<?php echo zget($lang->bug->statusList, $bug->status);?>'>
         <span class="status-<?php echo $bug->status?>">
-          <span class="label label-dot"></span>
           <span class='status-text'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
         </span>
       </td>

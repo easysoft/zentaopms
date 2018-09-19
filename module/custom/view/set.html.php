@@ -71,7 +71,7 @@ EOT;
         </tr>
         <?php endif;?>
         <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
       <?php elseif($module == 'task' and $field == 'hours'):?>
@@ -86,7 +86,7 @@ EOT;
           <td><?php echo html::radio('weekend', $lang->custom->weekendList, $weekend);?></td>
         </tr>
         <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
       <?php elseif($module == 'bug' and $field == 'longlife'):?>
@@ -99,7 +99,7 @@ EOT;
               <span class='input-group-addon'><?php echo $lang->day?></span>
             </div>
           </td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td><?php echo html::submitButton();?></td>
         </tr>
       </table>
       <div class='alert alert-info alert-block'><?php echo $lang->custom->notice->longlife;?></div>
@@ -110,7 +110,7 @@ EOT;
           <td><?php echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");?></td>
         </tr>
         <tr>
-          <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>
@@ -121,7 +121,7 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+          <td><?php echo html::submitButton();?></td>
         </tr>
       </table>
       <?php else:?>
@@ -151,7 +151,7 @@ EOT;
           <?php
           $appliedTo = array($currentLang => $lang->custom->currentLang, 'all' => $lang->custom->allLang);
           echo html::radio('lang', $appliedTo, $lang2Set);
-          echo html::submitButton('', '', 'btn btn-primary btn-wide');
+          echo html::submitButton();
           if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=$module&field=$field"), 'hiddenwin', '', 'btn btn-wide');
           ?>
           </td>

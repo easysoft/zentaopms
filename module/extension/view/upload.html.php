@@ -28,7 +28,7 @@
     <form method='post' target='hiddenwin' enctype='multipart/form-data' style='padding: 20px 20%'>
       <div class='input-group'>
         <input type='file' name='file' class='form-control' />
-        <span class='input-group-btn'><?php echo html::submitButton($lang->extension->install);?></span>
+        <span class='input-group-btn'><?php echo html::submitButton($lang->extension->install, '', 'btn btn-primary');?></span>
       </div>
     </form>
     <?php endif;?>

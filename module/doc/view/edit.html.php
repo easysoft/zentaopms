@@ -76,7 +76,7 @@
           <td colspan='3' class='text-center form-actions'>
             <?php
             echo html::hidden('editedDate', $doc->editedDate);
-            echo html::submitButton('', '', 'btn btn-wide btn-primary');
+            echo html::submitButton();
             echo html::backButton('', '', 'btn btn-wide');
             ?>
           </td>

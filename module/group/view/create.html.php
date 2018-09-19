@@ -26,7 +26,7 @@
         <td><?php echo html::textarea('desc', '', "rows=5 class=form-control");?></td>
       </tr>  
       <tr>
-        <td colspan='2' class='text-center'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
+        <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
       </tr>
     </table>
   </form>

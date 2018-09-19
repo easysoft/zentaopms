@@ -47,7 +47,7 @@ function closeWindow()
             <?php echo html::select('type', $lang->release->exportTypeList, 'all', "class='form-control'")?>
           </div>
         </td>
-        <td><?php echo html::submitButton($lang->export);?></td>
+        <td><?php echo html::submitButton($lang->export, '', 'btn btn-primary');?></td>
       </tr>
     </table>
   </form>

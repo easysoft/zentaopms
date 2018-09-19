@@ -28,7 +28,7 @@
                 <label for='withLeft'><?php echo $lang->project->fixFirstWithLeft?></label>
               </div>
             </span>
-            <span class='input-group-btn'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></span>
+            <span class='input-group-btn'><?php echo html::submitButton();?></span>
           </div>
         </td>
       </tr>

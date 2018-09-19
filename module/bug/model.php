@@ -2527,7 +2527,7 @@ class bugModel extends model
                 echo zget($this->lang->bug->typeList, $bug->type);
                 break;
             case 'status':
-                echo "<span class='status-{$bug->status}'><span class='label label-dot'></span><span class='status-text'>";
+                echo "<span class='status-{$bug->status}'><span class='status-text'>";
                 echo zget($this->lang->bug->statusList, $bug->status);
                 echo  '</span></span>';
                 break;
@@ -2584,13 +2584,9 @@ class bugModel extends model
                 }
                 break;
             case 'assignedTo':
-                $btnTextClass   = '';
-                $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
                 $btnTextClass   = 'text-primary';
                 if($bug->assignedTo == $account) $btnTextClass = 'text-red';
-                $btnClass = $assignedToText == 'closed' ? ' disabled' : '';
-
-                echo html::a(helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true), "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='iframe btn btn-sm btn-icon-left{$btnClass}'");
+                echo "<span class='{$btnTextClass}'>" . zget($users, $bug->assignedTo) . "</span>";
                 break;
             case 'assignedDate':
                 echo substr($bug->assignedDate, 5, 11);
@@ -2624,6 +2620,7 @@ class bugModel extends model
                 break;
             case 'actions':
                 $params = "bugID=$bug->id";
+                common::printIcon('bug', 'assignTo',   $params, $bug, 'list', '', '', 'iframe', true);
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);

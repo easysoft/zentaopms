@@ -49,7 +49,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php echo html::submitButton();?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
           </td>
         </tr>

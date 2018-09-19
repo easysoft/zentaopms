@@ -17,7 +17,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
-    <a href="<?php echo $backLink;?>" class="btn btn-link">
+    <a href="<?php echo $backLink;?>" class="btn btn-primary">
       <i class="icon icon-back icon-sm"></i> <?php echo $lang->goback;?>
     </a>
     <div class="divider"></div>
@@ -141,7 +141,7 @@
               <td></td>
               <?php endif;?>
               <td colspan="2" class="form-actions">
-                <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+                <?php echo html::submitButton();?>
                 <?php echo $this->session->{$viewType . 'List'} ? html::linkButton($this->lang->goback, $this->session->{$viewType .'List'}, 'self', '', 'btn btn-wide') : html::backButton('', '', 'btn btn-wide');?>
                 <?php echo html::hidden('parentModuleID', $currentModuleID);?>
                 <?php echo html::hidden('maxOrder', $maxOrder);?>

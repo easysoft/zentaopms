@@ -85,7 +85,7 @@
           <?php endforeach;?>
         </tbody>
         <tfoot>
-          <tr><td colspan='<?php echo count($visibleFields) + 6?>' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?></td></tr>
+          <tr><td colspan='<?php echo count($visibleFields) + 6?>' class='text-center form-actions'><?php echo html::submitButton();?></td></tr>
         </tfoot>
       </table>
     </div>

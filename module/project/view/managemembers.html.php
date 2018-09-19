@@ -120,7 +120,7 @@
         <?php $i ++; $memberCount ++;?>
         <?php endfor;?>
       </tbody>
-      <tfoot><tr><td colspan='6' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . ' ' . html::backButton('', '', 'btn btn-wide'); ?></td></tr></tfoot>
+      <tfoot><tr><td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton('', '', 'btn btn-wide'); ?></td></tr></tfoot>
     </table>
     <?php js::set('i', $i);?>
   </form>

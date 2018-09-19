@@ -64,7 +64,7 @@
           <td class='text-center form-actions'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
-            echo html::submitButton('', '', 'btn btn-wide btn-primary');
+            echo html::submitButton();
             echo html::linkButton($lang->goback, $app->session->storyList ? $app->session->storyList : inlink('view', "storyID=$story->id"), 'self', '', 'btn btn-wide');
             ?>
           </td>

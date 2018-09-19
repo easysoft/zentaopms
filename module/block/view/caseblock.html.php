@@ -19,11 +19,8 @@
   .block-cases.block-sm .c-status{text-align:center}
   .block-cases.block-sm .c-status .status-text{display:none;}
   .case-status-normal {color: #a6aab8;}
-  .case-status-normal > .label-dot {background-color: #006af1;}
   .case-status-blocked { color: #a6aab8; }
-  .case-status-blocked > .label-dot { background-color: #00da88; }
   .case-status-investigate {color: #a6aab8;}
-  .case-status-investigate > .label-dot {background-color: #006af1;}
   </style>
   <table class='table table-borderless table-hover table-fixed-head tablesorter block-cases <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
@@ -58,7 +55,6 @@
         <?php endif;?>
         <td class='c-status' title='<?php echo zget($lang->testcase->statusList, $case->status)?>'>
           <span class="case-status-<?php echo $case->status?>">
-            <span class="label label-dot"></span>
             <span class='status-text'><?php echo zget($lang->testcase->statusList, $case->status);?></span>
           </span>
         </td>

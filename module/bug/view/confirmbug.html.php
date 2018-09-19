@@ -54,7 +54,7 @@ js::set('page', 'confirmbug');
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>
         </tr>
         <tr>
-          <td class='text-center form-actions' colspan='3'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->server->http_referer, 'self', '', 'btn btn-wide');?></td>
+          <td class='text-center form-actions' colspan='3'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->server->http_referer, 'self', '', 'btn btn-wide');?></td>
         </tr>
       </table>
     </form>

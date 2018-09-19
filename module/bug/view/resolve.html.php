@@ -82,7 +82,7 @@ js::set('productID' , $bug->product);
           <td colspan='3'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>
         </tr>
         <tr>
-          <td class='text-center form-actions' colspan='4'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->session->bugList, 'self', '', 'btn btn-wide');?></td>
+          <td class='text-center form-actions' colspan='4'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList, 'self', '', 'btn btn-wide');?></td>
         </tr>
       </table>
     </form>

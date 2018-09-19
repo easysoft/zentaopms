@@ -22,7 +22,7 @@
       </div>
     </span>
     <?php endif;?>
-    <span class='input-group-btn'><?php echo html::submitButton() . html::hidden('module', $module)?></span>
+    <span class='input-group-btn'><?php echo html::submitButton('', '', 'btn btn-primary') . html::hidden('module', $module)?></span>
   </div>
 </form>
 <?php include '../../common/view/footer.lite.html.php';?>

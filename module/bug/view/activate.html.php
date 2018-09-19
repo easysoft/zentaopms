@@ -43,7 +43,7 @@
           <td colspan='2' class='text-left'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
         <tr>
-          <td class='text-center' colspan='3'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::linkButton($lang->goback, $this->session->bugList, 'self', '', 'btn btn-wide');?></td>
+          <td class='text-center' colspan='3'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->bugList, 'self', '', 'btn btn-wide');?></td>
         </tr>
       </table>
     </form>

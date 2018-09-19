@@ -28,7 +28,6 @@
                 <td><?php echo $users[$task->assignedTo];?></td>
                 <td>
                   <span class='status-<?php echo $task->status?>'>
-                    <span class='label label-dot'></span>
                     <?php echo $lang->task->statusList[$task->status];?>
                   </span>
                 </td>
@@ -61,7 +60,6 @@
             <td class='text-left'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></td>
             <td>
               <span class='status-<?php echo $bug->status?>'>
-                <span class='label label-dot'></span>
                 <?php echo $lang->bug->statusList[$bug->status];?>
               </span>
             </td>
@@ -92,7 +90,6 @@
             <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '_blank');?></td>
             <td>
               <span class='status-<?php echo $case->status?>'>
-                <span class='label label-dot'></span>
                 <?php echo $lang->testcase->statusList[$case->status];?>
               </span>
             </td>

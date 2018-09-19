@@ -37,7 +37,7 @@ $jsRoot  = $webRoot . "js/";
         </tr>
         <tr>
           <td colspan='2' class='text-center'>
-          <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+          <?php echo html::submitButton();?>
           </td>
         </tr>
       </table>

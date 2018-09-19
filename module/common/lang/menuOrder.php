@@ -89,15 +89,14 @@ $lang->report->menuOrder[15] = 'test';
 $lang->report->menuOrder[20] = 'staff';
 
 /* company menu order. */
-$lang->company->menuOrder[5]  = 'name';
-$lang->company->menuOrder[10]  = 'browseUser';
-$lang->company->menuOrder[15] = 'dept';
-$lang->company->menuOrder[20] = 'browseGroup';
-$lang->company->menuOrder[25] = 'dynamic';
-$lang->company->menuOrder[30] = 'view';
-$lang->company->menuOrder[35] = 'addGroup';
-$lang->company->menuOrder[40] = 'batchAddUser';
-$lang->company->menuOrder[45] = 'addUser';
+$lang->company->menuOrder[5]  = 'browseUser';
+$lang->company->menuOrder[10] = 'dept';
+$lang->company->menuOrder[15] = 'browseGroup';
+$lang->company->menuOrder[20] = 'dynamic';
+$lang->company->menuOrder[25] = 'view';
+$lang->company->menuOrder[30] = 'addGroup';
+$lang->company->menuOrder[35] = 'batchAddUser';
+$lang->company->menuOrder[40] = 'addUser';
 $lang->dept->menuOrder        = $lang->company->menuOrder;
 $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;

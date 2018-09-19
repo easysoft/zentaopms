@@ -23,7 +23,7 @@
               <td class='text-right w-100px'><?php echo $lang->printKanban->content?>:</td>
               <td class='text-left text-middle'>
                 <?php echo html::radio('content', $lang->printKanban->typeList, 'all')?>
-                &nbsp; &nbsp; <?php echo html::submitButton($lang->printKanban->print, '', 'btn btn-primary btn-wide')?>
+                &nbsp; &nbsp; <?php echo html::submitButton($lang->printKanban->print)?>
               </td>
             </tr>
           </table>

@@ -29,7 +29,7 @@
       </tr>
       <tr>
         <th></th>
-        <td><?php echo html::submitButton($lang->delete, '', 'btn btn-wide btn-primary');?></td>
+        <td><?php echo html::submitButton($lang->delete);?></td>
       </tr>
     </table>
   </form>

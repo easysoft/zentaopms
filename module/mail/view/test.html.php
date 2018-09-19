@@ -32,7 +32,7 @@
           <td><?php echo html::select('to', $users, $app->user->account, "class='form-control chosen'");?></td>
           <td class='text-left'>
             <?php 
-            echo html::submitButton($lang->mail->test);
+            echo html::submitButton($lang->mail->test, '', 'btn btn-primary');
             $mta = $config->mail->mta;
             echo html::linkButton($lang->mail->edit, inlink(($mta == 'sendcloud' or $mta == 'ztcloud') ? $mta : 'edit'));
             ?>

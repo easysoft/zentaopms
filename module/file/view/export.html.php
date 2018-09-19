@@ -214,7 +214,7 @@ if($isCustomExport)
             <tr>
               <th></th>
               <td>
-                <?php echo html::submitButton($lang->export, "onclick='setDownloading();' ");?>
+                <?php echo html::submitButton($lang->export, "onclick='setDownloading();'", 'btn btn-primary');?>
               </td>
             </tr>
           </tbody>

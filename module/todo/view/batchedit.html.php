@@ -96,7 +96,7 @@
       <tfoot>
         <tr>
           <td colspan='<?php echo $columns?>' class='text-center form-actions'>
-            <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+            <?php echo html::submitButton();?>
             <?php echo html::backButton('', '', 'btn btn-wide');?>
           </td>
         </tr>

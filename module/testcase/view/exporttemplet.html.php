@@ -39,7 +39,7 @@ function closeWindow()
           <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
         </td>
         <td>
-          <?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?>
+          <?php echo html::submitButton();?>
         </td>
       </tr>
     </table>

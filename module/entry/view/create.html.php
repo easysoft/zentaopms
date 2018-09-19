@@ -60,7 +60,7 @@
         <tr>
           <th></th>
           <td>
-            <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+            <?php echo html::submitButton();?>
             <?php echo html::a($config->entry->help, $lang->entry->help, '_blank', "class='help'");?>
           </td>
           <td></td>

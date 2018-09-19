@@ -47,7 +47,6 @@
         <td class='text-center'><?php echo $release->date?></td>
         <td class='c-status' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
           <span class="status-<?php echo $release->status?>">
-            <span class="label label-dot"></span>
             <span class='status-text'><?php echo zget($lang->release->statusList, $release->status);?></span>
           </span>
         </td>

@@ -141,7 +141,7 @@
         <tfoot>
           <tr>
             <td colspan='<?php echo $branchProduct ? $columns : ($columns - 1);?>' class='text-center form-actions'>
-              <?php echo html::submitButton('', '', 'btn btn-wide btn-primary');?>
+              <?php echo html::submitButton();?>
               <?php echo html::backButton('', '', 'btn btn-wide');?>
             </td>
           </tr>

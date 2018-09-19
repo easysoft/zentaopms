@@ -93,7 +93,7 @@
           </tr>
           <?php endfor;?>
           <tr>
-            <td colspan='6' class='text-center form-actions'><?php echo html::submitButton('', '', 'btn btn-wide btn-primary') . html::backButton('', '', 'btn btn-wide');?></td>
+            <td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . html::backButton('', '', 'btn btn-wide');?></td>
           </tr>
           <?php endif;?>
         </tbody>

@@ -28,7 +28,7 @@
           <?php endforeach;?>
         </td>
       </tr>
-      <tr><td></td><td><?php echo html::submitButton('', '', 'btn btn-primary btn-wide')?></td></tr>
+      <tr><td></td><td><?php echo html::submitButton()?></td></tr>
       <tr>
         <td colspan='2' class='pd-0'>
           <div class='alert alert-info alert-block'><strong><?php echo $lang->custom->productProject->notice?></strong></div>
