@@ -1473,4 +1473,24 @@ class userModel extends model
 
         return false;
     }
+
+    /**
+     * Judge an action is clickable or not.
+     * 
+     * @param  object    $user 
+     * @param  string    $action 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isClickable($user, $action)
+    {
+        global $config;
+        $action = strtolower($action);
+
+        if($action == 'unbind' and empty($user->ranzhi)) return false;
+        if($action == 'unlock' and (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) >= $config->user->lockMinutes * 60) return false;
+
+        return true;
+    }
 }
