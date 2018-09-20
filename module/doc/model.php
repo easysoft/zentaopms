@@ -168,7 +168,7 @@ class docModel extends model
                 }
             }
 
-            $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
+            $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
             if($libID and common::hasPriv('doc', 'create')) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
 
             $this->lang->modulePageActions = $actions;
@@ -227,7 +227,7 @@ class docModel extends model
 
     /**
      * Get grant libs by doc.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -897,8 +897,8 @@ class docModel extends model
 
     /**
      * Check priv for doc.
-     * 
-     * @param  object    $object 
+     *
+     * @param  object    $object
      * @access public
      * @return bool
      */

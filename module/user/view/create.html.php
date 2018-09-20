@@ -32,10 +32,6 @@
           <td><?php echo html::input('account', '', "class='form-control' autocomplete='off'");?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->user->realname;?></th>
-          <td><?php echo html::input('realname', '', "class='form-control' autocomplete='off'");?></td>
-        </tr>
-        <tr>
           <th><?php echo $lang->user->password;?></th>
           <td>
             <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
@@ -48,6 +44,10 @@
         <tr>
           <th><?php echo $lang->user->password2;?></th>
           <td><?php echo html::password('password2', '', "class='form-control' autocomplete='off'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->user->realname;?></th>
+          <td><?php echo html::input('realname', '', "class='form-control' autocomplete='off'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->join;?></th>
