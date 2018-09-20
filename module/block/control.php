@@ -740,9 +740,10 @@ class block extends control
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
-        $status  = isset($this->params->type) ? $this->params->type : '';
+        $status = isset($this->params->type) ? $this->params->type : '';
+        $num    = isset($this->params->num) ? $this->params->num : '';
 
-        $products      = $this->block->getProductsLikeDropMenu($status);
+        $products      = $this->block->getProductsLikeDropMenu($status, $num);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -873,7 +874,7 @@ class block extends control
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get projects. */
-        $projects = $this->block->getProjectsLikeDropMenu($status);
+        $projects = $this->block->getProjectsLikeDropMenu($status, $num);
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -979,9 +980,11 @@ class block extends control
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
+        $this->app->loadLang('bug');
         $status  = isset($this->params->type) ? $this->params->type : '';
+        $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
-        $products      = $this->block->getProductsLikeDropMenu($status);
+        $products      = $this->block->getProductsLikeDropMenu($status, $num);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -990,90 +993,48 @@ class block extends control
             return false;
         }
 
-        $testedBuilds = $this->dao->select('build')->from(TABLE_TESTTASK)->where('product')->in(array_keys($products))->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->fetchPairs();
-        $builds       = $this->dao->select('id, product, name, bugs')->from(TABLE_BUILD)->where('id')->in($testedBuilds)->andWhere('deleted')->eq(0)->orderBy('id_desc')->fetchGroup('product', 'id');
-        $openedBugs   = $this->dao->select('id, openedBuild')->from(TABLE_BUG)->where('openedBuild')->in($testedBuilds)->andWhere('deleted')->eq(0)->fetchGroup('openedBuild', 'id');
-
-        /* Get bugs. */
-        $bugIDList = array();
-        foreach($builds as $product => $productBuilds)
-        {
-            foreach($productBuilds as $buildID => $build)
-            {
-                /* If don't clone $build, the exploded bugs of build will be stored in dao::$cache and it occurs an error when the qa statistic block be loaded twice. */
-                $build = clone $build;
-                $build->bugs = explode(',', trim($build->bugs, ','));
-                foreach($build->bugs as $bugID) $bugIDList[$bugID] = $bugID;
-
-                $builds[$product][$buildID] = $build;
-            }
-        }
-        foreach($openedBugs as $buildBugs)
-        {
-            foreach($buildBugs as $bugID => $bug) $bugIDList[$bugID] = $bugID;
-        }
-
         $today     = date(DT_DATE1);
         $yesterday = date(DT_DATE1, strtotime('yesterday'));
+        $testtasks = $this->dao->select('*')->from(TABLE_TESTTASK)->where('product')->in($productIdList)->andWhere('project')->ne(0)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('product');
+        $bugs      = $this->dao->select("product, count(id) as total,
+            count(assignedTo = '{$this->app->user->account}' or null) as assignedToMe,
+            count(status != 'closed' or null) as unclosed,
+            count((status != 'closed' and status != 'resolved') or null) as unresolved,
+            count(confirmed = '0' or null) as unconfirmed,
+            count((resolvedDate >= '$yesterday' and resolvedDate < '$today') or null) as yesterdayResolved,
+            count((closedDate >= '$yesterday' and closedDate < '$today') or null) as yesterdayClosed")
+            ->from(TABLE_BUG)
+            ->where('product')->in($productIdList)
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('product')
+            ->fetchAll('product');
 
-        $bugs = $this->loadModel('bug')->getByList($bugIDList, 'id, assignedTo, resolvedDate, closedDate, status');
-        $confirmedBugs = $this->dao->select('objectID')->from(TABLE_ACTION)
+        $confirmedBugs = $this->dao->select('count(product) as product')->from(TABLE_ACTION)
             ->where('objectType')->eq('bug')
             ->andWhere('action')->eq('bugconfirmed')
             ->andWhere('date')->ge($yesterday)
             ->andWhere('date')->lt($today)
-            ->fetchPairs();
+            ->groupBy('product')
+            ->fetchPairs('product', 'product');
 
-        foreach($builds as $product => $productBuilds)
+        foreach($products as $productID => $product)
         {
-            foreach($productBuilds as $buildID => $build)
-            {
-                $build->total              = 0;
-                $build->assignedToMe       = 0;
-                $build->unresolved         = 0;
-                $build->unconfirmed        = 0;
-                $build->unclosed           = 0;
-                $build->yesterdayResolved  = 0;
-                $build->yesterdayConfirmed = 0;
-                $build->yesterdayClosed    = 0;
+            $bug = isset($bugs[$productID]) ? $bugs[$productID] : '';
+            $product->total              = empty($bug) ? 0 : $bug->total;
+            $product->assignedToMe       = empty($bug) ? 0 : $bug->assignedToMe;
+            $product->unclosed           = empty($bug) ? 0 : $bug->unclosed;
+            $product->unresolved         = empty($bug) ? 0 : $bug->unresolved;
+            $product->unconfirmed        = empty($bug) ? 0 : $bug->unconfirmed;
+            $product->yesterdayResolved  = empty($bug) ? 0 : $bug->yesterdayResolved;
+            $product->yesterdayClosed    = empty($bug) ? 0 : $bug->yesterdayClosed;
+            $product->yesterdayConfirmed = empty($confirmedBugs[",$productID,"]) ? 0 : $confirmedBugs[",$productID,"];
 
-                $buildOpenedBugs = zget($openedBugs, $buildID, array());
-                $build->bugs     = array_flip(array_merge(array_flip($build->bugs), array_flip(array_keys($buildOpenedBugs))));
-                foreach($build->bugs as $key => $bugID)
-                {
-                    if(!isset($bugs[$bugID])) continue;
-
-                    $bug = $bugs[$bugID];
-
-                    if($bug->assignedTo = $this->app->user->account) $build->assignedToMe++;
-
-                    if($bug->status != 'closed')
-                    {
-                        $build->unclosed++;
-
-                        if($bug->status != 'resoloved')
-                        {
-                            $build->unresolved++;
-
-                            if($bug->status != 'confirmed') $build->unconfirmed++;
-                        }
-                    }
-
-                    if($bug->resolvedDate >= $yesterday && $bug->resolvedDate < $today) $build->yesterdayResolved++;
-                    if($bug->closedDate   >= $yesterday && $bug->closedDate   < $today) $build->yesterdayClosed++;
-                    if(isset($confirmedBugs[$bugID])) $yesterdayConfirmed++;
-
-                    $build->total++;
-                }
-
-                $build->assignedRate    = $build->total ? round($build->assignedToMe  / $build->total * 100, 2) : 0;
-                $build->unresolvedRate  = $build->total ? round($build->unresolved  / $build->total * 100, 2) : 0;
-                $build->unconfirmedRate = $build->total ? round($build->unconfirmed / $build->total * 100, 2) : 0;
-                $build->unclosedRate    = $build->total ? round($build->unclosed    / $build->total * 100, 2) : 0;
-            }
+            $product->assignedRate    = $product->total ? round($product->assignedToMe  / $product->total * 100, 2) : 0;
+            $product->unresolvedRate  = $product->total ? round($product->unresolved    / $product->total * 100, 2) : 0;
+            $product->unconfirmedRate = $product->total ? round($product->unconfirmed   / $product->total * 100, 2) : 0;
+            $product->unclosedRate    = $product->total ? round($product->unclosed      / $product->total * 100, 2) : 0;
+            $product->testtask        = isset($testtasks[$productID]) ? $testtasks[$productID] : '';
         }
-
-        foreach($products as $product) $product->builds = zget($builds, $product->id, array());
 
         $this->view->products = $products;
     }

@@ -471,6 +471,9 @@ class blockModel extends model
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
 
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
         return json_encode($params);
     }
 
@@ -487,6 +490,9 @@ class blockModel extends model
         $params->type['options'] = $this->lang->block->typeList->project;
         $params->type['control'] = 'select';
 
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
+
         return json_encode($params);
     }
 
@@ -502,6 +508,9 @@ class blockModel extends model
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
+
+        $params->num['name']    = $this->lang->block->num;
+        $params->num['control'] = 'input';
 
         return json_encode($params);
     }
@@ -635,10 +644,11 @@ class blockModel extends model
      * Get products like drop menu order
      * 
      * @param  strint    $status 
+     * @param  int       $num 
      * @access public
      * @return array
      */
-    public function getProductsLikeDropMenu($status)
+    public function getProductsLikeDropMenu($status, $num)
     {
         $products = $this->loadModel('product')->getList($status);
         if(empty($products)) return $products;
@@ -678,17 +688,19 @@ class blockModel extends model
         }
         $products = $mineProducts + $otherProducts + $closedProducts;
 
-        return $products;
+        if(empty($num)) return $products;
+        return array_slice($products, 0, $num, true);
     }
 
     /**
      * Get projects like drop menu order
      * 
      * @param  string    $status 
+     * @param  int       $num 
      * @access public
      * @return array
      */
-    public function getProjectsLikeDropMenu($status)
+    public function getProjectsLikeDropMenu($status, $num)
     {
         $projectList = $this->loadModel('project')->getList($status);
         if(empty($projectList)) return $projectList;
@@ -712,6 +724,7 @@ class blockModel extends model
         }
         $projects = $mineProjects + $otherProjects + $closedProjects;
 
-        return $projects;
+        if(empty($num)) return $projects;
+        return array_slice($projects, 0, $num, true);
     }
 }
