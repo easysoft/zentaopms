@@ -24,11 +24,11 @@
 .block-stories.block-sm .c-status {text-align: center;}
 </style>
 <div class='panel-body has-table scrollbar-hover'>
-  <table class='table table-borderless table-hover table-fixed-head tablesorter block-stories <?php if(!$longBlock) echo 'block-sm'?>'>
+  <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-stories <?php if(!$longBlock) echo 'block-sm'?>'>
     <thead>
       <tr>
         <?php if($longBlock):?>
-        <th class="c-id-xs"><?php echo $lang->idAB?></th>
+        <th class="c-id"><?php echo $lang->idAB?></th>
         <?php endif;?>
         <th class="c-pri"><?php echo $lang->priAB?></th>
         <th class="c-name"><?php echo $lang->story->title;?></th>

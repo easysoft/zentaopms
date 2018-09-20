@@ -9,6 +9,7 @@
  * @version     $Id$
  * @link        http://www.ranzhi.org
  */
+if(!$selfCall) die(include('./todolist.html.php'));
 ?>
 <style>
 .block-todoes .panel-body {position: relative; padding-top: 42px; overflow: visible !important; padding-bottom: 0;}

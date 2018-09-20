@@ -607,29 +607,44 @@ class productModel extends model
      * Get roadmap of a proejct
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $num
      * @access public
      * @return array
      */
-    public function getRoadmap($productID, $branch = 0)
+    public function getRoadmap($productID, $branch = 0, $num = 0)
     {
         $plans    = $this->loadModel('productplan')->getList($productID, $branch);
         $releases = $this->loadModel('release')->getList($productID, $branch);
         $roadmap  = array();
+        $total    = 0;
 
         foreach($plans as $plan)
         {
             if(($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
             $year = substr($plan->end, 0, 4);
             $roadmap[$year][$plan->branch][] = $plan;
+
+            $total++;
+        }
+
+        if($num > 0 and $total >= $num)
+        {
+            krsort($roadmap);
+            return $this->limitRoadmap($roadmap, $num);
         }
 
         foreach($releases as $release)
         {
             $year = substr($release->date, 0, 4);
             $roadmap[$year][$release->branch][] = $release;
+
+            $total++;
+            if($num > 0 and $total >= $num) break;
         }
 
         krsort($roadmap);
+        if($num > 0) return $this->limitRoadmap($roadmap, $num);
 
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmaps)
@@ -664,6 +679,34 @@ class productModel extends model
         }
 
         return $lastRoadmap;
+    }
+
+    /**
+     * Limit roadmap.
+     * 
+     * @param  string $roadmap 
+     * @param  int    $num 
+     * @access public
+     * @return array
+     */
+    public function limitRoadmap($roadmap, $num)
+    {
+        $i = 0;
+        $newRoadmap = array();
+        foreach($roadmap as $year => $branches)
+        {
+            foreach($branches as $branch => $plans)
+            {
+                krsort($plans);
+                foreach($plans as $plan)
+                {
+                    $newRoadmap[$year][$branch][] = $plan;
+                    $i++;
+                    if($i >= $num) break;
+                }
+            }
+        }
+        return $newRoadmap;
     }
 
     /**

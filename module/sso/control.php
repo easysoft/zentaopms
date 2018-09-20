@@ -74,11 +74,12 @@ class sso extends control
 
                 $this->user->cleanLocked($user->account);
                 /* Authorize him and save to session. */
+                $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
                 $user->rights   = $this->user->authorize($user->account);
                 $user->groups   = $this->user->getGroups($user->account);
+                $user->view     = $this->user->grantUserView($user->account, $user->rights['acls']);
                 $user->last     = date(DT_DATETIME1, $last);
                 $user->lastTime = $user->last;
-                $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
                 $user->modifyPassword = ($user->visits == 0 and !empty($this->config->safe->modifyPasswordFirstLogin));
                 if($user->modifyPassword) $user->modifyPasswordReason = 'modifyPasswordFirstLogin';
                 if(!$user->modifyPassword and !empty($this->config->safe->changeWeak))
