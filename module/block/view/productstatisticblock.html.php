@@ -35,13 +35,13 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-statistic .col-nav {border-left: 1px solid #EBF2FB; width: 260px; padding: 0;}
+.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
 .block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
 .block-statistic .nav-secondary > li.active > a:hover,
 .block-statistic .nav-secondary > li.active > a:focus,
-.block-statistic .nav-secondary > li > a:hover {box-shadow: none;}
-.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li > a:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
+.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; right: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
 .block-statistic .nav-secondary > li.switch-icon {display: none;}
 .block-statistic.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px;}
 .block-statistic.block-sm .panel-body > .table-row,
@@ -87,6 +87,15 @@ $(function()
       <p><span class="text-muted"><?php echo $lang->block->noData;?></span></p>
     </div>
     <?php else:?>
+    <div class="col col-nav">
+      <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
+        <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
+        <?php foreach($products as $product):?>
+        <li <?php if($product == reset($products)) echo "class='active'";?>><a href="javascript:;" data-target="#tab<?php echo $product->code;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a></li>
+        <?php endforeach;?>
+        <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
+      </ul>
+    </div>
     <div class="col tab-content">
       <?php foreach($products as $product):?>
       <div class="tab-pane fade <?php if($product == reset($products)) echo 'active';?> in" id="tab<?php echo $product->code;?>">
@@ -198,15 +207,6 @@ $(function()
         </div>
       </div>
       <?php endforeach;?>
-    </div>
-    <div class="col col-nav">
-      <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
-        <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php foreach($products as $product):?>
-        <li <?php if($product == reset($products)) echo "class='active'";?>><a href="javascript:;" data-target="#tab<?php echo $product->code;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a></li>
-        <?php endforeach;?>
-        <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
-      </ul>
     </div>
     <?php endif;?>
   </div>
