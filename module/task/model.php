@@ -64,7 +64,7 @@ class taskModel extends model
             $task = $this->file->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
-            $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type'); 
+            $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
             $requiredFields =explode(',', $this->config->task->create->requiredFields);
             if($projectType == 'ops')unset($requiredFields[array_search("story",  $requiredFields)]);
             $requiredFields =implode(',', $requiredFields);
@@ -152,7 +152,7 @@ class taskModel extends model
         $preStory  = 0;
 
         /* Judge whether the current task is a parent. */
-        $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0; 
+        $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
 
         foreach($tasks->story as $key => $storyID)
         {
@@ -220,7 +220,7 @@ class taskModel extends model
         }
 
         /* Fix bug #1525*/
-        $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type'); 
+        $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
         $requiredFields = explode(',', $this->config->task->create->requiredFields);
         if($projectType == 'ops') unset($requiredFields[array_search('story', $requiredFields)]);
         $requiredFields = implode(',', $requiredFields);
@@ -310,8 +310,8 @@ class taskModel extends model
 
     /**
      * Compute begin and end for parent task.
-     * 
-     * @param  int    $taskID 
+     *
+     * @param  int    $taskID
      * @access public
      * @return bool
      */
@@ -443,12 +443,12 @@ class taskModel extends model
             }
         }
     }
-    
+
     /**
      * Compute hours for multiple task.
-     * 
-     * @param  object  $oldTask 
-     * @param  object  $task 
+     *
+     * @param  object  $oldTask
+     * @param  object  $task
      * @access public
      * @return object|bool
      */
@@ -1748,7 +1748,7 @@ class taskModel extends model
             $data->finishedDate = $now;
             $data->assignedTo   = $task->openedBy;
         }
-        
+
         if(!empty($task->team))
         {
             $oldConsumed = $task->team[$oldEstimate->account]->consumed;
@@ -2240,10 +2240,10 @@ class taskModel extends model
 
     /**
      * Process data for report.
-     * 
-     * @param  array    $tasks 
-     * @param  array    $children 
-     * @param  string   $field 
+     *
+     * @param  array    $tasks
+     * @param  array    $children
+     * @param  string   $field
      * @access public
      * @return array
      */
@@ -2390,8 +2390,8 @@ class taskModel extends model
             switch($id)
             {
                 case 'id':
-                    //if($mode == 'table' && $canBatchAction) 
-                    if($canBatchAction) 
+                    //if($mode == 'table' && $canBatchAction)
+                    if($canBatchAction)
                     {
                         echo html::checkbox('taskIDList', array($task->id => sprintf('%03d', $task->id)));
                     }
@@ -2406,8 +2406,8 @@ class taskModel extends model
                     echo "</span>";
                     break;
                 case 'name':
-                    if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-badge'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-badge'>" . $modulePairs[$task->module] . '</span> ';
+                    if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
+                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-gray'>" . $modulePairs[$task->module] . '</span> ';
                     if($child or !empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';
                     if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
