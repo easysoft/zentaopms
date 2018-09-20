@@ -4,7 +4,7 @@
   <?php
     $date = isset($date) ? $date : helper::today();
 
-    echo "<div class='input-control w-150px'>" . $userList . "</div>";
+    echo "<div class='input-control w-120px'>" . $userList . "</div>";
 
     $methodName = $this->app->getMethodName();
 

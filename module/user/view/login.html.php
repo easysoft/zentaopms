@@ -52,6 +52,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   echo html::submitButton($lang->login, '', 'btn btn-primary');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
                   echo html::hidden('referer', $referer);
+                  echo html::hidden('verifyRand', $rand);
                   echo html::a(inlink('reset'), $lang->user->resetPassword);
                   ?>
                   </td>
@@ -84,7 +85,6 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
           <?php $siteURL = 'http://api.zentao.net';?>
           <iframe id='updater' class='hidden' frameborder='0' width='100%' scrolling='no' allowtransparency='true' src="<?php echo $siteURL;?>/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html?lang=<?php echo str_replace('-', '_', $this->app->getClientLang())?>"></iframe>
           <?php endif;?>
-          <?php echo html::hidden('verifyRand', $rand);?>
         </div>
       </div>
     </div>
