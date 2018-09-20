@@ -64,7 +64,7 @@ js::set('suiteID',        $suiteID);
       </div>
       <?php
       $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-  
+
       if($useDatatable)  include '../../common/view/datatable.html.php';
       else               include '../../common/view/tablesorter.html.php';
       $setting = $this->datatable->getSetting('testcase');
@@ -102,18 +102,18 @@ js::set('suiteID',        $suiteID);
           <div class='btn-group dropup'>
             <?php
             $class = "class='disabled'";
-  
+
             $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
             $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu' id='moreActionMenu'>
-              <?php 
+              <?php
               $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
               $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
               echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
-  
+
               if(common::hasPriv('testcase', 'batchReview') and ($config->testcase->needReview or !empty($config->testcase->forceReview)))
               {
                   echo "<li class='dropdown-submenu'>";
@@ -127,19 +127,19 @@ js::set('suiteID',        $suiteID);
                   }
                   echo '</ul></li>';
               }
-  
+
               if(common::hasPriv('testcase', 'batchConfirmStoryChange'))
               {
                   $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
                   $misc = common::hasPriv('testcase', 'batchConfirmStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->testcase->confirmStoryChange, '', $misc) . "</li>";
               }
-  
-  
+
+
               $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
               $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
               echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
-  
+
               if(common::hasPriv('testcase', 'batchCaseTypeChange'))
               {
                   echo "<li class='dropdown-submenu'>";
@@ -168,7 +168,7 @@ js::set('suiteID',        $suiteID);
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
             <?php else:?>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php
@@ -194,7 +194,7 @@ js::set('suiteID',        $suiteID);
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
             <?php else:?>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php
@@ -217,7 +217,7 @@ js::set('suiteID',        $suiteID);
   </div>
 </div>
 <script>
-$('#module' + moduleID).closest('li').addClass('active'); 
+$('#module' + moduleID).closest('li').addClass('active');
 $('#' + caseBrowseType + 'Tab').addClass('btn-active-text').find('.text').after(" <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>");
 <?php if($useDatatable):?>
 $(function(){$('#caseForm').table();})

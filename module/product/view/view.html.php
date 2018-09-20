@@ -17,22 +17,30 @@
         <div class="col-sm-6">
           <div class="panel block-release">
             <div class="panel-heading">
-              <div class="panel-title"><?php echo $lang->productplan->unexpired;?> <span class="label label-badge label-light"><?php printf($lang->product->iterationInfo, count($plans));?></span></div>
+              <div class="panel-title"><?php echo $lang->product->roadmap;?></div>
             </div>
             <div class="panel-body">
               <div class="release-path">
                 <ul class="release-line">
-                  <?php $i = 0;?>
+                  <?php foreach($roadmap as $year => $branches):?>
+                  <?php $plans = $branches[0];?>
                   <?php foreach($plans as $plan):?>
-                  <?php $i++;?>
-                  <?php if($i > 6) break;?>
+                  <?php if(isset($plan->begin)):?>
                   <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
                     <a href="<?php echo $this->createLink('plan', 'view', "planID={$plan->id}");?>">
                       <span class="title"><?php echo $plan->title;?></span>
                       <span class="date"><?php echo $plan->begin;?></span>
-                      <span class="info text-ellipsis" title="<?php echo strip_tags($plan->desc);?>"><?php echo $plan->desc;?></span>
                     </a>
                   </li>
+                  <?php else:?>
+                  <li>
+                    <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
+                      <span class="title"><?php echo $plan->name;?></span>
+                      <span class="date"><?php echo $plan->date;?></span>
+                    </a>
+                  </li>
+                  <?php endif;?>
+                  <?php endforeach;?>
                   <?php endforeach;?>
                 </ul>
               </div>

@@ -61,8 +61,8 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
 .block-statistic.block-sm .types-line > li > div {padding: 18px 2px 5px;}
 
-#unexpired-plan, #doing-project{margin-left:-12px}
-#unexpired-plan + span, #doing-project + span, #total-release + span{color:#000;font-weight:bold}
+.status-count{margin:auto}
+.status-count tr:first-child td:last-child{color:#000;font-weight:bold}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -140,10 +140,16 @@ $(function()
               <?php endif;?>
               <div class="type-info">
                 <div class="type-label">
-                  <span id='unexpired-plan'><?php echo $lang->productplan->featureBar['browse']['unexpired'];?></span> : <span><?php echo $unexpiredPlan;?></span>
-                </div>
-                <div class="type-label">
-                  <span><?php echo $lang->story->planAB;?></span> : <span><?php echo $totalPlan;?></span>
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->productplan->featureBar['browse']['unexpired'];?> :</td>
+                      <td class='text-left'><?php echo $unexpiredPlan;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->story->planAB;?> :</td>
+                      <td class='text-left'><?php echo $totalPlan;?></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>
@@ -168,10 +174,16 @@ $(function()
               <?php endif;?>
               <div class="type-info">
                 <div class="type-label">
-                  <span id='doing-project'><?php echo $lang->project->statusList['doing'];?></span> : <span><?php echo $doingProject;?></span>
-                </div>
-                <div class="type-label">
-                  <span><?php echo $lang->projectCommon;?></span> : <span><?php echo $totalProject;?></span>
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->project->statusList['doing'];?> :</td>
+                      <td class='text-left'><?php echo $doingProject;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->projectCommon;?> :</td>
+                      <td class='text-left'><?php echo $totalProject;?></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>
@@ -195,10 +207,16 @@ $(function()
               <?php endif;?>
               <div class="type-info">
                 <div class="type-label">
-                  <span id='total-release'><?php echo $lang->release->common;?></span> : <span><?php echo $totalRelease;?></span>
-                </div>
-                <div class="type-label">
-                  <span><?php echo $lang->release->statusList['normal'];?></span> : <span><?php echo $normalRelease;?></span>
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->release->common;?> :</td>
+                      <td class='text-left'><?php echo $totalRelease;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->release->statusList['normal'];?> :</td>
+                      <td class='text-left'><?php echo $normalRelease;?></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>

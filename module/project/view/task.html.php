@@ -238,7 +238,7 @@ js::set('browseType', $browseType);
       <div class="table-footer">
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-          <?php 
+          <?php
           $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
           $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) && strtolower($browseType) != 'closedBy');
           $canBatchCancel       = common::hasPriv('task', 'batchCancel', !empty($task) ? $task : null);
@@ -246,7 +246,7 @@ js::set('browseType', $browseType);
           $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
           ?>
           <div class='btn-group dropup'>
-            <?php 
+            <?php
             $actionLink = $this->createLink('task', 'batchEdit', "projectID=$projectID");
             $disabled   = $canBatchEdit ? '' : "disabled='disabled'";
 
@@ -276,7 +276,7 @@ js::set('browseType', $browseType);
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
             <?php else:?>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php
@@ -307,7 +307,7 @@ js::set('browseType', $browseType);
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
             <?php else:?>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php

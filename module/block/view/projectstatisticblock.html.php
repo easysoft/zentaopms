@@ -47,8 +47,8 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li > a:before {display: none;}
 .block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
 
-#all-bug{margin-left:11px}
-#undone-task, #unclosed-story, #active-bug{color:#000;font-weight:bold}
+.status-count{margin:auto}
+.status-count tr:first-child td:last-child{color:#000;font-weight:bold}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -120,10 +120,16 @@ $(function()
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->task->noFinished;?></span> : <span id='undone-task'><?php echo $project->undoneTasks;?></span>
-                </div>
-                <div class="type-label">
-                  <span><?php echo $lang->task->allTasks;?></span> : <span><?php echo $project->totalTasks;?></span>
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
+                      <td class='text-left'><?php echo $project->undoneTasks;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->task->allTasks;?> :</td>
+                      <td class='text-left'><?php echo $project->totalTasks;?></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>
@@ -134,10 +140,16 @@ $(function()
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->story->unclosed;?></span> : <span id='unclosed-story'><?php echo $project->unclosedStories;?></span>
-                </div>
-                <div class="type-label">
-                  <span><?php echo $lang->story->total;?></span> : <span><?php echo $project->totalStories;?></span>
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
+                      <td class='text-left'><?php echo $project->unclosedStories;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->story->total;?> :</td>
+                      <td class='text-left'><?php echo $project->totalStories;?></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>
@@ -149,10 +161,16 @@ $(function()
               </div>
               <div class="type-info">
                 <div class="type-label">
-                  <span><?php echo $lang->bug->unResolved;?></span> : <span id='active-bug'><?php echo $project->activeBugs;?></span>
-                </div>
-                <div class="type-label">
-                  <span id='all-bug'><?php echo $lang->bug->allBugs;?></span> : <span><?php echo $project->totalBugs;?></span>
+                  <table class='status-count'>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
+                      <td class='text-left'><?php echo $project->activeBugs;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
+                      <td class='text-left'><?php echo $project->totalBugs;?></td>
+                    </tr>
+                  </table>
                 </div>
               </div>
             </div>

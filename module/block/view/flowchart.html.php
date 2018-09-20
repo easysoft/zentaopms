@@ -1,52 +1,47 @@
-<style>
-.block-flowchart .panel-body {padding-top: 0}
-.block-flowchart .table {margin-bottom: 0;}
-.block-flowchart .table > thead > tr > th,
-.block-flowchart .table > tbody > tr > td,
-.block-flowchart .table > tbody > tr > th {padding: 10px;font-weight: normal;text-align: center;}
-.block-flowchart .table > thead > tr > th:first-child,
-.block-flowchart .table > tbody > tr > td:first-child,
-.block-flowchart .table > tbody > tr > th:first-child {text-align: left;}
-.block-flowchart .table > thead > tr > th {width: 18%; padding-top: 0}
-.block-flowchart .table > thead > tr > th:first-child {width: auto; padding: 0 10px 0 10px;background: none;}
-.block-flowchart .table > thead > tr > th:first-child + th > div {background: none;}
-.block-flowchart .table > thead > tr > th,
-.block-flowchart .table > thead > tr > th > div {padding: 0;background: url('data:image/gif;base64,R0lGODlhLQAPAJEAAAAAAP///+7u7v///yH5BAEAAAMALAAAAAAtAA8AAAIrnI95IuoP42KyWsfa3TbzH3ngmIjkaZ5jqm5s21Ew986hbMdaXtU8tlMVAAA7') no-repeat;background-position: right -22px top 15px;}
-.block-flowchart .table > thead > tr > th > div {padding: 10px 10px 15px 10px;background-position: left -23px top 15px;}
-.block-flowchart .table > thead > tr > th:last-child {background: none;}
-.block-flowchart .table > tbody > tr > td {color: #3c4353;}
-.block-flowchart .table > tbody > tr:nth-child(even) > td {background: #f7f8f9;}
-.block-flowchart .flowchart-title {font-size: 14px;font-weight: bold;color: #3c4353;}
-.block-flowchart .flowchart-step {display: inline-block;width: 24px;height: 24px;font-size: 14px;line-height: 24px;color: #fff; border-radius: 50%;}
-.block-flowchart.block-sm .table > tbody > tr > td,
-.block-flowchart.block-sm .table > tbody > tr > th {padding: 10px 4px; font-size: 12px;}
-.block-flowchart.block-sm .table > thead > tr > th:first-child {padding: 0 4px 0 4px; width: 65px}
-</style>
-<div class='panel-body has-table scrollbar-hover'>
-  <table class="table table-borderless">
-    <thead>
-      <tr class='text-middle'>
-        <?php for($i = 0; $i < 6; $i++):?>
-        <?php if($i == 0):?>
-        <th style='width:110px;'><span class="flowchart-title"><?php echo $lang->block->role?></span></th>
-        <?php else:?>
-        <th><div><span class="flowchart-step bg-secondary"><?php echo $i?></span></div></th>
-        <?php endif;?>
-        <?php endfor;?>
-      </tr>
-    </thead>
-    <tbody>
-      <?php foreach($lang->block->flowchart as $flowchart):?>
-      <tr class='text-middle'>
-        <?php for($i = 0; $i < 6; $i++):?>
-        <?php if($i == 0):?>
-        <th><?php echo $flowchart[$i];?></th>
-        <?php else:?>
-        <td><?php echo zget($flowchart, $i, '')?></td>
-        <?php endif;?>
-        <?php endfor;?>
-      </tr>
-      <?php endforeach;?>
-    </tbody>
-  </table>
+<div class='panel-body scrollbar-hover'>
+<?php foreach ($lang->block->flowchart as $rowIndex => $flow):?>
+<?php $idx = 0; ?>
+  <div class='row row-<?php echo $rowIndex?>'>
+  <?php foreach ($flow as $flowItem):?>
+    <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><?php echo $flowItem ?></div></div>
+  <?php endforeach; ?>
+  </div>
+<?php endforeach; ?>
 </div>
+<style>
+.block-flowchart .panel-body {padding: 0 30px 0 20px;}
+.flow-item {float: left; width: 16.66667%; max-width: 180px; text-align: center; margin-bottom: 9px; padding-right: 15px;}
+.flow-item > div {position: relative; padding: 5px 0 5px 8px; line-height: 20px; background: #E8EBEF; white-space:nowrap; overflow: visible; color: #3c4353}
+.flow-item > div:before, .flow-item > div:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 10px; border-color: transparent transparent transparent #E8EBEF; position: absolute; left: 0; top: 0;}
+.ie-8 .flow-item > div:before {display: none}
+.flow-item > div:before {border-left-color: #fff; z-index: 1}
+.flow-item > div:after {left: auto; right: -10px; z-index: 2}
+.ie-8 .flow-item > div {margin-right: 10px}
+.flow-item-0 > div {color: #838A9D; font-weight: bold; padding-left: 0;}
+.flow-item-0 > div:before {display: none}
+.flow-item-1 > div {background: #E3F2FD}
+.flow-item-1 > div:after {border-left-color: #E3F2FD}
+.flow-item-2 > div {background: #E8F5E9}
+.flow-item-2 > div:after {border-left-color: #E8F5E9}
+.flow-item-3 > div {background: #FFF3E0}
+.flow-item-3 > div:after {border-left-color: #FFF3E0}
+.flow-item-4 > div {background: #FFEBEE}
+.flow-item-4 > div:after {border-left-color: #FFEBEE}
+.flow-item-5 > div {background: #F3E5F5}
+.flow-item-5 > div:after {border-left-color: #F3E5F5}
+.flow-item-1 > div:hover {background: #1565C0; color: #fff;}
+.flow-item-1 > div:hover:after {border-left-color: #1565C0}
+.flow-item-2 > div:hover {background: #43A047; color: #fff;}
+.flow-item-2 > div:hover:after {border-left-color: #43A047}
+.flow-item-3 > div:hover {background: #EF6C00; color: #fff;}
+.flow-item-3 > div:hover:after {border-left-color: #EF6C00}
+.flow-item-4 > div:hover {background: #E53935; color: #fff;}
+.flow-item-4 > div:hover:after {border-left-color: #E53935}
+.flow-item-5 > div:hover {background: #9C27B0; color: #fff;}
+.flow-item-5 > div:hover:after {border-left-color: #9C27B0}
+
+.block-sm .flow-item {padding-right: 5px}
+.block-sm .flow-item > div:before, .block-sm .flow-item > div:after {border-width: 15px 0 15px 6px;}
+.block-sm .row-3 .flow-item-1, .block-sm .row-3 .flow-item-3 {width: 25%}
+.block-sm .flow-item > div:after {right: -6px;}
+</style>
