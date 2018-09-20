@@ -324,10 +324,11 @@ class groupModel extends model
         }
 
         /* Adjust user view. */
-        if($userGroups)
+        $changedUsers = array_merge($newUsers, $delUsers);
+        if(!empty($changedUsers))
         {
             $this->loadModel('user');
-            foreach($userGroups as $account) $this->user->computeUserView($account, true);
+            foreach($changedUsers as $account) $this->user->computeUserView($account, true);
         }
     }
     
