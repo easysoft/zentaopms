@@ -49,6 +49,7 @@
 .block-statistic.block-sm .nav-secondary > li > a {padding: 5px 10px; border-radius: 4px;}
 .block-statistic.block-sm .nav-secondary > li > a:before {display: none;}
 .block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
+.block-statistic .statistic-menu {height:20px;}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -80,91 +81,78 @@ $(function()
       <?php $index = 1;?>
       <?php foreach($products as $product):?>
       <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabContent<?php echo $product->id;?>">
-        <?php if(!$product->builds):?>
-        <div class="table-empty-tip">
-          <p><span class="text-muted"><?php echo $lang->block->noData;?></span></p>
-        </div>
-        <?php endif;?>
         <div class="statistic-menu input-group space w-400px">
-          <?php if($product->builds):?>
-          <select id='build' name='build' class="form-control chosen">
-            <?php foreach($product->builds as $build):?>
-            <option value="<?php echo $build->id;?>"><?php echo $build->name;?></option>
-            <?php endforeach;?>
-          </select>
           <div class="input-group-cell">
-          <span class="text-muted small"><?php echo $lang->bug->hasSubmittedTest;?><a href="<?php echo $this->createLink('testtask', 'browse', "productID={$product->id}");?>" class="text-primary"><?php echo $lang->bug->nowToTest;?> <i class="icon icon-right-circle icon-sm"></i></a></span>
-          </div>
+          <?php if($product->testtask):?>
+            <?php echo $product->testtask->name;?>
+            <span class="text-muted small"><a href="<?php echo $this->createLink('testtask', 'browse', "productID={$product->id}");?>" class="text-primary"><?php echo $lang->block->lblTesttask;?> <i class="icon icon-right-circle icon-sm"></i></a></span>
           <?php endif;?>
+          </div>
         </div>
-        <?php $buildIndex = 1;?>
-        <?php foreach($product->builds as $build):?>
-        <div class="table-row <?php if($buildIndex != 1) echo 'hidden';?>" id='bugBox<?php echo $build->id;?>'>
+        <div class="table-row" id='bugBox<?php echo $product->id;?>'>
           <div class="col-5 text-middle text-center">
-            <div class="progress-pie inline-block space progress-pie-100" data-value="<?php echo $build->assignedRate;?>" data-doughnut-size="80">
+            <div class="progress-pie inline-block space progress-pie-100" data-value="<?php echo $product->assignedRate;?>" data-doughnut-size="80">
               <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
               <div class="progress-info">
                 <small><?php echo $lang->bug->allBugs . ' Bug';?></small>
-                <strong><span class="progress-value"><?php echo $build->total;?></span></strong>
+                <strong><span class="progress-value"><?php echo $product->total;?></span></strong>
               </div>
             </div>
             <div class="text-center small with-padding">
-              <span class="label label-dot label-primary"></span> &nbsp; <?php echo $lang->bug->assignToMe;?> &nbsp; <strong><?php echo $build->assignedToMe;?></strong>
+              <span class="label label-dot label-primary"></span> &nbsp; <?php echo $lang->bug->assignToMe;?> &nbsp; <strong><?php echo $product->assignedToMe;?></strong>
             </div>
           </div>
           <div class="col-7">
             <div class="product-info">
-              <?php if($build->yesterdayResolved):?>
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $build->yesterdayResolved;?></strong></div>
+              <?php if($product->yesterdayResolved):?>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayResolved;?></span> <strong><?php echo $product->yesterdayResolved;?></strong></div>
               <?php endif;?>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unresovedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unresovedRate;?>%"></div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $product->unresolvedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $product->unresolvedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
                   <span><?php echo $lang->bug->unResolved;?></span>
                 </div>
                 <div class="type-value">
-                  <strong><?php echo $build->unresolved;?></strong>
+                  <strong><?php echo $product->unresolved;?></strong>
                 </div>
               </div>
             </div>
             <div class="product-info">
-              <?php if($build->yesterdayConfirmed):?>
-              <div class="progress-info"><i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayConfirmed;?></span> <strong><?php echo $build->yesterdayConfirmed;?></strong></div>
+              <?php if($product->yesterdayConfirmed):?>
+              <div class="progress-info"><i class="icon icon-exclamation-sign text-danger icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayConfirmed;?></span> <strong><?php echo $product->yesterdayConfirmed;?></strong></div>
               <?php endif;?>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unconfirmedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unconfirmedRate;?>%"></div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $product->unconfirmedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $product->unconfirmedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
                   <span><?php echo $lang->bug->unconfirmed;?></span>
                 </div>
                 <div class="type-value">
-                  <strong><?php echo $build->unconfirmed;?></strong>
+                  <strong><?php echo $product->unconfirmed;?></strong>
                 </div>
               </div>
             </div>
             <div class="product-info">
-              <?php if($build->yesterdayClosed):?>
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayClosed;?></span> <strong><?php echo $build->yesterdayClosed;?></strong></div>
+              <?php if($product->yesterdayClosed):?>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->bug->yesterdayClosed;?></span> <strong><?php echo $product->yesterdayClosed;?></strong></div>
               <?php endif;?>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $build->unclosedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $build->unclosedRate;?>%"></div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $product->unclosedRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $product->unclosedRate;?>%"></div>
               </div>
               <div class="type-info">
                 <div class="type-label">
                   <span><?php echo $lang->bug->unclosed;?></span>
                 </div>
                 <div class="type-value">
-                  <strong><?php echo $build->unclosed;?></strong>
+                  <strong><?php echo $product->unclosed;?></strong>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <?php $buildIndex++;?>
-        <?php endforeach;?>
       </div>
       <?php $index++;?>
       <?php endforeach;?>
