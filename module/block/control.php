@@ -442,8 +442,9 @@ class block extends control
                 $this->view->sign = strpos($sso, '?') === false ? '?' : '&';
             }
 
-            $block = $this->block->getByID($id);
-            $this->view->longBlock = $this->block->isLongBlock($block);
+            if($id) $block = $this->block->getByID($id);
+            $this->view->longBlock = $this->block->isLongBlock($id ? $block : $params);
+            $this->view->selfCall  = $this->selfCall;
 
             $this->viewType    = (isset($params->viewType) and $params->viewType == 'json') ? 'json' : 'html';
             $this->params      = $params;

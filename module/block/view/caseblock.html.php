@@ -22,7 +22,7 @@
   .case-status-blocked { color: #a6aab8; }
   .case-status-investigate {color: #a6aab8;}
   </style>
-  <table class='table table-borderless table-hover table-fixed-head tablesorter block-cases <?php if(!$longBlock) echo 'block-sm';?>'>
+  <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter block-cases <?php if(!$longBlock) echo 'block-sm';?>'>
     <thead>
       <tr class='text-center'>
         <?php if($longBlock):?>
