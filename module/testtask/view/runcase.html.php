@@ -67,7 +67,7 @@
         </td>
         <?php if($step->type != 'group'):?>
         <td class='text-left'><?php echo nl2br($step->expect);?></td>
-        <td class='text-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, 'pass', "class='form-control'");?></td>
+        <td class='text-center'><?php echo html::select("steps[$step->id]", $lang->testcase->resultList, 'pass', "class='form-control' onchange='checkStepValue(this.value)'");?></td>
         <td>
           <table class='w-p100'>
             <tr>
