@@ -17,7 +17,7 @@
 .block-products.block-sm .c-project {display: none;}
 </style>
 <div class="panel-body has-table scrollbar-hover block-products">
-  <table class='table table-borderless table-hover table-fixed-head tablesorter table-fixed'>
+  <table class='table table-borderless table-hover table-fixed table-fixed-head tablesorter table-fixed'>
     <thead>
       <tr>
         <th class='c-name'><?php echo $lang->product->name;?></th>
