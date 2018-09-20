@@ -1,6 +1,6 @@
 .branch-list {padding-left: 0; margin: 0;}
 .branch-list > li {float: left; list-style: none; width: 50%; margin: 5px 0;}
 .data-basic.table-data tbody > tr > th {width: 80px;}
-.block-release .panel-body, .block-dynamic .panel-body {height: 240px; overflow: auto; position: relative;}
+.block-release .panel-body, .block-dynamic .panel-body {height: 240px; overflow-x: hidden; overflow-y: auto; position: relative;}
 .block-release .panel-body {padding-bottom: 50px;}
 .block-release .panel-body > .btn.pull-right {position: absolute; right: 20px; bottom: 20px;}
