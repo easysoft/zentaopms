@@ -306,29 +306,20 @@ class groupModel extends model
      */
     public function updateUser($groupID)
     {
-        $userGroups = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->fetchPairs('account', 'account');
+        $groupUsers = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->fetchPairs('account');
+        $newUsers   = array_diff($this->post->members, $groupUsers);
+        $delUsers   = array_diff($groupUsers, $this->post->members);
 
-        /* Delete old. */
-        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->exec();
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->andWhere('account')->in($delUsers)->exec();
 
-        /* Insert new. */
-        if($this->post->members)
+        if($newUsers)
         {
-            foreach($this->post->members as $account)
+            foreach($newUsers as $account)
             {
                 $data          = new stdclass();
                 $data->account = $account;
                 $data->group   = $groupID;
                 $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
-
-                if(isset($userGroups[$account]))
-                {
-                    unset($userGroups[$account]);
-                }
-                else
-                {
-                    $userGroups[$account] = $account;
-                }
             }
         }
 
