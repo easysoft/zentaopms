@@ -1223,6 +1223,7 @@ class block extends control
             $this->view->bugs = $bugs;
         }
 
+        $this->view->selfCall    = $this->selfCall;
         $this->view->hasViewPriv = $hasViewPriv;
         $this->view->longBlock   = $longBlock;
         $this->display();
