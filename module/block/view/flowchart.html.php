@@ -10,12 +10,12 @@
 </div>
 <style>
 .block-flowchart .panel-body {padding: 0 30px 0 20px;}
-.flow-item {float: left; width: 16.66667%; max-width: 180px; text-align: center; margin-bottom: 9px; padding-right: 5px;}
+.flow-item {float: left; width: 16.66667%; max-width: 180px; text-align: center; margin-bottom: 9px; padding-right: 15px;}
 .flow-item > div {position: relative; padding: 5px 0 5px 8px; line-height: 20px; background: #E8EBEF; white-space:nowrap; overflow: visible; color: #3c4353}
-.flow-item > div:before, .flow-item > div:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 15px; border-color: transparent transparent transparent #E8EBEF; position: absolute; left: 0; top: 0}
+.flow-item > div:before, .flow-item > div:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 15px 0 15px 10px; border-color: transparent transparent transparent #E8EBEF; position: absolute; left: 0; top: 0;}
 .ie-8 .flow-item > div:before {display: none}
 .flow-item > div:before {border-left-color: #fff; z-index: 1}
-.flow-item > div:after {left: auto; right: -14px; z-index: 2}
+.flow-item > div:after {left: auto; right: -10px; z-index: 2}
 .ie-8 .flow-item > div {margin-right: 10px}
 .flow-item-0 > div {color: #838A9D; font-weight: bold; padding-left: 0;}
 .flow-item-0 > div:before {display: none}
@@ -40,6 +40,7 @@
 .flow-item-5 > div:hover {background: #9C27B0; color: #fff;}
 .flow-item-5 > div:hover:after {border-left-color: #9C27B0}
 
+.block-sm .flow-item {padding-right: 5px}
 .block-sm .flow-item > div:before, .block-sm .flow-item > div:after {border-width: 15px 0 15px 6px;}
 .block-sm .row-3 .flow-item-1, .block-sm .row-3 .flow-item-3 {width: 25%}
 .block-sm .flow-item > div:after {right: -6px;}
