@@ -435,7 +435,10 @@ class block extends control
                     $this->app->user = new stdclass();
                     $this->app->user->account = 'guest';
                 }
+                $this->app->user->admin  = strpos($this->app->company->admins, ",{$this->app->user->account},") !== false;
                 $this->app->user->rights = $this->loadModel('user')->authorize($this->app->user->account);
+                $this->app->user->groups = $this->user->getGroups($this->app->user->account);
+                $this->app->user->view   = $this->user->grantUserView($this->app->user->account, $this->app->user->rights['acls']);
 
                 $sso = base64_decode($this->get->sso);
                 $this->view->sso  = $sso;
