@@ -1,16 +1,22 @@
+custom = false;
 $(document).on('keyup', 'form textarea', function()
 {
     var preSelect = $(this).closest('table').parent().prev().find('select');
-    if($(this).val() == '' && $(preSelect).val() == 'fail')
+    if($(this).val() == '' && $(preSelect).val() == 'fail' && !custom)
     {
         $(preSelect).val('pass');
     }
-    else if($(this).val() != '' && $(preSelect).val() == 'pass')
+    else if($(this).val() != '' && $(preSelect).val() == 'pass' && !custom)
     {
         $(preSelect).val('fail').parent().addClass('has-error');
         setTimeout(function(){$(preSelect).parent().removeClass('has-error');},'1000');
     }
 })
+
+function checkStepValue(result)
+{
+    if(result == 'pass') custom = true;
+}
 
 /* Delete a file. */
 function deleteFile(fileID)

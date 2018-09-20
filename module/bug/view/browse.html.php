@@ -297,7 +297,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
             <?php else:?>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php
@@ -323,7 +323,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
             <?php else:?>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php
@@ -349,7 +349,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
             <?php else:?>
-            <div class="dropdown-menu">
+            <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php

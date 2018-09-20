@@ -661,7 +661,7 @@ class productModel extends model
         }
 
         /* Get last 5 roadmap. */
-        $lastKeys    = array_slice(array_keys($groupRoadmap), -5);
+        $lastKeys    = array_slice(array_keys($groupRoadmap), 0, 5);
         $lastRoadmap = array();
         $lastRoadmap['total'] = 0;
         foreach($lastKeys as $key)
