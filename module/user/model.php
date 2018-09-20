@@ -851,6 +851,7 @@ class userModel extends model
             ->where('t1.type')->eq('project')
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t2.id_desc')
             ->fetchAll();
 
         /* Judge whether the project is delayed. */

@@ -33,8 +33,8 @@
         <?php foreach($projects as $project):?>
         <?php $projectLink = $this->createLink('project', 'browse', "projectID=$project->id");?>
         <tr class='text-center'>
-          <td><?php echo html::a($projectLink, $project->id);?></td>
-          <td><?php echo $project->code;?></td>
+          <td class='text-left'><?php echo html::a($projectLink, $project->id);?></td>
+          <td class='text-left'><?php echo $project->code;?></td>
           <td class="text-left"><?php echo html::a($projectLink, $project->name);?></td>
           <td><?php echo $project->begin;?></td>
           <td><?php echo $project->end;?></td>
