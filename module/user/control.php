@@ -779,7 +779,11 @@ class user extends control
                 {
                     die(js::error(sprintf($this->lang->user->lockWarning, $remainTimes)));
                 }
-                die(js::error($this->lang->user->loginFailed));
+
+                $errorScript = js::error($this->lang->user->loginFailed);
+                /* Finish task #4851. */
+                if($this->post->verifyRand and !isset($_SESSION['rand'])) $errorScript .= js::reload('parent');
+                die($errorScript);
             }
         }
         else
