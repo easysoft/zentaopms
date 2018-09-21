@@ -164,7 +164,7 @@
   </div>
 </div>
 
-<div id="mainActions">
+<div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>

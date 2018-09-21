@@ -79,7 +79,7 @@ $preLink   = $hasPre ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}
 $nextLink  = $hasNext ? inlink('dynamic', "type=$type&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
-<div id="mainActions">
+<div id="mainActions" class='main-actions'>
   <nav class="container">
     <a id="prevPage" class="btn btn-info<?php if(!$hasNext) echo ' disabled';?>" href="<?php echo $nextLink;?>"><i class="icon icon-chevron-left"></i></a>
     <a id="nextPage" class="btn btn-info<?php if(!$hasPre) echo ' disabled';?>" href="<?php echo $preLink;?>"><i class="icon icon-chevron-right"></i></a>

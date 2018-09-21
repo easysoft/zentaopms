@@ -275,7 +275,7 @@
   </div>
 </div>
 
-<div id="mainActions">
+<div id="mainActions" class='main-actions'>
   <nav class="container"></nav>
   <div class="btn-toolbar">
     <?php
