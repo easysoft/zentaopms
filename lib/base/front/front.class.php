@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -14,16 +14,16 @@
 /**
  * html类，生成html标签。
  * The html class, to build html tags.
- * 
+ *
  * @package framework
  */
 class baseHTML
 {
     /**
      * 生成title标签。
-     * Create the title tag. 
-     * 
-     * @param  mixed $title 
+     * Create the title tag.
+     *
+     * @param  mixed $title
      * @static
      * @access public
      * @return string.
@@ -36,12 +36,12 @@ class baseHTML
     /**
      * 生成meta标签。
      * Create a meta.
-     * 
+     *
      * @param mixed $name   the meta name
      * @param mixed $value  the meta value
      * @static
      * @access public
-     * @return string          
+     * @return string
      */
     public static function meta($name, $value)
     {
@@ -66,12 +66,12 @@ class baseHTML
     /**
      * 创建图标。
      * Create icon.
-     * 
+     *
      * @param name $name  the name of the icon.
      * @param cssClass $class  the extra css class of the icon.
      * @static
      * @access public
-     * @return string          
+     * @return string
      */
     public static function icon($name, $class = '')
     {
@@ -82,9 +82,9 @@ class baseHTML
     /**
      * 生成rss标签。
      * Create the rss tag.
-     * 
-     * @param  string $url 
-     * @param  string $title 
+     *
+     * @param  string $url
+     * @param  string $title
      * @static
      * @access public
      * @return string
@@ -382,8 +382,8 @@ class baseHTML
      *
      * @param  string $name     the name of the text input tag.
      * @param  string $value    the default value.
-     * @param  string $options 
-     * @param  string $attrib 
+     * @param  string $options
+     * @param  string $attrib
      * @static
      * @access public
      * @return void
@@ -402,8 +402,8 @@ class baseHTML
      *
      * @param  string $name     the name of the text input tag.
      * @param  string $value    the default value.
-     * @param  string $options 
-     * @param  string $attrib 
+     * @param  string $options
+     * @param  string $attrib
      * @static
      * @access public
      * @return void
@@ -434,7 +434,7 @@ class baseHTML
     /**
      * 创建提交按钮。
      * Create submit button.
-     * 
+     *
      * @param  string $label    the label of the button
      * @param  string $class    the class of the button
      * @param  string $misc     other params
@@ -455,9 +455,9 @@ class baseHTML
     /**
      * 创建重置按钮。
      * Create reset button.
-     * 
-     * @param  string $label 
-     * @param  string $class 
+     *
+     * @param  string $label
+     * @param  string $class
      * @static
      * @access public
      * @return string the reset button tag.
@@ -474,10 +474,10 @@ class baseHTML
 
     /**
      * 创建返回按钮。
-     * Back button. 
-     * 
-     * @param  string $label 
-     * @param  string $misc 
+     * Back button.
+     *
+     * @param  string $label
+     * @param  string $misc
      * @static
      * @access public
      * @return string the back button tag.
@@ -498,7 +498,7 @@ class baseHTML
     /**
      * 创建通用按钮。
      * Create common button.
-     * 
+     *
      * @param  string $label the label of the button
      * @param  string $class the class of the button
      * @param  string $misc  other params
@@ -516,7 +516,7 @@ class baseHTML
     /**
      * 创建一个带有链接的按钮。
      * create a button, when click, go to a link.
-     * 
+     *
      * @param  string $label    the link title
      * @param  string $link     the link url
      * @param  string $class    the link style
@@ -552,7 +552,7 @@ class baseHTML
     /**
      * 创建全选标签。
      * Create tags like "<input type='$type' onclick='selectAll()'/>"
-     * 
+     *
      * @param  string  $scope  the scope of select all.
      * @param  string  $type   the type of input tag.
      * @param  boolean $checked if the type is checkbox, set the checked attribute.
@@ -566,19 +566,19 @@ class baseHTML
         $string = <<<EOT
 <script>
 function selectAll(checker, scope, type)
-{ 
+{
     if(scope)
     {
         if(type == 'button')
         {
-            $('#' + scope + ' input').each(function() 
+            $('#' + scope + ' input').each(function()
             {
                 $(this).prop("checked", true)
             });
         }
         else if(type == 'checkbox')
         {
-            $('#' + scope + ' input').each(function() 
+            $('#' + scope + ' input').each(function()
             {
                 $(this).prop("checked", checker.checked)
             });
@@ -588,14 +588,14 @@ function selectAll(checker, scope, type)
     {
         if(type == 'button')
         {
-            $('input:checkbox').each(function() 
+            $('input:checkbox').each(function()
             {
                 $(this).prop("checked", true)
             });
         }
         else if(type == 'checkbox')
-        { 
-            $('input:checkbox').each(function() 
+        {
+            $('input:checkbox').each(function()
             {
                 $(this).prop("checked", checker.checked)
             });
@@ -620,7 +620,7 @@ EOT;
     /**
      * 创建反选标签。
      * Create tags like "<input type='button' onclick='selectReverse()'/>"
-     * 
+     *
      * @param  string $scope  the scope of select reverse.
      * @static
      * @access public
@@ -631,17 +631,17 @@ EOT;
         $string = <<<EOT
 <script type="text/javascript">
 function selectReverse(scope)
-{ 
+{
     if(scope)
     {
-        $('#' + scope + ' input').each(function() 
+        $('#' + scope + ' input').each(function()
         {
             $(this).prop("checked", !$(this).prop("checked"))
         });
     }
     else
     {
-        $('input:checkbox').each(function() 
+        $('input:checkbox').each(function()
         {
             $(this).prop("checked", !$(this).prop("checked"))
         });
@@ -658,10 +658,10 @@ EOT;
     /**
      * 创建全选、反选按钮组。
      * Create select buttons include 'selectAll' and 'selectReverse'.
-     * 
+     *
      * @param  string $scope  the scope of select reverse.
-     * @param  bool   $asGroup 
-     * @param  string $appendClass 
+     * @param  bool   $asGroup
+     * @param  string $appendClass
      * @static
      * @access public
      * @return string
@@ -697,7 +697,7 @@ EOT;
     /**
      * 打印星星。
      * Print the star images.
-     * 
+     *
      * @param  float    $stars 0 1 1.5 2 2.5 3 3.5 4 4.5 5
      * @access public
      * @static
@@ -729,7 +729,7 @@ EOT;
 /**
  * JS类。
  * JS class.
- * 
+ *
  * @package front
  */
 class baseJS
@@ -737,8 +737,8 @@ class baseJS
     /**
      * 引入一个js文件。
      * Import a js file.
-     * 
-     * @param  string $url 
+     *
+     * @param  string $url
      * @param  string $ieParam    like 'lt IE 9'
      * @static
      * @access public
@@ -758,9 +758,9 @@ class baseJS
 
     /**
      * 开始输出js。
-     * The start of javascript. 
-     * 
-     * @param  bool   $full 
+     * The start of javascript.
+     *
+     * @param  bool   $full
      * @static
      * @access public
      * @return string
@@ -773,9 +773,9 @@ class baseJS
 
     /**
      * 结束输出js。
-     * The end of javascript. 
-     * 
-     * @param  bool    $newline 
+     * The end of javascript.
+     *
+     * @param  bool    $newline
      * @static
      * @access public
      * @return void
@@ -788,10 +788,10 @@ class baseJS
 
     /**
      * 显示一个警告框。
-     * Show a alert box. 
-     * 
-     * @param  string $message 
-     * @param  bool   $full 
+     * Show a alert box.
+     *
+     * @param  string $message
+     * @param  bool   $full
      * @static
      * @access public
      * @return string
@@ -803,8 +803,8 @@ class baseJS
 
     /**
      * 关闭浏览器窗口。
-     * Close window 
-     * 
+     * Close window
+     *
      * @static
      * @access public
      * @return void
@@ -817,9 +817,9 @@ class baseJS
     /**
      * 显示错误信息。
      * Show error info.
-     * 
-     * @param  string|array $message 
-     * @param  bool         $full 
+     *
+     * @param  string|array $message
+     * @param  bool         $full
      * @static
      * @access public
      * @return string
@@ -843,15 +843,15 @@ class baseJS
 
     /**
      * 重置禁用的提交按钮。
-     * Reset the submit form. 
-     * 
+     * Reset the submit form.
+     *
      * @static
      * @access public
      * @return string
      */
     static public function resetForm()
     {
-        return self::start() . 'if(window.parent) window.parent.document.body.click();' . self::end();
+        return self::start() . 'if(window.parent) window.parent.$.enableForm();' . self::end();
     }
 
     /**
@@ -939,7 +939,7 @@ EOT;
     /**
      * 关闭当前窗口。
      * Close current window.
-     * 
+     *
      * @static
      * @access public
      * @return string
@@ -989,8 +989,8 @@ EOT;
      * 用Javascript关闭colorbox弹出框。
      * Close colorbox in javascript.
      * This is a obsolete method, you can use 'closeModal' instead.
-     * 
-     * @param  string $window 
+     *
+     * @param  string $window
      * @static
      * @access public
      * @return string
@@ -1003,10 +1003,10 @@ EOT;
     /**
      * 用Javascript关闭模态框。
      * Close modal with javascript.
-     * 
-     * @param  string $window 
-     * @param  string $location 
-     * @param  string $callback 
+     *
+     * @param  string $window
+     * @param  string $location
+     * @param  string $callback
      * @static
      * @access public
      * @return string
@@ -1023,7 +1023,7 @@ EOT;
     /**
      * 导出$config到js，因为js的createLink()方法需要获取config信息。
      * Export the config vars for createLink() js version.
-     * 
+     *
      * @static
      * @access public
      * @return void
@@ -1079,8 +1079,8 @@ EOT;
     /**
      * 执行js代码。
      * Execute some js code.
-     * 
-     * @param string $code 
+     *
+     * @param string $code
      * @static
      * @access public
      * @return string
@@ -1096,9 +1096,9 @@ EOT;
     /**
      * 设置Javascript变量值。
      * Set js value.
-     * 
-     * @param  string   $key 
-     * @param  mix      $value 
+     *
+     * @param  string   $key
+     * @param  mix      $value
      * @static
      * @access public
      * @return string
@@ -1112,7 +1112,7 @@ EOT;
         $js  = self::start(false);
         if(!$viewOBJOut and $prefix)
         {
-            $js .= 'if(typeof(v) != "object") v = {};'; 
+            $js .= 'if(typeof(v) != "object") v = {};';
             $viewOBJOut = true;
         }
 
@@ -1161,8 +1161,8 @@ class baseCSS
     /**
      * 引入css文件。
      * Import a css file.
-     * 
-     * @param  string $url 
+     *
+     * @param  string $url
      * @access public
      * @return void
      */
@@ -1176,8 +1176,8 @@ class baseCSS
     /**
      * 打印css代码。
      * Print a css code.
-     * 
-     * @param  string    $css 
+     *
+     * @param  string    $css
      * @static
      * @access public
      * @return void

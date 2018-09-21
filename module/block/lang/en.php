@@ -34,6 +34,7 @@ $lang->block->dynamic      = 'Dynamic';
 $lang->block->assignToMe   = 'Assign To Me';
 $lang->block->lblFlowchart = 'Workflow';
 $lang->block->welcome      = 'Welcome';
+$lang->block->lblTesttask  = 'Show test task';
 
 $lang->block->leftToday = 'Works for Today';
 $lang->block->myTask    = 'My Task';

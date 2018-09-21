@@ -396,7 +396,7 @@ class product extends control
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
         $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
-        $this->view->plans      = $this->loadModel('productplan')->getList($productID, 0, 'unexpired', null, 'begin');
+        $this->view->roadmap    = $this->product->getRoadmap($productID, 0, 6);
 
         $this->display();
     }
