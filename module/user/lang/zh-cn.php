@@ -76,6 +76,7 @@ $lang->user->bug         = 'Bug';
 $lang->user->test        = '测试';
 $lang->user->testTask    = '测试任务';
 $lang->user->testCase    = '测试用例';
+$lang->user->schedule    = '日程';
 $lang->user->todo        = '待办';
 $lang->user->story       = '需求';
 $lang->user->dynamic     = '动态';
