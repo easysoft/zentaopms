@@ -2450,8 +2450,20 @@ class taskModel extends model
                 case 'assignedTo':
                     $btnTextClass   = '';
                     $assignedToText = zget($users, $task->assignedTo);
+
+                    if(empty($task->assignedTo))
+                    {
+                        $btnTextClass   = 'text-primary';
+                        $assignedToText = $this->lang->task->noAssigned;
+                    }
                     if($task->assignedTo == $account) $btnTextClass = 'text-red';
-                    echo "<span class='{$btnTextClass}'>{$assignedToText}</span>";
+
+                    $btnClass     = $assignedToText == 'closed' ? ' disabled' : '';
+                    $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+                    $assignToLink = helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true);
+                    $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+
+                    echo !common::hasPriv('task', 'assignTo') ? "<span style='padding-left:25px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml; 
                     break;
                 case 'assignedDate':
                     echo substr($task->assignedDate, 5, 11);
@@ -2511,8 +2523,6 @@ class taskModel extends model
                         common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
                         break;
                     }
-
-                    common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
                     if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                     if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);

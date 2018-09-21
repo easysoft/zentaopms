@@ -2428,6 +2428,8 @@ class upgradeModel extends model
                }
             }
         }
+
+        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('key')->eq('full_project')->exec();
         return !dao::isError();
     }
 
