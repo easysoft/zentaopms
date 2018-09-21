@@ -14,3 +14,8 @@
 .segment-value {font-weight: bold;}
 
 .group-menu > .dropdown > .dropdown-menu{right: 0; width: 100%;}
+
+.table-grouped .c-side {padding: 8px;}
+.table-grouped .c-side > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}
+.table-grouped .c-side .groupSummary {margin-top: 10px; line-height: 24px;}
+.main-table > .table {box-shadow: none}
