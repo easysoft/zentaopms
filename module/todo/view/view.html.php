@@ -119,7 +119,7 @@
     </div>
   </div>
 </div>
-<div id="mainActions">
+<div id="mainActions" class='main-actions'>
   <div class="container"></div>
   <div class="btn-toolbar">
     <?php
