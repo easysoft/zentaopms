@@ -5,7 +5,6 @@ function setCopyProject(projectID)
 
 $(function()
 {
-    $('#cpmBtn').click(function(){$('#copyProjectModal').modal('show')});
     $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
     $('#begin').on('change', function()
     {

@@ -172,12 +172,14 @@
       <?php $taskLink        = $this->createLink('task','view',"taskID=$task->id"); ?>
       <tr data-id='<?php echo $groupIndex?>' <?php if($groupIndex > 1 and $i == 0) echo "class='divider-top'";?>>
         <?php if($i == 0):?>
-        <td rowspan='<?php echo $groupSum?>' class='c-side text-left group-toggle text-top'>
-          <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='text-primary' title='$groupName'");?>
-          <div class='groupSummary small'>
+        <td rowspan='<?php echo $groupSum?>' class='c-side text-left group-toggle text-top<?php if($groupSum > 4) echo ' c-side-lg'?>'>
+          <div class='group-header'>
+            <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='text-primary' title='$groupName'");?>
+            <div class='groupSummary small'>
 
-          <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHoursAB, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
-          <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?>
+            <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHoursAB, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
+            <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?>
+            </div>
           </div>
         </td>
         <?php endif;?>

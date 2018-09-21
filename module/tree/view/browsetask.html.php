@@ -14,7 +14,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->taskList ? $this->session->taskList : 'javascript:history.go(-1)';?>
-    <a href="<?php echo $backLink;?>" class="btn btn-link">
+    <a href="<?php echo $backLink;?>" class="btn btn-secondary">
       <i class="icon icon-back icon-sm"></i> <?php echo $lang->goback;?>
     </a>
     <div class="divider"></div>
