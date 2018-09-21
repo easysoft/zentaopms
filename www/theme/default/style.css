@@ -10,6 +10,4 @@
 */
 
 /* Finish task #4751. */
-.hide-sidebar #sidebar .cell{display:none;}
-/* 调整每个创建页面的宽度*/
-.main-content{padding:30px;}
+.hide-sidebar #sidebar .cell {display:none;}
