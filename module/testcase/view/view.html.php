@@ -15,7 +15,7 @@
 <?php $browseLink  = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-primary'");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <div class="page-title">
       <span class='label label-id'><?php echo $case->id;?></span>
@@ -33,7 +33,7 @@
         for($i = $case->version; $i >= 1; $i --)
         {
             $class = $i == $version ? " class='active'" : '';
-            echo '<li' . $class .'>' . html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i) . '</li>'; 
+            echo '<li' . $class .'>' . html::a(inlink('view', "caseID=$case->id&version=$i"), '#' . $i) . '</li>';
         }
         ?>
         </ul>
@@ -115,7 +115,7 @@
             <tr>
               <th><?php echo $lang->testcase->module;?></th>
               <td>
-                <?php 
+                <?php
                 if(empty($modulePath))
                 {
                     echo "/";
@@ -154,7 +154,7 @@
             <tr>
               <th><?php echo $lang->testcase->stage;?></th>
               <td>
-                <?php 
+                <?php
                 if($case->stage)
                 {
                     $stags = explode(',', $case->stage);
@@ -175,7 +175,7 @@
             <tr>
               <th><?php echo $lang->testcase->status;?></th>
               <td>
-                <?php 
+                <?php
                 echo $lang->testcase->statusList[$case->status];
                 if($case->version > $case->currentVersion and $from == 'testtask')
                 {
@@ -236,8 +236,8 @@
             <tr>
               <th class='w-60px' valign="top"><?php echo $lang->testcase->toBug;?></th>
               <td>
-              <?php 
-              foreach($case->toBugs as $bugID => $bugTitle) 
+              <?php
+              foreach($case->toBugs as $bugID => $bugTitle)
               {
                   echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), $bugTitle, '', "class='iframe' data-width='80%'") . '</p>';
               }

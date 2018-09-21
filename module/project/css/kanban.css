@@ -39,3 +39,6 @@
 #kanban .fix-table-copy-wrapper th.c-board {color: #eee;}
 #kanban .fix-table-copy-wrapper th.c-board .btn-link {color: #fff;}
 #kanban .group-title {word-break: break-all; line-height: 16px; padding: 3px 0; display: block;}
+
+.table-grouped > tbody > tr,
+.table-grouped > tbody > tr:hover {background: #fff!important;}
