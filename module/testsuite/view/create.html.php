@@ -25,7 +25,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testsuite->desc;?></th>
-          <td><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testsuite->author;?></th>
