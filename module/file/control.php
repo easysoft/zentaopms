@@ -108,7 +108,7 @@ class file extends control
                 die(json_encode(array('status' => 'error', 'message' => $error)));
             }
         }
-        die(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+        die(json_encode(array('status' => 'error', 'message' => $this->lang->file->uploadImagesExplain)));
     }
 
     /**
