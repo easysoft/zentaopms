@@ -44,8 +44,8 @@ $common->checkPriv();
 $app->loadModule();
 
 $output = json_decode(ob_get_clean());
-$data   = new  stdClass();
-$data->status = $output->status;
+$data   = new stdClass();
+$data->status = isset($output->status) ? $output->status : $output->result;
 if(isset($output->message)) $data->message = $output->message;
 if(isset($output->data))    $data->data    = json_decode($output->data);
 $output = json_encode($data);
