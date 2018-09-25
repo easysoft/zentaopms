@@ -2407,7 +2407,7 @@ class taskModel extends model
                     break;
                 case 'name':
                     if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-gray'>" . $modulePairs[$task->module] . '</span> ';
+                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray'>" . $modulePairs[$task->module] . '</span> ';
                     if($child or !empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';
                     if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
