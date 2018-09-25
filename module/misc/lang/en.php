@@ -12,7 +12,7 @@
 $lang->misc = new stdclass();
 $lang->misc->common = 'Misc';
 $lang->misc->ping   = 'Ping';
-$lang->misc->api    = 'http://api.zentao.net';
+$lang->misc->api    = 'https://api.zentao.net';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
