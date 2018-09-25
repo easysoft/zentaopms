@@ -25,7 +25,7 @@
 #steps .step textarea.autosize{resize:none;}
 
 .table-bordered .step-actions {width: 105px;}
-.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important; border-left-style: dotted!important; border-right-style: dotted!important;}
+.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important;}
 .table-bordered > #steps > tr > td.step-id { padding-right: 8px;}
 .table-bordered > #steps > tr > td .btn {border-color: transparent; background-color: transparent}
 .table-bordered > #steps > tr > td .btn:hover,
