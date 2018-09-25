@@ -76,6 +76,42 @@ class file extends control
     }
 
     /**
+     * @access public
+     * @return void
+     */
+    public function apiUpload($uid = '')
+    {
+        $file = $this->file->getUpload('file');
+        $file = $file[0];
+        if($file)
+        {
+            if($file['size'] == 0) die(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+            if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+            {
+                /* Compress image for jpg and bmp. */
+                $file = $this->file->compressImage($file);
+
+                $file['addedBy']    = $this->app->user->account;
+                $file['addedDate']  = helper::today();
+                unset($file['tmpname']);
+                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+                $_SERVER['SCRIPT_NAME'] = 'index.php';
+                $fileID = $this->dao->lastInsertID();
+                $url    = $this->createLink('file', 'read', "fileID=$fileID", $file['extension']);
+                if($uid) $_SESSION['album'][$uid][] = $fileID;
+                die(json_encode(array('status' => 'seccess', 'data' => commonModel::getSysURL() . $this->config->webRoot . $url)));
+            }
+            else
+            {
+                $error = strip_tags(sprintf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath));
+                die(json_encode(array('status' => 'error', 'message' => $error)));
+            }
+        }
+        die(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+    }
+
+    /**
      * AJAX: get upload request from the web editor.
      *
      * @access public
