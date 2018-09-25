@@ -11,9 +11,6 @@
 
 /* Finish task #4751. */
 .hide-sidebar #sidebar .cell{display:none;}
-/* 调整每个创建页面的宽度*/
-.main-content{padding:30px;}
-#nextPage, #prevPage{background-color:#909090;color:#fff}
 
 .table-header.fixed-right>.btn-toolbar{top:0px;}
 .c-assignedTo .icon-hand-right {opacity:0;}
