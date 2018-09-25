@@ -2376,7 +2376,7 @@ class taskModel extends model
             if($id == 'name')   $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo') $class .= ' has-btn text-left';
-            if(strpos('consumed,left,progress', $id) !== false) $class .= ' text-right';
+            if(strpos('progress', $id) !== false) $class .= ' text-right';
 
             $title = '';
             if($id == 'name')
@@ -2407,7 +2407,7 @@ class taskModel extends model
                     break;
                 case 'name':
                     if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-info label-gray'>" . $modulePairs[$task->module] . '</span> ';
+                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray'>" . $modulePairs[$task->module] . '</span> ';
                     if($child or !empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';
                     if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
@@ -2463,7 +2463,7 @@ class taskModel extends model
                     $assignToLink = helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true);
                     $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
-                    echo !common::hasPriv('task', 'assignTo') ? "<span style='padding-left:25px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml; 
+                    echo !common::hasPriv('task', 'assignTo') ? "<span style='padding-left:25px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
                     break;
                 case 'assignedDate':
                     echo substr($task->assignedDate, 5, 11);

@@ -4,7 +4,7 @@
 <?php if(!empty($lang->datatable)):?>
 <style>
 .datatable {margin-bottom: 0;}
-.datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 3px; padding-bottom: 3px; height: 40px; vertical-align: middle; white-space: nowrap;}
+.datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 2px; padding-bottom: 2px; height: 36px; vertical-align: middle; white-space: nowrap;}
 .datatable .table>tbody>tr.hover {box-shadow: none!important;}
 .datatable .flexarea .table-children,
 .datatable .fixed-left .table-children {border-right: none;}
@@ -22,7 +22,7 @@
 .datatable .flexarea tbody>tr.checked>td:first-child:before,
 .datatable .fixed-right tbody>tr.checked>td:first-child:before {display: none}
 .datatable>.scroll-wrapper {z-index: 10;}
-.has-fixed-footer .scroll-wrapper {bottom: 97px; position: fixed;}
+.has-fixed-footer .scroll-wrapper {bottom: 95px; position: fixed;}
 .datatable .flexarea thead>tr>th:first-child,
 .datatable .flexarea tbody>tr>td:first-child,
 .datatable .fixed-right thead>tr>th:first-child,
