@@ -11,10 +11,3 @@
 
 /* Finish task #4751. */
 .hide-sidebar #sidebar .cell{display:none;}
-
-.c-assignedTo .icon-hand-right {opacity:0;}
-.c-assignedTo a:hover .icon-hand-right {opacity:1;}
-.main-table tbody>tr:nth-child(odd) .c-assignedTo .btn{background-color:#f5f5f5;}
-.main-table tbody>tr:hover .c-assignedTo .btn {background-color:#e9f2fb;}
-.main-table tbody>tr>td.col-hover.c-assignedTo .btn {background-color:#e9f2fb;}
-.main-table thead>tr>th.c-assignedTo {padding-left:35px;}
