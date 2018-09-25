@@ -62,7 +62,7 @@
       <tr data-id='<?php echo $groupIndex;?>' <?php if($i == 0) echo "class='divider-top'";?>>
         <?php if($i == 0):?>
         <td rowspan='<?php echo count($groupTasks);?>' class='c-side text-left group-toggle text-top'>
-          <?php echo html::a('###', "<i class='icon-caret-down'></i> $groupName", '', "class='text-primary'");?>
+          <div class='group-header'><?php echo html::a('###', "<i class='icon-caret-down'></i> $groupName", '', "class='text-primary'");?></div>
         </td>
         <?php endif;?>
         <td class='c-id-sm'><?php echo sprintf('%03d', $case->id);?></td>
