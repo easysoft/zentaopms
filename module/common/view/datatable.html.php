@@ -4,7 +4,7 @@
 <?php if(!empty($lang->datatable)):?>
 <style>
 .datatable {margin-bottom: 0;}
-.datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 3px; padding-bottom: 3px; height: 40px; vertical-align: middle; white-space: nowrap;}
+.datatable .table>tbody>tr>td, .datatable .table>thead>tr>th {line-height: 30px; padding-top: 2px; padding-bottom: 2px; height: 36px; vertical-align: middle; white-space: nowrap;}
 .datatable .table>tbody>tr.hover {box-shadow: none!important;}
 .datatable .flexarea .table-children,
 .datatable .fixed-left .table-children {border-right: none;}
