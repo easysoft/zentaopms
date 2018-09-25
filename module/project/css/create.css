@@ -10,8 +10,6 @@
 #copyProjectModal a.active:after {position: absolute; content: '\e92f'; font-family: ZentaoIcon; font-size: 20px; right: 25px;}
 #copyProjectModal a.cancel {color: #ff5d5d}
 
-.modal-dialog {margin-top: 10%!important;}
-
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {margin-top: 1px;}
 
 .type-tips {display: none;}

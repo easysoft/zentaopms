@@ -76,6 +76,7 @@ $lang->user->bug         = 'Bug';
 $lang->user->test        = 'Test';
 $lang->user->testTask    = 'TestTask';
 $lang->user->testCase    = 'TestCase';
+$lang->user->schedule    = 'Calendar';
 $lang->user->todo        = 'Todo';
 $lang->user->story       = 'Story';
 $lang->user->dynamic     = 'Dynamic';

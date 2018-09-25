@@ -33,7 +33,7 @@
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
 </div>
-  
+
 <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
 <div id='mainContent' class='main-content'>
   <div id='dynamics'>
@@ -81,7 +81,7 @@ $preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&re
 $nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
-<div id="mainActions">
+<div id="mainActions" class='main-actions'>
   <nav class="container">
     <a id="prevPage" class="btn btn-info<?php if(!$hasNext) echo ' disabled';?>" href="<?php echo $nextLink;?>"><i class="icon icon-chevron-left"></i></a>
     <a id="nextPage" class="btn btn-info<?php if(!$hasPre) echo ' disabled';?>" href="<?php echo $preLink;?>"><i class="icon icon-chevron-right"></i></a>

@@ -16,7 +16,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-primary'");?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">
@@ -319,7 +319,7 @@ $params        = "bugID=$bug->id";
 $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
 $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
 ?>
-<div id="mainActions">
+<div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
   <div class="btn-toolbar">
     <?php common::printBack($browseLink);?>

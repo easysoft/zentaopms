@@ -39,3 +39,6 @@
 #kanban .fix-table-copy-wrapper {overflow: visible!important;}
 #kanban .fix-table-copy-wrapper th.c-board {color: #eee;}
 .story-estimate{margin-right: 5px;}
+
+.table-grouped > tbody > tr,
+.table-grouped > tbody > tr:hover {background: #fff!important;}

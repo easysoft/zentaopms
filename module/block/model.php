@@ -157,14 +157,19 @@ class blockModel extends model
     {
         $data = array();
 
-        $projects = $this->loadModel('project')->getPairs();
-        $products = $this->loadModel('product')->getPairs();
-
         $data['tasks']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
         $data['bugs']     = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
         $data['stories']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
-        $data['projects'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)->where('id')->in(array_keys($projects))->andWhere("(status='wait' or status='doing')")->andWhere('deleted')->eq(0)->fetch('count');
-        $data['products'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)->where('status')->ne('closed')->andWhere('id')->in(array_keys($products))->andWhere('deleted')->eq(0)->fetch('count');
+        $data['projects'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
+            ->where("(status='wait' or status='doing')")
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)
+            ->andWhere('deleted')->eq(0)
+            ->fetch('count');
+        $data['products'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)
+            ->where('status')->ne('closed')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)
+            ->andWhere('deleted')->eq(0)
+            ->fetch('count');
 
         $today = date('Y-m-d');
         $data['delayTask'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)
@@ -182,8 +187,8 @@ class blockModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
         $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
-            ->where('id')->in(array_keys($projects))
-            ->andWhere('status')->in('wait,doing')
+            ->where('status')->in('wait,doing')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)
             ->andWhere('end')->lt($today)
             ->andWhere('deleted')->eq(0)
             ->fetch('count');

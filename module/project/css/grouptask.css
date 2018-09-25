@@ -14,3 +14,13 @@
 .segment-value {font-weight: bold;}
 
 .group-menu > .dropdown > .dropdown-menu{right: 0; width: 100%;}
+
+.table-grouped .c-side {padding: 0!important; position: relative; min-height: 100px;}
+.group-header {padding: 8px; position: relative;}
+.group-header > a {line-height: 20px; display: block; max-height: 40px; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden;}
+.group-header > .groupSummary {margin-top: 10px; line-height: 24px;}
+.main-table > .table {box-shadow: none}
+.c-side-lg .group-header {display: flex; flex-direction: column; position: absolute; top: 0; right: 0; left: 0; bottom: 0; justify-content: space-between;}
+.is-firefox .group-header:before {content: ' '; position: absolute; top: 0; right: 0; left: 0; bottom: 0; background: #fff; z-index: 0;}
+.is-firefox .group-header > a,
+.is-firefox .group-header > .groupSummary {position: relative; z-index: 1;}

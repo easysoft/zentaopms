@@ -14,43 +14,12 @@
 class adminModel extends model
 {
     /**
-     * The api agent(use snoopy).
-     * 
-     * @var object   
-     * @access public
-     */
-    public $agent;
-
-    /**
      * The api root.
      * 
      * @var string
      * @access public
      */
     public $apiRoot;
-
-    /**
-     * The construct function.
-     * 
-     * @access public
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setAgent();
-    }
-
-    /**
-     * Set the api agent.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setAgent()
-    {
-        $this->agent = $this->app->loadClass('snoopy');
-    }
 
     /**
      * Post data form  API 
@@ -62,9 +31,7 @@ class adminModel extends model
      */
     public function postAPI($url, $formvars = "")
     {
-        $this->agent->cookies['lang'] = $this->cookie->lang;
-        $this->agent->submit($url, $formvars);
-        return $this->agent->results;
+        return common::http($url, $formvars);
     }
 
     /**
@@ -143,9 +110,7 @@ class adminModel extends model
         $params[$apiConfig->sessionVar]  = $apiConfig->sessionID;
         $params['k'] = $this->getSignature($params);
 
-        $this->agent->cookies['lang'] = $this->cookie->lang;
-        $this->agent->fetch($apiURL . '?' . http_build_query($params));
-        $result = $this->agent->results;
+        $result = common::http($apiURL . '?' . http_build_query($params));
         $result = json_decode($result);
         return $result;
     }

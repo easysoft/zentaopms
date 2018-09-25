@@ -13,5 +13,12 @@
 .hide-sidebar #sidebar .cell{display:none;}
 /* 调整每个创建页面的宽度*/
 .main-content{padding:30px;}
-/* 详情页上一页下一页的样式*/
 #nextPage, #prevPage{background-color:#909090;color:#fff}
+
+.table-header.fixed-right>.btn-toolbar{top:0px;}
+.c-assignedTo .icon-hand-right {opacity:0;}
+.c-assignedTo a:hover .icon-hand-right {opacity:1;}
+.main-table tbody>tr:nth-child(odd) .c-assignedTo .btn{background-color:#f5f5f5;}
+.main-table tbody>tr:hover .c-assignedTo .btn {background-color:#e9f2fb;}
+.main-table tbody>tr>td.col-hover.c-assignedTo .btn {background-color:#e9f2fb;}
+.main-table thead>tr>th.c-assignedTo {padding-left:35px;}

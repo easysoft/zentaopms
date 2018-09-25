@@ -2779,7 +2779,7 @@ class projectModel extends model
                 case 'module':
                     $this->app->loadLang('tree');
                     $html .= "<li class='item-module'>";
-                    $html .= '<a class="tree-toggle"><span class="label label-type">' . (empty($tree->parent) ? $this->lang->tree->module : $this->lang->tree->child) . "</span><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
+                    $html .= "<a class='tree-toggle'><span class='title' title='{$tree->name}'>" . $tree->name . '</span></a>';
                     break;
                 case 'task':
                     $link = helper::createLink('project', 'treeTask', "taskID={$tree->id}");

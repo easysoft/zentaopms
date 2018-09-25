@@ -39,7 +39,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->project->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' id='cpmBtn'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
+        <button type='button' class='btn btn-link' id='cpmBtn' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
@@ -154,7 +154,7 @@
     </form>
   </div>
 </div>
-<div class='modal fade' id='copyProjectModal'>
+<div class='modal fade modal-scroll-inside' id='copyProjectModal'>
   <div class='modal-dialog mw-900px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
