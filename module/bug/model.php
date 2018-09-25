@@ -422,10 +422,9 @@ class bugModel extends model
      */
     public function getPlanBugs($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('plan')->eq((int)$planID)
-            ->andWhere('project')->in(array_keys($projects))
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->beginIF($status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
@@ -1313,10 +1312,9 @@ class bugModel extends model
     public function getUserBugs($account, $type = 'assignedTo', $orderBy = 'id_desc', $limit = 0, $pager = null)
     {
         if(!$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
-        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
-        $bugs     = $this->dao->select('*')->from(TABLE_BUG)
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
-            ->andWhere('project')->in(array_keys($projects))
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->beginIF($type != 'all')->andWhere("`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -1459,11 +1457,10 @@ class bugModel extends model
      */
     public function getProductBugPairs($productID)
     {
-        $projects = $this->loadModel('project')->getPairs('empty|withdelete');
         $bugs = array('' => '');
         $data = $this->dao->select('id, title')->from(TABLE_BUG)
             ->where('product')->eq((int)$productID)
-            ->andWhere('project')->in(array_keys($projects))
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in($this->app->user->view->projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy('id desc')
             ->fetchAll();
@@ -2584,9 +2581,17 @@ class bugModel extends model
                 }
                 break;
             case 'assignedTo':
+                $btnTextClass   = '';
+                $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
                 $btnTextClass   = 'text-primary';
                 if($bug->assignedTo == $account) $btnTextClass = 'text-red';
-                echo "<span class='{$btnTextClass}'>" . zget($users, $bug->assignedTo) . "</span>";
+
+                $btnClass     = $assignedToText == 'closed' ? ' disabled' : '';
+                $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+                $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
+                $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+
+                echo !common::hasPriv('bug', 'assignTo') ? "<span style='padding-left:25px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
                 break;
             case 'assignedDate':
                 echo substr($bug->assignedDate, 5, 11);
@@ -2620,7 +2625,6 @@ class bugModel extends model
                 break;
             case 'actions':
                 $params = "bugID=$bug->id";
-                common::printIcon('bug', 'assignTo',   $params, $bug, 'list', '', '', 'iframe', true);
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
                 common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);

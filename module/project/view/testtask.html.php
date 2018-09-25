@@ -79,7 +79,7 @@
             <div class='small'><span class='text-muted'><?php echo $lang->testtask->allTasks;?></span> <?php echo count($productTasks);?></div>
           </td>
           <?php endif;?>
-          <td class="cell-id">
+          <td class="c-id">
             <?php if($canTestReport):?>
             <?php echo html::checkbox('taskIdList', array($task->id => sprintf('%03d', $task->id)));?>
             <?php else:?>

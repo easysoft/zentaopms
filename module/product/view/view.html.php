@@ -145,7 +145,7 @@
                     <tr>
                       <th><?php echo $lang->product->acl;?></th>
                       <td><em><?php echo $lang->product->aclList[$product->acl];?></em></td>
-                    </tr>  
+                    </tr>
                     <?php if($product->acl == 'custom'):?>
                     <tr>
                       <th><?php echo $lang->product->whitelist;?></th>
@@ -211,7 +211,7 @@
   </div>
 </div>
 
-<div id="mainActions">
+<div id="mainActions" class='main-actions'>
   <nav class="container"></nav>
   <div class="btn-toolbar">
     <?php

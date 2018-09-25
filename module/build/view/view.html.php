@@ -58,7 +58,7 @@ tbody tr td:first-child input{display:none;}
   </div>
   <?php echo $this->fetch('file', 'printFiles', array('files' => $build->files, 'fieldset' => 'true'));?>
   <?php include '../../common/view/action.html.php';?>
-  <div id="mainActions">
+  <div id="mainActions" class='main-actions'>
     <nav class="container"></nav>
     <div class="btn-toolbar">
       <?php

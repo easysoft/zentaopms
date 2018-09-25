@@ -197,5 +197,5 @@ $config->task->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['fixed']    = 'right';
-$config->task->datatable->fieldList['actions']['width']    = '180';
+$config->task->datatable->fieldList['actions']['width']    = '130';
 $config->task->datatable->fieldList['actions']['required'] = 'yes';

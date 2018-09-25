@@ -324,5 +324,5 @@ $config->bug->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
 $config->bug->datatable->fieldList['actions']['title']    = 'actions';
 $config->bug->datatable->fieldList['actions']['fixed']    = 'right';
-$config->bug->datatable->fieldList['actions']['width']    = '190';
+$config->bug->datatable->fieldList['actions']['width']    = '150';
 $config->bug->datatable->fieldList['actions']['required'] = 'yes';
