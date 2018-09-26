@@ -1,13 +1,13 @@
 <?php
 /**
- * The todo block view file of block module of RanZhi.
+ * The todo block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
- * @link        http://www.ranzhi.org
+ * @link        http://www.zentao.net
  */
 if(!$selfCall) die(include('./todolist.html.php'));
 ?>
@@ -73,7 +73,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
           <div class="col-sm-2"></div>
           <div class="col-sm-10">
             <div class="checkbox-primary">
-              <input type="checkbox" name="private" id="private" value="1"> 
+              <input type="checkbox" name="private" id="private" value="1">
               <label for="private"><?php echo $lang->todo->private?></label>
             </div>
           </div>
@@ -124,7 +124,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
                   $block.data('blockTodoes', 1);
                   var $form = $block.find('form');
                   var $titleInput = $form.find('[name="name"]');
-    
+
                   var toggleForm = function(toggle)
                   {
                       if(toggle === undefined)
@@ -172,7 +172,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
       var $todoes = $(obj).closest('.block-todoes');
       var $form   = $(obj).closest('form');
       var $name   = $form.find("input[name='name']").val();
-      if($name == '') 
+      if($name == '')
       {
           $("input[name='name']").addClass('has-error');
           $('#nameLabel').remove();
