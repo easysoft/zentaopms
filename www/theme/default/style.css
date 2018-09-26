@@ -18,3 +18,6 @@
 
 /* 取消历史记录的缩进,与标题对齐*/
 ol, ul { padding-left: 15px; }
+
+.tab-content{padding-top:6px;}
+.side-col .table-data tbody>tr>td, .side-col .table-data tbody>tr>th{padding:3px 8px;}
