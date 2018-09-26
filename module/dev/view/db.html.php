@@ -5,6 +5,7 @@
       <div class="panel panel-sm with-list">
         <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->dev->dbList?></strong></div>
         <?php foreach($lang->dev->groupList as $group => $groupName):?>
+        <?php if(isset($tables[$group])):?>
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($tables[$group] as $subTable => $table):?>
         <?php
@@ -13,6 +14,7 @@
         ?>
         <?php echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
         <?php endforeach;?>
+        <?php endif;?>
         <?php endforeach;?>
       </div>
     </div>
