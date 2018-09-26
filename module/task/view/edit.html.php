@@ -77,7 +77,7 @@
             <?php echo html::hidden('lastEditedDate', $task->lastEditedDate);?>
             <?php echo html::hidden('consumed', $task->consumed);?>
             <?php echo html::submitButton();?>
-            <?php echo html::backButton('', '', 'btn btn-wide');?>
+            <?php echo html::backButton();?>
           </div>
           <?php include '../../common/view/action.html.php';?>
         </div>

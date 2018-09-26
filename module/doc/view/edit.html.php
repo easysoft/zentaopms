@@ -77,7 +77,7 @@
             <?php
             echo html::hidden('editedDate', $doc->editedDate);
             echo html::submitButton();
-            echo html::backButton('', '', 'btn btn-wide');
+            echo html::backButton();
             ?>
           </td>
         </tr>

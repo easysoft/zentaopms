@@ -35,7 +35,7 @@
           <th></th>
           <td class='text-left form-actions' colspan='2'>
             <?php echo html::submitButton();?>
-            <?php echo html::backButton('', '', 'btn btn-wide');?>
+            <?php echo html::backButton();?>
           </td>
         </tr>
       </table>

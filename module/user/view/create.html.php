@@ -85,7 +85,7 @@
         <tr>
           <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton();?>
-            <?php echo html::backButton('', '', 'btn btn-wide');?>
+            <?php echo html::backButton();?>
           </td>
         </tr>
       </table>
