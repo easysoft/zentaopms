@@ -20,9 +20,8 @@
     <div class='text-left'>
       <div class='container mw-500px'>
         <p class='text-danger'><?php echo $error;?></p>
+        <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href', 'btn btn-primary');?>
       </div>
-      <hr class='small'>
-      <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
     </div>
     <?php else:?>
     <form method='post' target='hiddenwin' enctype='multipart/form-data' style='padding: 20px 20%'>

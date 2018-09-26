@@ -31,7 +31,7 @@
         <p class='text-danger'><?php echo $error;?></p>
       </div>
       <hr>
-      <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?>
+      <?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href', 'btn btn-primary');?>
     </div>
     <?php elseif(isset($license)):?>
     <div class='text-left'>
