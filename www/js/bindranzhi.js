@@ -20,3 +20,8 @@ function setOuterBox()
     $(window).resize(resetOuterHeight);
     resetOuterHeight();
 }
+
+if($('#pageNav').html() == '')
+{
+    $('#subNavbar ul').css('margin-left', '-10px');
+}
