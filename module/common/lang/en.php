@@ -659,8 +659,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     /* Adjust sub menu of project  module. */
     unset($lang->project->menu->story);
     unset($lang->project->menu->build);
-    unset($lang->project->menu->bug);
-    unset($lang->project->menu->testtask);
+    unset($lang->project->menu->qa);
     unset($lang->project->menu->product);
     unset($lang->project->menu->doc);
 
