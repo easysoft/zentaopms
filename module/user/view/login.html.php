@@ -82,7 +82,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
       <div class="table-col text-middle text-center">
         <div id="poweredby">
           <?php if($config->checkVersion):?>
-          <?php $siteURL = 'http://api.zentao.net';?>
+          <?php $siteURL = 'https://api.zentao.net';?>
           <iframe id='updater' class='hidden' frameborder='0' width='100%' scrolling='no' allowtransparency='true' src="<?php echo $siteURL;?>/updater-isLatest-<?php echo $config->version;?>-<?php echo $s;?>.html?lang=<?php echo str_replace('-', '_', $this->app->getClientLang())?>"></iframe>
           <?php endif;?>
         </div>

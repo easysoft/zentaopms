@@ -13,7 +13,7 @@
  */
 /* Set the error reporting. */
 error_reporting(0);
-
+define('RUN_MODE', 'api');
 /* Start output buffer. */
 ob_start();
 
@@ -44,7 +44,11 @@ $common->checkPriv();
 $app->loadModule();
 
 $output = json_decode(ob_get_clean());
-$output = json_encode($output->data);
+$data   = new stdClass();
+$data->status = isset($output->status) ? $output->status : $output->result;
+if(isset($output->message)) $data->message = $output->message;
+if(isset($output->data))    $data->data    = json_decode($output->data);
+$output = json_encode($data);
 
 unset($_SESSION['ENTRY_CODE']);
 unset($_SESSION['VALID_ENTRY']);
