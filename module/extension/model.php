@@ -17,14 +17,6 @@ class extensionModel extends model
     const EXT_MANAGER_VERSION = '1.3';
 
     /**
-     * The api agent(use snoopy).
-     * 
-     * @var object   
-     * @access public
-     */
-    public $agent;
-
-    /**
      * The api root.
      * 
      * @var string
@@ -41,20 +33,8 @@ class extensionModel extends model
     public function __construct()
     {
         parent::__construct();
-        $this->setAgent();
         $this->setApiRoot();
         $this->classFile = $this->app->loadClass('zfile');
-    }
-
-    /**
-     * Set the api agent.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setAgent()
-    {
-        $this->agent = $this->app->loadClass('snoopy');
     }
 
     /**
@@ -78,8 +58,7 @@ class extensionModel extends model
     public function fetchAPI($url)
     {
         $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $this->config->version;
-        $this->agent->fetch($url);
-        $result = json_decode($this->agent->results);
+        $result = json_decode(common::http($url));
 
         if(!isset($result->status)) return false;
         if($result->status != 'success') return false;
@@ -170,8 +149,7 @@ class extensionModel extends model
     public function downloadPackage($extension, $downLink)
     {
         $packageFile = $this->getPackageFile($extension);
-        $this->agent->fetch($downLink);
-        file_put_contents($packageFile, $this->agent->results);
+        file_put_contents($packageFile, common::http($downLink));
     }
 
     /**

@@ -38,7 +38,7 @@ $lang->extension->dirs        = '安装目录';
 $lang->extension->files       = '安装文件';
 $lang->extension->status      = '状态';
 $lang->extension->version     = '版本';
-$lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禅道<a href="http://api.zentao.net/goto.php?item=latest" target="_blank" class="alert-link"><strong>%s</strong></a></small>';
+$lang->extension->latest      = '<small>最新版本<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，兼容禅道<a href="https://api.zentao.net/goto.php?item=latest" target="_blank" class="alert-link"><strong>%s</strong></a></small>';
 $lang->extension->author      = '作者';
 $lang->extension->license     = '授权';
 $lang->extension->site        = '官网';

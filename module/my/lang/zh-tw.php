@@ -44,7 +44,7 @@ $lang->my->home->projects      = $lang->projectCommon;
 $lang->my->home->products      = $lang->productCommon;
 $lang->my->home->createProject = "創建一個{$lang->projectCommon}";
 $lang->my->home->createProduct = "創建一個{$lang->productCommon}";
-$lang->my->home->help          = "<a href='http://www.zentao.net/help-read-79236.html' target='_blank'>幫助文檔</a>";
+$lang->my->home->help          = "<a href='https://www.zentao.net/help-read-79236.html' target='_blank'>幫助文檔</a>";
 $lang->my->home->noProductsTip = "這裡還沒有{$lang->productCommon}。";
 
 $lang->my->form = new stdclass();

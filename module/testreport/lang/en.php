@@ -59,7 +59,7 @@ $lang->testreport->caseSummary    = ' <strong>%s</strong> cases in Total : <stro
 $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
 $lang->testreport->confirmDelete  = 'Do you want tot delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension mechanism, or you can contact us for customization.';
-$lang->testreport->exportNotice   = "Export By <a href='http://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
+$lang->testreport->exportNotice   = "Export By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
 $lang->testreport->foundBugTip    = "Bugs created in this build and created in the test period.";
 $lang->testreport->legacyBugTip   = "Active Bugs, or the resolved beyond the test period.";
