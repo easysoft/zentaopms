@@ -592,6 +592,7 @@ class productModel extends model
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.deleted')->eq(0)
+            ->orderBy('t1.project desc')
             ->fetchAll();
 
         foreach($datas as $data)
