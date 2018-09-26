@@ -653,7 +653,7 @@ class blockModel extends model
      * @access public
      * @return array
      */
-    public function getProductsLikeDropMenu($status, $num)
+    public function getProducts($status, $num)
     {
         $products = $this->loadModel('product')->getList($status);
         if(empty($products)) return $products;
@@ -705,7 +705,7 @@ class blockModel extends model
      * @access public
      * @return array
      */
-    public function getProjectsLikeDropMenu($status, $num)
+    public function getProjects($status, $num)
     {
         $projectList = $this->loadModel('project')->getList($status);
         if(empty($projectList)) return $projectList;
