@@ -14,3 +14,5 @@ html[lang='en'] #loginPanel .table-form > tbody > tr > th {width: 80px;}
 #info .btn + .btn {margin-left: 5px;}
 #langs > .btn,
 #langs > .dropdown-menu {min-width: 0; width: 85px;}
+
+#logo-box img{margin-left:40px}
