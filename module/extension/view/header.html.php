@@ -9,7 +9,7 @@
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('extension', 'obtain', '', '<i class="icon-download-alt"></i> ' . $lang->extension->obtain, '', "class='btn'");?>
+    <?php common::printLink('extension', 'obtain', '', '<i class="icon-download-alt"></i> ' . $lang->extension->obtain, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <script>$('#<?php echo $tab;?>').addClass('btn-active-text')</script>
