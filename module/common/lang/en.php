@@ -233,7 +233,7 @@ $lang->project->menu->kanban   = array('link' => 'Kanban|project|kanban|projectI
 $lang->project->menu->burn     = array('link' => 'Burn|project|burn|projectID=%s');
 $lang->project->menu->list     = array('link' => 'More|project|grouptask|projectID=%s', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story    = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa       = array('link' => 'Bug|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->qa       = array('link' => 'Test|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->action   = array('link' => 'Dynamic|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
