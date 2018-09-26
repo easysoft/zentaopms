@@ -448,6 +448,7 @@ class todoModel extends model
     {
         $this->loadModel('action');
         $today = helper::today();
+        $now   = helper::now();
         $lastCycleList = $this->dao->select('*')->from(TABLE_TODO)->where('type')->eq('cycle')->andWhere('idvalue')->in(array_keys($todoList))->orderBy('date_asc')->fetchAll('idvalue');
         foreach($todoList as $todoID => $todo)
         {
@@ -459,16 +460,19 @@ class todoModel extends model
             if($today < $begin or (!empty($end) && $today > $end)) continue;
 
             $newTodo = new stdclass();
-            $newTodo->account = $todo->account;
-            $newTodo->begin   = $todo->begin;
-            $newTodo->end     = $todo->end;
-            $newTodo->type    = 'cycle';
-            $newTodo->idvalue = $todoID;
-            $newTodo->pri     = $todo->pri;
-            $newTodo->name    = $todo->name;
-            $newTodo->desc    = $todo->desc;
-            $newTodo->status  = 'wait';
-            $newTodo->private = $todo->private;
+            $newTodo->account    = $todo->account;
+            $newTodo->begin      = $todo->begin;
+            $newTodo->end        = $todo->end;
+            $newTodo->type       = 'cycle';
+            $newTodo->idvalue    = $todoID;
+            $newTodo->pri        = $todo->pri;
+            $newTodo->name       = $todo->name;
+            $newTodo->desc       = $todo->desc;
+            $newTodo->status     = 'wait';
+            $newTodo->private    = $todo->private;
+            $newTodo->assignedTo = $todo->assignedTo;
+            $newTodo->assignedBy = $todo->assignedBy;
+            if($todo->assignedTo) $newTodo->assignedDate = $now;
 
             $date   = '';
             $start  = strtotime($begin);

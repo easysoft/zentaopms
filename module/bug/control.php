@@ -294,6 +294,8 @@ class bug extends control
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
             }
 
+            if($this->viewType == 'json') $this->send(array('status' => 'success', 'data' => $bugID));
+
             $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&type=byModule&param={$this->post->module}");
             $response['locate'] = isset($_SESSION['bugList']) ? $this->session->bugList : $location;
             $this->send($response);
@@ -577,7 +579,17 @@ class bug extends control
             if($comment == false)
             {
                 $changes  = $this->bug->update($bugID);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError())
+                {
+                    if($this->viewType == 'json')
+                    {
+                        $this->send(array('status' => 'error', 'message' => dao::getError()));
+                    }
+                    else
+                    {
+                        die(js::error(dao::getError()));
+                    }
+                }
                 $files = $this->loadModel('file')->saveUpload('bug', $bugID);
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
@@ -588,7 +600,7 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-
+            if($this->viewType == 'json') $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
             if($bug->toTask != 0)
             {

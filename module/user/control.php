@@ -781,8 +781,7 @@ class user extends control
                 }
 
                 $errorScript = js::error($this->lang->user->loginFailed);
-                /* Finish task #4851. */
-                if($this->post->verifyRand and !isset($_SESSION['rand'])) $errorScript .= js::reload('parent');
+                if($this->post->verifyRand and !isset($_SESSION['rand'])) $errorScript .= js::reload('parent'); // Finish task #4851.
                 die($errorScript);
             }
         }

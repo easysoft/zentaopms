@@ -42,6 +42,7 @@ class file extends control
     /**
      * AJAX: get upload request from the web editor.
      *
+     * @param  $uid
      * @access public
      * @return void
      */
@@ -51,7 +52,17 @@ class file extends control
         $file = $file[0];
         if($file)
         {
-            if($file['size'] == 0) die(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
+            if($file['size'] == 0)
+            {
+                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                {
+                    die(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+                }
+                else
+                {
+                    die(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
+                }
+            }
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
             {
                 /* Compress image for jpg and bmp. */
@@ -65,14 +76,30 @@ class file extends control
                 $fileID = $this->dao->lastInsertID();
                 $url    = $this->createLink('file', 'read', "fileID=$fileID", $file['extension']);
                 if($uid) $_SESSION['album'][$uid][] = $fileID;
-                die(json_encode(array('error' => 0, 'url' => $url)));
+                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                {
+                    $_SERVER['SCRIPT_NAME'] = 'index.php';
+                    die(json_encode(array('status' => 'success', 'data' => commonModel::getSysURL() . $this->config->webRoot . $url)));
+                }
+                else
+                {
+                    die(json_encode(array('error' => 0, 'url' => $url)));
+                }
             }
             else
             {
                 $error = strip_tags(sprintf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath));
-                die(json_encode(array('error' => 1, 'message' => $error)));
+                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                {
+                    die(json_encode(array('status' => 'error', 'message' => $error)));
+                }
+                else
+                {
+                    die(json_encode(array('error' => 1, 'message' => $error)));
+                }
             }
         }
+        die(json_encode(array('status' => 'error', 'message' => $this->lang->file->uploadImagesExplain)));
     }
 
     /**

@@ -1422,7 +1422,6 @@ class testcaseModel extends model
                 $class = 'result-' . $case->lastRunResult;
                 $lastRunResultText = $case->lastRunResult ? zget($this->lang->testcase->resultList, $case->lastRunResult, $case->lastRunResult) : $this->lang->testcase->unexecuted;
                 echo "<span class='$class'>" . $lastRunResultText . "</span>";
-                    //html::a(helper::createLink('testtask', 'results', "runID=0&caseID=$case->id", '', true), "<i class='icon icon-list-alt'></i> <span>{$lastRunResultText}</span>", '', "class='iframe btn btn-icon-left btn-sm'");
                 break;
             case 'bugs':
                 echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;
