@@ -1,13 +1,13 @@
 <?php
 /**
- * The setmodule view of block module of RanZhi.
+ * The setmodule view of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block 
  * @version     $Id: html.php 7488 2013-12-26 07:26:10Z zhujinyong $
- * @link        http://www.ranzhico.com
+ * @link        http://www.zentao.net
  */
 ?>
 <?php

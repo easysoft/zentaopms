@@ -1,13 +1,13 @@
 <?php
 /**
- * The en file of crm block module of RanZhi.
+ * The en file of crm block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block 
  * @version     $Id$
- * @link        http://www.ranzhi.org
+ * @link        http://www.zentao.net
  */
 $lang->block = new stdclass();
 $lang->block->common = 'Block';
@@ -367,20 +367,24 @@ $lang->block->typeList->testtask['blocked'] = 'Blocked';
 $lang->block->typeList->testtask['done']    = 'Done';
 $lang->block->typeList->testtask['all']     = 'All';
 
-$lang->block->modules['product']->moreLinkList = new stdclass();
+$lang->block->modules['product']->moreLinkList        = new stdclass();
 $lang->block->modules['product']->moreLinkList->list  = 'product|all|product=&line=0&status=%s';
 $lang->block->modules['product']->moreLinkList->story = 'my|story|type=%s';
-$lang->block->modules['project']->moreLinkList = new stdclass();
+
+$lang->block->modules['project']->moreLinkList        = new stdclass();
 $lang->block->modules['project']->moreLinkList->list  = 'project|all|status=%s&project=';
 $lang->block->modules['project']->moreLinkList->task  = 'my|task|type=%s';
-$lang->block->modules['qa']->moreLinkList = new stdclass();
+
+$lang->block->modules['qa']->moreLinkList           = new stdclass();
 $lang->block->modules['qa']->moreLinkList->bug      = 'my|bug|type=%s';
 $lang->block->modules['qa']->moreLinkList->case     = 'my|testcase|type=%s';
 $lang->block->modules['qa']->moreLinkList->testtask = 'testtask|browse|type=%s';
-$lang->block->modules['todo']->moreLinkList = new stdclass();
+
+$lang->block->modules['todo']->moreLinkList       = new stdclass();
 $lang->block->modules['todo']->moreLinkList->list = 'my|todo|type=all';
-$lang->block->modules['common'] = new stdclass();
-$lang->block->modules['common']->moreLinkList = new stdclass();
+
+$lang->block->modules['common']                        = new stdclass();
+$lang->block->modules['common']->moreLinkList          = new stdclass();
 $lang->block->modules['common']->moreLinkList->dynamic = 'company|dynamic|';
 
 $lang->block->welcomeList['06:00'] = 'Good morning, %s';
