@@ -39,7 +39,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->project->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' id='cpmBtn' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
