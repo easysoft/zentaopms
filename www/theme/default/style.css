@@ -11,3 +11,6 @@
 
 /* Finish task #4751. */
 .hide-sidebar #sidebar .cell{display:none;}
+
+/* 取消历史记录的缩进,与标题对齐*/
+ol, ul { padding-left: 15px; }

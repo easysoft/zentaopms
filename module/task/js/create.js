@@ -162,10 +162,18 @@ function setStories(moduleID, projectID)
 
 $(document).ready(function()
 {
+    $('#pri').on('change', function()
+    {   
+        var $select = $(this);
+        var $selector = $select.closest('.pri-selector');
+        var value = $select.val();
+        $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
+    });
+    
     setStoryRelated();
 
     $('#selectAllUser').on('click', function()
-    {
+            {
         var $assignedTo = $('#assignedTo');
         if($assignedTo.attr('multiple')) 
         {

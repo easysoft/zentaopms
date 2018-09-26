@@ -67,58 +67,64 @@
         <tr>
           <th><?php echo $lang->task->name;?></th>
           <td colspan='3'>
-            <div class="input-control has-icon-right">
-              <div class="colorpicker">
-                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                <ul class="dropdown-menu clearfix">
-                  <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
-                </ul>
-                <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
+            <div class="input-group title-group">
+              <div class="input-control has-icon-right">
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix">
+                    <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
+                  </ul>
+                  <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
+                </div>
+                <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off' required");?>
+                <?php if($config->global->flow != 'onlyTask'):?>
+                <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
+                <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
+                <?php endif;?>
               </div>
-              <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off' required");?>
-              <?php if($config->global->flow != 'onlyTask'):?>
-              <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
-              <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
+              <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
+              <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>
+              <?php
+              $hasCustomPri = false;
+              foreach($lang->task->priList as $priKey => $priValue)
+              {
+                  if(!empty($priKey) and (string)$priKey != (string)$priValue)
+                  {
+                      $hasCustomPri = true;
+                      break;
+                  }
+              }
+              $priList = $lang->task->priList;
+              if(end($priList))
+              {
+                  unset($priList[0]);
+                  $priList[0] = '';
+              }
+              ?>
+              <?php if($hasCustomPri):?>
+              <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control'");?>
+              <?php else: ?>
+              <div class="input-group-btn pri-selector" data-type="pri">
+                <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                  <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($task->pri) ? '0' : $task->pri?>" title="<?php echo $task->pri?>"><?php echo $task->pri?></span></span> &nbsp;<span class="caret"></span>
+                </button>
+                <div class='dropdown-menu pull-right'>
+                  <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
+                </div>
+              </div>
+              <?php endif; ?>
+              <?php endif; // end print pri selector ?>
+              <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
+              <div class='table-col w-120px'>
+                <div class="input-group">
+                  <span class="input-group-addon fix-border br-0"><?php echo $lang->task->estimateAB;?></span>
+                  <input type="text" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off"></td>
+                </div>
+              </div>
               <?php endif;?>
             </div>
           </td>
         </tr>
-        <?php if(strpos(",$showFields,", ',pri,') !== false):?>
-        <tr>
-          <th><?php echo $lang->task->pri;?></th>
-          <?php
-          $hasCustomPri = false;
-          foreach($lang->task->priList as $priKey => $priValue)
-          {
-              if(!empty($priKey) and (string)$priKey != (string)$priValue)
-              {
-                  $hasCustomPri = true;
-                  break;
-              }
-          }
-          $priList = $lang->task->priList;
-          if(end($priList))
-          {
-              unset($priList[0]);
-              $priList[0] = '';
-          }
-          ?>
-          <td colspan='<?php echo $hasCustomPri ? 1 : 3 ?>'>
-            <?php if($hasCustomPri):?>
-            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control chosen'");?>
-            <?php else: ?>
-            <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
-            <?php endif; ?>
-          </td>
-        </tr>
-        <?php endif;?>
-        <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
-        <tr>
-          <th><?php echo $lang->task->estimateAB;?></th>
-          <td><input type="number" min="0" step="0.5" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off"></td>
-          <td class="muted"><?php echo $lang->task->hour;?></td>
-        </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->task->desc;?></th>
           <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>

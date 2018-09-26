@@ -325,7 +325,7 @@ class bug extends control
         $keywords   = '';
         $severity   = 3;
         $type       = 'codeerror';
-        $pri        = '';
+        $pri        = 3;
         $color      = '';
 
         /* Parse the extras. extract fix php7.2*/
