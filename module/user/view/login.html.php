@@ -26,7 +26,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
         </div>
       </header>
       <div class="table-row">
-        <div class="col-4 text-right">
+        <div class="col-4 text-center" id='logo-box'>
         <img src="<?php echo $config->webRoot . 'theme/default/images/main/zt-logo.png';?>" alt="">
         </div>
         <div class="col-8">
