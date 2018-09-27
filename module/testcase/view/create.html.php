@@ -127,7 +127,7 @@
               <?php endif; ?>
               <?php endif; // end print pri selector ?>
               <?php if(!$this->testcase->forceNotReview()):?>
-                  <span class="input-group-addon fix-border br-0"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
+                  <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
               <?php endif;?>
             </div>
           </td>
