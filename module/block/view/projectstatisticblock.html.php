@@ -122,12 +122,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
-                      <td class='text-left'><?php echo $project->undoneTasks;?></td>
-                    </tr>
-                    <tr>
                       <td class='text-right'><?php echo $lang->task->allTasks;?> :</td>
                       <td class='text-left'><?php echo $project->totalTasks;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
+                      <td class='text-left'><?php echo $project->undoneTasks;?></td>
                     </tr>
                   </table>
                 </div>
@@ -142,12 +142,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
-                      <td class='text-left'><?php echo $project->unclosedStories;?></td>
-                    </tr>
-                    <tr>
                       <td class='text-right'><?php echo $lang->story->total;?> :</td>
                       <td class='text-left'><?php echo $project->totalStories;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
+                      <td class='text-left'><?php echo $project->unclosedStories;?></td>
                     </tr>
                   </table>
                 </div>
@@ -163,12 +163,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
-                      <td class='text-left'><?php echo $project->activeBugs;?></td>
+                      <td class='text-right'><?php echo $lang->bug->allBugs . ' Bug';?> :</td>
+                      <td class='text-left'><?php echo $project->totalBugs;?></td>
                     </tr>
                     <tr>
-                      <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
-                      <td class='text-left'><?php echo $project->totalBugs;?></td>
+                      <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
+                      <td class='text-left'><?php echo $project->activeBugs;?></td>
                     </tr>
                   </table>
                 </div>

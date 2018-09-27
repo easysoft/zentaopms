@@ -1170,7 +1170,7 @@ class testtaskModel extends model
         $id = $col->id;
         if($col->show)
         {
-            $class = '';
+            $class = "c-$id ";
             if($id == 'status') $class .= $run->status;
             if($id == 'title')  $class .= ' text-left';
             if($id == 'id')     $class .= ' cell-id';
@@ -1182,14 +1182,7 @@ class testtaskModel extends model
             switch ($id)
             {
             case 'id':
-                //if($mode == 'table')
-                //{
-                    echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
-                //}
-                //else
-                //{
-                //    echo $canView ? html::a($caseLink, sprintf('%03d', $run->case)) : sprintf('%03d', $run->case);
-                //}
+                echo html::checkbox('caseIDList', array($run->case => sprintf('%03d', $run->case)));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $run->pri . "' title='" . zget($this->lang->testcase->priList, $run->pri, $run->pri) . "'>";

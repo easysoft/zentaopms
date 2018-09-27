@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-  <div class="main-row">
+  <div id='mainContent' class="main-row">
     <div class="col-8 main-col">
       <div class="row">
         <div class="col-sm-6">
@@ -57,10 +57,10 @@
               </nav>
             </div>
             <div class="panel-body">
-              <ul class="timeline timeline-tag-left">
+              <ul class="timeline timeline-tag-left no-margin">
                 <?php foreach($dynamics as $action):?>
                 <li <?php if($action->major) echo "class='active'";?>>
-                  <div>
+                  <div class='text-ellipsis'>
                     <span class="timeline-tag"><?php echo $action->date;?></span>
                     <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . $action->actionLabel . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName);?></span>
                   </div>
@@ -73,6 +73,27 @@
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
           <?php include '../../common/view/action.html.php';?>
+        </div>
+      </div>
+      <div class='main-actions'>
+        <div class="btn-toolbar">
+          <?php
+          $params = "product=$product->id";
+          $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
+          common::printBack($browseLink);
+          if(!$product->deleted)
+          {
+              echo "<div class='divider'></div>";
+              if($product->status != 'closed')
+              {
+                  common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
+                  echo "<div class='divider'></div>";
+              }
+
+              common::printIcon('product', 'edit', $params, $product);
+              common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
+          }
+          ?>
         </div>
       </div>
     </div>
@@ -213,24 +234,5 @@
 
 <div id="mainActions" class='main-actions'>
   <nav class="container"></nav>
-  <div class="btn-toolbar">
-    <?php
-    $params = "product=$product->id";
-    $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
-    common::printBack($browseLink);
-    if(!$product->deleted)
-    {
-        echo "<div class='divider'></div>";
-        if($product->status != 'closed')
-        {
-            common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
-            echo "<div class='divider'></div>";
-        }
-
-        common::printIcon('product', 'edit', $params, $product);
-        common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
-    }
-    ?>
-  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

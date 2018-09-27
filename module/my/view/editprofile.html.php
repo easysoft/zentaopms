@@ -103,7 +103,7 @@
         </td>
       </tr>
     </table>
-    <div class='text-center form-actions'><?php echo html::submitButton() . html::backButton('', '', 'btn btn-wide');?></div>
+    <div class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></div>
   </form>
   <?php echo html::hidden('verifyRand', $rand);?>
 </div>

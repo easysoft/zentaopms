@@ -2406,7 +2406,7 @@ class taskModel extends model
                     break;
                 case 'name':
                     if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
-                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray'>" . $modulePairs[$task->module] . '</span> ';
+                    if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
                     if($child or !empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';
                     if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
@@ -2447,22 +2447,7 @@ class taskModel extends model
                     echo $task->realStarted;
                     break;
                 case 'assignedTo':
-                    $btnTextClass   = '';
-                    $assignedToText = zget($users, $task->assignedTo);
-
-                    if(empty($task->assignedTo))
-                    {
-                        $btnTextClass   = 'text-primary';
-                        $assignedToText = $this->lang->task->noAssigned;
-                    }
-                    if($task->assignedTo == $account) $btnTextClass = 'text-red';
-
-                    $btnClass     = $assignedToText == 'closed' ? ' disabled' : '';
-                    $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
-                    $assignToLink = helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true);
-                    $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
-
-                    echo !common::hasPriv('task', 'assignTo') ? "<span style='padding-left:25px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+                    $this->printAssignedHtml($task, $users);
                     break;
                 case 'assignedDate':
                     echo substr($task->assignedDate, 5, 11);
@@ -2523,21 +2508,46 @@ class taskModel extends model
                         break;
                     }
 
-                    if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                     if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                    if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                    if($task->status == 'doing') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                    common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
                     common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                     common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                    if(empty($task->team) or empty($task->children))
-                    {
-                        common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
-                    }
+                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children);
                     break;
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Print assigned html
+     *
+     * @param  object $task
+     * @param  array  $users
+     * @access public
+     * @return void
+     */
+    public function printAssignedHtml($task, $users)
+    {
+        $btnTextClass   = '';
+        $assignedToText = zget($users, $task->assignedTo);
+
+        if(empty($task->assignedTo))
+        {
+            $btnTextClass   = 'text-primary';
+            $assignedToText = $this->lang->task->noAssigned;
+        }
+        if($task->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+
+        $btnClass     = $assignedToText == 'closed' ? ' disabled' : '';
+        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $assignToLink = helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true);
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+
+        echo !common::hasPriv('task', 'assignTo') ? "<span style='padding-left:20px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**

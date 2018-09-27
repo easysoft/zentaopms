@@ -159,7 +159,6 @@
       $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
-
       $setting = $this->datatable->getSetting('product');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;

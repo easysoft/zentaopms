@@ -93,7 +93,7 @@
           {
             echo html::submitButton();
           }
-          echo ' &nbsp; ' . html::backButton('', '', 'btn btn-wide')
+          echo ' &nbsp; ' . html::backButton();
           ?>
         </td>
       </tr>

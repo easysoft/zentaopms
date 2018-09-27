@@ -56,10 +56,10 @@
           <th class='c-pri'>     <?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
           <th>                   <?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
           <th class='w-user'>    <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-110px'>   <?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
+          <th class='w-110px c-assignedTo'><?php common::printOrderLink('assignedTo',   $orderBy, $vars, $lang->assignedToAB);?></th>
           <th class='w-user'>    <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -76,19 +76,15 @@
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
         <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
-        <td class='c-assignedTo has-btn text-left'>
-          <?php $class = $bug->assignedTo == $this->app->user->account ? 'text-red' : 'text-primary';?>
-          <?php echo "<span class='$class'>" . zget($users, $bug->assignedTo, $bug->assignedTo) . "</span>";?>
-        </td>
+        <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
         <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
         <td class='c-actions'>
           <?php
           $params = "bugID=$bug->id";
-          common::printIcon('bug', 'assignTo', $params, $bug, 'list', '', '', 'iframe', true);
-          if($bug->status == 'active') common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-          if($bug->status == 'active') common::printIcon('bug', 'resolve', $params, $bug, 'list', 'check', '', 'iframe', true);
-          if($bug->status != 'active') common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
+          common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
+          common::printIcon('bug', 'resolve', $params, $bug, 'list', 'check', '', 'iframe', true);
+          common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'create', "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
           common::printIcon('bug', 'edit',   $params, $bug, 'list');
           ?>

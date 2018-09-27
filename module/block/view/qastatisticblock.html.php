@@ -77,6 +77,17 @@ $(function()
 </script>
 <div class="panel-body">
   <div class="table-row">
+    <div class="col col-nav">
+      <ul class="nav nav-stacked nav-secondary" id='<?php echo $blockNavId;?>'>
+        <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
+        <?php $index = 1;?>
+        <?php foreach($products as $product):?>
+        <li class="<?php if($index == 1) echo 'active';?>"><a data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a></li>
+        <?php $index++;?>
+        <?php endforeach;?>
+        <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
+      </ul>
+    </div>
     <div class="col tab-content">
       <?php $index = 1;?>
       <?php foreach($products as $product):?>
@@ -156,17 +167,6 @@ $(function()
       </div>
       <?php $index++;?>
       <?php endforeach;?>
-    </div>
-    <div class="col col-nav">
-      <ul class="nav nav-stacked nav-secondary" id='<?php echo $blockNavId;?>'>
-        <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $index = 1;?>
-        <?php foreach($products as $product):?>
-        <li class="<?php if($index == 1) echo 'active';?>"><a data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a></li>
-        <?php $index++;?>
-        <?php endforeach;?>
-        <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
-      </ul>
     </div>
   </div>
 </div>

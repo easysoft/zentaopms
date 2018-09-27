@@ -65,7 +65,7 @@ class productModel extends model
         }
         else
         {
-            $pageNav  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+            $pageNav  = '<div class="btn-group angle-btn' . ($currentMethod == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
             $pageNav .= '<ul class="dropdown-menu">';
             if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
             if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
@@ -609,11 +609,11 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
-     * @param  int    $num
+     * @param  int    $count
      * @access public
      * @return array
      */
-    public function getRoadmap($productID, $branch = 0, $num = 0)
+    public function getRoadmap($productID, $branch = 0, $count = 0)
     {
         $plans    = $this->loadModel('productplan')->getList($productID, $branch);
         $releases = $this->loadModel('release')->getList($productID, $branch);
@@ -629,10 +629,10 @@ class productModel extends model
             $total++;
         }
 
-        if($num > 0 and $total >= $num)
+        if($count > 0 and $total >= $count)
         {
             krsort($roadmap);
-            return $this->limitRoadmap($roadmap, $num);
+            return $this->sliceRoadmap($roadmap, $count);
         }
 
         foreach($releases as $release)
@@ -641,11 +641,11 @@ class productModel extends model
             $roadmap[$year][$release->branch][] = $release;
 
             $total++;
-            if($num > 0 and $total >= $num) break;
+            if($count > 0 and $total >= $count) break;
         }
 
         krsort($roadmap);
-        if($num > 0) return $this->limitRoadmap($roadmap, $num);
+        if($count > 0) return $this->sliceRoadmap($roadmap, $count);
 
         $groupRoadmap = array();
         foreach($roadmap as $year => $branchRoadmaps)
@@ -683,14 +683,14 @@ class productModel extends model
     }
 
     /**
-     * Limit roadmap.
-     * 
-     * @param  string $roadmap 
-     * @param  int    $num 
+     * Slice roadmap.
+     *
+     * @param  string $roadmap
+     * @param  int    $count
      * @access public
      * @return array
      */
-    public function limitRoadmap($roadmap, $num)
+    public function sliceRoadmap($roadmap, $count)
     {
         $i = 0;
         $newRoadmap = array();
@@ -703,7 +703,7 @@ class productModel extends model
                 {
                     $newRoadmap[$year][$branch][] = $plan;
                     $i++;
-                    if($i >= $num) break;
+                    if($i >= $count) break;
                 }
             }
         }

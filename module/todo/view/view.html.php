@@ -37,6 +37,55 @@
       </div>
       <?php include '../../common/view/action.html.php';?>
     </div>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?php
+        if($todo->status == 'done' || $todo->status == 'closed') common::printLink('todo', 'activate', "todoID=$todo->id", "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
+        if($todo->status == 'done') common::printLink('todo', 'close', "todoID=$todo->id", "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
+        common::printLink('todo', 'edit', "todoID=$todo->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
+        common::printLink('todo', 'delete', "todoID=$todo->id", "<i class='icon icon-close'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
+
+        echo html::a('#commentModal', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' data-toggle='modal' class='btn'");
+
+        if($this->session->todoList)
+        {
+            $browseLink = $this->session->todoList;
+        }
+        elseif($todo->account == $app->user->account)
+        {
+            $browseLink = $this->createLink('my', 'todo');
+        }
+        else
+        {
+            $browseLink = $this->createLink('user', 'todo', "account=$todo->account");
+        }
+
+        if($todo->status != 'done' && $todo->status != 'closed')
+        {
+            echo "<div class='btn-group dropup'>";
+            echo html::a($this->createLink('todo', 'finish', "id=$todo->id", 'html', true), "<i class='icon icon-checked'></i>", 'hiddenwin', "title='{$lang->todo->finish}' class='btn showinonlybody btn-success'");
+            $createStoryPriv = common::hasPriv('story', 'create');
+            $createTaskPriv  = common::hasPriv('task', 'create');
+            $createBugPriv   = common::hasPriv('bug', 'create');
+            if($createStoryPriv or $createTaskPriv or $createBugPriv)
+            {
+                $isonlybody = isonlybody();
+                unset($_GET['onlybody']);
+                echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                echo "<ul class='dropdown-menu pull-right' role='menu'>";
+                if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
+                if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
+                if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
+                echo "</ul>";
+                if($isonlybody) $_GET['onlybody'] = 'yes';
+            }
+            echo "</div>";
+        }
+
+        common::printRPN($browseLink);
+        ?>
+      </div>
+    </div>
   </div>
   <div class='side-col col-4'>
     <div class='cell'>
@@ -121,53 +170,6 @@
 </div>
 <div id="mainActions" class='main-actions'>
   <div class="container"></div>
-  <div class="btn-toolbar">
-    <?php
-    if($todo->status == 'done' || $todo->status == 'closed') common::printLink('todo', 'activate', "todoID=$todo->id", "<i class='icon icon-magic'></i>", 'hiddenwin', "title='{$lang->todo->activate}' class='btn showinonlybody'");
-    if($todo->status == 'done') common::printLink('todo', 'close', "todoID=$todo->id", "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
-    common::printLink('todo', 'edit', "todoID=$todo->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
-    common::printLink('todo', 'delete', "todoID=$todo->id", "<i class='icon icon-close'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
-
-    echo html::a('#commentModal', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' data-toggle='modal' class='btn'");
-
-    if($this->session->todoList)
-    {
-        $browseLink = $this->session->todoList;
-    }
-    elseif($todo->account == $app->user->account)
-    {
-        $browseLink = $this->createLink('my', 'todo');
-    }
-    else
-    {
-        $browseLink = $this->createLink('user', 'todo', "account=$todo->account");
-    }
-
-    if($todo->status != 'done' && $todo->status != 'closed')
-    {
-        echo "<div class='btn-group dropup'>";
-        echo html::a($this->createLink('todo', 'finish', "id=$todo->id", 'html', true), "<i class='icon icon-checked'></i>", 'hiddenwin', "title='{$lang->todo->finish}' class='btn showinonlybody btn-success'");
-        $createStoryPriv = common::hasPriv('story', 'create');
-        $createTaskPriv  = common::hasPriv('task', 'create');
-        $createBugPriv   = common::hasPriv('bug', 'create');
-        if($createStoryPriv or $createTaskPriv or $createBugPriv)
-        {
-            $isonlybody = isonlybody();
-            unset($_GET['onlybody']);
-            echo "<button type='button' class='btn btn-success dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
-            echo "<ul class='dropdown-menu pull-right' role='menu'>";
-            if($createStoryPriv) echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
-            if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
-            if($createBugPriv)   echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
-            echo "</ul>";
-            if($isonlybody) $_GET['onlybody'] = 'yes';
-        }
-        echo "</div>";
-    }
-
-    common::printRPN($browseLink);
-    ?>
-  </div>
 </div>
 <div class="modal fade" id="commentModal">
   <div class="modal-dialog mw-600px">

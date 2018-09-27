@@ -2398,7 +2398,9 @@ class storyModel extends model
                 echo substr($story->openedDate, 5, 11);
                 break;
             case 'assignedTo':
-                echo zget($users, $story->assignedTo, $story->assignedTo);
+                $assignedToText = zget($users, $story->assignedTo, $story->assignedTo);
+                $btnTextClass = ($story->assignedTo == $this->app->user->account) ? 'text-red' : '';
+                echo "<span style='padding-left:10px;' class='{$btnTextClass}'>{$assignedToText}</span>";
                 break;
             case 'assignedDate':
                 echo substr($story->assignedDate, 5, 11);

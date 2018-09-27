@@ -25,7 +25,7 @@
       <div class='content'>
         <h3><?php echo $lang->extension->waringInstall;?></h3>
         <p><?php echo $error;?></p>
-        <p class='text-center'><?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href');?></p>
+        <p class='text-center'><?php echo html::commonButton($lang->extension->refreshPage, 'onclick=location.href=location.href', 'btn btn-primary');?></p>
       </div>
     </div>
     <?php endif;?>

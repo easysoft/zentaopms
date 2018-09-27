@@ -8,6 +8,3 @@
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.zentao.net
 */
-
-/* Finish task #4751. */
-.hide-sidebar #sidebar .cell{display:none;}

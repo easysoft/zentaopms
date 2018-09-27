@@ -86,6 +86,7 @@ class datatableModel extends model
                     unset($setting[$key]);
                     continue;
                 }
+                if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
                 $set->title = $fieldList[$set->id]['title'];
                 $set->sort  = isset($fieldList[$set->id]['sort']) ? $fieldList[$set->id]['sort'] : 'yes';
             }
