@@ -2784,7 +2784,7 @@ class projectModel extends model
                 case 'task':
                     $link = helper::createLink('project', 'treeTask', "taskID={$tree->id}");
                     $html .= '<li class="item-task">';
-                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-id">' . $tree->id . '</span><span class="label label-type">' . (empty($tree->parent) ? $this->lang->task->common : $this->lang->task->children) . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></a>';
+                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-type">' . (empty($tree->parent) ? $this->lang->task->common : $this->lang->task->children) . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span><span class="label label-id">' . $tree->id . '</span></a>';
                     break;
                 case 'product':
                     $this->app->loadLang('product');
@@ -2795,7 +2795,7 @@ class projectModel extends model
                     $this->app->loadLang('story');
                     $link = helper::createLink('project', 'treeStory', "storyID={$tree->storyId}");
                     $html .= '<li class="item-story">';
-                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-id">' . $tree->storyId . '</span><span class="label label-type">' . $this->lang->story->common . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span></a>';
+                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-type">' . $this->lang->story->common . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span><span class="label label-id">' . $tree->storyId . '</span></a>';
                     break;
                 case 'branch':
                     $this->app->loadLang('branch');

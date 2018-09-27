@@ -79,6 +79,10 @@ $(function()
                 $itemContent.find('.histories').histories();
                 $itemContent.find('.iframe').modalTrigger();
                 $.zui.store.set('project/tree/showItem', url);
+
+                var scrollTop = $(document).scrollTop() - 140;
+                if(scrollTop < 0) scrollTop = 0;
+                $itemContent.closest('.cell').css('margin-top', scrollTop);
             },
             error: function()
             {
