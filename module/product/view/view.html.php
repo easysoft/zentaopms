@@ -60,7 +60,7 @@
               <ul class="timeline timeline-tag-left no-margin">
                 <?php foreach($dynamics as $action):?>
                 <li <?php if($action->major) echo "class='active'";?>>
-                  <div>
+                  <div class='text-ellipsis'>
                     <span class="timeline-tag"><?php echo $action->date;?></span>
                     <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . $action->actionLabel . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName);?></span>
                   </div>
