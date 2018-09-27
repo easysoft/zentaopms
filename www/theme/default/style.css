@@ -13,8 +13,5 @@
 .c-assignedTo.has-btn .btn-icon-left.btn-sm {padding-left: 20px;line-height:16px;}
 .table thead>tr>th.c-assign, .table thead>tr>th.c-assignedTo {padding-left: 27px;}
 
-/* 取消历史记录的缩进,与标题对齐*/
-ol, ul { padding-left: 15px; }
-
 .tab-content{padding-top:6px;}
 .side-col .table-data tbody>tr>td, .side-col .table-data tbody>tr>th{padding:3px 8px;}
