@@ -2472,7 +2472,6 @@ class bugModel extends model
             switch($id)
             {
             case 'id':
-                //if($mode == 'table' && $canBatchAction)
                 if($canBatchAction)
                 {
                     echo html::checkbox('bugIDList', array($bug->id => sprintf('%03d', $bug->id)));

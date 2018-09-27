@@ -99,6 +99,7 @@ $(function()
     $cols.filter('.fixed-flex, .fixed-no').appendTo('#colsFixedFlex');
     $cols.filter('.fixed-right').appendTo('#colsFixedRight');
     $('#originCols').remove();
+    $('[data-key=actions] #width').attr('disabled', 'disabled');
 
     if(typeof setting[0] === 'string')
     {
