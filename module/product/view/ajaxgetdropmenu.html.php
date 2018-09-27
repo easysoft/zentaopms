@@ -25,22 +25,22 @@ foreach($products as $product)
     {
         if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
         {
-            $myProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $myProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
         else
         {
-            $myProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $myProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
     {
         if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
         {
-            $normalProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $normalProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
         else
         {
-            $normalProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $normalProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
     }
     else if($product->status == 'closed')
@@ -48,11 +48,11 @@ foreach($products as $product)
 
         if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
         {
-            $closedProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $closedProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
         else
         {
-            $closedProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $closedProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' class='closed' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
     }
 }
@@ -61,7 +61,15 @@ foreach($products as $product)
   <div class="table-col col-left">
     <div class='list-group'>
     <?php
-    echo $myProductsHtml;
+    if(!empty($myProductsHtml))
+    {
+        echo "<div class='heading'>{$lang->product->mine}</div>";
+        echo $myProductsHtml;
+        if(!empty($myProductsHtml))
+        {
+            echo "<div class='heading'>{$lang->product->other}</div>";
+        }
+    }
     echo $normalProductsHtml;
     ?>
     </div>
