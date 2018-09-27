@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-  <div class="main-row">
+  <div id='mainContent' class="main-row">
     <div class="col-8 main-col">
       <div class="row">
         <div class="col-sm-6">
@@ -73,6 +73,27 @@
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
           <?php include '../../common/view/action.html.php';?>
+        </div>
+      </div>
+      <div class='main-actions'>
+        <div class="btn-toolbar">
+          <?php
+          $params = "product=$product->id";
+          $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
+          common::printBack($browseLink);
+          if(!$product->deleted)
+          {
+              echo "<div class='divider'></div>";
+              if($product->status != 'closed')
+              {
+                  common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
+                  echo "<div class='divider'></div>";
+              }
+
+              common::printIcon('product', 'edit', $params, $product);
+              common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
+          }
+          ?>
         </div>
       </div>
     </div>
@@ -213,24 +234,5 @@
 
 <div id="mainActions" class='main-actions'>
   <nav class="container"></nav>
-  <div class="btn-toolbar">
-    <?php
-    $params = "product=$product->id";
-    $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
-    common::printBack($browseLink);
-    if(!$product->deleted)
-    {
-        echo "<div class='divider'></div>";
-        if($product->status != 'closed')
-        {
-            common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
-            echo "<div class='divider'></div>";
-        }
-
-        common::printIcon('product', 'edit', $params, $product);
-        common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
-    }
-    ?>
-  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>
