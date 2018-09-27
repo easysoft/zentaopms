@@ -65,7 +65,7 @@ class productModel extends model
         }
         else
         {
-            $pageNav  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
+            $pageNav  = '<div class="btn-group angle-btn' . ($currentMethod == 'index' ? ' active' : '') . '"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . $label . ' <span class="caret"></span></button>';
             $pageNav .= '<ul class="dropdown-menu">';
             if($this->config->global->flow == 'full' && common::hasPriv('product', 'index')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'index', 'locate=no'), '<i class="icon icon-home"></i> ' . $this->lang->product->index) . '</li>';
             if(common::hasPriv('product', 'all')) $pageNav .= '<li>' . html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view"></i> ' . $this->lang->product->all) . '</li>';
@@ -684,9 +684,9 @@ class productModel extends model
 
     /**
      * Slice roadmap.
-     * 
-     * @param  string $roadmap 
-     * @param  int    $count 
+     *
+     * @param  string $roadmap
+     * @param  int    $count
      * @access public
      * @return array
      */
