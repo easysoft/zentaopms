@@ -33,7 +33,7 @@
         <nav class="btn-toolbar pull-right"></nav>
       </div>
       <?php
-      $vars         = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = "taskID=$task->id&browseType=$browseType&param=$param&orderBy=%s&recToal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
       $canBatchUnlink = common::hasPriv('testtask', 'batchUnlinkCases');
@@ -45,7 +45,7 @@
       if(!$useDatatable) include '../../common/view/tablesorter.html.php';
 
       $config->testcase->datatable->defaultField = $config->testtask->datatable->defaultField;
-      $config->testcase->datatable->fieldList['actions']['width'] = '140';
+      $config->testcase->datatable->fieldList['actions']['width'] = '120';
 
       $setting = $this->datatable->getSetting('testtask');
       $widths  = $this->datatable->setFixedFieldWidth($setting);

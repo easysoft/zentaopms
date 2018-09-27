@@ -2412,7 +2412,7 @@ class upgradeModel extends model
      */
     public function removeCustomMenu()
     {
-        $customMenuMain = $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->eq('full_main')->fetchAll('id');
+        $customMenuMain = $this->dao->select('*')->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere("(`key`='full_main' OR `key`='onlyTask_main' OR `key`='onlyStory_main' OR `key`='onlyTest_main')")->fetchAll('id');
         foreach($customMenuMain as $mainMenu)
         {
             $mainMenuValue = json_decode($mainMenu->value);
@@ -2429,7 +2429,8 @@ class upgradeModel extends model
             }
         }
 
-        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('key')->eq('full_project')->exec();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->eq('full_project')->exec();
+        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('customMenu')->andWhere('`key`')->eq('onlyTask_project')->exec();
         return !dao::isError();
     }
 
