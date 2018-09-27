@@ -256,7 +256,7 @@ class task extends control
         $this->view->moduleID   = $moduleID;
         $this->display();
     }
-    
+
     /**
      * Common actions of task module.
      *
@@ -320,7 +320,14 @@ class task extends control
                     }
                 }
             }
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {
+                die(array('status' => 'success', 'data' => $taskID));
+            }
+            else
+            {
+                die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            }
         }
 
         $noclosedProjects = $this->project->getPairs('noclosed,nocode');
@@ -801,7 +808,14 @@ class task extends control
                 }
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {
+                die(array('status' => 'success', 'data' => $taskID));
+            }
+            else
+            {
+                die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            }
         }
 
         $task         = $this->view->task;
@@ -923,7 +937,14 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {
+                die(array('status' => 'success', 'data' => $taskID));
+            }
+            else
+            {
+                die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            }
         }
 
         $this->view->title      = $this->view->project->name . $this->lang->colon .$this->lang->task->finish;

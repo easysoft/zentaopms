@@ -115,7 +115,14 @@ class action extends control
     public function comment($objectType, $objectID)
     {
         $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
-        die(js::reload('parent'));
+        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        {
+            die(array('status' => 'success', 'data' => $actionID));
+        }
+        else
+        {
+            die(js::reload('parent'));
+        }
     }
 
     /**

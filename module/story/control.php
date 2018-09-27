@@ -13,7 +13,7 @@ class story extends control
 {
     /**
      * The construct function, load product, tree, user auto.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -184,7 +184,7 @@ class story extends control
             $keywords  = $oldBug->keywords;
             $spec      = $oldBug->steps;
             $pri       = $oldBug->pri;
-            if(strpos($oldBug->mailto, $oldBug->openedBy) === false) 
+            if(strpos($oldBug->mailto, $oldBug->openedBy) === false)
             {
                 $mailto = $oldBug->mailto . $oldBug->openedBy . ',';
             }
@@ -262,13 +262,13 @@ class story extends control
 
     /**
      * Create a batch stories.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  int    $moduleID 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
      * @param  int    $storyID
-     * @param  int    $project 
-     * @param  int    $plan 
+     * @param  int    $project
+     * @param  int    $plan
      * @access public
      * @return void
      */
@@ -359,7 +359,7 @@ class story extends control
         $this->view->product          = $product;
         $this->view->moduleID         = $moduleID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $plans; 
+        $this->view->plans            = $plans;
         $this->view->priList          = $priList;
         $this->view->sourceList       = $sourceList;
         $this->view->planID           = $planID;
@@ -377,8 +377,8 @@ class story extends control
 
     /**
      * The common action when edit or change a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -406,8 +406,8 @@ class story extends control
 
     /**
      * Edit a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -423,7 +423,14 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {
+                die(array('status' => 'success', 'data' => $storyID));
+            }
+            else
+            {
+                die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            }
         }
 
         $this->commonAction($storyID);
@@ -578,8 +585,8 @@ class story extends control
 
     /**
      * Change a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -619,8 +626,8 @@ class story extends control
 
     /**
      * Activate a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -647,9 +654,9 @@ class story extends control
 
     /**
      * View a story.
-     * 
-     * @param  int    $storyID 
-     * @param  int    $version 
+     *
+     * @param  int    $storyID
+     * @param  int    $version
      * @access public
      * @return void
      */
@@ -726,8 +733,8 @@ class story extends control
 
     /**
      * Review a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -779,9 +786,9 @@ class story extends control
 
     /**
      * Batch review stories.
-     * 
-     * @param  string $result 
-     * @param  string $reason 
+     *
+     * @param  string $result
+     * @param  string $reason
      * @access public
      * @return void
      */
@@ -798,8 +805,8 @@ class story extends control
 
     /**
      * Close a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -812,7 +819,14 @@ class story extends control
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {
+                die(array('status' => 'success', 'data' => $storyID));
+            }
+            else
+            {
+                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+            }
         }
 
         /* Get story and product. */
@@ -839,9 +853,9 @@ class story extends control
 
     /**
      * Batch close story.
-     * 
-     * @param  int    $productID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -944,8 +958,8 @@ class story extends control
 
     /**
      * Batch change the plan of story.
-     * 
-     * @param  int    $planID 
+     *
+     * @param  int    $planID
      * @access public
      * @return void
      */
@@ -966,8 +980,8 @@ class story extends control
 
     /**
      * Batch change branch.
-     * 
-     * @param  int    $branchID 
+     *
+     * @param  int    $branchID
      * @access public
      * @return void
      */
@@ -988,8 +1002,8 @@ class story extends control
 
     /**
      * Batch change the stage of story.
-     * 
-     * @param  string    $stage 
+     *
+     * @param  string    $stage
      * @access public
      * @return void
      */
@@ -1014,7 +1028,7 @@ class story extends control
 
     /**
      * Batch assign to.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1036,9 +1050,9 @@ class story extends control
 
     /**
      * Tasks of a story.
-     * 
-     * @param  int    $storyID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $storyID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
@@ -1085,9 +1099,9 @@ class story extends control
 
     /**
      * Show zero case story.
-     * 
-     * @param  int    $productID 
-     * @param  string $orderBy 
+     *
+     * @param  int    $productID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -1156,10 +1170,10 @@ class story extends control
 
     /**
      * AJAX: get stories of a project in html select.
-     * 
-     * @param  int    $projectID 
-     * @param  int    $productID 
-     * @param  int    $storyID 
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  int    $storyID
      * @param  string $number
      * @param  string $type
      * @access public
@@ -1226,13 +1240,13 @@ class story extends control
 
     /**
      * AJAX: search stories of a product as json
-     * 
-     * @param  string $key 
-     * @param  int    $productID 
-     * @param  int    $moduleID 
-     * @param  int    $storyID 
-     * @param  string $status 
-     * @param  int    $limit 
+     *
+     * @param  string $key
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @param  string $status
+     * @param  int    $limit
      * @access public
      * @return void
      */
@@ -1274,8 +1288,8 @@ class story extends control
 
     /**
      * AJAX: get spec and verify of a story. for web app.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -1359,7 +1373,7 @@ class story extends control
      * @return void
      */
     public function export($productID, $orderBy, $projectID = 0)
-    { 
+    {
         /* format the fields of every story in order to export data. */
         if($_POST)
         {
@@ -1483,11 +1497,11 @@ class story extends control
                 if(isset($users[$story->openedBy]))     $story->openedBy     = $users[$story->openedBy];
                 if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo];
                 if(isset($users[$story->lastEditedBy])) $story->lastEditedBy = $users[$story->lastEditedBy];
-                if(isset($users[$story->closedBy]))     $story->closedBy     = $users[$story->closedBy]; 
+                if(isset($users[$story->closedBy]))     $story->closedBy     = $users[$story->closedBy];
 
-                if(isset($storyTasks[$story->id]))     $story->taskCountAB = $storyTasks[$story->id]; 
-                if(isset($storyBugs[$story->id]))      $story->bugCountAB  = $storyBugs[$story->id]; 
-                if(isset($storyCases[$story->id]))     $story->caseCountAB = $storyCases[$story->id]; 
+                if(isset($storyTasks[$story->id]))     $story->taskCountAB = $storyTasks[$story->id];
+                if(isset($storyBugs[$story->id]))      $story->bugCountAB  = $storyBugs[$story->id];
+                if(isset($storyCases[$story->id]))     $story->caseCountAB = $storyCases[$story->id];
 
                 $story->openedDate     = substr($story->openedDate, 0, 10);
                 $story->assignedDate   = substr($story->assignedDate, 0, 10);
