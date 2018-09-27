@@ -25,11 +25,11 @@ foreach($products as $product)
     {
         if($product->type != 'platform' && $module == 'branch' && $method == 'manage')
         {
-            $myProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $myProductsHtml .= html::a(sprintf($link, $productID), "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
         else
         {
-            $myProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
+            $myProductsHtml .= html::a(sprintf($link, $product->id), "<i class='icon icon-cube'></i> " . $product->name, '', "class='text-important' title='{$product->name}' data-key='" . zget($productsPinYin, $product->name, '') . "'");
         }
     }
     else if($product->status == 'normal' and !($product->PO == $this->app->user->account))
