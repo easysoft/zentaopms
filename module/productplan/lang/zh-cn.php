@@ -34,6 +34,7 @@ $lang->productplan->batchUnlinkBug   = "批量移除Bug";
 $lang->productplan->linkedBugs       = 'Bug';
 $lang->productplan->unlinkedBugs     = '未关联Bug';
 $lang->productplan->unexpired        = '未过期计划';
+$lang->productplan->all              = '所有计划';
 
 $lang->productplan->confirmDelete      = "您确认删除该计划吗？";
 $lang->productplan->confirmUnlinkStory = "您确认移除该需求吗？";

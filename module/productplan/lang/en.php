@@ -34,6 +34,7 @@ $lang->productplan->batchUnlinkBug   = "Batch Unlink Bug";
 $lang->productplan->linkedBugs       = 'Linked Bug';
 $lang->productplan->unlinkedBugs     = 'Unlinked';
 $lang->productplan->unexpired        = 'Unexpired Plan';
+$lang->productplan->all              = 'All Plan';
 
 $lang->productplan->confirmDelete      = "Do you want to delete this Plan?";
 $lang->productplan->confirmUnlinkStory = "Do you want to unlink this Story?";
