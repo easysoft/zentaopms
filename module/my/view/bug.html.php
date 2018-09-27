@@ -47,10 +47,10 @@
           <th class='w-type'>      <?php common::printOrderLink('type',       $orderBy, $vars, $lang->typeAB);?></th>
           <th>                     <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
           <th class='w-user'>      <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-user'>      <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th class='w-100px c-assignedTo'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
           <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions-6'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -70,14 +70,12 @@
           <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
           <td><?php echo zget($users, $bug->openedBy);?></td>
-          <td><?php echo "<span class='text-red'>" . zget($users, $bug->assignedTo) . "</span>";?>
-          </td>
+          <td class='c-assignedTo has-btn'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
           <td><?php echo zget($users, $bug->resolvedBy);?></td>
           <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
           <td class='c-actions'>
             <?php
             $params = "bugID=$bug->id";
-            common::printIcon('bug', 'assignTo',   $params, $bug, 'list', '', '', 'iframe', true);
             common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
             common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
             common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);

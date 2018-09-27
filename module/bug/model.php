@@ -2581,17 +2581,7 @@ class bugModel extends model
                 }
                 break;
             case 'assignedTo':
-                $btnTextClass   = '';
-                $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
-                $btnTextClass   = 'text-primary';
-                if($bug->assignedTo == $account) $btnTextClass = 'text-red';
-
-                $btnClass     = $assignedToText == 'closed' ? ' disabled' : '';
-                $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
-                $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
-                $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
-
-                echo !common::hasPriv('bug', 'assignTo') ? "<span style='padding-left:25px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+                $this->printAssignedHtml($bug, $users);
                 break;
             case 'assignedDate':
                 echo substr($bug->assignedDate, 5, 11);
@@ -2634,6 +2624,29 @@ class bugModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Print assigned html.
+     * 
+     * @param  object $bug 
+     * @param  array  $users 
+     * @access public
+     * @return void
+     */
+    public function printAssignedHtml($bug, $users)
+    {
+        $btnTextClass   = '';
+        $assignedToText = !empty($bug->assignedTo) ? zget($users, $bug->assignedTo) : $this->lang->bug->noAssigned;
+        $btnTextClass   = 'text-primary';
+        if($bug->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+
+        $btnClass     = $assignedToText == 'closed' ? ' disabled' : '';
+        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+
+        echo !common::hasPriv('bug', 'assignTo') ? "<span style='padding-left:25px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**

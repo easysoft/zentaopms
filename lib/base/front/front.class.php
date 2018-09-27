@@ -462,7 +462,7 @@ class baseHTML
      * @access public
      * @return string the reset button tag.
      */
-    public static function resetButton($label = '', $class = '')
+    public static function resetButton($label = '', $class = 'btn-wide')
     {
         if(empty($label))
         {
@@ -482,7 +482,7 @@ class baseHTML
      * @access public
      * @return string the back button tag.
      */
-    public static function backButton($label = '', $misc = '', $class = '')
+    public static function backButton($label = '', $misc = '', $class = 'btn-wide')
     {
         if(helper::inOnlyBodyMode()) return false;
 

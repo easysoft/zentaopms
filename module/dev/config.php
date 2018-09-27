@@ -1,4 +1,5 @@
 <?php
+$config->dev->group['index']          = 'my';
 $config->dev->group['my']             = 'my';
 $config->dev->group['todo']           = 'my';
 $config->dev->group['product']        = 'product';
@@ -16,6 +17,7 @@ $config->dev->group['taskestimate']   = 'project';
 $config->dev->group['team']           = 'project';
 $config->dev->group['build']          = 'project';
 $config->dev->group['burn']           = 'project';
+$config->dev->group['qa']             = 'qa';
 $config->dev->group['bug']            = 'qa';
 $config->dev->group['case']           = 'qa';
 $config->dev->group['testcase']       = 'qa';
@@ -49,6 +51,17 @@ $config->dev->group['mail']           = 'admin';
 $config->dev->group['backup']         = 'admin';
 $config->dev->group['cron']           = 'admin';
 $config->dev->group['dev']            = 'admin';
+$config->dev->group['svn']            = 'repo';
+$config->dev->group['git']            = 'repo';
+$config->dev->group['api']            = 'api';
+$config->dev->group['entry']          = 'api';
+$config->dev->group['install']        = 'system';
+$config->dev->group['upgrade']        = 'system';
+$config->dev->group['sso']            = 'system';
+$config->dev->group['search']         = 'system';
+$config->dev->group['message']        = 'message';
+$config->dev->group['mail']           = 'message';
+$config->dev->group['webhook']        = 'message';
 
 $config->dev->tableMap['storyspec']      = 'story';
 $config->dev->tableMap['storystage']     = 'story';

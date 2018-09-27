@@ -76,7 +76,7 @@ var browseType = '<?php echo $browseType;?>';
         <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn btn-secondary');?>
       </div>
       <div class='btn-toolbar'>
-        <?php echo html::backButton();?>
+        <?php echo html::backButton('', '', 'btn');?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
