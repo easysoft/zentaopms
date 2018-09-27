@@ -100,6 +100,23 @@
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?php common::printBack($browseLink);?>
+        <?php
+        if(!$doc->deleted)
+        {
+            echo "<div class='divider'></div>";
+            common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
+            common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
+        }
+        else
+        {
+            common::printRPN($browseLink);
+        }
+        ?>
+      </div>
+    </div>
   </div>
   <div class="side-col col-4">
     <div class="cell">
@@ -166,21 +183,6 @@
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
-  <div class="btn-toolbar">
-    <?php common::printBack($browseLink);?>
-    <?php
-    if(!$doc->deleted)
-    {
-        echo "<div class='divider'></div>";
-        common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
-        common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
-    }
-    else
-    {
-        common::printRPN($browseLink);
-    }
-    ?>
-  </div>
 </div>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

@@ -53,6 +53,34 @@
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php
+    $params        = "bugID=$bug->id";
+    $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
+    $convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
+    ?>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?php common::printBack($browseLink);?>
+        <?php if(!$bug->deleted):?>
+        <div class='divider'></div>
+        <?php
+        common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
+        common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
+        common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
+        common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
+        common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
+
+        if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
+        common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
+
+        echo "<div class='divider'></div>";
+        common::printIcon('bug', 'edit', $params, $bug);
+        common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
+        common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
+        ?>
+        <?php endif;?>
+      </div>
+    </div>
   </div>
   <div class="side-col col-4">
     <div class="cell">
@@ -314,34 +342,8 @@
   </div>
 </div>
 
-<?php
-$params        = "bugID=$bug->id";
-$copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
-$convertParams = "productID=$productID&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
-?>
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
-  <div class="btn-toolbar">
-    <?php common::printBack($browseLink);?>
-    <?php if(!$bug->deleted):?>
-    <div class='divider'></div>
-    <?php
-    common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
-    common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
-    common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
-    common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
-    common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
-
-    if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
-    common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
-
-    echo "<div class='divider'></div>";
-    common::printIcon('bug', 'edit', $params, $bug);
-    common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
-    common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
-    ?>
-    <?php endif;?>
-  </div>
 </div>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

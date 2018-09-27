@@ -138,7 +138,7 @@
     <div class="row form-group form-actions">
       <div class="col-sm-offset-2 col-sm-10">
         <?php echo html::submitButton();?>
-        <?php echo html::backButton('', '', 'btn btn-wide');?>
+        <?php echo html::backButton();?>
       </div>
     </div>
   </form>

@@ -55,7 +55,7 @@
           <th class='c-hours'>   <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
           <th class='c-date'>    <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
           <th class='c-status'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -94,17 +94,14 @@
             }
             else
             {
-                if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
                 if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                if($task->status == 'doing') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
+                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
 
                 common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                 common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                if(empty($task->team) or empty($task->children))
-                {
-                    common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
-                }
+                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
             }
             ?>
           </td>

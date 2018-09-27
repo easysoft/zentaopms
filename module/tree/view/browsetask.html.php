@@ -110,7 +110,7 @@
               <td colspan='2' class="form-actions">
                 <?php
                 echo html::submitButton();
-                echo $this->session->taskList ? html::linkButton($this->lang->goback, $this->session->taskList, '', '', 'btn btn-wide') : html::backButton('', '', 'btn btn-wide');
+                echo $this->session->taskList ? html::linkButton($this->lang->goback, $this->session->taskList, '', '', 'btn btn-wide') : html::backButton();
                 echo html::hidden('parentModuleID', $currentModuleID);
                 echo html::hidden('maxOrder', $maxOrder);
                 ?>

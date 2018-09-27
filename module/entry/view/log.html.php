@@ -17,7 +17,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'></i> " . $lang->entry->setting, '', "class='btn btn-primary'");?>
-    <?php echo html::backButton();?>
+    <?php echo html::backButton('', '' , 'btn');?>
   </div>
 </div>
 <div id='mainContent' class='main-content'>

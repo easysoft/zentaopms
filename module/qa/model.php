@@ -34,7 +34,8 @@ class qaModel extends model
         }
         else
         {
-            $productIndex  = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+            $currentMethod = $this->app->getMethodName();
+            $productIndex  = '<div class="btn-group angle-btn' . ($currentMethod == 'index' ? ' active' : '') . '"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
             $productIndex .= $selectHtml;
         }
 

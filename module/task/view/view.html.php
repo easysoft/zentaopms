@@ -135,6 +135,33 @@
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
+    <div class='main-actions'>
+      <div class="btn-toolbar">
+        <?php common::printBack($browseLink);?>
+        <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
+        <?php if(!$task->deleted):?>
+        <?php
+        common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
+        common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('task', 'pause',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('task', 'finish',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
+        common::printIcon('task', 'activate',       "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
+        common::printIcon('task', 'close',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
+
+        if(!isonlybody()) echo "<div class='divider'></div>";
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button','plus','','','','',' ');
+        common::printIcon('task', 'edit', "taskID=$task->id", $task);
+        common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
+        common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', '', 'hiddenwin');
+
+        if(!empty($task->parent)) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
+        ?>
+        <?php endif;?>
+      </div>
+    </div>
   </div>
   <div class="side-col col-4">
     <div class="cell">
@@ -337,31 +364,6 @@
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
-  <div class="btn-toolbar">
-    <?php common::printBack($browseLink);?>
-    <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-    <?php if(!$task->deleted):?>
-    <?php
-    common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
-    common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-    common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-    common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-    common::printIcon('task', 'pause',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-    common::printIcon('task', 'finish',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
-    common::printIcon('task', 'activate',       "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
-    common::printIcon('task', 'close',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-    common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-
-    if(!isonlybody()) echo "<div class='divider'></div>";
-    if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button','plus','','','','',' ');
-    common::printIcon('task', 'edit', "taskID=$task->id", $task);
-    common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
-    common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', '', 'hiddenwin');
-
-    if(!empty($task->parent)) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
-    ?>
-    <?php endif;?>
-  </div>
 </div>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

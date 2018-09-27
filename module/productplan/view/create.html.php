@@ -59,7 +59,7 @@
           <tr>
             <td colspan='4' class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php echo html::backButton('', '', 'btn btn-wide');?>
+              <?php echo html::backButton();?>
               <?php echo html::hidden('product', $product->id);?>
             </td>
           </tr>
