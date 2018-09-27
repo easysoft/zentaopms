@@ -28,7 +28,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .nav-secondary > li.active > a:hover,
 .block-statistic .nav-secondary > li.active > a:focus,
 .block-statistic .nav-secondary > li > a:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
-.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; right: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
 .block-statistic .nav-secondary > li.switch-icon {display: none;}
 .block-statistic.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px; border-radius: 3px;}
 .block-statistic.block-sm .panel-body > .table-row,
@@ -122,12 +122,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
-                      <td class='text-left'><?php echo $project->undoneTasks;?></td>
-                    </tr>
-                    <tr>
                       <td class='text-right'><?php echo $lang->task->allTasks;?> :</td>
                       <td class='text-left'><?php echo $project->totalTasks;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
+                      <td class='text-left'><?php echo $project->undoneTasks;?></td>
                     </tr>
                   </table>
                 </div>
@@ -142,12 +142,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
-                      <td class='text-left'><?php echo $project->unclosedStories;?></td>
-                    </tr>
-                    <tr>
                       <td class='text-right'><?php echo $lang->story->total;?> :</td>
                       <td class='text-left'><?php echo $project->totalStories;?></td>
+                    </tr>
+                    <tr>
+                      <td class='text-right'><?php echo $lang->story->unclosed;?> :</td>
+                      <td class='text-left'><?php echo $project->unclosedStories;?></td>
                     </tr>
                   </table>
                 </div>
@@ -163,12 +163,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
-                      <td class='text-left'><?php echo $project->activeBugs;?></td>
+                      <td class='text-right'><?php echo $lang->bug->allBugs . ' Bug';?> :</td>
+                      <td class='text-left'><?php echo $project->totalBugs;?></td>
                     </tr>
                     <tr>
-                      <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
-                      <td class='text-left'><?php echo $project->totalBugs;?></td>
+                      <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
+                      <td class='text-left'><?php echo $project->activeBugs;?></td>
                     </tr>
                   </table>
                 </div>

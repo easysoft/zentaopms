@@ -41,7 +41,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .nav-secondary > li.active > a:hover,
 .block-statistic .nav-secondary > li.active > a:focus,
 .block-statistic .nav-secondary > li > a:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
-.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; right: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
 .block-statistic .nav-secondary > li.switch-icon {display: none;}
 .block-statistic.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px;}
 .block-statistic.block-sm .panel-body > .table-row,
@@ -142,12 +142,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->productplan->featureBar['browse']['unexpired'];?> :</td>
-                      <td class='text-left'><?php echo $unexpiredPlan;?></td>
+                      <td class='text-right'><?php echo $lang->productplan->all;?> :</td>
+                      <td class='text-left'><?php echo $totalPlan;?></td>
                     </tr>
                     <tr>
-                      <td class='text-right'><?php echo $lang->story->planAB;?> :</td>
-                      <td class='text-left'><?php echo $totalPlan;?></td>
+                      <td class='text-right'><?php echo $lang->productplan->featureBar['browse']['unexpired'];?> :</td>
+                      <td class='text-left'><?php echo $unexpiredPlan;?></td>
                     </tr>
                   </table>
                 </div>
@@ -176,12 +176,12 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->project->statusList['doing'];?> :</td>
-                      <td class='text-left'><?php echo $doingProject;?></td>
+                      <td class='text-right'><?php echo $lang->project->allProjects;?> :</td>
+                      <td class='text-left'><?php echo $totalProject;?></td>
                     </tr>
                     <tr>
-                      <td class='text-right'><?php echo $lang->projectCommon;?> :</td>
-                      <td class='text-left'><?php echo $totalProject;?></td>
+                      <td class='text-right'><?php echo $lang->project->statusList['doing'];?> :</td>
+                      <td class='text-left'><?php echo $doingProject;?></td>
                     </tr>
                   </table>
                 </div>
