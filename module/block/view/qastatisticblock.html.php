@@ -26,7 +26,7 @@
 .block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
 .block-statistic .nav-secondary > li.active > a:hover,
 .block-statistic .nav-secondary > li.active > a:focus,
-.block-statistic .nav-secondary > li > a:hover {box-shadow: none;}
+.block-statistic .nav-secondary > li > a:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
 .block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
 .block-statistic .nav-stacked {overflow: auto; max-height: 247px;}
 .block-statistic .progress-pie .progress-info > strong {font-size: 24px;}
