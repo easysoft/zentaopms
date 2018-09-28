@@ -21,7 +21,7 @@
 .block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-statistic .col-nav {border-left: 1px solid #EBF2FB; width: 260px; padding: 0;}
+.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
 .block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
 .block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
 .block-statistic .nav-secondary > li.active > a:hover,
