@@ -75,10 +75,10 @@ $lang->report->unplanned     = '未計劃';
 $lang->report->workday       = '每天工時';
 $lang->report->diffDays      = '工作日天數';
 
-$lang->report->typeList['']     = '預設';
-$lang->report->typeList['pie']  = '餅圖';
-$lang->report->typeList['bar']  = '柱狀圖';
-$lang->report->typeList['line'] = '折線圖';
+$lang->report->typeList['default'] = '預設';
+$lang->report->typeList['pie']     = '餅圖';
+$lang->report->typeList['bar']     = '柱狀圖';
+$lang->report->typeList['line']    = '折線圖';
 
 $lang->report->conditions    = '篩選條件：';
 $lang->report->closedProduct = '關閉' . $lang->productCommon;
@@ -99,5 +99,5 @@ $lang->report->mailTitle->task     = " 任務(%s),";
 $lang->report->mailTitle->todo     = " 待辦(%s),";
 $lang->report->mailTitle->testTask = " 測試版本(%s),";
 
-$lang->report->proVersion = '<a href="http://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';
+$lang->report->proVersion = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';
 $lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';

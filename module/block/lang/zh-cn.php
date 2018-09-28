@@ -120,8 +120,8 @@ $lang->block->default['qa']['1']['title'] = '测试统计';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;
 
-$lang->block->default['qa']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['1']['params']['type']    = 'noclosed';
+$lang->block->default['qa']['1']['params']['type'] = 'noclosed';
+$lang->block->default['qa']['1']['params']['num']  = '20';
 
 //$lang->block->default['qa']['2']['title'] = '测试用例总览';
 //$lang->block->default['qa']['2']['block'] = 'overview';

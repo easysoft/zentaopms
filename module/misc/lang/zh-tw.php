@@ -12,7 +12,7 @@
 $lang->misc = new stdclass();
 $lang->misc->common = '雜項';
 $lang->misc->ping   = '防超時';
-$lang->misc->api    = 'http://api.zentao.net';
+$lang->misc->api    = 'https://api.zentao.net';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
@@ -74,19 +74,32 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
-$lang->misc->releaseDate['9.8.stable'] = '2018-01-17';
-$lang->misc->releaseDate['9.7.stable'] = '2017-12-22';
-$lang->misc->releaseDate['9.6.stable'] = '2017-11-06';
-$lang->misc->releaseDate['9.5.1']      = '2017-09-27';
-$lang->misc->releaseDate['9.3.beta']   = '2017-06-21';
-$lang->misc->releaseDate['9.1.stable'] = '2017-03-23';
-$lang->misc->releaseDate['9.0.beta']   = '2017-01-03';
-$lang->misc->releaseDate['8.3.stable'] = '2016-11-09';
-$lang->misc->releaseDate['8.2.stable'] = '2016-05-17';
-$lang->misc->releaseDate['7.4.beta']   = '2015-11-13';
-$lang->misc->releaseDate['7.2.stable'] = '2015-05-22';
-$lang->misc->releaseDate['7.1.stable'] = '2015-03-07';
-$lang->misc->releaseDate['6.3.stable'] = '2014-11-07';
+$lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
+$lang->misc->releaseDate['10.3.stable'] = '2018-08-10';
+$lang->misc->releaseDate['10.2.stable'] = '2018-08-02';
+$lang->misc->releaseDate['10.0.stable'] = '2018-06-26';
+$lang->misc->releaseDate['9.8.stable']  = '2018-01-17';
+$lang->misc->releaseDate['9.7.stable']  = '2017-12-22';
+$lang->misc->releaseDate['9.6.stable']  = '2017-11-06';
+$lang->misc->releaseDate['9.5.1']       = '2017-09-27';
+$lang->misc->releaseDate['9.3.beta']    = '2017-06-21';
+$lang->misc->releaseDate['9.1.stable']  = '2017-03-23';
+$lang->misc->releaseDate['9.0.beta']    = '2017-01-03';
+$lang->misc->releaseDate['8.3.stable']  = '2016-11-09';
+$lang->misc->releaseDate['8.2.stable']  = '2016-05-17';
+$lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
+$lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
+$lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
+$lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['10.4.stable'][] = array('title'=>'優化調整新界面', 'desc' => '<p>詳情頁面還原我們之前的排版佈局</p><p>重構添加用戶頁面的表單</p><p>用例執行時，如果用戶手工選擇了通過，寫結果的時候不要更新用例狀態</p>');
+$lang->misc->feature->all['10.4.stable'][] = array('title'=>'用戶機器休眠登錄失效後，重新刷新session', 'desc' => '');
+$lang->misc->feature->all['10.4.stable'][] = array('title'=>'提升現有的介面機制', 'desc' => '');
+
+$lang->misc->feature->all['10.3.stable'][] = array('title'=>'修復Bug', 'desc' => '');
+$lang->misc->feature->all['10.2.stable'][] = array('title'=>'整合喧喧IM', 'desc' => '');
+
+$lang->misc->feature->all['10.0.stable'][] = array('title'=>'全新的界面和交互體驗', 'desc' => '<ol><li>全新的我的地盤</li><li>全新的動態頁面</li><li>全新的產品主頁</li><li>全新的產品概況</li><li>全新的路線圖</li><li>全新的項目主頁</li><li>全新的項目概況</li><li>全新的測試主頁</li><li>全新的文檔主頁</li><li>我的地盤新增工作統計區塊</li><li>我的地盤待辦區塊可以直接添加、編輯、完成待辦</li><li>產品主頁新增產品統計區塊</li><li>產品主頁新增產品總覽區塊</li><li>項目主頁新增項目統計區塊</li><li>項目主頁新增項目總覽區塊</li><li>測試主頁新增測試統計區塊</li><li>所有產品、產品主頁、所有項目、項目主頁、測試主頁等按鈕從二級導航右側移動到了左側</li><li>項目任務列表看板、燃盡圖、樹狀圖、分組查看等按鈕從三級導航中移動到二級導航中，樹狀圖、分組查看和任務列表整合到一個下拉列表中</li><li>項目下二級導航中Bug、版本、測試單三個跟測試相關的導航整合到一個下拉列表中</li><li>版本、測試單列表按照產品分組展示，佈局更加合理</li><li>文檔左側增加樹狀圖顯示</li><li>文檔增加快速訪問功能，包括最近更新、我的文檔、我的收藏三個入口</li><li>文檔增加收藏功能</li><ol>');
 
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'實現集中的消息處理機制', 'desc' => '<p>郵件，短信，webhook都放統一的消息發送</p><p>移植然之裡面的消息通知功能</p>');
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'實現周期性待辦功能', 'desc' => '');

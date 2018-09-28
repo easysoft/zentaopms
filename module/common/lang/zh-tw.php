@@ -81,7 +81,7 @@ $lang->homepage        = '設為模組首頁';
 $lang->tutorial        = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
-$lang->manualUrl       = 'http://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
+$lang->manualUrl       = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $lang->customMenu      = '自定義導航';
 $lang->customField     = '自定義表單項';
 $lang->lineNumber      = '行號';
@@ -122,8 +122,7 @@ $lang->menu->qa      = '測試|qa|index';
 $lang->menu->doc     = '文檔|doc|index';
 $lang->menu->report  = '統計|report|index';
 $lang->menu->company = '組織|company|index';
-
-$lang->adminMenu = '後台|admin|index';
+$lang->menu->admin   = '後台|admin|index';
 
 $lang->dividerMenu = ',qa,';
 
@@ -229,11 +228,12 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->list    = array('link' => '任務列表|project|task|projectID=%s', 'subModule' => 'task,grouptask,tree', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->task    = array('link' => '任務|project|task|projectID=%s', 'subModule' => 'task,tree');
 $lang->project->menu->kanban  = array('link' => '看板|project|kanban|projectID=%s');
 $lang->project->menu->burn    = array('link' => '燃盡圖|project|burn|projectID=%s');
+$lang->project->menu->list    = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story   = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa      = array('link' => 'Bug|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->qa      = array('link' => '測試|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc     = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->action  = array('link' => '動態|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product = $lang->productCommon . '|project|manageproducts|projectID=%s';
@@ -242,7 +242,6 @@ $lang->project->menu->view    = array('link' => '概況|project|view|projectID=%
 
 $lang->project->subMenu = new stdclass();
 $lang->project->subMenu->list = new stdclass();
-$lang->project->subMenu->list->task      = '任務列表|project|task|projectID=%s';
 $lang->project->subMenu->list->groupTask = '分組視圖|project|groupTask|projectID=%s';
 $lang->project->subMenu->list->tree      = '樹狀圖|project|tree|projectID=%s';
 
@@ -350,8 +349,8 @@ $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => '用戶|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => '部門|dept|browse', 'subModule' => 'dept');
 $lang->company->menu->browseGroup = array('link' => '權限|group|browse', 'subModule' => 'group');
-$lang->company->menu->view        = array('link' => '公司|company|view');
 $lang->company->menu->dynamic     = '動態|company|dynamic|';
+$lang->company->menu->view        = array('link' => '公司|company|view');
 
 $lang->dept  = new stdclass();
 $lang->group = new stdclass();
@@ -373,6 +372,7 @@ $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 
 $lang->admin->menu->cron      = array('link' => '計劃任務|cron|index', 'subModule' => 'cron');
 $lang->admin->menu->trashes   = array('link' => '資源回收筒|action|trash', 'subModule' => 'action');
 $lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
+$lang->admin->menu->entry     = array('link' => '應用|entry|browse', 'subModule' => 'entry');
 $lang->admin->menu->sso       = '然之整合|admin|sso';
 
 $lang->convert   = new stdclass();
@@ -478,9 +478,9 @@ $lang->pager->previousPage = "上一頁";
 $lang->pager->nextPage     = "下一頁";
 $lang->pager->summery      = "第 <strong>%s-%s</strong> 項，共 <strong>%s</strong> 項";
 
-$lang->proVersion = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>專業版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->proVersion = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>專業版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify = "下載桌面提醒";
-$lang->website    = "http://www.zentao.net";
+$lang->website    = "https://www.zentao.net";
 
 $lang->suhosinInfo     = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
 $lang->maxVarsInfo     = "警告：數據太多，請在php.ini中修改<font color=red>max_input_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
@@ -569,7 +569,7 @@ $lang->icons['batchCreate']        = 'plus-sign';
 $lang->icons['batchEdit']          = 'edit-sign';
 $lang->icons['batchClose']         = 'off';
 $lang->icons['edit']               = 'edit';
-$lang->icons['delete']             = 'trash';
+$lang->icons['delete']             = 'close';
 $lang->icons['copy']               = 'copy';
 $lang->icons['report']             = 'bar-chart';
 $lang->icons['export']             = 'export';
@@ -659,8 +659,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     /* Adjust sub menu of project  module. */
     unset($lang->project->menu->story);
     unset($lang->project->menu->build);
-    unset($lang->project->menu->bug);
-    unset($lang->project->menu->testtask);
+    unset($lang->project->menu->qa);
     unset($lang->project->menu->product);
     unset($lang->project->menu->doc);
 

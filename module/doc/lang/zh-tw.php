@@ -133,7 +133,7 @@ $lang->doc->fastMenuIconList['openedbyme']    = 'icon-folder-account';
 $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 
 $lang->doc->customObjectLibs['files']       = '顯示附件庫';
-$lang->doc->customObjectLibs['customFiles'] = '顯示自定義檔案';
+$lang->doc->customObjectLibs['customFiles'] = '顯示自定義文檔庫';
 
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";

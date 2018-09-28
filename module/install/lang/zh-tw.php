@@ -17,7 +17,7 @@ $lang->install->pre     = '返回';
 $lang->install->reload  = '刷新';
 $lang->install->error   = '錯誤 ';
 
-$lang->install->officeDomain     = 'http://www.zentao.net';
+$lang->install->officeDomain     = 'https://www.zentao.net';
 
 $lang->install->start            = '開始安裝';
 $lang->install->keepInstalling   = '繼續安裝當前版本';
@@ -31,8 +31,8 @@ $lang->install->desc             = <<<EOT
 EOT;
 $lang->install->links = <<<EOT
 禪道項目管理軟件由<strong><a href='http://www.cnezsoft.com' target='_blank' class='text-danger'>青島易軟天創網絡科技有限公司</a>開發</strong>。
-官方網站：<a href='http://www.zentao.net' target='_blank'>http://www.zentao.net</a>
-技術支持：<a href='http://www.zentao.net/ask/' target='_blank'>http://www.zentao.net/ask/</a>
+官方網站：<a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
+技術支持：<a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
 新浪微博：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
 
 
@@ -168,7 +168,7 @@ $lang->install->login    = '登錄禪道管理系統';
 $lang->install->register = '禪道社區註冊';
 
 $lang->install->joinZentao = <<<EOT
-<p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。</p><p>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='http://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)進行登記。</p>
+<p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。</p><p>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='https://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)進行登記。</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'ranzhi', 'xuanxuan');

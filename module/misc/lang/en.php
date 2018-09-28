@@ -74,7 +74,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Details';
 
-$lang->misc->releaseDate['10.4.stable'] = '2018-09-26';
+$lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
 $lang->misc->releaseDate['10.3.stable'] = '2018-08-10';
 $lang->misc->releaseDate['10.2.stable'] = '2018-08-02';
 $lang->misc->releaseDate['10.0.stable'] = '2018-06-26';

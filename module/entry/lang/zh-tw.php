@@ -14,6 +14,7 @@ $lang->entry->createKey = '重新生成密鑰';
 
 $lang->entry->id          = 'ID';
 $lang->entry->name        = '名稱';
+$lang->entry->account     = '賬號';
 $lang->entry->code        = '代號';
 $lang->entry->key         = '密鑰';
 $lang->entry->ip          = 'IP';
@@ -41,4 +42,5 @@ $lang->entry->errmsg['EMPTY_KEY']             = '應用未設置密鑰';
 $lang->entry->errmsg['INVALID_TOKEN']         = '無效的token參數';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'session驗證失敗';
 $lang->entry->errmsg['IP_DENIED']             = '該IP被限制訪問';
+$lang->entry->errmsg['ACCOUNT_UNBOUND']       = '未綁定用戶';
 $lang->entry->errmsg['EMPTY_ENTRY']           = '應用不存在';
