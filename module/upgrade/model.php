@@ -1839,7 +1839,7 @@ class upgradeModel extends model
     {
         $fromVersion = $this->config->installedVersion;
         $needProcess = array();
-        if(strpos($fromVersion, 'pro') === false ? $fromVersion < '8.3' : $fromVersion < 'pro5.4') $needProcess['updateFile'] = true;
+        if(strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($config->installedVersion, 'pro5.4', '<')) $needProcess['updateFile'] = true;
         return $needProcess;
     }
 

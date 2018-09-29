@@ -42,7 +42,7 @@
 <script>
 <?php
 foreach($needProcess as $processKey => $value) echo 'var ' . $processKey . "Finish = false;\n";
-$needUpdateFile   = strpos($config->installedVersion, 'pro') === false ? $config->installedVersion < '8.3' : $config->installedVersion < 'pro5.4';
+$needUpdateFile = strpos($config->installedVersion, 'pro') === false ?  version_compare($config->installedVersion, '8.3', '<') : version_compare($config->installedVersion, 'pro5.4', '<');
 if($needUpdateFile):?>
 $(function()
 {

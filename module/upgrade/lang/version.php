@@ -95,3 +95,4 @@ $lang->upgrade->fromVersions['10_0']       = '10.0';
 $lang->upgrade->fromVersions['10_1']       = '10.1';
 $lang->upgrade->fromVersions['10_2']       = '10.2';
 $lang->upgrade->fromVersions['10_3']       = '10.3';
+$lang->upgrade->fromVersions['10_3_1']     = '10.3.1';

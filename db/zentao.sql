@@ -875,10 +875,18 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
   PRIMARY KEY  (`id`),
   KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_userview`;
+CREATE TABLE IF NOT EXISTS `zt_userview` (
+  `account` char(30) NOT NULL,
+  `products` text NOT NULL,
+  `projects` text NOT NULL,
+  UNIQUE KEY `account` (`account`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_entry`;
 CREATE TABLE IF NOT EXISTS `zt_entry` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
+  `account` varchar(30) NOT NULL DEFAULT '',
   `code` varchar(20) NOT NULL,
   `key` varchar(32) NOT NULL,
   `ip` varchar(100) NOT NULL,

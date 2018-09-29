@@ -30,7 +30,7 @@
       <tbody>
         <?php foreach($entries as $id => $entry):?>
         <tr>
-          <td class='text-center'><?php echo $id;?></td>
+          <td><?php echo $id;?></td>
           <td title='<?php echo $entry->name;?>'><?php echo $entry->name;?></td>
           <td><?php echo $entry->code;?></td>
           <td title='<?php echo $entry->key;?>'><?php echo $entry->key;?></td>

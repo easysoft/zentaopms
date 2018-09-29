@@ -99,7 +99,7 @@ $lang->extension->waring = '警告';
 
 $lang->extension->errorOccurs                  = '錯誤：';
 $lang->extension->errorGetModules              = '從www.zentao.net獲得插件分類失敗。可能是因為網絡方面的原因，請檢查後重新刷新頁面。';
-$lang->extension->errorGetExtensions           = '從www.zentao.net獲得插件失敗。可能是因為網絡方面的原因，您可以到 <a href="http://www.zentao.net/extension/" target="_blank" class="alert-link">www.zentao.net</a> 手工下載插件，然後上傳安裝。';
+$lang->extension->errorGetExtensions           = '從www.zentao.net獲得插件失敗。可能是因為網絡方面的原因，您可以到 <a href="https://www.zentao.net/extension/" target="_blank" class="alert-link">www.zentao.net</a> 手工下載插件，然後上傳安裝。';
 $lang->extension->errorDownloadPathNotFound    = '插件下載存儲路徑<strong>%s</strong>不存在。<br />linux下面請執行命令：<strong>mkdir -p %s</strong>來修正。';
 $lang->extension->errorDownloadPathNotWritable = '插件下載存儲路徑<strong>%s</strong>不可寫。<br />linux下面請執行命令：<strong>sudo chmod 777 %s</strong>來修正。';
 $lang->extension->errorPackageFileExists       = '下載路徑已經有一個名為的<strong>%s</strong>附件。<h5>重新%s，<a href="%s" class="alert-link">請點擊此連結</a></h5>';

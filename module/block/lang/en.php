@@ -67,8 +67,8 @@ $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report
 $lang->block->default['product']['1']['block'] = 'statistic';
 $lang->block->default['product']['1']['grid']  = 8;
 
-$lang->block->default['product']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['product']['1']['params']['type']    = 'all';
+$lang->block->default['product']['1']['params']['type'] = 'all';
+$lang->block->default['product']['1']['params']['num']  = '20';
 
 $lang->block->default['product']['2']['title'] = $lang->productCommon . ' Overview';
 $lang->block->default['product']['2']['block'] = 'overview';
@@ -93,8 +93,8 @@ $lang->block->default['project']['1']['title'] = $lang->projectCommon . ' Report
 $lang->block->default['project']['1']['block'] = 'statistic';
 $lang->block->default['project']['1']['grid']  = 8;
 
-$lang->block->default['project']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['project']['1']['params']['type']    = 'all';
+$lang->block->default['project']['1']['params']['type'] = 'all';
+$lang->block->default['project']['1']['params']['num']  = '20';
 
 $lang->block->default['project']['2']['title'] = $lang->projectCommon . ' Overview';
 $lang->block->default['project']['2']['block'] = 'overview';
@@ -120,8 +120,8 @@ $lang->block->default['qa']['1']['title'] = 'Test Report';
 $lang->block->default['qa']['1']['block'] = 'statistic';
 $lang->block->default['qa']['1']['grid']  = 8;
 
-$lang->block->default['qa']['1']['params']['orderBy'] = 'id_desc';
-$lang->block->default['qa']['1']['params']['type']    = 'noclosed';
+$lang->block->default['qa']['1']['params']['type'] = 'noclosed';
+$lang->block->default['qa']['1']['params']['num']  = '20';
 
 //$lang->block->default['qa']['2']['title'] = 'Testcase Overview';
 //$lang->block->default['qa']['2']['block'] = 'overview';

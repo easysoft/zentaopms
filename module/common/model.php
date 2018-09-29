@@ -1679,7 +1679,7 @@ EOD;
 
         $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
         curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
         if(!empty($data))
         {

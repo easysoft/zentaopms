@@ -195,6 +195,7 @@ $lang->story->errorEmptyChildStory  = '『細分需求』不能為空。';
 $lang->story->mustChooseResult      = '必須選擇評審結果';
 $lang->story->mustChoosePreVersion  = '必須選擇回溯的版本';
 $lang->story->noStory               = '暫時沒有需求。';
+$lang->story->ignoreChangeStage     = '需求 %s 為草稿狀態，沒有修改其階段。';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = '該需求所屬範圍';

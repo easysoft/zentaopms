@@ -167,8 +167,6 @@ $lang->bug->remindTask            = '該Bug已經轉化為任務，是否更新�
 $lang->bug->skipClose             = 'Bug %s 不是已解決狀態，不能關閉。';
 $lang->bug->applyTemplate         = '應用模板';
 $lang->bug->confirmDeleteTemplate = '您確認要刪除該模板嗎？';
-$lang->bug->hasSubmittedTest      = '開發已提交測試申請，';
-$lang->bug->nowToTest             = '現在去測試';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p><br/>";

@@ -1,4 +1,4 @@
-CREATE TABLE `zt_userview` (
+CREATE TABLE IF NOT EXISTS `zt_userview` (
   `account` char(30) NOT NULL,
   `products` text NOT NULL,
   `projects` text NOT NULL,

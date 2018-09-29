@@ -33,6 +33,8 @@ $lang->productplan->unlinkBug        = "移除Bug";
 $lang->productplan->batchUnlinkBug   = "批量移除Bug";
 $lang->productplan->linkedBugs       = 'Bug';
 $lang->productplan->unlinkedBugs     = '未關聯Bug';
+$lang->productplan->unexpired        = '未過期計劃';
+$lang->productplan->all              = '所有計劃';
 
 $lang->productplan->confirmDelete      = "您確認刪除該計劃嗎？";
 $lang->productplan->confirmUnlinkStory = "您確認移除該需求嗎？";
