@@ -16,7 +16,7 @@
 <div class='center-block mw-800px center-block-sm'>
   <div class="main-header">
     <h2>
-      <?php echo $lang->entry->api;?>
+      <?php echo $lang->entry->common;?>
       <small><?php echo $lang->arrow . ' ' . $lang->entry->edit;?></small>
     </h2>
   </div>

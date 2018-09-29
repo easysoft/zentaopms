@@ -8,3 +8,7 @@
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
 * @link        http://www.zentao.net
 */
+
+/* Change zentao icon on fixed footer with classic style image */
+#poweredBy .icon-zentao {background: url(images/main/icon.png) center no-repeat}
+#poweredBy .icon-zentao:before {visibility: hidden;}
