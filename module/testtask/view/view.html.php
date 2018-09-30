@@ -42,7 +42,7 @@
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=testtask&objectID=$task->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
-    <div class='main-content'>
+    <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <?php if(!$task->deleted):?>
@@ -111,7 +111,7 @@
   </div>
 </div>
 
-<div id='mainActions'>
+<div id='mainActions' class='main-actions'>
   <?php common::printPreAndNext($browseLink);?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -86,7 +86,7 @@ class commonModel extends model
     {
         if($this->session->user)
         {
-            $this->session->user->view = $this->loadModel('user')->grantUserView();
+            if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
             $this->app->user = $this->session->user;
         }
         elseif($this->app->company->guest or PHP_SAPI == 'cli')
@@ -99,7 +99,7 @@ class commonModel extends model
             $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
             $user->groups     = array('group');
-            $user->view       = $this->user->grantUserView($user->account, $user->rights['acls']);
+            if(!defined('IN_UPGRADE')) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }

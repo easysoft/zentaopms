@@ -23,7 +23,7 @@
               <div class="release-path">
                 <ul class="release-line">
                   <?php foreach($roadmap as $year => $branches):?>
-                  <?php $plans = $branches[0];?>
+                  <?php foreach($branches as $plans):?>
                   <?php foreach($plans as $plan):?>
                   <?php if(isset($plan->begin)):?>
                   <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
@@ -40,6 +40,7 @@
                     </a>
                   </li>
                   <?php endif;?>
+                  <?php endforeach;?>
                   <?php endforeach;?>
                   <?php endforeach;?>
                 </ul>
