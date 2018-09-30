@@ -677,7 +677,7 @@ class blockModel extends model
         $products = $mineProducts = $otherProducts = $closedProducts = array();
         foreach($productList as $product)
         {
-            if(!$this->app->user->admin and !$this->product->checkPriv($product)) continue;
+            if(!$this->app->user->admin and !$this->product->checkPriv($product->id)) continue;
             if($product->status == 'normal' and $product->PO == $this->app->user->account) 
             {
                 $mineProducts[$product->id] = $product;
@@ -713,7 +713,7 @@ class blockModel extends model
         $projects = $mineProjects = $otherProjects = $closedProjects = array();
         foreach($projectList as $project)
         {
-            if(!$this->app->user->admin and !$this->project->checkPriv($project)) continue;
+            if(!$this->app->user->admin and !$this->project->checkPriv($project->id)) continue;
             if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
             {
                 $mineProjects[$project->id] = $project;

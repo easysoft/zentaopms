@@ -446,7 +446,12 @@ function loadProductBranches(productID)
 function loadAssignedTo(projectID)
 {
     link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
-    $('#assignedToBox').load(link, function(){$('#assignedTo').chosen();});
+    $.get(link, function(data)
+    {
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo').chosen();
+    });
 }
 
 /**

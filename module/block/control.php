@@ -1070,7 +1070,7 @@ class block extends control
         $products = $this->loadModel('product')->getList();
         foreach($products as $product)
         {
-            if(!$this->product->checkPriv($product)) continue;
+            if(!$this->product->checkPriv($product->id)) continue;
 
             if($product->status == 'normal') $normal++;
             if($product->status == 'closed') $closed++;
@@ -1094,7 +1094,7 @@ class block extends control
         $total = 0;
         foreach($projects as $project)
         {
-            if(!$this->project->checkPriv($project)) continue;
+            if(!$this->project->checkPriv($project->id)) continue;
 
             if(!isset($overview[$project->status])) $overview[$project->status] = 0;
             $overview[$project->status]++;
