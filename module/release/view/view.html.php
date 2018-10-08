@@ -235,6 +235,17 @@
                     <th class='w-50px'>    <?php echo $lang->actions;?></th>
                   </tr>
                 </thead>
+                <?php
+                $hasCustomSeverity = false;
+                foreach($lang->bug->severityList as $severityKey => $severityValue)
+                {
+                    if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
+                    {
+                        $hasCustomSeverity = true;
+                        break;
+                    }
+                }
+                ?>
                 <tbody class='text-center'>
                   <?php foreach($leftBugs as $bug):?>
                   <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
@@ -249,7 +260,11 @@
                       <?php echo sprintf('%03d', $bug->id);?>
                     </td>
                     <td class='c-severity'>
+                      <?php if($hasCustomSeverity):?>
+                      <span class='<?php echo 'label-severity-custom';?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
+                      <?php else:?>
                       <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
+                      <?php endif;?>
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                     <td><span class='status-<?php echo $bug->status?>'> <?php echo zget($lang->bug->statusList, $bug->status);?></span></td>

@@ -142,8 +142,25 @@
                   <td><?php if(isset($lang->bug->typeList[$bug->type])) echo $lang->bug->typeList[$bug->type]; else echo $bug->type;?></td>
                 </tr>
                 <tr>
+                  <?php
+                  $hasCustomSeverity = false;
+                  foreach($lang->bug->severityList as $severityKey => $severityValue)
+                  {
+                      if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
+                      {
+                          $hasCustomSeverity = true;
+                          break;
+                      }
+                  }
+                  ?>
                   <th><?php echo $lang->bug->severity;?></th>
-                  <td><span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity)?>'></span></td>
+                  <td>
+                    <?php if($hasCustomSeverity):?>
+                    <span class='label-severity-custom' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
+                    <?php else:?>
+                    <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity)?>'></span>
+                    <?php endif;?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->pri;?></th>

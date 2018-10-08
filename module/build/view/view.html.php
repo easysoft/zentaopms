@@ -247,13 +247,28 @@ tbody tr td:first-child input{display:none;}
                 <th class='w-100px'>   <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
               </tr>
             </thead>
+            <?php
+            $hasCustomSeverity = false;
+            foreach($lang->bug->severityList as $severityKey => $severityValue)
+            {
+                if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
+                {
+                    $hasCustomSeverity = true;
+                    break;
+                }
+            }
+            ?>
             <tbody class='text-center'>
               <?php foreach($generatedBugs as $bug):?>
               <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
               <tr>
                 <td class='text-left'><?php printf('%03d', $bug->id);?></td>
                 <td>
+                  <?php if($hasCustomSeverity):?>
+                  <span class='label-severity-custom' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
+                  <?php else:?>
                   <span class='label-severity' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?>'></span>
+                  <?php endif;?>
                 </td>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
                 <td>

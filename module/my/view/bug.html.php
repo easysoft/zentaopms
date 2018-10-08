@@ -53,6 +53,17 @@
           <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
+      <?php
+      $hasCustomSeverity = false;
+      foreach($lang->bug->severityList as $severityKey => $severityValue)
+      {
+          if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
+          {
+              $hasCustomSeverity = true;
+              break;
+          }
+      }
+      ?>
       <tbody>
         <?php foreach($bugs as $bug):?>
         <tr>
@@ -65,7 +76,13 @@
             <?php endif;?>
             <?php printf('%03d', $bug->id);?>
           </td>
-          <td><span class='<?php echo 'label-severity';?>' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>'></span></td>
+          <td>
+            <?php if($hasCustomSeverity):?>
+            <span class='<?php echo 'label-severity-custom';?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
+            <?php else:?>
+            <span class='<?php echo 'label-severity';?>' data-severity='<?php echo $bug->severity;?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>'></span>
+            <?php endif;?>
+          </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
           <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
