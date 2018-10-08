@@ -2542,12 +2542,12 @@ class taskModel extends model
         }
         if($task->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
 
-        $btnClass     = $assignedToText == 'closed' ? ' disabled' : '';
+        $btnClass     = $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
         $assignToLink = helper::createLink('task', 'assignTo', "projectID=$task->project&taskID=$task->id", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
-        echo !common::hasPriv('task', 'assignTo') ? "<span style='padding-left:20px;' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+        echo !common::hasPriv('task', 'assignTo') ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**
