@@ -16,7 +16,7 @@
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedStories;?>
     </div>
-    <table class='table tablesorter'> 
+    <table class='table tablesorter'>
       <thead>
         <tr class='text-center'>
           <th class='c-id text-left'>
@@ -51,7 +51,7 @@
           <td><?php echo $users[$story->assignedTo];?></td>
           <td><?php echo $story->estimate;?></td>
           <td>
-            <span class='status-<?php echo $story->status?>'>
+            <span class='status-story status-<?php echo $story->status?>'>
               <?php echo $lang->story->statusList[$story->status];?>
             </span>
           </td>

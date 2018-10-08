@@ -193,7 +193,7 @@
             if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
           ?>
         </td>
-        <td class="c-status"><span class='status-<?php echo $task->status;?>'> <?php echo $lang->task->statusList[$task->status];?></span></td>
+        <td class="c-status"><span class='status-task status-<?php echo $task->status;?>'> <?php echo $lang->task->statusList[$task->status];?></span></td>
         <td class="c-assign"><?php echo "<span class='$assignedToClass'>" . $task->assignedToRealName . "</span>";?></td>
         <td class='c-user'><?php echo zget($users, $task->finishedBy);?></td>
         <td class="c-hours em"><?php echo $task->estimate;?></td>

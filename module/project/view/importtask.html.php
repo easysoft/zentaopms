@@ -60,12 +60,12 @@
           <td><?php echo $task->left;?></td>
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
           <td>
-            <span class='status-<?php echo $task->status;?>'>
+            <span class='status-task status-<?php echo $task->status;?>'>
               <?php echo $lang->task->statusList[$task->status];?>
             </span>
           </td>
           <td class='text-left nobr'>
-            <?php 
+            <?php
             if($task->storyID)
             {
                 if(common::hasPriv('story', 'view'))

@@ -97,7 +97,7 @@
                     <td class='c-id text-left'>
                       <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <input type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/> 
+                        <input type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/>
                         <label></label>
                       </div>
                       <?php endif;?>
@@ -108,7 +108,7 @@
                     <td><?php echo $users[$story->openedBy];?></td>
                     <td><?php echo $story->estimate;?></td>
                     <td>
-                      <span class='status-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span>
+                      <span class='status-story status-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span>
                     </td>
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
@@ -170,7 +170,7 @@
                     <td class='c-id text-left'>
                       <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                        <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
                         <label></label>
                       </div>
                       <?php endif;?>
@@ -178,7 +178,7 @@
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                     <td>
-                      <span class='status-<?php echo $bug->status?>'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
+                      <span class='status-bug status-<?php echo $bug->status?>'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
                     </td>
                     <td><?php echo $users[$bug->openedBy];?></td>
                     <td><?php echo substr($bug->openedDate, 5, 11)?></td>
@@ -242,7 +242,7 @@
                     <td class='c-id text-left'>
                       <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/> 
+                        <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
                         <label></label>
                       </div>
                       <?php endif;?>

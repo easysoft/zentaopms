@@ -54,7 +54,7 @@
           <td><?php echo zget($users, $story->assignedTo);?></td>
           <td><?php echo $story->estimate;?></td>
           <td>
-            <span class='status-<?php echo $story->status?>'>
+            <span class='status-story status-<?php echo $story->status?>'>
               <?php echo $lang->story->statusList[$story->status];?>
             </span>
           </td>

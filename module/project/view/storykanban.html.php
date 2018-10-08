@@ -3,7 +3,7 @@
  * The kanban view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @author      Wang Yidong, Zhu Jinyong 
+ * @author      Wang Yidong, Zhu Jinyong
  * @package     project
  * @version     $Id: kanban.html.php $
  */
@@ -22,7 +22,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <div class='btn-group'>
-    <?php 
+    <?php
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export');
 
     if(commonModel::isTutorialMode())
@@ -76,7 +76,7 @@ $account = $this->app->user->account;
                   <?php echo html::a($this->createLink('story', 'view', "story=$story->id", '', true), "#{$story->id} {$story->title}", '', 'class="title kanbaniframe" title="' . $story->title . '"');?>
                   <div class='info'>
                     <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
-                    <span class='status status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
+                    <span class='status status-story status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
                     <?php if(common::hasPriv('project', 'unlinkStory')):?>
                     <div class='pull-right'><?php echo html::a($this->createLink('project', 'unlinkStory', "projectID=$projectID&story=$story->id"), "<i class='icon icon-unlink icon-sm'></i>", 'hiddenwin', "title='{$lang->project->unlinkStory}'");?></div>
                     <?php endif;?>

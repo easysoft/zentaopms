@@ -16,7 +16,7 @@
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?>  <?php echo $lang->productplan->unlinkedBugs;?>
     </div>
-    <table class='table tablesorter'> 
+    <table class='table tablesorter'>
       <thead>
         <tr class='text-center'>
           <th class='c-id text-left'>
@@ -48,7 +48,7 @@
           <td><?php echo $users[$bug->openedBy];?></td>
           <td style='overflow:visible;padding-top:1px;padding-bottom:1px;'><?php echo ($bug->status == 'resolved' or $bug->status == 'closed') ? $users[$bug->resolvedBy] : html::select("resolvedBy[{$bug->id}]", $users, $this->app->user->account, "class='form-control chosen'");?></td>
           <td>
-            <span class='status-<?php echo $bug->status?>'>
+            <span class='status-bug status-<?php echo $bug->status?>'>
               <?php echo $lang->bug->statusList[$bug->status];?>
             </span>
           </td>

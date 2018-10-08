@@ -20,7 +20,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedBugs;?>
     </div>
-    <table class='table tablesorter'> 
+    <table class='table tablesorter'>
       <thead>
         <tr class='text-center'>
           <th class='c-id text-left'>
@@ -51,7 +51,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
           <td><?php echo $users[$bug->openedBy];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td>
-            <span class='status-<?php echo $bug->status?>'>
+            <span class='status-bug status-<?php echo $bug->status?>'>
               <?php echo $lang->bug->statusList[$bug->status];?>
             </span>
           </td>

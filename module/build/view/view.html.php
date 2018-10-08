@@ -126,7 +126,7 @@ tbody tr td:first-child input{display:none;}
                 <td><?php echo $users[$story->openedBy];?></td>
                 <td><?php echo $story->estimate;?></td>
                 <td>
-                  <span class='status-<?php echo $story->status;?>'>
+                  <span class='status-story status-<?php echo $story->status;?>'>
                     <?php echo $lang->story->statusList[$story->status];?>
                   </span>
                 </td>
@@ -197,7 +197,7 @@ tbody tr td:first-child input{display:none;}
                   <?php endif;?>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
                 <td>
-                  <span class='status-<?php echo $bug->status?>'>
+                  <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $lang->bug->statusList[$bug->status];?>
                   </span>
                 </td>
@@ -257,7 +257,7 @@ tbody tr td:first-child input{display:none;}
                 </td>
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
                 <td>
-                  <span class='status-<?php echo $bug->status?>'>
+                  <span class='status-bug status-<?php echo $bug->status?>'>
                     <?php echo $lang->bug->statusList[$bug->status];?>
                   </span>
                 </td>

@@ -79,9 +79,7 @@
           <td><?php echo $users[$project->PM];?></td>
           <td><?php echo $project->end;?></td>
           <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
-            <span class="status-<?php echo $project->status?>">
-              <span class='status-text'><?php echo zget($lang->project->statusList, $project->status);?></span>
-            </span>
+            <span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status);?></span>
           </td>
           <td><?php echo $project->hours->totalEstimate;?></td>
           <td><?php echo $project->hours->totalConsumed;?></td>

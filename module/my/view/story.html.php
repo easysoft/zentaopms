@@ -75,7 +75,7 @@
           <td class='c-plan'><?php echo $story->planTitle;?></td>
           <td class='c-user'><?php echo $users[$story->openedBy];?></td>
           <td class='c-hours'><?php echo $story->estimate;?></td>
-          <td class='c-status'><span class='status-<?php echo $story->status;?>'> <?php echo zget($lang->story->statusList, $story->status);?></span></td>
+          <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo zget($lang->story->statusList, $story->status);?></span></td>
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php

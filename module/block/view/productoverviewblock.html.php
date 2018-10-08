@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     block 
+ * @package     block
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -30,8 +30,8 @@
   </div>
   <div class="col-6 text-middle">
     <ul class="list-unstyled status-list">
-    <li><span class="status-unclosed"><span class="label label-dot label-primary"></span> <?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong><?php echo $normal;?></strong></li>
-    <li><span class="status-closed"><span class="label label-dot label-pale"></span> <?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong><?php echo $closed;?></strong></li>
+    <li><span class="status-product status-unclosed"><?php echo $lang->product->statusList['normal'];?></span> &nbsp; <strong><?php echo $normal;?></strong></li>
+    <li><span class="status-product status-closed"><?php echo $lang->product->statusList['closed'];?></span> &nbsp; <strong><?php echo $closed;?></strong></li>
     </ul>
   </div>
 </div>

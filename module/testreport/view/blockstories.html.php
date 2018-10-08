@@ -23,8 +23,8 @@
       <td><?php echo zget($users, $story->assignedTo);?></td>
       <td><?php echo $story->estimate?></td>
       <td title='<?php echo zget($lang->story->statusList, $story->status);?>'>
-        <span class="status-<?php echo $story->status?>">
-          <span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
+        <span class="status-story status-<?php echo $story->status?>">
+          <?php echo zget($lang->story->statusList, $story->status);?>
         </span>
       </td>
       <td><?php echo zget($lang->story->stageList, $story->stage);?></td>

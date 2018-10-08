@@ -52,7 +52,7 @@
         <td class='nobr'><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName));?></td>
         <td><?php echo $task->begin?></td>
         <td><?php echo $task->end?></td>
-        <td class='status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
+        <td class='status-testtask status-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
         <td class='c-actions'>
           <?php
           common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');

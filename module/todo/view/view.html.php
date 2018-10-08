@@ -99,7 +99,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->todo->status;?></th>
-              <td><span class="status-<?php echo $todo->status;?>"><span class="label label-dot"></span> <?php echo $lang->todo->statusList[$todo->status];?></span></td>
+              <td><span class="status-todo status-<?php echo $todo->status;?>"><span class="label label-dot"></span> <?php echo $lang->todo->statusList[$todo->status];?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->todo->type;?></th>

@@ -21,13 +21,13 @@
             </thead>
             <?php if(isset($story->tasks[$projectID])):?>
             <tbody class='<?php if(count($story->tasks[$projectID]) > $config->story->affectedFixedNum)  echo "linkbox";?>'>
-            <?php foreach($story->tasks[$projectID] as $task):?> 
+            <?php foreach($story->tasks[$projectID] as $task):?>
               <tr class='text-center'>
                 <td><?php echo $task->id;?></td>
                 <td class='text-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>
                 <td><?php echo $users[$task->assignedTo];?></td>
                 <td>
-                  <span class='status-<?php echo $task->status?>'>
+                  <span class='status-task status-<?php echo $task->status?>'>
                     <?php echo $lang->task->statusList[$task->status];?>
                   </span>
                 </td>
@@ -59,7 +59,7 @@
             <td><?php echo $bug->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></td>
             <td>
-              <span class='status-<?php echo $bug->status?>'>
+              <span class='status-bug status-<?php echo $bug->status?>'>
                 <?php echo $lang->bug->statusList[$bug->status];?>
               </span>
             </td>
@@ -89,7 +89,7 @@
             <td><?php echo $case->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '_blank');?></td>
             <td>
-              <span class='status-<?php echo $case->status?>'>
+              <span class='status-case status-<?php echo $case->status?>'>
                 <?php echo $lang->testcase->statusList[$case->status];?>
               </span>
             </td>

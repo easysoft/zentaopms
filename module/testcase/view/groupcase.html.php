@@ -82,9 +82,9 @@
           }
           else
           {
-              echo "<span class='status-{$case->status}'><span class='status-text'>";
+              echo "<span class='status-case status-{$case->status}'>";
               echo $lang->testcase->statusList[$case->status];
-              echo '</span></span>';
+              echo '</span>';
           }
           ?>
         </td>

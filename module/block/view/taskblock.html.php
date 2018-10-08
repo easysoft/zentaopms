@@ -50,9 +50,7 @@
         <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <?php endif;?>
         <td class='c-status' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
-          <span class="status-<?php echo $task->status?>">
-            <span class='status-text'><?php echo zget($lang->task->statusList, $task->status);?></span>
-          </span>
+          <span class="status-task status-<?php echo $task->status?>"><?php echo zget($lang->task->statusList, $task->status);?></span>
         </td>
       </tr>
       <?php endforeach;?>

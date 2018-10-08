@@ -157,8 +157,8 @@
             <td class='c-user'><?php echo $users[$story->assignedTo];?></td>
             <td class='c-estimate'><?php echo $story->estimate;?></td>
             <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
-              <span class='status-<?php echo $story->status;?>'>
-                <span class='status-text'><?php echo zget($lang->story->statusList, $story->status);?></span>
+              <span class='status-story status-<?php echo $story->status;?>'>
+                <?php echo zget($lang->story->statusList, $story->status);?>
               </span>
             </td>
             <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>

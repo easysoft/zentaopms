@@ -50,7 +50,7 @@
       <tr>
         <td class='c-id'>
           <div class="checkbox-primary">
-            <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' /> 
+            <input type='checkbox' name='storyIDList[<?php echo $story->id;?>]' value='<?php echo $story->id;?>' />
             <label></label>
           </div>
           <?php printf('%03d', $story->id);?>
@@ -62,10 +62,10 @@
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $users[$story->assignedTo];?></td>
         <td><?php echo $story->estimate;?></td>
-        <td><span class='status-<?php echo $story->status;?>'><?php echo zget($lang->story->statusList, $story->status);?></span></td>
+        <td><span class='status-story status-<?php echo $story->status;?>'><?php echo zget($lang->story->statusList, $story->status);?></span></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         <td class='c-actions'>
-          <?php 
+          <?php
           $vars = "story={$story->id}";
           common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
           common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
@@ -87,7 +87,7 @@
         $actionLink = $this->createLink('story', 'batchEdit', "productID=$productID&projectID=0&branch=$branch");
         ?>
         <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");?>
-        <?php 
+        <?php
         if(common::hasPriv('story', 'batchReview'))
         {
             echo "<div class='btn-group dropup'>";

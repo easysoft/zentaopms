@@ -2417,7 +2417,7 @@ class taskModel extends model
                     echo $this->lang->task->typeList[$task->type];
                     break;
                 case 'status':
-                    $storyChanged ? print("<span class='status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-{$task->status}'> {$this->lang->task->statusList[$task->status]}</span>");
+                    $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> {$this->lang->task->statusList[$task->status]}</span>");
                     break;
                 case 'estimate':
                     echo round($task->estimate, 1);

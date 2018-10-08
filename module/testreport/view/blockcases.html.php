@@ -26,8 +26,8 @@
       <td><?php echo substr($case->lastRunDate, 2);?></td>
       <td><?php echo zget($lang->testcase->resultList, $case->lastRunResult);?></td>
       <td title='<?php echo zget($lang->testtask->statusList, $case->status);?>'>
-        <span class="status-<?php echo $case->status?>">
-          <span class='status-text'><?php echo zget($lang->testtask->statusList, $case->status);?></span>
+        <span class="status-case status-<?php echo $case->status?>">
+          <?php echo zget($lang->testtask->statusList, $case->status);?>
         </span>
       </td>
     </tr>

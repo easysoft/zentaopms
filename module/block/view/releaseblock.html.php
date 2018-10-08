@@ -46,9 +46,7 @@
         <?php endif;?>
         <td class='text-center'><?php echo $release->date?></td>
         <td class='c-status' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
-          <span class="status-<?php echo $release->status?>">
-            <span class='status-text'><?php echo zget($lang->release->statusList, $release->status);?></span>
-          </span>
+          <span class="status-release status-<?php echo $release->status?>"><?php echo zget($lang->release->statusList, $release->status);?></span>
         </td>
       </tr>
       <?php endforeach;?>

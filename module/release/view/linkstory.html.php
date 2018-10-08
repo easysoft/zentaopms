@@ -16,7 +16,7 @@
     <div class='table-header hl-primary text-primary strong'>
       <?php echo html::icon('unlink');?> <?php echo $lang->productplan->unlinkedStories;?>
     </div>
-    <table class='table tablesorter'> 
+    <table class='table tablesorter'>
       <thead>
         <tr class='text-center'>
           <th class='c-id text-left'>
@@ -44,7 +44,7 @@
         <tr>
           <td class='c-id text-left'>
             <div class="checkbox-primary">
-              <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> /> 
+              <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> />
               <label></label>
             </div>
             <?php printf('%03d', $story->id);?>
@@ -54,7 +54,7 @@
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
           <td><?php echo $story->estimate;?></td>
-          <td><span class='status-<?php echo $story->status?>'><?php echo zget($lang->story->statusList, $story->status);?></span></td>
+          <td><span class='status-story status-<?php echo $story->status?>'><?php echo zget($lang->story->statusList, $story->status);?></span></td>
           <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         </tr>
         <?php $unlinkedCount++;?>

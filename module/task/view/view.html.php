@@ -245,7 +245,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->status;?></th>
-                  <td><span class='status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo zget($lang->task->statusList, $task->status);?></td>
+                  <td><span class='status-task status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo zget($lang->task->statusList, $task->status);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->pri;?></th>
