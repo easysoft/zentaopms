@@ -32,9 +32,10 @@ $lang->webhook->date        = 'Date';
 $lang->webhook->data        = 'Data';
 $lang->webhook->result      = 'Result';
 
+$lang->webhook->typeList['']          = '';
 $lang->webhook->typeList['bearychat'] = 'Bearychat';
 $lang->webhook->typeList['dingding']  = 'Dingding';
-$lang->webhook->typeList['default']   = 'Default';
+$lang->webhook->typeList['default']   = 'Others';
 
 $lang->webhook->sendTypeList['sync']  = 'Synchronization';
 $lang->webhook->sendTypeList['async'] = 'Asynchronous';
