@@ -188,25 +188,25 @@ $(function()
             sort:
             {
                 title: '<?php echo $lang->tree->dragAndSort ?>',
-                template: '<a class="sort-handler"><?php echo $lang->tree->sort ?></a>'
+                template: '<a class="sort-handler"><i class="icon-move"></i></a>'
             },
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=$viewType"); ?>',
                 title: '<?php echo $lang->tree->edit ?>',
-                template: '<a><?php echo $lang->edit?></a>'
+                template: '<a><i class="icon-edit"></i></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->delete ?>',
-                template: '<a><?php echo $lang->delete?></a>'
+                template: '<a><i class="icon-close"></i></a>'
             },
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
                 title: '<?php echo $viewType == 'line' ? '' : (strpos($viewType, 'doc') !== false ? $lang->doc->childType : $lang->tree->child) ?>',
-                template: '<a><?php echo $viewType == 'line' ? '' : (strpos($viewType, 'doc') !== false ? $lang->doc->childType : $lang->tree->child)?></a>',
+                template: '<a><?php echo $viewType == 'line' ? '' : '<i class="icon-edit"></i>';?></a>',
             }
         },
         action: function(event)
