@@ -1240,6 +1240,14 @@ class testcaseModel extends model
     public function importFromLib($productID)
     {
         $data = fixer::input('post')->get();
+
+        $prevModule = 0;
+        foreach($data->module as $i => $module)
+        {
+            if($module != 'ditto') $prevModule = $module;
+            if($module == 'ditto') $data->module[$i] = $prevModule;
+        }
+
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
         $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
         foreach($libCases as $libCaseID => $case)
