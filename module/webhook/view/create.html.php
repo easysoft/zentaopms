@@ -22,7 +22,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->webhook->type;?></th>
-          <td><?php echo html::select('type', $lang->webhook->typeList, 'default', "class='form-control'");?></td>
+          <td><?php echo html::select('type', $lang->webhook->typeList, '', "class='form-control'");?></td>
           <td></td>
         </tr>
         <tr>

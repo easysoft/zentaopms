@@ -44,6 +44,8 @@
         </tr>
       </thead>
       <tbody>
+        <?php $modules['ditto'] = $lang->testcase->ditto;?>
+        <?php $i = 0;?>
         <?php foreach($cases as $case):?>
         <tr>
           <td class='c-id'>
@@ -59,10 +61,13 @@
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo $case->pri == '0' ? '' : zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
           <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
           <?php $libModule = zget($libModules, $case->module, '');?>
-          <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></th>
-          <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'><?php echo html::select("module[{$case->id}]", $modules, 0, "class='form-control chosen' onchange='setModule(this)'");?></th>
-          <td><?php echo zget($lang->testcase->typeList, $case->type);?></th>
+          <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></td>
+          <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'>
+            <?php echo html::select("module[{$case->id}]", $modules, $i == 0 ? 0 : 'ditto', "class='form-control chosen'");?>
+          </td>
+          <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
         </tr>
+        <?php $i++;?>
         <?php endforeach;?>
       </tbody>
     </table>

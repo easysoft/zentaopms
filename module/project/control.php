@@ -1813,7 +1813,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function linkStory($projectID = 0, $browseType = '', $param = 0)
+    public function linkStory($projectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         $this->loadModel('story');
         $this->loadModel('product');
@@ -1876,6 +1876,16 @@ class project extends control
         }
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 
+        foreach($allStories as $id => $story)
+        {
+            if(isset($prjStories[$story->id])) unset($allStories[$id]);
+        }
+
+        /* Pager. */
+        $recTotal   = count($allStories);
+        $allStories = array_chunk($allStories, $recPerPage);
+        $this->app->loadClass('pager', $static = true);
+
         /* Assign. */
         $title      = $project->name . $this->lang->colon . $this->lang->project->linkStory;
         $position[] = html::a($browseLink, $project->name);
@@ -1885,8 +1895,8 @@ class project extends control
         $this->view->position     = $position;
         $this->view->project      = $project;
         $this->view->products     = $products;
-        $this->view->allStories   = $allStories;
-        $this->view->prjStories   = $prjStories;
+        $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];;
+        $this->view->pager        = pager::init($recTotal, $recPerPage, $pageID);
         $this->view->browseType   = $browseType;
         $this->view->productType  = $productType;
         $this->view->modules      = $modules;

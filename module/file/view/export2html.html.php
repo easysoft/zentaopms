@@ -19,6 +19,7 @@ table th,table td{padding:5px;}
 </style>
 <title><?php echo $fileName;?></title>
 <body>
+<?php echo "<font color='red'>" . $this->lang->file->childTaskTag . '</font>';?>
 <table>
   <tr>
   <?php
