@@ -1318,7 +1318,7 @@ class userModel extends model
     {
         if(empty($account)) $account = $this->session->user->account;
         if(empty($account)) return array();
-        if(empty($acls) and isset($this->app->user->rights['acls'])) $acls = $this->app->user->rights['acls'];
+        if(empty($acls) and isset($this->session->user->rights['acls'])) $acls = $this->session->user->rights['acls'];
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
 
         if(empty($userView)) $userView = $this->computeUserView($account);
