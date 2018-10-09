@@ -147,9 +147,10 @@ class html extends baseHTML
         $string = "<select name='$name' {$id} $attrib>\n";
 
         /* The options. */
+        global $config;
         if(is_array($selectedItems)) $selectedItems = implode(',', $selectedItems);
         $selectedItems   = ",$selectedItems,";
-        $convertedPinYin = class_exists('common') ? common::convert2Pinyin($options) : array();
+        $convertedPinYin = (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($options) : array();
         foreach($options as $key => $value)
         {
             $optionPinyin = zget($convertedPinYin, $value, '');
