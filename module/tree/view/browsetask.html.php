@@ -152,25 +152,25 @@ $(function()
             sort:
             {
                 title: '<?php echo $lang->tree->dragAndSort ?>',
-                template: '<a class="sort-handler" href="javascript:;"><?php echo $lang->tree->sort ?></a>'
+                template: '<a class="sort-handler" href="javascript:;"><i class="icon icon-move"></i></a>'
             },
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'edit', "moduleID={0}&type=task"); ?>',
                 title: '<?php echo $lang->tree->edit ?>',
-                template: '<a href="javascript:;"><?php echo $lang->edit?></a>'
+                template: '<a href="javascript:;"><i class="icon icon-edit"></i></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->delete ?>',
-                template: '<a href="javascript:;"><?php echo $lang->delete?></a>'
+                template: '<a href="javascript:;"><i class="icon icon-close"></i></a>'
             },
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browsetask', "rootID=$rootID&viewType=task&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->child ?>',
-                template: '<a href="javascript:;"><?php echo $lang->tree->child?></a>'
+                template: '<a href="javascript:;"><i class="icon icon-treemap-alt"></i></a>'
             }
         },
         action: function(event)
