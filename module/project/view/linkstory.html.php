@@ -55,7 +55,6 @@
       <tbody>
       <?php $storyCount = 0;?>
       <?php foreach($allStories as $story):?>
-      <?php if(isset($prjStories[$story->id])) continue;?>
       <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
       <tr>
         <td class='cell-id'>
@@ -84,6 +83,7 @@
       <div class='table-actions btn-toolbar show-always'>
         <?php echo html::submitButton('', '', 'btn btn-secondary');?>
       </div>
+      <?php $pager->show('right', 'pagerjs')?>
     </div>
     <?php else:?>
     <div class="table-empty-tip">
