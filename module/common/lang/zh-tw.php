@@ -166,8 +166,8 @@ $lang->themes['green']      = '葉蘭綠';
 $lang->themes['red']        = '赤誠紅';
 $lang->themes['purple']     = '玉煙紫';
 $lang->themes['pink']       = '芙蕖粉';
-$lang->themes['blackberry'] = '黑莓';
-$lang->themes['classic']    = '經典';
+$lang->themes['blackberry'] = '露莓黑';
+$lang->themes['classic']    = '經典藍';
 
 /* 首頁菜單設置。*/
 $lang->index = new stdclass();
