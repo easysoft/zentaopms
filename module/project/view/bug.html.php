@@ -95,7 +95,7 @@
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
         <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
         <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
-        <td><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
+        <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
         <td class='c-actions'>
           <?php
           $params = "bugID=$bug->id";

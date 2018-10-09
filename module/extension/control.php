@@ -86,7 +86,7 @@ class extension extends control
         $this->view->position[] = $this->lang->extension->obtain;
         $this->view->moduleTree = $this->extension->getModulesByAPI();
         $this->view->extensions = $extensions;
-        $this->view->installeds = $this->extension->getLocalExtensions('installed');
+        $this->view->installeds = $this->extension->getLocalExtensions('installed,deactivated');
         $this->view->pager      = $pager;
         $this->view->tab        = 'obtain';
         $this->view->type       = $type;
@@ -453,7 +453,7 @@ class extension extends control
             }
 
             $info = $this->extension->getInfoFromDB($extension);
-            $type = $info->status == 'installed' ? 'upgrade' : 'install';
+            $type = (!empty($info) and ($info->status == 'installed' or $info->status == 'deactivated')) ? 'upgrade' : 'install';
             $link = $type == 'install' ? inlink('install', "extension=$extension") : inlink('upgrade', "extension=$extension");
             die(js::locate($link, 'parent'));
         }

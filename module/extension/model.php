@@ -161,7 +161,7 @@ class extensionModel extends model
      */
     public function getLocalExtensions($status)
     {
-        $extensions = $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->eq($status)->fi()->fetchAll('code');
+        $extensions = $this->dao->select('*')->from(TABLE_EXTENSION)->where('status')->in($status)->fi()->fetchAll('code');
         foreach($extensions as $extension)
         {
             if($extension->site and stripos(strtolower($extension->site), 'http') === false) $extension->site = 'http://' . $extension->site;
