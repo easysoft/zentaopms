@@ -163,11 +163,13 @@ class blockModel extends model
         $data['projects'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
             ->where("(status='wait' or status='doing')")
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)
+            ->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
         $data['products'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)
             ->where('status')->ne('closed')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)
+            ->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
 
@@ -189,6 +191,7 @@ class blockModel extends model
         $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
             ->where('status')->in('wait,doing')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)
+            ->fi()
             ->andWhere('end')->lt($today)
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
