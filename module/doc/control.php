@@ -140,10 +140,8 @@ class doc extends control
 
         $title   = '';
         $module  = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
-        $docMenu = $this->tree->getOptionMenu($libID, 'doc');
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
-        if(isset($docMenu[$param]) and $docMenu[$param] != '/') $title = $title . $docMenu[$param];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
         if($browseType == 'fastsearch')
         {
