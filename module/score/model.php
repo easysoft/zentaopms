@@ -237,7 +237,12 @@ class scoreModel extends model
         if($lastID == 0)
         {
             $this->dao->query("UPDATE " . TABLE_USER . " SET `score`=0, `scoreLevel`=0");
-            $this->dao->query("TRUNCATE TABLE " . TABLE_SCORE);
+            $this->dao->delete()->from(TABLE_SCORE)->exec();
+            try
+            {
+                $this->dbh->exec('ALTER TABLE ' . TABLE_SCORE . ' auto_increment=1');
+            }
+            catch(Exception $e){}
         }
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->gt($lastID)->orderBy('id_asc')->limit(100)->fetchAll('id');
