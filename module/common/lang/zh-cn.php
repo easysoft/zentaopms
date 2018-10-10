@@ -166,8 +166,8 @@ $lang->themes['green']      = '叶兰绿';
 $lang->themes['red']        = '赤诚红';
 $lang->themes['purple']     = '玉烟紫';
 $lang->themes['pink']       = '芙蕖粉';
-$lang->themes['blackberry'] = '黑莓';
-$lang->themes['classic']    = '经典';
+$lang->themes['blackberry'] = '露莓黑';
+$lang->themes['classic']    = '经典蓝';
 
 /* 首页菜单设置。*/
 $lang->index = new stdclass();

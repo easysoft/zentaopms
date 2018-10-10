@@ -22,4 +22,4 @@ foreach($rows as $row)
     }
     echo '"' . "\n";
 }
-echo $this->lang->file->childTaskTag;
+if($this->post->kind == 'task') echo $this->lang->file->childTaskTips;
