@@ -121,8 +121,8 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title);?></td>
               <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-              <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d h:i');?></td>
-              <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d h:i');?></td>
+              <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d H:i');?></td>
+              <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d H:i');?></td>
               <td class="c-actions">
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
