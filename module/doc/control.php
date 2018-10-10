@@ -138,8 +138,8 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&from=$from");
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
 
-        $title  = '';
-        $module = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
+        $title   = '';
+        $module  = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
