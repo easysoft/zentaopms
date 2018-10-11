@@ -143,7 +143,7 @@ class doc extends control
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
-        if($param)  $title = $this->doc->buildBreadTitle($libID, $param, $title);
+        if($param != 0) $title = $this->doc->buildBreadTitle($libID, $param, $title);
         if($browseType == 'fastsearch')
         {
             if($this->post->searchDoc) $this->session->set('searchDoc', $this->post->searchDoc);
