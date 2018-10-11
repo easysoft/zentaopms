@@ -1666,11 +1666,18 @@ class treeModel extends model
             {
                 foreach($module->children as $children)
                 {
-                    if($children->parent != 0) continue;//Filter project children modules.
+                    if($children->parent != 0 && !empty($tree[$root])) 
+                    {
+                        foreach($tree[$root] as $firstChildren)
+                        {
+                            if($firstChildren->id == $children->parent) $firstChildren->children[] = $children;
+                        }
+                    };//Filter project children modules.
                     $tree[$root][] = $children;
                 }
             }
         }
+
         return $tree;
     }
 }

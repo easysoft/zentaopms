@@ -143,6 +143,7 @@ class doc extends control
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
+        if($param)  $title = $this->doc->buildBreadTitle($libID, $param, $title);
         if($browseType == 'fastsearch')
         {
             if($this->post->searchDoc) $this->session->set('searchDoc', $this->post->searchDoc);
@@ -160,7 +161,7 @@ class doc extends control
             $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
         }
 
-        $this->view->title      = $title;
+        $this->view->breadTitle = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
         $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc', $browseType);

@@ -2471,6 +2471,10 @@ class bugModel extends model
                 $class .= ' text-left';
                 $title  = "title='{$bug->title}'";
             }
+            if($id == 'type')
+            {
+                $title  = "title='" . zget($this->lang->bug->typeList, $bug->type) . "'";
+            }
             if($id == 'assignedTo')
             {
                 $class .= ' has-btn text-left';

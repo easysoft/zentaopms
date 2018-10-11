@@ -42,18 +42,17 @@ function loadList(type, id)
     {
         $.get(link, function(data, status)
         {
-            if(data != ' ')
+            if(data.length != 0)
             {
                 $(divClass).html(data).find('select').chosen();
             }
             else
             {
-                $("#type").val("custom");
-                $(divClass).html("<select id='bugs' class='form-control'></select>").find('select').chosen();
+                $(divClass).html("<select id="+ type +" class='form-control'></select>").find('select').chosen();
             }
         });
     }
-    else if(type == 'custom')
+    else
     {
         $(divClass).html($(divID).html());
     }

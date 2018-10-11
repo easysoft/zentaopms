@@ -23,7 +23,7 @@ $(document).ready(function()
                     }
                 }
             }
-            link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + module + '&storyID='+ $(select).val() + '&onlyOption=true&status=noclosed');
+            link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + module + '&storyID='+ $(select).val() + '&onlyOption=true');
             $('#story' + index).load(link, function(){$(this).trigger("chosen:updated");});
         }
         if($(select).val() == 'ditto')

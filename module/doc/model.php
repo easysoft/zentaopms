@@ -1529,4 +1529,52 @@ class docModel extends model
 
         return $statisticInfo;
     }
+
+    /**
+     * Print doc child module.
+     *
+     * @access public
+     */
+    public function printChildModule($module, $libID, $methodName, $browseType, $moduleID)
+    {
+        if(isset($module->children))
+        {
+            foreach($module->children as $childModule)
+            {
+                $active = '';
+                if($methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $childModule->id) $active = "class='active'";
+                echo '<ul>';
+                echo "<li $active>";
+                echo html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$childModule->id}"), "<i class='icon icon-folder-outline'></i> " . $childModule->name, '', "class='text-ellipsis' title='{$childModule->name}'");
+                if(isset($childModule->children)) $this->printChildModule($childModule, $libID, $methodName, $browseType, $moduleID);
+                echo '</li>';
+                echo '</ul>';
+            }
+        }
+    }
+
+    /**
+     * Build doc bread title.
+     *
+     * @access public
+     * @return string 
+     */
+    public function buildBreadTitle($libID = 0, $param = 0, $title = '')
+    {
+        $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq($param)->fetch('path');
+
+        $parantMoudles = $this->dao->select('id, name')->from(TABLE_MODULE)
+            ->where('id')->in($path)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        foreach($parantMoudles as $parentID => $moduleName)
+        {
+            $active = '';
+            if($param == $parentID) $active = "class='active'";
+            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), ' > ' . $moduleName->name , '', "$active");
+        } 
+
+        return $title;
+    }
 }
