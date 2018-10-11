@@ -36,7 +36,7 @@ var browseType = '<?php echo $browseType;?>';
           <?php else:?>
           <i class="icon icon-search text-muted"></i>
           <?php endif;?>
-          <?php echo $title;?>
+          <?php echo $breadTitle;?>
         </div>
         <nav class="panel-actions btn-toolbar">
           <div class="btn-group">

@@ -283,11 +283,11 @@ class gitModel extends model
         exec("{$this->client} config core.quotepath false");
         if($fromRevision)
         {
-            $cmd = "$this->client log --stat=1024 --name-status $fromRevision..HEAD";
+            $cmd = "$this->client log --stat=1024 --stat-name-width=1000 --name-status $fromRevision..HEAD";
         }
         else
         {
-            $cmd = "$this->client log --stat=1024 --name-status";
+            $cmd = "$this->client log --stat=1024 --stat-name-width=1000 --name-status";
         }
         exec($cmd, $list, $return);
 
