@@ -171,7 +171,7 @@ class taskModel extends model
             }
             else
             {
-                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common);
+                dao::$errors['message'][] = sprintf($this->lang->duplicate, $this->lang->task->common) . ' ' . $tasks->name[$key];
                 return false;
             }
         }

@@ -789,7 +789,7 @@ class actionModel extends model
             else
             {
                 $action->objectLink = '';
-                $action->objectLabel = $this->lang->action->objectTypes[$action->objectLabel];
+                $action->objectLabel = zget($this->lang->action->objectTypes, $action->objectLabel);
             }
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;

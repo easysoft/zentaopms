@@ -17,7 +17,8 @@ $(function()
             $('#switchDate').closest('.input-group-addon').addClass('hidden');
             $('#type').find('option').each(function()
             {
-                  if($(this).val() != 'custom') $(this).addClass('hidden');
+                var type = $(this).val();
+                if(type == 'bug' || type == 'task' || type == 'story') $(this).addClass('hidden');
             })
         }
         else
