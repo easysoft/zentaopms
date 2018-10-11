@@ -431,6 +431,7 @@ class taskModel extends model
 
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
+            $task->parent         = -1;
             $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
             if(!dao::isError())
             {
@@ -1390,7 +1391,7 @@ class taskModel extends model
         $task->children = $children;
 
         /* Check parent Task. */
-        if(!empty($task->parent)) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
+        if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
         $task->team = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
         foreach($children as $child) $child->team = isset($teams[$child->id]) ? $teams[$child->id] : array();
@@ -1479,7 +1480,7 @@ class taskModel extends model
             ->leftJoin(TABLE_TEAM)->alias('t4')->on('t4.root = t1.id')
             ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
             ->where('t1.project')->eq((int)$projectID)
-            ->beginIF($type =='all' || is_array($type))->andWhere('t1.parent')->eq(0)->fi()
+            ->beginIF($type =='all' || is_array($type))->andWhere('t1.parent')->lt(1)->fi()
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t4.`account` = '{$this->app->user->account}' AND t4.`type` = 'task') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
             ->fi()
@@ -2411,7 +2412,7 @@ class taskModel extends model
                 case 'name':
                     if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                     if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
-                    if($child or !empty($task->parent)) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';
+                    if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';
                     if(!empty($task->team)) echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';
                     echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
                     if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';
