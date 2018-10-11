@@ -813,8 +813,16 @@ class baseRouter
         {
             $sessionName = $this->config->sessionVar;
             session_name($sessionName);
-            if(isset($_GET[$this->config->sessionVar])) session_id($_GET[$this->config->sessionVar]);
             session_start();
+
+            $sessionID = session_id();
+            if(isset($_GET[$this->config->sessionVar]) and $sessionID != $_GET[$this->config->sessionVar])
+            {
+                helper::restartSession($_GET[$this->config->sessionVar]);
+                if($this->session->fingerprint and $this->cookie->fingerprint != $this->session->fingerprint) helper::restartSession($sessionID);
+            }
+            if($this->session->fingerprint and $this->cookie->fingerprint != $this->session->fingerprint) helper::restartSession();
+
             define('SESSION_STARTED', true);
         }
     }

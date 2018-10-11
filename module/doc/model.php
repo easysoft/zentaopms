@@ -66,6 +66,7 @@ class docModel extends model
             $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=custom"), "<i class='icon icon-folder-o'></i> {$this->lang->doc->customAB}") . '</li>';
             $selectHtml .='</ul></div></div>';
 
+            $currentLib = 0;
             if(strpos('product,project,custom', $type) !== false)
             {
                 if($type == 'custom')  $currentLib = $libID;

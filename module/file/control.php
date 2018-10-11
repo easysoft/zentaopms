@@ -157,9 +157,7 @@ class file extends control
         if(isset($_GET[$this->config->sessionVar]))
         {
             $sessionID = isset($_COOKIE[$this->config->sessionVar]) ? $_COOKIE[$this->config->sessionVar] : sha1(mt_rand());
-            session_write_close();
-            session_id($sessionID);
-            session_start();
+            helper::restartSession($sessionID);
         }
 
         $file = $this->file->getById($fileID);

@@ -22,8 +22,9 @@ $filter->default->paramValue = 'reg::paramValue';
 $filter->default->get['onlybody'] = 'equal::yes';
 $filter->default->get['HTTP_X_REQUESTED_WITH'] = 'equal::XMLHttpRequest';
 
-$filter->default->cookie['lang']  = 'reg::lang';
-$filter->default->cookie['theme'] = 'reg::word';
+$filter->default->cookie['lang']        = 'reg::lang';
+$filter->default->cookie['theme']       = 'reg::word';
+$filter->default->cookie['fingerprint'] = 'reg::word';
 
 $filter->bug        = new stdclass();
 $filter->doc        = new stdclass();

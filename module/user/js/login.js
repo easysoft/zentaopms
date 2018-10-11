@@ -17,6 +17,9 @@ $(document).ready(function()
 
     $('#account').focus();
 
+    /* Set fingerprint. */
+    $.cookie('fingerprint', getFingerprint(), {expires:config.cookieLife, path:config.webRoot});
+
     $("#langs li > a").click(function() 
     {
         selectLang($(this).data('value'));
