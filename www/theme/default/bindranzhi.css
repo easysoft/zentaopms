@@ -1,4 +1,5 @@
 body{padding-bottom:0px;}
+body.has-fixed-footer{padding-bottom:20px;}
 #header{padding-top:0px;}
 #header #heading{display:none !important;}
 #header #navbar{text-align:left !important;}
