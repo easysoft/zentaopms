@@ -390,7 +390,6 @@ class todoModel extends model
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
             ->query();
-        a($stmt);
         /* Set session. */
         $sql = explode('WHERE', $this->dao->get());
         $sql = explode('ORDER', $sql[1]);
