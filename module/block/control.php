@@ -893,7 +893,7 @@ class block extends control
         $tasks     = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel', `left`, 0)) as totalLeft")->from(TABLE_TASK)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->eq(0)
+            ->andWhere('parent')->lt(1)
             ->groupBy('project')
             ->fetchAll('project');
         foreach($tasks as $projectID => $task)

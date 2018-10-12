@@ -95,7 +95,7 @@ class reportModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.parent')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
             ->andWhere('t2.status')->eq('closed')
             ->beginIF($begin)->andWhere('t2.begin')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t2.end')->le($end)->fi()
@@ -302,7 +302,7 @@ class reportModel extends model
         $taskGroups    = array();
         foreach($tasks as $task)
         {
-            if(!empty($task->parent)) $parents[$task->parent] = $task->parent;
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
             $taskGroups[$task->assignedTo][$task->id] = $task;
         }
 

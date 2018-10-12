@@ -22,9 +22,9 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $task->id?></span>
       <span class="text" title='<?php echo $task->name;?>' style='color: <?php echo $task->color; ?>'>
-        <?php if(!empty($task->parent)) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->childrenAB . '</span>';?>
+        <?php if($task->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->childrenAB . '</span>';?>
         <?php if(!empty($task->team)) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->task->multipleAB . '</span>';?>
-        <?php echo isset($task->parentName) ? html::a(inlink('view', "taskID={$task->parent}"), $task->parentName) . ' / ' : '';?><?php echo $task->name;?>
+        <?php if($task->parent > 0) echo isset($task->parentName) ? html::a(inlink('view', "taskID={$task->parent}"), $task->parentName) . ' / ' : '';?><?php echo $task->name;?>
       </span>
       <?php if($task->deleted):?>
       <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
@@ -157,7 +157,7 @@
         common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
         common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', '', 'hiddenwin');
 
-        if(!empty($task->parent)) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
+        if($task->parent > 0) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
         ?>
         <?php endif;?>
       </div>
