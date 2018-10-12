@@ -365,13 +365,14 @@ class file extends control
         if($_POST)
         {
             $this->app->loadLang('action');
-            $file = $this->file->getByID($fileID);
-            $data = fixer::input('post')->get();
-            $this->dao->update(TABLE_FILE)->set('title')->eq($data->fileName)->where('id')->eq($fileID)->exec();
+            $file     = $this->file->getByID($fileID);
+            $data     = fixer::input('post')->get();
+            $fileName = $data->fileName . '.' . $file->extension;
+            $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)->where('id')->eq($fileID)->exec();
 
             $extension = "." . $file->extension;
-            $actionID = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $data->fileName . $extension);
-            $changes[] = array('field' => 'fileName', 'old' => $file->title . $extension, 'new' => $data->fileName . $extension);
+            $actionID  = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $fileName);
+            $changes[] = array('field' => 'fileName', 'old' => $file->title . $extension, 'new' => $fileName);
             $this->action->logHistory($actionID, $changes);
 
             die(js::reload('parent.parent'));
