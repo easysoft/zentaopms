@@ -118,7 +118,7 @@
             </div>
             <div class="panel-body">
               <div class="row row-grid">
-                <?php if(common::hasPriv('project', 'objectLibs')):?>
+                <?php if(common::hasPriv('doc', 'objectLibs')):?>
                 <?php $i = 0;?>
                 <?php foreach($docLibs as $libID => $docLib):?>
                 <?php if($i > 8) break;?>
