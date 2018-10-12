@@ -179,18 +179,6 @@ class project extends control
         /* Get tasks. */
         $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
 
-        if(strpos('unclosed,all,bymodule,byproduct', $browseType) === false)
-        {
-            foreach($tasks as $task)
-            {
-                if(isset($task->children))
-                {
-                    $task->children = true;
-                    unset($task->children);
-                }
-            }
-        }
-
        /* Build the search form. */
         $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
         $this->config->project->search['onMenuBar'] = 'yes';

@@ -2009,9 +2009,22 @@ class projectModel extends model
              ->where('t1.deleted')->eq(0)
              ->andWhere('t1.id')->in(array_keys($taskIdList))
              ->orderBy($orderBy)
-             ->fetchAll();
-        $this->loadModel('task')->processTasks($tasks);
-        return $tasks;
+             ->fetchAll('id');
+        
+        if(empty($tasks)) return array();
+        
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) 
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                    unset($tasks[$task->id]);
+                }
+            }
+        }
+        return $this->loadModel('task')->processTasks($tasks);
     }
 
     /**
@@ -2023,7 +2036,7 @@ class projectModel extends model
      * @param  int    $pager
      * @param  int    $orderBy
      * @access public
-     * @return void
+     * @return mixed
      */
     public function getSearchBugs($products, $projectID, $sql, $pager, $orderBy)
     {
