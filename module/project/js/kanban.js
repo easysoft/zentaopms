@@ -1,15 +1,19 @@
 $(function()
 {
-    $('.c-boards').each(function()
+    var adjustBoardsHeight = function()
     {
-        var height = $(window).height() - $('#header').height() - $('#footer').height() - 40 - 105;
-        var $boardsWrapper = $(this).find('.boards-wrapper');
-        $boardsWrapper.height(height);
-        if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
+        $('.c-boards').each(function()
         {
-            $boardsWrapper.find('.boards').css('height', $(this).height() - 1);
-        }
-    });
+            var height = $(window).height() - $('#header').height() - $('#footer').height() - 40 - 105;
+            var $boardsWrapper = $(this).find('.boards-wrapper');
+            $boardsWrapper.height(height);
+            if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
+            {
+                $boardsWrapper.find('.boards').css('height', $(this).height() - 1);
+            }
+        });
+    };
+    adjustBoardsHeight();
 
     var boardID  = '';
     var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
@@ -44,23 +48,23 @@ $(function()
         outer.style.visibility = "hidden";
         outer.style.width = "100px";
         outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
-    
+
         document.body.appendChild(outer);
-    
+
         var widthNoScroll = outer.offsetWidth;
         // force scrollbars
         outer.style.overflow = "scroll";
-    
+
         // add innerdiv
         var inner = document.createElement("div");
         inner.style.width = "100%";
-        outer.appendChild(inner);        
-    
+        outer.appendChild(inner);
+
         var widthWithScroll = inner.offsetWidth;
 
         // remove divs
         outer.parentNode.removeChild(outer);
-    
+
         return widthNoScroll - widthWithScroll;
     };
 
@@ -86,7 +90,11 @@ $(function()
     {
         var selfClose = $.cookie('selfClose');
         $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban', fixBoardWidth);
+        if(selfClose == 1) $kanban.load(location.href + ' #kanban', function()
+        {
+            fixBoardWidth();
+            adjustBoardsHeight();
+        });
     };
 
     var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});

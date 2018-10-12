@@ -2320,6 +2320,11 @@ class storyModel extends model
                 $title  = $story->planTitle;
                 $class .= ' text-ellipsis';
             }
+            if($id == 'sourceNote')
+            {
+                $title  = $story->sourceNote;
+                $class .= ' text-ellipsis';
+            }
 
             echo "<td class='" . $class . "' title='$title'>";
             switch($id)

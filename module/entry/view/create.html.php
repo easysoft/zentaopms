@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->entry->account;?></th>
-          <td><?php echo html::select("account", $users, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select("account", $users, '', "class='form-control chosen' data-placeholder='{$lang->entry->note->account}'");?></td>
           <td></td>
         </tr>
         <tr>
