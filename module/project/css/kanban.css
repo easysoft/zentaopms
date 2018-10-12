@@ -1,4 +1,4 @@
-.boards {display: table; table-layout: fixed; width: auto; }
+.boards {display: table; table-layout: fixed; width: auto; min-height: 50px;}
 .boards .board:not(:last-child) {border-right: 1px solid #ddd;}
 .board {display: table-cell; width: 16.666666667%; padding: 10px; border: 1px solid transparent; transition: background-color .2s, opacity .2s; vertical-align: top;}
 .board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: move; border-radius: 2px; background-color: #fff; transition: border .2s, opacity .2s; overflow: hidden;}
