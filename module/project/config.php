@@ -54,6 +54,7 @@ $config->project->search['fields']['canceledBy']     = $lang->task->canceledBy;
 $config->project->search['fields']['lastEditedBy']   = $lang->task->lastEditedBy;
 
 $config->project->search['fields']['mailto']         = $lang->task->mailto;
+$config->project->search['fields']['finishedList']   = $lang->task->finishedList;
 
 $config->project->search['fields']['openedDate']     = $lang->task->openedDate;
 $config->project->search['fields']['deadline']       = $lang->task->deadline;
@@ -87,6 +88,7 @@ $config->project->search['params']['cancelBy']       = array('operator' => '=', 
 $config->project->search['params']['lastEditedBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
 $config->project->search['params']['mailto']         = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
+$config->project->search['params']['finishedList']   = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
 $config->project->search['params']['openedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->project->search['params']['deadline']       = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');

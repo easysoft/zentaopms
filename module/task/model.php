@@ -420,8 +420,6 @@ class taskModel extends model
 
             if($status == 'doing')
             {
-                $task->assignedTo   = '';
-                $task->assignedDate = '';
                 $task->finishedBy   = '';
                 $task->finishedDate = '';
                 $task->closedBy     = '';
@@ -457,16 +455,16 @@ class taskModel extends model
      * @access public
      * @return object|bool
      */
-    public function computeHours4Multiple($oldTask, $task = null)
+    public function computeHours4Multiple($oldTask, $task = null, $team = array())
     {
         if(!$oldTask) return false;
 
-        $team = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($oldTask->id)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
+        if(empty($team)) $team = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($oldTask->id)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
         if(!empty($team))
         {
             $now         = helper::now();
             $teams       = array_keys($team);
-            $currentTask = isset($task) ? $task : new stdclass();
+            $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
 
             if(!empty($this->post->assignedTo))
@@ -508,7 +506,7 @@ class taskModel extends model
                 $currentTask->left     += (float)$member->left;
             }
 
-            if(isset($task))
+            if(!empty($task))
             {
                 if($this->post->status) return $currentTask;
 
@@ -537,12 +535,20 @@ class taskModel extends model
                     elseif($oldTask->assignedTo == $teams[count($teams) - 1])
                     {
                         $currentTask->status = 'done';
-                        if($oldTask->left > 0)
-                        {
-                            $currentTask->finishedBy   = $this->app->user->account;
-                            $currentTask->finishedDate = $now;
-                        }
+                        $currentTask->finishedBy   = $this->app->user->account;
+                        $currentTask->finishedDate = $now;
                     }
+                }
+
+                if(($oldTask->assignedTo != $currentTask->assignedTo or $currentTask->status == 'done')
+                    and isset($team[$this->app->user->account]) and $team[$this->app->user->account]->left == 0
+                    and strpos($oldTask->finishedLis, ",{$this->app->user->account},") === false)
+                {
+                    $currentTask->finishedList = ',' . trim(trim($oldTask->finishedList, ',') . ",{$this->app->user->account}", ',') . ',';
+                }
+                if(($oldTask->status == 'done' or $oldTask->status == 'closed') and $currentTask->status == 'doing' and $this->post->assignedTo)
+                {
+                    $currentTask->finishedList = ',' . trim(substr($oldTask->finishedList, 0, strpos($oldTask->finishedList, ",{$this->post->assignedTo},")), ',') . ',';
                 }
 
                 return $currentTask;
@@ -1161,6 +1167,7 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
+            ->setDefault('finishedDate, lastEditedDate', $now)
             ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
             ->remove('comment,files,labels')
             ->get();
@@ -1488,7 +1495,11 @@ class taskModel extends model
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
             ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
-            ->beginIF($type == 'finishedbyme')->andWhere('t1.finishedby')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'finishedbyme')
+            ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
+            ->orWhere('t1.finishedList')->like("%,{$this->app->user->account},%")
+            ->markRight(1)
+            ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
@@ -1521,7 +1532,11 @@ class taskModel extends model
             ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
             ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
             ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
-            ->beginIF($type == 'finishedbyme')->andWhere('t1.finishedby')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'finishedbyme')
+            ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
+            ->orWhere('t1.finishedList')->like("%,{$this->app->user->account},%")
+            ->markRight(1)
+            ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()

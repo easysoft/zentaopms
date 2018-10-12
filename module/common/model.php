@@ -813,6 +813,9 @@ EOD;
     {
         if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
 
+        /* Remove iframe for operation button in modal. Prevent pop up in modal. */
+        if(isonlybody() and strpos($extraClass, 'showinonlybody') !== false) $extraClass = str_replace('iframe', '', $extraClass);
+
         global $app, $lang;
 
         /* Judge the $method of $module clickable or not, default is clickable. */
