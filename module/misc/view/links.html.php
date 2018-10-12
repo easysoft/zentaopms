@@ -9,8 +9,9 @@
         </div>
         <div class='panel-body'>
           <ul>
+            <?php $api = $app->getClientLang() == 'en' ? $lang->misc->enApi : $lang->misc->api;?>
             <?php foreach($groupItems as $item => $label):?>
-            <li><?php echo html::a($lang->misc->api . "/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
+            <li><?php echo html::a($api . "/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
             <?php endforeach;?>
           </ul>
         </div>
