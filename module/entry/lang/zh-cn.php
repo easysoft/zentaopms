@@ -30,10 +30,11 @@ $lang->entry->confirmDelete = '您确认要删除该应用吗？';
 $lang->entry->help          = '使用说明';
 
 $lang->entry->note = new stdClass();
-$lang->entry->note->name  = '授权应用名称';
-$lang->entry->note->code  = '授权应用代号，必须为字母或数字的组合';
-$lang->entry->note->ip    = "允许访问API的应用ip，多个ip用逗号隔开。支持IP段，如192.168.1.*";
-$lang->entry->note->allIP = '无限制';
+$lang->entry->note->name    = '授权应用名称';
+$lang->entry->note->code    = '授权应用代号，必须为字母或数字的组合';
+$lang->entry->note->ip      = "允许访问API的应用ip，多个ip用逗号隔开。支持IP段，如192.168.1.*";
+$lang->entry->note->allIP   = '无限制';
+$lang->entry->note->account = '授权应用账号';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = '缺少code参数';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = '缺少token参数';

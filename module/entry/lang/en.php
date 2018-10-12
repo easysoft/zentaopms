@@ -30,10 +30,11 @@ $lang->entry->confirmDelete = 'Are you sure delete this entry?';
 $lang->entry->help          = 'Help';
 
 $lang->entry->note = new stdClass();
-$lang->entry->note->name  = 'Name';
-$lang->entry->note->code  = 'Code, should be english and number.';
-$lang->entry->note->ip    = "Use comma between two IPs. IP segment is supported, e.g. 192.168.1.*";
-$lang->entry->note->allIP = 'All';
+$lang->entry->note->name    = 'Name';
+$lang->entry->note->code    = 'Code, should be english and number.';
+$lang->entry->note->ip      = "Use comma between two IPs. IP segment is supported, e.g. 192.168.1.*";
+$lang->entry->note->allIP   = 'All';
+$lang->entry->note->account = 'Account for entry.';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Param code is missing.';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Param token is missing.';
