@@ -164,17 +164,13 @@ $(function()
     $kanban.on('click', '.kanbaniframe', function(e)
     {
         var $link = $(this);
-        new $.zui.ModalTrigger($.extend(
+        kanbanModalTrigger.show(
         {
-            type: 'iframe',
             url: $link.attr('href'),
-            width: '80%',
-        }, $link.data())).show(
-        {
-            shown:  function(){$('.modal-iframe').data('cancel-reload', true)},
+            shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
             hidden: refresh
         });
-				return false;
+		return false;
     });
 
     $.extend({'closeModal':function(callback, location)
