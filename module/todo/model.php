@@ -383,14 +383,14 @@ class todoModel extends model
             ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
             ->beginIF($end)->andWhere('date')->le($end)->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->beginIF($status == 'undone')->andWhere('status')->ne('done')->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->notin('done,closed')->fi()
             ->beginIF($date == 'cycle')->andWhere('cycle')->eq('1')->fi()
             ->beginIF($date != 'cycle')->andWhere('cycle')->eq('0')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
             ->query();
-
+        a($stmt);
         /* Set session. */
         $sql = explode('WHERE', $this->dao->get());
         $sql = explode('ORDER', $sql[1]);
