@@ -2311,16 +2311,21 @@ class storyModel extends model
         if($col->show)
         {
             $class = "c-{$id}";
-            if($id == 'assignedTo' && $story->assignedTo == $account) $class .= ' red';
-
             $title = '';
-            if($id == 'title') $title = $story->title;
-            if($id == 'plan')
+
+            if ($id == 'assignedTo')
+            {
+                $title = zget($users, $story->assignedTo, $story->assignedTo);
+                if($story->assignedTo == $account) $class .= ' red';
+            }
+            else if($id == 'openedBy') $title = zget($users, $story->openedBy, $story->openedBy);
+            else if($id == 'title') $title = $story->title;
+            else if($id == 'plan')
             {
                 $title  = $story->planTitle;
                 $class .= ' text-ellipsis';
             }
-            if($id == 'sourceNote')
+            else if($id == 'sourceNote')
             {
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';

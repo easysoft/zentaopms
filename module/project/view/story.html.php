@@ -153,8 +153,8 @@
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-outline label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color'");?>
             </td>
-            <td class='c-user'><?php echo $users[$story->openedBy];?></td>
-            <td class='c-user'><?php echo $users[$story->assignedTo];?></td>
+            <td class='c-user' title='<?php echo $users[$story->openedBy];?>'><?php echo $users[$story->openedBy];?></td>
+            <td class='c-user' title='<?php echo $users[$story->assignedTo];?>'><?php echo $users[$story->assignedTo];?></td>
             <td class='c-estimate'><?php echo $story->estimate;?></td>
             <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
               <span class='status-story status-<?php echo $story->status;?>'>
