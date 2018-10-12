@@ -865,7 +865,7 @@ class projectModel extends model
         $tasks = $this->dao->select('id, project, estimate, consumed, `left`, status, closedReason')
             ->from(TABLE_TASK)
             ->where('project')->in($projectKeys)
-            ->andWhere('parent')->eq(0)
+            ->andWhere('parent')->lt(1)
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('project', 'id');
 
@@ -1055,13 +1055,13 @@ class projectModel extends model
             ->where('project')->eq((int)$projectID)
             ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->eq(0)
+            ->andWhere('parent')->lt(1)
             ->fetch();
         $closedTotalLeft= (int)$this->dao->select('SUM(`left`) AS totalLeft')->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
             ->andWhere('status')->eq('closed')
             ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->eq(0)
+            ->andWhere('parent')->lt(1)
             ->fetch('totalLeft');
 
         $project->days          = $project->days ? $project->days : '';
@@ -1309,7 +1309,7 @@ class projectModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->where('t1.status')->in('wait, doing, pause, cancel')
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
             ->andWhere('t1.project')->in(array_keys($projects))
             ->andWhere("(t1.story = 0 OR (t2.branch in ('0','" . join("','", $branches) . "') and t2.product " . helper::dbIN(array_keys($branches)) . "))")
             ->fetchGroup('project', 'id');
@@ -1399,7 +1399,7 @@ class projectModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
-        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('parent')->eq(0)->andWhere('deleted')->eq(0)->fetch('taskCount');
+        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('parent')->lt(1)->andWhere('deleted')->eq(0)->fetch('taskCount');
         $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('bugCount');
 
         $statData = new stdclass();
@@ -2009,9 +2009,22 @@ class projectModel extends model
              ->where('t1.deleted')->eq(0)
              ->andWhere('t1.id')->in(array_keys($taskIdList))
              ->orderBy($orderBy)
-             ->fetchAll();
-        $this->loadModel('task')->processTasks($tasks);
-        return $tasks;
+             ->fetchAll('id');
+        
+        if(empty($tasks)) return array();
+        
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) 
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                    unset($tasks[$task->id]);
+                }
+            }
+        }
+        return $this->loadModel('task')->processTasks($tasks);
     }
 
     /**
@@ -2023,7 +2036,7 @@ class projectModel extends model
      * @param  int    $pager
      * @param  int    $orderBy
      * @access public
-     * @return void
+     * @return mixed
      */
     public function getSearchBugs($products, $projectID, $sql, $pager, $orderBy)
     {
@@ -2551,7 +2564,7 @@ class projectModel extends model
             $tasks = $this->dao->select('*')->from(TABLE_TASK)
                 ->where('project')->eq((int)$projectID)
                 ->andWhere('deleted')->eq(0)
-                ->andWhere('parent')->eq(0)
+                ->andWhere('parent')->lt(1)
                 ->orderBy('id_desc')
                 ->fetchAll();
             $childTasks = $this->dao->select('*')->from(TABLE_TASK)
@@ -2784,7 +2797,7 @@ class projectModel extends model
                 case 'task':
                     $link = helper::createLink('project', 'treeTask', "taskID={$tree->id}");
                     $html .= '<li class="item-task">';
-                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-type">' . (empty($tree->parent) ? $this->lang->task->common : $this->lang->task->children) . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span><span class="label label-id">' . $tree->id . '</span></a>';
+                    $html .= '<a class="tree-link" href="' . $link . '"><span class="label label-type">' . ($tree->parent > 0 ? $this->lang->task->children : $this->lang->task->common) . "</span><span class='title' title='{$tree->title}'>" . $tree->title . '</span> <span class="user"><i class="icon icon-person"></i> ' . (empty($tree->assignedTo) ? $tree->openedBy : $tree->assignedTo) . '</span><span class="label label-id">' . $tree->id . '</span></a>';
                     break;
                 case 'product':
                     $this->app->loadLang('product');

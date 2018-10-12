@@ -46,6 +46,7 @@ $lang->doc->users          = '用户';
 $lang->doc->item           = '项';
 $lang->doc->num            = '文档数量';
 $lang->doc->searchResult   = '搜索结果';
+$lang->doc->gt             = '>';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';

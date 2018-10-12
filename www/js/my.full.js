@@ -681,6 +681,24 @@ function notifyMessage(data)
     }
 }
 
+/**
+ * Get fingerprint.
+ * 
+ * @access public
+ * @return void
+ */
+function getFingerprint()
+{
+    if(typeof(Fingerprint) == 'function') return new Fingerprint().get();
+
+    fingerprint = '';
+    $.each(navigator, function(key, value)
+    {
+        if(typeof(value) == 'string') fingerprint += value.length;
+    })
+    return fingerprint;
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

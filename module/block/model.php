@@ -162,12 +162,12 @@ class blockModel extends model
         $data['stories']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
         $data['projects'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
             ->where("(status='wait' or status='doing')")
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
         $data['products'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PRODUCT)
             ->where('status')->ne('closed')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
 
@@ -188,7 +188,7 @@ class blockModel extends model
             ->fetch('count');
         $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
             ->where('status')->in('wait,doing')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->andWhere('end')->lt($today)
             ->andWhere('deleted')->eq(0)
             ->fetch('count');

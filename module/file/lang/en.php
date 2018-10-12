@@ -44,7 +44,7 @@ $lang->file->downloads = 'Downloads';
 $lang->file->extra     = 'Extra';
 
 $lang->file->dragFile            = 'Please drag here.';
-$lang->file->childTaskTag        = 'It\'s child task where \'>\' before the name.';
+$lang->file->childTaskTips       = 'It\'s child task where \'>\' before the name.';
 $lang->file->errorNotExists      = "<span class='text-red'>'%s' is not found.</span>";
 $lang->file->errorCanNotWrite    = "<span class='text-red'>'%s' is not writable. Please change its permission. Enter <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";
 $lang->file->confirmDelete       = " Do you want to delete it?";

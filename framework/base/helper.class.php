@@ -608,6 +608,23 @@ class baseHelper
 
         return $ip;
     }
+
+    /**
+     * Restart session.
+     * 
+     * @param  string $sessionID 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function restartSession($sessionID = '')
+    {
+        if(empty($sessionID)) $sessionID = sha1(mt_rand());
+
+        session_write_close();
+        session_id($sessionID);
+        session_start();
+    }
 }
 
 //------------------------------- 常用函数。Some tool functions.-------------------------------//

@@ -188,7 +188,7 @@
         <td class="c-name" title="<?php echo $task->name;?>">
           <?php
             if(!empty($task->team))   echo '<span class="label label-light label-badge">' . $lang->task->multipleAB . '</span> ';
-            if(!empty($task->parent)) echo '<span class="label label-light label-badge">' . $lang->task->childrenAB . '</span> ';
+            if($task->parent > 0) echo '<span class="label label-light label-badge">' . $lang->task->childrenAB . '</span> ';
             if(isset($task->children) && $task->children == true) echo '<span class="label">' . $lang->task->parentAB . '</span> ';
             if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;
           ?>

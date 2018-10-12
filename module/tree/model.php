@@ -1644,7 +1644,7 @@ class treeModel extends model
      */
     public function getDocStructure()
     {
-        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->get());
+        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('id_desc')->get());
         $parent = array();
         while($module = $stmt->fetch())
         {
@@ -1666,11 +1666,18 @@ class treeModel extends model
             {
                 foreach($module->children as $children)
                 {
-                    if($children->parent != 0) continue;//Filter project children modules.
+                    if($children->parent != 0 && !empty($tree[$root])) 
+                    {
+                        foreach($tree[$root] as $firstChildren)
+                        {
+                            if($firstChildren->id == $children->parent) $firstChildren->children[] = $children;
+                        }
+                    };//Filter project children modules.
                     $tree[$root][] = $children;
                 }
             }
         }
+
         return $tree;
     }
 }

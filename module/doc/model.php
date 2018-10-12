@@ -66,6 +66,7 @@ class docModel extends model
             $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=custom"), "<i class='icon icon-folder-o'></i> {$this->lang->doc->customAB}") . '</li>';
             $selectHtml .='</ul></div></div>';
 
+            $currentLib = 0;
             if(strpos('product,project,custom', $type) !== false)
             {
                 if($type == 'custom')  $currentLib = $libID;
@@ -1527,5 +1528,53 @@ class docModel extends model
         $statisticInfo->myDocsProgress       = $statisticInfo->totalDocs ? round($statisticInfo->myDocs / $statisticInfo->totalDocs, 2) * 100 : 0;
 
         return $statisticInfo;
+    }
+
+    /**
+     * Print doc child module.
+     *
+     * @access public
+     */
+    public function printChildModule($module, $libID, $methodName, $browseType, $moduleID)
+    {
+        if(isset($module->children))
+        {
+            foreach($module->children as $childModule)
+            {
+                $active = '';
+                if($methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $childModule->id) $active = "class='active'";
+                echo '<ul>';
+                echo "<li $active>";
+                echo html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$childModule->id}"), "<i class='icon icon-folder-outline'></i> " . $childModule->name, '', "class='text-ellipsis' title='{$childModule->name}'");
+                if(isset($childModule->children)) $this->printChildModule($childModule, $libID, $methodName, $browseType, $moduleID);
+                echo '</li>';
+                echo '</ul>';
+            }
+        }
+    }
+
+    /**
+     * Build doc bread title.
+     *
+     * @access public
+     * @return string 
+     */
+    public function buildBreadTitle($libID = 0, $param = 0, $title = '')
+    {
+        $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq($param)->fetch('path');
+
+        $parantMoudles = $this->dao->select('id, name')->from(TABLE_MODULE)
+            ->where('id')->in($path)
+            ->andWhere('deleted')->eq(0)
+            ->fetchAll('id');
+
+        foreach($parantMoudles as $parentID => $moduleName)
+        {
+            $active = '';
+            if($param == $parentID) $active = "class='active'";
+            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " {$this->lang->doc->gt} " . $moduleName->name , '', "$active");
+        } 
+
+        return $title;
     }
 }

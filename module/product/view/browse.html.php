@@ -401,7 +401,7 @@ $(function()
                 }
                 var data = $row.data();
                 checkedEstimate += data.estimate;
-                checkedCase += data.cases;
+                if(data.cases > 0) checkedCase += 1;
             });
             var rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
             return checkedSummary.replace('%total%', checkedTotal)

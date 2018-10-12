@@ -340,7 +340,7 @@ class todo extends control
             $this->lang->set('menugroup.todo', $from);
         }
 
-        $this->view->title      = "{$this->lang->todo->common} #$todo->id $todo->name";
+        $this->view->title      = $this->app->user->account == $todo->account ? "{$this->lang->todo->common} #$todo->id $todo->name" : $this->lang->todo->common ;
         $this->view->position[] = $this->lang->todo->view;
         $this->view->todo       = $todo;
         $this->view->times      = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);

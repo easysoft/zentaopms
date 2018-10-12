@@ -93,8 +93,9 @@ class reportModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.parent')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
             ->andWhere('t2.status')->eq('closed')
             ->beginIF($begin)->andWhere('t2.begin')->ge($begin)->fi()
             ->beginIF($end)->andWhere('t2.end')->le($end)->fi()
@@ -131,6 +132,7 @@ class reportModel extends model
         $products = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->beginIF(strpos($conditions, 'closedProduct') === false)->andWhere('status')->ne('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->fetchAll('id');
         $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))
             ->beginIF(strpos($conditions, 'overduePlan') === false)->andWhere('end')->gt(date('Y-m-d'))->fi()
@@ -300,7 +302,7 @@ class reportModel extends model
         $taskGroups    = array();
         foreach($tasks as $task)
         {
-            if(!empty($task->parent)) $parents[$task->parent] = $task->parent;
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
             $taskGroups[$task->assignedTo][$task->id] = $task;
         }
 

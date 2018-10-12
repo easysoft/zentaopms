@@ -76,8 +76,8 @@
                 echo "<th class='step-id'>$stepId</th>";
                 echo "<td class='text-left'><div class='input-group'>";
                 if($step->type == 'item') echo "<span class='step-item-id'>{$stepId}.{$childId}</span>";
-                echo nl2br($step->desc) . "</td>";
-                echo "<td class='text-left'>" . nl2br($step->expect) . "</div></td>";
+                echo nl2br(str_replace(' ', '&nbsp;', $step->desc)) . "</td>";
+                echo "<td class='text-left'>" . nl2br(str_replace(' ', '&nbsp;', $step->expect)) . "</div></td>";
                 echo "</tr>";
                 $childId ++;
             }

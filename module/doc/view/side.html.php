@@ -6,6 +6,11 @@ $allModules = $this->loadModel('tree')->getDocStructure();
 
 $productSubLibs = $this->doc->getSubLibGroups('product', array_keys($products));
 $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
+if($this->methodName != 'browse')
+{
+    $browseType = '';
+    $moduleID   = '';
+}
 ?>
 <div class="side-col" style="width: 220px" data-min-width="220">
   <div class="cell">
@@ -62,8 +67,10 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
                 <?php if(isset($allModules[$subLibID])):?>
                 <ul>
                   <?php foreach($allModules[$subLibID] as $module):?>
+                  <?php if($module->parent != 0) continue;?>
                   <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
                     <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
+                    <?php $this->doc->printChildModule($module, $subLibID, $this->methodName, $browseType, $moduleID);?>
                   </li>
                   <?php endforeach;?>
                 </ul>
@@ -106,8 +113,10 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
                 <?php if(isset($allModules[$subLibID])):?>
                 <ul>
                   <?php foreach($allModules[$subLibID] as $module):?>
+                  <?php if($module->parent != 0) continue;?>
                   <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
                     <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
+                  <?php $this->doc->printChildModule($module, $subLibID, $this->methodName, $browseType, $moduleID);?>
                   </li>
                   <?php endforeach;?>
                 </ul>
@@ -130,8 +139,10 @@ $projectSubLibs = $this->doc->getSubLibGroups('project', array_keys($projects));
             <?php if(isset($allModules[$subLibID])):?>
             <ul>
               <?php foreach($allModules[$subLibID] as $module):?>
+              <?php if($module->parent != 0) continue;?>
               <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
                 <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
+                <?php $this->doc->printChildModule($module, $subLibID, $this->methodName, $browseType, $moduleID);?>
               </li>
               <?php endforeach;?>
             </ul>

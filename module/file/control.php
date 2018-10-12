@@ -153,15 +153,7 @@ class file extends control
      */
     public function download($fileID, $mouse = '')
     {
-        /* When get sid then change session id. */
-        if(isset($_GET[$this->config->sessionVar]))
-        {
-            $sessionID = isset($_COOKIE[$this->config->sessionVar]) ? $_COOKIE[$this->config->sessionVar] : sha1(mt_rand());
-            session_write_close();
-            session_id($sessionID);
-            session_start();
-        }
-
+        if(session_id() != $this->app->sessionID) helper::restartSession($this->app->sessionID);
         $file = $this->file->getById($fileID);
 
         /* Judge the mode, down or open. */
@@ -170,7 +162,8 @@ class file extends control
         if(stripos($fileTypes, $file->extension) !== false && $mouse == 'left') $mode = 'open';
         if($file->extension == 'txt')
         {
-            $extension = end(explode('.', $file->title));
+            $extension = 'txt';
+            if(($postion = strrpos($file->title, '.')) !== false)$extension = substr($file->title, $postion + 1);
             if($extension != 'txt') $mode = 'down';
             $file->extension = $extension;
         }

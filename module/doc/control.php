@@ -138,11 +138,12 @@ class doc extends control
         $actionURL = $this->createLink('doc', 'browse', "lib=$libID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&from=$from");
         $this->doc->buildSearchForm($libID, $this->libs, $queryID, $actionURL, $type);
 
-        $title  = '';
-        $module = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
+        $title   = '';
+        $module  = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
         if($module) $title = $module->name;
         if($libID)  $title = $this->libs[$libID];
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
+        if($param != 0) $title = $this->doc->buildBreadTitle($libID, $param, $title);
         if($browseType == 'fastsearch')
         {
             if($this->post->searchDoc) $this->session->set('searchDoc', $this->post->searchDoc);
@@ -160,7 +161,7 @@ class doc extends control
             $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
         }
 
-        $this->view->title      = $title;
+        $this->view->breadTitle = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
         $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc', $browseType);

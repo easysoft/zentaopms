@@ -59,3 +59,4 @@
 }
 
 .main-col > .panel > .panel-body {padding-top: 20px;}
+.main-col .panel-title a.active{color: #0c64eb}
