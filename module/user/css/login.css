@@ -2,7 +2,7 @@ body {background: #1183fb linear-gradient(-90deg, #0a48d1 0%, #1183fb 100%); bac
 #login {max-width: 600px!important; margin: 0 auto; margin-top: 5%;}
 #loginPanel {background: #fff; overflow: hidden; box-shadow: 0 0 20px 0 rgba(0,0,0,.1); border-radius: 3px;}
 #loginPanel > header {padding: 20px; border-bottom: 1px #eee solid; position: relative;}
-#loginPanel > header > h2 {font-size: 16px; margin: 0; line-height: 32px;}
+#loginPanel > header > h2 {font-size: 16px; margin: 0; line-height: 32px; max-width: 83%;}
 #loginPanel > header > .actions {position: absolute; right: 20px; top: 20px;}
 #loginPanel > .table-row {margin: 20px 0;}
 #loginPanel .table-form > tbody > tr > th {width: 60px;}
