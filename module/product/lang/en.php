@@ -43,7 +43,7 @@ $lang->product->doc      = 'Doc';
 $lang->product->project  = $lang->projectCommon . 'List';
 $lang->product->build    = 'Build';
 
-$lang->product->currentProject   = 'Current Project';
+$lang->product->currentProject   = "Current {$lang->projectCommon}";
 $lang->product->activeStories    = 'Activated Story';
 $lang->product->changedStories   = 'Changed Story';
 $lang->product->draftStories     = 'Draft Story';

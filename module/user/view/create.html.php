@@ -25,7 +25,7 @@
       <table align='center' class="table table-form">
         <tr>
           <th class='w-verifyPassword'><?php echo $lang->user->dept;?></th>
-          <td class='w-p50'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
+          <td class='w-p40'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->account;?></th>
@@ -83,7 +83,8 @@
           </td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center form-actions'>
+          <th></th>
+          <td colspan='2' class='text-left form-actions'>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>
