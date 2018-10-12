@@ -5,7 +5,7 @@
 .block-dynamic .timeline > li .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .block-dynamic .panel-body {padding-top: 0;}
 </style>
-<div class='panel-body'>
+<div class='panel-body scrollbar-hover'>
   <ul class="timeline timeline-tag-left no-margin">
     <?php
     $i = 0;
