@@ -24,7 +24,6 @@ class commonModel extends model
         {
             define('FIRST_RUN', true);
             $this->sendHeader();
-            $this->setFingerprint();
             $this->setCompany();
             $this->setUser();
             $this->loadConfigFromDB();
@@ -50,17 +49,6 @@ class commonModel extends model
     {
         header("Content-Type: text/html; Language={$this->config->charset}");
         header("Cache-control: private");
-    }
-
-    /**
-     * Set fingerprint.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setFingerprint()
-    {
-        if($this->cookie->fingerprint and !$this->session->fingerprint) $this->session->set('fingerprint', $this->cookie->fingerprint);
     }
 
     /**
@@ -1326,8 +1314,8 @@ EOD;
         $method = $this->app->getMethodName();
         if(isset($this->app->user->modifyPassword) and $this->app->user->modifyPassword and ($module != 'my' or $method != 'changepassword')) die(js::locate(helper::createLink('my', 'changepassword')));
         if($this->isOpenMethod($module, $method)) return true;
-        if(!$this->loadModel('user')->isLogon() and $this->cookie->fingerprint and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
-        if(!$this->loadModel('user')->isLogon() and $this->cookie->fingerprint and $this->cookie->za) $this->user->identifyByCookie();
+        if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
+        if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
 
         if(isset($this->app->user))
         {

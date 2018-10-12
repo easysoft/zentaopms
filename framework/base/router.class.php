@@ -312,6 +312,15 @@ class baseRouter
     public $cookie;
 
     /**
+     * 原始SESSIONID
+     * SESSIONID
+     *
+     * @var int
+     * @access public
+     */
+    public $sessionID;
+
+    /**
      * 网站代号。
      * The code of current site.
      * 
@@ -815,13 +824,8 @@ class baseRouter
             session_name($sessionName);
             session_start();
 
-            $sessionID = session_id();
-            if(isset($_GET[$this->config->sessionVar]) and $sessionID != $_GET[$this->config->sessionVar])
-            {
-                helper::restartSession($_GET[$this->config->sessionVar]);
-                if($this->session->fingerprint and $this->cookie->fingerprint != $this->session->fingerprint) helper::restartSession($sessionID);
-            }
-            if($this->session->fingerprint and $this->cookie->fingerprint != $this->session->fingerprint) helper::restartSession();
+            $this->sessionID = session_id();
+            if(isset($_GET[$this->config->sessionVar]) and $this->sessionID != $_GET[$this->config->sessionVar]) helper::restartSession($_GET[$this->config->sessionVar]);
 
             define('SESSION_STARTED', true);
         }

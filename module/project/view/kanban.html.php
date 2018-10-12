@@ -136,7 +136,7 @@ $account = $this->app->user->account;
                 <?php foreach($group->tasks[$col] as $task):?>
                 <div class='board-item' data-id='<?php echo $task->id?>' id='task-<?php echo $task->id?>' data-type='task'>
                   <?php
-                  $childrenAB = empty($task->parent) ? '' : "<span class='label label-light label-badge'>" . $lang->task->childrenAB . '</span> ';
+                  $childrenAB = $task->parent > 0 ? "<span class='label label-light label-badge'>" . $lang->task->childrenAB . '</span> ' : '';
                   echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "{$childrenAB}{$task->name}", '', 'class="title kanbaniframe" title="' . $task->name . '"');
                   ?>
                   <div class='info'>
