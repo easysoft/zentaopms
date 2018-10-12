@@ -1572,7 +1572,7 @@ class docModel extends model
         {
             $active = '';
             if($param == $parentID) $active = "class='active'";
-            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), ' > ' . $moduleName->name , '', "$active");
+            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " {$this->lang->doc->gt} " . $moduleName->name , '', "$active");
         } 
 
         return $title;
