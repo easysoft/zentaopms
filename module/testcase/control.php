@@ -1297,7 +1297,7 @@ class testcase extends control
                 $columnKey[] = $fields[$title];
             }
 
-            if(count($columnKey) == 0 or $this->post->encode != 'utf-8')
+            if(count($columnKey) <= 3 or $this->post->encode != 'utf-8')
             {
                 $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';

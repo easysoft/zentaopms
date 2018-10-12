@@ -1322,7 +1322,7 @@ class userModel extends model
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
 
         if(empty($userView)) $userView = $this->computeUserView($account);
-        if(!empty($acls['products']))
+        if(!empty($acls['products']) and !$this->session->user->admin)
         {
             $grantProducts = '';
             foreach($acls['products'] as $productID)
@@ -1331,7 +1331,7 @@ class userModel extends model
             }
             $userView->products = $grantProducts;
         }
-        if(!empty($acls['projects']))
+        if(!empty($acls['projects']) and !$this->session->user->admin)
         {
             $grantProjects = '';
             foreach($acls['projects'] as $projectID)

@@ -70,26 +70,34 @@ if($status == 'createFile')
 }
 else
 {
-    $dsn = "mysql:host={$config->db->host}; port={$config->db->port}; dbname={$config->db->name}";
-    $dbh = new PDO($dsn, $config->db->user, $config->db->password, array(PDO::ATTR_PERSISTENT => $config->db->persistant));
-    $dbh->exec("SET NAMES {$config->db->encoding}");
-
-    $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-    $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    $tables = array();
-    $stmt = $dbh->query("show full tables");
-    while($table = $stmt->fetch(PDO::FETCH_ASSOC))
+    $error = '';
+    try
     {
-        $tableName = $table["Tables_in_{$config->db->name}"];
-        $tableType = strtolower($table['Table_type']);
-        if($tableType == 'base table')
+        $dsn = "mysql:host={$config->db->host}; port={$config->db->port}; dbname={$config->db->name}";
+        $dbh = new PDO($dsn, $config->db->user, $config->db->password, array(PDO::ATTR_PERSISTENT => $config->db->persistant));
+        $dbh->exec("SET NAMES {$config->db->encoding}");
+
+        $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+        $tables = array();
+        $stmt = $dbh->query("show full tables");
+        while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {
-            $tableStatus = $dbh->query("$type table $tableName")->fetch();
-            $tables[$tableName] = strtolower($tableStatus->Msg_text);
+            $tableName = $table["Tables_in_{$config->db->name}"];
+            $tableType = strtolower($table['Table_type']);
+            if($tableType == 'base table')
+            {
+                $tableStatus = $dbh->query("$type table $tableName")->fetch();
+                $tables[$tableName] = strtolower($tableStatus->Msg_text);
+            }
         }
+        $status = 'check';
     }
-    $status = 'check';
+    catch(PDOException $exception)
+    {
+        $error = sprintf($lang->misc->connectFail, $exception->getMessage());
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -103,7 +111,9 @@ else
 <body>
 <div class='alert alert-info'><strong><?php echo $lang->misc->repairTable;?></strong></div>
 <div class='container mw-700px'>
-<?php if($status == 'createFile'):?>
+<?php if(!empty($error)):?>
+<?php echo $error;?>
+<?php elseif($status == 'createFile'):?>
   <div class='panel-body' style='margin-left:25%;'>
     <?php
     $checkFileName = $_SESSION['checkFileName'];

@@ -59,6 +59,7 @@ $lang->misc->checkTable  = "Check Data Table";
 $lang->misc->needRepair  = "Repair Table";
 $lang->misc->repairTable = "Database table is damaged due to power outage. Please chech and repair!";
 $lang->misc->repairFail  = "Failed to repair. Please go to the database data directory, try to perform <code>myisamchk -r -f %s.MYI</code> repair.";
+$lang->misc->connectFail = "Failed to connect to database. Error: %s，<br/> Please check the MySQL error log and troubleshoot.";
 $lang->misc->tableName   = "Table Name";
 $lang->misc->tableStatus = "Status";
 $lang->misc->novice      = "First time to ZenTao? Do you want to start rookie mode?";

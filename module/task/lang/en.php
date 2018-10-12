@@ -84,6 +84,7 @@ $lang->task->finishedBy        = 'Finished';
 $lang->task->finishedByAB      = 'Finished';
 $lang->task->finishedDate      = 'Finished on';
 $lang->task->finishedDateAB    = 'Finished on';
+$lang->task->finishedList      = 'Finished list';
 $lang->task->canceledBy        = 'Cancelled by';
 $lang->task->canceledDate      = 'Cancelled on';
 $lang->task->closedBy          = 'Closed by';

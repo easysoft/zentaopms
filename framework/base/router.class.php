@@ -2154,7 +2154,14 @@ class baseRouter
         }
         catch (PDOException $exception)
         {
-            self::triggerError($exception->getMessage(), __FILE__, __LINE__, $exit = true);
+            $message = $exception->getMessage();
+            if(empty($message))
+            {
+                /* Try to repair table. */
+                header("location: {$this->config->webRoot}checktable.php");
+                exit;
+            }
+            self::triggerError($message, __FILE__, __LINE__, $exit = true);
         }
     }
 
