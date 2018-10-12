@@ -46,6 +46,7 @@ $lang->doc->users          = 'Users';
 $lang->doc->item           = ' Items';
 $lang->doc->num            = 'Docs';
 $lang->doc->searchResult   = 'Search Result';
+$lang->doc->gt             = '>';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
