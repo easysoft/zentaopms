@@ -1,6 +1,6 @@
-body{padding-bottom: 20px;}
+body {padding-bottom: 20px;}
 .block-statistic .nav-stacked {overflow: auto; max-height: 220px;}
-#dashboard .col-side {width: 450px; max-width:450px;}
+#dashboard .col-side {width: 450px; max-width: 450px;}
 #dashboard .panel-actions.nav > li > .btn {padding: 0 5px; line-height: 24px; margin: 3px; color: #3C4353;}
 #dashboard .panel-actions.nav .icon-more {font-size: 14px;}
 #dashboard .panel-body {max-height: 400px; overflow: auto;}
