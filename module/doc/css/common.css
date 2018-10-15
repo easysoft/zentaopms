@@ -48,6 +48,7 @@
 .files-grid .icon-folder:before {display: none;}
 .files-grid .img-holder {height: 64px; line-height: 64px; margin: 0 auto 8px; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: center;}
 .files-grid .img-holder > img {max-height: 64px; opacity: 0; width: 100%;}
+.files-grid + .table-footer {margin-top: 20px;}
 
 @keyframes flash-icon
 {
