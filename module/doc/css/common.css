@@ -29,6 +29,7 @@
 
 #docsTree li > a > .icon {opacity: .65;}
 
+.files-grid {padding: 0 10px;}
 .files-grid .col {width: 167px; text-align: center; padding: 0; margin-bottom: 10px;}
 .files-grid .actions {position: absolute; bottom: -38px; left: 0; right: 0; background: #E9F2FB; z-index: 10; opacity: 0; transition: opacity .2s; padding-bottom: 8px; border-radius: 0 0 3px 3px; padding-top: 8px;}
 .files-grid .col:hover .actions {opacity: 1;}
