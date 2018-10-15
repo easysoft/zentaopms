@@ -22,7 +22,7 @@
     ?>
     <?php foreach(customModel::getFeatureMenu('testcase', 'browse') as $menuItem):?>
     <?php
-    if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
+    if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
     if(!$config->testcase->needReview and empty($config->testcase->forceReview) and $menuType == 'wait') continue;
     if($config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
@@ -65,7 +65,7 @@
         echo html::a('javascript:;', $currentLable . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
         echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
 
-        if(empty($suiteList)) 
+        if(empty($suiteList))
         {
             echo '<li>';
             echo html::a($this->createLink('testsuite', 'create', "productID=$productID"), "<i class='icon-plus'></i>" . $lang->testsuite->create);
@@ -123,7 +123,7 @@
         <span class='caret'></span>
       </button>
       <ul class='dropdown-menu' id='exportActionMenu'>
-      <?php 
+      <?php
       $misc = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
       $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy") : '#';
       echo "<li>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
@@ -137,7 +137,7 @@
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>
-      <?php 
+      <?php
       $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
       $link = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
       echo "<li>" . html::a($link, $lang->testcase->importFile, '', $misc) . "</li>";

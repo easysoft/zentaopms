@@ -32,7 +32,7 @@
     <?php
     foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {
-        if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
+        if(isset($menuItem->hidden)) continue;
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         if($menuItem->name == 'more')
         {
