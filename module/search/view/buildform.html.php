@@ -27,9 +27,9 @@ $formId = 'searchForm-' . uniqid('');
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #<?php echo $formId;?> .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
-#<?php echo $formId;?> input.date::-webkit-input-placeholder {color: #000000; opacity: 1;}
-#<?php echo $formId;?> input.date::-moz-placeholder {color: #000000; opacity: 1;}
-#<?php echo $formId;?> input.date:-ms-input-placeholder {color: #000000; opacity: 1;}
+#<?php echo $formId;?> input.date::-webkit-input-placeholder {color: #838A9D; opacity: 1;}
+#<?php echo $formId;?> input.date::-moz-placeholder {color: #838A9D; opacity: 1;}
+#<?php echo $formId;?> input.date:-ms-input-placeholder {color: #838A9D; opacity: 1;}
 #<?php echo $formId;?> .btn-expand-form {background: transparent;}
 #<?php echo $formId;?> .btn-expand-form:hover {background: #e9f2fb;}
 .showmore .btn-expand-form .icon-chevron-double-down:before {content: '\e959';}
@@ -113,7 +113,7 @@ foreach($fieldParams as $fieldName => $param)
 
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
                     }
                     else
                     {
@@ -212,7 +212,7 @@ foreach($fieldParams as $fieldName => $param)
         if($style != 'simple')
         {
             if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary'") . "&nbsp;";
-            echo html::commonButton($lang->search->reset, 'onclick=resetForm(this)', 'btn-reset-form btn');
+            echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         }
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
         echo html::hidden('formType', 'lite');
