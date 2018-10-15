@@ -131,7 +131,8 @@ $(document).ready(function()
         };
 
         var resizeCols = function() {
-            var $cells = $cols.children('.panel,.cell').height('auto');
+            var cellHeight = $(window).height() - 230;
+            var $cells = $cols.children('.panel,.cell').height(cellHeight);
             if($firstCol.next('.col-spliter').css('display') != 'none')
             {
                 var bestHeight = $firstCol.height();
