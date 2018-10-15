@@ -11,6 +11,7 @@ $sessionString .= session_name() . '=' . session_id();
   <style>
   .files-list>li>a {display: inline;}
   .files-list>li>.right-icon {opacity: 1;}
+  .files-list>li>a{word-wrap: break-word;}
   </style>
   <script>
   /* Delete a file. */
