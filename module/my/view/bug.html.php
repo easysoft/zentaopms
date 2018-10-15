@@ -84,8 +84,8 @@
             <?php endif;?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-          <td><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color'");?></td>
+          <td title="<?php echo zget($lang->bug->typeList, $bug->type, '');?>"><?php echo zget($lang->bug->typeList, $bug->type, '');?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
           <td><?php echo zget($users, $bug->openedBy);?></td>
           <td class='c-assignedTo has-btn'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
           <td><?php echo zget($users, $bug->resolvedBy);?></td>
