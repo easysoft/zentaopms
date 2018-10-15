@@ -49,16 +49,17 @@
 .files-grid .img-holder {height: 64px; line-height: 64px; margin: 0 auto 8px; width: 100%; background-size: contain; background-repeat: no-repeat; background-position: center;}
 .files-grid .img-holder > img {max-height: 64px; opacity: 0; width: 100%;}
 
-.panel{padding-bottom: 40px;}
-.panel .table-footer{position: absolute; bottom: 0; width: 100%;}
-
 @keyframes flash-icon
 {
   0% {color: #666;}
   100% {color: #fff;}
 }
 
-.main-col > .panel > .panel-body {padding-top: 20px;}
-.main-col .panel-title a.active{color: #0c64eb}
+.main-col > .panel > .panel-body {padding: 5px 10px;}
+.main-col .panel-title a.active {color: #0c64eb}
 
-#mainRow .cell{overflow: hidden auto}
+.side-col > .cell {overflow: hidden auto; padding: 0; position: relative;}
+.side-col > .cell > header {position: absolute; top: 10px; right: 10px; left: 10px;}
+.side-col > .cell > header > .c-sm {padding-right: 20px; width: 60px;;}
+.side-col #docsTree {position: absolute; top: 53px; left: 0; right: 0; bottom: 0; overflow: auto; padding: 10px;}
+.main-col .block-files > .panel-body {position: absolute; top: 45px; left: 0; right: 0; bottom: 0; overflow: auto;}

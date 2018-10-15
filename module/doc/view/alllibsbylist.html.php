@@ -15,8 +15,8 @@
         </div>
       </nav>
     </div>
-    <div class="panel-body has-table">
-      <table class="table table-borderless table-hover table-files">
+    <div class="panel-body">
+      <table class="table table-borderless table-hover table-files table-fixed no-margin">
         <thead>
           <tr>
             <?php $name = '';?>
@@ -29,7 +29,7 @@
             <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
             <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
             <?php else:?>
-            <th class="c-actions-4"><?php echo $lang->actions;?></th>
+            <th class="c-actions-3"><?php echo $lang->actions;?></th>
             <?php endif;?>
           </tr>
         </thead>
@@ -62,7 +62,7 @@
           <?php endforeach;?>
         </tbody>
       </table>
+      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     </div>
-    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
   </div>
 </div>

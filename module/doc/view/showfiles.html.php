@@ -48,8 +48,8 @@
       </div>
 
       <?php if($viewType == 'list'):?>
-      <div class="panel-body has-table">
-        <table class="table table-borderless table-hover table-files">
+      <div class="panel-body">
+        <table class="table table-borderless table-hover table-files table-fixed no-margin">
           <thead>
             <tr class="text-center">
               <th class="w-80px"><?php echo $lang->doc->id;?></th>
@@ -85,6 +85,7 @@
             <?php endforeach;?>
           </tbody>
         </table>
+        <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
       </div>
       <?php else:?>
       <div class="panel-body">
@@ -141,9 +142,9 @@
           </div>
           <?php endforeach;?>
         </div>
+        <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
       </div>
       <?php endif?>
-      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     </div>
   </div>
 </div>

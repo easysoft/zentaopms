@@ -34,13 +34,13 @@
         </div>
       </nav>
     </div>
-    <div class='panel-body has-table'>
-      <table class="table table-borderless table-hover table-files">
+    <div class='panel-body'>
+      <table class="table table-borderless table-hover table-files table-fixed no-margin">
         <thead>
           <tr>
             <th class="c-name"><?php echo $lang->doc->libName;?></th>
             <th class="c-num"><?php echo $lang->doc->num;?></th>
-            <th class="c-actions-4"><?php echo $lang->actions;?></th>
+            <th class="c-actions-3"><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
