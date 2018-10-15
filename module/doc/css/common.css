@@ -64,3 +64,7 @@
 .side-col > .cell > header > .c-sm {padding-right: 20px; width: 60px;;}
 .side-col #docsTree {position: absolute; top: 53px; left: 0; right: 0; bottom: 0; overflow: auto; padding: 0 10px 10px;}
 .main-col .block-files > .panel-body {position: absolute; top: 45px; left: 0; right: 0; bottom: 0; overflow: auto;}
+
+td.c-name a{color: #0c60e1}
+td.c-name a:visited{color: #082999}
+.main-col .panel-heading a:visited{color: #082999}
