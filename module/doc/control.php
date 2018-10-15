@@ -337,6 +337,7 @@ class doc extends control
         $this->view->position[] = $this->lang->doc->create;
 
         $this->view->libID            = $libID;
+        $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID         = $moduleID;
         $this->view->type             = $type;
