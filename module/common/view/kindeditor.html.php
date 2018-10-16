@@ -11,8 +11,7 @@ $editorLang   = isset($editorLangs[$app->getClientLang()]) ? $editorLangs[$app->
 /* set uid for upload. */
 $uid = uniqid('');
 ?>
-<link rel="stylesheet" href="<?php echo $jsRoot;?>kindeditor/themes/default/default.css" />
-<script src='<?php echo $jsRoot;?>kindeditor/kindeditor-min.js'></script>
+<script src='<?php echo $jsRoot;?>kindeditor/kindeditor.min.js'></script>
 <script src='<?php echo $jsRoot;?>kindeditor/lang/<?php echo $editorLang;?>.js'></script>
 <script>
 (function($) {
@@ -21,33 +20,33 @@ $uid = uniqid('');
     var K = KindEditor;
 
     var bugTools =
-    [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
+    [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|',
     'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
     'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'about'];
-    var simpleTools = 
-    [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|', 
+    var simpleTools =
+    [ 'formatblock', 'fontname', 'fontsize', '|', 'forecolor', 'hilitecolor', 'bold', 'italic','underline', '|',
     'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist', 'insertunorderedlist', '|',
     'emoticons', 'image', 'code', 'link', '|', 'removeformat','undo', 'redo', 'fullscreen', 'source', 'about'];
-    var fullTools = 
+    var fullTools =
     [ 'formatblock', 'fontname', 'fontsize', 'lineheight', '|', 'forecolor', 'hilitecolor', '|', 'bold', 'italic','underline', 'strikethrough', '|',
     'justifyleft', 'justifycenter', 'justifyright', 'justifyfull', '|',
     'insertorderedlist', 'insertunorderedlist', '|',
     'emoticons', 'image', 'insertfile', 'hr', '|', 'link', 'unlink', '/',
     'undo', 'redo', '|', 'selectall', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml','quickformat', '|',
     'indent', 'outdent', 'subscript', 'superscript', '|',
-    'table', 'code', '|', 'pagebreak', 'anchor', '|', 
+    'table', 'code', '|', 'pagebreak', 'anchor', '|',
     'fullscreen', 'source', 'preview', 'about'];
     var editorToolsMap = {fullTools: fullTools, simpleTools: simpleTools, bugTools: bugTools};
 
     // Kindeditor default options
-    var editorDefaults = 
+    var editorDefaults =
     {
         cssPath: [config.themeRoot + 'zui/css/min.css'],
         width: '100%',
         height: '200px',
-        filterMode: true, 
+        filterMode: true,
         bodyClass: 'article-content',
-        urlType: 'absolute', 
+        urlType: 'absolute',
         uploadJson: createLink('file', 'ajaxUpload', 'uid=' + kuid),
         allowFileManager: true,
         langType: '<?php echo $editorLang?>',
@@ -68,10 +67,10 @@ $uid = uniqid('');
             editorID = 'kindeditor-' + $.zui.uuid();
             $editor.attr('id', editorID);
         }
-        
+
         var editorTool  = editorToolsMap[options.tools || editor.tools] || simpleTools;
         var placeholder = $editor.attr('placeholder') || options.placeholder || '';
-        
+
         /* Remove fullscreen in modal. */
         if(config.onlybody == 'yes')
         {
@@ -83,15 +82,15 @@ $uid = uniqid('');
             editorTool = newEditorTool;
         }
 
-        $.extend(options, 
+        $.extend(options,
         {
             items: editorTool,
             afterChange: function(){$editor.change().hide();},
             afterCreate : function()
             {
                 var frame = this.edit;
-                var doc   = this.edit.doc; 
-                var cmd   = this.edit.cmd; 
+                var doc   = this.edit.doc;
+                var cmd   = this.edit.cmd;
                 pasted    = true;
                 if(!K.WEBKIT && !K.GECKO)
                 {
@@ -135,7 +134,7 @@ $uid = uniqid('');
                             $("body").click(function(){$('#submit').removeAttr('disabled');});
 
                             var reader = new FileReader();
-                            reader.onload = function(evt) 
+                            reader.onload = function(evt)
                             {
                                 var result = evt.target.result;
                                 var arr    = result.split(",");
@@ -237,7 +236,7 @@ $uid = uniqid('');
         });
     };
 
-    // Init all kindeditor    
+    // Init all kindeditor
     var initKindeditor = function(afterInit)
     {
         var $submitBtn = $('form :input[type=submit]');

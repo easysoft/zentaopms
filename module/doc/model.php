@@ -273,11 +273,10 @@ class docModel extends model
     public function createLib()
     {
         $lib = fixer::input('post')
-            ->setForce('product', $this->post->libType == 'product' ? $this->post->product : 0)
-            ->setForce('project', $this->post->libType == 'project' ? $this->post->project : 0)
+            ->setForce('product', $this->post->type == 'product' ? $this->post->product : 0)
+            ->setForce('project', $this->post->type == 'project' ? $this->post->project : 0)
             ->join('groups', ',')
             ->join('users', ',')
-            ->remove('libType')
             ->get();
 
         if($lib->acl == 'private') $lib->users = $this->app->user->account;

@@ -51,7 +51,7 @@ js::set('browseType', $browseType);
     foreach(customModel::getFeatureMenu('project', 'task') as $menuItem)
     {
         if($project->type == 'ops' && $menuItem->name == 'needconfirm') continue;
-        if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
+        if(isset($menuItem->hidden)) continue;
         $menuType = $menuItem->name;
         if($menuType == 'QUERY')
         {

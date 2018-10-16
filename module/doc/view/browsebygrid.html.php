@@ -62,10 +62,10 @@
         </div>
         <?php endforeach;?>
       </div>
+      <?php if(!empty($docs)):?>
+      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+      <?php endif;?>
     </div>
-    <?php if(!empty($docs)):?>
-    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
-    <?php endif;?>
     <?php endif;?>
   </div>
 </div>

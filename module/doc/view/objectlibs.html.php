@@ -29,29 +29,6 @@
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon text-primary'");?>
           </div>
-          <div class="dropdown">
-            <button type="button" title="<?php echo $lang->customConfig;?>" class="btn btn-icon" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
-            <div class="dropdown-menu pull-right col-lg" id="pageSetting">
-              <form class='with-padding load-indicator' id='pageSettingForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('custom', 'ajaxSaveCustomFields', 'module=doc&section=custom&key=objectLibs');?>'>
-                <div><?php echo $lang->customConfig;?></div>
-                <div class="row row-grid with-padding">
-                  <?php foreach($customObjectLibs as $libType => $libTypeName):?>
-                  <div class="col-xs-12">
-                    <?php $checked = (strpos(",$showLibs,", ",$libType,") !== false) ? " checked ='checked'" : "";?>
-                    <div class="checkbox-primary">
-                      <input type="checkbox" name="fields[]" value="<?php echo $libType;?>" <?php echo $checked;?> id="fields<?php echo $libType;?>">
-                      <label for="fields<?php echo $libType;?>"><?php echo $libTypeName;?></label>
-                    </div>
-                  </div>
-                  <?php endforeach;?>
-                </div>
-                <div>
-                  <?php echo html::submitButton($lang->save, '', 'btn btn-primary');?> &nbsp;
-                  <?php echo html::commonButton($lang->cancel, '', "btn close-dropdown");?>
-                </div>
-              </form>
-            </div>
-          </div>
         </nav>
       </div>
       <div class='panel-body'>

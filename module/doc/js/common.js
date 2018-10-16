@@ -131,15 +131,11 @@ $(document).ready(function()
         };
 
         var resizeCols = function() {
-            var $cells = $cols.children('.panel,.cell').height('auto');
-            if($firstCol.next('.col-spliter').css('display') != 'none')
-            {
-                var bestHeight = $firstCol.height();
-                $cells.css('height', bestHeight);
-            }
+            var cellHeight = $(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - 40;
+            $cols.children('.panel,.cell').height(cellHeight).css('maxHeight', cellHeight);
         };
 
-        $element.find('.tree').on('resize', resizeCols);
+        $(window).on('resize', resizeCols);
         $firstCol.on('resize', function(e) {fixColClass($firstCol);});
         $secondCol.on('resize', function(e) {fixColClass($secondCol);});
         fixColClass($firstCol);

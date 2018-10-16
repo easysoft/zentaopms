@@ -47,7 +47,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     $menus = customModel::getFeatureMenu($this->moduleName, $this->methodName);
     foreach($menus as $menuItem)
     {
-        if(isset($menuItem->hidden) and $menuItem->name != 'QUERY') continue;
+        if(isset($menuItem->hidden)) continue;
 
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         $label  = "<span class='text'>{$menuItem->text}</span>";

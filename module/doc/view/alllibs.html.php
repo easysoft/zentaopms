@@ -65,8 +65,8 @@
           </div>
           <?php endforeach;?>
         </div>
+        <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
       </div>
-      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
     </div>
   </div>
   <?php endif;?>

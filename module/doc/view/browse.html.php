@@ -42,6 +42,7 @@ var browseType = '<?php echo $browseType;?>';
           <div class="btn-group">
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
+            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>", '',"class='btn btn-icon'");?>
           </div>
         </nav>
       </div>
@@ -66,8 +67,8 @@ var browseType = '<?php echo $browseType;?>';
         </p>
       </div>
       <?php else:?>
-      <div class="panel-body has-table">
-        <table class="table table-borderless table-hover table-files">
+      <div class="panel-body">
+        <table class="table table-borderless table-hover table-files table-fixed no-margin">
           <thead>
             <tr>
               <th class="c-name"><?php echo $lang->doc->title;?></th>
@@ -75,7 +76,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions-4"><?php echo $lang->actions;?></th>
+              <th class="c-actions-3"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -132,10 +133,10 @@ var browseType = '<?php echo $browseType;?>';
             <?php endforeach;?>
           </tbody>
         </table>
+        <?php if(!empty($docs)):?>
+        <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+        <?php endif;?>
       </div>
-      <?php if(!empty($docs)):?>
-      <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
-      <?php endif;?>
       <?php endif;?>
     </div>
   </div>

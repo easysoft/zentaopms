@@ -46,7 +46,7 @@
                 <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
             </div>
-            <div class="panel-body">
+            <div class="panel-body scrollbar-hover">
               <ul class="timeline timeline-tag-left no-margin">
                 <?php foreach($dynamics as $action):?>
                 <li <?php if($action->major) echo "class='active'";?>>
