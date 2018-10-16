@@ -75,7 +75,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions-3"><?php echo $lang->actions;?></th>
+              <th class="c-actions-4"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -98,18 +98,28 @@ var browseType = '<?php echo $browseType;?>';
             <?php endforeach;?>
             <?php endif;?>
             <?php if(isset($modules)):?>
-            <?php foreach($modules as $module):?>
+            <?php foreach($modules as $moduleID => $module):?>
+            <?php if($moduleID != 'project' and $moduleID != 'files'):?>
             <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
+            <?php endif;?>
             <tr>
+              <?php if($moduleID == 'project'):?>
+              <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$lib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
+              <?php elseif($moduleID == 'files'):?>
+              <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$lib->$type}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
+              <?php else:?>
               <td class="c-name"><?php echo html::a(inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
+              <?php endif;?>
               <td class="c-num"></td>
               <td class="c-user"></td>
               <td class="c-datetime"></td>
               <td class="c-datetime"></td>
               <td>
+                <?php if($moduleID != 'project' and $moduleID != 'files'):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$module->id&objectType=module");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
+                <?php endif;?>
               </td>
             </tr>
             <?php endforeach;?>

@@ -31,7 +31,7 @@
 
 .files-grid {padding: 0 10px;}
 .files-grid .col {width: 167px; text-align: center; padding: 0; margin-bottom: 10px;}
-.files-grid .actions {position: absolute; bottom: -38px; left: 0; right: 0; background: #E9F2FB; z-index: 10; opacity: 0; transition: opacity .2s; padding-bottom: 8px; border-radius: 0 0 3px 3px; padding-top: 8px;}
+.files-grid .actions {position: absolute; bottom: -38px; height:50px; left: 0; right: 0; background: #E9F2FB; z-index: 10; opacity: 0; transition: opacity .2s; padding-bottom: 8px; border-radius: 0 0 3px 3px; padding-top: 8px;}
 .files-grid .col:hover .actions {opacity: 1;}
 .files-grid .file {padding: 10px; cursor: pointer; display: block; border-radius: 2px; transition: background-color .2s; border-radius: 3px 3px 0 0}
 .files-grid .col:hover .file {background-color: #E9F2FB;}

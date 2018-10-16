@@ -161,10 +161,22 @@ class doc extends control
             $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
         }
 
+        $modules = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc', $browseType);
+        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)))
+        {
+            $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
+            if($count == 1)
+            {
+                $objectLibs = $this->doc->getLibsByObject($type, $lib->$type);
+                if(isset($objectLibs['project'])) $modules['project'] = $objectLibs['project'];
+                if(isset($objectLibs['files']))   $modules['files']   = $objectLibs['files'];
+            }
+        }
+
         $this->view->breadTitle = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
-        $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc', $browseType);
+        $this->view->modules    = $modules;
         $this->view->docs       = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->orderBy    = $orderBy;
@@ -174,6 +186,7 @@ class doc extends control
         $this->view->from       = $from;
         $this->view->pager      = $pager;
         $this->view->libs       = $libs;
+        $this->view->lib        = $libID ? $lib : '';
 
         $this->display();
     }
