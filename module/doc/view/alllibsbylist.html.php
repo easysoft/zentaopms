@@ -29,7 +29,7 @@
             <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
             <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
             <?php else:?>
-            <th class="c-actions-3"><?php echo $lang->actions;?></th>
+            <th class="w-120px"><?php echo $lang->actions;?></th>
             <?php endif;?>
           </tr>
         </thead>
