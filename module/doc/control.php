@@ -105,7 +105,7 @@ class doc extends control
             $this->product->setMenu($this->product->getPairs(), $lib->product);
             $this->lang->set('menugroup.doc', 'product');
 
-            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
+            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
         }
         elseif($from == 'project')
         {
@@ -114,13 +114,10 @@ class doc extends control
             $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
 
-            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
+            if(common::hasPriv('doc', 'create')) $this->lang->modulePageActions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
         }
-        else
-        {
             $menuType = (!$type && in_array($browseType, array_keys($this->lang->doc->fastMenuList))) ? $browseType : $type;
             $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
-        }
         $this->session->set('docList', $this->app->getURI(true));
 
         /* Set header and position. */
