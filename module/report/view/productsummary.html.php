@@ -58,7 +58,7 @@
               <?php foreach($products as $product):?>
               <tr class="text-center">
                 <?php $count = isset($product->plans) ? count($product->plans) : 1;?>
-                <td class='text-left' rowspan="<?php echo $count;?>"><?php echo "<p>" . html::a($this->createLink('product', 'view', "product=$product->id"), $product->name) . "</p>";?></td>
+                <td class='text-left' title="<?php echo $product->name;?>" rowspan="<?php echo $count;?>"><?php echo "<p>" . html::a($this->createLink('product', 'view', "product=$product->id"), $product->name) . "</p>";?></td>
                 <td class='text-left' rowspan="<?php echo $count;?>"><?php echo "<p>" . zget($users, $product->PO) . '</p>';?></td>
                 <?php if(isset($product->plans)):?>
                 <?php $id = 1;?>
