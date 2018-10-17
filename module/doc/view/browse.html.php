@@ -124,9 +124,8 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-user"></td>
               <td class="c-datetime"></td>
               <td class="c-datetime"></td>
-              <td>
+              <td class="c-actions">
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$module->id&objectType=module");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
-                <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
               </td>
             </tr>
             <?php endforeach;?>

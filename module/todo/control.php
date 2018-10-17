@@ -388,7 +388,8 @@ class todo extends control
                 }
                 $this->send($response);
             }
-            die(js::closeModal('parent.parent'));
+            if(isonlybody())die(js::reload('parent.parent'));
+            die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
     }
 

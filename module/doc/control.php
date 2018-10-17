@@ -85,14 +85,10 @@ class doc extends control
         $projectID = 0;
         if($libID)
         {
-            $type = 'custom';
-            $lib  = $this->doc->getLibByID($libID);
-            if($lib->product or $lib->project)
-            {
-                $type = $lib->product ? 'product' : 'project';
-                $productID = $lib->product;
-                $projectID = $lib->project;
-            }
+            $lib       = $this->doc->getLibByID($libID);
+            $type      = $lib->type;
+            $productID = $lib->product;
+            $projectID = $lib->project;
         }
 
         $this->libs = $this->doc->getLibs($type);
@@ -314,7 +310,7 @@ class doc extends control
         }
 
         $lib  = $this->doc->getLibByID($libID);
-        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $type = $lib->type;
 
         /* According the from, set menus. */
         if($this->from == 'product')
@@ -390,8 +386,8 @@ class doc extends control
 
         if($doc->contentType == 'markdown') $this->config->doc->markdown->edit = array('id' => 'content', 'tools' => 'toolbar');
 
-        $lib        = $this->doc->getLibByID($libID);
-        $type       = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $lib  = $this->doc->getLibByID($libID);
+        $type = $lib->type;
         $this->doc->setMenu($type, $libID, $doc->module, $lib->product, $lib->project);
 
         $this->view->title      = $lib->name . $this->lang->colon . $this->lang->doc->edit;
@@ -428,7 +424,7 @@ class doc extends control
 
         /* Check priv when lib is product or project. */
         $lib  = $this->doc->getLibByID($doc->lib);
-        $type = $lib->product ? 'product' : ($lib->project ? 'project' : 'custom');
+        $type = $lib->type;
 
         /* Set menu. */
         $this->doc->setMenu($type, $doc->lib, $doc->module, $lib->product, $lib->project);
@@ -623,7 +619,7 @@ class doc extends control
     {
         setcookie('product', $product, $this->config->cookieLife, $this->config->webRoot);
 
-        $libName = isset($this->lang->doc->systemLibs[$type]) ? $this->lang->doc->systemLibs[$type] : $this->lang->doc->customAB;
+        $libName = $this->lang->doc->libTypeList[$type];
         $crumb   = html::a(inlink('allLibs', "type=$type&product=$product"), $libName);
         if($product and $type == 'project') $crumb = $this->doc->getProductCrumb($product);
 
@@ -643,7 +639,10 @@ class doc extends control
             $subLibs = $this->doc->getSubLibGroups($type, array_keys($libs));
             if($this->cookie->browseType == 'bylist') $this->view->users = $this->loadModel('user')->getPairs('noletter');
         }
-        if($type == 'custom') $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
+        else
+        {
+            $this->view->itemCounts = $this->doc->statLibCounts(array_keys($libs));
+        }
 
         $this->view->type    = $type;
         $this->view->libs    = $libs;
