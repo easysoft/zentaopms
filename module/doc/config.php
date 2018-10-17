@@ -16,6 +16,7 @@ $config->doc->customObjectLibs = 'files,customFiles';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
+$config->doc->custom->showLibs   = 'zero,unclosed';
 
 $config->doc->editor = new stdclass();
 $config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');

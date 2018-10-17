@@ -15,7 +15,7 @@ if($this->methodName != 'browse')
 }
 if(!isset($type)) $type = 'product';
 ?>
-<div class="side-col" style="width: 220px" data-min-width="220">
+<div class="side-col" style="width: 230px" data-min-width="230">
   <div class="cell">
     <ul class='nav nav-tabs'>
       <?php foreach($lang->doclib->tabList as $tabValue => $tabName):?>
@@ -34,23 +34,27 @@ if(!isset($type)) $type = 'product';
         <ul data-name="docsTree" data-ride="tree" data-initial-state="preserve" class="tree no-margin">
           <?php if(isset($sideSubLibs[$tabValue])):?>
           <?php foreach($sideLibs[$tabValue] as $tabMenu):?>
-          <li <?php if($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $tabMenu->id) echo "class='active'";?>>
-            <?php
-            $customLibCount = 0;
-            $mainLibID      = 0;
-            if(isset($sideSubLibs[$tabValue][$tabMenu->id]))
-            {
-                foreach($sideSubLibs[$tabValue][$tabMenu->id] as $subLibID => $subLibName)
-                {
-                    if(is_numeric($subLibID) and !empty($mainLibID)) $customLibCount += 1;
-                    if(is_numeric($subLibID) and empty($mainLibID)) $mainLibID = $subLibID;
-                }
-            }
-            ?>
+          <?php
+          $customLibCount = 0;
+          $mainLibID      = 0;
+          if(isset($sideSubLibs[$tabValue][$tabMenu->id]))
+          {
+              foreach($sideSubLibs[$tabValue][$tabMenu->id] as $subLibID => $subLibName)
+              {
+                  if(is_numeric($subLibID) and !empty($mainLibID)) $customLibCount += 1;
+                  if(is_numeric($subLibID) and empty($mainLibID)) $mainLibID = $subLibID;
+              }
+          }
+
+          $icon        = $tabValue == 'product' ? "<i class='icon icon-cube'></i> " : "<i class='icon icon-stack'></i> ";
+          $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $tabMenu->id) ? 'active' : '';
+          $activeClass = ($this->methodName == 'browse' && isset($currentLib) && $currentLib->id == $mainLibID) ? 'active' : $activeClass;
+          ?>
+          <li <?php echo "class='$activeClass'";?>>
             <?php if($customLibCount > 0):?>
-            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=$tabValue&objectID=$tabMenu->id"), "<i class='icon icon-cube'></i> " . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
+            <?php echo html::a($this->createLink('doc', 'objectLibs', "type=$tabValue&objectID=$tabMenu->id"), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
             <?php else:?>
-            <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID"), "<i class='icon icon-cube'></i> " . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
+            <?php echo html::a($this->createLink('doc', 'browse', "libID=$mainLibID"), $icon . $tabMenu->name, '', "class='text-ellipsis' title='{$tabMenu->name}'");?>
             <?php endif;?>
             <?php if(isset($sideSubLibs[$tabValue][$tabMenu->id])):?>
             <ul>
@@ -109,8 +113,12 @@ if(!isset($type)) $type = 'product';
           <?php endforeach;?>
           <?php else:?>
           <?php foreach($sideLibs[$tabValue] as $sideLibID => $sideLibName):?>
-          <li <?php if($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $sideLibID) echo "class='active'";?>>
-            <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID"), "<i class='icon icon-cube'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
+          <?php
+          $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $sideLibID) ? 'active' : '';
+          $activeClass = ($this->methodName == 'browse' && isset($currentLib) && $currentLib->id == $sideLibID) ? 'active' : $activeClass;
+          ?>
+          <li <?php echo "class='$activeClass'";?>>
+            <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID"), "<i class='icon icon-folder-o'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
             <ul>
               <?php foreach($allModules[$sideLibID] as $module):?>
               <?php if($module->parent != 0) continue;?>
@@ -126,6 +134,29 @@ if(!isset($type)) $type = 'product';
         </ul>
       </div>
       <?php endforeach;?>
+    </div>
+  </div>
+  <div class='side-footer'><?php echo html::a('###', "<i class='icon-cog'></i> {$lang->doc->customShowLibs}", '', "class='setting text-secondary small' data-target='#settingModal' data-toggle='modal'");?></div>
+  <div class='modal fade' id='settingModal' aria-hidden="true">
+    <div class='modal-dialog'>
+      <div class='modal-content'>
+        <div class='modal-header'>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->close;?></span></button>
+          <strong><?php echo $lang->doc->customShowLibs;?></strong>
+        </div>
+        <div class='modal-body'>
+          <form action='<?php echo $this->createLink('custom', 'ajaxSetDoc');?>' target='hiddenwin' method='post'>
+            <table class='table table-form'>
+              <tr>
+                <td><?php echo html::checkbox('showLibs', $lang->doc->customShowLibsList, $config->doc->custom->showLibs);?></td>
+              </tr>
+              <tr>
+                <td><?php echo html::submitButton();?></td>
+              </tr>
+            </table>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 </div>

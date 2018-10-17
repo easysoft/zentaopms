@@ -19,6 +19,8 @@
   .split-row > .main-col {width: 100%!important;}
 }
 
+.side-col .cell .nav a.setting {padding:8px;}
+.side-footer{padding:8px; background:#fff;}
 .col-sm-size .col-sm-5,
 .col-sm-size .col-sm-7 {width: 100%;}
 .col-sm-size .table .c-user,
@@ -63,8 +65,8 @@
 .side-col > .cell {overflow: hidden auto; padding: 0; position: relative;}
 .side-col > .cell > header {position: absolute; top: 10px; right: 10px; left: 10px;}
 .side-col > .cell > header > .c-sm {padding-right: 20px; width: 60px;;}
-.side-col #docsTree {position: absolute; top: 53px; left: 0; right: 0; bottom: 0; overflow: auto; padding: 0 10px 10px;}
-.main-col .block-files > .panel-body {position: absolute; top: 45px; left: 0; right: 0; bottom: 0; overflow: auto;}
+.side-col .docsTree {position: absolute; top: 53px; left: 0; right: 0; bottom: 0; overflow: auto; padding: 0 10px 10px;}
+.main-col .block-files > .panel-body {top: 45px; left: 0; right: 0; bottom: 0; overflow: auto;}
 
 td.c-name a{color: #0c60e1}
 td.c-name a:visited{color: #082999}

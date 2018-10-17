@@ -136,6 +136,10 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Show File Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
+$lang->doc->customShowLibs = 'Library display settings';
+$lang->doc->customShowLibsList['zero']     = 'Display zero document library';
+$lang->doc->customShowLibsList['unclosed'] = 'Show only projects that are not closed.';
+
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
 $lang->doc->errorEditSystemDoc = "Ssytem document library doesn't have to be changed.";

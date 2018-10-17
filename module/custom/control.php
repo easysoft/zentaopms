@@ -461,6 +461,23 @@ class custom extends control
     }
 
     /**
+     * Ajax set doc setting.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxSetDoc()
+    {
+        if($this->server->request_method == 'POST')
+        {
+            $data = fixer::input('post')->join('showLibs', ',')->get();
+            if(isset($data->showLibs)) $data = $data->showLibs;
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.doc.custom.showLibs", $data);
+            die(js::reload('parent.parent'));
+        }
+    }
+
+    /**
      * Reset required.
      * 
      * @param  srting $module 
