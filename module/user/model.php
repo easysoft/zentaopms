@@ -751,6 +751,7 @@ class userModel extends model
             $groups = $this->dao->select('t1.acl')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.group')
                 ->where('t2.account')->eq($account)
+                ->andWhere('role')->ne('limited')
                 ->fetchAll();
             $acls = array();
             $viewAllow    = false;
