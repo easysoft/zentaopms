@@ -1,14 +1,15 @@
 <div class="main-col" data-min-width="400">
   <div class="panel block-files block-sm no-margin">
     <div class="panel-heading">
-      <div class="panel-title font-normal"><i class="icon icon-folder-open-o text-muted"></i> <?php echo $title;?></div>
-      <nav class="panel-actions btn-toolbar">
+      <div class="panel-title font-normal">
+        <i class="icon icon-folder-open-o text-muted"></i>
+        <?php echo $breadTitle;?>
         <div class="btn-group">
           <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon'");?>
           <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon text-primary'");?>
           <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>", '',"class='btn btn-icon'");?>
         </div>
-      </nav>
+      </div>
     </div>
     <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
     <div class="table-empty-tip">

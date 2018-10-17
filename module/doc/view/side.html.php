@@ -1,8 +1,6 @@
 <?php
 $sideLibs = array();
-$sideLibs['product'] = $this->doc->getLimitLibs('product');
-$sideLibs['project'] = $this->doc->getLimitLibs('project');
-$sideLibs['custom']  = $this->doc->getLimitLibs('custom');
+foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $this->doc->getLimitLibs($libType);
 $allModules = $this->loadModel('tree')->getDocStructure();
 
 $sideSubLibs = array();
@@ -119,6 +117,10 @@ if(!isset($type)) $type = 'product';
           ?>
           <li <?php echo "class='$activeClass'";?>>
             <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID"), "<i class='icon icon-folder-o'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
+            <?php if($tabValue == 'book'):?>
+            <?php include './bookside.html.php';?>
+            <?php else:?>
+            <?php if(isset($allModules[$sideLibID])):?>
             <ul>
               <?php foreach($allModules[$sideLibID] as $module):?>
               <?php if($module->parent != 0) continue;?>
@@ -128,6 +130,8 @@ if(!isset($type)) $type = 'product';
               </li>
               <?php endforeach;?>
             </ul>
+            <?php endif;?>
+            <?php endif;?>
           </li>
           <?php endforeach;?>
           <?php endif;?>

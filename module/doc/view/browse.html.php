@@ -37,12 +37,15 @@ var browseType = '<?php echo $browseType;?>';
           <i class="icon icon-search text-muted"></i>
           <?php endif;?>
           <?php echo $breadTitle;?>
-        </div>
-        <nav class="panel-actions btn-toolbar">
+
           <div class="btn-group">
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
-            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>", '',"class='btn btn-icon'");?>
+          </div>
+        </div>
+        <nav class="panel-actions btn-toolbar">
+          <div class="btn-group">
+            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>" . $lang->doc->manageType, '',"class='btn btn-printLink'");?>
           </div>
         </nav>
       </div>

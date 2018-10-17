@@ -3,13 +3,11 @@
     <div class="panel-heading">
       <div class="panel-title font-normal">
         <i class="icon icon-folder-open-o text-muted"></i> <?php echo $object->name;?>
-      </div>
-      <nav class="panel-actions btn-toolbar">
         <div class="btn-group">
           <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
           <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
         </div>
-      </nav>
+      </div>
     </div>
     <div class='panel-body'>
       <table class="table table-borderless table-hover table-files table-fixed no-margin">
