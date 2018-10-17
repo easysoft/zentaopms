@@ -9,7 +9,7 @@
         </div>
       </nav>
     </div>
-    <?php if(empty($docs) and empty($modules) and empty($libs)):?>
+    <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?></p>
     </div>
@@ -31,10 +31,32 @@
           </div>
         </div>
         <?php endforeach;?>
+        <?php foreach($attachLibs as $libID => $attachLib):?>
+        <div class="col">
+          <?php
+          $browseLink = '';
+          if($libID == 'project')
+          {
+              $browseLink = inlink('allLibs', "type=project&product={$currentLib->product}");
+          }
+          elseif($libID == 'files')
+          {
+              $browseLink = inlink('showFiles', "type=$type&objectID={$currentLib->$type}");
+          }
+          ?>
+          <a class="file" href="<?php echo $browseLink;?>">
+            <i class="file-icon icon icon-folder text-yellow"></i>
+            <div class="file-name"><?php echo $attachLib->name;?></div>
+            <div class="text-primary file-info"><?php echo $attachLib->allCount . $lang->doc->item;?></div>
+          </a>
+          <div class="actions"></div>
+        </div>
+        <?php endforeach;?>
         <?php foreach($modules as $module):?>
         <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <div class="col">
-          <a class="file" href="<?php echo inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from");?>">
+          <?php $browseLink = inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from");?>
+          <a class="file" href="<?php echo $browseLink;?>">
             <i class="file-icon icon icon-folder text-yellow"></i>
             <div class="file-name"><?php echo (strpos($module->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $module->name;?></div>
             <div class="text-primary file-info"><?php echo $module->docCount . $lang->doc->item;?></div>

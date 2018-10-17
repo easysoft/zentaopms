@@ -42,10 +42,11 @@ var browseType = '<?php echo $browseType;?>';
           <div class="btn-group">
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
+            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>", '',"class='btn btn-icon'");?>
           </div>
         </nav>
       </div>
-      <?php if(empty($docs) and empty($modules) and empty($libs)):?>
+      <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
       <div class="table-empty-tip">
         <p>
           <?php if($libID):?>
@@ -75,7 +76,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions-3"><?php echo $lang->actions;?></th>
+              <th class="c-actions-4"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -94,6 +95,22 @@ var browseType = '<?php echo $browseType;?>';
                 <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
                 <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
               </td>
+            </tr>
+            <?php endforeach;?>
+            <?php endif;?>
+            <?php if(!empty($attachLibs)):?>
+            <?php foreach($attachLibs as $libID => $attachLib):?>
+            <tr>
+              <?php if($libID == 'project'):?>
+              <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$currentLib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
+              <?php elseif($libID == 'files'):?>
+              <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$currentLib->$type}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
+              <?php endif;?>
+              <td class="c-num"></td>
+              <td class="c-user"></td>
+              <td class="c-datetime"></td>
+              <td class="c-datetime"></td>
+              <td></td>
             </tr>
             <?php endforeach;?>
             <?php endif;?>

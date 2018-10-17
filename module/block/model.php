@@ -207,6 +207,7 @@ class blockModel extends model
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $blocks  = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
+        $acls    = $this->app->user->rights['acls'];
         $account = $this->app->user->account;
 
         /* Mark this app has init. */
@@ -214,6 +215,12 @@ class blockModel extends model
         $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
         foreach($blocks as $index => $block)
         {
+            if(!empty($block['source']) and !empty($acls) and !isset($acls['views'][$block['source']]))
+            {
+                unset($blocks[$index]);
+                continue;
+            }
+
             $block['order']   = $index;
             $block['module']  = $module;
             $block['account'] = $account;

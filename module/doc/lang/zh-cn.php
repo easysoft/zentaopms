@@ -100,6 +100,10 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . '文档库';
 $lang->doc->libTypeList['project'] = $lang->projectCommon . '文档库';
 $lang->doc->libTypeList['custom']  = '自定义文档库';
 
+$lang->doc->libIconList['product'] = 'icon-cube';
+$lang->doc->libIconList['project'] = 'icon-stack';
+$lang->doc->libIconList['custom']  = 'icon-folder-o';
+
 $lang->doc->systemLibs['product'] = $lang->productCommon;
 $lang->doc->systemLibs['project'] = $lang->projectCommon;
 
@@ -166,3 +170,7 @@ $lang->doclib->product = $lang->productCommon . '库';
 
 $lang->doclib->main['product'] = $lang->productCommon . '主库';
 $lang->doclib->main['project'] = $lang->projectCommon . '主库';
+
+$lang->doclib->tabList['product'] = $lang->productCommon;
+$lang->doclib->tabList['project'] = $lang->projectCommon;
+$lang->doclib->tabList['custom']  = '自定义';

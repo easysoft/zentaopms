@@ -132,7 +132,8 @@ $(document).ready(function()
 
         var resizeCols = function() {
             var cellHeight = $(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - 40;
-            $cols.children('.panel,.cell').height(cellHeight).css('maxHeight', cellHeight);
+            $cols.children('.panel').height(cellHeight).css('maxHeight', cellHeight);
+            $cols.find('.tab-content').height(cellHeight - $cols.find('.nav-tabs').height()).css('maxHeight', cellHeight - $cols.find('.nav-tabs').height()).css('overflow-y', 'auto');
         };
 
         $(window).on('resize', resizeCols);
