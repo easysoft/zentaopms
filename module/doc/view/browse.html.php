@@ -46,7 +46,7 @@ var browseType = '<?php echo $browseType;?>';
           </div>
         </nav>
       </div>
-      <?php if(empty($docs) and empty($modules) and empty($libs)):?>
+      <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
       <div class="table-empty-tip">
         <p>
           <?php if($libID):?>
@@ -98,29 +98,35 @@ var browseType = '<?php echo $browseType;?>';
             </tr>
             <?php endforeach;?>
             <?php endif;?>
-            <?php if(isset($modules)):?>
-            <?php foreach($modules as $moduleID => $module):?>
-            <?php if($moduleID != 'project' and $moduleID != 'files'):?>
-            <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
-            <?php $collectTitle = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
-            <?php endif;?>
+            <?php if(!empty($attachLibs)):?>
+            <?php foreach($attachLibs as $libID => $attachLib):?>
             <tr>
-              <?php if($moduleID == 'project'):?>
-              <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$lib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
-              <?php elseif($moduleID == 'files'):?>
-              <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$lib->$type}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
-              <?php else:?>
-              <td class="c-name"><?php echo html::a(inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
+              <?php if($libID == 'project'):?>
+              <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$currentLib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
+              <?php elseif($libID == 'files'):?>
+              <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$currentLib->$type}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
               <?php endif;?>
               <td class="c-num"></td>
               <td class="c-user"></td>
               <td class="c-datetime"></td>
               <td class="c-datetime"></td>
+              <td></td>
+            </tr>
+            <?php endforeach;?>
+            <?php endif;?>
+            <?php if(isset($modules)):?>
+            <?php foreach($modules as $module):?>
+            <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+            <?php $collectTitle = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
+            <tr>
+              <td class="c-name"><?php echo html::a(inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $module->name);?></td>
+              <td class="c-num"></td>
+              <td class="c-user"></td>
+              <td class="c-datetime"></td>
+              <td class="c-datetime"></td>
               <td>
-                <?php if($moduleID != 'project' and $moduleID != 'files'):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$module->id&objectType=module");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
-                <?php endif;?>
               </td>
             </tr>
             <?php endforeach;?>

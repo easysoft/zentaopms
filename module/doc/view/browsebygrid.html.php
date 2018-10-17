@@ -9,7 +9,7 @@
         </div>
       </nav>
     </div>
-    <?php if(empty($docs) and empty($modules) and empty($libs)):?>
+    <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?></p>
     </div>
@@ -31,36 +31,39 @@
           </div>
         </div>
         <?php endforeach;?>
-        <?php foreach($modules as $moduleID => $module):?>
-        <?php if($moduleID != 'project' and $moduleID != 'files'):?>
-        <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
-        <?php endif;?>
+        <?php foreach($attachLibs as $libID => $attachLib):?>
         <div class="col">
           <?php
           $browseLink = '';
-          if($moduleID == 'project')
+          if($libID == 'project')
           {
-              $browseLink = inlink('allLibs', "type=project&product={$lib->product}");
+              $browseLink = inlink('allLibs', "type=project&product={$currentLib->product}");
           }
-          elseif($moduleID == 'files')
+          elseif($libID == 'files')
           {
-              $browseLink = inlink('showFiles', "type=$type&objectID={$lib->$type}");
-          }
-          else
-          {
-              $browseLink = inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from");
+              $browseLink = inlink('showFiles', "type=$type&objectID={$currentLib->$type}");
           }
           ?>
           <a class="file" href="<?php echo $browseLink;?>">
             <i class="file-icon icon icon-folder text-yellow"></i>
-            <div class="file-name"><?php echo (($moduleID != 'project' and $moduleID != 'files' and strpos($module->collector, $this->app->user->account) !== false) ? "<i class='icon icon-star text-yellow'></i> " : '') . $module->name;?></div>
-            <div class="text-primary file-info"><?php echo (isset($module->docCount) ? $module->docCount : $module->allCount) . $lang->doc->item;?></div>
+            <div class="file-name"><?php echo $attachLib->name;?></div>
+            <div class="text-primary file-info"><?php echo $attachLib->allCount . $lang->doc->item;?></div>
+          </a>
+          <div class="actions"></div>
+        </div>
+        <?php endforeach;?>
+        <?php foreach($modules as $module):?>
+        <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
+        <div class="col">
+          <?php $browseLink = inlink('browse', "libID=$libID&browseType=bymodule&param=$module->id&orderBy=$orderBy&from=$from");?>
+          <a class="file" href="<?php echo $browseLink;?>">
+            <i class="file-icon icon icon-folder text-yellow"></i>
+            <div class="file-name"><?php echo (strpos($module->collector, $this->app->user->account) !== false ? "<i class='icon icon-star text-yellow'></i> " : '') . $module->name;?></div>
+            <div class="text-primary file-info"><?php echo $module->docCount . $lang->doc->item;?></div>
           </a>
           <div class="actions">
-            <?php if($moduleID != 'project' and $moduleID != 'files'):?>
             <?php common::printLink('doc', 'collect', "objectID={$module->id}&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'");?>
             <?php common::printLink('tree', 'browse', "rootID=$libID&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
-            <?php endif;?>
           </div>
         </div>
         <?php endforeach;?>
