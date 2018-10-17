@@ -1,11 +1,11 @@
 $(function()
 {
-    $('#libType').change(function()
+    $('#type').change(function()
     {
         var libType = $(this).val();
         changeByLibType(libType);
     })
-    changeByLibType($('#libType').val());
+    changeByLibType($('#type').val());
     toggleAcl($('#acl').val());
 });
 

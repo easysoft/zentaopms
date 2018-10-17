@@ -237,6 +237,8 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('10.3.1'));
                 $this->removeCustomMenu();
                 $this->initUserView();
+            case '10_4':
+                $this->changeTaskParentValue();
         }
 
         $this->deletePatch();
@@ -2404,6 +2406,20 @@ class upgradeModel extends model
         return !dao::isError();
     }
 
+    /**
+     * Change task parent to -1 for 10.4 .
+     * @return bool
+     */
+    public function changeTaskParentValue()
+    {
+        $tasks = $this->dao->select(TABLE_TASK)->where('parent')->gt(0)->fetchGroup('parent');
+        if($tasks)
+        {
+            $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->in($tasks)->exec();
+        }
+        return !dao::isError();
+    }
+    
     /**
      * Remove custom menu.
      * 
