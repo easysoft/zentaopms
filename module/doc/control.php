@@ -42,6 +42,7 @@ class doc extends control
         $this->session->set('docList', $this->app->getURI(true));
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
+        $this->lang->modulePageActions = $this->doc->setFastMenu($this->lang->doc->fast);
 
         $this->view->title            = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->view->position[]       = $this->lang->doc->index;

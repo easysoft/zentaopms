@@ -48,7 +48,7 @@ if(!isset($type)) $type = 'product';
 
           $icon        = $tabValue == 'product' ? "<i class='icon icon-cube'></i> " : "<i class='icon icon-stack'></i> ";
           $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $tabMenu->id) ? 'active' : '';
-          $activeClass = ($this->methodName == 'browse' && isset($currentLib) && $currentLib->id == $mainLibID) ? 'active' : $activeClass;
+          $activeClass = ($this->methodName == 'browse' && isset($currentLib->id) && $currentLib->id == $mainLibID) ? 'active' : $activeClass;
           ?>
           <li <?php echo "class='$activeClass'";?>>
             <?php if($customLibCount > 0):?>
@@ -115,7 +115,7 @@ if(!isset($type)) $type = 'product';
           <?php foreach($sideLibs[$tabValue] as $sideLibID => $sideLibName):?>
           <?php
           $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $sideLibID) ? 'active' : '';
-          $activeClass = ($this->methodName == 'browse' && isset($currentLib) && $currentLib->id == $sideLibID) ? 'active' : $activeClass;
+          $activeClass = ($this->methodName == 'browse' && isset($currentLib->id) && $currentLib->id == $sideLibID) ? 'active' : $activeClass;
           ?>
           <li <?php echo "class='$activeClass'";?>>
             <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID"), "<i class='icon icon-folder-o'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
