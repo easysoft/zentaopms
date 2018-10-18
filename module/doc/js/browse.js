@@ -15,5 +15,6 @@ function browseBySearch()
 
 $(function(){
     if(browseType == 'bysearch') return;
+    if(browseType == 'byediteddate' || browseType == 'openedbyme' || browseType == 'collectedbyme') $('#bysearchTab').remove();
     $('#' + browseType + 'Tab').addClass('active');
 });
