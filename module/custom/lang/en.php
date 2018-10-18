@@ -5,7 +5,7 @@ $lang->custom->set        = 'Customize';
 $lang->custom->restore    = 'Reset to Default';
 $lang->custom->key        = 'Key';
 $lang->custom->value      = 'Value';
-$lang->custom->flow       = 'Workflow';
+$lang->custom->flow       = 'Mode';
 $lang->custom->working    = 'WorkStyle';
 $lang->custom->select     = 'Select Workflow';
 $lang->custom->branch     = 'Multi Branch';
@@ -120,7 +120,7 @@ $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Please select according to your team.';
 
-$lang->custom->workingList['full']      = 'Full Management of Dev';
+$lang->custom->workingList['full']      = 'Application Lifecycle Management';
 $lang->custom->workingList['onlyTest']  = 'Test Management';
 $lang->custom->workingList['onlyStory'] = 'Story Management';
 $lang->custom->workingList['onlyTask']  = 'Task Management';
