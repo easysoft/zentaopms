@@ -1489,6 +1489,7 @@ class docModel extends model
     public function setFastMenu($fastLib)
     {
         $actions  = '';
+        if($this->app->methodName == 'browse') $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
         $actions .= "<a data-toggle='dropdown' class='btn btn-secondary' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
@@ -1497,7 +1498,6 @@ class docModel extends model
             $actions .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
         }
         $actions .='</ul>';
-        $actions .= '<a class="btn btn-secondary querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
 
         return $actions;
     }
