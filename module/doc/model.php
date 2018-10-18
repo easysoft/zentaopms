@@ -30,7 +30,7 @@ class docModel extends model
 
         if($type)
         {
-            $mainLib = in_array($type, array_keys($this->lang->doc->fastMenuList)) ? $this->lang->doc->fastMenuList[$type] : '';
+            $fastLib = in_array($type, array_keys($this->lang->doc->fastMenuList)) ? $this->lang->doc->fastMenuList[$type] : $this->lang->doc->fast;
 
             if($libID)
             {
@@ -46,7 +46,18 @@ class docModel extends model
                 $type = $lib->type;
             }
 
-            $mainLib = isset($this->lang->doc->libTypeList[$type]) ? $this->lang->doc->libTypeList[$type] : $mainLib;
+            if(isset($this->lang->doc->libTypeList[$type]))
+            {
+                $mainLib     = $this->lang->doc->libTypeList[$type];
+                $selectHtml .= "<div class='btn-group angle-btn'>";
+                $selectHtml .= "<div class='btn-group'>";
+                $selectHtml .= "<a data-toggle='dropdown' class='btn btn-limit' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
+                $selectHtml .= "<ul class='dropdown-menu'>";
+                $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=product"), "<i class='icon icon-cube'></i> {$this->lang->productCommon}") . '</li>';
+                $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=project"), "<i class='icon icon-stack'></i> {$this->lang->projectCommon}") . '</li>';
+                $selectHtml .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=custom"), "<i class='icon icon-folder-o'></i> {$this->lang->doc->customAB}") . '</li>';
+                $selectHtml .='</ul></div></div>';
+            }
 
             $currentLib = 0;
             if(in_array($type, array_keys($this->lang->doc->libTypeList)))
@@ -89,7 +100,7 @@ class docModel extends model
                 }
             }
 
-            $actions  = $this->setFastMenu($mainLib);
+            $actions  = $this->setFastMenu($fastLib);
             $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
             if($libID and common::hasPriv('doc', 'create')) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
 
@@ -1475,20 +1486,15 @@ class docModel extends model
         return $title;
     }
 
-    public function setFastMenu($mainLib)
+    public function setFastMenu($fastLib)
     {
         $actions  = '';
-        $actions .= "<a data-toggle='dropdown' class='btn btn-secondary' title=$mainLib>" . $mainLib . " <span class='caret'></span></a>";
+        $actions .= "<a data-toggle='dropdown' class='btn btn-secondary' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {
             $link     = helper::createLink('doc', 'browse', "libID=0&browseTyp={$key}");
             $actions .= '<li>' . html::a($link, "<i class='icon {$this->lang->doc->fastMenuIconList[$key]}'></i> {$fastMenu}") . '</li>';
-        }
-        $actions .= "<li class='divider'></li>";
-        foreach($this->lang->doc->libTypeList as $libType => $libName)
-        {
-            $actions .= '<li>' . html::a(helper::createLink('doc', 'allLibs', "type=$libType"), "<i class='icon {$this->lang->doc->libIconList[$libType]}'></i> {$this->lang->doc->libTypeList[$libType]}") . '</li>';
         }
         $actions .='</ul>';
         $actions .= '<a class="btn btn-secondary querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
