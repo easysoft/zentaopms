@@ -49,7 +49,7 @@ class docModel extends model
             $mainLib = isset($this->lang->doc->libTypeList[$type]) ? $this->lang->doc->libTypeList[$type] : $mainLib;
 
             $currentLib = 0;
-            if(strpos('product,project,custom', $type) !== false)
+            if(in_array($type, array_keys($this->lang->doc->libTypeList)))
             {
                 if($type == 'product') $currentLib = $productID;
                 if($type == 'project') $currentLib = $projectID;
