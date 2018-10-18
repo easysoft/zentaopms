@@ -9,21 +9,6 @@
     </div>
   </div>
   <div class='main-col'>
-    <div class='cell'>
-      <div class="table-row" id='conditions'>
-        <div class="col-xs text-right text-gray text-middle"><?php echo $lang->report->conditions?></div>
-        <div class='col'>
-          <div class="checkbox-primary inline-block">
-            <input type="checkbox" name="closedProduct" value="closedProduct" id="closedProduct" <?php if(strpos($conditions, 'closedProduct') !== false) echo "checked='checked'"?> />
-            <label for="closedProduct"><?php echo $lang->report->closedProduct?></label>
-          </div>
-          <div class="checkbox-primary inline-block">
-            <input type="checkbox" name="overduePlan" value="overduePlan" id="overduePlan" <?php if(strpos($conditions, 'overduePlan') !== false) echo "checked='checked'"?> />
-            <label for="overduePlan"><?php echo $lang->report->overduePlan?></label>
-          </div>
-        </div>
-      </div>
-    </div>
     <?php if(empty($products)):?>
     <div class="cell">
       <div class="table-empty-tip">
@@ -34,7 +19,22 @@
     <div class='cell'>
       <div class='panel'>
         <div class="panel-heading">
-          <div class="panel-title"><?php echo $title;?></div>
+          <div class="panel-title">
+            <div class="table-row" id='conditions'>
+              <div class="col-xs"><?php echo $title;?></div>
+              <div class="col-xs text-right text-gray text-middle"><?php echo $lang->report->conditions?></div>
+              <div class='col'>
+                <div class="checkbox-primary inline-block">
+                  <input type="checkbox" name="closedProduct" value="closedProduct" id="closedProduct" <?php if(strpos($conditions, 'closedProduct') !== false) echo "checked='checked'"?> />
+                  <label for="closedProduct"><?php echo $lang->report->closedProduct?></label>
+                </div>
+                <div class="checkbox-primary inline-block">
+                  <input type="checkbox" name="overduePlan" value="overduePlan" id="overduePlan" <?php if(strpos($conditions, 'overduePlan') !== false) echo "checked='checked'"?> />
+                  <label for="overduePlan"><?php echo $lang->report->overduePlan?></label>
+                </div>
+              </div>
+            </div>
+          </div>
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>
