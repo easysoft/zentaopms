@@ -4,8 +4,6 @@ function browseByModule()
     $('.divider').removeClass('hidden');
     $('#bymoduleTab').addClass('active');
     $('#allTab').removeClass('active');
-    $('#bysearchTab').removeClass('active');
-    $('#queryBox').removeClass('show');
 }
 
 function browseBySearch()
@@ -13,15 +11,10 @@ function browseBySearch()
     $('.divider').addClass('hidden');
     $('#bymoduleTab').removeClass('active');
     $('#allTab').addClass('active');
-    $('#bysearchTab').addClass('active');
-    $('#queryBox').addClass('show');
 }
 
 $(function(){
+    if(browseType == 'bysearch') return;
+    if(browseType == 'byediteddate' || browseType == 'openedbyme' || browseType == 'collectedbyme') $('#bysearchTab').remove();
     $('#' + browseType + 'Tab').addClass('active');
-    if(browseType == "bysearch")
-    {
-        $.toggleQueryBox(true);
-        browseBySearch();
-    }
 });
