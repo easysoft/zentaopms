@@ -153,7 +153,7 @@ class doc extends control
         }
 
         $attachLibs = array();
-        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)))
+        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)) and $browseType != 'bymodule')
         {
             $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
             if($count == 1)
