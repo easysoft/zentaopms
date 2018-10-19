@@ -87,7 +87,7 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->legendBasic;?></div>
             <table class='table table-form'>
-              <?php if(empty($task->parent)):?>
+              <?php if($task->parent <= 0):?>
               <tr>
                 <th class='w-80px'><?php echo $lang->task->project;?></th>
                 <td><?php echo html::select('project', $projects, $task->project, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
