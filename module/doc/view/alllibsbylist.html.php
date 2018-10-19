@@ -17,10 +17,10 @@
             <?php $name = '';?>
             <?php if($type == 'product') $name = $lang->product->name;?>
             <?php if($type == 'project') $name = $lang->project->name;?>
-            <?php if($type == 'custom')  $name = $lang->doc->libName;?>
+            <?php if($type != 'product' and $type != 'project')  $name = $lang->doclib->nameList[$type];?>
             <th class="c-name"><?php echo $name;?></th>
             <th class="c-num"><?php echo $lang->doc->num;?></th>
-            <?php if($type != 'custom'):?>
+            <?php if($type == 'product' or $type == 'project'):?>
             <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
             <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
             <?php else:?>
@@ -30,17 +30,17 @@
         </thead>
         <tbody>
           <?php foreach($libs as $lib):?>
-          <?php $link = $type != 'custom' ? $this->createLink('doc', 'objectLibs', "type=$type&objectID=$lib->id") : $this->createLink('doc', 'browse', "libID=$lib->id");?>
+          <?php $link = ($type == 'product' or $type == 'project') ? $this->createLink('doc', 'objectLibs', "type=$type&objectID=$lib->id") : $this->createLink('doc', 'browse', "libID=$lib->id");?>
           <tr>
             <td class="c-name"><?php echo html::a($link, $lib->name);?></td>
             <td class="c-num">
-              <?php if($type == 'custom'):?>
+              <?php if($type != 'product' and $type != 'project'):?>
               <?php echo $itemCounts[$lib->id] . $lang->doc->item;?>
               <?php else:?>
               <?php echo count($subLibs[$lib->id]) . $lang->doc->item;?>
               <?php endif;?>
             </td>
-            <?php if($type != 'custom'):?>
+            <?php if($type == 'product' or $type == 'project'):?>
             <td class="c-user"><?php if($lib->createdBy) echo zget($users, $lib->createdBy);?></td>
             <td class="c-datetime"><?php if($lib->createdDate != '00-00-00 00:00:00') echo formatTime($lib->createdDate, 'm-d h:i');?></td>
             <?php else:?>
