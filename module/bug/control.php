@@ -1542,7 +1542,8 @@ class bug extends control
                 $bug->closedDate     = substr($bug->closedDate,     0, 10);
                 $bug->resolvedDate   = substr($bug->resolvedDate,   0, 10);
                 $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
-
+                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);   
+     
                 if($bug->linkBug)
                 {
                     $tmpLinkBugs = array();
