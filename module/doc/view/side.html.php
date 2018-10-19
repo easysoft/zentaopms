@@ -110,30 +110,32 @@ if(!isset($type)) $type = 'product';
           </li>
           <?php endforeach;?>
           <?php else:?>
+
           <?php foreach($sideLibs[$tabValue] as $sideLibID => $sideLibName):?>
-          <?php
-          $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $sideLibID) ? 'active' : '';
-          $activeClass = ($this->methodName == 'browse' && isset($currentLib->id) && $currentLib->id == $sideLibID) ? 'active' : $activeClass;
-          ?>
-          <li <?php echo "class='$activeClass'";?>>
-            <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID"), "<i class='icon icon-folder-o'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
             <?php if($tabValue == 'book'):?>
             <?php include './bookside.html.php';?>
             <?php else:?>
-            <?php if(isset($allModules[$sideLibID])):?>
-            <ul>
-              <?php foreach($allModules[$sideLibID] as $module):?>
-              <?php if($module->parent != 0) continue;?>
-              <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
-                <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
-                <?php $this->doc->printChildModule($module, $sideLibID, $this->methodName, $browseType, $moduleID);?>
-              </li>
-              <?php endforeach;?>
-            </ul>
+            <?php
+            $activeClass = ($this->methodName == 'objectlibs' && $type == $tabValue && $object->id == $sideLibID) ? 'active' : '';
+            $activeClass = ($this->methodName == 'browse' && isset($currentLib->id) && $currentLib->id == $sideLibID) ? 'active' : $activeClass;
+            ?>
+            <li <?php echo "class='$activeClass'";?>>
+              <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID"), "<i class='icon icon-folder-o'></i> " . $sideLibName, '', "class='text-ellipsis' title='{$sideLibName}'");?>
+              <?php if(isset($allModules[$sideLibID])):?>
+              <ul>
+                <?php foreach($allModules[$sideLibID] as $module):?>
+                <?php if($module->parent != 0) continue;?>
+                <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
+                  <?php echo html::a($this->createLink('doc', 'browse', "libID=$sideLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
+                  <?php $this->doc->printChildModule($module, $sideLibID, $this->methodName, $browseType, $moduleID);?>
+                </li>
+                <?php endforeach;?>
+              </ul>
+              <?php endif;?>
+            </li>
             <?php endif;?>
-            <?php endif;?>
-          </li>
           <?php endforeach;?>
+
           <?php endif;?>
         </ul>
       </div>
