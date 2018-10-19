@@ -178,3 +178,5 @@ $lang->doclib->main['project'] = $lang->projectCommon . '主库';
 $lang->doclib->tabList['product'] = $lang->productCommon;
 $lang->doclib->tabList['project'] = $lang->projectCommon;
 $lang->doclib->tabList['custom']  = '自定义';
+
+$lang->doclib->nameList['custom'] = '自定义文档库名称';
