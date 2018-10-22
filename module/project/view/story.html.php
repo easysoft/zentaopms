@@ -307,9 +307,6 @@ $(function()
                   .replace('%rate%', rate);
         }
     });
-    <?php if(!$stories):?>
-    $("#main").addClass('hide-sidebar');
-    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
