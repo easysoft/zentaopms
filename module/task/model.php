@@ -2351,7 +2351,7 @@ class taskModel extends model
         if($action == 'assignto'       and !empty($task->children)) return false;
         if($action == 'close'          and !empty($task->children)) return false;
         if($action == 'batchcreate'    and !empty($task->team))     return false;
-        if($action == 'batchcreate'    and $task->parent)           return false;
+        if($action == 'batchcreate'    and $task->parent > 0)       return false;
 
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
