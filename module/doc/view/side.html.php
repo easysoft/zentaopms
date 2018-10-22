@@ -11,7 +11,7 @@ if($this->methodName != 'browse')
     $browseType = '';
     $moduleID   = '';
 }
-if(!isset($type)) $type = 'product';
+if(empty($type)) $type = 'product';
 ?>
 <div class="side-col" style="width: 230px" data-min-width="230">
   <div class="cell">
