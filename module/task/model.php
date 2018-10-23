@@ -1169,7 +1169,6 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
-            ->setDefault('finishedDate, lastEditedDate', $now)
             ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
             ->remove('comment,files,labels')
             ->get();

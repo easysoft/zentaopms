@@ -1672,7 +1672,7 @@ class treeModel extends model
                         {
                             if($firstChildren->id == $children->parent) $firstChildren->children[] = $children;
                         }
-                    };//Filter project children modules.
+                    }
                     $tree[$root][] = $children;
                 }
             }
