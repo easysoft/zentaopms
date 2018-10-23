@@ -216,9 +216,16 @@ class block extends control
             if($this->block->initBlock($module)) die(js::reload());
         }
 
+        $acls = $this->app->user->rights['acls'];
         $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
+            if(!empty($block->source) and !empty($acls['views']) and !isset($acls['views'][$block->source]))
+            {
+                unset($blocks[$key]);
+                continue;
+            }
+
             if($this->config->global->flow == 'onlyStory' and $block->source != 'product' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
             if($this->config->global->flow == 'onlyTask' and $block->source != 'project' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
             if($this->config->global->flow == 'onlyTest' and $block->source != 'qa' and $block->source != 'todo' and $block->block != 'dynamic') unset($blocks[$key]);
