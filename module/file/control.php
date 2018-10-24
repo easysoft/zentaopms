@@ -367,6 +367,11 @@ class file extends control
             $this->app->loadLang('action');
             $file     = $this->file->getByID($fileID);
             $data     = fixer::input('post')->get();
+            if(validater::checkLength($data->fileName, 80, 1) == false)
+            {
+                $errTip = $this->lang->error->length;
+                die(js::alert(sprintf($errTip[1], $this->lang->file->title, 80, 1)));
+            }
             $fileName = $data->fileName . '.' . $data->extension;
             $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)->where('id')->eq($fileID)->exec();
 
