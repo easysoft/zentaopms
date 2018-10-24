@@ -2,14 +2,25 @@ $(function()
 {
     var adjustBoardsHeight = function()
     {
-        $('.c-boards').each(function()
+        var $cBoards = $('.c-boards');
+        if ($cBoards.length === 1)
         {
-            var height = $(window).height() - $('#header').height() - $('#footer').height() - 40 - 105;
-            var $boardsWrapper = $(this).find('.boards-wrapper');
-            $boardsWrapper.height(height);
+            var $boardsWrapper = $cBoards.find('.boards-wrapper');
+            $boardsWrapper.css('min-height', $(window).height() - $('#header').height() - $('#footer').height() - 111);
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
-                $boardsWrapper.find('.boards').css('height', $(this).height() - 1);
+                $boardsWrapper.find('.boards').css('min-height', $boardsWrapper.height() - 1);
+            }
+            return
+        }
+        $cBoards.each(function()
+        {
+            var height = $(window).height() - $('#header').height() - $('#footer').height() - 111;
+            var $boardsWrapper = $(this).find('.boards-wrapper');
+            $boardsWrapper.css('max-height', height);
+            if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
+            {
+                $boardsWrapper.find('.boards').css('max-height', $(this).height() - 1);
             }
         });
     };
@@ -98,12 +109,10 @@ $(function()
     };
 
     var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
-    var lastOperation;
     var dropTo = function(id, from, to, type)
     {
         if(statusMap[type][from] && statusMap[type][from][to])
         {
-            lastOperation = {id: id, from: from, to: to};
             kanbanModalTrigger.show(
             {
                 url: $.createLink(type, statusMap[type][from][to], 'id=' + id) + onlybody,
