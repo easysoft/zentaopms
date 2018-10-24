@@ -87,7 +87,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions-4"><?php echo $lang->actions;?></th>
+              <th class="w-90px"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
