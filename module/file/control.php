@@ -365,8 +365,8 @@ class file extends control
         if($_POST)
         {
             $this->app->loadLang('action');
-            $file     = $this->file->getByID($fileID);
-            $data     = fixer::input('post')->get();
+            $file = $this->file->getByID($fileID);
+            $data = fixer::input('post')->get();
             if(validater::checkLength($data->fileName, 80, 1) == false)
             {
                 $errTip = $this->lang->error->length;
