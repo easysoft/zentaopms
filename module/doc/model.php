@@ -1496,7 +1496,7 @@ class docModel extends model
     {
         $actions  = '';
         if($this->app->methodName == 'browse') $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
-        $actions .= "<a data-toggle='dropdown' class='btn btn-secondary' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
+        $actions .= "<a data-toggle='dropdown' class='btn btn-link' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {
