@@ -1256,6 +1256,8 @@ EOD;
      */
     public function appendOrder($orderBy, $append = 'id')
     {
+        if(empty($orderBy)) return $append;
+
         list($firstOrder) = explode(',', $orderBy);
         $sort = strpos($firstOrder, '_') === false ? '_asc' : strstr($firstOrder, '_');
         return strpos($orderBy, $append) === false ? $orderBy . ',' . $append . $sort : $orderBy;
