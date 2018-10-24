@@ -354,7 +354,7 @@ class docModel extends model
             $docQuery  = str_replace("`lib` = 'all'", '1', $docQuery);                // Search all lib.
 
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
-                ->beginIF(!$libCond)->andWhere("lib")->eq($libID)->fi()
+                ->beginIF(!$libCond and $libID != 0)->andWhere("lib")->eq($libID)->fi()
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
@@ -707,6 +707,12 @@ class docModel extends model
         /* Get the modules. */
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
+
+        if($type == 'index' || $type == 'objectLibs') 
+        {
+            unset($this->config->doc->search['fields']['module']);
+            unset($this->config->doc->search['fields']['lib']);
+        }
 
         $this->loadModel('search')->setSearchParams($this->config->doc->search);
     }
@@ -1493,7 +1499,7 @@ class docModel extends model
     public function setFastMenu($fastLib)
     {
         $actions  = '';
-        if($this->app->methodName == 'browse') $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+        $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
         $actions .= "<a data-toggle='dropdown' class='btn btn-link' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
