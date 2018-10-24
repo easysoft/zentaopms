@@ -1,4 +1,5 @@
 <div class="main-col" data-min-width="400">
+<div class="cell" id="queryBox"></div>
   <div class="panel block-files block-sm no-margin">
     <div class="panel-heading">
       <div class="panel-title font-normal">
