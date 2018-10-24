@@ -163,7 +163,7 @@ class file extends control
         if($file->extension == 'txt')
         {
             $extension = 'txt';
-            if(($postion = strrpos($file->title, '.')) !== false)$extension = substr($file->title, $postion + 1);
+            if(($postion = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $postion + 1);
             if($extension != 'txt') $mode = 'down';
             $file->extension = $extension;
         }
@@ -367,7 +367,7 @@ class file extends control
             $this->app->loadLang('action');
             $file     = $this->file->getByID($fileID);
             $data     = fixer::input('post')->get();
-            $fileName = $data->fileName . '.' . $file->extension;
+            $fileName = $data->fileName . '.' . $data->extension;
             $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)->where('id')->eq($fileID)->exec();
 
             $extension = "." . $file->extension;

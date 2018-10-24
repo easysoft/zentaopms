@@ -100,8 +100,12 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . ' Library';
 $lang->doc->libTypeList['project'] = $lang->projectCommon . ' Library';
 $lang->doc->libTypeList['custom']  = 'Custom Library';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon . 'Doc Lib';
-$lang->doc->systemLibs['project'] = $lang->projectCommon . 'Doc Lib';
+$lang->doc->libIconList['product'] = 'icon-cube';
+$lang->doc->libIconList['project'] = 'icon-stack';
+$lang->doc->libIconList['custom']  = 'icon-folder-o';
+
+$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['project'] = $lang->projectCommon;
 
 global $config;
 if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
@@ -136,9 +140,10 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Show File Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
-$lang->doc->customShowLibs = 'Library display settings';
-$lang->doc->customShowLibsList['zero']     = 'Display zero document library';
-$lang->doc->customShowLibsList['unclosed'] = 'Show only projects that are not closed.';
+$lang->doc->customShowLibs    = 'Library display settings';
+$lang->doc->customShowNullLib = 'Display empty library';
+$lang->doc->customShowLibProjects['unclosed'] = 'Display projects that are not closed';
+$lang->doc->customShowLibProjects['all']      = 'Display all projects';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
@@ -174,3 +179,5 @@ $lang->doclib->main['project'] =  'Main Library';
 $lang->doclib->tabList['product'] = $lang->productCommon;
 $lang->doclib->tabList['project'] = $lang->projectCommon;
 $lang->doclib->tabList['custom']  = 'Custom';
+
+$lang->doclib->nameList['custom'] = 'Doc lib name';

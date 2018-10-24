@@ -470,9 +470,9 @@ class custom extends control
     {
         if($this->server->request_method == 'POST')
         {
-            $data = fixer::input('post')->join('showLibs', ',')->get();
-            if(isset($data->showLibs)) $data = $data->showLibs;
-            $this->loadModel('setting')->setItem("{$this->app->user->account}.doc.custom.showLibs", $data);
+            $data = fixer::input('post')->get();
+            $this->loadModel('setting')->deleteItems("owner={$this->app->user->account}&module=doc&section=custom");
+            $this->setting->setItems("{$this->app->user->account}.doc.custom", $data);
             die(js::reload('parent.parent'));
         }
     }

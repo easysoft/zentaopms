@@ -103,7 +103,6 @@ class docModel extends model
 
             $actions  = $this->setFastMenu($fastLib);
             $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
-            if($libID and common::hasPriv('doc', 'create')) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
 
             $this->lang->modulePageActions = $actions;
         }
@@ -138,7 +137,7 @@ class docModel extends model
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where("t1.$type")->ne(0)
-                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                ->beginIF($type == 'project' and $this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy("t2.order desc, t1.order, t1.id")
                 ->query();
@@ -284,6 +283,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
@@ -296,6 +296,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->andWhere('id')->in($docIdList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibs)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
@@ -309,6 +310,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('collector')->like("%,{$this->app->user->account},%")
                 ->orderBy($sort)
                 ->page($pager)
@@ -353,6 +355,7 @@ class docModel extends model
 
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
                 ->beginIF(!$libCond)->andWhere("lib")->eq($libID)->fi()
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
             foreach($docs as $docID => $doc)
@@ -377,6 +380,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF(!empty($docIdList))->andWhere('t1.id')->in($docIdList)->fi()
                 ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orWhere('t2.content')->like("%{$this->session->searchDoc}%")->markRight(1)
                 ->andWhere('t1.lib')->in($allLibs)
                 ->orderBy($sort)
@@ -454,6 +458,7 @@ class docModel extends model
     {
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
             ->beginIF(!empty($module))->andWhere('module')->in($module)->fi()
             ->query();
@@ -906,7 +911,7 @@ class docModel extends model
             $fields = $type == 'product' ? "createdBy, createdDate" : "openedBy AS createdBy, openedDate AS createdDate";
             $libs   = $this->dao->select("id, name, `order`, {$fields}")->from($table)
                 ->where('id')->in($idList)
-                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
+                ->beginIF($type == 'project' and $this->config->doc->custom->showProjects == 'unclosed')->andWhere('status')->notin('done,closed')->fi()
                 ->orderBy('`order` desc, id desc')
                 ->page($pager, 'id')
                 ->fetchAll('id');
@@ -966,7 +971,7 @@ class docModel extends model
             $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->in($productIdList)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs('product', 'product');
         }
@@ -990,7 +995,7 @@ class docModel extends model
         }
         $projects = $this->dao->select('id,name,status')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projectLibs))
-            ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
+            ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('status')->notin('done,closed')->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('`order`_desc')
             ->fetchAll();
@@ -1028,7 +1033,7 @@ class docModel extends model
         if($type == 'product' or $type == 'project')
         {
             $nonzeroLibs = array();
-            if(strpos($this->config->doc->custom->showLibs, 'zero') === false)
+            if($this->config->doc->custom->showNullLib)
             {
                 $nonzeroLibs = $this->dao->select('lib,count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->groupBy('lib')->having('count')->ne(0)->fetchPairs('lib', 'lib');
             }
@@ -1037,8 +1042,8 @@ class docModel extends model
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
-                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'zero') === false)->andWhere('t1.id')->in($nonzeroLibs)->fi()
+                ->beginIF($type == 'project' and $this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
+                ->beginIF($this->config->doc->custom->showNullLib)->andWhere('t1.id')->in($nonzeroLibs)->fi()
                 ->orderBy("t2.`order` desc, t1.`order` asc, id desc")
                 ->query();
         }
@@ -1089,7 +1094,7 @@ class docModel extends model
                 $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->in($idList)
-                    ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                    ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
                     ->andWhere('t2.deleted')->eq(0)
                     ->fetchPairs('product', 'product');
             }
@@ -1132,7 +1137,7 @@ class docModel extends model
                 $hasProject  = $this->dao->select('DISTINCT product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($objectID)
-                    ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                    ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
                     ->andWhere('t2.deleted')->eq(0)
                     ->groupBy('product')
                     ->fetchPairs('product', 'projectCount');
@@ -1398,7 +1403,7 @@ class docModel extends model
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.root=t2.project')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.root=t3.id')
                 ->where('t2.product')->eq($objectID)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t3.status')->notin('done,closed')->fi()
+                ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t3.status')->notin('done,closed')->fi()
                 ->andWhere('t1.type')->eq('project')
                 ->andWhere('t3.deleted')->eq('0')
                 ->fetchPairs('account', 'account');

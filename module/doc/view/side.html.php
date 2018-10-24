@@ -144,7 +144,7 @@ if(empty($type)) $type = 'product';
   </div>
   <div class='side-footer'><?php echo html::a('###', "<i class='icon-cog'></i> {$lang->doc->customShowLibs}", '', "class='setting text-secondary small' data-target='#settingModal' data-toggle='modal'");?></div>
   <div class='modal fade' id='settingModal' aria-hidden="true">
-    <div class='modal-dialog'>
+    <div class='modal-dialog mw-400px'>
       <div class='modal-content'>
         <div class='modal-header'>
           <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only"><?php echo $lang->close;?></span></button>
@@ -154,7 +154,15 @@ if(empty($type)) $type = 'product';
           <form action='<?php echo $this->createLink('custom', 'ajaxSetDoc');?>' target='hiddenwin' method='post'>
             <table class='table table-form'>
               <tr>
-                <td><?php echo html::checkbox('showLibs', $lang->doc->customShowLibsList, $config->doc->custom->showLibs);?></td>
+                <td>
+                  <div class="checkbox-primary">
+                    <input type="checkbox" name="showNullLib" value="1" id="showNullLib1" <?php if($config->doc->custom->showNullLib) echo 'checked';?>>
+                    <label for="showNullLib1"><?php echo $lang->doc->customShowNullLib;?></label>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td><?php echo html::radio('showProjects', $lang->doc->customShowLibProjects, $config->doc->custom->showProjects);?></td>
               </tr>
               <tr>
                 <td><?php echo html::submitButton();?></td>
