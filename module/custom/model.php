@@ -268,7 +268,7 @@ class customModel extends model
                     }
                 }
 
-                if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = true;
+                if(strpos($name, 'QUERY') === 0 and !isset($customMenuMap[$name])) $hidden = false;
 
                 $menuItem = new stdclass();
                 $menuItem->name  = $name;
