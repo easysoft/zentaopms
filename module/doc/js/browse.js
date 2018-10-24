@@ -13,8 +13,14 @@ function browseBySearch()
     $('#allTab').addClass('active');
 }
 
-$(function(){
+$(function()
+{
     if(browseType == 'bysearch') return;
-    if(browseType == 'byediteddate' || browseType == 'openedbyme' || browseType == 'collectedbyme') $('#bysearchTab').remove();
+    $('#pageActions ul.dropdown-menu').css('left', '67px');
+    if(browseType == 'byediteddate' || browseType == 'openedbyme' || browseType == 'collectedbyme') 
+    {
+        $('#pageActions ul.dropdown-menu').css('left', '0px');
+        $('#bysearchTab').remove();
+    }
     $('#' + browseType + 'Tab').addClass('active');
 });

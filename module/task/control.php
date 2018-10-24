@@ -1424,6 +1424,7 @@ class task extends control
 
         $this->view->allExportFields = $allExportFields;
         $this->view->customExport    = true;
+        $this->view->type            = $type;
         $this->display();
     }
 

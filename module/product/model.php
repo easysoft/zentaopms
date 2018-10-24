@@ -367,6 +367,7 @@ class productModel extends model
         $lib = new stdclass();
         $lib->product = $productID;
         $lib->name    = $this->lang->doclib->main['product'];
+        $lib->type    = 'product';
         $lib->main    = '1';
         $lib->acl     = $product->acl == 'open' ? 'open' : 'private';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();

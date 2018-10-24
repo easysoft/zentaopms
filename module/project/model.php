@@ -345,6 +345,7 @@ class projectModel extends model
             $lib = new stdclass();
             $lib->project = $projectID;
             $lib->name    = $this->lang->doclib->main['project'];
+            $lib->type    = 'project';
             $lib->main    = '1';
             $lib->acl     = $project->acl == 'open' ? 'open' : 'private';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
@@ -2012,6 +2013,12 @@ class projectModel extends model
              ->fetchAll('id');
         
         if(empty($tasks)) return array();
+
+        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
+        if(!empty($taskTeam))
+        {
+            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+        }
         
         foreach($tasks as $task)
         {

@@ -42,7 +42,9 @@ class doc extends control
         $this->session->set('docList', $this->app->getURI(true));
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 5, 1);
-        $this->lang->modulePageActions = $this->doc->setFastMenu($this->lang->doc->fast);
+
+        $this->lang->modulePageActions  = $this->doc->setFastMenu($this->lang->doc->fast);
+        $this->lang->modulePageActions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
 
         $this->view->title            = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->view->position[]       = $this->lang->doc->index;
@@ -153,7 +155,7 @@ class doc extends control
         }
 
         $attachLibs = array();
-        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)))
+        if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)) and $browseType != 'bymodule')
         {
             $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
             if($count == 1)

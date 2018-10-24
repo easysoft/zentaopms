@@ -46,7 +46,7 @@ var browseType = '<?php echo $browseType;?>';
         </div>
         <nav class="panel-actions btn-toolbar">
           <div class="btn-group">
-            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>" . $lang->doc->manageType, '',"class='btn btn-printLink'");?>
+            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>" . $lang->doc->manageType, '',"class='btn btn-link'");?>
           </div>
         </nav>
       </div>
