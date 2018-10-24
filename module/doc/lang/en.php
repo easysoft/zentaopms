@@ -139,10 +139,9 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Show File Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
-$lang->doc->customShowLibs    = 'Library display settings';
-$lang->doc->customShowNullLib = 'Display empty library';
-$lang->doc->customShowLibProjects['unclosed'] = 'Display projects that are not closed';
-$lang->doc->customShowLibProjects['all']      = 'Display all projects';
+$lang->doc->customShowLibs = 'Library display settings';
+$lang->doc->customShowLibsList['zero']     = 'Display empty library';
+$lang->doc->customShowLibsList['unclosed'] = 'Display projects that are not closed';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
