@@ -137,7 +137,7 @@ class docModel extends model
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where("t1.$type")->ne(0)
-                ->beginIF($type == 'project' and $this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
+                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy("t2.order desc, t1.order, t1.id")
                 ->query();
@@ -354,7 +354,7 @@ class docModel extends model
             $docQuery  = str_replace("`lib` = 'all'", '1', $docQuery);                // Search all lib.
 
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
-                ->beginIF(!$libCond)->andWhere("lib")->eq($libID)->fi()
+                ->beginIF(!$libCond and $libID != 0)->andWhere("lib")->eq($libID)->fi()
                 ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
@@ -708,6 +708,12 @@ class docModel extends model
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
+        if($type == 'index' || $type == 'objectLibs') 
+        {
+            unset($this->config->doc->search['fields']['module']);
+            unset($this->config->doc->search['fields']['lib']);
+        }
+
         $this->loadModel('search')->setSearchParams($this->config->doc->search);
     }
 
@@ -911,7 +917,7 @@ class docModel extends model
             $fields = $type == 'product' ? "createdBy, createdDate" : "openedBy AS createdBy, openedDate AS createdDate";
             $libs   = $this->dao->select("id, name, `order`, {$fields}")->from($table)
                 ->where('id')->in($idList)
-                ->beginIF($type == 'project' and $this->config->doc->custom->showProjects == 'unclosed')->andWhere('status')->notin('done,closed')->fi()
+                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
                 ->orderBy('`order` desc, id desc')
                 ->page($pager, 'id')
                 ->fetchAll('id');
@@ -971,7 +977,7 @@ class docModel extends model
             $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->in($productIdList)
-                ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
+                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs('product', 'product');
         }
@@ -995,7 +1001,7 @@ class docModel extends model
         }
         $projects = $this->dao->select('id,name,status')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projectLibs))
-            ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('status')->notin('done,closed')->fi()
+            ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('`order`_desc')
             ->fetchAll();
@@ -1033,7 +1039,7 @@ class docModel extends model
         if($type == 'product' or $type == 'project')
         {
             $nonzeroLibs = array();
-            if($this->config->doc->custom->showNullLib)
+            if(strpos($this->config->doc->custom->showLibs, 'zero') !== false)
             {
                 $nonzeroLibs = $this->dao->select('lib,count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->groupBy('lib')->having('count')->ne(0)->fetchPairs('lib', 'lib');
             }
@@ -1042,8 +1048,8 @@ class docModel extends model
             $stmt  = $this->dao->select('t1.*')->from(TABLE_DOCLIB)->alias('t1')
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
-                ->beginIF($type == 'project' and $this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
-                ->beginIF($this->config->doc->custom->showNullLib)->andWhere('t1.id')->in($nonzeroLibs)->fi()
+                ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                ->beginIF(strpos($this->config->doc->custom->showLibs, 'zero') !== false)->andWhere('t1.id')->in($nonzeroLibs)->fi()
                 ->orderBy("t2.`order` desc, t1.`order` asc, id desc")
                 ->query();
         }
@@ -1094,7 +1100,7 @@ class docModel extends model
                 $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->in($idList)
-                    ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
+                    ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                     ->andWhere('t2.deleted')->eq(0)
                     ->fetchPairs('product', 'product');
             }
@@ -1137,7 +1143,7 @@ class docModel extends model
                 $hasProject  = $this->dao->select('DISTINCT product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($objectID)
-                    ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t2.status')->notin('done,closed')->fi()
+                    ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                     ->andWhere('t2.deleted')->eq(0)
                     ->groupBy('product')
                     ->fetchPairs('product', 'projectCount');
@@ -1403,7 +1409,7 @@ class docModel extends model
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.root=t2.project')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.root=t3.id')
                 ->where('t2.product')->eq($objectID)
-                ->beginIF($this->config->doc->custom->showProjects == 'unclosed')->andWhere('t3.status')->notin('done,closed')->fi()
+                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t3.status')->notin('done,closed')->fi()
                 ->andWhere('t1.type')->eq('project')
                 ->andWhere('t3.deleted')->eq('0')
                 ->fetchPairs('account', 'account');
@@ -1473,7 +1479,7 @@ class docModel extends model
      * @access public
      * @return string 
      */
-    public function buildBreadTitle($libID = 0, $param = 0, $title = '')
+    public function buildCrumbTitle($libID = 0, $param = 0, $title = '')
     {
         $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq($param)->fetch('path');
 
@@ -1484,9 +1490,7 @@ class docModel extends model
 
         foreach($parantMoudles as $parentID => $moduleName)
         {
-            $active = '';
-            if($param == $parentID) $active = "class='active'";
-            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " {$this->lang->doc->gt} " . $moduleName->name , '', "$active");
+            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " <i class='icon icon-chevron-right'></i> " . $moduleName->name , '');
         } 
 
         return $title;
@@ -1495,8 +1499,8 @@ class docModel extends model
     public function setFastMenu($fastLib)
     {
         $actions  = '';
-        if($this->app->methodName == 'browse') $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
-        $actions .= "<a data-toggle='dropdown' class='btn btn-secondary' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
+        $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+        $actions .= "<a data-toggle='dropdown' class='btn btn-link' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {

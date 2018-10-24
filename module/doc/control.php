@@ -46,6 +46,9 @@ class doc extends control
         $this->lang->modulePageActions  = $this->doc->setFastMenu($this->lang->doc->fast);
         $this->lang->modulePageActions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
 
+        $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
+        $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'index');
+
         $this->view->title            = $this->lang->doc->common . $this->lang->colon . $this->lang->doc->index;
         $this->view->position[]       = $this->lang->doc->index;
         $this->view->latestEditedDocs = $this->loadModel('doc')->getDocsByBrowseType(0, 'byediteddate', 0, 0, 'editedDate_desc, id_desc', $pager);
@@ -112,7 +115,7 @@ class doc extends control
             $this->lang->set('menugroup.doc', 'project');
         }
 
-        $menuType = (!$type && in_array($browseType, array_keys($this->lang->doc->fastMenuList))) ? $browseType : $type;
+        $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
         $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
         $this->session->set('docList', $this->app->getURI(true));
 
@@ -134,9 +137,10 @@ class doc extends control
         $title   = '';
         $module  = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
         if($module) $title = $module->name;
-        if($libID)  $title = $this->libs[$libID];
+        if($libID)  $title = html::a(helper::createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID], '');
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
-        if($param != 0) $title = $this->doc->buildBreadTitle($libID, $param, $title);
+        if($browseType == 'bysearch') $title = $this->lang->doc->search;
+        if($param != 0) $title = $this->doc->buildCrumbTitle($libID, $param, $title);
         if($browseType == 'fastsearch')
         {
             if($this->post->searchDoc) $this->session->set('searchDoc', $this->post->searchDoc);
@@ -158,7 +162,7 @@ class doc extends control
         if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)) and $browseType != 'bymodule')
         {
             $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
-            if($count == 1)
+            if($count == 1 and $type and isset($lib->$type))
             {
                 $objectLibs = $this->doc->getLibsByObject($type, $lib->$type);
                 if(isset($objectLibs['project'])) $attachLibs['project'] = $objectLibs['project'];
@@ -793,6 +797,10 @@ class doc extends control
 
         /* Set Custom. */
         foreach(explode(',', $this->config->doc->customObjectLibs) as $libType) $customObjectLibs[$libType] = $this->lang->doc->customObjectLibs[$libType];
+
+        $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
+        $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'objectLibs');
+
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 

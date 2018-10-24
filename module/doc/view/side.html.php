@@ -154,15 +154,7 @@ if(empty($type)) $type = 'product';
           <form action='<?php echo $this->createLink('custom', 'ajaxSetDoc');?>' target='hiddenwin' method='post'>
             <table class='table table-form'>
               <tr>
-                <td>
-                  <div class="checkbox-primary">
-                    <input type="checkbox" name="showNullLib" value="1" id="showNullLib1" <?php if($config->doc->custom->showNullLib) echo 'checked';?>>
-                    <label for="showNullLib1"><?php echo $lang->doc->customShowNullLib;?></label>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td><?php echo html::radio('showProjects', $lang->doc->customShowLibProjects, $config->doc->custom->showProjects);?></td>
+                <td><?php echo html::checkbox('showLibs', $lang->doc->customShowLibsList, $config->doc->custom->showLibs);?></td>
               </tr>
               <tr>
                 <td><?php echo html::submitButton();?></td>
