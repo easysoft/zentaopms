@@ -3,9 +3,9 @@
 
 #menuEditor {margin-top: 10px;}
 #menuEditor .panel {border-color: #ddd;}
-#mainMenu {position: static!important; margin: 0!important; text-align: center; height: 60px;}
-#subNavbar {margin: 0; padding: 10px; height: 60px;}
-#navbar {padding: 10px; margin-top: 0!important;}
+#mainMenu {position: static!important; margin: 0!important; text-align: center; height: 48px; padding: 6px!important; border-top: 1px solid #eee;}
+#subNavbar {margin: 0; padding: 5px; height: 50px;}
+#navbar {padding: 5px; margin-top: 0!important; height: 60px; border-radius: 4px 4px 0 0;}
 #navbar .nav > li > a {padding: 10px 15px; border-radius: 3px;}
 #mainMenu > .nav {display: inline-block;}
 #menuEditor .nav > li > a {cursor: move;}
