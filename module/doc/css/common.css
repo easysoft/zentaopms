@@ -20,7 +20,8 @@
 }
 
 .side-col .cell .nav a.setting {padding:8px;}
-.side-footer{padding:8px; background:#fff;}
+.side-col .tab-content {margin-right: -5px}
+.side-footer {padding:8px;}
 .col-sm-size .col-sm-5,
 .col-sm-size .col-sm-7 {width: 100%;}
 .col-sm-size .table .c-user,
