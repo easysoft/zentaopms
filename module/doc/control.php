@@ -158,7 +158,7 @@ class doc extends control
         if(!empty($lib) and (!empty($lib->product) or !empty($lib->project)) and $browseType != 'bymodule')
         {
             $count = $this->dao->select('count(*) as count')->from(TABLE_DOCLIB)->where('project')->eq($lib->project)->andWhere('product')->eq($lib->product)->fetch('count');
-            if($count == 1)
+            if($count == 1 and $type and isset($lib->$type))
             {
                 $objectLibs = $this->doc->getLibsByObject($type, $lib->$type);
                 if(isset($objectLibs['project'])) $attachLibs['project'] = $objectLibs['project'];
