@@ -104,8 +104,8 @@ $lang->doc->libIconList['product'] = 'icon-cube';
 $lang->doc->libIconList['project'] = 'icon-stack';
 $lang->doc->libIconList['custom']  = 'icon-folder-o';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon . 'Doc Lib';
-$lang->doc->systemLibs['project'] = $lang->projectCommon . 'Doc Lib';
+$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['project'] = $lang->projectCommon;
 
 global $config;
 if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
@@ -179,3 +179,5 @@ $lang->doclib->main['project'] =  'Main Library';
 $lang->doclib->tabList['product'] = $lang->productCommon;
 $lang->doclib->tabList['project'] = $lang->projectCommon;
 $lang->doclib->tabList['custom']  = 'Custom';
+
+$lang->doclib->nameList['custom'] = 'Doc lib name';
