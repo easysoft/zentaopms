@@ -38,16 +38,23 @@ var browseType = '<?php echo $browseType;?>';
           <i class="icon icon-search text-muted"></i>
           <?php endif;?>
           <?php echo $breadTitle;?>
-
+        </div>
+        <nav class="panel-actions btn-toolbar">
           <div class="btn-group">
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
           </div>
-        </div>
-        <nav class="panel-actions btn-toolbar">
-          <div class="btn-group">
-            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>" . $lang->doc->manageType, '',"class='btn btn-link'");?>
+          <?php if($libID):?>
+          <div class="dropdown">
+            <button class="btn" type="button" data-toggle="dropdown"><i class='icon-cog'></i> <span class="caret"></span></button>
+            <ul class='dropdown-menu'>
+              <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
+              <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->edit, '', "class='iframe'");?></li>
+              <li><?php common::printLink('doc', 'delete', "libID=$libID", "<i class='icon icon-remove'></i>" . $lang->delete, 'hiddenwin');?></li>
+            </ul>
           </div>
+          <?php common::printLink('doc', 'create', "libID=$libID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>
+          <?php endif;?>
         </nav>
       </div>
       <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>

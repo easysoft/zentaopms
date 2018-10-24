@@ -13,6 +13,7 @@ $config->doc->create->requiredFields = 'title';
 $config->doc->edit->requiredFields   = 'title';
 
 $config->doc->customObjectLibs = 'files,customFiles';
+$config->doc->notArticleType   = '';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs   = $config->doc->customObjectLibs;

@@ -103,7 +103,6 @@ class docModel extends model
 
             $actions  = $this->setFastMenu($fastLib);
             $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
-            if($libID and common::hasPriv('doc', 'create')) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
 
             $this->lang->modulePageActions = $actions;
         }
@@ -284,6 +283,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
@@ -296,6 +296,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->andWhere('id')->in($docIdList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibs)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
@@ -309,6 +310,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('collector')->like("%,{$this->app->user->account},%")
                 ->orderBy($sort)
                 ->page($pager)
@@ -353,6 +355,7 @@ class docModel extends model
 
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
                 ->beginIF(!$libCond)->andWhere("lib")->eq($libID)->fi()
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
             foreach($docs as $docID => $doc)
@@ -377,6 +380,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF(!empty($docIdList))->andWhere('t1.id')->in($docIdList)->fi()
                 ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orWhere('t2.content')->like("%{$this->session->searchDoc}%")->markRight(1)
                 ->andWhere('t1.lib')->in($allLibs)
                 ->orderBy($sort)
@@ -454,6 +458,7 @@ class docModel extends model
     {
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
             ->beginIF(!empty($module))->andWhere('module')->in($module)->fi()
             ->query();
