@@ -9,7 +9,7 @@
         </div>
         <div class='panel-body'>
           <ul>
-            <?php $api = empty($config->isINT) ? $lang->misc->api : $lang->misc->enApi;?>
+            <?php $api = (isset($config->isINT) && !empty($config->isINT)) ? $lang->misc->enApi : $lang->misc->api;?>
             <?php foreach($groupItems as $item => $label):?>
             <li><?php echo html::a($api . "/goto.php?item=$item&from=about", $label, '_blank', "id='$item'");;?></li>
             <?php endforeach;?>
