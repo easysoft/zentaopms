@@ -103,11 +103,11 @@ var browseType = '<?php echo $browseType;?>';
             <?php endforeach;?>
             <?php endif;?>
             <?php if(!empty($attachLibs)):?>
-            <?php foreach($attachLibs as $libID => $attachLib):?>
+            <?php foreach($attachLibs as $libType => $attachLib):?>
             <tr>
-              <?php if($libID == 'project'):?>
+              <?php if($libType == 'project'):?>
               <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$currentLib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
-              <?php elseif($libID == 'files'):?>
+              <?php elseif($libType == 'files'):?>
               <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$currentLib->$type}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
               <?php endif;?>
               <td class="c-num"></td>
