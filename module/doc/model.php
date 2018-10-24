@@ -1473,7 +1473,7 @@ class docModel extends model
      * @access public
      * @return string 
      */
-    public function buildBreadTitle($libID = 0, $param = 0, $title = '')
+    public function buildCrumbTitle($libID = 0, $param = 0, $title = '')
     {
         $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq($param)->fetch('path');
 
@@ -1484,9 +1484,7 @@ class docModel extends model
 
         foreach($parantMoudles as $parentID => $moduleName)
         {
-            $active = '';
-            if($param == $parentID) $active = "class='active'";
-            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " {$this->lang->doc->gt} " . $moduleName->name , '', "$active");
+            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " <i class='icon icon-chevron-right'></i> " . $moduleName->name , '');
         } 
 
         return $title;

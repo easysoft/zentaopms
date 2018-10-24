@@ -134,9 +134,9 @@ class doc extends control
         $title   = '';
         $module  = $moduleID ? $this->loadModel('tree')->getByID($moduleID) : '';
         if($module) $title = $module->name;
-        if($libID)  $title = $this->libs[$libID];
+        if($libID)  $title = html::a(helper::createLink('doc', 'browse', "libID=$libID"), $this->libs[$libID], '');
         if(in_array($browseType, array_keys($this->lang->doc->fastMenuList))) $title = $this->lang->doc->fastMenuList[$browseType];
-        if($param != 0) $title = $this->doc->buildBreadTitle($libID, $param, $title);
+        if($param != 0) $title = $this->doc->buildCrumbTitle($libID, $param, $title);
         if($browseType == 'fastsearch')
         {
             if($this->post->searchDoc) $this->session->set('searchDoc', $this->post->searchDoc);
