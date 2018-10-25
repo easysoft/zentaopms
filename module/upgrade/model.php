@@ -2417,7 +2417,7 @@ class upgradeModel extends model
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->gt(0)->fetchGroup('parent');
         if($tasks)
         {
-            $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->in($tasks)->exec();
+            $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->in(array_keys($tasks))->exec();
         }
         return !dao::isError();
     }
