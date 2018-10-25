@@ -66,8 +66,8 @@ $lang->extension->bySearch      = 'Search';
 $lang->extension->byCategory    = 'Category';
 
 $lang->extension->installFailed            = '%s failed. Error:';
-$lang->extension->uninstallFailed          = 'Uninstall failed. Error:';
-$lang->extension->confirmUninstall         = 'Uninstal the extension will delete or change related database. Do you want to uninstall?';
+$lang->extension->uninstallFailed          = 'Uninstallation failed. Error:';
+$lang->extension->confirmUninstall         = 'Uninstallation will delete or change related database. Do you want to uninstall?';
 $lang->extension->installFinished          = 'Congrats! The extension has been %sed!';
 $lang->extension->refreshPage              = 'Refresh';
 $lang->extension->uninstallFinished        = 'Extension has been uninstalled.';
@@ -78,7 +78,7 @@ $lang->extension->unremovedFiles           = 'File or direcroty cannot be delete
 $lang->extension->executeCommands          = '<h3>Execute command lines below to fix the problem:</h3>';
 $lang->extension->successDownloadedPackage = 'Extension downloaded!';
 $lang->extension->successCopiedFiles       = 'File copied!';
-$lang->extension->successInstallDB         = 'Database installed!';
+$lang->extension->successInstallDB         = 'Database is installed!';
 $lang->extension->viewInstalled            = 'Installed';
 $lang->extension->viewAvailable            = 'Available';
 $lang->extension->viewDeactivated          = 'Deactivated';
@@ -88,7 +88,7 @@ $lang->extension->noticeOkFile             = '<h5>For security reasons, your Adm
     <p>Note</p>
     <ol>
     <li>The file you will create is empty.</li>
-    <li>If there is one such file exists, delete it first, and then create yours.</li>
+    <li>If there is such file exists, delete it first, and then create ones.</li>
     </ol>'; 
 
 $lang->extension->upgradeExt     = 'Upgrade';
@@ -105,7 +105,7 @@ $lang->extension->errorDownloadPathNotWritable = 'Extensiond ownload path <stron
 $lang->extension->errorPackageFileExists       = '<strong>%s</strong> has existed in the download path.<h5> Please %s it again, <a href="%s" class="alert-link">CLICK HERE</a></h5>';
 $lang->extension->errorDownloadFailed          = 'Download failed. Please try it again. If still not OK, try to download it manually and upload it to install.';
 $lang->extension->errorMd5Checking             = 'Incomplete File. Please download it again. If still not OK, try to download it manually and upload it to install.';
-$lang->extension->errorCheckIncompatible       = 'Incompatible with this version of ZenTao. It may not be used %s later.<h5>You can choose to <a href="%s" class="btn btn-sm">force%s</a> or <a href="#" onclick=parent.location.href="%s" class="btn btn-sm">cancel</a></h5>';
+$lang->extension->errorCheckIncompatible       = 'Incompatible with your ZenTao. It may not be used %s later.<h5>You can choose to <a href="%s" class="btn btn-sm">force%s</a> or <a href="#" onclick=parent.location.href="%s" class="btn btn-sm">cancel</a></h5>';
 $lang->extension->errorFileConflicted          = '<br />%s <h5> is conflicted with others. Choose <a href="%s" class="btn btn-sm">Override</a> or <a href="#" onclick=parent.location.href="%s" class="btn btn-sm">Cancel</a></h5>';
 $lang->extension->errorPackageNotFound         = '<strong>%s </strong> is not found. Downloading might be failed. Please download it again.';
 $lang->extension->errorTargetPathNotWritable   = '<strong>%s </strong> is not writable.';
@@ -113,5 +113,5 @@ $lang->extension->errorTargetPathNotExists     = '<strong>%s </strong> is not fo
 $lang->extension->errorInstallDB               = 'Database report execution failed. Error: %s';
 $lang->extension->errorConflicts               = 'Conflicted with “%s”!';
 $lang->extension->errorDepends                 = 'Dependent extension has not been installed or the version is incorrect:<br /><br /> %s';
-$lang->extension->errorIncompatible            = 'Incompatible with this version of ZenTao.';
+$lang->extension->errorIncompatible            = 'Incompatible with your ZenTao.';
 $lang->extension->errorUninstallDepends        = '“%s” is dependent on this extension. Please do not install it.';
