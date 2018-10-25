@@ -53,7 +53,7 @@ $taskCols = array('wait', 'doing', 'pause', 'done');
 if($allCols) $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
 $account = $this->app->user->account;
 ?>
-<div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
+<div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
   <?php
   $hasTask = false;
   foreach($kanbanGroup as $group)
