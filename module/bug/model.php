@@ -1657,9 +1657,8 @@ class bugModel extends model
      */
     public function getDataOfBugsPerBuild()
     {
-        $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('openedBuild DESC')->fetchAll('name');
+        $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        ksort($datas);
         $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product, $branch = 0, $params = '');
         /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data)
@@ -1688,6 +1687,7 @@ class bugModel extends model
         {
             $data->name = isset($builds[$buildID]) ? $builds[$buildID] : $this->lang->report->undefined;
         }
+        ksort($datas);
         return $datas;
     }
 

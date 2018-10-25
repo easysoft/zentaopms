@@ -76,7 +76,7 @@ $account = $this->app->user->account;
     </p>
   </div>
   <?php else:?>
-  <table class="table table-grouped text-center">
+  <table class="table no-margin table-grouped text-center">
     <thead>
       <tr>
         <?php $hasGroupCol = (($type == 'story' and count($stories) > 0) or $type != 'story');?>

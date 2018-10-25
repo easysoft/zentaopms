@@ -19,8 +19,9 @@
   .split-row > .main-col {width: 100%!important;}
 }
 
+.side-col .tab-content {margin-right: -5px}
 .side-col .cell .nav a.setting {padding:8px;}
-.side-footer{padding:8px; background:#fff;}
+.side-footer {padding:8px; margin: 0 5px; border-top: 1px solid #ddd;}
 .col-sm-size .col-sm-5,
 .col-sm-size .col-sm-7 {width: 100%;}
 .col-sm-size .table .c-user,

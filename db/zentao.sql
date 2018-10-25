@@ -300,6 +300,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
 -- DROP TABLE IF EXISTS `zt_doclib`;
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
+  `type` varchar(30) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `name` varchar(60) NOT NULL,
@@ -356,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
 CREATE TABLE IF NOT EXISTS `zt_file` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `pathname` char(50) NOT NULL,
-  `title` char(90) NOT NULL,
+  `title` char(255) NOT NULL,
   `extension` char(30) NOT NULL,
   `size` int(10) unsigned NOT NULL default '0',
   `objectType` char(30) NOT NULL,
@@ -638,6 +639,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `realStarted` date NOT NULL,
   `finishedBy` varchar(30) NOT NULL,
   `finishedDate` datetime NOT NULL,
+  `finishedList` text NOT NULL,
   `canceledBy` varchar(30) NOT NULL,
   `canceledDate` datetime NOT NULL,
   `closedBy` varchar(30) NOT NULL,
@@ -878,8 +880,8 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
   `account` char(30) NOT NULL,
-  `products` text NOT NULL,
-  `projects` text NOT NULL,
+  `products` mediumtext NOT NULL,
+  `projects` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_entry`;

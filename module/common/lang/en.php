@@ -113,7 +113,7 @@ $lang->typeAB       = 'Type';
 $lang->common = new stdclass();
 $lang->common->common = 'Common Module';
 
-/* 主导航菜单。*/
+/* Main menu. */
 $lang->menu = new stdclass();
 $lang->menu->my      = '<span>Dashboard</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
@@ -126,7 +126,7 @@ $lang->menu->admin   = 'Admin|admin|index';
 
 $lang->dividerMenu = ',qa,';
 
-/* 查询条中可以选择的对象列表。*/
+/* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Task';
@@ -143,12 +143,12 @@ $lang->searchObjects['testsuite']   = 'Case Library';
 $lang->searchObjects['testreport']  = 'Test Report';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
-/* 导入支持的编码格式。*/
+/* Code formats for import. */
 $lang->importEncodeList['gbk']   = 'GBK';
 $lang->importEncodeList['big5']  = 'BIG5';
 $lang->importEncodeList['utf-8'] = 'UTF-8';
 
-/* 导出文件的类型列表。*/
+/* File type list for export. */
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
@@ -156,10 +156,10 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'All';
 $lang->exportTypeList['selected'] = 'Selected';
 
-/* 语言 */
+/* Language. */
 $lang->lang = 'Language';
 
-/* 风格列表。*/
+/* Theme style. */
 $lang->theme                = 'Theme';
 $lang->themes['default']    = 'ZenTao Blue (default)';
 $lang->themes['green']      = 'Green';
@@ -169,14 +169,14 @@ $lang->themes['pink']       = 'Pink';
 $lang->themes['blackberry'] = 'Blackberry';
 $lang->themes['classic']    = 'Classic';
 
-/* 首页菜单设置。*/
+/* Index menu settings. */
 $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
 $lang->index->menu->product = "{$lang->productCommon}|product|browse";
 $lang->index->menu->project = "{$lang->projectCommon}|project|browse";
 
-/* 我的地盘菜单设置。*/
+/* my dashboard menu settings. */
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
@@ -199,7 +199,7 @@ $lang->todo->menu = $lang->my->menu;
 $lang->score       = new stdclass();
 $lang->score->menu = $lang->my->menu;
 
-/* 产品视图设置。*/
+/* Product menu settings. */
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
@@ -224,7 +224,7 @@ $lang->story->menu       = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 $lang->release->menu     = $lang->product->menu;
 
-/* 项目视图菜单设置。*/
+/* Project menu settings. */
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
@@ -261,7 +261,7 @@ $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
 $lang->build->menu->qa = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
-/* QA视图菜单设置。*/
+/* QA menu settings. */
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
@@ -327,12 +327,12 @@ $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Report|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => 'Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
-/* 文档视图菜单设置。*/
+/* Doc menu settings. */
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 //$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Doc Lib|doc|createLib', 'float' => 'right');
 
-/* 统计视图菜单设置。*/
+/* Report menu settings. */
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
@@ -344,7 +344,7 @@ $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 $lang->report->notice = new stdclass();
 $lang->report->notice->help = 'Note: Report is generated from search results. Please search in the list page before you generate a report.';
 
-/* 组织结构视图菜单设置。*/
+/* Company menu settings. */
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => 'user');
@@ -361,7 +361,7 @@ $lang->dept->menu  = $lang->company->menu;
 $lang->group->menu = $lang->company->menu;
 $lang->user->menu  = $lang->company->menu;
 
-/* 后台管理菜单设置。*/
+/* Admin menu settings. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
@@ -405,7 +405,7 @@ $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
 
-/* 菜单分组。*/
+/* Menu group. */
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
@@ -439,7 +439,7 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
-/* 错误提示信息。*/
+/* Error info. */
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
@@ -465,7 +465,7 @@ $lang->error->noData          = 'No Data';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
 
-/* 分页信息。*/
+/* Page info. */
 $lang->pager = new stdclass();
 $lang->pager->noRecord     = "No Records";
 $lang->pager->digest       = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
@@ -498,7 +498,7 @@ $lang->chooseUsersToMail  = "Choose users that will be notified.";
 $lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste images here";
 
-/* 时间格式设置。*/
+/* Time formats settings. */
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
 if(!defined('DT_DATETIME2')) define('DT_DATETIME2',  'y-m-d H:i');
 if(!defined('DT_MONTHTIME1'))define('DT_MONTHTIME1', 'n/d H:i');
@@ -510,7 +510,7 @@ if(!defined('DT_DATE4'))     define('DT_DATE4',     'n/j');
 if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
 
-/* datepicker 时间*/
+/* Datepicker. */
 $lang->datepicker = new stdclass();
 
 $lang->datepicker->dpText = new stdclass();
@@ -532,7 +532,7 @@ $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesda
 $lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat');
 $lang->datepicker->monthNames   = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
-/* Common action icons 通用动作图标 */
+/* Common action icons. */
 $lang->icons['todo']      = 'check';
 $lang->icons['product']   = 'cube';
 $lang->icons['bug']       = 'bug';

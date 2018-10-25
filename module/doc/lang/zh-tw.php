@@ -99,6 +99,10 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . '文檔庫';
 $lang->doc->libTypeList['project'] = $lang->projectCommon . '文檔庫';
 $lang->doc->libTypeList['custom']  = '自定義文檔庫';
 
+$lang->doc->libIconList['product'] = 'icon-cube';
+$lang->doc->libIconList['project'] = 'icon-stack';
+$lang->doc->libIconList['custom']  = 'icon-folder-o';
+
 $lang->doc->systemLibs['product'] = $lang->productCommon;
 $lang->doc->systemLibs['project'] = $lang->projectCommon;
 
@@ -135,6 +139,10 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = '顯示附件庫';
 $lang->doc->customObjectLibs['customFiles'] = '顯示自定義文檔庫';
 
+$lang->doc->customShowLibs = '文檔庫顯示設置';
+$lang->doc->customShowLibsList['zero']     = '顯示空文檔的庫';
+$lang->doc->customShowLibsList['unclosed'] = '顯示未關閉的項目';
+
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
 $lang->doc->confirmDeleteLib   = "您確定刪除該文檔庫嗎？";
 $lang->doc->errorEditSystemDoc = "系統文檔庫無需修改。";
@@ -165,3 +173,9 @@ $lang->doclib->product = $lang->productCommon . '庫';
 
 $lang->doclib->main['product'] = $lang->productCommon . '主庫';
 $lang->doclib->main['project'] = $lang->projectCommon . '主庫';
+
+$lang->doclib->tabList['product'] = $lang->productCommon;
+$lang->doclib->tabList['project'] = $lang->projectCommon;
+$lang->doclib->tabList['custom']  = '自定義';
+
+$lang->doclib->nameList['custom'] = '自定義文檔庫名稱';

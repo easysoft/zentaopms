@@ -2,14 +2,27 @@ $(function()
 {
     var adjustBoardsHeight = function()
     {
-        $('.c-boards').each(function()
+        var $cBoards = $('.c-boards');
+        if ($cBoards.length === 1)
         {
-            var height = $(window).height() - $('#header').height() - $('#footer').height() - 40 - 105;
-            var $boardsWrapper = $(this).find('.boards-wrapper');
-            $boardsWrapper.height(height);
+            var $boardsWrapper = $cBoards.find('.boards-wrapper');
+            $boardsWrapper.css('min-height', $(window).height() - $('#header').height() - $('#footer').height() - 111);
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
-                $boardsWrapper.find('.boards').css('height', $(this).height() - 1);
+                $boardsWrapper.find('.boards').css('min-height', $boardsWrapper.height() - 1);
+            }
+            return
+        }
+        $cBoards.each(function()
+        {
+            var $theBoards = $(this);
+            var height = $(window).height() - $('#header').height() - $('#footer').height() - 111;
+            var $boardsWrapper = $theBoards.find('.boards-wrapper');
+            var minHeight = Math.min($theBoards.prev().outerHeight() - 1, height);
+            $boardsWrapper.css({maxHeight: height, minHeight: minHeight});
+            if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
+            {
+                $boardsWrapper.find('.boards').css({maxHeight: $theBoards.height(), minHeight: minHeight});
             }
         });
     };
@@ -71,7 +84,7 @@ $(function()
     var scrollbarWidth = getScrollbarWidth();
     var fixBoardWidth = function()
     {
-        var $table = $kanban.find('.table');
+        var $table = $kanban.children('.table:first');
         var kanbanWidth = $table.width();
         var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
         var boardCount = $cBoards.length;
@@ -84,26 +97,32 @@ $(function()
         $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
     };
     fixBoardWidth();
-    $(window).on('resize', fixBoardWidth);
 
-    var refresh = function()
+    var updateUI = function()
+    {
+        fixBoardWidth();
+        adjustBoardsHeight();
+        $kanban.data('zui.table').updateFixUI();
+    };
+
+    $(window).on('resize', updateUI);
+
+    var refresh = function(force)
     {
         var selfClose = $.cookie('selfClose');
         $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban', function()
+        if(selfClose == 1 || force)
         {
-            fixBoardWidth();
-            adjustBoardsHeight();
-        });
+            $kanban.load(location.href + ' #kanban', updateUI);
+        }
     };
+    window.refreshKanban = refresh;
 
     var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
-    var lastOperation;
     var dropTo = function(id, from, to, type)
     {
         if(statusMap[type][from] && statusMap[type][from][to])
         {
-            lastOperation = {id: id, from: from, to: to};
             kanbanModalTrigger.show(
             {
                 url: $.createLink(type, statusMap[type][from][to], 'id=' + id) + onlybody,

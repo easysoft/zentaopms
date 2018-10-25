@@ -9,9 +9,8 @@ $sessionString .= session_name() . '=' . session_id();
   <div class="detail-content">
 <?php endif;?>
   <style>
-  .files-list>li>a {display: inline;}
+  .files-list>li>a {display: inline; word-wrap: break-word;}
   .files-list>li>.right-icon {opacity: 1;}
-  .files-list>li>a{word-wrap: break-word;}
   </style>
   <script>
   /* Delete a file. */
