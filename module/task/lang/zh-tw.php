@@ -84,6 +84,7 @@ $lang->task->finishedBy       = '由誰完成';
 $lang->task->finishedByAB     = '完成者';
 $lang->task->finishedDate     = '完成時間';
 $lang->task->finishedDateAB   = '完成時間';
+$lang->task->finishedList     = '完成者列表';
 $lang->task->canceledBy       = '由誰取消';
 $lang->task->canceledDate     = '取消時間';
 $lang->task->closedBy         = '由誰關閉';

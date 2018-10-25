@@ -32,9 +32,10 @@ $lang->webhook->date        = '發送時間';
 $lang->webhook->data        = '數據';
 $lang->webhook->result      = '結果';
 
+$lang->webhook->typeList['']          = '';
 $lang->webhook->typeList['bearychat'] = '倍洽';
 $lang->webhook->typeList['dingding']  = '釘釘';
-$lang->webhook->typeList['default']   = '預設';
+$lang->webhook->typeList['default']   = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '非同步';
