@@ -1,5 +1,6 @@
 $(function()
 {
+    var isFirefox = $.zui.browser.firefox;
     var adjustBoardsHeight = function()
     {
         var $cBoards = $('.c-boards');
@@ -9,7 +10,7 @@ $(function()
             $boardsWrapper.css('min-height', $(window).height() - $('#header').height() - $('#footer').height() - 111);
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
-                $boardsWrapper.find('.boards').css('min-height', $boardsWrapper.height() - 1);
+                $boardsWrapper.find('.boards').css(isFirefox ? 'height' : 'min-height', $boardsWrapper.height() - 1);
             }
             return
         }
@@ -22,7 +23,9 @@ $(function()
             $boardsWrapper.css({maxHeight: height, minHeight: minHeight});
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
-                $boardsWrapper.find('.boards').css({maxHeight: $theBoards.height(), minHeight: minHeight});
+                var $boards = $boardsWrapper.find('.boards');
+                $boards.css({maxHeight: $theBoards.height(), minHeight: minHeight});
+                if ($boards.outerHeight() < minHeight) $boards.css('height', minHeight);
             }
         });
     };
@@ -89,12 +92,12 @@ $(function()
         var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
         var boardCount = $cBoards.length;
         var $cSide = $table.find('thead>tr>th.c-board.c-side');
-        var totalWidth = kanbanWidth - scrollbarWidth;
+        var totalWidth = kanbanWidth - scrollbarWidth - 1;
         if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
-        var cBoardWidth = Math.floor(totalWidth/boardCount) - 16;
+        var cBoardWidth = Math.floor(totalWidth/boardCount);
         $cBoards.not(':last').width(cBoardWidth);
-        $cBoards.first().width(cBoardWidth + 5);
-        $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
+        if ($cSide.length) $cBoards.first().width(cBoardWidth + (isFirefox ? 0 : 5));
+        $kanban.find('.boards > .board').width(cBoardWidth - (isFirefox ? 21 : 22));
     };
     fixBoardWidth();
 
