@@ -13,6 +13,7 @@ $lang->misc = new stdclass();
 $lang->misc->common = '雜項';
 $lang->misc->ping   = '防超時';
 $lang->misc->api    = 'https://api.zentao.net';
+$lang->misc->enApi  = 'http://api.zentao.pm';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
@@ -58,6 +59,7 @@ $lang->misc->checkTable  = "檢查修復數據表";
 $lang->misc->needRepair  = "修復表";
 $lang->misc->repairTable = "資料庫表可能因為斷電原因損壞，需要檢查修復！！";
 $lang->misc->repairFail  = "修復失敗，請到該資料庫的數據目錄下，嘗試執行<code>myisamchk -r -f %s.MYI</code>進行修復。";
+$lang->misc->connectFail = "連接資料庫失敗，錯誤：%s，<br/> 請檢查mysql錯誤日誌，排查錯誤。";
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "狀態";
 $lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";
@@ -74,6 +76,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->releaseDate['10.5.stable'] = '2018-10-25';
 $lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
 $lang->misc->releaseDate['10.3.stable'] = '2018-08-10';
 $lang->misc->releaseDate['10.2.stable'] = '2018-08-02';
@@ -91,6 +94,9 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'調整文檔顯示', 'desc' => '<p>調整文檔庫左側的佈局方式</p><p>文檔庫左側導航底部增加篩選條件</p>');
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'調整子任務邏輯，優化父子任務顯示。', 'desc' => '');
 
 $lang->misc->feature->all['10.4.stable'][] = array('title'=>'優化調整新界面', 'desc' => '<p>詳情頁面還原我們之前的排版佈局</p><p>重構添加用戶頁面的表單</p><p>用例執行時，如果用戶手工選擇了通過，寫結果的時候不要更新用例狀態</p>');
 $lang->misc->feature->all['10.4.stable'][] = array('title'=>'用戶機器休眠登錄失效後，重新刷新session', 'desc' => '');

@@ -372,9 +372,9 @@ $(function()
             });
             return checkedSummary.replace('%total%', checkedTotal).replace('%wait%', checkedWait)
               .replace('%doing%', checkedDoing)
-              .replace('%estimate%', checkedEstimate)
-              .replace('%consumed%', checkedConsumed)
-              .replace('%left%', checkedLeft);
+              .replace('%estimate%', checkedEstimate.toFixed(1))
+              .replace('%consumed%', checkedConsumed.toFixed(1))
+              .replace('%left%', checkedLeft.toFixed(1));
         }
     })
 });

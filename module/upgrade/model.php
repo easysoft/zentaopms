@@ -238,6 +238,7 @@ class upgradeModel extends model
                 $this->removeCustomMenu();
                 $this->initUserView();
             case '10_4':
+                $this->execSQL($this->getUpgradeFile('10.4'));
                 $this->changeTaskParentValue();
         }
 
@@ -354,6 +355,7 @@ class upgradeModel extends model
             case '10_2':
             case '10_3':
             case '10_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('10.3.1'));
+            case '10_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('10.4'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2412,7 +2414,7 @@ class upgradeModel extends model
      */
     public function changeTaskParentValue()
     {
-        $tasks = $this->dao->select(TABLE_TASK)->where('parent')->gt(0)->fetchGroup('parent');
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->gt(0)->fetchGroup('parent');
         if($tasks)
         {
             $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->in($tasks)->exec();
