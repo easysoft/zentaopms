@@ -15,12 +15,14 @@ $(function()
         }
         $cBoards.each(function()
         {
+            var $theBoards = $(this);
             var height = $(window).height() - $('#header').height() - $('#footer').height() - 111;
-            var $boardsWrapper = $(this).find('.boards-wrapper');
-            $boardsWrapper.css('max-height', height);
+            var $boardsWrapper = $theBoards.find('.boards-wrapper');
+            var minHeight = Math.min($theBoards.prev().outerHeight() - 1, height);
+            $boardsWrapper.css({maxHeight: height, minHeight: minHeight});
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
-                $boardsWrapper.find('.boards').css('max-height', $(this).height() - 1);
+                $boardsWrapper.find('.boards').css({maxHeight: $theBoards.height(), minHeight: minHeight});
             }
         });
     };
@@ -82,7 +84,7 @@ $(function()
     var scrollbarWidth = getScrollbarWidth();
     var fixBoardWidth = function()
     {
-        var $table = $kanban.find('.table');
+        var $table = $kanban.children('.table:first');
         var kanbanWidth = $table.width();
         var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
         var boardCount = $cBoards.length;
@@ -95,18 +97,26 @@ $(function()
         $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
     };
     fixBoardWidth();
-    $(window).on('resize', fixBoardWidth);
 
-    var refresh = function()
+    var updateUI = function()
+    {
+        fixBoardWidth();
+        adjustBoardsHeight();
+        $kanban.data('zui.table').updateFixUI();
+    };
+
+    $(window).on('resize', updateUI);
+
+    var refresh = function(force)
     {
         var selfClose = $.cookie('selfClose');
         $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban', function()
+        if(selfClose == 1 || force)
         {
-            fixBoardWidth();
-            adjustBoardsHeight();
-        });
+            $kanban.load(location.href + ' #kanban', updateUI);
+        }
     };
+    window.refreshKanban = refresh;
 
     var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
     var dropTo = function(id, from, to, type)
