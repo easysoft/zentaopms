@@ -708,7 +708,7 @@ class docModel extends model
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
-        if($type == 'index' || $type == 'objectLibs') 
+        if($type == 'index' || $type == 'objectLibs' || $libID == 0) 
         {
             unset($this->config->doc->search['fields']['module']);
             unset($this->config->doc->search['fields']['lib']);
