@@ -1520,7 +1520,7 @@ class taskModel extends model
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
-        $parents = [];
+        $parents = array();
         foreach($tasks as $task)
         {
             if($task->parent == -1) $parents[] = $task->id;
