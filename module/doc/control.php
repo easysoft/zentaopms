@@ -97,7 +97,7 @@ class doc extends control
             $projectID = $lib->project;
         }
 
-        $this->libs = $this->doc->getLibs($type);
+        $this->libs = $this->doc->getLibs($type, '', $libID);
 
         /* According the from, set menus. */
         if($from == 'product')

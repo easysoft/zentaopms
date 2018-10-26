@@ -69,7 +69,7 @@ class docModel extends model
 
                 if($currentLib)
                 {
-                    $allLibGroups   = $this->getAllLibGroups();
+                    $allLibGroups   = $this->getAllLibGroups($currentLib);
                     $currentGroups  = $allLibGroups[$type];
                     $currentLibName = is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib];
 
@@ -126,10 +126,13 @@ class docModel extends model
     /**
      * Get libraries.
      *
+     * @param  string $type
+     * @param  string $extra
+     * @param  string $appendLibs
      * @access public
-     * @return array
+     * @return void
      */
-    public function getLibs($type = '', $extra = '')
+    public function getLibs($type = '', $extra = '', $appendLibs = '')
     {
         if($type == 'product' or $type == 'project')
         {
@@ -159,6 +162,16 @@ class docModel extends model
         {
             if($this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
         }
+
+        if(!empty($appendLibs))
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
+            while($lib = $stmt->fetch())
+            {
+                if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
+            }
+        }
+
         return $libPairs;
     }
 
@@ -708,7 +721,7 @@ class docModel extends model
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
-        if($type == 'index' || $type == 'objectLibs' || $libID == 0) 
+        if($type == 'index' || $type == 'objectLibs' || $libID == 0)
         {
             unset($this->config->doc->search['fields']['module']);
             unset($this->config->doc->search['fields']['lib']);
@@ -933,12 +946,13 @@ class docModel extends model
     /**
      * Get all lib groups.
      *
+     * @param  string $appendLibs
      * @access public
-     * @return array
+     * @return void
      */
-    public function getAllLibGroups()
+    public function getAllLibGroups($appendLibs = '')
     {
-        $libs = $this->getLibs('all');
+        $libs = $this->getLibs('all', '', $appendLibs);
         $stmt = $this->dao->select("id,type,product,project,name")->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->andWhere("id")->in(array_keys($libs))
@@ -977,7 +991,6 @@ class docModel extends model
             $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->in($productIdList)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs('product', 'product');
         }
@@ -1001,7 +1014,6 @@ class docModel extends model
         }
         $projects = $this->dao->select('id,name,status')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projectLibs))
-            ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('`order`_desc')
             ->fetchAll();
@@ -1039,7 +1051,7 @@ class docModel extends model
         if($type == 'product' or $type == 'project')
         {
             $nonzeroLibs = array();
-            if(strpos($this->config->doc->custom->showLibs, 'zero') !== false)
+            if(strpos($this->config->doc->custom->showLibs, 'zero') === false)
             {
                 $nonzeroLibs = $this->dao->select('lib,count(*) as count')->from(TABLE_DOC)->where('deleted')->eq('0')->groupBy('lib')->having('count')->ne(0)->fetchPairs('lib', 'lib');
             }
@@ -1049,7 +1061,7 @@ class docModel extends model
                 ->leftJoin($table)->alias('t2')->on("t1.$type=t2.id")
                 ->where('t1.deleted')->eq(0)->andWhere("t1.$type")->ne(0)
                 ->beginIF($type == 'project' and strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'zero') !== false)->andWhere('t1.id')->in($nonzeroLibs)->fi()
+                ->beginIF(strpos($this->config->doc->custom->showLibs, 'zero') === false)->andWhere('t1.id')->in($nonzeroLibs)->fi()
                 ->orderBy("t2.`order` desc, t1.`order` asc, id desc")
                 ->query();
         }
@@ -1477,7 +1489,7 @@ class docModel extends model
      * Build doc bread title.
      *
      * @access public
-     * @return string 
+     * @return string
      */
     public function buildCrumbTitle($libID = 0, $param = 0, $title = '')
     {
@@ -1491,7 +1503,7 @@ class docModel extends model
         foreach($parantMoudles as $parentID => $moduleName)
         {
             $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " <i class='icon icon-chevron-right'></i> " . $moduleName->name , '');
-        } 
+        }
 
         return $title;
     }
