@@ -17,7 +17,7 @@ $config->doc->notArticleType   = '';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
-$config->doc->custom->showLibs   = '';
+$config->doc->custom->showLibs   = 'zero';
 
 $config->doc->editor = new stdclass();
 $config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');
