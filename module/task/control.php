@@ -1394,7 +1394,7 @@ class task extends control
                 if(isset($users[$task->closedBy]))     $task->closedBy     = $users[$task->closedBy];
                 if(isset($users[$task->lastEditedBy])) $task->lastEditedBy = $users[$task->lastEditedBy];
 
-                if($task->parent > 0) $task->name = '>' . $task->name;
+                if($task->parent > 0 && strpos($task->name, htmlentities('>')) !== 0) $task->name = '>' . $task->name;
                 if(!empty($task->team))   $task->name = '[' . $taskLang->multipleAB . '] ' . $task->name;
 
                 $task->openedDate     = substr($task->openedDate,     0, 10);
