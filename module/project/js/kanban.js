@@ -116,7 +116,7 @@ $(function()
         $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
         if(selfClose == 1 || force)
         {
-            $kanban.load(location.href + ' #kanban', updateUI);
+            $kanban.load(location.href + ' #kanban>*', updateUI);
         }
     };
     window.refreshKanban = refresh;
