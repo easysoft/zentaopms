@@ -9,7 +9,7 @@ function loadAllUsers()
     var link = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val());
     $.get(link, function(data)
     {
-        if (data)
+        if(data)
         {
             var moduleID  = $('#module').val();
             var productID = $('#product').val();
