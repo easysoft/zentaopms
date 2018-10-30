@@ -30,6 +30,9 @@
     </div>
     <?php endif;?>
   </div>
+  <div class='pull-right'>
+    <?php echo html::submitButton($lang->export, "onclick='downloadBurn();'", 'btn btn-primary');?>
+  </div>
 </div>
 <div id='mainContent' class='main-content'>
   <h2 class='text-center'><?php echo $projectName . ' ' . $this->lang->project->burn;?></h2>
