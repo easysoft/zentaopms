@@ -47,7 +47,7 @@
       </ul>
     </div>
     <?php
-    $misc = "class='btn btn-link iframe" . (common::hasPriv('task', 'export', $project) ? '' : ' dissabled') . "' data-width='700'";
+    $misc = "class='btn btn-link iframe" . (common::hasPriv('task', 'export', $project) ? '' : ' disabled') . "' data-width='700'";
     $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=tree") : '#';
     echo html::a($link, "<i class='icon icon-export muted'></i> <span class='text'>{$lang->export}</span>", '', $misc);
 

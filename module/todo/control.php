@@ -389,7 +389,9 @@ class todo extends control
                 $this->send($response);
             }
             if(isonlybody())die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
+
+            $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
+            die(js::locate($browseLink, 'parent'));
         }
     }
 

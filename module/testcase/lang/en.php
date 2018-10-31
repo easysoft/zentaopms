@@ -141,6 +141,7 @@ $lang->testcase->dittoNotice        = 'This Case does not belong to the Product 
 $lang->testcase->reviewList[0] = 'NO';
 $lang->testcase->reviewList[1] = 'YES';
 
+$lang->testcase->priList[0] = '';
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
 $lang->testcase->priList[2] = 2;

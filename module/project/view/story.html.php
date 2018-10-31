@@ -82,7 +82,7 @@
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div id='queryBox' class='cell <?php if($type =='bySearch') echo 'show';?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
@@ -307,9 +307,6 @@ $(function()
                   .replace('%rate%', rate);
         }
     });
-    <?php if(!$stories):?>
-    $("#main").addClass('hide-sidebar');
-    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

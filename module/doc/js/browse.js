@@ -20,7 +20,6 @@ $(function()
     if(browseType == 'byediteddate' || browseType == 'openedbyme' || browseType == 'collectedbyme') 
     {
         $('#pageActions ul.dropdown-menu').css('left', '0px');
-        $('#bysearchTab').remove();
     }
     $('#' + browseType + 'Tab').addClass('active');
 });

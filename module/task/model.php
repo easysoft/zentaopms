@@ -1169,7 +1169,6 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
-            ->setDefault('finishedDate, lastEditedDate', $now)
             ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
             ->remove('comment,files,labels')
             ->get();
@@ -1521,7 +1520,7 @@ class taskModel extends model
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
 
-        $parents = [];
+        $parents = array();
         foreach($tasks as $task)
         {
             if($task->parent == -1) $parents[] = $task->id;
@@ -2351,7 +2350,7 @@ class taskModel extends model
         if($action == 'assignto'       and !empty($task->children)) return false;
         if($action == 'close'          and !empty($task->children)) return false;
         if($action == 'batchcreate'    and !empty($task->team))     return false;
-        if($action == 'batchcreate'    and $task->parent)           return false;
+        if($action == 'batchcreate'    and $task->parent > 0)       return false;
 
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';

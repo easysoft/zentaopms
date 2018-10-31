@@ -38,16 +38,23 @@ var browseType = '<?php echo $browseType;?>';
           <i class="icon icon-search text-muted"></i>
           <?php endif;?>
           <?php echo $breadTitle;?>
-
+        </div>
+        <nav class="panel-actions btn-toolbar">
           <div class="btn-group">
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
           </div>
-        </div>
-        <nav class="panel-actions btn-toolbar">
-          <div class="btn-group">
-            <?php echo html::a(helper::createLink('tree', 'browse', "libID=$libID&viewType=doc"), "<i class='icon icon-cog'></i>" . $lang->doc->manageType, '',"class='btn btn-link'");?>
+          <?php if($libID):?>
+          <div class="dropdown">
+            <button class="btn" type="button" data-toggle="dropdown"><i class='icon-cog'></i> <span class="caret"></span></button>
+            <ul class='dropdown-menu'>
+              <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
+              <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->edit, '', "class='iframe'");?></li>
+              <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-close'></i>" . $lang->delete, 'hiddenwin');?></li>
+            </ul>
           </div>
+          <?php common::printLink('doc', 'create', "libID=$libID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>
+          <?php endif;?>
         </nav>
       </div>
       <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
@@ -80,7 +87,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="c-actions-4"><?php echo $lang->actions;?></th>
+              <th class="w-90px"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>
@@ -103,11 +110,11 @@ var browseType = '<?php echo $browseType;?>';
             <?php endforeach;?>
             <?php endif;?>
             <?php if(!empty($attachLibs)):?>
-            <?php foreach($attachLibs as $libID => $attachLib):?>
+            <?php foreach($attachLibs as $libType => $attachLib):?>
             <tr>
-              <?php if($libID == 'project'):?>
+              <?php if($libType == 'project'):?>
               <td class="c-name"><?php echo html::a(inlink('allLibs', "type=project&product={$currentLib->product}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
-              <?php elseif($libID == 'files'):?>
+              <?php elseif($libType == 'files'):?>
               <td class="c-name"><?php echo html::a(inlink('showFiles', "type=$type&objectID={$currentLib->$type}"), "<i class='icon icon-folder text-yellow'></i> &nbsp;" . $attachLib->name);?></td>
               <?php endif;?>
               <td class="c-num"></td>

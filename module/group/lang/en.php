@@ -10,15 +10,15 @@
  * @link        http://www.zentao.net
  */
 $lang->group->common             = 'Privilege';
-$lang->group->browse             = 'Group Privilges';
+$lang->group->browse             = 'Group Privilge';
 $lang->group->create             = 'Add Group';
 $lang->group->edit               = 'Edit';
 $lang->group->copy               = 'Copy';
 $lang->group->delete             = 'Delete';
 $lang->group->manageView         = 'View';
-$lang->group->managePriv         = 'Batch Assign Privileges';
+$lang->group->managePriv         = 'Batch Assign Privilege';
 $lang->group->managePrivByGroup  = 'Privilege';
-$lang->group->managePrivByModule = 'Module Privileges';
+$lang->group->managePrivByModule = 'Module Privilege';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Member';
 $lang->group->confirmDelete      = 'Do you want to delete this User Group?';

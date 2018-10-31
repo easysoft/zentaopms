@@ -2416,7 +2416,7 @@ class storyModel extends model
                 echo substr($story->assignedDate, 5, 11);
                 break;
             case 'reviewedBy':
-                echo zget($users, $story->reviewedBy, $story->reviewedBy);
+                foreach(explode(',', $story->reviewedBy) as $user) echo zget($users, $user) . ' ';
                 break;
             case 'reviewedDate':
                 echo substr($story->reviewedDate, 5, 11);

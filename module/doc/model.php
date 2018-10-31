@@ -69,7 +69,7 @@ class docModel extends model
 
                 if($currentLib)
                 {
-                    $allLibGroups   = $this->getAllLibGroups();
+                    $allLibGroups   = $this->getAllLibGroups($currentLib);
                     $currentGroups  = $allLibGroups[$type];
                     $currentLibName = is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib];
 
@@ -103,7 +103,6 @@ class docModel extends model
 
             $actions  = $this->setFastMenu($fastLib);
             $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
-            if($libID and common::hasPriv('doc', 'create')) $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID"), "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");
 
             $this->lang->modulePageActions = $actions;
         }
@@ -127,10 +126,13 @@ class docModel extends model
     /**
      * Get libraries.
      *
+     * @param  string $type
+     * @param  string $extra
+     * @param  string $appendLibs
      * @access public
-     * @return array
+     * @return void
      */
-    public function getLibs($type = '', $extra = '')
+    public function getLibs($type = '', $extra = '', $appendLibs = '')
     {
         if($type == 'product' or $type == 'project')
         {
@@ -160,6 +162,16 @@ class docModel extends model
         {
             if($this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
         }
+
+        if(!empty($appendLibs))
+        {
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
+            while($lib = $stmt->fetch())
+            {
+                if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
+            }
+        }
+
         return $libPairs;
     }
 
@@ -284,6 +296,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('addedBy')->eq($this->app->user->account)
                 ->orderBy($sort)
                 ->page($pager)
@@ -296,6 +309,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('product')->eq(0)->fi()
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->andWhere('id')->in($docIdList)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('lib')->in($allLibs)
                 ->orderBy('editedDate_desc')
                 ->page($pager)
@@ -309,6 +323,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
                 ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('collector')->like("%,{$this->app->user->account},%")
                 ->orderBy($sort)
                 ->page($pager)
@@ -352,7 +367,8 @@ class docModel extends model
             $docQuery  = str_replace("`lib` = 'all'", '1', $docQuery);                // Search all lib.
 
             $docs = $this->dao->select('*')->from(TABLE_DOC)->where($docQuery)
-                ->beginIF(!$libCond)->andWhere("lib")->eq($libID)->fi()
+                ->beginIF(!$libCond and $libID != 0)->andWhere("lib")->eq($libID)->fi()
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchAll('id');
             foreach($docs as $docID => $doc)
@@ -377,6 +393,7 @@ class docModel extends model
                 ->beginIF($this->config->global->flow == 'onlyStory' || $this->config->global->flow == 'onlyTest')->andWhere('project')->eq(0)->fi()
                 ->beginIF(!empty($docIdList))->andWhere('t1.id')->in($docIdList)->fi()
                 ->andWhere('t1.title', true)->like("%{$this->session->searchDoc}%")
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
                 ->orWhere('t2.content')->like("%{$this->session->searchDoc}%")->markRight(1)
                 ->andWhere('t1.lib')->in($allLibs)
                 ->orderBy($sort)
@@ -454,6 +471,7 @@ class docModel extends model
     {
         $stmt = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
             ->beginIF(!empty($module))->andWhere('module')->in($module)->fi()
             ->query();
@@ -703,6 +721,12 @@ class docModel extends model
         $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
+        if($type == 'index' || $type == 'objectLibs' || $libID == 0)
+        {
+            unset($this->config->doc->search['fields']['module']);
+            unset($this->config->doc->search['fields']['lib']);
+        }
+
         $this->loadModel('search')->setSearchParams($this->config->doc->search);
     }
 
@@ -922,12 +946,13 @@ class docModel extends model
     /**
      * Get all lib groups.
      *
+     * @param  string $appendLibs
      * @access public
-     * @return array
+     * @return void
      */
-    public function getAllLibGroups()
+    public function getAllLibGroups($appendLibs = '')
     {
-        $libs = $this->getLibs('all');
+        $libs = $this->getLibs('all', '', $appendLibs);
         $stmt = $this->dao->select("id,type,product,project,name")->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->andWhere("id")->in(array_keys($libs))
@@ -966,7 +991,6 @@ class docModel extends model
             $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->in($productIdList)
-                ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs('product', 'product');
         }
@@ -990,7 +1014,6 @@ class docModel extends model
         }
         $projects = $this->dao->select('id,name,status')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projectLibs))
-            ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('`order`_desc')
             ->fetchAll();
@@ -1466,9 +1489,9 @@ class docModel extends model
      * Build doc bread title.
      *
      * @access public
-     * @return string 
+     * @return string
      */
-    public function buildBreadTitle($libID = 0, $param = 0, $title = '')
+    public function buildCrumbTitle($libID = 0, $param = 0, $title = '')
     {
         $path = $this->dao->select('path')->from(TABLE_MODULE)->where('id')->eq($param)->fetch('path');
 
@@ -1479,10 +1502,8 @@ class docModel extends model
 
         foreach($parantMoudles as $parentID => $moduleName)
         {
-            $active = '';
-            if($param == $parentID) $active = "class='active'";
-            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " {$this->lang->doc->gt} " . $moduleName->name , '', "$active");
-        } 
+            $title .= html::a(helper::createLink('doc', 'browse', "libID=$libID&browseType=byModule&param={$parentID}"), " <i class='icon icon-chevron-right'></i> " . $moduleName->name , '');
+        }
 
         return $title;
     }
@@ -1490,8 +1511,8 @@ class docModel extends model
     public function setFastMenu($fastLib)
     {
         $actions  = '';
-        if($this->app->methodName == 'browse') $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
-        $actions .= "<a data-toggle='dropdown' class='btn btn-secondary' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
+        $actions .= '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+        $actions .= "<a data-toggle='dropdown' class='btn btn-link' title=$fastLib>" . $fastLib . " <span class='caret'></span></a>";
         $actions .= "<ul class='dropdown-menu'>";
         foreach($this->lang->doc->fastMenuList as $key => $fastMenu)
         {
