@@ -1472,8 +1472,8 @@ class story extends control
                     $story->verify = str_replace('&nbsp;', ' ', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))      $story->product = $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module])) $story->module  = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($products[$story->product]))      $story->product = $this->post->fileType == 'word' ? $products[$story->product] : $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module])) $story->module  = $this->post->fileType == 'word' ? $relatedModules[$story->module] : $relatedModules[$story->module] . "(#$story->module)";
                 if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
                 if(isset($story->plan))
                 {
@@ -1481,7 +1481,7 @@ class story extends control
                     foreach(explode(',', $story->plan) as $planID)
                     {
                         if(empty($planID)) continue;
-                        if(isset($relatedPlans[$planID])) $plans .= $relatedPlans[$planID] . "(#$planID)";
+                        if(isset($relatedPlans[$planID])) $plans .= $this->post->fileType == 'word' ? $relatedPlans[$planID] : $relatedPlans[$planID] . "(#$planID)";
                     }
                     $story->plan = $plans;
                 }

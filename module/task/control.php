@@ -1278,7 +1278,7 @@ class task extends control
                     $task->progress .= '%';
                 }
             }
-            else
+            elseif($this->session->taskQueryCondition)
             {
                 $stmt = $this->dbh->query($this->session->taskQueryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
                 while($row = $stmt->fetch()) $tasks[$row->id] = $row;
@@ -1307,7 +1307,7 @@ class task extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
 
-            if(!$this->session->taskWithChildren)
+            if(!$this->session->taskWithChildren and $tasks)
             {
                 $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
                     ->andWhere('parent')->ne(0)
@@ -1359,8 +1359,14 @@ class task extends control
 
             if($type == 'group')
             {
+                $stories    = $this->loadModel('story')->getProjectStories($projectID);
                 $groupTasks = array();
-                foreach($tasks as $task) $groupTasks[$task->$orderBy][] = $task;
+                foreach($tasks as $task)
+                {
+                    $task->storyTitle = isset($stories[$task->story]) ? $stories[$task->story]->title : '';
+                    $groupTasks[$task->$orderBy][] = $task;
+                }
+
                 $tasks = array();
                 foreach($groupTasks as $groupTask)
                 {
@@ -1424,6 +1430,7 @@ class task extends control
 
         $this->view->allExportFields = $allExportFields;
         $this->view->customExport    = true;
+        $this->view->orderBy         = $orderBy;
         $this->view->type            = $type;
         $this->view->projectID       = $projectID;
         $this->display();
