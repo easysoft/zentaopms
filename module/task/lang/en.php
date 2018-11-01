@@ -39,6 +39,7 @@ $lang->task->confirmStoryChange  = "Confirm Story Change";
 $lang->task->progress            = 'Progress';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
 $lang->task->copy                = 'Duplicate Task';
+$lang->task->undoneTask          = 'Undone Task';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';
