@@ -54,13 +54,13 @@ $lang->public       = 'Public';
 $lang->trunk        = 'Trunk';
 $lang->sort         = 'Sort';
 $lang->required     = 'Required';
-$lang->noData       = 'No record';
+$lang->noData       = 'No data.';
 
 $lang->actions         = 'Actions';
 $lang->restore         = 'Restore';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
-$lang->attatch         = 'Attachment';
+$lang->attatch         = 'File';
 $lang->reverse         = 'Reverse';
 $lang->switchDisplay   = 'Toggle';
 $lang->expand          = 'Expand All';
@@ -342,7 +342,7 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report is generated from search results. Please search in the list page before you generate a report.';
+$lang->report->notice->help = 'Note: Report is generated from search results. Please search in the list before you generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
@@ -467,7 +467,7 @@ $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Pleas
 
 /* Page info. */
 $lang->pager = new stdclass();
-$lang->pager->noRecord     = "No Records";
+$lang->pager->noRecord     = "No records.";
 $lang->pager->digest       = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
 $lang->pager->recPerPage   = " <strong>%s</strong> per page";
 $lang->pager->first        = "<i class='icon-step-backward' title='Home'></i>";
@@ -487,15 +487,15 @@ $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <fo
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->pasteTextInfo   = "Paste text here. Each line will be the title of each record. ";
 $lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
-$lang->importConfirm   = "Import Confirm";
+$lang->importConfirm   = "Confirm";
 $lang->importAndCover  = "Override";
-$lang->importAndInsert = "New Insertion";
+$lang->importAndInsert = "Insert";
 
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users that will be notified.";
-$lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
+$lang->browserNotice      = 'Your current browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste images here";
 
 /* Time formats settings. */
@@ -732,7 +732,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->subMenu->more->longlifebugs  = 'Pending|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
     $lang->bug->subMenu->more->postponedbugs = 'PostPoned|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->subMenu->more->overduebugs   = 'Overdue|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
-    $lang->bug->subMenu->more->needconfirm   = 'NeedConfirm|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
+    $lang->bug->subMenu->more->needconfirm   = 'ToConfirm|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
 
     $lang->bug->menuOrder[5]  = 'product';
     $lang->bug->menuOrder[10] = 'all';
