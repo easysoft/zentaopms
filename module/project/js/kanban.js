@@ -197,7 +197,15 @@ $(function()
 
     $.extend({'closeModal':function(callback, location)
     {
-        kanbanModalTrigger.close();
+        var ref = $('#triggerModal.modal').attr('ref');
+        if(ref.indexOf('export') > 0 && ref.indexOf('kanban') > 0)
+        {
+            $('#triggerModal').modal('hide');
+        }
+        else
+        {
+            kanbanModalTrigger.close();
+        }
         if(callback && $.isFunction(callback)) callback();
     }});
 });
