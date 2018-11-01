@@ -18,13 +18,13 @@ $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Cases";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
-$lang->testsuite->batchUnlinkCases = "Batch unlink cases";
-$lang->testsuite->deleted          = 'deleted';
+$lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
+$lang->testsuite->deleted          = 'Deleted';
 $lang->testsuite->exportTemplet    = 'Export template';
-$lang->testsuite->batchCreateCase  = 'Batch create cases';
+$lang->testsuite->batchCreateCase  = 'Batch Create Case';
 $lang->testsuite->import           = 'Import';
-$lang->testsuite->showImport       = 'Show import data';
-$lang->testsuite->successSaved     = 'Success Saved';
+$lang->testsuite->showImport       = 'Show Imported Data';
+$lang->testsuite->successSaved     = 'Saved';
 
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;
@@ -35,7 +35,7 @@ $lang->testsuite->addedBy        = 'Creator';
 $lang->testsuite->addedDate      = 'Date';
 
 $lang->testsuite->legendDesc      = 'Description';
-$lang->testsuite->legendBasicInfo = 'Base Info';
+$lang->testsuite->legendBasicInfo = 'Basic Info';
 
 $lang->testsuite->unlinkedCases = 'Unlinked Cases';
 
@@ -57,6 +57,6 @@ $lang->caselib->all    = 'All';
 
 $lang->testsuite->createLib  = 'Create Library';
 $lang->testsuite->editLib    = 'Edit';
-$lang->testsuite->library    = 'Browse cases in Library';
+$lang->testsuite->library    = 'View cases in Library';
 $lang->testsuite->createCase = 'Create Case';
 $lang->testsuite->libView    = 'Overview';
