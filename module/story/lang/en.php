@@ -181,6 +181,7 @@ $lang->story->lblChange            = 'Change';
 $lang->story->lblReview            = 'Review';
 $lang->story->lblActivate          = 'Activate';
 $lang->story->lblClose             = 'Close';
+$lang->story->lblTBC               = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Impact';
 $lang->story->affectedProjects     = '' . $lang->projectCommon;
