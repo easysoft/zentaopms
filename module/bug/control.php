@@ -141,7 +141,7 @@ class bug extends control
 
         /* Set view. */
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID],'','title=' . $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->common;
         $this->view->productID     = $productID;
         $this->view->product       = $this->product->getById($productID);
@@ -1542,7 +1542,8 @@ class bug extends control
                 $bug->closedDate     = substr($bug->closedDate,     0, 10);
                 $bug->resolvedDate   = substr($bug->resolvedDate,   0, 10);
                 $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
-
+                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);   
+     
                 if($bug->linkBug)
                 {
                     $tmpLinkBugs = array();
