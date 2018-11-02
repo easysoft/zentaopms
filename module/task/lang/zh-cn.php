@@ -39,7 +39,7 @@ $lang->task->confirmStoryChange  = "确认需求变动";
 $lang->task->progress            = '进度';
 $lang->task->progressTips        = '已消耗/(已消耗+剩余)';
 $lang->task->copy                = '复制任务';
-$lang->task->undoneTask          = '未完成的任务';
+$lang->task->waitTask            = '未开始的任务';
 
 $lang->task->common           = '任务';
 $lang->task->id               = '编号';
