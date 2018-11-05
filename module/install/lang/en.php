@@ -19,10 +19,10 @@ $lang->install->error   = 'Error ';
 
 $lang->install->officeDomain     = 'https://www.zentao.pm';
 
-$lang->install->start            = 'Start to Install';
-$lang->install->keepInstalling   = 'Continue installing this version.';
+$lang->install->start            = 'Start';
+$lang->install->keepInstalling   = 'Keep installing this version.';
 $lang->install->seeLatestRelease = 'View Latest Version';
-$lang->install->welcome          = 'Thanks for choosing ZenTao Project Management Software!';
+$lang->install->welcome          = 'Thanks for choosing ZenTao!';
 $lang->install->license          = 'ZenTao PMS is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
 ZenTao Project Management Software is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a> license. It integrates with Product Management, Project Management, QA Management, Document Management, Todos Management, Company Management etc. ZenTao is the best choice for software project management.
@@ -41,7 +41,7 @@ EOT;
 
 $lang->install->newReleased= "<strong class='text-danger'>Notice</strong>：Official Website has the latest version<strong class='text-danger'>%s</strong>, released on %s.";
 $lang->install->or         = 'Or';
-$lang->install->checking   = 'System Checking';
+$lang->install->checking   = 'System Checkup';
 $lang->install->ok         = 'Passed(√)';
 $lang->install->fail       = 'Failed(×)';
 $lang->install->loaded     = 'Loaded';
@@ -52,27 +52,27 @@ $lang->install->writable   = 'Writable ';
 $lang->install->notWritable= 'Not Writable ';
 $lang->install->phpINI     = 'PHP ini File';
 $lang->install->checkItem  = 'Item';
-$lang->install->current    = 'Current Settings';
-$lang->install->result     = 'Results';
-$lang->install->action     = 'Actions';
+$lang->install->current    = 'Current Setting';
+$lang->install->result     = 'Result';
+$lang->install->action     = 'Action';
 
 $lang->install->phpVersion = 'PHP Version';
 $lang->install->phpFail    = 'PHP Version has to be 5.2.0+';
 
 $lang->install->pdo          = 'PDO';
-$lang->install->pdoFail      = 'Edit PHP ini file to load PDO extsion.';
+$lang->install->pdoFail      = 'Edit php.ini to load PDO extsion.';
 $lang->install->pdoMySQL     = 'PDO_MySQL';
-$lang->install->pdoMySQLFail = 'Edit PHP ini file to load PDO_MySQL extsion.';
+$lang->install->pdoMySQLFail = 'Edit php.ini to load PDO_MySQL extsion.';
 $lang->install->json         = 'JSON Extension';
-$lang->install->jsonFail     = 'Edit the php.ini file to load JSON extension.';
+$lang->install->jsonFail     = 'Edit php.ini to load JSON extension.';
 $lang->install->openssl      = 'OpenSSL Extension';
-$lang->install->opensslFail  = 'Edit the php.ini file to load openssl extension.';
+$lang->install->opensslFail  = 'Edit php.ini to load openssl extension.';
 $lang->install->mbstring     = 'Mbstring Extension';
-$lang->install->mbstringFail = 'Edit the php.ini file to load mbstring extension.';
+$lang->install->mbstringFail = 'Edit php.ini to load mbstring extension.';
 $lang->install->zlib         = 'Zlib Extension';
-$lang->install->zlibFail     = 'Edit the php.ini file to load zlib extension.';
+$lang->install->zlibFail     = 'Edit php.ini to load zlib extension.';
 $lang->install->curl         = 'Curl Extension';
-$lang->install->curlFail     = 'Edit the php.ini file to load curl extension.';
+$lang->install->curlFail     = 'Edit php.ini to load curl extension.';
 $lang->install->filter       = 'Filter Extension';
 $lang->install->filterFail   = 'Edit the php.ini file to load filter extension.';
 $lang->install->gd           = 'GD Extension';
@@ -96,14 +96,14 @@ $lang->install->dbUser         = 'Database User';
 $lang->install->dbPassword     = 'Database Password';
 $lang->install->dbName         = 'Database Name';
 $lang->install->dbPrefix       = 'Table Prefix';
-$lang->install->clearDB        = 'Clean tables if already exist.';
+$lang->install->clearDB        = 'Clean tables if it already exists.';
 $lang->install->importDemoData = 'Import Demo Data';
-$lang->install->working        = 'Work Mode';
+$lang->install->working        = 'Operation Mode';
 
 $lang->install->requestTypes['GET']       = 'GET';
 $lang->install->requestTypes['PATH_INFO'] = 'PATH_INFO';
 
-$lang->install->workingList['full']      = 'Full Development Management';
+$lang->install->workingList['full']      = 'Application Lifecycle Management';
 $lang->install->workingList['onlyTest']  = 'Only Test Management';
 $lang->install->workingList['onlyStory'] = 'Only Story Management';
 $lang->install->workingList['onlyTask']  = 'Only Task Management';
@@ -115,10 +115,10 @@ $lang->install->errorTableExists    = 'Data table has existed. If ZenTao has bee
 $lang->install->errorCreateTable    = 'Failed to create the table.';
 $lang->install->errorImportDemoData = 'Failed to import demo data.';
 
-$lang->install->setConfig  = 'Create Config File';
+$lang->install->setConfig  = 'Create config file';
 $lang->install->key        = 'Item';
 $lang->install->value      = 'Value';
-$lang->install->saveConfig = 'Save Config';
+$lang->install->saveConfig = 'Save config';
 $lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this config file later.</div>';
 $lang->install->saved2File = 'Config file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'Config file is not saved.';
@@ -130,7 +130,7 @@ $lang->install->password = 'Admin Password';
 $lang->install->errorEmptyPassword = 'Password should not be blank.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
-$lang->install->groupList['ADMIN']['desc']   = 'System Administrator';
+$lang->install->groupList['ADMIN']['desc']   = 'System Admin';
 $lang->install->groupList['DEV']['name']     = 'Dev';
 $lang->install->groupList['DEV']['desc']     = 'Developer';
 $lang->install->groupList['QA']['name']      = 'QA';
@@ -150,7 +150,7 @@ $lang->install->groupList['TOP']['desc']     = 'Senior Manager';
 $lang->install->groupList['OTHERS']['name']  = 'Other';
 $lang->install->groupList['OTHERS']['desc']  = 'other users';
 $lang->install->groupList['LIMITED']['name'] = 'Limited User';
-$lang->install->groupList['LIMITED']['desc'] = 'can only edit contents related to itself';
+$lang->install->groupList['LIMITED']['desc'] = 'User can only edit contents related to itself';
 
 $lang->install->cronList[''] = 'Monitor cron';
 $lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Chart';
@@ -173,7 +173,7 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'ranzhi');
 
-$lang->install->promotion     = "Products of Nature Easy Soft:";
+$lang->install->promotion     = "Products from  Nature Easy Soft team:";
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE content management system.';
 $lang->install->chanzhi->logo = 'images/main/chanzhi_en.png';

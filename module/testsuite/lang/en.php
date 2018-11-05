@@ -15,7 +15,7 @@ $lang->testsuite->delete           = "Delete";
 $lang->testsuite->view             = "Overview";
 $lang->testsuite->edit             = "Edit";
 $lang->testsuite->browse           = "Suite List";
-$lang->testsuite->linkCase         = "Link Cases";
+$lang->testsuite->linkCase         = "Link Case";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
 $lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
@@ -37,7 +37,7 @@ $lang->testsuite->addedDate      = 'Date';
 $lang->testsuite->legendDesc      = 'Description';
 $lang->testsuite->legendBasicInfo = 'Basic Info';
 
-$lang->testsuite->unlinkedCases = 'Unlinked Cases';
+$lang->testsuite->unlinkedCases = 'Unlinked Case';
 
 $lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
 $lang->testsuite->libraryDelete     = 'Do you want to delete this library？';

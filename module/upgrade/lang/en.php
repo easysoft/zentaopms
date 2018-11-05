@@ -14,7 +14,7 @@ $lang->upgrade->result  = 'Result';
 $lang->upgrade->fail    = 'Failed';
 $lang->upgrade->success = 'Upgraded';
 $lang->upgrade->tohome  = 'Visit ZenTao';
-$lang->upgrade->license = 'Zentao PMS has started using Z PUBLIC LICENSE(ZPL) 1.2.';
+$lang->upgrade->license = 'Zentao is under Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning= 'Warning!';
 $lang->upgrade->checkExtension  = 'Check Extension';
 $lang->upgrade->warnningContent = <<<EOT
@@ -27,9 +27,9 @@ $lang->upgrade->warnningContent = <<<EOT
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
-$lang->upgrade->createFileWinCMD   = 'Open command line, execute <strong style="color:#ed980f">echo > %s</strong>';
-$lang->upgrade->createFileLinuxCMD = 'Execute in command line: <strong style="color:#ed980f">touch %s</strong>';
-$lang->upgrade->setStatusFile      = '<h4>Please finish the following action</h4>
+$lang->upgrade->createFileWinCMD   = 'Open command line and  execute <strong style="color:#ed980f">echo > %s</strong>';
+$lang->upgrade->createFileLinuxCMD = 'Execute command line: <strong style="color:#ed980f">touch %s</strong>';
+$lang->upgrade->setStatusFile      = '<h4>Please finish the following actions</h4>
                                       <ul style="line-height:1.5;font-size:13px;">
                                       <li>%s</li>
                                       <li>Or delete "<strong style="color:#ed980f">%s</strong>" and create <strong style="color:#ed980f">ok.txt</strong> and leave it blank.</li>
@@ -38,11 +38,11 @@ $lang->upgrade->setStatusFile      = '<h4>Please finish the following action</h4
 $lang->upgrade->selectVersion = 'Select Version';
 $lang->upgrade->continue      = 'Continue';
 $lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
-$lang->upgrade->fromVersion   = 'From Version';
-$lang->upgrade->toVersion     = 'Upgrade to Version';
+$lang->upgrade->fromVersion   = 'From';
+$lang->upgrade->toVersion     = 'Upgrade to';
 $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
-$lang->upgrade->forbiddenExt  = 'Extension is not compatible with the upgraded version. It has been deactivated:';
-$lang->upgrade->updateFile    = 'Attachment information has to be updated.';
+$lang->upgrade->forbiddenExt  = 'Extension is not compatible with the version. It has been deactivated:';
+$lang->upgrade->updateFile    = 'File information has to be updated.';
 
 include dirname(__FILE__) . '/version.php';

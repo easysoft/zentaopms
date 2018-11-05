@@ -16,12 +16,12 @@ $lang->my->dynamic        = 'My Dynamic';
 $lang->my->editProfile    = 'Edit Profile';
 $lang->my->changePassword = 'Edit Password';
 $lang->my->unbind         = 'Unbind Ranger';
-$lang->my->manageContacts = 'Maintain Contact';
+$lang->my->manageContacts = 'Manage Contact';
 $lang->my->deleteContacts = 'Delete Contact';
 $lang->my->shareContacts  = 'Share the list';
-$lang->my->limited        = 'Restricted operation (editing only content related to itself)';
-$lang->my->score          = 'My Score';
-$lang->my->scoreRule      = 'Score Rule';
+$lang->my->limited        = 'Restricted actions (editing only content related to itself)';
+$lang->my->score          = 'My Point';
+$lang->my->scoreRule      = 'Point Rule';
 $lang->my->noTodo         = 'No todos. ';
 
 $lang->my->taskMenu = new stdclass();
