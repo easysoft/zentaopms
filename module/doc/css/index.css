@@ -10,3 +10,5 @@
 #libs .libs-custom-heading .lable-custom{position: absolute;left:8px;}
 #libs hr {margin-top:0px;}
 #libs .panel-body {overflow: auto; max-height: 224px;}
+
+#pageActions ul.dropdown-menu{left: 67px}

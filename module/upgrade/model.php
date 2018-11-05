@@ -240,6 +240,7 @@ class upgradeModel extends model
             case '10_4':
                 $this->execSQL($this->getUpgradeFile('10.4'));
                 $this->changeTaskParentValue();
+            case '10_5':
         }
 
         $this->deletePatch();
@@ -356,6 +357,7 @@ class upgradeModel extends model
             case '10_3':
             case '10_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('10.3.1'));
             case '10_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('10.4'));
+            case '10_5':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
