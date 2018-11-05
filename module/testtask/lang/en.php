@@ -15,8 +15,8 @@ $lang->testtask->reportChart      = 'Report';
 $lang->testtask->delete           = "Delete";
 $lang->testtask->view             = "Overview";
 $lang->testtask->edit             = "Edit";
-$lang->testtask->browse           = "Test Tasks";
-$lang->testtask->linkCase         = "Link Cases";
+$lang->testtask->browse           = "Test Task";
+$lang->testtask->linkCase         = "Link Case";
 $lang->testtask->selectVersion    = "Select Version";
 $lang->testtask->unlinkCase       = "Unlink";
 $lang->testtask->batchUnlinkCases = "Batch unlink cases";
@@ -26,9 +26,9 @@ $lang->testtask->batchRun         = "Batch Run";
 $lang->testtask->results          = "Result";
 $lang->testtask->createBug        = "Bug(+)";
 $lang->testtask->assign           = 'Assign';
-$lang->testtask->cases            = 'Cases';
+$lang->testtask->cases            = 'Case';
 $lang->testtask->groupCase        = "By Group";
-$lang->testtask->pre              = 'Previous';
+$lang->testtask->pre              = 'Prev';
 $lang->testtask->next             = 'Next';
 $lang->testtask->start            = "Start";
 $lang->testtask->close            = "Close";
@@ -69,7 +69,7 @@ $lang->testtask->version        = 'Version';
 $lang->testtask->caseResult     = 'Test Result';
 $lang->testtask->stepResults    = 'Step Results';
 $lang->testtask->lastRunner     = 'Last Run By';
-$lang->testtask->lastRunDate    = 'Last Run Date';
+$lang->testtask->lastRunDate    = 'Last Run';
 $lang->testtask->date           = 'Date';
 
 $lang->testtask->beginAndEnd    = 'Date';
@@ -105,15 +105,15 @@ $lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testtask->noticeNoOther     = 'There are no other test task for this product';
 $lang->testtask->noTesttask        = 'No test tasks. ';
-$lang->testtask->checkLinked       = "Please check if the testtask product is linked to project.";
+$lang->testtask->checkLinked       = "Please check if the testtask product is linked to a project.";
 
 $lang->testtask->assignedToMe  = 'My';
-$lang->testtask->allCases      = 'AllCases';
+$lang->testtask->allCases      = 'All Cases';
 
 $lang->testtask->lblCases      = 'Cases';
 $lang->testtask->lblUnlinkCase = 'Unlink Case';
 $lang->testtask->lblRunCase    = 'Run Case';
-$lang->testtask->lblResults    = 'Results';
+$lang->testtask->lblResults    = 'Result';
 
 $lang->testtask->placeholder = new stdclass();
 $lang->testtask->placeholder->begin = 'Begin';
@@ -137,7 +137,7 @@ $lang->testtask->unexecuted = 'Not performed';
 /* 统计报表。*/
 $lang->testtask->report = new stdclass();
 $lang->testtask->report->common = 'Report';
-$lang->testtask->report->select = 'Select report type';
+$lang->testtask->report->select = 'Type';
 $lang->testtask->report->create = 'Generate';
 
 $lang->testtask->report->charts['testTaskPerRunResult'] = 'Result Report';

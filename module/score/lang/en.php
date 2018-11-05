@@ -1,11 +1,11 @@
 <?php
-$lang->score->common       = 'My Score';
-$lang->score->record       = 'Score Record';
-$lang->score->current      = 'Current Score';
-$lang->score->level        = 'Level Score';
+$lang->score->common       = 'My Point';
+$lang->score->record       = 'Point Record';
+$lang->score->current      = 'Current Point';
+$lang->score->level        = 'Level Point';
 $lang->score->reset        = 'Reset';
-$lang->score->tips         = 'Yesterday added score: <strong>%d</strong><br/>Total score: <strong>%d</strong>';
-$lang->score->resetTips    = 'It will take a long time. <strong>Do not close the window.</strong>';
+$lang->score->tips         = 'Yesterday added: <strong>%d</strong><br/> Total: <strong>%d</strong>';
+$lang->score->resetTips    = 'It will take a while. <strong>Do not close the window.</strong>';
 $lang->score->resetStart   = 'Start';
 $lang->score->resetLoading = 'Processing: ';
 $lang->score->resetFinish  = 'Finished';
@@ -16,11 +16,11 @@ $lang->score->account = 'User';
 $lang->score->module  = 'Module';
 $lang->score->method  = 'Method';
 $lang->score->before  = 'Before';
-$lang->score->score   = 'Score';
+$lang->score->score   = 'Point';
 $lang->score->after   = 'After';
 $lang->score->time    = 'Time';
 $lang->score->desc    = 'Description';
-$lang->score->noLimit = 'No limited';
+$lang->score->noLimit = 'No limit';
 $lang->score->times   = 'Times';
 $lang->score->hour    = 'Hour';
 
