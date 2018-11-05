@@ -93,7 +93,7 @@ $lang->story->newStory       = 'Continue adding';
 $lang->story->colorTag       = 'Color Tag';
 $lang->story->files          = 'Files';
 $lang->story->copy           = "Copy Story";
-$lang->story->total          = "Total Stories";
+$lang->story->total          = "Total";
 $lang->story->allStories     = 'All';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
@@ -166,7 +166,7 @@ $lang->story->legendBasicInfo      = 'Basic Info';
 $lang->story->legendLifeTime       = 'Story Life ';
 $lang->story->legendRelated        = 'Related Info';
 $lang->story->legendMailto         = 'Mail to';
-$lang->story->legendAttatch        = 'Files';
+$lang->story->legendAttatch        = 'File';
 $lang->story->legendProjectAndTask = $lang->projectCommon . ' Task';
 $lang->story->legendBugs           = 'Linked Bug';
 $lang->story->legendFromBug        = 'From Bug';
@@ -196,10 +196,10 @@ $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';
 $lang->story->mustChooseResult      = 'Select Result';
 $lang->story->mustChoosePreVersion  = 'Select the Version to revert to.';
 $lang->story->noStory               = 'No stories. ';
-$lang->story->ignoreChangeStage     = 'The status of story %s is draft, that fail to change stage.';
+$lang->story->ignoreChangeStage     = 'Story %s is a draft. Change its status.';
 
 $lang->story->form = new stdclass();
-$lang->story->form->area      = 'Story Scope';
+$lang->story->form->area      = 'Scope';
 $lang->story->form->desc      = 'What Story is it? What is the acceptance criteria?';
 $lang->story->form->resource  = 'Who will allocate resources? How long does it take?';
 $lang->story->form->file      = 'If there are Story linked files, please click Here to upload it.';
@@ -223,9 +223,9 @@ $lang->story->action->unlinkchildstory    = array('main' => '$date, unlinked by 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
-$lang->story->report->select = 'Group Stories by';
+$lang->story->report->select = 'Group by';
 $lang->story->report->create = 'Generate';
-$lang->story->report->value  = 'Story Count';
+$lang->story->report->value  = 'Count';
 
 $lang->story->report->charts['storysPerProduct']        = 'by ' . $lang->productCommon;
 $lang->story->report->charts['storysPerModule']         = 'by Module';
@@ -305,4 +305,4 @@ $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose Reviewer';
 
 $lang->story->notice = new stdClass();
-$lang->story->notice->closed = 'Stories you selected have already been closed!';
+$lang->story->notice->closed = 'Stories you select are closed!';

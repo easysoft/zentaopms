@@ -141,7 +141,7 @@ $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
 $lang->doc->customShowLibs = 'Library display settings';
 $lang->doc->customShowLibsList['zero']     = 'Display empty library';
-$lang->doc->customShowLibsList['unclosed'] = 'Display projects that are not closed';
+$lang->doc->customShowLibsList['unclosed'] = 'Only display projects that are not closed';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";

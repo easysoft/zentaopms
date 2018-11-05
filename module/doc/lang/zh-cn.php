@@ -141,7 +141,7 @@ $lang->doc->customObjectLibs['customFiles'] = '显示自定义文档库';
 
 $lang->doc->customShowLibs = '文档库显示设置';
 $lang->doc->customShowLibsList['zero']     = '显示空文档的库';
-$lang->doc->customShowLibsList['unclosed'] = '显示未关闭的项目';
+$lang->doc->customShowLibsList['unclosed'] = '只显示未关闭的项目';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
 $lang->doc->confirmDeleteLib   = "您确定删除该文档库吗？";
