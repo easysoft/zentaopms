@@ -47,8 +47,8 @@ $lang->bug->assignedToAB     = 'To';
 $lang->bug->assignedDate     = 'Assigned';
 $lang->bug->resolvedBy       = 'Resolved';
 $lang->bug->resolvedByAB     = 'Resolved';
-$lang->bug->resolution       = 'Solution';
-$lang->bug->resolutionAB     = 'Solution';
+$lang->bug->resolution       = 'Resolution';
+$lang->bug->resolutionAB     = 'Resolution';
 $lang->bug->resolvedBuild    = 'Resolved Build';
 $lang->bug->resolvedDate     = 'Resolved';
 $lang->bug->resolvedDateAB   = 'Resolved';
@@ -132,7 +132,7 @@ $lang->bug->ditto       = 'Ditto';
 $lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
 $lang->bug->noAssigned  = 'Assign';
 $lang->bug->noBug       = 'No bugs. ';
-$lang->bug->noModule    = '<div>You have no modules</div><div>Manage now</div>';
+$lang->bug->noModule    = '<div>You have no modules.</div><div>Manage now</div>';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'Assignee';
@@ -151,7 +151,7 @@ $lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
 $lang->bug->legendComment               = 'Note';
-$lang->bug->legendLife                  = 'About the Bug';
+$lang->bug->legendLife                  = 'About';
 $lang->bug->legendMisc                  = 'Misc';
 $lang->bug->legendRelated               = 'Related Info';
 
@@ -232,18 +232,18 @@ $lang->bug->browserList['other']    = 'Other';
 
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'Code Error';
-$lang->bug->typeList['interface']    = 'UI Optimization';
+$lang->bug->typeList['interface']    = 'Interface';
 $lang->bug->typeList['config']       = 'Configuration';
 $lang->bug->typeList['install']      = 'Install/Deploy';
 $lang->bug->typeList['security']     = 'Security';
 $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Standard';
-$lang->bug->typeList['automation']   = 'Testing Script';
+$lang->bug->typeList['automation']   = 'Automation';
 $lang->bug->typeList['others']       = 'Other';
 $lang->bug->typeList['designchange'] = 'Design Change';
 $lang->bug->typeList['newfeature']   = 'New Feature';
 $lang->bug->typeList['designdefect'] = 'Design Defect';
-$lang->bug->typeList['trackthings']  = 'Track Work';
+$lang->bug->typeList['trackthings']  = 'Tracking';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
@@ -266,8 +266,8 @@ $lang->bug->resolutionList['tostory']    = 'Convert to Story';
 /* 统计报表。*/
 $lang->bug->report = new stdclass();
 $lang->bug->report->common = 'Report';
-$lang->bug->report->select = 'Select Type ';
-$lang->bug->report->create = 'Generate Report';
+$lang->bug->report->select = 'Type ';
+$lang->bug->report->create = 'Create Report';
 
 $lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' Bugs';
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs Per Build';
@@ -279,7 +279,7 @@ $lang->bug->report->charts['openedBugsPerUser']     = 'Reported Bugs Per User';
 $lang->bug->report->charts['resolvedBugsPerUser']   = 'Resolved Bugs Per User';
 $lang->bug->report->charts['closedBugsPerUser']     = 'Closed Bugs Per User';
 $lang->bug->report->charts['bugsPerSeverity']       = 'Bug Severity Report';
-$lang->bug->report->charts['bugsPerResolution']     = 'Bug Solution Report';
+$lang->bug->report->charts['bugsPerResolution']     = 'Bug Resolution Report';
 $lang->bug->report->charts['bugsPerStatus']         = 'Bug Status Report';
 $lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug Activation Report';
 $lang->bug->report->charts['bugsPerPri']            = 'Bug Priority Report';
@@ -350,7 +350,7 @@ $lang->bug->report->resolvedBugsPerUser->graph->xAxisName = 'User';
 $lang->bug->report->closedBugsPerUser->graph->xAxisName   = 'User';
 
 $lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Priority';
-$lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Solution';
+$lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Resolution';
 $lang->bug->report->bugsPerStatus->graph->xAxisName         = 'Status';
 $lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Activated Count';
 $lang->bug->report->bugsPerPri->graph->xAxisName            = 'Priority';
