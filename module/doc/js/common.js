@@ -24,6 +24,7 @@ function setBrowseType(type)
 
 $(document).ready(function()
 {
+    $('#pageActions ul.dropdown-menu').css('left', '67px');
     $('.libs-group.sort').sortable(
     {
         trigger:  '.lib',
