@@ -32,7 +32,7 @@
 #steps .step-type-menu > a.active {color: #fff; background-color: #1a4f85;}
 
 .table-bordered .step-actions {width: 98px;}
-.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important; border-left-style: dotted!important; border-right-style: dotted!important;}
+.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important; }
 .table-bordered > #steps > tr > td.step-id { padding-right: 8px;}
 .table-bordered > #steps > tr > td .btn {border-color: transparent; background-color: transparent}
 .table-bordered > #steps > tr > td .btn:hover,
