@@ -63,7 +63,7 @@ $lang->history         = 'History';
 $lang->attatch         = 'File';
 $lang->reverse         = 'Reverse';
 $lang->switchDisplay   = 'Toggle';
-$lang->expand          = 'Expand All';
+$lang->expand          = 'Expand';
 $lang->collapse        = 'Collapse';
 $lang->saveSuccess     = 'Saved';
 $lang->fail            = 'Fail';
@@ -93,8 +93,8 @@ $lang->nextShortcutKey = '[Shortcut:→]';
 $lang->backShortcutKey = '[Shortcut:Alt+↑]';
 
 $lang->select        = 'Select';
-$lang->selectAll     = 'Select All';
-$lang->selectReverse = 'Select Reverse';
+$lang->selectAll     = 'All';
+$lang->selectReverse = 'Reverse';
 $lang->loading       = 'Loading...';
 $lang->notFound      = 'Not found!';
 $lang->showAll       = '[[Show All]]';
@@ -191,7 +191,7 @@ $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-$lang->my->menu->score          = 'Score|my|score';
+$lang->my->menu->score          = 'Point|my|score';
 
 $lang->todo = new stdclass();
 $lang->todo->menu = $lang->my->menu;

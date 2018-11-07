@@ -59,10 +59,10 @@ $lang->user->unbind          = "Unbind Zdoo";
 $lang->user->login           = "Login";
 $lang->user->mobileLogin     = "Mobile";
 $lang->user->editProfile     = "Edit";
-$lang->user->deny            = "Access is denied.";
-$lang->user->confirmDelete   = "Are you sure to delete this user?";
-$lang->user->confirmUnlock   = "Are you sure to unlock this user?";
-$lang->user->confirmUnbind   = "Are you sure to unbind this user from Zdoo?";
+$lang->user->deny            = "Your access is denied.";
+$lang->user->confirmDelete   = "Do you want to delete this user?";
+$lang->user->confirmUnlock   = "Do you want to unlock this user?";
+$lang->user->confirmUnbind   = "Do you want to unbind this user from Zdoo?";
 $lang->user->relogin         = "Login Again";
 $lang->user->asGuest         = "Guest";
 $lang->user->goback          = "Back";
@@ -93,11 +93,11 @@ $lang->user->testTask2Him = 'Build';
 $lang->user->case2Him     = 'Case Assigned';
 $lang->user->caseByHim    = 'Case Opened';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> has been denied. Please contact your Admin to get permissions. Click Back to return.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get permissions. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s mins later.";
-$lang->user->weakPassword = "Your password does not meet the complexity requirements.";
+$lang->user->weakPassword = "Your password does not meet the requirements.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -130,12 +130,12 @@ $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = 'Letters, Underline and Numbers, at least 3 characters';
+$lang->user->placeholder->account   = 'Letters, underline and numbers, 3 characters minimum';
 $lang->user->placeholder->password1 = 'six characters at lease ';
-$lang->user->placeholder->role      = "Role affects content and user order.";
-$lang->user->placeholder->group     = "Group decides user privilege.";
+$lang->user->placeholder->role      = "Role is related to content and user order.";
+$lang->user->placeholder->group     = "Group is related to user privileges.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
-$lang->user->placeholder->verify    = 'Please input your login password.';
+$lang->user->placeholder->verify    = 'Please enter your login password.';
 
 $lang->user->placeholder->passwordStrength[1] = 'Letters and Numbers, at least 6 characters';
 $lang->user->placeholder->passwordStrength[2] = 'Letters, Numbers and special characters, at lease 10 characters';

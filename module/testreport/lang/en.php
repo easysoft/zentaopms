@@ -5,7 +5,7 @@ $lang->testreport->create   = 'Create Report';
 $lang->testreport->edit     = 'Edit Report';
 $lang->testreport->delete   = 'Delete';
 $lang->testreport->export   = 'Export';
-$lang->testreport->view     = 'Report Details';
+$lang->testreport->view     = 'Details';
 $lang->testreport->recreate = 'Re-Create';
 
 $lang->testreport->title       = 'Title';
@@ -47,8 +47,8 @@ $lang->testreport->legendMore        = 'More';
 $lang->testreport->bugSeverityGroups   = 'Bug Severity Distribution';
 $lang->testreport->bugTypeGroups       = 'Bug Type Distribution';
 $lang->testreport->bugStatusGroups     = 'Bug Status Distribution';
-$lang->testreport->bugOpenedByGroups   = 'Bug Creator Distribution';
-$lang->testreport->bugResolvedByGroups = 'Bug Solver Distribution';
+$lang->testreport->bugOpenedByGroups   = 'Bug CreateBy Distribution';
+$lang->testreport->bugResolvedByGroups = 'Bug ResolveBy Distribution';
 $lang->testreport->bugResolutionGroups = 'Bug Resolution Distribution';
 $lang->testreport->bugModuleGroups     = 'Bug Module Distribution';
 $lang->testreport->legacyBugs          = 'Legacy Bugs';
@@ -59,13 +59,13 @@ $lang->testreport->caseSummary    = ' <strong>%s</strong> cases in Total : <stro
 $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
 $lang->testreport->confirmDelete  = 'Do you want to delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';
-$lang->testreport->exportNotice   = "Export By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
+$lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
 $lang->testreport->foundBugTip    = "Bugs created in this build and created in the test period.";
 $lang->testreport->legacyBugTip   = "Active Bugs, or the resolved beyond the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs created after failed cases in the test period.";
-$lang->testreport->errorTrunk     = "The trunk version cannot create a test report. Please modify the associated version!";
-$lang->testreport->moreProduct    = "You can only create test reports the same product.";
+$lang->testreport->errorTrunk     = "The trunk cannot create a test report for. Please modify the linked build!";
+$lang->testreport->moreProduct    = "You can only create test reports for the same product.";
 
 $lang->testreport->bugSummary = <<<EOD
 <strong>%s</strong> Bug(s) generated in total <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,
