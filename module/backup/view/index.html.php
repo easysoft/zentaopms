@@ -21,7 +21,10 @@
   <div class='btn-toolbar pull-left'>
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->backup->common;?></span></span>
   </div>
-  <div class='btn-toolbar pull-right'><?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?></div>
+  <div class='btn-toolbar pull-right'>
+    <?php common::printIcon('backup', 'setting', '', '', 'button', '', '', 'iframe', '', "data-width=400px");?>
+    <?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?>
+  </div>
 </div>
 
 <div id='mainContent' class='main-content'>

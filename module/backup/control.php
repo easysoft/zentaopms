@@ -60,6 +60,14 @@ class backup extends control
                     {
                         $backupFile->files[$this->backupPath . $backupFile->name . '.code.zip.php'] = abs(filesize($this->backupPath . $backupFile->name . '.code.zip.php'));
                     }
+                    if(file_exists($this->backupPath . $backupFile->name . '.file'))
+                    {
+                        $backupFile->files[$this->backupPath . $backupFile->name . '.file'] = $this->backup->getDirSize($this->backupPath . $backupFile->name . '.file');
+                    }
+                    if(file_exists($this->backupPath . $backupFile->name . '.code'))
+                    {
+                        $backupFile->files[$this->backupPath . $backupFile->name . '.code'] = $this->backup->getDirSize($this->backupPath . $backupFile->name . '.code');
+                    }
 
                     $backups[$backupFile->name] = $backupFile;
                 }
@@ -98,9 +106,14 @@ class backup extends control
         }
         $this->backup->addFileHeader($this->backupPath . $fileName . '.sql.php');
 
-        if(extension_loaded('zlib'))
+        if((extension_loaded('zlib') or strpos($this->config->backup->setting, 'nozip') !== false) and strpos($this->config->backup->setting, 'nofile') === false)
         {
-            $result = $this->backup->backFile($this->backupPath . $fileName . '.file.zip.php');
+            $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
+
+            $backFileName = $this->backupPath . $fileName . '.file';
+            if(!$nozip) $backFileName .= '.zip.php';
+
+            $result = $this->backup->backFile($backFileName);
             if(!$result->result)
             {
                 if($reload == 'yes')
@@ -113,9 +126,11 @@ class backup extends control
                     printf($this->lang->backup->error->backupFile, $result->error);
                 }
             }
-            $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
+            if(!$nozip) $this->backup->addFileHeader($backFileName);
 
-            $result = $this->backup->backCode($this->backupPath . $fileName . '.code.zip.php');
+            $backFileName = $this->backupPath . $fileName . '.code';
+            if(!$nozip) $backFileName .= '.zip.php';
+            $result = $this->backup->backCode($backFileName);
             if(!$result->result)
             {
                 if($reload == 'yes')
@@ -128,7 +143,7 @@ class backup extends control
                     printf($this->lang->backup->error->backupCode, $result->error);
                 }
             }
-            $this->backup->addFileHeader($this->backupPath . $fileName . '.code.zip.php');
+            if(!$nozip) $this->backup->addFileHeader($backFileName);
         }
 
         /* Delete expired backup. */
@@ -182,6 +197,12 @@ class backup extends control
             if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
         }
 
+        if(file_exists($this->backupPath . $fileName . '.file'))
+        {
+            $result = $this->backup->restoreFile($this->backupPath . $fileName . '.file');
+            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
+        }
+
         $this->send(array('result' => 'success', 'message' => $this->lang->backup->success->restore));
     }
 
@@ -215,6 +236,20 @@ class backup extends control
             die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip.php')));
         }
 
+        /* Delete attatchments dir. */
+        if(file_exists($this->backupPath . $fileName . '.file'))
+        {
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->removeDir($this->backupPath . $fileName . '.file');
+        }
+
+        /* Delete code dir. */
+        if(file_exists($this->backupPath . $fileName . '.code'))
+        {
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->removeDir($this->backupPath . $fileName . '.code');
+        }
+
         die(js::reload('parent'));
     }
 
@@ -233,6 +268,26 @@ class backup extends control
             die(js::reload('parent.parent'));
         }
 
+        $this->display();
+    }
+
+    /**
+     * Setting backup 
+     * 
+     * @access public
+     * @return void
+     */
+    public function setting()
+    {
+        if(strtolower($this->server->request_method) == "post")
+        {
+            $data    = fixer::input('post')->join('setting', ',')->get();
+            $setting = '';
+            if(isset($data->setting)) $setting = $data->setting;
+            $this->loadModel('setting')->setItem('system.backup.setting', $setting);
+
+            die(js::reload('parent.parent'));
+        }
         $this->display();
     }
 }
