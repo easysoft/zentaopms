@@ -297,7 +297,7 @@ class bug extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
             $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&type=byModule&param={$this->post->module}");
-            $response['locate'] = isset($_SESSION['bugList']) ? $this->session->bugList : $location;
+            $response['locate'] = $location;
             $this->send($response);
         }
 
