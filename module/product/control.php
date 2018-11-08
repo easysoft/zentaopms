@@ -118,9 +118,9 @@ class product extends control
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['storyModule'] = 0;
-            setcookie('storyModule', 0, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('storyModule', 0, 0, $this->config->webRoot);
         }
-        if($browseType == 'bymodule') setcookie('storyModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType == 'bymodule') setcookie('storyModule', (int)$param, 0, $this->config->webRoot);
         if($browseType != 'bymodule') $this->session->set('storyBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->storyModule ? $this->cookie->storyModule : 0));
@@ -131,7 +131,7 @@ class product extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
-        setcookie('productStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
