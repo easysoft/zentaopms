@@ -12,6 +12,10 @@ $lang->backup->time  = 'Date';
 $lang->backup->files = 'Files';
 $lang->backup->size  = 'Size';
 
+$lang->backup->setting = 'Setting';
+$lang->backup->settingList['nofile'] = 'Not backup file and code.';
+$lang->backup->settingList['nozip']  = 'Only copy file';
+
 $lang->backup->waitting       = '<span id="backupType"></span> In Progress. Please wait...';
 $lang->backup->confirmDelete  = 'Do you want to delete the backup？';
 $lang->backup->confirmRestore = 'Do you want to restore the backup？';
