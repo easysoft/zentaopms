@@ -40,14 +40,17 @@ class backupModel extends model
         $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
         if(!$nozip)
         {
+            $oldDir = getcwd();
+            chdir($this->app->getTmpRoot());
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($backupFile);
-            $zip->create($this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_REMOVE_PATH, $this->app->getAppRoot() . 'www/data/');
+            $zip->create($this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_REMOVE_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON);
             if($zip->errorCode() != 0)
             {
                 $return->result = false;
                 $return->error  = $zip->errorInfo();
             }
+            chdir($oldDir);
         }
         else
         {
@@ -88,14 +91,17 @@ class backupModel extends model
         $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
         if(!$nozip)
         {
+            $oldDir = getcwd();
+            chdir($this->app->getTmpRoot());
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($backupFile);
-            $zip->create($fileList, PCLZIP_OPT_REMOVE_PATH, $appRoot);
+            $zip->create($fileList, PCLZIP_OPT_REMOVE_PATH, $appRoot, PCLZIP_OPT_TEMP_FILE_ON);
             if($zip->errorCode() != 0)
             {
                 $return->result = false;
                 $return->error  = $zip->errorInfo();
             }
+            chdir($oldDir);
         }
         else
         {
@@ -150,6 +156,8 @@ class backupModel extends model
         $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
         if(!$nozip)
         {
+            $oldDir = getcwd();
+            chdir($this->app->getTmpRoot());
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($backupFile);
             if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/') == 0)
@@ -157,6 +165,7 @@ class backupModel extends model
                 $return->result = false;
                 $return->error  = $zip->errorInfo();
             }
+            chdir($oldDir);
         }
         else
         {
