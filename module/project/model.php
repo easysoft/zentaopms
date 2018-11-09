@@ -2367,7 +2367,7 @@ class projectModel extends model
         $this->config->project->search['actionURL'] = $actionURL;
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['params']['project']['values'] = array(''=>'', $projectID => $projects[$projectID], 'all' => $this->lang->project->allProject);
-        $this->config->project->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($projectID, $startModuleID = 0);
+        $this->config->project->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($projectID, 'task');
 
         $this->loadModel('search')->setSearchParams($this->config->project->search);
     }
