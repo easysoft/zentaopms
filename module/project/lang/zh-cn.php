@@ -190,6 +190,7 @@ $lang->project->aboveAllProduct = "以上所有{$lang->productCommon}";
 $lang->project->aboveAllProject = "以上所有{$lang->projectCommon}";
 
 /* 页面提示。*/
+$lang->project->linkStoryByPlanTips = '此操作会将所选计划下面的需求全部关联到此项目中';
 $lang->project->selectProject   = "请选择{$lang->projectCommon}";
 $lang->project->beginAndEnd     = '起止时间';
 $lang->project->begin           = '开始日期';
