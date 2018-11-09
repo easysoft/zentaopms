@@ -15,7 +15,7 @@
   <div class='center-block'>
     <div class='main-header'>
       <div class='heading'>
-        <h2><?php echo $lang->admin->sso;?></h2>
+        <h4><?php echo $lang->admin->sso;?></h4>
       </div>
     </div>
     <form method='post' id='dataform'>
