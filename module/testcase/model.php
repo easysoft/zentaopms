@@ -1361,7 +1361,7 @@ class testcaseModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));
+                echo html::checkbox('caseIDList', array($case->id => '')) . html::a(helper::createLink('testcase', 'view', "caseID=$case->id"), sprintf('%03d', $case->id));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $case->pri . "' title='" . zget($this->lang->testcase->priList, $case->pri, $case->pri) . "'>";

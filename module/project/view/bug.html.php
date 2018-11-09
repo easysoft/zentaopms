@@ -78,7 +78,7 @@
       <tr>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
-          <?php echo html::checkbox('bugIDList', array($bug->id => sprintf('%03d', $bug->id)));?>
+          <?php echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?>
           <?php else:?>
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>

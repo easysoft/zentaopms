@@ -84,7 +84,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <tr>
           <td class='c-id'>
             <?php if($canBatchEdit):?>
-            <?php echo html::checkbox('users', array($user->account => sprintf('%03d', $user->id)));?>
+            <?php echo html::checkbox('users', array($user->account => '')) . html::a(helper::createLink('user', 'view', "account=$user->account"), sprintf('%03d', $user->id));?>
             <?php else:?>
             <?php printf('%03d', $user->id);?>
             <?php endif;?>
