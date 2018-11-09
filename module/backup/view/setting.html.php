@@ -18,9 +18,17 @@
   <form method='post' target='hiddenwin'>
     <table class='w-p100'>
       <tr>
-        <td style='height:50px;vertical-align:top'>
+        <td style='height:80px;vertical-align:top'>
           <div class='input-group'>
             <?php echo html::checkbox('setting', $lang->backup->settingList, isset($config->backup->setting) ? $config->backup->setting : '');?>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->backup->settingDir;?></span>
+            <?php echo html::input('settingDir', !empty($config->backup->settingDir) ? $config->backup->settingDir : $this->app->getTmpRoot() . 'backup/', "class='form-control'");?>
           </div>
         </td>
       </tr>

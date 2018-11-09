@@ -91,7 +91,10 @@ class zdb
 
             /* Create sql code. */
             $backupSql  = "DROP " . strtoupper($tableType) . " IF EXISTS `$table`;\n";
-            $backupSql .= $this->getSchemaSQL($table, $tableType);
+
+            $schemaSQL = $this->getSchemaSQL($table, $tableType);
+            if($schemaSQL->result) $backupSql .= $schemaSQL->sql;
+
             fwrite($fp, $backupSql);
             if($tableType != 'table') continue;
 
@@ -198,8 +201,22 @@ class zdb
      */
     public function getSchemaSQL($table, $type = 'table')
     {
-        $sql = "SHOW CREATE $type `$table`";
-        $createSql = $this->dbh->query($sql)->fetch(PDO::FETCH_ASSOC);
-        return $createSql['Create ' . ucfirst($type)] . ";\n";
+        $return = new stdclass();
+        $return->result = true;
+        $return->error  = '';
+
+        try
+        {
+            $sql = "SHOW CREATE $type `$table`";
+            $createSql   = $this->dbh->query($sql)->fetch(PDO::FETCH_ASSOC);
+            $return->sql = $createSql['Create ' . ucfirst($type)] . ";\n";
+            return $return;
+        }
+        catch(PDOException $e)
+        {
+            $return->result = false;
+            $return->error  = $e->getMessage();
+            return $return;
+        }
     }
 }

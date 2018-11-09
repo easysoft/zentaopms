@@ -1,26 +1,32 @@
 <?php
-$lang->backup->common   = '备份';
-$lang->backup->index    = '备份首页';
-$lang->backup->history  = '备份历史';
-$lang->backup->delete   = '删除备份';
-$lang->backup->backup   = '备份';
-$lang->backup->restore  = '还原';
-$lang->backup->change   = '修改保留时间';
-$lang->backup->changeAB = '修改';
+$lang->backup->common      = '备份';
+$lang->backup->index       = '备份首页';
+$lang->backup->history     = '备份历史';
+$lang->backup->delete      = '删除备份';
+$lang->backup->backup      = '备份';
+$lang->backup->restore     = '还原';
+$lang->backup->change      = '修改保留时间';
+$lang->backup->changeAB    = '修改';
+$lang->backup->rmPHPHeader = '去除安全语句';
 
 $lang->backup->time  = '备份时间';
 $lang->backup->files = '备份文件';
 $lang->backup->size  = '大小';
 
-$lang->backup->setting = '设置';
+$lang->backup->setting    = '设置';
+$lang->backup->settingDir = '备份目录';
 $lang->backup->settingList['nofile'] = '不备份附件和代码';
 $lang->backup->settingList['nozip']  = '只拷贝文件';
+$lang->backup->settingList['nosafe'] = '不需要防下载设置';
 
-$lang->backup->waitting       = '<span id="backupType"></span>正在进行中，请稍候...';
-$lang->backup->confirmDelete  = '是否删除备份？';
-$lang->backup->confirmRestore = '是否还原该备份？';
-$lang->backup->holdDays       = '备份保留最近 %s 天';
-$lang->backup->restoreTip     = '还原功能只还原附件和数据库，如果需要还原代码，可以手动还原。';
+$lang->backup->waitting        = '<span id="backupType"></span>正在进行中，请稍候...';
+$lang->backup->progressSQL     = '<p>SQL备份中，已备份%s</p>';
+$lang->backup->progressAttatch = '<p>SQL备份完成</p><p>附件备份中，已备份%s</p>';
+$lang->backup->progressCode    = '<p>SQL备份完成</p><p>附件备份完成</p><p>代码备份中，已备份%s</p>';
+$lang->backup->confirmDelete   = '是否删除备份？';
+$lang->backup->confirmRestore  = '是否还原该备份？';
+$lang->backup->holdDays        = '备份保留最近 %s 天';
+$lang->backup->restoreTip      = '还原功能只还原附件和数据库，如果需要还原代码，可以手动还原。';
 
 $lang->backup->success = new stdclass();
 $lang->backup->success->backup  = '备份成功！';
