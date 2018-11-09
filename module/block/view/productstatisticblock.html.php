@@ -209,11 +209,11 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->release->common;?> :</td>
+                      <td class='text-right'><?php echo $lang->product->allRelease;?> :</td>
                       <td class='text-left'><?php echo $totalRelease;?></td>
                     </tr>
                     <tr>
-                      <td class='text-right'><?php echo $lang->release->statusList['normal'];?> :</td>
+                      <td class='text-right'><?php echo $lang->product->maintain;?> :</td>
                       <td class='text-left'><?php echo $normalRelease;?></td>
                     </tr>
                   </table>
