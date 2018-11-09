@@ -2446,7 +2446,7 @@ class taskModel extends model
                 case 'id':
                     if($canBatchAction)
                     {
-                        echo html::checkbox('taskIDList', array($task->id => sprintf('%03d', $task->id)));
+                        echo html::checkbox('taskIDList', array($task->id => '')) . html::a(helper::createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));
                     }
                     else
                     {

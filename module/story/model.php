@@ -2336,7 +2336,7 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));
+                echo html::checkbox('storyIDList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";

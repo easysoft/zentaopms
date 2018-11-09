@@ -157,9 +157,9 @@ $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = 'Other';
 
 $lang->story->priList[]  = '';
-$lang->story->priList[3] = '3';
 $lang->story->priList[1] = '1';
 $lang->story->priList[2] = '2';
+$lang->story->priList[3] = '3';
 $lang->story->priList[4] = '4';
 
 $lang->story->legendBasicInfo      = 'Basic Info';

@@ -66,7 +66,7 @@
             <div class="small"><span class="text-muted"><?php echo $lang->project->build;?></span> <?php echo $total;?></div>
           </td>
           <?php endif;?>
-          <td class="c-id-sm text-muted"><?php echo sprintf('%03d', $build->id);?></td>
+          <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink('build', 'view', "buildID=$build->id"), sprintf('%03d', $build->id));?></td>
           <td class="c-name">
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>

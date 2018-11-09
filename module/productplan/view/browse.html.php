@@ -73,7 +73,7 @@
       <tr>
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
-          <?php echo html::checkbox('planIDList', array($plan->id => sprintf('%03d', $plan->id)));?>
+          <?php echo html::checkbox('planIDList', array($plan->id => '')) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
           <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>
