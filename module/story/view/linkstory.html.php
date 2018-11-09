@@ -26,7 +26,7 @@
   <div id='queryBox' class='show divider'></div>
   <form method='post' target='hiddenwin' id='linkStoryForm' class='main-table table-story'>
     <?php if($stories2Link):?>
-    <table class='table tablesorter' id='storyList'>
+    <table class='table tablesorter table-bordered' id='storyList'>
       <thead>
       <tr>
         <th class='c-id'>
@@ -39,6 +39,8 @@
         <th><?php echo $lang->story->product;?></th>
         <th><?php echo $lang->story->title;?></th>
         <th><?php echo $lang->story->plan;?></th>
+        <th class='w-80px'><?php echo $lang->story->status;?></th>
+        <th class='w-80px'><?php echo $lang->story->stage;?></th>
         <th class='w-user'><?php echo $lang->openedByAB;?></th>
         <th class='w-80px'><?php echo $lang->story->estimateAB;?></th>
       </tr>
@@ -59,6 +61,8 @@
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
         <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title, '_blank');?></td>
         <td><?php echo $story2Link->planTitle;?></td>
+        <td><?php echo zget($lang->story->statusList, $story2Link->status);?></td>
+        <td><?php echo zget($lang->story->stageList, $story2Link->stage);?></td>
         <td><?php echo zget($users, $story2Link->openedBy);?></td>
         <td><?php echo $story2Link->estimate;?></td>
       </tr>
