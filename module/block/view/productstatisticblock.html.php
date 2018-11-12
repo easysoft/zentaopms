@@ -154,7 +154,7 @@ $(function()
               </div>
             </div>
             <div class="product-info">
-              <?php $totalProject = $product->projects ? array_sum($product->projects) : 0;?>
+              <?php $totalProject = $product->projects ? zget($product->projects, 'all', 0) : 0;?>
               <?php $doingProject = $product->projects ? zget($product->projects, 'doing', 0) : 0;?>
               <?php $delayProject = $product->projects ? zget($product->projects, 'delay', 0) : 0;?>
               <?php $doingRate    = $totalProject ? round($doingProject / $totalProject * 100, 2) : 0;?>
