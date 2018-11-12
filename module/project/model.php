@@ -1381,6 +1381,7 @@ class projectModel extends model
                 $story = $this->dao->findById($storyID)->fields("$projectID as project, id as story, product, version")->from(TABLE_STORY)->fetch();
                 $story->order = ++$lastOrder;
                 $this->dao->insert(TABLE_PROJECTSTORY)->data($story)->exec();
+                $this->action->create('story', $storyID, 'linked2project', '', $projectID);
             }
         }
     }
