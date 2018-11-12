@@ -71,6 +71,10 @@
           <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows=10 class='form-control'");?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->comment;?></th>
+          <td colspan='2'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->testtask->mailto;?></th>
           <td colspan='2'>
             <div class='input-group'>
