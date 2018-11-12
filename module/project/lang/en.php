@@ -190,7 +190,7 @@ $lang->project->aboveAllProduct = "All the above {$lang->productCommon}";
 $lang->project->aboveAllProject = "All the above {$lang->projectCommon}";
 
 /* 页面提示。*/
-$lang->project->linkStoryByPlanTips = 'It will link stories to this project who are under the plan';
+$lang->project->linkStoryByPlanTips = 'It will link stories to this project which are under the plan';
 $lang->project->selectProject       = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd         = 'Duration';
 $lang->project->begin               = 'Begin';
