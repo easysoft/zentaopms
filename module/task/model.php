@@ -542,7 +542,7 @@ class taskModel extends model
 
                 if(($oldTask->assignedTo != $currentTask->assignedTo or $currentTask->status == 'done')
                     and isset($team[$this->app->user->account]) and $team[$this->app->user->account]->left == 0
-                    and strpos($oldTask->finishedLis, ",{$this->app->user->account},") === false)
+                    and strpos($oldTask->finishedList, ",{$this->app->user->account},") === false)
                 {
                     $currentTask->finishedList = ',' . trim(trim($oldTask->finishedList, ',') . ",{$this->app->user->account}", ',') . ',';
                 }
