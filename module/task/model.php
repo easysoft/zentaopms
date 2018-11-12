@@ -683,6 +683,7 @@ class taskModel extends model
         {
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
+            if($task->parent) $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             return common::createChanges($oldTask, $task);
         }
@@ -1596,6 +1597,25 @@ class taskModel extends model
             ->query();
         while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->finishedByRealName:$task->name";
         return $tasks;
+    }
+
+    /**
+     * Get project parent tasks pairs.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getParentTaskPairs($projectID)
+    {
+        $tasks = $this->dao->select('id, name')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('parent')->le(0)
+            ->andWhere('status')->notin('cancel,closed')
+            ->andWhere('project')->eq($projectID)
+            ->fetchPairs();
+
+        return array('' => '') + $tasks ;
     }
 
     /**
