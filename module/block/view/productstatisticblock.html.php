@@ -154,7 +154,7 @@ $(function()
               </div>
             </div>
             <div class="product-info">
-              <?php $totalProject = $product->projects ? array_sum($product->projects) : 0;?>
+              <?php $totalProject = $product->projects ? zget($product->projects, 'all', 0) : 0;?>
               <?php $doingProject = $product->projects ? zget($product->projects, 'doing', 0) : 0;?>
               <?php $delayProject = $product->projects ? zget($product->projects, 'delay', 0) : 0;?>
               <?php $doingRate    = $totalProject ? round($doingProject / $totalProject * 100, 2) : 0;?>
@@ -209,11 +209,11 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->release->common;?> :</td>
+                      <td class='text-right'><?php echo $lang->product->allRelease;?> :</td>
                       <td class='text-left'><?php echo $totalRelease;?></td>
                     </tr>
                     <tr>
-                      <td class='text-right'><?php echo $lang->release->statusList['normal'];?> :</td>
+                      <td class='text-right'><?php echo $lang->product->maintain;?> :</td>
                       <td class='text-left'><?php echo $normalRelease;?></td>
                     </tr>
                   </table>

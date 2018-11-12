@@ -4,11 +4,15 @@ function switchShow(result)
     {
         $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
+        $('#priBox').hide();
+        $('#estimateBox').hide();
         $('#assignedTo').val('closed');
         $('#assignedTo').trigger("chosen:updated");
     }
-    else if(result == 'revert')
+    else if(result == 'clarify')
     {
+        $('#priBox').hide();
+        $('#estimateBox').hide();
         $('#preVersionBox').show();
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
@@ -18,6 +22,8 @@ function switchShow(result)
     }
     else
     {
+        $('#priBox').show();
+        $('#estimateBox').show();
         $('#preVersionBox').hide();
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();

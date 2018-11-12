@@ -146,6 +146,8 @@ class task extends control
             }
             elseif($this->post->after == 'toTaskList')
             {
+                $moduleID  = $this->post->module ? $this->post->module : 0;
+                $taskLink  = $this->createLink('project', 'task', "projectID=$projectID&browseType=byModule&param=$moduleID");
                 $response['locate'] = $taskLink;
                 $this->send($response);
             }
@@ -339,6 +341,7 @@ class task extends control
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
+        $this->view->tasks      = $this->task->getParentTaskPairs($this->view->project->id);
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();

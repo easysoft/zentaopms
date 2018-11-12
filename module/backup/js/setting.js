@@ -1,0 +1,15 @@
+$(function()
+{
+    $('#settingnofile').change(function()
+    {
+        if($(this).prop('checked'))
+        {
+            $('#settingnozip').closest('.checkbox-primary').hide();
+        }
+        else
+        {
+            $('#settingnozip').closest('.checkbox-primary').show();
+        }
+    })
+    $('#settingnofile').change();
+});

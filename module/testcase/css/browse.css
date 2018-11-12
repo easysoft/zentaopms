@@ -19,3 +19,5 @@
 
 tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-bug {margin-left: -8px;}
+
+.table td.c-title > a:first-child{max-width: 70%; max-width: calc(100% - 100px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

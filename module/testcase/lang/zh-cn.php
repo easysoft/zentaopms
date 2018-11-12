@@ -63,6 +63,7 @@ $lang->testcase->stepNumber       = '用例步骤数';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = '转Bug';
 $lang->testcase->fromModule       = '来源模块';
+$lang->testcase->fromCase         = '来源用例';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID      = '编号';

@@ -141,9 +141,9 @@ $lang->task->typeList['affair']  = 'Work';
 $lang->task->typeList['misc']    = 'Misc';
 
 $lang->task->priList[0]  = '';
-$lang->task->priList[3]  = '3';
 $lang->task->priList[1]  = '1';
 $lang->task->priList[2]  = '2';
+$lang->task->priList[3]  = '3';
 $lang->task->priList[4]  = '4';
 
 $lang->task->reasonList['']       = '';

@@ -16,7 +16,6 @@ function browseBySearch()
 $(function()
 {
     if(browseType == 'bysearch') return;
-    $('#pageActions ul.dropdown-menu').css('left', '67px');
     if(browseType == 'byediteddate' || browseType == 'openedbyme' || browseType == 'collectedbyme') 
     {
         $('#pageActions ul.dropdown-menu').css('left', '0px');

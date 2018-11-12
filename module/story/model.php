@@ -694,6 +694,7 @@ class storyModel extends model
             ->setIF($this->post->result == 'reject', 'closedDate', $now)
             ->setIF($this->post->result == 'reject', 'assignedTo', 'closed')
             ->setIF($this->post->result == 'reject', 'status', 'closed')
+            ->setIF($this->post->result == 'reject', 'stage', 'closed')
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
             ->setIF($this->post->closedReason == 'done', 'stage', 'released')
@@ -719,7 +720,7 @@ class storyModel extends model
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
-        $this->setStage($storyID);
+        if($this->post->result != 'reject') $this->setStage($storyID);
         return true;
     }
 
@@ -2335,7 +2336,7 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));
+                echo html::checkbox('storyIDList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
