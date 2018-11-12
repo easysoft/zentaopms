@@ -124,7 +124,7 @@ $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
 $lang->menu->admin   = '后台|admin|index';
 
-$lang->dividerMenu = ',qa,';
+$lang->dividerMenu = ',qa,report,';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';

@@ -32,7 +32,7 @@ var browseType = '<?php echo $browseType;?>';
     <div class="panel block-files block-sm no-margin">
       <div class="panel-heading">
         <div class="panel-title font-normal">
-          <?php if($browseType != 'fastsearch'):?>
+          <?php if($browseType != 'bysearch'):?>
           <i class="icon icon-folder-open-o text-muted"></i>
           <?php else:?>
           <i class="icon icon-search text-muted"></i>
@@ -57,7 +57,11 @@ var browseType = '<?php echo $browseType;?>';
           <?php endif;?>
         </nav>
       </div>
-      <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
+      <?php if(empty($docs) and $browseType == 'bysearch'):?>
+      <div class="table-empty-tip">
+        <p><span class="text-muted"><?php echo $lang->doc->noSearchedDoc;?></span></p>
+      </div>
+      <?php elseif(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
       <div class="table-empty-tip">
         <p>
           <?php if($libID):?>
@@ -66,8 +70,6 @@ var browseType = '<?php echo $browseType;?>';
           <span class="text-muted"><?php echo $lang->youCould;?></span>
           <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
           <?php endif;?>
-          <?php elseif($browseType == 'fastsearch'):?>
-          <span class="text-muted"><?php echo $lang->doc->noSearchedDoc;?></span>
           <?php elseif($browseType == 'byediteddate'):?>
           <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
           <?php elseif($browseType == 'openedbyme'):?>
@@ -91,7 +93,7 @@ var browseType = '<?php echo $browseType;?>';
             </tr>
           </thead>
           <tbody>
-            <?php if(!empty($libs)):?>
+            <?php if(!empty($libs) and $browseType != 'bysearch'):?>
             <?php foreach($libs as $lib):?>
             <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
@@ -109,7 +111,7 @@ var browseType = '<?php echo $browseType;?>';
             </tr>
             <?php endforeach;?>
             <?php endif;?>
-            <?php if(!empty($attachLibs)):?>
+            <?php if(!empty($attachLibs) and $browseType != 'bysearch'):?>
             <?php foreach($attachLibs as $libType => $attachLib):?>
             <tr>
               <?php if($libType == 'project'):?>
@@ -125,7 +127,7 @@ var browseType = '<?php echo $browseType;?>';
             </tr>
             <?php endforeach;?>
             <?php endif;?>
-            <?php if(isset($modules)):?>
+            <?php if(isset($modules) and $browseType != 'bysearch'):?>
             <?php foreach($modules as $module):?>
             <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
