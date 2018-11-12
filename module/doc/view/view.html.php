@@ -88,10 +88,12 @@
               {
                   $parsedUrl = parse_url($url);
                   $urlDomain = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
-                  $response  = common::http($url);
+
+                  $title    = '';
+                  $response = common::http($url);
                   preg_match_all('/<title>(.*)<\/title>/Ui', $response, $out);
-                  $title = '';
                   if(isset($out[1][0])) $title = $out[1][0];
+
                   echo "<div id='urlCard'>";
                   echo "<div class='url-icon'><img src='{$urlDomain}/favicon.ico' width='45' height='45' /></div>";
                   echo "<div class='url-content'>";
