@@ -64,11 +64,11 @@
             <?php endif;?>
             <th class='c-name required has-btn'><?php echo $lang->task->name;?></span></th>
             <th class='w-80px required'><?php echo $lang->typeAB;?></span></th>
-            <th class='w-150px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
+            <th class='w-130px<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
             <th class='w-60px<?php  echo zget($visibleFields, 'estimate',   ' hidden') . zget($requiredFields, 'estimate',   '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'estStarted', ' hidden') . zget($requiredFields, 'estStarted', '', ' required');?>'><?php echo $lang->task->estStarted;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'deadline',   ' hidden') . zget($requiredFields, 'deadline',   '', ' required');?>'><?php echo $lang->task->deadline;?></th>
-            <th class='w-200px<?php echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       '', ' required');?>'><?php echo $lang->task->desc;?></th>
+            <th class='w-150px<?php echo zget($visibleFields, 'desc',       ' hidden') . zget($requiredFields, 'desc',       '', ' required');?>'><?php echo $lang->task->desc;?></th>
             <th class='w-80px<?php  echo zget($visibleFields, 'pri',        ' hidden') . zget($requiredFields, 'pri',        '', ' required');?>'><?php echo $lang->task->pri;?></th>
           </tr>
         </thead>
@@ -106,6 +106,7 @@
               <div class='input-group'>
                 <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
                 <span class='input-group-btn'>
+                  <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-search'></i></a>
                   <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
                   <?php echo html::hidden("storyEstimate$i") . html::hidden("storyDesc$i") . html::hidden("storyPri$i");?>
                 </span>
@@ -158,6 +159,7 @@
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated(\"%s\")'");?>
           <span class='input-group-btn'>
+            <a id="preview%s" href='#' class='btn iframe btn-link btn-icon btn-copy' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-search'></i></a>
             <a href='javascript:copyStoryTitle("%s")' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
           </span>
         </div>

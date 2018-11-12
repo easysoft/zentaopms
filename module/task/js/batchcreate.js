@@ -74,7 +74,7 @@ function copyStoryTitle(num)
 function setStoryRelated(num)
 {
     var storyID = $('#story' + num).val();
-    if(storyID)
+    if(storyID && storyID != 'ditto')
     {
         var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
         $.getJSON(link, function(storyInfo)
@@ -86,6 +86,18 @@ function setStoryRelated(num)
             $('#storyPri'      + num).val(storyInfo.pri);
             $('#storyDesc'     + num).val(storyInfo.spec);
         });
+
+        storyLink  = createLink('story', 'view', "storyID=" + storyID);
+        var concat = config.requestType != 'GET' ? '?'  : '&';
+        storyLink  = storyLink + concat + 'onlybody=yes';
+        $('#preview' + num).removeAttr('disabled');
+        $('#preview' + num).attr('href', storyLink);
+    }
+    else
+    {
+        storyLink  = '#';
+        $('#preview' + num).attr('disabled', true);
+        $('#preview' + num).attr('href', storyLink);
     }
 }
 
