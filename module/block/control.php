@@ -825,6 +825,7 @@ class block extends control
             $project['doing'] = $doing;
             $project['done']  = $done;
             $project['delay'] = $delay;
+            $project['all']   = count($productProjects);
 
             $projects[$product] = $project;
         }
