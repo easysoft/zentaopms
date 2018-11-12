@@ -27,6 +27,9 @@
       <?php endif; ?>
 	</div>
   </div>
+  <div class="btn-toolbar pull-right">
+    <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); ?>
+  </div>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">

@@ -34,6 +34,14 @@
       <?php endif;?>
     </div>
   </div>
+  <div class="btn-toolbar pull-right">
+    <?php
+    $checkObject = new stdclass();
+    $checkObject->project = $task->project;
+    $link = $this->createLink('task', 'create', "project={$task->project}&storyID={$task->story}&moduleID={$task->module}");
+    if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
+    ?>
+  </div>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
