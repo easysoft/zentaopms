@@ -3,8 +3,14 @@
   <div class="panel block-files block-sm no-margin">
     <div class="panel-heading">
       <div class="panel-title font-normal">
-        <i class="icon icon-folder-open-o text-muted"></i>
-        <?php echo $breadTitle;?>
+        <div class="panel-title font-normal">
+          <?php if($browseType != 'bysearch'):?>
+          <i class="icon icon-folder-open-o text-muted"></i>
+          <?php else:?>
+          <i class="icon icon-search text-muted"></i>
+          <?php endif;?>
+          <?php echo $breadTitle;?>
+        </div>
         <nav class="panel-actions btn-toolbar">
           <div class="btn-group">
             <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon'");?>
@@ -24,13 +30,32 @@
         </nav>
       </div>
     </div>
-    <?php if(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
+    <?php if(empty($docs) and $browseType == 'bysearch'):?>
     <div class="table-empty-tip">
-      <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span> <?php common::printLink('doc', 'create', "libID={$libID}", "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?></p>
+      <p><span class="text-muted"><?php echo $lang->doc->noSearchedDoc;?></span></p>
+    </div>
+    <?php elseif(empty($docs) and empty($modules) and empty($libs) and empty($attachLibs)):?>
+    <div class="table-empty-tip">
+      <p>
+        <?php if($libID):?>
+        <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
+        <?php if(common::hasPriv('doc', 'create')):?>
+        <span class="text-muted"><?php echo $lang->youCould;?></span>
+        <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+        <?php endif;?>
+        <?php elseif($browseType == 'byediteddate'):?>
+        <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
+        <?php elseif($browseType == 'openedbyme'):?>
+        <span class="text-muted"><?php echo $lang->doc->noOpenedDoc;?></span>
+        <?php elseif($browseType == 'collectedbyme'):?>
+        <span class="text-muted"><?php echo $lang->doc->noCollectedDoc;?></span>
+        <?php endif;?>
+      </p>
     </div>
     <?php else:?>
     <div class="panel-body">
       <div class="row row-grid files-grid" data-size="300">
+        <?php if(!empty($libs) and $browseType != 'bysearch'):?>
         <?php foreach($libs as $lib):?>
         <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <div class="col">
@@ -45,6 +70,8 @@
           </div>
         </div>
         <?php endforeach;?>
+        <?php endif;?>
+        <?php if(!empty($attachLibs) and $browseType != 'bysearch'):?>
         <?php foreach($attachLibs as $libID => $attachLib):?>
         <div class="col">
           <?php
@@ -66,6 +93,8 @@
           <div class="actions"></div>
         </div>
         <?php endforeach;?>
+        <?php endif;?>
+        <?php if(isset($modules) and $browseType != 'bysearch'):?>
         <?php foreach($modules as $module):?>
         <?php $star = strpos($module->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <div class="col">
@@ -80,6 +109,7 @@
           </div>
         </div>
         <?php endforeach;?>
+        <?php endif;?>
         <?php foreach($docs as $doc):?>
         <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
         <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
