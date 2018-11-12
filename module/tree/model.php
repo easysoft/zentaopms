@@ -212,7 +212,7 @@ class treeModel extends model
         }
         $treeMenu   = array();
         $lastMenu[] = '/';
-        $projectModules   = $this->getTaskTreeModules($rootID, false, false);
+        $projectModules   = $this->getTaskTreeModules($rootID, true);
         $noProductModules = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task' and parent = 0")->andWhere('deleted')->eq(0)->fetchPairs('id', 'name');
 
         /* Fix for not in product modules. */
@@ -223,7 +223,7 @@ class treeModel extends model
             {
                 if($type == 'product')
                 {
-                    $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task') OR (root = $id and type = 'story'))")
+                    $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story'))")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                         ->andWhere('deleted')->eq(0)
                         ->orderBy('grade desc, branch, type, `order`')
@@ -240,8 +240,7 @@ class treeModel extends model
 
                 foreach($modules as $module)
                 {
-                    $parentModules = explode(',', trim($module->path, ','));
-                    if($type == 'product' and isset($noProductModules[$parentModules[0]])) continue;
+                    if($type == 'product' and !isset($projectModules[$module->id])) continue;
                     $rootName = ($productNum > 1 and $type == 'product') ? "/$rootModule/" : '/';
                     if($type == 'product' and $module->branch and isset($branchGroups[$id][$module->branch])) $rootName .= $branchGroups[$id][$module->branch] . '/';
                     $this->buildTreeArray($treeMenu, $modules, $module, $rootName);
