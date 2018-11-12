@@ -124,7 +124,7 @@ $lang->menu->report  = 'Report|report|index';
 $lang->menu->company = 'Company|company|index';
 $lang->menu->admin   = 'Admin|admin|index';
 
-$lang->dividerMenu = ',qa,';
+$lang->dividerMenu = ',qa,report,';
 
 /* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
