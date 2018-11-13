@@ -1431,6 +1431,19 @@ class task extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $this->app->loadLang('project');
+        $fileName = $this->lang->task->common;
+        $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');
+        if(isset($this->lang->project->featureBar['task'][$type]))
+        {
+            $browseType = $this->lang->project->featureBar['task'][$type];
+        }
+        else
+        {
+            $browseType = isset($this->lang->project->statusSelects[$type]) ? $this->lang->project->statusSelects[$type] : '';
+        }
+
+        $this->view->fileName        = $projectName . $this->lang->dash . $browseType . $fileName;
         $this->view->allExportFields = $allExportFields;
         $this->view->customExport    = true;
         $this->view->orderBy         = $orderBy;

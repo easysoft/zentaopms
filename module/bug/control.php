@@ -1421,10 +1421,11 @@ class bug extends control
      *
      * @param  string $productID
      * @param  string $orderBy
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy)
+    public function export($productID, $orderBy, $browseType = '')
     {
         if($_POST)
         {
@@ -1603,6 +1604,18 @@ class bug extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $fileName = $this->lang->bug->common;
+        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+        if(isset($this->lang->bug->featureBar['browse'][$browseType]))
+        {
+            $browseType = $this->lang->bug->featureBar['browse'][$browseType];
+        }
+        else
+        {
+            $browseType = $this->lang->bug->moreSelects[$browseType];
+        }
+
+        $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
         $this->view->allExportFields = $this->config->bug->list->exportFields;
         $this->view->customExport    = true;
         $this->display();

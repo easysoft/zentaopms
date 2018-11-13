@@ -187,7 +187,7 @@ class docModel extends model
         if($libs === null)
         {
             $libs = array();
-            $stmt = $this->dao->select('lib,groups,users')->from(TABLE_DOC)->where('acl')->ne('open')->andWhere("(groups != '' or users != '')")->query();
+            $stmt = $this->dao->select('lib,`groups`,users')->from(TABLE_DOC)->where('acl')->ne('open')->andWhere("(`groups` != '' or users != '')")->query();
 
             $account    = ",{$this->app->user->account},";
             $userGroups = $this->app->user->groups;
