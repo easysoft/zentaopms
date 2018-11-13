@@ -612,6 +612,18 @@ class doc extends control
     }
 
     /**
+     * Ajax get all child module. 
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetChild($libID)
+    {
+        $childModules = $this->loadModel('tree')->getOptionMenu($libID, 'doc');
+        die(html::select('parent', $childModules, '', "class='form-control'"));
+    }
+
+    /**
      * Show all libs by type.
      *
      * @param  string $type

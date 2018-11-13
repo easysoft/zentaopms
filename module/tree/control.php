@@ -240,6 +240,7 @@ class tree extends control
 
         $this->view->module = $module;
         $this->view->type   = $type;
+        $this->view->libs   = array('' => '') + $this->loadModel('doc')->getLibs();
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
