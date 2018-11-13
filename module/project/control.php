@@ -2323,9 +2323,9 @@ class project extends control
     {
         $planStories  = $planProducts = array();
         $planStory    = $this->loadModel('story')->getPlanStories($planID);
+        $count = 0;
         if(!empty($planStory))
         {
-            $count = 0;
             foreach($planStory as $id => $story)
             {
                 if($story->status == 'draft') 
