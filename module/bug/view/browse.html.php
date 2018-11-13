@@ -129,7 +129,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       </button>
       <ul class='dropdown-menu' id='exportActionMenu'>
         <?php
-        $link = $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy");
+        $link = $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=$browseType");
         echo "<li>" . html::a($link, $lang->bug->export, '', "class='export'") . "</li>";
         ?>
       </ul>

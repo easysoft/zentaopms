@@ -18,6 +18,7 @@ $lang->downArrow = '↓';
 $lang->null      = 'null';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
+$lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->welcome        = "%s PMS";

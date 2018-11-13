@@ -18,6 +18,7 @@ $lang->downArrow = '↓';
 $lang->null      = '空';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
+$lang->dash      = '-';
 
 $lang->zentaoPMS      = '禅道';
 $lang->welcome        = "%s项目管理系统";
