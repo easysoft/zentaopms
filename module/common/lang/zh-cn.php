@@ -194,6 +194,8 @@ $lang->my->menu->changePassword = '密码|my|changepassword';
 $lang->my->menu->manageContacts = '联系人|my|managecontacts';
 $lang->my->menu->score          = '积分|my|score';
 
+$lang->my->dividerMenu = ',task,myProject,profile,';
+
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
@@ -207,13 +209,15 @@ $lang->product->menu = new stdclass();
 $lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan    = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
-$lang->product->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
 $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
+$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
+$lang->product->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+
+$lang->product->dividerMenu = ',plan,project,doc,';
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -366,16 +370,36 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->message   = array('link' => '消息|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->backup    = array('link' => '备份|backup|index', 'subModule' => 'backup');
+$lang->admin->menu->sso       = array('link' => '集成|admin|sso');
+$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->cron      = array('link' => '计划任务|cron|index', 'subModule' => 'cron');
-$lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
-$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->entry     = array('link' => '应用|entry|browse', 'subModule' => 'entry');
-$lang->admin->menu->sso       = '然之集成|admin|sso';
+$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron');
+
+$lang->admin->subMenu = new stdclass();
+$lang->admin->subMenu->message = new stdclass();
+$lang->admin->subMenu->message->mail    = array('link' => '邮件|mail|index', 'subModule' => 'mail');
+$lang->admin->subMenu->message->webhook = array('link' => 'Webhook|webhook|browse', 'subModule' => 'webhook');
+$lang->admin->subMenu->message->setting = array('link' => '设置|message|setting', 'subModule' => 'message');
+
+$lang->admin->subMenu->sso = new stdclass();
+$lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
+
+$lang->admin->subMenu->dev = new stdclass();
+$lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
+$lang->admin->subMenu->dev->db     = array('link' => '数据库|dev|db');
+$lang->admin->subMenu->dev->editor = array('link' => '编辑器|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->entry  = array('link' => '应用|entry|browse', 'subModule' => 'entry');
+
+$lang->admin->subMenu->data = new stdclass();
+$lang->admin->subMenu->data->backup = array('link' => '备份|backup|index', 'subModule' => 'backup');
+$lang->admin->subMenu->data->trash  = '回收站|action|trash';
+
+$lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->cron = array('link' => '定时|cron|index', 'subModule' => 'cron');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

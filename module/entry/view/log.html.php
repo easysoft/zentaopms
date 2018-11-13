@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include 'header.html.php';?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <?php common::printLink('entry', 'browse', '', "<span class='text'>{$lang->entry->common}</span>", '', "class='btn btn-link btn-active-text'");?>
