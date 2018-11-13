@@ -27,7 +27,7 @@
                   <?php foreach($plans as $plan):?>
                   <?php if(isset($plan->begin)):?>
                   <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
-                    <a href="<?php echo $this->createLink('plan', 'view', "planID={$plan->id}");?>">
+                    <a href="<?php echo $this->createLink('productplan', 'view', "planID={$plan->id}");?>">
                       <span class="title"><?php echo $plan->title;?></span>
                       <span class="date"><?php echo $plan->begin;?></span>
                     </a>
