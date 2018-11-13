@@ -76,7 +76,4 @@
     </table>
   </form>
 </div>
-<script>
-$(function(){$('#mainMenu #settingTab').addClass('btn-active-text');})
-</script>
 <?php include '../../common/view/footer.html.php';?>

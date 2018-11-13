@@ -392,6 +392,47 @@ class commonModel extends model
     }
 
     /**
+     * Print admin subMenu.
+     * 
+     * @param  string    $subMenu 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printAdminSubMenu($subMenu)
+    {
+        global $app, $lang;
+        $moduleName  = $app->getModuleName();
+        $methodName  = $app->getMethodName();
+        if(isset($lang->admin->subMenuOrder->$subMenu))
+        {
+            ksort($lang->admin->subMenuOrder->$subMenu);
+            foreach($lang->admin->subMenuOrder->$subMenu as $type)
+            {
+                if(isset($lang->admin->subMenu->$subMenu->$type))
+                {
+                    $subModule = '';
+                    $alias     = '';
+                    $link      = $lang->admin->subMenu->$subMenu->$type;
+                    if(is_array($lang->admin->subMenu->$subMenu->$type))
+                    {
+                        if(isset($lang->admin->subMenu->$subMenu->$type['subModule'])) $subModule = $lang->admin->subMenu->$subMenu->$type['subModule'];
+                        if(isset($lang->admin->subMenu->$subMenu->$type['alias'])) $alias = $lang->admin->subMenu->$subMenu->$type['alias'];
+                        $link = $lang->admin->subMenu->$subMenu->$type['link'];
+                    }
+                    list($text, $currentModule, $currentMethod)= explode('|', $link);
+                    if(!common::hasPriv($currentModule, $currentMethod)) continue;
+
+                    $active = ($moduleName == $currentModule and $methodName == $currentMethod) ? 'btn-active-text' : '';
+                    if($subModule and strpos(",{$subModule}," , ",{$moduleName},") !== false) $active = 'btn-active-text';
+                    if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'btn-active-text';
+                    echo html::a(helper::createLink($currentModule, $currentMethod), "<span class='text'>$text</span>", '', "class='btn btn-link {$active}' id='{$type}Tab'");
+                }
+            }
+        }
+    }
+
+    /**
      * Print the main menu.
      *
      * @param  string $moduleName

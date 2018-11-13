@@ -193,7 +193,9 @@ $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
 $lang->my->menu->score          = 'Point|my|score';
 
-$lang->todo = new stdclass();
+$lang->my->dividerMenu = ',task,myProject,profile,';
+
+$lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
 $lang->score       = new stdclass();
@@ -213,6 +215,8 @@ $lang->product->menu->roadmap  = 'Roadmap|product|roadmap|productID=%s';
 $lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module   = 'Module|tree|browse|productID=%s&view=story';
 $lang->product->menu->view     = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
+
+$lang->product->dividerMenu = ',plan,project,doc,';
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -365,16 +369,36 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-
-$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->message   = array('link' => 'Message|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
+$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
+$lang->admin->menu->sso       = array('link' => 'Integrate|admin|sso');
+
+$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
-$lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
-$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->entry     = array('link' => 'Entry|entry|browse', 'subModule' => 'entry');
-$lang->admin->menu->sso       = 'Zdoo|admin|sso';
+$lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');
+
+$lang->admin->subMenu = new stdclass();
+$lang->admin->subMenu->message = new stdclass();
+$lang->admin->subMenu->message->mail    = array('link' => 'Mail|mail|index', 'subModule' => 'mail');
+$lang->admin->subMenu->message->webhook = array('link' => 'Webhook|webhook|browse', 'subModule' => 'webhook');
+$lang->admin->subMenu->message->setting = array('link' => 'Setting|message|setting', 'subModule' => 'message');
+
+$lang->admin->subMenu->sso = new stdclass();
+$lang->admin->subMenu->sso->ranzhi = 'Zdoo|admin|sso';
+
+$lang->admin->subMenu->dev = new stdclass();
+$lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
+$lang->admin->subMenu->dev->db     = array('link' => 'Database|dev|db');
+$lang->admin->subMenu->dev->editor = array('link' => 'Editor|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->entry  = array('link' => 'Entry|entry|browse', 'subModule' => 'entry');
+
+$lang->admin->subMenu->data = new stdclass();
+$lang->admin->subMenu->data->backup = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
+$lang->admin->subMenu->data->trash  = 'Recycle|action|trash';
+
+$lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->cron = array('link' => 'Timed task|cron|index', 'subModule' => 'cron');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
