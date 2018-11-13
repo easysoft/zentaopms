@@ -17,11 +17,13 @@
       <div class='panel panel-sm with-list'>
         <div class='panel-heading'><i class='icon-list'></i> <strong><?php echo $lang->editor->moduleList?></strong></div>
         <?php foreach($lang->dev->groupList as $group => $groupName):?>
+        <?php if(!empty($modules[$group])):?>
         <div class='modulegroup'><?php echo $groupName?></div>
         <?php foreach($modules[$group] as $module):?>
         <?php $moduleName = zget($lang->dev->tableList, $module, $module);?>
         <?php echo html::a(inlink('extend', "moduleDir=$module"), $moduleName, 'extendWin');?>
         <?php endforeach;?>
+        <?php endif;?>
         <?php endforeach;?>
       </div>
     </div>
