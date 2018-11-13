@@ -1197,7 +1197,9 @@ class testcase extends control
         $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
         $browseType  = isset($this->lang->testcase->featureBar['browse'][$browseType]) ? $this->lang->testcase->featureBar['browse'][$browseType] : '';
 
-        $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
+        if($taskID) $taskName = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch('name');
+
+        $this->view->fileName        = $productName . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
         $this->view->allExportFields = $this->config->testcase->exportFields;
         $this->view->customExport    = true;
         $this->display();
