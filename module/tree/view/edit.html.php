@@ -96,7 +96,7 @@ $(function()
 })
 function loadDocModule(libID)
 {
-    link = createLink('doc', 'ajaxGetChild', 'libID=' + libID);
+    link = createLink('doc', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
     $.post(link, function(data)
     {   
         $('#parent').replaceWith(data);
