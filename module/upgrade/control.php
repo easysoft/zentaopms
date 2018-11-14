@@ -150,6 +150,21 @@ class upgrade extends control
     }
 
     /**
+     * Consistency.
+     * 
+     * @access public
+     * @return void
+     */
+    public function consistency()
+    {
+        $alterSQL = $this->upgrade->checkConsistency();
+        if(empty($alterSQL)) $this->locate(inlink('checkExtension'));
+
+        $this->view->alterSQL = $alterSQL;
+        $this->display();
+    }
+
+    /**
      * Check extension.
      * 
      * @access public

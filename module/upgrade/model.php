@@ -15,6 +15,12 @@ class upgradeModel extends model
 {
     static $errors = array();
 
+    /**
+     * Construct
+     * 
+     * @access public
+     * @return void
+     */
     public function __construct()
     {
         parent::__construct();
@@ -390,6 +396,65 @@ class upgradeModel extends model
             }
         }
     }
+
+    /**
+     * Check consistency.
+     * 
+     * @access public
+     * @return string
+     */
+    public function checkConsistency()
+    {
+        $alterSQL    = '';
+        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $this->config->installedVersion . '.sql';
+        if(!file_exists($standardSQL)) return $alterSQL;
+
+        $handle = fopen($standardSQL, 'r');
+        if($handle)
+        {
+            while(!feof($handle))
+            {
+                $line = trim(fgets($handle));
+                if(strpos($line, 'CREATE TABLE ') !== false)
+                {
+                    preg_match_all('/`([^`]*)`/', $line, $out);
+                    if(isset($out[1][0]))
+                    {
+                        $fields = array();
+                        $table  = $out[1][0];
+                        $stmt   = $this->dao->query("show fields from `{$table}`");
+                        while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
+                    }
+                }
+
+                if(!empty($fields))
+                {
+                    if(preg_match('/^`([^`]*)` /', $line))
+                    {
+                        list($field) = explode(' ', $line);
+                        $field = trim($field, '`');
+                        if(!isset($fields[$field]))
+                        {
+                            $line = rtrim($line, ',');
+                            if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
+                            try
+                            {
+                                $this->dao->exec("ALTER TABLE `{$table}` ADD $line");
+                            }
+                            catch(PDOException $e)
+                            {
+                                $alterSQL .= "ALTER TABLE `{$table}` ADD $line;\n";
+                            }
+                        }
+                    }
+                }
+            }
+            fclose($handle);
+        }
+
+        return $alterSQL;
+    }
+
 
     /**
      * Update ubb code in bug table and user Templates table to html.
@@ -835,7 +900,7 @@ class upgradeModel extends model
             {
                 $this->dbh->exec($sql);
             }
-            catch (PDOException $e)
+            catch(PDOException $e)
             {
                 $errorInfo = $e->errorInfo;
                 $errorCode = $errorInfo[1];

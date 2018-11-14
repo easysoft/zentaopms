@@ -17,6 +17,7 @@ $lang->upgrade->tohome  = 'Visit ZenTao';
 $lang->upgrade->license = 'Zentao is under Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning= 'Warning!';
 $lang->upgrade->checkExtension  = 'Check Extension';
+$lang->upgrade->consistency     = 'Check Consistency';
 $lang->upgrade->warnningContent = <<<EOT
 <p>Please backup your database before upgrading ZenTao!</p>
 <pre>
@@ -44,5 +45,6 @@ $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->forbiddenExt  = 'Extension is not compatible with the version. It has been deactivated:';
 $lang->upgrade->updateFile    = 'File information has to be updated.';
+$lang->upgrade->noticeSQL     = 'Check that your database is inconsistent with the standard and try to fix failure. Please perform the following SQL and refresh.';
 
 include dirname(__FILE__) . '/version.php';
