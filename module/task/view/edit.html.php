@@ -103,7 +103,7 @@
                 <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen'");?></span></td>
               </tr>
               <?php endif;?>
-              <?php if($task->parent == 0):?>
+              <?php if($task->parent == 0 and empty($task->team)):?>
               <tr>
                 <th><?php echo $lang->task->parent;?></th>
                 <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control chosen'");?></td>
@@ -236,7 +236,7 @@
                     <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
                     <?php echo html::input("teamEstimate[]", $member->estimate, "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' autocomplete='off' disabled='false' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' autocomplete='off' readonly placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
                     <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
                   </div>

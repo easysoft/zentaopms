@@ -1370,10 +1370,11 @@ class story extends control
      * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $projectID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $projectID = 0)
+    public function export($productID, $orderBy, $projectID = 0, $browseType = '')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
@@ -1582,6 +1583,28 @@ class story extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $fileName = $this->lang->story->common;
+        if($projectID)
+        {
+            $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');
+            $fileName    = $projectName . $this->lang->dash . $fileName;
+        }
+        else
+        {
+            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            if(isset($this->lang->product->featureBar['browse'][$browseType]))
+            {
+                $browseType = $this->lang->product->featureBar['browse'][$browseType];
+            }
+            else
+            {
+                $browseType = isset($this->lang->product->moreSelects[$browseType]) ? $this->lang->product->moreSelects[$browseType] : '';
+            }
+
+            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->list->exportFields;
         $this->view->customExport    = true;
         $this->display();

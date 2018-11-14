@@ -187,7 +187,7 @@ class docModel extends model
         if($libs === null)
         {
             $libs = array();
-            $stmt = $this->dao->select('lib,groups,users')->from(TABLE_DOC)->where('acl')->ne('open')->andWhere("(groups != '' or users != '')")->query();
+            $stmt = $this->dao->select('lib,`groups`,users')->from(TABLE_DOC)->where('acl')->ne('open')->andWhere("(`groups` != '' or users != '')")->query();
 
             $account    = ",{$this->app->user->account},";
             $userGroups = $this->app->user->groups;
@@ -658,7 +658,7 @@ class docModel extends model
         $doc = $this->loadModel('file')->processImgURL($doc, $this->config->doc->editor->edit['id'], $this->post->uid);
         $doc->product = $lib->product;
         $doc->project = $lib->project;
-        if($doc->type == 'url') $doc->content = $doc->url;
+        if(isset($doc->type) and $doc->type == 'url') $doc->content = $doc->url;
         unset($doc->url);
 
         $files   = $this->file->saveUpload('doc', $docID);

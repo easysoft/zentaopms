@@ -238,8 +238,25 @@ class tree extends control
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $branch);
         }
 
+        $libs = $this->loadModel('doc')->getLibs();
+        foreach($libs as $id => $libName)
+        {
+            $lib = $this->doc->getLibById($id);
+            if($lib->project != 0) 
+            {
+                $project   = $this->loadModel('project')->getByID($lib->project);
+                $libs[$id] = $project->name . '/' . $libName;
+            }
+            if($lib->product != 0) 
+            {
+                $product   = $this->loadModel('product')->getByID($lib->product);
+                $libs[$id] = $product->name . '/' . $libName;
+            }
+        }
+
         $this->view->module = $module;
         $this->view->type   = $type;
+        $this->view->libs   = $libs;
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 

@@ -456,6 +456,7 @@ class testtask extends control
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
+            if($this->post->comment != '') $actionID = $this->action->create('testtask', $taskID, 'Commented', $this->post->comment);
             die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
 

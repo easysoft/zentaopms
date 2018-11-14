@@ -1084,9 +1084,12 @@ class block extends control
             if($product->status == 'closed') $closed++;
         }
 
-        $this->view->total  = $normal + $closed;
-        $this->view->normal = $normal;
-        $this->view->closed = $closed;
+        $total  = $normal + $closed; 
+
+        $this->view->total         = $total;
+        $this->view->normal        = $normal;
+        $this->view->closed        = $closed;
+        $this->view->normalPercent = $total ? round(($normal / $total), 2) * 100 : 0;
     }
 
     /**

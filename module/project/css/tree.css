@@ -39,7 +39,7 @@
 #mainContent.hide-side > .side-col {display: table-cell; width: 0px;}
 #mainContent.hide-side > .side-col > .cell {opacity: 0;}
 
-h2.detail-title {font-size: 16px;}
+h2.detail-title {font-size: 14px;}
 h2.detail-title .label-id, h2.detail-title .label {top: -1px}
 #itemContent > .detail:first-child {padding-top: 10px;}
 .detail-content > .btn-toolbar {margin-top: 15px;}

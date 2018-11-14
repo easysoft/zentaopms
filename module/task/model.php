@@ -542,7 +542,7 @@ class taskModel extends model
 
                 if(($oldTask->assignedTo != $currentTask->assignedTo or $currentTask->status == 'done')
                     and isset($team[$this->app->user->account]) and $team[$this->app->user->account]->left == 0
-                    and strpos($oldTask->finishedLis, ",{$this->app->user->account},") === false)
+                    and strpos($oldTask->finishedList, ",{$this->app->user->account},") === false)
                 {
                     $currentTask->finishedList = ',' . trim(trim($oldTask->finishedList, ',') . ",{$this->app->user->account}", ',') . ',';
                 }
@@ -578,7 +578,7 @@ class taskModel extends model
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('estStarted', '0000-00-00')
             ->setDefault('deadline', '0000-00-00')
-            ->setDefault('parent', 0)
+            ->setIF($oldTask->parent == 0 && $this->post->parent == '', 'parent', 0)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->story != false and $this->post->story != $oldTask->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
@@ -684,7 +684,11 @@ class taskModel extends model
         {
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
-            if($task->parent) $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
+            if($task->parent) 
+            {
+                $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
+                $this->updateParentStatus($taskID);
+            }
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             return common::createChanges($oldTask, $task);
         }

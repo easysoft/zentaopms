@@ -20,7 +20,7 @@
         <div class='content'><?php echo $lang->upgrade->warnningContent;?></div>
       </div>
     </div>
-    <div class='modal-footer'><?php echo html::linkButton($lang->upgrade->common, inlink('checkExtension'), 'self', '', 'btn btn-primary');?></div>
+    <div class='modal-footer'><?php echo html::linkButton($lang->upgrade->common, inlink('consistency'), 'self', '', 'btn btn-primary');?></div>
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>

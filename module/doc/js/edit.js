@@ -16,3 +16,14 @@ $(function()
         }
     })
 })
+
+function loadDocModule(libID)
+{
+    link = createLink('doc', 'ajaxGetChild', 'libID=' + libID);
+    $.post(link, function(data)
+    {   
+        $('#module').replaceWith(data);
+        $('#module_chosen').remove();
+        $('#module').chosen();
+    })  
+}

@@ -125,7 +125,7 @@
       <ul class='dropdown-menu' id='exportActionMenu'>
       <?php
       $misc = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
-      $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy") : '#';
+      $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
       echo "<li>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
 
       $misc = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";

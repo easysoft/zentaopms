@@ -13,6 +13,7 @@
 <?php
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
+js::set('type', $type);
 ?>
 <?php include '../../common/view/chosen.html.php';?>
 <div class='modal-dialog w-500px'>
@@ -30,6 +31,12 @@ $jsRoot  = $webRoot . "js/";
         </tr>
         <?php endif;?>
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
+        <?php if($type == 'doc'):?>
+        <tr>
+          <th class='w-80px'><?php echo $lang->doc->lib;?></th>
+          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen' onchange=loadDocModule(this.value)");?></td>
+        </tr>
+        <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
           <th class='w-80px'><?php echo $lang->tree->parent;?></th>
@@ -75,6 +82,7 @@ function getProductModules(productID)
 }
 $(function()
 {
+    if(type == 'doc') return;
     $('#root').change(function()
     {
         if($(this).val() == currentRoot) return true;
@@ -86,5 +94,15 @@ $(function()
         getProductModules($(this).val());
     })
 })
+function loadDocModule(libID)
+{
+    link = createLink('doc', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
+    $.post(link, function(data)
+    {   
+        $('#parent').replaceWith(data);
+        $('#parent_chosen').remove();
+        $('#parent').chosen();
+    })  
+}
 $(function(){$('.chosen').chosen();})
-</script>
+    </script>

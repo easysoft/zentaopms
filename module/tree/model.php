@@ -226,7 +226,7 @@ class treeModel extends model
                     $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story'))")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                         ->andWhere('deleted')->eq(0)
-                        ->orderBy('grade desc, branch, type, `order`')
+                        ->orderBy('grade desc, type, `order`')
                         ->fetchAll('id');
                 }
                 else

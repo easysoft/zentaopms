@@ -18,9 +18,7 @@
 <?php endif;?>
 
 <div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->backup->common;?></span></span>
-  </div>
+  <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('data');?></div>
   <div class='btn-toolbar pull-right'>
     <?php common::printIcon('backup', 'setting', '', '', 'button', '', '', 'iframe', '', "data-width=400px");?>
     <?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?>

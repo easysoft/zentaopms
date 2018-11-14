@@ -59,7 +59,7 @@ $lang->admin->safe->weak       = '常用弱口令';
 $lang->admin->safe->reason     = '类型';
 $lang->admin->safe->checkWeak  = '弱口令扫描';
 $lang->admin->safe->changeWeak = '修改弱口令密码';
-$lang->admin->safe->modifyPasswordFirstLogin = '首次登陆修改密码';
+$lang->admin->safe->modifyPasswordFirstLogin = '首次登录修改密码';
 
 $lang->admin->safe->modeList[0] = '不检查';
 $lang->admin->safe->modeList[1] = '中';

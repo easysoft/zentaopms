@@ -1009,10 +1009,11 @@ class testcase extends control
      * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $taskID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $taskID = 0)
+    public function export($productID, $orderBy, $taskID = 0, $browseType = '')
     {
         $product = $this->loadModel('product')->getById($productID);
         if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
@@ -1192,6 +1193,13 @@ class testcase extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $fileName    = $this->lang->testcase->common;
+        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+        $browseType  = isset($this->lang->testcase->featureBar['browse'][$browseType]) ? $this->lang->testcase->featureBar['browse'][$browseType] : '';
+
+        if($taskID) $taskName = $this->dao->findById($taskID)->from(TABLE_TESTTASK)->fetch('name');
+
+        $this->view->fileName        = $productName . $this->lang->dash . ($taskID ? $taskName . $this->lang->dash : '') . $browseType . $fileName;
         $this->view->allExportFields = $this->config->testcase->exportFields;
         $this->view->customExport    = true;
         $this->display();

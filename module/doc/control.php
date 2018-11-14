@@ -387,6 +387,22 @@ class doc extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
         }
 
+        $libs = $this->doc->getLibs();
+        foreach($libs as $id => $libName)
+        {
+            $lib = $this->doc->getLibById($id);
+            if($lib->project != 0) 
+            {
+                $project   = $this->loadModel('project')->getByID($lib->project);
+                $libs[$id] = $project->name . '/' . $libName;
+            }
+            if($lib->product != 0) 
+            {
+                $product   = $this->loadModel('product')->getByID($lib->product);
+                $libs[$id] = $product->name . '/' . $libName;
+            }
+        }
+
         /* Get doc and set menu. */
         $doc = $this->doc->getById($docID);
         $libID = $doc->lib;
@@ -404,6 +420,7 @@ class doc extends control
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->type             = $type;
+        $this->view->libs             = $libs;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter', $doc->users);
         $this->display();
@@ -609,6 +626,19 @@ class doc extends control
     public function ajaxGetAllLibs()
     {
         die(json_encode($this->doc->getAllLibGroups()));
+    }
+
+    /**
+     * Ajax get all child module. 
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetChild($libID, $type = 'module')
+    {
+        $childModules = $this->loadModel('tree')->getOptionMenu($libID, 'doc');
+        $select = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
+        die($select);
     }
 
     /**
