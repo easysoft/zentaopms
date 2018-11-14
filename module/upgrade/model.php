@@ -409,12 +409,14 @@ class upgradeModel extends model
         $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $this->config->installedVersion . '.sql';
         if(!file_exists($standardSQL)) return $alterSQL;
 
-        $handle = fopen($standardSQL, 'r');
+        $tableExists = true;
+        $handle      = fopen($standardSQL, 'r');
         if($handle)
         {
             while(!feof($handle))
             {
                 $line = trim(fgets($handle));
+                if(strpos($line, 'DROP TABLE ') !== false) continue;
                 if(strpos($line, 'CREATE TABLE ') !== false)
                 {
                     preg_match_all('/`([^`]*)`/', $line, $out);
@@ -422,10 +424,21 @@ class upgradeModel extends model
                     {
                         $fields = array();
                         $table  = $out[1][0];
-                        $stmt   = $this->dao->query("show fields from `{$table}`");
-                        while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
+                        try
+                        {
+                            $tableExists = true;
+                            $stmt        = $this->dbh->query("show fields from `{$table}`");
+                            while($row = $stmt->fetch()) $fields[$row->Field] = $row->Field;
+                        }
+                        catch(PDOException $e)
+                        {
+                            $errorInfo = $e->errorInfo;
+                            $errorCode = $errorInfo[1];
+                            if($errorCode == '1146') $tableExists = false;
+                        }
                     }
                 }
+                if(!$tableExists) $alterSQL .= $line . "\n";
 
                 if(!empty($fields))
                 {
@@ -439,7 +452,7 @@ class upgradeModel extends model
                             if(stripos($line, 'auto_increment') !== false) $line .= ' primary key';
                             try
                             {
-                                $this->dao->exec("ALTER TABLE `{$table}` ADD $line");
+                                $this->dbh->exec("ALTER TABLE `{$table}` ADD $line");
                             }
                             catch(PDOException $e)
                             {
