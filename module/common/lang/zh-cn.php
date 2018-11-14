@@ -255,10 +255,7 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->subMenu->action = new stdclass();
-$lang->project->subMenu->action->dynamic  = '动态|project|dynamic|projectID=%s';
-
-$lang->project->dividerMenu = ',story,doc,';
+$lang->project->dividerMenu = ',story,action,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();

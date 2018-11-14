@@ -258,7 +258,7 @@ $lang->project->subMenu->qa->testtask = array('link' => 'Test Task|project|testt
 $lang->project->subMenu->action = new stdclass();
 $lang->project->subMenu->action->dynamic  = 'Dynamic|project|dynamic|projectID=%s';
 
-$lang->project->dividerMenu = ',story,doc,';
+$lang->project->dividerMenu = ',story,action,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
