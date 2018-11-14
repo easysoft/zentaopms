@@ -567,6 +567,9 @@ class testsuite extends control
         $this->view->position[] = $this->lang->testsuite->common;
         $this->view->position[] = $this->lang->testcase->create;
 
+        foreach(explode(',', $this->config->testsuite->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
+        $this->view->showFields       = $this->config->testsuite->custom->createFields;
+        $this->view->customFields     = $customFields;
         $this->view->libraries        = $libraries;
         $this->view->libID            = $libID;
         $this->view->currentModuleID  = (int)$moduleID;
