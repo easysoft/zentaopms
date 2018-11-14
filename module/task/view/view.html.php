@@ -34,6 +34,8 @@
       <?php endif;?>
     </div>
   </div>
+  <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
+  <?php if(!$isOnlybody):?>
   <div class="btn-toolbar pull-right">
     <?php
     $checkObject = new stdclass();
@@ -42,6 +44,7 @@
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
