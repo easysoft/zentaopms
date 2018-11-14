@@ -41,9 +41,12 @@
       <?php endif; ?>
     </div>
   </div>
+  <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
+  <?php if(!$isOnlybody):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('story', 'create', "productID={$story->product}&branch={$story->branch}&moduleID={$story->module}", "<i class='icon icon-plus'></i>" . $lang->story->create, '', "class='btn btn-primary'"); ?>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
