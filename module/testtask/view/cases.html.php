@@ -101,12 +101,21 @@
           <?php if($canBatchAssign):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->testtask->assign;?> <span class="caret"></span></button>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <?php
+            $withSearch = count($assignedTos) > 10;
+            $actionLink = inLink('batchAssign', "taskID=$task->id");
+            echo html::select('assignedTo', $assignedTos, '', 'class="hidden"');
+            ?>
+            <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
+              <?php if($withSearch):?>
               <?php
-              $withSearch = count($assignedTos) > 10;
-              $actionLink = inLink('batchAssign', "taskID=$task->id");
-              echo html::select('assignedTo', $assignedTos, '', 'class="hidden"');
-              if($withSearch):
+              $memberNames = array();
+              foreach($assignedTos as $memberId => $member)
+              {
+                  if(empty($memberId) or $memberId == 'closed') continue;
+                  $memberNames[] = $member;
+              }
+              $membersPinYin = common::convert2Pinyin($memberNames);
               ?>
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
@@ -116,10 +125,11 @@
               <?php endif;?>
               <div class="list-group">
               <?php foreach ($assignedTos as $key => $value):?>
-              <?php
-              if(empty($key) or $key == 'closed') continue;
-              echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\")", $value);
-              ?>
+                  <?php
+                  if(empty($key) or $key == 'closed') continue;
+                  $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+                  echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\")", $value, '', $searchKey);
+                  ?>
               <?php endforeach;?>
               </div>
             </div>

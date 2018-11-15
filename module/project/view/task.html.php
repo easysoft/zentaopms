@@ -274,12 +274,20 @@ js::set('browseType', $browseType);
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 10;?>
             <?php if($withSearch):?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+            <?php
+            $moduleNames = array();
+            foreach($modules as $moduleId => $module)
+            {
+                $moduleNames[] = $module;
+            }
+            $modulesPinYin = common::convert2Pinyin($moduleNames);
+            ?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -287,8 +295,9 @@ js::set('browseType', $browseType);
                 <?php
                 foreach($modules as $moduleId => $module)
                 {
+                    $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('task', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"");
+                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"");
                 }
                 ?>
               </div>
@@ -305,12 +314,21 @@ js::set('browseType', $browseType);
             echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
             if($withSearch):
             ?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+            <?php
+            $memberNames = array();
+            foreach($memberPairs as $memberId => $member)
+            {
+                if(empty($memberId)) continue;
+                $memberNames[] = $member;
+            }
+            $membersPinYin = common::convert2Pinyin($memberNames);
+            ?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -319,7 +337,8 @@ js::set('browseType', $browseType);
                 foreach($memberPairs as $key => $value)
                 {
                     if(empty($key)) continue;
-                    echo html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#taskList\")", $value);
+                    $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+                    echo html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#taskList\")", $value, '', $searchKey);
                 }
                 ?>
               </div>
