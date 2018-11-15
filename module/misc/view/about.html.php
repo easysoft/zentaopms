@@ -15,6 +15,7 @@
         </tr>
         <tr>
           <td colspan='2' class="copyright text-right text-middle">
+            <div class='pull-left'><?php echo $lang->designedByAIUX;?></div>
             <?php echo $lang->misc->copyright;?>
           </td>
         </tr>

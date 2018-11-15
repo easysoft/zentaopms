@@ -699,6 +699,23 @@ function getFingerprint()
     return fingerprint;
 }
 
+/**
+ * Trim actions driver.
+ * 
+ * @access public
+ * @return void
+ */
+function trimDriver()
+{
+    var actions = $('.main-actions .btn-toolbar').children().size();
+    for(i = 0; i < actions; i++)
+    {
+        if($('.main-actions .btn-toolbar').children().first().hasClass('divider')) $('.main-actions .btn-toolbar').children().first().remove();
+        if($('.main-actions .btn-toolbar').children().last().hasClass('divider')) $('.main-actions .btn-toolbar').children().last().remove();
+    }
+    if($('.main-actions .btn-toolbar').children().length == 0) $('.main-actions .btn-toolbar').addClass('hidden');
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -709,6 +726,7 @@ $(document).ready(function()
 
     checkTutorial();
     revertModuleCookie();
+    trimDriver();
 
     $(document).on('click', '#helpMenuItem .close-help-tab', function(){$('#helpMenuItem').prev().remove();$('#helpMenuItem').remove();});
 });
