@@ -1511,7 +1511,7 @@ class taskModel extends model
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.`parent`,' . $orderBy)
+            ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
