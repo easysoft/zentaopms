@@ -255,13 +255,13 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->dividerMenu = ',story,action,product,';
+$lang->project->dividerMenu = ',story,team,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => '测试|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();
