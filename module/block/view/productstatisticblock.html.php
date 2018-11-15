@@ -36,12 +36,13 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
 .block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
-.block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
+.block-statistic .nav-secondary > li > a:first-child {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;display: inline-block; width: 180px; line-height: 16px;}
+.block-statistic .nav-secondary > li.active > a.productView {float: right}
 .block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
 .block-statistic .nav-secondary > li.active > a:hover,
 .block-statistic .nav-secondary > li.active > a:focus,
 .block-statistic .nav-secondary > li > a:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
-.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li.active > a:first-child:before {content: ' '; display: block; left: -1px; top: 7px; bottom: 10px; width: 4px; background: #006af1; position: absolute; height: 16px}
 .block-statistic .nav-secondary > li.switch-icon {display: none;}
 .block-statistic.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px;}
 .block-statistic.block-sm .panel-body > .table-row,
@@ -78,6 +79,15 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
         e.preventDefault();
     });
+    $('.block-statistic .nav-secondary > li').click(function()
+    {
+        productID = $(this).attr('productID');
+        link = createLink('product', 'view', 'productID=' + productID);
+        var $productView = $('.block-statistic .nav-secondary > li > .productView');
+        $productView.attr('href', link);
+        $(this).append($productView);
+        $productView.css('float', 'right');
+    })
 });
 </script>
 <div class="panel-body">
@@ -91,7 +101,7 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($products as $product):?>
-        <li <?php if($product == reset($products)) echo "class='active'";?>><a href="javascript:;" data-target="#tab<?php echo $product->code;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a></li>
+        <li <?php if($product == reset($products)) echo "class='active'";?> productID='<?php echo $product->id;?>'><a href="javascript:;" data-target="#tab<?php echo $product->code;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a><?php if($product == reset($products)) echo html::a(helper::createLink('product', 'view', "productID=$product->id"), "<i class='icon-arrow-right'></i>", '', "class='productView' title={$lang->product->view}");?></li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
       </ul>
