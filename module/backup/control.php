@@ -177,7 +177,6 @@ class backup extends control
 
         if($reload == 'yes')
         {
-            echo js::alert($this->lang->backup->success->backup);
             die(js::reload('parent'));
         }
         else
