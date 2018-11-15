@@ -2556,7 +2556,22 @@ class upgradeModel extends model
      */
     public function updateTaskRequireField()
     {
-        $this->dao->update(TABLE_CONFIG)->set('`value`')->eq('consumed')
+        $value = $this->dao->select('`value`')->from(TABLE_CONFIG)
+            ->where('`module`')->eq('task')
+            ->andWhere('`section`')->eq('finish')
+            ->andWhere('`key`')->eq('requiredFields')
+            ->fetch();
+
+        if(strpos($value->value, 'finishedDate') === false) return;
+
+        $values = explode(',', $value->value);
+        foreach($values as $id => $value)
+        {
+            if($value == 'finishedDate') unset($values[$id]);
+        }
+        $value = implode(',', $values);
+
+        $this->dao->update(TABLE_CONFIG)->set('`value`')->eq($value)
             ->where('`module`')->eq('task')
             ->andWhere('`section`')->eq('finish')
             ->andWhere('`key`')->eq('requiredFields')
