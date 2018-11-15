@@ -306,9 +306,10 @@ class groupModel extends model
      */
     public function updateUser($groupID)
     {
+        $members    = $this->post->members ? $this->post->members : array();
         $groupUsers = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->fetchPairs('account');
-        $newUsers   = array_diff($this->post->members, $groupUsers);
-        $delUsers   = array_diff($groupUsers, $this->post->members);
+        $newUsers   = array_diff($members, $groupUsers);
+        $delUsers   = array_diff($groupUsers, $members);
 
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->andWhere('account')->in($delUsers)->exec();
 
