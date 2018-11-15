@@ -18,3 +18,5 @@ function loadBranches(productID)
         }
     });
 }
+
+window.loadBuildsFormParentPage = function(){window.parent.loadProjectBuilds(0);}; //Code for task #5126.
