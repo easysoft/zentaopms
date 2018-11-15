@@ -38,11 +38,11 @@
         <?php
         $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
         $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>

@@ -15,6 +15,7 @@ $(function()
     $('.rmPHPHeader').click(function()
     {
         $('#waitting .modal-body #backupType').html(rmPHPHeader);
+        $('#waitting .modal-content #message').hide();
         $('#waitting').modal('show');
     })
 
@@ -26,6 +27,7 @@ $(function()
             if(result)
             {
                 $('#waitting .modal-body #backupType').html(restore);
+                $('#waitting .modal-content #message').hide();
                 $('#waitting').modal('show');
 
                 $.getJSON(url, function(response)

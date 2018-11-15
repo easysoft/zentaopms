@@ -122,19 +122,19 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart muted');?>
-    <?php if(common::hasPriv('bug', 'export')):?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
         <i class="icon icon-export muted"></i> <span class="text"> <?php echo $lang->export;?></span> <span class="caret"></span></button>
       </button>
       <ul class='dropdown-menu' id='exportActionMenu'>
         <?php
-        $link = $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=$browseType");
-        echo "<li>" . html::a($link, $lang->bug->export, '', "class='export'") . "</li>";
+        $class = common::hasPriv('bug', 'export') ? "" : "class='disabled'";
+        $misc  = common::hasPriv('bug', 'export') ? "class='export'" : "class='disabled'";
+        $link  = common::hasPriv('bug', 'export') ? $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=$browseType") : '#';
+        echo "<li $class>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
-    <?php endif;?>
     <?php
     common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
     if(commonModel::isTutorialMode())

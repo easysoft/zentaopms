@@ -96,9 +96,10 @@
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>
         <?php
-        $misc = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
-        $link = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType") : '#';
-        echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+        $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
+        $misc  = common::hasPriv('story', 'export') ? "class='export'" : "class=disabled";
+        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType") : '#';
+        echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
