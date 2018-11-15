@@ -43,7 +43,7 @@ $lang->export       = 'Export';
 $lang->setFileName  = 'File Name';
 $lang->submitting   = 'Saving...';
 $lang->save         = 'Save';
-$lang->saveSuccess  = 'Saved.';
+$lang->saveSuccess  = 'Saved';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'View';
 $lang->goback       = 'Back';
@@ -57,7 +57,7 @@ $lang->sort         = 'Sort';
 $lang->required     = 'Required';
 $lang->noData       = 'No data.';
 
-$lang->actions         = 'Actions';
+$lang->actions         = 'Action';
 $lang->restore         = 'Restore';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
@@ -258,13 +258,13 @@ $lang->project->subMenu->qa->testtask = array('link' => 'Test Task|project|testt
 $lang->project->subMenu->action = new stdclass();
 $lang->project->subMenu->action->dynamic  = 'Dynamic|project|dynamic|projectID=%s';
 
-$lang->project->dividerMenu = ',story,action,product,';
+$lang->project->dividerMenu = ',story,team,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => 'Test|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA menu settings. */
 $lang->qa = new stdclass();
@@ -482,7 +482,7 @@ $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";
 $lang->error->account         = "『%s』should be valid account.";
-$lang->error->passwordsame    = "Two passwords should be consistent.";
+$lang->error->passwordsame    = "Passwords should be consistent.";
 $lang->error->passwordrule    = "Password should follow rules. It must be at least 6 characters.";
 $lang->error->accessDenied    = 'Access is denied.';
 $lang->error->pasteImg        = 'Image is not allowed to be pasted in your browser!';
@@ -519,7 +519,7 @@ $lang->importAndInsert = "Insert";
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
-$lang->chooseUsersToMail  = "Choose users that will be notified.";
+$lang->chooseUsersToMail  = "Choose users to be notified.";
 $lang->browserNotice      = 'Your current browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste images here";
 

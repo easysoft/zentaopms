@@ -26,5 +26,5 @@ $lang->dept->confirmDelete = " Do you want to delete this Dept?";
 $lang->dept->successSave   = " Saved!";
 
 $lang->dept->error = new stdclass();
-$lang->dept->error->hasSons  = 'This Dept has child Dept. You cannot delete it!';
+$lang->dept->error->hasSons  = 'This Dept has child departments. You cannot delete it!';
 $lang->dept->error->hasUsers = 'This Dept has users. You cannot delete it!';
