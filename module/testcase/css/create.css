@@ -20,8 +20,8 @@
 .row .col-sm-2{padding-left:0px; width:11%;}
 
 #module + .chosen-container-single .chosen-single,
-#stage + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0; margin-left: -1px;}
-#module + .chosen-container-single .chosen-single {border-top-right-radius: 0; border-bottom-right-radius: 0; margin-left: -1px;}
+#stage + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0;}
+#module + .chosen-container-single .chosen-single {border-top-right-radius: 0; border-bottom-right-radius: 0;}
 
 .dropdown-pris > .btn {background-color: #fff; text-shadow: none}
 
