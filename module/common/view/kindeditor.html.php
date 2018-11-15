@@ -197,6 +197,7 @@ $uid = uniqid('');
                     $placeholder.hide();
                 }
                 $editor.prev('.ke-container').addClass('focus');
+                $(document).trigger('mousedown'); // see http://pms.zentao.net/task-view-5115.html
             },
             afterBlur: function()
             {
