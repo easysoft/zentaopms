@@ -21,3 +21,4 @@
 #unlinkStoryList, #unlinkBugList {border-top: 1px solid #cbd0db;}
 .fixed-footer .text{color:#fff}
 ol, ul { padding-left: 20px; }
+#tabsNav .tab-pane>.main-table{border-radius: 0;}
