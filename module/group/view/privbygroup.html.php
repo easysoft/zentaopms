@@ -48,6 +48,7 @@
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+  <span id='groupName'><i class='icon-lock'> <?php echo $group->name;?></i><i class="icon icon-chevron-right"></i></span>
     <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
     <?php $active = empty($menu) ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>

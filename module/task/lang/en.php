@@ -9,7 +9,7 @@
  * @version     $Id: en.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->task->index               = "Index";
+$lang->task->index               = "Home";
 $lang->task->create              = "Create Task";
 $lang->task->batchCreate         = "Batch Create";
 $lang->task->batchCreateChildren = "Batch Create Child";
@@ -35,7 +35,7 @@ $lang->task->export              = "Export Data";
 $lang->task->reportChart         = "Report Chart";
 $lang->task->fromBug             = 'From Bug';
 $lang->task->case                = 'Linked Case';
-$lang->task->confirmStoryChange  = "Confirm Story Change";
+$lang->task->confirmStoryChange  = "Confirm Change";
 $lang->task->progress            = 'Progress';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
 $lang->task->copy                = 'Duplicate Task';

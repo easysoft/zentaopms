@@ -44,3 +44,9 @@
 .table-bordered > #steps .step-child .step-child-id {border-right: 1px dotted #ddd; border-left: none}
 
 .minw-80px {min-width: 80px;}
+.title-group.required:after {display: none;}
+.title-group.required > .required:after {display: block; right: 29px; top: 5px;}
+.pri-selector > .btn {padding: 5px 8px!important; width: 100%;}
+.pri-selector > .dropdown-menu {padding: 10px;}
+
+.title-group .has-icon-right{min-width:700px}

@@ -18,6 +18,10 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->testcase->create;?></h2>
+      <div class="pull-right btn-toolbar">
+        <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testsuite&section=custom&key=createFields');?>
+        <?php include '../../common/view/customfield.html.php';?>
+      </div>
     </div>
     <form method='post' enctype='multipart/form-data' id='dataform' target='hiddenwin'>
       <table class='table table-form'>
@@ -50,53 +54,62 @@
         <tr>
           <th><?php echo $lang->testcase->type;?></th>
           <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
+          <?php if(strpos(",$showFields,", 'stage') !== false):?>
           <td style='padding-left:15px'>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->testcase->stage?></span>
               <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
             </div>
           </td>
+          <?php endif;?>
         </tr>
         <tr>
           <th><?php echo $lang->testcase->title;?></th>
           <td colspan='2'>
-            <div class="input-control has-icon-right">
+            <div class="input-group title-group">
+              <div class="input-control has-icon-right">
                 <?php echo html::input('title', $caseTitle, "class='form-control' autocomplete='off'");?>
-              <div class="colorpicker">
-                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
-                <ul class="dropdown-menu clearfix">
+                <div class="colorpicker">
+                  <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                  <ul class="dropdown-menu clearfix">
                   <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
-                </ul>
-                <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
+                  </ul>
+                  <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
+                </div>
               </div>
+              <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
+              <span class="input-group-addon fix-border br-0"><?php echo $lang->testcase->pri;?></span>
+              <?php
+              $hasCustomPri = false;
+              foreach($lang->testcase->priList as $priKey => $priValue)
+              {
+                  if(!empty($priKey) and (string)$priKey != (string)$priValue)
+                  {
+                      $hasCustomPri = true;
+                      break;
+                  }
+              }
+              $priList = $lang->testcase->priList;
+              if(end($priList))
+              {
+                  unset($priList[0]);
+                  $priList[0] = '';
+              }
+              ?>
+              <?php if($hasCustomPri):?>
+              <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
+              <?php else: ?>
+              <div class="input-group-btn pri-selector" data-type="pri">
+                <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                  <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
+                </button>
+                <div class='dropdown-menu pull-right'>
+                  <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
+                </div>
+              </div>
+              <?php endif; ?>
+              <?php endif; // end print pri selector ?>
             </div>
-          </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->testcase->pri;?></th>
-          <td colspan="2">
-            <?php
-            $hasCustomPri = false;
-            foreach($lang->testcase->priList as $priKey => $priValue)
-            {
-                if(!empty($priKey) and (string)$priKey != (string)$priValue)
-                {
-                    $hasCustomPri = true;
-                    break;
-                }
-            }
-            $priList = $lang->testcase->priList;
-            if(end($priList))
-            {
-                unset($priList[0]);
-                $priList[0] = '';
-            }
-            ?>
-            <?php if($hasCustomPri):?>
-            <?php echo html::select('pri', (array)$priList, $pri, "class='form-control chosen'");?>
-            <?php else: ?>
-            <?php echo html::select('pri', (array)$priList, $pri, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
-            <?php endif; ?>
           </td>
         </tr>
         <tr>
@@ -179,11 +192,13 @@
             </table>
           </td>
         </tr>
+        <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
         <tr>
           <th><?php echo $lang->testcase->keywords;?></th>
           <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' autocomplete='off'");?></td>
         </tr>
-         <tr>
+        <?php endif;?>
+        <tr>
           <th><?php echo $lang->testcase->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
