@@ -258,13 +258,13 @@ $lang->project->subMenu->qa->testtask = array('link' => 'Test Task|project|testt
 $lang->project->subMenu->action = new stdclass();
 $lang->project->subMenu->action->dynamic  = 'Dynamic|project|dynamic|projectID=%s';
 
-$lang->project->dividerMenu = ',story,action,product,';
+$lang->project->dividerMenu = ',story,team,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => 'Test|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA menu settings. */
 $lang->qa = new stdclass();
