@@ -135,35 +135,13 @@ $(function()
 
     $('[data-toggle=tooltip]').tooltip();
 
-    /* First unbind ajaxForm for form.*/
-    $("form[data-type='ajax']").unbind('submit');
-
-    /* Bind ajaxForm for form again. */
-    $.ajaxForm("form[data-type='ajax']", function(response)
-    {
-        if(response.message) alert(response.message);
-        if(response.locate)
-        {
-            if(response.locate == 'reload' && response.target == 'parent')
-            {
-                parent.$.cookie('selfClose', 1);
-                parent.$.closeModal(null, 'this');
-            }
-            else
-            {
-                location.href = response.locate;
-            }
-        }
-        return false;
-    });
-
     initSteps();
 
     $('#pri').on('change', function()
-    {   
+    {
         var $select = $(this);
         var $selector = $select.closest('.pri-selector');
         var value = $select.val();
-        $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');    
+        $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
-})
+});
