@@ -247,6 +247,8 @@ class upgradeModel extends model
                 $this->execSQL($this->getUpgradeFile('10.4'));
                 $this->changeTaskParentValue();
             case '10_5':
+            case '10_5_1':
+                $this->updateTaskRequireFields();
         }
 
         $this->deletePatch();
@@ -2544,5 +2546,20 @@ class upgradeModel extends model
         $this->loadModel('user');
         foreach($users as $user) $this->user->computeUserView($user->account, $force = true);
         return true;
+    }
+
+    /**
+     * Delete finish task require field.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function updateTaskRequireField()
+    {
+        $this->dao->update(TABLE_CONFIG)->set('`value`')->eq('consumed')
+            ->where('`module`')->eq('task')
+            ->andWhere('`section`')->eq('finish')
+            ->andWhere('`key`')->eq('requiredFields')
+            ->exec();
     }
 }
