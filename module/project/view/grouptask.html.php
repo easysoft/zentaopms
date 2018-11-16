@@ -221,7 +221,7 @@
         <td colspan='13'>
           <div class="table-row segments-list">
           <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
-          <?php printf($lang->project->countSummary, $groupSum, $groupWait, $groupDoing);?>
+          <?php printf($lang->project->countSummary, $groupSum, $groupDoing, $groupWait);?>
           <?php printf($lang->project->timeSummary, $groupEstimate, $groupConsumed, $groupLeft);?>
           </div>
         </td>
