@@ -2450,14 +2450,10 @@ class upgradeModel extends model
      */
     public function fixStorySpecTitle()
     {
-        $stories = $this->dao->select('story')->from(TABLE_STORYSEPC)->groupBy('story')->having('COUNT(story, version) = 1');
-
         $stories = $this->dao->select('t1.id, t1.title')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
-            ->where('t1.id')->in($stories)
-            ->andWhere('t1.title')->ne('t2.title')
-            ->andWhere('t2.version')->eq(1)
-            ->fetchPairs();
+            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story && t1.title != t2.title && t1.version = t2.version')
+            ->where('t2.version')->eq(1)
+            ->fetchPairs('id', 'title');
 
         foreach($stories as $story => $title)
         {

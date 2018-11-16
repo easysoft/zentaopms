@@ -75,3 +75,5 @@ td.c-name a:visited{color: #082999}
 .panel-title.font-normal .btn-group{margin-left: 20px;}
 
 .querybox-opened{color: #0c64eb; background: rgba(0,0,0,.075);}
+
+#queryBox #groupAndOr {min-width: 65px;}
