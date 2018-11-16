@@ -37,6 +37,7 @@ $uid = uniqid('');
     'table', 'code', '|', 'pagebreak', 'anchor', '|',
     'fullscreen', 'source', 'preview', 'about'];
     var editorToolsMap = {fullTools: fullTools, simpleTools: simpleTools, bugTools: bugTools};
+    var imageLoadingEle = '<div class="image-loading-ele small" style="padding: 5px; background: #f1f1f1; width: 300px; border-radius: 2px;"><i class="icon icon-spin icon-spinner-indicator text-muted"></i> <?php echo $this->lang->pasteImgUploading?></div>';
 
     // Kindeditor default options
     var editorDefaults =
@@ -119,6 +120,29 @@ $uid = uniqid('');
                     placeholder += ' <?php echo $this->lang->noticePasteImg?>';
                 }
 
+                var pasteBegin = function()
+                {
+                    $.enableForm(false);
+                    $('body').one('click.ke' + kuid, function(){$.enableForm(true);});
+                    cmd.inserthtml(imageLoadingEle);
+                    keditor.readonly(true);
+                };
+
+                var pasteEnd = function(error)
+                {
+                    if(error)
+                    {
+                        if(error === true) error = '<?php echo $this->lang->pasteImgFail;?>';
+                        $.zui.messager.danger(error, {placement: 'center'});
+                    }
+                    $.enableForm(true);
+                    $('body').off('.ke' + kuid);
+                    $(doc.body).find('.image-loading-ele').remove();
+                    keditor.readonly(false);
+                };
+
+                var pasteUrl = createLink('file', 'ajaxPasteImage', 'uid=' + kuid);
+
                 /* Paste in chrome.*/
                 /* Code reference from http://www.foliotek.com/devblog/copy-images-from-clipboard-in-javascript/. */
                 if(K.WEBKIT)
@@ -130,8 +154,7 @@ $uid = uniqid('');
                         var file     = original.clipboardData.items[0].getAsFile();
                         if(file)
                         {
-                            $('#submit').attr('disabled', 'disabled');
-                            $("body").click(function(){$('#submit').removeAttr('disabled');});
+                            pasteBegin();
 
                             var reader = new FileReader();
                             reader.onload = function(evt)
@@ -142,10 +165,13 @@ $uid = uniqid('');
                                 var contentType = arr[0].split(";")[0].split(":")[1];
 
                                 html = '<img src="' + result + '" alt="" />';
-                                $.post(createLink('file', 'ajaxPasteImage', 'uid=' + kuid), {editor: html}, function(data)
+                                $.post(pasteUrl, {editor: html}, function(data)
                                 {
                                     cmd.inserthtml(data);
-                                    $('#submit').removeAttr('disabled');
+                                    pasteEnd();
+                                }).error(function()
+                                {
+                                    pasteEnd(true);
                                 });
                             };
                             reader.readAsDataURL(file);
@@ -162,13 +188,15 @@ $uid = uniqid('');
                             var html = K(doc.body).html();
                             if(html.search(/<img src="data:.+;base64,/) > -1)
                             {
-                                $('#submit').attr('disabled', 'disabled');
-                                $("body").click(function(){$('#submit').removeAttr('disabled');});
-                                $.post(createLink('file', 'ajaxPasteImage', 'uid=' + kuid), {editor: html}, function(data)
+                                pasteBegin();
+                                $.post(pasteUrl, {editor: html}, function(data)
                                 {
-                                    if(data.indexOf('<img') == 0) data = '<p>' + data + '</p>';
+                                    if(data.indexOf('<img') === 0) data = '<p>' + data + '</p>';
                                     frame.html(data);
-                                    $('#submit').removeAttr('disabled');
+                                    pasteEnd();
+                                }).error(function()
+                                {
+                                    pasteEnd(true);
                                 });
                             }
                         }, 80);
