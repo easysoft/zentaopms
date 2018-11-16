@@ -88,11 +88,11 @@
                   <td class="<?php echo $class;?>"></td>
                   <td class="<?php echo $class;?>"></td>
                   <td class="<?php echo $class;?>"></td>
-                  <td class="<?php echo $class;?>"></td>
-                  <td class="<?php echo $class;?>"></td>
-                  <td class="<?php echo $class;?>"></td>
-                  <td class="<?php echo $class;?>"></td>
-                  <td class="<?php echo $class;?>"></td>
+                  <td class="<?php echo $class;?>">0</td>
+                  <td class="<?php echo $class;?>">0</td>
+                  <td class="<?php echo $class;?>">0</td>
+                  <td class="<?php echo $class;?>">0</td>
+                  <td class="<?php echo $class;?>">0</td>
                   <?php $color = !$color;?>
                 <?php endif;?>
               </tr>
