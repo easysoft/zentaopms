@@ -357,7 +357,7 @@ $lang->block->typeList->product['all']      = '全部';
 $lang->block->typeList->product['involved'] = '我参与的';
 
 $lang->block->typeList->project['undone']   = '未完成';
-$lang->block->typeList->project['isdoing']  = '进行中';
+$lang->block->typeList->project['doing']    = '进行中';
 $lang->block->typeList->project['all']      = '全部';
 $lang->block->typeList->project['involved'] = '我参与的';
 
