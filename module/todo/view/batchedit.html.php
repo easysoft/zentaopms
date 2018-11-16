@@ -60,15 +60,19 @@
           <?php
           if($todo->type == 'custom' or $todo->type == 'cycle')
           {
-            echo html::input("names[$todo->id]", $todo->name, "class='form-control' autocomplete='off'"); ;
+              echo html::input("names[$todo->id]", $todo->name, "class='form-control' autocomplete='off'"); ;
           }
           elseif($todo->type == 'task')
           {
-            echo  html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("tasks[$todo->id]", $tasks, $todo->idvalue, 'class="form-control chosen"');
           }
           elseif($todo->type == 'bug')
           {
-            echo  html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control chosen"');
+              echo html::select("bugs[$todo->id]", $bugs, $todo->idvalue, 'class="form-control chosen"');
+          }
+          elseif($todo->type == 'story')
+          {
+              echo html::select("storys[$todo->id]", $storys, $todo->idvalue, 'class="form-control chosen"');
           }
           ?>
           </div>
