@@ -1192,6 +1192,8 @@ class storyModel extends model
 
                 $branch = $projects[$task->project];
                 if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
+                if(!isset($branchStatusList[$branch][$task->type])) $branchStatusList[$branch][$task->type] = array();
+                if(!isset($branchStatusList[$branch][$task->type][$status])) $branchStatusList[$branch][$task->type][$status] = 0;
                 $branchStatusList[$branch][$task->type][$status] ++;
                 if($type == 'devel')
                 {
