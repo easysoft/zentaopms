@@ -366,10 +366,12 @@ class baseDAO
          * Remove the part after order and limit.
          **/
         $subLength = strlen($sql);
+        $groupPOS  = strripos($sql, 'group by');
         $orderPOS  = strripos($sql, 'order by');
         $limitPOS  = strripos($sql, 'limit');
         if($limitPOS) $subLength = $limitPOS;
         if($orderPOS) $subLength = $orderPOS;
+        if($groupPOS) $subLength = $groupPOS;
         $sql = substr($sql, 0, $subLength);
         self::$querys[] = $sql;
 

@@ -1053,7 +1053,7 @@ class taskModel extends model
                 $earliestTime = $record->dates[$id];
             }
 
-            if($record->dates[$id])
+            if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
                 if(!$record->consumed[$id])   die(js::alert($this->lang->task->error->consumedThisTime));
                 if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
