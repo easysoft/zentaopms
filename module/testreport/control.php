@@ -173,6 +173,7 @@ class testreport extends control
             $project = $this->project->getById($projectID);
             $tasks   = $this->testtask->getProjectTasks($projectID);
             $owners  = array();
+            $buildIdList   = array();
             $productIdList = array();
             foreach($tasks as $i => $task)
             {
@@ -185,6 +186,7 @@ class testreport extends control
                 $owners[$task->owner] = $task->owner;
                 $productIdList[$task->product] = $task->product;
                 $this->setChartDatas($task->id);
+                if($task->build != 'trunk') $buildIdList[$task->build] = $task->build;
             }
             if(count($productIdList) > 1)
             {
@@ -193,14 +195,7 @@ class testreport extends control
             }
 
             $stories = $this->story->getProjectStories($project->id);
-            $builds  = $this->build->getProjectBuilds($project->id);
-
-            $useBuilds = array();
-            foreach($tasks as $task)
-            {
-                if(isset($builds[$task->build])) $useBuilds[$task->build] = $builds[$task->build];
-            }
-            $builds = $useBuilds;
+            $builds  = $this->build->getByList($buildIdList);
 
             $begin = $project->begin;
             $end   = $project->end;
@@ -314,16 +309,11 @@ class testreport extends control
         }
         else
         {
-            $tasks = $this->testtask->getProjectTasks($report->project);
-            $productIdList = array();
-            foreach($tasks as $task)
-            {
-                $productIdList[$task->product] = $task->product;
-                $this->setChartDatas($task->id);
-            }
+            $tasks = $this->testtask->getByList($report->tasks);
+            $productIdList[$report->product] = $report->product;
 
+            $builds  = $this->build->getByList($report->builds);
             $stories = $this->story->getProjectStories($project->id);
-            $builds  = $this->build->getProjectBuilds($project->id);
             $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $report->begin, $report->end, 'project');
         }
 
