@@ -27,7 +27,7 @@
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='w-pri'>  <?php echo $lang->priAB;?></th>
+          <th class='w-100px'>  <?php echo $lang->priAB;?></th>
           <th class='text-left'><?php echo $lang->bug->title;?></th>
           <th class='w-user'> <?php echo $lang->openedByAB;?></th>
           <th class='w-150px'><?php echo $lang->bug->resolvedBy;?></th>
