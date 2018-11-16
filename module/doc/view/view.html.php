@@ -65,7 +65,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <a href='###' class='fullScreen btn'><i class='icon-fullscreen'></i></a>
+    <button type='button' class='btn fullscreen-btn'><i class='icon icon-fullscreen'></i></button>
   </div>
 </div>
 <div id="mainContent" class="main-row">

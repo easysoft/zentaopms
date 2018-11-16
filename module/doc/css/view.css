@@ -12,3 +12,11 @@
 #urlCard .url-content{padding-left:55px;}
 #urlCard .url-title{font-weight:bold; font-size:16px; min-height:20px}
 #urlCard .url-href a{color:#888;}
+
+.main-row > .side-col {transition: width .2s;}
+.main-row > .main-col .article-content {transition: max-width; margin: 0 auto!important;}
+.main-row > .side-col > .cell {transition: opacity .2s;}
+.doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden}
+.doc-fullscreen .main-row > .side-col > .cell {opacity: 0}
+.doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972'}
+.doc-fullscreen .main-row > .main-col .article-content {max-width: 1360px;}
