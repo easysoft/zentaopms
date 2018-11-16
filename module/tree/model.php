@@ -1643,7 +1643,7 @@ class treeModel extends model
      */
     public function getDocStructure()
     {
-        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('id_desc')->get());
+        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`order`')->get());
         $parent = array();
         while($module = $stmt->fetch())
         {
