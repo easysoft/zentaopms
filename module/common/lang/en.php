@@ -523,6 +523,8 @@ $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users to be notified.";
 $lang->browserNotice      = 'Your current browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste images here";
+$lang->pasteImgFail       = "Paste image fail, try again later.";
+$lang->pasteImgUploading  = "Please wait image uploading...";
 
 /* Time formats settings. */
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');

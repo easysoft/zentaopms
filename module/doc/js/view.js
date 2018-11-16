@@ -1,19 +1,9 @@
 $(function()
 {
     $('#urlIframe').height($('#mainContent').height() - 35);
-    $('#mainMenu .fullScreen').click(function()
+    $('#mainMenu .fullscreen-btn').click(function()
     {
-        if(!$(this).hasClass('collapse'))
-        {
-            $(this).addClass('collapse');
-            $(this).find('i').attr('class', 'icon-exchange');
-            $('.side-col').hide();
-        }
-        else
-        {
-            $(this).removeClass('collapse');
-            $(this).find('i').attr('class', 'icon-fullscreen');
-            $('.side-col').show();
-        }
-    })
+        $('body').toggleClass('doc-fullscreen');
+        setTimeout($.resetToolbarPosition, 250);
+    });
 })

@@ -34,7 +34,7 @@ class todoModel extends model
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
-            ->remove('bug, task, uid')
+            ->remove('bug, task, story, uid')
             ->get();
         if(empty($todo->cycle)) unset($todo->config);
         if(!empty($todo->cycle))
@@ -224,6 +224,7 @@ class todoModel extends model
                 $todo->end    = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
                 if($todo->type == 'task') $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
                 if($todo->type == 'bug')  $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
+                if($todo->type == 'story')$todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
 
                 $todos[$todoID] = $todo;
             }

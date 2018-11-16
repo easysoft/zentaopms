@@ -59,7 +59,7 @@
         <td class='text-center'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
         <td class='text-center'><?php echo $release->date;?></td>
-        <td class='c-status' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
+        <td class='c-status text-center' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
           <span class="status-release status-<?php echo $release->status?>">
             <?php echo zget($lang->release->statusList, $release->status);?>
           </span>
