@@ -1,5 +1,7 @@
 function switchShow(result)
 {
+    $('#priBox').hide();
+    $('#estimateBox').hide();
     if(result == 'reject')
     {
         $('#rejectedReasonBox').show();
@@ -9,10 +11,8 @@ function switchShow(result)
         $('#assignedTo').val('closed');
         $('#assignedTo').trigger("chosen:updated");
     }
-    else if(result == 'clarify')
+    else if(result == 'revert')
     {
-        $('#priBox').hide();
-        $('#estimateBox').hide();
         $('#preVersionBox').show();
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
@@ -22,8 +22,11 @@ function switchShow(result)
     }
     else
     {
-        $('#priBox').show();
-        $('#estimateBox').show();
+        if(result == 'pass')
+        {
+            $('#priBox').show();
+            $('#estimateBox').show();
+        }
         $('#preVersionBox').hide();
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
