@@ -68,7 +68,7 @@ $(function()
     $('.block-statistic .nav-secondary > li').click(function()
     {
         projectID = $(this).attr('projectID');
-        link = createLink('project', 'view', 'projectID=' + projectID);
+        link = createLink('project', 'task', 'projectID=' + projectID);
         var $projectView = $('.block-statistic .nav-secondary > li > .projectView');
         $projectView.attr('href', link);
         $(this).append($projectView);
@@ -87,7 +87,7 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($projects as $project):?>
-        <li <?php if($project == reset($projects)) echo "class='active'";?> projectID='<?php echo $project->id;?>'><a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a><?php if($project == reset($projects)) echo html::a(helper::createLink('project', 'view', "projectID=$project->id"), "<i class='icon-arrow-right'></i>", '', "class='projectView' title={$lang->project->view}");?></li>
+        <li <?php if($project == reset($projects)) echo "class='active'";?> projectID='<?php echo $project->id;?>'><a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a><?php if($project == reset($projects)) echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right'></i>", '', "class='projectView' title={$lang->project->view}");?></li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
       </ul>

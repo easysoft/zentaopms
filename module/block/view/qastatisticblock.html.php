@@ -77,7 +77,7 @@ $(function()
     $('.block-statistic .nav-secondary > li').click(function()
     {
         productID = $(this).attr('productID');
-        link = createLink('product', 'view', 'productID=' + productID);
+        link = createLink('bug', 'browse', 'productID=' + productID);
         var $productView = $('.block-statistic .nav-secondary > li > .productView');
         $productView.attr('href', link);
         $(this).append($productView);
@@ -92,7 +92,7 @@ $(function()
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php $index = 1;?>
         <?php foreach($products as $product):?>
-            <li class="<?php if($index == 1) echo 'active';?>" productID='<?php echo $product->id;?>'><a data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a><?php if($index == 1) echo html::a(helper::createLink('product', 'view', "productID=$product->id"), "<i class='icon-arrow-right'></i>", '', "class='productView' title={$lang->product->view}")?></li>
+            <li class="<?php if($index == 1) echo 'active';?>" productID='<?php echo $product->id;?>'><a data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a><?php if($index == 1) echo html::a(helper::createLink('bug', 'browse', "productID=$product->id"), "<i class='icon-arrow-right'></i>", '', "class='productView' title={$lang->product->view}")?></li>
         <?php $index++;?>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
