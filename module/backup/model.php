@@ -264,14 +264,51 @@ class backupModel extends model
     /**
      * Get dir size.
      * 
-     * @param  string    $dir 
+     * @param  string    $backupFile 
      * @access public
      * @return int
      */
-    public function getDirSize($dir)
+    public function getBackupSize($backupFile)
     {
         $zfile = $this->app->loadClass('zfile');
-        if(!is_dir($dir)) return $zfile->getFileSize($dir);
-        return $zfile->getDirSize($dir);
+        if(!is_dir($backupFile)) return $zfile->getFileSize($backupFile);
+        return $zfile->getDirSize($backupFile);
+    }
+
+    /**
+     * Get backup path.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getBackupPath()
+    {
+        return empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
+    }
+
+    /**
+     * Get backup file.
+     * 
+     * @param  string    $name 
+     * @param  string    $type 
+     * @access public
+     * @return string
+     */
+    public function getBackupFile($name, $type)
+    {
+        $backupPath = $this->getBackupPath();
+        if($type == 'sql')
+        {
+            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}.php")) return $backupPath . $name . ".{$type}.php";
+        }
+        else
+        {
+            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}.zip")) return $backupPath . $name . ".{$type}.zip";
+            if(file_exists($backupPath . $name . ".{$type}.zip.php")) return $backupPath . $name . ".{$type}.zip.php";
+        }
+
+        return false;
     }
 }

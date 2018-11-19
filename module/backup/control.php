@@ -21,7 +21,7 @@ class backup extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $this->backupPath = empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
+        $this->backupPath = $this->backup->getBackupPath();
         if(!is_dir($this->backupPath))
         {
             if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
@@ -53,30 +53,12 @@ class backup extends control
                     $backupFile->time  = filemtime($file);
                     $backupFile->name  = substr($fileName, 0, strpos($fileName, '.'));
                     $backupFile->files[$file] = abs(filesize($file));
-                    if(file_exists($this->backupPath . $backupFile->name . '.file.zip.php'))
-                    {
-                        $backupFile->files[$this->backupPath . $backupFile->name . '.file.zip.php'] = abs(filesize($this->backupPath . $backupFile->name . '.file.zip.php'));
-                    }
-                    if(file_exists($this->backupPath . $backupFile->name . '.code.zip.php'))
-                    {
-                        $backupFile->files[$this->backupPath . $backupFile->name . '.code.zip.php'] = abs(filesize($this->backupPath . $backupFile->name . '.code.zip.php'));
-                    }
-                    if(file_exists($this->backupPath . $backupFile->name . '.file.zip'))
-                    {
-                        $backupFile->files[$this->backupPath . $backupFile->name . '.file.zip'] = abs(filesize($this->backupPath . $backupFile->name . '.file.zip'));
-                    }
-                    if(file_exists($this->backupPath . $backupFile->name . '.code.zip'))
-                    {
-                        $backupFile->files[$this->backupPath . $backupFile->name . '.code.zip'] = abs(filesize($this->backupPath . $backupFile->name . '.code.zip'));
-                    }
-                    if(file_exists($this->backupPath . $backupFile->name . '.file'))
-                    {
-                        $backupFile->files[$this->backupPath . $backupFile->name . '.file'] = $this->backup->getDirSize($this->backupPath . $backupFile->name . '.file');
-                    }
-                    if(file_exists($this->backupPath . $backupFile->name . '.code'))
-                    {
-                        $backupFile->files[$this->backupPath . $backupFile->name . '.code'] = $this->backup->getDirSize($this->backupPath . $backupFile->name . '.code');
-                    }
+
+                    $fileBackup = $this->backup->getBackupFile($backupFile->name, 'file');
+                    if($fileBackup) $backupFile->files[$fileBackup] = $this->backup->getBackupSize($fileBackup);
+
+                    $codeBackup = $this->backup->getBackupFile($backupFile->name, 'code');
+                    if($codeBackup) $backupFile->files[$codeBackup] = $this->backup->getBackupSize($codeBackup);
 
                     $backups[$backupFile->name] = $backupFile;
                 }
@@ -105,7 +87,7 @@ class backup extends control
         $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
 
         $fileName = date('YmdHis') . mt_rand(0, 9);
-        $backFileName = $this->backupPath . $fileName . '.sql';
+        $backFileName = "{$this->backupPath}{$fileName}.sql";
         if(!$nosafe) $backFileName .= '.php';
         $result = $this->backup->backSQL($backFileName);
         if(!$result->result)
@@ -125,7 +107,7 @@ class backup extends control
         if((extension_loaded('zlib') or $nozip) and !$nofile)
         {
 
-            $backFileName = $this->backupPath . $fileName . '.file';
+            $backFileName = "{$this->backupPath}{$fileName}.file";
             if(!$nozip)  $backFileName .= '.zip';
             if(!$nozip and !$nosafe) $backFileName .= '.php';
 
@@ -144,7 +126,7 @@ class backup extends control
             }
             if(!$nozip and !$nosafe) $this->backup->addFileHeader($backFileName);
 
-            $backFileName = $this->backupPath . $fileName . '.code';
+            $backFileName = "{$this->backupPath}{$fileName}.code";
             if(!$nozip)  $backFileName .= '.zip';
             if(!$nozip and !$nosafe) $backFileName .= '.php';
 
@@ -200,37 +182,37 @@ class backup extends control
         set_time_limit(7200);
 
         /* Restore database. */
-        if(file_exists($this->backupPath . $fileName . '.sql.php'))
+        if(file_exists("{$this->backupPath}{$fileName}.sql.php"))
         {
-            $this->backup->removeFileHeader($this->backupPath . $fileName . '.sql.php');
-            $result = $this->backup->restoreSQL($this->backupPath . $fileName . '.sql.php');
-            $this->backup->addFileHeader($this->backupPath . $fileName . '.sql.php');
+            $sqlBackup = "{$this->backupPath}{$fileName}.sql.php";
+            $this->backup->removeFileHeader($sqlBackup);
+            $result = $this->backup->restoreSQL($sqlBackup);
+            $this->backup->addFileHeader($sqlBackup);
             if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
         }
-        if(file_exists($this->backupPath . $fileName . '.sql'))
+        elseif(file_exists("{$this->backupPath}{$fileName}.sql"))
         {
-            $result = $this->backup->restoreSQL($this->backupPath . $fileName . '.sql');
+            $result = $this->backup->restoreSQL("{$this->backupPath}{$fileName}.sql");
             if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreSQL, $result->error)));
         }
 
         /* Restore attatchments. */
-        if(file_exists($this->backupPath . $fileName . '.file.zip.php'))
+        if(file_exists("{$this->backupPath}{$fileName}.file.zip.php"))
         {
-            $this->backup->removeFileHeader($this->backupPath . $fileName . '.file.zip.php');
-            $result = $this->backup->restoreFile($this->backupPath . $fileName . '.file.zip.php');
-            $this->backup->addFileHeader($this->backupPath . $fileName . '.file.zip.php');
+            $fileBackup = "{$this->backupPath}{$fileName}.file.zip.php";
+            $this->backup->removeFileHeader($fileBackup);
+            $result = $this->backup->restoreFile($fileBackup);
+            $this->backup->addFileHeader($fileBackup);
             if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
         }
-
-        if(file_exists($this->backupPath . $fileName . '.file.zip'))
+        elseif(file_exists("{$this->backupPath}{$fileName}.file.zip"))
         {
-            $result = $this->backup->restoreFile($this->backupPath . $fileName . '.file.zip');
+            $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file.zip");
             if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
         }
-
-        if(file_exists($this->backupPath . $fileName . '.file'))
+        elseif(file_exists("{$this->backupPath}{$fileName}.file"))
         {
-            $result = $this->backup->restoreFile($this->backupPath . $fileName . '.file');
+            $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file");
             if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
         }
 
@@ -353,11 +335,15 @@ class backup extends control
             if(isset($data->setting)) $setting = $data->setting;
             $this->loadModel('setting')->setItem('system.backup.setting', $setting);
 
-            $settingDir = rtrim($data->settingDir, DS) . DS;
-            if(!is_dir($settingDir) and mkdir($settingDir, 0777, true)) die(js::alert($this->lang->backup->error->noCreateDir));
-            if(!is_writable($settingDir)) die(js::alert($this->lang->backup->error->noWritable));
+            $settingDir = $data->settingDir;
+            if($settingDir)
+            {
+                $settingDir = rtrim($settingDir, DS) . DS;
+                if(!is_dir($settingDir) and mkdir($settingDir, 0777, true)) die(js::alert($this->lang->backup->error->noCreateDir));
+                if(!is_writable($settingDir)) die(js::alert(strip_tags(sprintf($this->lang->backup->error->noWritable, $settingDir))));
+                if($data->settingDir == $this->app->getTmpRoot() . 'backup' . DS) $settingDir = '';
+            }
 
-            if($data->settingDir == $this->app->getTmpRoot() . 'backup' . DS) $settingDir = '';
             $this->setting->setItem('system.backup.settingDir', $settingDir);
 
             die(js::reload('parent.parent'));
@@ -383,35 +369,29 @@ class backup extends control
 
         $sqlFileName = $this->backupPath . $fileName . '.sql';
         if(!file_exists($sqlFileName)) $sqlFileName .= '.php';
-        if(file_exists($sqlFileName))
+        $sqlFileName = $this->backup->getBackupFile($fileName, 'sql');
+        if($sqlFileName)
         {
-            $fileSize = abs(filesize($sqlFileName));
+            $fileSize = $this->backup->getBackupSize($sqlFileName);
             $fileSize = $fileSize / 1024 >= 1024 ? round($fileSize / 1024 / 1024, 2) . 'MB' : round($fileSize / 1024, 2) . 'KB';
             $message  = sprintf($this->lang->backup->progressSQL, $fileSize);
         }
 
-        $attatchFileName = $this->backupPath . $fileName . '.file';
-        if(!file_exists($attatchFileName)) $attatchFileName .= '.zip';
-        if(!file_exists($attatchFileName)) $attatchFileName .= '.php';
-        if(file_exists($attatchFileName))
+        $attachFileName = $this->backup->getBackupFile($fileName, 'file');
+        if($attachFileName)
         {
-            $fileSize = abs(filesize($attatchFileName));
-            if(is_dir($attatchFileName)) $fileSize = $this->backup->getDirSize($attatchFileName);
+            $fileSize = $this->backup->getBackupSize($attachFileName);
             $fileSize = $fileSize / 1024 >= 1024 ? round($fileSize / 1024 / 1024, 2) . 'MB' : round($fileSize / 1024, 2) . 'KB';
-            $message = sprintf($this->lang->backup->progressAttatch, $fileSize);
+            $message = sprintf($this->lang->backup->progressAttach, $fileSize);
         }
 
-        $codeFileName = $this->backupPath . $fileName . '.code';
-        if(!file_exists($codeFileName)) $codeFileName .= '.zip';
-        if(!file_exists($codeFileName)) $codeFileName .= '.php';
-        if(file_exists($codeFileName))
+        $codeFileName = $this->backup->getBackupFile($fileName, 'code');
+        if($codeFileName)
         {
-            $fileSize = abs(filesize($codeFileName));
-            if(is_dir($codeFileName)) $fileSize = $this->backup->getDirSize($codeFileName);
+            $fileSize = $this->backup->getBackupSize($codeFileName);
             $fileSize = $fileSize / 1024 >= 1024 ? round($fileSize / 1024 / 1024, 2) . 'MB' : round($fileSize / 1024, 2) . 'KB';
             $message = sprintf($this->lang->backup->progressCode, $fileSize);
         }
-
         die($message);
     }
 }

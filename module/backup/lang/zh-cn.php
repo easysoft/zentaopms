@@ -21,7 +21,7 @@ $lang->backup->settingList['nosafe'] = '不需要防下载PHP文件头';
 
 $lang->backup->waitting        = '<span id="backupType"></span>正在进行中，请稍候...';
 $lang->backup->progressSQL     = '<p>SQL备份中，已备份%s</p>';
-$lang->backup->progressAttatch = '<p>SQL备份完成</p><p>附件备份中，已备份%s</p>';
+$lang->backup->progressAttach  = '<p>SQL备份完成</p><p>附件备份中，已备份%s</p>';
 $lang->backup->progressCode    = '<p>SQL备份完成</p><p>附件备份完成</p><p>代码备份中，已备份%s</p>';
 $lang->backup->confirmDelete   = '是否删除备份？';
 $lang->backup->confirmRestore  = '是否还原该备份？';
