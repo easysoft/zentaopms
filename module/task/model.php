@@ -2454,7 +2454,7 @@ class taskModel extends model
             if($id == 'status') $class .= ' task-' . $task->status;
             if($id == 'id')     $class .= ' cell-id';
             if($id == 'name')   $class .= ' text-left';
-            if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
+            if($id == 'deadline' and isset($task->delay)) $class .= ' text-center delayed';
             if($id == 'assignedTo') $class .= ' has-btn text-left';
             if(strpos('progress', $id) !== false) $class .= ' text-right';
 
