@@ -355,19 +355,31 @@ class tree extends control
         }
         if($returnType == 'html')
         {
-            $changeFunc = '';
-            if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
-            $field = $fieldID ? "modules[$fieldID]" : 'module';
-            if($viewType == 'line') $field = 'line';
-            $output = html::select("$field", $optionMenu, '', "class='form-control' $changeFunc");
-            if(count($optionMenu) == 1 and $needManage)
+            //Code for task #5081.
+            if($viewType == 'line')
             {
-                $output .=  "<span class='input-group-addon'>";
+                $lineID = $this->dao->select('id')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('id_desc')->limit(1)->fetch('id');
+                $output = html::select("line", $optionMenu, $lineID, "class='form-control'");
+                $output .=  "<span class='input-group-addon' style='border-radius: 0px 2px 2px 0px; border-right-width: 1px;'>";
                 $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $viewType == 'line' ? $this->lang->tree->manageLine : $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                $output .= '&nbsp; ';
-                $output .= $viewType == 'line' ? html::a("javascript:void(0)", $this->lang->refresh, '', "class='refresh' onclick='loadProductLines($rootID)'") : html::a("javascript:void(0)", $this->lang->refresh, '', "class='refresh' onclick='loadProductModules($rootID)'");
                 $output .= '</span>';
             }
+            else
+            {
+                $changeFunc = '';
+                if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+                $field = $fieldID ? "modules[$fieldID]" : 'module';
+                $output = html::select("$field", $optionMenu, '', "class='form-control' $changeFunc");
+                if(count($optionMenu) == 1 and $needManage)
+                {
+                    $output .=  "<span class='input-group-addon'>";
+                    $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
+                    $output .= '&nbsp; ';
+                    $output .= html::a("javascript:void(0)", $this->lang->refresh, '', "class='refresh' onclick='loadProductModules($rootID)'");
+                    $output .= '</span>';
+                }
+            }
+
             die($output);
         }
         if($returnType == 'mhtml')
