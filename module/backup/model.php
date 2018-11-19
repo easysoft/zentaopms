@@ -186,7 +186,7 @@ class backupModel extends model
     public function addFileHeader($fileName)
     {
         $firstline = false;
-        $die       = "<?php die();?>\n";
+        $die       = "<?php die();?" . ">\n";
         $fileSize  = filesize($fileName);
 
         $fh    = fopen($fileName, 'c+');
@@ -229,7 +229,7 @@ class backupModel extends model
     public function removeFileHeader($fileName)
     {
         $firstline = false;
-        $die       = "<?php die();?>\n";
+        $die       = "<?php die();?" . ">\n";
         $fileSize  = filesize($fileName);
 
         $fh = fopen($fileName, 'c+');
@@ -270,18 +270,8 @@ class backupModel extends model
      */
     public function getDirSize($dir)
     {
-        $size = 0;
-        foreach(glob("$dir/*") as $file)
-        {
-            if(is_dir($file))
-            {
-                $size += $this->getDirSize($file);
-            }
-            else
-            {
-                $size += abs(filesize($file));
-            }
-        }
-        return $size;
+        $zfile = $this->app->loadClass('zfile');
+        if(!is_dir($dir)) return $zfile->getFileSize($dir);
+        return $zfile->getDirSize($dir);
     }
 }

@@ -21,7 +21,7 @@ class backup extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $this->backupPath = empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup/' : $this->config->backup->settingDir;
+        $this->backupPath = empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
         if(!is_dir($this->backupPath))
         {
             if(!mkdir($this->backupPath, 0777, true)) $this->view->error = sprintf($this->lang->backup->error->noWritable, dirname($this->backupPath));
@@ -127,7 +127,7 @@ class backup extends control
 
             $backFileName = $this->backupPath . $fileName . '.file';
             if(!$nozip)  $backFileName .= '.zip';
-            if(!$nosafe) $backFileName .= '.php';
+            if(!$nozip and !$nosafe) $backFileName .= '.php';
 
             $result = $this->backup->backFile($backFileName);
             if(!$result->result)
@@ -146,7 +146,7 @@ class backup extends control
 
             $backFileName = $this->backupPath . $fileName . '.code';
             if(!$nozip)  $backFileName .= '.zip';
-            if(!$nosafe) $backFileName .= '.php';
+            if(!$nozip and !$nosafe) $backFileName .= '.php';
 
             $result = $this->backup->backCode($backFileName);
             if(!$result->result)
@@ -353,8 +353,11 @@ class backup extends control
             if(isset($data->setting)) $setting = $data->setting;
             $this->loadModel('setting')->setItem('system.backup.setting', $setting);
 
-            $settingDir = $data->settingDir;
-            if($data->settingDir == $this->app->getTmpRoot() . 'backup/') $settingDir = '';
+            $settingDir = rtrim($data->settingDir, DS) . DS;
+            if(!is_dir($settingDir) and mkdir($settingDir, 0777, true)) die(js::alert($this->lang->backup->error->noCreateDir));
+            if(!is_writable($settingDir)) die(js::alert($this->lang->backup->error->noWritable));
+
+            if($data->settingDir == $this->app->getTmpRoot() . 'backup' . DS) $settingDir = '';
             $this->setting->setItem('system.backup.settingDir', $settingDir);
 
             die(js::reload('parent.parent'));
