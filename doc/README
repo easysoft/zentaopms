@@ -1,6 +1,6 @@
-ZenTaoPMS is a scrum management system which is licensed under LGPLV3. 
+ZenTao is a Scrum tool which is licensed under ZPL 1.2. 
 
-The key feature of ZenTaoPMS:
+The key feature of ZenTao:
 
 1. Product management(product backlog)
 
@@ -22,8 +22,10 @@ The key feature of ZenTaoPMS:
    test task management
 
 4. Document management
-5. User management
-6. Todo feature 
 
-The English version site of ZenTaoPMS is http://www.zentao.net/en/
-The English demo site of ZenTaoPMS is http://demo.zentao.net/
+5. User management
+
+6. Todo management 
+
+ZenTao official website: https://www.zentao.pm/
+ZenTao demo site: http://demo.zentao.pm/
