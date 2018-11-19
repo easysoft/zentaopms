@@ -16,8 +16,8 @@ $lang->backup->size  = '大小';
 $lang->backup->setting    = '设置';
 $lang->backup->settingDir = '备份目录';
 $lang->backup->settingList['nofile'] = '不备份附件和代码';
-$lang->backup->settingList['nozip']  = '只拷贝文件';
-$lang->backup->settingList['nosafe'] = '不需要防下载设置';
+$lang->backup->settingList['nozip']  = '只拷贝文件，不压缩';
+$lang->backup->settingList['nosafe'] = '不需要防下载PHP文件头';
 
 $lang->backup->waitting        = '<span id="backupType"></span>正在进行中，请稍候...';
 $lang->backup->progressSQL     = '<p>SQL备份中，已备份%s</p>';
@@ -33,6 +33,7 @@ $lang->backup->success->backup  = '备份成功！';
 $lang->backup->success->restore = '还原成功！';
 
 $lang->backup->error = new stdclass();
+$lang->backup->error->noCreateDir = '备份目录不存在，也无法创建该目录';
 $lang->backup->error->noWritable  = "<code>%s</code> 不可写！请检查该目录权限，否则无法备份。";
 $lang->backup->error->noDelete    = "文件 %s 无法删除，修改权限或手工删除。";
 $lang->backup->error->restoreSQL  = "数据库还原失败，错误：%s";

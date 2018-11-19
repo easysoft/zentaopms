@@ -192,4 +192,40 @@ class zfile
     {
         return rename($from, $to);
     }
+
+    /**
+     * Get file size.
+     * 
+     * @param  string    $file 
+     * @access public
+     * @return int
+     */
+    public function getFileSize($file)
+    {
+        return abs(filesize($file));
+    }
+
+    /**
+     * Get directory size.
+     * 
+     * @param  string    $dir
+     * @access public
+     * @return int 
+     */
+    public function getDirSize($dir)
+    {
+        $size = 0;
+        foreach(glob("$dir/*") as $file)
+        {
+            if(is_dir($file))
+            {
+                $size += $this->getDirSize($file);
+            }
+            else
+            {
+                $size += $this->getFileSize($file);
+            }
+        }
+        return $size;
+    }
 }

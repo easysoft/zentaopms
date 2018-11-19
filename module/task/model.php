@@ -688,6 +688,7 @@ class taskModel extends model
             {
                 $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
                 $this->updateParentStatus($taskID);
+                $this->computeBeginAndEnd($task->parent);
             }
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             return common::createChanges($oldTask, $task);

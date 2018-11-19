@@ -1523,4 +1523,24 @@ class docModel extends model
 
         return $actions;
     }
+
+    public function getCompleteLibName()
+    {
+        $libPairs = array();
+        $products = $this->loadModel('product')->getPairs();
+        $projects = $this->loadModel('project')->getPairs();
+        $stmt = $this->dao->select('id,project,product,name')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->query(); 
+
+        while($lib = $stmt->fetch())
+        {
+            if($this->checkPrivLib($lib)) 
+            {
+                if($lib->product != 0) $lib->name = zget($products, $lib->product) . '/' . $lib->name;
+                if($lib->project != 0) $lib->name = zget($projects, $lib->project) . '/' . $lib->name;
+                $libPairs[$lib->id] = $lib->name;
+            }
+        }
+
+        return $libPairs;
+    }
 }

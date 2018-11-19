@@ -117,7 +117,7 @@
         <div class="btn-group dropup">
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
           <?php
-          $withSearch = count($memberPairs) > 1;
+          $withSearch = count($memberPairs) > 10;
           $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID={$project->id}&type=project");
 
           if($withSearch)

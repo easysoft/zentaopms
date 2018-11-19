@@ -123,6 +123,7 @@
           <?php endforeach;?>
         </div>
       </div>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
@@ -205,9 +206,6 @@
     <div class='cell'>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
       <?php include '../../common/view/action.html.php';?>
-    </div>
-    <div class='cell'>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
     </div>
   </div>
 </div>
