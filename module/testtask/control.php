@@ -451,12 +451,11 @@ class testtask extends control
         {
             $changes = $this->testtask->update($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if($changes)
+            if($changes or $this->post->comment)
             {
-                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited');
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if($this->post->comment != '') $actionID = $this->action->create('testtask', $taskID, 'Commented', $this->post->comment);
             die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
 

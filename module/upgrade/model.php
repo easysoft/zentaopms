@@ -2560,12 +2560,8 @@ class upgradeModel extends model
 
         if(strpos($value->value, 'finishedDate') === false) return;
 
-        $values = explode(',', $value->value);
-        foreach($values as $id => $value)
-        {
-            if($value == 'finishedDate') unset($values[$id]);
-        }
-        $value = implode(',', $values);
+        $value = ',' . $value->value . ',';
+        $value = trim(str_replace(',finishedDate,', '', $value), ',');
 
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq($value)
             ->where('`module`')->eq('task')

@@ -335,13 +335,15 @@ class task extends control
         $noclosedProjects = $this->project->getPairs('noclosed,nocode');
         unset($noclosedProjects[$this->view->project->id]);
         $this->view->projects = array($this->view->project->id => $this->view->project->name) + $noclosedProjects;
+        $tasks = $this->task->getParentTaskPairs($this->view->project->id);
+        if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         $this->view->title      = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[] = $this->lang->task->common;
         $this->view->position[] = $this->lang->task->edit;
         $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->tasks      = $this->task->getParentTaskPairs($this->view->project->id);
+        $this->view->tasks      = $tasks;
         $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
         $this->display();

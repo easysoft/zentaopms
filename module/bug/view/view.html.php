@@ -27,8 +27,7 @@
       <?php endif; ?>
 	</div>
   </div>
-  <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
-  <?php if(!$isOnlybody):?>
+  <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); ?>
   </div>
