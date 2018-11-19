@@ -203,17 +203,17 @@ class backup extends control
             $this->backup->removeFileHeader($fileBackup);
             $result = $this->backup->restoreFile($fileBackup);
             $this->backup->addFileHeader($fileBackup);
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
+            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
         }
         elseif(file_exists("{$this->backupPath}{$fileName}.file.zip"))
         {
             $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file.zip");
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
+            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
         }
         elseif(file_exists("{$this->backupPath}{$fileName}.file"))
         {
             $result = $this->backup->restoreFile("{$this->backupPath}{$fileName}.file");
-            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->resotreFile, $result->error)));
+            if(!$result->result) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->restoreFile, $result->error)));
         }
 
         $this->send(array('result' => 'success', 'message' => $this->lang->backup->success->restore));

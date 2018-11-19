@@ -125,7 +125,7 @@
       <div class="col-sm-7">
         <div class="panel block-files block-sm" style="height: 290px;">
           <div class="panel-heading">
-            <div class="panel-title"><?php echo $lang->project->statusList['doing'] . $lang->projectCommon;?></div>
+            <div class="panel-title"><?php echo $lang->project->undone . $lang->projectCommon;?></div>
             <nav class="panel-actions nav nav-default">
               <li><?php echo html::a($this->createLink('doc', 'allLibs', 'type=project'), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>

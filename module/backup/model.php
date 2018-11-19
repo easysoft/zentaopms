@@ -160,7 +160,7 @@ class backupModel extends model
             chdir($this->app->getTmpRoot());
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($backupFile);
-            if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/') == 0)
+            if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON) == 0)
             {
                 $return->result = false;
                 $return->error  = $zip->errorInfo();
