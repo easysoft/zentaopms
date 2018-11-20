@@ -23,13 +23,17 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
 .block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
-.block-statistic .nav-secondary > li > a:first-child {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;display: inline-block; line-height: 16px;width: 180px}
-.block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
-.block-statistic .nav-secondary > li.active > a:hover,
-.block-statistic .nav-secondary > li.active > a:focus,
-.block-statistic .nav-secondary > li > a:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
-.block-statistic .nav-secondary > li.active > a:first-child:before {content: ' '; display: block; left: -1px; top: 8px; bottom: 10px; width: 4px; background: #006af1; position: absolute;height: 16px}
-.block-statistic .nav-secondary > li.active > a.projectView {float: right}
+.block-statistic .nav-secondary > li {position: relative}
+.block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
+.block-statistic .nav-secondary > li > a:first-child {padding-right: 36px;}
+.block-statistic .nav-secondary > li.active > a:first-child {color: #3C4353; background: transparent; box-shadow: none;}
+.block-statistic .nav-secondary > li.active > a:first-child:hover,
+.block-statistic .nav-secondary > li.active > a:first-child:focus,
+.block-statistic .nav-secondary > li > a:first-child:hover {box-shadow: none; border-radius: 4px 0 0 4px; background: #f5f5f5;}
+.block-statistic .nav-secondary > li.active > a:first-child:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li > a.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
+.block-statistic .nav-secondary > li:hover > a.btn-view {opacity: 1}
+.block-statistic .nav-secondary > li.active > a.btn-view {box-shadow: none}
 .block-statistic .nav-secondary > li.switch-icon {display: none;}
 .block-statistic.block-sm .panel-body {padding-bottom: 10px; position: relative; padding-top: 45px; border-radius: 3px;}
 .block-statistic.block-sm .panel-body > .table-row,
@@ -48,6 +52,9 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic.block-sm .nav-secondary > li > a:before {display: none;}
 .block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
 .block-statistic.block-sm .nav-secondary > li.active > a:first-child:before {display: none}
+.block-statistic.block-sm .nav-secondary > li.active > a.btn-view {width: auto; left: 0; right: 0;}
+.block-statistic.block-sm .nav-secondary > li.active > a.btn-view > i {display: none;}
+.block-statistic.block-sm .nav-secondary > li.active > a.btn-view:hover {cursor: pointer; background: rgba(0,0,0,.05)}
 
 .status-count{margin:auto}
 .status-count tr:first-child td:last-child{color:#000;font-weight:bold}
@@ -66,15 +73,6 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
         e.preventDefault();
     });
-    $('.block-statistic .nav-secondary > li').click(function()
-    {
-        projectID = $(this).attr('projectID');
-        link = createLink('project', 'task', 'projectID=' + projectID);
-        var $projectView = $('.block-statistic .nav-secondary > li > .projectView');
-        $projectView.attr('href', link);
-        $(this).append($projectView);
-        $projectView.css('float', 'right');
-    })
 });
 </script>
 <div class="panel-body">
@@ -88,7 +86,10 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($projects as $project):?>
-        <li <?php if($project == reset($projects)) echo "class='active'";?> projectID='<?php echo $project->id;?>'><a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a><?php if($project == reset($projects)) echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right'></i>", '', "class='projectView' title={$lang->project->view}");?></li>
+        <li <?php if($project == reset($projects)) echo "class='active'";?> projectID='<?php echo $project->id;?>'>
+          <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
+          <?php echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->task}");?>
+        </li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
       </ul>
