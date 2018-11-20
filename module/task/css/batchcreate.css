@@ -15,6 +15,7 @@
 #zeroTaskStory > label:after {top: 5px; left: 5px;}
 #zeroTaskStory.checked {border-color: #00a9fc; background: #E9F2FB;}
 
-.chosen-results > li.has-task {position: relative;}
-.chosen-results > li.has-task:before {content: attr(data-data); display: inline-block; background: rgba(0,0,0,.1); font-size: 12px; border-radius: 4px; padding: 0 4px; margin-right: 4px; position: relative; top: -1px; color: green}
-.chosen-results > li.has-task.highlighted:before {color: #fff;}
+.chosen-results > li.has-task,
+.chosen-results > li.has-new-task {position: relative; color: #388E3C;}
+.chosen-results > li.has-task.highlighted,
+.chosen-results > li.has-new-task.highlighted {color: #fff;}
