@@ -156,13 +156,7 @@
               echo '<label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>';
               echo '<a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>';
               echo '</div>';
-              $memberNames = array();
-              foreach($memberPairs as $memberId => $member)
-              {
-                  if(empty($memberId)) continue;
-                  $memberNames[] = $member;
-              }
-              $membersPinYin = common::convert2Pinyin($memberNames);
+              $usersPinYin = common::convert2Pinyin($users);
           }
           else
           {
@@ -172,7 +166,7 @@
           foreach($users as $key => $value)
           {
               if(empty($key) or $key == 'closed') continue;
-              $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
               echo html::a('javascript:$(".table-actions #assignedTo").val("' . $key . '");setFormAction("' . $actionLink . '")', '<i class="icon icon-person icon-sm"></i> ' . $value, '', $searchKey);
           }
           echo "</div>";
