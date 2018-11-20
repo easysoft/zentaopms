@@ -416,10 +416,12 @@ class commonModel extends model
                     $link      = $lang->admin->subMenu->$subMenu->$type;
                     if(is_array($lang->admin->subMenu->$subMenu->$type))
                     {
-                        if(isset($lang->admin->subMenu->$subMenu->$type['subModule'])) $subModule = $lang->admin->subMenu->$subMenu->$type['subModule'];
-                        if(isset($lang->admin->subMenu->$subMenu->$type['alias'])) $alias = $lang->admin->subMenu->$subMenu->$type['alias'];
-                        $link = $lang->admin->subMenu->$subMenu->$type['link'];
+                        $subMenuType = $lang->admin->subMenu->$subMenu->$type;
+                        if(isset($subMenuType['subModule'])) $subModule = $subMenuType['subModule'];
+                        if(isset($subMenuType['alias']))     $alias     = $subMenuType['alias'];
+                        if(isset($subMenuType['link']))      $link      = $subMenuType['link'];
                     }
+
                     list($text, $currentModule, $currentMethod)= explode('|', $link);
                     if(!common::hasPriv($currentModule, $currentMethod)) continue;
 
