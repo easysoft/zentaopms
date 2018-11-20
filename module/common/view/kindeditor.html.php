@@ -122,7 +122,7 @@ $uid = uniqid('');
 
                 var pasteBegin = function()
                 {
-                    $.enableForm(false);
+                    $.enableForm(false, 0, 1);
                     $('body').one('click.ke' + kuid, function(){$.enableForm(true);});
                     cmd.inserthtml(imageLoadingEle);
                     keditor.readonly(true);
@@ -135,7 +135,7 @@ $uid = uniqid('');
                         if(error === true) error = '<?php echo $this->lang->pasteImgFail;?>';
                         $.zui.messager.danger(error, {placement: 'center'});
                     }
-                    $.enableForm(true);
+                    $.enableForm(true, 0, 1);
                     $('body').off('.ke' + kuid);
                     $(doc.body).find('.image-loading-ele').remove();
                     keditor.readonly(false);
