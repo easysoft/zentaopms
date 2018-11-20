@@ -74,18 +74,18 @@ $(function()
         $tab.find('.progress-pie').progressPie();
         $(this).parents('.tab-pane').find('.table-row').not($tab).addClass('hidden');
     });
-    $('.block-statistic .nav-secondary > li').click(function()
+    $('.block-qa .nav-secondary > li').click(function()
     {
         productID = $(this).attr('productID');
         link = createLink('bug', 'browse', 'productID=' + productID);
-        var $productView = $('.block-statistic .nav-secondary > li > .productView');
+        var $productView = $('.block-qa .nav-secondary > li > .productView');
         $productView.attr('href', link);
         $(this).append($productView);
         $productView.css('float', 'right');
     })
 });
 </script>
-<div class="panel-body">
+<div class="panel-body block-qa">
   <div class="table-row">
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary" id='<?php echo $blockNavId;?>'>
