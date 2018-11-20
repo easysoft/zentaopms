@@ -79,18 +79,18 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
         e.preventDefault();
     });
-    $('.block-statistic .nav-secondary > li').click(function()
+    $('.block-product .nav-secondary > li').click(function()
     {
         productID = $(this).attr('productID');
         link = createLink('product', 'browse', 'productID=' + productID);
-        var $productView = $('.block-statistic .nav-secondary > li > .productView');
+        var $productView = $('.block-product .nav-secondary > li > .productView');
         $productView.attr('href', link);
         $(this).append($productView);
         $productView.css('float', 'right');
     })
 });
 </script>
-<div class="panel-body">
+<div class="panel-body block-product">
   <div class="table-row">
     <?php if(empty($products)):?>
     <div class="table-empty-tip">

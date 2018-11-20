@@ -65,18 +65,18 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
         e.preventDefault();
     });
-    $('.block-statistic .nav-secondary > li').click(function()
+    $('.block-project .nav-secondary > li').click(function()
     {
         projectID = $(this).attr('projectID');
         link = createLink('project', 'task', 'projectID=' + projectID);
-        var $projectView = $('.block-statistic .nav-secondary > li > .projectView');
+        var $projectView = $('.block-project .nav-secondary > li > .projectView');
         $projectView.attr('href', link);
         $(this).append($projectView);
         $projectView.css('float', 'right');
     })
 });
 </script>
-<div class="panel-body">
+<div class="panel-body block-project">
   <div class="table-row">
     <?php if(empty($projects)):?>
     <div class="table-empty-tip">
