@@ -14,6 +14,10 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
+<?php
+js::set('fullscreen', $lang->doc->fullscreen);
+js::set('reset', $lang->doc->reset);
+?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-primary'");?>
@@ -63,9 +67,6 @@
       </small>
       <?php endif; ?>
     </div>
-  </div>
-  <div class="btn-toolbar pull-right">
-    <button type='button' class='btn fullscreen-btn'><i class='icon icon-fullscreen'></i></button>
   </div>
 </div>
 <div id="mainContent" class="main-row">
@@ -128,6 +129,7 @@
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
+        <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->fullscreen?>'><i class='icon icon-fullscreen'></i></button>
         <?php
         if(!$doc->deleted)
         {
