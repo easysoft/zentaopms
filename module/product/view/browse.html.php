@@ -297,13 +297,7 @@
                 <label for="moduleSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-              <?php
-              $moduleNames = array();
-              foreach($modules as $moduleId => $module)
-              {
-                  $moduleNames[] = $module;
-              }
-              $modulesPinYin = common::convert2Pinyin($moduleNames);
+              <?php $modulesPinYin = common::convert2Pinyin($modules);
               ?>
               <?php endif;?>
               <div class="list-group">
@@ -334,14 +328,7 @@
                 <label for="planSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-              <?php
-              $planNames = array();
-              foreach($plans as $planID => $plan)
-              {
-                  $planNames[] = $plan;
-              }
-              $plansPinYin = common::convert2Pinyin($planNames);
-              ?>
+              <?php $plansPinYin = common::convert2Pinyin($plans);?>
               <?php endif;?>
               <div class="list-group">
                 <?php
@@ -367,15 +354,7 @@
             ?>
             <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
               <?php if($withSearch):?>
-              <?php
-              $memberNames = array();
-              foreach($users as $memberId => $member)
-              {
-                  if(empty($memberId) or $memberId == 'closed') continue;
-                  $memberNames[] = $member;
-              }
-              $membersPinYin = common::convert2Pinyin($memberNames);
-              ?>
+              <?php $usersPinYin = common::convert2Pinyin($users);?>
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
@@ -386,7 +365,7 @@
               <?php foreach ($users as $key => $value):?>
               <?php
               if(empty($key) or $key == 'closed') continue;
-              $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
               echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\")", $value, '', $searchKey);
               ?>
               <?php endforeach;?>

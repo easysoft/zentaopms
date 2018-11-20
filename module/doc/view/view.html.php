@@ -16,7 +16,7 @@
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
 <?php
 js::set('fullscreen', $lang->doc->fullscreen);
-js::set('reset', $lang->doc->reset);
+js::set('retrack', $lang->doc->retrack);
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -129,23 +129,19 @@ js::set('reset', $lang->doc->reset);
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
-        <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->fullscreen?>'><i class='icon icon-fullscreen'></i></button>
+        <div class='divider'></div>
+        <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i></button>
         <?php
         if(!$doc->deleted)
         {
-            echo "<div class='divider'></div>";
             common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
             common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
-        }
-        else
-        {
-            common::printRPN($browseLink);
         }
         ?>
       </div>
     </div>
   </div>
-  <div class="side-col col-4">
+  <div class="side-col col-4 hidden">
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>

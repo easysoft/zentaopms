@@ -108,15 +108,7 @@
             ?>
             <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
               <?php if($withSearch):?>
-              <?php
-              $memberNames = array();
-              foreach($assignedTos as $memberId => $member)
-              {
-                  if(empty($memberId) or $memberId == 'closed') continue;
-                  $memberNames[] = $member;
-              }
-              $membersPinYin = common::convert2Pinyin($memberNames);
-              ?>
+              <?php $membersPinYin = common::convert2Pinyin($assignedTos);?>
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>

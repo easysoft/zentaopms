@@ -2,14 +2,13 @@ $(function()
 {
     $('#urlIframe').height($('#mainContent').height() - 35);
     $('body').addClass('doc-fullscreen');
-    $('#mainContent .fullscreen-btn').attr('title', reset);
-    setTimeout($.resetToolbarPosition, 50);
     $('#mainContent .fullscreen-btn').click(function()
     {
+        $('.side-col').removeClass('hidden');
         $('body').toggleClass('doc-fullscreen');
         if($('body').hasClass('doc-fullscreen')) 
         {
-            $('#mainContent .fullscreen-btn').attr('title', reset);
+            $('#mainContent .fullscreen-btn').attr('title', retrack);
         }
         else
         {

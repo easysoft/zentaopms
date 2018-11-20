@@ -296,14 +296,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-            <?php
-            $branchNames = array();
-            foreach($branches as $branchID => $branchName)
-            {
-                $branchNames[] = $branchName;
-            }
-            $branchsPinYin = common::convert2Pinyin($branchNames);
-            ?>
+            <?php $branchsPinYin = common::convert2Pinyin($branches);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -331,14 +324,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-              <?php
-              $moduleNames = array();
-              foreach($modules as $moduleId => $module)
-              {
-                  $moduleNames[] = $module;
-              }
-              $modulesPinYin = common::convert2Pinyin($moduleNames);
-              ?>
+              <?php $modulesPinYin = common::convert2Pinyin($modules);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -366,15 +352,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-            <?php
-            $memberNames = array();
-            foreach($memberPairs as $memberId => $member)
-            {
-                if(empty($memberId)) continue;
-                $memberNames[] = $member;
-            }
-            $membersPinYin = common::convert2Pinyin($memberNames);
-            ?>
+            <?php $membersPinYin = common::convert2Pinyin($memberPairs);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
