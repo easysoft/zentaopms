@@ -52,6 +52,7 @@ $lang->tree->branch     = 'Platform/Branch';
 $lang->tree->path       = 'Path';
 $lang->tree->type       = 'Type';
 $lang->tree->parent     = 'Parent';
+$lang->tree->parentCate = 'Parent';
 $lang->tree->child      = 'Child';
 $lang->tree->lineChild  = 'Child';
 $lang->tree->owner      = 'Owner';

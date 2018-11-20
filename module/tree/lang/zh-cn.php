@@ -52,6 +52,7 @@ $lang->tree->branch     = '平台/分支';
 $lang->tree->path       = '路径';
 $lang->tree->type       = '类型';
 $lang->tree->parent     = '上级模块';
+$lang->tree->parentCate = '上级分类';
 $lang->tree->child      = '子模块';
 $lang->tree->lineChild  = '子产品线';
 $lang->tree->owner      = '负责人';
