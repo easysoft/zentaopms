@@ -102,6 +102,7 @@ $lang->dev->groupList['product'] = $lang->productCommon;
 $lang->dev->groupList['project'] = $lang->projectCommon;
 $lang->dev->groupList['qa']      = 'QA';
 $lang->dev->groupList['doc']     = 'Doc';
+$lang->dev->groupList['report']  = 'Report';
 $lang->dev->groupList['company'] = 'Company';
 $lang->dev->groupList['repo']    = 'Code';
 $lang->dev->groupList['api']     = 'API';

@@ -19,4 +19,3 @@
 .doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden}
 .doc-fullscreen .main-row > .side-col > .cell {opacity: 0}
 .doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972'}
-.doc-fullscreen .main-row > .main-col .article-content {max-width: 1360px;}

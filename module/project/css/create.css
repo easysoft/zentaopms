@@ -1,4 +1,5 @@
 #tipsModal {margin-top: 10%;}
+.chosen-container-single .chosen-single > span{max-width:100%;}
 
 #copyProjectModal {padding: 0}
 #copyProjectModal {padding: 0 2px}

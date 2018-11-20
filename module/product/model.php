@@ -317,6 +317,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t1.project')->eq($projectID)
+            ->andWhere('t2.deleted')->eq(0)
             ->orderBy('t2.order desc')
             ->fetchPairs();
     }
