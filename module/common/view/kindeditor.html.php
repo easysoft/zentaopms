@@ -37,7 +37,7 @@ $uid = uniqid('');
     'table', 'code', '|', 'pagebreak', 'anchor', '|',
     'fullscreen', 'source', 'preview', 'about'];
     var editorToolsMap = {fullTools: fullTools, simpleTools: simpleTools, bugTools: bugTools};
-    var imageLoadingEle = '<div class="image-loading-ele small" style="padding: 5px; background: #f1f1f1; width: 300px; border-radius: 2px;"><i class="icon icon-spin icon-spinner-indicator text-muted"></i> <?php echo $this->lang->pasteImgUploading?></div>';
+    var imageLoadingEle = '<div class="image-loading-ele small" style="padding: 5px; background: #FFF3E0; width: 300px; border-radius: 2px; border: 1px solid #FF9800; color: #ff5d5d; margin: 10px 0;"><i class="icon icon-spin icon-spinner-indicator muted"></i> <?php echo $this->lang->pasteImgUploading?></div>';
 
     // Kindeditor default options
     var editorDefaults =
