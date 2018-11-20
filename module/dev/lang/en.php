@@ -103,9 +103,10 @@ $lang->dev->groupList['project'] = $lang->projectCommon;
 $lang->dev->groupList['qa']      = 'QA';
 $lang->dev->groupList['doc']     = 'Doc';
 $lang->dev->groupList['company'] = 'Company';
-$lang->dev->groupList['admin']   = 'Admin';
 $lang->dev->groupList['repo']    = 'Code';
 $lang->dev->groupList['api']     = 'API';
-$lang->dev->groupList['system']  = 'System';
 $lang->dev->groupList['message'] = 'Message';
-$lang->dev->groupList['other']   = 'Others';
+
+$lang->dev->endGroupList['admin']  = 'Admin';
+$lang->dev->endGroupList['system'] = 'System';
+$lang->dev->endGroupList['other']  = 'Others';

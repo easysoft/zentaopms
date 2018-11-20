@@ -60,12 +60,12 @@ $lang->project->readjustTask  = '顺延任务的起止时间';
 $lang->project->effort        = '日志';
 $lang->project->relatedMember = '相关成员';
 
-$lang->project->start    = "开始$lang->projectCommon";
-$lang->project->activate = "激活$lang->projectCommon";
-$lang->project->putoff   = "延期$lang->projectCommon";
-$lang->project->suspend  = "挂起$lang->projectCommon";
-$lang->project->close    = "关闭$lang->projectCommon";
-$lang->project->export   = "导出$lang->projectCommon";
+$lang->project->start    = "开始";
+$lang->project->activate = "激活";
+$lang->project->putoff   = "延期";
+$lang->project->suspend  = "挂起";
+$lang->project->close    = "关闭";
+$lang->project->export   = "导出";
 
 $lang->project->typeList['sprint']    = "短期$lang->projectCommon";
 $lang->project->typeList['waterfall'] = "长期$lang->projectCommon";

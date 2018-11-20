@@ -59,6 +59,8 @@ $lang->doc->todayEdited    = 'Update Today';
 $lang->doc->pastEdited     = 'Updated';
 $lang->doc->myDoc          = 'My Doc';
 $lang->doc->myCollection   = 'My Favorite';
+$lang->doc->fullscreen     = 'Full Screen';
+$lang->doc->reset          = 'Reset';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Doc Home';
