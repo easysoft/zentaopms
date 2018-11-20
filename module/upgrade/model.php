@@ -2558,15 +2558,16 @@ class upgradeModel extends model
             ->andWhere('`key`')->eq('requiredFields')
             ->fetch();
 
-        if(strpos($value->value, 'finishedDate') === false) return;
+        if(strpos($value->value, 'finishedDate') === false) return true;
 
-        $value = ',' . $value->value . ',';
-        $value = trim(str_replace(',finishedDate,', '', $value), ',');
+        $value = trim(str_replace(',finishedDate,', ',', ",{$value->value},"), ',');
 
         $this->dao->update(TABLE_CONFIG)->set('`value`')->eq($value)
             ->where('`module`')->eq('task')
             ->andWhere('`section`')->eq('finish')
             ->andWhere('`key`')->eq('requiredFields')
             ->exec();
+
+        return true;
     }
 }

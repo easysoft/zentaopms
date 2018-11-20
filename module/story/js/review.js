@@ -6,8 +6,6 @@ function switchShow(result)
     {
         $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
-        $('#priBox').hide();
-        $('#estimateBox').hide();
         $('#assignedTo').val('closed');
         $('#assignedTo').trigger("chosen:updated");
     }

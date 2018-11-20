@@ -157,10 +157,25 @@ class docModel extends model
                 ->orderBy('`order`, id desc')->query();
         }
 
+        if(strpos($extra, 'withObject') !== false)
+        {
+            $products = $this->loadModel('product')->getPairs();
+            $projects = $this->loadModel('project')->getPairs();
+        }
+
         $libPairs = array();
         while($lib = $stmt->fetch())
         {
-            if($this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
+            if($this->checkPrivLib($lib, $extra))
+            {
+                if(strpos($extra, 'withObject') !== false)
+                {
+                    if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . '/' . $lib->name;
+                    if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . '/' . $lib->name;
+                }
+
+                $libPairs[$lib->id] = $lib->name;
+            }
         }
 
         if(!empty($appendLibs))
@@ -1522,25 +1537,5 @@ class docModel extends model
         $actions .='</ul>';
 
         return $actions;
-    }
-
-    public function getCompleteLibName()
-    {
-        $libPairs = array();
-        $products = $this->loadModel('product')->getPairs();
-        $projects = $this->loadModel('project')->getPairs();
-        $stmt = $this->dao->select('id,project,product,name')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->query(); 
-
-        while($lib = $stmt->fetch())
-        {
-            if($this->checkPrivLib($lib)) 
-            {
-                if($lib->product != 0) $lib->name = zget($products, $lib->product) . '/' . $lib->name;
-                if($lib->project != 0) $lib->name = zget($projects, $lib->project) . '/' . $lib->name;
-                $libPairs[$lib->id] = $lib->name;
-            }
-        }
-
-        return $libPairs;
     }
 }

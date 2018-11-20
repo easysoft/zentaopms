@@ -240,7 +240,7 @@ class tree extends control
 
         $this->view->module = $module;
         $this->view->type   = $type;
-        $this->view->libs   = $this->loadModel('doc')->getCompleteLibName();
+        $this->view->libs   = $this->loadModel('doc')->getLibs($type = 'all', $extra = 'withObject');
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 
