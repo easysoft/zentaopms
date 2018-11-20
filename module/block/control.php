@@ -249,12 +249,12 @@ class block extends control
             $block->actionLink = '';
             if($block->block == 'overview')
             {
-                if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn'");
-                if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn'");
+                if($module == 'product' && common::hasPriv('product', 'create')) $block->actionLink = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
+                if($module == 'project' && common::hasPriv('project', 'create')) $block->actionLink = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
                 if($module == 'qa'      && common::hasPriv('testcase', 'create'))
                 {
                     $this->app->loadLang('testcase');
-                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn'");
+                    $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
                 }
             }
 
@@ -312,9 +312,9 @@ class block extends control
         $this->view->projects   = $data['projects'];
         $this->view->products   = $data['products'];
 
-        $this->view->delay['task']    = $data['delayTask']; 
-        $this->view->delay['bug']     = $data['delayBug']; 
-        $this->view->delay['project'] = $data['delayProject']; 
+        $this->view->delay['task']    = $data['delayTask'];
+        $this->view->delay['bug']     = $data['delayBug'];
+        $this->view->delay['project'] = $data['delayProject'];
 
         $time = date('H:i');
         $welcomeType = '19:00';
@@ -1084,7 +1084,7 @@ class block extends control
             if($product->status == 'closed') $closed++;
         }
 
-        $total  = $normal + $closed; 
+        $total  = $normal + $closed;
 
         $this->view->total         = $total;
         $this->view->normal        = $normal;
@@ -1268,9 +1268,9 @@ class block extends control
 
     /**
      * Ajax reset.
-     * 
-     * @param  string $module 
-     * @param  string $confirm 
+     *
+     * @param  string $module
+     * @param  string $confirm
      * @access public
      * @return void
      */
@@ -1285,9 +1285,9 @@ class block extends control
 
     /**
      * Ajax for use new block.
-     * 
-     * @param  string $module 
-     * @param  string $confirm 
+     *
+     * @param  string $module
+     * @param  string $confirm
      * @access public
      * @return void
      */
