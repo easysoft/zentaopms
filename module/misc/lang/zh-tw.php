@@ -76,6 +76,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->releaseDate['10.6.stable'] = '2018-11-20';
 $lang->misc->releaseDate['10.5.stable'] = '2018-10-25';
 $lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
 $lang->misc->releaseDate['10.3.stable'] = '2018-08-10';
@@ -94,6 +95,9 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'調整備份機制', 'desc' => '<p>增加備份設置，備份更加靈活</p><p>顯示備份進度</p><p>可以更改備份目錄</p>');
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'優化和調整菜單', 'desc' => '<p>調整後台菜單</p><p>調整我的地盤和項目的二級菜單</p>');
 
 $lang->misc->feature->all['10.5.stable'][] = array('title'=>'調整文檔顯示', 'desc' => '<p>調整文檔庫左側的佈局方式</p><p>文檔庫左側導航底部增加篩選條件</p>');
 $lang->misc->feature->all['10.5.stable'][] = array('title'=>'調整子任務邏輯，優化父子任務顯示。', 'desc' => '');

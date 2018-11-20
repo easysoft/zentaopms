@@ -95,16 +95,19 @@ $lang->dev->tableList['webhook']        = 'WebHook';
 $lang->dev->tableList['log']            = '介面日誌';
 $lang->dev->tableList['message']        = '消息';
 $lang->dev->tableList['notify']         = '通知';
+$lang->dev->tableList['userview']       = '可訪問權限';
 
 $lang->dev->groupList['my']      = '我的地盤';
 $lang->dev->groupList['product'] = $lang->productCommon;
 $lang->dev->groupList['project'] = $lang->projectCommon;
 $lang->dev->groupList['qa']      = '測試';
 $lang->dev->groupList['doc']     = '文檔';
+$lang->dev->groupList['report']  = '統計';
 $lang->dev->groupList['company'] = '組織';
-$lang->dev->groupList['admin']   = '後台';
 $lang->dev->groupList['repo']    = '代碼';
 $lang->dev->groupList['api']     = 'API';
-$lang->dev->groupList['system']  = '系統';
 $lang->dev->groupList['message'] = '消息';
-$lang->dev->groupList['other']   = '其他模組';
+
+$lang->dev->endGroupList['admin']  = '後台';
+$lang->dev->endGroupList['system'] = '系統';
+$lang->dev->endGroupList['other']  = '其他';

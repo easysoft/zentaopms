@@ -46,6 +46,8 @@ $lang->doc->users          = 'Users';
 $lang->doc->item           = ' Items';
 $lang->doc->num            = 'Docs';
 $lang->doc->searchResult   = 'Search Result';
+$lang->doc->fullscreen     = 'Fullscreen';
+$lang->doc->retrack        = 'Retrack';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
@@ -59,8 +61,6 @@ $lang->doc->todayEdited    = 'Update Today';
 $lang->doc->pastEdited     = 'Updated';
 $lang->doc->myDoc          = 'My Doc';
 $lang->doc->myCollection   = 'My Favorite';
-$lang->doc->fullscreen     = 'Full Screen';
-$lang->doc->retrack        = 'Retrack';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Doc Home';

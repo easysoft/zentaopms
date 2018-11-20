@@ -17,6 +17,7 @@ $lang->upgrade->tohome  = '訪問禪道';
 $lang->upgrade->license = '禪道項目管理軟件已更換授權協議至 Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->upgrade->warnning= '警告';
 $lang->upgrade->checkExtension  = '檢查插件';
+$lang->upgrade->consistency     = '一致性檢查';
 $lang->upgrade->warnningContent = <<<EOT
 <p>升級有危險，請先備份資料庫，以防萬一。</p>
 <pre>
@@ -44,5 +45,6 @@ $lang->upgrade->confirm       = '確認要執行的SQL語句';
 $lang->upgrade->sureExecute   = '確認執行';
 $lang->upgrade->forbiddenExt  = '以下插件與新版本不兼容，已經自動禁用：';
 $lang->upgrade->updateFile    = '需要更新附件信息。';
+$lang->upgrade->noticeSQL     = '檢查到你的資料庫跟標準不一致，嘗試修復失敗。請執行以下SQL語句，再刷新頁面檢查。';
 
 include dirname(__FILE__) . '/version.php';

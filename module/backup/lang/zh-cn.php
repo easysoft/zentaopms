@@ -7,7 +7,7 @@ $lang->backup->backup      = '备份';
 $lang->backup->restore     = '还原';
 $lang->backup->change      = '修改保留时间';
 $lang->backup->changeAB    = '修改';
-$lang->backup->rmPHPHeader = '去除安全语句';
+$lang->backup->rmPHPHeader = '去除安全设置';
 
 $lang->backup->time  = '备份时间';
 $lang->backup->files = '备份文件';

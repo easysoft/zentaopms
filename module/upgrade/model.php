@@ -248,7 +248,7 @@ class upgradeModel extends model
                 $this->changeTaskParentValue();
             case '10_5':
             case '10_5_1':
-                $this->updateTaskRequireFields();
+                $this->execSQL($this->getUpgradeFile('10.5.1'));
         }
 
         $this->deletePatch();
@@ -366,6 +366,7 @@ class upgradeModel extends model
             case '10_3_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('10.3.1'));
             case '10_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('10.4'));
             case '10_5':
+            case '10_5_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('10.5.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2541,33 +2542,6 @@ class upgradeModel extends model
         $users = $this->dao->select('account')->from(TABLE_USER)->fetchAll();
         $this->loadModel('user');
         foreach($users as $user) $this->user->computeUserView($user->account, $force = true);
-        return true;
-    }
-
-    /**
-     * Delete finish task require field.
-     * 
-     * @access public
-     * @return bool
-     */
-    public function updateTaskRequireField()
-    {
-        $value = $this->dao->select('`value`')->from(TABLE_CONFIG)
-            ->where('`module`')->eq('task')
-            ->andWhere('`section`')->eq('finish')
-            ->andWhere('`key`')->eq('requiredFields')
-            ->fetch();
-
-        if(strpos($value->value, 'finishedDate') === false) return true;
-
-        $value = trim(str_replace(',finishedDate,', ',', ",{$value->value},"), ',');
-
-        $this->dao->update(TABLE_CONFIG)->set('`value`')->eq($value)
-            ->where('`module`')->eq('task')
-            ->andWhere('`section`')->eq('finish')
-            ->andWhere('`key`')->eq('requiredFields')
-            ->exec();
-
         return true;
     }
 }

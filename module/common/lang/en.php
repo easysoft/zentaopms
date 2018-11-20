@@ -210,10 +210,10 @@ $lang->product->menu = new stdclass();
 $lang->product->menu->story    = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan     = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release  = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
-$lang->product->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->menu->dynamic  = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->roadmap  = 'Roadmap|product|roadmap|productID=%s';
+$lang->product->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->product->menu->dynamic  = 'Dynamic|product|dynamic|productID=%s';
+$lang->product->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module   = 'Module|tree|browse|productID=%s&view=story';
 $lang->product->menu->view     = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
@@ -255,9 +255,6 @@ $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => 'Test Task|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
-
-$lang->project->subMenu->action = new stdclass();
-$lang->project->subMenu->action->dynamic  = 'Dynamic|project|dynamic|projectID=%s';
 
 $lang->project->dividerMenu = ',story,team,product,';
 

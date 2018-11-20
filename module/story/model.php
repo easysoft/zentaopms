@@ -1109,6 +1109,7 @@ class storyModel extends model
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+        $this->setStage($storyID);
         return true;
     }
 
