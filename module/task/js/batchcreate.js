@@ -137,9 +137,33 @@ function markStoryTask()
             var $option = $(this);
             var value = $option.attr('value');
             var tasksCount = storyTasks[value];
-            $option.attr('data-data', tasksCount + 't').toggleClass('has-task', !!(tasksCount && tasksCount !== '0'));
+            $option.attr('data-data', value).toggleClass('has-task', !!(tasksCount && tasksCount !== '0'));
         });
         $select.trigger("chosen:updated");
+    });
+
+    var getStoriesHasTask = function()
+    {
+        var storiesHasTask = {};
+        $('#tableBody tbody>tr').each(function()
+        {
+            var $tr = $(this);
+            if ($tr.find('input[name^="name"]').val())
+            {
+                storiesHasTask[$tr.find('select[name^="story"]').val()] = true;
+            }
+        });
+        return storiesHasTask;
+    };
+
+    $('#batchCreateForm').on('chosen:showing_dropdown', 'select[name^="story"]', function()
+    {
+        var storiesHasTask = getStoriesHasTask();
+        $(this).next('.chosen-container').find('.chosen-results>li').each(function()
+        {
+            var $li = $(this);
+            $li.toggleClass('has-new-task', !!storiesHasTask[$li.data('data')]);
+        });
     });
 }
 
