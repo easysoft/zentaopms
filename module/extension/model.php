@@ -57,7 +57,22 @@ class extensionModel extends model
      */
     public function fetchAPI($url)
     {
-        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $this->config->version;
+        $this->app->loadConfig('upgrade');
+        $version = $this->config->version;
+        if(strpos($version, 'biz') !== false)
+        {
+            $version = str_replace('.', '_', $version);
+            if(isset($this->config->bizVersion[$version])) $version = $this->config->bizVersion[$version];
+            $version = str_replace('_', '.', $version);
+        }
+        if(strpos($version, 'pro') !== false)
+        {
+            $version = str_replace('.', '_', $version);
+            if(isset($this->config->proVersion[$version])) $version = $this->config->proVersion[$version];
+            $version = str_replace('_', '.', $version);
+        }
+
+        $url .= (strpos($url, '?') === false ? '?' : '&') . 'lang=' . str_replace('-', '_', $this->app->getClientLang()) . '&managerVersion=' . self::EXT_MANAGER_VERSION . '&zentaoVersion=' . $version;
         $result = json_decode(common::http($url));
 
         if(!isset($result->status)) return false;
