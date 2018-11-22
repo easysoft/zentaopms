@@ -20,7 +20,7 @@
       <div class='modal-body'>
         <h4><?php echo $lang->upgrade->noticeSQL;?></h4>
         <p class='text-danger code'>
-          SET @@sql_mode= '' <br />
+          SET @@sql_mode= '';<br />
           <?php echo nl2br($alterSQL);?>
         </p>
       </div>
