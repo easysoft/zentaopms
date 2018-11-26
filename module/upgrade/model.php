@@ -427,6 +427,7 @@ class upgradeModel extends model
                     {
                         $fields = array();
                         $table  = $out[1][0];
+                        $table = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
                         try
                         {
                             $tableExists = true;
