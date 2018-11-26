@@ -122,9 +122,10 @@ js::set('browseType', $browseType);
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right" id='exportActionMenu'>
         <?php
-        $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
-        $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
-        echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+        $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
+        $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
+        echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
@@ -133,13 +134,15 @@ js::set('browseType', $browseType);
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu pull-right" id='importActionMenu'>
         <?php
-        $misc = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
-        $link = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        $class = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
+        $misc  = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
-        $misc = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
-        $link = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        $class = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
+        $misc  = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
@@ -222,12 +225,14 @@ js::set('browseType', $browseType);
             <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php if(!empty($task->children)):?>
+          <?php $i = 0;?>
           <?php foreach($task->children as $key => $child):?>
-          <?php $class  = $key == 0 ? ' table-child-top' : '';?>
-          <?php $class .= ($key + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
+          <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
             <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
           </tr>
+          <?php $i ++;?>
           <?php endforeach;?>
           <?php endif;?>
           <?php endforeach;?>
@@ -269,12 +274,13 @@ js::set('browseType', $browseType);
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 10;?>
             <?php if($withSearch):?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+            <?php $modulesPinYin = common::convert2Pinyin($modules);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -282,8 +288,9 @@ js::set('browseType', $browseType);
                 <?php
                 foreach($modules as $moduleId => $module)
                 {
+                    $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('task', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"");
+                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#taskList')\"");
                 }
                 ?>
               </div>
@@ -300,12 +307,13 @@ js::set('browseType', $browseType);
             echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
             if($withSearch):
             ?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+            <?php $membersPinYin = common::convert2Pinyin($memberPairs);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -314,7 +322,8 @@ js::set('browseType', $browseType);
                 foreach($memberPairs as $key => $value)
                 {
                     if(empty($key)) continue;
-                    echo html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#taskList\")", $value);
+                    $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+                    echo html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#taskList\")", $value, '', $searchKey);
                 }
                 ?>
               </div>

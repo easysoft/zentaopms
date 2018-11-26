@@ -1,1 +1,3 @@
 .input-group .chosen-container-single .chosen-single {border-radius: 2px 0 0 2px}
+#affectedProjects .table + h6 {border-top: 1px solid #ddd}
+.nav-tabs>li>a {height: 36px;}

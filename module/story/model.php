@@ -1109,6 +1109,7 @@ class storyModel extends model
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+        $this->setStage($storyID);
         return true;
     }
 
@@ -1192,6 +1193,8 @@ class storyModel extends model
 
                 $branch = $projects[$task->project];
                 if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
+                if(!isset($branchStatusList[$branch][$task->type])) $branchStatusList[$branch][$task->type] = array();
+                if(!isset($branchStatusList[$branch][$task->type][$status])) $branchStatusList[$branch][$task->type][$status] = 0;
                 $branchStatusList[$branch][$task->type][$status] ++;
                 if($type == 'devel')
                 {
@@ -1937,7 +1940,7 @@ class storyModel extends model
             {
                 $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
             }
-            $storyPairs[$story->id] = $story->id . ':' . $story->title . $property;
+            $storyPairs[$story->id] = $story->id . ':' . $story->title . ' ' . $property;
 
             if($limit > 0 && ++$i > $limit)
             {

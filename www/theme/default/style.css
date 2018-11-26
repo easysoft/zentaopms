@@ -12,3 +12,6 @@
 /* Change zentao icon on fixed footer with classic style image */
 #poweredBy .icon-zentao {background: url(images/main/icon.png) center no-repeat}
 #poweredBy .icon-zentao:before {visibility: hidden;}
+
+/* Finish task #5068*/
+.main-table .table{cursor:pointer;}

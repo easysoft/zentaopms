@@ -160,7 +160,7 @@ class backupModel extends model
             chdir($this->app->getTmpRoot());
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($backupFile);
-            if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/') == 0)
+            if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON) == 0)
             {
                 $return->result = false;
                 $return->error  = $zip->errorInfo();
@@ -186,7 +186,7 @@ class backupModel extends model
     public function addFileHeader($fileName)
     {
         $firstline = false;
-        $die       = "<?php die();?>\n";
+        $die       = "<?php die();?" . ">\n";
         $fileSize  = filesize($fileName);
 
         $fh    = fopen($fileName, 'c+');
@@ -229,7 +229,7 @@ class backupModel extends model
     public function removeFileHeader($fileName)
     {
         $firstline = false;
-        $die       = "<?php die();?>\n";
+        $die       = "<?php die();?" . ">\n";
         $fileSize  = filesize($fileName);
 
         $fh = fopen($fileName, 'c+');
@@ -264,24 +264,51 @@ class backupModel extends model
     /**
      * Get dir size.
      * 
-     * @param  string    $dir 
+     * @param  string    $backupFile 
      * @access public
      * @return int
      */
-    public function getDirSize($dir)
+    public function getBackupSize($backupFile)
     {
-        $size = 0;
-        foreach(glob("$dir/*") as $file)
+        $zfile = $this->app->loadClass('zfile');
+        if(!is_dir($backupFile)) return $zfile->getFileSize($backupFile);
+        return $zfile->getDirSize($backupFile);
+    }
+
+    /**
+     * Get backup path.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getBackupPath()
+    {
+        return empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
+    }
+
+    /**
+     * Get backup file.
+     * 
+     * @param  string    $name 
+     * @param  string    $type 
+     * @access public
+     * @return string
+     */
+    public function getBackupFile($name, $type)
+    {
+        $backupPath = $this->getBackupPath();
+        if($type == 'sql')
         {
-            if(is_dir($file))
-            {
-                $size += $this->getDirSize($file);
-            }
-            else
-            {
-                $size += abs(filesize($file));
-            }
+            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}.php")) return $backupPath . $name . ".{$type}.php";
         }
-        return $size;
+        else
+        {
+            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}.zip")) return $backupPath . $name . ".{$type}.zip";
+            if(file_exists($backupPath . $name . ".{$type}.zip.php")) return $backupPath . $name . ".{$type}.zip.php";
+        }
+
+        return false;
     }
 }

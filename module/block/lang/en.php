@@ -357,7 +357,7 @@ $lang->block->typeList->product['all']      = 'All';
 $lang->block->typeList->product['involved'] = 'Involved';
 
 $lang->block->typeList->project['undone']   = 'Unfinished';
-$lang->block->typeList->project['isdoing']  = 'Doing';
+$lang->block->typeList->project['doing']    = 'Doing';
 $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
 

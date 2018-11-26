@@ -60,12 +60,12 @@ $lang->project->readjustTask  = '顺延任务的起止时间';
 $lang->project->effort        = '日志';
 $lang->project->relatedMember = '相关成员';
 
-$lang->project->start    = "开始$lang->projectCommon";
-$lang->project->activate = "激活$lang->projectCommon";
-$lang->project->putoff   = "延期$lang->projectCommon";
-$lang->project->suspend  = "挂起$lang->projectCommon";
-$lang->project->close    = "关闭$lang->projectCommon";
-$lang->project->export   = "导出$lang->projectCommon";
+$lang->project->start    = "开始";
+$lang->project->activate = "激活";
+$lang->project->putoff   = "延期";
+$lang->project->suspend  = "挂起";
+$lang->project->close    = "关闭";
+$lang->project->export   = "导出";
 
 $lang->project->typeList['sprint']    = "短期$lang->projectCommon";
 $lang->project->typeList['waterfall'] = "长期$lang->projectCommon";
@@ -146,6 +146,8 @@ $lang->project->updateOrder       = "{$lang->projectCommon}排序";
 $lang->project->tree              = '树状图';
 $lang->project->treeTask          = '只看任务';
 $lang->project->treeStory         = '只看需求';
+$lang->project->treeOnlyTask      = '树状图只看任务';
+$lang->project->treeOnlyStory     = '树状图只看需求';
 $lang->project->storyKanban       = '需求看板';
 $lang->project->storySort         = '需求排序';
 $lang->project->importPlanStory   = '创建' . $lang->projectCommon . '成功！\n是否导入计划关联的相关需求？';

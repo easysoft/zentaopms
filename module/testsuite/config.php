@@ -18,5 +18,5 @@ $config->testsuite->datatable = new stdclass();
 $config->testsuite->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'actions');
 
 $config->testsuite->custom = new stdclass();
-$config->testsuite->custom->createFields      = 'stage,pri,keywords';
-$config->testsuite->customCreateFields        = 'stage,pri,keywords';
+$config->testsuite->custom->createFields = 'stage,pri,keywords';
+$config->testsuite->customCreateFields   = 'stage,pri,keywords';

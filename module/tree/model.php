@@ -226,7 +226,7 @@ class treeModel extends model
                     $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story'))")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
                         ->andWhere('deleted')->eq(0)
-                        ->orderBy('grade desc, type, `order`')
+                        ->orderBy('grade desc, branch, type, `order`')
                         ->fetchAll('id');
                 }
                 else
@@ -240,7 +240,8 @@ class treeModel extends model
 
                 foreach($modules as $module)
                 {
-                    if($type == 'product' and !isset($projectModules[$module->id])) continue;
+                    $parentModules = explode(',', trim($module->path, ','));
+                    if($type == 'product' and isset($noProductModules[$parentModules[0]])) continue;
                     $rootName = ($productNum > 1 and $type == 'product') ? "/$rootModule/" : '/';
                     if($type == 'product' and $module->branch and isset($branchGroups[$id][$module->branch])) $rootName .= $branchGroups[$id][$module->branch] . '/';
                     $this->buildTreeArray($treeMenu, $modules, $module, $rootName);
@@ -1643,7 +1644,7 @@ class treeModel extends model
      */
     public function getDocStructure()
     {
-        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('id_desc')->get());
+        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`order`')->get());
         $parent = array();
         while($module = $stmt->fetch())
         {

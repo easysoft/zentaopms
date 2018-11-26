@@ -19,7 +19,10 @@
       </div>
       <div class='modal-body'>
         <h4><?php echo $lang->upgrade->noticeSQL;?></h4>
-        <p class='text-danger code'><?php echo nl2br($alterSQL);?></p>
+        <p class='text-danger code'>
+          SET @@sql_mode= '';<br />
+          <?php echo nl2br($alterSQL);?>
+        </p>
       </div>
       <div class='modal-footer'><?php echo html::a(inlink('consistency'), $this->lang->refresh, '', "class='btn'");?></div>
     </div>

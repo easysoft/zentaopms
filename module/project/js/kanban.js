@@ -4,23 +4,25 @@ $(function()
     var adjustBoardsHeight = function()
     {
         var $cBoards = $('.c-boards');
+        var viewHeight = $(window).height() - $('#header').height() - $('#footer').height() - 111;
         if ($cBoards.length === 1)
         {
             var $boardsWrapper = $cBoards.find('.boards-wrapper');
-            $boardsWrapper.css('min-height', $(window).height() - $('#header').height() - $('#footer').height() - 111);
+            $boardsWrapper.css('min-height', viewHeight);
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
                 $boardsWrapper.find('.boards').css(isFirefox ? 'height' : 'min-height', $boardsWrapper.height() - 1);
             }
             return
         }
+
         $cBoards.each(function()
         {
             var $theBoards = $(this);
-            var height = $(window).height() - $('#header').height() - $('#footer').height() - 111;
+
             var $boardsWrapper = $theBoards.find('.boards-wrapper');
-            var minHeight = Math.min($theBoards.prev().outerHeight() - 1, height);
-            $boardsWrapper.css({maxHeight: height, minHeight: minHeight});
+            var minHeight = Math.min($theBoards.prev().find('.board-story').outerHeight() + 4, viewHeight);
+            $boardsWrapper.css({maxHeight: viewHeight, minHeight: minHeight});
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
                 var $boards = $boardsWrapper.find('.boards');

@@ -14,3 +14,8 @@
 #zeroTaskStory > label:before {top: 7px; left: 5px;}
 #zeroTaskStory > label:after {top: 5px; left: 5px;}
 #zeroTaskStory.checked {border-color: #00a9fc; background: #E9F2FB;}
+
+.chosen-results > li.has-task,
+.chosen-results > li.has-new-task {position: relative; color: #388E3C;}
+.chosen-results > li.has-task.highlighted,
+.chosen-results > li.has-new-task.highlighted {color: #fff;}

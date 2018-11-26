@@ -683,7 +683,7 @@ function notifyMessage(data)
 
 /**
  * Get fingerprint.
- * 
+ *
  * @access public
  * @return void
  */

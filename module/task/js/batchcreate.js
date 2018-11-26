@@ -123,7 +123,48 @@ function toggleZeroTaskStory()
             }
         })
         $select.val(selectVal).trigger("chosen:updated");
-    })
+    });
+}
+
+// see http://pms.zentao.net/task-view-5086.html
+function markStoryTask()
+{
+    $('select[name^="story"]').each(function()
+    {
+        var $select = $(this);
+        $select.find('option').each(function()
+        {
+            var $option = $(this);
+            var value = $option.attr('value');
+            var tasksCount = storyTasks[value];
+            $option.attr('data-data', value).toggleClass('has-task', !!(tasksCount && tasksCount !== '0'));
+        });
+        $select.trigger("chosen:updated");
+    });
+
+    var getStoriesHasTask = function()
+    {
+        var storiesHasTask = {};
+        $('#tableBody tbody>tr').each(function()
+        {
+            var $tr = $(this);
+            if ($tr.find('input[name^="name"]').val())
+            {
+                storiesHasTask[$tr.find('select[name^="story"]').val()] = true;
+            }
+        });
+        return storiesHasTask;
+    };
+
+    $('#batchCreateForm').on('chosen:showing_dropdown', 'select[name^="story"]', function()
+    {
+        var storiesHasTask = getStoriesHasTask();
+        $(this).next('.chosen-container').find('.chosen-results>li').each(function()
+        {
+            var $li = $(this);
+            $li.toggleClass('has-new-task', !!storiesHasTask[$li.data('data')]);
+        });
+    });
 }
 
 $(document).on('click', '.chosen-with-drop', function()
@@ -168,6 +209,7 @@ $(function()
     $('#module0_chosen').width($('#module1_chosen').width());
     $('#story0_chosen').width($('#story1_chosen').width());
     if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
+    markStoryTask();
 
     if(storyID != 0) setStoryRelated(0);
 

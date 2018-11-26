@@ -688,6 +688,7 @@ class taskModel extends model
             {
                 $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
                 $this->updateParentStatus($taskID);
+                $this->computeBeginAndEnd($task->parent);
             }
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             return common::createChanges($oldTask, $task);
@@ -1053,7 +1054,7 @@ class taskModel extends model
                 $earliestTime = $record->dates[$id];
             }
 
-            if($record->dates[$id])
+            if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
                 if(!$record->consumed[$id])   die(js::alert($this->lang->task->error->consumedThisTime));
                 if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
@@ -1511,7 +1512,7 @@ class taskModel extends model
             ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.`parent`,' . $orderBy)
+            ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
@@ -1643,8 +1644,8 @@ class taskModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'assignedTo')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'finishedBy')
-            ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
-            ->orWhere('t1.finishedList')->like("%,{$this->app->user->account},%")
+            ->andWhere('t1.finishedby', 1)->eq($account)
+            ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy')->andWhere("t1.`$type`")->eq($account)->fi()
@@ -2453,7 +2454,7 @@ class taskModel extends model
             if($id == 'status') $class .= ' task-' . $task->status;
             if($id == 'id')     $class .= ' cell-id';
             if($id == 'name')   $class .= ' text-left';
-            if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
+            if($id == 'deadline' and isset($task->delay)) $class .= ' text-center delayed';
             if($id == 'assignedTo') $class .= ' has-btn text-left';
             if(strpos('progress', $id) !== false) $class .= ' text-right';
 

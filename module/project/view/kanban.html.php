@@ -26,11 +26,11 @@
         <?php
         $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
         $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
@@ -115,7 +115,7 @@ $account = $this->app->user->account;
           <div class='board-story' data-id='<?php echo $story->id;?>'>
             <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbaniframe group-title" title="' . $story->title . '"');?>
             <div class="small group-info">
-              <span class='story-id board-id' title='<?php echo $lang->story->id?>'><?php echo $story->id?></span>
+              <span class='story-id board-id' title='<?php echo $lang->story->id?>'>#<?php echo $story->id?></span>
               <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
               <span class='story-stage' title='<?php echo $lang->story->stage?>'><span class="label label-dot"></span> <?php echo $lang->story->stageList[$story->stage];?></span>
               <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . 'h ';?></div>

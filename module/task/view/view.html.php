@@ -34,8 +34,7 @@
       <?php endif;?>
     </div>
   </div>
-  <?php $isOnlybody = helper::inOnlyBodyMode(); ?>
-  <?php if(!$isOnlybody):?>
+  <?php if(!isonlybody()):?>
   <div class="btn-toolbar pull-right">
     <?php
     $checkObject = new stdclass();

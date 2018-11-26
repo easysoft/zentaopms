@@ -14,6 +14,10 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
+<?php
+js::set('fullscreen', $lang->doc->fullscreen);
+js::set('retrack', $lang->doc->retrack);
+?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-primary'");?>
@@ -63,9 +67,6 @@
       </small>
       <?php endif; ?>
     </div>
-  </div>
-  <div class="btn-toolbar pull-right">
-    <a href='###' class='fullScreen btn'><i class='icon-fullscreen'></i></a>
   </div>
 </div>
 <div id="mainContent" class="main-row">
@@ -123,26 +124,24 @@
           <?php endforeach;?>
         </div>
       </div>
+      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
+        <div class='divider'></div>
+        <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i></button>
         <?php
         if(!$doc->deleted)
         {
-            echo "<div class='divider'></div>";
             common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
             common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
-        }
-        else
-        {
-            common::printRPN($browseLink);
         }
         ?>
       </div>
     </div>
   </div>
-  <div class="side-col col-4">
+  <div class="side-col col-4 hidden">
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
@@ -205,9 +204,6 @@
     <div class='cell'>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
       <?php include '../../common/view/action.html.php';?>
-    </div>
-    <div class='cell'>
-      <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
     </div>
   </div>
 </div>

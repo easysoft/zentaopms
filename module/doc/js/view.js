@@ -1,19 +1,24 @@
 $(function()
 {
-    $('#urlIframe').height($('#mainContent').height() - 35);
-    $('#mainMenu .fullScreen').click(function()
+    if($('#urlIframe').size() > 0)
     {
-        if(!$(this).hasClass('collapse'))
+        var defaultHeight = $.cookie('windowHeight') - $('#header').height() - $('#footer').height() - $('#mainMenu').height() - 50;
+        $('#urlIframe').height(defaultHeight);
+        setTimeout($.resetToolbarPosition, 50);
+    }
+    $('body').addClass('doc-fullscreen');
+    $('#mainContent .fullscreen-btn').click(function()
+    {
+        $('.side-col').removeClass('hidden');
+        $('body').toggleClass('doc-fullscreen');
+        if($('body').hasClass('doc-fullscreen')) 
         {
-            $(this).addClass('collapse');
-            $(this).find('i').attr('class', 'icon-exchange');
-            $('.side-col').hide();
+            $('#mainContent .fullscreen-btn').attr('title', retrack);
         }
         else
         {
-            $(this).removeClass('collapse');
-            $(this).find('i').attr('class', 'icon-fullscreen');
-            $('.side-col').show();
+            $('#mainContent .fullscreen-btn').attr('title', fullscreen);
         }
-    })
+        setTimeout($.resetToolbarPosition, 50);
+    });
 })

@@ -141,9 +141,9 @@ $lang->task->typeList['affair']  = '事務';
 $lang->task->typeList['misc']    = '其他';
 
 $lang->task->priList[0] = '';
-$lang->task->priList[3] = '3';
 $lang->task->priList[1] = '1';
 $lang->task->priList[2] = '2';
+$lang->task->priList[3] = '3';
 $lang->task->priList[4] = '4';
 
 $lang->task->reasonList['']       = '';

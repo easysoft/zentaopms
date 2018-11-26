@@ -1,8 +1,9 @@
 body {padding-bottom: 20px;}
+.nav > li > .btn {padding: 0 5px; line-height: 24px; margin: 3px; color: #3C4353;}
+.nav > li > .btn.btn-primary {color: #fff;}
+.nav .icon-more {font-size: 14px;}
 .block-statistic .nav-stacked {overflow: auto; max-height: 220px;}
 #dashboard .col-side {width: 450px; max-width: 450px;}
-#dashboard .panel-actions.nav > li > .btn {padding: 0 5px; line-height: 24px; margin: 3px; color: #3C4353;}
-#dashboard .panel-actions.nav .icon-more {font-size: 14px;}
 #dashboard .panel-body {max-height: 400px; overflow: auto;}
 #dashboard .panel-body.has-table {padding-top: 0;}
 #dashboard .panel-move-handler {position: absolute; top: 0; left: 0; right: 50px; height: 40px; z-index: 10; cursor: move;}
