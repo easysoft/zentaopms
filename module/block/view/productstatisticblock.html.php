@@ -102,7 +102,7 @@ $(function()
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($products as $product):?>
         <li <?php if($product == reset($products)) echo "class='active'";?> productID='<?php echo $product->id;?>'>
-          <a href="javascript:;" data-target="#tab<?php echo $product->code;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>
+          <a href="javascript:;" data-target="#tabProduct<?php echo $product->id;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>
           <?php echo html::a(helper::createLink('product', 'browse', "productID=$product->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->product->browse}");?></li>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
@@ -110,7 +110,7 @@ $(function()
     </div>
     <div class="col tab-content">
       <?php foreach($products as $product):?>
-      <div class="tab-pane fade <?php if($product == reset($products)) echo 'active';?> in" id="tab<?php echo $product->code;?>">
+      <div class="tab-pane fade <?php if($product == reset($products)) echo 'active';?> in" id="tabProduct<?php echo $product->id;?>">
         <div class="table-row">
           <div class="col-6 text-middle">
             <div class="tile">
