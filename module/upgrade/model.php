@@ -438,6 +438,7 @@ class upgradeModel extends model
                         {
                             $errorInfo = $e->errorInfo;
                             $errorCode = $errorInfo[1];
+                            $line      = str_replace('zt_', $this->config->db->prefix, $line);
                             if($errorCode == '1146') $tableExists = false;
                         }
                     }
