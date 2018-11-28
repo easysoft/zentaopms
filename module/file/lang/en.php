@@ -22,7 +22,7 @@ $lang->file->maxUploadSize = "<span class='text-red'>%s</span>";
 $lang->file->applyTemplate = "Apply Template";
 $lang->file->tplTitle      = "Template Name";
 $lang->file->setPublic     = "Set Public Template";
-$lang->file->exportFields  = "Export Fileds";
+$lang->file->exportFields  = "Export Fields";
 $lang->file->exportRange   = "Data Range";
 $lang->file->defaultTPL    = "Default Template";
 $lang->file->setExportTPL  = "Settings";
