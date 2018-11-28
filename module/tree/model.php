@@ -970,6 +970,19 @@ class treeModel extends model
     }
 
     /**
+     * Create link of feedback.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createFeedbackLink($type, $module)
+    {
+        return html::a(helper::createLink('feedback', 'admin', "type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+    }
+
+    /**
      * Get sons of a module.
      *
      * @param  int    $rootID
