@@ -1154,8 +1154,6 @@ EOD;
     {
         $preAndNextObject = new stdClass();
 
-        if(strpos('story, task, bug, testcase, doc', $type) === false) return $preAndNextObject;
-
         /* Use existObject when the preAndNextObject of this objectID has exist in session. */
         $existObject = $type . 'PreAndNext';
         if(isset($_SESSION[$existObject]) and $_SESSION[$existObject]['objectID'] == $objectID) return $_SESSION[$existObject]['preAndNextObject'];

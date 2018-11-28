@@ -90,6 +90,18 @@ class tree extends control
             $position[] = html::a($this->createLink('bug', 'browse', "product=$rootID"), $product->name);
             $position[] = $this->lang->tree->manageBug;
         }
+        elseif($viewType == 'feedback')
+        {
+            $this->lang->set('menugroup.tree', 'feedback');
+            $this->app->loadLang('feedback');
+            $this->lang->tree->menu = $this->lang->feedback->menu;
+            $root = new stdclass();
+            $root->name = $this->lang->feedback->common;
+            $this->view->root = $root;
+
+            $title      = $this->lang->tree->manageFeedback;
+            $position[] = html::a($this->createLink('feedback', 'admin'), $this->lang->tree->manageFeedback);
+        }
         elseif($viewType == 'case')
         {
             $this->loadModel('testcase')->setMenu($this->product->getPairs(), $rootID);
