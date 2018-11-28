@@ -49,7 +49,7 @@
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
         <tr>
-          <th class='w-90px'><?php echo $lang->user->account;?></th>
+          <th class='w-100px'><?php echo $lang->user->account;?></th>
           <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control' autocomplete='off'");?></td>
           <th class='w-90px'><?php echo $lang->user->email;?></th>
           <td>

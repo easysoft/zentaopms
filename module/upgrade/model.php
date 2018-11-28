@@ -426,8 +426,7 @@ class upgradeModel extends model
                     if(isset($out[1][0]))
                     {
                         $fields = array();
-                        $table  = $out[1][0];
-                        $table = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+                        $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
                         try
                         {
                             $tableExists = true;
@@ -438,6 +437,7 @@ class upgradeModel extends model
                         {
                             $errorInfo = $e->errorInfo;
                             $errorCode = $errorInfo[1];
+                            $line      = str_replace('zt_', $this->config->db->prefix, $line);
                             if($errorCode == '1146') $tableExists = false;
                         }
                     }

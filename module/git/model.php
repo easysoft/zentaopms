@@ -107,7 +107,7 @@ class gitModel extends model
                 $this->printLog("parsing log {$log->revision}");
                 if($log->revision == $savedRevision)
                 {
-                    $this->printLog("{$log->revision} alread parsed, ommit it");
+                    $this->printLog("{$log->revision} alread parsed, commit it");
                     continue;
                 }
 
@@ -321,11 +321,10 @@ class gitModel extends model
      */
     public function convertLog($log)
     {
-
         list($hash, $account, $date) = $log;
 
         $account = preg_replace('/^Author:/', '', $account);
-        $account = trim(preg_replace('/<\w+@\w+\.\w+>/', '', $account));
+        $account = trim(preg_replace('/<[\w\-\.]+@([\w\-]+\.)+\w+>/', '', $account));
         $date    = trim(preg_replace('/^Date:/', '', $date));
 
         $count   = count($log);
