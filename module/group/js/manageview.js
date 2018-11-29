@@ -8,6 +8,18 @@ function toggleProject()
     $('#projectBox').toggle($('#project').prop("checked"));
 }
 
+function selectAll(obj)
+{
+    if($(obj).prop('checked'))
+    {
+        $(obj).closest('td').find(':checkbox').attr('checked', 'checked');
+    }
+    else
+    {
+        $(obj).closest('td').find(':checkbox').removeAttr('checked');
+    }
+}
+
 $('input:checkbox[name^="allchecker"]').change(function()
 {
     setTimeout(function(){toggleProduct(),toggleProject()}, 50);

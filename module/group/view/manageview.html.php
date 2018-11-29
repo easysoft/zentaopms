@@ -41,7 +41,7 @@
         <?php endforeach;?>
           <div class='group-item'>
             <div class='checkbox-primary'>
-              <input type="checkbox" id='allchecker' name="allchecker" onclick="selectAll(this, '', 'checkbox')" <?php if(empty($group->acl['views'])) echo "checked";?> />
+              <input type="checkbox" id='allchecker' name="allchecker" onclick="selectAll(this)" <?php if(empty($group->acl['views'])) echo "checked";?> />
               <label class='priv' for='allchecker'>
                 <?php echo $lang->selectAll?>
               </label>
