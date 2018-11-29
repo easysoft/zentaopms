@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('viewType', $viewType);?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
-<?php $name = $viewType == 'line' ? $lang->tree->line : ($viewType == 'doc' ? $lang->tree->cate : $lang->tree->name);?>
+<?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback') ? $lang->tree->cate : $lang->tree->name);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
@@ -28,6 +28,10 @@
         if($viewType == 'doc')
         {
             echo $lang->doc->manageType . $lang->colon . $root->name;
+        }
+        elseif($viewType == 'feedback')
+        {
+            echo $lang->feedback->manageCate;
         }
         elseif($viewType == 'line')
         {
