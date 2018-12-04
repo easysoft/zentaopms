@@ -167,7 +167,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
-            if(stripos($method, 'downnotify') !== false) return true;
+            if(stripos($method, 'downloadClient') !== false) return true;
             if($module == 'block' and $method == 'main') return true;
             if($module == 'misc' and $method == 'changelog') return true;
             if($module == 'tutorial') return true;
@@ -687,6 +687,19 @@ class commonModel extends model
             global $lang;
             echo html::a(helper::createLink('misc', 'downNotify'), "<i class='icon-bell'></i>", '', "title='$lang->downNotify' class='text-primary'") . ' &nbsp; ';
         }
+    }
+
+    /**
+     * Print the link for zentao client.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printClientLink()
+    {
+        global $lang;
+        echo html::a(helper::createLink('misc', 'downloadClient'), "<i class='icon-bell'></i>", '', "title='$lang->downloadClient' class='text-primary iframe' data-width='400'") . ' &nbsp; ';
     }
 
     /**
