@@ -5,5 +5,4 @@ $lang->message->setting = 'Setting';
 
 $lang->message->typeList['mail']     = 'Mail';
 $lang->message->typeList['message']  = 'Browser notifications';
-$lang->message->typeList['xuanxuan'] = 'Zentao client';
 $lang->message->typeList['webhook']  = 'Webhook';

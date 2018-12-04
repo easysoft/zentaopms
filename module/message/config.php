@@ -16,7 +16,6 @@ $config->message->available['mail']['bug']      = $config->message->objectTypes[
 $config->message->available['mail']['testtask'] = array('opened', 'edited', 'closed');
 
 $config->message->available['webhook']  = $config->message->objectTypes;
-$config->message->available['xuanxuan'] = $config->message->objectTypes;
 
 $config->message->available['message']['bug']      = $config->message->objectTypes['bug'];
 $config->message->available['message']['story']    = $config->message->objectTypes['story'];
@@ -29,5 +28,4 @@ $config->message->typeLink['webhook'] = 'webhook|browse';
 
 $config->message->setting['message']['setting']  = $config->message->available['message'];
 $config->message->setting['webhook']['setting']  = $config->message->available['webhook'];
-$config->message->setting['xuanxuan']['setting'] = $config->message->available['xuanxuan'];
 $config->message->setting['mail']['setting']     = $config->message->available['mail'];
