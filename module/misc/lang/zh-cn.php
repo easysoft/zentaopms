@@ -15,6 +15,15 @@ $lang->misc->ping   = '防超时';
 $lang->misc->api    = 'https://api.zentao.net';
 $lang->misc->enApi  = 'http://api.zentao.pm';
 
+$lang->misc->client = new stdclass();
+$lang->misc->client->download = '下载';
+
+$lang->misc->client->osList['windows64'] = 'Windows 64位';
+$lang->misc->client->osList['windows32'] = 'Windows 32位';
+$lang->misc->client->osList['linux64']   = 'Linux 64位';
+$lang->misc->client->osList['linux32']   = 'Linux 32位';
+$lang->misc->client->osList['mac']       = 'Mac版';
+
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
 $lang->misc->zentao->labels['about']   = '关于禅道';

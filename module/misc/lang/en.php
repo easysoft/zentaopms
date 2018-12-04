@@ -15,6 +15,15 @@ $lang->misc->ping   = 'Ping';
 $lang->misc->api    = 'https://api.zentao.net';
 $lang->misc->enApi  = 'http://api.zentao.pm';
 
+$lang->misc->client = new stdclass();
+$lang->misc->client->download = 'Download';
+
+$lang->misc->client->osList['windows64'] = 'Windows 64';
+$lang->misc->client->osList['windows32'] = 'Windows 32';
+$lang->misc->client->osList['linux64']   = 'Linux 64';
+$lang->misc->client->osList['linux32']   = 'Linux 32';
+$lang->misc->client->osList['mac']       = 'Mac';
+
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
 $lang->misc->zentao->labels['about']   = 'About';

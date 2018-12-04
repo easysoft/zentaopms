@@ -85,6 +85,65 @@ class misc extends control
     }
 
     /**
+     * Download zentao client.
+     * 
+     * @access public
+     * @return void
+     */
+    public function downloadClient()
+    {
+        if($_POST)
+        {
+            $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
+            if(!is_dir($clientDir))mkdir($clientDir, 0755, true);
+
+            $account     = $this->app->user->account;
+            $packageFile = $clientDir . $account . 'client.zip';
+            $loginFile   = $clientDir . 'config.json';
+
+            /* write login info into tmp file. */
+            $loginInfo = new stdclass();
+            $defaultUser = new stdclass();
+            $defaultUser->server  = common::getSysURL();
+            $defaultUser->account = $account;
+            $loginInfo->ui = $defaultUser;
+
+            $loginInfo = json_encode($loginInfo);
+
+            file_put_contents($packageFile, file_get_contents("http://dl.cnezsoft.com/notify/newest/zentaonotify.win_32.zip"));
+            file_put_contents($loginFile, $loginInfo);
+
+            define('PCLZIP_TEMPORARY_DIR', $clientDir);
+            $this->app->loadClass('pclzip', true);
+
+            /* remove the old config.json, add a new one. */
+            $archive = new pclzip($packageFile);
+            $result = $archive->delete(PCLZIP_OPT_BY_NAME, 'config.json');
+            if($result == 0) die("Error : " . $archive->errorInfo(true));
+
+            if($this->post->os == 'windows64' or $this->post->os == 'windows32')
+            {
+            }
+            if($this->post->os == 'linux64' or $this->post->os == 'linux32')
+            {
+            }
+            if($this->post->os == 'mac')
+            {
+            }
+
+            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'client');
+            if($result == 0) die("Error : " . $archive->errorInfo(true));
+
+            $zipContent = file_get_contents($packageFile);
+            unlink($loginFile);
+            unlink($packageFile);
+            $this->fetch('file', 'sendDownHeader', array('fileName' => 'client.zip', 'zip', $zipContent));
+        }
+
+        $this->display();
+    }
+
+    /**
      * Down notify.
      * 
      * @access public
