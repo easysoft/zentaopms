@@ -17,6 +17,7 @@ class admin extends control
             $data = new stdclass();
             $data->turnon = $this->post->turnon;
             $data->key    = $this->post->key;
+            $data->server = $this->post->server;
             if($data) $this->loadModel('setting')->setItems('system.xuanxuan', $data);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

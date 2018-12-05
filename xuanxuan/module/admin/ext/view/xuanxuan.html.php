@@ -22,27 +22,27 @@
       </div>
     </div>
     <form id='dataform' method='post' class='form-ajax'>
-      <table class='table table-form w-p40'>
+      <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->chat->version;?></th>
           <td><?php echo $config->xuanxuan->version;?></td>
-          <td></td>
-          <td></td>
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->chat->turnon;?></th>
           <td><?php echo html::radio('turnon', $lang->chat->turnonList, $turnon);?></td>
-          <td></td>
-          <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->chat->xxdServer;?></th>
+          <td class='w-200px'><?php echo html::input('server', zget($config->xuanxuan, 'server', ''), "class='form-control' placeholder={$lang->chat->xxdServerTip}");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->chat->key;?></th>
-          <td colspan='2'><?php echo html::input('key', $config->xuanxuan->key, "class='form-control'");?></td>
+          <td><?php echo html::input('key', $config->xuanxuan->key, "class='form-control'");?></td>
           <td><?php echo html::a('javascript:void(0)', $lang->chat->createKey, "", 'onclick="createKey()"');?></td>
         </tr>
         <tr>
           <th></th>
-          <td colspan='3'><?php echo html::submitButton();?></td>
+          <td><?php echo html::submitButton();?> <?php echo html::a(helper::createLink('chat', 'downloadxxd'), $lang->chat->downloadXXD, '', "class='btn btn-primary' data-toggle='modal'");?> </td>
         </tr>
       </table>
     </form>
