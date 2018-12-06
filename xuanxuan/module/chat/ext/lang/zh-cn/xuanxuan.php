@@ -20,12 +20,12 @@ $lang->chat->downloadConfig  = '只下载配置文件';
 $lang->chat->statusList[1] = '启用';
 $lang->chat->statusList[0] = '不启用';
 
-$lang->chat->xxdServerTip   = 'XXD服务器地址为完整的协议+地址+端口，示例：https://127.0.0.1:11443。';
-$lang->chat->xxdServerEmpty = 'XXD服务器地址为空。';
-$lang->chat->xxdSchemeError = '服务器地址应该以<strong>http://</strong>或<strong>https://</strong>开头。';
-$lang->chat->xxdPortError   = '服务器地址应该包含有效的端口号，默认为<strong>11443</strong>。';
-$lang->chat->staffEmpty     = '客服为空。';
-$lang->chat->createChatFail = '创建会话失败。';
+$lang->chat->xxdServerTip    = 'XXD服务器地址为完整的协议+地址+端口，示例：https://127.0.0.1:11443。';
+$lang->chat->xxdServerEmpty  = 'XXD服务器地址为空。';
+$lang->chat->xxdSchemeError  = '服务器地址应该以<strong>http://</strong>或<strong>https://</strong>开头。';
+$lang->chat->xxdPortError    = '服务器地址应该包含有效的端口号，默认为<strong>11443</strong>。';
+$lang->chat->xxClientConfirm = '禅道新增客户端，点击下载体验！';
+$lang->chat->xxServerConfirm = '禅道新增客户端，点击确认前往后台配置客户端服务器';
 
 $lang->chat->xxd = new stdclass();
 $lang->chat->xxd->os             = '操作系统';
@@ -41,6 +41,7 @@ $lang->chat->xxd->sslkey         = '证书私钥';
 $lang->chat->httpsOptions[1] = '启用';
 $lang->chat->httpsOptions[0] = '不启用';
 
+$lang->chat->placeholder = new stdclass();
 $lang->chat->placeholder->xxd = new stdclass();
 $lang->chat->placeholder->xxd->ip             = '监听的服务器ip地址，没有特殊需要直接填写0.0.0.0';
 $lang->chat->placeholder->xxd->chatPort       = '与聊天客户端通讯的端口';
