@@ -90,57 +90,109 @@ class misc extends control
      * @access public
      * @return void
      */
-    public function downloadClient()
+    public function downloadClient($os = '', $confirm = 'no', $send = 'no')
     {
-        if($_POST)
+        if($_POST) die(js::locate($this->createLink('misc', 'downloadClient', "os={$this->post->os}&confirm=yes"), 'parent'));
+
+        if($send == 'yes')
         {
-            $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
-            if(!is_dir($clientDir))mkdir($clientDir, 0755, true);
+            $clientDir = $this->app->getBasePath() . 'tmp/cache/client/tmp/';
+            if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
-            $account     = $this->app->user->account;
-            $packageFile = $clientDir . $account . 'client.zip';
-            $loginFile   = $clientDir . 'config.json';
-
-            /* write login info into tmp file. */
-            $loginInfo = new stdclass();
+            /* write login info into config file. */
             $defaultUser = new stdclass();
             $defaultUser->server  = common::getSysURL();
-            $defaultUser->account = $account;
-            $loginInfo->ui = $defaultUser;
+            $defaultUser->account = $this->app->user->account;
 
+            $loginInfo = new stdclass();
+            $loginInfo->ui = $defaultUser;
             $loginInfo = json_encode($loginInfo);
 
-            file_put_contents($packageFile, file_get_contents("http://dl.cnezsoft.com/notify/newest/zentaonotify.win_32.zip"));
+            $loginFile = $clientDir . 'config.json';
             file_put_contents($loginFile, $loginInfo);
 
             define('PCLZIP_TEMPORARY_DIR', $clientDir);
             $this->app->loadClass('pclzip', true);
+            $clientFile = $clientDir . 'zentaoClient.zip';
+            $archive    = new pclzip($clientFile);
 
-            /* remove the old config.json, add a new one. */
-            $archive = new pclzip($packageFile);
-            $result = $archive->delete(PCLZIP_OPT_BY_NAME, 'config.json');
+            if($os == 'mac')
+            {
+                $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'xuanxuan.app/Contents/Resouces');
+            }
+            else
+            {
+                $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'resources/build-in');
+            }
+
             if($result == 0) die("Error : " . $archive->errorInfo(true));
 
-            if($this->post->os == 'windows64' or $this->post->os == 'windows32')
-            {
-            }
-            if($this->post->os == 'linux64' or $this->post->os == 'linux32')
-            {
-            }
-            if($this->post->os == 'mac')
-            {
-            }
-
-            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'client');
-            if($result == 0) die("Error : " . $archive->errorInfo(true));
-
-            $zipContent = file_get_contents($packageFile);
-            unlink($loginFile);
-            unlink($packageFile);
+            unlink($clientDir);
+            
             $this->fetch('file', 'sendDownHeader', array('fileName' => 'client.zip', 'zip', $zipContent));
         }
 
+        $this->view->os      = $os;
+        $this->view->confirm = $confirm;
         $this->display();
+    }
+
+    public function ajaxGetClient($os)
+    {
+        set_time_limit (0);
+
+        $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
+        if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
+
+        if($os == 'windows64') $clientName = "xuanxuan.win64.zip";
+        if($os == 'windows32') $clientName = "xuanxuan.win32.zip";
+        if($os == 'linux64')   $clientName = "xuanxuan.linux.x64.zip";
+        if($os == 'linux32')   $clientName = "xuanxuan.linux.ia32.zip";
+        if($os == 'mac')       $clientName = "xuanxuan.mac.zip";
+
+        $tmpDir = $clientDir . '/tmp/';
+        if(!is_dir($tmpDir)) mkdir($tmpDir, 0755, true);
+
+        $packageFile = $clientDir . $clientName;
+        if(!file_exists($packageFile))
+        {
+            $handle = "http://dl.pts.com/xuanxuan/xuanxuan.win64.zip";
+        }
+        else
+        {
+            $handle = $packageFile;
+        }
+
+        $client = $tmpDir . 'zentaoClient.zip';
+
+        $clientHd = fopen($handle, "rb");
+        if($clientHd)
+        {
+            $newf = fopen($client, "wb");
+            if($newf)
+            {
+                while(!feof($clientHd))
+                {
+                    fwrite($newf, fread($clientHd, 1024 * 8 ), 1024 * 8 );
+                }
+            }
+        }
+
+        if ($clientHd) fclose($clientHd);
+        if ($newf)     fclose($newf);
+
+        $response = array();
+        $response['result'] = 'success';
+
+        $this->send($response);
+    }
+
+    public function ajaxGetDownProgress($os = '')
+    {
+        $response = array();
+        $response['result'] = 'unfinished';
+
+        $this->send($response);
     }
 
     /**

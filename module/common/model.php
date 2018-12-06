@@ -699,7 +699,7 @@ class commonModel extends model
     public static function printClientLink()
     {
         global $lang;
-        echo html::a(helper::createLink('misc', 'downloadClient'), "<i class='icon-bell'></i>", '', "title='$lang->downloadClient' class='text-primary iframe' data-width='400'") . ' &nbsp; ';
+        echo html::a(helper::createLink('misc', 'downloadClient', '', '', true), "<i class='icon-bell'></i>", '', "title='$lang->downloadClient' class='text-primary iframe' data-width='400'") . ' &nbsp; ';
     }
 
     /**
