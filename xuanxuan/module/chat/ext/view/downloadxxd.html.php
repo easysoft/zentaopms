@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../../common/view/header.modal.html.php';?>
 <form id='jaxForm' class='form-horizontal' action='<?php echo inlink('downloadxxd')?>' method='post' target='_blank'>
   <table class='table table-form'>
     <tr>
@@ -61,7 +60,6 @@
     </tr>
   </table>
 </form>
-<?php include '../../../common/view/footer.modal.html.php';?>
 <script>
 $(function()
 {
