@@ -3,7 +3,7 @@
   <div class='main-header'>
     <h2><?php echo $lang->downloadClient;?></h2>
   </div>
-  <?php if($confirm == 'no'):?>
+  <?php if($action == 'selectPackage'):?>
   <form method='post' target='hiddenwin'>
     <table class='w-p100'>
       <tr>
@@ -13,31 +13,55 @@
       </tr>
       <tr class='text-center'>
         <td>
-          <?php echo html::submitButton($lang->misc->client->download, '', 'btn btn-primary');?>
+          <?php echo html::submitButton($lang->select, '', 'btn btn-primary');?>
         </td>
       </tr>
     </table>
   </form>
   <?php endif;?>
-  <?php if($confirm == 'yes'):?>
+
+  <?php if($action == 'getPackage'):?>
   <?php js::set('os', $os);?>
-  <div>
+  <?php js::set('uid', $uid);?>
+  <div class='main'>
+    <ul>
+      <li id='downloading'><?php echo $lang->misc->client->downloading;?><span>0</span>M</li>
+      <li id='downloaded' class='hidden'><?php echo $lang->misc->client->downloaded;?></li>
+      <li id='setConfig'  class='hidden'><?php echo $lang->misc->client->setConfig;?></li>
+      <li id='hasError' class='hidden'><?php echo $lang->misc->client->downloaded;?></li>
+    </ul>
   </div>
   <script>
   $(document).ready(function()
   {
       getClient();
-      setInterval("showDownloadProgress()", 2000);
+      progress = setInterval("showProgress()", 2000);
   })
   
   function getClient()
   {
-      var link = createLink('misc', 'ajaxGetClient', 'os=' + os);
+      var link = createLink('misc', 'ajaxGetClient', 'os=' + os + '&uid=' + uid);
       $.getJSON(link, function(response)
       {
           if(response.result == 'success')
           {
-              downloadClient();
+              clearInterval(progress);
+              $('#downloading').addClass('hidden');
+              $('#downloaded').removeClass('hidden');
+
+              var link = createLink('misc', 'ajaxSetClientConfig', 'os=' + os + '&uid=' + uid);
+              $.getJSON(link, function(response)
+              {
+                  if(response.result == 'success')
+                  {
+                      $('#setConfig').removeClass('hidden');
+                      downloadClient();
+                  }
+                  else
+                  {
+                      $('#hasError').text(response.message);
+                  }
+              });
           }
           else
           {
@@ -48,13 +72,13 @@
 
   function downloadClient()
   {
-      var link = createLink('misc', 'downloadClient', "os=" + os + "&confirm=yes" + "&send=yes");
+      var link = createLink('misc', 'downloadClient', "action=downloadPackage" + '&os=' + os + '&uid=' + uid);
       location.href = link;
   }
 
-  function showDownloadProgress()
+  function showProgress()
   {
-      var link = createLink('misc', 'ajaxGetDownProgress', 'file=' + os);
+      var link = createLink('misc', 'ajaxGetDownProgress', 'os=' + os + '&uid=' + uid);
       $.getJSON(link, function(response)
       {
           if(response.result == 'finished')
@@ -62,7 +86,7 @@
           }
           else
           {
-              console.log('i');
+              $('#downloading span').text(response.size);
           }
       });
   }
