@@ -88,26 +88,84 @@ class misc extends control
      * Download zentao client.
      * 
      * @access public
+     * @param  string $action
+     * @param  string $os 
+     * @param  string $version
      * @return void
      */
-    public function downloadClient($action = 'selectPackage', $os = '', $uid = '')
+    public function downloadClient($action = 'check', $os = '', $version = '')
     {
         if($_POST)
         {
-            $os = $this->post->os;
+            $version = $this->post->version;
+            $os      = $this->post->os;
+
             die(js::locate($this->createLink('misc', 'downloadClient', "action=getPackage&os=$os"), 'parent'));
+        }
+
+        if($action == 'check')
+        {
+            $error     = false;
+            $errorInfo = '';
+
+            $cacheDir = $this->app->getBasePath() . 'tmp/cache/';
+            if(!is_dir($cacheDir))
+            {
+                $result = mkdir($cacheDir, 0755, true);
+                if($result == false)
+                {
+                    $error = true;
+                    $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotExist, $cacheDir, $cacheDir);
+                }
+            }
+
+            if(!is_writable($cacheDir))
+            {
+                $error = true;
+                $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotWritable, $cacheDir, $cacheDir);
+            }
+
+            $this->view->error     = $error;
+            $this->view->errorInfo = $errorInfo;
+
+            if(!$error) die(js::locate($this->createLink('misc', 'downloadClient', "action=selectPackage")));
+        }
+
+        if($action == 'selectPackage')
+        {
+            $os = 'windows64';
+            $agentOS = helper::getOS();
+            if(strpos($agentOS, 'Windows') !== false) $os = 'windows64';
+            if(strpos($agentOS, 'Linux') !== false)   $os = 'linux64';
+            if(strpos($agentOS, 'Mac') !== false)     $os = 'mac';
+
+            $this->view->os = $os;
         }
 
         if($action == 'getPackage')
         {
             $this->view->os  = $os;
-            $this->view->uid = uniqid();
+            $this->view->account = $this->app->user->account; 
+        }
+
+        if($action == 'clearTmpPackage')
+        {
+            $account = $this->app->user->account;
+            $tmpDir  = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
+
+            if(is_dir($tmpDir))
+            {
+                $zfile = $this->app->loadClass('zfile');
+                $zfile->removeDir($tmpDir);
+            }
+
+            die(js::closeModal('parent.parent', 'this'));
         }
 
         if($action == 'downloadPackage')
         {
-            $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$uid/";
-            if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
+            $account   = $this->app->user->account;
+            $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
 
             $clientFile = $clientDir . 'zentaoClient.zip';
             $zipContent = file_get_contents($clientFile);
@@ -124,22 +182,35 @@ class misc extends control
         $this->display();
     }
 
-    public function ajaxGetClient($os = '', $uid = '')
+    /**
+     * Ajax get client package.
+     * 
+     * @param  string $os 
+     * @param  string $version
+     * @access public
+     * @return void
+     */
+    public function ajaxGetClientPackage($os = '', $version = '')
     {
         set_time_limit (0);
         session_write_close();
 
+        $response = array();
+        $response['result']  = 'success';
+        $response['message'] = '';
+
         $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
+
+        $account = $this->app->user->account;
+        $tmpDir = $clientDir . "/$account/";
+        if(!is_dir($tmpDir)) mkdir($tmpDir, 0755, true);
 
         if($os == 'windows64') $clientName = "xuanxuan.win64.zip";
         if($os == 'windows32') $clientName = "xuanxuan.win32.zip";
         if($os == 'linux64')   $clientName = "xuanxuan.linux.x64.zip";
         if($os == 'linux32')   $clientName = "xuanxuan.linux.ia32.zip";
         if($os == 'mac')       $clientName = "xuanxuan.mac.zip";
-
-        $tmpDir = $clientDir . "/$uid/";
-        if(!is_dir($tmpDir)) mkdir($tmpDir, 0755, true);
 
         $needCache   = false;
         $packageFile = $clientDir . $clientName;
@@ -155,36 +226,56 @@ class misc extends control
         }
 
         $clientFile = $tmpDir . 'zentaoClient.zip';
-
-        $xxHd= fopen($xxFile, "rb");
-        if($xxHd)
+        if($xxHd = fopen($xxFile, "rb"))
         {
-            $clientHd = fopen($clientFile, "wb");
-            if($clientHd)
+            if($clientHd = fopen($clientFile, "wb"))
             {
                 while(!feof($xxHd))
                 {
-                    fwrite($clientHd, fread($xxHd, 1024 * 8 ), 1024 * 8 );
+                    $result = fwrite($clientHd, fread($xxHd, 1024 * 8 ), 1024 * 8 );
+                    if($result == false)
+                    {
+                        $response['result']  = 'fail';
+                        $response['message'] = sprintf($this->lang->misc->client->errorInfo->manualOpt, $xxFile);
+                        $this->send($response);
+                    }
                 }
             }
+            else
+            {
+                $response['result'] = 'fail';
+                $response['message'] = sprintf($this->lang->misc->client->errorInfo->manualOpt, $xxFile);
+                $this->send($response);
+            }
+            fclose($xxHd);
+            fclose($clientHd);
+        }
+        else
+        {
+            $response['result'] = 'fail';
+            $response['message'] = sprintf($this->lang->misc->client->errorInfo->manualOpt, $xxFile);
+            $this->send($response);
         }
 
-        if($xxHd)     fclose($xxHd);
-        if($clientHd) fclose($clientHd);
-
         if($needCache) file_put_contents($packageFile, file_get_contents($clientFile));
-
-        $response = array();
-        $response['result'] = 'success';
 
         $this->send($response);
     }
 
-    public function ajaxSetClientConfig($os = '', $uid = '')
+    /**
+     * Ajax set client config to client package. 
+     * 
+     * @param  string $os 
+     * @param  string $version 
+     * @access public
+     * @return void
+     */
+    public function ajaxSetClientConfig($os = '', $version = '')
     {
         $response['result'] = 'success';
 
-        $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$uid/";
+        $account   = $this->app->user->account;
+        $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
         /* write login info into config file. */
@@ -213,27 +304,26 @@ class misc extends control
             $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'resources/build-in');
         }
 
-        $zipContent = file_get_contents($clientFile);
-
         if($result == 0)
         {
-            $response['result'] = 'fail';
+            $response['result']  = 'fail';
             $response['message'] = $archive->errorInfo(true);
-
-            if(is_dir($clientDir))
-            {
-                $zfile = $this->app->loadClass('zfile');
-                $zfile->removeDir($clientDir);
-            }
             $this->send($response);
         }
 
         $this->send($response);
     }
 
-    public function ajaxGetDownProgress($os = '', $uid = '')
+    /**
+     * Ajax get client package size.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPackageSize()
     {
-        $packageFile = $this->app->getBasePath() . 'tmp/cache/client/' . $uid . '/zentaoClient.zip';
+        $account     = $this->app->user->account;
+        $packageFile = $this->app->getBasePath() . 'tmp/cache/client/' . $account . '/zentaoClient.zip';
 
         $size = 0;
         if(file_exists($packageFile))
