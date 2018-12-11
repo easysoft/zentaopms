@@ -46,12 +46,14 @@ pms:
 	mkdir -p buildxx/framework
 	mkdir -p buildxx/db
 	mkdir -p buildxx/www
+	mkdir -p buildxx/module/common/ext/model/
 	svn export https://github.com/easysoft/xuanxuan.git/branches/master/ranzhi/
 	cp ranzhi/config/ext/xuanxuan.php buildxx/config/ext/
 	cp -r ranzhi/lib/phpaes buildxx/lib/
 	cp -r ranzhi/framework/xuanxuan.class.php buildxx/framework/
 	cp -r ranzhi/db/xuanxuan.sql buildxx/db/
 	cp -r ranzhi/app/sys/chat buildxx/module/
+	cp -r ranzhi/app/sys/common/ext/model/hook buildxx/module/common/ext/model/
 	cp -r ranzhi/app/sys/action buildxx/module/
 	cp -r xuanxuan/module/* buildxx/module/
 	cp -r xuanxuan/www/* buildxx/www/
