@@ -10,7 +10,11 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if($this->app->viewType == 'xhtml'):?>
+<?php include '../../common/view/header.lite.html.php';?>
+<?php else:?>
 <?php include '../../common/view/header.html.php';?>
+<?php endif;?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('noTodo', $lang->todo->noTodo);?>
@@ -144,5 +148,8 @@
 var nowTime = '<?php echo $time?>';
 var today   = '<?php echo date('Y-m-d')?>';
 var start   = '<?php echo key($times)?>';
+<?php if($this->app->viewType == 'xhtml'):?>
+$('body').addClass('body-modal');
+<?php endif;?>
 </script>
 <?php include './footer.html.php';?>

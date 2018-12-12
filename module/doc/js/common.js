@@ -16,6 +16,17 @@ function toggleAcl(acl)
     }
 }
 
+function loadDocModule(libID)
+{
+    link = createLink('doc', 'ajaxGetChild', 'libID=' + libID);
+    $.post(link, function(data)
+    {
+        $('#module').replaceWith(data);
+        $('#module_chosen').remove();
+        $('#module').chosen();
+    });
+}
+
 function setBrowseType(type)
 {
     $.cookie('browseType', type, {expires:config.cookieLife, path:config.webRoot});
@@ -24,6 +35,12 @@ function setBrowseType(type)
 
 $(document).ready(function()
 {
+    // hide #module chosen dropdown on #lib dropdown show
+    $('#lib').on('chosen:showing_dropdown', function()
+    {
+        $('#module').trigger('chosen:close');
+    });
+
     $('#pageActions ul.dropdown-menu').css('left', '67px');
     $('.libs-group.sort').sortable(
     {

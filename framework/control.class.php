@@ -45,7 +45,6 @@ class control extends baseControl
         {
             if(!file_exists($mainViewFile))
             {
-                if($this->viewType == 'xhtml') $this->app->viewType = 'html';
                 $this->devicePrefix = '';
                 $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
             }
