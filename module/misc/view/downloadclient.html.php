@@ -1,68 +1,111 @@
 <?php include '../../common/view/header.lite.html.php';?>
-<div id='mainContent' class='main-content'>
-  <div class='main-header'>
-    <h2><?php echo $lang->downloadClient;?></h2>
+<div id='' class='modal-content'>
+  <div class='modal-header'>
+    <h2 class='modal-title'><?php echo $lang->downloadClient;?></h2>
   </div>
-  <?php if($confirm == 'no'):?>
-  <form method='post' target='hiddenwin'>
-    <table class='w-p100'>
-      <tr>
-        <td>
-          <?php echo html::radio('os', $lang->misc->client->osList, 'windows64', '', 'block');?>
-        </td>
-      </tr>
-      <tr class='text-center'>
-        <td>
-          <?php echo html::submitButton($lang->misc->client->download, '', 'btn btn-primary');?>
-        </td>
-      </tr>
-    </table>
-  </form>
+  <?php if($action == 'check'):?>
+  <div class='modal-body'>
+    <div class='alert alert-info'>
+      <p><?php echo $errorInfo;?></p>
+    </div>
+    <div class='text-center'><?php echo html::a($this->createLink('misc', 'downloadClient', "action=check"), $lang->refresh, '', "class='btn btn-primary btn-wide'");?></div>
+  </div>
   <?php endif;?>
-  <?php if($confirm == 'yes'):?>
+  <?php if($action == 'selectPackage'):?>
+  <div class='modal-body'>
+    <form method='post' target='hiddenwin'>
+      <table class='table table-form'>
+        <tr>
+          <th class='w-70px'><?php echo $lang->misc->client->version;?></th>
+          <td><?php echo html::select('version', $lang->misc->client->versionList, '', "class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->misc->client->os;?></th>
+          <td><?php echo html::select('os', $lang->misc->client->osList, $os, "class='form-control'");?></td>
+        </tr>
+        <tr class='text-center'>
+          <td colspan='2'><?php echo html::submitButton($lang->select, '', 'btn btn-primary btn-wide');?></td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <?php endif;?>
+
+  <?php if($action == 'getPackage'):?>
   <?php js::set('os', $os);?>
-  <div>
+  <div class='modal-body'>
+    <ul>
+      <li id='downloading'><?php echo $lang->misc->client->downloading;?><span>0</span>M</li>
+      <li id='downloaded' class='hidden'>     <?php echo $lang->misc->client->downloaded;?></li>
+      <li id='setConfig'  class='hidden'>     <?php echo $lang->misc->client->setConfig;?></li>
+      <li id='configError'  class='hidden'>   <?php echo $lang->misc->client->errorInfo->configError;?></li>
+      <li id='downloadError' class='hidden'>  <?php echo $lang->misc->client->errorInfo->downloadError;?></li>
+    </ul>
+    <div id='hasError' class='alert alert-info hidden'></div>
+    <div id='clearTmp' class='text-center hidden'><?php echo html::a($this->createLink('misc', 'downloadClient', "action=clearTmpPackage"), $lang->confirm, '', "class='btn btn-primary btn-wide'");?></div>
   </div>
   <script>
   $(document).ready(function()
   {
       getClient();
-      setInterval("showDownloadProgress()", 2000);
   })
   
   function getClient()
   {
-      var link = createLink('misc', 'ajaxGetClient', 'os=' + os);
+      var link = createLink('misc', 'ajaxGetClientPackage', 'os=' + os);
+      progress = setInterval("showPackageSize()", 1000);
       $.getJSON(link, function(response)
       {
           if(response.result == 'success')
           {
-              downloadClient();
+              clearInterval(progress);
+              $('#downloading').addClass('hidden');
+              $('#downloaded').removeClass('hidden');
+
+              var link = createLink('misc', 'ajaxSetClientConfig', 'os=' + os);
+              $.getJSON(link, function(response)
+              {
+                  if(response.result == 'success')
+                  {
+                      $('#setConfig').removeClass('hidden');
+                      var link = createLink('misc', 'downloadClient', "action=downloadPackage" + '&os=' + os);
+                      parent.$.closeModal();
+                      location.href = link;
+                  }
+                  else
+                  {
+                      $('#downloading').addClass('hidden');
+                      $('#configError').removeClass('hidden');
+                      $('#hasError').removeClass('hidden');
+                      $('#clearTmp').removeClass('hidden');
+                      $('#hasError').text(response.message);
+                  }
+              });
           }
           else
           {
-              alert('fail');
+              clearInterval(progress);
+              $('#downloading').addClass('hidden');
+              $('#downloadError').removeClass('hidden');
+              $('#hasError').removeClass('hidden');
+              $('#clearTmp').removeClass('hidden');
+              $('#hasError').text(response.message);
           }
       });
   }
 
-  function downloadClient()
+  function showPackageSize()
   {
-      var link = createLink('misc', 'downloadClient', "os=" + os + "&confirm=yes" + "&send=yes");
-      location.href = link;
-  }
-
-  function showDownloadProgress()
-  {
-      var link = createLink('misc', 'ajaxGetDownProgress', 'file=' + os);
+      var link = createLink('misc', 'ajaxGetPackageSize', 'os=' + os);
       $.getJSON(link, function(response)
       {
-          if(response.result == 'finished')
+          if(response.result == 'success')
           {
+              $('#downloading span').text(response.size);
           }
           else
           {
-              console.log('i');
+              $('#downloading span').text(0);
           }
       });
   }

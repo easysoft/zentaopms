@@ -21,8 +21,10 @@ class xuanxuanMessage extends messageModel
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
                 $target = trim($target, ',');
+                $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->fetchAll('id');
+                $target = array_keys($target);
 
-                if($target) $this->loadModel('chat')->createNotify($target, $text, '', $text, 'text', $url);
+                if($target) $this->loadModel('chat')->createNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
             }
         }
     }

@@ -16,13 +16,27 @@ $lang->misc->api    = 'https://api.zentao.net';
 $lang->misc->enApi  = 'http://api.zentao.pm';
 
 $lang->misc->client = new stdclass();
-$lang->misc->client->download = 'Download';
+$lang->misc->client->version     = 'Select Version';
+$lang->misc->client->os          = 'Select OS';
+$lang->misc->client->download    = 'Download';
+$lang->misc->client->downloading = 'Downloading:';
+$lang->misc->client->downloaded  = 'Downloaded successful!';
+$lang->misc->client->setConfig   = 'Set config successful!';
 
 $lang->misc->client->osList['windows64'] = 'Windows 64';
 $lang->misc->client->osList['windows32'] = 'Windows 32';
 $lang->misc->client->osList['linux64']   = 'Linux 64';
 $lang->misc->client->osList['linux32']   = 'Linux 32';
 $lang->misc->client->osList['mac']       = 'Mac';
+
+$lang->misc->client->versionList['2.1.1'] = '2.1.1';
+
+$lang->misc->client->errorInfo = new stdclass();
+$lang->misc->client->errorInfo->downloadError  = 'Failed to download package!';
+$lang->misc->client->errorInfo->configError    = 'Failed to set config info!';
+$lang->misc->client->errorInfo->manualOpt      = 'Please get client package from %s .';
+$lang->misc->client->errorInfo->dirNotExist    = 'The dir <span class="code text-red">%s</span> is not exist, please make it.';
+$lang->misc->client->errorInfo->dirNotWritable = 'The dir <span class="code text-red">%s</span> is not writable. <br /> Please exec:<span class="code text-red">sudo chmod 777 %s</span> under linux os.';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
