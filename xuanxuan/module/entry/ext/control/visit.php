@@ -35,7 +35,6 @@ class entry extends control
         {
             $location = rtrim($location, '?') . "?$query";
         }
-        if($this->get->display) $location .= "&display=" . $this->get->display;
         $output->data = $location;
 
         if($this->session->userID)
