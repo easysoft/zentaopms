@@ -45,13 +45,13 @@ class xuanxuanChat extends chatModel
         $data->entryID     = 1;
         $data->name        = 'zentao-integrated';
         $data->displayName = '禅道集成';
-        $data->webViewUrl  = $baseURL;
+        $data->webViewUrl  = $baseURL . $this->config->webRoot;
         $data->download    = $baseURL . $this->config->webRoot . 'zentao-integrated.zip';
         $data->md5         = '38915bcd63ca82a2a39c3536bf5ca3da';
 
         $data->data['actions']  = $actions;
         $data->data['urls']     = $urls;
-        $data->data['entryUrl'] = $baseURL;
+        $data->data['entryUrl'] = $baseURL . $this->config->webRoot;
 
         $entries[] = $data;
         return $entries;
