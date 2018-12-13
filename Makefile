@@ -40,15 +40,42 @@ pms:
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
 	#xuanxuan
-	mkdir xuanxuan
-	cd xuanxuan; svn export https://github.com/easysoft/xuanxuan.git/branches/master/ranzhi/
-	cd xuanxuan; svn export https://github.com/easysoft/xuanxuan.git/branches/master/zentao/
-	mkdir xuanxuan/xxb
-	cd xuanxuan/xxb; svn export https://github.com/easysoft/xuanxuan.git/branches/master/xxb/VERSION
-	cd xuanxuan/zentao; make
-	unzip xuanxuan/zentao/xuanxuan.zentao.*.zip -d zentaoxx
-	cp zentaoxx/build/* zentaopms/ -r
-	cat zentaoxx/build/db/xuanxuan.sql >> zentaopms/db/zentao.sql
+	mkdir -p buildxx/config/ext
+	mkdir -p buildxx/lib
+	mkdir -p buildxx/module
+	mkdir -p buildxx/framework
+	mkdir -p buildxx/db
+	mkdir -p buildxx/www
+	mkdir -p buildxx/module/common/ext/model/
+	svn export https://github.com/easysoft/xuanxuan.git/branches/master/ranzhi/
+	cp ranzhi/config/ext/xuanxuan.php buildxx/config/ext/
+	cp -r ranzhi/lib/phpaes buildxx/lib/
+	cp -r ranzhi/framework/xuanxuan.class.php buildxx/framework/
+	cp -r ranzhi/db/xuanxuan.sql buildxx/db/
+	cp -r ranzhi/app/sys/chat buildxx/module/
+	cp -r ranzhi/app/sys/common/ext/model/hook buildxx/module/common/ext/model/
+	cp -r ranzhi/app/sys/action buildxx/module/
+	cp -r xuanxuan/module/* buildxx/module/
+	cp -r xuanxuan/www/* buildxx/www/
+	sed -i 's/site,//' buildxx/module/chat/model.php
+	sed -i 's/admin, g/g/' buildxx/module/chat/model.php
+	sed -i '/password = md5/d' buildxx/module/chat/control.php
+	sed -i '/getSignedTime/d' buildxx/module/chat/control.php
+	sed -i 's/tree/dept/' buildxx/module/chat/control.php
+	sed -i "s/, 'sys'//" buildxx/module/chat/control.php
+	sed -i 's/system.sys/system/' buildxx/module/chat/control.php
+	sed -i 's/&app=sys//' buildxx/module/chat/control.php
+	sed -i 's/file->createdBy/file->addedBy/' buildxx/module/chat/control.php
+	sed -i 's/file->createdDate/file->addedDate/' buildxx/module/chat/control.php
+	sed -i 's/im_/zt_im_/' buildxx/db/xuanxuan.sql
+	sed -i 's/sys_user/zt_user/' buildxx/db/xuanxuan.sql
+	sed -i 's/sys_file/zt_file/' buildxx/db/xuanxuan.sql
+	sed -i '/sys_entry/d' buildxx/db/xuanxuan.sql
+	zip -rqm -9 xuanxuan.zentao.$(VERSION).zip buildxx/*
+	rm -rf buildxx/
+	unzip xuanxuan.zentao.*.zip -d zentaoxx
+	cp zentaoxx/buildxx/* zentaopms/ -r
+	cat zentaoxx/buildxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
 	# change mode.
 	chmod -R 777 zentaopms/tmp/
 	chmod -R 777 zentaopms/www/data
@@ -60,7 +87,7 @@ pms:
 	for module in `ls zentaopms/module/`; do if [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	rm -fr zentaopms xuanxuan zentaoxx
+	rm -fr zentaopms ranzhi buildxx zentaoxx xuanxuan.zentao.*.zip
 deb:
 	mkdir buildroot
 	cp -r build/debian/DEBIAN buildroot

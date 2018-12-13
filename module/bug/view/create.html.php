@@ -21,6 +21,7 @@ js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
 js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
 ?>
+<style>.title-group .has-icon-right{min-width:700px}</style>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">

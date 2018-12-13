@@ -283,7 +283,7 @@ class storyModel extends model
         {
             if(empty($title)) continue;
             $story = new stdclass();
-            $story->branch     = $stories->branch[$i];
+            $story->branch     = isset($stories->branch[$i]) ? $stories->branch[$i] : 0;
             $story->module     = $stories->module[$i];
             $story->plan       = $stories->plan[$i];
             $story->color      = $stories->color[$i];
@@ -338,6 +338,7 @@ class storyModel extends model
                 $realPath = $file['realpath'];
                 unset($file['realpath']);
 
+                if(!is_dir($this->file->savePath)) mkdir($this->file->savePath, 0777, true);
                 if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
                 {
                     $file['addedBy']    = $this->app->user->account;

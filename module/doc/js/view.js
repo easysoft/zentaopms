@@ -9,7 +9,7 @@ $(function()
     $('body').addClass('doc-fullscreen');
     $('#mainContent .fullscreen-btn').click(function()
     {
-        $('.side-col').removeClass('hidden');
+        $('.side-col').toggleClass('hidden');
         $('body').toggleClass('doc-fullscreen');
         if($('body').hasClass('doc-fullscreen')) 
         {

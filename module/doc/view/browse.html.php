@@ -53,7 +53,7 @@ var browseType = '<?php echo $browseType;?>';
               <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-close'></i>" . $lang->delete, 'hiddenwin');?></li>
             </ul>
           </div>
-          <?php common::printLink('doc', 'create', "libID=$libID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>
+          <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>
           <?php endif;?>
         </nav>
       </div>
@@ -68,7 +68,7 @@ var browseType = '<?php echo $browseType;?>';
           <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
           <?php if(common::hasPriv('doc', 'create')):?>
           <span class="text-muted"><?php echo $lang->youCould;?></span>
-          <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
+          <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}&moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
           <?php endif;?>
           <?php elseif($browseType == 'byediteddate'):?>
           <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
