@@ -13,13 +13,11 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/ueditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
+<style>body{padding:0px;}</style>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
 <div id="mainContent" class="main-content">
   <div class='center-block'>
-    <div class='main-header'>
-      <h2><?php echo $lang->doc->create;?></h2>
-    </div>
     <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
       <table class='table table-form'> 
         <tbody>
@@ -90,7 +88,6 @@
   </div>
 </div>
 <script>
-$('body').addClass('body-modal');
 window.injectWithXXC = function(message)
 {
     $('#title').val(message.content);

@@ -10,15 +10,15 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<style>
+body{padding:0px;}
+</style>
 <?php js::set('noTodo', $lang->todo->noTodo);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <div class='main-header'>
-      <h2><?php echo $lang->todo->create;?></h2>
-    </div>
     <form method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'> 
         <tr>
@@ -132,7 +132,7 @@
         </tr>  
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton() . html::backButton();?>
+            <?php echo html::submitButton();?>
           </td>
         </tr>
       </table>
@@ -140,9 +140,10 @@
   </div>
 </div>
 
+<?php js::set('account', $app->user->account)?>
 <script>
 var nowTime = '<?php echo $time?>';
 var today   = '<?php echo date('Y-m-d')?>';
 var start   = '<?php echo key($times)?>';
 </script>
-<?php include './footer.html.php';?>
+<?php include '../../common/view/footer.lite.html.php';?>
