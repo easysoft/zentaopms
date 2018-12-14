@@ -1,26 +1,66 @@
 <?php
 class xuanxuanChat extends chatModel
 {
-    public function downloadXXD($setting)
+    public function downloadXXD($setting, $type)
     {
-        $setting->host = commonModel::getSysURL();
-        $setting->key  = $this->config->xuanxuan->key;
+        $data = new stdClass();
+        $data->server         = $setting->server;
+        $data->uploadFileSize = $setting->uploadFileSize;
+        $data->uploadFileSize = $setting->uploadFileSize;
+        $data->isHttps        = $setting->isHttps;
+        $data->sslcrt         = $setting->sslcrt;
+        $data->sslkey         = $setting->sslkey;
+        $data->ip             = $setting->ip;
+        $data->chatPort       = $setting->chatPort;
+        $data->commonPort     = $setting->commonPort;
+        $data->maxOnlineUser  = isset($setting->maxOnlineUser) ? $setting->maxOnlineUser : 0;
+        $data->host           = commonModel::getSysURL() . getWebRoot();
+        $data->key            = $this->config->xuanxuan->key;
+        $data->os             = $setting->os;
+        $data->version        = $this->config->xuanxuan->version;
+        $data->downloadType   = $type;
 
-        $agent = $this->app->loadClass('snoopy');
         $url   = "https://www.chanzhi.org/license-downloadxxd.html";
+        $agent = $this->app->loadClass('snoopy');
         $agent->cookies['lang'] = $this->cookie->lang;
-        $agent->submit($url, $setting);
+        $agent->submit($url, $data);
         $result = $agent->results;
-        if($this->post->downloadType == 'config')
+        
+        if($type == 'config')
         {
-            $this->loadModel('file')->sendDownHeader('xxd.conf', 'conf', $result, strlen($result));
+            $this->sendDownHeader('xxd.conf', 'conf', $result, strlen($result));
         }
         else
         {
             header("Location: $result");
         }
-        $this->loadModel('setting')->setItem('system.common.xxserver.installed', 1);
         exit;
+    }
+
+    public function sendDownHeader($fileName, $fileType, $content, $fileSize = 0)
+    {
+        /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
+        setcookie('downloading', 1, 0, '', '', false, true);
+
+        /* Append the extension name auto. */
+        $extension = '.' . $fileType;
+        if(strpos($fileName, $extension) === false) $fileName .= $extension;
+
+        /* urlencode the fileName for ie. */
+        $isIE11 = (strpos($this->server->http_user_agent, 'Trident') !== false and strpos($this->server->http_user_agent, 'rv:11.0') !== false); 
+        if(strpos($this->server->http_user_agent, 'MSIE') !== false or $isIE11) $fileName = urlencode($fileName);
+
+        /* Judge the content type. */
+        $mimes = $this->config->chat->mimes;
+        $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
+        if(empty($fileSize) and $content) $fileSize = strlen($content);
+
+        header("Content-type: $contentType");
+        header("Content-Disposition: attachment; filename=\"$fileName\"");
+        header("Content-length: {$fileSize}");
+        header("Pragma: no-cache");
+        header("Expires: 0");
+        die($content);
     }
 
     public function getExtensionList($userID)

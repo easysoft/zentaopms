@@ -16,6 +16,7 @@ $lang->chat->uploadFileSize  = '上传文件大小';
 $lang->chat->downloadPackage = '下载完整包';
 $lang->chat->downloadConfig  = '只下载配置文件';
 $lang->chat->zentaoIntegrate = '禅道集成';
+$lang->chat->changeSetting   = '修改配置';
 
 $lang->chat->createBug   = '创建 Bug';
 $lang->chat->createDoc   = '创建文档';
@@ -31,7 +32,7 @@ $lang->chat->xxdServerEmpty  = 'XXD服务器地址为空。';
 $lang->chat->xxdSchemeError  = '服务器地址应该以<strong>http://</strong>或<strong>https://</strong>开头。';
 $lang->chat->xxdPortError    = '服务器地址应该包含有效的端口号，默认为<strong>11443</strong>。';
 $lang->chat->xxClientConfirm = '禅道新增客户端，点击下载体验！';
-$lang->chat->xxServerConfirm = '禅道新增客户端，点击确认前往后台配置客户端服务器';
+$lang->chat->xxServerConfirm = '禅道新增客户端，点击确认前往后台配置客户端服务器。';
 
 $lang->chat->xxd = new stdclass();
 $lang->chat->xxd->os             = '操作系统';
@@ -43,6 +44,7 @@ $lang->chat->xxd->uploadFileSize = '上传文件大小';
 $lang->chat->xxd->maxOnlineUser  = '最大在线人数';
 $lang->chat->xxd->sslcrt         = '证书内容';
 $lang->chat->xxd->sslkey         = '证书私钥';
+$lang->chat->xxd->max            = '最大';
 
 $lang->chat->httpsOptions[1] = '启用';
 $lang->chat->httpsOptions[0] = '不启用';
@@ -58,8 +60,8 @@ $lang->chat->placeholder->xxd->maxOnlineUser  = '最大在线人数';
 $lang->chat->placeholder->xxd->sslcrt         = '请将证书内容复制到此处';
 $lang->chat->placeholder->xxd->sslkey         = '请将证书密钥复制到此处';
 
-$lang->chat->osList['win32']   = 'Windows 32位压缩包';
-$lang->chat->osList['win64']   = 'Windows 64位压缩包';
-$lang->chat->osList['linux32'] = 'Linux 32位压缩包';
-$lang->chat->osList['linux64'] = 'Linux 64位压缩包';
-$lang->chat->osList['mac']     = 'Mac 压缩包';
+$lang->chat->osList['win_i386']      = 'Windows 32位';
+$lang->chat->osList['win_x86_64']    = 'Windows 64位';
+$lang->chat->osList['linux_i386']    = 'Linux 32位';
+$lang->chat->osList['linux_x86_64']  = 'Linux 64位';
+$lang->chat->osList['darwin_x86_64'] = 'macOS';
