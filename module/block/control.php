@@ -220,7 +220,7 @@ class block extends control
         $shortBlocks = $longBlocks = array();
         foreach($blocks as $key => $block)
         {
-            if(!empty($block->source) and !empty($acls['views']) and !isset($acls['views'][$block->source]))
+            if(!empty($block->source) and $block->source != 'todo' and !empty($acls['views']) and !isset($acls['views'][$block->source]))
             {
                 unset($blocks[$key]);
                 continue;
