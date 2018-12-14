@@ -15,6 +15,7 @@ $lang->chat->chatPort        = 'Chat Port';
 $lang->chat->uploadFileSize  = 'File Size';
 $lang->chat->downloadPackage = 'Full Package';
 $lang->chat->downloadConfig  = 'Only Config';
+$lang->chat->changeSetting   = 'Change Setting';
 
 $lang->chat->statusList[1] = 'Enable';
 $lang->chat->statusList[0] = 'Disable';
@@ -35,3 +36,4 @@ $lang->chat->xxd->isHttps        = 'Ishttps';
 $lang->chat->xxd->uploadFileSize = 'File Size';
 $lang->chat->xxd->sslcrt         = 'SSL Crt';
 $lang->chat->xxd->sslkey         = 'SSL Key';
+$lang->chat->xxd->max            = 'Max';

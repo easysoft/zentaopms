@@ -7,27 +7,58 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function xuanxuan()
+    public function xuanxuan($type = '')
     {
         $this->app->loadLang('chat');
         if($_POST)
         {
-            if(strlen($this->post->key) != 32 or !validater::checkREG($this->post->key, '|^[A-Za-z0-9]+$|')) $this->send(array('result' => 'fail', 'message' => array('key' => $this->lang->chat->errorKey)));
+            $setting = fixer::input('post')->join('staff', ',')->remove('https')->get();
+            $errors  = array();
 
-            $data = new stdclass();
-            $data->turnon = $this->post->turnon;
-            $data->key    = $this->post->key;
-            $data->server = $this->post->server;
-            if($data) $this->loadModel('setting')->setItems('system.common.xuanxuan', $data);
-            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!is_numeric($setting->chatPort) or (int)$setting->chatPort <= 0 or (int)$setting->chatPort > 65535) $errors['chatPort'] = $this->lang->chat->xxdPortError;
+            if(!is_numeric($setting->commonPort) or (int)$setting->commonPort <= 0 or (int)$setting->commonPort > 65535) $errors['commonPort'] = $this->lang->chat->xxdPortError;
+            if($setting->isHttps)
+            {
+                if(empty($setting->sslcrt)) $errors['sslcrt'] = $this->lang->chat->errorSSLCrt;
+                if(empty($setting->sslkey)) $errors['sslkey'] = $this->lang->chat->errorSSLKey;
+            }
 
-            $locate = inlink('xuanxuan');
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+            if($errors) $this->send(array('result' => 'fail', 'message' => $errors));
+
+            $setting->server = ($setting->isHttps ? 'https' : 'http') . '://' . $setting->domain . ':' . $setting->commonPort;
+            $result = $this->loadModel('setting')->setItems('system.common.xuanxuan', $setting, 'all');
+            if(!$result) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('xuanxuan')));
         }
 
-        $this->view->position[] = $this->lang->chat->settings;
-        $this->view->title      = $this->lang->chat->settings;
-        $this->view->turnon     = isset($this->config->xuanxuan->turnon) ? $this->config->xuanxuan->turnon : 1;
+        $os = 'win';
+        if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
+        $isHttps = (isset($this->config->site->scheme) && $this->config->site->scheme == 'https') || $this->server->https == 'on' ? 1 : 0;
+        if($isHttps == 0)
+        {
+            $url    = 'https://' . $this->server->http_host . getWebroot() . '?mode=getconfig';
+            $snoopy = $this->app->loadClass('snoopy');
+            $snoopy->referer = getWebroot(true);
+            $snoopy->submit($url);
+            $contents = $snoopy->results;
+            $contents = json_decode($contents);
+            if(!empty($contents)) $isHttps = 1;
+        }
+
+        $domain = $this->server->http_host;
+        if(!empty($this->config->xuanxuan->server))
+        {
+            preg_match('/^(https?:\/\/)?([^\:]+)/i', $this->config->xuanxuan->server, $match);
+            $domain = $match[2];
+        }
+
+
+        $this->view->title     = $this->lang->chat->common;
+        $this->view->adminList = $this->loadModel('user')->getPairs('admin');
+        $this->view->os        = $os . '_' . php_uname('m');
+        $this->view->type      = $type;
+        $this->view->domain    = $domain;
+        $this->view->isHttps   = $isHttps;
         $this->display();
     }
 }
