@@ -168,10 +168,7 @@ class router extends baseRouter
     {
         parent::parsePathInfo();
 
-        if($this->get->display == 'card')
-        {
-            $this->viewType = 'xhtml';
-        }
+        if($this->get->display == 'card') $this->viewType = 'xhtml';
     }
 
     /**
@@ -185,9 +182,6 @@ class router extends baseRouter
     {
         parent::parseGET();
 
-        if($this->get->display == 'card')
-        {
-            $this->viewType = 'xhtml';
-        }
+        if($this->get->display == 'card') $this->viewType = 'xhtml';
     }
 }
