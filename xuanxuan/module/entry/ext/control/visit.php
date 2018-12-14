@@ -29,7 +29,8 @@ class entry extends control
         $pathinfo = parse_url($location);
         if(!empty($pathinfo['query']))
         {
-            $location = rtrim($location, '&') . "&$query";
+            $location = substr($location, 0, strpos($location, '?'));
+            $location = rtrim($location, '?') . "?{$query}&{$pathinfo['query']}";
         }
         else
         {

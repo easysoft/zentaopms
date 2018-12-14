@@ -15,6 +15,13 @@ $lang->chat->chatPort        = 'Chat Port';
 $lang->chat->uploadFileSize  = 'File Size';
 $lang->chat->downloadPackage = 'Full Package';
 $lang->chat->downloadConfig  = 'Only Config';
+$lang->chat->zentaoIntegrate = 'Zentao Integrated';
+
+$lang->chat->createBug   = 'Create Bug';
+$lang->chat->createDoc   = 'Create Doc';
+$lang->chat->createStory = 'Create Story';
+$lang->chat->createTask  = 'Create Task';
+$lang->chat->createTodo  = 'Create Todo';
 
 $lang->chat->statusList[1] = 'Enable';
 $lang->chat->statusList[0] = 'Disable';

@@ -29,29 +29,38 @@ class xuanxuanChat extends chatModel
         $baseURL = commonModel::getSysURL();
 
         $actions = new stdclass();
-        $actions->createBug   = array('title' => "创建 Bug", 'url' => $baseURL . helper::createLink('bug', 'create', 'product=1', 'xhtml'), 'height' => "600px", 'width' => "800px");
-        $actions->createDoc   = array('title' => "创建文档", 'url' => $baseURL . helper::createLink('doc', 'create', 'lib=1', 'xhtml'), 'height' => "600px", 'width' => "800px");
-        $actions->createStory = array('title' => "创建需求", 'url' => $baseURL . helper::createLink('story', 'create', 'product=1', 'xhtml'), 'height' => "600px", 'width' => "800px");
-        $actions->createTask  = array('title' => "创建任务", 'url' => $baseURL . helper::createLink('task', 'create', 'project=1', 'xhtml'), 'height' => "600px", 'width' => "800px");
-        $actions->createTodo  = array('title' => "创建待办", 'url' => $baseURL . helper::createLink('todo', 'create', '', 'xhtml'), 'height' => "600px", 'width' => "800px"); 
+        $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . helper::createLink('bug', 'create', 'product=1', 'xhtml'),   'height' => "600px", 'width' => "800px");
+        $actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . helper::createLink('doc', 'create', 'lib=1', 'xhtml'),       'height' => "600px", 'width' => "800px");
+        $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . helper::createLink('story', 'create', 'product=1', 'xhtml'), 'height' => "600px", 'width' => "800px");
+        $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . helper::createLink('task', 'create', 'project=1', 'xhtml'),  'height' => "600px", 'width' => "800px");
+        $actions->createTodo  = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . helper::createLink('todo', 'create', '', 'xhtml'),           'height' => "600px", 'width' => "800px");
 
-        $urls['/bug-view-']   = true;
-        $urls['/task-view-']  = true;
-        $urls['/doc-view-']   = true;
-        $urls['/story-view-'] = true;
-        $urls['/todo-view-']  = true;
+        $urls = array();
+        foreach(array('bug', 'task', 'doc', 'story', 'todo', 'testcase') as $moduleName)
+        {
+            $url = '/';
+            if($this->config->requestType == 'GET')
+            {
+                $url .= "index.php?m={$moduleName}&f=view";
+            }
+            else
+            {
+                $url .= "{$moduleName}-view-";
+            }
+            $urls[$url] = true;
+        }
 
         $data = new stdClass();
         $data->entryID     = 1;
         $data->name        = 'zentao-integrated';
-        $data->displayName = '禅道集成';
-        $data->webViewUrl  = $baseURL . $this->config->webRoot;
+        $data->displayName = $this->lang->chat->zentaoIntegrate;
+        $data->webViewUrl  = trim($baseURL . $this->config->webRoot, '/');
         $data->download    = $baseURL . $this->config->webRoot . 'data/xuanxuan/zentao-integrated.zip';
         $data->md5         = md5_file($this->app->getDataRoot() . 'xuanxuan/zentao-integrated.zip');
 
         $data->data['actions']  = $actions;
         $data->data['urls']     = $urls;
-        $data->data['entryUrl'] = $baseURL . $this->config->webRoot;
+        $data->data['entryUrl'] = trim($baseURL . $this->config->webRoot, '/');
 
         $entries[] = $data;
         return $entries;

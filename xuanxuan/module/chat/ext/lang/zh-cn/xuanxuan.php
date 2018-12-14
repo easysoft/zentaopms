@@ -12,10 +12,16 @@ $lang->chat->xxdServer       = 'XXD服务器';
 $lang->chat->downloadXXD     = '下载喧喧服务端';
 $lang->chat->listenIP        = '监听IP';
 $lang->chat->chatPort        = '客户端通讯端口';
-$lang->chat->chatPort        = '客户端通讯端口';
 $lang->chat->uploadFileSize  = '上传文件大小';
 $lang->chat->downloadPackage = '下载完整包';
 $lang->chat->downloadConfig  = '只下载配置文件';
+$lang->chat->zentaoIntegrate = '禅道集成';
+
+$lang->chat->createBug   = '创建 Bug';
+$lang->chat->createDoc   = '创建文档';
+$lang->chat->createStory = '创建需求';
+$lang->chat->createTask  = '创建任务';
+$lang->chat->createTodo  = '创建待办';
 
 $lang->chat->statusList[1] = '启用';
 $lang->chat->statusList[0] = '不启用';
