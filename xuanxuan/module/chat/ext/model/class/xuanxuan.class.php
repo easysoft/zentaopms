@@ -75,23 +75,23 @@ class xuanxuanChat extends chatModel
         $actions->createTask  = array('title' => "创建任务", 'url' => $baseURL . helper::createLink('task', 'create', 'project=1', 'xhtml'), 'height' => "600px", 'width' => "800px");
         $actions->createTodo  = array('title' => "创建待办", 'url' => $baseURL . helper::createLink('todo', 'create', '', 'xhtml'), 'height' => "600px", 'width' => "800px"); 
 
-        $urls['/bug-view-']   = array('height' => "700px", 'width' => "600px");
-        $urls['/task-view-']  = array('height' => "700px", 'width' => "600px");
-        $urls['/doc-view-']   = array('height' => "700px", 'width' => "600px");
-        $urls['/story-view-'] = array('height' => "700px", 'width' => "600px");
-        $urls['/todo-view-']  = array('height' => "700px", 'width' => "600px");
+        $urls['/bug-view-']   = true;
+        $urls['/task-view-']  = true;
+        $urls['/doc-view-']   = true;
+        $urls['/story-view-'] = true;
+        $urls['/todo-view-']  = true;
 
         $data = new stdClass();
         $data->entryID     = 1;
         $data->name        = 'zentao-integrated';
         $data->displayName = '禅道集成';
-        $data->webViewUrl  = $baseURL;
-        $data->download    = $baseURL . $this->config->webRoot . 'zentao-integrated.zip';
-        $data->md5         = '38915bcd63ca82a2a39c3536bf5ca3da';
+        $data->webViewUrl  = $baseURL . $this->config->webRoot;
+        $data->download    = $baseURL . $this->config->webRoot . 'data/xuanxuan/zentao-integrated.zip';
+        $data->md5         = md5_file($this->app->getDataRoot() . 'xuanxuan/zentao-integrated.zip');
 
         $data->data['actions']  = $actions;
         $data->data['urls']     = $urls;
-        $data->data['entryUrl'] = $baseURL;
+        $data->data['entryUrl'] = $baseURL . $this->config->webRoot;
 
         $entries[] = $data;
         return $entries;

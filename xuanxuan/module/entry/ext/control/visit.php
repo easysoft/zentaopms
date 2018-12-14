@@ -14,7 +14,7 @@ class entry extends control
         if(RUN_MODE != 'xuanxuan') die();
 
         $referer = !empty($_GET['referer']) ? $this->get->referer : $referer;
-        if(empty($referer)) $referer = $this->createLink('index');
+        if(empty($referer)) $referer = common::getSysURL() . $this->createLink('index', 'index', '', 'xhtml');
 
         $output = new stdclass();
         $output->module = $this->moduleName;
@@ -35,7 +35,6 @@ class entry extends control
         {
             $location = rtrim($location, '?') . "?$query";
         }
-        $location .= "&display=card";
         $output->data = $location;
 
         if($this->session->userID)
