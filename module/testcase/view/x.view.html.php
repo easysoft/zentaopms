@@ -109,7 +109,7 @@
           <th><?php echo $lang->testcase->story;?></th>
           <td>
             <?php
-            if(isset($case->storyTitle)) echo "#$case->story:$case->storyTitle");
+            if(isset($case->storyTitle)) echo "#$case->story:$case->storyTitle";
             if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
             {
                 echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -235,16 +235,6 @@
       </table>
       <?php include '../../common/view/action.html.php';?>
     </div>
-  </div>
-  <div class='page-actions'>
-    <?php
-    if(!$isLibCase)
-    {
-        common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'results', false, "data-width='95%'");
-        if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe', '', "data-width='90%'");
-    }
-    if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe');
-    ?>
   </div>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
