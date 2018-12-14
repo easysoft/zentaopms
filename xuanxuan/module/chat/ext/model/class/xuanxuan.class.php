@@ -76,7 +76,7 @@ class xuanxuanChat extends chatModel
         $actions->createTodo  = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . helper::createLink('todo', 'create', '', 'xhtml'),           'height' => "600px", 'width' => "800px");
 
         $urls = array();
-        foreach(array('bug', 'task', 'doc', 'story', 'todo', 'testcase') as $moduleName)
+        foreach(array('bug', 'task', 'doc', 'story', 'testcase') as $moduleName)
         {
             $url = '/';
             if($this->config->requestType == 'GET')

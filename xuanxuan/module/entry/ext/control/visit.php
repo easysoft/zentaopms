@@ -54,7 +54,7 @@ class entry extends control
 
             $last = time();
             $user->last     = date(DT_DATETIME1, $last);
-            $user->lastTime = $user->last;
+            $user->lastTime = $last;
             $user->ip       = $this->session->clientIP->IP;
 
             $this->session->set('user', $user);
