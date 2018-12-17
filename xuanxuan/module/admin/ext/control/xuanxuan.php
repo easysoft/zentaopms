@@ -58,6 +58,7 @@ class admin extends control
         $this->view->os        = $os . '_' . php_uname('m');
         $this->view->type      = $type;
         $this->view->domain    = $domain;
+        $this->view->turnon    = isset($this->config->xuanxuan->turnon) ? $this->config->xuanxuan->turnon : 1;
         $this->view->isHttps   = $isHttps;
         $this->display();
     }
