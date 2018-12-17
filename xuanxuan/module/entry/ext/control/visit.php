@@ -14,7 +14,7 @@ class entry extends control
         if(RUN_MODE != 'xuanxuan') die();
 
         $referer = !empty($_GET['referer']) ? $this->get->referer : $referer;
-        if(empty($referer)) $referer = common::getSysURL() . $this->createLink('index', 'index', '', 'xhtml');
+        if(empty($referer)) $referer = common::getSysURL() . str_replace('/xuanxuan.php', '/index.php', $this->createLink('index', 'index', '', 'xhtml'));
 
         $output = new stdclass();
         $output->module = $this->moduleName;
