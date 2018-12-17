@@ -95,16 +95,11 @@ class control extends baseControl
         /* If the js or css file doesn't exist, set the device prefix to empty and reset the js or css file. */
         if($this->viewType == 'xhtml')
         {
-            if(!$css)
-            {
-                $this->devicePrefix = '';
-                $css = $this->getCSS($moduleName, $methodName);
-            }
-            if(!$js)
-            {
-                $this->devicePrefix = '';
-                $js = $this->getJS($moduleName, $methodName);
-            }
+            $this->devicePrefix = '';
+            $css .= $this->getCSS($moduleName, $methodName);
+
+            $this->devicePrefix = '';
+            $js .= $this->getJS($moduleName, $methodName);
         }
         if($css) $this->view->pageCSS = $css;
         if($js)  $this->view->pageJS  = $js;
