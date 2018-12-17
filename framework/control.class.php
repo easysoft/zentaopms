@@ -41,13 +41,10 @@ class control extends baseControl
         $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
 
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */
-        if($this->viewType == 'mhtml' or $this->viewType == 'xhtml')
+        if(!file_exists($mainViewFile))
         {
-            if(!file_exists($mainViewFile))
-            {
-                $this->devicePrefix = '';
-                $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
-            }
+            $this->devicePrefix = '';
+            $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
         }
 
         $viewFile = $mainViewFile;

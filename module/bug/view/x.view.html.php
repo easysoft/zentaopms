@@ -20,7 +20,7 @@
     <div class='panel-heading strong'>
         <span class="label label-id"><?php echo $bug->id;?></span> <span class="text" title='<?php echo $bug->title;?>'><?php echo $bug->title;?></span>
     </div>
-    <div class="main-col col-8">
+    <div class="main-col">
       <div class="cell">
         <div class="detail">
           <div class="detail-title"><?php echo $lang->bug->legendSteps;?></div>

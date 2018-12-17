@@ -17,6 +17,11 @@
   <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
+        <th class='w-70px'><?php echo $lang->task->project;?></th>
+        <?php $projects = $this->loadModel('project')->getPairs();?>
+        <td><?php echo html::select('project', $projects, $project->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
+      </tr>
+      <tr>
         <th class='w-70px'><?php echo $lang->task->type;?></th>
         <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td><td></td><td></td>
       </tr>
@@ -185,3 +190,34 @@
     </div>
   </form>
 </div>
+<script>
+function loadAll(projectID)
+{
+    loadModuleMenu(projectID); 
+    loadProjectStories(projectID);
+    loadProjectMembers(projectID);
+}
+
+function loadModuleMenu(projectID)
+{
+    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + projectID + '&viewtype=task');
+    $('#moduleIdBox').load(link, function(){$('#module').chosen();});
+}
+
+function loadProjectStories(projectID)
+{
+    var link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=0&storyID=' + oldStoryID);
+    $.get(link, function(data)
+    {
+        $('#story').replaceWith(data);
+        $('#story').chosen();
+    });
+}
+
+function loadProjectMembers(projectID)
+{
+    var link = createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + oldAssignedTo);
+    $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen()});
+}
+</script>
+<?php include '../../common/view/footer.lite.html.php';?>
