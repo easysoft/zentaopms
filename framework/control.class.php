@@ -43,8 +43,10 @@ class control extends baseControl
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */
         if(!file_exists($mainViewFile))
         {
+            $oldPrefix = $this->devicePrefix;
             $this->devicePrefix = '';
             $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+            $this->devicePrefix = $oldPrefix;
         }
 
         $viewFile = $mainViewFile;
@@ -95,11 +97,11 @@ class control extends baseControl
         /* If the js or css file doesn't exist, set the device prefix to empty and reset the js or css file. */
         if($this->viewType == 'xhtml')
         {
+            $oldPrefix = $this->devicePrefix;
             $this->devicePrefix = '';
             $css .= $this->getCSS($moduleName, $methodName);
-
-            $this->devicePrefix = '';
-            $js .= $this->getJS($moduleName, $methodName);
+            $js  .= $this->getJS($moduleName, $methodName);
+            $this->devicePrefix = $oldPrefix;
         }
         if($css) $this->view->pageCSS = $css;
         if($js)  $this->view->pageJS  = $js;
