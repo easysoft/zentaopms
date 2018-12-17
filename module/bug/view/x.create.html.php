@@ -185,7 +185,7 @@ body{padding-bottom:0px}
             ?>
             </div>
           </td>
-          <td>
+          <td <?php echo $colspan?>>
             <div class='input-group'>
               <span class='input-group-addon' id='keywordsAddonLabel'><?php echo $lang->bug->keywords;?></span>
               <?php echo html::input('keywords', $keywords, "class='form-control'");?>
