@@ -46,5 +46,6 @@ $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->forbiddenExt  = 'Extension is not compatible with the version. It has been deactivated:';
 $lang->upgrade->updateFile    = 'File information has to be updated.';
 $lang->upgrade->noticeSQL     = 'Check that your database is inconsistent with the standard and try to fix failure. Please perform the following SQL and refresh.';
+$lang->upgrade->afterDeleted  = 'File is not deleted. Please refresh after you delete it.';
 
 include dirname(__FILE__) . '/version.php';
