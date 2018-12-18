@@ -24,7 +24,11 @@
     <form method='post' id='ajaxForm' class='form-inline form-ajax'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->chat->version;?></th>
+          <th class='w-120px'><?php echo $lang->chat->turnon;?></th>
+          <td><?php echo $type == 'edit' ? html::radio('turnon', $lang->chat->turnonList, $turnon) : zget($lang->chat->turnonList, $config->xuanxuan->turnon);?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->chat->version;?></th>
           <td><?php echo $config->xuanxuan->version;?></td>
         </tr>
         <tr>
@@ -75,21 +79,6 @@
         <tr class='sslTR <?php if($isHttps == 0 || empty($type)) echo 'hide';?>'>
           <th><?php echo $lang->chat->xxd->sslkey;?></th>
           <td><?php echo html::textarea('sslkey',  zget($config->xuanxuan, 'sslkey', ''), "placeholder='{$lang->chat->placeholder->xxd->sslkey}' class='form-control'");?></td>
-          <td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->chat->xxd->uploadFileSize;?></th>
-          <td>
-            <?php if($type == 'edit'):?>
-            <div class='input-group'>
-              <span class='input-group-addon'><?php echo $lang->chat->xxd->max;?></span>
-              <?php echo html::input('uploadFileSize', zget($config->xuanxuan, 'uploadFileSize', 20), "class='form-control' placeholder='{$lang->chat->placeholder->xxd->uploadFileSize}' ");?>
-              <span class='input-group-addon'>M</span>
-            </div>
-            <?php else:?>
-            <?php echo $lang->chat->xxd->max . zget($config->xuanxuan, 'uploadFileSize', 20) . 'M';?>
-            <?php endif;?>
-          </td>
           <td></td>
         </tr>
         <?php if(!$type):?>

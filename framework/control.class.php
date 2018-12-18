@@ -41,13 +41,12 @@ class control extends baseControl
         $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
 
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */
-        if($this->viewType == 'mhtml' or $this->viewType == 'xhtml')
+        if(!file_exists($mainViewFile))
         {
-            if(!file_exists($mainViewFile))
-            {
-                $this->devicePrefix = '';
-                $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
-            }
+            $originalPrefix     = $this->devicePrefix;
+            $this->devicePrefix = '';
+            $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
+            $this->devicePrefix = $originalPrefix;
         }
 
         $viewFile = $mainViewFile;
@@ -98,16 +97,11 @@ class control extends baseControl
         /* If the js or css file doesn't exist, set the device prefix to empty and reset the js or css file. */
         if($this->viewType == 'xhtml')
         {
-            if(!$css)
-            {
-                $this->devicePrefix = '';
-                $css = $this->getCSS($moduleName, $methodName);
-            }
-            if(!$js)
-            {
-                $this->devicePrefix = '';
-                $js = $this->getJS($moduleName, $methodName);
-            }
+            $originalPrefix = $this->devicePrefix;
+            $this->devicePrefix = '';
+            $css .= $this->getCSS($moduleName, $methodName);
+            $js  .= $this->getJS($moduleName, $methodName);
+            $this->devicePrefix = $originalPrefix;
         }
         if($css) $this->view->pageCSS = $css;
         if($js)  $this->view->pageJS  = $js;

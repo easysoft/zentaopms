@@ -1,0 +1,4 @@
+#header{display: none}
+#footer{display: none}
+#header, #header+#main{min-width: auto}
+.main-header{display: none}

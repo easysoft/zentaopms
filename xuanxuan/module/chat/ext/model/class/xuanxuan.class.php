@@ -69,25 +69,27 @@ class xuanxuanChat extends chatModel
         $baseURL = commonModel::getSysURL();
 
         $actions = new stdclass();
-        $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . helper::createLink('bug', 'create', 'product=1', 'xhtml'),   'height' => "600px", 'width' => "800px");
-        $actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . helper::createLink('doc', 'create', 'lib=1', 'xhtml'),       'height' => "600px", 'width' => "800px");
-        $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . helper::createLink('story', 'create', 'product=1', 'xhtml'), 'height' => "600px", 'width' => "800px");
-        $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . helper::createLink('task', 'create', 'project=1', 'xhtml'),  'height' => "600px", 'width' => "800px");
-        $actions->createTodo  = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . helper::createLink('todo', 'create', '', 'xhtml'),           'height' => "600px", 'width' => "800px");
+        $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('bug', 'create', 'product=1', 'xhtml')),   'height' => "600px", 'width' => "800px");
+        $actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('doc', 'create', 'lib=1', 'xhtml')),       'height' => "600px", 'width' => "800px");
+        $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('story', 'create', 'product=1', 'xhtml')), 'height' => "600px", 'width' => "800px");
+        $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('task', 'create', 'project=1', 'xhtml')),  'height' => "600px", 'width' => "800px");
+        $actions->createTodo  = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')),           'height' => "600px", 'width' => "800px");
 
         $urls = array();
-        foreach(array('bug', 'task', 'doc', 'story', 'testcase') as $moduleName)
+        foreach($this->config->chat->cards as $moduleName => $methods)
         {
-            $url = '/';
-            if($this->config->requestType == 'GET')
+            foreach($methods as $methodName => $size)
             {
-                $url .= "index.php?m={$moduleName}&f=view";
+                if($this->config->requestType == 'GET')
+                {
+                    $url = "/index.php?m={$moduleName}&f={$methodName}";
+                }
+                else
+                {
+                    $url = "/{$moduleName}-{$methodName}-";
+                }
+                $urls[$url] = $size;
             }
-            else
-            {
-                $url .= "{$moduleName}-view-";
-            }
-            $urls[$url] = true;
         }
 
         $data = new stdClass();
