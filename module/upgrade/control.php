@@ -106,11 +106,23 @@ class upgrade extends control
     public function execute($fromVersion = '')
     {
         $this->session->set('step', '');
-        $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
-        $this->upgrade->execute($fromVersion);
 
         $this->view->title      = $this->lang->upgrade->result;
         $this->view->position[] = $this->lang->upgrade->common;
+
+        $result = $this->upgrade->deleteFiles();
+        if($result)
+        {
+            $result[] = $this->lang->upgrade->afterDeleted; 
+
+            $this->view->result = 'fail';
+            $this->view->errors  = $result;
+
+            die($this->display());
+        }
+
+        $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
+        $this->upgrade->execute($fromVersion);
 
         if(!$this->upgrade->isError()) $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
 
