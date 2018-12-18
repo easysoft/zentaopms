@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink  = $app->session->caseList != false ? $app->session->caseList : $this->createLink('testcase', 'browse', "productID=$case->product");?>
+<?php js::set('sysurl', common::getSysUrl());?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -113,17 +114,7 @@
         if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe');
         ?>
         <?php
-        if($this->app->getViewType() == 'xhtml' and common::hasPriv('testcase', 'edit'))
-        {
-            $url  = common::getSysURL() . $this->createLink('testcase', 'edit', "case=$case->id");
-            $url .= strpos($url, '?') === false ? '?' : '&';
-            $url .= 'width=1000px&height=800px';
-            echo html::a('xxc:openUrlInDialog/' . urlencode($url), "<i class='icon-edit'></i>", '_blank', "class='btn btn-link'");
-        }
-        else
-        {
-            common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
-        }
+        common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
         if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
         if($isLibCase and common::hasPriv('testsuite', 'createCase')) echo html::a($this->createLink('testsuite', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
         common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', '', 'hiddenwin');

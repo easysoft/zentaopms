@@ -1,18 +1,5 @@
-#header {display: none;}
-#main {padding: 0 0;}
-#main > .container {padding: 0 0;}
-
-#header, #header + #main {min-width: 600px;}
-
-#mainContent .center-block .main-header {display: none;}
-.main-content {padding:0}
-
 .title-group .has-icon-right {min-width: 400px!important;}
-
 #mailto ~ span.input-group-btn{display:none;}
-
 .modal-dialog {width: 700px;}
-
 a.btn-back {display:none;}
-
-#footer{display:none;}
+.main-header{display: none}

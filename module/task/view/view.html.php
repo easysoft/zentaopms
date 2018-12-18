@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");?>
+<?php js::set('sysurl', common::getSysUrl());?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>

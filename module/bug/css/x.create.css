@@ -1,4 +1,3 @@
-#header{display: none}
-#footer{display: none}
 .main-header{display: none}
-#header, #header+#main{min-width: auto}
+#mailto ~ span.input-group-btn{display:none;}
+a.btn-back {display:none;}

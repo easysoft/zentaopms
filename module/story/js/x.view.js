@@ -1,13 +1,34 @@
 $(function()
 {
     var $xuanAction = "<div class='xuancard-actions fixed'>";
+    $('.main-col div.main-actions .btn-toolbar a').each(function(){
+        var $that    = $(this);
 
-    if(status != 'closed') $xuanAction += "<a href='" + changeLink + "'" + " target='_blank'" + " class='btn btn-link'" + '>' + "<i class='icon-story-change icon-fork'></i>" + " <span class='text'>" + change + "</span>" + "</a>";
-    if(status == 'draft')  $xuanAction += "<a href='" + reviewLink + "'" + " target='_blank'" + " class='btn btn-link'" + '>' + "<i class='icon-glasses'></i>" + " <span class='text'>" + review + "</span>" + "</a>";
-    if(status != 'closed') $xuanAction += '<a href="' + closeLink  + '"' + " target='_blank'" + ' class="btn btn-link">' + '<i class="icon-story-close icon-off"></i>' + ' <span class="text">' + close + "</span>" + "</a>";
-    if(status == 'closed') $xuanAction += '<a href="' + activateLink  + '"' + " target='_blank'" + ' class="btn btn-link">' + '<i class="icon-story-activate icon-magic"></i>' + ' <span class="text">' + activate + "</span>" + "</a>";
-    $xuanAction += "<a href='" + editLink + "'" + " target='_blank' title=" + edit + " class='btn btn-link'" + '>' + "<i class='icon-edit'></i>" + "</a>";
+        if($that.attr('id') == 'back') return true;
+
+        var href     = $that.attr('href');
+        var title    = $that.attr('title') == undefined ? '' : " title='" + $that.attr('title') + "'";
+        var btnClass = " class='" + $that.attr('class') + "'";
+        var action   = $that.html();
+
+        if(href.indexOf('browse') >= 0 || href.indexOf('batchCreate') >= 0 
+            || href.indexOf('create') >= 0 || href.indexOf('delete') >= 0) return true;
+
+        if(href.indexOf('activate') >= 0 || href.indexOf('close') >= 0) 
+        {
+            url = href;
+            target = '';
+        }
+        else
+        {
+           url = 'xxc:openUrlInDialog/' + encodeURIComponent(sysurl + href);
+           target = " target='_blank'";
+        }
+
+        $xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
+    });
 
     $xuanAction += '</div>';
     $('#footer').replaceWith($xuanAction);
+    $('.xuancard-actions a.iframe').modalTrigger();
 })

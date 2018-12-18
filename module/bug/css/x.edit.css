@@ -1,7 +1,7 @@
-body{padding:0px; margin: 0px}
-#header{display: none}
-#footer{display: none}
-#header+#main{min-width:700px}
 .main-header{display: none}
-.main-row .col-8{display: none}
 .form-actions{margin-top: 0px}
+.form-actions button:last-child{display:none;}
+#mailto ~ .input-group-btn{display:none;}
+#mainContent .main-row .col-8{width: 55%}
+#mainContent .main-row .col-4{width: 45%}
+.main-row .side-col.col-4 .detail:last-child {display: none;}

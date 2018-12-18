@@ -1,7 +1,2 @@
-body{padding:0px;}
-#header{display:none;}
-#header+#main{min-width:auto;}
-#main{padding:0px;}
-#main .container{padding:0px;}
 .main-header{display:none;}
-#footer{display:none;}
+.form-actions .btn-back{display:none;}

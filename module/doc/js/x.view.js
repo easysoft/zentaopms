@@ -11,18 +11,10 @@ $(function()
         var btnClass = " class='" + $that.attr('class') + "'";
         var action   = $that.html();
 
-        if(href.indexOf('createCase') >= 0 || href.indexOf('toStory') >= 0 || href.indexOf('create') >= 0 || href.indexOf('delete') >= 0) return true;
+        if(href.indexOf('edit') < 0) return true;
 
-        if($that.hasClass('iframe')) 
-        {
-            url = href;
-            target = '';
-        }
-        else
-        {
-           url = 'xxc:openUrlInDialog/' + encodeURIComponent(sysurl + href);
-           target = " target='_blank'";
-        }
+        url = 'xxc:openUrlInDialog/' + encodeURIComponent(sysurl + href);
+        target = " target='_blank'";
 
         $xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
     });

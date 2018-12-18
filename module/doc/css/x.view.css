@@ -1,13 +1,5 @@
-#header{display:none;}
-#header+#main{min-width:auto;}
-#main{padding:0px;}
-#main .container{padding:0px;}
 .side-col.col-4{display:none;}
 #mainMenu{margin-top:0px;}
 #mainMenu .btn{display:none;}
 #mainMenu .divider{display:none;}
-.main-actions #back{display:none;}
-.main-actions .divider{display:none;}
-.main-actions .fullscreen-btn{display:none;}
-.main-actions a[href*=delete]{display:none;}
-#footer{display:none;}
+.main-actions{display:none;}

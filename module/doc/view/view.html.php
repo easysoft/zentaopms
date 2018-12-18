@@ -17,6 +17,7 @@
 <?php
 js::set('fullscreen', $lang->doc->fullscreen);
 js::set('retrack', $lang->doc->retrack);
+js::set('sysurl', common::getSysUrl());
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -134,17 +135,7 @@ js::set('retrack', $lang->doc->retrack);
         <?php
         if(!$doc->deleted)
         {
-            if($this->app->getViewType() == 'xhtml' and common::hasPriv('doc', 'edit'))
-            {
-                $url  = common::getSysURL() . $this->createLink('doc', 'edit', "docID=$doc->id");
-                $url .= strpos($url, '?') === false ? '?' : '&';
-                $url .= 'width=1000px&height=800px';
-                echo html::a('xxc:openUrlInDialog/' . urlencode($url), "<i class='icon-edit'></i>", '_blank', "class='btn btn-link'");
-            }
-            else
-            {
-                common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
-            }
+            common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
             common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
         }
         ?>
