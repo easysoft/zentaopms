@@ -25,12 +25,11 @@
         <tbody>
           <tr>
             <th><?php echo $lang->doc->lib;?></th>
-            <td><?php echo $libName?></td><td></td>
+            <td> <?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td><td></td>
           </tr>  
           <tr>
             <th><?php echo $lang->doc->module;?></th>
             <td>
-              <?php echo html::hidden('lib', $libID);?>
               <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
             </td><td></td>
           </tr>  
@@ -81,7 +80,7 @@
           </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
-              <?php echo html::submitButton() . ' ' . html::backButton() . html::hidden('lib', $libID);?>
+              <?php echo html::submitButton() . ' ' . html::backButton();?>
             </td>
           </tr>
         </tbody>
