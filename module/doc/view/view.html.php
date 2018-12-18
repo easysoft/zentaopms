@@ -134,7 +134,17 @@ js::set('retrack', $lang->doc->retrack);
         <?php
         if(!$doc->deleted)
         {
-            common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
+            if($this->app->getViewType() == 'xhtml' and common::hasPriv('doc', 'edit'))
+            {
+                $url  = common::getSysURL() . $this->createLink('doc', 'edit', "docID=$doc->id");
+                $url .= strpos($url, '?') === false ? '?' : '&';
+                $url .= 'width=1000px&height=800px';
+                echo html::a('xxc:openUrlInDialog/' . urlencode($url), "<i class='icon-edit'></i>", '_blank', "class='btn btn-link'");
+            }
+            else
+            {
+                common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
+            }
             common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
         }
         ?>

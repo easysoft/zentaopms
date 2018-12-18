@@ -1525,6 +1525,7 @@ class testcase extends control
                         }
                         elseif(isset($num))
                         {
+                            if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
                             $caseStep[$num]['content'] .= "\n" . $step;
                         }
                         else

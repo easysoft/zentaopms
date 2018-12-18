@@ -39,12 +39,12 @@ js::set('type', $type);
         <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='w-80px'><?php echo $type == 'doc' ? $lang->tree->parentCate : $lang->tree->parent;?></th>
+          <th class='w-80px'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
           <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='w-80px'><?php echo $type == 'doc' ? $lang->tree->cate : $lang->tree->name;?></th>
+          <th class='w-80px'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->cate : $lang->tree->name;?></th>
           <td><?php echo html::input('name', $module->name, "class='form-control' autocomplete='off'");?></td>
         </tr>
         <?php if($type == 'bug'):?>

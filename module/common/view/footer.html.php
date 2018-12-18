@@ -13,7 +13,7 @@
       <small class='muted'><?php echo $lang->designedByAIUX;?></small> &nbsp;
       <a href='<?php echo $lang->website;?>' target='_blank'><i class='icon-zentao'></i> <?php echo $lang->zentaoPMS . $config->version;?></a> &nbsp;
       <?php echo $lang->proVersion;?>
-      <?php commonModel::printNotifyLink();?>
+      <?php commonModel::printClientLink();?>
     </div>
   </div>
 </footer>
@@ -48,7 +48,7 @@ $(function()
                 if(data)
                 {
                     if(typeof data == 'string') data = $.parseJSON(data);
-                    if(typeof data.message == 'string') notifyMessage(data.message);
+                    if(typeof data.message == 'string') notifyMessage(data);
                 }
             }
         });

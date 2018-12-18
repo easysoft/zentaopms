@@ -911,7 +911,16 @@ class testsuite extends control
                 }
                 else
                 {
-                    $steps    = explode("\n", $cellValue);
+                    $steps = (array)$cellValue;
+                    if(strpos($cellValue, "\n"))
+                    {
+                        $steps = explode("\n", $cellValue);
+                    }
+                    elseif(strpos($cellValue, "\r"))
+                    {
+                        $steps = explode("\r", $cellValue);
+                    }
+
                     $stepKey  = str_replace('step', '', strtolower($field));
                     $caseStep = array();
 
@@ -941,6 +950,7 @@ class testsuite extends control
                         }
                         elseif(isset($num))
                         {
+                            if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
                             $caseStep[$num]['content'] .= "\n" . $step;
                         }
                         else

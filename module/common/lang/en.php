@@ -73,10 +73,10 @@ $lang->addFiles        = 'Add';
 $lang->files           = 'File ';
 $lang->pasteText       = 'Paste';
 $lang->uploadImages    = 'Upload';
-$lang->timeout         = 'Timeout. Pease check your network settings, or try it again!';
+$lang->timeout         = 'Timeout. Pease check your connection, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Please use phpmyadmin or myisamchk to fix it.';
-$lang->duplicate       = '%s has the same title as that of an existing file.';
-$lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to unrestrict it.</body></html>";
+$lang->duplicate       = '%s has the same title as that of a file existed.';
+$lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to grant it.</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = 'Set as Home';
@@ -139,7 +139,7 @@ $lang->searchObjects['user']        = 'User';
 $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';
-$lang->searchObjects['testtask']    = 'Test Task';
+$lang->searchObjects['testtask']    = 'Test';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchObjects['testsuite']   = 'Case Library';
 $lang->searchObjects['testreport']  = 'Test Report';
@@ -345,7 +345,7 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report is generated from search results. Please search in the list before you generate a report.';
+$lang->report->notice->help = 'Note: Report is generated on search results. Please search in the list before you generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
@@ -504,12 +504,13 @@ $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
+$lang->downloadClient = "Download Desktop Client";
 $lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->pasteTextInfo   = "Paste text here. Each line will be the title of each record. ";
-$lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
+$lang->noticeImport    = "Imported data contains something that has already existed in system. Please confirm your actions.";
 $lang->importConfirm   = "Confirm";
 $lang->importAndCover  = "Override";
 $lang->importAndInsert = "Insert";
@@ -521,7 +522,7 @@ $lang->chooseUsersToMail  = "Choose users to be notified.";
 $lang->browserNotice      = 'Your current browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste images here";
 $lang->pasteImgFail       = "Paste image fail, try again later.";
-$lang->pasteImgUploading  = "Please wait image uploading...";
+$lang->pasteImgUploading  = "Please wait. Uploading...";
 
 /* Time formats settings. */
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -729,8 +730,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menu->bug       = 'Bug|bug|index';
     $lang->menu->testcase  = 'Test Case|testcase|index';
     $lang->menu->testsuite = 'Test Suite|testsuite|index';
-    $lang->menu->testtask  = 'Test Task|testtask|index';
-    $lang->menu->caselib   = 'Case Library|testsuite|library';
+    $lang->menu->testtask  = 'Test|testtask|index';
+    $lang->menu->caselib   = 'Case Lib|testsuite|library';
 
     $lang->menuOrder[6]  = 'bug';
     $lang->menuOrder[7]  = 'testcase';
@@ -743,9 +744,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->menu = new stdclass();
     $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
     $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
-    $lang->bug->menu->openedbyme    = 'CreatedByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
-    $lang->bug->menu->assigntome    = 'AssignedToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
-    $lang->bug->menu->resolvedbyme  = 'ResolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->openedbyme    = 'CreateByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
+    $lang->bug->menu->assigntome    = 'AssignToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
+    $lang->bug->menu->resolvedbyme  = 'ResolveByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
     $lang->bug->menu->toclosed      = 'ToBeClosed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
     $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->more          = array('link' => 'More|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');

@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', $config->global->flow == 'onlyTask' || !empty($task->id));?>
+<style>.title-group .has-icon-right{min-width:700px}</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

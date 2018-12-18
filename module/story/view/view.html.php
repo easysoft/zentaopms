@@ -12,7 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");?>
+<?php 
+$browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");
+/* xuanxuan.*/
+$changeLink   = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('story', 'change',   "storyID=$story->id"));
+$reviewLink   = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('story', 'review',   "storyID=$story->id"));
+$editLink     = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('story', 'edit',     "storyID=$story->id"));
+$closeLink    = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('story', 'close',    "storyID=$story->id"));
+$activateLink = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('story', 'activate', "storyID=$story->id"));
+?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
@@ -388,6 +396,19 @@ js::set('createStory', $lang->story->create);
 js::set('productID', $story->product);
 js::set('branch', $story->branch);
 js::set('moduleID', $story->module);
+/* xuanxuan. */
+js::set('storyID',      $story->id);
+js::set('changeLink',   $changeLink);
+js::set('reviewLink',   $reviewLink);
+js::set('editLink',     $editLink);
+js::set('closeLink',    $closeLink);
+js::set('activateLink', $activateLink);
+js::set('edit',         $lang->story->edit);
+js::set('change',       $lang->story->change);
+js::set('review',       $lang->story->review);
+js::set('close',        $lang->story->close);
+js::set('activate',     $lang->story->activate);
+js::set('status',       $story->status);
 ?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

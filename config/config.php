@@ -29,7 +29,7 @@ $config->moduleVar   = 'm';                 // 请求类型为GET：模块变量
 $config->methodVar   = 'f';                 // 请求类型为GET：模块变量名。            requestType=GET: the method var name.
 $config->viewVar     = 't';                 // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';         // 请求类型为GET：session变量名。         requestType=GET: the session var name.
-$config->views       = ',html,json,mhtml,'; // 支持的视图类型。                       Supported view formats.
+$config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
 
 /* 支持的主题和语言。Supported thems and languages. */
 $config->themes['default'] = 'default';
@@ -39,6 +39,7 @@ $config->langs['en']       = 'English';
 
 /* 设备类型视图文件前缀。The prefix for view file for different device. */
 $config->devicePrefix['mhtml'] = '';
+$config->devicePrefix['xhtml'] = 'x.';
 
 /* 默认值设置。Default settings. */
 $config->default = new stdclass();

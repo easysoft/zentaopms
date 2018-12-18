@@ -12,7 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
+<?php 
+$browseLink  = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");
+$confirmLink = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('bug', 'confirmBug', "bugID=$bug->id"));
+$assignLink  = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('bug', 'assignTo',   "bugID=$bug->id"));
+$resolveLink = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('bug', 'resolve',    "bugID=$bug->id"));
+$editLink    = 'xxc:openUrlInDialog/' . rawurlencode(common::getSysUrl() . helper::createLink('bug', 'edit',       "bugID=$bug->id"));
+?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
@@ -367,5 +373,17 @@
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
 </div>
+<?php
+js::set('confirmLink', $confirmLink);
+js::set('resolveLink', $resolveLink);
+js::set('editLink',    $editLink);
+js::set('assignLink',  $assignLink);
+js::set('confirmed',   $bug->confirmed);
+js::set('status',      $bug->status);
+js::set('confirmBug',  $lang->bug->confirmBug);
+js::set('assignTo',    $lang->bug->assignTo);
+js::set('resolve',     $lang->bug->resolve);
+js::set('edit',        $lang->bug->edit);
+?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

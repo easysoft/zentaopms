@@ -472,6 +472,28 @@ class upgradeModel extends model
         return $alterSQL;
     }
 
+    /**
+     * Delete Useless Files 
+     * 
+     * @access public
+     * @return array
+     */
+    public function deleteFiles()
+    {
+        $result = array();
+        foreach($this->config->delete as $deleteFiles)
+        {
+            $basePath = $this->app->getBasePath();
+            foreach($deleteFiles as $file)
+            {
+                $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
+                if(file_exists($fullPath) and !unlink($fullPath)) $result[] = $fullPath;
+            }
+        }
+        return $result;
+    }
+
+
 
     /**
      * Update ubb code in bug table and user Templates table to html.
