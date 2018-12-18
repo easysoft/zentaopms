@@ -1,0 +1,12 @@
+#header {display: none;}
+#main {padding: 0 0;}
+#mainMenu {display: none;}
+#main > .container {padding: 0 0;}
+
+#header, #header + #main {min-width: 600px;}
+
+#mainContent div.side-col {display: none;}
+#mainContent .main-col div.main-actions {display: none;}
+.main-content {padding:0}
+
+#footer{display:none;}
