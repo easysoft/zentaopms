@@ -38,13 +38,13 @@ $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
 $lang->admin->register = new stdclass();
-$lang->admin->register->common     = 'Binding New Account';
+$lang->admin->register->common     = 'Bind New Account';
 $lang->admin->register->caption    = 'Register in Zentao Community';
-$lang->admin->register->click      = 'Please Register here';
-$lang->admin->register->lblAccount = 'at least 3 characters pls; contains letters and numbers.';
-$lang->admin->register->lblPasswd  = 'at least 6 characters pls; contains letters and numbers.';
+$lang->admin->register->click      = 'Register here';
+$lang->admin->register->lblAccount = 'at least 3 characters; contains letters and numbers.';
+$lang->admin->register->lblPasswd  = 'at least 6 characters; contains letters and numbers.';
 $lang->admin->register->submit     = 'Register';
-$lang->admin->register->bind       = "Binding Exsit Account";
+$lang->admin->register->bind       = "Bind Exsit Account";
 $lang->admin->register->success    = "You have registered with us!";
 
 $lang->admin->bind = new stdclass();

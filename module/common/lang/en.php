@@ -60,7 +60,7 @@ $lang->actions         = 'Actions';
 $lang->restore         = 'Restore';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
-$lang->attatch         = 'Attachment';
+$lang->attatch         = 'File';
 $lang->reverse         = 'Reverse';
 $lang->switchDisplay   = 'Toggle';
 $lang->expand          = 'Expand All';
@@ -106,8 +106,8 @@ $lang->workingHour  = 'Hour';
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = 'Status';
-$lang->openedByAB   = 'Creator';
-$lang->assignedToAB = 'Assignee';
+$lang->openedByAB   = 'CreatedBy';
+$lang->assignedToAB = 'AssignTo';
 $lang->typeAB       = 'Type';
 
 $lang->common = new stdclass();
@@ -270,7 +270,7 @@ $lang->qa->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s'
 $lang->qa->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s');
 $lang->qa->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->qa->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
-$lang->qa->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->qa->menu->caselib   = array('link' => 'Case Library|testsuite|library');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
@@ -280,7 +280,7 @@ $lang->bug->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s
 $lang->bug->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->bug->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
-$lang->bug->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->bug->menu->caselib   = array('link' => 'Case Library|testsuite|library');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
@@ -289,7 +289,7 @@ $lang->testcase->menu->testcase  = array('link' => 'Case|testcase|browse|product
 $lang->testcase->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s');
 $lang->testcase->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->testcase->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
-$lang->testcase->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->testcase->menu->caselib   = array('link' => 'Case Library|testsuite|library');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = new stdclass();
@@ -298,7 +298,7 @@ $lang->testtask->menu->testcase  = array('link' => 'Case|testcase|browse|product
 $lang->testtask->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
 $lang->testtask->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->testtask->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
-$lang->testtask->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->testtask->menu->caselib   = array('link' => 'Case Library|testsuite|library');
 
 $lang->testsuite = new stdclass();
 $lang->testsuite->menu = new stdclass();
@@ -307,7 +307,7 @@ $lang->testsuite->menu->testcase  = array('link' => 'Case|testcase|browse|produc
 $lang->testsuite->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s');
 $lang->testsuite->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->testsuite->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
-$lang->testsuite->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->testsuite->menu->caselib   = array('link' => 'Case Library|testsuite|library');
 
 $lang->testreport = new stdclass();
 $lang->testreport->menu = new stdclass();
@@ -316,7 +316,7 @@ $lang->testreport->menu->testcase  = array('link' => 'Case|testcase|browse|produ
 $lang->testreport->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s');
 $lang->testreport->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s');
 $lang->testreport->menu->report    = array('link' => 'Report|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
-$lang->testreport->menu->caselib   = array('link' => 'Library|testsuite|library');
+$lang->testreport->menu->caselib   = array('link' => 'Case Library|testsuite|library');
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
@@ -325,7 +325,7 @@ $lang->caselib->menu->testcase  = array('link' => 'Case|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => 'Test Task|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Report|testreport|browse|');
-$lang->caselib->menu->caselib   = array('link' => 'Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib   = array('link' => 'Case Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -457,7 +457,7 @@ $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";
 $lang->error->account         = "『%s』should be valid account.";
-$lang->error->passwordsame    = "Two passwords should be consistent.";
+$lang->error->passwordsame    = "Passwords should be consistent.";
 $lang->error->passwordrule    = "Password should follow rules. It must be at least 6 characters.";
 $lang->error->accessDenied    = 'Access is denied.';
 $lang->error->pasteImg        = 'Image is not allowed to be pasted in your browser!';
@@ -479,7 +479,7 @@ $lang->pager->previousPage = "Prev";
 $lang->pager->nextPage     = "Next";
 $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
-$lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
 $lang->website        = "https://www.zentao.net";
 
@@ -487,7 +487,7 @@ $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <fo
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->pasteTextInfo   = "Paste text here. Each line will be the title of each record. ";
 $lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
-$lang->importConfirm   = "Import Confirm";
+$lang->importConfirm   = "Import";
 $lang->importAndCover  = "Override";
 $lang->importAndInsert = "New Insertion";
 
@@ -495,7 +495,7 @@ $lang->importAndInsert = "New Insertion";
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users that will be notified.";
-$lang->browserNotice      = 'Your current browser might not show the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
+$lang->browserNotice      = 'Your current browser might not display· the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste images here";
 
 /* 时间格式设置。*/
@@ -702,9 +702,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Add bug, testcase and testtask module. */
     $lang->menu->bug       = 'Bug|bug|index';
-    $lang->menu->testcase  = 'Test Case|testcase|index';
-    $lang->menu->testsuite = 'Test Suite|testsuite|index';
-    $lang->menu->testtask  = 'Test Task|testtask|index';
+    $lang->menu->testcase  = 'Case|testcase|index';
+    $lang->menu->testsuite = 'Suite|testsuite|index';
+    $lang->menu->testtask  = 'Test|testtask|index';
     $lang->menu->caselib   = 'Case Library|testsuite|library';
 
     $lang->menuOrder[6]  = 'bug';
@@ -718,9 +718,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->menu = new stdclass();
     $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
     $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
-    $lang->bug->menu->openedbyme    = 'CreatedByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
-    $lang->bug->menu->assigntome    = 'AssignedToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
-    $lang->bug->menu->resolvedbyme  = 'ResolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->openedbyme    = 'CreateByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
+    $lang->bug->menu->assigntome    = 'AssignToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
+    $lang->bug->menu->resolvedbyme  = 'ResolveByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
     $lang->bug->menu->toclosed      = 'ToBeClosed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
     $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->more          = array('link' => 'More|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');
@@ -732,7 +732,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->subMenu->more->longlifebugs  = 'Pending|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
     $lang->bug->subMenu->more->postponedbugs = 'PostPoned|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->subMenu->more->overduebugs   = 'Overdue|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
-    $lang->bug->subMenu->more->needconfirm   = 'NeedConfirm|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
+    $lang->bug->subMenu->more->needconfirm   = 'ToConfirm|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
 
     $lang->bug->menuOrder[5]  = 'product';
     $lang->bug->menuOrder[10] = 'all';
@@ -753,7 +753,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->testcase->menu = new stdclass();
     $lang->testcase->menu->all     = 'All|testcase|browse|productID=%s&branch=%s&browseType=all';
     $lang->testcase->menu->wait    = 'Wait|testcase|browse|productID=%s&branch=%s&browseType=wait';
-    $lang->testcase->menu->bysuite = array('link' => 'Test Suite|testsuite|create|productID=%s', 'class' => 'dropdown dropdown-hover');
+    $lang->testcase->menu->bysuite = array('link' => 'Suite|testsuite|create|productID=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->testcase->subMenu = new stdclass();
     $lang->testcase->subMenu->bysuite = new stdclass();

@@ -15,16 +15,16 @@ $lang->dept->edit        = "Edit";
 $lang->dept->delete      = "Delete";
 $lang->dept->parent      = "Parent";
 $lang->dept->manager     = "Manager";
-$lang->dept->name        = "Dept Name";
+$lang->dept->name        = "Department Name";
 $lang->dept->browse      = "Manage";
-$lang->dept->manage      = "Maintain Dept";
+$lang->dept->manage      = "Maintain Department";
 $lang->dept->updateOrder = "Sort";
-$lang->dept->add         = "Add Dept";
+$lang->dept->add         = "Add Department";
 $lang->dept->dragAndSort = "Drag and Sort";
 
-$lang->dept->confirmDelete = " Do you want to delete this Dept?";
+$lang->dept->confirmDelete = " Do you want to delete this Department?";
 $lang->dept->successSave   = " Saved!";
 
 $lang->dept->error = new stdclass();
-$lang->dept->error->hasSons  = 'This Dept has child Dept. You cannot be deleted!';
-$lang->dept->error->hasUsers = 'This Dept has staff. It cannot be deleted!';
+$lang->dept->error->hasSons  = 'This Department has child Department. You cannot delete it!';
+$lang->dept->error->hasUsers = 'This Department has users. You cannot delete it!';
