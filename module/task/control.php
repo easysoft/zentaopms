@@ -124,6 +124,7 @@ class task extends control
             }
 
             /* If link from no head then reload*/
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal());
             if(isonlybody())
             {
                 $response['locate'] = 'reload';
@@ -310,6 +311,7 @@ class task extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             if($task->fromBug != 0)
             {
                 foreach($changes as $change)

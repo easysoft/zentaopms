@@ -113,6 +113,7 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal());
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -424,6 +425,7 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 die(array('status' => 'success', 'data' => $storyID));
@@ -607,6 +609,7 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -751,6 +754,7 @@ class story extends control
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
             }
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
