@@ -130,18 +130,18 @@ class project extends control
         if($this->cookie->preProjectID != $projectID)
         {
             $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
-            setcookie('moduleBrowseParam',  0, $this->config->cookieLife, $this->config->webRoot);
-            setcookie('productBrowseParam', 0, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot);
+            setcookie('productBrowseParam', 0, 0, $this->config->webRoot);
         }
         if($browseType == 'bymodule')
         {
-            setcookie('moduleBrowseParam',  (int)$param, $this->config->cookieLife, $this->config->webRoot);
-            setcookie('productBrowseParam', 0, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('moduleBrowseParam',  (int)$param, 0, $this->config->webRoot);
+            setcookie('productBrowseParam', 0, 0, $this->config->webRoot);
         }
         elseif($browseType == 'byproduct')
         {
-            setcookie('moduleBrowseParam',  0, $this->config->cookieLife, $this->config->webRoot);
-            setcookie('productBrowseParam', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot);
+            setcookie('productBrowseParam', (int)$param, 0, $this->config->webRoot);
         }
         else
         {
@@ -161,7 +161,7 @@ class project extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
-        setcookie('projectTaskOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('projectTaskOrder', $orderBy, 0, $this->config->webRoot);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -592,7 +592,7 @@ class project extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->projectStoryOrder ? $this->cookie->projectStoryOrder : 'pri';
-        setcookie('projectStoryOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('projectStoryOrder', $orderBy, 0, $this->config->webRoot);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -2323,9 +2323,9 @@ class project extends control
     {
         $planStories  = $planProducts = array();
         $planStory    = $this->loadModel('story')->getPlanStories($planID);
+        $count = 0;
         if(!empty($planStory))
         {
-            $count = 0;
             foreach($planStory as $id => $story)
             {
                 if($story->status == 'draft') 

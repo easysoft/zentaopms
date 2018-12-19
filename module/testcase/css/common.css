@@ -1,9 +1,9 @@
 .table-form > tbody > tr > td .btn-group-vertical > .btn {margin-left: 0!important; padding: 2px 8px}
 
-#steps .step-id {text-align: right}
+#steps .step-id {text-align: center;vertical-align: middle}
 #steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
 #steps .checkbox-inline input[type="checkbox"] {top: -2px}
-#steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
+#steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px; height: 32px;}
 .step-actions {width: 105px;}
 #steps .active td {transition: background-color .5s;}
 #steps .step-group .step-steps {resize: none; max-height: 30px;}
@@ -23,8 +23,10 @@
 #steps.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 #steps .step-type-toggle {padding: 5px 11px 5px 7px;}
 #steps .step textarea.autosize{resize:none;}
+#steps .step .form-control {border-radius: 0}
 
-.table-bordered .step-actions {width: 105px;}
+
+.table-bordered .step-actions {width: 100px;}
 .table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important;}
 .table-bordered > #steps > tr > td.step-id { padding-right: 8px;}
 .table-bordered > #steps > tr > td .btn {border-color: transparent; background-color: transparent}

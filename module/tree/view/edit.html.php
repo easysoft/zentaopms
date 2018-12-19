@@ -13,6 +13,7 @@
 <?php
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
+js::set('type', $type);
 ?>
 <?php include '../../common/view/chosen.html.php';?>
 <div class='modal-dialog w-500px'>
@@ -22,7 +23,7 @@ $jsRoot  = $webRoot . "js/";
   </div>
   <div class='modal-body'>
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <?php if($showProduct):?>
         <tr>
           <th class='w-80px'><?php echo $lang->tree->product;?></th>
@@ -30,26 +31,32 @@ $jsRoot  = $webRoot . "js/";
         </tr>
         <?php endif;?>
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
+        <?php if($type == 'doc'):?>
+        <tr>
+          <th class='w-80px'><?php echo $lang->doc->lib;?></th>
+          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen' onchange=loadDocModule(this.value)");?></td>
+        </tr>
+        <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='w-80px'><?php echo $lang->tree->parent;?></th>
+          <th class='w-80px'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
           <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='w-80px'><?php echo $lang->tree->name;?></th>
+          <th class='w-80px'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->cate : $lang->tree->name;?></th>
           <td><?php echo html::input('name', $module->name, "class='form-control' autocomplete='off'");?></td>
         </tr>
         <?php if($type == 'bug'):?>
         <tr>
           <th class='w-80px'><?php echo $lang->tree->owner;?></th>
           <td><?php echo html::select('owner', $users, $module->owner, "class='form-control chosen'", true);?></td>
-        </tr>  
+        </tr>
         <?php endif;?>
         <tr>
           <th><?php echo $lang->tree->short;?></th>
           <td><?php echo html::input('short', $module->short, "class='form-control' autocomplete='off'");?></td>
-        </tr>  
+        </tr>
         <tr>
           <td colspan='2' class='text-center'>
           <?php echo html::submitButton();?>
@@ -75,6 +82,7 @@ function getProductModules(productID)
 }
 $(function()
 {
+    if(type == 'doc') return;
     $('#root').change(function()
     {
         if($(this).val() == currentRoot) return true;
@@ -86,5 +94,22 @@ $(function()
         getProductModules($(this).val());
     })
 })
-$(function(){$('.chosen').chosen();})
+function loadDocModule(libID)
+{
+    var link = createLink('doc', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
+    $.post(link, function(data)
+    {
+        $('#parent').empty().append($(data).children()).trigger('chosen:updated');
+    });
+}
+$(function()
+{
+    $('#dataform .chosen').chosen();
+
+    // hide #parent chosen dropdown on root dropdown show
+    $('#root').on('chosen:showing_dropdown', function()
+    {
+        $('#parent').trigger('chosen:close');
+    });
+})
 </script>

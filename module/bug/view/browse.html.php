@@ -122,19 +122,19 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printIcon('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart muted');?>
-    <?php if(common::hasPriv('bug', 'export')):?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
         <i class="icon icon-export muted"></i> <span class="text"> <?php echo $lang->export;?></span> <span class="caret"></span></button>
       </button>
       <ul class='dropdown-menu' id='exportActionMenu'>
         <?php
-        $link = $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy");
-        echo "<li>" . html::a($link, $lang->bug->export, '', "class='export'") . "</li>";
+        $class = common::hasPriv('bug', 'export') ? "" : "class='disabled'";
+        $misc  = common::hasPriv('bug', 'export') ? "class='export'" : "class='disabled'";
+        $link  = common::hasPriv('bug', 'export') ? $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=$browseType") : '#';
+        echo "<li $class>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
-    <?php endif;?>
     <?php
     common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
     if(commonModel::isTutorialMode())
@@ -290,12 +290,13 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
             <?php $withSearch = count($branches) > 8;?>
             <?php if($withSearch):?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+            <?php $branchsPinYin = common::convert2Pinyin($branches);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -303,8 +304,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <?php
                 foreach($branches as $branchID => $branchName)
                 {
+                    $searchKey = $withSearch ? ('data-key="' . zget($branchsPinYin, $branchName, '') . '"') : '';
                     $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID");
-                    echo html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$branchID'");
+                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$branchID'");
                 }
                 ?>
               </div>
@@ -316,12 +318,13 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
             <?php if($withSearch):?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+              <?php $modulesPinYin = common::convert2Pinyin($modules);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -329,8 +332,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <?php
                 foreach($modules as $moduleId => $module)
                 {
+                    $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('bug', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\" data-key='$moduleID'");
+                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink','hiddenwin')\" data-key='$moduleID'");
                 }
                 ?>
               </div>
@@ -342,12 +346,13 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
             <?php $withSearch = count($memberPairs) > 10;?>
             <?php if($withSearch):?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+            <?php $membersPinYin = common::convert2Pinyin($memberPairs);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -358,7 +363,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 foreach ($memberPairs as $key => $value)
                 {
                     if(empty($key)) continue;
-                    echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', "data-key='$key'");
+                    $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+                    echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\",\"hiddenwin\")", $value, '', $searchKey);
                 }
                 ?>
               </div>

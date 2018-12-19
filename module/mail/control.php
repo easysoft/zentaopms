@@ -303,6 +303,7 @@ class mail extends control
     public function asyncSend()
     {
         /* Reload mail config. */
+        $this->loadModel('common')->loadConfigFromDB();
         $this->app->loadConfig('mail');
         $queueList = $this->mail->getQueue('wait', 'id_asc');
         $now       = helper::now();

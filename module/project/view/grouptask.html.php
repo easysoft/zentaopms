@@ -46,9 +46,10 @@
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
         <?php
-        $misc = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
-        $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
-        echo "<li>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+        $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
+        $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
+        $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
+        echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
@@ -56,13 +57,15 @@
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-import muted"></i> <span class="text"><?php echo $lang->import;?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu">
         <?php
-        $misc = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
-        $link = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        $class = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
+        $misc  = common::hasPriv('project', 'importTask') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('project', 'importTask') ? $this->createLink('project', 'importTask', "project=$project->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
-        $misc = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
-        $link = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        $class = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
+        $misc  = common::hasPriv('project', 'importBug') ? "class='import'" : "class=disabled";
+        $link  = common::hasPriv('project', 'importBug') ? $this->createLink('project', 'importBug', "project=$project->id") : '#';
+        echo "<li $class>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
@@ -218,7 +221,7 @@
         <td colspan='13'>
           <div class="table-row segments-list">
           <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
-          <?php printf($lang->project->countSummary, $groupSum, $groupWait, $groupDoing);?>
+          <?php printf($lang->project->countSummary, $groupSum, $groupDoing, $groupWait);?>
           <?php printf($lang->project->timeSummary, $groupEstimate, $groupConsumed, $groupLeft);?>
           </div>
         </td>

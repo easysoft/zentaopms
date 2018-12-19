@@ -18,6 +18,7 @@ $lang->downArrow = '↓';
 $lang->null      = 'null';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
+$lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->welcome        = "%s PMS";
@@ -29,6 +30,7 @@ $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement      = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
+$lang->designedByAIUX = "<a href='http://aiuxstudio.com/' class='link-aiux' target='_blank'>Designed by <strong>AIUX</strong></a>";
 
 $lang->reset        = 'Reset';
 $lang->cancel       = 'Cancel';
@@ -42,7 +44,7 @@ $lang->export       = 'Export';
 $lang->setFileName  = 'File Name';
 $lang->submitting   = 'Saving...';
 $lang->save         = 'Save';
-$lang->saveSuccess  = 'Saved.';
+$lang->saveSuccess  = 'Saved';
 $lang->confirm      = 'Confirm';
 $lang->preview      = 'View';
 $lang->goback       = 'Back';
@@ -54,16 +56,16 @@ $lang->public       = 'Public';
 $lang->trunk        = 'Trunk';
 $lang->sort         = 'Sort';
 $lang->required     = 'Required';
-$lang->noData       = 'No record';
+$lang->noData       = 'No data.';
 
-$lang->actions         = 'Actions';
+$lang->actions         = 'Action';
 $lang->restore         = 'Restore';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
 $lang->attatch         = 'File';
 $lang->reverse         = 'Reverse';
 $lang->switchDisplay   = 'Toggle';
-$lang->expand          = 'Expand All';
+$lang->expand          = 'Expand';
 $lang->collapse        = 'Collapse';
 $lang->saveSuccess     = 'Saved';
 $lang->fail            = 'Fail';
@@ -71,17 +73,17 @@ $lang->addFiles        = 'Add';
 $lang->files           = 'File ';
 $lang->pasteText       = 'Paste';
 $lang->uploadImages    = 'Upload';
-$lang->timeout         = 'Timeout. Pease check your network settings, or try it again!';
+$lang->timeout         = 'Timeout. Pease check your connection, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Please use phpmyadmin or myisamchk to fix it.';
-$lang->duplicate       = '%s has the same title as that of an existing file.';
-$lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to unrestrict it.</body></html>";
+$lang->duplicate       = '%s has the same title as that of a file existed.';
+$lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to grant it.</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = 'Set as Home';
 $lang->tutorial        = 'Tutorial';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manual';
-$lang->manualUrl       = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
+$lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html';
 $lang->customMenu      = 'Custom Menu';
 $lang->customField     = 'Custom Field';
 $lang->lineNumber      = 'Line No.';
@@ -93,8 +95,8 @@ $lang->nextShortcutKey = '[Shortcut:→]';
 $lang->backShortcutKey = '[Shortcut:Alt+↑]';
 
 $lang->select        = 'Select';
-$lang->selectAll     = 'Select All';
-$lang->selectReverse = 'Select Reverse';
+$lang->selectAll     = 'All';
+$lang->selectReverse = 'Reverse';
 $lang->loading       = 'Loading...';
 $lang->notFound      = 'Not found!';
 $lang->showAll       = '[[Show All]]';
@@ -113,7 +115,7 @@ $lang->typeAB       = 'Type';
 $lang->common = new stdclass();
 $lang->common->common = 'Common Module';
 
-/* 主导航菜单。*/
+/* Main menu. */
 $lang->menu = new stdclass();
 $lang->menu->my      = '<span>Dashboard</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
@@ -124,9 +126,9 @@ $lang->menu->report  = 'Report|report|index';
 $lang->menu->company = 'Company|company|index';
 $lang->menu->admin   = 'Admin|admin|index';
 
-$lang->dividerMenu = ',qa,';
+$lang->dividerMenu = ',qa,report,';
 
-/* 查询条中可以选择的对象列表。*/
+/* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
 $lang->searchObjects['story']       = 'Story';
 $lang->searchObjects['task']        = 'Task';
@@ -137,18 +139,18 @@ $lang->searchObjects['user']        = 'User';
 $lang->searchObjects['build']       = 'Build';
 $lang->searchObjects['release']     = 'Release';
 $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';
-$lang->searchObjects['testtask']    = 'Test Task';
+$lang->searchObjects['testtask']    = 'Test';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchObjects['testsuite']   = 'Case Library';
 $lang->searchObjects['testreport']  = 'Test Report';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
-/* 导入支持的编码格式。*/
+/* Code formats for import. */
 $lang->importEncodeList['gbk']   = 'GBK';
 $lang->importEncodeList['big5']  = 'BIG5';
 $lang->importEncodeList['utf-8'] = 'UTF-8';
 
-/* 导出文件的类型列表。*/
+/* File type list for export. */
 $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
@@ -156,10 +158,10 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'All';
 $lang->exportTypeList['selected'] = 'Selected';
 
-/* 语言 */
+/* Language. */
 $lang->lang = 'Language';
 
-/* 风格列表。*/
+/* Theme style. */
 $lang->theme                = 'Theme';
 $lang->themes['default']    = 'ZenTao Blue (default)';
 $lang->themes['green']      = 'Green';
@@ -169,14 +171,14 @@ $lang->themes['pink']       = 'Pink';
 $lang->themes['blackberry'] = 'Blackberry';
 $lang->themes['classic']    = 'Classic';
 
-/* 首页菜单设置。*/
+/* Index menu settings. */
 $lang->index = new stdclass();
 $lang->index->menu = new stdclass();
 
 $lang->index->menu->product = "{$lang->productCommon}|product|browse";
 $lang->index->menu->project = "{$lang->projectCommon}|project|browse";
 
-/* 我的地盘菜单设置。*/
+/* my dashboard menu settings. */
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
@@ -191,28 +193,32 @@ $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-$lang->my->menu->score          = 'Score|my|score';
+$lang->my->menu->score          = 'Point|my|score';
 
-$lang->todo = new stdclass();
+$lang->my->dividerMenu = ',task,myProject,profile,';
+
+$lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
 $lang->score       = new stdclass();
 $lang->score->menu = $lang->my->menu;
 
-/* 产品视图设置。*/
+/* Product menu settings. */
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
 $lang->product->menu->story    = array('link' => 'Story|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan     = array('link' => 'Plan|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release  = array('link' => 'Release|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
-$lang->product->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->menu->dynamic  = 'Dynamic|product|dynamic|productID=%s';
 $lang->product->menu->roadmap  = 'Roadmap|product|roadmap|productID=%s';
+$lang->product->menu->project  = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->product->menu->dynamic  = 'Dynamic|product|dynamic|productID=%s';
+$lang->product->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch   = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module   = 'Module|tree|browse|productID=%s&view=story';
 $lang->product->menu->view     = array('link' => 'Overview|product|view|productID=%s', 'alias' => 'edit');
+
+$lang->product->dividerMenu = ',plan,project,doc,';
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -224,14 +230,14 @@ $lang->story->menu       = $lang->product->menu;
 $lang->productplan->menu = $lang->product->menu;
 $lang->release->menu     = $lang->product->menu;
 
-/* 项目视图菜单设置。*/
+/* Project menu settings. */
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->task     = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree');
+$lang->project->menu->task     = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->project->menu->kanban   = array('link' => 'Kanban|project|kanban|projectID=%s');
 $lang->project->menu->burn     = array('link' => 'Burn|project|burn|projectID=%s');
-$lang->project->menu->list     = array('link' => 'More|project|grouptask|projectID=%s', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->list     = array('link' => 'More|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story    = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->project->menu->qa       = array('link' => 'Test|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
@@ -250,18 +256,15 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => 'Test Task|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->subMenu->action = new stdclass();
-$lang->project->subMenu->action->dynamic  = 'Dynamic|project|dynamic|projectID=%s';
-
-$lang->project->dividerMenu = ',story,doc,';
+$lang->project->dividerMenu = ',story,team,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => 'Test|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
-/* QA视图菜单设置。*/
+/* QA menu settings. */
 $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
@@ -327,12 +330,12 @@ $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Report|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => 'Case Library|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
-/* 文档视图菜单设置。*/
+/* Doc menu settings. */
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 //$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Doc Lib|doc|createLib', 'float' => 'right');
 
-/* 统计视图菜单设置。*/
+/* Report menu settings. */
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
@@ -342,9 +345,9 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report is generated from search results. Please search in the list page before you generate a report.';
+$lang->report->notice->help = 'Note: Report is generated on search results. Please search in the list before you generate a report.';
 
-/* 组织结构视图菜单设置。*/
+/* Company menu settings. */
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => 'user');
@@ -361,20 +364,40 @@ $lang->dept->menu  = $lang->company->menu;
 $lang->group->menu = $lang->company->menu;
 $lang->user->menu  = $lang->company->menu;
 
-/* 后台管理菜单设置。*/
+/* Admin menu settings. */
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-
-$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->message   = array('link' => 'Message|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->backup    = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
+$lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
+$lang->admin->menu->sso       = array('link' => 'Integrate|admin|sso');
+
+$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->cron      = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
-$lang->admin->menu->trashes   = array('link' => 'Recycle|action|trash', 'subModule' => 'action');
-$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->entry     = array('link' => 'Entry|entry|browse', 'subModule' => 'entry');
-$lang->admin->menu->sso       = 'Zdoo|admin|sso';
+$lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');
+
+$lang->admin->subMenu = new stdclass();
+$lang->admin->subMenu->message = new stdclass();
+$lang->admin->subMenu->message->mail    = array('link' => 'Mail|mail|index', 'subModule' => 'mail');
+$lang->admin->subMenu->message->webhook = array('link' => 'Webhook|webhook|browse', 'subModule' => 'webhook');
+$lang->admin->subMenu->message->setting = array('link' => 'Setting|message|setting', 'subModule' => 'message');
+
+$lang->admin->subMenu->sso = new stdclass();
+$lang->admin->subMenu->sso->ranzhi = 'Zdoo|admin|sso';
+
+$lang->admin->subMenu->dev = new stdclass();
+$lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
+$lang->admin->subMenu->dev->db     = array('link' => 'Database|dev|db');
+$lang->admin->subMenu->dev->editor = array('link' => 'Editor|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->entry  = array('link' => 'Entry|entry|browse', 'subModule' => 'entry');
+
+$lang->admin->subMenu->data = new stdclass();
+$lang->admin->subMenu->data->backup = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
+$lang->admin->subMenu->data->trash  = 'Recycle|action|trash';
+
+$lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->cron = array('link' => 'Timed task|cron|index', 'subModule' => 'cron');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -405,7 +428,7 @@ $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
 
-/* 菜单分组。*/
+/* Menu group. */
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
 $lang->menugroup->story       = 'product';
@@ -439,7 +462,7 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
-/* 错误提示信息。*/
+/* Error info. */
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
@@ -465,9 +488,9 @@ $lang->error->noData          = 'No Data';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
 
-/* 分页信息。*/
+/* Page info. */
 $lang->pager = new stdclass();
-$lang->pager->noRecord     = "No Records";
+$lang->pager->noRecord     = "No records.";
 $lang->pager->digest       = " <strong>%s</strong> in total. %s <strong>%s/%s</strong> &nbsp; ";
 $lang->pager->recPerPage   = " <strong>%s</strong> per page";
 $lang->pager->first        = "<i class='icon-step-backward' title='Home'></i>";
@@ -481,24 +504,37 @@ $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
-$lang->website        = "https://www.zentao.net";
+$lang->downloadClient = "Download Desktop Client";
+$lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->pasteTextInfo   = "Paste text here. Each line will be the title of each record. ";
+<<<<<<< HEAD
 $lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
 $lang->importConfirm   = "Import";
+=======
+$lang->noticeImport    = "Imported data contains something that has already existed in system. Please confirm your actions.";
+$lang->importConfirm   = "Confirm";
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->importAndCover  = "Override";
-$lang->importAndInsert = "New Insertion";
+$lang->importAndInsert = "Insert";
 
 
 $lang->noResultsMatch     = "No results match!";
 $lang->searchMore         = "More results：";
+<<<<<<< HEAD
 $lang->chooseUsersToMail  = "Choose users that will be notified.";
 $lang->browserNotice      = 'Your current browser might not display· the best effect. Please use Chrome, Firefox, IE9+, Opera or Safari.';
+=======
+$lang->chooseUsersToMail  = "Choose users to be notified.";
+$lang->browserNotice      = 'Your current browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->noticePasteImg     = "Paste images here";
+$lang->pasteImgFail       = "Paste image fail, try again later.";
+$lang->pasteImgUploading  = "Please wait. Uploading...";
 
-/* 时间格式设置。*/
+/* Time formats settings. */
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
 if(!defined('DT_DATETIME2')) define('DT_DATETIME2',  'y-m-d H:i');
 if(!defined('DT_MONTHTIME1'))define('DT_MONTHTIME1', 'n/d H:i');
@@ -510,7 +546,7 @@ if(!defined('DT_DATE4'))     define('DT_DATE4',     'n/j');
 if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
 
-/* datepicker 时间*/
+/* Datepicker. */
 $lang->datepicker = new stdclass();
 
 $lang->datepicker->dpText = new stdclass();
@@ -532,7 +568,7 @@ $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesda
 $lang->datepicker->abbrDayNames = array('Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat');
 $lang->datepicker->monthNames   = array('Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
 
-/* Common action icons 通用动作图标 */
+/* Common action icons. */
 $lang->icons['todo']      = 'check';
 $lang->icons['product']   = 'cube';
 $lang->icons['bug']       = 'bug';
@@ -702,10 +738,17 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Add bug, testcase and testtask module. */
     $lang->menu->bug       = 'Bug|bug|index';
+<<<<<<< HEAD
     $lang->menu->testcase  = 'Case|testcase|index';
     $lang->menu->testsuite = 'Suite|testsuite|index';
     $lang->menu->testtask  = 'Test|testtask|index';
     $lang->menu->caselib   = 'Case Library|testsuite|library';
+=======
+    $lang->menu->testcase  = 'Test Case|testcase|index';
+    $lang->menu->testsuite = 'Test Suite|testsuite|index';
+    $lang->menu->testtask  = 'Test|testtask|index';
+    $lang->menu->caselib   = 'Case Lib|testsuite|library';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 
     $lang->menuOrder[6]  = 'bug';
     $lang->menuOrder[7]  = 'testcase';

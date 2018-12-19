@@ -11,8 +11,8 @@
 #productsBox .input-group.has-branch > select[name*="branch"] + .chosen-container.chosen-container-active  .chosen-single {border-left-width: 1px; padding-left: 8px;}
 
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
-.table-children.table-child-top {border-top: 2px solid #cbd0db;}
-.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
 .table td.has-child > a {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .table td.has-child > .task-toggle {color: #838a9d; position: relative; top: 1px;}
 .table td.has-child > .task-toggle:hover {color: #006af1; cursor: pointer;}

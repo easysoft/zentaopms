@@ -124,13 +124,15 @@
       </button>
       <ul class='dropdown-menu' id='exportActionMenu'>
       <?php
-      $misc = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
-      $link = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy") : '#';
-      echo "<li>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
+      $class = common::hasPriv('testcase', 'export') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=$orderBy&taskID=0&browseType=$browseType") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
 
-      $misc = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
-      $link = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
-      echo "<li>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
+      $class = common::hasPriv('testcase', 'exportTemplet') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'exportTemplet') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'exportTemplet') ?  $this->createLink('testcase', 'exportTemplet', "productID=$productID") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->exportTemplet, '', $misc) . "</li>";
       ?>
       </ul>
     </div>
@@ -138,13 +140,15 @@
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu' id='importActionMenu'>
       <?php
-      $misc = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
-      $link = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
-      echo "<li>" . html::a($link, $lang->testcase->importFile, '', $misc) . "</li>";
+      $class = common::hasPriv('testcase', 'import') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->importFile, '', $misc) . "</li>";
 
-      $misc = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
-      $link = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch") : '#';
-      echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', $misc) . "</li>";
+      $class = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
+      $link  = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->importFromLib, '', $misc) . "</li>";
       ?>
       </ul>
     </div>

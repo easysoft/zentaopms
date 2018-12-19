@@ -31,12 +31,24 @@ function closeWindow()
       <div class='main-header'>
         <h2><?php echo $lang->file->inputFileName;?></h2>
       </div>
+      <?php
+      if(strrpos($file->title, '.') !== false)
+      {
+          /* Fix the file name exe.exe */
+          $title     = explode('.', $file->title);
+          $extension = end($title);
+          if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
+          array_pop($title);
+          $file->title = join('.', $title);
+      }
+      ?>
       <form class='main-form' method='post' target='hiddenwin' onsubmit='setFileName();'>
         <table class='table table-form'>
           <tr>
             <td>
               <div class='input-group'>
-                <?php echo html::input('fileName', rtrim($file->title, '.' . $file->extension), "class='form-control' size='40' autocomplete='off'");?>
+                <?php echo html::input('fileName', $file->title, "class='form-control' size='40' autocomplete='off'");?>
+                <input type="hidden" name="extension" value="<?php echo $file->extension;?>"/>
                 <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
               </div>
             </td>

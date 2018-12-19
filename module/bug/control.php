@@ -82,9 +82,9 @@ class bug extends control
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['bugModule'] = 0;
-            setcookie('bugModule', 0, $this->config->cookieLife, $this->config->webRoot);
+            setcookie('bugModule', 0, 0, $this->config->webRoot);
         }
-        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, $this->config->cookieLife, $this->config->webRoot);
+        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot);
         if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
 
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
@@ -96,7 +96,7 @@ class bug extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
-        setcookie('qaBugOrder', $orderBy, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('qaBugOrder', $orderBy, 0, $this->config->webRoot);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -141,7 +141,7 @@ class bug extends control
 
         /* Set view. */
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->bug->common;
-        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]    = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID],'','title=' . $this->products[$productID]);
         $this->view->position[]    = $this->lang->bug->common;
         $this->view->productID     = $productID;
         $this->view->product       = $this->product->getById($productID);
@@ -294,10 +294,11 @@ class bug extends control
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
             }
 
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal());
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
             $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&type=byModule&param={$this->post->module}");
-            $response['locate'] = isset($_SESSION['bugList']) ? $this->session->bugList : $location;
+            $response['locate'] = $location;
             $this->send($response);
         }
 
@@ -600,6 +601,7 @@ class bug extends control
                 $actionID = $this->action->create('bug', $bugID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
             if($bug->toTask != 0)
@@ -1010,7 +1012,7 @@ class bug extends control
 
         $bug        = $this->bug->getById($bugID);
         $productID  = $bug->product;
-        $users      = $this->user->getPairs();
+        $users      = $this->user->getPairs('noclosed');
         $assignedTo = $bug->openedBy;
         if(!isset($users[$assignedTo])) $assignedTo = $this->bug->getModuleOwner($bug->module, $productID);
         unset($this->lang->bug->resolutionList['tostory']);
@@ -1421,10 +1423,11 @@ class bug extends control
      *
      * @param  string $productID
      * @param  string $orderBy
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy)
+    public function export($productID, $orderBy, $browseType = '')
     {
         if($_POST)
         {
@@ -1542,7 +1545,8 @@ class bug extends control
                 $bug->closedDate     = substr($bug->closedDate,     0, 10);
                 $bug->resolvedDate   = substr($bug->resolvedDate,   0, 10);
                 $bug->lastEditedDate = substr($bug->lastEditedDate, 0, 10);
-
+                $bug->title          = htmlspecialchars_decode($bug->title,ENT_QUOTES);   
+     
                 if($bug->linkBug)
                 {
                     $tmpLinkBugs = array();
@@ -1602,6 +1606,18 @@ class bug extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $fileName = $this->lang->bug->common;
+        $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+        if(isset($this->lang->bug->featureBar['browse'][$browseType]))
+        {
+            $browseType = $this->lang->bug->featureBar['browse'][$browseType];
+        }
+        else
+        {
+            $browseType = $this->lang->bug->moreSelects[$browseType];
+        }
+
+        $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
         $this->view->allExportFields = $this->config->bug->list->exportFields;
         $this->view->customExport    = true;
         $this->display();

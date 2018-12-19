@@ -52,14 +52,14 @@
     <tbody>
       <?php foreach($releases as $release):?>
       <tr>
-        <td><?php echo sprintf('%03d', $release->id);?></td>
+        <td><?php echo html::a(helper::createLink('release', 'view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
         <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
         <td class='text-center'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
         <td class='text-center'><?php echo $release->date;?></td>
-        <td class='c-status' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
+        <td class='c-status text-center' title='<?php echo zget($lang->release->statusList, $release->status);?>'>
           <span class="status-release status-<?php echo $release->status?>">
             <?php echo zget($lang->release->statusList, $release->status);?>
           </span>

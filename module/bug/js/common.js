@@ -426,12 +426,14 @@ function setStories(moduleID, productID)
 function loadProductBranches(productID)
 {
     $('#branch').remove();
+    $('#branch_chosen').remove();
     $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
     {
         if(data)
         {
             $('#product').closest('.input-group').append(data);
             $('#branch').css('width', page == 'create' ? '120px' : '65px');
+            $('#branch').chosen();
         }
     })
 }

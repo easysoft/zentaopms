@@ -37,13 +37,26 @@ class backupModel extends model
         $return->result = true;
         $return->error  = '';
 
-        $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($backupFile);
-        $zip->create($this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_REMOVE_PATH, $this->app->getAppRoot() . 'www/data/');
-        if($zip->errorCode() != 0)
+        $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
+        if(!$nozip)
         {
-            $return->result = false;
-            $return->error  = $zip->errorInfo();
+            $oldDir = getcwd();
+            chdir($this->app->getTmpRoot());
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($backupFile);
+            $zip->create($this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_REMOVE_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON);
+            if($zip->errorCode() != 0)
+            {
+                $return->result = false;
+                $return->error  = $zip->errorInfo();
+            }
+            chdir($oldDir);
+        }
+        else
+        {
+            if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->copyDir($this->app->getAppRoot() . 'www/data/', $backupFile);
         }
 
         return $return;
@@ -75,13 +88,40 @@ class backupModel extends model
 
         $fileList = array_merge($fileList, $wwwFileList);
 
-        $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($backupFile);
-        $zip->create($fileList, PCLZIP_OPT_REMOVE_PATH, $appRoot);
-        if($zip->errorCode() != 0)
+        $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
+        if(!$nozip)
         {
-            $return->result = false;
-            $return->error  = $zip->errorInfo();
+            $oldDir = getcwd();
+            chdir($this->app->getTmpRoot());
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($backupFile);
+            $zip->create($fileList, PCLZIP_OPT_REMOVE_PATH, $appRoot, PCLZIP_OPT_TEMP_FILE_ON);
+            if($zip->errorCode() != 0)
+            {
+                $return->result = false;
+                $return->error  = $zip->errorInfo();
+            }
+            chdir($oldDir);
+        }
+        else
+        {
+            if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
+            $zfile = $this->app->loadClass('zfile');
+            foreach($fileList as $codeFile)
+            {
+                $file = trim(str_replace($appRoot, '', $codeFile), DS);
+                if(is_dir($codeFile))
+                {
+                    if(!is_dir($backupFile . DS . $flle)) mkdir($backupFile . DS . $flle, 0777, true);
+                    $zfile->copyDir($codeFile, $backupFile . DS . $file);
+                }
+                else
+                {
+                    $dirName = dirname($file);
+                    if(!is_dir($backupFile . DS . $dirName)) mkdir($backupFile . DS . $dirName, 0777, true);
+                    $zfile->copyFile($codeFile, $backupFile . DS . $file);
+                }
+            }
         }
 
         return $return;
@@ -113,12 +153,24 @@ class backupModel extends model
         $return->result = true;
         $return->error  = '';
 
-        $this->app->loadClass('pclzip', true);
-        $zip = new pclzip($backupFile);
-        if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/') == 0)
+        $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
+        if(!$nozip)
         {
-            $return->result = false;
-            $return->error  = $zip->errorInfo();
+            $oldDir = getcwd();
+            chdir($this->app->getTmpRoot());
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($backupFile);
+            if($zip->extract(PCLZIP_OPT_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON) == 0)
+            {
+                $return->result = false;
+                $return->error  = $zip->errorInfo();
+            }
+            chdir($oldDir);
+        }
+        else
+        {
+            $zfile = $this->app->loadClass('zfile');
+            $zfile->copyDir($backupFile, $this->app->getAppRoot() . 'www/data/');
         }
 
         return $return;
@@ -134,7 +186,7 @@ class backupModel extends model
     public function addFileHeader($fileName)
     {
         $firstline = false;
-        $die       = "<?php die();?>\n";
+        $die       = "<?php die();?" . ">\n";
         $fileSize  = filesize($fileName);
 
         $fh    = fopen($fileName, 'c+');
@@ -177,7 +229,7 @@ class backupModel extends model
     public function removeFileHeader($fileName)
     {
         $firstline = false;
-        $die       = "<?php die();?>\n";
+        $die       = "<?php die();?" . ">\n";
         $fileSize  = filesize($fileName);
 
         $fh = fopen($fileName, 'c+');
@@ -207,5 +259,56 @@ class backupModel extends model
         ftruncate($fh, ($fileSize - $delta));
         fclose($fh);
         return true;
+    }
+
+    /**
+     * Get dir size.
+     * 
+     * @param  string    $backupFile 
+     * @access public
+     * @return int
+     */
+    public function getBackupSize($backupFile)
+    {
+        $zfile = $this->app->loadClass('zfile');
+        if(!is_dir($backupFile)) return $zfile->getFileSize($backupFile);
+        return $zfile->getDirSize($backupFile);
+    }
+
+    /**
+     * Get backup path.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getBackupPath()
+    {
+        return empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
+    }
+
+    /**
+     * Get backup file.
+     * 
+     * @param  string    $name 
+     * @param  string    $type 
+     * @access public
+     * @return string
+     */
+    public function getBackupFile($name, $type)
+    {
+        $backupPath = $this->getBackupPath();
+        if($type == 'sql')
+        {
+            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}.php")) return $backupPath . $name . ".{$type}.php";
+        }
+        else
+        {
+            if(file_exists($backupPath . $name . ".{$type}")) return $backupPath . $name . ".{$type}";
+            if(file_exists($backupPath . $name . ".{$type}.zip")) return $backupPath . $name . ".{$type}.zip";
+            if(file_exists($backupPath . $name . ".{$type}.zip.php")) return $backupPath . $name . ".{$type}.zip.php";
+        }
+
+        return false;
     }
 }

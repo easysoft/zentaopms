@@ -113,6 +113,7 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal());
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -120,7 +121,8 @@ class story extends control
                 $this->send($response);
             }
 
-            $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID");
+            $moduleID = $this->post->module ? $this->post->module : 0;
+            $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID&branch=&browseType=byModule&moduleID=$moduleID");
             if($projectID == 0) $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
             $this->send($response);
         }
@@ -423,6 +425,7 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 die(array('status' => 'success', 'data' => $storyID));
@@ -606,6 +609,7 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -750,6 +754,7 @@ class story extends control
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
             }
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
@@ -1369,10 +1374,11 @@ class story extends control
      * @param  int    $productID
      * @param  string $orderBy
      * @param  int    $projectID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function export($productID, $orderBy, $projectID = 0)
+    public function export($productID, $orderBy, $projectID = 0, $browseType = '')
     {
         /* format the fields of every story in order to export data. */
         if($_POST)
@@ -1472,8 +1478,8 @@ class story extends control
                     $story->verify = str_replace('&nbsp;', ' ', $story->verify);
                 }
                 /* fill some field with useful value. */
-                if(isset($products[$story->product]))      $story->product = $products[$story->product] . "(#$story->product)";
-                if(isset($relatedModules[$story->module])) $story->module  = $relatedModules[$story->module] . "(#$story->module)";
+                if(isset($products[$story->product]))      $story->product = $this->post->fileType == 'word' ? $products[$story->product] : $products[$story->product] . "(#$story->product)";
+                if(isset($relatedModules[$story->module])) $story->module  = $this->post->fileType == 'word' ? $relatedModules[$story->module] : $relatedModules[$story->module] . "(#$story->module)";
                 if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
                 if(isset($story->plan))
                 {
@@ -1481,7 +1487,7 @@ class story extends control
                     foreach(explode(',', $story->plan) as $planID)
                     {
                         if(empty($planID)) continue;
-                        if(isset($relatedPlans[$planID])) $plans .= $relatedPlans[$planID] . "(#$planID)";
+                        if(isset($relatedPlans[$planID])) $plans .= $this->post->fileType == 'word' ? $relatedPlans[$planID] : $relatedPlans[$planID] . "(#$planID)";
                     }
                     $story->plan = $plans;
                 }
@@ -1581,6 +1587,28 @@ class story extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
+        $fileName = $this->lang->story->common;
+        if($projectID)
+        {
+            $projectName = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch('name');
+            $fileName    = $projectName . $this->lang->dash . $fileName;
+        }
+        else
+        {
+            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            if(isset($this->lang->product->featureBar['browse'][$browseType]))
+            {
+                $browseType = $this->lang->product->featureBar['browse'][$browseType];
+            }
+            else
+            {
+                $browseType = isset($this->lang->product->moreSelects[$browseType]) ? $this->lang->product->moreSelects[$browseType] : '';
+            }
+
+            $fileName = $productName . $this->lang->dash . $browseType . $fileName;
+        }
+
+        $this->view->fileName        = $fileName;
         $this->view->allExportFields = $this->config->story->list->exportFields;
         $this->view->customExport    = true;
         $this->display();

@@ -1,0 +1,4 @@
+.main-header{display: none}
+.form-actions input[type=button]:last-child{display:none;}
+#mainContent .main-row .col-8{width: 55%}
+#mainContent .main-row .col-4{width: 45%}

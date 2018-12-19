@@ -603,7 +603,7 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid')->get();
+        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->remove('uid,comment')->get();
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
@@ -1338,15 +1338,15 @@ class testtaskModel extends model
         /* Set email title. */
         if($actionType == 'opened')
         {
-            return sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtask->id, $testtask->name);
+            return sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtask->id, $testtask->title);
         }
         elseif($actionType == 'closed')
         {
-            return sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtask->id, $testtask->name);
+            return sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtask->id, $testtask->title);
         }
         else
         {
-            return sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtask->id, $testtask->name);
+            return sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtask->id, $testtask->title);
         }
     }
 

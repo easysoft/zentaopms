@@ -1,5 +1,7 @@
 function switchShow(result)
 {
+    $('#priBox').hide();
+    $('#estimateBox').hide();
     if(result == 'reject')
     {
         $('#rejectedReasonBox').show();
@@ -18,6 +20,11 @@ function switchShow(result)
     }
     else
     {
+        if(result == 'pass')
+        {
+            $('#priBox').show();
+            $('#estimateBox').show();
+        }
         $('#preVersionBox').hide();
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();

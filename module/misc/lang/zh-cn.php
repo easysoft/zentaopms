@@ -15,6 +15,30 @@ $lang->misc->ping   = '防超时';
 $lang->misc->api    = 'https://api.zentao.net';
 $lang->misc->enApi  = 'http://api.zentao.pm';
 
+$lang->misc->client = new stdclass();
+$lang->misc->client->version     = '客户端版本';
+$lang->misc->client->os          = '操作系统';
+$lang->misc->client->download    = '下载';
+$lang->misc->client->downloading = '正在获取安装包:';
+$lang->misc->client->downloaded  = '成功获取安装包';
+$lang->misc->client->setting     = '正在设置配置信息';
+$lang->misc->client->setted      = '成功设置配置信息';
+
+$lang->misc->client->osList['windows64'] = 'Windows 64位';
+$lang->misc->client->osList['windows32'] = 'Windows 32位';
+$lang->misc->client->osList['linux64']   = 'Linux 64位';
+$lang->misc->client->osList['linux32']   = 'Linux 32位';
+$lang->misc->client->osList['mac']       = 'Mac版';
+
+$lang->misc->client->versionList['2.1.1'] = '2.1.1';
+
+$lang->misc->client->errorInfo = new stdclass();
+$lang->misc->client->errorInfo->downloadError  = '获取安装包失败';
+$lang->misc->client->errorInfo->configError    = '配置用户信息失败';
+$lang->misc->client->errorInfo->manualOpt      = '请从 %s 手动获取安装包。';
+$lang->misc->client->errorInfo->dirNotExist    = '客户端下载存储路径 <span class="code text-red">%s</span> 不存在，请创建该目录。';
+$lang->misc->client->errorInfo->dirNotWritable = '客户端下载存储路径 <span class="code text-red">%s</span> 不可写 <br />linux下面请执行命令：<span class="code text-red">sudo chmod 777 %s</span>来修正';
+
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
 $lang->misc->zentao->labels['about']   = '关于禅道';
@@ -76,6 +100,8 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['10.6.stable'] = '2018-11-20';
+$lang->misc->releaseDate['10.5.stable'] = '2018-10-25';
 $lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
 $lang->misc->releaseDate['10.3.stable'] = '2018-08-10';
 $lang->misc->releaseDate['10.2.stable'] = '2018-08-02';
@@ -93,6 +119,12 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'调整备份机制', 'desc' => '<p>增加备份设置，备份更加灵活</p><p>显示备份进度</p><p>可以更改备份目录</p>');
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'优化和调整菜单', 'desc' => '<p>调整后台菜单</p><p>调整我的地盘和项目的二级菜单</p>');
+
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'调整文档显示', 'desc' => '<p>调整文档库左侧的布局方式</p><p>文档库左侧导航底部增加筛选条件</p>');
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'调整子任务逻辑，优化父子任务显示。', 'desc' => '');
 
 $lang->misc->feature->all['10.4.stable'][] = array('title'=>'优化调整新界面', 'desc' => '<p>详情页面还原我们之前的排版布局</p><p>重构添加用户页面的表单</p><p>用例执行时，如果用户手工选择了通过，写结果的时候不要更新用例状态</p>');
 $lang->misc->feature->all['10.4.stable'][] = array('title'=>'用户机器休眠登录失效后，重新刷新session', 'desc' => '');

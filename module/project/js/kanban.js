@@ -1,15 +1,33 @@
 $(function()
 {
+    var isFirefox = $.zui.browser.firefox;
     var adjustBoardsHeight = function()
     {
-        $('.c-boards').each(function()
+        var $cBoards = $('.c-boards');
+        var viewHeight = $(window).height() - $('#header').height() - $('#footer').height() - 111;
+        if ($cBoards.length === 1)
         {
-            var height = $(window).height() - $('#header').height() - $('#footer').height() - 40 - 105;
-            var $boardsWrapper = $(this).find('.boards-wrapper');
-            $boardsWrapper.height(height);
+            var $boardsWrapper = $cBoards.find('.boards-wrapper');
+            $boardsWrapper.css('min-height', viewHeight);
             if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
             {
-                $boardsWrapper.find('.boards').css('height', $(this).height() - 1);
+                $boardsWrapper.find('.boards').css(isFirefox ? 'height' : 'min-height', $boardsWrapper.height() - 1);
+            }
+            return
+        }
+
+        $cBoards.each(function()
+        {
+            var $theBoards = $(this);
+
+            var $boardsWrapper = $theBoards.find('.boards-wrapper');
+            var minHeight = Math.min($theBoards.prev().find('.board-story').outerHeight() + 4, viewHeight);
+            $boardsWrapper.css({maxHeight: viewHeight, minHeight: minHeight});
+            if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
+            {
+                var $boards = $boardsWrapper.find('.boards');
+                $boards.css({maxHeight: $theBoards.height(), minHeight: minHeight});
+                if ($boards.outerHeight() < minHeight) $boards.css('height', minHeight);
             }
         });
     };
@@ -71,39 +89,45 @@ $(function()
     var scrollbarWidth = getScrollbarWidth();
     var fixBoardWidth = function()
     {
-        var $table = $kanban.find('.table');
+        var $table = $kanban.children('.table:first');
         var kanbanWidth = $table.width();
         var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
         var boardCount = $cBoards.length;
         var $cSide = $table.find('thead>tr>th.c-board.c-side');
-        var totalWidth = kanbanWidth - scrollbarWidth;
+        var totalWidth = kanbanWidth - scrollbarWidth - 1;
         if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
-        var cBoardWidth = Math.floor(totalWidth/boardCount) - 16;
+        var cBoardWidth = Math.floor(totalWidth/boardCount);
         $cBoards.not(':last').width(cBoardWidth);
-        $cBoards.first().width(cBoardWidth + 5);
-        $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
+        if ($cSide.length) $cBoards.first().width(cBoardWidth + (isFirefox ? 0 : 5));
+        $kanban.find('.boards > .board').width(cBoardWidth - (isFirefox ? 21 : 22));
     };
     fixBoardWidth();
-    $(window).on('resize', fixBoardWidth);
 
-    var refresh = function()
+    var updateUI = function()
+    {
+        fixBoardWidth();
+        adjustBoardsHeight();
+        $kanban.data('zui.table').updateFixUI();
+    };
+
+    $(window).on('resize', updateUI);
+
+    var refresh = function(force)
     {
         var selfClose = $.cookie('selfClose');
         $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1) $kanban.load(location.href + ' #kanban', function()
+        if(selfClose == 1 || force)
         {
-            fixBoardWidth();
-            adjustBoardsHeight();
-        });
+            $kanban.load(location.href + ' #kanban>*', updateUI);
+        }
     };
+    window.refreshKanban = refresh;
 
     var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
-    var lastOperation;
     var dropTo = function(id, from, to, type)
     {
         if(statusMap[type][from] && statusMap[type][from][to])
         {
-            lastOperation = {id: id, from: from, to: to};
             kanbanModalTrigger.show(
             {
                 url: $.createLink(type, statusMap[type][from][to], 'id=' + id) + onlybody,
@@ -175,7 +199,15 @@ $(function()
 
     $.extend({'closeModal':function(callback, location)
     {
-        kanbanModalTrigger.close();
+        var ref = $('#triggerModal.modal').attr('ref');
+        if(ref.indexOf('export') > 0 && ref.indexOf('kanban') > 0)
+        {
+            $('#triggerModal').modal('hide');
+        }
+        else
+        {
+            kanbanModalTrigger.close();
+        }
         if(callback && $.isFunction(callback)) callback();
     }});
 });

@@ -14,8 +14,8 @@
     <?php echo html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog muted'></i> " . $lang->project->kanbanSetting, '', "class='iframe btn btn-link'");?>
     <?php if(common::hasPriv('project', 'printKanban')) echo html::a($this->createLink('project', 'printKanban', "projectID=$projectID"), "<i class='icon-printer muted'></i> " . $lang->project->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->project->printKanban}' data-width='500'");?>
     <?php
-    $link = $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType");
-    if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-import muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe' data-width='700'");
+    $link = $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=kanban");
+    if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-import muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe export' data-width='700'");
     ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'>
@@ -26,11 +26,11 @@
         <?php
         $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
         $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
@@ -53,7 +53,7 @@ $taskCols = array('wait', 'doing', 'pause', 'done');
 if($allCols) $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
 $account = $this->app->user->account;
 ?>
-<div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
+<div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
   <?php
   $hasTask = false;
   foreach($kanbanGroup as $group)
@@ -76,7 +76,7 @@ $account = $this->app->user->account;
     </p>
   </div>
   <?php else:?>
-  <table class="table table-grouped text-center">
+  <table class="table no-margin table-grouped text-center">
     <thead>
       <tr>
         <?php $hasGroupCol = (($type == 'story' and count($stories) > 0) or $type != 'story');?>
@@ -115,7 +115,7 @@ $account = $this->app->user->account;
           <div class='board-story' data-id='<?php echo $story->id;?>'>
             <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbaniframe group-title" title="' . $story->title . '"');?>
             <div class="small group-info">
-              <span class='story-id board-id' title='<?php echo $lang->story->id?>'><?php echo $story->id?></span>
+              <span class='story-id board-id' title='<?php echo $lang->story->id?>'>#<?php echo $story->id?></span>
               <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
               <span class='story-stage' title='<?php echo $lang->story->stage?>'><span class="label label-dot"></span> <?php echo $lang->story->stageList[$story->stage];?></span>
               <div class='pull-right text-muted story-estimate' title='<?php echo $lang->story->estimate?>'><?php echo $story->estimate . 'h ';?></div>

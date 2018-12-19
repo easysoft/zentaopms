@@ -63,7 +63,7 @@
         <th class='w-60px'> <?php echo $lang->productplan->hour;?></th>
         <th class='w-60px'> <?php echo $lang->productplan->project;?></th>
         <th>                <?php echo $lang->productplan->desc;?></th>
-        <th class='c-actions-5'><?php echo $lang->actions;?></th>
+        <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
       <tbody>
@@ -73,7 +73,7 @@
       <tr>
         <td class='cell-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit')):?>
-          <?php echo html::checkbox('planIDList', array($plan->id => sprintf('%03d', $plan->id)));?>
+          <?php echo html::checkbox('planIDList', array($plan->id => '')) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
           <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>
@@ -88,7 +88,7 @@
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
         <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
-        <td title='<?php echo strip_tags($plan->desc)?>' class='text-left content'><?php echo nl2br(strip_tags($plan->desc));?></td>
+        <td title='<?php echo strip_tags(str_replace("</p>", "\n", str_replace("\n", '', $plan->desc)));?>' class='text-left content'><?php echo nl2br(strip_tags(str_replace("</p>", "\n", str_replace("\n", '', $plan->desc))));?></td>
         <td class='c-actions'>
           <?php
           if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-plus"></i>', '', "class='btn' title='{$lang->project->create}'");

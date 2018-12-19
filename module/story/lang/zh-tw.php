@@ -157,9 +157,9 @@ $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = '其他';
 
 $lang->story->priList[]  = '';
-$lang->story->priList[3] = '3';
 $lang->story->priList[1] = '1';
 $lang->story->priList[2] = '2';
+$lang->story->priList[3] = '3';
 $lang->story->priList[4] = '4';
 
 $lang->story->legendBasicInfo      = '基本信息';
@@ -181,6 +181,7 @@ $lang->story->lblChange            = '變更需求';
 $lang->story->lblReview            = '評審需求';
 $lang->story->lblActivate          = '激活需求';
 $lang->story->lblClose             = '關閉需求';
+$lang->story->lblTBC               = '任務Bug用例';
 
 $lang->story->checkAffection       = '影響範圍';
 $lang->story->affectedProjects     = '影響的' . $lang->projectCommon;

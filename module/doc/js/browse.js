@@ -16,11 +16,9 @@ function browseBySearch()
 $(function()
 {
     if(browseType == 'bysearch') return;
-    $('ul.dropdown-menu').css('left', '67px');
     if(browseType == 'byediteddate' || browseType == 'openedbyme' || browseType == 'collectedbyme') 
     {
-        $('ul.dropdown-menu').css('left', '0px');
-        $('#bysearchTab').remove();
+        $('#pageActions ul.dropdown-menu').css('left', '0px');
     }
     $('#' + browseType + 'Tab').addClass('active');
 });

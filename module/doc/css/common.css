@@ -19,8 +19,9 @@
   .split-row > .main-col {width: 100%!important;}
 }
 
+.side-col .tab-content {margin-right: -5px}
 .side-col .cell .nav a.setting {padding:8px;}
-.side-footer{padding:8px; background:#fff;}
+.side-footer {padding:8px; margin: 0 5px; border-top: 1px solid #ddd;}
 .col-sm-size .col-sm-5,
 .col-sm-size .col-sm-7 {width: 100%;}
 .col-sm-size .table .c-user,
@@ -70,8 +71,9 @@
 
 td.c-name a{color: #0c60e1}
 td.c-name a:visited{color: #082999}
-.main-col .panel-heading a:visited{color: #082999}
 
 .panel-title.font-normal .btn-group{margin-left: 20px;}
 
 .querybox-opened{color: #0c64eb; background: rgba(0,0,0,.075);}
+
+#queryBox #groupAndOr {min-width: 65px;}

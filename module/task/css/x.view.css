@@ -1,0 +1,7 @@
+#mainMenu .pull-left>a{display: none}
+#mainMenu .pull-left .divider{display: none}
+#mainMenu .pull-right{display: none}
+#mainContent .col-4{display: none}
+.main-actions{display:none;}
+.col-8>.cell{min-height: 300px}
+.modal-dialog{width: 90%}

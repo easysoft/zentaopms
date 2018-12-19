@@ -35,9 +35,15 @@ $lang->story->bugCountAB  = 'B';
 $lang->story->caseCountAB = 'C';
 $lang->story->linkStory   = 'Link';
 $lang->story->unlinkStory = 'UnLinked';
+<<<<<<< HEAD
 $lang->story->export      = "Export Story";
 $lang->story->zeroCase    = "Story w/o cases";
 $lang->story->zeroTask    = "Display story w/o tasks";
+=======
+$lang->story->export      = "Export Data";
+$lang->story->zeroCase    = "Story w/o case";
+$lang->story->zeroTask    = "Story w/o task";
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->story->reportChart = "Report";
 $lang->story->copyTitle   = "Copy Title";
 $lang->story->batchChangePlan   = "Batch Change Plans";
@@ -64,11 +70,15 @@ $lang->story->estimate       = 'Est.(h)';
 $lang->story->estimateAB     = 'Est.(h)';
 $lang->story->hour           = 'Hour';
 $lang->story->status         = 'Status';
-$lang->story->stage          = 'Phase';
-$lang->story->stageAB        = 'Phase';
+$lang->story->stage          = 'Stage';
+$lang->story->stageAB        = 'Stage';
 $lang->story->mailto         = 'Mail to';
 $lang->story->openedBy       = 'Creator';
+<<<<<<< HEAD
 $lang->story->openedDate     = 'Create';
+=======
+$lang->story->openedDate     = 'Created';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->story->assignedTo     = 'Assignee';
 $lang->story->assignedDate   = 'Assigned';
 $lang->story->lastEditedBy   = 'Last Edited';
@@ -91,9 +101,9 @@ $lang->story->preVersion     = 'Previous Version';
 $lang->story->keywords       = 'Tags';
 $lang->story->newStory       = 'Continue adding';
 $lang->story->colorTag       = 'Color Tag';
-$lang->story->files          = 'Files';
+$lang->story->files          = 'File';
 $lang->story->copy           = "Copy Story";
-$lang->story->total          = "Total Stories";
+$lang->story->total          = "Total";
 $lang->story->allStories     = 'All';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
@@ -157,16 +167,16 @@ $lang->story->sourceList['bug']        = 'Bug';
 $lang->story->sourceList['other']      = 'Other';
 
 $lang->story->priList[]  = '';
-$lang->story->priList[3] = '3';
 $lang->story->priList[1] = '1';
 $lang->story->priList[2] = '2';
+$lang->story->priList[3] = '3';
 $lang->story->priList[4] = '4';
 
 $lang->story->legendBasicInfo      = 'Basic Info';
 $lang->story->legendLifeTime       = 'Story Life ';
 $lang->story->legendRelated        = 'Related Info';
 $lang->story->legendMailto         = 'Mail to';
-$lang->story->legendAttatch        = 'Files';
+$lang->story->legendAttatch        = 'File';
 $lang->story->legendProjectAndTask = $lang->projectCommon . ' Task';
 $lang->story->legendBugs           = 'Linked Bug';
 $lang->story->legendFromBug        = 'From Bug';
@@ -181,6 +191,7 @@ $lang->story->lblChange            = 'Change';
 $lang->story->lblReview            = 'Review';
 $lang->story->lblActivate          = 'Activate';
 $lang->story->lblClose             = 'Close';
+$lang->story->lblTBC               = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Impact';
 $lang->story->affectedProjects     = '' . $lang->projectCommon;
@@ -193,12 +204,12 @@ $lang->story->successSaved          = "Story is saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
 $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';
 $lang->story->mustChooseResult      = 'Select Result';
-$lang->story->mustChoosePreVersion  = 'Select the Version to revert to.';
+$lang->story->mustChoosePreVersion  = 'Select a version to revert to.';
 $lang->story->noStory               = 'No stories. ';
-$lang->story->ignoreChangeStage     = 'The status of story %s is draft, that fail to change stage.';
+$lang->story->ignoreChangeStage     = 'Story %s is a draft. Change its status.';
 
 $lang->story->form = new stdclass();
-$lang->story->form->area      = 'Story Scope';
+$lang->story->form->area      = 'Scope';
 $lang->story->form->desc      = 'What Story is it? What is the acceptance criteria?';
 $lang->story->form->resource  = 'Who will allocate resources? How long does it take?';
 $lang->story->form->file      = 'If there are Story linked files, please click Here to upload it.';
@@ -222,9 +233,9 @@ $lang->story->action->unlinkchildstory    = array('main' => '$date, unlinked by 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
-$lang->story->report->select = 'Group Stories by';
+$lang->story->report->select = 'Group by';
 $lang->story->report->create = 'Generate';
-$lang->story->report->value  = 'Story Count';
+$lang->story->report->value  = 'Count';
 
 $lang->story->report->charts['storysPerProduct']        = 'by ' . $lang->productCommon;
 $lang->story->report->charts['storysPerModule']         = 'by Module';
@@ -237,7 +248,7 @@ $lang->story->report->charts['storysPerEstimate']       = 'by Hour';
 $lang->story->report->charts['storysPerOpenedBy']       = 'by CreatedBy';
 $lang->story->report->charts['storysPerAssignedTo']     = 'by Assignee';
 $lang->story->report->charts['storysPerClosedReason']   = 'by Closed Reason';
-$lang->story->report->charts['storysPerChange']         = 'by Change times';
+$lang->story->report->charts['storysPerChange']         = 'by Change Times';
 
 $lang->story->report->options = new stdclass();
 $lang->story->report->options->graph   = new stdclass();
@@ -263,7 +274,7 @@ $lang->story->report->storysPerModule->item       = 'Module';
 $lang->story->report->storysPerSource->item       = 'Source';
 $lang->story->report->storysPerPlan->item         = 'Plan';
 $lang->story->report->storysPerStatus->item       = 'Status';
-$lang->story->report->storysPerStage->item        = 'Phase';
+$lang->story->report->storysPerStage->item        = 'Stage';
 $lang->story->report->storysPerPri->item          = 'Priority';
 $lang->story->report->storysPerOpenedBy->item     = 'Account';
 $lang->story->report->storysPerAssignedTo->item   = 'User';
@@ -289,11 +300,11 @@ $lang->story->report->storysPerModule->graph->xAxisName       = 'Module';
 $lang->story->report->storysPerSource->graph->xAxisName       = 'Source';
 $lang->story->report->storysPerPlan->graph->xAxisName         = 'Plan';
 $lang->story->report->storysPerStatus->graph->xAxisName       = 'Status';
-$lang->story->report->storysPerStage->graph->xAxisName        = 'Phase';
+$lang->story->report->storysPerStage->graph->xAxisName        = 'Stage';
 $lang->story->report->storysPerPri->graph->xAxisName          = 'Priority';
 $lang->story->report->storysPerOpenedBy->graph->xAxisName     = 'Created By';
 $lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assigned To';
-$lang->story->report->storysPerClosedReason->graph->xAxisName = 'Closed Reason';
+$lang->story->report->storysPerClosedReason->graph->xAxisName = 'Close Reason';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = 'Hour ';
 $lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
 
@@ -304,4 +315,4 @@ $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose Reviewer';
 
 $lang->story->notice = new stdClass();
-$lang->story->notice->closed = 'Stories you selected have already been closed!';
+$lang->story->notice->closed = 'Story that you select are closed!';

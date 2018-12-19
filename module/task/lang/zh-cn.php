@@ -39,6 +39,7 @@ $lang->task->confirmStoryChange  = "确认需求变动";
 $lang->task->progress            = '进度';
 $lang->task->progressTips        = '已消耗/(已消耗+剩余)';
 $lang->task->copy                = '复制任务';
+$lang->task->waitTask            = '未开始的任务';
 
 $lang->task->common           = '任务';
 $lang->task->id               = '编号';
@@ -140,9 +141,9 @@ $lang->task->typeList['affair']  = '事务';
 $lang->task->typeList['misc']    = '其他';
 
 $lang->task->priList[0] = '';
-$lang->task->priList[3] = '3';
 $lang->task->priList[1] = '1';
 $lang->task->priList[2] = '2';
+$lang->task->priList[3] = '3';
 $lang->task->priList[4] = '4';
 
 $lang->task->reasonList['']       = '';

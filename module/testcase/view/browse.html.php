@@ -163,12 +163,13 @@ js::set('suiteID',        $suiteID);
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
             <?php $withSearch = count($branches) > 10;?>
             <?php if($withSearch):?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+            <?php $branchsPinYin = common::convert2Pinyin($branches);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -176,8 +177,9 @@ js::set('suiteID',        $suiteID);
                 <?php
                 foreach($branches as $branchID => $branchName)
                 {
+                    $searchKey = $withSearch ? ('data-key="' . zget($branchsPinYin, $branchName, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeBranch', "branchID=$branchID");
-                    echo html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$branchID'");
+                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                 }
                 ?>
               </div>
@@ -189,12 +191,13 @@ js::set('suiteID',        $suiteID);
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 10;?>
             <?php if($withSearch):?>
-            <div class="dropdown-menu search-list" data-ride="searchList">
+            <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
                 <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
+              <?php $modulesPinYin = common::convert2Pinyin($modules);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
@@ -202,8 +205,9 @@ js::set('suiteID',        $suiteID);
                 <?php
                 foreach($modules as $moduleId => $module)
                 {
+                    $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\" data-key='$moduleID'");
+                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink','hiddenwin')\"");
                 }
                 ?>
               </div>

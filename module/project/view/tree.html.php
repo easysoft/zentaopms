@@ -38,15 +38,19 @@
         <?php
         $misc = common::hasPriv('project', 'importTask') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importTask') ?  $this->createLink('project', 'importTask', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importTask, '', $misc) . "</li>";
 
         $misc = common::hasPriv('project', 'importBug') ? '' : "class=disabled";
         $link = common::hasPriv('project', 'importBug') ?  $this->createLink('project', 'importBug', "project=$project->id") : '#';
-        echo "<li>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
+        echo "<li $misc>" . html::a($link, $lang->project->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
     <?php
+    $misc = "class='btn btn-link iframe" . (common::hasPriv('task', 'export', $project) ? '' : ' disabled') . "' data-width='700'";
+    $link = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=tree") : '#';
+    echo html::a($link, "<i class='icon icon-export muted'></i> <span class='text'>{$lang->export}</span>", '', $misc);
+
     $checkObject = new stdclass();
     $checkObject->project = $projectID;
     $misc = common::hasPriv('task', 'create', $checkObject) ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";

@@ -14,6 +14,11 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php echo css::internal($keTableCSS);?>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
+<?php
+js::set('fullscreen', $lang->doc->fullscreen);
+js::set('retrack', $lang->doc->retrack);
+js::set('sysurl', common::getSysUrl());
+?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-primary'");?>
@@ -71,21 +76,45 @@
       <div class="detail no-padding">
         <div class="detail-content article-content no-margin no-padding">
           <?php
-          $content = $doc->content;
           if($doc->type == 'url')
           {
               $url = $doc->content;
               if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;
-              $content = html::a($url, $doc->content, '_blank');
+              $urlIsHttps = strpos($url, 'https://') === 0;
+              $serverIsHttps = isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on';
+              if(($urlIsHttps and $serverIsHttps) or (!$urlIsHttps and !$serverIsHttps))
+              {
+                  echo "<iframe width='100%' id='urlIframe' src='$url'></iframe>";
+              }
+              else
+              {
+                  $parsedUrl = parse_url($url);
+                  $urlDomain = $parsedUrl['scheme'] . '://' . $parsedUrl['host'];
+
+                  $title    = '';
+                  $response = common::http($url);
+                  preg_match_all('/<title>(.*)<\/title>/Ui', $response, $out);
+                  if(isset($out[1][0])) $title = $out[1][0];
+
+                  echo "<div id='urlCard'>";
+                  echo "<div class='url-icon'><img src='{$urlDomain}/favicon.ico' width='45' height='45' /></div>";
+                  echo "<div class='url-content'>";
+                  echo "<div class='url-title'>{$title}</div>";
+                  echo "<div class='url-href'>" . html::a($url, $url, '_target') . "</div>";
+                  echo "</div></div>";
+              }
           }
-          echo $content;
+          else
+          {
+              echo $doc->content;
+          }
           ?>
 
           <?php foreach($doc->files as $file):?>
           <?php if(in_array($file->extension, $config->file->imageExtensions)):?>
           <div class='file-image'>
             <a href="<?php echo $file->webPath?>" target="_blank">
-              <img onload="setImageSize(this,0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
+              <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
             </a>
             <span class='right-icon'>
               <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-close'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
@@ -97,28 +126,23 @@
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $doc->files, 'fieldset' => 'true'));?>
-      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
+        <div class='divider'></div>
+        <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i></button>
         <?php
         if(!$doc->deleted)
         {
-            echo "<div class='divider'></div>";
             common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
             common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
-        }
-        else
-        {
-            common::printRPN($browseLink);
         }
         ?>
       </div>
     </div>
   </div>
-  <div class="side-col col-4">
+  <div class="side-col col-4 hidden">
     <div class="cell">
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->doc->digest;?></summary>
@@ -177,6 +201,10 @@
           </table>
         </div>
       </details>
+    </div>
+    <div class='cell'>
+      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=doc&objectID=$doc->id");?>
+      <?php include '../../common/view/action.html.php';?>
     </div>
   </div>
 </div>

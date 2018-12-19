@@ -18,6 +18,7 @@ $lang->downArrow = '↓';
 $lang->null      = '空';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
+$lang->dash      = '-';
 
 $lang->zentaoPMS      = '禅道';
 $lang->welcome        = "%s项目管理系统";
@@ -29,6 +30,7 @@ $lang->profile        = '个人档案';
 $lang->changePassword = '更改密码';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
+$lang->designedByAIUX = "<a href='http://aiuxstudio.com/' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
 
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
@@ -124,7 +126,7 @@ $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
 $lang->menu->admin   = '后台|admin|index';
 
-$lang->dividerMenu = ',qa,';
+$lang->dividerMenu = ',qa,report,';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -193,6 +195,8 @@ $lang->my->menu->changePassword = '密码|my|changepassword';
 $lang->my->menu->manageContacts = '联系人|my|managecontacts';
 $lang->my->menu->score          = '积分|my|score';
 
+$lang->my->dividerMenu = ',task,myProject,profile,';
+
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
 
@@ -206,13 +210,15 @@ $lang->product->menu = new stdclass();
 $lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan    = array('link' => '计划|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => '发布|release|browse|productID=%s',     'subModule' => 'release');
-$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
-$lang->product->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
-$lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
 $lang->product->menu->roadmap = '路线图|product|roadmap|productID=%s';
+$lang->product->menu->project = "{$lang->projectCommon}|product|project|status=all&productID=%s";
+$lang->product->menu->dynamic = '动态|product|dynamic|productID=%s';
+$lang->product->menu->doc     = array('link' => '文档|doc|objectLibs|type=product&objectID=%s&from=product', 'subModule' => 'doc');
 $lang->product->menu->branch  = '@branch@|branch|manage|productID=%s';
 $lang->product->menu->module  = '模块|tree|browse|productID=%s&view=story';
 $lang->product->menu->view    = array('link' => '概况|product|view|productID=%s', 'alias' => 'edit');
+
+$lang->product->dividerMenu = ',plan,project,doc,';
 
 $lang->story       = new stdclass();
 $lang->productplan = new stdclass();
@@ -228,10 +234,10 @@ $lang->release->menu     = $lang->product->menu;
 $lang->project = new stdclass();
 $lang->project->menu = new stdclass();
 
-$lang->project->menu->task    = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree');
+$lang->project->menu->task    = array('link' => '任务|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->project->menu->kanban  = array('link' => '看板|project|kanban|projectID=%s');
 $lang->project->menu->burn    = array('link' => '燃尽图|project|burn|projectID=%s');
-$lang->project->menu->list    = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,importtask,importbug,tree', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->list    = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story   = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->project->menu->qa      = array('link' => '测试|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc     = array('link' => '文档|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
@@ -250,16 +256,13 @@ $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'build');
 $lang->project->subMenu->qa->testtask = array('link' => '测试单|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
-$lang->project->subMenu->action = new stdclass();
-$lang->project->subMenu->action->dynamic  = '动态|project|dynamic|projectID=%s';
-
-$lang->project->dividerMenu = ',story,doc,';
+$lang->project->dividerMenu = ',story,team,product,';
 
 $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => '测试|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA视图菜单设置。*/
 $lang->qa = new stdclass();
@@ -365,16 +368,36 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->message   = array('link' => '消息|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->backup    = array('link' => '备份|backup|index', 'subModule' => 'backup');
+$lang->admin->menu->sso       = array('link' => '集成|admin|sso');
+$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
+$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->cron      = array('link' => '计划任务|cron|index', 'subModule' => 'cron');
-$lang->admin->menu->trashes   = array('link' => '回收站|action|trash', 'subModule' => 'action');
-$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor');
-$lang->admin->menu->entry     = array('link' => '应用|entry|browse', 'subModule' => 'entry');
-$lang->admin->menu->sso       = '然之集成|admin|sso';
+$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron');
+
+$lang->admin->subMenu = new stdclass();
+$lang->admin->subMenu->message = new stdclass();
+$lang->admin->subMenu->message->mail    = array('link' => '邮件|mail|index', 'subModule' => 'mail');
+$lang->admin->subMenu->message->webhook = array('link' => 'Webhook|webhook|browse', 'subModule' => 'webhook');
+$lang->admin->subMenu->message->setting = array('link' => '设置|message|setting', 'subModule' => 'message');
+
+$lang->admin->subMenu->sso = new stdclass();
+$lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
+
+$lang->admin->subMenu->dev = new stdclass();
+$lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
+$lang->admin->subMenu->dev->db     = array('link' => '数据库|dev|db');
+$lang->admin->subMenu->dev->editor = array('link' => '编辑器|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->entry  = array('link' => '应用|entry|browse', 'subModule' => 'entry');
+
+$lang->admin->subMenu->data = new stdclass();
+$lang->admin->subMenu->data->backup = array('link' => '备份|backup|index', 'subModule' => 'backup');
+$lang->admin->subMenu->data->trash  = '回收站|action|trash';
+
+$lang->admin->subMenu->system = new stdclass();
+$lang->admin->subMenu->system->cron = array('link' => '定时|cron|index', 'subModule' => 'cron');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -479,9 +502,10 @@ $lang->pager->previousPage = "上一页";
 $lang->pager->nextPage     = "下一页";
 $lang->pager->summery      = "第 <strong>%s-%s</strong> 项，共 <strong>%s</strong> 项";
 
-$lang->proVersion = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
-$lang->downNotify = "下载桌面提醒";
-$lang->website    = "https://www.zentao.net";
+$lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->downNotify     = "下载桌面提醒";
+$lang->downloadClient = "下载客户端";
+$lang->website        = "https://www.zentao.net";
 
 $lang->suhosinInfo     = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大于%s的数）。 保存并重新启动apache或php-fpm，否则会造成部分数据无法保存。";
 $lang->maxVarsInfo     = "警告：数据太多，请在php.ini中修改<font color=red>max_input_vars</font>（大于%s的数）。 保存并重新启动apache或php-fpm，否则会造成部分数据无法保存。";
@@ -497,6 +521,8 @@ $lang->searchMore        = "搜索此关键字的更多结果：";
 $lang->chooseUsersToMail = "选择要发信通知的用户...";
 $lang->browserNotice     = '你目前使用的浏览器可能无法得到最佳浏览效果，建议使用Chrome、火狐、IE9+、Opera、Safari浏览器。';
 $lang->noticePasteImg    = "可以在编辑器直接贴图。";
+$lang->pasteImgFail      = "贴图失败，请稍后重试。";
+$lang->pasteImgUploading = "正在上传图片，请稍后...";
 
 /* 时间格式设置。*/
 if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');

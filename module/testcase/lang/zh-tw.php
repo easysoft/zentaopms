@@ -63,6 +63,7 @@ $lang->testcase->stepNumber       = '用例步驟數';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = '轉Bug';
 $lang->testcase->fromModule       = '來源模組';
+$lang->testcase->fromCase         = '來源用例';
 $lang->case = $lang->testcase;  // 用於DAO檢查時使用。因為case是系統關鍵字，所以無法定義該模組為case，只能使用testcase，但表還是使用的case。
 
 $lang->testcase->stepID      = '編號';
@@ -141,6 +142,7 @@ $lang->testcase->dittoNotice        = '該用例與上一用例不屬於同一�
 $lang->testcase->reviewList[0] = '否';
 $lang->testcase->reviewList[1] = '是';
 
+$lang->testcase->priList[0] = '';
 $lang->testcase->priList[3] = 3;
 $lang->testcase->priList[1] = 1;
 $lang->testcase->priList[2] = 2;

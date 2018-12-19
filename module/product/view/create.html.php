@@ -33,18 +33,10 @@
             <th><?php echo $lang->product->line;?></th>
             <td>
               <div class='input-group' id='lineIdBox'>
-                <?php
-                echo html::select('line', $lines, '', "class='form-control chosen'");
-                if(count($lines) == 1)
-                {
-                    echo "<span class='input-group-addon'>";
-                    echo html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=line", '', true), $lang->tree->manageLine, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                    echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductLines($rootID)'");
-                    echo '</span>';
-                }
-                ?>
+                <?php echo html::select('line', $lines, '', "class='form-control chosen'");?>
+                <span class='input-group-addon'><?php echo html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=line", '', true), $lang->tree->manageLine, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");?></span>
               </div>
+              <div class='hidden'><?php echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductLines($rootID)'");?></div>
             </td>
           </tr>
           <tr>

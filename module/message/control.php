@@ -86,11 +86,13 @@ class message extends control
         $this->dao->update(TABLE_NOTIFY)->set('status')->eq('sended')->set('sendTime')->eq(helper::now())->where('id')->in($idList)->exec();
 
         foreach($todos as $todo) $messages .= $todo->data . $newline;
-        if($windowBlur) $messages = strip_tags($messages);
 
         if($windowBlur)
         {
-            echo json_encode(array('message' => $messages));
+            preg_match_all("/<a href='([^\']+)'/", $messages, $out);
+            $link = count($out[1]) ? $out[1][0] : '';
+            $messages = strip_tags($messages);
+            echo json_encode(array('message' => $messages, 'url' => $link));
         }
         else
         {

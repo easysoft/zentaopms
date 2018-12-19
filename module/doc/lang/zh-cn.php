@@ -46,7 +46,8 @@ $lang->doc->users          = '用户';
 $lang->doc->item           = '项';
 $lang->doc->num            = '文档数量';
 $lang->doc->searchResult   = '搜索结果';
-$lang->doc->gt             = '>';
+$lang->doc->fullscreen     = '全屏';
+$lang->doc->retrack        = '收起';
 
 $lang->doc->moduleDoc      = '按模块浏览';
 $lang->doc->searchDoc      = '搜索';
@@ -141,7 +142,7 @@ $lang->doc->customObjectLibs['files']       = '显示附件库';
 $lang->doc->customObjectLibs['customFiles'] = '显示自定义文档库';
 
 $lang->doc->customShowLibs = '文档库显示设置';
-$lang->doc->customShowLibsList['zero']     = '显示零文档的库';
+$lang->doc->customShowLibsList['zero']     = '显示空文档的库';
 $lang->doc->customShowLibsList['unclosed'] = '只显示未关闭的项目';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";

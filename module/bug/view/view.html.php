@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('sysurl', common::getSysUrl());?>
 <?php $browseLink = $app->session->bugList != false ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -27,6 +28,11 @@
       <?php endif; ?>
 	</div>
   </div>
+  <?php if(!isonlybody()):?>
+  <div class="btn-toolbar pull-right">
+    <?php common::printLink('bug', 'create', "productID={$bug->product}&branch={$bug->branch}&extra=moduleID={$bug->module}", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'"); ?>
+  </div>
+  <?php endif;?>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">

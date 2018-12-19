@@ -1,4 +1,4 @@
-#steps .step-id {text-align: right}
+#steps .step-id {text-align: center;vertical-align: middle}
 #steps .step-item-id {background-color: transparent; border: none; display: none; width: 30px; padding-left: 0; padding-right: 0; text-align: right; padding-right: 8px}
 #steps .checkbox-inline input[type="checkbox"] {top: -2px}
 #steps .btn-group .btn {padding-left: 0; padding-right: 0; min-width: 30px;}
@@ -32,7 +32,7 @@
 #steps .step-type-menu > a.active {color: #fff; background-color: #1a4f85;}
 
 .table-bordered .step-actions {width: 98px;}
-.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important; border-left-style: dotted!important; border-right-style: dotted!important;}
+.table-bordered > #steps > tr > td {padding: 0; background-color: #fafafa; border: 1px solid #ddd!important; }
 .table-bordered > #steps > tr > td.step-id { padding-right: 8px;}
 .table-bordered > #steps > tr > td .btn {border-color: transparent; background-color: transparent}
 .table-bordered > #steps > tr > td .btn:hover,
@@ -44,3 +44,9 @@
 .table-bordered > #steps .step-child .step-child-id {border-right: 1px dotted #ddd; border-left: none}
 
 .minw-80px {min-width: 80px;}
+.title-group.required:after {display: none;}
+.title-group.required > .required:after {display: block; right: 29px; top: 5px;}
+.pri-selector > .btn {padding: 5px 8px!important; width: 100%;}
+.pri-selector > .dropdown-menu {padding: 10px;}
+
+.title-group .has-icon-right{min-width:700px}

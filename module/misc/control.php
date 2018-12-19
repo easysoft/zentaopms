@@ -85,6 +85,258 @@ class misc extends control
     }
 
     /**
+     * Download zentao client.
+     * 
+     * @access public
+     * @param  string $action
+     * @param  string $os 
+     * @return void
+     */
+    public function downloadClient($action = 'check', $os = '')
+    {
+        if($_POST)
+        {
+            $os = $this->post->os;
+
+            die(js::locate($this->createLink('misc', 'downloadClient', "action=getPackage&os=$os"), 'parent'));
+        }
+
+        if($action == 'check')
+        {
+            $error     = false;
+            $errorInfo = '';
+
+            $cacheDir = $this->app->getBasePath() . 'tmp/cache/';
+            if(!is_dir($cacheDir))
+            {
+                $result = mkdir($cacheDir, 0755, true);
+                if($result == false)
+                {
+                    $error = true;
+                    $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotExist, $cacheDir, $cacheDir);
+                }
+            }
+
+            if(!is_writable($cacheDir))
+            {
+                $error = true;
+                $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotWritable, $cacheDir, $cacheDir);
+            }
+
+            $this->view->error     = $error;
+            $this->view->errorInfo = $errorInfo;
+
+            if(!$error) die(js::locate($this->createLink('misc', 'downloadClient', "action=selectPackage")));
+        }
+
+        if($action == 'selectPackage')
+        {
+            $os = 'windows64';
+            $agentOS = helper::getOS();
+            if(strpos($agentOS, 'Windows') !== false) $os = 'windows64';
+            if(strpos($agentOS, 'Linux') !== false)   $os = 'linux64';
+            if(strpos($agentOS, 'Mac') !== false)     $os = 'mac';
+
+            $this->view->os = $os;
+        }
+
+        if($action == 'getPackage')
+        {
+            $this->view->os      = $os;
+            $this->view->account = $this->app->user->account; 
+        }
+
+        if($action == 'clearTmpPackage')
+        {
+            $account = $this->app->user->account;
+            $tmpDir  = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
+
+            if(is_dir($tmpDir))
+            {
+                $zfile = $this->app->loadClass('zfile');
+                $zfile->removeDir($tmpDir);
+            }
+
+            die(js::closeModal('parent.parent', 'this'));
+        }
+
+        if($action == 'downloadPackage')
+        {
+            $account   = $this->app->user->account;
+            $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
+
+            $clientFile = $clientDir . 'zentaoclient.zip';
+            $zipContent = file_get_contents($clientFile);
+            if(is_dir($clientDir))
+            {
+                $zfile = $this->app->loadClass('zfile');
+                $zfile->removeDir($clientDir);
+            }
+            
+            $this->fetch('file', 'sendDownHeader', array('fileName' => "zentaoclient." . $os . '.zip', 'zip', $zipContent));
+        }
+
+        $this->view->action = $action;
+        $this->display();
+    }
+
+    /**
+     * Ajax get client package.
+     * 
+     * @param  string $os 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetClientPackage($os = '')
+    {
+        set_time_limit (0);
+        session_write_close();
+
+        $response = array();
+        $response['result']  = 'success';
+        $response['message'] = '';
+
+        $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
+        if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
+
+        $account = $this->app->user->account;
+        $tmpDir = $clientDir . "/$account/";
+        if(!is_dir($tmpDir)) mkdir($tmpDir, 0755, true);
+
+        if($os == 'windows64') $clientName = "zentaoclient.win64.zip";
+        if($os == 'windows32') $clientName = "zentaoclient.win32.zip";
+        if($os == 'linux64')   $clientName = "zentaoclient.linux.x64.zip";
+        if($os == 'linux32')   $clientName = "zentaoclient.linux.ia32.zip";
+        if($os == 'mac')       $clientName = "zentaoclient.mac.zip";
+
+        $needCache   = false;
+        $version     = $this->config->xuanxuan->version;
+        $packageFile = $clientDir . $clientName;
+        if(!file_exists($packageFile))
+        {
+            $url       = "http://dl.cnezsoft.com/zentaoclient/$version/";
+            $xxFile    = $url . $clientName;
+            $needCache = true;
+        }
+        else
+        {
+            $xxFile = $packageFile;
+        }
+
+        $clientFile = $tmpDir . 'zentaoclient.zip';
+        if($xxHd = fopen($xxFile, "rb"))
+        {
+            if($clientHd = fopen($clientFile, "wb"))
+            {
+                while(!feof($xxHd))
+                {
+                    $result = fwrite($clientHd, fread($xxHd, 1024 * 8 ), 1024 * 8 );
+                    if($result == false)
+                    {
+                        $response['result']  = 'fail';
+                        $response['message'] = sprintf($this->lang->misc->client->errorInfo->manualOpt, $xxFile);
+                        $this->send($response);
+                    }
+                }
+            }
+            else
+            {
+                $response['result'] = 'fail';
+                $response['message'] = sprintf($this->lang->misc->client->errorInfo->manualOpt, $xxFile);
+                $this->send($response);
+            }
+            fclose($xxHd);
+            fclose($clientHd);
+        }
+        else
+        {
+            $response['result'] = 'fail';
+            $response['message'] = sprintf($this->lang->misc->client->errorInfo->manualOpt, $xxFile);
+            $this->send($response);
+        }
+
+        if($needCache) file_put_contents($packageFile, file_get_contents($clientFile));
+
+        $this->send($response);
+    }
+
+    /**
+     * Ajax set client config to client package. 
+     * 
+     * @param  string $os 
+     * @access public
+     * @return void
+     */
+    public function ajaxSetClientConfig($os = '')
+    {
+        $response['result'] = 'success';
+
+        $account   = $this->app->user->account;
+        $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
+        if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
+
+        /* write login info into config file. */
+        $defaultUser = new stdclass();
+        $defaultUser->server  = common::getSysURL();
+        $defaultUser->account = $this->app->user->account;
+
+        $loginInfo = new stdclass();
+        $loginInfo->ui = $defaultUser;
+        $loginInfo = json_encode($loginInfo);
+
+        $loginFile = $clientDir . 'config.json';
+        file_put_contents($loginFile, $loginInfo);
+
+        define('PCLZIP_TEMPORARY_DIR', $clientDir);
+        $this->app->loadClass('pclzip', true);
+        $clientFile = $clientDir . 'zentaoclient.zip';
+        $archive    = new pclzip($clientFile);
+
+        if($os == 'mac')
+        {
+            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'xuanxuan.app/Contents/Resouces');
+        }
+        else
+        {
+            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'resources/build-in');
+        }
+
+        if($result == 0)
+        {
+            $response['result']  = 'fail';
+            $response['message'] = $archive->errorInfo(true);
+            $this->send($response);
+        }
+
+        $this->send($response);
+    }
+
+    /**
+     * Ajax get client package size.
+     * 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetPackageSize()
+    {
+        $account     = $this->app->user->account;
+        $packageFile = $this->app->getBasePath() . 'tmp/cache/client/' . $account . '/zentaoclient.zip';
+
+        $size = 0;
+        if(file_exists($packageFile))
+        {
+            $size = filesize($packageFile);
+            $size = $size ? round($size / 1048576, 2) : 0;
+        }
+
+        $response = array();
+        $response['result'] = 'success';
+        $response['size'] = $size;
+
+        $this->send($response);
+    }
+
+    /**
      * Down notify.
      * 
      * @access public

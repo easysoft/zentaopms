@@ -197,6 +197,8 @@ class my extends control
         $this->view->orderBy    = $orderBy;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
+
+        if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
     }
 

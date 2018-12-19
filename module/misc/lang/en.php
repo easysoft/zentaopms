@@ -15,6 +15,30 @@ $lang->misc->ping   = 'Ping';
 $lang->misc->api    = 'https://api.zentao.net';
 $lang->misc->enApi  = 'http://api.zentao.pm';
 
+$lang->misc->client = new stdclass();
+$lang->misc->client->version     = 'Client Version';
+$lang->misc->client->os          = 'Select OS';
+$lang->misc->client->download    = 'Download';
+$lang->misc->client->downloading = 'Downloading:';
+$lang->misc->client->downloaded  = 'Downloaded successful!';
+$lang->misc->client->setting     = 'Setting config info.';
+$lang->misc->client->setted      = 'Set config info successful!';
+
+$lang->misc->client->osList['windows64'] = 'Windows 64';
+$lang->misc->client->osList['windows32'] = 'Windows 32';
+$lang->misc->client->osList['linux64']   = 'Linux 64';
+$lang->misc->client->osList['linux32']   = 'Linux 32';
+$lang->misc->client->osList['mac']       = 'Mac';
+
+$lang->misc->client->versionList['2.1.1'] = '2.1.1';
+
+$lang->misc->client->errorInfo = new stdclass();
+$lang->misc->client->errorInfo->downloadError  = 'Failed to download package!';
+$lang->misc->client->errorInfo->configError    = 'Failed to set config info!';
+$lang->misc->client->errorInfo->manualOpt      = 'Please get client package from %s .';
+$lang->misc->client->errorInfo->dirNotExist    = 'The dir <span class="code text-red">%s</span> is not exist, please make it.';
+$lang->misc->client->errorInfo->dirNotWritable = 'The dir <span class="code text-red">%s</span> is not writable. <br /> Please exec:<span class="code text-red">sudo chmod 777 %s</span> under linux os.';
+
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
 $lang->misc->zentao->labels['about']   = 'About';
@@ -76,6 +100,8 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Details';
 
+$lang->misc->releaseDate['10.6.stable'] = '2018-11-20';
+$lang->misc->releaseDate['10.5.stable'] = '2018-10-25';
 $lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
 $lang->misc->releaseDate['10.3.stable'] = '2018-08-10';
 $lang->misc->releaseDate['10.2.stable'] = '2018-08-02';
@@ -93,6 +119,12 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'Adjust backup mechanism', 'desc' => '<p>Increase backup settings and make backups more flexible</p><p>Show backup progress</p><p>Can change the backup directory</p>');
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'Optimize and adjust menus', 'desc' => '<p>Adjust admin menus</p><p>Adjust the secondary menu of my and project</p>');
+
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'Adjust document display', 'desc' => "<p>Adjust the layout method on the left side of the document library.</p><p>Adding filter conditions to the bottom of the document library's navigation bottom.</p>");
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'Adjust the sub task logic and optimize the display of father child task.', 'desc' => '');
 
 $lang->misc->feature->all['10.4.stable'][] = array('title'=>'Optimizing and adjusting new interface', 'desc' => '<p>Details page restore our previous layout.</p><p>Refactoring forms to add user pages</p><p>When use cases are executed, do not update the use case state if the user manually chooses to pass through and write the results.</p>');
 $lang->misc->feature->all['10.4.stable'][] = array('title'=>'After the user machine hibernate login fails, the session is refreshed again.', 'desc' => '');

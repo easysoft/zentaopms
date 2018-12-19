@@ -30,7 +30,7 @@ $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';
 $lang->admin->info->links   = 'You can visit links below';
 $lang->admin->info->account = 'Your ZenTao account is %s.';
-$lang->admin->info->log     = 'Logs that is beyond valid days will be deleted and it has to run cron.';
+$lang->admin->info->log     = 'Log that is beyond valid days will be deleted and it has to run cron.';
 
 $lang->admin->notice = new stdclass();
 $lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.pm). %s then get the Latest ZenTao Upgrades and News.";
@@ -38,7 +38,11 @@ $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
 $lang->admin->register = new stdclass();
+<<<<<<< HEAD
 $lang->admin->register->common     = 'Bind New Account';
+=======
+$lang->admin->register->common     = 'Bind Account';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->admin->register->caption    = 'Register in Zentao Community';
 $lang->admin->register->click      = 'Register here';
 $lang->admin->register->lblAccount = 'at least 3 characters; contains letters and numbers.';
@@ -49,15 +53,15 @@ $lang->admin->register->success    = "You have registered with us!";
 
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Link Account';
-$lang->admin->bind->success = "Account has been linked!";
+$lang->admin->bind->success = "Account is linked!";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common     = 'Security Policy';
-$lang->admin->safe->set        = 'PasswordStrength';
+$lang->admin->safe->set        = 'Password Strength';
 $lang->admin->safe->password   = 'Password Strength';
-$lang->admin->safe->weak       = 'Weak Passwords';
+$lang->admin->safe->weak       = 'Weak Password';
 $lang->admin->safe->reason     = 'Type';
-$lang->admin->safe->checkWeak  = 'WeakPasswords';
+$lang->admin->safe->checkWeak  = 'Weak Password';
 $lang->admin->safe->changeWeak = 'Your password is weak. Change it.';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Change password after first login';
 
@@ -77,5 +81,5 @@ $lang->admin->safe->reasonList['birthday'] = 'Same as your DOB';
 $lang->admin->safe->modifyPasswordList[1] = 'Yes';
 $lang->admin->safe->modifyPasswordList[0] = 'No';
 
-$lang->admin->safe->noticeMode   = 'Password will be checked when login, add/edit user.';
+$lang->admin->safe->noticeMode   = 'Password will be checked when login, add and edit user.';
 $lang->admin->safe->noticeStrong = '';

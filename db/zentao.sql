@@ -300,6 +300,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
 -- DROP TABLE IF EXISTS `zt_doclib`;
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
+  `type` varchar(30) NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `name` varchar(60) NOT NULL,
@@ -356,7 +357,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
 CREATE TABLE IF NOT EXISTS `zt_file` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `pathname` char(50) NOT NULL,
-  `title` char(90) NOT NULL,
+  `title` char(255) NOT NULL,
   `extension` char(30) NOT NULL,
   `size` int(10) unsigned NOT NULL default '0',
   `objectType` char(30) NOT NULL,
@@ -638,6 +639,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `realStarted` date NOT NULL,
   `finishedBy` varchar(30) NOT NULL,
   `finishedDate` datetime NOT NULL,
+  `finishedList` text NOT NULL,
   `canceledBy` varchar(30) NOT NULL,
   `canceledDate` datetime NOT NULL,
   `closedBy` varchar(30) NOT NULL,
@@ -878,8 +880,8 @@ CREATE TABLE IF NOT EXISTS `zt_usertpl` (
 -- DROP TABLE IF EXISTS `zt_userview`;
 CREATE TABLE IF NOT EXISTS `zt_userview` (
   `account` char(30) NOT NULL,
-  `products` text NOT NULL,
-  `projects` text NOT NULL,
+  `products` mediumtext NOT NULL,
+  `projects` mediumtext NOT NULL,
   UNIQUE KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_entry`;
@@ -1176,7 +1178,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'project', 'bug'),
 (1, 'project', 'build'),
 (1, 'project', 'burn'),
-(1, 'project', 'burnData'),
 (1, 'project', 'close'),
 (1, 'project', 'computeBurn'),
 (1, 'project', 'create'),
@@ -1473,7 +1474,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (2, 'project', 'bug'),
 (2, 'project', 'build'),
 (2, 'project', 'burn'),
-(2, 'project', 'burnData'),
 (2, 'project', 'computeBurn'),
 (2, 'project', 'doc'),
 (2, 'project', 'dynamic'),
@@ -1661,7 +1661,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (3, 'project', 'bug'),
 (3, 'project', 'build'),
 (3, 'project', 'burn'),
-(3, 'project', 'burnData'),
 (3, 'project', 'computeBurn'),
 (3, 'project', 'doc'),
 (3, 'project', 'dynamic'),
@@ -1910,7 +1909,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (4, 'project', 'bug'),
 (4, 'project', 'build'),
 (4, 'project', 'burn'),
-(4, 'project', 'burnData'),
 (4, 'project', 'close'),
 (4, 'project', 'computeBurn'),
 (4, 'project', 'create'),
@@ -2159,7 +2157,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (5, 'project', 'bug'),
 (5, 'project', 'build'),
 (5, 'project', 'burn'),
-(5, 'project', 'burnData'),
 (5, 'project', 'close'),
 (5, 'project', 'computeBurn'),
 (5, 'project', 'create'),
@@ -2416,7 +2413,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (6, 'project', 'bug'),
 (6, 'project', 'build'),
 (6, 'project', 'burn'),
-(6, 'project', 'burnData'),
 (6, 'project', 'close'),
 (6, 'project', 'computeBurn'),
 (6, 'project', 'create'),
@@ -2660,7 +2656,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7, 'project', 'bug'),
 (7, 'project', 'build'),
 (7, 'project', 'burn'),
-(7, 'project', 'burnData'),
 (7, 'project', 'doc'),
 (7, 'project', 'dynamic'),
 (7, 'project', 'grouptask'),
@@ -2894,7 +2889,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (8, 'project', 'bug'),
 (8, 'project', 'build'),
 (8, 'project', 'burn'),
-(8, 'project', 'burnData'),
 (8, 'project', 'doc'),
 (8, 'project', 'dynamic'),
 (8, 'project', 'grouptask'),
@@ -3137,7 +3131,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9, 'project', 'bug'),
 (9, 'project', 'build'),
 (9, 'project', 'burn'),
-(9, 'project', 'burnData'),
 (9, 'project', 'computeBurn'),
 (9, 'project', 'doc'),
 (9, 'project', 'dynamic'),

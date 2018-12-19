@@ -22,12 +22,17 @@
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
 .block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
+.block-statistic .nav-secondary > li {position: relative}
 .block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
-.block-statistic .nav-secondary > li.active > a {color: #3C4353; background: transparent; box-shadow: none;}
-.block-statistic .nav-secondary > li.active > a:hover,
-.block-statistic .nav-secondary > li.active > a:focus,
-.block-statistic .nav-secondary > li > a:hover {box-shadow: none; border-radius: 4px 0 0 4px;}
-.block-statistic .nav-secondary > li.active > a:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li > a:first-child {padding-right: 36px;}
+.block-statistic .nav-secondary > li.active > a:first-child {color: #3C4353; background: transparent; box-shadow: none;}
+.block-statistic .nav-secondary > li.active > a:first-child:hover,
+.block-statistic .nav-secondary > li.active > a:first-child:focus,
+.block-statistic .nav-secondary > li > a:first-child:hover {box-shadow: none; border-radius: 4px 0 0 4px; background: #f5f5f5;}
+.block-statistic .nav-secondary > li.active > a:first-child:before {content: ' '; display: block; left: -1px; top: 10px; bottom: 10px; width: 4px; background: #006af1; position: absolute;}
+.block-statistic .nav-secondary > li > a.btn-view {position: absolute; top: 0; right: 0; bottom: 0; padding: 8px; width: 36px; text-align: center; opacity: 0;}
+.block-statistic .nav-secondary > li:hover > a.btn-view {opacity: 1}
+.block-statistic .nav-secondary > li.active > a.btn-view {box-shadow: none}
 .block-statistic .nav-stacked {overflow: auto; max-height: 247px;}
 .block-statistic .progress-pie .progress-info > strong {font-size: 24px;}
 .block-statistic .chosen-single {font-size: 16px; font-weight: bold;}
@@ -50,6 +55,9 @@
 .block-statistic.block-sm .nav-secondary > li > a:before {display: none;}
 .block-statistic.block-sm .nav-secondary > li.switch-icon {width: 40px;}
 .block-statistic .statistic-menu {height:20px;}
+.block-statistic.block-sm .nav-secondary > li.active > a.btn-view {width: auto; left: 0; right: 0;}
+.block-statistic.block-sm .nav-secondary > li.active > a.btn-view > i {display: none;}
+.block-statistic.block-sm .nav-secondary > li.active > a.btn-view:hover {cursor: pointer; background: rgba(0,0,0,.05)}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -75,14 +83,16 @@ $(function()
     });
 });
 </script>
-<div class="panel-body">
+<div class="panel-body block-qa">
   <div class="table-row">
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php $index = 1;?>
         <?php foreach($products as $product):?>
-        <li class="<?php if($index == 1) echo 'active';?>"><a data-target="#tabContent<?php echo $product->id;?>" data-toggle="tab"><?php echo $product->name;?></a></li>
+        <li <?php if($product == reset($products)) echo "class='active'";?> productID='<?php echo $product->id;?>'>
+          <a href="javascript:;" data-target="#tabQaProduct<?php echo $product->id;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>
+        <?php echo html::a(helper::createLink('bug', 'browse', "productID=$product->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->product->browse}");?></li>
         <?php $index++;?>
         <?php endforeach;?>
         <li class='switch-icon next'><a><i class='icon icon-arrow-right'></i></a></li>
@@ -91,7 +101,7 @@ $(function()
     <div class="col tab-content">
       <?php $index = 1;?>
       <?php foreach($products as $product):?>
-      <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabContent<?php echo $product->id;?>">
+      <div class="tab-pane fade <?php if($index == 1) echo 'active';?> in" id="tabQaProduct<?php echo $product->id;?>">
         <div class="statistic-menu input-group space w-400px">
           <div class="input-group-cell">
           <?php if($product->testtask):?>

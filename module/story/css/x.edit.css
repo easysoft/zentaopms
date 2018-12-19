@@ -1,0 +1,7 @@
+.form-actions{margin-top: 0px}
+.form-actions button:last-child{display:none;}
+#mailto ~ .input-group-btn{display:none;}
+#mainContent .main-row .col-8{width: 55%}
+#mainContent .main-row .col-4{width: 45%}
+.main-header{display: none}
+.main-row .side-col.col-4 .detail:last-child {display: none;}

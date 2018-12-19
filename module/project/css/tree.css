@@ -1,6 +1,7 @@
+.tree li.has-list.open:before {border-left: none;}
 #taskTree li {padding: 0 0 0 8px;}
 #taskTree li.has-list {padding-left: 20px;}
-#taskTree li > a {display: block; padding: 5px 0; border-radius: 2px; padding-left: 6px;}
+#taskTree li > a {display: block; padding: 5px 0; border-radius: 2px; padding-left: 6px; height: 30px;}
 #taskTree li > a > span {display: inline-block;}
 #taskTree li > a > span + span {margin-left: 8px;}
 #taskTree li.selected > a {background-color: #E8F3FC;}
@@ -25,6 +26,7 @@
 #taskTree ul > li.has-list:before {background: none; content: ' '; display: block; position: absolute; width: auto; height: auto; border: none; border-left: 2px solid #cbd0db; top: -13px; bottom: 12px; left: -12px;}
 #taskTree ul > li:last-child:before {bottom: auto; height: 29px;}
 #taskTree ul > li:first-child:before {top: -9px;}
+#taskTree ul > li.has-list:first-child:before {top: -13px;}
 #taskTree ul > li.tree-single-item:before {height: 23px;}
 #taskTree ul > li.has-list:after {width: 14px;}
 
@@ -39,7 +41,7 @@
 #mainContent.hide-side > .side-col {display: table-cell; width: 0px;}
 #mainContent.hide-side > .side-col > .cell {opacity: 0;}
 
-h2.detail-title {font-size: 16px;}
+h2.detail-title {font-size: 14px;}
 h2.detail-title .label-id, h2.detail-title .label {top: -1px}
 #itemContent > .detail:first-child {padding-top: 10px;}
 .detail-content > .btn-toolbar {margin-top: 15px;}

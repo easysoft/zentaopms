@@ -24,7 +24,7 @@ $lang->product->select      = "Select {$lang->productCommon}";
 $lang->product->mine        = 'My responsibility:';
 $lang->product->other       = 'Other:';
 $lang->product->closed      = 'Closed';
-$lang->product->updateOrder = 'Ranking';
+$lang->product->updateOrder = 'Order';
 $lang->product->all         = "All {$lang->productCommon}";
 $lang->product->export      = 'Export Data';
 
@@ -44,7 +44,7 @@ $lang->product->project  = $lang->projectCommon . 'List';
 $lang->product->build    = 'Build';
 
 $lang->product->currentProject   = "Current {$lang->projectCommon}";
-$lang->product->activeStories    = 'Activated Story';
+$lang->product->activeStories    = 'Active Story';
 $lang->product->changedStories   = 'Changed Story';
 $lang->product->draftStories     = 'Draft Story';
 $lang->product->closedStories    = 'Closed Story';
@@ -72,6 +72,8 @@ $lang->product->whitelist     = 'Whitelist';
 $lang->product->branch        = '%s';
 $lang->product->qa            = 'QA';
 $lang->product->release       = 'Release';
+$lang->product->allRelease    = 'All Release';
+$lang->product->maintain      = 'Maintaining';
 $lang->product->latestDynamic = 'Dynamic';
 $lang->product->plan          = 'Plan';
 $lang->product->iteration     = 'Version Iteration';

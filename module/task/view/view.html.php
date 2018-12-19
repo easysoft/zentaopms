@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('project', 'browse', "projectID=$task->project");?>
+<?php js::set('sysurl', common::getSysUrl());?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
@@ -34,6 +35,16 @@
       <?php endif;?>
     </div>
   </div>
+  <?php if(!isonlybody()):?>
+  <div class="btn-toolbar pull-right">
+    <?php
+    $checkObject = new stdclass();
+    $checkObject->project = $task->project;
+    $link = $this->createLink('task', 'create', "project={$task->project}&storyID={$task->story}&moduleID={$task->module}");
+    if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
+    ?>
+  </div>
+  <?php endif;?>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">

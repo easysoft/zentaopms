@@ -18,10 +18,11 @@
 <?php endif;?>
 
 <div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->backup->common;?></span></span>
+  <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('data');?></div>
+  <div class='btn-toolbar pull-right'>
+    <?php common::printIcon('backup', 'setting', '', '', 'button', '', '', 'iframe', '', "data-width=400px");?>
+    <?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?>
   </div>
-  <div class='btn-toolbar pull-right'><?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?></div>
 </div>
 
 <div id='mainContent' class='main-content'>
@@ -47,8 +48,10 @@
     <tbody class='text-center'>
     <?php foreach($backups as $backupFile):?>
       <?php $rowspan = count($backupFile->files);?>
-      <?php $i = 0?>
+      <?php $i = 0;?>
+      <?php $isPHP = false;?>
       <?php foreach($backupFile->files as $file => $size):?>
+      <?php if(!$isPHP) $isPHP = strpos($file, '.php') !== false;?>
       <tr>
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>><?php echo date(DT_DATETIME1, $backupFile->time);?></td>
@@ -58,6 +61,11 @@
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>>
           <?php
+          if(common::hasPriv('backup', 'rmPHPHeader') and $isPHP)
+          {
+              echo html::a(inlink('rmPHPHeader', "file={$backupFile->name}"), $lang->backup->rmPHPHeader, 'hiddenwin', "class='rmPHPHeader'");
+              echo "<br />";
+          }
           if(common::hasPriv('backup', 'restore')) echo html::a(inlink('restore', "file={$backupFile->name}&confirm=yes"), $lang->backup->restore, 'hiddenwin', "class='restore'");
           if(common::hasPriv('backup', 'delete')) echo html::a(inlink('delete', "file=$backupFile->name"), $lang->delete, 'hiddenwin');
           ?>
@@ -73,11 +81,15 @@
 <div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog w-300px">
     <div class="modal-content">
-      <div class="modal-body"><?php echo $lang->backup->waitting?></div>
+      <div class="modal-body">
+        <p><?php echo $lang->backup->waitting?></p>
+        <div id='message'><?php echo sprintf($lang->backup->progressSQL, 0);?></div>
+      </div>
     </div>
   </div>
 </div>
 <?php js::set('backup', $lang->backup->backup);?>
+<?php js::set('rmPHPHeader', $lang->backup->rmPHPHeader);?>
 <?php js::set('confirmRestore', $lang->backup->confirmRestore);?>
 <?php js::set('restore', $lang->backup->restore);?>
 <?php include '../../common/view/footer.html.php';?>

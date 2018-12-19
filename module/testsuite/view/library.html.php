@@ -125,7 +125,7 @@ js::set('flow',          $config->global->flow);
             <tr>
               <td class='c-id'>
                 <?php if($canBatchAction):?>
-                <?php echo html::checkbox('caseIDList', array($case->id => sprintf('%03d', $case->id)));?>
+                <?php echo html::checkbox('caseIDList', array($case->id => '')) . html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$case->version"), sprintf('%03d', $case->id));?>
                 <?php else:?>
                 <?php echo sprintf('%03d', $case->id);?>
                 <?php endif;?>

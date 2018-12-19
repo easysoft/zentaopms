@@ -39,6 +39,7 @@ $lang->task->confirmStoryChange  = "確認需求變動";
 $lang->task->progress            = '進度';
 $lang->task->progressTips        = '已消耗/(已消耗+剩餘)';
 $lang->task->copy                = '複製任務';
+$lang->task->waitTask            = '未開始的任務';
 
 $lang->task->common           = '任務';
 $lang->task->id               = '編號';
@@ -84,6 +85,7 @@ $lang->task->finishedBy       = '由誰完成';
 $lang->task->finishedByAB     = '完成者';
 $lang->task->finishedDate     = '完成時間';
 $lang->task->finishedDateAB   = '完成時間';
+$lang->task->finishedList     = '完成者列表';
 $lang->task->canceledBy       = '由誰取消';
 $lang->task->canceledDate     = '取消時間';
 $lang->task->closedBy         = '由誰關閉';
@@ -139,9 +141,9 @@ $lang->task->typeList['affair']  = '事務';
 $lang->task->typeList['misc']    = '其他';
 
 $lang->task->priList[0] = '';
-$lang->task->priList[3] = '3';
 $lang->task->priList[1] = '1';
 $lang->task->priList[2] = '2';
+$lang->task->priList[3] = '3';
 $lang->task->priList[4] = '4';
 
 $lang->task->reasonList['']       = '';

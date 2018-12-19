@@ -43,7 +43,7 @@ $lang->product->doc      = '文檔列表';
 $lang->product->project  = $lang->projectCommon . '列表';
 $lang->product->build    = '版本列表';
 
-$lang->product->currentProject   = '當前項目';
+$lang->product->currentProject   = '當前' . $lang->projectCommon;
 $lang->product->activeStories    = '激活需求';
 $lang->product->changedStories   = '已變更需求';
 $lang->product->draftStories     = '草稿需求';
@@ -72,6 +72,8 @@ $lang->product->whitelist     = '分組白名單';
 $lang->product->branch        = '所屬%s';
 $lang->product->qa            = '測試';
 $lang->product->release       = '發佈';
+$lang->product->allRelease    = '所有發佈';
+$lang->product->maintain      = '維護中';
 $lang->product->latestDynamic = '最新動態';
 $lang->product->plan          = '計劃';
 $lang->product->iteration     = '版本迭代';
@@ -91,7 +93,7 @@ $lang->product->closedStory  = '已關閉';
 $lang->product->unclosed     = '未關閉';
 $lang->product->unplan       = '未計劃';
 
-$lang->product->allStory             = '全部需求';
+$lang->product->allStory             = '所有';
 $lang->product->allProduct           = '全部' . $lang->productCommon;
 $lang->product->allProductsOfProject = '全部關聯' . $lang->productCommon;
 

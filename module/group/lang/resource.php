@@ -335,9 +335,9 @@ $lang->resource->project->updateOrder       = 'updateOrder';
 $lang->resource->project->kanban            = 'kanban';
 $lang->resource->project->printKanban       = 'printKanban';
 $lang->resource->project->tree              = 'tree';
-$lang->resource->project->treeTask          = 'treeTask';
-$lang->resource->project->treeStory         = 'treeStory';
-$lang->resource->project->all               = 'all';
+$lang->resource->project->treeTask          = 'treeOnlyTask';
+$lang->resource->project->treeStory         = 'treeOnlyStory';
+$lang->resource->project->all               = 'allProjects';
 $lang->resource->project->kanbanHideCols    = 'kanbanHideCols';
 $lang->resource->project->kanbanColsColor   = 'kanbanColsColor';
 $lang->resource->project->export            = 'export';
@@ -1043,16 +1043,20 @@ $lang->action->methodOrder[25] = 'comment';
 $lang->action->methodOrder[30] = 'editComment';
 
 $lang->resource->backup = new stdclass();
-$lang->resource->backup->index   = 'index';
-$lang->resource->backup->backup  = 'backup';
-$lang->resource->backup->restore = 'restore';
-$lang->resource->backup->change  = 'change';
-$lang->resource->backup->delete  = 'delete';
+$lang->resource->backup->index       = 'index';
+$lang->resource->backup->backup      = 'backup';
+$lang->resource->backup->restore     = 'restore';
+$lang->resource->backup->change      = 'change';
+$lang->resource->backup->delete      = 'delete';
+$lang->resource->backup->setting     = 'setting';
+$lang->resource->backup->rmPHPHeader = 'rmPHPHeader';
 
 $lang->backup->methodOrder[5]  = 'index';
 $lang->backup->methodOrder[10] = 'backup';
 $lang->backup->methodOrder[15] = 'restore';
 $lang->backup->methodOrder[20] = 'delete';
+$lang->backup->methodOrder[25] = 'setting';
+$lang->backup->methodOrder[30] = 'rmPHPHeader';
 
 $lang->resource->cron = new stdclass();
 $lang->resource->cron->index   = 'index';
@@ -1394,6 +1398,9 @@ $lang->changelog['10.0.alpha'][] = 'doc-collect';
 $lang->changelog['10.1'][] = 'todo-batchClose';
 $lang->changelog['10.1'][] = 'project-treeTask';
 $lang->changelog['10.1'][] = 'project-treeStory';
+
+$lang->changelog['10.6'][] = 'backup-setting';
+$lang->changelog['10.6'][] = 'backup-rmPHPHeader';
 
 global $config;
 if($config->global->flow != 'full')

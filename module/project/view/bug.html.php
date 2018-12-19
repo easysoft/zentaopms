@@ -78,7 +78,7 @@
       <tr>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
-          <?php echo html::checkbox('bugIDList', array($bug->id => sprintf('%03d', $bug->id)));?>
+          <?php echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));?>
           <?php else:?>
           <?php printf('%03d', $bug->id);?>
           <?php endif;?>
@@ -116,23 +116,30 @@
       <div class="table-actions btn-toolbar">
         <div class="btn-group dropup">
           <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo?> <span class="caret"></span></button>
-          <?php 
+          <?php
           $withSearch = count($memberPairs) > 10;
           $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID={$project->id}&type=project");
-          echo "<div class='dropdown-menu search-list' data-ride='searchList'>";
+
           if($withSearch)
           {
+              echo "<div class='dropdown-menu search-list search-box-sink' data-ride='searchList'>";
               echo '<div class="input-control search-box has-icon-left has-icon-right search-example">';
               echo '<input id="userSearchBox" type="search" class="form-control search-input" autocomplete="off" />';
               echo '<label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>';
               echo '<a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>';
               echo '</div>';
+              $membersPinYin = common::convert2Pinyin($memberPairs);
+          }
+          else
+          {
+              echo "<div class='dropdown-menu search-list'>";
           }
           echo '<div class="list-group">';
           foreach($memberPairs as $key => $value)
           {
               if(empty($key)) continue;
-              echo html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', "data-key='@$key'");
+              $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
+              echo html::a("javascript:$(\".table-actions #assignedTo\").val(\"$key\");setFormAction(\"$actionLink\")", $value, '', $searchKey);
           }
           echo "</div>";
           echo "</div>";

@@ -18,12 +18,21 @@ $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Case";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
+<<<<<<< HEAD
 $lang->testsuite->batchUnlinkCases = "Batch unlink case";
 $lang->testsuite->deleted          = 'Deleted';
 $lang->testsuite->exportTemplet    = 'Export template';
 $lang->testsuite->batchCreateCase  = 'Batch create case';
 $lang->testsuite->import           = 'Import';
 $lang->testsuite->showImport       = 'Show imported data';
+=======
+$lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
+$lang->testsuite->deleted          = 'Deleted';
+$lang->testsuite->exportTemplet    = 'Export template';
+$lang->testsuite->batchCreateCase  = 'Batch Create Case';
+$lang->testsuite->import           = 'Import';
+$lang->testsuite->showImport       = 'Show Imported Data';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->testsuite->successSaved     = 'Saved';
 
 $lang->testsuite->common         = 'Test Suite';
@@ -37,7 +46,7 @@ $lang->testsuite->addedDate      = 'Date';
 $lang->testsuite->legendDesc      = 'Description';
 $lang->testsuite->legendBasicInfo = 'Basic Info';
 
-$lang->testsuite->unlinkedCases = 'Unlinked Cases';
+$lang->testsuite->unlinkedCases = 'Unlinked Case';
 
 $lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
 $lang->testsuite->libraryDelete     = 'Do you want to delete this library？';
@@ -57,6 +66,6 @@ $lang->caselib->all    = 'All';
 
 $lang->testsuite->createLib  = 'Create Library';
 $lang->testsuite->editLib    = 'Edit';
-$lang->testsuite->library    = 'Browse cases in Library';
+$lang->testsuite->library    = 'View cases in Library';
 $lang->testsuite->createCase = 'Create Case';
 $lang->testsuite->libView    = 'Overview';

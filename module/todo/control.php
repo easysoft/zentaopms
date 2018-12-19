@@ -62,6 +62,7 @@ class todo extends control
                 $this->send(array('result' => 'success', 'id' => $todoID, 'name' => $todo->name, 'pri' => $todo->pri, 'priName' => $this->lang->todo->priList[$todo->pri], 'time' => date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin));
             }
 
+            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             if(isonlybody()) die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
@@ -177,10 +178,11 @@ class todo extends control
             $columns     = 7;
 
             if($account == '') $account = $this->app->user->account;
-            $bugs       = $this->bug->getUserBugPairs($account);
-            $tasks      = $this->task->getUserTaskPairs($account, $status);
-            $allTodos   = $this->todo->getList($type, $account, $status);
-            if($this->post->todoIDList)  $todoIDList = $this->post->todoIDList;
+            $bugs     = $this->bug->getUserBugPairs($account);
+            $tasks    = $this->task->getUserTaskPairs($account, $status);
+            $storys   = $this->loadModel('story')->getUserStoryPairs($account);
+            $allTodos = $this->todo->getList($type, $account, $status);
+            if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
 
             /* Initialize todos whose need to edited. */
             foreach($allTodos as $todo)
@@ -217,6 +219,7 @@ class todo extends control
             if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
             $this->view->bugs        = $bugs;
             $this->view->tasks       = $tasks;
+            $this->view->storys      = $storys;
             $this->view->editedTodos = $editedTodos;
             $this->view->times       = date::buildTimeList($this->config->todo->times->begin, $this->config->todo->times->end, $this->config->todo->times->delta);
             $this->view->time        = date::now();
@@ -389,7 +392,9 @@ class todo extends control
                 $this->send($response);
             }
             if(isonlybody())die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
+
+            $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
+            die(js::locate($browseLink, 'parent'));
         }
     }
 

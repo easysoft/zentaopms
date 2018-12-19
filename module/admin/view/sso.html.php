@@ -11,11 +11,14 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('sso');?></div>
+</div>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
       <div class='heading'>
-        <h2><?php echo $lang->admin->sso;?></h2>
+        <h4><?php echo $lang->admin->sso;?></h4>
       </div>
     </div>
     <form method='post' id='dataform'>

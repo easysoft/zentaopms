@@ -72,6 +72,8 @@ $lang->product->whitelist     = '分组白名单';
 $lang->product->branch        = '所属%s';
 $lang->product->qa            = '测试';
 $lang->product->release       = '发布';
+$lang->product->allRelease    = '所有发布';
+$lang->product->maintain      = '维护中';
 $lang->product->latestDynamic = '最新动态';
 $lang->product->plan          = '计划';
 $lang->product->iteration     = '版本迭代';
@@ -91,7 +93,7 @@ $lang->product->closedStory  = '已关闭';
 $lang->product->unclosed     = '未关闭';
 $lang->product->unplan       = '未计划';
 
-$lang->product->allStory             = '全部需求';
+$lang->product->allStory             = '所有';
 $lang->product->allProduct           = '全部' . $lang->productCommon;
 $lang->product->allProductsOfProject = '全部关联' . $lang->productCommon;
 

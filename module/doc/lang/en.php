@@ -25,9 +25,9 @@ $lang->doc->keywords       = 'Tags';
 $lang->doc->url            = 'URL';
 $lang->doc->files          = 'File';
 $lang->doc->addedBy        = 'Add By';
-$lang->doc->addedDate      = 'Add Date';
+$lang->doc->addedDate      = 'Added';
 $lang->doc->editedBy       = 'Edit By';
-$lang->doc->editedDate     = 'Edit Date';
+$lang->doc->editedDate     = 'Edited ';
 $lang->doc->version        = 'Version';
 $lang->doc->basicInfo      = 'Basic Info';
 $lang->doc->deleted        = 'Deleted';
@@ -46,7 +46,8 @@ $lang->doc->users          = 'Users';
 $lang->doc->item           = ' Items';
 $lang->doc->num            = 'Docs';
 $lang->doc->searchResult   = 'Search Result';
-$lang->doc->gt             = '>';
+$lang->doc->fullscreen     = 'Fullscreen';
+$lang->doc->retrack        = 'Retrack';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
@@ -100,8 +101,12 @@ $lang->doc->libTypeList['product'] = $lang->productCommon . ' Library';
 $lang->doc->libTypeList['project'] = $lang->projectCommon . ' Library';
 $lang->doc->libTypeList['custom']  = 'Custom Library';
 
-$lang->doc->systemLibs['product'] = $lang->productCommon . 'Doc Lib';
-$lang->doc->systemLibs['project'] = $lang->projectCommon . 'Doc Lib';
+$lang->doc->libIconList['product'] = 'icon-cube';
+$lang->doc->libIconList['project'] = 'icon-stack';
+$lang->doc->libIconList['custom']  = 'icon-folder-o';
+
+$lang->doc->systemLibs['product'] = $lang->productCommon;
+$lang->doc->systemLibs['project'] = $lang->projectCommon;
 
 global $config;
 if($config->global->flow == 'onlyStory' or $config->global->flow == 'onlyTest') unset($lang->doc->systemLibs['project']);
@@ -137,8 +142,8 @@ $lang->doc->customObjectLibs['files']       = 'Show File Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
 $lang->doc->customShowLibs = 'Library display settings';
-$lang->doc->customShowLibsList['zero']     = 'Display zero document library';
-$lang->doc->customShowLibsList['unclosed'] = 'Show only projects that are not closed.';
+$lang->doc->customShowLibsList['zero']     = 'Display empty library';
+$lang->doc->customShowLibsList['unclosed'] = 'Only display projects that are not closed';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this Doc Lib?";
@@ -163,7 +168,7 @@ $lang->doclib->control = 'Access Control';
 $lang->doclib->group   = 'Group';
 $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Files';
-$lang->doclib->all     = 'All Libraries';
+$lang->doclib->all     = 'All Library';
 $lang->doclib->select  = 'Select';
 $lang->doclib->project = $lang->projectCommon . ' Library';
 $lang->doclib->product = $lang->productCommon . ' Library';
@@ -174,3 +179,5 @@ $lang->doclib->main['project'] =  'Main Library';
 $lang->doclib->tabList['product'] = $lang->productCommon;
 $lang->doclib->tabList['project'] = $lang->projectCommon;
 $lang->doclib->tabList['custom']  = 'Custom';
+
+$lang->doclib->nameList['custom'] = 'Doc lib name';

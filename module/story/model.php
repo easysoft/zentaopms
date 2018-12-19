@@ -283,7 +283,7 @@ class storyModel extends model
         {
             if(empty($title)) continue;
             $story = new stdclass();
-            $story->branch     = $stories->branch[$i];
+            $story->branch     = isset($stories->branch[$i]) ? $stories->branch[$i] : 0;
             $story->module     = $stories->module[$i];
             $story->plan       = $stories->plan[$i];
             $story->color      = $stories->color[$i];
@@ -338,6 +338,7 @@ class storyModel extends model
                 $realPath = $file['realpath'];
                 unset($file['realpath']);
 
+                if(!is_dir($this->file->savePath)) mkdir($this->file->savePath, 0777, true);
                 if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
                 {
                     $file['addedBy']    = $this->app->user->account;
@@ -694,6 +695,7 @@ class storyModel extends model
             ->setIF($this->post->result == 'reject', 'closedDate', $now)
             ->setIF($this->post->result == 'reject', 'assignedTo', 'closed')
             ->setIF($this->post->result == 'reject', 'status', 'closed')
+            ->setIF($this->post->result == 'reject', 'stage', 'closed')
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'revert', 'status',  'active')
             ->setIF($this->post->closedReason == 'done', 'stage', 'released')
@@ -719,7 +721,7 @@ class storyModel extends model
             $this->dao->delete()->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWHere('version')->eq($oldStory->version)->exec();
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
-        $this->setStage($storyID);
+        if($this->post->result != 'reject') $this->setStage($storyID);
         return true;
     }
 
@@ -1108,6 +1110,7 @@ class storyModel extends model
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+        $this->setStage($storyID);
         return true;
     }
 
@@ -1191,6 +1194,8 @@ class storyModel extends model
 
                 $branch = $projects[$task->project];
                 if(!isset($branchStatusList[$branch])) $branchStatusList[$branch] = $statusList;
+                if(!isset($branchStatusList[$branch][$task->type])) $branchStatusList[$branch][$task->type] = array();
+                if(!isset($branchStatusList[$branch][$task->type][$status])) $branchStatusList[$branch][$task->type][$status] = 0;
                 $branchStatusList[$branch][$task->type][$status] ++;
                 if($type == 'devel')
                 {
@@ -1936,7 +1941,7 @@ class storyModel extends model
             {
                 $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
             }
-            $storyPairs[$story->id] = $story->id . ':' . $story->title . $property;
+            $storyPairs[$story->id] = $story->id . ':' . $story->title . ' ' . $property;
 
             if($limit > 0 && ++$i > $limit)
             {
@@ -2335,7 +2340,7 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));
+                echo html::checkbox('storyIDList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
@@ -2416,7 +2421,7 @@ class storyModel extends model
                 echo substr($story->assignedDate, 5, 11);
                 break;
             case 'reviewedBy':
-                echo zget($users, $story->reviewedBy, $story->reviewedBy);
+                foreach(explode(',', $story->reviewedBy) as $user) echo zget($users, $user) . ' ';
                 break;
             case 'reviewedDate':
                 echo substr($story->reviewedDate, 5, 11);

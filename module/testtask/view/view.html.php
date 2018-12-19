@@ -74,12 +74,23 @@
             <?php if($config->global->flow != 'onlyTest'):?>
             <tr>
               <th class='w-60px'><?php echo $lang->testtask->project;?></th>
-              <td><?php echo html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName, '', "title='{$task->projectName}'" . ($isOnlybody ? ' target="_blank"' : ''));?></td>
+              <td><?php echo $isOnlybody ? $task->projectName : html::a($this->createLink('project', 'story', "projectID=$task->project"), $task->projectName, '', "title='{$task->projectName}'");?></td>
             </tr>
             <?php endif;?>
             <tr>
               <th><?php echo $lang->testtask->build;?></th>
-              <td><?php $task->build == 'trunk' ? print($lang->trunk) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "title='{$task->buildName}'" . ($isOnlybody ? ' target="_blank"' : '')));?></td>
+              <td>
+                <?php
+                if($task->build == 'trunk')
+                {
+                    print($lang->trunk);
+                }
+                else
+                {
+                    $isOnlybody ? print($task->buildName) : print(html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName, '', "title='{$task->buildName}'"));
+                }
+                ?>
+              </td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->owner;?></th>

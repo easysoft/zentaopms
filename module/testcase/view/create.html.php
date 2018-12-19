@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/form.html.php';?>
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
@@ -142,7 +141,7 @@
             <table class='table table-form mg-0 table-bordered' style='border: 1px solid #ddd'>
               <thead>
                 <tr>
-                  <th class='w-50px text-right'><?php echo $lang->testcase->stepID;?></th>
+                  <th class='w-50px text-center'><?php echo $lang->testcase->stepID;?></th>
                   <th width="45%"><?php echo $lang->testcase->stepDesc;?></th>
                   <th><?php echo $lang->testcase->stepExpect;?></th>
                   <th class='step-actions'><?php echo $lang->actions;?></th>

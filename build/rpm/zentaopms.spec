@@ -9,7 +9,8 @@ URL:http://www.zentao.net
 Source0:%{name}-%{version}.tar.gz
 BuildRoot:%{_tmppath}/%{name}-%{version}-root
 BuildArch:noarch
-Requires:httpd,php-cli,php,php-common,php-pdo,php-mysql,php-json,php-ldap,mysql 
+Requires:httpd, php-cli, php, php-common, php-pdo, php-json, php-ldap, mysql
+Requires:/usr/lib64/php/modules/pdo_mysql.so
 
 %description
 

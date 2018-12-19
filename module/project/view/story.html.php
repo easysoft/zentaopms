@@ -82,7 +82,7 @@
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
+    <div id='queryBox' class='cell <?php if($type =='bySearch') echo 'show';?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
@@ -140,7 +140,7 @@
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
               <?php if($canBatchEdit or $canBatchClose):?>
-              <?php echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));?>
+              <?php echo html::checkbox('storyIDList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));?>
               <?php else:?>
               <?php printf('%03d', $story->id);?>
               <?php endif;?>
@@ -265,7 +265,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->project->linkStoryByPlan;?></h4>
+        <h4 class="modal-title"><?php echo $lang->project->linkStoryByPlan;?></h4><?php echo '(' . $lang->project->linkStoryByPlanTips . ')';?>
       </div>
       <div class="modal-body">
         <div class='input-group'>
@@ -307,9 +307,6 @@ $(function()
                   .replace('%rate%', rate);
         }
     });
-    <?php if(!$stories):?>
-    $("#main").addClass('hide-sidebar');
-    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

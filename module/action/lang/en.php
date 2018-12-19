@@ -28,12 +28,12 @@ $lang->action->editComment = 'Edit';
 $lang->action->create      = 'Add Comment';
 $lang->action->comment     = 'Comment';
 
-$lang->action->trashTips      = 'Note: All Deletion in ZenTao are logical.';
+$lang->action->trashTips      = 'Note: Delete in ZenTao is logic.';
 $lang->action->textDiff       = 'Text Format';
 $lang->action->original       = 'Original Format';
 $lang->action->confirmHideAll = 'Do you want to hide all the records?';
 $lang->action->needEdit       = '%s that you want to restore exists. Please edit it.';
-$lang->action->historyEdit    = 'The history editor cannot be empty.';
+$lang->action->historyEdit    = 'The history EditBy cannot be empty.';
 $lang->action->noDynamic      = 'No dynamics. ';
 
 $lang->action->history = new stdclass();
@@ -115,7 +115,7 @@ $lang->action->desc->started        = '$date, started by <strong>$actor</strong>
 $lang->action->desc->restarted      = '$date, continued by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->delayed        = '$date, postponed by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->suspended      = '$date, suspended by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->recordestimate = '$date, recorded by <strong>$actor</strong> and it consumed <strong>$extra</strong> hours.';
+$lang->action->desc->recordestimate = '$date, recorded by <strong>$actor</strong> and it cost <strong>$extra</strong> hours.';
 $lang->action->desc->editestimate   = '$date, <strong>$actor</strong> edited Hour.';
 $lang->action->desc->deleteestimate = '$date, <strong>$actor</strong> deleted Hour.';
 $lang->action->desc->canceled       = '$date, cancelled by <strong>$actor</strong>.' . "\n";
@@ -124,14 +124,14 @@ $lang->action->desc->gitcommited    = '$date, <strong>$actor</strong> committed 
 $lang->action->desc->finished       = '$date, finished by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->paused         = '$date, paused by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->verified       = '$date, verified by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->diff1          = '<strong><i>%s</i></strong> has been changed. It was "%s" and it is "%s".<br />' . "\n";
-$lang->action->desc->diff2          = '<strong><i>%s</i></strong> has been changed. The difference is ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
+$lang->action->desc->diff1          = '<strong><i>%s</i></strong> is changed. It was "%s" and it is "%s".<br />' . "\n";
+$lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. The difference is ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date Linked to <strong>$extra</strong> by <strong>$actor</strong>';
 
 /* 关联用例和移除用例时的历史操作记录。*/
-$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked relevant use case <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked relevant use case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked to  use case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked use case <strong>$extra</strong>.' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();

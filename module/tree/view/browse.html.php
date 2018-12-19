@@ -12,8 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('viewType', $viewType);?>
+<?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
-<?php $name = $viewType == 'line' ? $lang->tree->line : ($viewType == 'doc' ? $lang->tree->cate : $lang->tree->name);?>
+<?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback') ? $lang->tree->cate : $lang->tree->name);?>
+<?php $title = $viewType == 'line' ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
@@ -28,6 +30,10 @@
         if($viewType == 'doc')
         {
             echo $lang->doc->manageType . $lang->colon . $root->name;
+        }
+        elseif($viewType == 'feedback')
+        {
+            echo $lang->feedback->manageCate;
         }
         elseif($viewType == 'line')
         {
@@ -205,7 +211,7 @@ $(function()
             subModules:
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'browse', "rootID=$rootID&viewType=$viewType&moduleID={0}&branch={1}"); ?>',
-                title: '<?php echo $viewType == 'line' ? '' : (strpos($viewType, 'doc') !== false ? $lang->doc->childType : $lang->tree->child) ?>',
+                title: '<?php echo $title;?>',
                 template: '<a><?php echo $viewType == 'line' ? '' : '<i class="icon-treemap-alt"></i>';?></a>',
             }
         },

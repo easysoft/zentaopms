@@ -14,5 +14,5 @@ $(function()
             $('#contentBox').addClass('hidden');
             $('#urlBox').removeClass('hidden');
         }
-    })
+    });
 })

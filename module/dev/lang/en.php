@@ -95,16 +95,19 @@ $lang->dev->tableList['webhook']        = 'WebHook';
 $lang->dev->tableList['log']            = 'Log';
 $lang->dev->tableList['message']        = 'Message';
 $lang->dev->tableList['notify']         = 'Notify';
+$lang->dev->tableList['userview']       = 'User View';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
 $lang->dev->groupList['project'] = $lang->projectCommon;
 $lang->dev->groupList['qa']      = 'QA';
 $lang->dev->groupList['doc']     = 'Doc';
+$lang->dev->groupList['report']  = 'Report';
 $lang->dev->groupList['company'] = 'Company';
-$lang->dev->groupList['admin']   = 'Admin';
 $lang->dev->groupList['repo']    = 'Code';
 $lang->dev->groupList['api']     = 'API';
-$lang->dev->groupList['system']  = 'System';
 $lang->dev->groupList['message'] = 'Message';
-$lang->dev->groupList['other']   = 'Others';
+
+$lang->dev->endGroupList['admin']  = 'Admin';
+$lang->dev->endGroupList['system'] = 'System';
+$lang->dev->endGroupList['other']  = 'Others';

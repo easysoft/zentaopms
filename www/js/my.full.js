@@ -667,23 +667,41 @@ function notifyMessage(data)
 {
     if(window.Notification)
     {
+        var notify = null;
+
+        message = data;
+        if(typeof data.message == 'string') message = data.message;
         if(Notification.permission == "granted")
         {
-            new Notification("", {body:data});
+            notify = new Notification("", {body:message, tag:'zentao', data:data});
         }
         else if(Notification.permission != "denied")
         {
             Notification.requestPermission(function(permission)
             {
-                new Notification("", {body:data});
+                notify = new Notification("", {body:message, tag:'zentao', data:data});
             });
+        }
+
+        if(notify)
+        {
+            notify.onclick = function()
+            {
+                window.focus();
+                if(typeof notify.data.url == 'string' && notify.data.url) window.location.href = notify.data.url;
+                notify.close();
+            }
+            setTimeout(function()
+            {
+                notify.close();
+            }, 3000);
         }
     }
 }
 
 /**
  * Get fingerprint.
- * 
+ *
  * @access public
  * @return void
  */

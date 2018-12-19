@@ -28,6 +28,7 @@ $(function()
         var lastIndex = parseInt($formTbody.find('tr:last > td:first').text());
         var $newRow = $(rowTpl.replace(/%s/g, lastIndex + 1));
         $newRow.find('.chosen').chosen();
+        $newRow.find('.iframe').modalTrigger({iframe:true});
         $newRow.find('[data-provide="colorpicker-later"]').colorPicker();
         $newRow.datepickerAll();
         $formTbody.append($newRow);
