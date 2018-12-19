@@ -562,7 +562,6 @@ class testcase extends control
                 $actionID = $this->action->create('case', $caseID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
         }
 

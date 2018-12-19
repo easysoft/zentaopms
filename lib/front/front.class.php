@@ -190,13 +190,6 @@ class html extends baseHTML
  */
 class js extends baseJS
 {
-    static public function closeXXModal($window = 'self')
-    {
-        $js  = "<script>";
-        $js .= "$window.window.callXXCCommand('closeModal');";
-        $js .= '</script>';
-        return $js;
-    }
 }
 
 /**
