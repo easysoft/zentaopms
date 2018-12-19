@@ -16,12 +16,13 @@ $lang->misc->api    = 'https://api.zentao.net';
 $lang->misc->enApi  = 'http://api.zentao.pm';
 
 $lang->misc->client = new stdclass();
-$lang->misc->client->version     = 'Select Version';
+$lang->misc->client->version     = 'Client Version';
 $lang->misc->client->os          = 'Select OS';
 $lang->misc->client->download    = 'Download';
 $lang->misc->client->downloading = 'Downloading:';
 $lang->misc->client->downloaded  = 'Downloaded successful!';
-$lang->misc->client->setConfig   = 'Set config successful!';
+$lang->misc->client->setting     = 'Setting config info.';
+$lang->misc->client->setted      = 'Set config info successful!';
 
 $lang->misc->client->osList['windows64'] = 'Windows 64';
 $lang->misc->client->osList['windows32'] = 'Windows 32';

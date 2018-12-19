@@ -33,17 +33,6 @@ class admin extends control
 
         $os = 'win';
         if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
-        $isHttps = (isset($this->config->site->scheme) && $this->config->site->scheme == 'https') || $this->server->https == 'on' ? 1 : 0;
-        if($isHttps == 0)
-        {
-            $url    = 'https://' . $this->server->http_host . getWebroot() . '?mode=getconfig';
-            $snoopy = $this->app->loadClass('snoopy');
-            $snoopy->referer = getWebroot(true);
-            $snoopy->submit($url);
-            $contents = $snoopy->results;
-            $contents = json_decode($contents);
-            if(!empty($contents)) $isHttps = 1;
-        }
 
         $domain = $this->server->http_host;
         if(!empty($this->config->xuanxuan->server))
@@ -59,7 +48,7 @@ class admin extends control
         $this->view->type      = $type;
         $this->view->domain    = $domain;
         $this->view->turnon    = isset($this->config->xuanxuan->turnon) ? $this->config->xuanxuan->turnon : 1;
-        $this->view->isHttps   = $isHttps;
+        $this->view->isHttps   = $this->config->xuanxuan->isHttps ? $this->config->xuanxuan->isHttps : 0;
         $this->display();
     }
 }

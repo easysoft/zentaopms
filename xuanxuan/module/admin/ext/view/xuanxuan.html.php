@@ -54,13 +54,12 @@
           <td><?php echo $type == 'edit' ? html::input('commonPort', zget($config->xuanxuan, 'commonPort', 11443), "placeholder='{$lang->chat->placeholder->xxd->commonPort}' class='form-control'") : zget($config->xuanxuan, 'commonPort', 11443);?></td>
           <td></td>
         </tr>
-        <?php $disabled = ($isHttps == 1) ? "disabled" : ''?>
         <?php if($type == 'edit'):?>
         <tr>
           <th><?php echo $lang->chat->xxd->isHttps;?></th>
           <td>
             <?php echo html::hidden('isHttps', $isHttps);?>
-            <?php echo $type ? html::radio('https', $lang->chat->httpsOptions, $isHttps, "class='checkbox' {$disabled}") : $lang->chat->httpsOptions[$isHttps];?>
+            <?php echo $type ? html::radio('https', $lang->chat->httpsOptions, $isHttps, "class='checkbox'") : $lang->chat->httpsOptions[$isHttps];?>
           </td>
           <td></td>
         </tr>
