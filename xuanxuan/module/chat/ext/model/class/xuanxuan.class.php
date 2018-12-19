@@ -34,6 +34,8 @@ class xuanxuanChat extends chatModel
         {
             header("Location: $result");
         }
+
+        $this->loadModel('setting')->setItem('system.common.xxserver.installed', 1);
         exit;
     }
 
