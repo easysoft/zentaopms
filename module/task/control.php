@@ -124,7 +124,6 @@ class task extends control
             }
 
             /* If link from no head then reload*/
-            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal());
             if(isonlybody())
             {
                 $response['locate'] = 'reload';
@@ -139,6 +138,13 @@ class task extends control
             }
 
             /* Locate the browser. */
+            if($this->app->getViewType() == 'xhtml')
+            {
+                $taskLink  = $this->createLink('task', 'view', "taskID=$taskID");
+                $response['locate'] = $taskLink;
+                $this->send($response);
+            }
+
             if($this->post->after == 'continueAdding')
             {
                 $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
@@ -311,7 +317,6 @@ class task extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            if($this->app->getViewType() == 'xhtml') die(js::closeXXModal('parent'));
             if($task->fromBug != 0)
             {
                 foreach($changes as $change)

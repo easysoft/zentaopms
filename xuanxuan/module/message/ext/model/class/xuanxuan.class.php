@@ -15,7 +15,9 @@ class xuanxuanMessage extends messageModel
                 $field  = $this->config->action->objectNameFields[$objectType];
                 $title  = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
                 $text   = $title . ' ' . "[#{$objectID}::{$object->$field}]";
-                $url    = common::getSysURL() . helper::createLink($objectType, 'view', "id=$objectID");
+
+                unset($_GET['onlybody']);
+                $url = common::getSysURL() . helper::createLink($objectType, 'view', "id=$objectID", 'html');
 
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;

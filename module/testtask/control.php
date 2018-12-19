@@ -855,8 +855,6 @@ class testtask extends control
                 }
                 else
                 {
-                    if($this->app->getViewType() == 'xhtml') die(js::closeXXModal());
-
                     $response['result'] = 'success';
                     $response['locate'] = 'reload';
                     $response['target'] = 'parent';
