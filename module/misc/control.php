@@ -173,7 +173,7 @@ class misc extends control
                 $zfile->removeDir($clientDir);
             }
             
-            $this->fetch('file', 'sendDownHeader', array('fileName' => 'zentaoclient.zip', 'zip', $zipContent));
+            $this->fetch('file', 'sendDownHeader', array('fileName' => "zentaoclient." . $os . '.zip', 'zip', $zipContent));
         }
 
         $this->view->action = $action;
