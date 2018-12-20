@@ -1,5 +1,5 @@
 <?php
-$lang->message->typeList['xuanxuan'] = 'Xuanxuan';
+$lang->message->typeList['xuanxuan'] = 'Client';
 
 $lang->message->sender = 'ZentaoPMS';
 

@@ -26,7 +26,7 @@ class taskModel extends model
         $taskFiles  = array();
         $this->loadModel('file');
         $task = fixer::input('post')
-            ->add('project', (int)$projectID)
+            ->setDefault('project', (int)$projectID)
             ->setDefault('estimate, left, story', 0)
             ->setDefault('status', 'wait')
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
