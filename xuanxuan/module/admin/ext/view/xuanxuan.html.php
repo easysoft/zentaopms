@@ -54,6 +54,21 @@
           <td><?php echo $type == 'edit' ? html::input('commonPort', zget($config->xuanxuan, 'commonPort', 11443), "placeholder='{$lang->chat->placeholder->xxd->commonPort}' class='form-control'") : zget($config->xuanxuan, 'commonPort', 11443);?></td>
           <td></td>
         </tr>
+        <tr>
+          <th><?php echo $lang->chat->xxd->uploadFileSize;?></th>
+          <td>
+            <?php if($type == 'edit'):?>
+            <div class='input-group' style='width: 30%'>
+              <span class='input-group-addon'><?php echo $lang->chat->xxd->max;?></span>
+              <?php echo html::input('uploadFileSize', zget($config->xuanxuan, 'uploadFileSize', 20), "class='form-control' placeholder='{$lang->chat->placeholder->xxd->uploadFileSize}' ");?>
+              <span class='input-group-addon'>M</span>
+            </div>
+            <?php else:?>
+            <?php echo $lang->chat->xxd->max . zget($config->xuanxuan, 'uploadFileSize', 20) . 'M';?>
+            <?php endif;?>
+          </td>
+          <td></td>
+        </tr>
         <?php if($type == 'edit'):?>
         <tr>
           <th><?php echo $lang->chat->xxd->isHttps;?></th>

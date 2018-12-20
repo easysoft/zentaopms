@@ -6,7 +6,6 @@ class xuanxuanChat extends chatModel
         $data = new stdClass();
         $data->server         = $setting->server;
         $data->uploadFileSize = $setting->uploadFileSize;
-        $data->uploadFileSize = $setting->uploadFileSize;
         $data->isHttps        = $setting->isHttps;
         $data->sslcrt         = $setting->sslcrt;
         $data->sslkey         = $setting->sslkey;
