@@ -60,6 +60,7 @@
         <td>
           <?php echo html::submitButton();?>
           <?php echo html::a($config->entry->help, $lang->entry->help, '_blank', "class='help'");?>
+          <?php echo html::a($config->entry->notify, $lang->entry->notify, '_blank', "class='help'");?>
         </td>
       </tr>
     </table>

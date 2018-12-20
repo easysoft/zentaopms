@@ -5,7 +5,8 @@ $config->entry->create->requiredFields = 'name, code, account, key';
 $config->entry->edit = new stdclass();
 $config->entry->edit->requiredFields = 'name, code, account, key';
 
-$config->entry->help = 'https://www.zentao.net/book/zentaopmshelp/integration-287.html';
+$config->entry->help   = 'https://www.zentao.net/book/zentaopmshelp/integration-287.html';
+$config->entry->notify = 'https://www.zentao.net/book/zentaopmshelp/301.html';
 
 $config->entry->errcode['PARAM_CODE_MISSING']    = 401;
 $config->entry->errcode['PARAM_TOKEN_MISSING']   = 401;
