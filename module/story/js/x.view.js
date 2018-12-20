@@ -1,5 +1,6 @@
 $(function()
 {
+    $('.main-actions-holder').css('height', '0px');
     var $xuanAction = "<div class='xuancard-actions fixed'>";
     $('.main-col div.main-actions .btn-toolbar a').each(function(){
         var $that    = $(this);

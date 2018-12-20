@@ -3,3 +3,4 @@
 #mainMenu .btn{display:none;}
 #mainMenu .divider{display:none;}
 .main-actions{display:none;}
+#mainContent .cell{min-height: 420px}
