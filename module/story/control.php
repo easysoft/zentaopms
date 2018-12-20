@@ -123,6 +123,7 @@ class story extends control
             $moduleID = $this->post->module ? $this->post->module : 0;
             $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID&branch=&browseType=byModule&moduleID=$moduleID");
             if($projectID == 0) $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
+            if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
             $this->send($response);
         }
 
