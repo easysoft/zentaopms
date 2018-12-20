@@ -15,7 +15,3 @@
 
 /* Finish task #5068*/
 .main-table .table{cursor:pointer;}
-
-.xuanxuan-card{padding-bottom:55px;}
-.xuancard-actions{width: 100%;text-align: center; padding: 10px 0;}
-.xuancard-actions.fixed{position: fixed; background: #fff; border-top: 1px solid #ddd; bottom: 0; margin-bottom: 0; z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.15);}
