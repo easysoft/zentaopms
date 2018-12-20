@@ -31,9 +31,9 @@ $lang->chat->xxdServerTip    = 'XXD服务器地址为完整的协议+地址+端�
 $lang->chat->xxdServerEmpty  = 'XXD服务器地址为空。';
 $lang->chat->xxdSchemeError  = '服务器地址应该以<strong>http://</strong>或<strong>https://</strong>开头。';
 $lang->chat->xxdPortError    = '服务器地址应该包含有效的端口号，默认为<strong>11443</strong>。';
-$lang->chat->xxClientConfirm = '禅道新增客户端，与禅道深度集成，支持成员沟通，小组讨论，文件传输，任务指派，更加方便的项目管理，更加流畅的团队协作！点击确认下载客户端。';
-$lang->chat->xxServerConfirm = '禅道新增客户端，与禅道深度集成，支持成员沟通，小组讨论，文件传输，任务指派，更加方便的项目管理，更加流畅的团队协作！点击确认前往后台配置客户端服务器。';
-$lang->chat->info            = "禅道客户端由易软天创旗下另外一款免费、开源、安全的IM产品<a href='https://xuan.im/' target='_blank'>喧喧</a>驱动，支持私有部署，跨平台操作，内置大量插件，功能丰富，在喧喧里，您甚至还可以为自己编写个性化的插件，<a href='https://xuan.im/' target='_blank'>点击查看</a>。";
+$lang->chat->zentaoClient    = '新增禅道客户端！';
+$lang->chat->xxClientConfirm = '与禅道深度集成，支持成员沟通，小组讨论，文件传输，任务指派，更加方便的项目管理，更加流畅的团队协作！点击界面右下角下载禅道客户端。';
+$lang->chat->xxServerConfirm = '与禅道深度集成，支持成员沟通，小组讨论，文件传输，任务指派，更加方便的项目管理，更加流畅的团队协作！进入后台-集成-客户端集成进行下载配置。';
 
 $lang->chat->xxd = new stdclass();
 $lang->chat->xxd->os             = '操作系统';
