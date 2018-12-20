@@ -19,11 +19,8 @@ class xuanxuanChat extends chatModel
         $data->version        = $this->config->xuanxuan->version;
         $data->downloadType   = $type;
 
-        $url   = "https://www.chanzhi.org/license-downloadxxd.html";
-        $agent = $this->app->loadClass('snoopy');
-        $agent->cookies['lang'] = $this->cookie->lang;
-        $agent->submit($url, $data);
-        $result = $agent->results;
+        $url    = "https://www.chanzhi.org/license-downloadxxd.html";
+        $result = common::http($url, $data);
         
         if($type == 'config')
         {
