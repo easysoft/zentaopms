@@ -57,6 +57,9 @@ class entry extends control
             $user->lastTime = $last;
             $user->ip       = $this->session->clientIP->IP;
 
+            $xxInstalled = $user->account . 'installed';
+            if(!isset($this->config->xxclient->$xxInstalled)) $this->loadModel('setting')->setItem("system.common.xxclient.{$user->account}installed", '1');
+
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }

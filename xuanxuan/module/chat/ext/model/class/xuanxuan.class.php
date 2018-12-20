@@ -80,11 +80,11 @@ class xuanxuanChat extends chatModel
             {
                 if($this->config->requestType == 'GET')
                 {
-                    $url = "/index.php?m={$moduleName}&f={$methodName}";
+                    $url = $this->config->webRoot . "index.php?m={$moduleName}&f={$methodName}";
                 }
                 else
                 {
-                    $url = "/{$moduleName}-{$methodName}-";
+                    $url = $this->config->webRoot . "{$moduleName}-{$methodName}-";
                 }
                 $urls[$url] = $size;
             }
