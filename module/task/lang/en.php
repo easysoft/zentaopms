@@ -120,7 +120,7 @@ $lang->task->noAssigned        = 'Unassigned';
 $lang->task->noFinished        = 'Unfinished';
 $lang->task->noClosed          = 'Unclosed';
 $lang->task->yesterdayFinished = 'Finished Yesterday';
-$lang->task->allTasks          = 'All Tasks';
+$lang->task->allTasks          = 'Task';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Wait';

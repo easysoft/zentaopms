@@ -131,9 +131,9 @@ class misc extends control
 
         if($action == 'selectPackage')
         {
-            $os = 'windows64';
+            $os = 'win64';
             $agentOS = helper::getOS();
-            if(strpos($agentOS, 'Windows') !== false) $os = 'windows64';
+            if(strpos($agentOS, 'Windows') !== false) $os = 'win64';
             if(strpos($agentOS, 'Linux') !== false)   $os = 'linux64';
             if(strpos($agentOS, 'Mac') !== false)     $os = 'mac';
 
@@ -199,23 +199,21 @@ class misc extends control
         $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
+        $version    = $this->config->xuanxuan->version;
+        $packageDir = $clientDir . "/$version/";
+        if(!is_dir($packageDir)) mkdir($packageDir, 0755, true);
+
         $account = $this->app->user->account;
         $tmpDir = $clientDir . "/$account/";
         if(!is_dir($tmpDir)) mkdir($tmpDir, 0755, true);
 
-        if($os == 'windows64') $clientName = "zentaoclient.win64.zip";
-        if($os == 'windows32') $clientName = "zentaoclient.win32.zip";
-        if($os == 'linux64')   $clientName = "zentaoclient.linux.x64.zip";
-        if($os == 'linux32')   $clientName = "zentaoclient.linux.ia32.zip";
-        if($os == 'mac')       $clientName = "zentaoclient.mac.zip";
-
         $needCache   = false;
-        $version     = $this->config->xuanxuan->version;
-        $packageFile = $clientDir . $clientName;
+        $clientName  = "zentaoclient." . $os . ".zip";
+        $packageFile = $packageDir . $clientName;
         if(!file_exists($packageFile))
         {
             $url       = "http://dl.cnezsoft.com/zentaoclient/$version/";
-            $xxFile    = $url . $clientName;
+            $xxFile    = $url . $clientName . "?t=" . rand();
             $needCache = true;
         }
         else
@@ -276,12 +274,11 @@ class misc extends control
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
         /* write login info into config file. */
-        $defaultUser = new stdclass();
-        $defaultUser->server  = common::getSysURL();
-        $defaultUser->account = $this->app->user->account;
-
         $loginInfo = new stdclass();
-        $loginInfo->ui = $defaultUser;
+        $loginInfo->ui = new stdclass();
+        $loginInfo->ui->defaultUser = new stdclass();
+        $loginInfo->ui->defaultUser->server  = common::getSysURL();;
+        $loginInfo->ui->defaultUser->account = $this->app->user->account;
         $loginInfo = json_encode($loginInfo);
 
         $loginFile = $clientDir . 'config.json';
@@ -294,11 +291,11 @@ class misc extends control
 
         if($os == 'mac')
         {
-            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'xuanxuan.app/Contents/Resouces');
+            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'zentaoclient/xuanxuan.app/Contents/Resouces');
         }
         else
         {
-            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'resources/build-in');
+            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'zentaoclient/resources/build-in');
         }
 
         if($result == 0)

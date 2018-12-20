@@ -29,8 +29,8 @@ $lang->tutorial->requiredTip      = '【%s】is required.';
 $lang->tutorial->congratulateTask = 'Congratulations! You have finished【<span class="task-name-current"></span>】!';
 $lang->tutorial->serverErrorTip   = 'Error!';
 $lang->tutorial->ajaxSetError     = 'Finished task must be defined. If you want to reset the Task, please set its value as null.';
-$lang->tutorial->novice           = "For a quick start, let's go through a smart (2 min) Tutorial?";
-$lang->tutorial->dataNotSave      = "Data generated in the Tutorial will not be saved!";
+$lang->tutorial->novice           = "For a quick start, let's go through a two-minute Tutorial.";
+$lang->tutorial->dataNotSave      = "Data generated in this Tutorial will not be saved!";
 
 $lang->tutorial->tasks = array();
 

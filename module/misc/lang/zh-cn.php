@@ -24,13 +24,11 @@ $lang->misc->client->downloaded  = '成功获取安装包';
 $lang->misc->client->setting     = '正在设置配置信息';
 $lang->misc->client->setted      = '成功设置配置信息';
 
-$lang->misc->client->osList['windows64'] = 'Windows 64位';
-$lang->misc->client->osList['windows32'] = 'Windows 32位';
-$lang->misc->client->osList['linux64']   = 'Linux 64位';
-$lang->misc->client->osList['linux32']   = 'Linux 32位';
-$lang->misc->client->osList['mac']       = 'Mac版';
-
-$lang->misc->client->versionList['2.1.1'] = '2.1.1';
+$lang->misc->client->osList['win64']   = 'Windows 64位';
+$lang->misc->client->osList['win32']   = 'Windows 32位';
+$lang->misc->client->osList['linux64'] = 'Linux 64位';
+$lang->misc->client->osList['linux32'] = 'Linux 32位';
+$lang->misc->client->osList['mac']     = 'Mac版';
 
 $lang->misc->client->errorInfo = new stdclass();
 $lang->misc->client->errorInfo->downloadError  = '获取安装包失败';
