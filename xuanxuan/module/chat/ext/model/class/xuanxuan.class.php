@@ -66,12 +66,21 @@ class xuanxuanChat extends chatModel
         $entries = array();
         $baseURL = commonModel::getSysURL();
 
+        $this->loadModel('user');
+        $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($userID)->fetch();
+        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
+        $user->rights = $this->user->authorize($user->account);
+        $user->groups = $this->user->getGroups($user->account);
+
+        $this->session->set('user', $user);
+        $this->app->user = $this->session->user;
+
         $actions = new stdclass();
-        $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('bug', 'create', 'product=1', 'xhtml')),   'height' => "600px", 'width' => "800px");
-        $actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('doc', 'create', 'lib=1', 'xhtml')),       'height' => "600px", 'width' => "800px");
-        $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('story', 'create', 'product=1', 'xhtml')), 'height' => "600px", 'width' => "800px");
-        $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('task', 'create', 'project=1', 'xhtml')),  'height' => "600px", 'width' => "800px");
-        $actions->createTodo  = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')),           'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('bug',   'create')) $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('bug', 'create', 'product=1', 'xhtml')),   'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('doc',   'create')) $actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('doc', 'create', 'lib=1', 'xhtml')),       'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('story', 'create')) $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('story', 'create', 'product=1', 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('task',  'create')) $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('task', 'create', 'project=1', 'xhtml')),  'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('todo',  'create')) $actions->createTodo  = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')),           'height' => "600px", 'width' => "800px");
 
         $urls = array();
         foreach($this->config->chat->cards as $moduleName => $methods)
@@ -103,6 +112,7 @@ class xuanxuanChat extends chatModel
         $data->data['entryUrl'] = trim($baseURL . $this->config->webRoot, '/');
 
         $entries[] = $data;
+        unset($_SESSION['user']);
         return $entries;
     }
 }
