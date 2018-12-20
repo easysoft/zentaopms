@@ -102,6 +102,7 @@
         </tr>
       </table>
     </form>
+    <div class='alert alert-info mg-0'><?php echo $lang->chat->info;?></div>
   </div>
 </div>
 <?php include '../../../common/view/footer.html.php';?>
