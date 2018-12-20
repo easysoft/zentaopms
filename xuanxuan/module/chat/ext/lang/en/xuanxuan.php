@@ -2,6 +2,7 @@
 $lang->chat->common      = 'Xuanxuan';
 $lang->chat->turnon      = 'On';
 $lang->chat->downloadXXD = 'Download XXD';
+$lang->chat->settings    = 'Settings';
 
 $lang->chat->turnonList = array();
 $lang->chat->turnonList[1] = 'On';

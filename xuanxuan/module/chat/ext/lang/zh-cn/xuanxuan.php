@@ -1,8 +1,9 @@
 <?php
-$lang->chat->common          = '喧喧';
+$lang->chat->common          = '客户端';
 $lang->chat->turnon          = '是否打开';
-$lang->chat->downloadXXD     = '下载喧喧服务端';
+$lang->chat->downloadXXD     = '下载XXD服务端';
 $lang->chat->help            = '使用说明';
+$lang->chat->settings        = '服务器设置';
 
 $lang->chat->turnonList = array();
 $lang->chat->turnonList[1] = '是';
