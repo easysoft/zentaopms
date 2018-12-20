@@ -825,7 +825,7 @@ class baseRouter
             session_start();
 
             $this->sessionID = session_id();
-            if(isset($_GET[$this->config->sessionVar]) and $this->sessionID != $_GET[$this->config->sessionVar]) helper::restartSession($_GET[$this->config->sessionVar]);
+            if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
 
             define('SESSION_STARTED', true);
         }
