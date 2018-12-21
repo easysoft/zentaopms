@@ -24,7 +24,7 @@
           <td><?php echo html::select('os', $lang->misc->client->osList, $os, "class='form-control'");?></td>
         </tr>
         <tr class='text-center'>
-          <td colspan='2'><?php echo html::submitButton($lang->select, '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
     </form>
