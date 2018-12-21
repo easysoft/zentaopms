@@ -1,2 +1,3 @@
 <?php 
-$lang->admin->xuanxuan = 'Xuanxuan';
+$lang->admin->xuanxuan    = 'Client';
+$lang->admin->downloadXXD = 'Download XXD';
