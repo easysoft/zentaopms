@@ -51,7 +51,7 @@ pms:
 	cp ranzhi/config/ext/xuanxuan.php buildxx/config/ext/
 	cp -r ranzhi/lib/phpaes buildxx/lib/
 	cp -r ranzhi/framework/xuanxuan.class.php buildxx/framework/
-	cp -r ranzhi/db/xuanxuan.sql buildxx/db/
+	cp -r ranzhi/db/*.sql buildxx/db/
 	cp -r ranzhi/app/sys/chat buildxx/module/
 	cp -r ranzhi/app/sys/common/ext/model/hook buildxx/module/common/ext/model/
 	cp -r ranzhi/app/sys/action buildxx/module/
@@ -67,10 +67,10 @@ pms:
 	sed -i 's/&app=sys//' buildxx/module/chat/control.php
 	sed -i 's/file->createdBy/file->addedBy/' buildxx/module/chat/control.php
 	sed -i 's/file->createdDate/file->addedDate/' buildxx/module/chat/control.php
-	sed -i 's/im_/zt_im_/' buildxx/db/xuanxuan.sql
-	sed -i 's/sys_user/zt_user/' buildxx/db/xuanxuan.sql
-	sed -i 's/sys_file/zt_file/' buildxx/db/xuanxuan.sql
-	sed -i '/sys_entry/d' buildxx/db/xuanxuan.sql
+	sed -i 's/im_/zt_im_/' buildxx/db/*.sql
+	sed -i 's/sys_user/zt_user/' buildxx/db/*.sql
+	sed -i 's/sys_file/zt_file/' buildxx/db/*.sql
+	sed -i '/sys_entry/d' buildxx/db/*.sql
 	zip -rqm -9 xuanxuan.zentao.$(VERSION).zip buildxx/*
 	rm -rf buildxx/
 	unzip xuanxuan.zentao.*.zip -d zentaoxx

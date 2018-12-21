@@ -246,8 +246,8 @@ class testcase extends control
                 $this->send($response);
             }
 
-            setcookie('caseModule', 0, 0, $this->config->webRoot);
-            $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}");
+            setcookie('caseModule', (int)$this->post->module, 0, $this->config->webRoot);
+            $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
             $this->send($response);
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));

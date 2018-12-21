@@ -250,6 +250,10 @@ class upgradeModel extends model
             case '10_5_1':
                 $this->execSQL($this->getUpgradeFile('10.5.1'));
             case '10_6':
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
+                $this->execSQL($xuanxuanSql);
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
+                $this->execSQL($xuanxuanSql);
                 $this->initXuanxuan();
         }
 
@@ -369,6 +373,9 @@ class upgradeModel extends model
             case '10_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('10.4'));
             case '10_5':
             case '10_5_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('10.5.1'));
+            case '10_6':
+                $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql');
+                $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql');
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
