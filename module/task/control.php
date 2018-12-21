@@ -154,8 +154,8 @@ class task extends control
             }
             elseif($this->post->after == 'toTaskList')
             {
-                $moduleID  = $this->post->module ? $this->post->module : 0;
-                $taskLink  = $this->createLink('project', 'task', "projectID=$projectID&browseType=byModule&param=$moduleID");
+                setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot);
+                $taskLink  = $this->createLink('project', 'task', "projectID=$projectID");
                 $response['locate'] = $taskLink;
                 $this->send($response);
             }
