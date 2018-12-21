@@ -19,7 +19,7 @@ class xuanxuanChat extends chatModel
         $data->version        = $this->config->xuanxuan->version;
         $data->downloadType   = $type;
 
-        $url    = "https://www.chanzhi.org/license-downloadxxd.html";
+        $url    = "https://www.chanzhi.org/license-downloadxxd-zentao.html";
         $result = common::http($url, $data);
         
         if($type == 'config')
