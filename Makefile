@@ -86,6 +86,7 @@ pms:
 	if [ ! -d "zentaopms/config/ext" ]; then mkdir zentaopms/config/ext; fi
 	for module in `ls zentaopms/module/`; do if [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
+	tools/cn2tw.php
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms ranzhi buildxx zentaoxx xuanxuan.zentao.*.zip
 deb:
