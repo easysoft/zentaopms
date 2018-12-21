@@ -505,6 +505,8 @@ $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
 $lang->downloadClient = "Download Desktop Client";
+$lang->clientHelp     = "Client help manual";
+$lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
 $lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";

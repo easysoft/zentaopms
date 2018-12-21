@@ -505,6 +505,8 @@ $lang->pager->summery      = "第 <strong>%s-%s</strong> 项，共 <strong>%s</s
 $lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
 $lang->downloadClient = "下载客户端";
+$lang->clientHelp     = "客户端使用说明";
+$lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
 $lang->website        = "https://www.zentao.net";
 
 $lang->suhosinInfo     = "警告：数据太多，请在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大于%s的数）。 保存并重新启动apache或php-fpm，否则会造成部分数据无法保存。";
