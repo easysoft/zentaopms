@@ -92,6 +92,7 @@ class task extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
+            if($this->post->project) $projectID = $this->post->project;
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
             {
@@ -191,6 +192,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
+        $this->view->projects         = $this->loadModel('project')->getPairs();
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;

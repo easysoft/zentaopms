@@ -59,6 +59,7 @@ class entry extends control
 
             $xxInstalled = $user->account . 'installed';
             if(!isset($this->config->xxclient->$xxInstalled)) $this->loadModel('setting')->setItem("system.common.xxclient.{$user->account}installed", '1');
+            if(!isset($this->config->xxserver->installed)) $this->loadModel('setting')->setItem("system.common.xxserver.installed", '1');
 
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
