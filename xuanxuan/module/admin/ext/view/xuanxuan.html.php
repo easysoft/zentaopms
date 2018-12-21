@@ -112,7 +112,7 @@
               <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=package'), $lang->chat->downloadXXD, '', "class='btn btn-primary download download-package' target='_blank'");?>
               <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=config'), $lang->chat->downloadConfig, '', "class='btn btn-primary download'");?>
               <?php echo html::a(helper::createLink('admin', 'xuanxuan', 'type=edit'), $lang->chat->changeSetting, '', "class='btn'");?>
-              <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/298.html', $lang->chat->help, '_blank', "class='btn'");?>
+              <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->chat->help, '_blank', "class='btn'");?>
             <?php endif;?>
           </td>
         </tr>
