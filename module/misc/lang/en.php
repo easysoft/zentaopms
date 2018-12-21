@@ -98,6 +98,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Details';
 
+$lang->misc->releaseDate['11.0.stable'] = '2018-12-21';
 $lang->misc->releaseDate['10.6.stable'] = '2018-11-20';
 $lang->misc->releaseDate['10.5.stable'] = '2018-10-25';
 $lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
@@ -117,6 +118,8 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.0.stable'][] = array('title'=>'Zentao integrate Xuanxuan');
 
 $lang->misc->feature->all['10.6.stable'][] = array('title'=>'Adjust backup mechanism', 'desc' => '<p>Increase backup settings and make backups more flexible</p><p>Show backup progress</p><p>Can change the backup directory</p>');
 $lang->misc->feature->all['10.6.stable'][] = array('title'=>'Optimize and adjust menus', 'desc' => '<p>Adjust admin menus</p><p>Adjust the secondary menu of my and project</p>');

@@ -249,6 +249,8 @@ class upgradeModel extends model
             case '10_5':
             case '10_5_1':
                 $this->execSQL($this->getUpgradeFile('10.5.1'));
+            case '10_6':
+                $this->initXuanxuan();
         }
 
         $this->deletePatch();
@@ -2565,6 +2567,26 @@ class upgradeModel extends model
         $users = $this->dao->select('account')->from(TABLE_USER)->fetchAll();
         $this->loadModel('user');
         foreach($users as $user) $this->user->computeUserView($user->account, $force = true);
+        return true;
+    }
+
+    /**
+     * Init Xuanxuan.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function initXuanxuan()
+    {
+        $this->loadModel('setting');
+        $keyID = $this->dao->select('id')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('xuanxuan')->andWhere('`key`')->eq('key')->fetch('id');
+        if($keyID)
+        {
+            $this->dao->update(TABLE_CONFIG)->set('module')->eq('common')->set('section')->eq('xuanxuan')->where('id')->eq($keyID)->exec();
+            $this->setting->setItem('system.common.xuanxuan.turnon', '1');
+            $this->setting->setItem('system.common.xxserver.noticed', '1');
+        }
+
         return true;
     }
 }
