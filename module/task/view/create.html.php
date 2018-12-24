@@ -171,7 +171,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <tr <?php echo $config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
+        <tr <?php echo $config->global->flow == 'onlyTask' ? "class='hidden'" : '';?> id='after-tr'>
           <th><?php echo $lang->task->afterSubmit;?></th>
           <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
