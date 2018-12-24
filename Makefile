@@ -55,6 +55,7 @@ pms:
 	cp -r ranzhi/app/sys/chat buildxx/module/
 	cp -r ranzhi/app/sys/common/ext/model/hook buildxx/module/common/ext/model/
 	cp -r ranzhi/app/sys/action buildxx/module/
+	cp -r xuanxuan/config/* buildxx/config/
 	cp -r xuanxuan/module/* buildxx/module/
 	cp -r xuanxuan/www/* buildxx/www/
 	sed -i 's/site,//' buildxx/module/chat/model.php
