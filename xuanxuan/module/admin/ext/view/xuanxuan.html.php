@@ -21,11 +21,12 @@
         <h4><?php echo $lang->chat->settings;?></h4>
       </div>
     </div>
-    <form method='post' id='ajaxForm' class='form-inline form-ajax'>
+    <form method='post' id='ajaxForm' class='form-ajax'>
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->chat->turnon;?></th>
-          <td><?php echo $type == 'edit' ? html::radio('turnon', $lang->chat->turnonList, $turnon) : zget($lang->chat->turnonList, $config->xuanxuan->turnon);?></td>
+          <td class='w-p20'><?php echo $type == 'edit' ? html::radio('turnon', $lang->chat->turnonList, $turnon) : zget($lang->chat->turnonList, $config->xuanxuan->turnon);?></td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->chat->version;?></th>
@@ -37,7 +38,8 @@
         </tr>
         <tr>
           <th><?php echo $lang->chat->xxdServer;?></th>
-          <td colspan='2'><?php echo $type == 'edit' ? html::input('domain', $domain, "class='form-control'") : $domain;?></td>
+          <td><?php echo $type == 'edit' ? html::input('server', $domain, "class='form-control'") : $domain;?></td>
+          <td><?php if($type == 'edit') echo $lang->chat->xxdServerTip;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->chat->xxd->ip;?></th>
@@ -58,7 +60,7 @@
           <th><?php echo $lang->chat->xxd->uploadFileSize;?></th>
           <td>
             <?php if($type == 'edit'):?>
-            <div class='input-group' style='width: 30%'>
+            <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->chat->xxd->max;?></span>
               <?php echo html::input('uploadFileSize', zget($config->xuanxuan, 'uploadFileSize', 20), "class='form-control' placeholder='{$lang->chat->placeholder->xxd->uploadFileSize}' ");?>
               <span class='input-group-addon'>M</span>
@@ -109,8 +111,8 @@
               <?php echo html::submitButton();?>
               <?php echo html::a(helper::createLink('admin', 'xuanxuan'), $lang->goback, '', 'class="btn" style="min-width: 120px"');?>
             <?php else:?>
-              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=package'), $lang->chat->downloadXXD, '', "class='btn btn-primary download download-package' target='_blank'");?>
-              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=config'), $lang->chat->downloadConfig, '', "class='btn btn-primary download'");?>
+              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=package'), $lang->chat->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package'");?>
+              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=config'), $lang->chat->downloadConfig, 'hiddenwin', "class='btn btn-primary download'");?>
               <?php echo html::a(helper::createLink('admin', 'xuanxuan', 'type=edit'), $lang->chat->changeSetting, '', "class='btn'");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->chat->help, '_blank', "class='btn'");?>
             <?php endif;?>
