@@ -39,15 +39,11 @@ class admin extends control
         $os = 'win';
         if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
 
-        $this->loadModel('mail');
-        $domain = empty($this->config->mail->domain) ? commonModel::getSysURL() : $this->config->mail->domain;
-        if(!empty($this->config->xuanxuan->server)) $domain = $this->config->xuanxuan->server;
-
         $this->view->title     = $this->lang->chat->common;
         $this->view->adminList = $this->loadModel('user')->getPairs('admin');
         $this->view->os        = $os . '_' . php_uname('m');
         $this->view->type      = $type;
-        $this->view->domain    = $domain;
+        $this->view->domain    = $this->loadModel('chat')->getServer();
         $this->view->turnon    = isset($this->config->xuanxuan->turnon) ? $this->config->xuanxuan->turnon : 1;
         $this->view->isHttps   = $this->config->xuanxuan->isHttps ? $this->config->xuanxuan->isHttps : 0;
         $this->display();

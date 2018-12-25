@@ -17,11 +17,9 @@ class xuanxuanChat extends chatModel
         $data->version        = $this->config->xuanxuan->version;
         $data->downloadType   = $type;
 
-        $this->loadModel('mail');
-        $domain = empty($this->config->mail->domain) ? commonModel::getSysURL() : $this->config->mail->domain;
-        if(!empty($this->config->xuanxuan->server)) $domain = $this->config->xuanxuan->server;
-        $data->server = $domain;
-        $data->host   = trim($domain, '/') . getWebRoot();
+        $server = $this->getServer();
+        $data->server = $server;
+        $data->host   = trim($server, '/') . getWebRoot();
 
         $url    = "https://www.chanzhi.org/license-downloadxxd-zentao.html";
         $result = common::http($url, $data);
@@ -68,7 +66,7 @@ class xuanxuanChat extends chatModel
     public function getExtensionList($userID)
     {
         $entries = array();
-        $baseURL = commonModel::getSysURL();
+        $baseURL = $this->getServer();
 
         $this->loadModel('user');
         $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($userID)->fetch();
@@ -118,5 +116,14 @@ class xuanxuanChat extends chatModel
         $entries[] = $data;
         unset($_SESSION['user']);
         return $entries;
+    }
+
+    public function getServer()
+    {
+        $this->app->loadConfig('mail');
+        $server = empty($this->config->mail->domain) ? commonModel::getSysURL() : $this->config->mail->domain;
+        if(!empty($this->config->xuanxuan->server)) $server = $this->config->xuanxuan->server;
+
+        return $server;
     }
 }
