@@ -23,10 +23,15 @@ class admin extends control
                 if(empty($setting->sslkey)) $errors['sslkey'] = $this->lang->chat->errorSSLKey;
             }
 
+            if(strpos($setting->server, '127.0.0.1') !== false) $errors[] = $this->lang->chat->xxdServerError;
+            if(strpos($setting->server, 'https://') !== 0 and strpos($setting->server, 'http://') !== 0) $errors[] = $this->lang->chat->xxdSchemeError;
+            if(empty($setting->server)) $errors[] = $this->lang->chat->xxdServerEmpty;
+
             if($errors) $this->send(array('result' => 'fail', 'message' => $errors));
 
-            $setting->server = ($setting->isHttps ? 'https' : 'http') . '://' . $setting->domain . ':' . $setting->commonPort;
-            $result = $this->loadModel('setting')->setItems('system.common.xuanxuan', $setting, 'all');
+
+            $result = $this->loadModel('setting')->setItems('system.common.xuanxuan', $setting);
+            $this->setting->setItem('system.mail.domain', $setting->server);
             if(!$result) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('xuanxuan')));
         }
@@ -34,13 +39,9 @@ class admin extends control
         $os = 'win';
         if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
 
-        $domain = $this->server->http_host;
-        if(!empty($this->config->xuanxuan->server))
-        {
-            preg_match('/^(https?:\/\/)?([^\:]+)/i', $this->config->xuanxuan->server, $match);
-            $domain = $match[2];
-        }
-
+        $this->loadModel('mail');
+        $domain = empty($this->config->mail->domain) ? commonModel::getSysURL() : $this->config->mail->domain;
+        if(!empty($this->config->xuanxuan->server)) $domain = $this->config->xuanxuan->server;
 
         $this->view->title     = $this->lang->chat->common;
         $this->view->adminList = $this->loadModel('user')->getPairs('admin');

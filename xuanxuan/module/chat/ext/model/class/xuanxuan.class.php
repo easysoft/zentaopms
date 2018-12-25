@@ -4,7 +4,6 @@ class xuanxuanChat extends chatModel
     public function downloadXXD($setting, $type)
     {
         $data = new stdClass();
-        $data->server         = $setting->server;
         $data->uploadFileSize = $setting->uploadFileSize;
         $data->isHttps        = $setting->isHttps;
         $data->sslcrt         = $setting->sslcrt;
@@ -13,11 +12,16 @@ class xuanxuanChat extends chatModel
         $data->chatPort       = $setting->chatPort;
         $data->commonPort     = $setting->commonPort;
         $data->maxOnlineUser  = isset($setting->maxOnlineUser) ? $setting->maxOnlineUser : 0;
-        $data->host           = commonModel::getSysURL() . getWebRoot();
         $data->key            = $this->config->xuanxuan->key;
         $data->os             = $setting->os;
         $data->version        = $this->config->xuanxuan->version;
         $data->downloadType   = $type;
+
+        $this->loadModel('mail');
+        $domain = empty($this->config->mail->domain) ? commonModel::getSysURL() : $this->config->mail->domain;
+        if(!empty($this->config->xuanxuan->server)) $domain = $this->config->xuanxuan->server;
+        $data->server = $domain;
+        $data->host   = trim($domain, '/') . getWebRoot();
 
         $url    = "https://www.chanzhi.org/license-downloadxxd-zentao.html";
         $result = common::http($url, $data);
