@@ -13,3 +13,8 @@ public function sendDownHeader($fileName, $fileType, $content, $fileSize = 0)
 {
     return $this->loadExtension('xuanxuan')->sendDownHeader($fileName, $fileType, $content, $fileSize);
 }
+
+public function getServer()
+{
+    return $this->loadExtension('xuanxuan')->getServer();
+}

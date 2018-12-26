@@ -29,8 +29,9 @@ $lang->chat->createTodo  = '创建待办';
 $lang->chat->statusList[1] = '启用';
 $lang->chat->statusList[0] = '不启用';
 
-$lang->chat->xxdServerTip    = 'XXD服务器地址为完整的协议+地址+端口，示例：https://127.0.0.1:11443。';
+$lang->chat->xxdServerTip    = 'XXD服务器地址为完整的协议+地址+端口，示例：http://192.168.1.35 或 http://pms.zentao.com ，不能使用127.0.0.1。';
 $lang->chat->xxdServerEmpty  = 'XXD服务器地址为空。';
+$lang->chat->xxdServerError  = 'XXD服务器地址不能为 127.0.0.1。';
 $lang->chat->xxdSchemeError  = '服务器地址应该以<strong>http://</strong>或<strong>https://</strong>开头。';
 $lang->chat->xxdPortError    = '服务器地址应该包含有效的端口号，默认为<strong>11443</strong>。';
 $lang->chat->zentaoClient    = '新增禅道客户端！';
