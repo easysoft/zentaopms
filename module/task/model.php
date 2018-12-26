@@ -598,7 +598,7 @@ class taskModel extends model
 
             ->setIF($this->post->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
 
-            ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0, 'left', $this->post->estimate)
+            ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
 
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
