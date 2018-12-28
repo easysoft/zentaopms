@@ -20,6 +20,7 @@
     var _VERSION = '4.1.9 (2013-10-08)',
         _ua = navigator.userAgent.toLowerCase(),
         _IE = _ua.indexOf('msie') > -1 && _ua.indexOf('opera') == -1,
+        _NEWIE = _ua.indexOf('msie') == -1 && _ua.indexOf('trident') > -1,
         _GECKO = _ua.indexOf('gecko') > -1 && _ua.indexOf('khtml') == -1,
         _WEBKIT = _ua.indexOf('applewebkit') > -1,
         _OPERA = _ua.indexOf('opera') > -1,
@@ -259,7 +260,7 @@
         langType: 'zh_CN',
         urlType: '',
         newlineTag: 'p',
-        resizeType: 2,
+        resizeType: 1,
         syncType: 'form',
         pasteType: 2,
         dialogAlignType: 'page',
@@ -1368,17 +1369,14 @@
     function _getScrollPos(doc) {
         doc = doc || document;
         var x, y;
-        if(_IE || _OPERA) {
+        if (_IE || _NEWIE || _OPERA) {
             x = _docElement(doc).scrollLeft;
             y = _docElement(doc).scrollTop;
         } else {
             x = _getWin(doc).scrollX;
             y = _getWin(doc).scrollY;
         }
-        return {
-            x: x,
-            y: y
-        };
+        return {x : x, y : y};
     }
 
     function KNode(node) {
@@ -3602,6 +3600,7 @@
                 height = moveEl.height(),
                 pageX = e.pageX,
                 pageY = e.pageY;
+            K(self).addClass('ke-dragging');
             if(beforeDrag) {
                 beforeDrag();
             }
@@ -3626,6 +3625,7 @@
                 if(self.releaseCapture) {
                     self.releaseCapture();
                 }
+                K(self).removeClass('ke-dragging');
             }
             K(docs).mousemove(moveListener)
                 .mouseup(upListener)
@@ -3722,10 +3722,10 @@
         },
         autoPos: function(width, height) {
             var self = this,
-                w = _removeUnit(width) || 0,
-                h = _removeUnit(height) || 0,
-                scrollPos = _getScrollPos();
-            if(self._alignEl) {
+			w = _removeUnit(width) || 0,
+			h = _removeUnit(height) || 0,
+            scrollPos = _getScrollPos();
+            if (self._alignEl) {
                 var knode = K(self._alignEl),
                     pos = knode.pos(),
                     diffX = _round(knode[0].clientWidth / 2 - w / 2),
@@ -3737,7 +3737,7 @@
                 x = _round(scrollPos.x + (docEl.clientWidth - w) / 2);
                 y = _round(scrollPos.y + (docEl.clientHeight - h) / 2);
             }
-            if(!(_IE && _V < 7 || _QUIRKS)) {
+            if (!(_IE && _V < 7 || _QUIRKS)) {
                 x -= scrollPos.x;
                 y -= scrollPos.y;
             }
@@ -5383,9 +5383,11 @@
                     }
                 }
             });
+            // statusbar.removeClass('statusbar').addClass('ke-statusbar')
+            //     .append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
+            //     .append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
             statusbar.removeClass('statusbar').addClass('ke-statusbar')
-                .append('<span class="ke-inline-block ke-statusbar-center-icon"></span>')
-                .append('<span class="ke-inline-block ke-statusbar-right-icon"></span>');
+                .append('<i class="ke-statusbar-resize-icon"></i>');
             if(self._fullscreenResizeHandler) {
                 K(window).unbind('resize', self._fullscreenResizeHandler);
                 self._fullscreenResizeHandler = null;
@@ -5407,8 +5409,8 @@
                 };
                 K(window).bind('resize', self._fullscreenResizeHandler);
                 toolbar.select('fullscreen');
-                statusbar.first().css('visibility', 'hidden');
-                statusbar.last().css('visibility', 'hidden');
+                // statusbar.first().css('visibility', 'hidden');
+                // statusbar.last().css('visibility', 'hidden');
             } else {
                 if(_GECKO) {
                     K(window).bind('scroll', function(e) {
@@ -5425,7 +5427,7 @@
                         }
                     });
                 } else {
-                    statusbar.first().css('visibility', 'hidden');
+                    // statusbar.first().css('visibility', 'hidden');
                 }
                 if(self.resizeType === 2) {
                     _drag({
@@ -5438,7 +5440,7 @@
                         }
                     });
                 } else {
-                    statusbar.last().css('visibility', 'hidden');
+                    // statusbar.last().css('visibility', 'hidden');
                 }
             }
             return self;
@@ -9968,7 +9970,7 @@ KindEditor.plugin('table', function (K) {
                            colsCount += cellSpan ? parseInt(cellSpan) : 1;
                         });
                         for(var i = 0; i < colsCount; ++i) {
-                            theadHtml.push('<th>' + (K.IE ? '&nbsp;' : '<br />') + '</th>');
+                            theadHtml.push('<th>' + (K.IE ? '&nbsp;' : '<br />') +  '</th>');
                         }
                         theadHtml.push('</tr></thead>');
                         $thead = $(theadHtml.join(''));
