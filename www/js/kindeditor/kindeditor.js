@@ -6213,6 +6213,8 @@
                 } else {
                     cmd.range.selectNodeContents(div[0]);
                     cmd.select();
+                    div[0].tabIndex = -1;
+				    div[0].focus();
                 }
                 setTimeout(function() {
                     movePastedData();
