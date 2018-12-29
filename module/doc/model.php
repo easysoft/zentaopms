@@ -784,7 +784,7 @@ class docModel extends model
 
         $docCounts= $this->dao->select("module, count(id) as docCount")->from(TABLE_DOC)
             ->where('module')->in(array_keys($modules))
-            ->groupBy('module')
+            ->andWhere('deleted')->eq(0)
             ->fetchPairs();
 
         foreach($modules as $moduleID => $module) $modules[$moduleID]->docCount = isset($docCounts[$moduleID]) ? $docCounts[$moduleID] : 0;
