@@ -372,6 +372,10 @@ class taskModel extends model
             {
                 $status = 'doing';
             }
+            elseif(isset($childrenStatus['done']) && isset($childrenStatus['wait']))
+            {
+                $status = 'doing';
+            }
             elseif(isset($childrenStatus['wait']))
             {
                 $status = 'wait';
