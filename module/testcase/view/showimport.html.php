@@ -19,11 +19,11 @@
           <?php if(!empty($branches)):?>
           <th class='w-100px'><?php echo $lang->testcase->branch?></th>
           <?php endif;?>
-          <th class='w-100px'><?php echo $lang->testcase->module?></th>
+          <th class='w-180px'><?php echo $lang->testcase->module?></th>
           <th class='w-120px'><?php echo $lang->testcase->story?></th>
           <th class='w-70px'><?php echo $lang->testcase->pri?></th>
           <th class='w-100px'><?php echo $lang->testcase->type?></th>
-          <th><?php echo $lang->testcase->stage?></th>
+          <th class='w-160px'><?php echo $lang->testcase->stage?></th>
           <th class='w-80px'><?php echo $lang->testcase->keywords?></th>
           <th><?php echo $lang->testcase->precondition?></th>
           <th class='w-300px'>
