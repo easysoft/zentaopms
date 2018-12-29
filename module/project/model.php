@@ -1839,14 +1839,14 @@ class projectModel extends model
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->eq('0')
+            ->andWhere('parent')->ge('0')
             ->andWhere('status')->ne('cancel')
             ->groupBy('project')
             ->fetchAll('project');
         $closedLefts = $this->dao->select("project, sum(`left`) AS `left`")->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->eq('0')
+            ->andWhere('parent')->ge('0')
             ->andWhere('status')->eq('closed')
             ->groupBy('project')
             ->fetchAll('project');
