@@ -46,7 +46,7 @@
       $i = 0;
       $groupName = $groupByList ? $groupByList[$groupKey] : '';
       if(empty($groupName) and $groupBy == 'story') $groupName = $lang->task->noStory;
-      if(empty($groupName) and $groupBy == 'assignedTo') $groupName = $lang->task->noAssigned;
+      if(empty($groupName) and $groupBy == 'assignedTo') $groupName = $groupKey ? zget($users, $groupKey, $lang->task->noAssigned) : $lang->task->noAssigned;
       ?>
       <?php foreach($groupCases as $run):?>
       <tr data-id='<?php echo $groupIndex;?>' <?php if($i == 0) echo "class='divider-top'";?>>

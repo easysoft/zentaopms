@@ -1666,6 +1666,7 @@ class taskModel extends model
             ->beginIF($type == 'assignedTo')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'finishedBy')
             ->andWhere('t1.finishedby', 1)->eq($account)
+            ->andWhere('t1.status')->eq('done')
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
