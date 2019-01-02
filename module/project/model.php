@@ -2080,6 +2080,10 @@ class projectModel extends model
 
             $statusVar = 'status' . ucfirst($task->status);
             $$statusVar ++;
+            if(isset($task->children))
+            {
+                foreach($task->children as $children) $taskSum ++;
+            }
             $taskSum ++;
         }
 
