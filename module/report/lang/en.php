@@ -43,8 +43,7 @@ $lang->report->bugAssign        = 'Bug Assigned';
 $lang->report->workload         = 'Team Workload ';
 $lang->report->workloadAB       = 'Workload';
 $lang->report->bugOpenedDate    = 'Bug reported from';
-$lang->report->taskAssignedDate = 'From';
-$lang->report->beginAndEnd      = ' : from';
+$lang->report->beginAndEnd      = ' From';
 $lang->report->dept             = 'Dept';
 $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
