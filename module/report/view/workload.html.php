@@ -21,7 +21,7 @@
           </div>
           <div class='col-sm-4'>
             <div class='input-group input-group-sm'>
-              <span class='input-group-addon'><?php echo $lang->report->taskAssignedDate;?></span>
+              <span class='input-group-addon'><?php echo $lang->report->beginAndEnd;?></span>
               <div class='datepicker-wrapper datepicker-date'><?php echo html::input('begin', $begin, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
               <span class='input-group-addon fix-border'><?php echo $lang->report->to;?></span>
               <div class='datepicker-wrapper datepicker-date'><?php echo html::input('end', $end, "class='form-control' style='padding-right:10px' onchange='changeParams(this)'");?></div>
