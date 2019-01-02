@@ -622,6 +622,7 @@ class commonModel extends model
                     }
                 }
 
+                if($moduleName == 'feedback') $active = '';
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
                 if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";
                 echo $menuItemHtml;
