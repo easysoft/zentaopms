@@ -9,7 +9,7 @@ $lang->chat->turnonList[1] = 'On';
 $lang->chat->turnonList[0] = 'Off';
 
 $lang->chat->status          = 'Status';
-$lang->chat->xxdServer       = 'XXD Server';
+$lang->chat->xxdServer       = 'Zentao Server';
 $lang->chat->downloadXXD     = 'Download XXD';
 $lang->chat->listenIP        = 'Listen IP';
 $lang->chat->chatPort        = 'Chat Port';

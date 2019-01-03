@@ -10,7 +10,7 @@ $lang->chat->turnonList[1] = '是';
 $lang->chat->turnonList[0] = '否';
 
 $lang->chat->status          = '状态';
-$lang->chat->xxdServer       = 'XXD服务器';
+$lang->chat->xxdServer       = '禅道服务器';
 $lang->chat->downloadXXD     = '下载喧喧服务端';
 $lang->chat->listenIP        = '监听IP';
 $lang->chat->chatPort        = '客户端通讯端口';
