@@ -918,6 +918,8 @@ class upgradeModel extends model
      */
     public function execSQL($sqlFile)
     {
+        if(!file_exists($sqlFile)) return false;
+
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
         $ignoreCode   = '|1050|1060|1091|1061|';
 
