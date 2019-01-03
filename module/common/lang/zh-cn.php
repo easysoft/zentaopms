@@ -727,6 +727,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Remove sub menu of project module. */
     unset($lang->project->menu);
     unset($lang->project->menuOrder);
+    $lang->project->menu = new stdclass();
+    $lang->project->menu->list = array('alias' => '');
 
     /* Add bug, testcase and testtask module. */
     $lang->menu->bug       = 'Bug|bug|index';
