@@ -2690,7 +2690,7 @@ class bugModel extends model
         $history            = $this->action->getHistory($actionID);
         $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
         $action->appendLink = '';
-        if(strpos($action->extra, ':')!== false)
+        if(strpos($action->extra, ':') !== false)
         {
             list($extra, $id) = explode(':', $action->extra);
             $action->extra    = $extra;
