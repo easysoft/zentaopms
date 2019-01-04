@@ -1,0 +1,6 @@
+.main-actions{display: none}
+#mainMenu .pull-left>a{display: none}
+#mainMenu .pull-left .divider{display: none}
+#mainMenu .pull-right{display: none}
+#mainContent .col-4{display: none}
+.modal-dialog{width: 90%}

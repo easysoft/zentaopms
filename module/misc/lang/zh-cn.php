@@ -16,20 +16,19 @@ $lang->misc->api    = 'https://api.zentao.net';
 $lang->misc->enApi  = 'http://api.zentao.pm';
 
 $lang->misc->client = new stdclass();
-$lang->misc->client->version     = '选择版本';
+$lang->misc->client->version     = '客户端版本';
 $lang->misc->client->os          = '操作系统';
 $lang->misc->client->download    = '下载';
 $lang->misc->client->downloading = '正在获取安装包:';
 $lang->misc->client->downloaded  = '成功获取安装包';
-$lang->misc->client->setConfig   = '成功设置配置信息';
+$lang->misc->client->setting     = '正在设置配置信息';
+$lang->misc->client->setted      = '成功设置配置信息';
 
-$lang->misc->client->osList['windows64'] = 'Windows 64位';
-$lang->misc->client->osList['windows32'] = 'Windows 32位';
-$lang->misc->client->osList['linux64']   = 'Linux 64位';
-$lang->misc->client->osList['linux32']   = 'Linux 32位';
-$lang->misc->client->osList['mac']       = 'Mac版';
-
-$lang->misc->client->versionList['2.1.1'] = '2.1.1';
+$lang->misc->client->osList['win64']   = 'Windows 64位';
+$lang->misc->client->osList['win32']   = 'Windows 32位';
+$lang->misc->client->osList['linux64'] = 'Linux 64位';
+$lang->misc->client->osList['linux32'] = 'Linux 32位';
+$lang->misc->client->osList['mac']     = 'Mac版';
 
 $lang->misc->client->errorInfo = new stdclass();
 $lang->misc->client->errorInfo->downloadError  = '获取安装包失败';
@@ -99,6 +98,8 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['11.1.stable'] = '2019-01-04';
+$lang->misc->releaseDate['11.0.stable'] = '2018-12-21';
 $lang->misc->releaseDate['10.6.stable'] = '2018-11-20';
 $lang->misc->releaseDate['10.5.stable'] = '2018-10-25';
 $lang->misc->releaseDate['10.4.stable'] = '2018-09-28';
@@ -118,6 +119,10 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.1.stable'][] = array('title'=>'主要修复Bug。');
+
+$lang->misc->feature->all['11.0.stable'][] = array('title'=>'禅道集成喧喧');
 
 $lang->misc->feature->all['10.6.stable'][] = array('title'=>'调整备份机制', 'desc' => '<p>增加备份设置，备份更加灵活</p><p>显示备份进度</p><p>可以更改备份目录</p>');
 $lang->misc->feature->all['10.6.stable'][] = array('title'=>'优化和调整菜单', 'desc' => '<p>调整后台菜单</p><p>调整我的地盘和项目的二级菜单</p>');

@@ -27,6 +27,10 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
+          <th><?php echo $lang->task->project;?></th>
+          <td><?php echo html::select('project', $projects, $project->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->task->type;?></th>
           <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td><td></td><td></td>
         </tr>
@@ -167,7 +171,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <tr <?php echo $config->global->flow == 'onlyTask' ? "class='hidden'" : '';?>>
+        <tr <?php echo $config->global->flow == 'onlyTask' ? "class='hidden'" : '';?> id='after-tr'>
           <th><?php echo $lang->task->afterSubmit;?></th>
           <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, $config->global->flow == 'onlyTask' || !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>

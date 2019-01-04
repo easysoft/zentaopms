@@ -43,6 +43,7 @@ js::set('suiteID',        $suiteID);
   <div class='main-col'>
     <div id='queryBox' class='cell<?php if($browseType == 'bysearch') echo ' show';?>'></div>
     <?php if(empty($cases)):?>
+    <?php $useDatatable = '';?>
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>

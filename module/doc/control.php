@@ -173,7 +173,7 @@ class doc extends control
         $this->view->breadTitle = $title;
         $this->view->libID      = $libID;
         $this->view->moduleID   = $moduleID;
-        $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, $orderBy == 'title_asc' ? 'name_asc' : 'id_desc', $browseType);
+        $this->view->modules    = $this->doc->getDocMenu($libID, $moduleID, '`order`', $browseType);
         $this->view->docs       = $this->doc->getDocsByBrowseType($libID, $browseType, $queryID, $moduleID, $sort, $pager);
         $this->view->attachLibs = $attachLibs;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
@@ -313,6 +313,7 @@ class doc extends control
 
             $vars = "libID=$libID&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
             $link = $this->createLink('doc', 'browse', $vars);
+            if($this->app->getViewType() == 'xhtml') $link = $this->createLink('doc', 'view', "docID=$docID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -348,6 +349,7 @@ class doc extends control
         $this->view->position[] = $this->lang->doc->create;
 
         $this->view->libID            = $libID;
+        $this->view->libs             = $this->doc->getLibs($type = 'all', $extra = 'withObject');
         $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID         = $moduleID;

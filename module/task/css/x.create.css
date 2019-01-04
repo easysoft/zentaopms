@@ -1,0 +1,6 @@
+.title-group .has-icon-right {min-width: 400px!important;}
+#mailto ~ span.input-group-btn{display:none;}
+.modal-dialog {width: 700px;}
+a.btn-back {display:none;}
+.main-header{display: none}
+#after-tr{display: none}

@@ -90,15 +90,13 @@ class misc extends control
      * @access public
      * @param  string $action
      * @param  string $os 
-     * @param  string $version
      * @return void
      */
-    public function downloadClient($action = 'check', $os = '', $version = '')
+    public function downloadClient($action = 'check', $os = '')
     {
         if($_POST)
         {
-            $version = $this->post->version;
-            $os      = $this->post->os;
+            $os = $this->post->os;
 
             die(js::locate($this->createLink('misc', 'downloadClient', "action=getPackage&os=$os"), 'parent'));
         }
@@ -133,9 +131,9 @@ class misc extends control
 
         if($action == 'selectPackage')
         {
-            $os = 'windows64';
+            $os = 'win64';
             $agentOS = helper::getOS();
-            if(strpos($agentOS, 'Windows') !== false) $os = 'windows64';
+            if(strpos($agentOS, 'Windows') !== false) $os = 'win64';
             if(strpos($agentOS, 'Linux') !== false)   $os = 'linux64';
             if(strpos($agentOS, 'Mac') !== false)     $os = 'mac';
 
@@ -144,7 +142,7 @@ class misc extends control
 
         if($action == 'getPackage')
         {
-            $this->view->os  = $os;
+            $this->view->os      = $os;
             $this->view->account = $this->app->user->account; 
         }
 
@@ -167,7 +165,7 @@ class misc extends control
             $account   = $this->app->user->account;
             $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
 
-            $clientFile = $clientDir . 'zentaoClient.zip';
+            $clientFile = $clientDir . 'zentaoclient.zip';
             $zipContent = file_get_contents($clientFile);
             if(is_dir($clientDir))
             {
@@ -175,7 +173,7 @@ class misc extends control
                 $zfile->removeDir($clientDir);
             }
             
-            $this->fetch('file', 'sendDownHeader', array('fileName' => 'client.zip', 'zip', $zipContent));
+            $this->fetch('file', 'sendDownHeader', array('fileName' => "zentao_chat_client." . $os . '.zip', 'zip', $zipContent));
         }
 
         $this->view->action = $action;
@@ -186,11 +184,10 @@ class misc extends control
      * Ajax get client package.
      * 
      * @param  string $os 
-     * @param  string $version
      * @access public
      * @return void
      */
-    public function ajaxGetClientPackage($os = '', $version = '')
+    public function ajaxGetClientPackage($os = '')
     {
         set_time_limit (0);
         session_write_close();
@@ -202,22 +199,21 @@ class misc extends control
         $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
+        $version    = $this->config->xuanxuan->version;
+        $packageDir = $clientDir . "/$version/";
+        if(!is_dir($packageDir)) mkdir($packageDir, 0755, true);
+
         $account = $this->app->user->account;
         $tmpDir = $clientDir . "/$account/";
         if(!is_dir($tmpDir)) mkdir($tmpDir, 0755, true);
 
-        if($os == 'windows64') $clientName = "xuanxuan.win64.zip";
-        if($os == 'windows32') $clientName = "xuanxuan.win32.zip";
-        if($os == 'linux64')   $clientName = "xuanxuan.linux.x64.zip";
-        if($os == 'linux32')   $clientName = "xuanxuan.linux.ia32.zip";
-        if($os == 'mac')       $clientName = "xuanxuan.mac.zip";
-
         $needCache   = false;
-        $packageFile = $clientDir . $clientName;
+        $clientName  = "zentaoclient." . $os . ".zip";
+        $packageFile = $packageDir . $clientName;
         if(!file_exists($packageFile))
         {
-            $url       = "http://dl.pts.com/xuanxuan/";
-            $xxFile    = $url . $clientName;
+            $url       = "http://dl.cnezsoft.com/zentaoclient/$version/";
+            $xxFile    = $url . $clientName . "?t=" . rand();
             $needCache = true;
         }
         else
@@ -225,7 +221,7 @@ class misc extends control
             $xxFile = $packageFile;
         }
 
-        $clientFile = $tmpDir . 'zentaoClient.zip';
+        $clientFile = $tmpDir . 'zentaoclient.zip';
         if($xxHd = fopen($xxFile, "rb"))
         {
             if($clientHd = fopen($clientFile, "wb"))
@@ -266,11 +262,10 @@ class misc extends control
      * Ajax set client config to client package. 
      * 
      * @param  string $os 
-     * @param  string $version 
      * @access public
      * @return void
      */
-    public function ajaxSetClientConfig($os = '', $version = '')
+    public function ajaxSetClientConfig($os = '')
     {
         $response['result'] = 'success';
 
@@ -279,12 +274,11 @@ class misc extends control
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
         /* write login info into config file. */
-        $defaultUser = new stdclass();
-        $defaultUser->server  = common::getSysURL();
-        $defaultUser->account = $this->app->user->account;
-
         $loginInfo = new stdclass();
-        $loginInfo->ui = $defaultUser;
+        $loginInfo->ui = new stdclass();
+        $loginInfo->ui->defaultUser = new stdclass();
+        $loginInfo->ui->defaultUser->server  = common::getSysURL();;
+        $loginInfo->ui->defaultUser->account = $this->app->user->account;
         $loginInfo = json_encode($loginInfo);
 
         $loginFile = $clientDir . 'config.json';
@@ -292,16 +286,16 @@ class misc extends control
 
         define('PCLZIP_TEMPORARY_DIR', $clientDir);
         $this->app->loadClass('pclzip', true);
-        $clientFile = $clientDir . 'zentaoClient.zip';
+        $clientFile = $clientDir . 'zentaoclient.zip';
         $archive    = new pclzip($clientFile);
 
         if($os == 'mac')
         {
-            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'xuanxuan.app/Contents/Resouces');
+            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'zentaoclient/xuanxuan.app/Contents/Resouces');
         }
         else
         {
-            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'resources/build-in');
+            $result = $archive->add($loginFile, PCLZIP_OPT_REMOVE_ALL_PATH, PCLZIP_OPT_ADD_PATH, 'zentaoclient/resources/build-in');
         }
 
         if($result == 0)
@@ -323,7 +317,7 @@ class misc extends control
     public function ajaxGetPackageSize()
     {
         $account     = $this->app->user->account;
-        $packageFile = $this->app->getBasePath() . 'tmp/cache/client/' . $account . '/zentaoClient.zip';
+        $packageFile = $this->app->getBasePath() . 'tmp/cache/client/' . $account . '/zentaoclient.zip';
 
         $size = 0;
         if(file_exists($packageFile))

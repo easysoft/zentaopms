@@ -148,12 +148,13 @@ class custom extends control
                 }
 
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
-                foreach($_POST['keys'] as $index => $key)
+                $data = fixer::input('post')->get();
+                foreach($data->keys as $index => $key)
                 {
                     //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
                     
-                    $value  = $_POST['values'][$index];
-                    $system = $_POST['systems'][$index];
+                    $value  = $data->values[$index];
+                    $system = $data->systems[$index];
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
                 }
             }

@@ -191,6 +191,11 @@ class testsuiteModel extends model
                     $link = helper::createLink('testsuite', 'createCase', $params);
                     $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->testcase->create, '', "class='btn btn-primary'");
                 }
+                if(common::hasPriv('testsuite', 'createLib'))
+                {
+                    $link = helper::createLink('testsuite', 'createLib');
+                    $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->testsuite->createLib, '', "class='btn btn-primary'");
+                }
             }
         }
         $pageNav .= $selectHtml;

@@ -26,7 +26,7 @@ class taskModel extends model
         $taskFiles  = array();
         $this->loadModel('file');
         $task = fixer::input('post')
-            ->add('project', (int)$projectID)
+            ->setDefault('project', (int)$projectID)
             ->setDefault('estimate, left, story', 0)
             ->setDefault('status', 'wait')
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
@@ -35,6 +35,9 @@ class taskModel extends model
             ->setDefault('deadline', '0000-00-00')
             ->setIF(strpos($this->config->task->create->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
             ->setIF(strpos($this->config->task->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
@@ -368,6 +371,10 @@ class taskModel extends model
             {
                 $status = 'doing';
             }
+            elseif(isset($childrenStatus['done']) && isset($childrenStatus['wait']))
+            {
+                $status = 'doing';
+            }
             elseif(isset($childrenStatus['wait']))
             {
                 $status = 'wait';
@@ -578,6 +585,9 @@ class taskModel extends model
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('estStarted', '0000-00-00')
             ->setDefault('deadline', '0000-00-00')
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setIF($oldTask->parent == 0 && $this->post->parent == '', 'parent', 0)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
@@ -598,7 +608,7 @@ class taskModel extends model
 
             ->setIF($this->post->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
 
-            ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0, 'left', $this->post->estimate)
+            ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
 
             ->add('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
@@ -651,6 +661,7 @@ class taskModel extends model
         {
             foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
             $task = $this->computeHours4Multiple($oldTask, $task);
+            if($task->status == 'wait') $task->assignedTo = key($teams);
         }
 
         $this->dao->update(TABLE_TASK)->data($task)
@@ -1170,6 +1181,7 @@ class taskModel extends model
         }
 
         $task = fixer::input('post')
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
             ->setDefault('assignedDate', $now)
@@ -1349,6 +1361,7 @@ class taskModel extends model
 
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
+            ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
             ->setDefault('left', 0)
             ->setDefault('status', 'doing')
             ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
@@ -1358,6 +1371,12 @@ class taskModel extends model
             ->setDefault('assignedDate', helper::now())
             ->remove('comment')
             ->get();
+
+        if(!is_numeric($task->left))
+        {
+            dao::$errors[] = $this->lang->task->error->estimateNumber;
+            return false;
+        }
 
         if(!empty($oldTask->team))
         {

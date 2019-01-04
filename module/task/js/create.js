@@ -1,3 +1,71 @@
+/**
+ * Load module, stories and members. 
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadAll(projectID)
+{
+    loadModuleMenu(projectID); 
+    loadProjectStories(projectID);
+    loadProjectMembers(projectID);
+}
+
+/**
+ * Load team members of the project. 
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectMembers(projectID)
+{
+    $.get(createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + $('#assignedTo').val()), function(data)
+    {
+        $('#assignedTo_chosen').remove();
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo').attr('name', 'assignedTo[]').chosen();
+
+        $('.modal-dialog #taskTeamEditor tr').each(function()
+        {
+            $(this).find('#team_chosen').remove();
+            $(this).find('#team').replaceWith(data);
+            $(this).find('#assignedTo').attr('id', 'team').attr('name', 'team[]').chosen();
+        });
+    });
+}
+
+/**
+ * Load stories of the project. 
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadProjectStories(projectID)
+{
+    $.get(createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=0&storyID=' + $('#story').val()), function(data)
+    {
+        $('#story_chosen').remove();
+        $('#story').replaceWith(data);
+        $('#story').chosen();
+    });
+}
+
+/**
+ * Load module of the project. 
+ * 
+ * @param  int    $projectID 
+ * @access public
+ * @return void
+ */
+function loadModuleMenu(projectID)
+{
+    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + projectID + '&viewtype=task');
+    $('#moduleIdBox').load(link, function(){$('#module').chosen();});
+}
+
 /* Copy story title as task title. */
 function copyStoryTitle()
 {

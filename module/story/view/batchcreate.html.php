@@ -118,6 +118,7 @@ $(function()
                 var $select = $(this);
                 if(index == 0) $select.find("option[value='ditto']").remove();
                 if(index > 0) $select.val('ditto');
+                if($select.attr('id').indexOf('branch') >= 0) $select.val('<?php echo $branch;?>')
                 $select.chosen();
                 setTimeout(function()
                 {

@@ -16,15 +16,15 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-70px'><?php echo $lang->misc->client->version;?></th>
-          <td><?php echo html::select('version', $lang->misc->client->versionList, '', "class='form-control chosen'");?></td>
+          <th class='w-80px'><?php echo $lang->misc->client->version;?></th>
+          <td><?php echo $config->xuanxuan->version;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->misc->client->os;?></th>
           <td><?php echo html::select('os', $lang->misc->client->osList, $os, "class='form-control'");?></td>
         </tr>
         <tr class='text-center'>
-          <td colspan='2'><?php echo html::submitButton($lang->select, '', 'btn btn-primary btn-wide');?></td>
+          <td colspan='2'><?php echo html::submitButton('', '', 'btn btn-primary btn-wide');?></td>
         </tr>
       </table>
     </form>
@@ -36,10 +36,11 @@
   <div class='modal-body'>
     <ul>
       <li id='downloading'><?php echo $lang->misc->client->downloading;?><span>0</span>M</li>
-      <li id='downloaded' class='hidden'>     <?php echo $lang->misc->client->downloaded;?></li>
-      <li id='setConfig'  class='hidden'>     <?php echo $lang->misc->client->setConfig;?></li>
-      <li id='configError'  class='hidden'>   <?php echo $lang->misc->client->errorInfo->configError;?></li>
-      <li id='downloadError' class='hidden'>  <?php echo $lang->misc->client->errorInfo->downloadError;?></li>
+      <li id='downloaded' class='hidden'>    <?php echo $lang->misc->client->downloaded;?></li>
+      <li id='setting' class='hidden'>       <?php echo $lang->misc->client->setting;?></li>
+      <li id='setted' class='hidden'>        <?php echo $lang->misc->client->setted;?></li>
+      <li id='configError'  class='hidden'>  <?php echo $lang->misc->client->errorInfo->configError;?></li>
+      <li id='downloadError' class='hidden'> <?php echo $lang->misc->client->errorInfo->downloadError;?></li>
     </ul>
     <div id='hasError' class='alert alert-info hidden'></div>
     <div id='clearTmp' class='text-center hidden'><?php echo html::a($this->createLink('misc', 'downloadClient', "action=clearTmpPackage"), $lang->confirm, '', "class='btn btn-primary btn-wide'");?></div>
@@ -61,13 +62,14 @@
               clearInterval(progress);
               $('#downloading').addClass('hidden');
               $('#downloaded').removeClass('hidden');
+              $('#setting').removeClass('hidden');
 
               var link = createLink('misc', 'ajaxSetClientConfig', 'os=' + os);
               $.getJSON(link, function(response)
               {
                   if(response.result == 'success')
                   {
-                      $('#setConfig').removeClass('hidden');
+                      $('#setted').removeClass('hidden');
                       var link = createLink('misc', 'downloadClient', "action=downloadPackage" + '&os=' + os);
                       parent.$.closeModal();
                       location.href = link;

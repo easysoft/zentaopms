@@ -1,0 +1,12 @@
+body{padding:0px; margin: 0px;background-color: #fff;}
+#header{display: none}
+#footer{display: none}
+#header+#main{min-width:auto}
+#main{padding: 0px;}
+#main .container{padding: 0px;}
+#mainMenu{margin-top:0px;background-color: #efefef;}
+#mainContent .cell{box-shadow:none; -webkit-box-shadow: none;}
+
+.xuanxuan-card{padding-bottom:55px;}
+.xuancard-actions{width: 100%;text-align: center; padding: 10px 0;}
+.xuancard-actions.fixed{position: fixed; background: #fff; border-top: 1px solid #ddd; bottom: 0; margin-bottom: 0; z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.15);}

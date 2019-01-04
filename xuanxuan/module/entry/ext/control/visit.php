@@ -14,7 +14,8 @@ class entry extends control
         if(RUN_MODE != 'xuanxuan') die();
 
         $referer = !empty($_GET['referer']) ? $this->get->referer : $referer;
-        if(empty($referer)) $referer = $this->createLink('index');
+        $server  = $this->loadModel('chat')->getServer();
+        if(empty($referer)) $referer = $server . str_replace('/xuanxuan.php', '/index.php', $this->createLink('my', 'index', '', 'html'));
 
         $output = new stdclass();
         $output->module = $this->moduleName;
@@ -29,13 +30,13 @@ class entry extends control
         $pathinfo = parse_url($location);
         if(!empty($pathinfo['query']))
         {
-            $location = rtrim($location, '&') . "&$query";
+            $location = substr($location, 0, strpos($location, '?'));
+            $location = rtrim($location, '?') . "?{$query}&{$pathinfo['query']}";
         }
         else
         {
             $location = rtrim($location, '?') . "?$query";
         }
-        $location .= "&display=card";
         $output->data = $location;
 
         if($this->session->userID)
@@ -54,8 +55,14 @@ class entry extends control
 
             $last = time();
             $user->last     = date(DT_DATETIME1, $last);
-            $user->lastTime = $user->last;
+            $user->lastTime = $last;
             $user->ip       = $this->session->clientIP->IP;
+
+            $xxInstalled = $user->account . 'installed';
+            $this->loadModel('setting');
+            if(!isset($this->config->xxclient->$xxInstalled)) $this->setting->setItem("system.common.xxclient.{$user->account}installed", '1');
+            if(!isset($this->config->xxserver->installed)) $this->setting->setItem("system.common.xxserver.installed", '1');
+            if(!isset($this->config->xxserver->noticed)) $this->setting->setItem("system.common.xxserver.noticed", '1');
 
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;

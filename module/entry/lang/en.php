@@ -28,6 +28,7 @@ $lang->entry->url         = 'Request URL';
 
 $lang->entry->confirmDelete = 'Are you sure delete this entry?';
 $lang->entry->help          = 'Help';
+$lang->entry->notify        = 'Notify';
 
 $lang->entry->note = new stdClass();
 $lang->entry->note->name    = 'Name';

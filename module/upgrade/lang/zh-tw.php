@@ -46,5 +46,6 @@ $lang->upgrade->sureExecute   = '確認執行';
 $lang->upgrade->forbiddenExt  = '以下插件與新版本不兼容，已經自動禁用：';
 $lang->upgrade->updateFile    = '需要更新附件信息。';
 $lang->upgrade->noticeSQL     = '檢查到你的資料庫跟標準不一致，嘗試修復失敗。請執行以下SQL語句，再刷新頁面檢查。';
+$lang->upgrade->afterDeleted  = '以上檔案未能刪除， 刪除後刷新！';
 
 include dirname(__FILE__) . '/version.php';

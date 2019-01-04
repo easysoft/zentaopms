@@ -17,6 +17,7 @@
 <?php
 js::set('fullscreen', $lang->doc->fullscreen);
 js::set('retrack', $lang->doc->retrack);
+js::set('sysurl', common::getSysUrl());
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">

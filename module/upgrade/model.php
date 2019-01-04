@@ -249,6 +249,13 @@ class upgradeModel extends model
             case '10_5':
             case '10_5_1':
                 $this->execSQL($this->getUpgradeFile('10.5.1'));
+            case '10_6':
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
+                $this->execSQL($xuanxuanSql);
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
+                $this->execSQL($xuanxuanSql);
+                $this->initXuanxuan();
+            case '11_0':
         }
 
         $this->deletePatch();
@@ -367,6 +374,10 @@ class upgradeModel extends model
             case '10_4':       $confirmContent .= file_get_contents($this->getUpgradeFile('10.4'));
             case '10_5':
             case '10_5_1':     $confirmContent .= file_get_contents($this->getUpgradeFile('10.5.1'));
+            case '10_6':
+                $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql');
+                $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql');
+            case '11_0':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -471,6 +482,28 @@ class upgradeModel extends model
 
         return $alterSQL;
     }
+
+    /**
+     * Delete Useless Files 
+     * 
+     * @access public
+     * @return array
+     */
+    public function deleteFiles()
+    {
+        $result = array();
+        foreach($this->config->delete as $deleteFiles)
+        {
+            $basePath = $this->app->getBasePath();
+            foreach($deleteFiles as $file)
+            {
+                $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
+                if(file_exists($fullPath) and !unlink($fullPath)) $result[] = $fullPath;
+            }
+        }
+        return $result;
+    }
+
 
 
     /**
@@ -887,6 +920,8 @@ class upgradeModel extends model
      */
     public function execSQL($sqlFile)
     {
+        if(!file_exists($sqlFile)) return false;
+
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
         $ignoreCode   = '|1050|1060|1091|1061|';
 
@@ -2543,6 +2578,29 @@ class upgradeModel extends model
         $users = $this->dao->select('account')->from(TABLE_USER)->fetchAll();
         $this->loadModel('user');
         foreach($users as $user) $this->user->computeUserView($user->account, $force = true);
+        return true;
+    }
+
+    /**
+     * Init Xuanxuan.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function initXuanxuan()
+    {
+        $this->loadModel('setting');
+        $keyID = $this->dao->select('id')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('xuanxuan')->andWhere('`key`')->eq('key')->fetch('id');
+        if($keyID)
+        {
+            $existKey = $this->dao->select('id')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('xuanxuan')->andWhere('`key`')->eq('key')->fetch('id');
+            if($existKey) $this->dao->delete()->from(TABLE_CONFIG)->where('id')->eq($existKey)->exec();
+
+            $this->dao->update(TABLE_CONFIG)->set('module')->eq('common')->set('section')->eq('xuanxuan')->where('id')->eq($keyID)->exec();
+            $this->setting->setItem('system.common.xuanxuan.turnon', '1');
+            $this->setting->setItem('system.common.xxserver.noticed', '1');
+        }
+
         return true;
     }
 }

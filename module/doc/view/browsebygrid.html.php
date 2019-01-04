@@ -72,15 +72,15 @@
         <?php endforeach;?>
         <?php endif;?>
         <?php if(!empty($attachLibs) and $browseType != 'bysearch'):?>
-        <?php foreach($attachLibs as $libID => $attachLib):?>
+        <?php foreach($attachLibs as $libType => $attachLib):?>
         <div class="col">
           <?php
           $browseLink = '';
-          if($libID == 'project')
+          if($libType == 'project')
           {
               $browseLink = inlink('allLibs', "type=project&product={$currentLib->product}");
           }
-          elseif($libID == 'files')
+          elseif($libType == 'files')
           {
               $browseLink = inlink('showFiles', "type=$type&objectID={$currentLib->$type}");
           }

@@ -194,8 +194,8 @@ class testreport extends control
                 die(js::locate('back'));
             }
 
-            $stories = $this->story->getProjectStories($project->id);
             $builds  = $this->build->getByList($buildIdList);
+            $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getProjectStories($project->id);;
 
             $begin = $project->begin;
             $end   = $project->end;

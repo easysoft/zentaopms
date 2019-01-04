@@ -92,6 +92,7 @@ class task extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
+            if($this->post->project) $projectID = $this->post->project;
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
             {
@@ -138,6 +139,13 @@ class task extends control
             }
 
             /* Locate the browser. */
+            if($this->app->getViewType() == 'xhtml')
+            {
+                $taskLink  = $this->createLink('task', 'view', "taskID=$taskID");
+                $response['locate'] = $taskLink;
+                $this->send($response);
+            }
+
             if($this->post->after == 'continueAdding')
             {
                 $response['message'] = $this->lang->task->successSaved . $this->lang->task->afterChoices['continueAdding'];
@@ -146,8 +154,8 @@ class task extends control
             }
             elseif($this->post->after == 'toTaskList')
             {
-                $moduleID  = $this->post->module ? $this->post->module : 0;
-                $taskLink  = $this->createLink('project', 'task', "projectID=$projectID&browseType=byModule&param=$moduleID");
+                setcookie('moduleBrowseParam',  (int)$this->post->module, 0, $this->config->webRoot);
+                $taskLink  = $this->createLink('project', 'task', "projectID=$projectID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 $this->send($response);
             }
@@ -184,6 +192,7 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
+        $this->view->projects         = $this->loadModel('project')->getPairs();
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;

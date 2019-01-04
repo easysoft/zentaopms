@@ -39,6 +39,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
       css::import($defaultTheme . $this->cookie->lang . '.' . $this->cookie->theme . '.css');
       js::import($jsRoot . 'all.js');
   }
+  if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');
 
   if(!defined('IN_INSTALL') and commonModel::isTutorialMode())
   {

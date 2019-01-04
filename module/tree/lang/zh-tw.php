@@ -12,7 +12,7 @@
 $lang->tree = new stdclass();
 $lang->tree->common             = '模組維護';
 $lang->tree->edit               = '編輯';
-$lang->tree->delete             = '刪除模組';
+$lang->tree->delete             = '刪除';
 $lang->tree->browse             = '通用模組維護';
 $lang->tree->browseTask         = '任務模組維護';
 $lang->tree->manage             = '維護模組';

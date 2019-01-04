@@ -168,10 +168,7 @@ class router extends baseRouter
     {
         parent::parsePathInfo();
 
-        if($this->get->display == 'card')
-        {
-            $this->viewType = 'xhtml';
-        }
+        if($this->get->display == 'card') $this->viewType = 'xhtml';
     }
 
     /**
@@ -185,9 +182,21 @@ class router extends baseRouter
     {
         parent::parseGET();
 
-        if($this->get->display == 'card')
-        {
-            $this->viewType = 'xhtml';
-        }
+        if($this->get->display == 'card') $this->viewType = 'xhtml';
+    }
+
+    /**
+     * 合并请求的参数和默认参数，这样就可以省略已经有默认值的参数了。
+     * Merge the params passed in and the default params. Thus the params which have default values needn't pass value, just like a function.
+     *
+     * @param   array $defaultParams     the default params defined by the method.
+     * @param   array $passedParams      the params passed in through url.
+     * @access  public
+     * @return  array the merged params.
+     */
+    public function mergeParams($defaultParams, $passedParams)
+    {
+        unset($passedParams['display']);
+        return parent::mergeParams($defaultParams, $passedParams);
     }
 }

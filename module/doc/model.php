@@ -784,6 +784,7 @@ class docModel extends model
 
         $docCounts= $this->dao->select("module, count(id) as docCount")->from(TABLE_DOC)
             ->where('module')->in(array_keys($modules))
+            ->andWhere('deleted')->eq(0)
             ->groupBy('module')
             ->fetchPairs();
 
@@ -1221,7 +1222,7 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`lib`,`acl`,`users`,`groups`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)

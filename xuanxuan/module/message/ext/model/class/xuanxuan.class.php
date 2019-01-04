@@ -15,7 +15,11 @@ class xuanxuanMessage extends messageModel
                 $field  = $this->config->action->objectNameFields[$objectType];
                 $title  = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
                 $text   = $title . ' ' . "[#{$objectID}::{$object->$field}]";
-                $url    = common::getSysURL() . helper::createLink($objectType, 'view', "id=$objectID");
+
+                $server   = $this->loadModel('chat')->getServer();
+                $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
+                unset($_GET['onlybody']);
+                $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');
 
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
@@ -25,6 +29,7 @@ class xuanxuanMessage extends messageModel
                 $target = array_keys($target);
 
                 if($target) $this->loadModel('chat')->createNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+                if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }
     }

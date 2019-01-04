@@ -11,10 +11,8 @@ $config->global->flow = 'full';
 /* set module root path and included the resource of group module. */
 $moduleRoot = '../module/';
 include $moduleRoot . '/group/lang/resource.php';
-foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile)
-{
-    include $resourceFile;
-}
+foreach(glob($moduleRoot . '/group/ext/lang/zh-cn/*.php') as $resourceFile) include $resourceFile;
+foreach(glob('../xuanxuan/module/group/ext/lang/zh-cn/*.php') as $resourceFile) include $resourceFile;
 
 $lang->productCommon = '';
 $lang->projectCommon = '';
@@ -116,59 +114,62 @@ $whiteList[] = 'webhook-asyncsend';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
-foreach(glob($moduleRoot . '*') as $modulePath)
+foreach(array($moduleRoot, '../xuanxuan/module/') as $subModuleRoot)
 {
-    $moduleName  = basename($modulePath);
-    if(strpos('install|upgrade|convert|common|misc|editor', $moduleName) !== false) continue;
-    $controlFile = $modulePath . '/control.php';
-    if(file_exists($controlFile))
+    foreach(glob($subModuleRoot . '*') as $modulePath)
     {
-        include $controlFile;
-        if(class_exists($moduleName))
+        $moduleName  = basename($modulePath);
+        if(strpos('install|upgrade|convert|common|misc|editor', $moduleName) !== false) continue;
+        $controlFile = $modulePath . '/control.php';
+        if(file_exists($controlFile))
         {
-            if($moduleName == 'block') continue;
-            $class   = new ReflectionClass($moduleName);
-            $methods = $class->getMethods();
-            foreach($methods as $method)
+            include $controlFile;
+            if(class_exists($moduleName))
             {
-                $methodRef = new ReflectionMethod($method->class, $method->name);
-                if($methodRef->isPublic() and strpos($method->name, '__') === false)
+                if($moduleName == 'block') continue;
+                $class   = new ReflectionClass($moduleName);
+                $methods = $class->getMethods();
+                foreach($methods as $method)
                 {
-                    $methodName = $method->name;
-                    if(in_array($moduleName . '-' . strtolower($method->name), $whiteList)) continue;
-                    if(strpos($methodName, 'ajax') !== false) continue;
-
-                    $exits = false;
-                    if(isset($lang->resource->$moduleName))
+                    $methodRef = new ReflectionMethod($method->class, $method->name);
+                    if($methodRef->isPublic() and strpos($method->name, '__') === false)
                     {
-                        foreach($lang->resource->$moduleName as $key => $label)
+                        $methodName = $method->name;
+                        if(in_array($moduleName . '-' . strtolower($method->name), $whiteList)) continue;
+                        if(strpos($methodName, 'ajax') !== false) continue;
+
+                        $exits = false;
+                        if(isset($lang->resource->$moduleName))
                         {
-                            if(strtolower($methodName) == strtolower($key)) $exits = true;
+                            foreach($lang->resource->$moduleName as $key => $label)
+                            {
+                                if(strtolower($methodName) == strtolower($key)) $exits = true;
+                            }
                         }
+                        if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
                     }
-                    if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
                 }
             }
         }
-    }
 
-    /* Checking extension files. */
-    $extControlFiles = glob($modulePath . '/ext/control/*.php');
-    if($extControlFiles)
-    {
-        foreach($extControlFiles as $extControlFile)
+        /* Checking extension files. */
+        $extControlFiles = glob($modulePath . '/ext/control/*.php');
+        if($extControlFiles)
         {
-            $methodFile = substr($extControlFile, strrpos($extControlFile, '/') + 1);
-            $methodName = substr($methodFile, 0, strpos($methodFile, '.'));
-            if(in_array($moduleName . '-' . strtolower($methodName), $whiteList)) continue;
-            if(strpos($methodName, 'ajax') !== false) continue;
-
-            $exits = false;
-            foreach($lang->resource->$moduleName as $key => $label)
+            foreach($extControlFiles as $extControlFile)
             {
-                if(strtolower($methodName) == strtolower($key)) $exits = true;
+                $methodFile = substr($extControlFile, strrpos($extControlFile, '/') + 1);
+                $methodName = substr($methodFile, 0, strpos($methodFile, '.'));
+                if(in_array($moduleName . '-' . strtolower($methodName), $whiteList)) continue;
+                if(strpos($methodName, 'ajax') !== false) continue;
+
+                $exits = false;
+                foreach($lang->resource->$moduleName as $key => $label)
+                {
+                    if(strtolower($methodName) == strtolower($key)) $exits = true;
+                }
+                if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
             }
-            if(!$exits) echo $moduleName . "\t" . $methodName . " not in the list. \n";
         }
     }
 }
@@ -177,66 +178,69 @@ foreach(glob($moduleRoot . '*') as $modulePath)
 echo '-------------lang checking-----------------' . "\n";
 include '../module/common/lang/zh-cn.php';
 include '../config/config.php';
-foreach(glob($moduleRoot . '*') as $modulePath)
+foreach(array($moduleRoot, '../xuanxuan/module/') as $subModuleRoot)
 {
-    unset($lang);
-    $moduleName   = basename($modulePath);
-    $mainLangFile = $modulePath . '/lang/zh-cn.php';
-    if(!file_exists($mainLangFile)) continue;
-    $mainLines = file($mainLangFile);
-
-    foreach($config->langs as $langKey => $langName)
+    foreach(glob($subModuleRoot . '*') as $modulePath)
     {
-        if($langKey == 'zh-cn' or $langKey == 'zh-tw') continue;
-        $langFile = $modulePath . '/lang/' . $langKey . '.php';
-        if(!file_exists($langFile)) continue;
-        $lines = file($langFile);
-        foreach($mainLines as $lineNO => $line)
+        unset($lang);
+        $moduleName   = basename($modulePath);
+        $mainLangFile = $modulePath . '/lang/zh-cn.php';
+        if(!file_exists($mainLangFile)) continue;
+        $mainLines = file($mainLangFile);
+
+        foreach($config->langs as $langKey => $langName)
         {
-            if(!isset($lines[$lineNO]) OR empty(trim($lines[$lineNO]))) continue;
-            if(empty(trim($line))) continue;
-            if(strpos($line, '$lang') === 0)
+            if($langKey == 'zh-cn' or $langKey == 'zh-tw') continue;
+            $langFile = $modulePath . '/lang/' . $langKey . '.php';
+            if(!file_exists($langFile)) continue;
+            $lines = file($langFile);
+            foreach($mainLines as $lineNO => $line)
             {
-                if(strpos($line, '=') !== false)
+                if(!isset($lines[$lineNO]) OR empty(trim($lines[$lineNO]))) continue;
+                if(empty(trim($line))) continue;
+                if(strpos($line, '$lang') === 0)
                 {
-                    list($mainKey, $mainValue) = explode('=', $line);
-                    list($key, $value) = explode('=', $lines[$lineNO]);
-                }
-                if((strpos($line, '=') === false and $line != $lines[$lineNO]) or trim($mainKey) != trim($key))
-                {
-                    $key = trim($key);
-                    $lineNO = $lineNO + 1;
-                    echo "module $moduleName need checking, command is:";
-                    echo " vim -O +$lineNO ../module/$moduleName/lang/zh-cn.php +$lineNO ../module/$moduleName/lang/en.php \n";
-                    break;
+                    if(strpos($line, '=') !== false)
+                    {
+                        list($mainKey, $mainValue) = explode('=', $line);
+                        list($key, $value) = explode('=', $lines[$lineNO]);
+                    }
+                    if((strpos($line, '=') === false and $line != $lines[$lineNO]) or trim($mainKey) != trim($key))
+                    {
+                        $key = trim($key);
+                        $lineNO = $lineNO + 1;
+                        echo "module $moduleName need checking, command is:";
+                        echo " vim -O +$lineNO ../module/$moduleName/lang/zh-cn.php +$lineNO ../module/$moduleName/lang/en.php \n";
+                        break;
+                    }
                 }
             }
         }
-    }
 
-    foreach(glob($modulePath . '/ext/lang/zh-cn/*.php') as $extMainLangFile)
-    {
-        $extMainLines = file($extMainLangFile);
-        $extLangFile  = basename($extMainLangFile);
-        $extEnFile    = $modulePath . '/ext/lang/en/' . $extLangFile;
-        $extLines     = file($extEnFile);
-        foreach($extMainLines as $lineNO => $line)
+        foreach(glob($modulePath . '/ext/lang/zh-cn/*.php') as $extMainLangFile)
         {
-            if(strpos($line, '$lang') === false)
+            $extMainLines = file($extMainLangFile);
+            $extLangFile  = basename($extMainLangFile);
+            $extEnFile    = $modulePath . '/ext/lang/en/' . $extLangFile;
+            $extLines     = file($extEnFile);
+            foreach($extMainLines as $lineNO => $line)
             {
-                //if($line != $lines[$lineNO]) echo $moduleName . ' ' . $langKey . ' ' . $lineNO . "\n";
-            }
-            else
-            {
-                list($mainKey, $mainValue) = explode('=', $line);
-                list($key, $value) = explode('=', $extLines[$lineNO]);
-                if(trim($mainKey) != trim($key))
+                if(strpos($line, '$lang') === false)
                 {
-                    $key = trim($key);
-                    $lineNO = $lineNO + 1;
-                    echo "module $moduleName need checking, command is:";
-                    echo " vim -O +$lineNO ../../module/$moduleName/ext/lang/zh-cn/$extLangFile +$lineNO ../../module/$moduleName/ext/lang/en/$extLangFile \n";
-                    break;
+                    //if($line != $lines[$lineNO]) echo $moduleName . ' ' . $langKey . ' ' . $lineNO . "\n";
+                }
+                else
+                {
+                    list($mainKey, $mainValue) = explode('=', $line);
+                    list($key, $value) = explode('=', $extLines[$lineNO]);
+                    if(trim($mainKey) != trim($key))
+                    {
+                        $key = trim($key);
+                        $lineNO = $lineNO + 1;
+                        echo "module $moduleName need checking, command is:";
+                        echo " vim -O +$lineNO ../../module/$moduleName/ext/lang/zh-cn/$extLangFile +$lineNO ../../module/$moduleName/ext/lang/en/$extLangFile \n";
+                        break;
+                    }
                 }
             }
         }
@@ -249,18 +253,21 @@ $app = new app;
 $lang = new stdclass();
 
 error_reporting(E_WARNING | E_STRICT );
-foreach(glob($moduleRoot . '*') as $modulePath)
+foreach(array($moduleRoot, '../xuanxuan/module/') as $subModuleRoot)
 {
-    $moduleName = basename($modulePath);
-    $cnLangFile = $modulePath . '/lang/zh-cn.php';
-    $enLangFile = $modulePath . '/lang/en.php';
-    $configFile = $modulePath . '/config.php';
+    foreach(glob($subModuleRoot . '*') as $modulePath)
+    {
+        $moduleName = basename($modulePath);
+        $cnLangFile = $modulePath . '/lang/zh-cn.php';
+        $enLangFile = $modulePath . '/lang/en.php';
+        $configFile = $modulePath . '/config.php';
 
-    if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
-    if(!isset($config->$moduleName)) $config->$moduleName = new stdclass();
-    if(file_exists($cnLangFile)) include $cnLangFile;
-    if(file_exists($enLangFile)) include $enLangFile;
-    if(file_exists($configFile)) include $configFile;
+        if(!isset($lang->$moduleName)) $lang->$moduleName = new stdclass();
+        if(!isset($config->$moduleName)) $config->$moduleName = new stdclass();
+        if(file_exists($cnLangFile)) include $cnLangFile;
+        if(file_exists($enLangFile)) include $enLangFile;
+        if(file_exists($configFile)) include $configFile;
+    }
 }
 
 echo '-------------demo data checking. -----------------' . "\n";
