@@ -419,11 +419,11 @@ class testreportModel extends model
      */
     public function getStories4Test($builds)
     {
-        $bugIdList = '';
-        foreach($builds as $build) $bugIdList .= $build->stories. ',';
+        $storyIdList = '';
+        foreach($builds as $build) $storyIdList .= $build->stories . ',';
 
         return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq(0)
-            ->beginIF(is_array($builds))->andWhere('id')->in(trim($bugIdList, ','))->fi()
+            ->andWhere('id')->in(trim($storyIdList, ','))
             ->fetchAll('id');
     }
 }

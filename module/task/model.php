@@ -29,16 +29,15 @@ class taskModel extends model
             ->setDefault('project', (int)$projectID)
             ->setDefault('estimate, left, story', 0)
             ->setDefault('status', 'wait')
-            ->setDefault('estimate',(float)$this->post->estimate) 
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('estStarted', '0000-00-00')
             ->setDefault('deadline', '0000-00-00')
             ->setIF(strpos($this->config->task->create->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
             ->setIF(strpos($this->config->task->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->setIF($this->post->estimate !== 0, 'estimate', (float)$this->post->estimate)
-            ->setIF($this->post->consumed !== 0, 'consumed', (float)$this->post->consumed)
-            ->setIF($this->post->left     !== 0, 'left',     (float)$this->post->left)
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setDefault('openedBy',   $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
@@ -586,9 +585,9 @@ class taskModel extends model
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('estStarted', '0000-00-00')
             ->setDefault('deadline', '0000-00-00')
-            ->setIF($this->post->estimate !== 0, 'estimate', (float)$this->post->estimate)
-            ->setIF($this->post->consumed !== 0, 'consumed', (float)$this->post->consumed)
-            ->setIF($this->post->left     !== 0, 'left',     (float)$this->post->left)
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)
             ->setIF($oldTask->parent == 0 && $this->post->parent == '', 'parent', 0)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'estStarted') !== false, 'estStarted', $this->post->estStarted)
             ->setIF(strpos($this->config->task->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
@@ -1182,7 +1181,7 @@ class taskModel extends model
         }
 
         $task = fixer::input('post')
-            ->setIF($this->post->consumed !== 0, 'consumed', (float)$this->post->consumed)
+            ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setDefault('left', 0)
             ->setDefault('assignedTo',   $oldTask->openedBy)
             ->setDefault('assignedDate', $now)
@@ -1242,7 +1241,6 @@ class taskModel extends model
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
-        $task->consumed = (int)$task->consumed;
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
@@ -1363,7 +1361,7 @@ class taskModel extends model
 
         $oldTask = $this->getById($taskID);
         $task = fixer::input('post')
-            ->setIF($this->post->left !== 0, 'left', (float)$this->post->left)
+            ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
             ->setDefault('left', 0)
             ->setDefault('status', 'doing')
             ->setDefault('finishedBy, canceledBy, closedBy, closedReason', '')
@@ -1666,7 +1664,6 @@ class taskModel extends model
             ->beginIF($type == 'assignedTo')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'finishedBy')
             ->andWhere('t1.finishedby', 1)->eq($account)
-            ->andWhere('t1.status')->eq('done')
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()

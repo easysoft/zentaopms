@@ -195,7 +195,7 @@ class testreport extends control
             }
 
             $builds  = $this->build->getByList($buildIdList);
-            $stories = !empty($this->testreport->getStories4Test($builds)) ? $this->testreport->getStories4Test($builds) : $this->story->getProjectStories($project->id);;
+            $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getProjectStories($project->id);;
 
             $begin = $project->begin;
             $end   = $project->end;
