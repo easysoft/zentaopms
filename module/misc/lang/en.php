@@ -20,9 +20,9 @@ $lang->misc->client->version     = 'Client Version';
 $lang->misc->client->os          = 'Select OS';
 $lang->misc->client->download    = 'Download';
 $lang->misc->client->downloading = 'Downloading:';
-$lang->misc->client->downloaded  = 'Downloaded successful!';
-$lang->misc->client->setting     = 'Setting config info.';
-$lang->misc->client->setted      = 'Set config info successful!';
+$lang->misc->client->downloaded  = 'Downloaded!';
+$lang->misc->client->setting     = 'Configure';
+$lang->misc->client->setted      = 'Configuration is done!';
 
 $lang->misc->client->osList['win64']   = 'Windows 64';
 $lang->misc->client->osList['win32']   = 'Windows 32';
@@ -32,10 +32,10 @@ $lang->misc->client->osList['mac']     = 'Mac';
 
 $lang->misc->client->errorInfo = new stdclass();
 $lang->misc->client->errorInfo->downloadError  = 'Failed to download package!';
-$lang->misc->client->errorInfo->configError    = 'Failed to set config info!';
+$lang->misc->client->errorInfo->configError    = 'Failed to configure!';
 $lang->misc->client->errorInfo->manualOpt      = 'Please get client package from %s .';
-$lang->misc->client->errorInfo->dirNotExist    = 'The dir <span class="code text-red">%s</span> is not exist, please make it.';
-$lang->misc->client->errorInfo->dirNotWritable = 'The dir <span class="code text-red">%s</span> is not writable. <br /> Please exec:<span class="code text-red">sudo chmod 777 %s</span> under linux os.';
+$lang->misc->client->errorInfo->dirNotExist    = 'The dir <span class="code text-red">%s</span> does not exist. Create it.';
+$lang->misc->client->errorInfo->dirNotWritable = 'The dir <span class="code text-red">%s</span> is not writable. <br /> Please exec:<span class="code text-red">sudo chmod 777 %s</span> in Linux.';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
@@ -75,23 +75,23 @@ $lang->misc->zentao->cowin['cowinmore']    = "More";
 $lang->misc->zentao->service['servicemore']= 'More';
 
 $lang->misc->mobile      = "Mobile Access";
-$lang->misc->noGDLib     = "Please use the browser on your phone to visit <strong>%s</strong>";
-$lang->misc->copyright   = "&copy; 2009 - 2018 <a href='http://easysoft.ltd' target='_blank'>Nature Easy Soft Network Technology Co,LTD</a> Email <a href='mailto:Max@easysoft.ltd'>Max@easysoft.ltd</a>";
+$lang->misc->noGDLib     = "Please visit <strong>%s</strong> in the browser of your phone.";
+$lang->misc->copyright   = "&copy; 2009 - 2019 <a href='http://easysoft.ltd' target='_blank'>Nature Easy Soft</a> Email <a href='mailto:Renee@easysoft.ltd'>Renee@easysoft.ltd</a>";
 $lang->misc->checkTable  = "Check Data Table";
 $lang->misc->needRepair  = "Repair Table";
-$lang->misc->repairTable = "Database table is damaged due to power outage. Please chech and repair!";
-$lang->misc->repairFail  = "Failed to repair. Please go to the database data directory, try to perform <code>myisamchk -r -f %s.MYI</code> repair.";
+$lang->misc->repairTable = "Database table is damaged due to power outage. Please check and repair!";
+$lang->misc->repairFail  = "Failed to repair. Please go to the database data directory, and try to execute <code>myisamchk -r -f %s.MYI</code> repair.";
 $lang->misc->connectFail = "Failed to connect to database. Error: %s，<br/> Please check the MySQL error log and troubleshoot.";
 $lang->misc->tableName   = "Table Name";
 $lang->misc->tableStatus = "Status";
-$lang->misc->novice      = "First time to ZenTao? Do you want to start rookie mode?";
+$lang->misc->novice      = "New to ZenTao? Do you want to start ZenTao Tutorial?";
 
-$lang->misc->noticeRepair = "<h5>If you are not Administrator, please contact Administrator to repair table.</h5>
-    <h5>If you are, please login into your Zentao host and create a file named <span>%s</span>.</h5>
+$lang->misc->noticeRepair = "<h5>If you are not Administrator, please contact your ZenTao Administrator to repair tables.</h5>
+    <h5>If you are, please login your Zentao host and create a file named <span>%s</span>.</h5>
     <p>Note:</p>
     <ol>
     <li>Keep the file empty.</li>
-    <li>If the file exists, remove it and create one again.</li>
+    <li>If the file exists, remove it and create a new one.</li>
     </ol>";
 
 $lang->misc->feature = new stdclass();
@@ -122,34 +122,34 @@ $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 $lang->misc->feature->all['11.1.stable'][] = array('title'=>'Fix Bug.');
 
-$lang->misc->feature->all['11.0.stable'][] = array('title'=>'Zentao integrate Xuanxuan');
+$lang->misc->feature->all['11.0.stable'][] = array('title'=>'ZenTao integrate Xuanxuan');
 
-$lang->misc->feature->all['10.6.stable'][] = array('title'=>'Adjust backup mechanism', 'desc' => '<p>Increase backup settings and make backups more flexible</p><p>Show backup progress</p><p>Can change the backup directory</p>');
-$lang->misc->feature->all['10.6.stable'][] = array('title'=>'Optimize and adjust menus', 'desc' => '<p>Adjust admin menus</p><p>Adjust the secondary menu of my and project</p>');
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'Adjust backup mechanism', 'desc' => '<p>Increase backup settings and make backup more flexible</p><p>Show backup progress</p><p>Change the backup directory</p>');
+$lang->misc->feature->all['10.6.stable'][] = array('title'=>'Optimize and adjust menu', 'desc' => '<p>Adjust admin menu</p><p>Adjust the secondary menu of My and Project</p>');
 
-$lang->misc->feature->all['10.5.stable'][] = array('title'=>'Adjust document display', 'desc' => "<p>Adjust the layout method on the left side of the document library.</p><p>Adding filter conditions to the bottom of the document library's navigation bottom.</p>");
-$lang->misc->feature->all['10.5.stable'][] = array('title'=>'Adjust the sub task logic and optimize the display of father child task.', 'desc' => '');
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'Adjust document layout', 'desc' => "<p>Adjust the layout method on the left side of the document library.</p><p>Add filter conditions at the bottom of the document library menu.</p>");
+$lang->misc->feature->all['10.5.stable'][] = array('title'=>'Adjust the child task logic and optimize the display of parent-child task.', 'desc' => '');
 
-$lang->misc->feature->all['10.4.stable'][] = array('title'=>'Optimizing and adjusting new interface', 'desc' => '<p>Details page restore our previous layout.</p><p>Refactoring forms to add user pages</p><p>When use cases are executed, do not update the use case state if the user manually chooses to pass through and write the results.</p>');
-$lang->misc->feature->all['10.4.stable'][] = array('title'=>'After the user machine hibernate login fails, the session is refreshed again.', 'desc' => '');
-$lang->misc->feature->all['10.4.stable'][] = array('title'=>'Upgrading existing interface mechanisms', 'desc' => '');
+$lang->misc->feature->all['10.4.stable'][] = array('title'=>'Optimize and adjust new interface', 'desc' => '<p>Detail page restore to the previous layout.</p><p>Refactore forms to add user pages</p><p>When use cases are executed, do not update the use case stause if the user manually chooses to pass and write the results.</p>');
+$lang->misc->feature->all['10.4.stable'][] = array('title'=>'After the user machine hibernate and the login fails, the session will be refreshed again.', 'desc' => '');
+$lang->misc->feature->all['10.4.stable'][] = array('title'=>'Upgrade existing interface mechanisms', 'desc' => '');
 
 $lang->misc->feature->all['10.3.stable'][] = array('title'=>'Fix Bug.', 'desc' => '');
 $lang->misc->feature->all['10.2.stable'][] = array('title'=>'Xuan.im is integrated!', 'desc' => '');
 
 $lang->misc->feature->all['10.0.stable'][] = array('title'=>'New UI/UX and new experience', 'desc' => '<ol><li>My Dashboard</li><li>Dynamic</li><li>Product Home</li><li>Product overview</li><li>Roadmap</li><li>Project Home</li><li>Project overview</li><li>QA Home</li><li>Document Home</li><li>Added work report on My Dashboard</li><li>Add/Edit/Finish todos on My Dashboard</li><li>Add prodcut report on Product Home</li><li>Add prodcut overview on Product Home</li><li>Add project report on Project Home</li><li>Add project overview on Project Home</li><li>Add QA report on QA Home</li><li>All Product/product Home/All Project/Project Home/QA Home is moved from the right of the secondary Narbar to the left.</li><li>Kanban/Burndown/Tree/ByGroup of Project/Task has been moved from the third Navbar to the secondary one; Tree/ByGroup/Task Liat has been integrated to a drop-down.</li><li>Bug/Build of Project on the secondary Navbar has been integrated to a drop-down.</li><li>Display build and list by group, which is more reasonable.</li><li>Added tree to display docuemnt on the left of the page.</li><li>Added quick entry to document, including Last Update, My Doc and My Favorite</li><li>Added My Favorite to Doc module.</li></ol>');
 
-$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Message centralized management', 'desc' => '<p>Centring Mail，SMS，webhook into Message</p>');
-$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Add Periodic Todo function', 'desc' => '');
-$lang->misc->feature->all['9.8.stable'][] = array('title'=>"Add Block of 'Assigned to Me'", 'desc' => '');
-$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Support Generating TestStatements of TestBuilds', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Message centralized management', 'desc' => '<p>Gather Mail，SMS，webhook into Message</p>');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Add recuured Todo', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>"Add Block of 'AssignToMe'", 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Support generating reports of TestBuilds', 'desc' => '');
 
-$lang->misc->feature->all['9.7.stable'][] = array('title'=>'optimize International package，Added Demo data。', 'desc' => '');
+$lang->misc->feature->all['9.7.stable'][] = array('title'=>'Optimize International package. Added Demo data.', 'desc' => '');
 
-$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Webhook Interface feature', 'desc' => 'support communication with BearyChat,dingding');
-$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Score feature', 'desc' => 'More skilled Use, More score');
-$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Multiplayer task and subTask to project tasks', 'desc' => '');
-$lang->misc->feature->all['9.6.stable'][] = array('title'=>'added Product line management to Product View', 'desc' => '');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'Added Webhook Interface feature', 'desc' => 'Support communication with BearyChat, Dingding');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'Added Point', 'desc' => 'More skilled application, more score');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'Added multiple user task and child tasks to Project', 'desc' => '');
+$lang->misc->feature->all['9.6.stable'][] = array('title'=>'Added Product line management to Product View', 'desc' => '');
 
 $lang->misc->feature->all['9.5.1'][] = array('title'=>'added Restricted Operatio', 'desc' => '');
 
@@ -169,7 +169,7 @@ $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Batch Add/Edit Custo
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Story/Task/Bug/Case', 'desc' => '<p>You can custom fileds when add a Story/Task/Bug/Case.</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Custom Export', 'desc' => '<p>You can custom fileds when export a Story/Task/Bug/Case pages. You can also save it as template for next export.</p>');
 $lang->misc->feature->all['8.2.stable'][] = array('title'=>'Story/Task/Bug/Case Search ', 'desc' => '<p>On Story/Task/Bug/Case List page, you can do a combined search on Modules and Tabs.</p>');
-$lang->misc->feature->all['8.2.stable'][] = array('title'=>"Rookie's Tutorial", 'desc' => '<p>Tutorial for Rookies is added for first-time users to know how to use ZenTao.</p>');
+$lang->misc->feature->all['8.2.stable'][] = array('title'=>"Rookie's Tutorial", 'desc' => '<p>Tutorial for rookies is added for first-time users to know how to use ZenTao.</p>');
 
 $lang->misc->feature->all['7.4.beta'][] = array('title'=>'Product branch feature is added.', 'desc' => '<p>Product branch/platform is added, and its related Story/Plan/Bug/Case/Module has Branch added too.</p>');
 $lang->misc->feature->all['7.4.beta'][] = array('title'=>'Release Module is improved.', 'desc' => '<p>Stop action has been added. If Stop to manage it, the Release will not show when Report Bug.</p><p>Bugs that have been omitted in the Release will be related manually.</p>');

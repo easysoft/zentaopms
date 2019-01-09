@@ -79,7 +79,7 @@ $lang->duplicate       = '%s has the same title as that of a file existed.';
 $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to grant it.</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
-$lang->homepage        = 'Set as Home';
+$lang->homepage        = 'Set Home';
 $lang->tutorial        = 'Tutorial';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manual';
@@ -87,7 +87,7 @@ $lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-install
 $lang->customMenu      = 'Custom Menu';
 $lang->customField     = 'Custom Field';
 $lang->lineNumber      = 'Line No.';
-$lang->tutorialConfirm = 'You are using tutorial. Do you want to exit right now？';
+$lang->tutorialConfirm = 'You are using tutorial. Do you want to quit right now？';
 $lang->youCould        = 'You could ';
 
 $lang->preShortcutKey  = '[Shortcut:←]';
@@ -333,7 +333,7 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|testsuite|librar
 /* Doc menu settings. */
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Doc Lib|doc|createLib', 'float' => 'right');
+//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Library|doc|createLib', 'float' => 'right');
 
 /* Report menu settings. */
 $lang->report = new stdclass();
@@ -465,28 +465,28 @@ $lang->menugroup->message     = 'admin';
 /* Error info. */
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
-$lang->error->length          = array("『%s』Length Error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
-$lang->error->reg             = "『%s』Format Error. It should be『%s』.";
-$lang->error->unique          = "『%s』『%s』existed. Please go to Admin->Recycle to restore it, if you are sure it is deleted.";
+$lang->error->length          = array("『%s』length error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
+$lang->error->reg             = "『%s』format error. It should be『%s』.";
+$lang->error->unique          = "『%s』『%s』exists. Please go to Admin->Recycle to restore it, if you are sure it is deleted.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->notempty        = "『%s』should not be blank.";
 $lang->error->empty           = "『%s』should be null.";
 $lang->error->equal           = "『%s』has to be『%s』.";
 $lang->error->int             = array("『%s』should be numbers", "『%s』should be 『%s-%s』.");
-$lang->error->float           = "『%s』should be numbers, decimals included.";
+$lang->error->float           = "『%s』should have numbers, decimals.";
 $lang->error->email           = "『%s』should be valid Email.";
 $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";
 $lang->error->account         = "『%s』should be valid account.";
 $lang->error->passwordsame    = "Passwords should be consistent.";
-$lang->error->passwordrule    = "Password should follow rules. It must be at least 6 characters.";
+$lang->error->passwordrule    = "Password should abide by rules. It should be at least 6 characters.";
 $lang->error->accessDenied    = 'Access is denied.';
-$lang->error->pasteImg        = 'Image is not allowed to be pasted in your browser!';
-$lang->error->noData          = 'No Data';
+$lang->error->pasteImg        = 'Image is not allowed to paste in your browser!';
+$lang->error->noData          = 'No data.';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
-$lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
+$lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please quit tutorial first!';
 
 /* Page info. */
 $lang->pager = new stdclass();
@@ -505,8 +505,8 @@ $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
 $lang->downloadClient = "Download Desktop Client";
-$lang->clientHelp     = "Client help manual";
-$lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
+$lang->clientHelp     = "Client Help";
+$lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/scrum-tool-open-source-client-214.html";
 $lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
@@ -518,13 +518,13 @@ $lang->importAndCover  = "Override";
 $lang->importAndInsert = "Insert";
 
 
-$lang->noResultsMatch     = "No results match!";
+$lang->noResultsMatch     = "No results match found!";
 $lang->searchMore         = "More results：";
-$lang->chooseUsersToMail  = "Choose users to be notified.";
-$lang->browserNotice      = 'Your current browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
+$lang->chooseUsersToMail  = "Choose users to be notified";
+$lang->browserNotice      = 'Your browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Paste images here";
-$lang->pasteImgFail       = "Paste image fail, try again later.";
-$lang->pasteImgUploading  = "Please wait. Uploading...";
+$lang->pasteImgFail       = "Pasting image failed. Try again later.";
+$lang->pasteImgUploading  = "Uploading...";
 
 /* Time formats settings. */
 if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
@@ -760,7 +760,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->subMenu->more->unconfirmed   = 'Unconfirmed|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
     $lang->bug->subMenu->more->assigntonull  = 'Unassigned|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
     $lang->bug->subMenu->more->longlifebugs  = 'Pending|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
-    $lang->bug->subMenu->more->postponedbugs = 'PostPoned|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
+    $lang->bug->subMenu->more->postponedbugs = 'Postponed|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->subMenu->more->overduebugs   = 'Overdue|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
     $lang->bug->subMenu->more->needconfirm   = 'ToConfirm|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
 
