@@ -78,10 +78,10 @@ class xuanxuanChat extends chatModel
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
 
-        $products  = trim($this->app->user->view->products, ',');
-        $projects  = trim($this->app->user->view->projects, ',');
-        $products  = empty($products) ? array() : explode(',', $products);
-        $projects  = empty($projects) ? array() : explode(',', $projects);
+        $products  = $this->loadModel('product')->getPairs();
+        $projects  = $this->loadModel('project')->getPairs();
+        $products  = empty($products) ? array() : array_keys($products);
+        $projects  = empty($projects) ? array() : array_keys($projects);
         $libIdList = array_keys($this->loadModel('doc')->getLibs('all'));
         $productID = isset($products[0])  ? $products[0]  : 1;
         $projectID = isset($projects[0])  ? $projects[0]  : 1;
