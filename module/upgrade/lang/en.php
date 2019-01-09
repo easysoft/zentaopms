@@ -14,7 +14,7 @@ $lang->upgrade->result  = 'Result';
 $lang->upgrade->fail    = 'Failed';
 $lang->upgrade->success = 'Upgraded';
 $lang->upgrade->tohome  = 'Visit ZenTao';
-$lang->upgrade->license = 'Zentao is under Z PUBLIC LICENSE(ZPL) 1.2.';
+$lang->upgrade->license = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning= 'Warning!';
 $lang->upgrade->checkExtension  = 'Check Extension';
 $lang->upgrade->consistency     = 'Check Consistency';
@@ -28,14 +28,14 @@ $lang->upgrade->warnningContent = <<<EOT
    e.g. mysqldump -u root -p zentao >zentao.bak
 </pre>
 EOT;
-$lang->upgrade->createFileWinCMD   = 'Open command line and  execute <strong style="color:#ed980f">echo > %s</strong>';
+$lang->upgrade->createFileWinCMD   = 'Open command line and execute <strong style="color:#ed980f">echo > %s</strong>';
 $lang->upgrade->createFileLinuxCMD = 'Execute command line: <strong style="color:#ed980f">touch %s</strong>';
 $lang->upgrade->setStatusFile      = '<h4>Please finish the following actions</h4>
                                       <ul style="line-height:1.5;font-size:13px;">
                                       <li>%s</li>
                                       <li>Or delete "<strong style="color:#ed980f">%s</strong>" and create <strong style="color:#ed980f">ok.txt</strong> and leave it blank.</li>
                                       </ul>
-                                      <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue update.</a></strong></p>';
+                                      <p><strong style="color:red">I have read and done as instructed above. <a href="upgrade.php">Continue upgrading.</a></strong></p>';
 $lang->upgrade->selectVersion = 'Select Version';
 $lang->upgrade->continue      = 'Continue';
 $lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
