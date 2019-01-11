@@ -87,6 +87,7 @@ class userModel extends model
         $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
 
         /* Get raw records. */
+        $this->app->loadConfig('user');
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
