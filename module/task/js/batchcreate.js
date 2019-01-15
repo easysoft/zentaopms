@@ -63,7 +63,7 @@ function copyStoryTitle(num)
 
     $('#name\\[' + num + '\\]').val(storyTitle);
     $('#estimate\\[' + num + '\\]').val($('#storyEstimate' + num).val());
-    $('#desc\\[' + num + '\\]').val(($('#storyDesc' + num).val()).replace(/<[^>]+>/g,''));
+    $('#desc\\[' + num + '\\]').val(($('#storyDesc' + num).val()).replace(/<[^>]+>/g,'').replace(/(\n)+\n/g, "\n").replace(/^\n/g, ''));
 
     var storyPri = $('#storyPri' + num).val();
     if(storyPri == 0) $('#pri' + num ).val('3');

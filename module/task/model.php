@@ -1428,7 +1428,7 @@ class taskModel extends model
         if($task->parent > 0) $task->parentName = $this->dao->findById($task->parent)->from(TABLE_TASK)->fetch('name');
 
         $task->team = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
-        foreach($children as $child) $child->team = isset($teams[$child->id]) ? $teams[$child->id] : array();
+        foreach($children as $child) $child->team = array();
 
         $task = $this->loadModel('file')->replaceImgURL($task, 'desc');
         if($setImgSize) $task->desc = $this->file->setImgSize($task->desc);

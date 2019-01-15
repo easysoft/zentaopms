@@ -75,7 +75,7 @@ class custom extends control
         }
         if($module == 'user' and $field == 'deleted')
         {
-            $this->loadModel('user');
+            $this->app->loadConfig('user');
             $this->view->showDeleted = isset($this->config->user->showDeleted) ? $this->config->user->showDeleted : '0';
         }
 
