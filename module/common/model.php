@@ -1491,7 +1491,7 @@ EOD;
      */
     public function checkIP($ipWhiteList = '')
     {
-        $ip = $this->server->remote_addr;
+        $ip = helper::getRemoteIp();
 
         if(!$ipWhiteList) $ipWhiteList = $this->config->ipWhiteList;
 

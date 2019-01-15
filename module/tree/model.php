@@ -34,7 +34,7 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function buildMenuQuery($rootID, $type, $startModule, $branch = 0)
+    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 0)
     {
         /* Set the start module. */
         $startModulePath = '';
