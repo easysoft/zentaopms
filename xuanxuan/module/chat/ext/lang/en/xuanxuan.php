@@ -1,7 +1,7 @@
 <?php
 $lang->chat->common      = 'Xuanxuan';
 $lang->chat->turnon      = 'On';
-$lang->chat->downloadXXD = 'Download XXD';
+$lang->chat->help        = 'Help';
 $lang->chat->settings    = 'Settings';
 
 $lang->chat->turnonList = array();
@@ -10,7 +10,7 @@ $lang->chat->turnonList[0] = 'Off';
 
 $lang->chat->status          = 'Status';
 $lang->chat->xxdServer       = 'Zentao Server';
-$lang->chat->downloadXXD     = 'Download XXD';
+$lang->chat->downloadXXD     = 'Download Xuanxuan Server';
 $lang->chat->listenIP        = 'Listen IP';
 $lang->chat->chatPort        = 'Chat Port';
 $lang->chat->uploadFileSize  = 'File Size';
@@ -31,9 +31,9 @@ $lang->chat->statusList[0] = 'Disable';
 $lang->chat->httpsOptions[1] = 'Enable';
 $lang->chat->httpsOptions[0] = 'Disable';
 
-$lang->chat->xxdServerTip   = 'XXD server address contains protocol and host and port，such as http://192.168.1.35 or http://pms.zentao.com. that can not be 127.0.0.1.';
-$lang->chat->xxdServerEmpty = 'XXD server address is empty.';
-$lang->chat->xxdServerError = 'XXD server address can not be 127.0.0.1.';
+$lang->chat->xxdServerTip   = 'Zentao server address contains protocol and host and port，such as http://192.168.1.35 or http://pms.zentao.com. that can not be 127.0.0.1.';
+$lang->chat->xxdServerEmpty = 'Zentao server address is empty.';
+$lang->chat->xxdServerError = 'Zentao server address can not be 127.0.0.1.';
 $lang->chat->xxdSchemeError = 'Server address should started with http:// or https://.';
 $lang->chat->xxdPortError   = 'Server address should contain valid port and the default is <strong>11443</strong>.';
 $lang->chat->xxClientConfirm = 'Click to download new zentao client!';
