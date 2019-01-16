@@ -11,7 +11,7 @@ clean:
 	rm -fr api*
 	rm -fr build/linux/lampp
 	rm -fr lampp
-pms:
+common:
 	mkdir zentaopms
 	cp -fr bin zentaopms/
 	cp -fr config zentaopms/ && rm -fr zentaopms/config/my.php
@@ -39,44 +39,43 @@ pms:
 	find zentaopms -name tests |xargs rm -fr
 	# notify.zip.
 	mkdir zentaopms/www/data/notify/
+zentaoxx:
 	#xuanxuan
-	mkdir -p buildxx/config/ext
-	mkdir -p buildxx/lib
-	mkdir -p buildxx/module
-	mkdir -p buildxx/framework
-	mkdir -p buildxx/db
-	mkdir -p buildxx/www
-	mkdir -p buildxx/module/common/ext/model/
+	mkdir -p zentaoxx/config/ext
+	mkdir -p zentaoxx/lib
+	mkdir -p zentaoxx/module
+	mkdir -p zentaoxx/framework
+	mkdir -p zentaoxx/db
+	mkdir -p zentaoxx/www
+	mkdir -p zentaoxx/module/common/ext/model/
 	svn export https://github.com/easysoft/xuanxuan.git/branches/master/ranzhi/
-	cp ranzhi/config/ext/xuanxuan.php buildxx/config/ext/
-	cp -r ranzhi/lib/phpaes buildxx/lib/
-	cp -r ranzhi/framework/xuanxuan.class.php buildxx/framework/
-	cp -r ranzhi/db/*.sql buildxx/db/
-	cp -r ranzhi/app/sys/chat buildxx/module/
-	cp -r ranzhi/app/sys/common/ext/model/hook buildxx/module/common/ext/model/
-	cp -r ranzhi/app/sys/action buildxx/module/
-	cp -r xuanxuan/config/* buildxx/config/
-	cp -r xuanxuan/module/* buildxx/module/
-	cp -r xuanxuan/www/* buildxx/www/
-	sed -i 's/site,//' buildxx/module/chat/model.php
-	sed -i 's/admin, g/g/' buildxx/module/chat/model.php
-	sed -i '/password = md5/d' buildxx/module/chat/control.php
-	sed -i '/getSignedTime/d' buildxx/module/chat/control.php
-	sed -i 's/tree/dept/' buildxx/module/chat/control.php
-	sed -i "s/, 'sys'//" buildxx/module/chat/control.php
-	sed -i 's/system.sys/system/' buildxx/module/chat/control.php
-	sed -i 's/&app=sys//' buildxx/module/chat/control.php
-	sed -i 's/file->createdBy/file->addedBy/' buildxx/module/chat/control.php
-	sed -i 's/file->createdDate/file->addedDate/' buildxx/module/chat/control.php
-	sed -i 's/im_/zt_im_/' buildxx/db/*.sql
-	sed -i 's/sys_user/zt_user/' buildxx/db/*.sql
-	sed -i 's/sys_file/zt_file/' buildxx/db/*.sql
-	sed -i '/sys_entry/d' buildxx/db/*.sql
-	zip -rqm -9 xuanxuan.zentao.$(VERSION).zip buildxx/*
-	rm -rf buildxx/
-	unzip xuanxuan.zentao.*.zip -d zentaoxx
-	cp zentaoxx/buildxx/* zentaopms/ -r
-	cat zentaoxx/buildxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
+	cp ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/
+	cp -r ranzhi/lib/phpaes zentaoxx/lib/
+	cp -r ranzhi/framework/xuanxuan.class.php zentaoxx/framework/
+	cp -r ranzhi/db/*.sql zentaoxx/db/
+	cp -r ranzhi/app/sys/chat zentaoxx/module/
+	cp -r ranzhi/app/sys/common/ext/model/hook zentaoxx/module/common/ext/model/
+	cp -r ranzhi/app/sys/action zentaoxx/module/
+	cp -r xuanxuan/config/* zentaoxx/config/
+	cp -r xuanxuan/module/* zentaoxx/module/
+	cp -r xuanxuan/www/* zentaoxx/www/
+	sed -i 's/site,//' zentaoxx/module/chat/model.php
+	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
+	sed -i '/password = md5/d' zentaoxx/module/chat/control.php
+	sed -i '/getSignedTime/d' zentaoxx/module/chat/control.php
+	sed -i 's/tree/dept/' zentaoxx/module/chat/control.php
+	sed -i "s/, 'sys'//" zentaoxx/module/chat/control.php
+	sed -i 's/system.sys/system/' zentaoxx/module/chat/control.php
+	sed -i 's/&app=sys//' zentaoxx/module/chat/control.php
+	sed -i 's/file->createdBy/file->addedBy/' zentaoxx/module/chat/control.php
+	sed -i 's/file->createdDate/file->addedDate/' zentaoxx/module/chat/control.php
+	sed -i 's/im_/zt_im_/' zentaoxx/db/*.sql
+	sed -i 's/sys_user/zt_user/' zentaoxx/db/*.sql
+	sed -i 's/sys_file/zt_file/' zentaoxx/db/*.sql
+	sed -i '/sys_entry/d' zentaoxx/db/*.sql
+	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
+	rm -rf ranzhi zentaoxx
+package:
 	# change mode.
 	chmod -R 777 zentaopms/tmp/
 	chmod -R 777 zentaopms/www/data
@@ -88,8 +87,27 @@ pms:
 	for module in `ls zentaopms/module/`; do if [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
 	tools/cn2tw.php
+pms:
+	make common 
+	make zentaoxx 
+	unzip zentaoxx.*.zip
+	cp zentaoxx/* zentaopms/ -r
+	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
+	make package
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	rm -fr zentaopms ranzhi buildxx zentaoxx xuanxuan.zentao.*.zip
+	rm -fr zentaopms zentaoxx zentaoxx.*.zip
+en:
+	make common
+	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
+	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
+	make package
+	zip -r -9 ZenTaoPMS.$(VERSION).int.zip zentaopms
+	rm -fr zentaopms
+	echo $(VERSION).int > VERSION
+	make deb
+	make rpm
+	echo $(VERSION) > VERSION
 deb:
 	mkdir buildroot
 	cp -r build/debian/DEBIAN buildroot
@@ -117,17 +135,6 @@ rpm:
 	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
 	cp ~/rpmbuild/RPMS/noarch/zentaopms-${VERSION}-1.noarch.rpm ./
 	rm -rf ~/rpmbuild
-en:
-	unzip ZenTaoPMS.${VERSION}.zip
-	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
-	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
-	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
-	zip -r -9 ZenTaoPMS.$(VERSION).int.zip zentaopms
-	rm -fr zentaopms
-	echo $(VERSION).int > VERSION 
-	make deb
-	make rpm
-	echo $(VERSION) > VERSION
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
 phpdoc:
