@@ -16,7 +16,7 @@ class xuanxuanMessage extends messageModel
                 $title  = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
                 $text   = $title . ' ' . "[#{$objectID}::{$object->$field}]";
 
-                $server   = $this->loadModel('chat')->getServer();
+                $server   = $this->loadModel('chat')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
                 unset($_GET['onlybody']);
                 $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');

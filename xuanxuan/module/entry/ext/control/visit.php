@@ -14,7 +14,7 @@ class entry extends control
         if(RUN_MODE != 'xuanxuan') die();
 
         $referer = !empty($_GET['referer']) ? $this->get->referer : $referer;
-        $server  = $this->loadModel('chat')->getServer();
+        $server  = $this->loadModel('chat')->getServer('zentao');
         if(empty($referer)) $referer = $server . str_replace('/xuanxuan.php', '/index.php', $this->createLink('my', 'index', '', 'html'));
 
         $output = new stdclass();

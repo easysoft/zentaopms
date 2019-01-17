@@ -43,7 +43,7 @@ class admin extends control
         $this->view->adminList = $this->loadModel('user')->getPairs('admin');
         $this->view->os        = $os . '_' . php_uname('m');
         $this->view->type      = $type;
-        $this->view->domain    = $this->loadModel('chat')->getServer();
+        $this->view->domain    = $this->loadModel('chat')->getServer('zentao');
         $this->view->turnon    = isset($this->config->xuanxuan->turnon) ? $this->config->xuanxuan->turnon : 1;
         $this->view->isHttps   = $this->config->xuanxuan->isHttps ? $this->config->xuanxuan->isHttps : 0;
         $this->display();
