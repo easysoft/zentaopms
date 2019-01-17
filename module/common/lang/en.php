@@ -75,7 +75,7 @@ $lang->pasteText       = 'Paste';
 $lang->uploadImages    = 'Upload';
 $lang->timeout         = 'Timeout. Pease check your connection, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Please use phpmyadmin or myisamchk to fix it.';
-$lang->duplicate       = '%s has the same title as that of a file existed.';
+$lang->duplicate       = '%s has the same title as a file title existed.';
 $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, current IP Login has been restricted. PLease contact Admin to grant it.</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
