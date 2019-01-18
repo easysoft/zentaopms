@@ -1,72 +1,10 @@
 <?php
 class xuanxuanChat extends chatModel
 {
-    public function downloadXXD($setting, $type)
-    {
-        $data = new stdClass();
-        $data->uploadFileSize = $setting->uploadFileSize;
-        $data->isHttps        = $setting->isHttps;
-        $data->sslcrt         = $setting->sslcrt;
-        $data->sslkey         = $setting->sslkey;
-        $data->ip             = $setting->ip;
-        $data->chatPort       = $setting->chatPort;
-        $data->commonPort     = $setting->commonPort;
-        $data->maxOnlineUser  = isset($setting->maxOnlineUser) ? $setting->maxOnlineUser : 0;
-        $data->key            = $this->config->xuanxuan->key;
-        $data->os             = $setting->os;
-        $data->version        = $this->config->xuanxuan->version;
-        $data->downloadType   = $type;
-
-        $server = $this->getServer();
-        $data->server = $server;
-        $data->host   = trim($server, '/') . getWebRoot();
-
-        $url    = "https://www.chanzhi.org/license-downloadxxd-zentao.html";
-        $result = common::http($url, $data);
-        
-        if($type == 'config')
-        {
-            $this->sendDownHeader('xxd.conf', 'conf', $result, strlen($result));
-        }
-        else
-        {
-            header("Location: $result");
-        }
-
-        $this->loadModel('setting')->setItem('system.common.xxserver.installed', 1);
-        exit;
-    }
-
-    public function sendDownHeader($fileName, $fileType, $content, $fileSize = 0)
-    {
-        /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
-        setcookie('downloading', 1, 0, '', '', false, true);
-
-        /* Append the extension name auto. */
-        $extension = '.' . $fileType;
-        if(strpos($fileName, $extension) === false) $fileName .= $extension;
-
-        /* urlencode the fileName for ie. */
-        $isIE11 = (strpos($this->server->http_user_agent, 'Trident') !== false and strpos($this->server->http_user_agent, 'rv:11.0') !== false); 
-        if(strpos($this->server->http_user_agent, 'MSIE') !== false or $isIE11) $fileName = urlencode($fileName);
-
-        /* Judge the content type. */
-        $mimes = $this->config->chat->mimes;
-        $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
-        if(empty($fileSize) and $content) $fileSize = strlen($content);
-
-        header("Content-type: $contentType");
-        header("Content-Disposition: attachment; filename=\"$fileName\"");
-        header("Content-length: {$fileSize}");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-        die($content);
-    }
-
     public function getExtensionList($userID)
     {
         $entries = array();
-        $baseURL = $this->getServer();
+        $baseURL = $this->getServer('zentao');
 
         $this->loadModel('user');
         $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($userID)->fetch();
@@ -126,14 +64,5 @@ class xuanxuanChat extends chatModel
         $entries[] = $data;
         unset($_SESSION['user']);
         return $entries;
-    }
-
-    public function getServer()
-    {
-        $this->app->loadConfig('mail');
-        $server = empty($this->config->mail->domain) ? commonModel::getSysURL() : $this->config->mail->domain;
-        if(!empty($this->config->xuanxuan->server)) $server = $this->config->xuanxuan->server;
-
-        return $server;
     }
 }

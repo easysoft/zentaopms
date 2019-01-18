@@ -1,4 +1,6 @@
-VERSION=$(shell head -n 1 VERSION)
+VERSION     = $(shell head -n 1 VERSION)
+XUANPATH    = $(shell head -n 1 XUANPATH)
+XUANVERSION = $(shell head -n 1 XUANVERSION)
 
 all: pms
 clean:
@@ -48,14 +50,16 @@ zentaoxx:
 	mkdir -p zentaoxx/db
 	mkdir -p zentaoxx/www
 	mkdir -p zentaoxx/module/common/ext/model/
-	svn export https://github.com/easysoft/xuanxuan.git/branches/master/ranzhi/
-	cp ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/
-	cp -r ranzhi/lib/phpaes zentaoxx/lib/
-	cp -r ranzhi/framework/xuanxuan.class.php zentaoxx/framework/
-	cp -r ranzhi/db/*.sql zentaoxx/db/
-	cp -r ranzhi/app/sys/chat zentaoxx/module/
-	cp -r ranzhi/app/sys/common/ext/model/hook zentaoxx/module/common/ext/model/
-	cp -r ranzhi/app/sys/action zentaoxx/module/
+	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
+	mv $(XUANPATH)/xuan.zip .
+	unzip xuan.zip
+	cp xuan/ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/
+	cp -r xuan/ranzhi/lib/phpaes zentaoxx/lib/
+	cp -r xuan/ranzhi/framework/xuanxuan.class.php zentaoxx/framework/
+	cp -r xuan/ranzhi/db/*.sql zentaoxx/db/
+	cp -r xuan/ranzhi/app/sys/chat zentaoxx/module/
+	cp -r xuan/ranzhi/app/sys/common/ext/model/hook zentaoxx/module/common/ext/model/
+	cp -r xuan/ranzhi/app/sys/action zentaoxx/module/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
@@ -74,7 +78,7 @@ zentaoxx:
 	sed -i 's/sys_file/zt_file/' zentaoxx/db/*.sql
 	sed -i '/sys_entry/d' zentaoxx/db/*.sql
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
-	rm -rf ranzhi zentaoxx
+	rm -rf xuan.zip xuan zentaoxx
 package:
 	# change mode.
 	chmod -R 777 zentaopms/tmp/
