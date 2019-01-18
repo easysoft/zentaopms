@@ -335,6 +335,9 @@ $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 //$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加文件夹|doc|createLib', 'float' => 'right');
 
+$lang->svn = new stdclass();
+$lang->git = new stdclass();
+
 /* 统计视图菜单设置。*/
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
