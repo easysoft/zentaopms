@@ -336,7 +336,7 @@ class userModel extends model
                 $group = new stdClass();
                 $group->account = $user->account;
                 $group->group   = $user->group;
-                $this->dao->insert(TABLE_USERGROUP)->data($group)->exec();
+                $this->dao->replace(TABLE_USERGROUP)->data($group)->exec();
             }
             unset($user->group);
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
