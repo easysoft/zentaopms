@@ -53,7 +53,12 @@
       <?php foreach($releases as $release):?>
       <tr>
         <td><?php echo html::a(helper::createLink('release', 'view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
-        <td><?php echo html::a(inlink('view', "release=$release->id"), $release->name);?></td>
+        <td>
+          <?php 
+          $releaseName = $release->marker ? "<icon class='icon-flag'></icon>" . $release->name : $release->name;
+          echo html::a(inlink('view', "release=$release->id"), $releaseName);
+          ?>
+        </td>
         <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
         <td class='text-center'><?php echo $branches[$release->branch];?></td>
