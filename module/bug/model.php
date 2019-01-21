@@ -502,7 +502,6 @@ class bugModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
-            ->andWhere('toTask')->eq(0)
             ->andWhere('tostory')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
