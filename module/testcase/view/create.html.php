@@ -106,11 +106,7 @@
                   }
               }
               $priList = $lang->testcase->priList;
-              if(end($priList))
-              {
-                  unset($priList[0]);
-                  $priList[0] = '';
-              }
+              if(end($priList)) unset($priList[0]);
               ?>
               <?php if($hasCustomPri):?>
               <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
