@@ -141,6 +141,14 @@ class upgrade extends control
      */
     public function afterExec($fromVersion, $processed = 'no')
     {
+        $alterSQL = $this->upgrade->checkConsistency($this->config->version);
+        if(!empty($alterSQL))
+        {
+            $this->view->title    = $this->lang->upgrade->consistency;
+            $this->view->alterSQL = $alterSQL;
+            die($this->display('upgrade', 'consistency'));
+        }
+
         if($processed == 'no')
         {
             $this->app->loadLang('install');
@@ -172,6 +180,7 @@ class upgrade extends control
         $alterSQL = $this->upgrade->checkConsistency();
         if(empty($alterSQL)) $this->locate(inlink('checkExtension'));
 
+        $this->view->title    = $this->lang->upgrade->consistency;
         $this->view->alterSQL = $alterSQL;
         $this->display();
     }
