@@ -291,14 +291,33 @@ class productModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-        $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
+        $products = $this->dao->select('id,name,line,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
-            ->orderBy($orderBy)
-            ->fetchPairs('id', 'name');
-        return $products;
+            ->orderBy('order_desc')
+            ->fetchAll('id');
+
+        $lines = $this->loadModel('tree')->getLinePairs();
+        $linePairs = array();
+        foreach($lines as $id => $name)
+        {
+            foreach($products as $key => $product)
+            {
+                if($product->line == $id)
+                {
+                    $linePairs[$product->id] = $name . '/' . $product->name;
+                    unset($products[$key]);
+                }
+            }
+        }
+
+        $productPairs = array();
+        foreach($products as $id => $product) $productPairs[$product->id] = $product->name;
+        $productPairs = $linePairs + $productPairs;
+
+        return $productPairs;
     }
 
     /**
