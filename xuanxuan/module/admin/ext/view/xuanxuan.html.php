@@ -87,12 +87,12 @@
           <td></td>
         </tr>
         <?php endif;?>
-        <tr class='sslTR <?php if($isHttps == 0 || empty($type)) echo 'hide';?>'>
+        <tr class='sslTR <?php if($isHttps == 'off' || empty($type)) echo 'hide';?>'>
           <th><?php echo $lang->chat->xxd->sslcrt;?></th>
           <td><?php echo html::textarea('sslcrt',  zget($config->xuanxuan, 'sslcrt', ''), "placeholder='{$lang->chat->placeholder->xxd->sslcrt}' class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr class='sslTR <?php if($isHttps == 0 || empty($type)) echo 'hide';?>'>
+        <tr class='sslTR <?php if($isHttps == 'off' || empty($type)) echo 'hide';?>'>
           <th><?php echo $lang->chat->xxd->sslkey;?></th>
           <td><?php echo html::textarea('sslkey',  zget($config->xuanxuan, 'sslkey', ''), "placeholder='{$lang->chat->placeholder->xxd->sslkey}' class='form-control'");?></td>
           <td></td>
