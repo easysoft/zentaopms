@@ -142,3 +142,17 @@ $config->dev->postParams['task']['create']['pri']        = 'int';
 $config->dev->postParams['task']['create']['color']      = 'string';
 $config->dev->postParams['task']['create']['desc']       = 'string';
 $config->dev->postParams['task']['create']['mailto']     = 'string';
+
+$config->dev->postParams['testcase']['create']['product']      = 'int';
+$config->dev->postParams['testcase']['create']['title']        = 'string';
+$config->dev->postParams['testcase']['create']['type']         = 'string';
+$config->dev->postParams['testcase']['create']['module']       = 'int';
+$config->dev->postParams['testcase']['create']['story']        = 'int';
+$config->dev->postParams['testcase']['create']['stage']        = 'string';
+$config->dev->postParams['testcase']['create']['pri']          = 'int';
+$config->dev->postParams['testcase']['create']['color']        = 'string';
+$config->dev->postParams['testcase']['create']['precondition'] = 'string';
+$config->dev->postParams['testcase']['create']['steps']        = 'string';
+$config->dev->postParams['testcase']['create']['expect']       = 'string';
+$config->dev->postParams['testcase']['create']['mailto']       = 'string';
+$config->dev->postParams['testcase']['create']['keywords']     = 'string';
