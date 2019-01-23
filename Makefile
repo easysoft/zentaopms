@@ -68,6 +68,7 @@ zentaoxx:
 	sed -i '/password = md5/d' zentaoxx/module/chat/control.php
 	sed -i '/getSignedTime/d' zentaoxx/module/chat/control.php
 	sed -i 's/tree/dept/' zentaoxx/module/chat/control.php
+	sed -i 's/tree/dept/' zentaoxx/module/chat/model.php
 	sed -i "s/, 'sys'//" zentaoxx/module/chat/control.php
 	sed -i 's/system.sys/system/' zentaoxx/module/chat/control.php
 	sed -i 's/&app=sys//' zentaoxx/module/chat/control.php
