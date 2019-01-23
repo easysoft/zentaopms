@@ -22,13 +22,17 @@ class bug extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+        $products = array();
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-        $this->view->products = $this->products = $this->product->getPairs('nocode');
+
+        $productList = $this->loadModel('block')->getProducts('noclosed', ''); 
+        foreach($productList as $product) $products[$product->id] = $product->name;
+        $this->view->products = $this->products = $products;
 
         if($this->config->global->flow == 'onlyTest')
         {
