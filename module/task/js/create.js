@@ -146,6 +146,7 @@ function setPreview()
         $('#preview').addClass('hidden');
         $('#copyButton').addClass('hidden');
         $('div.colorpicker').css('right', '1px');//Adjust for task #4151;
+        $('.title-group.required > div').removeAttr('id', 'copyStory-input').addClass('.required');
     }
     else
     {
@@ -155,6 +156,7 @@ function setPreview()
         $('#preview').removeClass('hidden');
         $('#preview a').attr('href', storyLink);
         $('#copyButton').removeClass('hidden');
+        $('.title-group.required > div').attr('id', 'copyStory-input').removeClass('.required');
         $('div.colorpicker').css('right', '57px');//Adjust for task #4151;
     }
 

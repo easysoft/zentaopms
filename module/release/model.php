@@ -195,6 +195,7 @@ class releaseModel extends model
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
+            ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
             ->get();
