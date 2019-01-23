@@ -53,7 +53,7 @@ zentaoxx:
 	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
-	cp xuan/ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/
+	cp xuan/ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/x.php
 	cp -r xuan/ranzhi/lib/phpaes zentaoxx/lib/
 	cp -r xuan/ranzhi/framework/xuanxuan.class.php zentaoxx/framework/
 	cp -r xuan/ranzhi/db/*.sql zentaoxx/db/
