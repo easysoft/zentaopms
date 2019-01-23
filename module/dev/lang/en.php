@@ -9,6 +9,12 @@ $lang->dev->params     = 'Parameters';
 $lang->dev->type       = 'Type';
 $lang->dev->desc       = 'Description';
 $lang->dev->noParams   = 'No Parameters';
+$lang->dev->post       = 'POST Parameters';
+
+$lang->dev->paramRange  = 'Range of values: %s';
+$lang->dev->paramDate   = 'Date format: YY-mm-dd. such as 2019-01-01';
+$lang->dev->paramColor  = 'Color format: #RGB. such as #3da7f5';
+$lang->dev->paramMailto = "Use account. Separate multiple accounts by ','.";
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';
