@@ -36,6 +36,7 @@
     <?php foreach($apis as $api):?>
     <div class='detail'>
       <?php
+      $methodName = $api['name'];
       $params = array();
       if(isset($api['param']))
       {
@@ -69,6 +70,38 @@
           <tr><td colspan="3"><?php echo $lang->dev->noParams?></td></tr>
           <?php endif;?>
         </table>
+        <?php if(isset($config->dev->postParams[$selectedModule][$methodName])):?>
+        <?php
+        $this->app->loadLang($selectedModule);
+        $this->app->loadConfig($selectedModule);
+        ?>
+        <table class='table table-bordered'>
+          <caption><?php echo $lang->dev->post;?></caption>
+          <tr>
+            <td><?php echo $lang->dev->params?></td>
+            <td><?php echo $lang->dev->type?></td>
+            <td><?php echo $lang->dev->desc?></td>
+          </tr>
+          <?php foreach($config->dev->postParams[$selectedModule][$methodName] as $paramName => $paramType):?>
+          <tr>
+            <td><?php echo $paramName?></td>
+            <td><?php echo $paramType?></td>
+            <?php
+            $paramDesc = '';
+            $listKey   = $paramName . 'List';
+            if(isset($lang->$selectedModule->$paramName)) $paramDesc .= $lang->$selectedModule->$paramName . ' ';
+            if(isset($lang->$selectedModule->$listKey)) $paramDesc .= sprintf($lang->dev->paramRange, join(' | ', array_keys($lang->$selectedModule->$listKey)));
+            if($paramType == 'date')  $paramDesc .= $lang->dev->paramDate;
+            if($paramName == 'color') $paramDesc .= $lang->dev->paramColor;
+            if(isset($config->$selectedModule->$methodName->requiredFields) and strpos($config->$selectedModule->$methodName->requiredFields, $paramName) !== false) $paramDesc .= "<span class='red'>*{$lang->required}</span>";
+            if($paramName == 'product') $paramDesc .= "<span class='red'>*{$lang->required}</span>";
+            if($paramName == 'mailto') $paramDesc .= $lang->dev->paramMailto;
+            ?>
+            <td><?php echo $paramDesc?></td>
+          </tr>
+          <?php endforeach;?>
+        </table>
+        <?php endif;?>
       </div>
     </div>
     <?php endforeach;?>
