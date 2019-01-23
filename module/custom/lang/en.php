@@ -5,18 +5,18 @@ $lang->custom->set        = 'Customize';
 $lang->custom->restore    = 'Reset to Default';
 $lang->custom->key        = 'Key';
 $lang->custom->value      = 'Value';
-$lang->custom->flow       = 'Mode';
-$lang->custom->working    = 'WorkStyle';
+$lang->custom->flow       = 'Workflow';
+$lang->custom->working    = 'Work Mode';
 $lang->custom->select     = 'Select Workflow';
-$lang->custom->branch     = 'Multi Branch';
+$lang->custom->branch     = 'Multi-Branch';
 $lang->custom->owner      = 'Owner';
 $lang->custom->module     = 'Module';
 $lang->custom->section    = 'Section';
 $lang->custom->lang       = 'Language';
 $lang->custom->setPublic  = 'Set Public';
 $lang->custom->required   = 'Required';
-$lang->custom->score      = 'Score';
-$lang->custom->scoreReset = 'Reset Score';
+$lang->custom->score      = 'Point';
+$lang->custom->scoreReset = 'Reset Point';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
@@ -41,7 +41,7 @@ $lang->custom->task->fields['priList']    = 'Priority';
 $lang->custom->task->fields['typeList']   = 'Type';
 $lang->custom->task->fields['reasonList'] = 'Close Reason';
 $lang->custom->task->fields['statusList'] = 'Status';
-$lang->custom->task->fields['hours']      = 'Man-hours';
+$lang->custom->task->fields['hours']      = 'Effort';
 
 $lang->custom->bug = new stdClass();
 $lang->custom->bug->fields['priList']        = 'Priority';
@@ -51,12 +51,12 @@ $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
 $lang->custom->bug->fields['resolutionList'] = 'Solution';
 $lang->custom->bug->fields['statusList']     = 'Status';
-$lang->custom->bug->fields['longlife']       = 'Shelved Days';
+$lang->custom->bug->fields['longlife']       = 'Longlife days';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = 'Priority';
 $lang->custom->testcase->fields['typeList']   = 'Type';
-$lang->custom->testcase->fields['stageList']  = 'Phase';
+$lang->custom->testcase->fields['stageList']  = 'Stage';
 $lang->custom->testcase->fields['resultList'] = 'Result';
 $lang->custom->testcase->fields['statusList'] = 'Status';
 $lang->custom->testcase->fields['review']     = 'Review Required';
@@ -73,7 +73,7 @@ $lang->custom->todo->fields['statusList'] = 'Status';
 $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = 'Role';
 $lang->custom->user->fields['statusList'] = 'Status';
-$lang->custom->user->fields['deleted']    = 'Show deleted user';
+$lang->custom->user->fields['deleted']    = 'Deleted User';
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
@@ -83,12 +83,12 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->canNotAdd            = 'These items are parameters of calculation, so customized creation is not enabled.';
+$lang->custom->notice->canNotAdd            = 'It will be calculated, so customization is not enabled.';
 $lang->custom->notice->forceReview          = '%s Review is required for certain submitters.';
 $lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain submitters.";
-$lang->custom->notice->longlife             = 'Define shelved bugs.';
-$lang->custom->notice->invalidNumberKey     = 'Priority list key should be a natural and not greater than 255.';
-$lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase English letters, numbers or underscores';
+$lang->custom->notice->longlife             = 'Define longlife bugs.';
+$lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
+$lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase letters, numbers or underlines.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";
@@ -118,7 +118,7 @@ $lang->custom->productProject->relation['0_0'] = 'Product - Project';
 $lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
 $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
-$lang->custom->productProject->notice = 'Please select according to your team.';
+$lang->custom->productProject->notice = 'Select according to your team';
 
 $lang->custom->workingList['full']      = 'Application Lifecycle Management';
 $lang->custom->workingList['onlyTest']  = 'Test Management';

@@ -1118,7 +1118,7 @@ class upgradeModel extends model
 
         foreach($oldPriv as $item)
         {
-            $this->dao->insert($privTable)
+            $this->dao->replace($privTable)
                 ->set('company')->eq($item->company)
                 ->set('module')->eq('company')
                 ->set('method')->eq('view')
@@ -1134,7 +1134,7 @@ class upgradeModel extends model
 
         foreach($oldPriv as $item)
         {
-            $this->dao->insert($privTable)
+            $this->dao->replace($privTable)
                 ->set('company')->eq($item->company)
                 ->set('module')->eq('todo')
                 ->set('method')->eq('batchFinish')
@@ -1163,7 +1163,7 @@ class upgradeModel extends model
 
         foreach($oldPriv as $item)
         {
-            $this->dao->insert($privTable)
+            $this->dao->replace($privTable)
                 ->set('company')->eq($item->company)
                 ->set('module')->eq('tree')
                 ->set('method')->eq('browseTask')
@@ -2952,8 +2952,11 @@ class upgradeModel extends model
     public function saveLogs($log)
     {
         $logFile = $this->app->getTmpRoot() . 'log/upgrade.' . date('Ymd') . '.log.php';
-        if(!file_exists($logFile)) file_put_contents($logFile, "<?php\ndie();\n?" . ">\n");
-        $log = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
-        file_put_contents($logFile, $log, FILE_APPEND);
+        $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
+        if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
+
+        static $fh;
+        if(empty($fh)) $fh = fopen($logFile, 'a');
+        fwrite($fh, $log);
     }
 }
