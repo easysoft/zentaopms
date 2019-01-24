@@ -147,7 +147,7 @@
       {
           if($groupBy == 'story')
           {
-              if(!$task->parent)
+              if($task->parent <= 0)
               {
                   $groupEstimate += $task->estimate;
                   $groupConsumed += $task->consumed;
