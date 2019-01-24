@@ -29,9 +29,7 @@ class admin extends control
 
             if($errors) $this->send(array('result' => 'fail', 'message' => $errors));
 
-
             $result = $this->loadModel('setting')->setItems('system.common.xuanxuan', $setting);
-            $this->setting->setItem('system.mail.domain', $setting->server);
             if(!$result) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('xuanxuan')));
         }
