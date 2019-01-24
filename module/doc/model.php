@@ -262,7 +262,12 @@ class docModel extends model
     {
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
-        $lib = fixer::input('post')->join('groups', ',')->join('users', ',')->get();
+        $lib = fixer::input('post')
+            ->setIF(!$this->post->users, 'users', '')
+            ->setIF(!$this->post->groups, 'groups', '')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->get();
         if($lib->acl == 'private')
         {
             $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
