@@ -107,9 +107,7 @@
                     <div class="table-col col-module"><?php echo html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled');?></div>
                     <?php endif;?>
                     <div class="table-col col-shorts"><?php echo html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' $disabled autocomplete='off'") . html::hidden("order[id$sonModule->id]", $sonModule->order);?></div>
-                    <div class="table-col col-actions">
-                      <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                    </div>
+                    <div class="table-col col-actions"> </div>
                   </div>
                   <?php endforeach;?>
                   <?php for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++):?>
