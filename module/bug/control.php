@@ -29,10 +29,7 @@ class bug extends control
         $this->loadModel('action');
         $this->loadModel('story');
         $this->loadModel('task');
-
-        $productList = $this->loadModel('block')->getProducts('noclosed', ''); 
-        foreach($productList as $product) $products[$product->id] = $product->name;
-        $this->view->products = $this->products = $products;
+        $this->view->products = $this->products = $this->product->getPairs('nocode');
 
         if($this->config->global->flow == 'onlyTest')
         {
@@ -397,6 +394,9 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
+        $productList = $this->loadModel('block')->getProducts('noclosed', ''); 
+        foreach($productList as $product) $products[$product->id] = $product->name;
+
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
         $this->view->customFields = $customFields;
@@ -406,6 +406,7 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
 
+        $this->view->products         =  $products;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $moduleOptionMenu;
