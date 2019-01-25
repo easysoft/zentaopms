@@ -311,4 +311,29 @@ class backupModel extends model
 
         return false;
     }
+
+    /**
+     * Process filesize.
+     * 
+     * @param  int    $fileSize 
+     * @access public
+     * @return string
+     */
+    public function processFileSize($fileSize)
+    {
+        $bit = 'KB';
+        $fileSize = round($fileSize / 1024, 2);
+        if($fileSize >= 1024)
+        {
+            $bit = 'MB';
+            $fileSize = round($fileSize / 1024, 2);
+        }
+        if($fileSize >= 1024)
+        {
+            $bit = 'GB';
+            $fileSize = round($fileSize / 1024, 2);
+        }
+
+        return $fileSize . $bit;
+    }
 }
