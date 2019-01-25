@@ -159,7 +159,7 @@ $account = $this->app->user->account;
                   <div class='info'>
                     <?php
                     $assignedToRealName = "<span>" . zget($realnames, $bug->assignedTo) . "</span>";
-                    if(empty($task->assignedTo)) $assignedToRealName = "<span class='text-primary text'>{$lang->task->noAssigned}</span>";
+                    if(empty($bug->assignedTo)) $assignedToRealName = "<span class='text-primary text'>{$lang->task->noAssigned}</span>";
                     echo html::a($this->createLink('bug', 'assignTo', "bugID={$bug->id}", '', true), '<i class="icon icon-hand-right"></i> ' . $assignedToRealName, '', 'class="btn btn-icon-left kanbaniframe bug-assignedTo"');?>
                     <span class='status-bug status-<?php echo $bug->status;?>' title='<?php echo $lang->bug->status?>'><span class="label label-dot"></span> <?php echo zget($lang->bug->statusList, $bug->status);?></span>
                   </div>

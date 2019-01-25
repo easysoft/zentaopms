@@ -159,6 +159,7 @@ class userModel extends model
      */
     public function getUserRoles($users)
     {
+        $this->app->loadLang('user');
         $users = $this->dao->select('account, role')->from(TABLE_USER)->where('account')->in($users)->fetchPairs();
         if(!$users) return array();
 
