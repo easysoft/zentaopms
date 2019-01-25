@@ -65,4 +65,28 @@ class xuanxuanChat extends chatModel
         unset($_SESSION['user']);
         return $entries;
     }
+
+    public function editUser($user = null)
+    {
+        if(empty($user->id)) return null;
+
+        $data = array();
+        foreach($this->config->chat->user->canEditFields as $field)
+        {
+            if(!empty($user->$field)) $data[$field] = $user->$field;
+        }
+        if(!$data) return null;
+
+        $data['clientLang'] = $this->app->getClientLang();
+        $this->dao->update(TABLE_USER)->data($data)->where('id')->eq($user->id)->exec();
+        return $this->getUserByUserID($user->id);
+    }
+
+    public function getServer($backend = 'xxb')
+    {
+        $server = commonModel::getSysURL();
+        if(!empty($this->config->xuanxuan->server)) $server = $this->config->xuanxuan->server;
+
+        return $server;
+    }
 }
