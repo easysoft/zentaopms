@@ -83,6 +83,7 @@ $lang->testcase->edit                    = "Edit";
 $lang->testcase->batchEdit               = "Batch Edit ";
 $lang->testcase->batchChangeModule       = "Batch Change Module";
 $lang->testcase->batchChangeBranch       = "Batch Change Branch";
+$lang->testcase->groupByStories          = 'Group by Story';
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->batchDelete             = "Batch Delete ";
 $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
@@ -169,10 +170,6 @@ $lang->testcase->stageList['bvt']        = 'BVT Test';
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = 'Pass';
 $lang->testcase->reviewResultList['clarify'] = 'Clarify';
-
-$lang->testcase->groups['']           = 'Group ';
-$lang->testcase->groups['story']      = 'Group by Story';
-$lang->testcase->groups['assignedTo'] = 'Group by Assignee';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = 'Wait';
