@@ -14,7 +14,6 @@
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 ?>
-<?php include '../../common/view/chosen.html.php';?>
 <div class='modal-dialog w-500px'>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
@@ -44,3 +43,6 @@ $jsRoot  = $webRoot . "js/";
     </form>
   </div>
 </div>
+<script>
+$('#dataform .chosen').chosen();
+</script>
