@@ -615,11 +615,10 @@ class commonModel extends model
                         $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
                     }
 
-                    if($subMenu)
-                    {
-                        $label   .= "<span class='caret'></span>";
-                        $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
-                    }
+                    if(empty($subMenu)) continue;
+
+                    $label   .= "<span class='caret'></span>";
+                    $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
                 }
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
