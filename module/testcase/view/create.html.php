@@ -70,7 +70,7 @@
               <?php echo html::select('story', $stories, $storyID, 'class="form-control chosen" onchange="setPreview();" data-no_results_text="' . $lang->searchMore . '"');?>
               <span class='input-group-btn' style='width: 0.01%'>
               <?php if($storyID == 0): ?>
-                <a href='' id='preview' class='btn iframe hidden'><?php echo $lang->preview;?></a>
+                <a href='' id='preview' class='btn hidden'><?php echo $lang->preview;?></a>
               <?php else:?>
                 <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn' id='preview'");?>
               <?php endif;?>

@@ -45,7 +45,7 @@
         common::printLink('todo', 'edit', "todoID=$todo->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
         common::printLink('todo', 'delete', "todoID=$todo->id", "<i class='icon icon-close'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
 
-        echo html::a('#commentModal', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' data-toggle='modal' class='btn'");
+        if(common::hasPriv('action', 'comment', $todo)) echo html::a('#commentModal', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' data-toggle='modal' class='btn'");
 
         if($this->session->todoList)
         {

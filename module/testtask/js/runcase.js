@@ -52,46 +52,52 @@ function loadFilesName()
 $(document).ready(function()
 {
     // First unbind ajaxForm for form.
-    $("form[data-type='ajax']").unbind('submit');
+    $("#dataform").unbind('submit');
     
     // Bind ajaxForm for form again.
-    $.ajaxForm("form[data-type='ajax']", function(response)
-    {   
-        if(response.locate)
+    $('#dataform').ajaxForm(
+    {
+        finish:function(response)
         {
-            if(response.locate == 'reload' && response.target == 'parent')
+            if(response.locate)
             {
-                parent.$.cookie('selfClose', 1);
-                parent.$.closeModal(null, 'this');
-            } else if(response.next) {
-                location.href = response.locate;
-            } else {
-
-                // Get cases result
-                $('#resultsContainer').load(response.locate + " #casesResults", function()
+                if(response.locate == 'reload' && response.target == 'parent')
                 {
-                    $('tr:first').addClass("show-detail");
-                    $('#tr-detail_1').removeClass("hide");
-
-                    $('.result-item').click(function()
+                    parent.$.cookie('selfClose', 1);
+                    parent.$.closeModal(null, 'this');
+                }
+                else if(response.next)
+                {
+                    location.href = response.locate;
+                }
+                else
+                {
+                    // Get cases result
+                    $('#resultsContainer').load(response.locate + " #casesResults", function()
                     {
-                        var $this = $(this);
-                        $this.toggleClass('show-detail');
-                        var show = $this.hasClass('show-detail');
-                        $this.next('.result-detail').toggleClass('hide', !show);
-                        $this.find('.collapse-handle').toggleClass('icon-chevron-down', !show).toggleClass('icon-chevron-up', show);
+                        $('tr:first').addClass("show-detail");
+                        $('#tr-detail_1').removeClass("hide");
+
+                        $('.result-item').click(function()
+                        {
+                            var $this = $(this);
+                            $this.toggleClass('show-detail');
+                            var show = $this.hasClass('show-detail');
+                            $this.next('.result-detail').toggleClass('hide', !show);
+                            $this.find('.collapse-handle').toggleClass('icon-chevron-down', !show).toggleClass('icon-chevron-up', show);
+                        });
+
+                        $('#casesResults table caption .result-tip').html($('#resultTip').html());
+
+                        $("#submit").text(caseResultSave);
+                        $("#submit").attr({"disabled":"disabled"});
                     });
+                }
+            }
 
-                    $('#casesResults table caption .result-tip').html($('#resultTip').html());
-
-                    $("#submit").text(caseResultSave);
-                    $("#submit").attr({"disabled":"disabled"});
-                });   
-            }   
+            return false;
         }
-    
-        return false;
-    }); 
+    });
 
     $(document).on('click', ".step-group input[type='checkbox']", function()
     {
