@@ -53,7 +53,7 @@ zentaoxx:
 	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
-	cp xuan/ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/x.php
+	cp xuan/ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/
 	cp -r xuan/ranzhi/lib/phpaes zentaoxx/lib/
 	cp -r xuan/ranzhi/framework/xuanxuan.class.php zentaoxx/framework/
 	cp -r xuan/ranzhi/db/*.sql zentaoxx/db/
@@ -63,6 +63,7 @@ zentaoxx:
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
+	mv zentaoxx/www/xuanxuan.php zentaoxx/www/x.php
 	sed -i 's/site,//' zentaoxx/module/chat/model.php
 	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
 	sed -i '/password = md5/d' zentaoxx/module/chat/control.php
