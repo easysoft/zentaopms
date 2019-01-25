@@ -500,7 +500,6 @@ class userModel extends model
             if(!validater::checkAccount($users[$id]['account'])) die(js::error(sprintf($this->lang->user->error->account, $id)));
             if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
             if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));
-            if(empty($users[$id]['role'])) die(js::error(sprintf($this->lang->user->error->role, $id)));
 
             $accounts[$id] = $account;
             $prev['dept']  = $users[$id]['dept'];

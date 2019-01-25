@@ -146,7 +146,6 @@ $lang->user->error->accountDupl   = "ID %s，account has been used.";
 $lang->user->error->realname      = "ID %s，must be real name";
 $lang->user->error->password      = "ID %s，password must be 6 characters at least.";
 $lang->user->error->mail          = "ID %s，please enter valid Email address";
-$lang->user->error->role          = "ID %s，role cannot be null.";
 $lang->user->error->reserved      = "ID %s，account is reserved.";
 
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";

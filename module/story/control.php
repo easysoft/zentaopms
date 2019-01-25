@@ -1324,7 +1324,8 @@ class story extends control
         $storyInfo['moduleID'] = $story->module;
         $storyInfo['estimate'] = $story->estimate;
         $storyInfo['pri']      = $story->pri;
-        $storyInfo['spec']     = $story->spec;
+        $storyInfo['spec']     = html_entity_decode($story->spec);
+        
 
         echo json_encode($storyInfo);
     }
