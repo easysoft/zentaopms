@@ -865,3 +865,4 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['release']);
     unset($lang->searchObjects['project']);
     unset($lang->searchObjects['productplan']);
+}

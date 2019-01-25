@@ -252,15 +252,9 @@ class testcase extends control
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
-        /* Set productID and currentModuleID. */
+        /* Set productID and branch. */
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
-        if($storyID and empty($moduleID))
-        {
-            $story    = $this->loadModel('story')->getByID($storyID);
-            $moduleID = $story->module;
-        }
-        $currentModuleID = (int)$moduleID;
 
         /* Set menu. */
         $this->testcase->setMenu($this->products, $productID, $branch);
@@ -319,6 +313,14 @@ class testcase extends control
         $position[] = $this->lang->testcase->common;
         $position[] = $this->lang->testcase->create;
 
+        /* Set story and currentModuleID. */
+        if($storyID and empty($moduleID))
+        {
+            $story    = $this->loadModel('story')->getByID($storyID);
+            $moduleID = $story->module;
+        }
+        $currentModuleID = (int)$moduleID;
+
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
         $modules = array();
@@ -328,6 +330,7 @@ class testcase extends control
             $modules = $this->tree->getAllChildID($modules);
         }
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50);
+        if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
@@ -339,7 +342,7 @@ class testcase extends control
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (isset($story->module) ? $story->module : 0);
+        $this->view->currentModuleID  = $currentModuleID;
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;
         $this->view->color            = $color;
