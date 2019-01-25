@@ -160,9 +160,8 @@
               {
                   $groupEstimate += $task->estimate;
                   $groupConsumed += $task->consumed;
+                  if($groupBy == 'status' || ($task->status != 'cancel' && $task->status != 'closed')) $groupLeft += $task->left;
               }
-
-              if($groupBy == 'status' || ($task->status != 'cancel' && $task->status != 'closed')) $groupLeft += $task->left;
           }
 
           if($task->status == 'wait')   $groupWait++;

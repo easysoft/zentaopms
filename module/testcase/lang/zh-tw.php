@@ -83,6 +83,7 @@ $lang->testcase->edit                    = "編輯";
 $lang->testcase->batchEdit               = "批量編輯 ";
 $lang->testcase->batchChangeModule       = "批量修改模組";
 $lang->testcase->batchChangeBranch       = "批量修改分支";
+$lang->testcase->groupByStories          = '需求分組';
 $lang->testcase->delete                  = "刪除";
 $lang->testcase->batchDelete             = "批量刪除 ";
 $lang->testcase->batchConfirmStoryChange = "批量確認變更";
@@ -169,10 +170,6 @@ $lang->testcase->stageList['bvt']        = '版本驗證階段';
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = '確認通過';
 $lang->testcase->reviewResultList['clarify'] = '繼續完善';
-
-$lang->testcase->groups['']           = '分組查看';
-$lang->testcase->groups['story']      = '需求分組';
-$lang->testcase->groups['assignedTo'] = '指派分組';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = '待評審';
