@@ -313,7 +313,7 @@ class reportModel extends model
         {
             foreach($multiTasks as $task)
             {
-                $userTask = $allTasks[$task->root];
+                $userTask = clone $allTasks[$task->root];
                 $userTask->estimate = $task->estimate;
                 $userTask->consumed = $task->consumed;
                 $userTask->left     = $task->left;
