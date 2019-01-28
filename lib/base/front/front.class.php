@@ -980,7 +980,15 @@ EOT;
     static public function reload($window = 'self')
     {
         $js  = self::start();
-        $js .= "$window.location.reload(true);\n";
+        // See bug #2379 http://pms.zentao.net/bug-view-2379.html
+        if($window !== 'self' && $window !== 'window')
+        {
+            $js .= "if($window !== window) $window.location.reload(true);\n";
+        }
+        else
+        {
+            $js .= "$window.location.reload(true);\n";
+        }
         $js .= self::end();
         return $js;
     }
