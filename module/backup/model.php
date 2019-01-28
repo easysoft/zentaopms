@@ -283,7 +283,8 @@ class backupModel extends model
      */
     public function getBackupPath()
     {
-        return empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
+        $backupPath = empty($this->config->backup->settingDir) ? $this->app->getTmpRoot() . 'backup' . DS : $this->config->backup->settingDir;
+        return trim(str_replace('\\', '/', $backupPath), '/') . '/';
     }
 
     /**
