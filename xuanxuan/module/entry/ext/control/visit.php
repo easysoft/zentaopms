@@ -45,7 +45,6 @@ class entry extends control
             $this->loadModel('user');
             $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($this->session->userID)->fetch();
 
-            unset($user->password);
             $this->user->cleanLocked($user->account);
 
             $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
