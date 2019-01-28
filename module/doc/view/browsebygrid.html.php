@@ -65,7 +65,9 @@
             <div class="text-primary file-info"><?php echo zget($itemCounts, $lib->id, 0) . $lang->doc->item;?></div>
           </a>
           <div class="actions">
+            <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$lib->id&objectType=doclib");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <?php endif;?>
             <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
           </div>
         </div>
@@ -105,7 +107,9 @@
             <div class="text-primary file-info"><?php echo $module->docCount . $lang->doc->item;?></div>
           </a>
           <div class="actions">
+            <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID={$module->id}&objectType=module");?>" title="<?php echo $lang->doc->collect;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <?php endif;?>
           </div>
         </div>
         <?php endforeach;?>
@@ -120,7 +124,9 @@
             <div class="text-primary file-info"><?php echo zget($users, $doc->addedBy);?></div>
           </a>
           <div class="actions">
+            <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID={$doc->id}&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <?php endif;?>
             <?php common::printLink('doc', 'edit', "docID={$doc->id}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
             <?php common::printLink('doc', 'delete', "docID={$doc->id}", "<i class='icon icon-close'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
           </div>
