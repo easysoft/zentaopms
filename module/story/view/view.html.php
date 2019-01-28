@@ -144,6 +144,12 @@
                   }
                   else
                   {
+                      if($storyModule->branch and isset($branches[$storyModule->branch]))
+                      {
+                          $moduleTitle .= $branches[$storyModule->branch] . '/';
+                          echo $branches[$storyModule->branch] . $lang->arrow;
+                      }
+
                       foreach($modulePath as $key => $module)
                       {
                           $moduleTitle .= $module->name;

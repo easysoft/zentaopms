@@ -487,6 +487,7 @@ class testcase extends control
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
         if($from == 'testtask') $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
 
+        $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);
         $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
@@ -508,7 +509,7 @@ class testcase extends control
             $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             $this->view->productName = $this->products[$productID];
-            $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($case->branch);
+            $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
         $caseFails = $this->dao->select('COUNT(*) AS count')->from(TABLE_TESTRESULT)
@@ -526,12 +527,14 @@ class testcase extends control
         $this->view->taskID     = $taskID;
         $this->view->version    = $version ? $version : $case->version;
         $this->view->modulePath = $this->tree->getParents($case->module);
+        $this->view->caseModule = empty($case->module) ? '' : $this->tree->getById($case->module);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('case', $caseID);
         $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('testcase', $caseID);
         $this->view->runID      = $from == 'testcase' ? 0 : $run->id;
         $this->view->isLibCase  = $isLibCase;
         $this->view->caseFails  = $caseFails;
+        $this->view->branches   = $branches;
 
         $this->display();
     }
