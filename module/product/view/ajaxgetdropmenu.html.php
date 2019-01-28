@@ -74,8 +74,8 @@ foreach($products as $product)
     ?>
     </div>
     <div class="col-footer">
-      <?php echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all); ?>
-      <a class='pull-right toggle-right-col'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
+      <?php echo html::a(helper::createLink('product', 'all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->product->all, '', 'class="not-list-item"'); ?>
+      <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
   <div class="table-col col-right">
