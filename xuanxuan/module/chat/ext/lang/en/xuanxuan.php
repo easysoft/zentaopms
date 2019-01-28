@@ -7,6 +7,9 @@ $lang->chat->xxdServer       = 'Zentao Server';
 $lang->chat->downloadXXD     = 'Download XXD';
 $lang->chat->zentaoIntegrate = 'Zentao Integrated';
 $lang->chat->zentaoClient    = 'ZenTao Client is added!';
+$lang->chat->getChatUsers    = 'Get Chat Users';
+$lang->chat->getChatGroups   = 'Get Chat Groups';
+$lang->chat->notifyMSG       = 'Notify';
 
 $lang->chat->turnonList = array();
 $lang->chat->turnonList[1] = 'Enable';

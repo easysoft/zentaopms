@@ -35,7 +35,7 @@ $lang->upgrade->setStatusFile      = '<h4>升級之前請先完成下面的操�
                                       <li>%s</li>
                                       <li>或者刪掉"<strong style="color:#ed980f">%s</strong>" 這個檔案 ，重新創建一個<strong style="color:#ed980f">ok.txt</strong>檔案，不需要內容。</li>
                                       </ul>
-                                      <p><strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="upgrade.php">繼續更新</a></strong></p>';
+                                      <p><strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="#" onclick="location.reload()">繼續更新</a></strong></p>';
 $lang->upgrade->selectVersion = '選擇版本';
 $lang->upgrade->continue      = '繼續';
 $lang->upgrade->noteVersion   = "務必選擇正確的版本，否則會造成數據丟失。";

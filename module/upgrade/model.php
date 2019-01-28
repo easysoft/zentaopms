@@ -347,6 +347,7 @@ class upgradeModel extends model
         case '11_0': $this->saveLogs('Execute 11_0');
         case '11_1':
             $this->saveLogs('Execute 11_1');
+            $this->execSQL($this->getUpgradeFile('11.1'));
             if(!isset($this->config->isINT) or !($this->config->isINT))
             {
                 $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';

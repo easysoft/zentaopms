@@ -262,7 +262,7 @@ $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => '測試|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA視圖菜單設置。*/
 $lang->qa = new stdclass();
@@ -334,6 +334,9 @@ $lang->caselib->menu->caselib   = array('link' => '用例庫|testsuite|library',
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 //$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加檔案夾|doc|createLib', 'float' => 'right');
+
+$lang->svn = new stdclass();
+$lang->git = new stdclass();
 
 /* 統計視圖菜單設置。*/
 $lang->report = new stdclass();
@@ -479,7 +482,7 @@ $lang->error->email           = "『%s』應當為合法的EMAIL。";
 $lang->error->date            = "『%s』應當為合法的日期。";
 $lang->error->datetime        = "『%s』應當為合法的日期。";
 $lang->error->code            = "『%s』應當為字母或數字的組合。";
-$lang->error->account         = "『%s』應當為合法的用戶名。";
+$lang->error->account         = "『%s』只能是字母和數字的組合三位以上。";
 $lang->error->passwordsame    = "兩次密碼應當相等。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
