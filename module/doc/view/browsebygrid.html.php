@@ -105,7 +105,7 @@
             <div class="text-primary file-info"><?php echo $module->docCount . $lang->doc->item;?></div>
           </a>
           <div class="actions">
-            <?php common::printLink('doc', 'collect', "objectID={$module->id}&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'");?>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID={$module->id}&objectType=module");?>" title="<?php echo $lang->doc->collect;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
           </div>
         </div>
         <?php endforeach;?>
