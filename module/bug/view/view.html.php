@@ -123,16 +123,22 @@
                   }
                   else
                   {
-                     foreach($modulePath as $key => $module)
-                     {
-                         $moduleTitle .= $module->name;
-                         if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                         if(isset($modulePath[$key + 1]))
-                         {
-                             $moduleTitle .= '/';
-                             echo $lang->arrow;
-                         }
-                     }
+                      if($bugModule->branch and isset($branches[$bugModule->branch]))
+                      {
+                          $moduleTitle .= $branches[$bugModule->branch] . '/';
+                          echo $branches[$bugModule->branch] . $lang->arrow;
+                      }
+
+                      foreach($modulePath as $key => $module)
+                      {
+                          $moduleTitle .= $module->name;
+                          if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                          if(isset($modulePath[$key + 1]))
+                          {
+                              $moduleTitle .= '/';
+                              echo $lang->arrow;
+                          }
+                      }
                   }
                   $printModule = ob_get_contents();
                   ob_end_clean();
