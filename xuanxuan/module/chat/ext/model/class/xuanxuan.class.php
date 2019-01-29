@@ -75,6 +75,7 @@ class xuanxuanChat extends chatModel
         {
             if(!empty($user->$field)) $data[$field] = $user->$field;
         }
+        if(!empty($user->account) && !empty($user->password)) $data['password'] = $user->password;
         if(!$data) return null;
 
         $data['clientLang'] = $this->app->getClientLang();
