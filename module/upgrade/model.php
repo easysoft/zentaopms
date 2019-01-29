@@ -346,8 +346,8 @@ class upgradeModel extends model
                 $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
                 $this->execSQL($xuanxuanSql);
                 $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
+                $this->execSQL($xuanxuanSql);
             }
-            $this->execSQL($xuanxuanSql);
             $this->initXuanxuan();
         case '11_0': $this->saveLogs('Execute 11_0');
         case '11_1':
