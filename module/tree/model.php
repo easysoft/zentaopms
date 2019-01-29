@@ -508,7 +508,6 @@ class treeModel extends model
         $fullTrees = array();
         foreach($products as $id => $product)
         {
-            $linkedStory = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($rootID)->andWhere('product')->eq($id)->fetch();
             $productInfo = $this->product->getById($id);
             /* tree menu. */
             $productTree = array();
@@ -521,7 +520,7 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                if($branch == 0 and $linkedStory) $productTree = $this->getDataStructure($stmt, 'task', $projectModules);
+                if($branch == 0) $productTree = $this->getDataStructure($stmt, 'task', $projectModules);
                 if($branch != 0)
                 {
                     $children = $this->getDataStructure($stmt, 'task', $projectModules);
