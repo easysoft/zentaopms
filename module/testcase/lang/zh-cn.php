@@ -171,7 +171,6 @@ $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = '确认通过';
 $lang->testcase->reviewResultList['clarify'] = '继续完善';
 
-
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = '待评审';
 $lang->testcase->statusList['normal']      = '正常';
