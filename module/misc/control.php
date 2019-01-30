@@ -59,16 +59,15 @@ class misc extends control
     /**
      * Check current version is latest or not.
      * 
+     * @param  string    $sn 
      * @access public
      * @return void
      */
-    public function checkUpdate()
+    public function checkUpdate($sn)
     {
-        $note    = isset($_GET['note'])    ? $_GET['note'] : '';
-        $browser = isset($_GET['browser']) ? $_GET['browser'] : '';
-
-        $this->view->note    = urldecode(helper::safe64Decode($note));
-        $this->view->browser = $browser;
+        session_write_close();
+        $link = $this->lang->misc->api . "/updater-isLatest-{$this->config->version}-{$sn}.html?lang=" . str_replace('-', '_', $this->app->getClientLang());
+        $this->view->note = file_get_contents($link);
         $this->display();
     }
 
