@@ -79,6 +79,8 @@ zentaoxx:
 	sed -i 's/sys_user/zt_user/' zentaoxx/db/*.sql
 	sed -i 's/sys_file/zt_file/' zentaoxx/db/*.sql
 	sed -i '/sys_entry/d' zentaoxx/db/*.sql
+	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
+	rm -rf zentaopms/tools
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	rm -rf xuan.zip xuan zentaoxx
 package:
