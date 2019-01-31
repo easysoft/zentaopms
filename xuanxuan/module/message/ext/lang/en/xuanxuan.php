@@ -1,8 +1,8 @@
 <?php
 $lang->message->typeList['xuanxuan'] = 'Client';
 
-$lang->message->sender = 'ZentaoPMS';
+$lang->message->sender = 'ZenTao';
 
 if(!isset($lang->message->error)) $lang->message->error = new stdclass();
-$lang->message->error->noUserList = 'Not set user id list.';
-$lang->message->error->noSender   = 'Not set sender information.';
+$lang->message->error->noUserList = 'User ID list is not set.';
+$lang->message->error->noSender   = 'Sender information is not set.';
