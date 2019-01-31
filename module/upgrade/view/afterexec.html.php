@@ -42,8 +42,7 @@
 <script>
 <?php
 foreach($needProcess as $processKey => $value) echo 'var ' . $processKey . "Finish = false;\n";
-$needUpdateFile = strpos($config->installedVersion, 'pro') === false ?  version_compare($config->installedVersion, '8.3', '<') : version_compare($config->installedVersion, 'pro5.4', '<');
-if($needUpdateFile):?>
+if(isset($needProcess['updateFile'])):?>
 $(function()
 {
     $('a#tohome').closest('.alert').hide();

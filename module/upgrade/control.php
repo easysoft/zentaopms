@@ -57,6 +57,8 @@ class upgrade extends control
      */
     public function backup()
     {
+        $this->session->set('upgrading', true);
+
         $this->view->title = $this->lang->upgrade->common;
         $this->display();
     }
@@ -166,6 +168,7 @@ class upgrade extends control
 
             @unlink($this->app->getAppRoot() . 'www/install.php');
             @unlink($this->app->getAppRoot() . 'www/upgrade.php');
+            unset($_SESSION['upgrading']);
         }
     }
 
@@ -245,6 +248,7 @@ class upgrade extends control
      */
     public function ajaxUpdateFile($type = '', $lastID = 0)
     {
+        set_time_limit(0);
         $result = $this->upgrade->updateFileObjectID($type, $lastID);
         $response = array();
         if($result['type'] == 'finish')

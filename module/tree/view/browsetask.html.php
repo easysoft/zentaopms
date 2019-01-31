@@ -75,9 +75,7 @@
                       echo html::hidden("order[id$sonModule->id]", $sonModule->order);
                       ?>
                     </div>
-                    <div class="table-col col-actions">
-                      <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                    </div>
+                    <div class="table-col col-actions"> </div>
                   </div>
                   <?php endforeach;?>
                   <?php for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++):?>
@@ -186,7 +184,7 @@ $(function()
             }
             else if(action.type === 'delete')
             {
-                window.open(action.linkTemplate.format(item.id), 'hiddenwin');
+                hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
             else if(action.type === 'add')
             {

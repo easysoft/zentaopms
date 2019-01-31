@@ -63,11 +63,13 @@ zentaoxx:
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
+	mv zentaoxx/www/xuanxuan.php zentaoxx/www/x.php
 	sed -i 's/site,//' zentaoxx/module/chat/model.php
 	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
 	sed -i '/password = md5/d' zentaoxx/module/chat/control.php
 	sed -i '/getSignedTime/d' zentaoxx/module/chat/control.php
 	sed -i 's/tree/dept/' zentaoxx/module/chat/control.php
+	sed -i 's/tree/dept/' zentaoxx/module/chat/model.php
 	sed -i "s/, 'sys'//" zentaoxx/module/chat/control.php
 	sed -i 's/system.sys/system/' zentaoxx/module/chat/control.php
 	sed -i 's/&app=sys//' zentaoxx/module/chat/control.php
@@ -77,6 +79,8 @@ zentaoxx:
 	sed -i 's/sys_user/zt_user/' zentaoxx/db/*.sql
 	sed -i 's/sys_file/zt_file/' zentaoxx/db/*.sql
 	sed -i '/sys_entry/d' zentaoxx/db/*.sql
+	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
+	rm -rf zentaopms/tools
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	rm -rf xuan.zip xuan zentaoxx
 package:
@@ -90,7 +94,8 @@ package:
 	if [ ! -d "zentaopms/config/ext" ]; then mkdir zentaopms/config/ext; fi
 	for module in `ls zentaopms/module/`; do if [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
-	tools/cn2tw.php
+	mkdir zentaopms/tools; cp tools/cn2tw.php zentaopms/tools; cd zentaopms/tools; php cn2tw.php
+	rm -rf zentaopms/tools
 pms:
 	make common 
 	make zentaoxx 

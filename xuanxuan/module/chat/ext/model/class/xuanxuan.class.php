@@ -26,11 +26,11 @@ class xuanxuanChat extends chatModel
         $libID     = isset($libIdList[0]) ? $libIdList[0] : 1;
 
         $actions = new stdclass();
-        if(common::hasPriv('bug',   'create') and !empty($products)) $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('doc',   'create') and !empty($libIdList))$actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('doc', 'create', "libID=$libID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('story', 'create') and !empty($products)) $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('task',  'create') and !empty($projects)) $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('task', 'create', "project=$projectID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('todo',  'create')) $actions->createTodo = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('bug',   'create') and !empty($products)) $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('doc',   'create') and !empty($libIdList))$actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "libID=$libID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('story', 'create') and !empty($products)) $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('task',  'create') and !empty($projects)) $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "project=$projectID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('todo',  'create')) $actions->createTodo = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "800px");
 
         $urls = array();
         foreach($this->config->chat->cards as $moduleName => $methods)
@@ -64,5 +64,30 @@ class xuanxuanChat extends chatModel
         $entries[] = $data;
         unset($_SESSION['user']);
         return $entries;
+    }
+
+    public function editUser($user = null)
+    {
+        if(empty($user->id)) return null;
+
+        $data = array();
+        foreach($this->config->chat->user->canEditFields as $field)
+        {
+            if(!empty($user->$field)) $data[$field] = $user->$field;
+        }
+        if(!empty($user->account) && !empty($user->password)) $data['password'] = $user->password;
+        if(!$data) return null;
+
+        $data['clientLang'] = $this->app->getClientLang();
+        $this->dao->update(TABLE_USER)->data($data)->where('id')->eq($user->id)->exec();
+        return $this->getUserByUserID($user->id);
+    }
+
+    public function getServer($backend = 'xxb')
+    {
+        $server = commonModel::getSysURL();
+        if(!empty($this->config->xuanxuan->server)) $server = $this->config->xuanxuan->server;
+
+        return $server;
     }
 }

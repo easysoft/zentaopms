@@ -146,7 +146,6 @@ $lang->user->error->accountDupl   = "【ID %s】的用户名已经存在";
 $lang->user->error->realname      = "【ID %s】的真实姓名必须填写";
 $lang->user->error->password      = "【ID %s】的密码必须为六位以上";
 $lang->user->error->mail          = "【ID %s】的邮箱地址不正确";
-$lang->user->error->role          = "【ID %s】的职位不能为空";
 $lang->user->error->reserved      = "【ID %s】的用户名已被系统预留";
 
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";

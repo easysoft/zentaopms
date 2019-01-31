@@ -750,7 +750,7 @@ class actionModel extends model
         }
         $objectNames['user'][0] = 'guest';    // Add guest account.
 
-        foreach($actions as $action)
+        foreach($actions as $i => $action)
         {
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
@@ -779,11 +779,14 @@ class actionModel extends model
             {
                 list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
                 $action->objectLink = '';
-                if(common::hasPriv($moduleName, $methodName))
+                if(!common::hasPriv($moduleName, $methodName))
                 {
-                    $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
-                    if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->actor));
+                    unset($actions[$i]);
+                    continue;
                 }
+
+                $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                if($action->objectType == 'user') $action->objectLink  = helper::createLink($moduleName, $methodName, sprintf($vars, $action->actor));
                 $action->objectLabel = $objectLabel;
             }
             else

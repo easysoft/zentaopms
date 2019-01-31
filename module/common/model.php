@@ -167,7 +167,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
-            if(stripos($method, 'downloadClient') !== false) return true;
+            if($module == 'misc' and $method == 'downloadClient') return true;
             if($module == 'block' and $method == 'main') return true;
             if($module == 'misc' and $method == 'changelog') return true;
             if($module == 'tutorial') return true;
@@ -615,11 +615,10 @@ class commonModel extends model
                         $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
                     }
 
-                    if($subMenu)
-                    {
-                        $label   .= "<span class='caret'></span>";
-                        $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
-                    }
+                    if(empty($subMenu)) continue;
+
+                    $label   .= "<span class='caret'></span>";
+                    $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
                 }
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";

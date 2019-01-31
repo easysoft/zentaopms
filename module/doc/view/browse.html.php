@@ -104,7 +104,9 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-datetime"></td>
               <td class="c-datetime"></td>
               <td>
+                <?php if(common::hasPriv('doc', 'collect')):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$lib->id&objectType=doclib");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+                <?php endif;?>
                 <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
                 <?php common::printLink('tree', 'browse', "rootID=$lib->id&type=doc", "<i class='icon icon-cog'></i>", '', "title='{$lang->tree->manage}' class='btn btn-link'")?>
               </td>
@@ -138,7 +140,9 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-datetime"></td>
               <td class="c-datetime"></td>
               <td class="c-actions">
+                <?php if(common::hasPriv('doc', 'collect')):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$module->id&objectType=module");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+                <?php endif;?>
               </td>
             </tr>
             <?php endforeach;?>
@@ -153,7 +157,9 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d H:i');?></td>
               <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d H:i');?></td>
               <td class="c-actions">
+                <?php if(common::hasPriv('doc', 'collect')):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+                <?php endif;?>
                 <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
                 <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-close'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
               </td>

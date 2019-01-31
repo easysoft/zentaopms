@@ -147,7 +147,7 @@
       {
           if($groupBy == 'story')
           {
-              if(!$task->parent)
+              if($task->parent <= 0)
               {
                   $groupEstimate += $task->estimate;
                   $groupConsumed += $task->consumed;
@@ -156,10 +156,12 @@
           }
           else
           {
-              $groupEstimate += $task->estimate;
-              $groupConsumed += $task->consumed;
-
-              if($groupBy == 'status' || ($task->status != 'cancel' && $task->status != 'closed')) $groupLeft += $task->left;
+              if($task->parent <= 0)
+              {
+                  $groupEstimate += $task->estimate;
+                  $groupConsumed += $task->consumed;
+                  if($groupBy == 'status' || ($task->status != 'cancel' && $task->status != 'closed')) $groupLeft += $task->left;
+              }
           }
 
           if($task->status == 'wait')   $groupWait++;

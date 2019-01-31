@@ -7,6 +7,9 @@ $lang->chat->xxdServer       = '禅道服务器';
 $lang->chat->downloadXXD     = '下载喧喧服务端';
 $lang->chat->zentaoIntegrate = '禅道集成';
 $lang->chat->zentaoClient    = '新增禅道客户端！';
+$lang->chat->getChatUsers    = '获取用户';
+$lang->chat->getChatGroups   = '获取讨论组';
+$lang->chat->notifyMSG       = '消息通知';
 
 $lang->chat->turnonList = array();
 $lang->chat->turnonList[1] = '是';

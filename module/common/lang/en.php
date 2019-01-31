@@ -262,7 +262,7 @@ $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => 'Test|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA menu settings. */
 $lang->qa = new stdclass();
@@ -334,6 +334,9 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|testsuite|librar
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 //$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Library|doc|createLib', 'float' => 'right');
+
+$lang->svn = new stdclass();
+$lang->git = new stdclass();
 
 /* Report menu settings. */
 $lang->report = new stdclass();
@@ -865,3 +868,4 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     unset($lang->searchObjects['release']);
     unset($lang->searchObjects['project']);
     unset($lang->searchObjects['productplan']);
+}

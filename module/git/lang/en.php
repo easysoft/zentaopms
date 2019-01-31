@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 /* Methods. */
-$lang->git = new stdclass();
 $lang->git->common  = 'Git';
 $lang->git->cat     = 'View Code';
 $lang->git->diff    = 'Diff Code';

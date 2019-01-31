@@ -444,12 +444,7 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                while($module = $stmt->fetch())
-                {
-                    /* if not manage, ignore unused modules. */
-                    if(!$manage and !isset($projectModules[$module->id])) continue;
-                    $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
-                }
+                while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
                 if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
                 $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
             }
@@ -465,12 +460,7 @@ class treeModel extends model
             $treeMenu = array();
             $query = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task'")->andWhere('deleted')->eq(0)->orderBy('grade desc, type, `order`')->get();
             $stmt  = $this->dbh->query($query);
-            while($module = $stmt->fetch())
-            {
-                /* if not manage, ignore unused modules. */
-                if(!$manage and !isset($projectModules[$module->id])) continue;
-                $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
-            }
+            while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
 
             $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
             $menu .= $tree . '</li>';
@@ -508,7 +498,7 @@ class treeModel extends model
         $fullTrees = array();
         foreach($products as $id => $product)
         {
-            $productInfo  = $this->product->getById($id);
+            $productInfo = $this->product->getById($id);
             /* tree menu. */
             $productTree = array();
             $branchTrees = array();
@@ -520,10 +510,10 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                if($branch == 0) $productTree = $this->getDataStructure($stmt, 'task', $projectModules);
+                if($branch == 0) $productTree = $this->getDataStructure($stmt, 'task');
                 if($branch != 0)
                 {
-                    $children = $this->getDataStructure($stmt, 'task', $projectModules);
+                    $children = $this->getDataStructure($stmt, 'task');
                     if($children) $branchTrees[] = array('name' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $children);
                 }
             }
@@ -1335,6 +1325,7 @@ class treeModel extends model
         {
             $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();
             $this->dao->update(TABLE_MODULE)->set('branch')->eq(0)->where('id')->in($childs)->exec();
+            if($self->type == 'doc') $this->dao->update(TABLE_DOC)->set('`lib`')->eq($module->root)->where('module')->eq($moduleID)->exec();
         }
         $this->fixModulePath(isset($module->root) ? $module->root : $self->root, $self->type);
         if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);

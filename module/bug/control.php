@@ -22,6 +22,7 @@ class bug extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+        $products = array();
         $this->loadModel('product');
         $this->loadModel('tree');
         $this->loadModel('user');
@@ -393,6 +394,9 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
+        $productList = $this->loadModel('block')->getProducts('noclosed', ''); 
+        foreach($productList as $product) $products[$product->id] = $product->name;
+
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
         $this->view->customFields = $customFields;
@@ -402,6 +406,7 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
 
+        $this->view->products         =  $products;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $moduleOptionMenu;
@@ -545,6 +550,7 @@ class bug extends control
         /* Get product info. */
         $productID   = $bug->product;
         $productName = $this->products[$productID];
+        $branches    = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
         /* Header and positon. */
         $this->view->title      = "BUG #$bug->id $bug->title - " . $this->products[$productID];
@@ -554,9 +560,11 @@ class bug extends control
         /* Assign. */
         $this->view->productID   = $productID;
         $this->view->productName = $productName;
+        $this->view->branches    = $branches;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
+        $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
         $this->view->bug         = $bug;
-        $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : $this->loadModel('branch')->getById($bug->branch, $bug->product);
+        $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);
         $this->view->builds      = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');

@@ -146,7 +146,6 @@ $lang->user->error->accountDupl   = "【ID %s】的用戶名已經存在";
 $lang->user->error->realname      = "【ID %s】的真實姓名必須填寫";
 $lang->user->error->password      = "【ID %s】的密碼必須為六位以上";
 $lang->user->error->mail          = "【ID %s】的郵箱地址不正確";
-$lang->user->error->role          = "【ID %s】的職位不能為空";
 $lang->user->error->reserved      = "【ID %s】的用戶名已被系統預留";
 
 $lang->user->error->verifyPassword   = "驗證失敗，請檢查您的系統登錄密碼是否正確";
