@@ -203,6 +203,8 @@ class release extends control
                 {
                     $response['result']  = 'success';
                     $response['message'] = '';
+                    $release = $this->release->getById($releaseID);
+                    $this->dao->update(TABLE_BUILD)->set('deleted')->eq(1)->where('id')->eq($release->build)->andWhere('name')->eq($release->name)->exec();
                 }
                 $this->send($response);
             }
