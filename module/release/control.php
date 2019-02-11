@@ -191,6 +191,10 @@ class release extends control
         {
             $this->release->delete(TABLE_RELEASE, $releaseID);
 
+            $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
+            $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
+            if(empty($build->project)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
+
             /* if ajax request, send result. */
             if($this->server->ajax)
             {
