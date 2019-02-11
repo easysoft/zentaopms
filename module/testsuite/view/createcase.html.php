@@ -90,15 +90,12 @@
                   }
               }
               $priList = $lang->testcase->priList;
-              if(end($priList))
-              {
-                  unset($priList[0]);
-                  $priList[0] = '';
-              }
+              if(end($priList)) unset($priList[0]);
               ?>
               <?php if($hasCustomPri):?>
               <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
               <?php else: ?>
+              <?php ksort($priList);?>
               <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                   <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
