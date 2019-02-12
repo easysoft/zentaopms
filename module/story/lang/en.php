@@ -234,7 +234,7 @@ $lang->story->report->charts['storysPerPlan']           = 'by Plan';
 $lang->story->report->charts['storysPerStatus']         = 'by Status';
 $lang->story->report->charts['storysPerStage']          = 'by Phase';
 $lang->story->report->charts['storysPerPri']            = 'by Priority';
-$lang->story->report->charts['storysPerEstimate']       = 'by Hour';
+$lang->story->report->charts['storysPerEstimate']       = 'by Estimate';
 $lang->story->report->charts['storysPerOpenedBy']       = 'by CreatedBy';
 $lang->story->report->charts['storysPerAssignedTo']     = 'by Assignee';
 $lang->story->report->charts['storysPerClosedReason']   = 'by Closed Reason';
@@ -269,7 +269,7 @@ $lang->story->report->storysPerPri->item          = 'Priority';
 $lang->story->report->storysPerOpenedBy->item     = 'Account';
 $lang->story->report->storysPerAssignedTo->item   = 'User';
 $lang->story->report->storysPerClosedReason->item = 'Reason';
-$lang->story->report->storysPerEstimate->item     = 'Hour';
+$lang->story->report->storysPerEstimate->item     = 'Estimates';
 $lang->story->report->storysPerChange->item       = 'Change';
 
 $lang->story->report->storysPerProduct->graph      = new stdclass();
@@ -295,7 +295,7 @@ $lang->story->report->storysPerPri->graph->xAxisName          = 'Priority';
 $lang->story->report->storysPerOpenedBy->graph->xAxisName     = 'Created By';
 $lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assigned To';
 $lang->story->report->storysPerClosedReason->graph->xAxisName = 'Close Reason';
-$lang->story->report->storysPerEstimate->graph->xAxisName     = 'Hour ';
+$lang->story->report->storysPerEstimate->graph->xAxisName     = 'Estimates ';
 $lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
 
 $lang->story->placeholder = new stdclass();
