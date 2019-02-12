@@ -1718,7 +1718,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            $this->locate($this->createLink('project', 'team', "projectID=$projectID"));
+            die(js::locate($this->createLink('project', 'team', "projectID=$projectID"), 'parent'));
         }
 
         /* Load model. */

@@ -428,6 +428,12 @@ class taskModel extends model
 
             if($status == 'doing')
             {
+                if($parentTask->assignedTo == 'closed')
+                {
+                    $task->assignedTo   = $childTask->assignedTo;
+                    $task->assignedDate = $now;
+                }
+
                 $task->finishedBy   = '';
                 $task->finishedDate = '';
                 $task->closedBy     = '';

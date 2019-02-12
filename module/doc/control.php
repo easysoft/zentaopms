@@ -796,6 +796,7 @@ class doc extends control
         }
         elseif($from == 'project')
         {
+            $this->lang->modulePageActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "from=project&projectID=$objectID"), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $objectID);

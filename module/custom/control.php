@@ -31,8 +31,9 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function set($module = 'story', $field = 'priList', $lang = 'zh_cn')
+    public function set($module = 'story', $field = 'priList', $lang = '')
     {
+        if(empty($lang)) $lang = $this->app->getClientLang();
         if($module == 'user' and $field == 'priList') $field = 'roleList';
         if($module == 'block' and $field == 'priList')$field = 'closed';
         $currentLang = $this->app->getClientLang();
@@ -159,7 +160,7 @@ class custom extends control
                 }
             }
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . str_replace('-', '_', $lang))));
         }
 
         /* Check whether the current language has been customized. */

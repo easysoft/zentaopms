@@ -23,20 +23,12 @@
 
     if($hasGroupPriv and $config->global->flow != 'onlyTest')
     {
-        echo "<div class='btn-group'>";
-        $active  = $browseType == 'group' ? 'btn-active-text' : '';
-        $groupBy = isset($groupBy) ? $groupBy : '';
-        $current = zget($lang->testcase->groups, isset($groupBy) ? $groupBy : '', '');
-        if(empty($current)) $current = $lang->testcase->groups[''];
-        echo html::a('javascript:;', "<span class='text'>{$current} <span class='caret'></span></span>", '', "class='btn btn-link $active' data-toggle='dropdown'");
-        echo "<ul class='dropdown-menu'>";
-        foreach ($lang->testcase->groups as $key => $value)
-        {
-            if($key == '') continue;
-            echo '<li' . ($key == $groupBy ? " class='active'" : '') . '>';
-            echo html::a($this->inlink('groupCase', "taskID=$taskID&groupBy=$key"), $value);
-        }
-        echo '</ul></div>';
+        $groupBy  = isset($groupBy)  ? $groupBy : '';
+        $active   = !empty($groupBy) ? 'btn-active-text' : '';
+
+        echo "<div id='groupTab' class='btn-group'>";
+        echo html::a($this->createLink('testtask', 'groupCase', "taskID=$taskID&groupBy=story"), "<span class='text'>{$lang->testcase->groupByStories}</span>", '', "class='btn btn-link $active'");
+        echo '</div>';
     }
 
     if($this->methodName == 'cases') echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>{$lang->testcase->bySearch}</a>";
