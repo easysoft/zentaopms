@@ -80,7 +80,7 @@ $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='t
 $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = 'Set Home';
-$lang->tutorial        = 'Tutorial';
+$lang->noviceTutorial  = 'Novice Tutorial';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manual';
 $lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html';

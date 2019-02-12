@@ -30,7 +30,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <form class='main-form' method='post' id='teamForm'>
+  <form class='main-form' method='post' id='teamForm' target='hiddenwin'>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
