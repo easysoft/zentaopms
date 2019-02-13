@@ -417,6 +417,12 @@
                   <th class='w-80px strong'><?php echo $lang->productplan->title;?></th>
                   <td><?php echo $plan->title;?></td>
                 </tr>
+                <?php if($plan->parent > 0):?>
+                <tr>
+                  <th><?php echo $lang->productplan->parent;?></th>
+                  <td><?php echo html::a(inlink('view', "planID={$parentPlan->id}"), "#{$parentPlan->id} " . $parentPlan->title);?></td>
+                </tr>
+                <?php endif;?>
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th><?php echo $lang->product->branch;?></th>
@@ -431,6 +437,16 @@
                   <th><?php echo $lang->productplan->end;?></th>
                   <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
                 </tr>
+                <?php if($plan->parent == '-1'):?>
+                <tr>
+                  <th><?php echo $lang->productplan->children;?></th>
+                  <td>
+                    <?php foreach($childrenPlans as $childrenPlan):?>
+                    <?php echo html::a(inlink('view', "planID={$childrenPlan->id}"), "#{$childrenPlan->id} " . $childrenPlan->title) . '<br />';?>
+                    <?php endforeach;?>
+                  </td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>

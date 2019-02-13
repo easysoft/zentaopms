@@ -270,6 +270,9 @@ class productplan extends control
             $orderBy = str_replace('id', 'order', $orderBy);
         }
 
+        if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
+        if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
+
         $this->loadModel('datatable');
         $this->view->modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story');
         $this->view->title       = "PLAN #$plan->id $plan->title/" . $products[$plan->product];

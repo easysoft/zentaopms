@@ -222,6 +222,18 @@ class productplanModel extends model
     }
 
     /**
+     * Get Children plan.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return array
+     */
+    public function getChildren($planID)
+    {
+        return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq((int)$planID)->andWhere('deleted')->eq('0')->fetchAll();
+    }
+
+    /**
      * Create a plan.
      *
      * @access public
