@@ -75,8 +75,8 @@ class productplanModel extends model
      */
     public function getList($product = 0, $branch = 0, $browseType = 'all', $pager = null, $orderBy = 'begin_desc')
     {
-        $date = date('Y-m-d');
-        $productPlans = $this->dao->select('t1.*,t2.project')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $date  = date('Y-m-d');
+        $plans = $this->dao->select('t1.*,t2.project')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t2.plan = t1.id and t2.product = ' . $product)
             ->where('t1.product')->eq($product)
             ->andWhere('t1.deleted')->eq(0)
@@ -87,21 +87,49 @@ class productplanModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        if(!empty($productPlans))
+        $planIdList = array();
+        $childrenPlans = array();
+        foreach($plans as $plan)
         {
-            foreach($productPlans as $productPlan)
+            $planIdList[$plan->id] = $plan->id;
+            if($plan->parent > 0)
             {
-                $stories = $this->dao->select('id,estimate')->from(TABLE_STORY)
-                    ->where("CONCAT(',', plan, ',')")->like("%,{$productPlan->id},%")
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id', 'estimate');
-                $productPlan->stories   = count($stories);
-                $productPlan->bugs      = $this->dao->select()->from(TABLE_BUG)->where("plan")->eq($productPlan->id)->andWhere('deleted')->eq(0)->count();
-                $productPlan->hour      = array_sum($stories);
-                $productPlan->projectID = $productPlan->project;
+                $childrenPlans[$plan->parent][$plan->id] = $plan;
+                unset($plans[$plan->id]);
             }
         }
-        return $productPlans;
+
+        if(!empty($childrenPlans))
+        {
+            $processedPlans = array();
+            foreach($plans as $plan)
+            {
+                $processedPlans[$plan->id] = $plan;
+                if(isset($childrenPlans[$plan->id]))
+                {
+                    $plan->children = count($childrenPlans[$plan->id]);
+                    foreach($childrenPlans[$plan->id] as $childrenPlan) $processedPlans[$childrenPlan->id] = $childrenPlan;
+                }
+            }
+            $plans = $processedPlans;
+        }
+
+        if(!empty($plans))
+        {
+            $bugs = $this->dao->select('*')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
+            foreach($plans as $plan)
+            {
+                $stories = $this->dao->select('id,estimate')->from(TABLE_STORY)
+                    ->where("CONCAT(',', plan, ',')")->like("%,{$plan->id},%")
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchPairs('id', 'estimate');
+                $plan->stories   = count($stories);
+                $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
+                $plan->hour      = array_sum($stories);
+                $plan->projectID = $plan->project;
+            }
+        }
+        return $plans;
     }
 
     /**
@@ -228,6 +256,7 @@ class productplanModel extends model
             $planID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
             $this->loadModel('score')->create('productplan', 'create', $planID);
+            if($plan->parent) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
             return $planID;
         }
     }
