@@ -68,7 +68,7 @@
               <?php echo html::submitButton();?>
               <?php echo html::backButton();?>
               <?php echo html::hidden('product', $product->id);?>
-              <?php echo html::hidden('branch', $parent ? $parentPlan->branch : $branch);?>
+              <?php if($parent) echo html::hidden('branch', $parentPlan->branch);?>
               <?php echo html::hidden('parent', $parent);?>
             </td>
           </tr>
