@@ -52,6 +52,7 @@
         {
             echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-link'");
         }
+        if(common::hasPriv('productplan', 'create') and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i>", '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
         common::printIcon('productplan', 'edit',   "planID=$plan->id", $plan);
         common::printIcon('productplan', 'delete', "planID=$plan->id", $plan, 'button', '', 'hiddenwin');
     }

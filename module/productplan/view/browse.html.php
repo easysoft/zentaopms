@@ -121,8 +121,8 @@
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           if(common::hasPriv('productplan', 'create'))
           {
-              if($plan->parent != '0') echo "<button type='button' class='disabled btn'><i class='disabled icon-treemap-alt' title='{$this->lang->productplan->children}'></i></button>";
-              if($plan->parent == '0') echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-treemap-alt'></i>", '', "class='btn' title='{$this->lang->productplan->children}'");
+              if($plan->parent > '0') echo "<button type='button' class='disabled btn'><i class='disabled icon-treemap-alt' title='{$this->lang->productplan->children}'></i></button>";
+              if($plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-treemap-alt'></i>", '', "class='btn' title='{$this->lang->productplan->children}'");
           }
 
           if(common::hasPriv('productplan', 'delete', $plan))
