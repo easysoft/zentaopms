@@ -194,7 +194,7 @@ class productplanModel extends model
             ->andWhere('end')->ge($date)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
             ->orderBy('begin desc')
-            ->fetchPairs();
+            ->fetchAll('id');
 
         if(!$plans)
         {
@@ -205,7 +205,7 @@ class productplanModel extends model
                 ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
                 ->orderBy('begin desc')
                 ->limit(5)
-                ->fetchPairs();
+                ->fetchAll('id');
         }
 
         $plans       = $this->reorder4Children($plans);
@@ -239,7 +239,8 @@ class productplanModel extends model
         $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
-            ->orderBy('begin desc')->fetchPairs();
+            ->orderBy('begin desc')
+            ->fetchAll('id');
 
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
@@ -253,6 +254,7 @@ class productplanModel extends model
                 $parentTitle = $plan->title;
             }
             if($plan->parent > 0 and $plan->parent == $parent) $plan->title = $parentTitle . ' /' . $plan->title;
+            $planPairs[$plan->id] = $plan->title;
         }
         return array('' => '') + $planPairs;
     }
