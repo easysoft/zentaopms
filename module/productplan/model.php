@@ -87,45 +87,39 @@ class productplanModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $planIdList = array();
-        $childrenPlans = array();
-        foreach($plans as $plan)
-        {
-            $planIdList[$plan->id] = $plan->id;
-            if($plan->parent > 0)
-            {
-                $childrenPlans[$plan->parent][$plan->id] = $plan;
-                unset($plans[$plan->id]);
-            }
-        }
-
-        if(!empty($childrenPlans))
-        {
-            $processedPlans = array();
-            foreach($plans as $plan)
-            {
-                $processedPlans[$plan->id] = $plan;
-                if(isset($childrenPlans[$plan->id]))
-                {
-                    $plan->children = count($childrenPlans[$plan->id]);
-                    foreach($childrenPlans[$plan->id] as $childrenPlan) $processedPlans[$childrenPlan->id] = $childrenPlan;
-                }
-            }
-            $plans = $processedPlans;
-        }
-
         if(!empty($plans))
         {
+            $plans      = $this->reorder4Children($plans);
+            $planIdList = array_keys($plans);
+
+            $product = $this->loadModel('product')->getById($product);
+            if($product->type == 'normal')
+            {
+                $storyGroups = $this->dao->select('id,plan,estimate')->from(TABLE_STORY)
+                    ->where("id")->in($planIdList)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchGroup('plan', 'id');
+            }
+
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
             foreach($plans as $plan)
             {
-                $stories = $this->dao->select('id,estimate')->from(TABLE_STORY)
-                    ->where("CONCAT(',', plan, ',')")->like("%,{$plan->id},%")
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id', 'estimate');
-                $plan->stories   = count($stories);
+                if($product->type == 'normal')
+                {
+                    $stories    = zget($storyGroups, $plan->id, array());
+                    $storyPairs = array();
+                    foreach($stories as $story) $storyPairs[$story->id] = $story->estimate;
+                }
+                else
+                {
+                    $storyPairs = $this->dao->select('id,estimate')->from(TABLE_STORY)
+                        ->where("CONCAT(',', plan, ',')")->like("%,{$plan->id},%")
+                        ->andWhere('deleted')->eq(0)
+                        ->fetchPairs('id', 'estimate');
+                }
+                $plan->stories   = count($storyPairs);
                 $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
-                $plan->hour      = array_sum($stories);
+                $plan->hour      = array_sum($storyPairs);
                 $plan->projectID = $plan->project;
             }
         }
@@ -144,17 +138,17 @@ class productplanModel extends model
     public function getPairs($product = 0, $branch = 0, $expired = '')
     {
         $date = date('Y-m-d');
-        $plans = $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
+        $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
             ->beginIF($expired == 'unexpired')->andWhere('end')->ge($date)->fi()
             ->orderBy('begin desc')
-            ->fetchPairs();
+            ->fetchAll('id');
 
         if($expired == 'unexpired')
         {
-            $plans += $this->dao->select('id,CONCAT(title, " [", begin, " ~ ", end, "]") as title')->from(TABLE_PRODUCTPLAN)
+            $plans += $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
                 ->where('product')->in($product)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('end')->lt($date)
@@ -162,14 +156,25 @@ class productplanModel extends model
                 ->beginIF($plans)->andWhere("id")->notIN(array_keys($plans))->fi()
                 ->orderBy('begin desc')
                 ->limit(5)
-                ->fetchPairs();
+                ->fetchAll('id');
         }
 
-        foreach($plans as $key => $value)
+        $plans       = $this->reorder4Children($plans);
+        $planPairs   = array();
+        $parent      = 0;
+        $parentTitle = '';
+        foreach($plans as $plan)
         {
-            $plans[$key] = str_replace('[2030-01-01 ~ 2030-01-01]', '[' . $this->lang->productplan->future . ']', $value);
+            if($plan->parent == '-1')
+            {
+                $parent      = $plan->id;
+                $parentTitle = $plan->title;
+            }
+            if($plan->parent > 0 and $plan->parent == $parent) $plan->title = $parentTitle . ' /' . $plan->title;
+            $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
         }
-        return array('' => '') + $this->processFuture($plans);
+        return array('' => '') + $planPairs;
     }
 
     /**
@@ -183,7 +188,7 @@ class productplanModel extends model
     public function getPairsForStory($product = 0, $branch = 0)
     {
         $date = date('Y-m-d');
-        $plans = $this->dao->select('id, CONCAT(title, " [", begin, " ~ ", end, "]") AS title')->from(TABLE_PRODUCTPLAN)
+        $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->andWhere('end')->ge($date)
@@ -193,7 +198,7 @@ class productplanModel extends model
 
         if(!$plans)
         {
-            $plans = $this->dao->select('id, CONCAT(title, " [", begin, " ~ ", end, "]") AS title')->from(TABLE_PRODUCTPLAN)
+            $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
                 ->where('product')->in($product)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('end')->lt($date)
@@ -203,7 +208,23 @@ class productplanModel extends model
                 ->fetchPairs();
         }
 
-        return array('' => '') + $this->processFuture($plans);
+        $plans       = $this->reorder4Children($plans);
+        $planPairs   = array();
+        $parent      = 0;
+        $parentTitle = '';
+        foreach($plans as $plan)
+        {
+            if($plan->parent == '-1')
+            {
+                $parent      = $plan->id;
+                $parentTitle = $plan->title;
+            }
+            if($plan->parent > 0 and $plan->parent == $parent) $plan->title = $parentTitle . ' /' . $plan->title;
+            $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
+            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+        }
+
+        return array('' => '') + $planPairs;
     }
 
     /**
@@ -215,10 +236,25 @@ class productplanModel extends model
      */
     public function getForProducts($products)
     {
-        return array('' => '') + $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
+        $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
             ->orderBy('begin desc')->fetchPairs();
+
+        $plans       = $this->reorder4Children($plans);
+        $planPairs   = array();
+        $parent      = 0;
+        $parentTitle = '';
+        foreach($plans as $plan)
+        {
+            if($plan->parent == '-1')
+            {
+                $parent      = $plan->id;
+                $parentTitle = $plan->title;
+            }
+            if($plan->parent > 0 and $plan->parent == $parent) $plan->title = $parentTitle . ' /' . $plan->title;
+        }
+        return array('' => '') + $planPairs;
     }
 
     /**
@@ -466,18 +502,41 @@ class productplanModel extends model
     }
 
     /**
-     * Process future of plans.
-     *
-     * @param  array  $plans
+     * Reorder for children plans.
+     * 
+     * @param  array    $plans 
      * @access public
      * @return array
      */
-    public function processFuture($plans)
+    public function reorder4Children($plans)
     {
-        foreach($plans as $key => $value)
+        /* Get children and unset. */
+        $childrenPlans = array();
+        foreach($plans as $plan)
         {
-            $plans[$key] = str_replace('[2030-01-01 ~ 2030-01-01]', '[' . $this->lang->productplan->future . ']', $value);
+            if($plan->parent > 0)
+            {
+                $childrenPlans[$plan->parent][$plan->id] = $plan;
+                if(isset($plans[$plan->parent])) unset($plans[$plan->id]);
+            }
         }
+
+        if(!empty($childrenPlans))
+        {
+            /* Append to parent plan. */
+            $reorderedPlans = array();
+            foreach($plans as $plan)
+            {
+                $reorderedPlans[$plan->id] = $plan;
+                if(isset($childrenPlans[$plan->id]))
+                {
+                    $plan->children = count($childrenPlans[$plan->id]);
+                    foreach($childrenPlans[$plan->id] as $childrenPlan) $reorderedPlans[$childrenPlan->id] = $childrenPlan;
+                }
+            }
+            $plans = $reorderedPlans;
+        }
+
         return $plans;
     }
 }
