@@ -1599,6 +1599,7 @@ class projectModel extends model
 
         $planStories  = array();
         $planProducts = array();
+        $count        = 0;
         if(!empty($plans))
         {
             foreach($plans as $planID => $productID)
@@ -1606,7 +1607,6 @@ class projectModel extends model
                 $planStory = $this->loadModel('story')->getPlanStories($planID);
                 if(!empty($planStory))
                 {
-                    $count = 0;
                     foreach($planStory as $id => $story)
                     {
                         if($story->status == 'draft')

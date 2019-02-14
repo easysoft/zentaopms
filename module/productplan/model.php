@@ -96,7 +96,7 @@ class productplanModel extends model
             if($product->type == 'normal')
             {
                 $storyGroups = $this->dao->select('id,plan,estimate')->from(TABLE_STORY)
-                    ->where("id")->in($planIdList)
+                    ->where("plan")->in($planIdList)
                     ->andWhere('deleted')->eq(0)
                     ->fetchGroup('plan', 'id');
             }
