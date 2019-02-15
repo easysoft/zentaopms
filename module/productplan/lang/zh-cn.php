@@ -27,6 +27,7 @@ $lang->productplan->batchUnlinkStory = "批量移除需求";
 $lang->productplan->linkedStories    = '需求';
 $lang->productplan->unlinkedStories  = '未关联需求';
 $lang->productplan->updateOrder      = '排序';
+$lang->productplan->createChildren   = "创建子计划";
 
 $lang->productplan->linkBug          = "关联Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
@@ -54,6 +55,8 @@ $lang->productplan->stories = '需求数';
 $lang->productplan->bugs    = 'Bug数';
 $lang->productplan->hour    = '工时';
 $lang->productplan->project = $lang->projectCommon;
+$lang->productplan->parent  = "父计划";
+$lang->productplan->children= "子计划";
 
 $lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '两星期';
