@@ -119,6 +119,7 @@
           <?php
           $withSearch = count($memberPairs) > 10;
           $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID={$project->id}&type=project");
+          echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
 
           if($withSearch)
           {
