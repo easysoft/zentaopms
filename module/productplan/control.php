@@ -54,7 +54,7 @@ class productplan extends control
         }
 
         $this->commonAction($product, $branch);
-        $lastPlan = $this->productplan->getLast($product);
+        $lastPlan = $this->productplan->getLast($product, $branch, $parent);
         if($lastPlan)
         {
             $timestamp = strtotime($lastPlan->end);

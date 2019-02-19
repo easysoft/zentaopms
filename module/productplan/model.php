@@ -47,14 +47,18 @@ class productplanModel extends model
      * Get last plan.
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $parent
      * @access public
-     * @return void
+     * @return object
      */
-    public function getLast($productID, $branch = 0)
+    public function getLast($productID, $branch = 0, $parent = 0)
     {
         return $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->eq($productID)
+            ->beginIF($parent <= 0)->andWhere('parent')->le((int)$parent)->fi()
+            ->beginIF($parent > 0)->andWhere('parent')->eq((int)$parent)->fi()
+            ->andWhere('product')->eq((int)$productID)
             ->andWhere('end')->ne('2030-01-01')
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
             ->orderBy('end desc')
@@ -102,6 +106,7 @@ class productplanModel extends model
             }
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)->where("plan")->in($planIdList)->andWhere('deleted')->eq(0)->fetchGroup('plan', 'id');
+            $parentStories = $parentBugs = $parentHour = array();
             foreach($plans as $plan)
             {
                 if($product->type == 'normal')
@@ -121,6 +126,26 @@ class productplanModel extends model
                 $plan->bugs      = isset($bugs[$plan->id]) ? count($bugs[$plan->id]) : 0;
                 $plan->hour      = array_sum($storyPairs);
                 $plan->projectID = $plan->project;
+
+                if(!isset($parentStories[$plan->parent])) $parentStories[$plan->parent] = 0;
+                if(!isset($parentBugs[$plan->parent]))    $parentBugs[$plan->parent]    = 0;
+                if(!isset($parentHour[$plan->parent]))    $parentHour[$plan->parent]    = 0;
+
+                $parentStories[$plan->parent] += $plan->stories;
+                $parentBugs[$plan->parent]    += $plan->bugs;
+                $parentHour[$plan->parent]    += $plan->hour;
+            }
+
+            unset($parentStories[0]);
+            unset($parentBugs[0]);
+            unset($parentHour[0]);
+            foreach($parentStories as $parentID => $count)
+            {
+                if(!isset($plans[$parentID])) continue;
+                $plan = $plans[$parentID];
+                $plan->stories += $count;
+                $plan->bugs    += $parentBugs[$parentID];
+                $plan->hour    += $parentHour[$parentID];
             }
         }
         return $plans;
@@ -306,7 +331,7 @@ class productplanModel extends model
             $planID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
             $this->loadModel('score')->create('productplan', 'create', $planID);
-            if($plan->parent) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+            if(!empty($plan->parent)) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
             return $planID;
         }
     }
