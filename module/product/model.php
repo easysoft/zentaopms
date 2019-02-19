@@ -622,6 +622,18 @@ class productModel extends model
         $roadmap  = array();
         $total    = 0;
 
+        $parents = array();
+        foreach($plans as $planID => $plan)
+        {
+            if($plan->parent == '-1')
+            {
+                $parents[$planID] = $plan->title;
+                unset($plans[$planID]);
+            }
+
+            if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
+        }
+
         foreach($plans as $plan)
         {
             if(($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;

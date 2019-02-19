@@ -274,7 +274,7 @@ class buildModel extends model
         {
             foreach($data->bugs as $key => $bugID)
             {
-                if(isset($_POST['resolvedBy'][$key]))$resolvedPairs[$bugID] = $data->resolvedBy[$key];
+                if(isset($_POST['resolvedBy'][$bugID])) $resolvedPairs[$bugID] = $data->resolvedBy[$bugID];
             }
         }
 

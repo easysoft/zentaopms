@@ -17,11 +17,17 @@
 <div id='mainContent'class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2> <?php echo $lang->productplan->create;?></h2>
+      <h2> <?php echo $parent ? $lang->productplan->createChildren : $lang->productplan->create;?></h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'> 
         <tbody>
+          <?php if($parent):?>
+          <tr>
+            <th><?php echo $lang->productplan->parent;?></th>
+            <td class='muted'><?php echo $parentPlan->title;?></td><td></td><td></td>
+          </tr>
+          <?php else:?>
           <tr>
             <th><?php echo $lang->productplan->product;?></th>
             <td class='muted'><?php echo $product->name;?></td><td></td><td></td>
@@ -31,6 +37,7 @@
             <th><?php echo $lang->product->branch;?></th>
             <td><?php echo html::select('branch', $branches, $branch, "class='form-control chosen'");?></td><td></td><td></td>
           </tr>
+          <?php endif;?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->title;?></th>
@@ -61,6 +68,8 @@
               <?php echo html::submitButton();?>
               <?php echo html::backButton();?>
               <?php echo html::hidden('product', $product->id);?>
+              <?php if($parent) echo html::hidden('branch', $parentPlan->branch);?>
+              <?php echo html::hidden('parent', $parent);?>
             </td>
           </tr>
         </tbody>

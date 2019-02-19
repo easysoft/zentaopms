@@ -302,6 +302,10 @@ function ajaxDelete(url, replaceID, notice)
                         if($('#' + replaceID).find('table.datatable').length) $('#' + replaceID).find('table.datatable').datatable();
                     });
                 }
+                else if(data.result == 'fail' && typeof(data.message) == 'string')
+                {
+                    bootbox.alert(data.message);
+                }
             }
         });
     }

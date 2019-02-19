@@ -1,4 +1,4 @@
 <?php
 $lang->message->typeList['xuanxuan'] = 'Client';
 
-$lang->message->sender = 'ZentaoPMS';
+$lang->message->sender = 'ZenTao';

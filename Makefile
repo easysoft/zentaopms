@@ -79,6 +79,8 @@ zentaoxx:
 	sed -i 's/sys_user/zt_user/' zentaoxx/db/*.sql
 	sed -i 's/sys_file/zt_file/' zentaoxx/db/*.sql
 	sed -i '/sys_entry/d' zentaoxx/db/*.sql
+	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
+	rm -rf zentaopms/tools
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	rm -rf xuan.zip xuan zentaoxx
 package:
@@ -92,7 +94,8 @@ package:
 	if [ ! -d "zentaopms/config/ext" ]; then mkdir zentaopms/config/ext; fi
 	for module in `ls zentaopms/module/`; do if [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
-	tools/cn2tw.php
+	mkdir zentaopms/tools; cp tools/cn2tw.php zentaopms/tools; cd zentaopms/tools; php cn2tw.php
+	rm -rf zentaopms/tools
 pms:
 	make common 
 	make zentaoxx 

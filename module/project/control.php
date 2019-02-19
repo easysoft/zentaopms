@@ -1000,6 +1000,8 @@ class project extends control
         if(!empty($_POST))
         {
             $projectID = $copyProjectID == '' ? $this->project->create() : $this->project->create($copyProjectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->project->updateProducts($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1056,6 +1058,8 @@ class project extends control
         if(!empty($_POST))
         {
             $changes = $this->project->update($projectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->project->updateProducts($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
@@ -1718,7 +1722,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            $this->locate($this->createLink('project', 'team', "projectID=$projectID"));
+            die(js::locate($this->createLink('project', 'team', "projectID=$projectID"), 'parent'));
         }
 
         /* Load model. */

@@ -444,7 +444,11 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
+                while($module = $stmt->fetch()) 
+                {
+                    if(!$manage and !isset($projectModules[$module->id])) continue;
+                    $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
+                }
                 if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
                 $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
             }
@@ -510,10 +514,10 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                if($branch == 0) $productTree = $this->getDataStructure($stmt, 'task');
+                if($branch == 0) $productTree = $this->getDataStructure($stmt, 'task', $projectModules);
                 if($branch != 0)
                 {
-                    $children = $this->getDataStructure($stmt, 'task');
+                    $children = $this->getDataStructure($stmt, 'task', $projectModules);
                     if($children) $branchTrees[] = array('name' => $branchName, 'root' => $id, 'type' => 'branch', 'actions' => false, 'children' => $children);
                 }
             }

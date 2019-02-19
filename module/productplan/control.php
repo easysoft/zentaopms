@@ -42,7 +42,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function create($product = '', $branch = 0)
+    public function create($product = '', $branch = 0, $parent = 0)
     {
         if(!empty($_POST))
         {
@@ -54,7 +54,7 @@ class productplan extends control
         }
 
         $this->commonAction($product, $branch);
-        $lastPlan = $this->productplan->getLast($product);
+        $lastPlan = $this->productplan->getLast($product, $branch, $parent);
         if($lastPlan)
         {
             $timestamp = strtotime($lastPlan->end);
@@ -65,11 +65,15 @@ class productplan extends control
             $begin = date('Y-m-d', strtotime("+$delta days", $timestamp));
         }
         $this->view->begin = $lastPlan ? $begin : '';
+        if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
 
-        $this->view->title = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
-        $this->view->lastPlan = $lastPlan;
+        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
         $this->view->position[] = $this->lang->productplan->common;
         $this->view->position[] = $this->lang->productplan->create;
+
+        $this->view->lastPlan = $lastPlan;
+        $this->view->branch   = $branch;
+        $this->view->parent   = $parent;
         $this->display();
     }
 
@@ -206,6 +210,7 @@ class productplan extends control
         $this->view->title      = $products[$productID] . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;
+        $this->view->branch     = $branch;
         $this->view->browseType = $browseType;
         $this->view->orderBy    = $orderBy;
         $this->view->plans      = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
@@ -264,6 +269,9 @@ class productplan extends control
             }
             $orderBy = str_replace('id', 'order', $orderBy);
         }
+
+        if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
+        if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
         $this->loadModel('datatable');
         $this->view->modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story');

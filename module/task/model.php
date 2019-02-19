@@ -428,6 +428,12 @@ class taskModel extends model
 
             if($status == 'doing')
             {
+                if($parentTask->assignedTo == 'closed')
+                {
+                    $task->assignedTo   = $childTask->assignedTo;
+                    $task->assignedDate = $now;
+                }
+
                 $task->finishedBy   = '';
                 $task->finishedDate = '';
                 $task->closedBy     = '';
@@ -661,7 +667,11 @@ class taskModel extends model
         {
             foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
             $task = $this->computeHours4Multiple($oldTask, $task);
-            if($task->status == 'wait') $task->assignedTo = key($teams);
+            if($task->status == 'wait')
+            {
+                reset($teams);
+                $task->assignedTo = key($teams);
+            }
         }
 
         $this->dao->update(TABLE_TASK)->data($task)
