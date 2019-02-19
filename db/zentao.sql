@@ -533,7 +533,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
   `build` mediumint(8) unsigned NOT NULL,
-  `name` char(30) NOT NULL default '',
+  `name` varchar(255) NOT NULL default '',
   `marker` enum('0','1') NOT NULL default '0',
   `date` date NOT NULL,
   `stories` text NOT NULL,

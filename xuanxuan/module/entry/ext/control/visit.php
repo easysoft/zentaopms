@@ -15,7 +15,7 @@ class entry extends control
 
         $referer = !empty($_GET['referer']) ? $this->get->referer : $referer;
         $server  = $this->loadModel('chat')->getServer('zentao');
-        if(empty($referer)) $referer = $server . str_replace('/xuanxuan.php', '/index.php', $this->createLink('my', 'index', '', 'html'));
+        if(empty($referer)) $referer = $server . str_replace('/x.php', '/index.php', $this->createLink('my', 'index', '', 'html'));
 
         $output = new stdclass();
         $output->module = $this->moduleName;
@@ -45,7 +45,6 @@ class entry extends control
             $this->loadModel('user');
             $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($this->session->userID)->fetch();
 
-            unset($user->password);
             $this->user->cleanLocked($user->account);
 
             $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;

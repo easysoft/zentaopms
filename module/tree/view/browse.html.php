@@ -226,7 +226,7 @@ $(function()
             }
             else if(action.type === 'delete')
             {
-                window.open(action.linkTemplate.format(item.id), 'hiddenwin');
+                hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
             else if(action.type === 'sort')
             {

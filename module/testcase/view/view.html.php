@@ -156,11 +156,16 @@
                 }
                 else
                 {
-                   foreach($modulePath as $key => $module)
-                   {
-                       if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                       if(isset($modulePath[$key + 1])) echo $lang->arrow;
-                   }
+                    if($caseModule->branch and isset($branches[$caseModule->branch]))
+                    {
+                        echo $branches[$caseModule->branch] . $lang->arrow;
+                    }
+
+                    foreach($modulePath as $key => $module)
+                    {
+                        if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if(isset($modulePath[$key + 1])) echo $lang->arrow;
+                    }
                 }
                 ?>
               </td>

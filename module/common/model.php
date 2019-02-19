@@ -167,7 +167,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
-            if(stripos($method, 'downloadClient') !== false) return true;
+            if($module == 'misc' and $method == 'downloadclient') return true;
             if($module == 'block' and $method == 'main') return true;
             if($module == 'misc' and $method == 'changelog') return true;
             if($module == 'tutorial') return true;
@@ -315,7 +315,7 @@ class commonModel extends model
         echo "<li class='dropdown-submenu'>";
         echo "<a data-toggle='dropdown'>" . $lang->help . "</a>";
         echo "<ul class='dropdown-menu pull-left'>";
-        if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
+        if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
         echo '<li>' . html::a($lang->manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";

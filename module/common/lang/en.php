@@ -80,7 +80,7 @@ $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='t
 $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = 'Set Home';
-$lang->tutorial        = 'Tutorial';
+$lang->noviceTutorial  = 'Novice Tutorial';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'Manual';
 $lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html';
@@ -262,7 +262,7 @@ $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => 'Test|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA menu settings. */
 $lang->qa = new stdclass();
@@ -334,6 +334,9 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|testsuite|librar
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 //$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;Add Library|doc|createLib', 'float' => 'right');
+
+$lang->svn = new stdclass();
+$lang->git = new stdclass();
 
 /* Report menu settings. */
 $lang->report = new stdclass();

@@ -683,6 +683,7 @@ class story extends control
         $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
         $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $modulePath   = $this->tree->getParents($story->module);
+        $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
         $users        = $this->user->getPairs('noletter');
 
         /* Set the menu. */
@@ -699,23 +700,24 @@ class story extends control
         $position[] = $this->lang->story->common;
         $position[] = $this->lang->story->view;
 
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->product    = $product;
-        $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->plan       = $plan;
-        $this->view->bugs       = $bugs;
-        $this->view->fromBug    = $fromBug;
-        $this->view->cases      = $cases;
-        $this->view->story      = $story;
-        $this->view->users      = $users;
-        $this->view->projects   = $this->loadModel('project')->getPairs('nocode');
-        $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->modulePath = $modulePath;
-        $this->view->version    = $version == 0 ? $story->version : $version;
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
-        $this->view->from       = $from;
-        $this->view->param      = $param;
+        $this->view->title       = $title;
+        $this->view->position    = $position;
+        $this->view->product     = $product;
+        $this->view->branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->plan        = $plan;
+        $this->view->bugs        = $bugs;
+        $this->view->fromBug     = $fromBug;
+        $this->view->cases       = $cases;
+        $this->view->story       = $story;
+        $this->view->users       = $users;
+        $this->view->projects    = $this->loadModel('project')->getPairs('nocode');
+        $this->view->actions     = $this->action->getList('story', $storyID);
+        $this->view->storyModule = $storyModule;
+        $this->view->modulePath  = $modulePath;
+        $this->view->version     = $version == 0 ? $story->version : $version;
+        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->from        = $from;
+        $this->view->param       = $param;
         $this->display();
     }
 

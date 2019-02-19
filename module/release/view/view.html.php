@@ -21,8 +21,8 @@
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $release->id;?></span>
-      <?php $releaseName = $release->marker ? "<icon class='icon-flag'></icon>" . $release->name : $release->name;?>
-      <span class='text' title='<?php echo $release->name;?>'><?php echo $releaseName;?></span>
+      <?php $flagIcon = $release->marker ? "<icon class='icon icon-flag-alt'></icon> " : '';?>
+      <span class='text' title='<?php echo $release->name;?>'><?php echo $flagIcon . $release->name;?></span>
       <?php if($release->deleted):?>
       <span class='label label-danger'><?php echo $lang->release->deleted;?></span>
       <?php endif; ?>

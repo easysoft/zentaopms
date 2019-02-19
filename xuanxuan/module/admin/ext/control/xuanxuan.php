@@ -17,7 +17,7 @@ class admin extends control
 
             if(!is_numeric($setting->chatPort) or (int)$setting->chatPort <= 0 or (int)$setting->chatPort > 65535) $errors['chatPort'] = $this->lang->chat->xxdPortError;
             if(!is_numeric($setting->commonPort) or (int)$setting->commonPort <= 0 or (int)$setting->commonPort > 65535) $errors['commonPort'] = $this->lang->chat->xxdPortError;
-            if($setting->isHttps)
+            if($setting->isHttps == 'on')
             {
                 if(empty($setting->sslcrt)) $errors['sslcrt'] = $this->lang->chat->errorSSLCrt;
                 if(empty($setting->sslkey)) $errors['sslkey'] = $this->lang->chat->errorSSLKey;

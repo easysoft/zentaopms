@@ -37,6 +37,7 @@ class upgradeModel extends model
     public function execute($fromVersion)
     {
         set_time_limit(0);
+        $executeXuanxuan = false;
         switch($fromVersion)
         {
         case '0_3beta':
@@ -322,6 +323,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 10_1');
             $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
             $this->execSQL($xuanxuanSql);
+            $executeXuanxuan = true;
         case '10_2': $this->saveLogs('Execute 10_2');
         case '10_3': $this->saveLogs('Execute 10_3');
         case '10_3_1':
@@ -339,12 +341,28 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('10.5.1'));
         case '10_6':
             $this->saveLogs('Execute 10_6');
-            $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
-            $this->execSQL($xuanxuanSql);
-            $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
-            $this->execSQL($xuanxuanSql);
+            if(!$executeXuanxuan)
+            {
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
+                $this->execSQL($xuanxuanSql);
+                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql';
+                $this->execSQL($xuanxuanSql);
+            }
             $this->initXuanxuan();
         case '11_0': $this->saveLogs('Execute 11_0');
+        case '11_1':
+            $this->saveLogs('Execute 11_1');
+            $this->execSQL($this->getUpgradeFile('11.1'));
+            if(!isset($this->config->isINT) or !($this->config->isINT))
+            {
+                if(!$executeXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
+                $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
+            }
         }
 
         $this->deletePatch();
@@ -467,6 +485,12 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql');
                 $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql');
             case '11_0':
+            case '11_1':
+                if(!isset($this->config->isINT) or !($this->config->isINT))
+                {
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                }
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

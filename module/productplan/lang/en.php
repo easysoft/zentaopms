@@ -27,6 +27,7 @@ $lang->productplan->batchUnlinkStory = "Batch Unlink";
 $lang->productplan->linkedStories    = 'Linked Story';
 $lang->productplan->unlinkedStories  = 'Unlinked Story';
 $lang->productplan->updateOrder      = 'Sort';
+$lang->productplan->createChildren   = "Create subplans";
 
 $lang->productplan->linkBug          = "Link Bug";
 $lang->productplan->unlinkBug        = "Unlink Bug";
@@ -54,6 +55,8 @@ $lang->productplan->stories = 'Stories';
 $lang->productplan->bugs    = 'Bugs';
 $lang->productplan->hour    = 'Hour';
 $lang->productplan->project = $lang->projectCommon;
+$lang->productplan->parent  = "Father plan";
+$lang->productplan->children= "Sub plan";
 
 $lang->productplan->endList[7]    = '1 Week';
 $lang->productplan->endList[14]   = '2 Weeks';

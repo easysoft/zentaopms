@@ -30,8 +30,8 @@ $lang->sso->bindTypeList['bind'] = 'Bind to existing User';
 $lang->sso->bindTypeList['add']  = 'Add User';
 
 $lang->sso->help = <<<EOD
-<p>1. Interface address is required. If use PATH_INFO, it is http://YOUR RANGER ADDRESS/sys/sso-check.html If GET, it is http://YOUR RANGER ADDRESS/sys/index.php?m=sso&f=check</p>
-<p>2. Code and Key must be the same as set in Ranger.</p>
+<p>1. Zdoo address is required. If use PATH_INFO, it is http://YOUR ZDOO ADDRESS/sys/sso-check.html If GET, it is http://YOUR ZDOO ADDRESS/sys/index.php?m=sso&f=check</p>
+<p>2. CAlias and Key must be the same as set in Zdoo.</p>
 EOD;
 $lang->sso->bindNotice     = 'User that is just added has no privilege. You have to ask ZenTao Admin to grant permissions to the User.';
 $lang->sso->bindNoPassword = 'Password should not be empty.';
