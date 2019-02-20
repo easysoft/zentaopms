@@ -169,6 +169,7 @@ class testtask extends control
 
         if($projectID != 0)
         {
+            $this->app->loadLang('build');
             $this->view->products  = $products;
             $this->view->projectID = $projectID;
         }

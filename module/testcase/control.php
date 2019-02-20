@@ -593,9 +593,10 @@ class testcase extends control
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $position[] = html::a($this->createLink('testsuite', 'library', "libID=$case->lib"), $libraries[$case->lib]);
 
-            $this->view->libID     = $case->lib;
-            $this->view->libName   = $libraries[$case->lib];
-            $this->view->libraries = $libraries;
+            $this->view->libID            = $case->lib;
+            $this->view->libName          = $libraries[$case->lib];
+            $this->view->libraries        = $libraries;
+            $this->view->linkedCaseID     = $this->testcase->getLinkedCaseID($case->lib, $caseID);
             $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'caselib', $startModuleID = 0);
         }
         else

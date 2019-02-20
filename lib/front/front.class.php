@@ -40,6 +40,26 @@ class html extends baseHTML
     }
 
     /**
+     * 生成input输入标签。
+     * Create tags like "<input type='text' />"
+     *
+     * @param  string $name     the name of the text input tag.
+     * @param  string $value    the default value.
+     * @param  string $attrib   other attribs.
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function input($name, $value = "", $attrib = "", $autocomplete = false)
+    {
+        $id = "id='$name'";
+        if(strpos($attrib, 'id=') !== false) $id = '';
+        $value = str_replace("'", '&#039;', $value);
+        $autocomplete = $autocomplete ? 'autocomplete="on"' : 'autocomplete="off"';
+        return "<input type='text' name='$name' {$id} value='$value' $attrib $autocomplete />\n";
+    }
+
+    /**
      * 生成多选按钮。
      * Create tags like "<input type='checkbox' />"
      *

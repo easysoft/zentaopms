@@ -322,8 +322,8 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr class='text-top'>
-                  <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
+                <tr>
+                  <th class='text-top' class='w-70px'><?php echo $lang->story->legendBugs;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -335,8 +335,8 @@
                     </ul>
                   </td>
                 </tr>
-                <tr class='text-top'>
-                  <th><?php echo $lang->story->legendCases;?></th>
+                <tr>
+                  <th class='text-top'><?php echo $lang->story->legendCases;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -349,8 +349,8 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr class='text-top'>
-                  <th class='w-80px'><?php echo $lang->story->legendLinkStories;?></th>
+                <tr>
+                  <th class='text-top' class='w-80px'><?php echo $lang->story->legendLinkStories;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                       <?php
@@ -363,8 +363,8 @@
                     </ul>
                   </td>
                 </tr>
-                <tr class='text-top'>
-                  <th><?php echo $lang->story->legendChildStories;?></th>
+                <tr>
+                  <th class='text-top'><?php echo $lang->story->legendChildStories;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                       <?php
