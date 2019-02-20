@@ -6,7 +6,7 @@ $(function()
         changeByLibType(libType);
     })
     changeByLibType($('#type').val());
-    toggleAcl($('#acl').val());
+    toggleAcl($('[name=acl]').val(), 'lib');
 });
 
 function changeByLibType(libType)
@@ -26,4 +26,8 @@ function changeByLibType(libType)
         $('table tr.product').addClass('hidden');
         $('table tr.project').addClass('hidden');
     }
+
+    var acl    = $('[name=acl]').val();
+    var notice = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
+    $('#noticeAcl').html(notice);
 }

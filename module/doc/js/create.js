@@ -1,6 +1,6 @@
 $(function()
 {
-    toggleAcl($('#acl').val());
+    toggleAcl($('[name=acl]').val(), 'doc');
     $('input[name="type"]').change(function()
     {
         var type = $(this).val();

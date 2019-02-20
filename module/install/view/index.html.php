@@ -59,20 +59,9 @@
       </table>
     </div>
     <div class='modal-footer'>
-      <?php if(isset($latestRelease) and (version_compare($latestRelease->version, $config->version) > 0)):?>
-      <div class='mgb-20'><?php vprintf($lang->install->newReleased, $latestRelease);?></div>
-      <div class='form-group'>
-        <?php 
-        echo html::a($latestRelease->url, $lang->install->seeLatestRelease, '_blank', "class='btn btn-success'");
-        echo "<span class='text-muted'> &nbsp; " . $lang->install->or . ' &nbsp; </span>';
-        echo html::a($this->createLink('install', 'step1'), $lang->install->keepInstalling, '', "class='btn btn-primary'");
-        ?>
-      </div>
-      <?php else:?>
       <div class='form-group'>
         <?php echo html::a(inlink('license'), $lang->install->start, '', "class='btn btn-primary'");?>
       </div>
-      <?php endif;?>
     </div>
   </div>
 </div>

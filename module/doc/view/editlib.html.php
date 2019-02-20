@@ -36,11 +36,19 @@
       <?php endif;?>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libName?></th>
-        <td><?php echo html::input('name', $lib->name, "class='form-control'")?></td>
+        <td>
+          <?php
+          echo html::input('name', $lib->name, "class='form-control'");
+          echo html::hidden('type', $lib->type);
+          ?>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
-        <td><?php echo html::radio('acl', $lang->doc->aclList, $lib->acl, "onchange='toggleAcl(this.value)'")?></td>
+        <td>
+          <?php echo html::radio('acl', $lang->doc->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
+          <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
+        </td>
       </tr>
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList?></th>
@@ -61,7 +69,5 @@
     </table>
   </form>
 </div>
-<script>
-$(function(){toggleAcl($('#acl').val())});
-</script>
+<?php js::set('noticeAcl', $lang->doc->noticeAcl['lib']);?>
 <?php include '../../common/view/footer.lite.html.php';?>
