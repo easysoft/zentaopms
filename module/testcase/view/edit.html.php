@@ -125,6 +125,7 @@
             <?php echo html::hidden('lastEditedDate', $case->lastEditedDate);?>
             <?php echo html::submitButton();?>
             <input type='button' value='<?php echo $lang->testcase->buttonToList;?>' class='btn btn-wide' onclick='location.href="<?php echo $isLibCase ? $this->createLink('testsuite', 'library', "libID=$libID") : $this->createLink('testcase', 'browse', "productID=$productID");?>"' />
+            <?php if($isLibCase and $linkedCaseID) echo '<span class="text-danger">' . $lang->testcase->haveLinkCase . '</span>'; ?>
           </div>
           <?php include '../../common/view/action.html.php';?>
         </div>
