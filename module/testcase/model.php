@@ -605,7 +605,7 @@ class testcaseModel extends model
     }
 
     /**
-     * Check have imported cases or not.
+     * Check have linked cases or not.
      *
      * @param  int $libID
      * @param  int $caseID$
