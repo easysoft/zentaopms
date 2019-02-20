@@ -23,6 +23,11 @@
             </tr>
           </thead>
           <tr>
+            <?php include $this->app->getConfigRoot() . 'timezones.php';?>
+            <th><?php echo $lang->install->timezone;?></th>
+            <td><?php echo html::select('timezone', $timezoneList, $config->timezone, "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->install->defaultLang;?></th>
             <td><?php echo html::select('defaultLang', $config->langs, $app->getClientLang(), "class='form-control'");?></td><td></td>
           </tr>

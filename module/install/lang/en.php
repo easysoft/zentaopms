@@ -88,6 +88,7 @@ $lang->install->chmodWin     = ' "%s" privilege has to be changed.';
 $lang->install->mkdirLinux   = '<p>%s directory has to be created.<br /> Run <code>mkdir -p %s</code> to create it.</p>';
 $lang->install->chmodLinux   = ' "%s" privilege has to be changed.<br /> Run <code>chmod o=rwx -R %s</code> to change it.';
 
+$lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Default Language';
 $lang->install->dbHost         = 'Database Host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 is not accessible, try localhost.';

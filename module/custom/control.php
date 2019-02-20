@@ -319,6 +319,25 @@ class custom extends control
     }
 
     /**
+     * Timezone.
+     * 
+     * @access public
+     * @return void
+     */
+    public function timezone()
+    {
+        if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
+        {
+            $this->loadModel('setting')->setItems('system.common', fixer::input('post')->get());
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->custom->timezone;
+        $this->view->position[] = $this->lang->custom->timezone;
+        $this->display();
+    }
+
+    /**
      * Ajax save custom fields.
      * 
      * @param  string $module 

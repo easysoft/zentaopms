@@ -16,6 +16,7 @@ $lang->custom->lang       = '所属语言';
 $lang->custom->setPublic  = '设为公共';
 $lang->custom->required   = '必填项';
 $lang->custom->score      = '积分';
+$lang->custom->timezone   = '时区';
 $lang->custom->scoreReset = '重置积分';
 
 $lang->custom->object['story']    = '需求';

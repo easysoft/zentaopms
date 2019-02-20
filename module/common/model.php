@@ -27,6 +27,7 @@ class commonModel extends model
             $this->setCompany();
             $this->setUser();
             $this->loadConfigFromDB();
+            $this->app->setTimezone();
             if((strpos($this->config->global->version, 'pro') !== false && version_compare($this->config->global->version, 'pro2.3.beta', '>'))
                 || (strpos($this->config->global->version, 'biz') !== false)
                 || version_compare($this->config->global->version, '4.3.beta', '>'))
