@@ -18,6 +18,7 @@ if(!isset($error))
 \$config->installed       = true;
 \$config->debug           = false;
 \$config->requestType     = '$requestType';
+\$config->timezone        = '$timezone';
 \$config->db->host        = '$dbHost';
 \$config->db->port        = '$dbPort';
 \$config->db->name        = '$dbName';

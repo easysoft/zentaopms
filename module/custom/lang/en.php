@@ -16,6 +16,7 @@ $lang->custom->lang       = 'Language';
 $lang->custom->setPublic  = 'Set Public';
 $lang->custom->required   = 'Required';
 $lang->custom->score      = 'Point';
+$lang->custom->timezone   = 'Timezone';
 $lang->custom->scoreReset = 'Reset Point';
 
 $lang->custom->object['story']    = 'Story';
