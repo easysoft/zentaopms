@@ -55,12 +55,12 @@
         </td>
         <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
         <td style='overflow:visible'>
-          <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin' autocomplete='off'"); ?></div>
+          <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><? echo html::input("names[$todo->id]", '', "class='text-left form-control hiddenwin'"); ?></div>
           <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
           <?php
           if($todo->type == 'custom' or $todo->type == 'cycle')
           {
-              echo html::input("names[$todo->id]", $todo->name, "class='form-control' autocomplete='off'"); ;
+              echo html::input("names[$todo->id]", $todo->name, "class='form-control'"); ;
           }
           elseif($todo->type == 'task')
           {

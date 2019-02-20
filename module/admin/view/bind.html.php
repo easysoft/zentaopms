@@ -27,7 +27,7 @@
           $account = zget($config->global, 'community', '');
           if($account == 'na') $account = '';
           ?>
-          <td><?php echo html::input('account', $account, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('account', $account, "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->password;?></th>

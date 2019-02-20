@@ -84,7 +84,7 @@
           <td colspan='2'>
             <div class="input-group title-group">
               <div class="input-control has-icon-right">
-                <?php echo html::input('title', $caseTitle, "class='form-control' autocomplete='off'");?>
+                <?php echo html::input('title', $caseTitle, "class='form-control'");?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                   <ul class="dropdown-menu clearfix">
@@ -203,7 +203,7 @@
         <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
         <tr>
           <th><?php echo $lang->testcase->keywords;?></th>
-          <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
         </tr>
         <?php endif;?>
         <tr>

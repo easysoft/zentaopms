@@ -20,12 +20,12 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->user->email;?></th>
-          <td><?php echo html::input('email', $email, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('email', $email, "class='form-control'");?></td>
           <td><?php echo html::a(inlink('ajaxsendcode', 'type=email'), $lang->admin->getCaptcha, '', "id='codeSender' class='btn'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->admin->captcha;?></th>
-          <td><?php echo html::input('captcha', '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('captcha', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>

@@ -16,7 +16,7 @@
     <div class='cell'>
       <form class='side-search mgb-20' method='post' action='<?php echo inlink('obtain', 'type=bySearch');?>'>
         <div class="input-group">
-          <?php echo html::input('key', $this->post->key, "class='form-control' placeholder='{$lang->extension->bySearch}' autocomplete='off'");?>
+          <?php echo html::input('key', $this->post->key, "class='form-control' placeholder='{$lang->extension->bySearch}'");?>
           <span class="input-group-btn">
             <?php echo html::submitButton('<i class="icon-search"></i>', '', 'btn'); ?>
           </span>

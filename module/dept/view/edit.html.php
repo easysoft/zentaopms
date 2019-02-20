@@ -28,7 +28,7 @@ $jsRoot  = $webRoot . "js/";
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->dept->name;?></th>
-          <td><?php echo html::input('name', $dept->name, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('name', $dept->name, "class='form-control'");?></td>
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->dept->manager;?></th>

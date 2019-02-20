@@ -46,12 +46,12 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->project->name;?></th>
-          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' autocomplete='off' required");?></td>
+          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->code;?></th>
-          <td><?php echo html::input('code', $code, "class='form-control' autocomplete='off' required");?></td><td></td><td></td>
+          <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->dateRange;?></th>
@@ -72,14 +72,14 @@
           <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? helper::workDays($plan->begin, $plan->end) : ''), "class='form-control' autocomplete='off'");?>
+              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? helper::workDays($plan->begin, $plan->end) : ''), "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->project->day;?></span>
             </div>
           </td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>
-          <td><?php echo html::input('team', $team, "class='form-control' autocomplete='off'");?></td><td></td><td></td>
+          <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->type;?></th>

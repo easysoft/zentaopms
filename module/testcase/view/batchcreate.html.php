@@ -83,7 +83,7 @@
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
             <td style='overflow:visible'>
               <div class="input-control has-icon-right">
-                <?php echo html::input("title[$i]", '', "class='form-control title-import' autocomplete='off'");?>
+                <?php echo html::input("title[$i]", '', "class='form-control title-import'");?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                   <ul class="dropdown-menu clearfix">
@@ -96,7 +96,7 @@
             <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
-            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control' autocomplete='off'");?></td>
+            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
           </tr>
@@ -123,7 +123,7 @@
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control chosen"');?></td>
       <td style='overflow:visible'>
         <div class="input-control has-icon-right">
-          <?php echo html::input("title[%s]", '', "class='form-control title-import' autocomplete='off'");?>
+          <?php echo html::input("title[%s]", '', "class='form-control title-import'");?>
           <div class="colorpicker">
             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
             <ul class="dropdown-menu clearfix">
@@ -136,7 +136,7 @@
       <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
       <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
       <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "rows='1' class='form-control'")?></td>
-      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control' autocomplete='off'");?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
       <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
     </tr>

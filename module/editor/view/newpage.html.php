@@ -26,7 +26,7 @@
         <th><?php echo $lang->editor->pageName?></th>
         <td>
           <?php
-          echo html::input('fileName', '', "class='form-control' autocomplete='off' placeholder='{$lang->editor->examplePHP}'");
+          echo html::input('fileName', '', "class='form-control' placeholder='{$lang->editor->examplePHP}'");
           ?>
         </td>
       </tr>

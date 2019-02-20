@@ -20,7 +20,7 @@
       <tr>
         <td>
           <div class='input-group'>
-            <?php echo html::input('holdDays', $config->backup->holdDays, "class='form-control' autocomplete='off'");?>
+            <?php echo html::input('holdDays', $config->backup->holdDays, "class='form-control'");?>
             <strong class='input-group-addon'><?php echo $lang->day;?></strong>
           </div>
         </td>

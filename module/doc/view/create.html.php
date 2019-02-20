@@ -35,11 +35,11 @@
           </tr>  
           <tr>
             <th><?php echo $lang->doc->title;?></th>
-            <td colspan='2'><?php echo html::input('title', '', "class='form-control' autocomplete='off' required");?></td>
+            <td colspan='2'><?php echo html::input('title', '', "class='form-control' required");?></td>
           </tr> 
           <tr>
             <th><?php echo $lang->doc->keywords;?></th>
-            <td colspan='2'><?php echo html::input('keywords', '', "class='form-control' autocomplete='off'");?></td>
+            <td colspan='2'><?php echo html::input('keywords', '', "class='form-control'");?></td>
           </tr>  
           <tr>
             <th><?php echo $lang->doc->type;?></th>
@@ -55,7 +55,7 @@
           </tr>
           <tr id='urlBox' class='hidden'>
             <th><?php echo $lang->doc->url;?></th>
-            <td colspan='2'><?php echo html::input('url', '', "class='form-control' autocomplete='off'");?></td>
+            <td colspan='2'><?php echo html::input('url', '', "class='form-control'");?></td>
           </tr>
           <tr id='fileBox'>
             <th><?php echo $lang->doc->files;?></th>

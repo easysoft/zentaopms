@@ -57,7 +57,7 @@ foreach($fieldParams as $fieldName => $param)
 {
     echo "<div id='box$fieldName'>";
     if($param['control'] == 'select') echo html::select('field' . $fieldName, $param['values'], '', "class='form-control searchSelect'");
-    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput' autocomplete='off'");
+    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput'");
     echo '</div>';
 }
 ?>
@@ -117,7 +117,7 @@ foreach($fieldParams as $fieldName => $param)
                     }
                     else
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' autocomplete='off'");
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
                     }
                 }
                 echo '</td>';
@@ -178,7 +178,7 @@ foreach($fieldParams as $fieldName => $param)
                     }
                     else
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' autocomplete='off'");
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
                     }
                 }
                 echo '</td>';

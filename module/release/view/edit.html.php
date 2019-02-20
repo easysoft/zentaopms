@@ -26,7 +26,7 @@
         <tbody>
           <tr>
             <th><?php echo $lang->release->name;?></th>
-            <td><?php echo html::input('name', $release->name, "class='form-control' autocomplete='off' required");?></td>
+            <td><?php echo html::input('name', $release->name, "class='form-control' required");?></td>
             <td>
               <?php $checked = !empty($release->marker) ? "checked='checked'" : '';?>
               <div class='checkbox-primary'>

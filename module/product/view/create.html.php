@@ -23,11 +23,11 @@
         <tbody>
           <tr>
             <th><?php echo $lang->product->name;?></th>
-            <td><?php echo html::input('name', '', "class='form-control input-product-title' autocomplete='off' required");?></td><td></td>
+            <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->code;?></th>
-            <td><?php echo html::input('code', '', "class='form-control input-product-code' autocomplete='off' required");?></td><td></td>
+            <td><?php echo html::input('code', '', "class='form-control input-product-code' required");?></td><td></td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->line;?></th>

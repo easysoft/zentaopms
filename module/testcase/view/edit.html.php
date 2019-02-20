@@ -30,7 +30,7 @@
             <div class='detail-title'><?php echo $lang->testcase->title;?></div>
             <div class="detail-content">
               <div class="input-control has-icon-right">
-                <?php echo html::input('title', $case->title, 'class="form-control" autocomplete="off" placeholder="' . $lang->case->title . '"');?>
+                <?php echo html::input('title', $case->title, 'class="form-control" placeholder="' . $lang->case->title . '"');?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                   <ul class="dropdown-menu clearfix">
@@ -217,7 +217,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->keywords;?></th>
-                <td><?php echo html::input('keywords', $case->keywords, "class='form-control' autocomplete='off'");?></td>
+                <td><?php echo html::input('keywords', $case->keywords, "class='form-control'");?></td>
               </tr>
               <?php if(!$isLibCase):?>
               <tr>

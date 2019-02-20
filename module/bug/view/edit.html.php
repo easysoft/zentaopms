@@ -47,7 +47,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                 </ul>
                 <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $bug->color;?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".bug-title"  data-provide="colorpicker">
               </div>
-              <?php echo html::input('title', $bug->title, "class='form-control bug-title' autocomplete='off'");?>
+              <?php echo html::input('title', $bug->title, "class='form-control bug-title'");?>
             </div>
           </div>
           <div class='detail'>

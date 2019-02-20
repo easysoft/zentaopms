@@ -30,7 +30,7 @@
     ?>
     <?php endforeach;?>
     <div class="input-control has-icon-right space">
-      <?php echo html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)' autocomplete='off'");?>
+      <?php echo html::input('date', $date,"class='form-control form-date' onchange='changeDate(this.value)'");?>
       <label for="date" class="input-control-icon-right"><i class="icon icon-delay"></i></label>
     </div>
   </div>

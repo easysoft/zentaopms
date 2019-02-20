@@ -77,7 +77,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>
-          <td colspan='2'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('name', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>

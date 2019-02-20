@@ -45,18 +45,18 @@
         <?php endif;?>
         <tr>
           <th><?php echo $lang->mail->domain?></th>
-          <td><?php echo html::input('domain', zget($config->mail, 'domain', common::getSysURL()), "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('domain', zget($config->mail, 'domain', common::getSysURL()), "class='form-control'")?></td>
         </tr>
         <tr>
           <th><?php echo $lang->mail->fromAddress; ?></th>
-          <td><?php echo html::input('fromAddress', $mailConfig->fromAddress, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('fromAddress', $mailConfig->fromAddress, "class='form-control'");?></td>
           <td><?php echo $lang->mail->addressWhiteList?></td>
         </tr>
         <tr>
           <th><?php echo $lang->mail->fromName; ?></th>
           <td>
             <div class='required'></div>
-            <?php echo html::input('fromName', $mailConfig->fromName, "class='form-control' autocomplete='off'");?>
+            <?php echo html::input('fromName', $mailConfig->fromName, "class='form-control'");?>
           </td>
         </tr>
         <tr>

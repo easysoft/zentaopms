@@ -41,7 +41,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->title;?></th>
-            <td><?php echo html::input('title', '', "class='form-control' autocomplete='off' required");?></td>
+            <td><?php echo html::input('title', '', "class='form-control' required");?></td>
             <td colspan='2' class='muted'><?php if($lastPlan) echo '(' . $lang->productplan->last . ': ' . $lastPlan->title . ')';?></td>
           </tr>
           <tr>

@@ -85,9 +85,9 @@
             <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select('source[$id]', $sourceList, '', "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><textarea name="verify[$id]" id="verify$id" rows="1" class="form-control autosize"></textarea></td>
             <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control' autocomplete='off'");?></td>
+            <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('needReview[$id]', $lang->story->reviewList, $needReview, "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control' autocomplete='off'");?></td>
+            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
           </tr>
         </tbody>
         <tfoot>

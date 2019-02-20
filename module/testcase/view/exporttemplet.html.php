@@ -31,7 +31,7 @@ function closeWindow()
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->testcase->num;?></span>
             <?php
-            echo html::input('num', '10', "class='form-control' autocomplete='off'");
+            echo html::input('num', '10', "class='form-control'");
             ?>
           </div>
         </td>

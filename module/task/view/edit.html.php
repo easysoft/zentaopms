@@ -45,7 +45,7 @@
                       </ul>
                       <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $task->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".task-name"  data-provide="colorpicker">
                     </div>
-                    <?php echo html::input('name', $task->name, 'class="form-control task-name" autocomplete="off" placeholder="' . $lang->task->name . '"');?>
+                    <?php echo html::input('name', $task->name, 'class="form-control task-name" placeholder="' . $lang->task->name . '"');?>
                   </div>
                   <?php if(empty($task->children) and empty($task->parent) and $task->type != 'affair'):?>
                   <span class='input-group-addon'>
@@ -161,7 +161,7 @@
                 <th><?php echo $lang->task->estimate;?></th>
                 <td>
                   <?php $disabled = !empty($task->team) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('estimate', $task->estimate, "class='form-control' autocomplete='off' {$disabled}");?>
+                  <?php echo html::input('estimate', $task->estimate, "class='form-control' {$disabled}");?>
                 </td>
               </tr>
               <tr>
@@ -172,7 +172,7 @@
                 <th><?php echo $lang->task->left;?></th>
                 <td>
                   <?php $disabled = !empty($task->team) ? "disabled='disabled'" : '';?>
-                  <?php echo html::input('left', $task->left, "class='form-control' autocomplete='off' {$disabled}");?>
+                  <?php echo html::input('left', $task->left, "class='form-control' {$disabled}");?>
                 </td>
               </tr>
             </table>
@@ -234,11 +234,11 @@
                 <td>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", $member->estimate, "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamEstimate[]", $member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' autocomplete='off' readonly placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                   </div>
                 </td>
                 <td class='w-130px sort-handler'>
@@ -253,11 +253,11 @@
                 <td>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", '', "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamLeft[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                   </div>
                 </td>
                 <td class='w-130px sort-handler'>

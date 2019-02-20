@@ -49,7 +49,7 @@
           <th><?php echo $lang->project->days;?></th>
           <td colspan='2'>
             <div class='input-group'>
-            <?php echo html::input('days', $project->days, "class='form-control' autocomplete='off'");?>
+            <?php echo html::input('days', $project->days, "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->project->day;?></span>
             </div>
           </td> 

@@ -40,19 +40,19 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           </tr>
           <tr id='priBox' class='hide'>
             <th><?php echo $lang->story->pri;?></th>
-            <td><?php echo html::select('pri', $lang->story->priList, '',"class='form-control' autocomplete='off'");?></td><td></td>
+            <td><?php echo html::select('pri', $lang->story->priList, '',"class='form-control'");?></td><td></td>
           </tr>
           <tr id='estimateBox' class='hide'>
             <th><?php echo $lang->story->estimate;?></th>
-            <td><?php echo html::input('estimate', '', "class='form-control' autocomplete='off'");?></td><td></td>
+            <td><?php echo html::input('estimate', '', "class='form-control'");?></td><td></td>
           </tr>
           <tr id='duplicateStoryBox' class='hide'>
             <th><?php echo $lang->story->duplicateStory;?></th>
-            <td><?php echo html::input('duplicateStory', '', "class='form-control' autocomplete='off'");?></td><td></td>
+            <td><?php echo html::input('duplicateStory', '', "class='form-control'");?></td><td></td>
           </tr>
           <tr id='childStoriesBox' class='hide'>
             <th><?php echo $lang->story->childStories;?></th>
-            <td><?php echo html::input('childStories', '', "class='form-control' autocomplete='off'");?></td><td></td>
+            <td><?php echo html::input('childStories', '', "class='form-control'");?></td><td></td>
           </tr>
           <?php if($story->status == 'changed' or ($story->status == 'draft' and $story->version > 1)):?>
           <tr id='preVersionBox' class='hide'>

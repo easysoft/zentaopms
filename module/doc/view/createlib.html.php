@@ -35,7 +35,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->doclib->name?></th>
-              <td><?php echo html::input('name', '', "class='form-control' autocomplete='off'")?></td>
+              <td><?php echo html::input('name', '', "class='form-control'")?></td>
             </tr>
             <tr>
               <th><?php echo $lang->doclib->control;?></th>

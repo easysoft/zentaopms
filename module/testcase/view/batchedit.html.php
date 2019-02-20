@@ -94,7 +94,7 @@
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>
                 <div class="input-control has-icon-right">
-                  <?php echo html::input("title[$caseID]", $cases[$caseID]->title, "class='form-control' autocomplete='off'");?>
+                  <?php echo html::input("title[$caseID]", $cases[$caseID]->title, "class='form-control'");?>
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">
@@ -107,7 +107,7 @@
             </td>
             <td><?php echo html::select("types[$caseID]", $typeList, $cases[$caseID]->type, 'class=form-control');?></td>
             <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$caseID]", $cases[$caseID]->precondition, "rows='1' class='form-control autosize'")?></td>
-            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$caseID]", $cases[$caseID]->keywords, "class='form-control' autocomplete='off'");?></td>
+            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$caseID]", $cases[$caseID]->keywords, "class='form-control'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stages[$caseID][]", $lang->testcase->stageList, $cases[$caseID]->stage, "class='form-control chosen' multiple data-placeholder='{$lang->testcase->stage}'");?></td>
           </tr>
           <?php endforeach;?>

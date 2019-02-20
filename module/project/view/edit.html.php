@@ -27,11 +27,11 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->project->name;?></th>
-          <td><?php echo html::input('name', $project->name, "class='form-control' autocomplete='off' required");?></td><td></td>
+          <td><?php echo html::input('name', $project->name, "class='form-control' required");?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->code;?></th>
-          <td><?php echo html::input('code', $project->code, "class='form-control' autocomplete='off' required");?></td>
+          <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->dateRange;?></th>
@@ -55,7 +55,7 @@
           <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('days', $project->days, "class='form-control' autocomplete='off'");?>
+              <?php echo html::input('days', $project->days, "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->project->day;?></span>
             </div>
           </td>
@@ -66,7 +66,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>
-          <td><?php echo html::input('team', $project->team, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('team', $project->team, "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->status;?></th>

@@ -81,7 +81,7 @@
                   </ul>
                   <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#name"  data-provide="colorpicker">
                 </div>
-                <?php echo html::input('name', $task->name, "class='form-control' autocomplete='off' required");?>
+                <?php echo html::input('name', $task->name, "class='form-control' required");?>
                 <?php if($config->global->flow != 'onlyTask'):?>
                 <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
                 <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
@@ -194,7 +194,7 @@
                   <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' autocomplete='off' placeholder='{$lang->task->estimateAB}'") ?>
+                      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
                       <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
                     </div>
                   </td>
