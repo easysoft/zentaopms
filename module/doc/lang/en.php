@@ -187,6 +187,10 @@ $lang->doclib->select  = 'Select';
 $lang->doclib->project = $lang->projectCommon . ' Library';
 $lang->doclib->product = $lang->productCommon . ' Library';
 
+$lang->doclib->create['product'] = 'Create ' . $lang->productCommon . ' Library';
+$lang->doclib->create['project'] = 'Create ' . $lang->projectCommon . ' Library';
+$lang->doclib->create['custom']  = 'Create Custom Library';
+
 $lang->doclib->main['product'] =  'Main Library';
 $lang->doclib->main['project'] =  'Main Library';
 
