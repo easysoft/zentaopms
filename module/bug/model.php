@@ -2637,7 +2637,7 @@ class bugModel extends model
                 $params = "bugID=$bug->id";
                 common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
                 common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-                common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
+                common::printIcon('bug', 'close',      $params, $bug, 'list', 'close', '', 'iframe', true);
                 common::printIcon('bug', 'edit',       $params, $bug, 'list');
                 common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
                 break;

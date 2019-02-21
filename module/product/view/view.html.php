@@ -87,12 +87,12 @@
               echo "<div class='divider'></div>";
               if($product->status != 'closed')
               {
-                  common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
+                  common::printIcon('product', 'close', $params, $product, 'button', 'close', '', 'iframe', true);
                   echo "<div class='divider'></div>";
               }
 
               common::printIcon('product', 'edit', $params, $product);
-              common::printIcon('product', 'delete', $params, $product, 'button', '', 'hiddenwin');
+              common::printIcon('product', 'delete', $params, $product, 'button', 'trash', 'hiddenwin');
           }
           ?>
         </div>
