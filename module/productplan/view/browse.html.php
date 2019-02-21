@@ -52,7 +52,7 @@
           <?php endif;?>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='w-140px'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+        <th class='w-160px'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
         <?php if($this->session->currentProductType != 'normal'):?>
         <th class='w-100px'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->product->branch);?></th>
         <?php endif;?>
@@ -97,7 +97,7 @@
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>
         </td>
-        <td class='text-left<?php if($plan->parent == '-1') echo ' has-child';?>' title="<?php echo $plan->title?>">
+        <td class='c-title text-left<?php if($plan->parent == '-1') echo ' has-child';?>' title="<?php echo $plan->title?>">
           <?php
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
           if($plan->parent == '-1') echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
