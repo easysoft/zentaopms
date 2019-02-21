@@ -55,7 +55,7 @@
             <td><?php echo $estimate->date;?></td>
             <td><?php echo $estimate->consumed;?></td>
             <td><?php echo $estimate->left;?></td>
-            <td class="text-left"><?php echo $estimate->work;?></td>
+            <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
             <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account):?>
             <td align='center' class='c-actions'>
               <?php
