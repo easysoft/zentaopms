@@ -128,11 +128,12 @@ $lang->bug->assignToMeAB   = 'Assigned To Me';
 $lang->bug->openedByMeAB   = 'Created By Me';
 $lang->bug->resolvedByMeAB = 'Resolved By Me';
 
-$lang->bug->ditto       = 'Ditto';
-$lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
-$lang->bug->noAssigned  = 'Assign';
-$lang->bug->noBug       = 'No bugs. ';
-$lang->bug->noModule    = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->ditto        = 'Ditto';
+$lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one!';
+$lang->bug->noAssigned   = 'Assign';
+$lang->bug->noBug        = 'No bugs. ';
+$lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'Assignee';
