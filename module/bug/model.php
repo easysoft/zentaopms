@@ -360,7 +360,7 @@ class bugModel extends model
     }
 
     /**
-     * Check delay bug.
+     * Check delay bugs.
      *
      * @param  array  $bugs
      * @access public
@@ -368,25 +368,36 @@ class bugModel extends model
      */
     public function checkDelayBugs($bugs)
     {
-        foreach ($bugs as $bug)
-        {
-            // Delayed or not?.
-            if($bug->deadline != '0000-00-00')
-            {
-                if(substr($bug->resolvedDate, 0, 10) != '0000-00-00')
-                {
-                    $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
-                }
-                elseif($bug->status == 'active')
-                {
-                    $delay = helper::diffDate(helper::today(), $bug->deadline);
-                }
-
-                if(isset($delay) and $delay > 0) $bug->delay = $delay;
-            }
-        }
+        foreach ($bugs as $bug) $bug = $this->checkDelayBug($bug);
 
         return $bugs;
+    }
+
+    /**
+     * Check delay bug.
+     *
+     * @param  array  $bug
+     * @access public
+     * @return array
+     */
+    public function checkDelayBug($bug)
+    {
+        // Delayed or not?.
+        if($bug->deadline != '0000-00-00')
+        {
+            if(substr($bug->resolvedDate, 0, 10) != '0000-00-00')
+            {
+                $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
+            }
+            elseif($bug->status == 'active')
+            {
+                $delay = helper::diffDate(helper::today(), $bug->deadline);
+            }
+
+            if(isset($delay) and $delay > 0) $bug->delay = $delay;
+        }
+
+        return $bug;
     }
 
     /**
@@ -469,7 +480,7 @@ class bugModel extends model
 
         $bug->files = $this->loadModel('file')->getByObject('bug', $bugID);
 
-        return $bug;
+        return $this->checkDelayBug($bug);
     }
 
     /**

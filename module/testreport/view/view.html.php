@@ -112,7 +112,7 @@
     <?php
     if(common::hasPriv('testreport', 'create')) echo html::a(inLink('create', "objectID=$report->objectID&objectType=$report->objectType"),  "<i class='icon-refresh'></i>", '', "class='btn' title='{$lang->testreport->recreate}'");
     common::printIcon('testreport', 'edit', "reportID=$report->id", '', 'button');
-    common::printIcon('testreport', 'delete', "reportID=$report->id", '', 'button', '', 'hiddenwin');
+    common::printIcon('testreport', 'delete', "reportID=$report->id", '', 'button', 'trash', 'hiddenwin');
     ?>
     <?php endif;?>
   </div>
