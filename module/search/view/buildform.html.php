@@ -215,7 +215,7 @@ foreach($fieldParams as $fieldName => $param)
             echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         }
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
-        echo html::hidden('formType', 'lite');
+        echo html::hidden('formType', zget($formSession, 'formType', 'lite'));
         ?>
       </td>
     </tr>
@@ -287,8 +287,7 @@ $(function()
             }
         }
 
-        $searchForm.find('#formType').val(expand ? 'more' : '');
-        $searchForm.toggleClass('showmore', expand);
+        $searchForm.find('#formType').val(expand ? 'more' : 'lite');
     };
 
     /**
@@ -441,6 +440,7 @@ $(function()
 
     $searchForm.find('.btn-save-form').modalTrigger({width:650, type:'iframe', title: setQueryTitle});
 
+    if($('#formType').val() == 'more') expandForm(true);
     $searchForm.on('click', '.user-query .icon-close', function(e)
     {
         var $query = $(this).closest('.user-query');
@@ -457,6 +457,6 @@ $(function()
     $searchForm.find('.table-condensed input.date').each(function()
     {
         setDateField($(this), $(this).attr('id').substr(5));
-    })
+    });
 });
 </script>
