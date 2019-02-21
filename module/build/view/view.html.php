@@ -45,7 +45,7 @@ tbody tr td:first-child input{display:none;}
             if(common::hasPriv('build', 'linkBug'))   echo html::a(inlink('view', "buildID=$build->id&type=bug&link=true"), '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-link'");
         }
         common::printIcon('build', 'edit',   "buildID=$build->id", $build);
-        common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', '', 'hiddenwin');
+        common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', 'trash', 'hiddenwin');
     }
     ?>
   </div>

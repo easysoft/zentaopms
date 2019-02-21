@@ -157,11 +157,11 @@
               common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
               common::printIcon('project', 'putoff',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
               common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
-              common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+              common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', 'close', '', 'iframe', true);
 
               echo "<div class='divider'></div>";
               common::printIcon('project', 'edit', $params, $project);
-              common::printIcon('project', 'delete', $params, $project, 'button', '', 'hiddenwin');
+              common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin');
           }
           ?>
         </div>

@@ -73,7 +73,7 @@
         common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'search', '', 'iframe', true);
         common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
         common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
-        common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
+        common::printIcon('bug', 'close',      $params, $bug, 'button', 'close', '', 'text-danger iframe showinonlybody', true);
         common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
 
         if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
@@ -82,7 +82,7 @@
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
         common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
-        common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
+        common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
       </div>

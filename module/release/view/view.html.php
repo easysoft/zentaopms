@@ -42,7 +42,7 @@
             echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn btn-link' title='{$lang->release->changeStatusList[$changedStatus]}'");
         }
         common::printIcon('release', 'edit',   "releaseID=$release->id", $release);
-        common::printIcon('release', 'delete', "releaseID=$release->id", $release, 'button', '', 'hiddenwin');
+        common::printIcon('release', 'delete', "releaseID=$release->id", $release, 'button', 'trash', 'hiddenwin');
     }
     ?>
   </div>

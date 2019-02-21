@@ -105,7 +105,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
 
             $deleteClass = (strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete')) ? 'btn iframe' : 'btn disabled';
-            echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-close"></i>', '', "title='{$lang->user->delete}' class='{$deleteClass}'");
+            echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-trash"></i>', '', "title='{$lang->user->delete}' class='{$deleteClass}'");
             ?>
           </td>
         </tr>

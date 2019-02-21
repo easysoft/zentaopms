@@ -50,7 +50,7 @@ var browseType = '<?php echo $browseType;?>';
             <ul class='dropdown-menu'>
               <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
               <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->doc->editLib, '', "class='iframe'");?></li>
-              <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-close'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
+              <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
             </ul>
           </div>
           <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>

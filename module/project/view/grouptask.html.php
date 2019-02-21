@@ -210,7 +210,7 @@
         <td class="c-actions">
           <?php common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('task', 'edit', "taskid=$task->id", '', 'list');?>
-          <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', '', 'hiddenwin');?>
+          <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', 'trash', 'hiddenwin');?>
         </td>
       </tr>
       <?php $i++;?>
