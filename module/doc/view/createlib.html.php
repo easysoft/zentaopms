@@ -39,7 +39,11 @@
             </tr>
             <tr>
               <th><?php echo $lang->doclib->control;?></th>
-              <td><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value)'")?></td>
+              <td>
+                <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?>
+                <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['open'];?></span>
+              </td>
+            </tr>
             </tr>
             <tr id='whiteListBox' class='hidden'>
               <th><?php echo $lang->doc->whiteList;?></th>
@@ -63,4 +67,5 @@
     </div>
   </div>
 </div>
+<?php js::set('noticeAcl', $lang->doc->noticeAcl['lib']);?>
 <?php include '../../common/view/footer.lite.html.php';?>

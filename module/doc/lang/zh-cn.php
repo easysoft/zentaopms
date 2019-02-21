@@ -159,6 +159,20 @@ $lang->doc->noEditedDoc        = '您还没有编辑任何文档。';
 $lang->doc->noOpenedDoc        = '您还没有创建任何文档。';
 $lang->doc->noCollectedDoc     = '您还没有收藏任何文档。';
 
+$lang->doc->noticeAcl['lib']['product']['open']    = '所有人都可以访问，除非用户没有权限访问的关联产品。';
+$lang->doc->noticeAcl['lib']['product']['custom']  = '白名单和有权限访问的关联产品的用户可以访问。';
+$lang->doc->noticeAcl['lib']['product']['private'] = '创建人和有权限访问的关联产品的用户可以访问。';
+$lang->doc->noticeAcl['lib']['project']['open']    = '所有人都可以访问，除非用户没有权限访问的关联项目。';
+$lang->doc->noticeAcl['lib']['project']['custom']  = '白名单和有权限访问的关联项目的用户可以访问。';
+$lang->doc->noticeAcl['lib']['project']['private'] = '创建人和有权限访问的关联项目的用户可以访问。';
+$lang->doc->noticeAcl['lib']['custom']['open']     = '所有人都可以访问。';
+$lang->doc->noticeAcl['lib']['custom']['custom']   = '白名单的用户可以访问。';
+$lang->doc->noticeAcl['lib']['custom']['private']  = '只有创建人可以访问。';
+
+$lang->doc->noticeAcl['doc']['open']    = '所有人都可以访问，除非用户没有所属文档库的权限。';
+$lang->doc->noticeAcl['doc']['custom']  = '白名单的用户可以访问。';
+$lang->doc->noticeAcl['doc']['private'] = '只有自己可以访问。';
+
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
 
