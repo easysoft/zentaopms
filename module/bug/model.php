@@ -134,8 +134,8 @@ class bugModel extends model
     {
         $now = helper::now();
         $bug = fixer::input('post')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', $now)
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('deadline', '0000-00-00')
@@ -611,9 +611,9 @@ class bugModel extends model
             ->setDefault('plan', 0)
             ->setDefault('deadline', '0000-00-00')
             ->setDefault('resolvedDate', '0000-00-00 00:00:00')
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
             ->join('openedBuild', ',')
             ->join('mailto', ',')
             ->join('linkBug', ',')
@@ -919,15 +919,15 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
-            ->add('resolvedBy',     $this->app->user->account)
-            ->add('status',         'resolved')
-            ->add('confirmed',      1)
-            ->add('assignedDate',   $now)
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->setDefault('resolvedDate', $now)
-            ->setDefault('duplicateBug', 0)
-            ->setDefault('assignedTo', $oldBug->openedBy)
+            ->add('status',    'resolved')
+            ->add('confirmed', 1)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('resolvedBy',     $this->app->user->account)
+            ->setDefault('assignedDate',   $now)
+            ->setDefault('resolvedDate',   $now)
+            ->setDefault('duplicateBug',   0)
+            ->setDefault('assignedTo',     $oldBug->openedBy)
             ->remove('comment,files,labels')
             ->get();
 
@@ -1122,8 +1122,11 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         $now = helper::now();
         $bug = fixer::input('post')
-            ->setDefault('assignedTo', $oldBug->resolvedBy)
-            ->add('assignedDate', $now)
+            ->setDefault('assignedTo',     $oldBug->resolvedBy)
+            ->setDefault('assignedDate',   $now)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('activatedDate',  $now)
             ->add('resolution', '')
             ->add('status', 'active')
             ->add('resolvedDate', '0000-00-00')
@@ -1134,9 +1137,6 @@ class bugModel extends model
             ->add('duplicateBug', 0)
             ->add('toTask', 0)
             ->add('toStory', 0)
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->add('activatedDate', $now)
             ->join('openedBuild', ',')
             ->remove('comment,files,labels')
             ->get();
@@ -1160,14 +1160,14 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
-            ->add('assignedTo',     'closed')
-            ->add('assignedDate',   $now)
-            ->add('status',         'closed')
-            ->add('closedBy',       $this->app->user->account)
-            ->add('closedDate',     $now)
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->add('confirmed',      1)
+            ->add('assignedTo', 'closed')
+            ->add('status',     'closed')
+            ->add('confirmed',  1)
+            ->setDefault('assignedDate',   $now)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('closedBy',       $this->app->user->account)
+            ->setDefault('closedDate',     $now)
             ->remove('comment')
             ->get();
 
@@ -1967,8 +1967,8 @@ class bugModel extends model
     public function saveUserBugTemplate()
     {
         $template = fixer::input('post')
-            ->add('account', $this->app->user->account)
-            ->add('type', 'bug')
+            ->setDefault('account', $this->app->user->account)
+            ->setDefault('type', 'bug')
             ->stripTags('content', $this->config->allowedTags)
             ->get();
 

@@ -532,7 +532,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function sort()
+    public function sort($type = '')
     {
         if($_POST)
         {
@@ -542,6 +542,12 @@ class doc extends control
             }
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success'));
+        }
+
+        if($type)
+        {
+            $this->view->libs = $this->doc->getLibs($type);
+            $this->display();
         }
     }
 

@@ -141,7 +141,8 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = '显示附件库';
 $lang->doc->customObjectLibs['customFiles'] = '显示自定义文档库';
 
-$lang->doc->customShowLibs = '文档库显示设置';
+$lang->doc->orderLib = '文档库排序';
+$lang->doc->customShowLibs = '显示设置';
 $lang->doc->customShowLibsList['zero']     = '显示空文档的库';
 $lang->doc->customShowLibsList['unclosed'] = '只显示未关闭的项目';
 

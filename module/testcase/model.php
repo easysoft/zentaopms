@@ -185,11 +185,11 @@ class testcaseModel extends model
     {
         $now  = helper::now();
         $case = fixer::input('post')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', $now)
             ->add('status', $this->forceNotReview() || $this->post->forceNotReview ? 'normal' : 'wait')
             ->add('version', 1)
             ->add('fromBug', $bugID)
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -676,11 +676,11 @@ class testcaseModel extends model
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
 
         $case = fixer::input('post')
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setDefault('story,branch', 0)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('story,branch',   0)
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->remove('comment,steps,expects,files,labels,stepType')
@@ -752,8 +752,8 @@ class testcaseModel extends model
         $case    = fixer::input('post')
             ->remove('result,comment')
             ->setDefault('reviewedDate', substr($now, 0, 10))
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->setIF($this->post->result == 'pass',   'status', 'normal')
             ->join('reviewedBy', ',')
             ->get();
