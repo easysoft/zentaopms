@@ -1325,6 +1325,7 @@ class bugModel extends model
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
+            ->beginIF($type != 'closedBy')->andWhere('status')->ne('closed')->fi()
             ->beginIF($type != 'all')->andWhere("`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
