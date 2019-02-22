@@ -44,7 +44,6 @@
               <th><?php echo $lang->doclib->control;?></th>
               <td colspan='2'>
                 <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?>
-                <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['open'];?></span>
               </td>
             </tr>
             </tr>
@@ -60,6 +59,10 @@
                   <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
                 </div>
               </td>
+            </tr>
+            <tr>
+              <th></th>
+              <td colspan='2'><span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['open'];?></span></td>
             </tr>
             <tr>
               <td class='text-center form-actions' colspan='3'><?php echo html::submitButton();?></td>

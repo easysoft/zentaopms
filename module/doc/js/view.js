@@ -41,3 +41,9 @@ $(function()
         setTimeout($.resetToolbarPosition, 50);
     });
 })
+
+function deleteFile(fileID)
+{
+    if(!fileID) return;
+    hiddenwin.location.href =createLink('file', 'delete', 'fileID=' + fileID);
+}
