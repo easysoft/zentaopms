@@ -385,7 +385,7 @@ class bugModel extends model
         // Delayed or not?.
         if($bug->deadline != '0000-00-00')
         {
-            if(substr($bug->resolvedDate, 0, 10) != '0000-00-00')
+            if($bug->resolvedDate and substr($bug->resolvedDate, 0, 10) != '0000-00-00')
             {
                 $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
             }
