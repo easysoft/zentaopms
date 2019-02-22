@@ -626,7 +626,7 @@ class taskModel extends model
         if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
 
         /* Fix bug#1388, Check children task projectID and moduleID. */
-        if($task->project != $oldTask->project)
+        if(isset($task->project) and $task->project != $oldTask->project)
         {
             $this->dao->update(TABLE_TASK)->set('project')->eq($task->project)->set('module')->eq($task->module)->where('parent')->eq($taskID)->exec();
         }
@@ -705,7 +705,7 @@ class taskModel extends model
         {
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
-            if($task->parent) 
+            if(!empty($task->parent))
             {
                 $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
                 $this->updateParentStatus($taskID);

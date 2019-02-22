@@ -1,14 +1,1 @@
-.lib-heading{border-right:1px solid #ddd;}
-.lib-more a.more{font-weight:bold; display:block;}
-#libs .libs-group-heading{border:1px solid #ddd;}
-#libs .libs-group{border:1px solid #ddd; border-top:0px; margin-bottom:20px;}
-#libs .libs-group.lib-more{border:0px; text-align:center; height:120px; line-height:110px;}
-#libs .libs-group.lib-more:hover{background-color: #EBF2F9}
-#libs .libs-custom-heading{text-align:center; height:120px; line-height:110px; position: relative; margin-bottom:20px;}
-#libs .libs-custom-heading:hover{background-color: #EBF2F9}
-#libs .libs-custom-heading a{display:block;height:100%;}
-#libs .libs-custom-heading .lable-custom{position: absolute;left:8px;}
-#libs hr {margin-top:0px;}
-#libs .panel-body {overflow: auto; max-height: 224px;}
-
 #pageActions ul.dropdown-menu{left: 67px}
