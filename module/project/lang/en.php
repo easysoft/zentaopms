@@ -241,8 +241,8 @@ $lang->project->setTeam               = 'Set Team';
 $lang->project->linkStory             = 'Link Story';
 $lang->project->createTask            = 'Create Task';
 $lang->project->goback                = "Go Back";
-$lang->project->noweekend             = 'Without Weekend';
-$lang->project->withweekend           = 'With Weekend';
+$lang->project->noweekend             = 'excl. Weekend';
+$lang->project->withweekend           = 'incl. Weekend';
 $lang->project->interval              = 'Intervals';
 $lang->project->fixFirstWithLeft      = 'Modify the left';
 
@@ -258,7 +258,7 @@ $lang->project->charts->burn->graph->formatNumber = 0;
 $lang->project->charts->burn->graph->animation    = 0;
 $lang->project->charts->burn->graph->rotateNames  = 1;
 $lang->project->charts->burn->graph->showValues   = 0;
-$lang->project->charts->burn->graph->reference    = 'Reference';
+$lang->project->charts->burn->graph->reference    = 'Ideal';
 $lang->project->charts->burn->graph->actuality    = 'Actual';
 
 $lang->project->placeholder = new stdclass();
