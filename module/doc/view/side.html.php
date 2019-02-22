@@ -264,15 +264,15 @@ $(function()
             });
         });
     });
-
-    function cancelOrder()
-    {
-        var $tabPane = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
-        $tabPane.find('.libs-group.sort').remove();
-        $tabPane.find('ul.tree').removeClass('hidden');
-        $tabPane.closest('.side-col').find('.side-footer .pull-right #orderLib').removeClass('hidden');
-        $tabPane.closest('.side-col').find('.side-footer .pull-right #cancelOrder').addClass('hidden');
-    }
 });
+
+function cancelOrder()
+{
+    var $tabPane = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+    $tabPane.find('.libs-group.sort').remove();
+    $tabPane.find('ul.tree').removeClass('hidden');
+    $tabPane.closest('.side-col').find('.side-footer .pull-right #orderLib').removeClass('hidden');
+    $tabPane.closest('.side-col').find('.side-footer .pull-right #cancelOrder').addClass('hidden');
+}
 </script>
 </div>
