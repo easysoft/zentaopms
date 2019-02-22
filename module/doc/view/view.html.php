@@ -131,7 +131,7 @@ js::set('sysurl', common::getSysUrl());
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <div class='divider'></div>
-        <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i></button>
+            <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->doc->retrack;?></button>
         <?php
         if(!$doc->deleted)
         {
