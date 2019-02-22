@@ -855,7 +855,7 @@ class docModel extends model
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(strpos(",$object->users,", $account) !== false) return true;
+        if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
         if($object->acl == 'custom')
         {
             $userGroups = $this->app->user->groups;
@@ -872,8 +872,8 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->project) return $this->loadModel('project')->checkPriv($object->project);
-        if($object->product) return $this->loadModel('product')->checkPriv($object->product);
+        if(!empty($object->project)) return $this->loadModel('project')->checkPriv($object->project);
+        if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
         return false;
     }
 
@@ -1141,7 +1141,7 @@ class docModel extends model
             $projects = $mineProjects = $otherProjects = $closedProjects = array();
             foreach($libs as $lib)
             {   
-                if(!$this->app->user->admin and !$this->lib->checkPriv($lib->id)) continue;
+                if(!$this->app->user->admin and !$this->checkPrivLib($lib)) continue;
                 if($lib->status != 'done' and $lib->status != 'closed' and $lib->PM == $this->app->user->account)
                 {   
                     $mineProjects[$lib->id] = $lib;

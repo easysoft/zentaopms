@@ -219,8 +219,24 @@ $(function()
 
     $('#mainRow .side-col .tabs .nav-tabs li a').click(function()
     {
-        var href = $(this).attr('href');
-        $(this).closest('.side-col').find('.side-footer #orderLib').toggleClass('hidden', (href.indexOf('product') > 0 || href.indexOf('project') > 0));
+        var href     = $(this).attr('href');
+        var canOrder = !(href.indexOf('product') > 0 || href.indexOf('project') > 0);
+        $(this).closest('.side-col').find('.side-footer #orderLib').toggleClass('hidden', !canOrder);
+        $(this).closest('.side-col').find('.side-footer #cancelOrder').toggleClass('hidden', !canOrder);
+
+        var $tabPane     = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+        var $orderLib    = $(this).closest('.side-col').find('.side-footer #orderLib');
+        var $cancelOrder = $(this).closest('.side-col').find('.side-footer #cancelOrder');
+        if($tabPane.find('.libs-group.sort').length > 0 && canOrder)
+        {
+            $orderLib.addClass('hidden');
+            $cancelOrder.removeClass('hidden');
+        }
+        if($tabPane.find('.libs-group.sort').length == 0 && canOrder)
+        {
+            $orderLib.removeClass('hidden');
+            $cancelOrder.addClass('hidden');
+        }
     });
 
     $('#orderLib').click(function()

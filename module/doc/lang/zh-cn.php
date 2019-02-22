@@ -118,6 +118,10 @@ $lang->doc->aclList['open']    = '公开';
 $lang->doc->aclList['custom']  = '自定义';
 $lang->doc->aclList['private'] = '私有';
 
+$lang->doc->typeList['html']     = '富文本';
+$lang->doc->typeList['markdown'] = 'Markdown';
+$lang->doc->typeList['url']      = '链接';
+
 $lang->doc->types['text'] = '文档';
 $lang->doc->types['url']  = '链接';
 
