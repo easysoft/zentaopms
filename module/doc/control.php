@@ -296,7 +296,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function create($libID, $moduleID = 0)
+    public function create($libID, $moduleID = 0, $docType = '')
     {
         if(!empty($_POST))
         {
@@ -354,6 +354,7 @@ class doc extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->moduleID         = $moduleID;
         $this->view->type             = $type;
+        $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode');
 

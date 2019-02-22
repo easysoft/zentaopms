@@ -43,7 +43,11 @@
           </tr>  
           <tr>
             <th><?php echo $lang->doc->type;?></th>
-            <td><?php echo html::radio('type', $lang->doc->types, 'text');?></td>
+            <?php
+            $typeKeyList = array();
+            foreach($lang->doc->types as $typeKey => $typeName) $typeKeyList[$typeKey] = $typeKey;
+            ?>
+            <td><?php echo html::radio('type', $lang->doc->types, zget($typeKeyList, $docType, 'text'));?></td>
           </tr> 
           <tr id='contentBox'>
             <th><?php echo $lang->doc->content;?></th>
@@ -91,5 +95,6 @@
     </form>
   </div>
 </div>
+<?php js::set('docType', $docType);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>
