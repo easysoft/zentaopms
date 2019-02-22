@@ -165,12 +165,17 @@ $config->bug->search['params']['lastEditedDate']= array('operator' => '=',      
 $config->bug->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
-$config->bug->datatable->defaultField = array('id', 'pri', 'title', 'severity', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
+$config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
 
 $config->bug->datatable->fieldList['id']['title']    = 'idAB';
 $config->bug->datatable->fieldList['id']['fixed']    = 'left';
 $config->bug->datatable->fieldList['id']['width']    = '70';
 $config->bug->datatable->fieldList['id']['required'] = 'yes';
+
+$config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
+$config->bug->datatable->fieldList['severity']['fixed']    = 'left';
+$config->bug->datatable->fieldList['severity']['width']    = '60';
+$config->bug->datatable->fieldList['severity']['required'] = 'no';
 
 $config->bug->datatable->fieldList['pri']['title']    = 'P';
 $config->bug->datatable->fieldList['pri']['fixed']    = 'left';
@@ -181,11 +186,6 @@ $config->bug->datatable->fieldList['title']['title']    = 'title';
 $config->bug->datatable->fieldList['title']['fixed']    = 'left';
 $config->bug->datatable->fieldList['title']['width']    = 'auto';
 $config->bug->datatable->fieldList['title']['required'] = 'yes';
-
-$config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
-$config->bug->datatable->fieldList['severity']['fixed']    = 'left';
-$config->bug->datatable->fieldList['severity']['width']    = '60';
-$config->bug->datatable->fieldList['severity']['required'] = 'no';
 
 $config->bug->datatable->fieldList['branch']['title']    = 'branch';
 $config->bug->datatable->fieldList['branch']['fixed']    = 'left';
