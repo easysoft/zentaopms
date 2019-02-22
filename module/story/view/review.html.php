@@ -40,11 +40,11 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           </tr>
           <tr id='priBox' class='hide'>
             <th><?php echo $lang->story->pri;?></th>
-            <td><?php echo html::select('pri', $lang->story->priList, '',"class='form-control'");?></td><td></td>
+            <td><?php echo html::select('pri', $lang->story->priList, $story->pri,"class='form-control'");?></td><td></td>
           </tr>
           <tr id='estimateBox' class='hide'>
             <th><?php echo $lang->story->estimate;?></th>
-            <td><?php echo html::input('estimate', '', "class='form-control'");?></td><td></td>
+            <td><?php echo html::input('estimate', $story->estimate, "class='form-control'");?></td><td></td>
           </tr>
           <tr id='duplicateStoryBox' class='hide'>
             <th><?php echo $lang->story->duplicateStory;?></th>
