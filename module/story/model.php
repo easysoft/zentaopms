@@ -485,6 +485,7 @@ class storyModel extends model
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
+            ->setIF(!$this->post->linkStories, 'linkStories', '')
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -2457,7 +2458,7 @@ class storyModel extends model
                 $vars = "story={$story->id}";
                 common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-                common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
+                common::printIcon('story', 'close',      $vars, $story, 'list', 'close', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list');
                 if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
                 break;

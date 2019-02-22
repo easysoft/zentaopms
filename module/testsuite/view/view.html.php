@@ -33,7 +33,7 @@
     {
         common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'button', 'link');
         common::printIcon('testsuite', 'edit',     "suiteID=$suite->id");
-        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", '', 'button', '', 'hiddenwin');
+        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", '', 'button', 'trash', 'hiddenwin');
     }
     ?>
   </div>

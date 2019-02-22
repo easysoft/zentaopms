@@ -50,7 +50,7 @@ var browseType = '<?php echo $browseType;?>';
             <ul class='dropdown-menu'>
               <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
               <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->doc->editLib, '', "class='iframe'");?></li>
-              <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-close'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
+              <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
             </ul>
           </div>
           <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>
@@ -161,7 +161,7 @@ var browseType = '<?php echo $browseType;?>';
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
                 <?php endif;?>
                 <?php common::printLink('doc', 'edit', "docID=$doc->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
-                <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-close'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
+                <?php common::printLink('doc', 'delete', "docID=$doc->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->delete}' class='btn btn-link'")?>
               </td>
             </tr>
             <?php endforeach;?>

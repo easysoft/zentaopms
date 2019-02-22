@@ -32,6 +32,14 @@ if(empty($type)) $type = 'product';
         <div class="tab-pane <?php echo $activeClass;?>" id="<?php echo "$tabValue";?>">
           <ul data-name="docsTree" data-ride="tree" data-initial-state="preserve" class="tree no-margin">
             <?php if(isset($sideSubLibs[$tabValue])):?>
+            <?php if(empty($sideLibs[$tabValue])):?>
+            <li>
+            <?php
+            $text = zget($lang->doclib->create, $tabValue, '');
+            if($text) echo html::a($this->createLink($tabValue, 'create'), $text, '', "class='text-ellipsis'");
+            ?>
+            </li>
+            <?php else:?>
             <?php foreach($sideLibs[$tabValue] as $tabMenu):?>
             <?php
             $customLibCount = 0;
@@ -110,8 +118,17 @@ if(empty($type)) $type = 'product';
               <?php endif;?>
             </li>
             <?php endforeach;?>
+            <?php endif;?>
             <?php else:?>
 
+            <?php if(empty($sideLibs[$tabValue])):?>
+            <li>
+            <?php
+            $text = zget($lang->doclib->create, $tabValue, '');
+            if($text) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe'");
+            ?>
+            </li>
+            <?php else:?>
             <?php foreach($sideLibs[$tabValue] as $sideLibID => $sideLibName):?>
               <?php if($tabValue == 'book'):?>
               <?php include './bookside.html.php';?>
@@ -137,6 +154,7 @@ if(empty($type)) $type = 'product';
               <?php endif;?>
             <?php endforeach;?>
 
+            <?php endif;?>
             <?php endif;?>
           </ul>
         </div>

@@ -187,6 +187,10 @@ $lang->doclib->select  = '选择文档库';
 $lang->doclib->project = $lang->projectCommon . '库';
 $lang->doclib->product = $lang->productCommon . '库';
 
+$lang->doclib->create['product'] = '创建' . $lang->productCommon . '文档库';
+$lang->doclib->create['project'] = '创建' . $lang->projectCommon . '文档库';
+$lang->doclib->create['custom']  = '创建自定义文档库';
+
 $lang->doclib->main['product'] = $lang->productCommon . '主库';
 $lang->doclib->main['project'] = $lang->projectCommon . '主库';
 

@@ -78,7 +78,7 @@
             if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $lang->story->subdivide, '', $misc);
         }
 
-        common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
+        common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', 'close', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
         if($config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
@@ -105,7 +105,7 @@
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
         common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', 'iframe showinonlybody', true, "data-width='1050'");
-        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
+        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
       </div>

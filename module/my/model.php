@@ -22,23 +22,29 @@ class myModel extends model
     public function setMenu()
     {
         /* Adjust the menu order according to the user role. */
-        $role = $this->app->user->role;
-        if($role == 'qa')
+        $flowModule = $this->config->global->flow . '_my';
+        $customMenu = isset($this->config->customMenu->$flowModule) ? $this->config->customMenu->$flowModule : array();
+
+        if(empty($customMenu))
         {
-            unset($this->lang->my->menuOrder[20]);
-            $this->lang->my->menuOrder[32] = 'task';
-        }
-        elseif($role == 'po')
-        {
-            unset($this->lang->my->menuOrder[35]);
-            unset($this->lang->my->menuOrder[20]);
-            $this->lang->my->menuOrder[17] = 'story';
-            $this->lang->my->menuOrder[42] = 'task';
-        }
-        elseif($role == 'pm')
-        {
-            unset($this->lang->my->menuOrder[40]);
-            $this->lang->my->menuOrder[17] = 'myProject';
+            $role = $this->app->user->role;
+            if($role == 'qa')
+            {
+                unset($this->lang->my->menuOrder[15]);
+                $this->lang->my->menuOrder[32] = 'task';
+                $this->lang->my->dividerMenu = str_replace(',task,', ',' , $this->lang->my->menuOrder[20] . ',', $this->lang->my->dividerMenu);
+            }
+            elseif($role == 'po')
+            {
+                $this->lang->my->menuOrder[15] = 'story';
+                $this->lang->my->menuOrder[30] = 'task';
+                $this->lang->my->dividerMenu = str_replace(',task,', ',story,', $this->lang->my->dividerMenu);
+            }
+            elseif($role == 'pm')
+            {
+                unset($this->lang->my->menuOrder[35]);
+                $this->lang->my->menuOrder[17] = 'myProject';
+            }
         }
     }
 }

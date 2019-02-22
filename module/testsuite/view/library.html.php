@@ -146,7 +146,7 @@ js::set('flow',          $config->global->flow);
                 if(common::hasPriv('testcase', 'delete'))
                 {
                     $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-close"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
                 }
                 ?>
               </td>
