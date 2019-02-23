@@ -91,6 +91,30 @@
       <th><?php echo $lang->user->qq;?></th>
       <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
     </tr>  
+    <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'wechat') !== false)):?>
+    <tr>
+      <th><?php echo $lang->user->wechat;?></th>
+      <td><?php echo $user->wechat;?></td>
+    </tr>
+    <?php endif;?>
+    <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'dingding') !== false)):?>
+    <tr>
+      <th><?php echo $lang->user->dingding;?></th>
+      <td><?php echo $user->dingding;?></td>
+    </tr>
+    <?php endif;?>
+    <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'slack') !== false)):?>
+    <tr>
+      <th><?php echo $lang->user->slack;?></th>
+      <td><?php echo $user->slack;?></td>
+    </tr>
+    <?php endif;?>
+    <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'whatsapp') !== false)):?>
+    <tr>
+      <th><?php echo $lang->user->whatsapp;?></th>
+      <td><?php echo $user->whatsapp;?></td>
+    </tr>
+    <?php endif;?>
     <tr>
       <th><?php echo $lang->user->gtalk;?></th>
       <td><?php echo $user->gtalk;?></td>
