@@ -95,6 +95,26 @@
           <td><?php echo html::input('address', $user->address, "class='form-control'");?></td>
         </tr>
         <tr>
+          <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'wechat') !== false)):?>
+          <th><?php echo $lang->user->wechat;?></th>
+          <td><?php echo html::input('wechat', $user->wechat, "class='form-control'");?></td>
+          <?php endif;?>
+          <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'dingding') !== false)):?>
+          <th><?php echo $lang->user->dingding;?></th>
+          <td><?php echo html::input('dingding', $user->dingding, "class='form-control'");?></td>
+          <?php endif;?>
+        </tr>
+        <tr>
+          <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'slack') !== false)):?>
+          <th><?php echo $lang->user->slack;?></th>
+          <td><?php echo html::input('slack', $user->slack, "class='form-control'");?></td>
+          <?php endif;?>
+          <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'whatsapp') !== false)):?>
+          <th><?php echo $lang->user->whatsapp;?></th>
+          <td><?php echo html::input('whatsapp', $user->whatsapp, "class='form-control'");?></td>
+          <?php endif;?>
+        </tr>
+        <tr>
           <th><?php echo $lang->user->zipcode;?></th>
           <td><?php echo html::input('zipcode', $user->zipcode, "class='form-control'");?></td>
         </tr>

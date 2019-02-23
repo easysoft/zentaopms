@@ -75,6 +75,7 @@ $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = '职位';
 $lang->custom->user->fields['statusList'] = '状态';
 $lang->custom->user->fields['deleted']    = '列出已删除用户';
+$lang->custom->user->fields['showField']  = '显示字段';
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -84,6 +85,7 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
+$lang->custom->notice->userFieldNotice             = '控制以上字段在用户相关页面是否显示，留空则全显示';
 $lang->custom->notice->canNotAdd                   = '该项参与运算，不提供自定义添加功能';
 $lang->custom->notice->forceReview                 = "指定人提交的%s必须评审。";
 $lang->custom->notice->forceNotReview              = "指定人提交的%s不需要评审。";
@@ -108,6 +110,11 @@ $lang->custom->reviewList[0]  = '关闭';
 
 $lang->custom->deletedList[1] = '列出';
 $lang->custom->deletedList[0] = '不列出';
+
+$lang->custom->userFieldList['wechat']   = '微信';
+$lang->custom->userFieldList['dingding'] = '钉钉';
+$lang->custom->userFieldList['slact']    = 'Slact';
+$lang->custom->userFieldList['whatsapp'] = 'WhatsApp';
 
 $lang->custom->workingHours   = '每天可用工时';
 $lang->custom->weekend        = '休息日';
