@@ -77,22 +77,16 @@
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->contactInfo;?></caption>
         <tr>
-          <th class='w-90px'><?php echo $lang->user->skype;?></th>
-          <td class='w-p40'><?php echo html::input('skype', $user->skype, "class='form-control'");?></td>
+          <th class='w-90px'><?php echo $lang->user->mobile;?></th>
+          <td class='w-p40'><?php echo html::input('mobile', $user->mobile, "class='form-control'");?></td>
           <th class='w-90px'><?php echo $lang->user->qq;?></th>
           <td><?php echo html::input('qq', $user->qq, "class='form-control'");?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->user->yahoo;?></th>
-          <td><?php echo html::input('yahoo', $user->yahoo, "class='form-control'");?></td>
           <th><?php echo $lang->user->gtalk;?></th>
           <td><?php echo html::input('gtalk', $user->gtalk, "class='form-control'");?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->user->wangwang;?></th>
-          <td><?php echo html::input('wangwang', $user->wangwang, "class='form-control'");?></td>
-          <th><?php echo $lang->user->mobile;?></th>
-          <td><?php echo html::input('mobile', $user->mobile, "class='form-control'");?></td>
+          <th><?php echo $lang->user->skype;?></th>
+          <td><?php echo html::input('skype', $user->skype, "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->phone;?></th>

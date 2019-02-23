@@ -300,9 +300,7 @@ class userModel extends model
                 $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
                 $data[$i]->skype    = $users->skype[$i];
                 $data[$i]->qq       = $users->qq[$i];
-                $data[$i]->yahoo    = $users->yahoo[$i];
                 $data[$i]->gtalk    = $users->gtalk[$i];
-                $data[$i]->wangwang = $users->wangwang[$i];
                 $data[$i]->mobile   = $users->mobile[$i];
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
@@ -474,9 +472,7 @@ class userModel extends model
             $users[$id]['join']     = $data->join[$id];
             $users[$id]['skype']    = $data->skype[$id];
             $users[$id]['qq']       = $data->qq[$id];
-            $users[$id]['yahoo']    = $data->yahoo[$id];
             $users[$id]['gtalk']    = $data->gtalk[$id];
-            $users[$id]['wangwang'] = $data->wangwang[$id];
             $users[$id]['mobile']   = $data->mobile[$id];
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];

@@ -100,16 +100,8 @@
       <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
     </tr>
     <tr>
-      <th><?php echo $lang->user->yahoo;?></th>
-      <td><?php echo $user->yahoo;?></td>
-    </tr>
-    <tr>
       <th><?php echo $lang->user->gtalk;?></th>
       <td><?php echo $user->gtalk;?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->user->wangwang;?></th>
-      <td><?php echo $user->wangwang;?></td>
     </tr>
     <tr>
       <th><?php echo $lang->user->mobile;?></th>
