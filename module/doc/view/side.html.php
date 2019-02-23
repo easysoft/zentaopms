@@ -125,7 +125,7 @@ if(empty($type)) $type = 'product';
             <li>
             <?php
             $text = zget($lang->doclib->create, $tabValue, '');
-            if($text) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe'");
+            if($text) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe' data-width='50%'");
             ?>
             </li>
             <?php else:?>
