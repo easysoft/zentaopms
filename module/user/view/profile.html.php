@@ -99,7 +99,6 @@
       <th><?php echo $lang->user->qq;?></th>
       <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
     </tr>
-
     <?php if(!isset($config->user->showFields) or (strpos($config->user->showFields, 'wechat') !== false)):?>
     <tr>
       <th><?php echo $lang->user->wechat;?></th>
@@ -124,7 +123,6 @@
       <td><?php echo $user->whatsapp;?></td>
     </tr>
     <?php endif;?>
-
     <tr>
       <th><?php echo $lang->user->gtalk;?></th>
       <td><?php echo $user->gtalk;?></td>
