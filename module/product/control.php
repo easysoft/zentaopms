@@ -588,14 +588,9 @@ class product extends control
         $this->view->extra     = $extra;
 
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
-        $productPairs = array();
-        foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $productsPinyin = common::convert2Pinyin($productPairs);
-
-        foreach($products as $key => $product) $product->key = $productsPinyin[$product->name];
 
         /* Sort products as lines' order first. */
-        $lines = $this->loadModel('tree')->getLinePairs();
+        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
         $productList = array();
         foreach($lines as $id => $name)
         {
