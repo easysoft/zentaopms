@@ -8,6 +8,23 @@ $(function()
 
     var taskTree = $taskTree.data('zui.tree');
 
+    var hiddenModuleItem = function($moduleItems)
+    {
+        $moduleItems.each(function()
+        {
+            if($moduleItems.find('ul > li.item-module:not(.hidden)').length)
+            {
+                $childrenItems = $moduleItems.find('ul > li.item-module:not(.hidden)');
+                hiddenModuleItem($childrenItems);
+            }
+            else
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            }
+        });
+    }
+
     // 根据列表展开树形列表
     var showTreeLevel = function(level)
     {
@@ -34,20 +51,16 @@ $(function()
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-task').parent().parent(), true);
 
-            var $itemStory = $('#taskTree li.item-story');
-            $itemStory.each(function()
+            var $storyItems = $('#taskTree li.item-story');
+            $storyItems.each(function()
             {
                 var items = $(this).find('ul li:not(.hidden)').length;
                 if(items == 0) $(this).addClass('hidden');
             });
-            var $itemModule = $('#taskTree li.item-module');
-            $itemModule.each(function()
-            {
-                var items = $(this).find('ul li:not(.hidden)').length;
-                if(items == 0) $(this).addClass('hidden');
-            });
-            var $itemProduct = $('#taskTree li.item-product');
-            $itemProduct.each(function()
+            var $moduleItems = $('#taskTree li.item-module');
+            hiddenModuleItem($moduleItems);
+            var $productItems = $('#taskTree li.item-product');
+            $productItems.each(function()
             {
                 var items = $(this).find('ul li:not(.hidden)').length;
                 if(items == 0) $(this).addClass('hidden');
@@ -60,14 +73,10 @@ $(function()
             taskTree.show($taskTree.find('li.item-story').parent().parent(), true);
 
             $('#taskTree li.item-task').addClass('hidden');
-            var $itemModule = $('#taskTree li.item-module');
-            $itemModule.each(function()
-            {
-                var items = $(this).find('ul li:not(.hidden)').length;
-                if(items == 0) $(this).addClass('hidden');
-            });
-            var $itemProduct = $('#taskTree li.item-product');
-            $itemProduct.each(function()
+            var $moduleItems = $('#taskTree li.item-module');
+            hiddenModuleItem($moduleItems);
+            var $productItems = $('#taskTree li.item-product');
+            $productItems.each(function()
             {
                 var items = $(this).find('ul li:not(.hidden)').length;
                 if(items == 0) $(this).addClass('hidden');
