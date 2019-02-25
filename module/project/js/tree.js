@@ -8,16 +8,22 @@ $(function()
 
     var taskTree = $taskTree.data('zui.tree');
 
-    var hiddenModuleItem = function($moduleItems)
+    var sortItems = function($items)
     {
-        $moduleItems.each(function()
+        var items = $items.toArray();
+        for(i = 0; i < items.length; i++)
         {
-            var $childrenItems = $moduleItems.find('ul > li.item-module:not(.hidden)');
-            hiddenModuleItem($childrenItems);
-
-            var items = $(this).find('ul li:not(.hidden)').length;
-            if(items == 0) $(this).addClass('hidden');
-        });
+            for(j = 0; j < items.length - 1 - i; j++)
+            {
+                if($(items[j + 1]).data('id').toString() > $(items[j]).data('id').toString())
+                {
+                    var tmp = items[j + 1];
+                    items[j + 1] = items[j];
+                    items[j] = tmp;
+                }
+            }
+        }
+        return items;
     }
 
     // 根据列表展开树形列表
@@ -53,7 +59,12 @@ $(function()
                 if(items == 0) $(this).addClass('hidden');
             });
             var $moduleItems = $('#taskTree li.item-module');
-            hiddenModuleItem($moduleItems);
+            moduleItems = sortItems($moduleItems);
+            for(i = 0; i < moduleItems.length; i++)
+            {
+                var items = $(moduleItems[i]).find('ul li:not(.hidden)').length;
+                if(items == 0) $(moduleItems[i]).addClass('hidden');
+            }
             var $productItems = $('#taskTree li.item-product');
             $productItems.each(function()
             {
@@ -69,7 +80,12 @@ $(function()
 
             $('#taskTree li.item-task').addClass('hidden');
             var $moduleItems = $('#taskTree li.item-module');
-            hiddenModuleItem($moduleItems);
+            moduleItems = sortItems($moduleItems);
+            for(i = 0; i < moduleItems.length; i++)
+            {
+                var items = $(moduleItems[i]).find('ul li:not(.hidden)').length;
+                if(items == 0) $(moduleItems[i]).addClass('hidden');
+            }
             var $productItems = $('#taskTree li.item-product');
             $productItems.each(function()
             {
