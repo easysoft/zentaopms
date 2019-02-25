@@ -13,6 +13,7 @@ $(function()
     {
         $('.btn-tree-view').removeClass('btn-active-text');
         $('#taskTree li.item-task').removeClass('hidden');
+        $('#taskTree li.item-story').removeClass('hidden');
 
         if(level === 'root')
         {
@@ -30,6 +31,12 @@ $(function()
             $('[data-type=task]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-task').parent().parent(), true);
+            var $itemStory = $('#taskTree li.item-story');
+            $itemStory.each(function()
+            {
+                var tasks = $(this).find('ul').length;
+                if(tasks == 0) $itemStory.addClass('hidden');
+            });
         }
         else if(level === 'story')
         {
