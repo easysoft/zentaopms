@@ -12,16 +12,11 @@ $(function()
     {
         $moduleItems.each(function()
         {
-            if($moduleItems.find('ul > li.item-module:not(.hidden)').length)
-            {
-                $childrenItems = $moduleItems.find('ul > li.item-module:not(.hidden)');
-                hiddenModuleItem($childrenItems);
-            }
-            else
-            {
-                var items = $(this).find('ul li:not(.hidden)').length;
-                if(items == 0) $(this).addClass('hidden');
-            }
+            var $childrenItems = $moduleItems.find('ul > li.item-module:not(.hidden)');
+            hiddenModuleItem($childrenItems);
+
+            var items = $(this).find('ul li:not(.hidden)').length;
+            if(items == 0) $(this).addClass('hidden');
         });
     }
 
