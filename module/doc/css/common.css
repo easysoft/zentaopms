@@ -78,3 +78,5 @@ td.c-name a:visited{color: #082999}
 
 #queryBox #groupAndOr {min-width: 65px;}
 #noticeAcl{margin-left:10px;}
+
+#pageNav .dropdown-menu{max-height:250px; overflow-y:auto;}
