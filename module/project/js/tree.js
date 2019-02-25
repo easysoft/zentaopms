@@ -12,8 +12,10 @@ $(function()
     var showTreeLevel = function(level)
     {
         $('.btn-tree-view').removeClass('btn-active-text');
-        $('#taskTree li.item-task').removeClass('hidden');
+        $('#taskTree li.item-product').removeClass('hidden');
+        $('#taskTree li.item-module').removeClass('hidden');
         $('#taskTree li.item-story').removeClass('hidden');
+        $('#taskTree li.item-task').removeClass('hidden');
 
         if(level === 'root')
         {
@@ -31,11 +33,24 @@ $(function()
             $('[data-type=task]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-task').parent().parent(), true);
+
             var $itemStory = $('#taskTree li.item-story');
             $itemStory.each(function()
             {
-                var tasks = $(this).find('ul').length;
-                if(tasks == 0) $itemStory.addClass('hidden');
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
+            var $itemModule = $('#taskTree li.item-module');
+            $itemModule.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
+            var $itemProduct = $('#taskTree li.item-product');
+            $itemProduct.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
             });
         }
         else if(level === 'story')
@@ -43,7 +58,20 @@ $(function()
             $('[data-type=story]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-story').parent().parent(), true);
+
             $('#taskTree li.item-task').addClass('hidden');
+            var $itemModule = $('#taskTree li.item-module');
+            $itemModule.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
+            var $itemProduct = $('#taskTree li.item-product');
+            $itemProduct.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
         }
         $('#main').toggleClass('tree-show-root', level === 'root');
     };
