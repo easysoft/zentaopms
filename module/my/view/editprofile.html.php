@@ -63,34 +63,19 @@
     </table>
     <table class='table table-form'>
       <caption><?php echo $lang->my->form->lblContact;?></caption>
+      <?php $i = 0;?>
+      <?php foreach(explode(',', $config->user->contactField) as $field):?>
+      <?php if($i % 2 == 0) echo '<tr>';?>
+      <?php $i++;?>
+        <th class='w-90px'><?php echo $lang->user->$field;?></th>
+        <td><?php echo html::input($field, $user->$field, "class='form-control'");?></td>
+      <?php if($i % 2 == 0) echo '</tr>';?>
+      <?php endforeach;?>
       <tr>
-        <th class='w-90px'><?php echo $lang->user->skype;?></th>
-        <td><?php echo html::input('skype', $user->skype, "class='form-control'");?></td>
-        <th class='w-90px'><?php echo $lang->user->qq;?></th>
-        <td><?php echo html::input('qq', $user->qq, "class='form-control'");?></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->user->yahoo;?></th>
-        <td><?php echo html::input('yahoo', $user->yahoo, "class='form-control'");?></td>
-        <th><?php echo $lang->user->gtalk;?></th>
-        <td><?php echo html::input('gtalk', $user->gtalk, "class='form-control'");?></td>
-      </tr>  
-       <tr>
-        <th><?php echo $lang->user->wangwang;?></th>
-        <td><?php echo html::input('wangwang', $user->wangwang, "class='form-control'");?></td>
-        <th><?php echo $lang->user->mobile;?></th>
-        <td><?php echo html::input('mobile', $user->mobile, "class='form-control'");?></td>
-      </tr>  
-       <tr>
-        <th><?php echo $lang->user->phone;?></th>
-        <td><?php echo html::input('phone', $user->phone, "class='form-control'");?></td>
         <th><?php echo $lang->user->address;?></th>
         <td><?php echo html::input('address', $user->address, "class='form-control'");?></td>
-      </tr>  
-      <tr>
         <th><?php echo $lang->user->zipcode;?></th>
         <td><?php echo html::input('zipcode', $user->zipcode, "class='form-control'");?></td>
-        <td></td>
       </tr>
     </table>
     <table class='table table-form'>

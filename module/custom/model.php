@@ -440,8 +440,10 @@ class customModel extends model
             $fieldList = isset($customFields[$moduleName][$method]) ? $customFields[$moduleName][$method] : $customFields[$moduleName];
             if(!is_string($fieldList)) return $fields;
 
+            if($moduleName == 'user' and $method == 'edit') $this->app->loadConfig('user');
             foreach(explode(',', $fieldList) as $fieldName)
             {
+                if($moduleName == 'user' and $method == 'edit' and strpos($this->config->user->contactField, $fieldName) === false) continue;
                 if($fieldName == 'comment') $fields[$fieldName] = $this->lang->comment;
                 if(isset($moduleLang->$fieldName) and is_string($moduleLang->$fieldName)) $fields[$fieldName] = $moduleLang->$fieldName;
             }

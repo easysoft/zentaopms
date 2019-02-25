@@ -1,7 +1,7 @@
 $(function()
 {
     toggleAcl($('[name=acl]').val(), 'doc');
-    setTimeout(function(){initPage(docType)}, 100);
+    setTimeout(function(){initPage(docType)}, 50);
     $('input[name="type"]').change(function()
     {
         var type = $(this).val();
