@@ -75,7 +75,6 @@ $lang->custom->user = new stdClass();
 $lang->custom->user->fields['roleList']   = 'Role';
 $lang->custom->user->fields['statusList'] = 'Status';
 $lang->custom->user->fields['deleted']    = 'Deleted User';
-$lang->custom->user->fields['showField']  = 'Show Field';
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
@@ -110,11 +109,6 @@ $lang->custom->reviewList[0]  = 'Off';
 
 $lang->custom->deletedList[1] = 'Show';
 $lang->custom->deletedList[0] = 'Hide';
-
-$lang->custom->userFieldList['wechat']   = 'Wechat';
-$lang->custom->userFieldList['dingding'] = 'Dingding';
-$lang->custom->userFieldList['slact']    = 'Slact';
-$lang->custom->userFieldList['whatsapp'] = 'WhatsApp';
 
 $lang->custom->workingHours   = 'hours/day';
 $lang->custom->weekend        = 'Weekend';

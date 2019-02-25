@@ -79,11 +79,6 @@ class custom extends control
             $this->app->loadConfig('user');
             $this->view->showDeleted = isset($this->config->user->showDeleted) ? $this->config->user->showDeleted : '0';
         }
-        if($module == 'user' and $field == 'showField')
-        {
-            $this->app->loadConfig('user');
-            $this->view->showFields = isset($this->config->user->showFields) ? $this->config->user->showFields : '';
-        }
 
         if(strtolower($this->server->request_method) == "post")
         {
@@ -121,11 +116,6 @@ class custom extends control
             {
                 $data = fixer::input('post')->get();
                 $this->loadModel('setting')->setItem('system.user.showDeleted', $data->showDeleted);
-            }
-            elseif($module == 'user' and $field == 'showField')
-            {
-                $data = fixer::input('post')->join('showFields', ',')->get();
-                $this->loadModel('setting')->setItem('system.user.showFields', $data->showFields);
             }
             else
             {

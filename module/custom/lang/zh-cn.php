@@ -111,11 +111,6 @@ $lang->custom->reviewList[0]  = '关闭';
 $lang->custom->deletedList[1] = '列出';
 $lang->custom->deletedList[0] = '不列出';
 
-$lang->custom->userFieldList['wechat']   = '微信';
-$lang->custom->userFieldList['dingding'] = '钉钉';
-$lang->custom->userFieldList['slact']    = 'Slact';
-$lang->custom->userFieldList['whatsapp'] = 'WhatsApp';
-
 $lang->custom->workingHours   = '每天可用工时';
 $lang->custom->weekend        = '休息日';
 $lang->custom->weekendList[2] = '双休';

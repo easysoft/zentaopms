@@ -139,21 +139,6 @@ EOT;
           <td><?php echo html::submitButton();?></td>
         </tr>
       </table>
-      <?php elseif($module == 'user' and $field == 'showField'):?>
-      <table class='table table-form mw-600px'>
-        <tr>
-          <th class='w-100px'><?php echo $lang->custom->user->fields['showField'];?></th>
-          <td><?php echo html::select('showFields[]', $lang->custom->userFieldList, $showFields, "class='form-control chosen' multiple");?></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td><span class='text-warning'><?php echo $lang->custom->notice->userFieldNotice;?></span></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
       <?php else:?>
       <table class='table table-form active-disabled table-condensed mw-600px'>
         <tr class='text-center'>
