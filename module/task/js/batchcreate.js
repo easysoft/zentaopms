@@ -48,8 +48,10 @@ function setStories(moduleID, projectID, num)
                 }
             })
         }
+        var chosenWidth = $("#story" + num + "_chosen").css('max-width');
         $("#story" + num + "_chosen").remove();
         $("#story" + num).chosen();
+        $("#story" + num + "_chosen").width(chosenWidth).css('max-width', chosenWidth);
     });
 }
 
@@ -156,20 +158,24 @@ function markStoryTask()
         return storiesHasTask;
     };
 
-    $('#batchCreateForm').on('chosen:showing_dropdown', 'select[name^="story"]', function()
+    $('#batchCreateForm').on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
     {
         var storiesHasTask = getStoriesHasTask();
-        $(this).next('.chosen-container').find('.chosen-results>li').each(function()
+        var $container     = $(this).closest('td').find('.chosen-container');
+        setTimeout(function()
         {
-            var $li = $(this);
-            $li.toggleClass('has-new-task', !!storiesHasTask[$li.data('data')]);
-        });
+            $container.find('.chosen-results>li').each(function()
+            {
+                var $li = $(this);
+                $li.toggleClass('has-new-task', !!storiesHasTask[$li.data('data')]);
+            });
+        }, 100);
     });
 }
 
-$(document).on('click', '.chosen-with-drop', function()
+$(document).on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
 {
-    var select = $(this).prev('select');
+    var select = $(this).closest('td').find('select');
     if($(select).val() == 'ditto')
     {
         var index = $(select).closest('td').index();
@@ -206,8 +212,14 @@ $(document).on('mousedown', 'select', function()
 $(function()
 {
     /* Adjust width for ie chosen width. */
-    $('#module0_chosen').width($('#module1_chosen').width());
-    $('#story0_chosen').width($('#story1_chosen').width());
+    var chosenWidth = $('#module1_chosen').width();
+    $('.chosen-container[id^=module]').width(chosenWidth);
+    $('.chosen-container[id^=module]').css('max-width', chosenWidth);
+
+    var chosenWidth = $('#story1_chosen').width();
+    $('.chosen-container[id^=story]').width(chosenWidth);
+    $('.chosen-container[id^=story]').css('max-width', chosenWidth);
+
     if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
     markStoryTask();
 
