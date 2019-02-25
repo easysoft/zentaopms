@@ -31,7 +31,6 @@ $lang->user->contactInfo      = '联系信息';
 $lang->user->skype            = 'Skype';
 $lang->user->qq               = 'QQ';
 $lang->user->gtalk            = 'GTalk';
-$lang->user->wangwang         = '旺旺';
 $lang->user->mobile           = '手机';
 $lang->user->phone            = '电话';
 $lang->user->weixin           = '微信';
