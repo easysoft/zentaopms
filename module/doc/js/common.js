@@ -16,7 +16,7 @@ function toggleAcl(acl, type)
     }
     if(type == 'lib')
     {
-        var libType = $('#type').val();
+        var libType = $('input[name="type"]').val();
         var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
         $('#noticeAcl').html(notice);
     }
@@ -80,7 +80,6 @@ $(document).ready(function()
                 }
             }, 'json');
         }
-
     });
 
     'use strict';

@@ -8,33 +8,74 @@ $(function()
 
     var taskTree = $taskTree.data('zui.tree');
 
+    var hiddenModuleItem = function($moduleItems)
+    {
+        $moduleItems.each(function()
+        {
+            var $childrenItems = $moduleItems.find('ul > li.item-module:not(.hidden)');
+            hiddenModuleItem($childrenItems);
+
+            var items = $(this).find('ul li:not(.hidden)').length;
+            if(items == 0) $(this).addClass('hidden');
+        });
+    }
+
     // 根据列表展开树形列表
     var showTreeLevel = function(level)
     {
         $('.btn-tree-view').removeClass('btn-active-text');
+        $('#taskTree li.item-product').removeClass('hidden');
+        $('#taskTree li.item-module').removeClass('hidden');
+        $('#taskTree li.item-story').removeClass('hidden');
+        $('#taskTree li.item-task').removeClass('hidden');
 
-        if (level === 'root')
+        if(level === 'root')
         {
             $('[data-type=root]').addClass('btn-active-text');
             taskTree.collapse();
         }
-        else if (level === 'all')
+        else if(level === 'all')
         {
             $('[data-type=all]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.expand($taskTree.find('li.has-list'), true);
         }
-        else if (level === 'task')
+        else if(level === 'task')
         {
             $('[data-type=task]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-task').parent().parent(), true);
+
+            var $storyItems = $('#taskTree li.item-story');
+            $storyItems.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
+            var $moduleItems = $('#taskTree li.item-module');
+            hiddenModuleItem($moduleItems);
+            var $productItems = $('#taskTree li.item-product');
+            $productItems.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
         }
-        else if (level === 'story')
+        else if(level === 'story')
         {
             $('[data-type=story]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-story').parent().parent(), true);
+
+            $('#taskTree li.item-task').addClass('hidden');
+            var $moduleItems = $('#taskTree li.item-module');
+            hiddenModuleItem($moduleItems);
+            var $productItems = $('#taskTree li.item-product');
+            $productItems.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
         }
         $('#main').toggleClass('tree-show-root', level === 'root');
     };

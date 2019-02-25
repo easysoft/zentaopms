@@ -855,7 +855,7 @@ class docModel extends model
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(strpos(",$object->users,", $account) !== false) return true;
+        if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
         if($object->acl == 'custom')
         {
             $userGroups = $this->app->user->groups;
@@ -872,8 +872,8 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->project) return $this->loadModel('project')->checkPriv($object->project);
-        if($object->product) return $this->loadModel('product')->checkPriv($object->product);
+        if(!empty($object->project)) return $this->loadModel('project')->checkPriv($object->project);
+        if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
         return false;
     }
 
@@ -1104,7 +1104,66 @@ class docModel extends model
             }
         }
 
-        if($type == 'product' or $type == 'project') $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc, id desc')->fetchAll('id');
+        if($type == 'product' or $type == 'project') $libs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc')->fetchAll('id');
+
+        /* Order the same as drop menu.*/
+        if($type == 'product')
+        {
+            $this->loadModel('product');
+            $products = $mineProducts = $otherProducts = $closedProducts = array();
+            foreach($libs as $lib)
+            {   
+                if(!$this->app->user->admin and !$this->product->checkPriv($lib->id)) continue;
+                if($lib->status == 'normal' and $lib->PO == $this->app->user->account) 
+                {   
+                    $mineProducts[$lib->id] = $lib;
+                }   
+                elseif($lib->status == 'normal' and $lib->PO != $this->app->user->account) 
+                {   
+                    $otherProducts[$lib->id] = $lib;
+                }   
+                elseif($lib->status == 'closed')
+                {   
+                    $closedProducts[$lib->id] = $lib;
+                }   
+            }
+            $products = $mineProducts + $otherProducts + $closedProducts;
+            $libs = array();
+            foreach($products as $product)
+            {
+                $libs[$product->id] = new stdclass();
+                $libs[$product->id]->id   = $product->id;
+                $libs[$product->id]->name = $product->name;
+            }
+        }
+        elseif($type == 'project')
+        {
+            $projects = $mineProjects = $otherProjects = $closedProjects = array();
+            foreach($libs as $lib)
+            {   
+                if(!$this->app->user->admin and !$this->checkPrivLib($lib)) continue;
+                if($lib->status != 'done' and $lib->status != 'closed' and $lib->PM == $this->app->user->account)
+                {   
+                    $mineProjects[$lib->id] = $lib;
+                }   
+                elseif($lib->status != 'done' and $lib->status != 'closed' and !($lib->PM == $this->app->user->account))
+                {   
+                    $otherProjects[$lib->id] = $lib;
+                }   
+                elseif($lib->status == 'done' or $lib->status == 'closed')
+                {   
+                    $closedProjects[$lib->id] = $lib;
+                }   
+            }   
+            $projects = $mineProjects + $otherProjects + $closedProjects;
+            $libs = array();
+            foreach($projects as $project)
+            {
+                $libs[$project->id] = new stdclass();
+                $libs[$project->id]->id   = $project->id;
+                $libs[$project->id]->name = $project->name;
+            }
+        }
 
         return $libs;
     }

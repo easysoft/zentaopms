@@ -47,10 +47,12 @@
             <th class='w-120px<?php echo zget($visibleFields, 'join', ' hidden')?>'>    <?php echo $lang->user->join;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'skype', ' hidden')?>'>   <?php echo $lang->user->skype;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'qq', ' hidden')?>'>      <?php echo $lang->user->qq;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'yahoo', ' hidden')?>'>   <?php echo $lang->user->yahoo;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'dingtalk', ' hidden')?>'><?php echo $lang->user->dingtalk;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'gtalk', ' hidden')?>'>   <?php echo $lang->user->gtalk;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'wangwang', ' hidden')?>'><?php echo $lang->user->wangwang;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'weixin', ' hidden')?>'>  <?php echo $lang->user->weixin;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'mobile', ' hidden')?>'>  <?php echo $lang->user->mobile;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'slack', ' hidden')?>'>   <?php echo $lang->user->slack;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'whatsapp', ' hidden')?>'><?php echo $lang->user->whatsapp;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'phone', ' hidden')?>'>   <?php echo $lang->user->phone;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'address', ' hidden')?>'> <?php echo $lang->user->address;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'zipcode', ' hidden')?>'> <?php echo $lang->user->zipcode;?></th>
@@ -82,10 +84,12 @@
           <td class='<?php echo zget($visibleFields, 'join', 'hidden')?>'>    <?php echo html::input("join[$i]",     '', "class='form-control form-date'");?></td>
           <td class='<?php echo zget($visibleFields, 'skype', 'hidden')?>'>   <?php echo html::input("skype[$i]",    '', "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'qq', 'hidden')?>'>      <?php echo html::input("qq[$i]",       '', "class='form-control'");?></td>
-          <td class='<?php echo zget($visibleFields, 'yahoo', 'hidden')?>'>   <?php echo html::input("yahoo[$i]",    '', "class='form-control'");?></td>
+          <td class='<?php echo zget($visibleFields, 'dingtalk', 'hidden')?>'><?php echo html::input("dingtalk[$i]", '', "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'gtalk', 'hidden')?>'>   <?php echo html::input("gtalk[$i]",    '', "class='form-control'");?></td>
-          <td class='<?php echo zget($visibleFields, 'wangwang', 'hidden')?>'><?php echo html::input("wangwang[$i]", '', "class='form-control'");?></td>
+          <td class='<?php echo zget($visibleFields, 'weixin', 'hidden')?>'>  <?php echo html::input("weixin[$i]",   '', "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'mobile', 'hidden')?>'>  <?php echo html::input("mobile[$i]",   '', "class='form-control'");?></td>
+          <td class='<?php echo zget($visibleFields, 'slack', 'hidden')?>'>   <?php echo html::input("slack[$i]",    '', "class='form-control'");?></td>
+          <td class='<?php echo zget($visibleFields, 'whatsapp', 'hidden')?>'><?php echo html::input("whatsapp[$i]", '', "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'phone', 'hidden')?>'>   <?php echo html::input("phone[$i]",    '', "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'address', 'hidden')?>'> <?php echo html::input("address[$i]",  '', "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'zipcode', 'hidden')?>'> <?php echo html::input("zipcode[$i]",  '', "class='form-control'");?></td>

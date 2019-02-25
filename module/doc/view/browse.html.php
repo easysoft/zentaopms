@@ -53,7 +53,16 @@ var browseType = '<?php echo $browseType;?>';
               <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
             </ul>
           </div>
-          <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>
+          <?php if(common::hasPriv('doc', 'create')):?>
+          <div class="dropdown">
+            <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $lang->doc->create;?> <span class='caret'></span></button>
+            <ul class='dropdown-menu'>
+              <?php foreach($lang->doc->typeList as $typeKey => $typeName):?>
+              <li><?php echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID&type=$typeKey"), $typeName);?></li>
+              <?php endforeach;?>
+            </ul>
+          </div>
+          <?php endif;?>
           <?php endif;?>
         </nav>
       </div>
@@ -154,8 +163,8 @@ var browseType = '<?php echo $browseType;?>';
               <td class="c-name"><?php echo html::a(inlink('view', "docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title);?></td>
               <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
-              <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'm-d H:i');?></td>
-              <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'm-d H:i');?></td>
+              <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>
+              <td class="c-datetime"><?php echo formatTime($doc->editedDate, 'y-m-d');?></td>
               <td class="c-actions">
                 <?php if(common::hasPriv('doc', 'collect')):?>
                 <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>

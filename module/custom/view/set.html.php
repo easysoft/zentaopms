@@ -113,6 +113,21 @@ EOT;
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
+      <?php elseif($module == 'user' and $field == 'contactField'):?>
+      <?php
+      $this->app->loadConfig('user');
+      $this->app->loadLang('user');
+      ?>
+      <table class='table table-form mw-800px'>
+        <tr>
+          <th class='w-150px'><?php echo $lang->custom->user->fields['contactField'];?></th>
+          <td><?php echo html::select('contactField[]', $lang->user->contactFieldList, $config->user->contactField, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><?php echo html::submitButton();?></td>
+        </tr>
+      </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>
       <table class='table table-form mw-600px'>
         <tr>

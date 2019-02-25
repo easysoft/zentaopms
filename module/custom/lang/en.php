@@ -84,6 +84,7 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
+$lang->custom->notice->userFieldNotice      = 'Control whether the above fields are displayed on the user-related page, and leave blank to display all';
 $lang->custom->notice->canNotAdd            = 'It will be calculated, so customization is not enabled.';
 $lang->custom->notice->forceReview          = '%s Review is required for certain submitters.';
 $lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain submitters.";

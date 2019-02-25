@@ -72,9 +72,10 @@ $lang->custom->todo->fields['typeList']   = '类型';
 $lang->custom->todo->fields['statusList'] = '状态';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']   = '职位';
-$lang->custom->user->fields['statusList'] = '状态';
-$lang->custom->user->fields['deleted']    = '列出已删除用户';
+$lang->custom->user->fields['roleList']     = '职位';
+$lang->custom->user->fields['statusList']   = '状态';
+$lang->custom->user->fields['contactField'] = '可用联系方式';
+$lang->custom->user->fields['deleted']      = '列出已删除用户';
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
@@ -84,6 +85,7 @@ $lang->custom->allLang     = '适用所有语言';
 $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
+$lang->custom->notice->userFieldNotice             = '控制以上字段在用户相关页面是否显示，留空则全部显示';
 $lang->custom->notice->canNotAdd                   = '该项参与运算，不提供自定义添加功能';
 $lang->custom->notice->forceReview                 = "指定人提交的%s必须评审。";
 $lang->custom->notice->forceNotReview              = "指定人提交的%s不需要评审。";

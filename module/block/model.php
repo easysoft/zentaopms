@@ -662,7 +662,7 @@ class blockModel extends model
         $products = $this->loadModel('product')->getList($status);
         if(empty($products)) return $products;
 
-        $lines = $this->loadModel('tree')->getLinePairs();
+        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
         $productList = array();
         foreach($lines as $id => $name)
         {

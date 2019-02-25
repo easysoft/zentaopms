@@ -30,11 +30,13 @@ $lang->user->verify           = '安全验证';
 $lang->user->contactInfo      = '联系信息';
 $lang->user->skype            = 'Skype';
 $lang->user->qq               = 'QQ';
-$lang->user->yahoo            = '雅虎通';
 $lang->user->gtalk            = 'GTalk';
-$lang->user->wangwang         = '旺旺';
 $lang->user->mobile           = '手机';
 $lang->user->phone            = '电话';
+$lang->user->weixin           = '微信';
+$lang->user->dingtalk         = '钉钉';
+$lang->user->slack            = 'Slack';
+$lang->user->whatsapp         = 'WhatsApp';
 $lang->user->address          = '通讯地址';
 $lang->user->zipcode          = '邮编';
 $lang->user->join             = '入职日期';
@@ -150,6 +152,16 @@ $lang->user->error->reserved      = "【ID %s】的用户名已被系统预留";
 
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";
+
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['qq']       = $lang->user->qq;
+$lang->user->contactFieldList['dingtalk'] = $lang->user->dingtalk;
+$lang->user->contactFieldList['gtalk']    = $lang->user->gtalk;
+$lang->user->contactFieldList['weixin']   = $lang->user->weixin;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['slack']    = $lang->user->slack;
+$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';

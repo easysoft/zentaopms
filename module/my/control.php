@@ -512,6 +512,7 @@ class my extends control
     {
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
 
+        $this->app->loadLang('user');
         $user = $this->user->getById($this->app->user->account);
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;

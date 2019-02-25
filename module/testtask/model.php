@@ -915,8 +915,8 @@ class testtaskModel extends model
             ->add('run', $runID)
             ->add('caseResult', $caseResult)
             ->setForce('stepResults', serialize($stepResults))
-            ->add('lastRunner', $this->app->user->account)
-            ->add('date', $now)
+            ->setDefault('lastRunner', $this->app->user->account)
+            ->setDefault('date', $now)
             ->skipSpecial('stepResults')
             ->remove('steps,reals,result')
             ->get();

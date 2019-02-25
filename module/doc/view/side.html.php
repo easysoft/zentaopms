@@ -125,7 +125,7 @@ if(empty($type)) $type = 'product';
             <li>
             <?php
             $text = zget($lang->doclib->create, $tabValue, '');
-            if($text) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe'");
+            if($text) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe' data-width='50%'");
             ?>
             </li>
             <?php else:?>
@@ -161,7 +161,20 @@ if(empty($type)) $type = 'product';
         <?php endforeach;?>
       </div>
     </div>
-    <div class='side-footer'><?php echo html::a('###', "<i class='icon-cog'></i> {$lang->doc->customShowLibs}", '', "class='setting text-secondary small' data-target='#settingModal' data-toggle='modal'");?></div>
+    <div class='side-footer clearfix'>
+      <div class='pull-left'>
+      <?php echo html::a('###', "<i class='icon-cog'></i> {$lang->doc->customShowLibs}", '', "class='setting text-secondary small' data-target='#settingModal' data-toggle='modal'");?>
+      </div>
+      <div class='pull-right'>
+        <?php
+        if(common::hasPriv('doc', 'sort'))
+        {
+            echo html::a('###', "{$lang->doc->orderLib}", '', "id='orderLib' class='text-secondary small " . (($type != 'product' and $type !='project') ? '' : 'hidden') . "'");
+            echo html::a('javascript:cancelOrder()', "<i class='icon-back icon-sm'></i> {$lang->goback}", '', "id='cancelOrder' class='text-secondary small hidden'");
+        }
+        ?>
+      </div>
+    </div>
   </div>
   <div class='modal fade' id='settingModal' aria-hidden="true">
     <div class='modal-dialog mw-400px'>
@@ -185,4 +198,97 @@ if(empty($type)) $type = 'product';
       </div>
     </div>
   </div>
+<?php js::set('goback', $lang->goback);?>
+<script>
+$(function()
+{
+    if($.cookie('docSideType'))
+    {
+        var type = $.cookie('docSideType');
+        var $tabs = $('#mainRow .side-col .tabs');
+        if($tabs.find('.tab-content .tab-pane#' + type).length >0)
+        {
+            $tabs.find('.nav-tabs li').removeClass('active');
+            $tabs.find('.nav-tabs li a[href="#' + type + '"]').parent().addClass('active');
+            $tabs.find('.tab-content .tab-pane').removeClass('active');
+            $tabs.find('.tab-content .tab-pane#' + type).addClass('active');
+        }
+        $.cookie('docSideType', '');
+        $('#mainRow .side-col .side-footer #orderLib').toggleClass('hidden', (type == 'product' || type == 'project'));
+    }
+
+    $('#mainRow .side-col .tabs .nav-tabs li a').click(function()
+    {
+        var href     = $(this).attr('href');
+        var canOrder = !(href.indexOf('product') > 0 || href.indexOf('project') > 0);
+        $(this).closest('.side-col').find('.side-footer #orderLib').toggleClass('hidden', !canOrder);
+        $(this).closest('.side-col').find('.side-footer #cancelOrder').toggleClass('hidden', !canOrder);
+
+        var $tabPane     = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+        var $orderLib    = $(this).closest('.side-col').find('.side-footer #orderLib');
+        var $cancelOrder = $(this).closest('.side-col').find('.side-footer #cancelOrder');
+        if($tabPane.find('.libs-group.sort').length > 0 && canOrder)
+        {
+            $orderLib.addClass('hidden');
+            $cancelOrder.removeClass('hidden');
+        }
+        if($tabPane.find('.libs-group.sort').length == 0 && canOrder)
+        {
+            $orderLib.removeClass('hidden');
+            $cancelOrder.addClass('hidden');
+        }
+    });
+
+    $('#orderLib').click(function()
+    {
+        var $tabPane = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+        var type     = $tabPane.attr('id');
+        $.get(createLink('doc', 'sort', "type=" + type), function(data)
+        {
+            $tabPane.find('ul.tree').addClass('hidden');
+            $tabPane.find('.libs-group.sort').remove();
+            $tabPane.closest('.side-col').find('.side-footer .pull-right #orderLib').addClass('hidden');
+            $tabPane.closest('.side-col').find('.side-footer .pull-right #cancelOrder').removeClass('hidden');
+            $tabPane.append(data);
+            $tabPane.find('.libs-group.sort').sortable(
+            {
+                trigger:  '.lib',
+                selector: '.lib',
+                finish:   function()
+                {
+                    var orders = {};
+                    var orderNext = 1;
+
+                    $('.libs-group.sort .lib').not('.files').not('.addbtn').each(function()
+                    {
+                        orders[$(this).data('id')] = orderNext ++;
+                    });
+
+                    $.post(createLink('doc', 'sort'), orders, function(data)
+                    {
+                        if(data.result == 'success')
+                        {
+                            $.cookie('docSideType', type);
+                            return location.reload();
+                        }
+                        else
+                        {
+                            bootbox.alert(data.message);
+                        }
+                    }, 'json');
+                }
+            });
+        });
+    });
+});
+
+function cancelOrder()
+{
+    var $tabPane = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+    $tabPane.find('.libs-group.sort').remove();
+    $tabPane.find('ul.tree').removeClass('hidden');
+    $tabPane.closest('.side-col').find('.side-footer .pull-right #orderLib').removeClass('hidden');
+    $tabPane.closest('.side-col').find('.side-footer .pull-right #cancelOrder').addClass('hidden');
+}
+</script>
 </div>

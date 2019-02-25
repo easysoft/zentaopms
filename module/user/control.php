@@ -456,9 +456,16 @@ class user extends control
         }
 
         /* Set custom. */
-        foreach(explode(',', $this->config->user->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->user->$field;
+        foreach(explode(',', $this->config->user->customBatchCreateFields) as $field)
+        {
+            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
+        }
+        foreach(explode(',', $this->config->user->custom->batchCreateFields) as $field)
+        {
+            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $showFields[$field] = $field;
+        }
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->user->custom->batchCreateFields;
+        $this->view->showFields   = join(',', $showFields);
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
         $position[] = $this->lang->user->batchCreate;
@@ -533,9 +540,16 @@ class user extends control
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
 
         /* Set custom. */
-        foreach(explode(',', $this->config->user->customBatchEditFields) as $field) $customFields[$field] = $this->lang->user->$field;
+        foreach(explode(',', $this->config->user->customBatchEditFields) as $field)
+        {
+            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $customFields[$field] = $this->lang->user->$field;
+        }
+        foreach(explode(',', $this->config->user->custom->batchEditFields) as $field)
+        {
+            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $showFields[$field] = $field;
+        }
         $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->user->custom->batchEditFields;
+        $this->view->showFields   = join(',', $showFields);
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchEdit;
         $this->view->position[] = $this->lang->user->batchEdit;

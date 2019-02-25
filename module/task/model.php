@@ -616,8 +616,8 @@ class taskModel extends model
 
             ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
 
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
@@ -626,7 +626,7 @@ class taskModel extends model
         if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
 
         /* Fix bug#1388, Check children task projectID and moduleID. */
-        if($task->project != $oldTask->project)
+        if(isset($task->project) and $task->project != $oldTask->project)
         {
             $this->dao->update(TABLE_TASK)->set('project')->eq($task->project)->set('module')->eq($task->module)->where('parent')->eq($taskID)->exec();
         }
@@ -705,7 +705,7 @@ class taskModel extends model
         {
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
-            if($task->parent) 
+            if(!empty($task->parent))
             {
                 $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($task->parent)->exec();
                 $this->updateParentStatus($taskID);
@@ -1671,7 +1671,7 @@ class taskModel extends model
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->beginIF($type == 'assignedTo')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type != 'closedBy')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'finishedBy')
             ->andWhere('t1.finishedby', 1)->eq($account)
             ->orWhere('t1.finishedList')->like("%,{$account},%")

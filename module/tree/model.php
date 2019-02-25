@@ -112,7 +112,7 @@ class treeModel extends model
         ksort($treeMenu);
         $topMenu = @array_shift($treeMenu);
         $topMenu = explode("\n", trim($topMenu));
-        $lastMenu[] = in_array($type, array('bug', 'story')) ? '' : '/';
+        $lastMenu[] = '/';
         foreach($topMenu as $menu)
         {
             if(!strpos($menu, '|')) continue;
@@ -173,12 +173,18 @@ class treeModel extends model
     /**
      * Get line pairs.
      *
+     * @param  bool    $useShort 
      * @access public
      * @return array
      */
-    public function getLinePairs()
+    public function getLinePairs($useShort = false)
     {
-        return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->fetchPairs();
+        $lines = $this->dao->select('id,name,short')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->fetchAll('id');
+
+        $linePairs = array();
+        foreach($lines as $lineID => $line) $linePairs[$lineID] = ($useShort and !empty($line->short)) ? $line->short : $line->name;
+
+        return $linePairs;
     }
 
     /**

@@ -300,10 +300,12 @@ class userModel extends model
                 $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
                 $data[$i]->skype    = $users->skype[$i];
                 $data[$i]->qq       = $users->qq[$i];
-                $data[$i]->yahoo    = $users->yahoo[$i];
+                $data[$i]->dingtalk = $users->dingtalk[$i];
                 $data[$i]->gtalk    = $users->gtalk[$i];
-                $data[$i]->wangwang = $users->wangwang[$i];
+                $data[$i]->weixin   = $users->weixin[$i];
                 $data[$i]->mobile   = $users->mobile[$i];
+                $data[$i]->slack    = $users->slack[$i];
+                $data[$i]->whatsapp = $users->whatsapp[$i];
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
@@ -387,10 +389,16 @@ class userModel extends model
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
         }
+        $requiredFields = array();
+        foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
+        {
+            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $requiredFields[$field] = $field;
+        }
+        $requiredFields = join(',', $requiredFields);
 
         $this->dao->update(TABLE_USER)->data($user)
             ->autoCheck()
-            ->batchCheck($this->config->user->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
             ->checkIF($this->post->email != '', 'email', 'email')
@@ -474,10 +482,12 @@ class userModel extends model
             $users[$id]['join']     = $data->join[$id];
             $users[$id]['skype']    = $data->skype[$id];
             $users[$id]['qq']       = $data->qq[$id];
-            $users[$id]['yahoo']    = $data->yahoo[$id];
+            $users[$id]['dingtalk'] = $data->dingtalk[$id];
             $users[$id]['gtalk']    = $data->gtalk[$id];
-            $users[$id]['wangwang'] = $data->wangwang[$id];
+            $users[$id]['weixin']   = $data->weixin[$id];
             $users[$id]['mobile']   = $data->mobile[$id];
+            $users[$id]['slack']    = $data->slack[$id];
+            $users[$id]['whatsapp'] = $data->whatsapp[$id];
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];
             $users[$id]['zipcode']  = $data->zipcode[$id];

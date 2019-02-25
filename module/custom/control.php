@@ -107,6 +107,11 @@ class custom extends control
                 $data = fixer::input('post')->join('closed', ',')->get();
                 $this->loadModel('setting')->setItem('system.block.closed', zget($data, 'closed', ''));
             }
+            elseif($module == 'user' and $field == 'contactField')
+            {
+                $data = fixer::input('post')->join('contactField', ',')->get();
+                $this->loadModel('setting')->setItem('system.user.contactField', $data->contactField);
+            }
             elseif($module == 'user' and $field == 'deleted')
             {
                 $data = fixer::input('post')->get();
