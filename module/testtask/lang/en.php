@@ -110,7 +110,7 @@ $lang->testtask->checkLinked       = "Please check if the product that the test 
 $lang->testtask->assignedToMe  = 'AssignToMe';
 $lang->testtask->allCases      = 'All Cases';
 
-$lang->testtask->lblCases      = 'Cases';
+$lang->testtask->lblCases      = 'Case';
 $lang->testtask->lblUnlinkCase = 'Unlink Case';
 $lang->testtask->lblRunCase    = 'Run Case';
 $lang->testtask->lblResults    = 'Result';

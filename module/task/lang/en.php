@@ -81,11 +81,11 @@ $lang->task->assignedDate      = 'Assigned';
 $lang->task->openedBy          = 'Created by';
 $lang->task->openedDate        = 'Created';
 $lang->task->openedDateAB      = 'Add';
-$lang->task->finishedBy        = 'Finished';
+$lang->task->finishedBy        = 'Finished by';
 $lang->task->finishedByAB      = 'Finished';
 $lang->task->finishedDate      = 'Finished';
 $lang->task->finishedDateAB    = 'Finished';
-$lang->task->finishedList      = 'Finished list';
+$lang->task->finishedList      = 'FinishedBy list';
 $lang->task->canceledBy        = 'Cancelled by';
 $lang->task->canceledDate      = 'Cancelled';
 $lang->task->closedBy          = 'Closed by';
@@ -119,7 +119,7 @@ $lang->task->noStory           = 'No Story';
 $lang->task->noAssigned        = 'Unassigned';
 $lang->task->noFinished        = 'Unfinished';
 $lang->task->noClosed          = 'Unclosed';
-$lang->task->yesterdayFinished = 'Finished Yesterday';
+$lang->task->yesterdayFinished = 'Task Finished Yesterday';
 $lang->task->allTasks          = 'Task';
 
 $lang->task->statusList['']        = '';
@@ -191,7 +191,7 @@ $lang->task->error->assignedTo       = 'Multiple task in the current status cann
 /* Report. */
 $lang->task->report = new stdclass();
 $lang->task->report->common = 'Report';
-$lang->task->report->select = 'Group Tasks by';
+$lang->task->report->select = 'Group by';
 $lang->task->report->create = 'Create';
 $lang->task->report->value  = 'Task Count';
 

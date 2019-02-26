@@ -43,8 +43,7 @@
             <th class='w-120px<?php echo zget($visibleFields, 'join', ' hidden')?>'>         <?php echo $lang->user->join;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'skype', ' hidden')?>'>        <?php echo $lang->user->skype;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'qq', ' hidden')?>'>           <?php echo $lang->user->qq;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'dingtalk', ' hidden')?>'>     <?php echo $lang->user->dingtalk;?></th>
-            <th class='w-120px<?php echo zget($visibleFields, 'gtalk', ' hidden')?>'>        <?php echo $lang->user->gtalk;?></th>
+            <th class='w-120px<?php echo zget($visibleFields, 'dingding', ' hidden')?>'>     <?php echo $lang->user->dingding;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'weixin', ' hidden')?>'>       <?php echo $lang->user->weixin;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'mobile', ' hidden')?>'>       <?php echo $lang->user->mobile;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'slack', ' hidden')?>'>        <?php echo $lang->user->slack;?></th>
@@ -75,8 +74,7 @@
           <td class='<?php echo zget($visibleFields, 'join', 'hidden')?>'>    <?php echo html::input("join[$user->id]",     $user->join, "class='form-control form-date'");?></td>
           <td class='<?php echo zget($visibleFields, 'skype', 'hidden')?>'>   <?php echo html::input("skype[$user->id]",    $user->skype, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'qq', 'hidden')?>'>      <?php echo html::input("qq[$user->id]",       $user->qq, "class='form-control'");?></td>
-          <td class='<?php echo zget($visibleFields, 'dingtalk', 'hidden')?>'><?php echo html::input("dingtalk[$user->id]", $user->dingtalk, "class='form-control'");?></td>
-          <td class='<?php echo zget($visibleFields, 'gtalk', 'hidden')?>'>   <?php echo html::input("gtalk[$user->id]",    $user->gtalk, "class='form-control'");?></td>
+          <td class='<?php echo zget($visibleFields, 'dingding', 'hidden')?>'><?php echo html::input("dingding[$user->id]", $user->dingding, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'weixin', 'hidden')?>'>  <?php echo html::input("weixin[$user->id]",   $user->weixin, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'mobile', 'hidden')?>'>  <?php echo html::input("mobile[$user->id]",   $user->mobile, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'slack', 'hidden')?>'>   <?php echo html::input("slack[$user->id]",    $user->slack, "class='form-control'");?></td>

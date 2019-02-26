@@ -30,7 +30,6 @@ $lang->user->verify           = '安全驗證';
 $lang->user->contactInfo      = '聯繫信息';
 $lang->user->skype            = 'Skype';
 $lang->user->qq               = 'QQ';
-$lang->user->gtalk            = 'GTalk';
 $lang->user->mobile           = '手機';
 $lang->user->phone            = '電話';
 $lang->user->address          = '通訊地址';
