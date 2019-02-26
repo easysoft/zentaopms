@@ -42,7 +42,7 @@
             </td>
             <?php if($type == 'product' or $type == 'project'):?>
             <td class="c-user"><?php if($lib->createdBy) echo zget($users, $lib->createdBy);?></td>
-            <td class="c-datetime"><?php if($lib->createdDate != '00-00-00 00:00:00') echo formatTime($lib->createdDate, 'm-d h:i');?></td>
+            <td class="c-datetime"><?php if($lib->createdDate != '00-00-00 00:00:00') echo formatTime($lib->createdDate, 'Y-m-d');?></td>
             <?php else:?>
             <td class="c-actions">
               <?php $star = strpos($lib->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
