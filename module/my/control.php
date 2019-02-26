@@ -369,6 +369,9 @@ class my extends control
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
 
+        $this->app->loadConfig('user');
+        $this->app->loadLang('user');
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->editProfile;
         $this->view->position[] = $this->lang->my->editProfile;
         $this->view->user       = $this->user->getById($this->app->user->account);
@@ -512,6 +515,7 @@ class my extends control
     {
         if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
 
+        $this->app->loadConfig('user');
         $this->app->loadLang('user');
         $user = $this->user->getById($this->app->user->account);
 

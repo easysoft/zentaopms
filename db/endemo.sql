@@ -328,7 +328,7 @@ INSERT INTO `zt_testsuite` (`id`, `product`, `name`, `desc`, `type`, `addedBy`, 
 INSERT INTO `zt_testtask` (`id`, `name`, `product`, `project`, `build`, `owner`, `pri`, `begin`, `end`, `mailto`, `desc`, `report`, `status`, `deleted`) VALUES
 (1,	'test for blog v0.1',	2,	2,	'2',	'thePO',	0,	'2018-01-05',	'2018-01-20',	'',	'',	'',	'wait',	'0');
 
-INSERT INTO `zt_user` (`dept`, `account`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `yahoo`, `gtalk`, `wangwang`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
+INSERT INTO `zt_user` (`dept`, `account`, `password`, `role`, `realname`, `nickname`, `commiter`, `avatar`, `birthday`, `gender`, `email`, `skype`, `qq`, `weixin`, `dingding`, `slack`, `mobile`, `phone`, `address`, `zipcode`, `join`, `visits`, `ip`, `last`, `fails`, `locked`, `ranzhi`, `score`, `scoreLevel`, `deleted`) VALUES
 (1,	'thePO',	'e10adc3949ba59abbe56e057f20f883e',	'po',	'Richard',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	3,	'127.0.0.1',	1513093950,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0'),
 (5,	'pm1',	'e10adc3949ba59abbe56e057f20f883e',	'pm',	'Daniel',	'',	'',	'',	'0000-00-00',	'm',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'',	'0000-00-00',	2,	'127.0.0.1',	1513093318,	0,	'0000-00-00 00:00:00',	'',	0,	0,	'0');
 
