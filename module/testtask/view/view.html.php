@@ -49,7 +49,7 @@
         <div class='divider'></div>
         <?php
         common::printIcon('testtask', 'start',    "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('testtask', 'close',    "taskID=$task->id", $task, 'button', 'close', '', 'iframe showinonlybody', true);
+        common::printIcon('testtask', 'close',    "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('testtask', 'block',    "taskID=$task->id", $task, 'button', 'pause', '', 'iframe showinonlybody', true);
         common::printIcon('testtask', 'activate', "taskID=$task->id", $task, 'button', 'magic', '', 'iframe showinonlybody', true);
         common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'sitemap');

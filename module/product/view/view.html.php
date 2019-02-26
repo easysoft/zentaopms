@@ -87,7 +87,7 @@
               echo "<div class='divider'></div>";
               if($product->status != 'closed')
               {
-                  common::printIcon('product', 'close', $params, $product, 'button', 'close', '', 'iframe', true);
+                  common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
                   echo "<div class='divider'></div>";
               }
 

@@ -78,7 +78,7 @@
             if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $lang->story->subdivide, '', $misc);
         }
 
-        common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', 'close', '', 'iframe showinonlybody', true);
+        common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
         if($config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
@@ -293,7 +293,7 @@
                   {
                       if(!isset($projects[$task->project])) continue;
                       $projectName = $projects[$task->project];
-                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "#$task->id $task->name", '', "class='iframe' data-width='80%'");
+                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "[T]$task->id $task->name", '', "class='iframe' data-width='80%'");
                       echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName, '', "class='text-muted'") . '</li>';
                   }
               }
@@ -329,7 +329,7 @@
                     <?php
                     foreach($bugs as $bug)
                     {
-                        echo "<li title='#$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "#$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='[B]$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "[B]$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
@@ -342,7 +342,7 @@
                     <?php
                     foreach($cases as $case)
                     {
-                        echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "#$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C]$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
@@ -357,7 +357,7 @@
                       $linkStories = explode(',', $story->linkStories) ;
                       foreach($linkStories as $linkStoryID)
                       {
-                          if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "#$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
+                          if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "[S]$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
                       }
                       ?>
                     </ul>

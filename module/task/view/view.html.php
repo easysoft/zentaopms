@@ -131,7 +131,7 @@
                   common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                   common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
                   common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', 'close', '', 'iframe', true);
+                  common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                   common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list');
                   ?>
                 </td>
@@ -159,7 +159,7 @@
         common::printIcon('task', 'pause',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'finish',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
         common::printIcon('task', 'activate',       "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
-        common::printIcon('task', 'close',          "taskID=$task->id", $task, 'button', 'close', '', 'iframe showinonlybody', true);
+        common::printIcon('task', 'close',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
 
         if(!isonlybody()) echo "<div class='divider'></div>";
