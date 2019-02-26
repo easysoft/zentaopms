@@ -34,7 +34,6 @@ $lang->user->wechat      = 'Wechat';
 $lang->user->dingding    = 'Dingding';
 $lang->user->slack       = 'Slack';
 $lang->user->whatsapp    = 'WhatsApp';
-$lang->user->gtalk       = 'GTalk';
 $lang->user->mobile      = 'Mobile';
 $lang->user->phone       = 'Phone';
 $lang->user->address     = 'Address';

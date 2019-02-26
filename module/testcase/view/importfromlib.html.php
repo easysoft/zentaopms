@@ -14,7 +14,7 @@
 <?php js::set('flow', $config->global->flow);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class='input-group w-150px'>
+    <div class='input-group w-300px'>
       <span class='input-group-addon'><?php echo $lang->testcase->selectLib;?></span>
       <?php echo html::select('fromlib', $libraries, $libID, "onchange='reload(this.value)' class='form-control chosen'");?>
     </div>
