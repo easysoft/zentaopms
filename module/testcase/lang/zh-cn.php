@@ -139,7 +139,6 @@ $lang->testcase->confirmDelete      = '您确认要删除该测试用例吗？';
 $lang->testcase->confirmBatchDelete = '您确认要批量删除这些测试用例吗？';
 $lang->testcase->ditto              = '同上';
 $lang->testcase->dittoNotice        = '该用例与上一用例不属于同一产品！';
-$lang->testcase->haveLinkCase       = '此用例存在相关用例，确认后，其相关用例会一并更新。';
 
 $lang->testcase->reviewList[0] = '否';
 $lang->testcase->reviewList[1] = '是';
