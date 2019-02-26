@@ -337,6 +337,10 @@ class custom extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
+        unset($this->lang->admin->menu->custom['subModule']);
+        $this->lang->admin->menu->system['subModule'] = 'custom';
+        $this->lang->custom->menu = $this->lang->admin->menu;
+
         $this->view->title = $this->lang->custom->timezone;
         $this->view->position[] = $this->lang->custom->timezone;
         $this->display();

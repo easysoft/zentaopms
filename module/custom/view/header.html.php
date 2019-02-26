@@ -6,7 +6,6 @@
   {
       common::printLink('custom', 'set', "module=$object", "<span class='text'>{$name}</span>", '', "class='btn btn-link' id='{$object}Tab'"); 
   }
-  common::printLink('custom', 'timezone', "", "<span class='text'>{$lang->custom->timezone}</span>", '', "class='btn btn-link' id='timezoneTab'"); 
   common::printLink('custom', 'flow', "", "<span class='text'>{$lang->custom->flow}</span>", '', "class='btn btn-link' id='flowTab'"); 
   common::printLink('custom', 'working', '', "<span class='text'>{$lang->custom->working}</span>", '', "class='btn btn-link' id='workingTab'"); 
   common::printLink('custom', 'required', '', "<span class='text'>{$lang->custom->required}</span>", '', "class='btn btn-link' id='requiredTab'");
