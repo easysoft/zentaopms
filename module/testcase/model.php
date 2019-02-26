@@ -605,24 +605,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Check have linked cases or not.
-     *
-     * @param  int $libID
-     * @param  int $caseID$
-     * @access public
-     * @return int
-     */
-    public function getLinkedCaseID($libID, $caseID)
-    {   
-        $linkedCaseID = $this->dao->select('id')->from(TABLE_CASE)
-            ->where('lib')->eq($libID)
-            ->andWhere('fromCaseID')->eq($caseID)
-            ->andWhere('deleted')->eq(0)
-            ->fetch('id');
-        return $linkedCaseID;
-    }
-
-    /**
      * Update a case.
      *
      * @param  int    $caseID
@@ -631,10 +613,7 @@ class testcaseModel extends model
      */
     public function update($caseID)
     {
-        $oldCase     = $this->getById($caseID);
-        $isLibCase   = ($oldCase->lib and empty($oldCase->product));
-        $linkedCases = '';
-        if($isLibCase) $linkedCases = $this->dao->select('id')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetchPairs();
+        $oldCase      = $this->getById($caseID);
         if(!empty($_POST['lastEditedDate']) and $oldCase->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -687,10 +666,6 @@ class testcaseModel extends model
             ->get();
         if(!$this->forceNotReview() and $stepChanged) $case->status = 'wait';
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
-        if($isLibCase and $linkedCases)
-        {
-            foreach($linkedCases as $linkedCaseID) $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$linkedCaseID)->exec();
-        }
         if(!$this->dao->isError())
         {
             if($stepChanged)
@@ -710,15 +685,6 @@ class testcaseModel extends model
                     $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                     if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                     if($step->type == 'step')  $parentStepID = 0;
-
-                    if($isLibCase and $linkedCases)
-                    {
-                        foreach($linkedCases as $linkedCaseID)
-                        {
-                            $step->case = $linkedCaseID; 
-                            $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                        } 
-                    }
                 }
             }
 
@@ -733,6 +699,31 @@ class testcaseModel extends model
                 unset($oldCase->steps);
             }
             return common::createChanges($oldCase, $case);
+        }
+    }
+
+    /**
+     * Update linked case.
+     *
+     * @param  int    $linkedCaseID
+     * @param  object $steps
+     * @access public
+     * @return bool
+     */
+    public function updateLinkedCases($linkedCaseID, $steps)
+    {
+        foreach($linkedCaseID as $caseID)
+        {
+            $version = $this->dao->findByID($caseID)->from(TABLE_CASE)->fetch('version');
+            $version = $version + 1;
+            foreach($steps as $step)
+            {
+                unset($step->id);
+                $step->case    = $caseID;
+                $step->version = $version;
+                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+            }
+            $this->dao->update(TABLE_CASE)->set('version')->eq($version)->where('id')->eq($caseID)->exec();
         }
     }
 

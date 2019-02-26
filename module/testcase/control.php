@@ -546,9 +546,19 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function edit($caseID, $comment = false)
+    public function edit($caseID, $comment = false, $confirm = 'no')
     {
         $this->loadModel('story');
+        $case = $this->testcase->getById($caseID);
+        $isLibCase = ($case->lib and empty($case->product));
+
+        if($confirm == 'yes')
+        {
+            $linkedCaseID = '';
+            if($isLibCase) $linkedCaseID = $this->dao->select('id')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetchPairs();
+            if(!empty($linkedCaseID)) $this->testcase->updateLinkedCases($linkedCaseID, $case->steps);
+            die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+        }
 
         if(!empty($_POST))
         {
@@ -569,10 +579,17 @@ class testcase extends control
                 $actionID = $this->action->create('case', $caseID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $stepChanged  = false;
+            foreach($changes as $change) 
+            {
+                if($change['field'] == 'version') $stepChanged = true;
+            }
+
+            if($isLibCase and $stepChanged) die(js::confirm($this->lang->testcase->haveLinkCase, inlink('edit', "caseID=$caseID&comment=&confirm=yes"), inlink('view', "caseID=$caseID"), 'parent', 'parent'));
             die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
         }
 
-        $case = $this->testcase->getById($caseID);
         if(empty($case->steps))
         {
             $step = new stdclass();
@@ -582,7 +599,6 @@ class testcase extends control
             $case->steps[] = $step;
         }
 
-        $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
             $libraries = $this->loadModel('testsuite')->getLibraries();
@@ -596,7 +612,6 @@ class testcase extends control
             $this->view->libID            = $case->lib;
             $this->view->libName          = $libraries[$case->lib];
             $this->view->libraries        = $libraries;
-            $this->view->linkedCaseID     = $this->testcase->getLinkedCaseID($case->lib, $caseID);
             $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'caselib', $startModuleID = 0);
         }
         else
