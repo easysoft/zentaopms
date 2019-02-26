@@ -162,18 +162,18 @@ if(empty($type)) $type = 'product';
       </div>
     </div>
     <div class='side-footer clearfix'>
-      <div class='pull-left'>
+      <span id='customShowLibsBox'>
       <?php echo html::a('###', "<i class='icon-cog'></i> {$lang->doc->customShowLibs}", '', "class='setting text-secondary small' data-target='#settingModal' data-toggle='modal'");?>
-      </div>
-      <div class='pull-right'>
-        <?php
-        if(common::hasPriv('doc', 'sort'))
-        {
-            echo html::a('###', "{$lang->doc->orderLib}", '', "id='orderLib' class='text-secondary small " . (($type != 'product' and $type !='project') ? '' : 'hidden') . "'");
-            echo html::a('javascript:cancelOrder()', "<i class='icon-back icon-sm'></i> {$lang->goback}", '', "id='cancelOrder' class='text-secondary small hidden'");
-        }
-        ?>
-      </div>
+      </span>
+      <span id='orderBox'>
+      <?php
+      if(common::hasPriv('doc', 'sort'))
+      {
+          echo html::a('###', "<i class='icon-sort'></i> {$lang->doc->orderLib}", '', "id='orderLib' class='text-secondary small " . (($type != 'product' and $type !='project') ? '' : 'hidden') . "'");
+          echo html::a('javascript:saveOrder()', "<i class='icon-checked icon-sm'></i> {$lang->save}", '', "id='saveOrder' class='text-primary small hidden'");
+      }
+      ?>
+      </span>
     </div>
   </div>
   <div class='modal fade' id='settingModal' aria-hidden="true">
@@ -198,7 +198,6 @@ if(empty($type)) $type = 'product';
       </div>
     </div>
   </div>
-<?php js::set('goback', $lang->goback);?>
 <script>
 $(function()
 {
@@ -222,21 +221,24 @@ $(function()
         var href     = $(this).attr('href');
         var canOrder = !(href.indexOf('product') > 0 || href.indexOf('project') > 0);
         $(this).closest('.side-col').find('.side-footer #orderLib').toggleClass('hidden', !canOrder);
-        $(this).closest('.side-col').find('.side-footer #cancelOrder').toggleClass('hidden', !canOrder);
+        $(this).closest('.side-col').find('.side-footer #saveOrder').toggleClass('hidden', !canOrder);
 
-        var $tabPane     = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
-        var $orderLib    = $(this).closest('.side-col').find('.side-footer #orderLib');
-        var $cancelOrder = $(this).closest('.side-col').find('.side-footer #cancelOrder');
-        if($tabPane.find('.libs-group.sort').length > 0 && canOrder)
+        var $orderLib  = $(this).closest('.side-col').find('.side-footer #orderLib');
+        var $saveOrder = $(this).closest('.side-col').find('.side-footer #saveOrder');
+        $(this).on('shown.zui.tab', function(e)
         {
-            $orderLib.addClass('hidden');
-            $cancelOrder.removeClass('hidden');
-        }
-        if($tabPane.find('.libs-group.sort').length == 0 && canOrder)
-        {
-            $orderLib.removeClass('hidden');
-            $cancelOrder.addClass('hidden');
-        }
+            var $tabPane   = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+            if($tabPane.find('.libs-group.sort').length > 0 && canOrder)
+            {
+                $orderLib.addClass('hidden');
+                $saveOrder.removeClass('hidden');
+            }
+            if($tabPane.find('.libs-group.sort').length == 0 && canOrder)
+            {
+                $orderLib.removeClass('hidden');
+                $saveOrder.addClass('hidden');
+            }
+        });
     });
 
     $('#orderLib').click(function()
@@ -245,50 +247,42 @@ $(function()
         var type     = $tabPane.attr('id');
         $.get(createLink('doc', 'sort', "type=" + type), function(data)
         {
-            $tabPane.find('ul.tree').addClass('hidden');
-            $tabPane.find('.libs-group.sort').remove();
-            $tabPane.closest('.side-col').find('.side-footer .pull-right #orderLib').addClass('hidden');
-            $tabPane.closest('.side-col').find('.side-footer .pull-right #cancelOrder').removeClass('hidden');
-            $tabPane.append(data);
+            $tabPane.html(data);
+            $tabPane.closest('.side-col').find('.side-footer #orderBox #orderLib').addClass('hidden');
+            $tabPane.closest('.side-col').find('.side-footer #orderBox #saveOrder').removeClass('hidden');
             $tabPane.find('.libs-group.sort').sortable(
             {
                 trigger:  '.lib',
                 selector: '.lib',
-                finish:   function()
-                {
-                    var orders = {};
-                    var orderNext = 1;
-
-                    $('.libs-group.sort .lib').not('.files').not('.addbtn').each(function()
-                    {
-                        orders[$(this).data('id')] = orderNext ++;
-                    });
-
-                    $.post(createLink('doc', 'sort'), orders, function(data)
-                    {
-                        if(data.result == 'success')
-                        {
-                            $.cookie('docSideType', type);
-                            return location.reload();
-                        }
-                        else
-                        {
-                            bootbox.alert(data.message);
-                        }
-                    }, 'json');
-                }
             });
         });
     });
 });
 
-function cancelOrder()
+function saveOrder()
 {
-    var $tabPane = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
-    $tabPane.find('.libs-group.sort').remove();
-    $tabPane.find('ul.tree').removeClass('hidden');
-    $tabPane.closest('.side-col').find('.side-footer .pull-right #orderLib').removeClass('hidden');
-    $tabPane.closest('.side-col').find('.side-footer .pull-right #cancelOrder').addClass('hidden');
+    var $tabPane  = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+    var type      = $tabPane.attr('id');
+    var orders    = {};
+    var orderNext = 1;
+
+    $tabPane.find('.libs-group.sort .lib').not('.files').not('.addbtn').each(function()
+    {
+        orders[$(this).data('id')] = orderNext ++;
+    });
+
+    $.post(createLink('doc', 'sort'), orders, function(data)
+    {
+        if(data.result == 'success')
+        {
+            $.cookie('docSideType', type);
+            return location.reload();
+        }
+        else
+        {
+            bootbox.alert(data.message);
+        }
+    }, 'json');
 }
 </script>
 </div>
