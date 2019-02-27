@@ -1339,6 +1339,7 @@ class testcaseModel extends model
         $caseLink   = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");
         $account    = $this->app->user->account;
         $fromCaseID = $case->fromCaseID;
+        if($fromCaseID) $libCaseVersion = $this->dao->findById($fromCaseID)->from(TABLE_CASE)->fetch('version');
         $id = $col->id;
         if($col->show)
         {
@@ -1387,7 +1388,18 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
-                $case->needconfirm ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                if($case->needconfirm) 
+                {
+                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromTesttask}>{$this->lang->story->changed}</span>");
+                }
+                elseif(isset($libCaseVersion) and $libCaseVersion > $case->version and !$case->needconfirm)
+                {
+                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromCaselib}>{$this->lang->testcase->changed}</span>");
+                }
+                else
+                {
+                    print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                }
                 break;
             case 'story':
                 static $stories = array();
@@ -1445,6 +1457,11 @@ class testcaseModel extends model
                 if($case->needconfirm or $browseType == 'needconfirm')
                 {
                     common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+                    break;
+                }
+                if(isset($libCaseVersion) and $libCaseVersion > $case->version and !$case->needconfirm)
+                {
+                    common::printIcon('testcase', 'confirmLibcasechange',  "caseID=$case->id&libCaseID=$fromCaseID&version=$libCaseVersion", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
                     break;
                 }
 
