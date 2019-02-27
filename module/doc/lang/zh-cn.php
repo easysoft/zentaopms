@@ -202,7 +202,6 @@ $lang->doclib->aclListB['open']    = '公开';
 $lang->doclib->aclListB['custom']  = '自定义';
 $lang->doclib->aclListB['private'] = '私有';
 
-
 $lang->doclib->create['product'] = '创建' . $lang->productCommon . '文档库';
 $lang->doclib->create['project'] = '创建' . $lang->projectCommon . '文档库';
 $lang->doclib->create['custom']  = '创建自定义文档库';
