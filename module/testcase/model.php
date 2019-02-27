@@ -703,31 +703,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Update linked case.
-     *
-     * @param  int    $linkedCaseID
-     * @param  object $steps
-     * @access public
-     * @return bool
-     */
-    public function updateLinkedCases($linkedCaseID, $steps)
-    {
-        foreach($linkedCaseID as $caseID)
-        {
-            $version = $this->dao->findByID($caseID)->from(TABLE_CASE)->fetch('version');
-            $version = $version + 1;
-            foreach($steps as $step)
-            {
-                unset($step->id);
-                $step->case    = $caseID;
-                $step->version = $version;
-                $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-            }
-            $this->dao->update(TABLE_CASE)->set('version')->eq($version)->where('id')->eq($caseID)->exec();
-        }
-    }
-
-    /**
      * Review case
      *
      * @param  int    $caseID

@@ -204,7 +204,7 @@ $(function()
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->delete ?>',
-                template: '<a><i class="icon-close"></i></a>'
+                template: '<a><i class="icon-trash"></i></a>'
             },
             subModules:
             {
