@@ -169,8 +169,8 @@ if(empty($type)) $type = 'product';
       <?php
       if(common::hasPriv('doc', 'sort'))
       {
-          echo html::a('###', "<i class='icon-sort'></i> {$lang->doc->orderLib}", '', "id='orderLib' class='text-secondary small " . (($type != 'product' and $type !='project') ? '' : 'hidden') . "'");
-          echo html::a('javascript:saveOrder()', "<i class='icon-checked icon-sm'></i> {$lang->save}", '', "id='saveOrder' class='text-primary small hidden'");
+          echo html::a('###', "<i class='icon-sort'></i> {$lang->doc->orderLib}", '', "id='orderLib' class='text-secondary small " . (($type != 'product' and $type !='project') ? '' : 'hidden') . "' style='padding-left:5px;'");
+          echo html::a('javascript:saveOrder()', "<i class='icon-checked'></i> {$lang->save}", '', "id='saveOrder' class='text-secondary small hidden' style='padding-left:10px;'");
       }
       ?>
       </span>
@@ -220,23 +220,33 @@ $(function()
     {
         var href     = $(this).attr('href');
         var canOrder = !(href.indexOf('product') > 0 || href.indexOf('project') > 0);
-        $(this).closest('.side-col').find('.side-footer #orderLib').toggleClass('hidden', !canOrder);
-        $(this).closest('.side-col').find('.side-footer #saveOrder').toggleClass('hidden', !canOrder);
+        if(!canOrder)
+        {
+            $(this).closest('.side-col').find('.side-footer #orderLib').addClass('hidden');
+            $(this).closest('.side-col').find('.side-footer #saveOrder').addClass('hidden');
+        }
 
         var $orderLib  = $(this).closest('.side-col').find('.side-footer #orderLib');
         var $saveOrder = $(this).closest('.side-col').find('.side-footer #saveOrder');
-        $(this).on('shown.zui.tab', function(e)
+
+        var execute = false;
+        $(this).on('shown.zui.tab', function()
         {
-            var $tabPane   = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
-            if($tabPane.find('.libs-group.sort').length > 0 && canOrder)
+            if(!execute)
             {
-                $orderLib.addClass('hidden');
-                $saveOrder.removeClass('hidden');
-            }
-            if($tabPane.find('.libs-group.sort').length == 0 && canOrder)
-            {
-                $orderLib.removeClass('hidden');
-                $saveOrder.addClass('hidden');
+                var $tabPane   = $('#mainRow .side-col .tabs .tab-content .tab-pane.active');
+                if($tabPane.find('.libs-group.sort').length > 0 && canOrder)
+                {
+                    $orderLib.addClass('hidden');
+                    $saveOrder.removeClass('hidden');
+                    execute = true;
+                }
+                if($tabPane.find('.libs-group.sort').length == 0 && canOrder)
+                {
+                    $orderLib.removeClass('hidden');
+                    $saveOrder.addClass('hidden');
+                    execute = true;
+                }
             }
         });
     });
