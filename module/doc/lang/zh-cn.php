@@ -169,17 +169,15 @@ $lang->doc->noEditedDoc        = '您还没有编辑任何文档。';
 $lang->doc->noOpenedDoc        = '您还没有创建任何文档。';
 $lang->doc->noCollectedDoc     = '您还没有收藏任何文档。';
 
-$lang->doc->noticeAcl['lib']['product']['open']    = '除了没有关联产品权限的用户，都可以访问。';
-$lang->doc->noticeAcl['lib']['product']['custom']  = '白名单和有关联产品权限的用户可以访问。';
-$lang->doc->noticeAcl['lib']['product']['private'] = '创建人和有关联产品权限的用户可以访问。';
-$lang->doc->noticeAcl['lib']['project']['open']    = '除了没有关联项目权限的用户，都可以访问。';
-$lang->doc->noticeAcl['lib']['project']['custom']  = '白名单和有关联项目权限的用户可以访问。';
-$lang->doc->noticeAcl['lib']['project']['private'] = '创建人和有关联项目权限的用户可以访问。';
+$lang->doc->noticeAcl['lib']['product']['default'] = '有所选产品访问权限的用户可以访问。';
+$lang->doc->noticeAcl['lib']['product']['custom']  = '有所选产品访问权限或白名单里的用户可以访问。';
+$lang->doc->noticeAcl['lib']['project']['default'] = '有所选项目访问权限的用户可以访问。';
+$lang->doc->noticeAcl['lib']['project']['custom']  = '有所选项目访问权限或白名单里的用户可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['open']     = '所有人都可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['custom']   = '白名单的用户可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['private']  = '只有创建人可以访问。';
 
-$lang->doc->noticeAcl['doc']['open']    = '除了没有所属文档库权限的用户，都可以访问。';
+$lang->doc->noticeAcl['doc']['open']    = '有文档所属文档库访问权限的，都可以访问。';
 $lang->doc->noticeAcl['doc']['custom']  = '白名单的用户可以访问。';
 $lang->doc->noticeAcl['doc']['private'] = '只有自己可以访问。';
 
@@ -196,6 +194,14 @@ $lang->doclib->all     = '所有文档库';
 $lang->doclib->select  = '选择文档库';
 $lang->doclib->project = $lang->projectCommon . '库';
 $lang->doclib->product = $lang->productCommon . '库';
+
+$lang->doclib->aclListA['default'] = '默认';
+$lang->doclib->aclListA['custom']  = '自定义';
+
+$lang->doclib->aclListB['open']    = '公开';
+$lang->doclib->aclListB['custom']  = '自定义';
+$lang->doclib->aclListB['private'] = '私有';
+
 
 $lang->doclib->create['product'] = '创建' . $lang->productCommon . '文档库';
 $lang->doclib->create['project'] = '创建' . $lang->projectCommon . '文档库';

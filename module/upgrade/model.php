@@ -363,6 +363,10 @@ class upgradeModel extends model
                 $this->dao->update(TABLE_CONFIG)->set('value')->eq('off')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('0')->exec();
                 $this->dao->update(TABLE_CONFIG)->set('value')->eq('on')->where('`key`')->eq('isHttps')->andWhere('`section`')->eq('xuanxuan')->andWhere('`value`')->eq('1')->exec();
             }
+        case '11_2':
+            $this->saveLogs('Execute 11_2');
+            $this->execSQL($this->getUpgradeFile('11.2'));
+            $this->processDocLibAcl();
         }
 
         $this->deletePatch();
@@ -486,11 +490,13 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.2.0.sql');
             case '11_0':
             case '11_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('11.1'));
                 if(!isset($this->config->isINT) or !($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '11_2':       $confirmContent .= file_get_contents($this->getUpgradeFile('11.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2964,6 +2970,18 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Process doc lib acl.
+     *
+     * @access public
+     * @return void
+     */
+    public function processDocLibAcl()
+    {
+        $this->dao->update(TABLE_DOCLIB)->set('acl')->eq('default')->where('type')->in('product,project')->andWhere('acl')->in('open,private')->exec();
+        return !dao::isError();
     }
 
     /**
