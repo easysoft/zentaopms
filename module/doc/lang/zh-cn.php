@@ -122,6 +122,9 @@ $lang->doc->aclList['private'] = '私有';
 $lang->doc->typeList['html']     = '富文本';
 $lang->doc->typeList['markdown'] = 'Markdown';
 $lang->doc->typeList['url']      = '链接';
+$lang->doc->typeList['word']     = 'Word';
+$lang->doc->typeList['ppt']      = 'PPT';
+$lang->doc->typeList['excel']    = 'Excel';
 
 $lang->doc->types['text'] = '文档';
 $lang->doc->types['url']  = '链接';
@@ -160,6 +163,7 @@ $lang->doc->errorMainSysLib    = "该系统文档库不能删除！";
 $lang->doc->accessDenied       = "您没有权限访问！";
 $lang->doc->versionNotFount    = '该版本文档不存在';
 $lang->doc->noDoc              = '暂时没有文档。';
+$lang->doc->cannotCreateOffice = '对不起，企业版才能创建%s文档。';
 $lang->doc->noSearchedDoc      = '没有搜索到任何文档。';
 $lang->doc->noEditedDoc        = '您还没有编辑任何文档。';
 $lang->doc->noOpenedDoc        = '您还没有创建任何文档。';

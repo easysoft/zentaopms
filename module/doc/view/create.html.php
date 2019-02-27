@@ -10,6 +10,19 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if(strpos($config->doc->officeTypes, $docType) !== false and !$config->doc->canCreateOffice):?>
+<?php include '../../common/view/header.lite.html.php';?>
+<div id="mainContent" class="main-content">
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2><?php echo $lang->doc->create;?></h2>
+    </div>
+    <div class='alert alert-warning strong'><?php printf($lang->doc->cannotCreateOffice, zget($lang->doc->typeList, $docType));?></div>
+  </div>
+</div>
+</body>
+</html>
+<?php else:?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/ueditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
@@ -98,3 +111,4 @@
 <?php js::set('docType', $docType);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>
+<?php endif;?>
