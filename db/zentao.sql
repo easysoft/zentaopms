@@ -461,7 +461,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL,
-  `parent` mediumint(9) NOT NULL DEFAULT '0'
+  `parent` mediumint(9) NOT NULL DEFAULT '0',
   `title` varchar(90) NOT NULL,
   `desc` text NOT NULL,
   `begin` date NOT NULL,
