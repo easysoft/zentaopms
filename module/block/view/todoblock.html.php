@@ -52,7 +52,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
           <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
           <div class="col-sm-9 ">
             <div class="input-control has-icon-right">
-              <input type="text" class="form-control date" id="todoDate" name="date" placeholder="">
+              <input type="text" class="form-control date" id="todoDate" name="date" placeholder="" autocomplete='off'>
               <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
             </div>
           </div>

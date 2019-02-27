@@ -847,6 +847,8 @@ class docModel extends model
     {
         if($this->app->user->admin) return true;
 
+        if($object->acl == 'open') return true;
+
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
@@ -874,8 +876,6 @@ class docModel extends model
             if(!empty($object->project)) return $this->loadModel('project')->checkPriv($object->project);
             if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
         }
-
-        if($object->acl == 'open') return true;
 
         return false;
     }
