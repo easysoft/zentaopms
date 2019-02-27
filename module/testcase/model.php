@@ -1459,11 +1459,6 @@ class testcaseModel extends model
                     common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
                     break;
                 }
-                if(isset($libCaseVersion) and $libCaseVersion > $case->version and !$case->needconfirm)
-                {
-                    common::printIcon('testcase', 'confirmLibcasechange',  "caseID=$case->id&libCaseID=$fromCaseID&version=$libCaseVersion", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
-                    break;
-                }
 
                 common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true);
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
