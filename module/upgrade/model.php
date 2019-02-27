@@ -367,11 +367,6 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_2');
             $this->execSQL($this->getUpgradeFile('11.2'));
             $this->processDocLibAcl();
-            if((!isset($this->config->isINT) or !($this->config->isINT)) and !$executeXuanxuan)
-            {
-                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
-                $this->execSQL($xuanxuanSql);
-            }
         }
 
         $this->deletePatch();
@@ -501,9 +496,7 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
-            case '11_2':
-                $confirmContent .= file_get_contents($this->getUpgradeFile('11.2'));
-                if(!isset($this->config->isINT) or !($this->config->isINT)) $confirmContent .= file_get_contents($this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql');
+            case '11_2': $confirmContent .= file_get_contents($this->getUpgradeFile('11.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
