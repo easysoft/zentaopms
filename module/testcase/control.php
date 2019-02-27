@@ -980,6 +980,29 @@ class testcase extends control
     }
 
     /**
+     * Confirm libcase changed.
+     *
+     * @param  int    $caseID
+     * @param  int    $libcaseID
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function confirmLibcaseChange($caseID, $libcaseID, $version)
+    {
+        $case  = $this->testcase->getById($caseID);
+        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->where('id')->eq($caseID)->exec();
+        $steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($libcaseID)->andWhere('version')->eq($version)->fetchAll();
+        foreach($steps as $step)
+        {
+            unset($step->id);
+            $step->case = $caseID;
+            $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
+        }
+        die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
+    }
+
+    /**
      * Confirm story changes.
      *
      * @param  int    $caseID

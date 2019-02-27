@@ -43,7 +43,7 @@
             if(common::hasPriv('entry', 'delete'))
             {
                 $deleteURL = $this->createLink('entry', 'delete', "entryID=$id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"entryList\",confirmDelete)", '<i class="icon-close"></i>', '', "title='{$lang->entry->delete}' class='btn'");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"entryList\",confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->entry->delete}' class='btn'");
             }
             ?>
           </td>
