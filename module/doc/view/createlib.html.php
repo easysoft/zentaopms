@@ -23,33 +23,31 @@
           <table class='table table-form'>
             <tr>
               <th class='w-80px'><?php echo $lang->doc->libType?></th>
-              <td colspan='2'><?php echo html::radio('type', $libTypeList, $type ? $type : 'product')?></td>
+              <td><?php echo html::radio('type', $libTypeList, $type ? $type : 'product')?></td>
             </tr>
             <tr class='product'>
               <th><?php echo $lang->doc->product?></th>
               <td><?php echo html::select('product', $products, $type == 'product' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
-              <td></td>
             </tr>
             <tr class='project hidden'>
               <th><?php echo $lang->doc->project?></th>
               <td><?php echo html::select('project', $projects, $type == 'project' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
-              <td></td>
             </tr>
             <tr>
               <th><?php echo $lang->doclib->name?></th>
               <td><?php echo html::input('name', '', "class='form-control'")?></td>
-              <td></td>
             </tr>
             <tr>
               <th><?php echo $lang->doclib->control;?></th>
-              <td colspan='2'>
-                <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?>
-              </td>
+              <td>
+                <span><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
+                <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['default'];?></span>
+</td>
             </tr>
             </tr>
             <tr id='whiteListBox' class='hidden'>
               <th><?php echo $lang->doc->whiteList;?></th>
-              <td colspan='2'>
+              <td>
                 <div class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
                   <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
@@ -61,17 +59,29 @@
               </td>
             </tr>
             <tr>
-              <th></th>
-              <td colspan='2'><span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['open'];?></span></td>
-            </tr>
-            <tr>
-              <td class='text-center form-actions' colspan='3'><?php echo html::submitButton();?></td>
+              <td class='text-center form-actions' colspan='2'><?php echo html::submitButton();?></td>
             </tr>
           </table>
         </form>
       </div>
     </div>
   </div>
+</div>
+<div class='hidden'>
+  <table>
+    <tr id='aclBoxA'>
+      <th><?php echo $lang->doclib->control;?></th>
+      <td>
+        <?php echo html::radio('acl', $lang->doclib->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'")?>
+      </td>
+    </tr>
+    <tr id='aclBoxB'>
+      <th><?php echo $lang->doclib->control;?></th>
+      <td>
+        <?php echo html::radio('acl', $lang->doclib->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?>
+      </td>
+    </tr>
+  </table>
 </div>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['lib']);?>
 <?php include '../../common/view/footer.lite.html.php';?>

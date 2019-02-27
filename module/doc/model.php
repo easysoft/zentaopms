@@ -847,12 +847,6 @@ class docModel extends model
     {
         if($this->app->user->admin) return true;
 
-        $acls = $this->app->user->rights['acls'];
-        if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
-        if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
-
-        if($object->acl == 'open') return true;
-
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
@@ -872,8 +866,17 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if(!empty($object->project)) return $this->loadModel('project')->checkPriv($object->project);
-        if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
+        if(!empty($object->product) or !empty($object->project))
+        {
+            $acls = $this->app->user->rights['acls'];
+            if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
+            if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
+            if(!empty($object->project)) return $this->loadModel('project')->checkPriv($object->project);
+            if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
+        }
+
+        if($object->acl == 'open') return true;
+
         return false;
     }
 
