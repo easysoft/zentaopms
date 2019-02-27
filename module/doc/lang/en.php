@@ -78,7 +78,7 @@ $lang->doc->addType          = 'Add';
 $lang->doc->childType        = 'Child';
 $lang->doc->collect          = 'Add Favorites';
 $lang->doc->cancelCollection = 'Remove Favorites';
-$lang->doc->deleteFile       = 'Detele File'
+$lang->doc->deleteFile       = 'Detele File';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';

@@ -99,10 +99,11 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-80px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr valign='middle'>
-                  <th class='w-70px'><?php echo $lang->bug->product;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->product;?></th>
                   <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
                 </tr>
                 <?php if($this->session->currentProductType != 'normal'):?>
@@ -267,10 +268,11 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendLife'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='w-90px'><?php echo $lang->bug->openedBy;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->openedBy;?></th>
                   <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
                 </tr>
                 <tr>
