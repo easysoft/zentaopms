@@ -76,6 +76,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['11.3.stable'] = '2019-02-27';
 $lang->misc->releaseDate['11.2.stable'] = '2019-01-30';
 $lang->misc->releaseDate['11.1.stable'] = '2019-01-04';
 $lang->misc->releaseDate['11.0.stable'] = '2018-12-21';
@@ -98,6 +99,8 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.3.stable'][] = array('title'=>'完善细节，修复Bug', 'desc' => '<p>计划添加子计划功能</p><p>优化chosen交互</p><p>添加时区设置</p><p>优化文档库和文档</p>');
 
 $lang->misc->feature->all['11.2.stable'][] = array('title'=>'完善细节，修复Bug', 'desc' => '<p>增加升级日志和升级后数据库检查的功能</p><p>修复禅道集成客户端和其他若干bug，完善细节</p>');
 

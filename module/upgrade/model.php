@@ -2981,6 +2981,7 @@ class upgradeModel extends model
     public function processDocLibAcl()
     {
         $this->dao->update(TABLE_DOCLIB)->set('acl')->eq('default')->where('type')->in('product,project')->andWhere('acl')->in('open,private')->exec();
+        $this->saveLogs($this->dao->get());
         return !dao::isError();
     }
 

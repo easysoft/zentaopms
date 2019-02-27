@@ -85,6 +85,7 @@ $lang->testcase->batchReview             = "Batch Review";
 $lang->testcase->edit                    = "Edit";
 $lang->testcase->batchEdit               = "Batch Edit ";
 $lang->testcase->batchChangeModule       = "Batch Change Module";
+$lang->testcase->confirmLibcaseChange    = "Confirm Library Case Change";
 $lang->testcase->batchChangeBranch       = "Batch Change Branch";
 $lang->testcase->groupByStories          = 'Group by Story';
 $lang->testcase->delete                  = "Delete";

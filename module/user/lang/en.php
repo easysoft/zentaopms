@@ -30,12 +30,12 @@ $lang->user->verify      = 'Verification';
 $lang->user->contactInfo = 'Contact';
 $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
-$lang->user->wechat      = 'Wechat';
-$lang->user->dingding    = 'Dingding';
-$lang->user->slack       = 'Slack';
-$lang->user->whatsapp    = 'WhatsApp';
 $lang->user->mobile      = 'Mobile';
 $lang->user->phone       = 'Phone';
+$lang->user->weixin      = 'Wechat';
+$lang->user->dingding    = 'Ding Ding';
+$lang->user->slack       = 'Slack';
+$lang->user->whatsapp    = 'WhatsApp';
 $lang->user->address     = 'Address';
 $lang->user->zipcode     = 'Zip Code';
 $lang->user->join        = 'Join Date';
@@ -151,6 +151,15 @@ $lang->user->error->reserved      = "ID %s，account is reserved.";
 
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
+
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['qq']       = $lang->user->qq;
+$lang->user->contactFieldList['dingding'] = $lang->user->dingding;
+$lang->user->contactFieldList['weixin']   = $lang->user->weixin;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['slack']    = $lang->user->slack;
+$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contact';
