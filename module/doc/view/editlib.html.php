@@ -37,10 +37,8 @@
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libName?></th>
         <td>
-          <?php
-          echo html::input('name', $lib->name, "class='form-control'");
-          echo html::hidden('type', $lib->type);
-          ?>
+          <?php echo html::input('name', $lib->name, "class='form-control'");?>
+          <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
         </td>
       </tr>
       <tr>
