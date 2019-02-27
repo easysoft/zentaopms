@@ -999,7 +999,7 @@ class testcase extends control
             $step->case = $caseID;
             $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
         }
-        die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
+        die(js::reload('parent'));
     }
 
     /**
