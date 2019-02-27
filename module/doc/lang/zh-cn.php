@@ -149,8 +149,8 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = '显示附件库';
 $lang->doc->customObjectLibs['customFiles'] = '显示自定义文档库';
 
-$lang->doc->orderLib = '文档库排序';
-$lang->doc->customShowLibs = '显示设置';
+$lang->doc->orderLib                       = '文档库排序';
+$lang->doc->customShowLibs                 = '显示设置';
 $lang->doc->customShowLibsList['zero']     = '显示空文档的库';
 $lang->doc->customShowLibsList['unclosed'] = '只显示未关闭的项目';
 
@@ -175,11 +175,11 @@ $lang->doc->noticeAcl['lib']['project']['default'] = '有所选项目访问权�
 $lang->doc->noticeAcl['lib']['project']['custom']  = '有所选项目访问权限或白名单里的用户可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['open']     = '所有人都可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['custom']   = '白名单的用户可以访问。';
-$lang->doc->noticeAcl['lib']['custom']['private']  = '只有创建人可以访问。';
+$lang->doc->noticeAcl['lib']['custom']['private']  = '只有创建者自己可以访问。';
 
 $lang->doc->noticeAcl['doc']['open']    = '有文档所属文档库访问权限的，都可以访问。';
 $lang->doc->noticeAcl['doc']['custom']  = '白名单的用户可以访问。';
-$lang->doc->noticeAcl['doc']['private'] = '只有自己可以访问。';
+$lang->doc->noticeAcl['doc']['private'] = '只有创建者自己可以访问。';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = '相应的链接地址';
