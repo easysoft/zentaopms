@@ -88,6 +88,7 @@ $lang->install->chmodWin     = '需要修改目錄 "%s" 的權限。';
 $lang->install->mkdirLinux   = '<p>需要創建目錄%s。<br /> 命令為：<br /> mkdir -p %s</p>';
 $lang->install->chmodLinux   = '需要修改目錄 "%s" 的權限。<br />命令為：<br />chmod o=rwx -R %s';
 
+$lang->install->timezone       = '時區設置';
 $lang->install->defaultLang    = '預設語言';
 $lang->install->dbHost         = '資料庫伺服器';
 $lang->install->dbHostNote     = '如果127.0.0.1無法訪問，嘗試使用localhost';
