@@ -2322,7 +2322,7 @@ class projectModel extends model
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch)
+                if($product->branch and isset($branchGroups[$product->id][$product->branch]))
                 {
                     $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
                 }
