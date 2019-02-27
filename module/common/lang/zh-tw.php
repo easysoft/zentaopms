@@ -80,7 +80,7 @@ $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='t
 $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = '設為模組首頁';
-$lang->tutorial        = '新手教程';
+$lang->noviceTutorial  = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
 $lang->manualUrl       = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
@@ -400,7 +400,8 @@ $lang->admin->subMenu->data->backup = array('link' => '備份|backup|index', 'su
 $lang->admin->subMenu->data->trash  = '資源回收筒|action|trash';
 
 $lang->admin->subMenu->system = new stdclass();
-$lang->admin->subMenu->system->cron = array('link' => '定時|cron|index', 'subModule' => 'cron');
+$lang->admin->subMenu->system->cron     = array('link' => '定時|cron|index', 'subModule' => 'cron');
+$lang->admin->subMenu->system->timezone = array('link' => '時區|custom|timezone', 'subModule' => 'custom');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

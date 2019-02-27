@@ -228,10 +228,11 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLifeTime'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->story->openedBy;?></th>
                   <td><?php echo $users[$story->openedBy] . $lang->at . $story->openedDate;?></td>
                 </tr>
                 <tr>
@@ -309,12 +310,13 @@
           </div>
           <?php endif;?>
           <div class="tab-pane <?php if($config->global->flow == 'onlyStory') echo 'active';?>" id='legendRelated'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-120px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <?php if($config->global->flow != 'onlyStory'):?>
                 <?php if(!empty($fromBug)):?>
                 <tr class='text-top'>
-                  <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->story->legendFromBug;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id", '', true), "#$fromBug->id $fromBug->title", '', "class='iframe' data-width='80%'") . '</li>';?>
@@ -323,7 +325,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='text-top' class='w-70px'><?php echo $lang->story->legendBugs;?></th>
+                  <th class='text-top <?php echo $widthClass;?>'><?php echo $lang->story->legendBugs;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -350,7 +352,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='text-top' class='w-80px'><?php echo $lang->story->legendLinkStories;?></th>
+                  <th class='text-top <?php echo $widthClass;?>'><?php echo $lang->story->legendLinkStories;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                       <?php

@@ -282,9 +282,10 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLife'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-100px' : 'w-70px';?>
             <table class='table table-data'>
               <tr>
-                <th><?php echo $lang->task->openedBy;?></th>
+                <th class='<?php echo $widthClass;?>'><?php echo $lang->task->openedBy;?></th>
                 <td><?php echo $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData;?></td>
               </tr>
               <tr>
@@ -337,8 +338,9 @@
         <summary class="detail-title"><?php echo $lang->task->legendEffort;?></summary>
         <div class="detail-content">
           <table class='table table-data'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
             <tr>
-              <th><?php echo $lang->task->estStarted;?></th>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estStarted;?></th>
               <td><?php echo $task->estStarted;?></td>
             </tr>
             <tr>

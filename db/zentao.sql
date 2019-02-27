@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `objectID` mediumint(8) unsigned NOT NULL default '0',
   `product` varchar(255) NOT NULL,
   `project` mediumint(9) NOT NULL,
-  `actor` varchar(30) NOT NULL default '',
+  `actor` varchar(100) NOT NULL default '',
   `action` varchar(30) NOT NULL default '',
   `date` datetime NOT NULL,
   `comment` text NOT NULL,
@@ -461,6 +461,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `product` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL,
+  `parent` mediumint(9) NOT NULL DEFAULT '0'
   `title` varchar(90) NOT NULL,
   `desc` text NOT NULL,
   `begin` date NOT NULL,

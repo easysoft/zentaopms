@@ -16,6 +16,7 @@ $lang->custom->lang       = '所屬語言';
 $lang->custom->setPublic  = '設為公共';
 $lang->custom->required   = '必填項';
 $lang->custom->score      = '積分';
+$lang->custom->timezone   = '時區';
 $lang->custom->scoreReset = '重置積分';
 
 $lang->custom->object['story']    = '需求';
@@ -71,9 +72,10 @@ $lang->custom->todo->fields['typeList']   = '類型';
 $lang->custom->todo->fields['statusList'] = '狀態';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']   = '職位';
-$lang->custom->user->fields['statusList'] = '狀態';
-$lang->custom->user->fields['deleted']    = '列出已刪除用戶';
+$lang->custom->user->fields['roleList']     = '職位';
+$lang->custom->user->fields['statusList']   = '狀態';
+$lang->custom->user->fields['contactField'] = '可用聯繫方式';
+$lang->custom->user->fields['deleted']      = '列出已刪除用戶';
 
 $lang->custom->block->fields['closed'] = '關閉的區塊';
 
@@ -83,12 +85,14 @@ $lang->custom->allLang     = '適用所有語言';
 $lang->custom->confirmRestore = '是否要恢復預設配置？';
 
 $lang->custom->notice = new stdclass();
+$lang->custom->notice->userFieldNotice             = '控制以上欄位在用戶相關頁面是否顯示，留空則全部顯示';
 $lang->custom->notice->canNotAdd                   = '該項參與運算，不提供自定義添加功能';
 $lang->custom->notice->forceReview                 = "指定人提交的%s必須評審。";
 $lang->custom->notice->forceNotReview              = "指定人提交的%s不需要評審。";
 $lang->custom->notice->longlife                    = 'Bug列表頁面的久未處理標籤中，列出設置天數之前未處理的Bug。';
 $lang->custom->notice->invalidNumberKey            = '鍵值應為不大於255的數字';
 $lang->custom->notice->invalidStringKey            = '鍵值應當為小寫英文字母、數字或下劃線的組合';
+$lang->custom->notice->cannotSetTimezone           = 'date_default_timezone_set方法不存在或禁用，不能設置時區。';
 
 $lang->custom->notice->indexPage['product']        = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
 $lang->custom->notice->indexPage['project']        = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";

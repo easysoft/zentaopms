@@ -72,9 +72,10 @@ $lang->custom->todo->fields['typeList']   = 'Type';
 $lang->custom->todo->fields['statusList'] = 'Status';
 
 $lang->custom->user = new stdClass();
-$lang->custom->user->fields['roleList']   = 'Role';
-$lang->custom->user->fields['statusList'] = 'Status';
-$lang->custom->user->fields['deleted']    = 'Deleted User';
+$lang->custom->user->fields['roleList']     = 'Role';
+$lang->custom->user->fields['statusList']   = 'Status';
+$lang->custom->user->fields['contactField'] = 'Available Contact';
+$lang->custom->user->fields['deleted']      = 'Deleted User';
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
@@ -91,6 +92,7 @@ $lang->custom->notice->forceNotReview       = "%s Review is NOT required for cer
 $lang->custom->notice->longlife             = 'Define longlife bugs.';
 $lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
 $lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase letters, numbers or underlines.';
+$lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Time zone cannot be set.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";

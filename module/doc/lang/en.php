@@ -78,7 +78,7 @@ $lang->doc->addType          = 'Add';
 $lang->doc->childType        = 'Child';
 $lang->doc->collect          = 'Add Favorites';
 $lang->doc->cancelCollection = 'Remove Favorites';
-$lang->doc->deleteFile       = 'Detele File'
+$lang->doc->deleteFile       = 'Detele File';
 
 $lang->doc->libName        = 'Name';
 $lang->doc->libType        = 'Category';
@@ -119,6 +119,13 @@ $lang->doc->aclList['open']    = 'Public';
 $lang->doc->aclList['custom']  = 'Custom';
 $lang->doc->aclList['private'] = 'Private';
 
+$lang->doc->typeList['html']     = 'Html';
+$lang->doc->typeList['markdown'] = 'Markdown';
+$lang->doc->typeList['url']      = 'Url';
+$lang->doc->typeList['word']     = 'Word';
+$lang->doc->typeList['ppt']      = 'PPT';
+$lang->doc->typeList['excel']    = 'Excel';
+
 $lang->doc->types['text'] = 'Text';
 $lang->doc->types['url']  = 'URL';
 
@@ -142,6 +149,7 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Show File Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
+$lang->doc->orderLib = 'Library order settings';
 $lang->doc->customShowLibs = 'Library display settings';
 $lang->doc->customShowLibsList['zero']     = 'Display empty library';
 $lang->doc->customShowLibsList['unclosed'] = 'Only display projects that are not closed';
@@ -155,10 +163,23 @@ $lang->doc->errorMainSysLib    = "This library cannot be deleted.";
 $lang->doc->accessDenied       = "Access denied!";
 $lang->doc->versionNotFount    = 'It does not exist in this build.';
 $lang->doc->noDoc              = 'No docs. ';
+$lang->doc->cannotCreateOffice = 'Sorry, %s can only be created in ZenTao Enterprise. Contact renee@easysoft.ltd to try ZenTao Enterprise.';
 $lang->doc->noSearchedDoc      = 'Nothing searched.';
 $lang->doc->noEditedDoc        = 'You have not edited any document.';
 $lang->doc->noOpenedDoc        = 'You have not created any document.';
 $lang->doc->noCollectedDoc     = 'You have not collected any document.';
+
+$lang->doc->noticeAcl['lib']['product']['default'] = 'Users with privileges to access the selected products have access to it.';
+$lang->doc->noticeAcl['lib']['product']['custom']  = 'Users with privileges to access the selected products or users in the whiltelist have access to visit it.';
+$lang->doc->noticeAcl['lib']['project']['default'] = 'Users with privileges to access the selected projects have access to it.';
+$lang->doc->noticeAcl['lib']['project']['custom']  = 'Users with privileges to access the selected projects or users in the whiltelist have access to it.';
+$lang->doc->noticeAcl['lib']['custom']['open']     = 'All users have access to it.';
+$lang->doc->noticeAcl['lib']['custom']['custom']   = 'Users in the whitelist have access to it.';
+$lang->doc->noticeAcl['lib']['custom']['private']  = 'Only the one who created it has access to it.';
+
+$lang->doc->noticeAcl['doc']['open']    = 'Users with privileges to access the doc lib which the doc belongs to have access to it.';
+$lang->doc->noticeAcl['doc']['custom']  = 'Users in the whiltelist have access to visit it.';
+$lang->doc->noticeAcl['doc']['private'] = 'Only the one who created it has access to it.';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url = 'Url';
@@ -173,6 +194,13 @@ $lang->doclib->all     = 'All Library';
 $lang->doclib->select  = 'Select';
 $lang->doclib->project = $lang->projectCommon . ' Library';
 $lang->doclib->product = $lang->productCommon . ' Library';
+
+$lang->doclib->aclListA['default'] = 'Default';
+$lang->doclib->aclListA['custom']  = 'Custom';
+
+$lang->doclib->aclListB['open']    = 'Public';
+$lang->doclib->aclListB['custom']  = 'Custom';
+$lang->doclib->aclListB['private'] = 'Private';
 
 $lang->doclib->create['product'] = 'Create ' . $lang->productCommon . ' Library';
 $lang->doclib->create['project'] = 'Create ' . $lang->projectCommon . ' Library';

@@ -76,6 +76,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->releaseDate['11.3.stable'] = '2019-02-27';
 $lang->misc->releaseDate['11.2.stable'] = '2019-01-30';
 $lang->misc->releaseDate['11.1.stable'] = '2019-01-04';
 $lang->misc->releaseDate['11.0.stable'] = '2018-12-21';
@@ -98,6 +99,8 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.3.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '<p>計劃添加子計劃功能</p><p>優化chosen交互</p><p>添加時區設置</p><p>優化文檔庫和文檔</p>');
 
 $lang->misc->feature->all['11.2.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '<p>增加升級日誌和升級後資料庫檢查的功能</p><p>修復禪道整合客戶端和其他若干bug，完善細節</p>');
 

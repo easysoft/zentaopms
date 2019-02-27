@@ -102,3 +102,4 @@ $lang->upgrade->fromVersions['10_5_1']     = '10.5.1';
 $lang->upgrade->fromVersions['10_6']       = '10.6';
 $lang->upgrade->fromVersions['11_0']       = '11.0';
 $lang->upgrade->fromVersions['11_1']       = '11.1';
+$lang->upgrade->fromVersions['11_2']       = '11.2';
