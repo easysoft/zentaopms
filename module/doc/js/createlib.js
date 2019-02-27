@@ -5,7 +5,7 @@ $(function()
         var libType = $(this).val();
         changeByLibType(libType);
     })
-    changeByLibType($('input[name="type"]').val());
+    changeByLibType($('input[name="type"]:checked').val());
     toggleAcl($('form [name=acl]:checked').val(), 'lib');
 });
 
