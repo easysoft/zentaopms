@@ -43,7 +43,7 @@
     {
         echo "<div class='divider'></div>";
         common::printIcon('testsuite', 'edit',   "libID=$lib->id");
-        common::printIcon('testsuite', 'delete', "libID=$lib->id", '', 'button', '', 'hiddenwin');
+        common::printIcon('testsuite', 'delete', "libID=$lib->id", '', 'button', 'trash', 'hiddenwin');
     }
     ?>
   </div>
