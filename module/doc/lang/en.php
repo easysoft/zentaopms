@@ -163,6 +163,7 @@ $lang->doc->errorMainSysLib    = "This library cannot be deleted.";
 $lang->doc->accessDenied       = "Access denied!";
 $lang->doc->versionNotFount    = 'It does not exist in this build.';
 $lang->doc->noDoc              = 'No docs. ';
+$lang->doc->cannotCreateOffice = 'Sorry, %s can only be created in ZenTao Enterprise. Contact renee@easysoft.ltd to try ZenTao Enterprise.';
 $lang->doc->noSearchedDoc      = 'Nothing searched.';
 $lang->doc->noEditedDoc        = 'You have not edited any document.';
 $lang->doc->noOpenedDoc        = 'You have not created any document.';
@@ -193,6 +194,13 @@ $lang->doclib->all     = 'All Library';
 $lang->doclib->select  = 'Select';
 $lang->doclib->project = $lang->projectCommon . ' Library';
 $lang->doclib->product = $lang->productCommon . ' Library';
+
+$lang->doclib->aclListA['default'] = 'Default';
+$lang->doclib->aclListA['custom']  = 'Custom';
+
+$lang->doclib->aclListB['open']    = 'Public';
+$lang->doclib->aclListB['custom']  = 'Custom';
+$lang->doclib->aclListB['private'] = 'Private';
 
 $lang->doclib->create['product'] = 'Create ' . $lang->productCommon . ' Library';
 $lang->doclib->create['project'] = 'Create ' . $lang->projectCommon . ' Library';
