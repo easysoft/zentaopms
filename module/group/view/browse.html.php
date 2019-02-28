@@ -59,7 +59,7 @@
           }
           else
           {
-              echo "<button class='btn disabled'><i class='icon icon-close disabled' title='{$lang->group->delete}'></i></button>";
+              echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
           }
           ?>
         </td>
