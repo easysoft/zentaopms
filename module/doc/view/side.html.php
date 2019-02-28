@@ -36,7 +36,7 @@ if(empty($type)) $type = 'product';
             <li>
             <?php
             $text = zget($lang->doclib->create, $tabValue, '');
-            if($text) echo html::a($this->createLink($tabValue, 'create'), $text, '', "class='text-ellipsis'");
+            if($text and common::hasPriv($tabValue, 'create')) echo html::a($this->createLink($tabValue, 'create'), $text, '', "class='text-ellipsis'");
             ?>
             </li>
             <?php else:?>
@@ -125,7 +125,7 @@ if(empty($type)) $type = 'product';
             <li>
             <?php
             $text = zget($lang->doclib->create, $tabValue, '');
-            if($text) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe' data-width='70%'");
+            if($text and common::hasPriv('doc', 'createLib')) echo html::a($this->createLink('doc', 'createLib', "type={$tabValue}"), $text, '', "class='iframe' data-width='70%'");
             ?>
             </li>
             <?php else:?>
