@@ -149,11 +149,11 @@ INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `positi
 (5,	'Dev 1',	2,	',2,5,',	2,	10,	'',	'',	''),
 (6,	'Dev 2',	2,	',2,6,',	2,	20,	'',	'',	'');
 
-INSERT INTO `zt_doclib` (`id`, `product`, `project`, `name`, `acl`, `groups`, `users`, `main`, `order`, `deleted`) VALUES
-(1,	1,	0,	'Product Main Library',	'open',	'',	'',	'1',	0,	'0'),
-(2,	0,	1,	'Project Main Library',	'open',	'',	'',	'1',	0,	'0'),
-(3,	2,	0,	'Product Main Library',	'open',	'',	'',	'1',	0,	'0'),
-(4,	0,	2,	'Project Main Library',	'open',	'',	'',	'1',	0,	'0');
+INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `groups`, `users`, `main`, `order`, `deleted`) VALUES
+(1, 'product', 1,	0,	'Product Main Library',	'default',	'',	'',	'1',	0,	'0'),
+(2, 'project', 0,	1,	'Project Main Library',	'default',	'',	'',	'1',	0,	'0'),
+(3, 'product', 2,	0,	'Product Main Library',	'default',	'',	'',	'1',	0,	'0'),
+(4, 'project', 0,	2,	'Project Main Library',	'default',	'',	'',	'1',	0,	'0');
 
 INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
 (1,	7,	'desc',	'Finish developing system drive program.',	'Add advanced features such as remote desktop.',	'001- <del>Finish developing system drive program.</del>\n001+ <ins>Add advanced features such as remote desktop.</ins>'),
