@@ -593,10 +593,9 @@ class testcase extends control
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
             $position[] = html::a($this->createLink('testsuite', 'library', "libID=$case->lib"), $libraries[$case->lib]);
 
-            $this->view->libID            = $case->lib;
-            $this->view->libName          = $libraries[$case->lib];
-            $this->view->libraries        = $libraries;
-            $this->view->linkedCaseID     = $this->testcase->getLinkedCaseID($case->lib, $caseID);
+            $this->view->libID     = $case->lib;
+            $this->view->libName   = $libraries[$case->lib];
+            $this->view->libraries = $libraries;
             $this->view->moduleOptionMenu = $this->tree->getOptionMenu($case->lib, $viewType = 'caselib', $startModuleID = 0);
         }
         else
@@ -978,6 +977,29 @@ class testcase extends control
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
         die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
+    }
+
+    /**
+     * Confirm libcase changed.
+     *
+     * @param  int    $caseID
+     * @param  int    $libcaseID
+     * @param  int    $version
+     * @access public
+     * @return void
+     */
+    public function confirmLibcaseChange($caseID, $libcaseID, $version)
+    {
+        $case  = $this->testcase->getById($caseID);
+        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->where('id')->eq($caseID)->exec();
+        $steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($libcaseID)->andWhere('version')->eq($version)->fetchAll();
+        foreach($steps as $step)
+        {
+            unset($step->id);
+            $step->case = $caseID;
+            $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
+        }
+        die(js::reload('parent'));
     }
 
     /**

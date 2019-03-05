@@ -64,6 +64,9 @@ $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = 'Convert to Bug';
 $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
+$lang->testcase->sync             = 'Sync Case';
+$lang->testcase->fromTesttask     = 'From Testtask';
+$lang->testcase->fromCaselib      = 'From Caselib';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
@@ -82,6 +85,7 @@ $lang->testcase->batchReview             = "Batch Review";
 $lang->testcase->edit                    = "Edit";
 $lang->testcase->batchEdit               = "Batch Edit ";
 $lang->testcase->batchChangeModule       = "Batch Change Module";
+$lang->testcase->confirmLibcaseChange    = "Confirm Library Case Change";
 $lang->testcase->batchChangeBranch       = "Batch Change Branch";
 $lang->testcase->groupByStories          = 'Group by Story';
 $lang->testcase->delete                  = "Delete";
@@ -139,7 +143,6 @@ $lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete these Test Cases?';
 $lang->testcase->ditto              = 'Ditto';
 $lang->testcase->dittoNotice        = 'This Case does not belong to the Product as the previous one!';
-$lang->testcase->haveLinkCase       = 'It has linked case, update this one, the linked case will change.';
 
 $lang->testcase->reviewList[0] = 'NO';
 $lang->testcase->reviewList[1] = 'YES';

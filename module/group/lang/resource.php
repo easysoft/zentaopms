@@ -557,6 +557,7 @@ $lang->resource->testcase->review             = 'review';
 $lang->resource->testcase->batchReview        = 'batchReview';
 $lang->resource->testcase->importFromLib      = 'importFromLib';
 $lang->resource->testcase->batchCaseTypeChange = 'batchCaseTypeChange';
+$lang->resource->testcase->confirmLibcaseChange    = 'confirmLibcaseChange';
 $lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 
 $lang->testcase->methodOrder[0]   = 'index';
@@ -752,6 +753,7 @@ $lang->resource->custom->restore   = 'restore';
 $lang->resource->custom->flow      = 'flow';
 $lang->resource->custom->working   = 'working';
 $lang->resource->custom->setPublic = 'setPublic';
+$lang->resource->custom->timezone  = 'timezone';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -759,6 +761,7 @@ $lang->custom->methodOrder[15] = 'restore';
 $lang->custom->methodOrder[20] = 'flow';
 $lang->custom->methodOrder[25] = 'working';
 $lang->custom->methodOrder[30] = 'setPublic';
+$lang->custom->methodOrder[35] = 'timezone';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';

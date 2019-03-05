@@ -395,7 +395,8 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugTitle = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
+        if($case->fromBug) $case->fromBugTitle      = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
+        if($case->fromCaseID) $case->libCaseVersion = $this->dao->findById($case->fromCaseID)->from(TABLE_CASE)->fetch('version');
 
         $case->toBugs = array();
         $toBugs       = $this->dao->select('id, title')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
@@ -605,24 +606,6 @@ class testcaseModel extends model
     }
 
     /**
-     * Check have linked cases or not.
-     *
-     * @param  int $libID
-     * @param  int $caseID$
-     * @access public
-     * @return int
-     */
-    public function getLinkedCaseID($libID, $caseID)
-    {   
-        $linkedCaseID = $this->dao->select('id')->from(TABLE_CASE)
-            ->where('lib')->eq($libID)
-            ->andWhere('fromCaseID')->eq($caseID)
-            ->andWhere('deleted')->eq(0)
-            ->fetch('id');
-        return $linkedCaseID;
-    }
-
-    /**
      * Update a case.
      *
      * @param  int    $caseID
@@ -631,10 +614,7 @@ class testcaseModel extends model
      */
     public function update($caseID)
     {
-        $oldCase     = $this->getById($caseID);
-        $isLibCase   = ($oldCase->lib and empty($oldCase->product));
-        $linkedCases = '';
-        if($isLibCase) $linkedCases = $this->dao->select('id')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetchPairs();
+        $oldCase      = $this->getById($caseID);
         if(!empty($_POST['lastEditedDate']) and $oldCase->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -687,10 +667,6 @@ class testcaseModel extends model
             ->get();
         if(!$this->forceNotReview() and $stepChanged) $case->status = 'wait';
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
-        if($isLibCase and $linkedCases)
-        {
-            foreach($linkedCases as $linkedCaseID) $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$linkedCaseID)->exec();
-        }
         if(!$this->dao->isError())
         {
             if($stepChanged)
@@ -710,15 +686,6 @@ class testcaseModel extends model
                     $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                     if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                     if($step->type == 'step')  $parentStepID = 0;
-
-                    if($isLibCase and $linkedCases)
-                    {
-                        foreach($linkedCases as $linkedCaseID)
-                        {
-                            $step->case = $linkedCaseID; 
-                            $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                        } 
-                    }
                 }
             }
 
@@ -1372,6 +1339,7 @@ class testcaseModel extends model
         $caseLink   = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");
         $account    = $this->app->user->account;
         $fromCaseID = $case->fromCaseID;
+        if($fromCaseID) $libCaseVersion = $this->dao->findById($fromCaseID)->from(TABLE_CASE)->fetch('version');
         $id = $col->id;
         if($col->show)
         {
@@ -1420,7 +1388,18 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
-                $case->needconfirm ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                if($case->needconfirm) 
+                {
+                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromTesttask}>{$this->lang->story->changed}</span>");
+                }
+                elseif(isset($libCaseVersion) and $libCaseVersion > $case->version and !$case->needconfirm)
+                {
+                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromCaselib}>{$this->lang->testcase->changed}</span>");
+                }
+                else
+                {
+                    print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                }
                 break;
             case 'story':
                 static $stories = array();

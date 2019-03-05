@@ -432,7 +432,7 @@ class reportModel extends model
             ->where('t1.assignedTo')->ne('')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.status')->in('wait, doing')
+            ->andWhere('t1.status')->in('wait,doing')
             ->andWhere('t3.status')->ne('suspended')
             ->andWhere('t1.deadline', true)->eq('0000-00-00')
             ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))

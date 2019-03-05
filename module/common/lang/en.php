@@ -400,7 +400,8 @@ $lang->admin->subMenu->data->backup = array('link' => 'Backup|backup|index', 'su
 $lang->admin->subMenu->data->trash  = 'Recycle|action|trash';
 
 $lang->admin->subMenu->system = new stdclass();
-$lang->admin->subMenu->system->cron = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
+$lang->admin->subMenu->system->cron     = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
+$lang->admin->subMenu->system->timezone = array('link' => 'Timezone|custom|timezone', 'subModule' => 'custom');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();

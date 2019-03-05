@@ -24,7 +24,7 @@
       if($task->status == 'wait') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon iframe', true);
       if($task->status == 'wait') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon iframe', true);
       if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon iframe', true);
-      if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', 'close', '', 'btn btn-info btn-icon iframe', true);
+      if($task->status == 'done' or $task->status == 'cancel' or $task->status == 'closed') common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', 'off', '', 'btn btn-info btn-icon iframe', true);
       if($task->status == 'doing') common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'btn btn-info btn-icon iframe', true);
 
       common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'btn btn-info btn-icon iframe', true);

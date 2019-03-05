@@ -18,3 +18,4 @@
 .main-row > .side-col > .cell {transition: opacity .2s;}
 .doc-fullscreen .main-row > .side-col {width: 0; position: relative; overflow: hidden}
 .doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972'}
+.right-icon a{color: #1183fb}

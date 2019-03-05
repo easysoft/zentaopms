@@ -226,10 +226,10 @@ INSERT INTO `zt_productplan` (`id`, `product`, `title`, `desc`, `begin`, `end`, 
 INSERT INTO `zt_project` (`id`, `isCat`, `catID`, `type`, `parent`, `name`, `code`, `begin`, `end`, `days`, `status`, `statge`, `pri`, `desc`, `openedBy`, `openedDate`, `closedBy`, `closedDate`, `canceledBy`, `canceledDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `deleted`) VALUES(1, '0', 0, 'sprint', 0, '企业网站第一期', 'coWeb1', '2012-06-05', '2012-12-04', 184, 'done', '1', '1', '开发企业网站的基本雏形。<br />', '', 0, '', 0, '', 0, 'productManager', 'projectManager', 'testManager', 'productManager', '公司开发团队', 'open', '', '5', '0');
 INSERT INTO `zt_project` (`id`, `isCat`, `catID`, `type`, `parent`, `name`, `code`, `begin`, `end`, `days`, `status`, `statge`, `pri`, `desc`, `openedBy`, `openedDate`, `closedBy`, `closedDate`, `canceledBy`, `canceledDate`, `PO`, `PM`, `QD`, `RD`, `team`, `acl`, `whitelist`, `order`, `deleted`) VALUES(2, '0', 0, 'sprint', 0, '企业网站第二期', 'coWebsite2', '2013-06-05', '2014-06-04', 365, 'wait', '1', '1', '', '', 0, '', 0, '', 0, 'productManager', 'projectManager', 'testManager', 'productManager', '公司开发团队', 'open', '', '10', '0');
 
-INSERT INTO `zt_doclib` (`id`, `product`, `project`, `name`, `acl`, `main`) VALUES(1, 1, 0, '产品库', 'open','1');
-INSERT INTO `zt_doclib` (`id`, `product`, `project`, `name`, `acl`, `main`) VALUES(2, 2, 0, '产品库', 'open', '1');
-INSERT INTO `zt_doclib` (`id`, `product`, `project`, `name`, `acl`, `main`) VALUES(3, 0, 1, '项目库', 'open', '1');
-INSERT INTO `zt_doclib` (`id`, `product`, `project`, `name`, `acl`, `main`) VALUES(4, 0, 2, '项目库', 'open', '1');
+INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(1, 'product', 1, 0, '产品库', 'default','1');
+INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(2, 'product', 2, 0, '产品库', 'default', '1');
+INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(3, 'project', 0, 1, '项目库', 'default', '1');
+INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `name`, `acl`, `main`) VALUES(4, 'project', 0, 2, '项目库', 'default', '1');
 
 INSERT INTO `zt_projectproduct` (`project`, `product`) VALUES(1, 1);
 INSERT INTO `zt_projectproduct` (`project`, `product`) VALUES(2, 1);

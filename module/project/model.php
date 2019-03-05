@@ -348,7 +348,7 @@ class projectModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = $project->acl == 'open' ? 'open' : 'private';
+            $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->loadModel('user')->updateUserView($projectID, 'project');
@@ -421,8 +421,6 @@ class projectModel extends model
         }
         if(!dao::isError())
         {
-            if($project->acl != $oldProject->acl) $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($project->acl == 'open' ? 'open' : 'private')->where('project')->eq($projectID)->exec();
-
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
             if($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
@@ -2322,7 +2320,7 @@ class projectModel extends model
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch)
+                if($product->branch and isset($branchGroups[$product->id][$product->branch]))
                 {
                     $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
                 }

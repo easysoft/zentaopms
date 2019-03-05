@@ -37,18 +37,23 @@
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libName?></th>
         <td>
-          <?php
-          echo html::input('name', $lib->name, "class='form-control'");
-          echo html::hidden('type', $lib->type);
-          ?>
+          <?php echo html::input('name', $lib->name, "class='form-control'");?>
+          <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
         </td>
       </tr>
       <tr>
         <th><?php echo $lang->doclib->control;?></th>
+        <?php if($lib->type == 'product' or $lib->type == 'project'):?>
         <td>
-          <?php echo html::radio('acl', $lang->doc->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
+          <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
           <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
         </td>
+        <?php else:?>
+        <td>
+          <?php echo html::radio('acl', $lang->doclib->aclListB, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
+          <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
+        </td>
+        <?php endif;?>
       </tr>
       <tr id='whiteListBox' class='hidden'>
         <th><?php echo $lang->doc->whiteList?></th>
