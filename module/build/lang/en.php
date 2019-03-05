@@ -44,7 +44,7 @@ $lang->build->unlinkStory   = 'Unlink Story';
 $lang->build->unlinkBug     = 'Unlink Bug';
 $lang->build->stories       = 'Finished Story';
 $lang->build->bugs          = 'Resolved Bug';
-$lang->build->generatedBugs = 'Left Bug';
+$lang->build->generatedBugs = 'Reported Bug';
 $lang->build->noProduct     = " <span style='color:red'>This {$lang->projectCommon} has not linked to {$lang->productCommon}, so Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild       = 'No builds. ';
 
