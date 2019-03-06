@@ -200,7 +200,7 @@ $lang->story->ignoreChangeStage     = 'Story %s is a draft. Change its status.';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = 'Scope';
-$lang->story->form->desc      = 'What Story is it? What is the acceptance criteria?';
+$lang->story->form->desc      = 'What Story is it? What is the acceptance?';
 $lang->story->form->resource  = 'Who will allocate resources? How long does it take?';
 $lang->story->form->file      = 'If there are Story linked files, please click Here to upload it.';
 
