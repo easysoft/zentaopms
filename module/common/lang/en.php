@@ -348,7 +348,7 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report is generated on search results. Please search in the list before you generate a report.';
+$lang->report->notice->help = 'Note: Report is generated on search results. Please search the list before you generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
@@ -471,7 +471,7 @@ $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』length error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
 $lang->error->reg             = "『%s』format error. It should be『%s』.";
-$lang->error->unique          = "『%s』『%s』exists. Please go to Admin->Recycle to restore it, if you are sure it is deleted.";
+$lang->error->unique          = "『%s』『%s』exists. Go to Admin->Recycle to restore it, if you are sure it is deleted.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->notempty        = "『%s』should not be blank.";

@@ -44,7 +44,7 @@ $lang->release->last          = 'Last Release';
 $lang->release->unlinkStory   = 'Unlink Story';
 $lang->release->unlinkBug     = 'Unlink Bug';
 $lang->release->stories       = 'Finished Story';
-$lang->release->bugs          = 'Solved Bug';
+$lang->release->bugs          = 'Resolved Bug';
 $lang->release->leftBugs      = 'Remained Bug';
 $lang->release->generatedBugs = 'Remained Bug';
 $lang->release->finishStories = 'Finished %s Story';
@@ -69,4 +69,4 @@ $lang->release->changeStatusList['normal']    = 'Activate';
 $lang->release->changeStatusList['terminate'] = 'Terminate';
 
 $lang->release->action = new stdclass();
-$lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
+$lang->release->action->changestatus = array('main' => '$date,  $extra by  <strong>$actor</strong>', 'extra' => 'changeStatusList');
