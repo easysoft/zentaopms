@@ -140,7 +140,7 @@ $lang->bug->lblAssignedTo = 'Assignee';
 $lang->bug->lblMailto     = 'Mail To';
 $lang->bug->lblLastEdited = 'Last Edited';
 $lang->bug->lblResolved   = 'Resolved By';
-$lang->bug->allUsers      = 'Load All User';
+$lang->bug->allUsers      = 'All Users';
 $lang->bug->allBuilds     = 'All';
 $lang->bug->createBuild   = 'New';
 
@@ -375,7 +375,7 @@ $lang->bug->action->linkrelatedbug      = array('main' => '$date, linked by <str
 $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, unlinked by <strong>$actor</strong> from Bug <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->chooseBuilds = 'Choose Build...';
+$lang->bug->placeholder->chooseBuilds = 'Select Build...';
 $lang->bug->placeholder->newBuildName = 'New build Name';
 
 $lang->bug->featureBar['browse']['all']          = $lang->bug->allBugs;
