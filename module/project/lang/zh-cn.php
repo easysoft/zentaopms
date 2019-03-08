@@ -55,7 +55,7 @@ $lang->project->other         = '其他：';
 $lang->project->deleted       = '已删除';
 $lang->project->delayed       = '已延期';
 $lang->project->product       = $lang->project->products;
-$lang->project->readjustTime  = '调整项目起止时间';
+$lang->project->readjustTime  = "调整{$lang->projectCommon}起止时间";
 $lang->project->readjustTask  = '顺延任务的起止时间';
 $lang->project->effort        = '日志';
 $lang->project->relatedMember = '相关成员';
@@ -192,7 +192,7 @@ $lang->project->aboveAllProduct = "以上所有{$lang->productCommon}";
 $lang->project->aboveAllProject = "以上所有{$lang->projectCommon}";
 
 /* 页面提示。*/
-$lang->project->linkStoryByPlanTips = '此操作会将所选计划下面的需求全部关联到此项目中';
+$lang->project->linkStoryByPlanTips = "此操作会将所选计划下面的需求全部关联到此{$lang->projectCommon}中";
 $lang->project->selectProject   = "请选择{$lang->projectCommon}";
 $lang->project->beginAndEnd     = '起止时间';
 $lang->project->begin           = '开始日期';
@@ -225,7 +225,7 @@ $lang->project->copyFromProject = "复制自{$lang->projectCommon} <strong>%s</s
 $lang->project->cancelCopy      = '取消复制';
 $lang->project->byPeriod        = '按时间段';
 $lang->project->byUser          = '按用户';
-$lang->project->noProject       = '暂时没有项目。';
+$lang->project->noProject       = "暂时没有{$lang->projectCommon}。";
 $lang->project->noMembers       = '暂时没有团队成员。';
 
 /* 交互提示。*/
@@ -263,7 +263,7 @@ $lang->project->charts->burn->graph->actuality    = '实际';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = '团队内部的简称';
-$lang->project->placeholder->totalLeft = '项目开始时的总预计工时';
+$lang->project->placeholder->totalLeft = "{$lang->projectCommon}开始时的总预计工时";
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(已结束)';
