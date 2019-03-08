@@ -58,7 +58,7 @@ $lang->product->accessDenied   = "You have no access to {$lang->productCommon}."
 $lang->product->id            = 'ID';
 $lang->product->name          = 'Name';
 $lang->product->code          = 'Alias';
-$lang->product->line          = 'Product Line';
+$lang->product->line          = "{$lang->productCommon} Line";
 $lang->product->order         = 'Sort';
 $lang->product->type          = 'Type';
 $lang->product->status        = 'Status';
@@ -121,7 +121,7 @@ $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members
 $lang->product->storySummary   = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
 $lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> hour(s) estimated, case coverage is <strong>%rate%</strong>.";
 $lang->product->noModule       = '<div>You have no modules</div><div>Manage now</div>';
-$lang->product->noProduct      = 'No product. ';
+$lang->product->noProduct      = "No {$lang->productCommon}. ";
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;

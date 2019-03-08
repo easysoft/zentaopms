@@ -55,7 +55,7 @@ $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
 $lang->project->product       = $lang->project->products;
-$lang->project->readjustTime  = 'Adjust project begin and end time';
+$lang->project->readjustTime  = "Adjust {$lang->projectCommon} begin and end time";
 $lang->project->readjustTask  = 'Adjust task start date and deadline';
 $lang->project->effort        = 'Effort';
 $lang->project->relatedMember = 'Team Member';
@@ -100,7 +100,7 @@ $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspend';
 $lang->project->statusList['closed']    = 'Closed';
 
-$lang->project->aclList['open']    = "Default (Users who can visit Project have access to it.)";
+$lang->project->aclList['open']    = "Default (Users who can visit {$lang->projectCommon} have access to it.)";
 $lang->project->aclList['private'] = 'Private (For team members only.)';
 $lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist members have access to it.)';
 
@@ -129,7 +129,7 @@ $lang->project->unlinkStoryTasks  = 'Unlink';
 $lang->project->linkedProducts    = 'Linked Product';
 $lang->project->unlinkedProducts  = 'Unlinked Product';
 $lang->project->view              = "Overview";
-$lang->project->create            = "Create Project";
+$lang->project->create            = "Create {$lang->projectCommon}";
 $lang->project->copy              = "Copy {$lang->projectCommon}";
 $lang->project->delete            = "Delete";
 $lang->project->browse            = "Browse";
@@ -192,7 +192,7 @@ $lang->project->aboveAllProduct = "All the above {$lang->productCommon}";
 $lang->project->aboveAllProject = "All the above {$lang->projectCommon}";
 
 /* 页面提示。*/
-$lang->project->linkStoryByPlanTips = 'It will link all stories in this plan to the project.';
+$lang->project->linkStoryByPlanTips = "It will link all stories in this plan to the {$lang->projectCommon}.";
 $lang->project->selectProject       = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd         = 'Duration';
 $lang->project->begin               = 'Begin';
@@ -225,7 +225,7 @@ $lang->project->copyFromProject     = "Copy from {$lang->projectCommon} <strong>
 $lang->project->cancelCopy          = 'Cancel Copy';
 $lang->project->byPeriod            = 'By Time';
 $lang->project->byUser              = 'By User';
-$lang->project->noProject           = 'No projects. ';
+$lang->project->noProject           = "No {$lang->projectCommon}. ";
 $lang->project->noMembers           = 'No members. ';
 
 /* 交互提示。*/
@@ -262,8 +262,8 @@ $lang->project->charts->burn->graph->reference    = 'Ideal';
 $lang->project->charts->burn->graph->actuality    = 'Actual';
 
 $lang->project->placeholder = new stdclass();
-$lang->project->placeholder->code      = 'Abbreviation of project name';
-$lang->project->placeholder->totalLeft = 'Estimates at the beginning of the Project.';
+$lang->project->placeholder->code      = "Abbreviation of {$lang->projectCommon} name";
+$lang->project->placeholder->totalLeft = "Estimates at the beginning of the {$lang->projectCommon}.";
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
