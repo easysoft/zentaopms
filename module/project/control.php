@@ -283,11 +283,57 @@ class project extends control
             }
             elseif($groupBy == 'assignedTo')
             {
-                $groupTasks[$task->assignedToRealName][] = $task;
+                if(isset($task->team))
+                {
+                    foreach($task->team as $team)
+                    {
+                        $cloneTask = clone $task;
+                        $cloneTask->assignedTo = $team->account;
+                        $cloneTask->estimate   = $team->estimate;
+                        $cloneTask->consumed   = $team->consumed;
+                        $cloneTask->left       = $team->left;
+                        if($team->left == 0) $cloneTask->status = 'done';
+
+                        $realname = zget($users, $team->account);
+                        $cloneTask->assignedToRealName = $realname;
+                        $groupTasks[$realname][] = $cloneTask;
+                    }
+                }
+                else
+                {
+                    $groupTasks[$task->assignedToRealName][] = $task;
+                }
             }
             elseif($groupBy == 'finishedBy')
             {
-                $groupTasks[$users[$task->finishedBy]][] = $task;
+                if(isset($task->team))
+                {
+                    $task->consumed = $task->estimate = $task->left = 0;
+                    foreach($task->team as $team)
+                    {
+                        if($team->left != 0)
+                        {
+                            $task->estimate += $team->estimate;
+                            $task->consumed += $team->consumed;
+                            $task->left     += $team->left;
+                            continue;
+                        }
+
+                        $cloneTask = clone $task;
+                        $cloneTask->finishedBy = $team->account;
+                        $cloneTask->estimate   = $team->estimate;
+                        $cloneTask->consumed   = $team->consumed;
+                        $cloneTask->left       = $team->left;
+                        $cloneTask->status     = 'done';
+                        $realname = zget($users, $team->account);
+                        $groupTasks[$realname][] = $cloneTask;
+                    }
+                    if(!empty($task->left)) $groupTasks[$users[$task->finishedBy]][] = $task;
+                }
+                else
+                {
+                    $groupTasks[$users[$task->finishedBy]][] = $task;
+                }
             }
             elseif($groupBy == 'closedBy')
             {

@@ -1378,7 +1378,39 @@ class task extends control
                 foreach($tasks as $task)
                 {
                     $task->storyTitle = isset($stories[$task->story]) ? $stories[$task->story]->title : '';
-                    $groupTasks[$task->$orderBy][] = $task;
+                    if(isset($task->team))
+                    {
+                        if($orderBy == 'finishedBy') $task->consumed = $task->estimate = $task->left = 0;
+                        foreach($task->team as $team)
+                        {
+                            if($orderBy == 'finishedBy' and $team->left != 0)
+                            {
+                                $task->estimate += $team->estimate;
+                                $task->consumed += $team->consumed;
+                                $task->left     += $team->left;
+                                continue;
+                            }
+
+                            $cloneTask = clone $task;
+                            $cloneTask->estimate = $team->estimate;
+                            $cloneTask->consumed = $team->consumed;
+                            $cloneTask->left     = $team->left;
+                            if($team->left == 0) $cloneTask->status = 'done';
+
+                            if($orderBy == 'assignedTo')
+                            {
+                                $cloneTask->assignedToRealName = zget($users, $team->account);
+                                $cloneTask->assignedTo = $team->account;
+                            }
+                            if($orderBy == 'finishedBy')$cloneTask->finishedBy = $team->account;
+                            $groupTasks[$team->account][] = $cloneTask;
+                        }
+                        if(!empty($task->left) and $orderBy == 'finishedBy') $groupTasks[$task->finishedBy][] = $task;
+                    }
+                    else
+                    {
+                        $groupTasks[$task->$orderBy][] = $task;
+                    }
                 }
 
                 $tasks = array();

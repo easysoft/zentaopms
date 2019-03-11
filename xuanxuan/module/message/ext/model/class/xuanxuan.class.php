@@ -13,7 +13,7 @@ class xuanxuanMessage extends messageModel
                 $this->loadModel('action');
                 $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                 $field  = $this->config->action->objectNameFields[$objectType];
-                $title  = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
+                $title  = $this->app->user->realname . ' ' . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
                 $text   = $title . ' ' . "[#{$objectID}::{$object->$field}]";
 
                 $server   = $this->loadModel('chat')->getServer('zentao');
