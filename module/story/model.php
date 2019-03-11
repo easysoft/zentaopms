@@ -480,7 +480,7 @@ class storyModel extends model
             ->cleanFloat('estimate')
             ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->add('lastEditedDate', $now)
             ->setDefault('plan', '')
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)

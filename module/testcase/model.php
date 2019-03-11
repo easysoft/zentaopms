@@ -659,7 +659,7 @@ class testcaseModel extends model
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->add('lastEditedDate', $now)
             ->setDefault('story,branch',   0)
             ->join('stage', ',')
             ->join('linkCase', ',')
