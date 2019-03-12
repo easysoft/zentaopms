@@ -617,7 +617,7 @@ class taskModel extends model
             ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
+            ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
