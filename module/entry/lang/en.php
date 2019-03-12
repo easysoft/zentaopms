@@ -35,7 +35,7 @@ $lang->entry->note->name    = 'Name';
 $lang->entry->note->code    = 'Alias should be letters and numbers';
 $lang->entry->note->ip      = "Use comma to seperate IP. IP segment is supported, e.g. 192.168.1.*";
 $lang->entry->note->allIP   = 'All';
-$lang->entry->note->account = 'Authorized account in the applcation';
+$lang->entry->note->account = 'Authenticated account in the applcation';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Code is missing.';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Token is missing.';
