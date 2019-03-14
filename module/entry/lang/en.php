@@ -1,5 +1,5 @@
 <?php
-$lang->entry->common  = 'Application';
+$lang->entry->common  = 'Entry';
 $lang->entry->list    = 'Entry List';
 $lang->entry->api     = 'API';
 $lang->entry->webhook = 'Webhook';
@@ -7,7 +7,7 @@ $lang->entry->log     = 'Log';
 $lang->entry->setting = 'Setting';
 
 $lang->entry->browse    = 'Browse';
-$lang->entry->create    = 'Add Application';
+$lang->entry->create    = 'Add Entry';
 $lang->entry->edit      = 'Edit';
 $lang->entry->delete    = 'Delete';
 $lang->entry->createKey = 'Create Key';
@@ -26,7 +26,7 @@ $lang->entry->editedDate  = 'Edited';
 $lang->entry->date        = 'Request Time';
 $lang->entry->url         = 'Request URL';
 
-$lang->entry->confirmDelete = 'Do you want to delete this application?';
+$lang->entry->confirmDelete = 'Do you want to delete this entry?';
 $lang->entry->help          = 'Help';
 $lang->entry->notify        = 'Notify';
 
@@ -35,7 +35,7 @@ $lang->entry->note->name    = 'Name';
 $lang->entry->note->code    = 'Alias should be letters and numbers';
 $lang->entry->note->ip      = "Use comma to seperate IP. IP segment is supported, e.g. 192.168.1.*";
 $lang->entry->note->allIP   = 'All';
-$lang->entry->note->account = 'Authenticated account in the applcation';
+$lang->entry->note->account = 'Authenticated account in the entry';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Code is missing.';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Token is missing.';
