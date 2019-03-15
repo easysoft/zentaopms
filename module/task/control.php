@@ -1271,6 +1271,7 @@ class task extends control
             if($this->session->taskOnlyCondition)
             {
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
+                    ->andWhere('parent')->le(0)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($sort)->fetchAll('id');
 
