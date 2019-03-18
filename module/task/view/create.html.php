@@ -32,7 +32,12 @@
         </tr>
         <tr>
           <th><?php echo $lang->task->type;?></th>
-          <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td><td></td><td></td>
+          <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td>
+          <td>
+            <div class="checkbox-primary hidden" id='selectTestStoryBox'>
+              <input type="checkbox" name='selectTestStory' id="selectTestStory" value='1' onchange='toggleSelectTestStory()' /><label for="selectTestStory" class="no-margin"><?php echo $lang->task->selectTestStory;?></label>
+            </div>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->task->module;?></th>
@@ -69,6 +74,46 @@
           </td>
         </tr>
         <?php endif;?>
+        <tr id='testStoryBox' class='hidden'>
+          <th><?php echo $lang->task->selectTestStory;?></th>
+          <td colspan='3'>
+            <?php if($noTestStories):?>
+            <table class='table table-form mg-0 table-bordered'>
+              <thead>
+                <tr>
+                  <th><?php echo $lang->task->storyAB;?></th>
+                  <th class='w-100px'><?php echo $lang->task->pri;?></th>
+                  <th class='w-300px'><?php echo $lang->task->datePlan;?></th>
+                  <th class='w-150px'><?php echo $lang->task->assignedTo;?></th>
+                  <th class='w-80px'><?php echo $lang->task->estimate;?></th>
+                  <th class='w-80px'><?php echo $lang->actions;?></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><?php echo html::select("testStory[]", $noTestStories, '', "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input("testEstStarted[]", $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+                      <span class='input-group-addon fix-border'>~</span>
+                      <?php echo html::input("testDeadline[]", $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
+                    </div>
+                  </td>
+                  <td><?php echo html::select("testAssignedTo[]", $members, $task->assignedTo, "class='form-control chosen'");?></td>
+                  <td><?php echo html::input("testEstimate[]", '', "class='form-control'");?></td>
+                  <td class='text-center'>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm" tabindex="-1" onclick='addItem(this)'><i class="icon icon-plus"></i></button>
+                      <button type="button" class="btn btn-sm" tabindex="-1" onclick='removeItem(this)'><i class="icon icon-close"></i></button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <?php endif;?>
+          </td>
+        </tr>
         <tr>
           <th><?php echo $lang->task->name;?></th>
           <td colspan='3'>

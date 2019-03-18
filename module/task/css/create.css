@@ -7,3 +7,8 @@
 
 .pri-selector > .btn {padding: 5px 8px!important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
+
+#testStoryBox table tr td{padding:0px;}
+#testStoryBox table tr td .chosen-container .chosen-single{border:0px;}
+#testStoryBox table tr td input{border:0px;}
+#testStoryBox table tr td .input-group .input-group-addon{border-left:1px solid #dcdcdc;border-right:1px solid #dcdcdc;}

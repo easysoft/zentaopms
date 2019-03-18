@@ -111,9 +111,11 @@ $lang->task->parent            = 'Parent Task';
 $lang->task->parentAB          = 'Parent Task';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
+$lang->task->lblTestStory      = 'Test Story';
 
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task does not belong to the Project as the previous one does!";
+$lang->task->selectTestStory   = 'Select Test Story';
 $lang->task->selectAllUser     = 'All';
 $lang->task->noStory           = 'No Story';
 $lang->task->noAssigned        = 'Unassigned';
@@ -270,5 +272,5 @@ $lang->task->report->tasksPerConsumed->graph->xAxisName     = 'Cost';
 $lang->task->report->tasksPerFinishedBy->graph->xAxisName   = 'User';
 $lang->task->report->tasksPerClosedReason->graph->xAxisName = 'Close Reason';
 
-$lang->task->report->finishedTasksPerDay->type               = 'bar';
-$lang->task->report->finishedTasksPerDay->graph->xAxisName   = 'Date';
+$lang->task->report->finishedTasksPerDay->type             = 'bar';
+$lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Date';

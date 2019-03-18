@@ -230,6 +230,48 @@ function setStories(moduleID, projectID)
     });
 }
 
+function toggleSelectTestStory()
+{
+    if(!$('#selectTestStoryBox').hasClass('hidden') && $('#selectTestStory').prop('checked'))
+    {
+        $('#module').closest('tr').addClass('hidden');
+        $('#multipleBox').closest('td').addClass('hidden');
+        $('#story').closest('tr').addClass('hidden');
+        $('#estStarted').closest('tr').addClass('hidden');
+        $('#estimate').closest('.table-col').addClass('hidden');
+        $('#testStoryBox').removeClass('hidden');
+    }
+    else
+    {
+        $('#module').closest('tr').removeClass('hidden');
+        $('#multipleBox').closest('td').removeClass('hidden');
+        $('#story').closest('tr').removeClass('hidden');
+        $('#estStarted').closest('tr').removeClass('hidden');
+        $('#estimate').closest('.table-col').removeClass('hidden');
+        $('#testStoryBox').addClass('hidden');
+    }
+}
+
+function addItem(obj)
+{
+    var $tr = $(obj).closest('tr');
+    $tr.after($tr.clone());
+    var $nextTr = $tr.next();
+    $nextTr.find('#testAssignedTo').val($('#assignedTo').val());
+    $nextTr.find('#testStory').closest('td').find('.chosen-container').remove();
+    $nextTr.find('#testStory').closest('td').find('select').chosen();
+    $nextTr.find('#testPri').closest('td').find('.chosen-container').remove();
+    $nextTr.find('#testPri').closest('td').find('select').chosen();
+    $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
+    $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
+    $nextTr.find('.form-date').datepicker();
+}
+
+function removeItem(obj)
+{
+    if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
+}
+
 $(document).ready(function()
 {
     $('#pri').on('change', function()
@@ -239,11 +281,16 @@ $(document).ready(function()
         var value = $select.val();
         $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
+    $('#type').change(function()
+    {
+        $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
+        toggleSelectTestStory();
+    });
     
     setStoryRelated();
 
     $('#selectAllUser').on('click', function()
-            {
+    {
         var $assignedTo = $('#assignedTo');
         if($assignedTo.attr('multiple')) 
         {
@@ -272,7 +319,6 @@ $(document).ready(function()
             $('#estimate').attr('readonly', false);
         }
     });
-
 
     /* Init task team manage dialog */
     var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(
