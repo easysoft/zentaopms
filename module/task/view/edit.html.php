@@ -109,6 +109,12 @@
                 <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control chosen'");?></td>
               </tr>
               <?php endif;?>
+              <?php if($task->parent > 0):?>
+              <tr>
+                <th><?php echo $lang->task->unlinkParent;?></th>
+                <td><?php echo html::checkbox('unlinkParent', '');?></td>
+              </tr>
+              <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
                 <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $members, $task->assignedTo, "class='form-control chosen'");?></span></td>

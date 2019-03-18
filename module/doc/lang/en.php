@@ -152,6 +152,7 @@ $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 $lang->doc->orderLib = 'Library order settings';
 $lang->doc->customShowLibs = 'Library display settings';
 $lang->doc->customShowLibsList['zero']     = 'Display empty library';
+$lang->doc->customShowLibsList['children'] = 'Display sub-category documents';
 $lang->doc->customShowLibsList['unclosed'] = 'Only display projects that are not closed';
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";

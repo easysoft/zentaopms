@@ -79,6 +79,8 @@ class taskModel extends model
             }
             $requiredFields = trim($requiredFields, ',');
 
+            /* Fix Bug #2466 */
+            if($this->post->multiple) $task->assignedTo = '';
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->batchCheck($requiredFields, 'notempty')
@@ -653,12 +655,13 @@ class taskModel extends model
             ->setIF($this->post->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
 
             ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
+            ->setIF(isset($_POST['unlinkParent']), 'parent', 0)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
+            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu,unlinkParent')
             ->get();
 
         if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
@@ -734,6 +737,7 @@ class taskModel extends model
 
         if($oldTask->parent > 0)
         {
+            if($task->parent == 0) $this->computeWorkingHours($oldTask->parent);
             $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($oldTask->parent);
         }
@@ -1688,6 +1692,11 @@ class taskModel extends model
             ->andWhere('project')->eq($projectID)
             ->fetchPairs();
 
+        foreach($tasks as $id => $name)
+        {
+            $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($id)->andWhere('type')->eq('task')->fetch();
+            if(!empty($taskTeam)) unset($tasks[$id]);
+        }
         return array('' => '') + $tasks ;
     }
 
