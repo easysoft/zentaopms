@@ -106,6 +106,7 @@ $lang->task->team             = '团队';
 $lang->task->transfer         = '转交';
 $lang->task->transferTo       = '转交给';
 $lang->task->children         = '子任务';
+$lang->task->unlinkParent     = '取消子任务';
 $lang->task->childrenAB       = '子';
 $lang->task->parent           = '父任务';
 $lang->task->parentAB         = '父';

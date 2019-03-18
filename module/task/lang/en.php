@@ -106,6 +106,7 @@ $lang->task->team              = 'Team';
 $lang->task->transfer          = 'Transfer';
 $lang->task->transferTo        = 'Transfer To';
 $lang->task->children          = 'Child Task';
+$lang->task->unlinkParent      = 'Unlink Parent';
 $lang->task->childrenAB        = 'Child';
 $lang->task->parent            = 'Parent Task';
 $lang->task->parentAB          = 'Parent Task';
