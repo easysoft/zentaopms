@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(strpos($config->doc->officeTypes, $docType) !== false):?>
+<?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div id="mainContent" class="main-content">
   <div class='center-block'>
