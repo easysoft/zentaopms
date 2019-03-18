@@ -72,6 +72,8 @@ class taskModel extends model
             if($projectType == 'ops')unset($requiredFields[array_search("story",  $requiredFields)]);
             $requiredFields =implode(',', $requiredFields);
 
+            /* Fix Bug #2466 */
+            if($this->post->multiple) $task->assignedTo = '';
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->batchCheck($requiredFields, 'notempty')
