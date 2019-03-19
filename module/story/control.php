@@ -1037,6 +1037,44 @@ class story extends control
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         die(js::locate($this->session->storyList, 'parent'));
     }
+    
+    /**
+     * Assign to.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
+    public function assignTo($storyID)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->story->assign($storyID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
+                $this->action->logHistory($actionID, $changes);
+            }
+
+            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+        }
+
+        /* Get story and product. */
+        $story    = $this->story->getById($storyID);
+        $products = $this->product->getPairs();
+
+        /* Set menu. */
+        $this->product->setMenu($products, $story->product, $story->branch);
+
+        $this->view->title      = zget($products, $story->product, '') . $this->lang->colon . $this->lang->story->assign;
+        $this->view->position[] = $this->lang->story->assign;
+        $this->view->story      = $story;
+        $this->view->actions    = $this->action->getList('story', $storyID);
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+        $this->display();
+    }
 
     /**
      * Batch assign to.

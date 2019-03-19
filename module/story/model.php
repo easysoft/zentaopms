@@ -1057,6 +1057,31 @@ class storyModel extends model
     }
 
     /**
+     * Assign story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return array
+     */
+    public function assign($storyID)
+    {
+        $oldStory   = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $now        = helper::now();
+        $assignedTo = $this->post->assignedTo;
+        if($assignedTo == $oldStory->assignedTo) return array();
+
+        $story = new stdclass();
+        $story->lastEditedBy   = $this->app->user->account;
+        $story->lastEditedDate = $now;
+        $story->assignedTo     = $assignedTo;
+        $story->assignedDate   = $now;
+
+        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+        if(!dao::isError()) return common::createChanges($oldStory, $story);
+        return false;
+    }
+
+    /**
      * Batch assign to.
      *
      * @access public
@@ -2254,6 +2279,7 @@ class storyModel extends model
         if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
         if($action == 'close')    return $story->status != 'closed';
         if($action == 'activate') return $story->status == 'closed';
+        if($action == 'assignto') return $story->status != 'closed';
 
         return true;
     }
