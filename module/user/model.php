@@ -99,7 +99,7 @@ class userModel extends model
         foreach($users as $account => $user)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
-            if(strpos($params, 'noletter') !== false) $firstLetter =  '';
+            if((strpos($params, 'noletter') !== false) or (isset($this->config->isINT) and $this->config->isINT)) $firstLetter =  '';
             $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $account : ($user->realname ? $user->realname : $account));
         }
 
