@@ -42,7 +42,7 @@ class taskModel extends model
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate')
             ->get();
 
         foreach($this->post->assignedTo as $assignedTo)
@@ -67,10 +67,17 @@ class taskModel extends model
             $task = $this->file->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
-            $projectType =$this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
-            $requiredFields =explode(',', $this->config->task->create->requiredFields);
-            if($projectType == 'ops')unset($requiredFields[array_search("story",  $requiredFields)]);
-            $requiredFields =implode(',', $requiredFields);
+            $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
+            $requiredFields = "," . $this->config->task->create->requiredFields . ",";
+            if($projectType == 'ops') $requiredFields = str_replace(",story,", ',', "$requiredFields");
+            if($this->post->selectTestStory)
+            {
+                $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
+                $requiredFields = str_replace(",story,", ',', "$requiredFields");
+                $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
+                $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
+            }
+            $requiredFields = trim($requiredFields, ',');
 
             /* Fix Bug #2466 */
             if($this->post->multiple) $task->assignedTo = '';
@@ -85,6 +92,37 @@ class taskModel extends model
 
             $taskID = $this->dao->lastInsertID();
             if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
+            if($this->post->selectTestStory)
+            {
+                $testStoryIdList = array();
+                $this->loadModel('action');
+                foreach($this->post->testStory as $storyID)
+                {
+                    if($storyID) $testStoryIdList[$storyID] = $storyID;
+                }
+                $testStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchPairs('id', 'title');
+                foreach($this->post->testStory as $i => $storyID)
+                {
+                    if(!isset($testStories[$storyID])) continue;
+
+                    $task->parent     = $taskID;
+                    $task->story      = $storyID;
+                    $task->name       = $this->lang->task->lblTestStory . " #{$storyID} " . zget($testStories, $storyID);
+                    $task->pri        = $this->post->testPri[$i];
+                    $task->estStarted = $this->post->testEstStarted[$i];
+                    $task->deadline   = $this->post->testDeadline[$i];
+                    $task->assignedTo = $this->post->testAssignedTo[$i];
+                    $task->estimate   = $this->post->testEstimate[$i];
+                    $this->dao->insert(TABLE_TASK)->data($task)->exec();
+
+                    $childTaskID = $this->dao->lastInsertID();
+                    $this->action->create('task', $childTaskID, 'Opened');
+                }
+
+                $this->computeWorkingHours($taskID);
+                $this->computeBeginAndEnd($taskID);
+                $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($taskID)->exec();
+            }
             $this->file->updateObjectID($this->post->uid, $taskID, 'task');
             if(!empty($taskFiles))
             {

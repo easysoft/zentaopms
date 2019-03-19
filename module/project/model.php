@@ -1698,6 +1698,7 @@ class projectModel extends model
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            if(isset($this->config->isINT) and $this->config->isINT) $firstLetter = '';
             $users[$account] =  $firstLetter . ($realName ? $realName : $account);
         }
         return array('' => '') + $users;
