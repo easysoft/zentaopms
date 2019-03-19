@@ -22,8 +22,9 @@
   </div>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-320px'>
+      <?php $thWidth = (isset($config->isINT) and $config->isINT) ? 'w-130px' : 'w-90px';?>
       <tr>
-        <th class='rowhead w-90px'><?php echo $lang->user->account;?></th>
+        <th class='rowhead <?php echo $thWidth?>'><?php echo $lang->user->account;?></th>
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
       </tr>  
       <tr>

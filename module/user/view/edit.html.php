@@ -48,10 +48,11 @@
       </table>
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
+        <?php $thClass = (isset($config->isINT) and $config->isINT) ? 'w-130px' : 'w-90px';?>
         <tr>
           <th class='w-100px'><?php echo $lang->user->account;?></th>
           <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control'");?></td>
-          <th class='w-90px'><?php echo $lang->user->email;?></th>
+          <th class='<?php echo $thClass?>'><?php echo $lang->user->email;?></th>
           <td>
             <?php echo html::input('email', $user->email, "class='form-control'");?>
             <input type='text' style="display:none"> <!-- Disable input account by browser automatically. -->
@@ -93,8 +94,9 @@
       </table>
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->verify;?></caption>
+        <?php $thClass = (isset($config->isINT) and $config->isINT) ? 'w-enVerifyPassword' : 'w-verifyPassword';?>
         <tr>
-          <th class='w-verifyPassword'><?php echo $lang->user->verifyPassword;?></th>
+          <th class='<?php echo $thClass?>'><?php echo $lang->user->verifyPassword;?></th>
           <td>
             <div class="required required-wrapper"></div>
             <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' placeholder='{$lang->user->placeholder->verify}'");?>
