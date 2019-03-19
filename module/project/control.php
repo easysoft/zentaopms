@@ -45,6 +45,8 @@ class project extends control
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
         //$this->project->setMenu($this->projects, key($this->projects));
+        
+        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
