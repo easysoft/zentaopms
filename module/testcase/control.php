@@ -988,9 +988,10 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function confirmLibcaseChange($caseID, $libcaseID, $version)
+    public function confirmLibcaseChange($caseID, $libcaseID)
     {
-        $case  = $this->testcase->getById($caseID);
+        $case    = $this->testcase->getById($caseID);
+        $version = $case->fromCaseVersion;
         $this->dao->update(TABLE_CASE)->set('version')->eq($version)->where('id')->eq($caseID)->exec();
         $steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($libcaseID)->andWhere('version')->eq($version)->fetchAll();
         foreach($steps as $step)
@@ -999,6 +1000,20 @@ class testcase extends control
             $step->case = $caseID;
             $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
         }
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Ignore libcase changed.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function ignoreLibcaseChange($caseID)
+    {
+        $case    = $this->testcase->getById($caseID);
+        $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
         die(js::reload('parent'));
     }
 
