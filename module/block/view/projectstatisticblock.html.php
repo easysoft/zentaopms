@@ -9,7 +9,7 @@
 .types-line > li > div > span {display: block; color: #CBD0DB; font-size: 16px;}
 .product-info {position: relative; height: 65px;}
 .product-info + .product-info {margin-top: 10px;}
-.product-info .progress {position: absolute; left: 10px; top: 35px; right: 90px;}
+.product-info .progress {position: absolute; left: 10px; top: 35px; right: 100px;}
 .product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
 .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
 html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 130px;}

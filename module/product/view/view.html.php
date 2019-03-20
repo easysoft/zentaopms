@@ -137,7 +137,7 @@
                 <table class="table table-data">
                   <tbody>
                     <tr>
-                      <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
+                      <th class='w-100px'><i class="icon icon-person icon-sm"></i> <?php echo $lang->productCommon;?></th>
                       <td><em><?php echo zget($users, $product->PO);?></em></td>
                       <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->qa;?></th>
                       <td><em><?php echo zget($users, $product->QD);?></em></td>

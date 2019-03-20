@@ -23,8 +23,9 @@
     </div>
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table align='center' class="table table-form">
+        <?php $thClass = (isset($config->isINT) and $config->isINT) ? 'w-enVerifyPassword' : 'w-verifyPassword';?>
         <tr>
-          <th class='w-verifyPassword'><?php echo $lang->user->dept;?></th>
+          <th class='<?php echo $thClass?>'><?php echo $lang->user->dept;?></th>
           <td class='w-p40'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
         </tr>
         <tr>
