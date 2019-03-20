@@ -246,6 +246,11 @@ $lang->project->withweekend           = 'incl. Weekend';
 $lang->project->interval              = 'Intervals';
 $lang->project->fixFirstWithLeft      = 'Modify the left';
 
+$lang->project->action = new stdclass();
+$lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
+$lang->project->action->managed = '$date, managed by <strong>$actor</strong> .' . "\n";
+$lang->project->action->extra   = 'The related products are %s.';
+
 /* 统计。*/
 $lang->project->charts = new stdclass();
 $lang->project->charts->burn = new stdclass();

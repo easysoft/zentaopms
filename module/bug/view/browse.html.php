@@ -384,7 +384,7 @@ $('#module' + moduleID).closest('li').addClass('active');
 <?php if($browseType == 'bysearch'):?>
 if($('#query li.active').size() == 0) $.toggleQueryBox(true);
 <?php endif;?>
-<?php if($useDatatable):?>
+<?php if(!empty($useDatatable)):?>
 $(function(){$('#bugForm').table();})
 <?php endif;?>
 <?php $this->app->loadConfig('qa', '', false);?>
