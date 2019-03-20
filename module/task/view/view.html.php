@@ -259,6 +259,10 @@
                   <td><span class='status-task status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo zget($lang->task->statusList, $task->status);?></td>
                 </tr>
                 <tr>
+                  <th><?php echo $lang->task->progress;?></th>
+                  <td><?php echo $task->progress . '%';?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->task->pri;?></th>
                   <td><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo $task->pri == '0' ? $lang->noData : zget($lang->task->priList, $task->pri)?></span></td>
                 </tr>

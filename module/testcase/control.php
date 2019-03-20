@@ -239,12 +239,7 @@ class testcase extends control
             $this->action->create('case', $caseID, 'Opened');
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $response['locate'] = 'reload';
-                $response['target'] = 'parent';
-                $this->send($response);
-            }
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             setcookie('caseModule', (int)$this->post->module, 0, $this->config->webRoot);
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
