@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($this->app->getClientLang() == 'en'):?>
+<style>.side-col .cell table th{width: 100px !important}</style>
+<?php endif;?>
   <div id='mainContent' class="main-row">
     <div class="col-8 main-col">
       <div class="row">
@@ -191,8 +194,9 @@
               <div class="detail-content">
                 <table class="table table-data data-basic">
                   <tbody>
+                    <?php $space = $this->app->getClientLang() == 'en' ? ' ' : '';?>
                     <tr>
-                      <th><?php echo $lang->story->statusList['active']  . $lang->story->common;?></th>
+                      <th><?php echo $lang->story->statusList['active']  . $space . $lang->story->common;?></th>
                       <td><em><?php echo $product->stories['active']?></em></td>
                       <th><?php echo $lang->product->plans?></th>
                       <td><em><?php echo $product->plans?></em></td>
@@ -200,7 +204,7 @@
                       <td><em><?php echo $product->bugs?></em></td>
                     </tr>
                     <tr>
-                      <th><?php echo $lang->story->statusList['changed']  . $lang->story->common;?></th>
+                      <th><?php echo $lang->story->statusList['changed']  . $space . $lang->story->common;?></th>
                       <td><em><?php echo $product->stories['changed']?></em></td>
                       <th><?php echo $lang->product->projects?></th>
                       <td><em><?php echo $product->projects?></em></td>
@@ -208,7 +212,7 @@
                       <td><em><?php echo $product->cases?></em></td>
                     </tr>
                     <tr>
-                      <th><?php echo $lang->story->statusList['draft']  . $lang->story->common;?></th>
+                      <th><?php echo $lang->story->statusList['draft']  . $space . $lang->story->common;?></th>
                       <td><em><?php echo $product->stories['draft']?></em></td>
                       <th><?php echo $lang->product->builds?></th>
                       <td><em><?php echo $product->builds?></em></td>
@@ -216,7 +220,7 @@
                       <td><em><?php echo $product->docs?></em></td>
                     </tr>
                     <tr>
-                      <th><?php echo $lang->story->statusList['closed']  . $lang->story->common;?></th>
+                      <th><?php echo $lang->story->statusList['closed']  . $space . $lang->story->common;?></th>
                       <td><em><?php echo $product->stories['closed']?></em></td>
                       <th><?php echo $lang->product->releases?></th>
                       <td><em><?php echo $product->releases?></em></td>
@@ -232,7 +236,6 @@
     </div>
   </div>
 </div>
-
 <div id="mainActions" class='main-actions'>
   <nav class="container"></nav>
 </div>
