@@ -39,11 +39,6 @@ tbody tr td:first-child input{display:none;}
     <?php
     if(!$build->deleted)
     {
-        if($config->global->flow != 'onlyTest')
-        {
-            if(common::hasPriv('build', 'linkStory')) echo html::a(inlink('view', "buildID=$build->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-link'");
-            if(common::hasPriv('build', 'linkBug'))   echo html::a(inlink('view', "buildID=$build->id&type=bug&link=true"), '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-link'");
-        }
         common::printIcon('build', 'edit',   "buildID=$build->id", $build);
         common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', 'trash', 'hiddenwin');
     }

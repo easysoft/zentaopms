@@ -60,7 +60,7 @@
       <?php if($unlinkedCount):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->productplan->linkBug, '', 'btn');?>
+        <?php echo html::submitButton($lang->productplan->linkBug, '', 'btn btn-secondary');?>
       </div>
       <?php endif;?>
       <div class="btn-toolbar">
