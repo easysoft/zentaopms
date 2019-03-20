@@ -9,6 +9,8 @@ function showLink(planID, type, orderBy, param)
         $linkBox.find('[data-ride="table"]').table();
         $.toggleQueryBox(true, $linkBox.find('#queryBox'));
     });
+
+    $('.actions').find("a[href*='" + type + "']").addClass('hidden');
 }
 
 $(function()
