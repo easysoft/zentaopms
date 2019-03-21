@@ -368,7 +368,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('11.2'));
             $this->processDocLibAcl();
         case '11_3':
-            $this->saveLogs('Execute 11_2');
+            $this->saveLogs('Execute 11_3');
             $this->addPriv11_4();
         }
 
@@ -2227,7 +2227,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function adjustPriv11_4()
+    public function addPriv11_4()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
