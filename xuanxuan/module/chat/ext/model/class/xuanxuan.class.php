@@ -86,7 +86,19 @@ class xuanxuanChat extends chatModel
     public function getServer($backend = 'xxb')
     {
         $server = commonModel::getSysURL();
-        if(!empty($this->config->xuanxuan->server)) $server = $this->config->xuanxuan->server;
+        if(!empty($this->config->xuanxuan->server))
+        {
+            $host     = $this->server->http_host;
+            $position = strrpos($host, ':');
+            $port     = $position === false ? '' : substr($host, $position + 1);
+            $server   = $this->config->xuanxuan->server;
+            if($port and strpos($server, ":$port") === false)
+            {
+                $server = rtrim($server, '/');
+                $server = "{$server}:{$port}";
+            }
+        }
+        $server = rtrim($server, '/');
 
         return $server;
     }
