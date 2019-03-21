@@ -1631,7 +1631,7 @@ class baseRouter
          **/
         $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
         chdir(dirname($file2Included));
-        include $file2Included;
+        helper::import($file2Included);
 
         /*
          * 设置control的类名。
@@ -1650,7 +1650,7 @@ class baseRouter
 
         /* include default value for module*/
         $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
-        if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+        if($defaultValueFiles) foreach($defaultValueFiles as $file) helper::import($file);
 
         /* 
          * 使用反射机制获取函数参数的默认值。

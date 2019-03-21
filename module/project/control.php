@@ -45,6 +45,8 @@ class project extends control
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
         //$this->project->setMenu($this->projects, key($this->projects));
+        
+        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
@@ -1051,7 +1053,7 @@ class project extends control
             $this->project->updateProducts($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('project', $projectID, 'opened');
+            $this->loadModel('action')->create('project', $projectID, 'opened', '', join(',', $_POST['products']));
 
             $planID = reset($_POST['plans']);
             if(!empty($planID))
@@ -1709,7 +1711,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $from='')
+    public function manageProducts($projectID, $from = '')
     {
         /* use first project if projectID does not exist. */
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
@@ -1721,6 +1723,8 @@ class project extends control
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('project', $projectID, 'Managed', '', join(',', $_POST['products']));
             die(js::locate($browseProjectLink));
         }
 

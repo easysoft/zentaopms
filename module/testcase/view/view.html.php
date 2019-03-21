@@ -223,10 +223,11 @@
                     echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
-                if(isset($case->libCaseVersion) and $case->libCaseVersion > $case->version and $from != 'testtask')
+                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask')
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID&version=$case->libCaseVersion"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 ?>

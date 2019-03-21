@@ -68,6 +68,7 @@ class router extends baseRouter
             }
 
             $productCommon = $projectCommon = 0;
+            if(!empty($this->config->isINT)) $projectCommon = 1;
             if($productProject)
             {
                 $productProject = $productProject->value;

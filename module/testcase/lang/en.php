@@ -65,6 +65,7 @@ $lang->testcase->createBug        = 'Convert to Bug';
 $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
 $lang->testcase->sync             = 'Sync Case';
+$lang->testcase->ignore           = 'Ignore';
 $lang->testcase->fromTesttask     = 'From Testtask';
 $lang->testcase->fromCaselib      = 'From Caselib';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.

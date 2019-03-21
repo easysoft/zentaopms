@@ -42,6 +42,7 @@
             <th><?php echo $lang->user->company;?></th>
             <td><div class="required required-wrapper"></div><?php echo html::input('company', $register->company, "class='form-control'");?></td>
           </tr>
+          <?php if(empty($config->isINT)):?>
           <tr>
             <th><?php echo $lang->user->mobile;?></th>
             <td>
@@ -55,6 +56,7 @@
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->user->email;?></th>
             <td>

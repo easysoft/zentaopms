@@ -208,7 +208,7 @@ $lang->project->timeSummary         = '<div class="table-col"><div class="clearf
 $lang->project->groupSummaryAB      = "<div>Tasks <strong>%s ：</strong><span class='text-muted'>Wait</span> %s &nbsp; <span class='text-muted'>Doing</span> %s</div><div>Est. <strong>%s ：</strong><span class='text-muted'>Cost</span> %s &nbsp; <span class='text-muted'>Left</span> %s</div>";
 $lang->project->wbs                 = "Decompose Task";
 $lang->project->batchWBS            = "Batch Decompose";
-$lang->project->howToUpdateBurn     = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
+$lang->project->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories        = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} linked {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->productStories      = "{$lang->projectCommon} linked  story is the subeset of {$lang->productCommon}, which can only be linked after review. Please <a href='%s'> Link Story</a>。";
 $lang->project->haveDraft           = "There are %s draft stories can't be linked.";
@@ -245,6 +245,11 @@ $lang->project->noweekend             = 'excl. Weekend';
 $lang->project->withweekend           = 'incl. Weekend';
 $lang->project->interval              = 'Intervals';
 $lang->project->fixFirstWithLeft      = 'Modify the left';
+
+$lang->project->action = new stdclass();
+$lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
+$lang->project->action->managed = '$date, managed by <strong>$actor</strong> .' . "\n";
+$lang->project->action->extra   = 'The related products are %s.';
 
 /* 统计。*/
 $lang->project->charts = new stdclass();

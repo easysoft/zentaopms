@@ -77,7 +77,7 @@
         <?php
         $nav = $task['nav'];
         $task['name'] = $name;
-        $task['id']   = $idx+1;
+        $task['id']   = $idx + 1;
         $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
         $tasks[$name] = $task;
         ?>
@@ -224,11 +224,15 @@ $(function()
             tipClass: 'tooltip-warning tooltip-max'
         }, options);
         $e = $e.first();
-        if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
-        $e.tooltip('show');
-        if($e[0].getBoundingClientRect().top > $(window).height() || $e[0].getBoundingClientRect().top < 0)
+        if($e.css('display') == 'none')
         {
-            $e[0].scrollIntoView();
+            $e.parent().addClass('tooltip-tutorial').after("<div id='typeLabel' class='text-danger help-text'>" + options.title + "</div>");
+        }
+        else
+        {
+            if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
+            $e.tooltip('show');
+            if($e[0].getBoundingClientRect().top > $(window).height() || $e[0].getBoundingClientRect().top < 0) $e[0].scrollIntoView();
         }
     };
 
@@ -277,7 +281,7 @@ $(function()
                 var $checkboxes = $form.find(fieldSelector);
                 targetStatus.form = $checkboxes.filter(':checked').length > 0;
                 if(!targetStatus.form) {
-                    targetStatus.waitFeild = $checkboxes.filter(':not(:checked):first').closest('td');
+                    targetStatus.waitField = $checkboxes.filter(':not(:checked):first').closest('td');
                 }
             }
             else if(requiredFields)
@@ -294,7 +298,7 @@ $(function()
                         if(val === undefined || val === null || val === '' || val === '0')
                         {
                             targetStatus.form = false;
-                            if(!targetStatus.waitFeild) targetStatus.waitFeild = $required;
+                            if(!targetStatus.waitField) targetStatus.waitField = $required;
                         }
                     }
                 });
@@ -310,15 +314,17 @@ $(function()
                     var status = checkTask();
                     if(!status.submitOK)
                     {
-                        if(status.waitFeild)
+                        if(status.waitField)
                         {
-                            var feildName = status.waitFeild.closest('td').prev('th').text();
-                            if(feildName) showToolTip(status.waitFeild, lang.requiredTip.replace('%s', feildName));
-                            highlight(status.waitFeild, function()
+                            var fieldName = status.waitField.closest('td').prev('th').text();
+                            if(!fieldName) fieldName = status.waitField.closest('.input-group').find('.input-group-addon:first').text();
+                            if(fieldName) showToolTip(status.waitField, lang.requiredTip.replace('%s', fieldName));
+                            highlight(status.waitField, function()
                             {
                                 clearTimeout(showToolTipTask);
                                 showToolTipTask = setTimeout(function()
                                 {
+                                    status.waitField.closest('td').find('#typeLabel').remove();
                                     showToolTip($formWrapper, $formTarget.text());
                                     highlight($formWrapper);
                                 }, 2000);

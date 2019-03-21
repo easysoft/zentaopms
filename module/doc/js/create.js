@@ -16,10 +16,13 @@ $(function()
             $('#urlBox').removeClass('hidden');
         }
     });
-    window.editor['content'].addListener('ready', function()
+    if(typeof(window.editor) != 'undefined')
     {
-        $('div#content .edui-toolbar').append("<div class='edui-box edui-button edui-for-markdown edui-default'><div class='edui-default' onmouseover='toggleHover(this)' onmouseout='toggleHover(this)'><div class='edui-button-wrap edui-default' style='padding-right:4px;padding-left:4px;'><div class='edui-default' onclick='toggleEditor(\"markdown\")' title='Markdown'>Markdown</div></div></div></div>");
-    });
+        window.editor['content'].addListener('ready', function()
+        {
+            $('div#content .edui-toolbar').append("<div class='edui-box edui-button edui-for-markdown edui-default'><div class='edui-default' onmouseover='toggleHover(this)' onmouseout='toggleHover(this)'><div class='edui-button-wrap edui-default' style='padding-right:4px;padding-left:4px;'><div class='edui-default' onclick='toggleEditor(\"markdown\")' title='Markdown'>Markdown</div></div></div></div>");
+        });
+    }
 })
 
 function toggleHover(obj)
@@ -58,5 +61,10 @@ function initPage(type)
     {
         $('#contentBox').addClass('hidden');
         $('#urlBox').removeClass('hidden');
+    }
+    if(type == 'word' || type == 'ppt' || type == 'excel')
+    {
+        if($('#contentBox')).hide();
+        if($('#urlBox')).hide();
     }
 }

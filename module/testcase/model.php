@@ -396,7 +396,6 @@ class testcaseModel extends model
             $case->latestStoryVersion = $story->version;
         }
         if($case->fromBug) $case->fromBugTitle      = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
-        if($case->fromCaseID) $case->libCaseVersion = $this->dao->findById($case->fromCaseID)->from(TABLE_CASE)->fetch('version');
 
         $case->toBugs = array();
         $toBugs       = $this->dao->select('id, title')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
@@ -672,6 +671,8 @@ class testcaseModel extends model
             if($stepChanged)
             {
                 $parentStepID = 0;
+                $isLibCase = ($oldCase->lib and empty($oldCase->product));
+                if($isLibCase) $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($version)->where('`fromCaseID`')->eq($caseID)->exec(); 
                 foreach($this->post->steps as $stepID => $stepDesc)
                 {
                     if(empty($stepDesc)) continue;
@@ -1253,7 +1254,8 @@ class testcaseModel extends model
         $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
         foreach($libCases as $libCaseID => $case)
         {
-            $case->fromCaseID = $case->id;
+            $case->fromCaseID      = $case->id;
+            $case->fromCaseVersion = $case->version;
             $case->product    = $productID;
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
@@ -1339,7 +1341,6 @@ class testcaseModel extends model
         $caseLink   = helper::createLink('testcase', 'view', "caseID=$case->id&version=$case->version");
         $account    = $this->app->user->account;
         $fromCaseID = $case->fromCaseID;
-        if($fromCaseID) $libCaseVersion = $this->dao->findById($fromCaseID)->from(TABLE_CASE)->fetch('version');
         $id = $col->id;
         if($col->show)
         {
@@ -1392,7 +1393,7 @@ class testcaseModel extends model
                 {
                     print("<span class='status-story status-changed' title={$this->lang->testcase->fromTesttask}>{$this->lang->story->changed}</span>");
                 }
-                elseif(isset($libCaseVersion) and $libCaseVersion > $case->version and !$case->needconfirm)
+                elseif(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
                 {
                     print("<span class='status-story status-changed' title={$this->lang->testcase->fromCaselib}>{$this->lang->testcase->changed}</span>");
                 }

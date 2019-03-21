@@ -125,12 +125,7 @@ class task extends control
             }
 
             /* If link from no head then reload*/
-            if(isonlybody())
-            {
-                $response['locate'] = 'reload';
-                $response['target'] = 'parent';
-                $this->send($response);
-            }
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             if($todoID > 0)
             {
@@ -177,6 +172,14 @@ class task extends control
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
 
+        /* Get no test stories. */
+        $testStoryIdList = $this->dao->select('story')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('story')->in(array_keys($stories))->fetchPairs('story', 'story');
+        $noTestStories   = array();
+        foreach($stories as $id => $title)
+        {
+            if(!isset($testStoryIdList[$id])) $noTestStories[$id] = $title;
+        }
+
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);
         $position[] = $this->lang->task->common;
@@ -196,6 +199,7 @@ class task extends control
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
+        $this->view->noTestStories    = $noTestStories;
         $this->view->members          = $members;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
@@ -235,7 +239,7 @@ class task extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            if(!empty($iframe)) $this->send(array('result' => 'success', 'locate' => 'parent'));
+            if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
         }
 
@@ -1271,6 +1275,7 @@ class task extends control
             if($this->session->taskOnlyCondition)
             {
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
+                    ->andWhere('parent')->le(0)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($sort)->fetchAll('id');
 

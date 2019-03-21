@@ -152,6 +152,7 @@ $lang->doc->customObjectLibs['customFiles'] = '显示自定义文档库';
 $lang->doc->orderLib                       = '文档库排序';
 $lang->doc->customShowLibs                 = '显示设置';
 $lang->doc->customShowLibsList['zero']     = '显示空文档的库';
+$lang->doc->customShowLibsList['children'] = '显示子分类的文档';
 $lang->doc->customShowLibsList['unclosed'] = '只显示未关闭的项目';
 
 $lang->doc->confirmDelete      = "您确定删除该文档吗？";
