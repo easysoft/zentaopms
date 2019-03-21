@@ -1,9 +1,11 @@
 /* If left = 0, warning. */
 function checkLeft()
 {
-    value = $("#left").val();
-    if(isNaN(parseInt(value)) || value == 0)
+    var value = $("#left").val();
+    if(isNaN(parseFloat(value)) || value == 0)
     {
-        return confirm(confirmFinish);
+        var result = confirm(confirmFinish);
+        if(!result) setTimeout(function() {$.enableForm()}, 500);
+        return result;
     }
 }
