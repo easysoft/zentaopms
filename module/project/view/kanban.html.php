@@ -113,7 +113,24 @@ $account = $this->app->user->account;
           <?php if($type == 'story'):?>
           <?php $story = $group;?>
           <div class='board-story' data-id='<?php echo $story->id;?>'>
-            <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbaniframe group-title" title="' . $story->title . '"');?>
+            <div class='board-title'>
+              <?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', 'class="kanbaniframe group-title" title="' . $story->title . '"');?>
+              <nav class='board-actions nav nav-default'>
+                <li class='dropdown'>
+                  <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
+                  <ul class='dropdown-menu pull-right'>
+                    <?php
+                    $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
+                    echo (common::hasPriv('task', 'create'))         ? '<li>' . html::a($this->createLink('task', 'create', "projectID=$story->project&storyID=$story->id&moduleID=$story->module", '', true), $lang->project->wbs, '', $misc) : '' . '</li>';
+                    echo (common::hasPriv('task', 'batchCreate'))    ? '<li>' . html::a($this->createLink('task', 'batchCreate', "projectID=$story->project&storyID=$story->id&moduleID=0&taskID=0&iframe=true", '', true), $lang->project->batchWBS, '', $misc) : '' . '</li>';
+                    echo (common::hasPriv('project', 'unlinkStory')) ? '<li>' . html::a($this->createLink('project', 'unlinkStory', "projectID=$story->project&storyID=$story->story&confirm=no", '', true), $lang->project->unlinkStory, 'hiddenwin') : '' . '</li>';
+                    $misc = "data-toggle='modal' data-type='iframe'";
+                    echo (common::hasPriv('story', 'close'))         ? '<li>' . html::a($this->createLink('story', 'close', "storyID=$story->id", '', true), $lang->story->close, '', $misc) : '' . '</li>';
+                    ?>
+                  </ul>
+                </li>
+              </nav>
+            </div>
             <div class="small group-info">
               <span class='story-id board-id' title='<?php echo $lang->story->id?>'>#<?php echo $story->id?></span>
               <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>

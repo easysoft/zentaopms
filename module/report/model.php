@@ -24,7 +24,7 @@ class reportModel extends model
     {
         $sum = 0;
         foreach($datas as $data) $sum += $data->value;
-        foreach($datas as $data) $data->percent = round($data->value / $sum, 2);
+        foreach($datas as $data) $data->percent = round($data->value / $sum, 4);
         return $datas;
     }
 

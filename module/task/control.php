@@ -125,12 +125,7 @@ class task extends control
             }
 
             /* If link from no head then reload*/
-            if(isonlybody())
-            {
-                $response['locate'] = 'reload';
-                $response['target'] = 'parent';
-                $this->send($response);
-            }
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             if($todoID > 0)
             {
@@ -244,7 +239,7 @@ class task extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            if(!empty($iframe)) $this->send(array('result' => 'success', 'locate' => 'parent'));
+            if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
         }
 
