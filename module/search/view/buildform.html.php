@@ -16,7 +16,7 @@ include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
 $fieldWidth    = $app->getClientLang() == 'en' ? 'w-130px' : 'w-110px';
-$operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-100px';
+$operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 ?>
 <style>
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
@@ -26,7 +26,11 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-100px';
 #<?php echo $formId;?> > table > tbody > tr > td {padding: 8px;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
 #<?php echo $formId;?> .chosen-container[id^="field"] .chosen-drop {min-width: 180px;}
+<?php if($app->getClientLang() == 'en'):?>
+#<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 70px;}
+<?php else:?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
+<?php endif;?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #<?php echo $formId;?> .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #<?php echo $formId;?> input.date::-webkit-input-placeholder {color: #838A9D; opacity: 1;}
@@ -35,6 +39,10 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-100px';
 #<?php echo $formId;?> .btn-expand-form {background: transparent;}
 #<?php echo $formId;?> .btn-expand-form:hover {background: #e9f2fb;}
 .showmore .btn-expand-form .icon-chevron-double-down:before {content: '\e959';}
+
+#queryBox select[id^="operator"] {padding-right:2px; padding-left:5px;}
+#queryBox select#groupAndOr {padding-right:2px; padding-left:5px;}
+#queryBox .chosen-container-single .chosen-single>span {margin-right:5px;}
 
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
@@ -131,7 +139,7 @@ foreach($fieldParams as $fieldName => $param)
           </tbody>
         </table>
       </td>
-      <td class='text-center nobr w-80px'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control'")?></td>
+      <td class='text-center nobr w-70px'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control'")?></td>
       <td class='w-400px'>
         <table class='table table-form'>
           <tbody>

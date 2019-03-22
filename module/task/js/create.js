@@ -259,12 +259,12 @@ function addItem(obj)
     var $nextTr = $tr.next();
     $nextTr.find('#testAssignedTo').val($('#assignedTo').val());
     $nextTr.find('#testStory').closest('td').find('.chosen-container').remove();
-    $nextTr.find('#testStory').closest('td').find('select').chosen();
+    $nextTr.find('#testStory').closest('td').find('select').val('').chosen();
     $nextTr.find('#testPri').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testPri').closest('td').find('select').chosen();
     $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
     $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
-    $nextTr.find('.form-date').datepicker();
+    $nextTr.find('.form-date').val('').datepicker();
 }
 
 function removeItem(obj)
