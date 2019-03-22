@@ -343,8 +343,20 @@
         <div class="detail-content">
           <table class='table table-data'>
             <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
+            <tr class='<?php echo $widthClass;?>'>
+              <th><?php echo $lang->task->estimate;?></th>
+              <td><?php echo $task->estimate . $lang->workingHour;?></td>
+            </tr>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estStarted;?></th>
+              <th><?php echo $lang->task->consumed;?></th>
+              <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->task->left;?></th>
+              <td><?php echo $task->left . $lang->workingHour;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->task->estStarted;?></th>
               <td><?php echo $task->estStarted;?></td>
             </tr>
             <tr>
@@ -359,18 +371,6 @@
                 if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
                 ?>
               </td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->estimate;?></th>
-              <td><?php echo $task->estimate . $lang->workingHour;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->consumed;?></th>
-              <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->left;?></th>
-              <td><?php echo $task->left . $lang->workingHour;?></td>
             </tr>
           </table>
         </div>
