@@ -655,13 +655,13 @@ class taskModel extends model
             ->setIF($this->post->assignedTo != $oldTask->assignedTo, 'assignedDate', $now)
 
             ->setIF($this->post->status == 'wait' and $this->post->left == $oldTask->left and $this->post->consumed == 0 and $this->post->estimate, 'left', $this->post->estimate)
-            ->setIF(isset($_POST['unlinkParent']), 'parent', 0)
+            ->setIF($oldTask->parent > 0 and !$this->post->parent, 'parent', 0)
 
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu,unlinkParent')
+            ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
             ->get();
 
         if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
