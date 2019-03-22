@@ -127,4 +127,3 @@ if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
-$config->isINT = 1;

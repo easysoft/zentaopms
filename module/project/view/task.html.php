@@ -149,12 +149,24 @@ js::set('browseType', $browseType);
     <?php
     $checkObject = new stdclass();
     $checkObject->project = $projectID;
-    $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-    if(common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
+    if(!isset($this->config->isINT) or !$this->config->isINT)
+    {
+        $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+        if(common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");
+    }
 
     $link = $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
     if(common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
     ?>
+    <?php if(isset($this->config->isINT) and $this->config->isINT):?>
+    <?php $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));?>
+    <div class="btn-group dropdown-hover">
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown' id='int-dropdown'> <span class='caret'></span> </button>
+      <ul class="dropdown-menu pull-right">
+      <?php echo "<li>" . html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->batchCreate) . "</li>";?>
+      </ul>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
