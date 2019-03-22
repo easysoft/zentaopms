@@ -272,6 +272,48 @@ function removeItem(obj)
     if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
 }
 
+function markTestStory()
+{
+    $('#testStoryBox select[name^="testStory"]').each(function()
+    {
+        var $select = $(this);
+        $select.find('option').each(function()
+        {
+            var $option = $(this);
+            var value = $option.attr('value');
+            var tests = testStoryIdList[value];
+            $option.attr('data-data', value).toggleClass('has-test', !!(tests && tests !== '0'));
+        });
+        $select.trigger("chosen:updated");
+    });
+
+    var getStoriesHasTest = function()
+    {
+        var storiesHasTest = {};
+        $('#testStoryBox table tbody>tr').each(function()
+        {
+            var $tr = $(this);
+            storiesHasTest[$tr.find('select[name^="testStory"]').val()] = true;
+        });
+        console.log(storiesHasTest);
+        return storiesHasTest;
+    };
+
+    $('#testStoryBox').on('chosen:showing_dropdown', 'select[name^="testStory"],.chosen-with-drop', function()
+    {
+        var storiesHasTest = getStoriesHasTest();
+        var $container     = $(this).closest('td').find('.chosen-container');
+        setTimeout(function()
+        {
+            $container.find('.chosen-results>li').each(function()
+            {
+                var $li = $(this);
+                $li.toggleClass('has-new-test', !!storiesHasTest[$li.data('data')]);
+            });
+        }, 100);
+    });
+}
+
 $(document).ready(function()
 {
     $('#pri').on('change', function()
@@ -288,6 +330,7 @@ $(document).ready(function()
     });
     
     setStoryRelated();
+    markTestStory();
 
     $('#selectAllUser').on('click', function()
     {
@@ -297,6 +340,17 @@ $(document).ready(function()
             $assignedTo.children('option').attr('selected', 'selected');
             $assignedTo.trigger('chosen:updated');
         }
+    });
+
+    var preAssign = '';
+    $('#assignedTo').change(function()
+    {
+        var assign = $(this).val();
+        $('#testStoryBox').find('select[name^="testAssignedTo"]').each(function()
+        {
+            if($(this).val() == '' || $(this).val() == preAssign) $(this).val(assign).trigger('chosen:updated');
+        });
+        preAssign = assign;
     });
 
     $('[data-toggle=tooltip]').tooltip();

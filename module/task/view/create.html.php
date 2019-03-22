@@ -74,10 +74,10 @@
           </td>
         </tr>
         <?php endif;?>
+        <?php if($stories and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
-            <?php if($noTestStories):?>
             <table class='table table-form mg-0 table-bordered'>
               <thead>
                 <tr>
@@ -90,8 +90,11 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $i = 0;?>
+                <?php foreach($stories as $storyID => $storyTitle):?>
+                <?php if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;?>
                 <tr>
-                  <td><?php echo html::select("testStory[]", $noTestStories, '', "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testStory[]", $stories, $storyID, "class='form-control chosen'");?></td>
                   <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
@@ -109,11 +112,14 @@
                     </div>
                   </td>
                 </tr>
+                <?php $i++;?>
+                <?php if($i >= 5) break;?>
+                <?php endforeach;?>
               </tbody>
             </table>
-            <?php endif;?>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->task->name;?></th>
           <td colspan='3'>
@@ -262,4 +268,5 @@
     </form>
   </div>
 </div>
+<?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php include '../../common/view/footer.html.php';?>
