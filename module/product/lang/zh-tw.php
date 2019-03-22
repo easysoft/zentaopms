@@ -58,7 +58,7 @@ $lang->product->accessDenied   = "您無權訪問該{$lang->productCommon}";
 $lang->product->id            = '編號';
 $lang->product->name          = "{$lang->productCommon}名稱";
 $lang->product->code          = "{$lang->productCommon}代號";
-$lang->product->line          = '產品綫';
+$lang->product->line          = "{$lang->productCommon}綫";
 $lang->product->order         = '排序';
 $lang->product->type          = "{$lang->productCommon}類型";
 $lang->product->status        = '狀態';
@@ -120,8 +120,8 @@ $lang->product->aclList['custom']  = '自定義白名單(團隊成員和白名�
 
 $lang->product->storySummary   = "本頁共 <strong>%s</strong> 個需求，預計 <strong>%s</strong> 個工時，用例覆蓋率 <strong>%s</strong>。";
 $lang->product->checkedSummary = "選中 <strong>%total%</strong> 個需求，預計 <strong>%estimate%</strong> 個工時，用例覆蓋率 <strong>%rate%</strong>。";
-$lang->product->noModule       = '<div>您現在還沒有模組信息</div><div>請維護產品模組</div>';
-$lang->product->noProduct      = '暫時沒有產品。';
+$lang->product->noModule       = "<div>您現在還沒有模組信息</div><div>請維護{$lang->productCommon}模組</div>";
+$lang->product->noProduct      = "暫時沒有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;

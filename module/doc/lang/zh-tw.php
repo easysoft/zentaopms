@@ -152,6 +152,7 @@ $lang->doc->customObjectLibs['customFiles'] = '顯示自定義文檔庫';
 $lang->doc->orderLib                       = '文檔庫排序';
 $lang->doc->customShowLibs                 = '顯示設置';
 $lang->doc->customShowLibsList['zero']     = '顯示空文檔的庫';
+$lang->doc->customShowLibsList['children'] = '顯示子分類的文檔';
 $lang->doc->customShowLibsList['unclosed'] = '只顯示未關閉的項目';
 
 $lang->doc->confirmDelete      = "您確定刪除該文檔嗎？";
@@ -201,7 +202,6 @@ $lang->doclib->aclListA['custom']  = '自定義';
 $lang->doclib->aclListB['open']    = '公開';
 $lang->doclib->aclListB['custom']  = '自定義';
 $lang->doclib->aclListB['private'] = '私有';
-
 
 $lang->doclib->create['product'] = '創建' . $lang->productCommon . '文檔庫';
 $lang->doclib->create['project'] = '創建' . $lang->projectCommon . '文檔庫';

@@ -93,6 +93,7 @@ $lang->custom->notice->longlife                    = 'Bug列表頁面的久未�
 $lang->custom->notice->invalidNumberKey            = '鍵值應為不大於255的數字';
 $lang->custom->notice->invalidStringKey            = '鍵值應當為小寫英文字母、數字或下劃線的組合';
 $lang->custom->notice->cannotSetTimezone           = 'date_default_timezone_set方法不存在或禁用，不能設置時區。';
+$lang->custom->notice->noClosedBlock               = '沒有永久關閉的區塊';
 
 $lang->custom->notice->indexPage['product']        = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
 $lang->custom->notice->indexPage['project']        = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";

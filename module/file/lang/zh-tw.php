@@ -56,3 +56,4 @@ $lang->file->dangerFile          = " 您選擇的檔案存在安全風險，系�
 $lang->file->errorSuffix         = '壓縮包格式錯誤，只能上傳zip壓縮包！';
 $lang->file->errorExtract        = '解壓縮失敗！可能檔案已經損壞，或壓縮包裡含有非法上傳檔案。';
 $lang->file->uploadImagesExplain = '註：請上傳"jpg, jpeg, gif, png"格式的圖片，程序會以檔案名作為標題，以圖片作為內容。';
+$lang->file->fileNotFound        = '未找到該檔案，可能物理檔案已被刪除！';
