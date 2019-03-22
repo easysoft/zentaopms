@@ -560,6 +560,7 @@ $lang->resource->testcase->batchReview        = 'batchReview';
 $lang->resource->testcase->importFromLib      = 'importFromLib';
 $lang->resource->testcase->batchCaseTypeChange = 'batchCaseTypeChange';
 $lang->resource->testcase->confirmLibcaseChange    = 'confirmLibcaseChange';
+$lang->resource->testcase->ignoreLibcaseChange     = 'ignoreLibcaseChange';
 $lang->resource->testcase->batchConfirmStoryChange = 'batchConfirmStoryChange';
 
 $lang->testcase->methodOrder[0]   = 'index';
