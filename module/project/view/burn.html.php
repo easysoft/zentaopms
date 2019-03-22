@@ -25,7 +25,7 @@
     echo $lang->project->howToUpdateBurn;
     ?>
     <?php if($interval):?>
-    <div class='input-control w-120px'>
+    <div class='input-control <?php echo $this->app->getClientLang() == 'en' ? "w-150px" : "w-120px" ?>'>
       <?php echo html::select('interval', $dayList, $interval, "class='form-control chosen'");?>
     </div>
     <?php endif;?>
