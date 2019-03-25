@@ -48,7 +48,7 @@
       </table>
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
-        <?php $thClass = (isset($config->isINT) and $config->isINT) ? 'w-130px' : 'w-90px';?>
+        <?php $thClass = ($app->getClientLang() == 'en') ? 'w-130px' : 'w-90px';?>
         <tr>
           <th class='w-100px'><?php echo $lang->user->account;?></th>
           <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control'");?></td>
@@ -94,7 +94,7 @@
       </table>
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->verify;?></caption>
-        <?php $thClass = (isset($config->isINT) and $config->isINT) ? 'w-enVerifyPassword' : 'w-verifyPassword';?>
+        <?php $thClass = ($app->getClientLang() == 'en') ? 'w-enVerifyPassword' : 'w-verifyPassword';?>
         <tr>
           <th class='<?php echo $thClass?>'><?php echo $lang->user->verifyPassword;?></th>
           <td>
