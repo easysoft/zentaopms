@@ -438,6 +438,7 @@ class testtaskModel extends model
      */
     public function getLinkableCasesBySuite($productID, $task, $query, $suite, $linkedCases, $pager)
     {
+        if(strpos($query, '`product`') !== false) $query = str_replace('`product`', 't1.`product`', $query);
         return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                 ->where($query)
