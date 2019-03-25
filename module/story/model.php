@@ -83,6 +83,19 @@ class storyModel extends model
     }
 
     /**
+     * Get test stories.
+     * 
+     * @param  array  $storyIdList 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getTestStories($storyIdList, $projectID)
+    {
+        return $this->dao->select('story')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('type')->eq('test')->andWhere('story')->in($storyIdList)->fetchPairs('story', 'story');
+    }
+
+    /**
      * Get story specs.
      *
      * @param  array  $storyIdList
