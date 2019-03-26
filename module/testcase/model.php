@@ -672,7 +672,13 @@ class testcaseModel extends model
             {
                 $parentStepID = 0;
                 $isLibCase = ($oldCase->lib and empty($oldCase->product));
-                if($isLibCase) $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($version)->where('`fromCaseID`')->eq($caseID)->exec(); 
+                if($isLibCase) 
+                {
+                    $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+                    $fromcaseVersion += 1;
+                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec(); 
+                }
+
                 foreach($this->post->steps as $stepID => $stepDesc)
                 {
                     if(empty($stepDesc)) continue;
