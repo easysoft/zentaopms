@@ -731,18 +731,21 @@ function convertURL()
 {
     if($('.article-content, .article>.content').size() == 0) return;
 
-    var aTags   = new Array();
-    var content = $('.article-content, .article>.content').html();
-    $('.article-content, .article>.content').find('a').each(function(i)
+    $('.article-content, .article>.content').each(function()
     {
-        aTags[i] = $(this).prop('outerHTML');
-        content  = content.replace(aTags[i], '<REPLACE_' + i + '>');
-    });
+        var aTags   = new Array();
+        var content = $(this).html();
+        $(this).find('a').each(function(i)
+        {
+            aTags[i] = $(this).prop('outerHTML');
+            content  = content.replace(aTags[i], '<REPLACE_' + i + '>');
+        });
 
-    var regexp = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|\&|-|%|;)+)/g;
-    content = content.replace(regexp, function($url){ return "<a href='" + $url + "' target='_blank'>" + $url + "</a>";});
-    for(i in aTags) content = content.replace('<REPLACE_' + i + '>', aTags[i]);
-    $('.article-content, .article>.content').html(content);
+        var regexp = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|\&|-|%|;)+)/g;
+        content = content.replace(regexp, function($url){ return "<a href='" + $url + "' target='_blank'>" + $url + "</a>";});
+        for(i in aTags) content = content.replace('<REPLACE_' + i + '>', aTags[i]);
+        $(this).html(content);
+    });
 }
 
 /* Ping the server every some minutes to keep the session. */
