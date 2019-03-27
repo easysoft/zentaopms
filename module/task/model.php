@@ -44,6 +44,7 @@ class taskModel extends model
             ->join('mailto', ',')
             ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate')
             ->get();
+        if($task->type != 'test') $this->post->set('selectTestStory', 0);
 
         foreach($this->post->assignedTo as $assignedTo)
         {
