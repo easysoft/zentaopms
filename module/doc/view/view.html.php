@@ -167,13 +167,13 @@ js::set('sysurl', common::getSysUrl());
             <tbody>
               <?php if($doc->productName):?>
               <tr>
-                <th><?php echo $lang->doc->product;?></th>
+                <th class='w-80px'><?php echo $lang->doc->product;?></th>
                 <td><?php echo $doc->productName;?></td>
               </tr>
               <?php endif;?>
               <?php if($doc->projectName):?>
               <tr>
-                <th><?php echo $lang->doc->project;?></th>
+                <th class='w-80px'><?php echo $lang->doc->project;?></th>
                 <td><?php echo $doc->projectName;?></td>
               </tr>
               <?php endif;?>
