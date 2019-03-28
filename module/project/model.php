@@ -119,13 +119,19 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
+                $projectSubMenu = $this->lang->project->subMenu->$key;
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
                 if(!empty($subMenu))
                 {
-                    foreach($subMenu as $menu)
+                    foreach($subMenu as $menuKey => $menu)
                     {
-                        if($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']))
+                        if($moduleName == strtolower($menu->link['module']) and 
+                            (
+                                $methodName == strtolower($menu->link['method']) or
+                                (isset($projectSubMenu->$menuKey['alias']) and strpos($projectSubMenu->$menuKey['alias'], $methodName) !== false)
+                            )
+                        )
                         {
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
