@@ -1,8 +1,8 @@
 <script>
 <?php 
 $this->app->loadLang('chat');
-$account = $this->app->user->account;
-$xxInstalled = $this->app->user->account . 'installed';
+$account = str_replace('.', '_', $this->app->user->account);
+$xxInstalled = $account . 'installed';
 ?>
 <?php if(isset($config->xxserver->installed) and $config->xuanxuan->turnon and !isset($config->xxclient->$xxInstalled) and $config->global->flow == 'full' ):?>
 var myModalTrigger = new $.zui.ModalTrigger({custom: '<?php echo $lang->chat->xxClientConfirm;?>', title: '<?php echo $lang->chat->zentaoClient;?>'});
