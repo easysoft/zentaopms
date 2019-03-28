@@ -1044,7 +1044,7 @@ class taskModel extends model
             ->removeIF(!empty($oldTask->team), 'consumed,left')
             ->remove('comment')->get();
 
-        if(empty($task->team) && $this->post->left == 0)
+        if($this->post->left == 0)
         {
             $task->status       = 'done';
             $task->finishedBy   = $this->app->user->account;
@@ -1665,7 +1665,7 @@ class taskModel extends model
     public function getProjectTaskPairs($projectID, $status = 'all', $orderBy = 'finishedBy, id_desc')
     {
         $tasks = array('' => '');
-        $stmt = $this->dao->select('t1.id, t1.name, t2.realname AS finishedByRealName')
+        $stmt = $this->dao->select('t1.id,t1.name,t1.parent,t2.realname AS finishedByRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.finishedBy = t2.account')
             ->where('t1.project')->eq((int)$projectID)
@@ -1673,7 +1673,7 @@ class taskModel extends model
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->orderBy($orderBy)
             ->query();
-        while($task = $stmt->fetch()) $tasks[$task->id] = "$task->id:$task->finishedByRealName:$task->name";
+        while($task = $stmt->fetch()) $tasks[$task->id] = ($task->parent > 0 ? "[{$this->lang->task->childrenAB}] " : '') . "$task->id:$task->finishedByRealName:$task->name";
         return $tasks;
     }
 
