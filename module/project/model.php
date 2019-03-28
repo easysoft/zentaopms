@@ -126,10 +126,11 @@ class projectModel extends model
                 {
                     foreach($subMenu as $menuKey => $menu)
                     {
+                        $itemMenu = zget($projectSubMenu, $menuKey, '');
                         if($moduleName == strtolower($menu->link['module']) and 
                             (
                                 $methodName == strtolower($menu->link['method']) or
-                                (isset($projectSubMenu->$menuKey['alias']) and strpos($projectSubMenu->$menuKey['alias'], $methodName) !== false)
+                                (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false)
                             )
                         )
                         {
