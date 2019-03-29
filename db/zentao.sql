@@ -125,11 +125,12 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
 -- DROP TABLE IF EXISTS `zt_burn`;
 CREATE TABLE IF NOT EXISTS `zt_burn` (
   `project` mediumint(8) unsigned NOT NULL,
+  `task` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `date` date NOT NULL,
   `estimate` float NOT NULL,
   `left` float NOT NULL,
   `consumed` float NOT NULL,
-  PRIMARY KEY  (`project`,`date`)
+  PRIMARY KEY  (`project`,`date`,`task`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (

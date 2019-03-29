@@ -1528,7 +1528,7 @@ class baseRouter
     {
         $code = trim(file_get_contents($fileName));
         if(strpos($code, '<?php') === 0)     $code = ltrim($code, '<?php');
-        if(strrpos($code, '?>')   !== false) $code = rtrim($code, '?>');
+        if(strrpos($code, '?' . '>')   !== false) $code = rtrim($code, '?' . '>');
         return trim($code);
     }
 
@@ -1650,7 +1650,7 @@ class baseRouter
 
         /* include default value for module*/
         $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
-        if($defaultValueFiles) foreach($defaultValueFiles as $file) helper::import($file);
+        if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
 
         /* 
          * 使用反射机制获取函数参数的默认值。

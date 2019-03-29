@@ -74,10 +74,10 @@
           </td>
         </tr>
         <?php endif;?>
+        <?php if($stories and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
           <td colspan='3'>
-            <?php if($noTestStories):?>
             <table class='table table-form mg-0 table-bordered'>
               <thead>
                 <tr>
@@ -90,8 +90,11 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $i = 0;?>
+                <?php foreach($stories as $storyID => $storyTitle):?>
+                <?php if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;?>
                 <tr>
-                  <td><?php echo html::select("testStory[]", $noTestStories, '', "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testStory[]", $stories, $storyID, "class='form-control chosen'");?></td>
                   <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
@@ -109,11 +112,35 @@
                     </div>
                   </td>
                 </tr>
+                <?php $i++;?>
+                <?php if($i >= 5) break;?>
+                <?php endforeach;?>
+                <?php if($i == 0):?>
+                <tr>
+                  <td><?php echo html::select("testStory[]", $stories, '', "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input("testEstStarted[]", $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
+                      <span class='input-group-addon fix-border'>~</span>
+                      <?php echo html::input("testDeadline[]", $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
+                    </div>
+                  </td>
+                  <td><?php echo html::select("testAssignedTo[]", $members, $task->assignedTo, "class='form-control chosen'");?></td>
+                  <td><?php echo html::input("testEstimate[]", '', "class='form-control'");?></td>
+                  <td class='text-center'>
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-sm" tabindex="-1" onclick='addItem(this)'><i class="icon icon-plus"></i></button>
+                      <button type="button" class="btn btn-sm" tabindex="-1" onclick='removeItem(this)'><i class="icon icon-close"></i></button>
+                    </div>
+                  </td>
+                </tr>
+                <?php endif;?>
               </tbody>
             </table>
-            <?php endif;?>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->task->name;?></th>
           <td colspan='3'>
@@ -262,4 +289,5 @@
     </form>
   </div>
 </div>
+<?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php include '../../common/view/footer.html.php';?>

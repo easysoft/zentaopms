@@ -10,5 +10,12 @@
 
 #testStoryBox table tr td{padding:0px;}
 #testStoryBox table tr td .chosen-container .chosen-single{border:0px;}
+#testStoryBox table tr td .chosen-compact.chosen-container-single .chosen-single>.chosen-search{top:0;right:0;left:0}
 #testStoryBox table tr td input{border:0px;}
 #testStoryBox table tr td .input-group .input-group-addon{border-left:1px solid #dcdcdc;border-right:1px solid #dcdcdc;}
+#testStoryBox table button.btn{border:0px;}
+
+.chosen-results > li.has-test,
+.chosen-results > li.has-new-test {position: relative; color: #388E3C;}
+.chosen-results > li.has-test.highlighted,
+.chosen-results > li.has-new-test.highlighted {color: #fff;}

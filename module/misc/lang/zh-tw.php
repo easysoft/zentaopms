@@ -76,6 +76,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->releaseDate['11.4.stable'] = '2019-03-25';
 $lang->misc->releaseDate['11.3.stable'] = '2019-02-27';
 $lang->misc->releaseDate['11.2.stable'] = '2019-01-30';
 $lang->misc->releaseDate['11.1.stable'] = '2019-01-04';
@@ -100,13 +101,15 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['11.4.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '<p>增強測試任務管理</p><p>優化計劃、發佈、版本關聯需求和bug的交互</p><p>文檔庫可以自定義是否顯示子分類裡的文檔</p><p>修復bug，完善細節</p>');
+
 $lang->misc->feature->all['11.3.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '<p>計劃添加子計劃功能</p><p>優化chosen交互</p><p>添加時區設置</p><p>優化文檔庫和文檔</p>');
 
 $lang->misc->feature->all['11.2.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '<p>增加升級日誌和升級後資料庫檢查的功能</p><p>修復禪道整合客戶端和其他若干bug，完善細節</p>');
 
-$lang->misc->feature->all['11.1.stable'][] = array('title'=>'主要修復Bug。');
+$lang->misc->feature->all['11.1.stable'][] = array('title'=>'主要修復Bug。', 'desc' => '');
 
-$lang->misc->feature->all['11.0.stable'][] = array('title'=>'禪道整合喧喧');
+$lang->misc->feature->all['11.0.stable'][] = array('title'=>'禪道整合喧喧', 'desc' => '');
 
 $lang->misc->feature->all['10.6.stable'][] = array('title'=>'調整備份機制', 'desc' => '<p>增加備份設置，備份更加靈活</p><p>顯示備份進度</p><p>可以更改備份目錄</p>');
 $lang->misc->feature->all['10.6.stable'][] = array('title'=>'優化和調整菜單', 'desc' => '<p>調整後台菜單</p><p>調整我的地盤和項目的二級菜單</p>');

@@ -56,3 +56,4 @@ $lang->file->dangerFile          = " File has been rejected to upload for securi
 $lang->file->errorSuffix         = 'Format is incorrect. .zip files ONLY!';
 $lang->file->errorExtract        = 'Extracting file failed. File might be damaged or invalid files in the zip package.';
 $lang->file->uploadImagesExplain = 'Note: upload .jpg, .jpeg, .gif, and .png images. The image name will be taken as the title of the story and the image as its content.';
+$lang->file->fileNotFound        = 'The file was not found, maybe the physical file has been deleted!';

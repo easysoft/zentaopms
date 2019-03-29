@@ -172,14 +172,6 @@ class task extends control
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
 
-        /* Get no test stories. */
-        $testStoryIdList = $this->dao->select('story')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('story')->in(array_keys($stories))->fetchPairs('story', 'story');
-        $noTestStories   = array();
-        foreach($stories as $id => $title)
-        {
-            if(!isset($testStoryIdList[$id])) $noTestStories[$id] = $title;
-        }
-
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);
         $position[] = $this->lang->task->common;
@@ -199,7 +191,7 @@ class task extends control
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
-        $this->view->noTestStories    = $noTestStories;
+        $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $project->id);
         $this->view->members          = $members;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();

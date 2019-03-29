@@ -37,9 +37,9 @@
     <?php
     if(!$plan->deleted)
     {
-        if(common::hasPriv('productplan', 'create') and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i>" . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
-        common::printIcon('productplan', 'edit',   "planID=$plan->id", $plan);
-        common::printIcon('productplan', 'delete', "planID=$plan->id", $plan, 'button', 'trash', 'hiddenwin');
+        if(common::hasPriv('productplan', 'create') and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
+        if(common::hasPriv('productplan', 'edit')) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('productplan', 'delete')) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
     ?>
   </div>
@@ -57,16 +57,27 @@
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
         <div class='actions'>
-          <?php
-          if(!$plan->deleted)
-          {
-              $batchMisc = common::hasPriv('story', 'batchCreate') ? 'btn btn-link' : "disabled";
-              $batchLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
-              echo html::a($batchLink, "<i class='icon icon-sitemap'></i><span class='text'>" . $lang->story->batchCreate . '</span>', '', "class='$batchMisc'");
-              common::printIcon('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id", $plan, 'button', 'plus');
-          }
-          if(common::hasPriv('productplan', 'linkStory')) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");
-          ?>
+          <?php if(!$plan->deleted):?>
+          <div class="btn-group">
+            <div class='drop-down dropdown-hover'>
+              <?php
+              $createLink = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=0&bugID=0&planID=$plan->id") : '#';
+              $createMisc = common::hasPriv('story', 'create') ? 'btn btn-secondary' : " btn btn-secondary disabled";
+              echo html::a($createLink, "<i class='icon icon-plus'></i><span class='text'>" . $lang->story->create . "</span><span class='caret'>", '', "class='$createMisc'");
+              ?>
+              <ul class='dropdown-menu'>
+                <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
+                <li <?php echo $disabled?>>
+                  <?php
+                  $batchLink = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=0&plan={$plan->id}") : '#';
+                  echo html::a($batchLink, "<span class='text'>" . $lang->story->batchCreate . '</span>', '', "class='btn btn-link'");
+                  ?>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <?php endif;?>
+          <?php if(common::hasPriv('productplan', 'linkStory')) echo html::a("javascript:showLink($plan->id, \"story\")", '<i class="icon-link"></i> ' . $lang->productplan->linkStory, '', "class='btn btn-primary'");?>
         </div>
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='linkBox cell hidden'></div>

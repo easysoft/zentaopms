@@ -119,13 +119,19 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
+                $projectSubMenu = $this->lang->project->subMenu->$key;
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
                 if(!empty($subMenu))
                 {
-                    foreach($subMenu as $menu)
+                    foreach($subMenu as $menuKey => $menu)
                     {
-                        if($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']))
+                        if($moduleName == strtolower($menu->link['module']) and 
+                            (
+                                $methodName == strtolower($menu->link['method']) or
+                                (isset($projectSubMenu->$menuKey['alias']) and strpos($projectSubMenu->$menuKey['alias'], $methodName) !== false)
+                            )
+                        )
                         {
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
@@ -897,6 +903,7 @@ class projectModel extends model
         $burns = $this->dao->select('project, date AS name, `left` AS value')
             ->from(TABLE_BURN)
             ->where('project')->in($projectKeys)
+            ->andWhere('task')->eq(0)
             ->orderBy('date desc')
             ->fetchGroup('project', 'name');
 
@@ -1876,7 +1883,7 @@ class projectModel extends model
     public function fixFirst($projectID)
     {
         $project  = $this->getById($projectID);
-        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
+        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('task')->eq(0)->andWhere('date')->eq($project->begin)->fetch();
         $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
 
         $data = fixer::input('post')
@@ -1904,7 +1911,7 @@ class projectModel extends model
         $project    = $this->getById($projectID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
+        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
 
         $count    = 0;
         $burnData = array();

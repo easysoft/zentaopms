@@ -369,6 +369,7 @@ class upgradeModel extends model
             $this->processDocLibAcl();
         case '11_3':
             $this->saveLogs('Execute 11_3');
+            $this->execSQL($this->getUpgradeFile('11.3'));
             $this->addPriv11_4();
         }
 
@@ -500,6 +501,7 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '11_2': $confirmContent .= file_get_contents($this->getUpgradeFile('11.2'));
+            case '11_3': $confirmContent .= file_get_contents($this->getUpgradeFile('11.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

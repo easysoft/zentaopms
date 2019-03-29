@@ -39,8 +39,8 @@ tbody tr td:first-child input{display:none;}
     <?php
     if(!$build->deleted)
     {
-        common::printIcon('build', 'edit',   "buildID=$build->id", $build);
-        common::printIcon('build', 'delete', "buildID=$build->id", $build, 'button', 'trash', 'hiddenwin');
+        if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
     ?>
   </div>

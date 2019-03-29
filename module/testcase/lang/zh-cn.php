@@ -87,6 +87,7 @@ $lang->testcase->edit                    = "编辑";
 $lang->testcase->batchEdit               = "批量编辑 ";
 $lang->testcase->batchChangeModule       = "批量修改模块";
 $lang->testcase->confirmLibcaseChange    = "同步用例库用例修改";
+$lang->testcase->ignoreLibcaseChange     = "忽略用例库用例修改";
 $lang->testcase->batchChangeBranch       = "批量修改分支";
 $lang->testcase->groupByStories          = '需求分组';
 $lang->testcase->delete                  = "删除";

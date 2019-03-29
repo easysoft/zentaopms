@@ -986,16 +986,17 @@ class testcase extends control
     public function confirmLibcaseChange($caseID, $libcaseID)
     {
         $case    = $this->testcase->getById($caseID);
-        $version = $case->fromCaseVersion;
-        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->where('id')->eq($caseID)->exec();
-        $steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($libcaseID)->andWhere('version')->eq($version)->fetchAll();
-        foreach($steps as $step)
+        $libCase = $this->testcase->getById($libcaseID);
+        $version = $case->version + 1;
+        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->set('fromCaseVersion')->eq($version)->where('id')->eq($caseID)->exec();
+        foreach($libCase->steps as $step)
         {
             unset($step->id);
-            $step->case = $caseID;
+            $step->case    = $caseID;
+            $step->version = $version;
             $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
         }
-        die(js::reload('parent'));
+        die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID&version=$version"), 'parent'));
     }
 
     /**

@@ -590,6 +590,7 @@ class blockModel extends model
                 if($blockKey == 'html')      $blockPairs[$block] = 'HTML';
                 if($blockKey == 'flowchart') $blockPairs[$block] = $this->lang->block->lblFlowchart;
                 if($blockKey == 'dynamic')   $blockPairs[$block] = $this->lang->block->dynamic;
+                if($blockKey == 'welcome')   $blockPairs[$block] = $this->lang->block->welcome;
             }
             else
             {
