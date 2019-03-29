@@ -1308,9 +1308,24 @@ class task extends control
                 ->where('root')->in(array_keys($tasks))
                 ->andWhere('type')->eq('task')
                 ->fetchGroup('root');
+
+            /* Process multiple task info. */
             if(!empty($taskTeam))
             {
-                foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+                foreach($taskTeam as $taskID => $team) 
+                {
+                    $tasks[$taskID]->team     = $team;
+                    $tasks[$taskID]->estimate = '';
+                    $tasks[$taskID]->left     = '';
+                    $tasks[$taskID]->consumed = '';
+
+                    foreach($team as $userInfo)
+                    {
+                        $tasks[$taskID]->estimate .= zget($users, $userInfo->account) . ':' . $userInfo->estimate . "\n";
+                        $tasks[$taskID]->left     .= zget($users, $userInfo->account) . ':' . $userInfo->left . "\n";
+                        $tasks[$taskID]->consumed .= zget($users, $userInfo->account) . ':' . $userInfo->consumed . "\n"; 
+                    }
+                }
             }
 
             /* Get related objects title or names. */
