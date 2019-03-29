@@ -15,6 +15,7 @@
 
 /* Finish task #5068*/
 .main-table .table{cursor:pointer;}
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{background:none;}
 
 #dropMenu.show-right-col{width:502px;max-width:520px;}
 #dropMenu.has-search-text{width:250px;max-width:260px;}
