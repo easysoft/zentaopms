@@ -983,6 +983,32 @@ class treeModel extends model
     }
 
     /**
+     * Create link of trainskill.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainSkillLink($type, $module, $extra = '')
+    {
+        return html::a(helper::createLink('trainskill', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    }
+
+    /**
+     * Create link of trainskill.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainCourseLink($type, $module, $extra = '')
+    {
+        return html::a(helper::createLink('traincourse', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    }
+
+    /**
      * Get sons of a module.
      *
      * @param  int    $rootID
