@@ -31,12 +31,12 @@ $lang->block->lblBlock     = 'Block';
 $lang->block->lblNum       = 'Number';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamic';
-$lang->block->assignToMe   = 'Assign To Me';
+$lang->block->assignToMe   = 'AssignToMe';
 $lang->block->lblFlowchart = 'Workflow';
 $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Show Test Details';
 
-$lang->block->leftToday = 'Works for Today';
+$lang->block->leftToday = 'Work for Today';
 $lang->block->myTask    = 'My Task';
 $lang->block->myStory   = 'My Story';
 $lang->block->myBug     = 'My Bug';
