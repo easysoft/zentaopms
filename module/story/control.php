@@ -158,7 +158,7 @@ class story extends control
         /* Init vars. */
         $source     = '';
         $sourceNote = '';
-        $pri        = 0;
+        $pri        = 3;
         $estimate   = '';
         $title      = '';
         $spec       = '';
