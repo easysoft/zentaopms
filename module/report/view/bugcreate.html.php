@@ -50,7 +50,7 @@
         <div data-ride='table'>
           <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id="bug">
             <thead>
-              <tr class='colhead'>
+              <tr class='colhead text-center'>
                 <th><?php echo $lang->bug->openedBy;?></th>
                 <th><?php echo $lang->bug->unResolved;?></th>
                 <?php foreach($lang->bug->resolutionList as $resolutionType => $resolution):?>
