@@ -32,6 +32,17 @@
           </div>
         </td>
       </tr>
+      <?php if(common::hasPriv('backup', 'change')):?>
+      <tr>
+        <td>
+          <div class='input-group'>
+            <span class='input-group-addon'><?php echo $lang->backup->change;?></span>
+            <?php echo html::input('holdDays', $config->backup->holdDays, "class='form-control'");?>
+            <span class='input-group-addon'><?php echo $lang->day;?></span>
+          </div>
+        </td>
+      </tr>
+      <?php endif;?>
       <tr><td><?php echo html::submitButton('', '', 'btn btn-primary');?></td></tr>
     </table>
   </form>
