@@ -63,7 +63,6 @@ zentaoxx:
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
-	mv zentaoxx/www/xuanxuan.php zentaoxx/www/x.php
 	sed -i 's/site,//' zentaoxx/module/chat/model.php
 	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
 	sed -i '/password = md5/d' zentaoxx/module/chat/control.php

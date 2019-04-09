@@ -247,7 +247,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th><?php echo empty($task->team) ? $lang->task->assignTo : $lang->task->transferTo;?></th>
+                  <th><?php echo $lang->task->assignedTo;?></th>
                   <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;?></td>
                 </tr>
                 <tr>
@@ -257,6 +257,10 @@
                 <tr>
                   <th><?php echo $lang->task->status;?></th>
                   <td><span class='status-task status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo zget($lang->task->statusList, $task->status);?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->task->progress;?></th>
+                  <td><?php echo $task->progress . '%';?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->pri;?></th>
@@ -339,8 +343,20 @@
         <div class="detail-content">
           <table class='table table-data'>
             <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
+            <tr class='<?php echo $widthClass;?>'>
+              <th><?php echo $lang->task->estimate;?></th>
+              <td><?php echo $task->estimate . $lang->workingHour;?></td>
+            </tr>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estStarted;?></th>
+              <th><?php echo $lang->task->consumed;?></th>
+              <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->task->left;?></th>
+              <td><?php echo $task->left . $lang->workingHour;?></td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->task->estStarted;?></th>
               <td><?php echo $task->estStarted;?></td>
             </tr>
             <tr>
@@ -355,18 +371,6 @@
                 if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
                 ?>
               </td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->estimate;?></th>
-              <td><?php echo $task->estimate . $lang->workingHour;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->consumed;?></th>
-              <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->left;?></th>
-              <td><?php echo $task->left . $lang->workingHour;?></td>
             </tr>
           </table>
         </div>

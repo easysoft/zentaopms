@@ -196,7 +196,7 @@ class file extends control
         }
         else
         {
-            $this->app->triggerError("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+            die($this->lang->file->fileNotFound);
         }
     }
 

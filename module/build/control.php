@@ -12,7 +12,7 @@
 class build extends control
 {
     /**
-     * Create a buld.
+     * Create a build.
      * 
      * @param  int    $projectID 
      * @access public

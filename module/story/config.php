@@ -3,7 +3,7 @@ $config->story = new stdclass();
 
 $config->story->batchCreate      = 10;
 $config->story->affectedFixedNum = 7;
-$config->story->needReview = 1;
+$config->story->needReview       = 1;
 
 $config->story->batchClose = new stdclass();
 $config->story->batchClose->columns = 10;
@@ -26,6 +26,7 @@ $config->story->editor->view     = array('id' => 'comment,lastComment', 'tools' 
 $config->story->editor->close    = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->story->editor->review   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->story->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->story->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->story->list = new stdclass();
 $config->story->list->exportFields      = '
@@ -101,7 +102,7 @@ $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';
 $config->story->datatable->fieldList['stage']['fixed']    = 'no';
-$config->story->datatable->fieldList['stage']['width']    = '70';
+$config->story->datatable->fieldList['stage']['width']    = '80';
 $config->story->datatable->fieldList['stage']['required'] = 'no';
 
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';

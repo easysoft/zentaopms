@@ -125,11 +125,12 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
 -- DROP TABLE IF EXISTS `zt_burn`;
 CREATE TABLE IF NOT EXISTS `zt_burn` (
   `project` mediumint(8) unsigned NOT NULL,
+  `task` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `date` date NOT NULL,
   `estimate` float NOT NULL,
   `left` float NOT NULL,
   `consumed` float NOT NULL,
-  PRIMARY KEY  (`project`,`date`)
+  PRIMARY KEY  (`project`,`date`,`task`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_case`;
 CREATE TABLE IF NOT EXISTS `zt_case` (
@@ -166,6 +167,7 @@ CREATE TABLE IF NOT EXISTS `zt_case` (
   `linkCase` varchar(255) NOT NULL,
   `fromBug` mediumint(8) unsigned NOT NULL,
   `fromCaseID` mediumint(8) unsigned NOT NULL,
+  `fromCaseVersion` mediumint(8) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   `lastRunner` varchar(30) NOT NULL,
   `lastRunDate` datetime NOT NULL,
@@ -1251,6 +1253,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'story', 'create'),
 (1, 'story', 'delete'),
 (1, 'story', 'edit'),
+(1, 'story', 'assignTo'),
 (1, 'story', 'batchChangeModule'),
 (1, 'story', 'linkStory'),
 (1, 'story', 'unlinkStory'),
@@ -2715,6 +2718,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7, 'story', 'create'),
 (7, 'story', 'delete'),
 (7, 'story', 'edit'),
+(7, 'story', 'assignTo'),
 (7, 'story', 'batchChangeModule'),
 (7, 'story', 'linkStory'),
 (7, 'story', 'unlinkStory'),

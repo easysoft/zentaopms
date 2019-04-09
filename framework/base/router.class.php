@@ -1528,7 +1528,7 @@ class baseRouter
     {
         $code = trim(file_get_contents($fileName));
         if(strpos($code, '<?php') === 0)     $code = ltrim($code, '<?php');
-        if(strrpos($code, '?>')   !== false) $code = rtrim($code, '?>');
+        if(strrpos($code, '?' . '>')   !== false) $code = rtrim($code, '?' . '>');
         return trim($code);
     }
 
@@ -1631,7 +1631,7 @@ class baseRouter
          **/
         $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
         chdir(dirname($file2Included));
-        include $file2Included;
+        helper::import($file2Included);
 
         /*
          * 设置control的类名。

@@ -55,7 +55,7 @@ $lang->project->other         = '其他：';
 $lang->project->deleted       = '已刪除';
 $lang->project->delayed       = '已延期';
 $lang->project->product       = $lang->project->products;
-$lang->project->readjustTime  = '調整項目起止時間';
+$lang->project->readjustTime  = "調整{$lang->projectCommon}起止時間";
 $lang->project->readjustTask  = '順延任務的起止時間';
 $lang->project->effort        = '日誌';
 $lang->project->relatedMember = '相關成員';
@@ -192,7 +192,7 @@ $lang->project->aboveAllProduct = "以上所有{$lang->productCommon}";
 $lang->project->aboveAllProject = "以上所有{$lang->projectCommon}";
 
 /* 頁面提示。*/
-$lang->project->linkStoryByPlanTips = '此操作會將所選計划下面的需求全部關聯到此項目中';
+$lang->project->linkStoryByPlanTips = "此操作會將所選計划下面的需求全部關聯到此{$lang->projectCommon}中";
 $lang->project->selectProject   = "請選擇{$lang->projectCommon}";
 $lang->project->beginAndEnd     = '起止時間';
 $lang->project->begin           = '開始日期';
@@ -225,7 +225,7 @@ $lang->project->copyFromProject = "複製自{$lang->projectCommon} <strong>%s</s
 $lang->project->cancelCopy      = '取消複製';
 $lang->project->byPeriod        = '按時間段';
 $lang->project->byUser          = '按用戶';
-$lang->project->noProject       = '暫時沒有項目。';
+$lang->project->noProject       = "暫時沒有{$lang->projectCommon}。";
 $lang->project->noMembers       = '暫時沒有團隊成員。';
 
 /* 交互提示。*/
@@ -246,6 +246,11 @@ $lang->project->withweekend           = '顯示周末';
 $lang->project->interval              = '間隔';
 $lang->project->fixFirstWithLeft      = '修改剩餘工時';
 
+$lang->project->action = new stdclass();
+$lang->project->action->opened  = '$date, 由 <strong>$actor</strong> 創建。$extra' . "\n";
+$lang->project->action->managed = '$date, 由 <strong>$actor</strong> 維護。$extra' . "\n";
+$lang->project->action->extra   = '相關產品為 %s。';
+
 /* 統計。*/
 $lang->project->charts = new stdclass();
 $lang->project->charts->burn = new stdclass();
@@ -263,7 +268,7 @@ $lang->project->charts->burn->graph->actuality    = '實際';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = '團隊內部的簡稱';
-$lang->project->placeholder->totalLeft = '項目開始時的總預計工時';
+$lang->project->placeholder->totalLeft = "{$lang->projectCommon}開始時的總預計工時";
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(已結束)';

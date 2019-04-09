@@ -103,7 +103,7 @@
                 <td><span id="storyIdBox"><?php echo html::select('story', $stories, $task->story, "class='form-control chosen'");?></span></td>
               </tr>
               <?php endif;?>
-              <?php if($task->parent == 0 and empty($task->team)):?>
+              <?php if($task->parent >= 0 and empty($task->team)):?>
               <tr>
                 <th><?php echo $lang->task->parent;?></th>
                 <td><?php echo html::select('parent', $tasks, $task->parent, "class='form-control chosen'");?></td>

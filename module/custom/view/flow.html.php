@@ -21,7 +21,7 @@
     <table class='table table-form'>
       <tr>
         <th class='w-120px text-top'><?php echo $lang->custom->select;?></th>
-        <?php $checkedKey = isset($config->custom->productProject) ? $config->custom->productProject : '0_0' ?>
+        <?php $checkedKey = isset($config->custom->productProject) ? $config->custom->productProject : (empty($config->isINT) ? '0_0' : '0_1');?>
         <td>
           <?php foreach($lang->custom->productProject->relation as $key => $value):?>
           <p><label class="radio-inline"><input type="radio" name="productProject" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="productProject<?php echo $key;?>"><?php echo $value;?></label></p>

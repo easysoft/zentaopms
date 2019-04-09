@@ -230,6 +230,90 @@ function setStories(moduleID, projectID)
     });
 }
 
+function toggleSelectTestStory()
+{
+    if(!$('#selectTestStoryBox').hasClass('hidden') && $('#selectTestStory').prop('checked'))
+    {
+        $('#module').closest('tr').addClass('hidden');
+        $('#multipleBox').closest('td').addClass('hidden');
+        $('#story').closest('tr').addClass('hidden');
+        $('#estStarted').closest('tr').addClass('hidden');
+        $('#estimate').closest('.table-col').addClass('hidden');
+        $('#testStoryBox').removeClass('hidden');
+    }
+    else
+    {
+        $('#module').closest('tr').removeClass('hidden');
+        $('#multipleBox').closest('td').removeClass('hidden');
+        $('#story').closest('tr').removeClass('hidden');
+        $('#estStarted').closest('tr').removeClass('hidden');
+        $('#estimate').closest('.table-col').removeClass('hidden');
+        $('#testStoryBox').addClass('hidden');
+    }
+}
+
+function addItem(obj)
+{
+    var $tr = $(obj).closest('tr');
+    $tr.after($tr.clone());
+    var $nextTr = $tr.next();
+    $nextTr.find('#testAssignedTo').val($('#assignedTo').val());
+    $nextTr.find('#testStory').closest('td').find('.chosen-container').remove();
+    $nextTr.find('#testStory').closest('td').find('select').val('').chosen();
+    $nextTr.find('#testPri').closest('td').find('.chosen-container').remove();
+    $nextTr.find('#testPri').closest('td').find('select').chosen();
+    $nextTr.find('#testAssignedTo').closest('td').find('.chosen-container').remove();
+    $nextTr.find('#testAssignedTo').closest('td').find('select').chosen();
+    $nextTr.find('.form-date').val('').datepicker();
+}
+
+function removeItem(obj)
+{
+    if($(obj).closest('table').find('tbody tr').size() > 1) $(obj).closest('tr').remove();
+}
+
+function markTestStory()
+{
+    $('#testStoryBox select[name^="testStory"]').each(function()
+    {
+        var $select = $(this);
+        $select.find('option').each(function()
+        {
+            var $option = $(this);
+            var value = $option.attr('value');
+            var tests = testStoryIdList[value];
+            $option.attr('data-data', value).toggleClass('has-test', !!(tests && tests !== '0'));
+        });
+        $select.trigger("chosen:updated");
+    });
+
+    var getStoriesHasTest = function()
+    {
+        var storiesHasTest = {};
+        $('#testStoryBox table tbody>tr').each(function()
+        {
+            var $tr = $(this);
+            storiesHasTest[$tr.find('select[name^="testStory"]').val()] = true;
+        });
+        console.log(storiesHasTest);
+        return storiesHasTest;
+    };
+
+    $('#testStoryBox').on('chosen:showing_dropdown', 'select[name^="testStory"],.chosen-with-drop', function()
+    {
+        var storiesHasTest = getStoriesHasTest();
+        var $container     = $(this).closest('td').find('.chosen-container');
+        setTimeout(function()
+        {
+            $container.find('.chosen-results>li').each(function()
+            {
+                var $li = $(this);
+                $li.toggleClass('has-new-test', !!storiesHasTest[$li.data('data')]);
+            });
+        }, 100);
+    });
+}
+
 $(document).ready(function()
 {
     $('#pri').on('change', function()
@@ -239,17 +323,34 @@ $(document).ready(function()
         var value = $select.val();
         $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
+    $('#type').change(function()
+    {
+        $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
+        toggleSelectTestStory();
+    });
     
     setStoryRelated();
+    markTestStory();
 
     $('#selectAllUser').on('click', function()
-            {
+    {
         var $assignedTo = $('#assignedTo');
         if($assignedTo.attr('multiple')) 
         {
             $assignedTo.children('option').attr('selected', 'selected');
             $assignedTo.trigger('chosen:updated');
         }
+    });
+
+    var preAssign = '';
+    $('#assignedTo').change(function()
+    {
+        var assign = $(this).val();
+        $('#testStoryBox').find('select[name^="testAssignedTo"]').each(function()
+        {
+            if($(this).val() == '' || $(this).val() == preAssign) $(this).val(assign).trigger('chosen:updated');
+        });
+        preAssign = assign;
     });
 
     $('[data-toggle=tooltip]').tooltip();
@@ -272,7 +373,6 @@ $(document).ready(function()
             $('#estimate').attr('readonly', false);
         }
     });
-
 
     /* Init task team manage dialog */
     var $taskTeamEditor = $('#taskTeamEditor').batchActionForm(

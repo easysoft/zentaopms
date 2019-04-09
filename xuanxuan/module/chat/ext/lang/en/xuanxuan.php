@@ -11,6 +11,12 @@ $lang->chat->getChatUsers    = 'Get Chat Users';
 $lang->chat->getChatGroups   = 'Get Chat Groups';
 $lang->chat->notifyMSG       = 'Notify';
 
+$lang->chat->createBug   = 'Create Bug';
+$lang->chat->createDoc   = 'Create Doc';
+$lang->chat->createStory = 'Create Story';
+$lang->chat->createTask  = 'Create Task';
+$lang->chat->createTodo  = 'Create Todo';
+
 $lang->chat->turnonList = array();
 $lang->chat->turnonList[1] = 'Enable';
 $lang->chat->turnonList[0] = 'Disable';

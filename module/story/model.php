@@ -83,6 +83,19 @@ class storyModel extends model
     }
 
     /**
+     * Get test stories.
+     * 
+     * @param  array  $storyIdList 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getTestStories($storyIdList, $projectID)
+    {
+        return $this->dao->select('story')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('type')->eq('test')->andWhere('story')->in($storyIdList)->fetchPairs('story', 'story');
+    }
+
+    /**
      * Get story specs.
      *
      * @param  array  $storyIdList
@@ -1054,6 +1067,31 @@ class storyModel extends model
         }
         if($ignoreStories) echo js::alert(sprintf($this->lang->story->ignoreChangeStage, $ignoreStories));
         return $allChanges;
+    }
+
+    /**
+     * Assign story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return array
+     */
+    public function assign($storyID)
+    {
+        $oldStory   = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $now        = helper::now();
+        $assignedTo = $this->post->assignedTo;
+        if($assignedTo == $oldStory->assignedTo) return array();
+
+        $story = new stdclass();
+        $story->lastEditedBy   = $this->app->user->account;
+        $story->lastEditedDate = $now;
+        $story->assignedTo     = $assignedTo;
+        $story->assignedDate   = $now;
+
+        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+        if(!dao::isError()) return common::createChanges($oldStory, $story);
+        return false;
     }
 
     /**
@@ -2254,6 +2292,7 @@ class storyModel extends model
         if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
         if($action == 'close')    return $story->status != 'closed';
         if($action == 'activate') return $story->status == 'closed';
+        if($action == 'assignto') return $story->status != 'closed';
 
         return true;
     }

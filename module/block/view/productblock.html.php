@@ -26,8 +26,8 @@
         <?php endif;?>
         <th class='c-num'><?php echo $lang->product->plans;?></th>
         <th class='c-num'><?php echo $lang->product->releases;?></th>
-        <th class='c-num'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
-        <th class='c-num w-90px'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
+        <th class='c-num w-100px'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
+        <th class='c-num w-120px'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
       </tr>
     </thead>
     <tbody>

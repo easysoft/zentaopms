@@ -11,6 +11,12 @@ $lang->chat->getChatUsers    = '获取用户';
 $lang->chat->getChatGroups   = '获取讨论组';
 $lang->chat->notifyMSG       = '消息通知';
 
+$lang->chat->createBug   = '创建 Bug';
+$lang->chat->createDoc   = '创建文档';
+$lang->chat->createStory = '创建需求';
+$lang->chat->createTask  = '创建任务';
+$lang->chat->createTodo  = '创建待办';
+
 $lang->chat->turnonList = array();
 $lang->chat->turnonList[1] = '是';
 $lang->chat->turnonList[0] = '否';

@@ -16,12 +16,11 @@
   <div class="content"><i class='icon-exclamation-sign'></i> <?php echo $error;?></div>
 </div>
 <?php endif;?>
-
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('data');?></div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printIcon('backup', 'setting', '', '', 'button', '', '', 'iframe', '', "data-width=400px");?>
-    <?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?>
+    <?php common::printLink('backup', 'setting', '', "<i class='icon icon-cog'></i>" . $lang->backup->setting, '', "data-width='400' class='iframe btn btn-primary'");?>
+    <?php common::printLink('backup', 'backup', 'reload=yes', "<i class='icon icon-copy'></i>" . $lang->backup->backup, 'hiddenwin', "class='iframe btn btn-primary backup'");?>
   </div>
 </div>
 

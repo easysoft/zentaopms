@@ -832,7 +832,8 @@ class testtask extends control
             $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            if($caseResult == 'fail') {
+            if($caseResult == 'fail')
+            {
 
                 $response['result']  = 'success';
                 $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");

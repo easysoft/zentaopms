@@ -92,7 +92,12 @@ $lang->custom->notice->forceNotReview       = "%s Review is NOT required for cer
 $lang->custom->notice->longlife             = 'Define longlife bugs.';
 $lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
 $lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase letters, numbers or underlines.';
+<<<<<<< HEAD
 $lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
+=======
+$lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Time zone cannot be set.';
+$lang->custom->notice->noClosedBlock        = 'Blocks without permanent closure';
+>>>>>>> 49933c0fcb7f076b5948bc4dba29468ed23927ec
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";

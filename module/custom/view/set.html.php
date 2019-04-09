@@ -107,10 +107,23 @@ EOT;
       <table class='table table-form mw-600px'>
         <tr>
           <th class='w-100px'><?php echo $lang->custom->block->fields['closed'];?></th>
-          <td><?php echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");?></td>
+          <td>
+            <?php
+            if(empty($blockPairs))
+            {
+                echo $lang->custom->notice->noClosedBlock;
+            }
+            else
+            {
+                echo html::select('closed[]', $blockPairs, $closedBlock, "class='form-control chosen' multiple");
+            }
+            ?>
+          </td>
         </tr>
         <tr>
+          <?php if(!empty($blockPairs)):?>
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
+          <?php endif;?>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'contactField'):?>

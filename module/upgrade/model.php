@@ -367,6 +367,10 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_2');
             $this->execSQL($this->getUpgradeFile('11.2'));
             $this->processDocLibAcl();
+        case '11_3':
+            $this->saveLogs('Execute 11_3');
+            $this->execSQL($this->getUpgradeFile('11.3'));
+            $this->addPriv11_4();
         }
 
         $this->deletePatch();
@@ -497,6 +501,7 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '11_2': $confirmContent .= file_get_contents($this->getUpgradeFile('11.2'));
+            case '11_3': $confirmContent .= file_get_contents($this->getUpgradeFile('11.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -2212,6 +2217,28 @@ class upgradeModel extends model
             $data->group  = $groupID;
             $data->module = 'bug';
             $data->method = 'batchActivate';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+        return true;
+    }
+
+    /**
+     * Adjust priv for 11.4.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addPriv11_4()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('story')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'story';
+            $data->method = 'assignTo';
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             $this->saveLogs($this->dao->get());
         }

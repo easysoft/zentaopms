@@ -94,7 +94,7 @@ class todoModel extends model
             {
                 $todo          = new stdclass();
                 $todo->account = $this->app->user->account;
-                if($this->post->date == false)
+                if($this->post->switchDate == 'on' or $this->post->date == false)
                 {
                     $todo->date = '2030-01-01';
                 }

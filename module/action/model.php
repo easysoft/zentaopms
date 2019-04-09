@@ -342,6 +342,12 @@ class actionModel extends model
                     }
                 }
             }
+            elseif(($actionName == 'opened' or $actionName == 'managed') and $objectType == 'project')
+            {
+                $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
+                $action->extra  = '';
+                if($linkedProducts) $action->extra = sprintf($this->lang->project->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
+            }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
             $actionName = strtolower($action->action);

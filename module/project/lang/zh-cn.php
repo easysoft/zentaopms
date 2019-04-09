@@ -246,6 +246,11 @@ $lang->project->withweekend           = '显示周末';
 $lang->project->interval              = '间隔';
 $lang->project->fixFirstWithLeft      = '修改剩余工时';
 
+$lang->project->action = new stdclass();
+$lang->project->action->opened  = '$date, 由 <strong>$actor</strong> 创建。$extra' . "\n";
+$lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
+$lang->project->action->extra   = '相关产品为 %s。';
+
 /* 统计。*/
 $lang->project->charts = new stdclass();
 $lang->project->charts->burn = new stdclass();

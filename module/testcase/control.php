@@ -239,12 +239,7 @@ class testcase extends control
             $this->action->create('case', $caseID, 'Opened');
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $response['locate'] = 'reload';
-                $response['target'] = 'parent';
-                $this->send($response);
-            }
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
             setcookie('caseModule', (int)$this->post->module, 0, $this->config->webRoot);
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
@@ -988,17 +983,33 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function confirmLibcaseChange($caseID, $libcaseID, $version)
+    public function confirmLibcaseChange($caseID, $libcaseID)
     {
-        $case  = $this->testcase->getById($caseID);
-        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->where('id')->eq($caseID)->exec();
-        $steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($libcaseID)->andWhere('version')->eq($version)->fetchAll();
-        foreach($steps as $step)
+        $case    = $this->testcase->getById($caseID);
+        $libCase = $this->testcase->getById($libcaseID);
+        $version = $case->version + 1;
+        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->set('fromCaseVersion')->eq($version)->where('id')->eq($caseID)->exec();
+        foreach($libCase->steps as $step)
         {
             unset($step->id);
-            $step->case = $caseID;
+            $step->case    = $caseID;
+            $step->version = $version;
             $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
         }
+        die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID&version=$version"), 'parent'));
+    }
+
+    /**
+     * Ignore libcase changed.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function ignoreLibcaseChange($caseID)
+    {
+        $case    = $this->testcase->getById($caseID);
+        $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
         die(js::reload('parent'));
     }
 

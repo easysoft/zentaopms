@@ -33,16 +33,13 @@
     <?php
     if(!$release->deleted)
     {
-        if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-link'");
-        if(common::hasPriv('release', 'linkBug') and $config->global->flow != 'onlyStory') echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"),   '<i class="icon-bug"></i> '  . $lang->release->linkBug,   '', "class='btn btn-link'");
-
         if(common::hasPriv('release', 'changeStatus', $release))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-            echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn btn-link' title='{$lang->release->changeStatusList[$changedStatus]}'");
+            echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn btn-link' title='{$lang->release->changeStatusList[$changedStatus]}'");
         }
-        common::printIcon('release', 'edit',   "releaseID=$release->id", $release);
-        common::printIcon('release', 'delete', "releaseID=$release->id", $release, 'button', 'trash', 'hiddenwin');
+        if(common::hasPriv('release', 'edit')) echo html::a($this->createLink('release', 'edit',   "releaseID=$release->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('release', 'delete')) echo html::a($this->createLink('release', 'delete', "releaseID=$release->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
     ?>
   </div>

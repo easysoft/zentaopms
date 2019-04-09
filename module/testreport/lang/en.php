@@ -60,7 +60,7 @@ $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
 $lang->testreport->confirmDelete  = 'Do you want to delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao manual, or you can contact us at renee@easysoft.ltd for customization.';
 $lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.pm' target='_blank' style='color:grey'>ZenTao</a>";
-$lang->testreport->noReport       = "No report has been generated. Please check later.";
+$lang->testreport->noReport       = "No report has been generated yet.";
 $lang->testreport->foundBugTip    = "Bugs reported in this build and in this test.";
 $lang->testreport->legacyBugTip   = "Active Bugs, or bugs that are resolved after this test is done.";
 $lang->testreport->fromCaseBugTip = "Bugs reported due to failed cases in this test.";

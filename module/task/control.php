@@ -125,12 +125,7 @@ class task extends control
             }
 
             /* If link from no head then reload*/
-            if(isonlybody())
-            {
-                $response['locate'] = 'reload';
-                $response['target'] = 'parent';
-                $this->send($response);
-            }
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             if($todoID > 0)
             {
@@ -196,6 +191,7 @@ class task extends control
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
+        $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $project->id);
         $this->view->members          = $members;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
@@ -235,7 +231,7 @@ class task extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            if(!empty($iframe)) $this->send(array('result' => 'success', 'locate' => 'parent'));
+            if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
         }
 
@@ -1312,9 +1308,24 @@ class task extends control
                 ->where('root')->in(array_keys($tasks))
                 ->andWhere('type')->eq('task')
                 ->fetchGroup('root');
+
+            /* Process multiple task info. */
             if(!empty($taskTeam))
             {
-                foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+                foreach($taskTeam as $taskID => $team) 
+                {
+                    $tasks[$taskID]->team     = $team;
+                    $tasks[$taskID]->estimate = '';
+                    $tasks[$taskID]->left     = '';
+                    $tasks[$taskID]->consumed = '';
+
+                    foreach($team as $userInfo)
+                    {
+                        $tasks[$taskID]->estimate .= zget($users, $userInfo->account) . ':' . $userInfo->estimate . "\n";
+                        $tasks[$taskID]->left     .= zget($users, $userInfo->account) . ':' . $userInfo->left . "\n";
+                        $tasks[$taskID]->consumed .= zget($users, $userInfo->account) . ':' . $userInfo->consumed . "\n"; 
+                    }
+                }
             }
 
             /* Get related objects title or names. */
