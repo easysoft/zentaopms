@@ -27,7 +27,7 @@
     </h2>
     <div class='pull-right'>
       <?php common::printLink('backup', 'setting', '', "<i class='icon icon-cog'></i>" . $lang->backup->setting, '', "data-width='400' class='iframe btn btn-primary'");?>
-      <?php common::printLink('backup', 'backup', 'reload=yes', "<i class='icon icon-copy'></i> " . $lang->backup->backup, 'hiddenwin', "class='iframe btn btn-primary backup'");?>
+      <?php common::printLink('backup', 'backup', 'reload=yes', "<i class='icon icon-copy'></i> " . $lang->backup->backup, 'hiddenwin', "class='btn btn-primary backup'");?>
     </div>
   </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
@@ -88,7 +88,7 @@
     </div>
   </div>
 </div>
-<?php js::set('backup', $lang->backup->backup);?>
+<?php js::set('backup', $lang->backup->common);?>
 <?php js::set('rmPHPHeader', $lang->backup->rmPHPHeader);?>
 <?php js::set('confirmRestore', $lang->backup->confirmRestore);?>
 <?php js::set('restore', $lang->backup->restore);?>

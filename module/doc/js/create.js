@@ -64,7 +64,7 @@ function initPage(type)
     }
     if(type == 'word' || type == 'ppt' || type == 'excel')
     {
-        if($('#contentBox')).hide();
-        if($('#urlBox')).hide();
+        $('#contentBox').hide();
+        $('#urlBox').hide();
     }
 }

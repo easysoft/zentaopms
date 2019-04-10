@@ -38,6 +38,17 @@ class blockModel extends model
             ->remove('uid,actionLink,modules,moduleBlock')
             ->get();
 
+        if($this->post->moduleBlock)
+        {
+            $data->source = $this->post->modules;
+            $data->block  = $this->post->moduleBlock;
+        }
+        else
+        {
+            $data->source = '';
+            $data->block  = $this->post->modules;
+        }
+
         if($block) $data->height = $block->height;
         if($type == 'html')
         {
