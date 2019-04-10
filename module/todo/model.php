@@ -77,6 +77,11 @@ class todoModel extends model
             $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
             $this->loadModel('score')->create('todo', 'create', $todoID);
             if(!empty($todo->cycle)) $this->createByCycle(array($todoID => $todo));
+            if(isset($todo->type) and $todo->type == 'feedback')
+            {
+                $this->dao->update(TABLE_FEEDBACK)->set('`status`')->eq('closed')->where('id')->eq($todo->idvalue)->exec();
+                $this->loadModel('action')->create('feedback', $todo->idvalue, 'totodo', '', $todoID);
+            }
             return $todoID;
         }
     }

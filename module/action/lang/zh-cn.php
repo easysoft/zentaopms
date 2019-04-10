@@ -111,6 +111,7 @@ $lang->action->desc->confirmed      = '$date, 由 <strong>$actor</strong> 确认
 $lang->action->desc->caseconfirmed  = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->bugconfirmed   = '$date, 由 <strong>$actor</strong> 确认Bug。' . "\n";
 $lang->action->desc->frombug        = '$date, 由 <strong>$actor</strong> Bug转化而来，Bug编号为 <strong>$extra</strong>。';
+$lang->action->desc->totodo         = '$date, 由 <strong>$actor</strong> 转待办，待办编号为 <strong>$extra</strong>。';
 $lang->action->desc->started        = '$date, 由 <strong>$actor</strong> 启动。' . "\n";
 $lang->action->desc->restarted      = '$date, 由 <strong>$actor</strong> 继续。' . "\n";
 $lang->action->desc->delayed        = '$date, 由 <strong>$actor</strong> 延期。' . "\n";
