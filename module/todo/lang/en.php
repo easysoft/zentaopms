@@ -77,11 +77,12 @@ $lang->todo->priList[2] = 'Important';
 $lang->todo->priList[4] = 'Low';
 $lang->todo->priList[0] = '';
 
-$lang->todo->typeList['custom'] = 'Custom';
-$lang->todo->typeList['cycle']  = 'Recur';
-$lang->todo->typeList['bug']    = 'Bug';
-$lang->todo->typeList['task']   = $lang->projectCommon . 'Task';
-$lang->todo->typeList['story']  = $lang->projectCommon . 'Story';
+$lang->todo->typeList['custom']   = 'Custom';
+$lang->todo->typeList['cycle']    = 'Recur';
+$lang->todo->typeList['bug']      = 'Bug';
+$lang->todo->typeList['task']     = $lang->projectCommon . 'Task';
+$lang->todo->typeList['story']    = $lang->projectCommon . 'Story';
+$lang->todo->typeList['feedback'] = 'Feedback';
 
 global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
