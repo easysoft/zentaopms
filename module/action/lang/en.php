@@ -111,7 +111,6 @@ $lang->action->desc->confirmed      = '$date, <strong>$actor</strong> confirmed 
 $lang->action->desc->caseconfirmed  = '$date, <strong>$actor</strong> confirmed the case change. The latest build is <strong>#$extra</strong>' . "\n";
 $lang->action->desc->bugconfirmed   = '$date, <strong>$actor</strong> confirmed Bug.' . "\n";
 $lang->action->desc->frombug        = '$date, converted from <strong>$actor</strong>. Its ID was <strong>$extra</strong>.';
-$lang->action->desc->totodo         = '$date, converted to todo from <strong>$actor</strong>. Its ID was <strong>$extra</strong>。';
 $lang->action->desc->started        = '$date, started by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->restarted      = '$date, continued by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->delayed        = '$date, postponed by <strong>$actor</strong>.' . "\n";
