@@ -15,7 +15,7 @@ $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
 $lang->block->color  = 'Color';
-$lang->block->reset  = 'Restore the default';
+$lang->block->reset  = 'Reset';
 
 $lang->block->account = 'Account';
 $lang->block->module  = 'Module';
@@ -43,7 +43,7 @@ $lang->block->myBug     = 'My Bug';
 $lang->block->myProject = 'My ' . $lang->projectCommon;
 $lang->block->myProduct = 'My ' . $lang->productCommon;
 $lang->block->delayed   = 'Delayed';
-$lang->block->noData    = 'There is no data in this type of reports.';
+$lang->block->noData    = 'No data in this type of reports.';
 $lang->block->emptyTip  = 'No Information';
 
 $lang->block->params = new stdclass();
