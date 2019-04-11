@@ -101,7 +101,7 @@
         </tr>  
         <tr>
           <th><?php echo $lang->todo->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', '', "rows='8' class='form-control'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', isset($feedback->desc) ? $feedback->desc : '', "rows='8' class='form-control'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->todo->status;?></th>
