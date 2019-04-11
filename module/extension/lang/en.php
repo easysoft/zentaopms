@@ -34,7 +34,7 @@ $lang->extension->name        = 'Extension Name';
 $lang->extension->code        = 'Code';
 $lang->extension->desc        = 'Describe';
 $lang->extension->type        = 'Type';
-$lang->extension->dirs        = 'Directories';
+$lang->extension->dirs        = 'Directory';
 $lang->extension->files       = 'Files';
 $lang->extension->status      = 'Status';
 $lang->extension->version     = 'Version';
@@ -68,12 +68,12 @@ $lang->extension->byCategory    = 'Category';
 $lang->extension->installFailed            = '%s failed. Error:';
 $lang->extension->uninstallFailed          = 'Uninstallation failed. Error:';
 $lang->extension->confirmUninstall         = 'Uninstallation will delete or change related database. Do you want to uninstall?';
-$lang->extension->installFinished          = 'Congrats! The extension has been %sed!';
+$lang->extension->installFinished          = 'Congrats! The extension is %sed!';
 $lang->extension->refreshPage              = 'Refresh';
-$lang->extension->uninstallFinished        = 'Extension has been uninstalled.';
-$lang->extension->deactivateFinished       = 'Extension has been deactivated.';
-$lang->extension->activateFinished         = 'Extension has been activated.';
-$lang->extension->eraseFinished            = 'Extension has been removed.';
+$lang->extension->uninstallFinished        = 'Extension is uninstalled.';
+$lang->extension->deactivateFinished       = 'Extension is deactivated.';
+$lang->extension->activateFinished         = 'Extension is activated.';
+$lang->extension->eraseFinished            = 'Extension is removed.';
 $lang->extension->unremovedFiles           = 'File or direcroty cannot be deleted. You have to manually delete';
 $lang->extension->executeCommands          = '<h3>Execute command lines below to fix the problem:</h3>';
 $lang->extension->successDownloadedPackage = 'Extension downloaded!';
@@ -84,11 +84,11 @@ $lang->extension->viewAvailable            = 'Available';
 $lang->extension->viewDeactivated          = 'Deactivated';
 $lang->extension->backDBFile               = 'Extension data has been backed up to %s!';
 $lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
-    <h5>Plese Login your ZenTao server and create %s.</h5>
+    <h5>Plese login your ZenTao server and create %s.</h5>
     <p>Note</p>
     <ol>
     <li>The file you will create is empty.</li>
-    <li>If there is such file exists, delete it first, and then create ones.</li>
+    <li>If such file exists, delete it first, and then create one.</li>
     </ol>'; 
 
 $lang->extension->upgradeExt     = 'Upgrade';
@@ -101,8 +101,8 @@ $lang->extension->errorOccurs                  = 'Error:';
 $lang->extension->errorGetModules              = 'Get Extension Category from www.zentao.net failed. It could be network error. Plase check your network and refresh it.';
 $lang->extension->errorGetExtensions           = 'Get Extension from www.zentao.net failed. It could be network error. Please go to <a href="https://www.zentao.net/extension/" target="_blank" class="alert-link">www.zentao.net</a> and download the extension, and then upload it to install.';
 $lang->extension->errorDownloadPathNotFound    = 'Extension download path <strong>%s</strong> is not found.<br /> Please run <strong>mkdir -p %s</strong> in Linux to fix it.';
-$lang->extension->errorDownloadPathNotWritable = 'Extensiond ownload path <strong>%s</strong>is not writable. <br />Please run <strong>sudo chmod 777 %s</strong> in Linux to fix it.';
-$lang->extension->errorPackageFileExists       = '<strong>%s</strong> has existed in the download path.<h5> Please %s it again, <a href="%s" class="alert-link">CLICK HERE</a></h5>';
+$lang->extension->errorDownloadPathNotWritable = 'Extension download path <strong>%s</strong>is not writable. <br />Please run <strong>sudo chmod 777 %s</strong> in Linux to fix it.';
+$lang->extension->errorPackageFileExists       = '<strong>%s</strong> exists in the download path.<h5> Please %s it again, <a href="%s" class="alert-link">CLICK HERE</a></h5>';
 $lang->extension->errorDownloadFailed          = 'Download failed. Please try it again. If still not OK, try to download it manually and upload it to install.';
 $lang->extension->errorMd5Checking             = 'Incomplete File. Please download it again. If still not OK, try to download it manually and upload it to install.';
 $lang->extension->errorCheckIncompatible       = 'Incompatible with your ZenTao. It may not be used %s later.<h5>You can choose to <a href="%s" class="btn btn-sm">force%s</a> or <a href="#" onclick=parent.location.href="%s" class="btn btn-sm">cancel</a></h5>';
