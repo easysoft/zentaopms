@@ -35,7 +35,7 @@ class todoModel extends model
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->end   == false, 'end',   '2400')
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
-            ->remove('bug, task, story, uid')
+            ->remove('bug, task, story, uid, feedback')
             ->get();
         if(empty($todo->cycle)) unset($todo->config);
         if(!empty($todo->cycle))
@@ -77,11 +77,6 @@ class todoModel extends model
             $this->file->updateObjectID($this->post->uid, $todoID, 'todo');
             $this->loadModel('score')->create('todo', 'create', $todoID);
             if(!empty($todo->cycle)) $this->createByCycle(array($todoID => $todo));
-            if(isset($todo->type) and $todo->type == 'feedback')
-            {
-                $this->dao->update(TABLE_FEEDBACK)->set('`status`')->eq('closed')->where('id')->eq($todo->idvalue)->exec();
-                $this->loadModel('action')->create('feedback', $todo->idvalue, 'totodo', '', $todoID);
-            }
             return $todoID;
         }
     }
@@ -421,6 +416,20 @@ class todoModel extends model
             $todos[] = $todo;
         }
         return $todos;
+    }
+
+    /**
+     * Get by id list.
+     *
+     * @param  array $todoIDList
+     * @access public
+     * @return object
+     */
+    public function getByList($todoIDList = 0) 
+    {    
+        return $this->dao->select('*')->from(TABLE_TODO)
+            ->beginIF($todoIDList)->where('id')->in($todoIDList)->fi()
+            ->fetchAll('id');
     }
 
     /**
