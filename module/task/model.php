@@ -1279,6 +1279,7 @@ class taskModel extends model
             ->remove('finishedDate,comment,assignedTo,files,labels,consumed')
             ->get();
         $estimate->consumed = $consumed;
+        $estimate->date     = $this->post->finishedDate;/*#task 7849*/
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team))

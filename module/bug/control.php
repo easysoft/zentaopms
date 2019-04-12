@@ -1622,7 +1622,7 @@ class bug extends control
         }
         else
         {
-            $browseType = $this->lang->bug->moreSelects[$browseType];
+            $browseType = isset($this->lang->bug->moreSelects[$browseType]) ? $this->lang->bug->moreSelects[$browseType] : null;
         }
 
         $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
