@@ -38,7 +38,7 @@ $lang->task->case                = 'Linked Case';
 $lang->task->confirmStoryChange  = "Confirm Change";
 $lang->task->progress            = 'Progress';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
-$lang->task->copy                = 'Duplicated Task';
+$lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Wait Task';
 
 $lang->task->common            = 'Task';
