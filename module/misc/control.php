@@ -193,4 +193,8 @@ class misc extends control
         $this->view->detailed = $detailed;
         $this->display();
     }
+    public function ajaxerror()
+    {
+        $this->display(); 
+    }
 }

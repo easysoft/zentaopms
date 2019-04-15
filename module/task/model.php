@@ -1279,6 +1279,7 @@ class taskModel extends model
             ->remove('finishedDate,comment,assignedTo,files,labels,consumed')
             ->get();
         $estimate->consumed = $consumed;
+        $estimate->date     = $this->post->finishedDate;/*#task 7849*/
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team))
@@ -2445,7 +2446,6 @@ class taskModel extends model
         $action = strtolower($action);
 
         if($action == 'start'          and !empty($task->children)) return false;
-        if($action == 'recordestimate' and !empty($task->children)) return false;
         if($action == 'finish'         and !empty($task->children)) return false;
         if($action == 'cancel'         and !empty($task->children)) return false;
         if($action == 'pause'          and !empty($task->children)) return false;
@@ -2454,6 +2454,7 @@ class taskModel extends model
         if($action == 'close'          and !empty($task->children)) return false;
         if($action == 'batchcreate'    and !empty($task->team))     return false;
         if($action == 'batchcreate'    and $task->parent > 0)       return false;
+        if($action == 'recordestimate' and $task->parent == -1)     return false;
 
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';
