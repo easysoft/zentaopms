@@ -34,7 +34,7 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function buildMenuQuery($rootID, $type, $startModule, $branch = 0)
+    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 0)
     {
         /* Set the start module. */
         $startModulePath = '';
@@ -112,7 +112,7 @@ class treeModel extends model
         ksort($treeMenu);
         $topMenu = @array_shift($treeMenu);
         $topMenu = explode("\n", trim($topMenu));
-        $lastMenu[] = in_array($type, array('bug', 'story')) ? '' : '/';
+        $lastMenu[] = '/';
         foreach($topMenu as $menu)
         {
             if(!strpos($menu, '|')) continue;
@@ -173,12 +173,18 @@ class treeModel extends model
     /**
      * Get line pairs.
      *
+     * @param  bool    $useShort 
      * @access public
      * @return array
      */
-    public function getLinePairs()
+    public function getLinePairs($useShort = false)
     {
-        return $this->dao->select('id, name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->fetchPairs();
+        $lines = $this->dao->select('id,name,short')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->fetchAll('id');
+
+        $linePairs = array();
+        foreach($lines as $lineID => $line) $linePairs[$lineID] = ($useShort and !empty($line->short)) ? $line->short : $line->name;
+
+        return $linePairs;
     }
 
     /**
@@ -444,9 +450,8 @@ class treeModel extends model
                     ->orderBy('grade desc, type, `order`')
                     ->get();
                 $stmt = $this->dbh->query($query);
-                while($module = $stmt->fetch())
+                while($module = $stmt->fetch()) 
                 {
-                    /* if not manage, ignore unused modules. */
                     if(!$manage and !isset($projectModules[$module->id])) continue;
                     $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
                 }
@@ -465,12 +470,7 @@ class treeModel extends model
             $treeMenu = array();
             $query = $this->dao->select('*')->from(TABLE_MODULE)->where("root = '" . (int)$rootID . "' and type = 'task'")->andWhere('deleted')->eq(0)->orderBy('grade desc, type, `order`')->get();
             $stmt  = $this->dbh->query($query);
-            while($module = $stmt->fetch())
-            {
-                /* if not manage, ignore unused modules. */
-                if(!$manage and !isset($projectModules[$module->id])) continue;
-                $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
-            }
+            while($module = $stmt->fetch()) $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
 
             $tree  = isset($treeMenu[0]) ? $treeMenu[0] : '';
             $menu .= $tree . '</li>';
@@ -508,7 +508,7 @@ class treeModel extends model
         $fullTrees = array();
         foreach($products as $id => $product)
         {
-            $productInfo  = $this->product->getById($id);
+            $productInfo = $this->product->getById($id);
             /* tree menu. */
             $productTree = array();
             $branchTrees = array();
@@ -983,6 +983,32 @@ class treeModel extends model
     }
 
     /**
+     * Create link of trainskill.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainSkillLink($type, $module, $extra = '')
+    {
+        return html::a(helper::createLink('trainskill', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    }
+
+    /**
+     * Create link of trainskill.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainCourseLink($type, $module, $extra = '')
+    {
+        return html::a(helper::createLink('traincourse', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    }
+
+    /**
      * Get sons of a module.
      *
      * @param  int    $rootID
@@ -1335,6 +1361,7 @@ class treeModel extends model
         {
             $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();
             $this->dao->update(TABLE_MODULE)->set('branch')->eq(0)->where('id')->in($childs)->exec();
+            if($self->type == 'doc') $this->dao->update(TABLE_DOC)->set('`lib`')->eq($module->root)->where('module')->eq($moduleID)->exec();
         }
         $this->fixModulePath(isset($module->root) ? $module->root : $self->root, $self->type);
         if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);

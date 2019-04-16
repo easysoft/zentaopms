@@ -27,6 +27,7 @@ class commonModel extends model
             $this->setCompany();
             $this->setUser();
             $this->loadConfigFromDB();
+            $this->app->setTimezone();
             if((strpos($this->config->global->version, 'pro') !== false && version_compare($this->config->global->version, 'pro2.3.beta', '>'))
                 || (strpos($this->config->global->version, 'biz') !== false)
                 || version_compare($this->config->global->version, '4.3.beta', '>'))
@@ -167,7 +168,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
-            if(stripos($method, 'downloadClient') !== false) return true;
+            if($module == 'misc' and $method == 'downloadclient') return true;
             if($module == 'block' and $method == 'main') return true;
             if($module == 'misc' and $method == 'changelog') return true;
             if($module == 'tutorial') return true;
@@ -315,7 +316,7 @@ class commonModel extends model
         echo "<li class='dropdown-submenu'>";
         echo "<a data-toggle='dropdown'>" . $lang->help . "</a>";
         echo "<ul class='dropdown-menu pull-left'>";
-        if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->tutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
+        if($config->global->flow == 'full' && !commonModel::isTutorialMode() and $app->user->account != 'guest') echo '<li>' . html::a(helper::createLink('tutorial', 'start'), $lang->noviceTutorial, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . "</li>";
         echo '<li>' . html::a($lang->manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
@@ -615,11 +616,10 @@ class commonModel extends model
                         $subMenu .= "<li class='$subActive' data-id='$subMenuItem->name'>" . html::a($subLink, $subLabel) . '</li>';
                     }
 
-                    if($subMenu)
-                    {
-                        $label   .= "<span class='caret'></span>";
-                        $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
-                    }
+                    if(empty($subMenu)) continue;
+
+                    $label   .= "<span class='caret'></span>";
+                    $subMenu  = "<ul class='dropdown-menu'>{$subMenu}</ul>";
                 }
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
@@ -699,7 +699,7 @@ class commonModel extends model
     public static function printClientLink()
     {
         global $lang;
-        echo html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='text-primary iframe' data-width='600'") . ' &nbsp; ';
+        echo html::a(helper::createLink('misc', 'downloadClient', '', '', true), $lang->downloadClient, '', "title='$lang->downloadClient' class='text-primary iframe' data-width='600'") . html::a($lang->clientHelpLink, "<i class='icon-lightbulb text-success'></i>", '', "title='$lang->clientHelp' target='_blank'") . ' &nbsp; ';
     }
 
     /**
@@ -1371,7 +1371,7 @@ EOD;
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if(isset($this->app->user->modifyPassword) and $this->app->user->modifyPassword and ($module != 'my' or $method != 'changepassword')) die(js::locate(helper::createLink('my', 'changepassword')));
+        if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword')));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -1491,7 +1491,7 @@ EOD;
      */
     public function checkIP($ipWhiteList = '')
     {
-        $ip = $this->server->remote_addr;
+        $ip = helper::getRemoteIp();
 
         if(!$ipWhiteList) $ipWhiteList = $this->config->ipWhiteList;
 

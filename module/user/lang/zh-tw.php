@@ -30,11 +30,12 @@ $lang->user->verify           = '安全驗證';
 $lang->user->contactInfo      = '聯繫信息';
 $lang->user->skype            = 'Skype';
 $lang->user->qq               = 'QQ';
-$lang->user->yahoo            = '雅虎通';
-$lang->user->gtalk            = 'GTalk';
-$lang->user->wangwang         = '旺旺';
 $lang->user->mobile           = '手機';
 $lang->user->phone            = '電話';
+$lang->user->weixin           = '微信';
+$lang->user->dingding         = '釘釘';
+$lang->user->slack            = 'Slack';
+$lang->user->whatsapp         = 'WhatsApp';
 $lang->user->address          = '通訊地址';
 $lang->user->zipcode          = '郵編';
 $lang->user->join             = '入職日期';
@@ -146,11 +147,19 @@ $lang->user->error->accountDupl   = "【ID %s】的用戶名已經存在";
 $lang->user->error->realname      = "【ID %s】的真實姓名必須填寫";
 $lang->user->error->password      = "【ID %s】的密碼必須為六位以上";
 $lang->user->error->mail          = "【ID %s】的郵箱地址不正確";
-$lang->user->error->role          = "【ID %s】的職位不能為空";
 $lang->user->error->reserved      = "【ID %s】的用戶名已被系統預留";
 
 $lang->user->error->verifyPassword   = "驗證失敗，請檢查您的系統登錄密碼是否正確";
 $lang->user->error->originalPassword = "原密碼不正確";
+
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['qq']       = $lang->user->qq;
+$lang->user->contactFieldList['dingding'] = $lang->user->dingding;
+$lang->user->contactFieldList['weixin']   = $lang->user->weixin;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['slack']    = $lang->user->slack;
+$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '聯繫人';

@@ -196,7 +196,7 @@ class file extends control
         }
         else
         {
-            $this->app->triggerError("The file you visit $fileID not found.", __FILE__, __LINE__, true);
+            die($this->lang->file->fileNotFound);
         }
     }
 
@@ -299,7 +299,7 @@ class file extends control
         if(strpos($fileName, $extension) === false) $fileName .= $extension;
 
         /* urlencode the filename for ie. */
-        if(strpos($this->server->http_user_agent, 'MSIE') !== false or strpos($this->server->http_user_agent, 'Trident') !== false) $fileName = urlencode($fileName);
+        if(strpos($this->server->http_user_agent, 'MSIE') !== false or strpos($this->server->http_user_agent, 'Trident') !== false or strpos($this->server->http_user_agent, 'Edge') !== false) $fileName = urlencode($fileName);
 
         /* Judge the content type. */
         $mimes = $this->config->file->mimes;

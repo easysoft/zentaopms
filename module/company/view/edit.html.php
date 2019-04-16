@@ -24,31 +24,31 @@
     <table class='table table-form'> 
       <tr>
         <th><?php echo $lang->company->name;?></th>
-        <td><?php echo html::input('name', $company->name, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('name', $company->name, "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->company->phone;?></th>
-        <td><?php echo html::input('phone', $company->phone, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('phone', $company->phone, "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->company->fax;?></th>
-        <td><?php echo html::input('fax', $company->fax, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('fax', $company->fax, "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->company->address;?></th>
-        <td><?php echo html::input('address', $company->address, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('address', $company->address, "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->company->zipcode;?></th>
-        <td><?php echo html::input('zipcode', $company->zipcode, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('zipcode', $company->zipcode, "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->company->website;?></th>
-        <td><?php echo html::input('website', $company->website ? $company->website : 'http://', "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('website', $company->website ? $company->website : 'http://', "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->company->backyard;?></th>
-        <td><?php echo html::input('backyard', $company->backyard ? $company->backyard : 'http://', "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('backyard', $company->backyard ? $company->backyard : 'http://', "class='form-control'");?></td>
       </tr>  
       <tr>
         <th><?php echo $lang->company->guest;?></th>

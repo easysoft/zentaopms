@@ -12,7 +12,7 @@
 ?>
 <div class='form-group'>
   <label for='title' class='col-sm-3'><?php echo $lang->block->name?></label>
-  <div class='col-sm-7'><?php echo html::input('title', $block ? $block->title : '', "class='form-control' autocomplete='off'")?></div>
+  <div class='col-sm-7'><?php echo html::input('title', $block ? $block->title : '', "class='form-control'")?></div>
 </div>
 <div class='form-group'>
   <label for='grid' class='col-sm-3'><?php echo $lang->block->grid;?></label>

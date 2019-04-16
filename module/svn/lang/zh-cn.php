@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 /* 方法列表。*/
-$lang->svn = new stdclass();
 $lang->svn->common  = 'Subversion';
 $lang->svn->cat     = '查看源代码';
 $lang->svn->diff    = '比较源代码';

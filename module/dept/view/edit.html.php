@@ -14,7 +14,6 @@
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 ?>
-<?php include '../../common/view/chosen.html.php';?>
 <div class='modal-dialog w-500px'>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
@@ -29,7 +28,7 @@ $jsRoot  = $webRoot . "js/";
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->dept->name;?></th>
-          <td><?php echo html::input('name', $dept->name, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('name', $dept->name, "class='form-control'");?></td>
         </tr>
         <tr>
           <th class='w-80px'><?php echo $lang->dept->manager;?></th>
@@ -44,3 +43,6 @@ $jsRoot  = $webRoot . "js/";
     </form>
   </div>
 </div>
+<script>
+$('#dataform .chosen').chosen();
+</script>

@@ -42,7 +42,7 @@ function closeWindow()
         <td>
           <div class='input-group'>
             <span class='input-group-addon'><?php echo $lang->setFileName;?></span>
-            <?php echo html::input('fileName', '', "class='form-control' autocomplete='off'");?>
+            <?php echo html::input('fileName', '', "class='form-control'");?>
             <span class='input-group-addon'>.html</span>
             <?php echo html::select('type', $lang->release->exportTypeList, 'all', "class='form-control'")?>
           </div>

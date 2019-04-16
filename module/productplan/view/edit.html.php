@@ -34,7 +34,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->title;?></th>
-            <td><?php echo html::input('title', $plan->title, "class='form-control' autocomplete='off' required");?></td><td></td><td></td>
+            <td><?php echo html::input('title', $plan->title, "class='form-control' required");?></td><td></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>

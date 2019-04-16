@@ -1,15 +1,15 @@
 <?php
-public function downloadXXD($setting, $type)
-{
-    return $this->loadExtension('xuanxuan')->downloadXXD($setting, $type);
-}
-
 public function getExtensionList($userID)
 {
     return $this->loadExtension('xuanxuan')->getExtensionList($userID);
 }
 
-public function sendDownHeader($fileName, $fileType, $content, $fileSize = 0)
+public function editUser($user = null)
 {
-    return $this->loadExtension('xuanxuan')->sendDownHeader($fileName, $fileType, $content, $fileSize);
+    return $this->loadExtension('xuanxuan')->editUser($user);
+}
+
+public function getServer($backend = 'xxb')
+{
+    return $this->loadExtension('xuanxuan')->getServer($backend);
 }

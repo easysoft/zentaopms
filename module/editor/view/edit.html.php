@@ -40,7 +40,7 @@
           <div class='form-group'>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->editor->fileName;?></span>
-              <?php echo html::input('fileName', '', "class='form-control' autocomplete='off'");?>
+              <?php echo html::input('fileName', '', "class='form-control'");?>
               <span class='input-group-addon'>
                 <?php
                 if($action == 'newHook')

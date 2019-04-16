@@ -156,7 +156,7 @@ if($isCustomExport)
           <tbody>
             <tr>
               <th><?php echo $lang->file->fileName;?></th>
-              <td class="w-300px"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus autocomplete='off' placeholder='{$lang->file->untitled}'");?></td>
+              <td class="w-300px"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus placeholder='{$lang->file->untitled}'");?></td>
               <td></td>
             </tr>
             <tr>
@@ -198,7 +198,7 @@ if($isCustomExport)
                     <div>
                       <div class='input-group'>
                         <span class='input-group-addon'><?php echo $lang->file->tplTitle;?></span>
-                        <?php echo html::input('title', $lang->file->defaultTPL, "class='form-control' autocomplete='off'")?>
+                        <?php echo html::input('title', $lang->file->defaultTPL, "class='form-control'")?>
                         <?php if(common::hasPriv('file', 'setPublic')):?>
                         <span class='input-group-addon'><?php echo html::checkbox('public', array(1 => $lang->public));?></span>
                         <?php endif?>

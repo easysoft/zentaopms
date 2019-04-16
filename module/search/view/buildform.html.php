@@ -15,16 +15,22 @@ $jsRoot = $this->app->getWebRoot() . "js/";
 include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
+$fieldWidth    = $app->getClientLang() == 'en' ? 'w-130px' : 'w-110px';
+$operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 ?>
 <style>
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
 #<?php echo $formId;?> > table {margin: 0 auto;}
-#<?php echo $formId;?> > table > tbody > tr > td {padding: 10px 15px;}
+#<?php echo $formId;?> > table > tbody > tr > td {padding: 8px;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
-#<?php echo $formId;?> .chosen-container[id^="field"] .chosen-drop {min-width: 140px;}
+#<?php echo $formId;?> .chosen-container[id^="field"] .chosen-drop {min-width: 180px;}
+<?php if($app->getClientLang() == 'en'):?>
+#<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 70px;}
+<?php else:?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
+<?php endif;?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #<?php echo $formId;?> .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #<?php echo $formId;?> input.date::-webkit-input-placeholder {color: #838A9D; opacity: 1;}
@@ -33,6 +39,10 @@ $formId = 'searchForm-' . uniqid('');
 #<?php echo $formId;?> .btn-expand-form {background: transparent;}
 #<?php echo $formId;?> .btn-expand-form:hover {background: #e9f2fb;}
 .showmore .btn-expand-form .icon-chevron-double-down:before {content: '\e959';}
+
+#queryBox select[id^="operator"] {padding-right:2px; padding-left:5px;}
+#queryBox select#groupAndOr {padding-right:2px; padding-left:5px;}
+#queryBox .chosen-container-single .chosen-single>span {margin-right:5px;}
 
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
@@ -57,7 +67,7 @@ foreach($fieldParams as $fieldName => $param)
 {
     echo "<div id='box$fieldName'>";
     if($param['control'] == 'select') echo html::select('field' . $fieldName, $param['values'], '', "class='form-control searchSelect'");
-    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput' autocomplete='off'");
+    if($param['control'] == 'input')  echo html::input('field' . $fieldName, '', "class='form-control searchInput'");
     echo '</div>';
 }
 ?>
@@ -91,16 +101,16 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-80px'>";
+                echo "<td class='text-right w-70px'>";
                 if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='w-110px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='{$fieldWidth}' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='w-90px'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='{$operatorWidth}'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
@@ -117,7 +127,7 @@ foreach($fieldParams as $fieldName => $param)
                     }
                     else
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' autocomplete='off'");
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
                     }
                 }
                 echo '</td>';
@@ -129,7 +139,7 @@ foreach($fieldParams as $fieldName => $param)
           </tbody>
         </table>
       </td>
-      <td class='text-center nobr w-90px'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control'")?></td>
+      <td class='text-center nobr w-70px'><?php echo html::select('groupAndOr', $lang->search->andor, $formSession['groupAndOr'], "class='form-control'")?></td>
       <td class='w-400px'>
         <table class='table table-form'>
           <tbody>
@@ -151,16 +161,16 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-80px'>";
+                echo "<td class='text-right w-70px'>";
                 if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='w-110px' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='{$fieldWidth}' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='w-90px'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='{$operatorWidth}'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
@@ -178,7 +188,7 @@ foreach($fieldParams as $fieldName => $param)
                     }
                     else
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' autocomplete='off'");
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
                     }
                 }
                 echo '</td>';
@@ -215,7 +225,7 @@ foreach($fieldParams as $fieldName => $param)
             echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         }
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
-        echo html::hidden('formType', 'lite');
+        echo html::hidden('formType', zget($formSession, 'formType', 'lite'));
         ?>
       </td>
     </tr>
@@ -287,8 +297,7 @@ $(function()
             }
         }
 
-        $searchForm.find('#formType').val(expand ? 'more' : '');
-        $searchForm.toggleClass('showmore', expand);
+        $searchForm.find('#formType').val(expand ? 'more' : 'lite');
     };
 
     /**
@@ -441,6 +450,7 @@ $(function()
 
     $searchForm.find('.btn-save-form').modalTrigger({width:650, type:'iframe', title: setQueryTitle});
 
+    if($('#formType').val() == 'more') expandForm(true);
     $searchForm.on('click', '.user-query .icon-close', function(e)
     {
         var $query = $(this).closest('.user-query');
@@ -457,6 +467,6 @@ $(function()
     $searchForm.find('.table-condensed input.date').each(function()
     {
         setDateField($(this), $(this).attr('id').substr(5));
-    })
+    });
 });
 </script>

@@ -4,7 +4,7 @@ function loadModules(libID)
     $('#moduleBox').load(link, function(){$('#moduleBox').find('select').chosen()});
 }
 
-function toggleAcl(acl)
+function toggleAcl(acl, type)
 {
     if(acl == 'custom')
     {
@@ -13,6 +13,17 @@ function toggleAcl(acl)
     else
     {
         $('#whiteListBox').addClass('hidden');
+    }
+    if(type == 'lib')
+    {
+        var libType = $('input[name="type"]:checked').val();
+        var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
+        $('#noticeAcl').html(notice);
+    }
+    else
+    {
+        var notice  = typeof(noticeAcl[acl]) != 'undefined' ? noticeAcl[acl] : '';
+        $('#noticeAcl').html(notice);
     }
 }
 
@@ -69,7 +80,6 @@ $(document).ready(function()
                 }
             }, 'json');
         }
-
     });
 
     'use strict';

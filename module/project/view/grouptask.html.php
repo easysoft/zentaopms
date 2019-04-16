@@ -147,7 +147,7 @@
       {
           if($groupBy == 'story')
           {
-              if(!$task->parent)
+              if($task->parent <= 0)
               {
                   $groupEstimate += $task->estimate;
                   $groupConsumed += $task->consumed;
@@ -156,10 +156,12 @@
           }
           else
           {
-              $groupEstimate += $task->estimate;
-              $groupConsumed += $task->consumed;
-
-              if($groupBy == 'status' || ($task->status != 'cancel' && $task->status != 'closed')) $groupLeft += $task->left;
+              if($task->parent <= 0)
+              {
+                  $groupEstimate += $task->estimate;
+                  $groupConsumed += $task->consumed;
+                  if($groupBy == 'status' || ($task->status != 'cancel' && $task->status != 'closed')) $groupLeft += $task->left;
+              }
           }
 
           if($task->status == 'wait')   $groupWait++;
@@ -208,7 +210,7 @@
         <td class="c-actions">
           <?php common::printIcon('task', 'assignTo', "projectID=$task->project&taskID=$task->id", $task, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('task', 'edit', "taskid=$task->id", '', 'list');?>
-          <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', '', 'hiddenwin');?>
+          <?php common::printIcon('task', 'delete', "projectID=$task->project&taskid=$task->id", '', 'list', 'trash', 'hiddenwin');?>
         </td>
       </tr>
       <?php $i++;?>

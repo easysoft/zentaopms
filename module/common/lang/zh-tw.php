@@ -80,7 +80,7 @@ $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='t
 $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = '設為模組首頁';
-$lang->tutorial        = '新手教程';
+$lang->noviceTutorial  = '新手教程';
 $lang->changeLog       = '修改日誌';
 $lang->manual          = '手冊';
 $lang->manualUrl       = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
@@ -262,7 +262,7 @@ $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => '測試|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->build->menu->qa = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA視圖菜單設置。*/
 $lang->qa = new stdclass();
@@ -335,6 +335,9 @@ $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
 //$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加檔案夾|doc|createLib', 'float' => 'right');
 
+$lang->svn = new stdclass();
+$lang->git = new stdclass();
+
 /* 統計視圖菜單設置。*/
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
@@ -397,7 +400,8 @@ $lang->admin->subMenu->data->backup = array('link' => '備份|backup|index', 'su
 $lang->admin->subMenu->data->trash  = '資源回收筒|action|trash';
 
 $lang->admin->subMenu->system = new stdclass();
-$lang->admin->subMenu->system->cron = array('link' => '定時|cron|index', 'subModule' => 'cron');
+$lang->admin->subMenu->system->cron     = array('link' => '定時|cron|index', 'subModule' => 'cron');
+$lang->admin->subMenu->system->timezone = array('link' => '時區|custom|timezone', 'subModule' => 'custom');
 
 $lang->convert   = new stdclass();
 $lang->upgrade   = new stdclass();
@@ -479,7 +483,7 @@ $lang->error->email           = "『%s』應當為合法的EMAIL。";
 $lang->error->date            = "『%s』應當為合法的日期。";
 $lang->error->datetime        = "『%s』應當為合法的日期。";
 $lang->error->code            = "『%s』應當為字母或數字的組合。";
-$lang->error->account         = "『%s』應當為合法的用戶名。";
+$lang->error->account         = "『%s』只能是字母和數字的組合三位以上。";
 $lang->error->passwordsame    = "兩次密碼應當相等。";
 $lang->error->passwordrule    = "密碼應該符合規則，長度至少為六位。";
 $lang->error->accessDenied    = '您沒有訪問權限';
@@ -502,9 +506,12 @@ $lang->pager->previousPage = "上一頁";
 $lang->pager->nextPage     = "下一頁";
 $lang->pager->summery      = "第 <strong>%s-%s</strong> 項，共 <strong>%s</strong> 項";
 
-$lang->proVersion = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>專業版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
-$lang->downNotify = "下載桌面提醒";
-$lang->website    = "https://www.zentao.net";
+$lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>專業版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
+$lang->downNotify     = "下載桌面提醒";
+$lang->downloadClient = "下載客戶端";
+$lang->clientHelp     = "客戶端使用說明";
+$lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
+$lang->website        = "https://www.zentao.net";
 
 $lang->suhosinInfo     = "警告：數據太多，請在php.ini中修改<font color=red>sohusin.post.max_vars</font>和<font color=red>sohusin.request.max_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
 $lang->maxVarsInfo     = "警告：數據太多，請在php.ini中修改<font color=red>max_input_vars</font>（大於%s的數）。 保存並重新啟動apache或php-fpm，否則會造成部分數據無法保存。";
@@ -724,6 +731,8 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Remove sub menu of project module. */
     unset($lang->project->menu);
     unset($lang->project->menuOrder);
+    $lang->project->menu = new stdclass();
+    $lang->project->menu->list = array('alias' => '');
 
     /* Add bug, testcase and testtask module. */
     $lang->menu->bug       = 'Bug|bug|index';

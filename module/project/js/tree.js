@@ -8,33 +8,90 @@ $(function()
 
     var taskTree = $taskTree.data('zui.tree');
 
+    var sortItems = function($items)
+    {
+        var items = $items.toArray();
+        for(i = 0; i < items.length; i++)
+        {
+            for(j = 0; j < items.length - 1 - i; j++)
+            {
+                if($(items[j + 1]).data('id').toString() > $(items[j]).data('id').toString())
+                {
+                    var tmp = items[j + 1];
+                    items[j + 1] = items[j];
+                    items[j] = tmp;
+                }
+            }
+        }
+        return items;
+    }
+
     // 根据列表展开树形列表
     var showTreeLevel = function(level)
     {
         $('.btn-tree-view').removeClass('btn-active-text');
+        $('#taskTree li.item-product').removeClass('hidden');
+        $('#taskTree li.item-module').removeClass('hidden');
+        $('#taskTree li.item-story').removeClass('hidden');
+        $('#taskTree li.item-task').removeClass('hidden');
 
-        if (level === 'root')
+        if(level === 'root')
         {
             $('[data-type=root]').addClass('btn-active-text');
             taskTree.collapse();
         }
-        else if (level === 'all')
+        else if(level === 'all')
         {
             $('[data-type=all]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.expand($taskTree.find('li.has-list'), true);
         }
-        else if (level === 'task')
+        else if(level === 'task')
         {
             $('[data-type=task]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-task').parent().parent(), true);
+
+            var $storyItems = $('#taskTree li.item-story');
+            $storyItems.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
+            var $moduleItems = $('#taskTree li.item-module');
+            moduleItems = sortItems($moduleItems);
+            for(i = 0; i < moduleItems.length; i++)
+            {
+                var items = $(moduleItems[i]).find('ul li:not(.hidden)').length;
+                if(items == 0) $(moduleItems[i]).addClass('hidden');
+            }
+            var $productItems = $('#taskTree li.item-product');
+            $productItems.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
         }
-        else if (level === 'story')
+        else if(level === 'story')
         {
             $('[data-type=story]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-story').parent().parent(), true);
+
+            $('#taskTree li.item-task').addClass('hidden');
+            var $moduleItems = $('#taskTree li.item-module');
+            moduleItems = sortItems($moduleItems);
+            for(i = 0; i < moduleItems.length; i++)
+            {
+                var items = $(moduleItems[i]).find('ul li:not(.hidden)').length;
+                if(items == 0) $(moduleItems[i]).addClass('hidden');
+            }
+            var $productItems = $('#taskTree li.item-product');
+            $productItems.each(function()
+            {
+                var items = $(this).find('ul li:not(.hidden)').length;
+                if(items == 0) $(this).addClass('hidden');
+            });
         }
         $('#main').toggleClass('tree-show-root', level === 'root');
     };

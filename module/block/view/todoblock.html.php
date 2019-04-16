@@ -37,12 +37,12 @@ if(!$selfCall) die(include('./todolist.html.php'));
 <div class='block-todoes'>
   <div class='panel-body'>
     <div class="todoes-input">
-      <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" class="form-control"></div>
+      <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" autocomplete="off" class="form-control"></div>
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
         <div class="form-group">
           <label for="todoName" class="col-sm-2"><?php echo $lang->todo->name?></label>
-          <div class="col-sm-9 required"><input type="text" class="form-control" name="name" autocomplete='off'></div>
+          <div class="col-sm-9 required"><input type="text" class="form-control" autocomplete="off" name="name"></div>
         </div>
         <div class="form-group">
           <label for="todoPri" class="col-sm-2"><?php echo $lang->todo->pri?></label>

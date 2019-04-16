@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 /* 方法列表。*/
-$lang->git = new stdclass();
 $lang->git->common  = 'Git';
 $lang->git->cat     = '查看源代码';
 $lang->git->diff    = '比较源代码';

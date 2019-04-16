@@ -92,6 +92,7 @@ class task extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
+            if($this->post->project) $projectID = $this->post->project;
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
             {
@@ -124,12 +125,7 @@ class task extends control
             }
 
             /* If link from no head then reload*/
-            if(isonlybody())
-            {
-                $response['locate'] = 'reload';
-                $response['target'] = 'parent';
-                $this->send($response);
-            }
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             if($todoID > 0)
             {
@@ -153,8 +149,8 @@ class task extends control
             }
             elseif($this->post->after == 'toTaskList')
             {
-                $moduleID  = $this->post->module ? $this->post->module : 0;
-                $taskLink  = $this->createLink('project', 'task', "projectID=$projectID&browseType=byModule&param=$moduleID");
+                setcookie('moduleBrowseParam',  (int)$this->post->module, 0, $this->config->webRoot);
+                $taskLink  = $this->createLink('project', 'task', "projectID=$projectID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 $this->send($response);
             }
@@ -191,9 +187,11 @@ class task extends control
         $this->view->title            = $title;
         $this->view->position         = $position;
         $this->view->project          = $project;
+        $this->view->projects         = $this->loadModel('project')->getPairs();
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->stories          = $stories;
+        $this->view->testStoryIdList  = $this->loadModel('story')->getTestStories(array_keys($stories), $project->id);
         $this->view->members          = $members;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->display();
@@ -233,7 +231,7 @@ class task extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Locate the browser. */
-            if(!empty($iframe)) $this->send(array('result' => 'success', 'locate' => 'parent'));
+            if(!empty($iframe)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $storyLink));
         }
 
@@ -1269,6 +1267,7 @@ class task extends control
             if($this->session->taskOnlyCondition)
             {
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
+                    ->andWhere('parent')->le(0)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($sort)->fetchAll('id');
 
@@ -1309,9 +1308,24 @@ class task extends control
                 ->where('root')->in(array_keys($tasks))
                 ->andWhere('type')->eq('task')
                 ->fetchGroup('root');
+
+            /* Process multiple task info. */
             if(!empty($taskTeam))
             {
-                foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+                foreach($taskTeam as $taskID => $team) 
+                {
+                    $tasks[$taskID]->team     = $team;
+                    $tasks[$taskID]->estimate = '';
+                    $tasks[$taskID]->left     = '';
+                    $tasks[$taskID]->consumed = '';
+
+                    foreach($team as $userInfo)
+                    {
+                        $tasks[$taskID]->estimate .= zget($users, $userInfo->account) . ':' . $userInfo->estimate . "\n";
+                        $tasks[$taskID]->left     .= zget($users, $userInfo->account) . ':' . $userInfo->left . "\n";
+                        $tasks[$taskID]->consumed .= zget($users, $userInfo->account) . ':' . $userInfo->consumed . "\n"; 
+                    }
+                }
             }
 
             /* Get related objects title or names. */
@@ -1376,7 +1390,39 @@ class task extends control
                 foreach($tasks as $task)
                 {
                     $task->storyTitle = isset($stories[$task->story]) ? $stories[$task->story]->title : '';
-                    $groupTasks[$task->$orderBy][] = $task;
+                    if(isset($task->team))
+                    {
+                        if($orderBy == 'finishedBy') $task->consumed = $task->estimate = $task->left = 0;
+                        foreach($task->team as $team)
+                        {
+                            if($orderBy == 'finishedBy' and $team->left != 0)
+                            {
+                                $task->estimate += $team->estimate;
+                                $task->consumed += $team->consumed;
+                                $task->left     += $team->left;
+                                continue;
+                            }
+
+                            $cloneTask = clone $task;
+                            $cloneTask->estimate = $team->estimate;
+                            $cloneTask->consumed = $team->consumed;
+                            $cloneTask->left     = $team->left;
+                            if($team->left == 0) $cloneTask->status = 'done';
+
+                            if($orderBy == 'assignedTo')
+                            {
+                                $cloneTask->assignedToRealName = zget($users, $team->account);
+                                $cloneTask->assignedTo = $team->account;
+                            }
+                            if($orderBy == 'finishedBy')$cloneTask->finishedBy = $team->account;
+                            $groupTasks[$team->account][] = $cloneTask;
+                        }
+                        if(!empty($task->left) and $orderBy == 'finishedBy') $groupTasks[$task->finishedBy][] = $task;
+                    }
+                    else
+                    {
+                        $groupTasks[$task->$orderBy][] = $task;
+                    }
                 }
 
                 $tasks = array();

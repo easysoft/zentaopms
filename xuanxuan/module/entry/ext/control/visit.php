@@ -14,7 +14,8 @@ class entry extends control
         if(RUN_MODE != 'xuanxuan') die();
 
         $referer = !empty($_GET['referer']) ? $this->get->referer : $referer;
-        if(empty($referer)) $referer = common::getSysURL() . str_replace('/xuanxuan.php', '/index.php', $this->createLink('index', 'index', '', 'xhtml'));
+        $server  = $this->loadModel('chat')->getServer('zentao');
+        if(empty($referer)) $referer = $server . str_replace('/x.php', '/index.php', $this->createLink('my', 'index', '', 'html'));
 
         $output = new stdclass();
         $output->module = $this->moduleName;
@@ -44,7 +45,6 @@ class entry extends control
             $this->loadModel('user');
             $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($this->session->userID)->fetch();
 
-            unset($user->password);
             $this->user->cleanLocked($user->account);
 
             $user->admin    = strpos($this->app->company->admins, ",{$user->account},") !== false;
@@ -56,6 +56,12 @@ class entry extends control
             $user->last     = date(DT_DATETIME1, $last);
             $user->lastTime = $last;
             $user->ip       = $this->session->clientIP->IP;
+
+            $xxInstalled = $user->account . 'installed';
+            $this->loadModel('setting');
+            if(!isset($this->config->xxclient->$xxInstalled)) $this->setting->setItem("system.common.xxclient.{$user->account}installed", '1');
+            if(!isset($this->config->xxserver->installed)) $this->setting->setItem("system.common.xxserver.installed", '1');
+            if(!isset($this->config->xxserver->noticed)) $this->setting->setItem("system.common.xxserver.noticed", '1');
 
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;

@@ -21,6 +21,7 @@
         <?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title, '', "title='$doc->title'");?>
         <small> <?php echo $lang->arrow . ' ' . $lang->doc->edit;?></small>
       </h2>
+      <div class='pull-right'><?php echo html::a('###', $lang->save, '', 'id="top-submit" class="btn btn-primary"');?></div>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'> 
@@ -36,11 +37,11 @@
         </tr>  
         <tr>
           <th><?php echo $lang->doc->title;?></th>
-          <td colspan='2'><?php echo html::input('title', $doc->title, "class='form-control' autocomplete='off' required");?></td>
+          <td colspan='2'><?php echo html::input('title', $doc->title, "class='form-control' required");?></td>
         </tr> 
         <tr>
           <th><?php echo $lang->doc->keywords;?></th>
-          <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('keywords', $doc->keywords, "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->doc->type;?></th>
@@ -52,7 +53,7 @@
         </tr>  
         <tr id='urlBox' <?php if($doc->type != 'url') echo "class='hidden'"?>>
           <th><?php echo $lang->doc->url;?></th>
-          <td colspan='2'><?php echo html::input('url', $doc->type == 'url' ? $doc->content : '', "class='form-control' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('url', $doc->type == 'url' ? $doc->content : '', "class='form-control'");?></td>
         </tr>  
         <tr id='fileBox'>
           <th><?php echo $lang->doc->files;?></th>
@@ -60,7 +61,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->doclib->control;?></th>
-          <td><?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value)'")?></td>
+          <td colspan='2'>
+            <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
+            <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$doc->acl];?></span>
+          </td>
         </tr>
         <tr id='whiteListBox' class='hidden'>
           <th><?php echo $lang->doc->whiteList;?></th>
@@ -88,4 +92,5 @@
     </form>
   </div>
 </div>
+<?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>

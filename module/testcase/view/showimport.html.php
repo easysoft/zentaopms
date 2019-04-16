@@ -14,17 +14,13 @@
       <thead>
         <tr>
           <th class='w-50px'><?php echo $lang->lineNumber?></th>
-          <th class='w-70px'><?php echo $lang->testcase->id?></th>
+          <th class='w-40px'><?php echo $lang->idAB?></th>
           <th><?php echo $lang->testcase->title?></th>
-          <?php if(!empty($branches)):?>
-          <th class='w-100px'><?php echo $lang->testcase->branch?></th>
-          <?php endif;?>
-          <th class='w-100px'><?php echo $lang->testcase->module?></th>
+          <th class='w-180px'><?php echo $lang->testcase->module?></th>
           <th class='w-120px'><?php echo $lang->testcase->story?></th>
-          <th class='w-70px'><?php echo $lang->testcase->pri?></th>
-          <th class='w-100px'><?php echo $lang->testcase->type?></th>
-          <th><?php echo $lang->testcase->stage?></th>
-          <th class='w-80px'><?php echo $lang->testcase->keywords?></th>
+          <th class='w-80px'><?php echo $lang->testcase->pri?></th>
+          <th class='w-120px'><?php echo $lang->testcase->type?></th>
+          <th class='w-160px'><?php echo $lang->testcase->stage?></th>
           <th><?php echo $lang->testcase->precondition?></th>
           <th class='w-300px'>
             <table class='w-p100 table-borderless'>
@@ -43,7 +39,7 @@
         ?>
         <?php foreach($caseData as $key => $case):?>
         <?php if(empty($case->title)) continue;?>
-        <tr valign='top' align='center'>
+        <tr valign='top' class='text-left'>
           <td><?php echo $key;?></td>
           <td>
             <?php
@@ -57,18 +53,16 @@
                 echo "<sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
             }
             echo html::hidden("product[$key]", $productID);
+            if(!empty($branches)) echo html::hidden("branch[$key]", (isset($case->branch) and $case->branch !== '') ? $case->branch : ((!empty($case->id) and isset($cases[$case->id]) and !empty($cases[$case->id]->branch)) ? $cases[$case->id]->branch : $branch));
+            echo html::hidden("keywords[$key]", isset($case->keywords) ? $case->keywords : "");
             ?>
           </td>
           <td><?php echo html::input("title[$key]", htmlspecialchars($case->title, ENT_QUOTES), "class='form-control'")?></td>
-          <?php if(!empty($branches)):?>
-          <td class='text-left' style='overflow:visible'><?php echo html::select("branch[$key]", $branches, (isset($case->branch) and $case->branch !== '') ? $case->branch : ((!empty($case->id) and isset($cases[$case->id]) and !empty($cases[$case->id]->branch)) ? $cases[$case->id]->branch : $branch), "class='form-control chosen'")?></td>
-          <?php endif;?>
-          <td class='text-left' style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
-          <td class='text-left' style='overflow:visible'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
+          <td style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
+          <td style='overflow:visible'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
           <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
           <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control chosen'")?></td>
-          <td class='text-left' style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
-          <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control' autocomplete='off'")?></td>
+          <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
           <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
           <td>
             <?php if(isset($stepData[$key]['desc'])):?>
@@ -97,7 +91,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='<?php echo !empty($branches) ? 12 : 11;?>' class='text-center form-actions'>
+          <td colspan='10' class='text-center form-actions'>
             <?php
             if(!$insert)
             {

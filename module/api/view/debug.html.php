@@ -20,7 +20,7 @@
         <?php foreach($method->parameters as $param):?>
         <tr>
           <th class='w-80px'><?php echo $param->name?></th>
-          <td><?php echo html::input("$param->name", $param->isOptional() ? $param->getDefaultValue() : '', "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input("$param->name", $param->isOptional() ? $param->getDefaultValue() : '', "class='form-control'")?></td>
         </tr>
         <?php endforeach;?>
         <tr>

@@ -27,10 +27,10 @@ $lang->testreport->stories     = 'Test Story';
 $lang->testreport->bugs        = 'Bugs';
 $lang->testreport->builds      = 'Build Info';
 $lang->testreport->goal        = 'Project Goal';
-$lang->testreport->cases       = 'Cases';
+$lang->testreport->cases       = 'Case';
 $lang->testreport->bugInfo     = 'Bug Distribution';
 $lang->testreport->report      = 'Summary';
-$lang->testreport->legacyBugs  = 'Legacy Bugs';
+$lang->testreport->legacyBugs  = 'Legacy Bug';
 $lang->testreport->createdDate = 'Date';
 $lang->testreport->objectID    = 'Object';
 $lang->testreport->profile     = 'Profile';
@@ -40,10 +40,14 @@ $lang->testreport->all         = 'All Report';
 $lang->testreport->deleted     = 'Deleted';
 
 $lang->testreport->legendBasic       = 'Basic Info';
+<<<<<<< HEAD
 $lang->testreport->legendStoryAndBug = 'Story and Bug of Test';
+=======
+$lang->testreport->legendStoryAndBug = 'Story&Bug';
+>>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->testreport->legendBuild       = 'Build Info';
 $lang->testreport->legendCase        = 'Linked Case';
-$lang->testreport->legendLegacyBugs  = 'Legacy Bugs';
+$lang->testreport->legendLegacyBugs  = 'Legacy Bug';
 $lang->testreport->legendReport      = 'Report';
 $lang->testreport->legendComment     = 'Summary';
 $lang->testreport->legendMore        = 'More';
@@ -59,9 +63,15 @@ $lang->testreport->bugOpenedByGroups   = 'Bug CreateBy Distribution';
 $lang->testreport->bugResolvedByGroups = 'Bug ResolveBy Distribution';
 $lang->testreport->bugResolutionGroups = 'Bug Resolution Distribution';
 $lang->testreport->bugModuleGroups     = 'Bug Module Distribution';
+<<<<<<< HEAD
 $lang->testreport->legacyBugs          = 'Legacy Bugs';
 $lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Resolution is fixed or postponed / status is resolved or closed)';
 $lang->testreport->bugCreateByCaseRate = 'Bug Created in Case Rate (Bugs reported in cases / Newly added bugs)';
+=======
+$lang->testreport->legacyBugs          = 'Legacy Bug';
+$lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Solution is fixed or postponed / status is resolved or closed)';
+$lang->testreport->bugCreateByCaseRate = 'Bug Created in Case Rate (Bugs created in cases / Newly added bugs)';
+>>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 
 $lang->testreport->caseSummary    = ' <strong>%s</strong> cases in Total : <strong>%s</strong> performed, <strong>%s</strong> results, <strong>%s</strong> failed.';
 $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
@@ -77,6 +87,7 @@ $lang->testreport->errorTrunk     = "The trunk version cannot create a test repo
 $lang->testreport->moreProduct    = "A test report can only be generated for the same product.";
 =======
 $lang->testreport->confirmDelete  = 'Do you want to delete this report?';
+<<<<<<< HEAD
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';
 $lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
@@ -86,6 +97,16 @@ $lang->testreport->fromCaseBugTip = "Bugs created after failed cases in the test
 $lang->testreport->errorTrunk     = "The trunk cannot create a QA report for. Please modify the linked build!";
 $lang->testreport->moreProduct    = "You can only create QA reports for the same product.";
 >>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
+=======
+$lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao manual, or you can contact us at renee@easysoft.ltd for customization.';
+$lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.pm' target='_blank' style='color:grey'>ZenTao</a>";
+$lang->testreport->noReport       = "No report has been generated yet.";
+$lang->testreport->foundBugTip    = "Bugs reported in this build and in this test.";
+$lang->testreport->legacyBugTip   = "Active Bugs, or bugs that are resolved after this test is done.";
+$lang->testreport->fromCaseBugTip = "Bugs reported due to failed cases in this test.";
+$lang->testreport->errorTrunk     = "The trunk cannot generate a QA report. Modify the linked build!";
+$lang->testreport->moreProduct    = "You can only generate QA reports for the same product.";
+>>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 
 $lang->testreport->bugSummary = <<<EOD
 <strong>%s</strong> Bug(s) reported in total <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,

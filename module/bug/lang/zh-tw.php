@@ -128,11 +128,12 @@ $lang->bug->assignToMeAB   = '指派給我';
 $lang->bug->openedByMeAB   = '由我創建';
 $lang->bug->resolvedByMeAB = '由我解決';
 
-$lang->bug->ditto       = '同上';
-$lang->bug->dittoNotice = '該bug與上一bug不屬於同一產品！';
-$lang->bug->noAssigned  = '未指派';
-$lang->bug->noBug       = '暫時沒有Bug。';
-$lang->bug->noModule    = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
+$lang->bug->ditto         = '同上';
+$lang->bug->dittoNotice   = '該bug與上一bug不屬於同一產品！';
+$lang->bug->noAssigned    = '未指派';
+$lang->bug->noBug         = '暫時沒有Bug。';
+$lang->bug->noModule      = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
+$lang->bug->delayWarning  = " <strong class='text-danger'> 延期%s天 </strong>";
 
 /* 頁面標籤。*/
 $lang->bug->lblAssignedTo = '當前指派';

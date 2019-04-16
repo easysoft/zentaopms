@@ -117,7 +117,7 @@ js::set('sysurl', common::getSysUrl());
               <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
             </a>
             <span class='right-icon'>
-              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-close'></i>", '', "class='btn-icon' onclick='deleteFile($file->id)' title='$lang->delete'");?>
+              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>" . ' ' . $lang->doc->deleteFile, '', "class='btn-icon' onclick='deleteFile($file->id)'");?>
             </span>
           </div>
           <?php unset($doc->files[$file->id]);?>
@@ -131,12 +131,12 @@ js::set('sysurl', common::getSysUrl());
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <div class='divider'></div>
-        <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i></button>
+            <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->doc->retrack;?></button>
         <?php
         if(!$doc->deleted)
         {
             common::printIcon('doc', 'edit', "docID=$doc->id", $doc);
-            common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', '', 'hiddenwin');
+            common::printIcon('doc', 'delete', "docID=$doc->id", $doc, 'button', 'trash', 'hiddenwin');
         }
         ?>
       </div>
@@ -167,13 +167,13 @@ js::set('sysurl', common::getSysUrl());
             <tbody>
               <?php if($doc->productName):?>
               <tr>
-                <th><?php echo $lang->doc->product;?></th>
+                <th class='w-80px'><?php echo $lang->doc->product;?></th>
                 <td><?php echo $doc->productName;?></td>
               </tr>
               <?php endif;?>
               <?php if($doc->projectName):?>
               <tr>
-                <th><?php echo $lang->doc->project;?></th>
+                <th class='w-80px'><?php echo $lang->doc->project;?></th>
                 <td><?php echo $doc->projectName;?></td>
               </tr>
               <?php endif;?>

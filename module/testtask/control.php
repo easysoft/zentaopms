@@ -169,6 +169,7 @@ class testtask extends control
 
         if($projectID != 0)
         {
+            $this->app->loadLang('build');
             $this->view->products  = $products;
             $this->view->projectID = $projectID;
         }
@@ -831,7 +832,8 @@ class testtask extends control
             $caseResult = $this->testtask->createResult($runID);
             if(dao::isError()) die(js::error(dao::getError()));
 
-            if('fail' == $caseResult) {
+            if($caseResult == 'fail')
+            {
 
                 $response['result']  = 'success';
                 $response['locate']  = $this->createLink('testtask', 'results',"runID=$runID&caseID=$caseID&version=$version");

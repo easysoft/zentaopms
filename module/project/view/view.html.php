@@ -161,7 +161,7 @@
 
               echo "<div class='divider'></div>";
               common::printIcon('project', 'edit', $params, $project);
-              common::printIcon('project', 'delete', $params, $project, 'button', '', 'hiddenwin');
+              common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin');
           }
           ?>
         </div>

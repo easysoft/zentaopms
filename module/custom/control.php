@@ -31,8 +31,9 @@ class custom extends control
      * @access public
      * @return void
      */
-    public function set($module = 'story', $field = 'priList', $lang = 'zh_cn')
+    public function set($module = 'story', $field = 'priList', $lang = '')
     {
+        if(empty($lang)) $lang = $this->app->getClientLang();
         if($module == 'user' and $field == 'priList') $field = 'roleList';
         if($module == 'block' and $field == 'priList')$field = 'closed';
         $currentLang = $this->app->getClientLang();
@@ -75,7 +76,7 @@ class custom extends control
         }
         if($module == 'user' and $field == 'deleted')
         {
-            $this->loadModel('user');
+            $this->app->loadConfig('user');
             $this->view->showDeleted = isset($this->config->user->showDeleted) ? $this->config->user->showDeleted : '0';
         }
 
@@ -105,6 +106,11 @@ class custom extends control
             {
                 $data = fixer::input('post')->join('closed', ',')->get();
                 $this->loadModel('setting')->setItem('system.block.closed', zget($data, 'closed', ''));
+            }
+            elseif($module == 'user' and $field == 'contactField')
+            {
+                $data = fixer::input('post')->join('contactField', ',')->get();
+                $this->loadModel('setting')->setItem('system.user.contactField', $data->contactField);
             }
             elseif($module == 'user' and $field == 'deleted')
             {
@@ -148,17 +154,18 @@ class custom extends control
                 }
 
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
-                foreach($_POST['keys'] as $index => $key)
+                $data = fixer::input('post')->get();
+                foreach($data->keys as $index => $key)
                 {
                     //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
                     
-                    $value  = $_POST['values'][$index];
-                    $system = $_POST['systems'][$index];
+                    $value  = $data->values[$index];
+                    $system = $data->systems[$index];
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
                 }
             }
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('custom', 'set', "module=$module&field=$field&lang=" . str_replace('-', '_', $lang))));
         }
 
         /* Check whether the current language has been customized. */
@@ -313,6 +320,29 @@ class custom extends control
         $this->view->title      = $this->lang->custom->score;
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
+        $this->display();
+    }
+
+    /**
+     * Timezone.
+     * 
+     * @access public
+     * @return void
+     */
+    public function timezone()
+    {
+        if(strtolower($_SERVER['REQUEST_METHOD']) == "post")
+        {
+            $this->loadModel('setting')->setItems('system.common', fixer::input('post')->get());
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        unset($this->lang->admin->menu->custom['subModule']);
+        $this->lang->admin->menu->system['subModule'] = 'custom';
+        $this->lang->custom->menu = $this->lang->admin->menu;
+
+        $this->view->title = $this->lang->custom->timezone;
+        $this->view->position[] = $this->lang->custom->timezone;
         $this->display();
     }
 

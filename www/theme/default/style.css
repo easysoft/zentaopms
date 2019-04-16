@@ -15,7 +15,14 @@
 
 /* Finish task #5068*/
 .main-table .table{cursor:pointer;}
+.table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{background:none;}
 
-.xuanxuan-card{padding-bottom:55px;}
-.xuancard-actions{width: 100%;text-align: center; padding: 10px 0;}
-.xuancard-actions.fixed{position: fixed; background: #fff; border-top: 1px solid #ddd; bottom: 0; margin-bottom: 0; z-index: 999; box-shadow: 0 -2px 10px rgba(0,0,0,0.15);}
+#dropMenu.show-right-col{width:502px;max-width:520px;}
+#dropMenu.has-search-text{width:250px;max-width:260px;}
+#dropMenu.has-search-text .col-right{margin-left:0px;}
+#dropMenu>.search-box{max-width:240px;}
+#dropMenu .list-group{width:250px; max-width:260px;}
+#dropMenu.show-right-col>.list-group{width:502px;max-width:520px;}
+#dropMenu.show-right-col .col-left>.list-group{width:250px;max-width:260px;}
+#dropMenu.show-right-col .col-right>.list-group{width:250px;max-width:260px;}
+#dropMenu .col-footer{width:230px;}

@@ -102,6 +102,19 @@ class tutorial extends control
         define('TUTORIAL',      true);
         define('WIZARD_MODULE', $module);
         define('WIZARD_METHOD', $method);
+
+        /* Check priv for tutorial. */
+        $hasPriv = false;
+        foreach($this->lang->tutorial->tasks as $taskName)
+        {
+            $taskModule = strtolower($taskName['nav']['module']);
+            if($taskModule == strtolower($module)) $hasPriv = true;
+            if(isset($this->lang->menugroup->$taskModule) and $this->lang->menugroup->$taskModule == strtolower($module)) $hasPriv = true;
+            if($hasPriv) break;
+        }
+        if(!$hasPriv and $module == 'my' and $method == 'index') $hasPriv = true;
+        if(!$hasPriv) die(js::locate('back'));
+
         $params = helper::safe64Decode($params);
         if($_POST)
         {

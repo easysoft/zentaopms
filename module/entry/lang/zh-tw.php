@@ -28,6 +28,7 @@ $lang->entry->url         = '請求地址';
 
 $lang->entry->confirmDelete = '您確認要刪除該應用嗎？';
 $lang->entry->help          = '使用說明';
+$lang->entry->notify        = '消息通知';
 
 $lang->entry->note = new stdClass();
 $lang->entry->note->name    = '授權應用名稱';

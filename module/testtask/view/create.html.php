@@ -40,7 +40,15 @@
         <?php endif;?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>
-          <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $build, "class='form-control chosen'");?></span></td>
+          <td class='w-p35-f'>
+            <div class='input-group' id='buildBox'>
+            <?php echo html::select('build', empty($builds) ? '' : $builds, $build, "class='form-control chosen'");?>
+            <?php if(isset($projectID) and $projectID and empty($builds)):?>
+            <span class='input-group-addon'><?php echo html::a(helper::createLink('build', 'create', "projectID=$projectID", '', true), $lang->build->create, '', "data-toggle='modal' data-type='iframe' data-width='95%'")?> </span>
+            </div>
+            <div class='hidden'><?php echo '&nbsp; ' .  html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProjectBuilds($projectID)'");?></div>
+            <?php endif;?>
+          </td>
           <td></td>
         </tr>
         <tr>
@@ -69,7 +77,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>
-          <td colspan='2'><?php echo html::input('name', '', "class='form-control' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('name', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>

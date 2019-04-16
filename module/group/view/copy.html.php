@@ -19,7 +19,7 @@
     <table align='center' class='table table-form'> 
       <tr>
         <th class='w-100px'><?php echo $lang->group->name;?></th>
-        <td><?php echo html::input('name', $group->name, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('name', $group->name, "class='form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->group->desc;?></th>

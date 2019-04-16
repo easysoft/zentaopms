@@ -83,34 +83,27 @@
       <th><?php echo $lang->user->last;?></th>
       <td><?php echo $user->last;?></td>
     </tr>
+    <?php foreach(explode(',', $config->user->contactField) as $field):?>
     <tr>
-      <th><?php echo $lang->user->skype;?></th>
-      <td><?php if($user->skype) echo html::a("callto://$user->skype", $user->skype);?></td>
+      <th><?php echo $lang->user->$field;?></th>
+      <td>
+        <?php
+        if($field == 'skype' and $user->$field)
+        {
+            echo html::a("callto://$user->skype", $user->skype);
+        }
+        elseif($field == 'qq' and $user->$field)
+        {
+            echo html::a("tencent://message/?uin=$user->qq", $user->qq);
+        }
+        else
+        {
+            echo $user->$field;
+        }
+        ?>
+      </td>
     </tr>  
-    <tr>
-      <th><?php echo $lang->user->qq;?></th>
-      <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->yahoo;?></th>
-      <td><?php echo $user->yahoo;?></td>
-    </tr>
-    <tr>
-      <th><?php echo $lang->user->gtalk;?></th>
-      <td><?php echo $user->gtalk;?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->wangwang;?></th>
-      <td><?php echo $user->wangwang;?></td>
-    </tr>  
-    <tr>
-      <th><?php echo $lang->user->mobile;?></th>
-      <td><?php echo $user->mobile;?></td>
-    </tr>
-     <tr>
-      <th><?php echo $lang->user->phone;?></th>
-      <td><?php echo $user->phone;?></td>
-    </tr>  
+    <?php endforeach;?>
     <tr>
       <th><?php echo $lang->user->address;?></th>
       <td><?php echo $user->address;?></td>

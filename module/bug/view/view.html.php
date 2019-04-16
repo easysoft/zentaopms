@@ -82,7 +82,7 @@
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
         common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
-        common::printIcon('bug', 'delete', $params, $bug, 'button', '', 'hiddenwin');
+        common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
       </div>
@@ -99,10 +99,11 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-80px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr valign='middle'>
-                  <th class='w-70px'><?php echo $lang->bug->product;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->product;?></th>
                   <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
                 </tr>
                 <?php if($this->session->currentProductType != 'normal'):?>
@@ -123,16 +124,22 @@
                   }
                   else
                   {
-                     foreach($modulePath as $key => $module)
-                     {
-                         $moduleTitle .= $module->name;
-                         if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                         if(isset($modulePath[$key + 1]))
-                         {
-                             $moduleTitle .= '/';
-                             echo $lang->arrow;
-                         }
-                     }
+                      if($bugModule->branch and isset($branches[$bugModule->branch]))
+                      {
+                          $moduleTitle .= $branches[$bugModule->branch] . '/';
+                          echo $branches[$bugModule->branch] . $lang->arrow;
+                      }
+
+                      foreach($modulePath as $key => $module)
+                      {
+                          $moduleTitle .= $module->name;
+                          if(!common::printLink('bug', 'browse', "productID=$bug->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                          if(isset($modulePath[$key + 1]))
+                          {
+                              $moduleTitle .= '/';
+                              echo $lang->arrow;
+                          }
+                      }
                   }
                   $printModule = ob_get_contents();
                   ob_end_clean();
@@ -194,7 +201,12 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
-                  <td><?php if($bug->deadline) echo  $bug->deadline;?></td>
+                  <td>
+                    <?php 
+                    if($bug->deadline) echo  $bug->deadline;
+                    if(isset($bug->delay)) printf($lang->bug->delayWarning, $bug->delay);
+                    ?>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>
@@ -256,10 +268,11 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendLife'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='w-90px'><?php echo $lang->bug->openedBy;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->openedBy;?></th>
                   <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
                 </tr>
                 <tr>

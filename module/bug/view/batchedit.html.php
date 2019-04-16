@@ -99,7 +99,7 @@
             <td style='overflow:visible' title='<?php echo $bug->title?>'>
               <div class='input-group'>
                 <div class="input-control has-icon-right">
-                  <?php echo html::input("titles[$bugID]", $bug->title, "class='form-control' autocomplete='off' style='color:{$bug->color}'");?>
+                  <?php echo html::input("titles[$bugID]", $bug->title, "class='form-control' style='color:{$bug->color}'");?>
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar" style="background:<?php echo $bug->color;?>"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">

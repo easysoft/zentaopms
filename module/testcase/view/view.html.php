@@ -117,7 +117,7 @@
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
         if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
         if($isLibCase and common::hasPriv('testsuite', 'createCase')) echo html::a($this->createLink('testsuite', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
-        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', '', 'hiddenwin');
+        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
       </div>
@@ -128,15 +128,16 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendBasicInfo;?></summary>
         <div class="detail-content">
+          <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-60px';?>
           <table class='table table-data'>
             <?php if($isLibCase):?>
             <tr>
-              <th class='w-80px'><?php echo $lang->testcase->lib;?></th>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->lib;?></th>
               <td><?php if(!common::printLink('testsuite', 'library', "libID=$case->lib", $libName)) echo $libName;?></td>
             </tr>
             <?php else:?>
             <tr>
-              <th class='w-80px'><?php echo $lang->testcase->product;?></th>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->product;?></th>
               <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
             </tr>
             <?php if($this->session->currentProductType != 'normal'):?>
@@ -156,11 +157,16 @@
                 }
                 else
                 {
-                   foreach($modulePath as $key => $module)
-                   {
-                       if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
-                       if(isset($modulePath[$key + 1])) echo $lang->arrow;
-                   }
+                    if($caseModule->branch and isset($branches[$caseModule->branch]))
+                    {
+                        echo $branches[$caseModule->branch] . $lang->arrow;
+                    }
+
+                    foreach($modulePath as $key => $module)
+                    {
+                        if(!common::printLink('testcase', 'browse', "productID=$case->product&branch=$module->branch&browseType=byModule&param=$module->id", $module->name)) echo $module->name;
+                        if(isset($modulePath[$key + 1])) echo $lang->arrow;
+                    }
                 }
                 ?>
               </td>
@@ -213,8 +219,15 @@
                 echo $lang->testcase->statusList[$case->status];
                 if($case->version > $case->currentVersion and $from == 'testtask')
                 {
-                    echo "(<span class='warning'>{$lang->testcase->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->confirm, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    echo "(<span class='warning' title={$lang->testcase->fromTesttask}>{$lang->testcase->changed}</span> ";
+                    echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    echo ")";
+                }
+                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask')
+                {
+                    echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
+                    echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 ?>
@@ -259,16 +272,17 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendLinkBugs;?></summary>
         <div class="detail-content">
+          <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-60px';?>
           <table class='table table-data'>
             <?php if($case->fromBug):?>
             <tr>
-              <th class='w-60px'><?php echo $lang->testcase->fromBug;?></th>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->fromBug;?></th>
               <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugTitle, '', "class='iframe' data-width='80%'");?></td>
             </tr>
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
-              <th class='w-60px' valign="top"><?php echo $lang->testcase->toBug;?></th>
+              <th class='<?php echo $widthClass;?>' valign="top"><?php echo $lang->testcase->toBug;?></th>
               <td>
               <?php
               foreach($case->toBugs as $bugID => $bugTitle)
@@ -288,9 +302,10 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendOpenAndEdit;?></summary>
         <div class="detail-content">
+          <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-60px';?>
           <table class='table table-data'>
             <tr>
-              <th class='w-60px'><?php echo $lang->testcase->openedBy;?></th>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->openedBy;?></th>
               <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
             </tr>
             <?php if($config->testcase->needReview or !empty($config->testcase->forceReview)):?>

@@ -79,7 +79,7 @@
                   <div class="input-group-addon"><?php echo $lang->story->source;?></div>
                   <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                   <span class='input-group-addon'><?php echo $lang->story->sourceNote;?></span>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' autocomplete='off' style='width:140px;'");?>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
                 </div>
               </div>
             </td>
@@ -103,7 +103,7 @@
               <div class='table-row'>
                 <div class='table-col'>
                   <div class="input-control has-icon-right">
-                    <?php echo html::input('title', $storyTitle, "class='form-control' autocomplete='off' required");?>
+                    <?php echo html::input('title', $storyTitle, "class='form-control' required");?>
                     <div class="colorpicker">
                       <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                       <ul class="dropdown-menu clearfix">
@@ -127,7 +127,9 @@
                             break;
                         }
                     }
+
                     $priList = $lang->story->priList;
+                    if(end($priList)) unset($priList[0]);
                     ?>
                     <?php if($hasCustomPri):?>
                     <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
@@ -184,7 +186,7 @@
           <tr>
             <th><?php echo $lang->story->keywords;?></th>
             <td colspan="4">
-              <?php echo html::input('keywords', $keywords, 'class="form-control" autocomplete="off"');?>
+              <?php echo html::input('keywords', $keywords, 'class="form-control"');?>
             </td>
           </tr>
           <?php endif;?>

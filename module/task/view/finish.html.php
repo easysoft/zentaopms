@@ -49,7 +49,7 @@
           <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
             <?php $consumed = empty($task->team) ? $task->consumed : $task->myConsumed;?>
-            <div class='input-group'><?php echo html::input('consumed', $consumed, "class='form-control' autocomplete='off'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
+            <div class='input-group'><?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
           </td>
         </tr>
         <tr>

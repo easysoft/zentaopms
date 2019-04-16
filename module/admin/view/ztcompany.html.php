@@ -21,7 +21,7 @@
         <?php foreach($fields as $field):?>
         <tr>
           <th><?php echo $field == 'company' ? $lang->company->name : $lang->user->$field;?></th>
-          <td><?php echo html::input($field, '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input($field, '', "class='form-control'");?></td>
         </tr>
         <?php endforeach;?>
         <tr>

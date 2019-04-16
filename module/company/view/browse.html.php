@@ -73,7 +73,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <th class="c-url"><?php common::printOrderLink('email', $orderBy, $vars, $lang->user->email);?></th>
           <th class="c-type"><?php common::printOrderLink('gender', $orderBy, $vars, $lang->user->gender);?></th>
           <th><?php common::printOrderLink('phone', $orderBy, $vars, $lang->user->phone);?></th>
-          <th><?php common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
+          <th><?php (isset($this->config->isINT) and $this->config->isINT) ? common::printOrderLink('skype', $orderBy, $vars, $lang->user->skype) : common::printOrderLink('qq', $orderBy, $vars, $lang->user->qq);?></th>
           <th class="c-date"><?php common::printOrderLink('last', $orderBy, $vars, $lang->user->last);?></th>
           <th class="w-90px"><?php common::printOrderLink('visits', $orderBy, $vars, $lang->user->visits);?></th>
           <th class='c-actions'><?php echo $lang->actions;?></th>
@@ -95,7 +95,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
           <td class="c-type"><?php echo zget($lang->user->genderList, $user->gender, $user->gender);?></td>
           <td><?php echo $user->phone;?></td>
-          <td><?php if($user->qq) echo html::a("tencent://message/?uin=$user->qq", $user->qq);?></td>
+          <td><?php echo (isset($this->config->isINT) and $this->config->isINT) ? $user->skype : ($user->qq ? html::a("tencent://message/?uin=$user->qq", $user->qq) : '');?></td>
           <td class='c-date'><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
           <td class='c-num text-center'><?php echo $user->visits;?></td>
           <td class='c-actions'>
@@ -105,7 +105,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
             common::printIcon('user', 'edit', "userID=$user->id&from=company", '', 'list');
 
             $deleteClass = (strpos($this->app->company->admins, ",{$user->account},") === false and common::hasPriv('user', 'delete')) ? 'btn iframe' : 'btn disabled';
-            echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-close"></i>', '', "title='{$lang->user->delete}' class='{$deleteClass}'");
+            echo html::a($this->createLink('user', 'delete', "userID=$user->id"), '<i class="icon-trash"></i>', '', "title='{$lang->user->delete}' class='{$deleteClass}'");
             ?>
           </td>
         </tr>

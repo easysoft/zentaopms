@@ -24,7 +24,7 @@
           <?php echo nl2br($alterSQL);?>
         </p>
       </div>
-      <div class='modal-footer'><?php echo html::a(inlink('consistency'), $this->lang->refresh, '', "class='btn'");?></div>
+      <div class='modal-footer'><?php echo html::a('#', $this->lang->refresh, '', "class='btn' onclick='location.reload()'");?></div>
     </div>
   </form>
 </div>

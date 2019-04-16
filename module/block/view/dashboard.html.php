@@ -18,6 +18,16 @@ $useGuest = $this->app->user->account == 'guest';
 ?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <div class='dashboard auto-fade-in fade' id='dashboard' data-confirm-remove-block='<?php  echo $lang->block->confirmRemoveBlock;?>'>
+  <?php if(empty($longBlocks) and empty($shortBlocks)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->block->noData. ',';?></span>
+      <span class="text-muted"><?php echo $lang->youCould;?></span>
+      <?php echo html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus'></i> {$lang->block->createBlock}", '', "data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}' class='btn btn-info'")?> 
+      <?php echo html::a($this->createLink("block", "ajaxReset", "module=$module"), "<i class='icon icon-refresh'></i> {$lang->block->reset}", 'hiddenwin', 'class="btn btn-info"')?>
+    </p>
+  </div>
+  <?php endif;?>
   <div class="row">
     <div class='col-main'>
       <?php foreach($longBlocks as $index => $block):?>
@@ -34,14 +44,16 @@ $useGuest = $this->app->user->account == 'guest';
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
-                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh ?></a></li>
+                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh . $lang->block->common;?></a></li>
                 <?php if(!$useGuest):?>
-                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module");?>" class='edit-block' data-title='<?php echo $block->title;?>' ><?php echo $lang->edit;?></a></li>
+                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module");?>" class='edit-block' data-title='<?php echo $block->title;?>' ><?php echo $lang->edit . $lang->block->common;?></a></li>
                 <?php if(!$block->source and $block->block == 'html'):?>
-                <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><?php echo $lang->block->hidden;?></a></li>
+                <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><?php echo $lang->block->hidden . $lang->block->common ;?></a></li>
                 <?php endif;?>
-                <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='remove-panel'><?php echo $lang->block->remove;?></a></li>
+                <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='remove-panel'><?php echo $lang->block->remove . $lang->block->common;?></a></li>
                 <?php endif;?>
+                <li><?php echo html::a($this->createLink("block", "admin", "id=0&module=$module"), "{$lang->block->createBlock}", '', "data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'")?></li>
+                <li><?php echo html::a($this->createLink("block", "ajaxReset", "module=$module"), "{$lang->block->reset}", 'hiddenwin')?></li>
                 <?php if($this->app->user->admin):?>
                 <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), $lang->block->closeForever, 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                 <?php endif;?>
@@ -70,14 +82,16 @@ $useGuest = $this->app->user->account == 'guest';
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
-                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh ?></a></li>
+                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh . $lang->block->common ?></a></li>
                 <?php if(!$useGuest):?>
-                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' ><?php echo $lang->edit; ?></a></li>
+                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' ><?php echo $lang->edit . $lang->block->common; ?></a></li>
                 <?php if(!$block->source and $block->block == 'html'):?>
-                <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><?php echo $lang->block->hidden; ?></a></li>
+                <li><a href="javascript:hiddenBlock(<?php echo $index;?>)" class="hidden-panel"><?php echo $lang->block->hidden  . $lang->blcok->common; ?></a></li>
                 <?php endif;?>
-                <li><a href='javascript:deleteBlock(<?php echo $index?>);' class='remove-panel'><?php echo $lang->block->remove; ?></a></li>
+                <li><a href='javascript:deleteBlock(<?php echo $index?>);' class='remove-panel'><?php echo $lang->block->remove . $lang->block->common; ?></a></li>
                 <?php endif;?>
+                <li><?php echo html::a($this->createLink("block", "admin", "id=0&module=$module"), "{$lang->block->createBlock}", '', "data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'")?></li>
+                <li><?php echo html::a($this->createLink("block", "ajaxReset", "module=$module"), "{$lang->block->reset}", 'hiddenwin')?></li>
                 <?php if($this->app->user->admin):?>
                 <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), $lang->block->closeForever, 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                 <?php endif;?>
@@ -99,15 +113,6 @@ config.confirmRemoveBlock = '<?php echo $lang->block->confirmRemoveBlock; ?>';
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
 <?php if(!$useGuest):?>
-<?php
-$dropmenu  = "<div class='btn-group'>";
-$dropmenu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' style='padding-bottom:7px;'>{$lang->block->common} <span class='caret'></span></button>";
-$dropmenu .= "<ul class='dropdown-menu pull-right' role='menu'>";
-$dropmenu .= "<li>" . html::a($this->createLink("block", "admin", "id=0&module=$module"), "<i class='icon icon-plus'></i> {$lang->block->createBlock}", '', "data-toggle='modal' data-type='ajax' data-width='700' data-title='{$lang->block->createBlock}'") . "</li>";
-$dropmenu .= "<li>" . html::a($this->createLink("block", "ajaxReset", "module=$module"), "<i class='icon icon-refresh'></i> {$lang->block->reset}", 'hiddenwin') . "</li>";
-$dropmenu .= '</ul></div>';
-?>
-$('#subHeader #pageActions .btn-toolbar:last').append(<?php echo json_encode($dropmenu)?>);
 <?php if(!isset($config->$module->block->initVersion) or $config->$module->block->initVersion < '2'):?>
 $(function()
 {

@@ -119,13 +119,20 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
+                $projectSubMenu = $this->lang->project->subMenu->$key;
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
                 if(!empty($subMenu))
                 {
-                    foreach($subMenu as $menu)
+                    foreach($subMenu as $menuKey => $menu)
                     {
-                        if($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']))
+                        $itemMenu = zget($projectSubMenu, $menuKey, '');
+                        if($moduleName == strtolower($menu->link['module']) and 
+                            (
+                                $methodName == strtolower($menu->link['method']) or
+                                (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false)
+                            )
+                        )
                         {
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
@@ -329,6 +336,7 @@ class projectModel extends model
             /* Add the creator to team. */
             if($copyProjectID == '' or !$creatorExists)
             {
+                $this->app->loadLang('user');
                 $member = new stdclass();
                 $member->root    = $projectID;
                 $member->account = $this->app->user->account;
@@ -347,7 +355,7 @@ class projectModel extends model
             $lib->name    = $this->lang->doclib->main['project'];
             $lib->type    = 'project';
             $lib->main    = '1';
-            $lib->acl     = $project->acl == 'open' ? 'open' : 'private';
+            $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->loadModel('user')->updateUserView($projectID, 'project');
@@ -420,10 +428,8 @@ class projectModel extends model
         }
         if(!dao::isError())
         {
-            if($project->acl != $oldProject->acl) $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($project->acl == 'open' ? 'open' : 'private')->where('project')->eq($projectID)->exec();
-
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open' or $project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }
@@ -898,6 +904,7 @@ class projectModel extends model
         $burns = $this->dao->select('project, date AS name, `left` AS value')
             ->from(TABLE_BURN)
             ->where('project')->in($projectKeys)
+            ->andWhere('task')->eq(0)
             ->orderBy('date desc')
             ->fetchGroup('project', 'name');
 
@@ -1599,6 +1606,7 @@ class projectModel extends model
 
         $planStories  = array();
         $planProducts = array();
+        $count        = 0;
         if(!empty($plans))
         {
             foreach($plans as $planID => $productID)
@@ -1606,7 +1614,6 @@ class projectModel extends model
                 $planStory = $this->loadModel('story')->getPlanStories($planID);
                 if(!empty($planStory))
                 {
-                    $count = 0;
                     foreach($planStory as $id => $story)
                     {
                         if($story->status == 'draft')
@@ -1686,6 +1693,7 @@ class projectModel extends model
     public function getTeamMemberPairs($projectID, $params = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+        $this->app->loadConfig('user');
         $users = $this->dao->select('t1.account, t2.realname')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
@@ -1698,6 +1706,7 @@ class projectModel extends model
         foreach($users as $account => $realName)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
+            if(isset($this->config->isINT) and $this->config->isINT) $firstLetter = '';
             $users[$account] =  $firstLetter . ($realName ? $realName : $account);
         }
         return array('' => '') + $users;
@@ -1839,14 +1848,14 @@ class projectModel extends model
             ->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->eq('0')
+            ->andWhere('parent')->ge('0')
             ->andWhere('status')->ne('cancel')
             ->groupBy('project')
             ->fetchAll('project');
         $closedLefts = $this->dao->select("project, sum(`left`) AS `left`")->from(TABLE_TASK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq('0')
-            ->andWhere('parent')->eq('0')
+            ->andWhere('parent')->ge('0')
             ->andWhere('status')->eq('closed')
             ->groupBy('project')
             ->fetchAll('project');
@@ -1875,7 +1884,7 @@ class projectModel extends model
     public function fixFirst($projectID)
     {
         $project  = $this->getById($projectID);
-        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
+        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('task')->eq(0)->andWhere('date')->eq($project->begin)->fetch();
         $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
 
         $data = fixer::input('post')
@@ -1903,7 +1912,7 @@ class projectModel extends model
         $project    = $this->getById($projectID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
+        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
 
         $count    = 0;
         $burnData = array();
@@ -2080,6 +2089,15 @@ class projectModel extends model
 
             $statusVar = 'status' . ucfirst($task->status);
             $$statusVar ++;
+            if(isset($task->children))
+            {
+                foreach($task->children as $children)
+                {
+                    $statusVar = 'status' . ucfirst($children->status);
+                    $$statusVar ++;
+                    $taskSum ++;
+                }
+            }
             $taskSum ++;
         }
 
@@ -2311,7 +2329,7 @@ class projectModel extends model
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                if($product->branch)
+                if($product->branch and isset($branchGroups[$product->id][$product->branch]))
                 {
                     $branchPairs[$product->branch] = (count($products) > 1 ? $product->name . '/' : '') . $branchGroups[$product->id][$product->branch];
                 }

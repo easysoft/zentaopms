@@ -324,7 +324,7 @@ class gitModel extends model
         list($hash, $account, $date) = $log;
 
         $account = preg_replace('/^Author:/', '', $account);
-        $account = trim(preg_replace('/<[\w\-\.]+@([\w\-]+\.)+\w+>/', '', $account));
+        $account = trim(preg_replace('/<[a-zA-Z0-9_\-\.]+@[a-zA-Z0-9_\-\.]+>/', '', $account));
         $date    = trim(preg_replace('/^Date:/', '', $date));
 
         $count   = count($log);

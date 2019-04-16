@@ -45,6 +45,8 @@ class project extends control
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
         //$this->project->setMenu($this->projects, key($this->projects));
+        
+        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
@@ -283,11 +285,57 @@ class project extends control
             }
             elseif($groupBy == 'assignedTo')
             {
-                $groupTasks[$task->assignedToRealName][] = $task;
+                if(isset($task->team))
+                {
+                    foreach($task->team as $team)
+                    {
+                        $cloneTask = clone $task;
+                        $cloneTask->assignedTo = $team->account;
+                        $cloneTask->estimate   = $team->estimate;
+                        $cloneTask->consumed   = $team->consumed;
+                        $cloneTask->left       = $team->left;
+                        if($team->left == 0) $cloneTask->status = 'done';
+
+                        $realname = zget($users, $team->account);
+                        $cloneTask->assignedToRealName = $realname;
+                        $groupTasks[$realname][] = $cloneTask;
+                    }
+                }
+                else
+                {
+                    $groupTasks[$task->assignedToRealName][] = $task;
+                }
             }
             elseif($groupBy == 'finishedBy')
             {
-                $groupTasks[$users[$task->finishedBy]][] = $task;
+                if(isset($task->team))
+                {
+                    $task->consumed = $task->estimate = $task->left = 0;
+                    foreach($task->team as $team)
+                    {
+                        if($team->left != 0)
+                        {
+                            $task->estimate += $team->estimate;
+                            $task->consumed += $team->consumed;
+                            $task->left     += $team->left;
+                            continue;
+                        }
+
+                        $cloneTask = clone $task;
+                        $cloneTask->finishedBy = $team->account;
+                        $cloneTask->estimate   = $team->estimate;
+                        $cloneTask->consumed   = $team->consumed;
+                        $cloneTask->left       = $team->left;
+                        $cloneTask->status     = 'done';
+                        $realname = zget($users, $team->account);
+                        $groupTasks[$realname][] = $cloneTask;
+                    }
+                    if(!empty($task->left)) $groupTasks[$users[$task->finishedBy]][] = $task;
+                }
+                else
+                {
+                    $groupTasks[$users[$task->finishedBy]][] = $task;
+                }
             }
             elseif($groupBy == 'closedBy')
             {
@@ -1000,10 +1048,12 @@ class project extends control
         if(!empty($_POST))
         {
             $projectID = $copyProjectID == '' ? $this->project->create() : $this->project->create($copyProjectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->project->updateProducts($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('project', $projectID, 'opened');
+            $this->loadModel('action')->create('project', $projectID, 'opened', '', join(',', $_POST['products']));
 
             $planID = reset($_POST['plans']);
             if(!empty($planID))
@@ -1056,6 +1106,8 @@ class project extends control
         if(!empty($_POST))
         {
             $changes = $this->project->update($projectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->project->updateProducts($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($action == 'undelete')
@@ -1659,7 +1711,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function manageProducts($projectID, $from='')
+    public function manageProducts($projectID, $from = '')
     {
         /* use first project if projectID does not exist. */
         if(!isset($this->projects[$projectID])) $projectID = key($this->projects);
@@ -1671,6 +1723,8 @@ class project extends control
 
             $this->project->updateProducts($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('project', $projectID, 'Managed', '', join(',', $_POST['products']));
             die(js::locate($browseProjectLink));
         }
 
@@ -1718,7 +1772,7 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
-            $this->locate($this->createLink('project', 'team', "projectID=$projectID"));
+            die(js::locate($this->createLink('project', 'team', "projectID=$projectID"), 'parent'));
         }
 
         /* Load model. */

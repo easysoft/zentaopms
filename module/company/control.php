@@ -71,6 +71,8 @@ class company extends control
 
         /* Get users. */
         $users = $this->company->getUsers($type, $queryID, $deptID, $sort, $pager);
+        /* Remove passwd. */
+        foreach($users as $user) unset($user->password);
 
         /* Assign. */
         $this->view->title       = $this->lang->company->index . $this->lang->colon . $this->lang->dept->common;

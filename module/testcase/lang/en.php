@@ -64,6 +64,10 @@ $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = 'Convert to Bug';
 $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
+$lang->testcase->sync             = 'Sync Case';
+$lang->testcase->ignore           = 'Ignore';
+$lang->testcase->fromTesttask     = 'From Testtask';
+$lang->testcase->fromCaselib      = 'From Caselib';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
@@ -82,7 +86,10 @@ $lang->testcase->batchReview             = "Batch Review";
 $lang->testcase->edit                    = "Edit";
 $lang->testcase->batchEdit               = "Batch Edit ";
 $lang->testcase->batchChangeModule       = "Batch Change Module";
+$lang->testcase->confirmLibcaseChange    = "Confirm Library Case Change";
+$lang->testcase->ignoreLibcaseChange     = "Ignore Library Case Change";
 $lang->testcase->batchChangeBranch       = "Batch Change Branch";
+$lang->testcase->groupByStories          = 'Group by Story';
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->batchDelete             = "Batch Delete ";
 $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
@@ -169,10 +176,6 @@ $lang->testcase->stageList['bvt']        = 'BVT Test';
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = 'Pass';
 $lang->testcase->reviewResultList['clarify'] = 'Clarify';
-
-$lang->testcase->groups['']           = 'Group ';
-$lang->testcase->groups['story']      = 'Group by Story';
-$lang->testcase->groups['assignedTo'] = 'Group by Assignee';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = 'Wait';

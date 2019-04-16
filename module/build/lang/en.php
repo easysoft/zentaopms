@@ -18,8 +18,8 @@ $lang->build->delete           = "Delete Build";
 $lang->build->deleted          = "Deleted";
 $lang->build->view             = "Build Details";
 $lang->build->batchUnlink      = 'Batch Unlink';
-$lang->build->batchUnlinkStory = 'Batch Story Unlink';
-$lang->build->batchUnlinkBug   = 'Batch Bug Unlink';
+$lang->build->batchUnlinkStory = 'Batch Unlink Story';
+$lang->build->batchUnlinkBug   = 'Batch Unlink Bug';
 
 $lang->build->confirmDelete      = "Do you want to delete this Build?";
 $lang->build->confirmUnlinkStory = "Do you want to unlink this Story?";
@@ -37,20 +37,20 @@ $lang->build->builder       = 'Builder';
 $lang->build->scmPath       = 'SCM Path';
 $lang->build->filePath      = 'File Path';
 $lang->build->desc          = 'Description';
-$lang->build->files         = 'Upload Files';
+$lang->build->files         = 'File';
 $lang->build->last          = 'Last Build';
 $lang->build->packageType   = 'Package Type';
 $lang->build->unlinkStory   = 'Unlink Story';
 $lang->build->unlinkBug     = 'Unlink Bug';
 $lang->build->stories       = 'Finished Story';
 $lang->build->bugs          = 'Resolved Bug';
-$lang->build->generatedBugs = 'Left Bug';
-$lang->build->noProduct     = " <span style='color:red'>This {$lang->projectCommon} has not linked to {$lang->productCommon}, so Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
+$lang->build->generatedBugs = 'Reported Bug';
+$lang->build->noProduct     = " <span style='color:red'>This {$lang->projectCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild       = 'No builds. ';
 
 $lang->build->finishStories = '  %s Story is finished.';
 $lang->build->resolvedBugs  = '  %s Bug is resolved.';
-$lang->build->createdBugs   = '  %s Bug is  created.';
+$lang->build->createdBugs   = '  %s Bug is created.';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = ' Source code repository, e.g. Subversion/Git Library path';

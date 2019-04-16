@@ -22,15 +22,15 @@
       <caption><?php echo $lang->my->form->lblBasic;?></caption>
       <tr>
         <th class='w-90px'><?php echo $lang->user->realname;?></th>
-        <td><?php echo html::input('realname', $user->realname, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('realname', $user->realname, "class='form-control'");?></td>
         <th class='w-90px'><?php echo $lang->user->email;?></th>
-        <td><?php echo html::input('email', $user->email, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('email', $user->email, "class='form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->gender;?></th>
         <td><?php echo html::radio('gender', $lang->user->genderList, $user->gender);?></td>
         <th><?php echo $lang->user->birthyear;?></th>
-        <td><?php echo html::input('birthday', $user->birthday,"class='form-date form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('birthday', $user->birthday,"class='form-date form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->join;?></th>
@@ -44,16 +44,16 @@
       <caption><?php echo $lang->my->form->lblAccount;?></caption>
       <tr>
         <th class='w-90px'><?php echo $lang->user->account;?></th>
-        <td style='width:33%'><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly' autocomplete='off'");?></td>
+        <td style='width:33%'><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly'");?></td>
         <th class='w-90px'><?php echo $lang->user->commiter;?></th>
-        <td><?php echo html::input('commiter', $user->commiter, "class='form-control' autocomplete='off'");?></td>
+        <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->user->password;?></th>
       <td>
         <input type='password' style="display:none"> <!-- Disable input password by browser automatically. -->
         <span class='input-group'>
-          <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
+          <?php echo html::password('password1', '', "class='form-control disabled-ie-placeholder' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>
           <span class='input-group-addon' id='passwordStrength'></span>
         </span>
       </td>
@@ -63,34 +63,19 @@
     </table>
     <table class='table table-form'>
       <caption><?php echo $lang->my->form->lblContact;?></caption>
+      <?php $i = 0;?>
+      <?php foreach(explode(',', $config->user->contactField) as $field):?>
+      <?php if($i % 2 == 0) echo '<tr>';?>
+      <?php $i++;?>
+        <th class='w-90px'><?php echo $lang->user->$field;?></th>
+        <td><?php echo html::input($field, $user->$field, "class='form-control'");?></td>
+      <?php if($i % 2 == 0) echo '</tr>';?>
+      <?php endforeach;?>
       <tr>
-        <th class='w-90px'><?php echo $lang->user->skype;?></th>
-        <td><?php echo html::input('skype', $user->skype, "class='form-control' autocomplete='off'");?></td>
-        <th class='w-90px'><?php echo $lang->user->qq;?></th>
-        <td><?php echo html::input('qq', $user->qq, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
-      <tr>
-        <th><?php echo $lang->user->yahoo;?></th>
-        <td><?php echo html::input('yahoo', $user->yahoo, "class='form-control' autocomplete='off'");?></td>
-        <th><?php echo $lang->user->gtalk;?></th>
-        <td><?php echo html::input('gtalk', $user->gtalk, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
-       <tr>
-        <th><?php echo $lang->user->wangwang;?></th>
-        <td><?php echo html::input('wangwang', $user->wangwang, "class='form-control' autocomplete='off'");?></td>
-        <th><?php echo $lang->user->mobile;?></th>
-        <td><?php echo html::input('mobile', $user->mobile, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
-       <tr>
-        <th><?php echo $lang->user->phone;?></th>
-        <td><?php echo html::input('phone', $user->phone, "class='form-control' autocomplete='off'");?></td>
         <th><?php echo $lang->user->address;?></th>
-        <td><?php echo html::input('address', $user->address, "class='form-control' autocomplete='off'");?></td>
-      </tr>  
-      <tr>
+        <td><?php echo html::input('address', $user->address, "class='form-control'");?></td>
         <th><?php echo $lang->user->zipcode;?></th>
-        <td><?php echo html::input('zipcode', $user->zipcode, "class='form-control' autocomplete='off'");?></td>
-        <td></td>
+        <td><?php echo html::input('zipcode', $user->zipcode, "class='form-control'");?></td>
       </tr>
     </table>
     <table class='table table-form'>

@@ -23,31 +23,32 @@
     </div>
     <form class="load-indicator main-form form-ajax" id="createForm" method="post" target='hiddenwin'>
       <table align='center' class="table table-form">
+        <?php $thClass = ($app->getClientLang() == 'en') ? 'w-enVerifyPassword' : 'w-verifyPassword';?>
         <tr>
-          <th class='w-verifyPassword'><?php echo $lang->user->dept;?></th>
+          <th class='<?php echo $thClass?>'><?php echo $lang->user->dept;?></th>
           <td class='w-p40'><?php echo html::select('dept', $depts, $deptID, "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->account;?></th>
-          <td><?php echo html::input('account', '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('account', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->password;?></th>
           <td>
             <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
             <span class='input-group'>
-              <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+              <?php echo html::password('password1', '', "class='form-control' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
               <span class='input-group-addon' id='passwordStrength'></span>
             </span>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->user->password2;?></th>
-          <td><?php echo html::password('password2', '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::password('password2', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->realname;?></th>
-          <td><?php echo html::input('realname', '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('realname', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->join;?></th>
@@ -65,11 +66,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->user->email;?></th>
-          <td><?php echo html::input('email', '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('email', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->commiter;?></th>
-          <td><?php echo html::input('commiter', '', "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('commiter', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->gender;?></th>
@@ -79,7 +80,7 @@
           <th><?php echo $lang->user->verifyPassword;?></th>
           <td>
             <div class="required required-wrapper"></div>
-            <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' autocomplete='off' placeholder='{$lang->user->placeholder->verify}'");?>
+            <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' placeholder='{$lang->user->placeholder->verify}'");?>
           </td>
         </tr>
         <tr>

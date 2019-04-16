@@ -78,6 +78,7 @@
             if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $lang->story->subdivide, '', $misc);
         }
 
+        common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
@@ -105,7 +106,7 @@
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
         common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', 'iframe showinonlybody', true, "data-width='1050'");
-        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', '', 'hiddenwin');
+        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
       </div>
@@ -144,6 +145,12 @@
                   }
                   else
                   {
+                      if($storyModule->branch and isset($branches[$storyModule->branch]))
+                      {
+                          $moduleTitle .= $branches[$storyModule->branch] . '/';
+                          echo $branches[$storyModule->branch] . $lang->arrow;
+                      }
+
                       foreach($modulePath as $key => $module)
                       {
                           $moduleTitle .= $module->name;
@@ -222,10 +229,11 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLifeTime'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->story->openedBy;?></th>
                   <td><?php echo $users[$story->openedBy] . $lang->at . $story->openedDate;?></td>
                 </tr>
                 <tr>
@@ -287,7 +295,7 @@
                   {
                       if(!isset($projects[$task->project])) continue;
                       $projectName = $projects[$task->project];
-                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "#$task->id $task->name", '', "class='iframe' data-width='80%'");
+                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), "[T]$task->id $task->name", '', "class='iframe' data-width='80%'");
                       echo html::a($this->createLink('project', 'browse', "projectID=$task->project"), $projectName, '', "class='text-muted'") . '</li>';
                   }
               }
@@ -303,12 +311,13 @@
           </div>
           <?php endif;?>
           <div class="tab-pane <?php if($config->global->flow == 'onlyStory') echo 'active';?>" id='legendRelated'>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-120px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <?php if($config->global->flow != 'onlyStory'):?>
                 <?php if(!empty($fromBug)):?>
                 <tr class='text-top'>
-                  <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
+                  <th class='<?php echo $widthClass;?>'><?php echo $lang->story->legendFromBug;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id", '', true), "#$fromBug->id $fromBug->title", '', "class='iframe' data-width='80%'") . '</li>';?>
@@ -316,49 +325,49 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr class='text-top'>
-                  <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
+                <tr>
+                  <th class='text-top <?php echo $widthClass;?>'><?php echo $lang->story->legendBugs;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
                     foreach($bugs as $bug)
                     {
-                        echo "<li title='#$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "#$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='[B]$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "[B]$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
                   </td>
                 </tr>
-                <tr class='text-top'>
-                  <th><?php echo $lang->story->legendCases;?></th>
+                <tr>
+                  <th class='text-top'><?php echo $lang->story->legendCases;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
                     foreach($cases as $case)
                     {
-                        echo "<li title='#$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "#$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C]$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
                   </td>
                 </tr>
                 <?php endif;?>
-                <tr class='text-top'>
-                  <th class='w-80px'><?php echo $lang->story->legendLinkStories;?></th>
+                <tr>
+                  <th class='text-top <?php echo $widthClass;?>'><?php echo $lang->story->legendLinkStories;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                       <?php
                       $linkStories = explode(',', $story->linkStories) ;
                       foreach($linkStories as $linkStoryID)
                       {
-                          if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "#$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
+                          if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "[S]$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
                       }
                       ?>
                     </ul>
                   </td>
                 </tr>
-                <tr class='text-top'>
-                  <th><?php echo $lang->story->legendChildStories;?></th>
+                <tr>
+                  <th class='text-top'><?php echo $lang->story->legendChildStories;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                       <?php

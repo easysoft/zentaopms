@@ -30,6 +30,7 @@ class backup extends control
         {
             if(!is_writable($this->backupPath)) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->backupPath);
         }
+        if(!is_writable($this->app->getTmpRoot())) $this->view->error = sprintf($this->lang->backup->error->noWritable, $this->app->getTmpRoot());
     }
 
     /**
@@ -81,7 +82,7 @@ class backup extends control
     public function backup($reload = 'no')
     {
         if($reload == 'yes') session_write_close();
-        set_time_limit(7200);
+        set_time_limit(0);
         $nozip  = strpos($this->config->backup->setting, 'nozip') !== false;
         $nofile = strpos($this->config->backup->setting, 'nofile') !== false;
         $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
@@ -147,7 +148,7 @@ class backup extends control
         }
 
         /* Delete expired backup. */
-        $backupFiles = glob("{$this->backupPath}*.php");
+        $backupFiles = glob("{$this->backupPath}*.*");
         if(!empty($backupFiles))
         {
             $time = time();
@@ -179,7 +180,7 @@ class backup extends control
     {
         if($confirm == 'no') $this->send(array('result' => 'fail', 'message' => $this->lang->backup->confirmRestore));
 
-        set_time_limit(7200);
+        set_time_limit(0);
 
         /* Restore database. */
         if(file_exists("{$this->backupPath}{$fileName}.sql.php"))
@@ -331,6 +332,10 @@ class backup extends control
         if(strtolower($this->server->request_method) == "post")
         {
             $data    = fixer::input('post')->join('setting', ',')->get();
+            
+            /*save change*/
+            if(isset($data->holdDays)) $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
+
             $setting = '';
             if(isset($data->setting)) $setting = $data->setting;
             $this->loadModel('setting')->setItem('system.backup.setting', $setting);
@@ -373,24 +378,21 @@ class backup extends control
         if($sqlFileName)
         {
             $fileSize = $this->backup->getBackupSize($sqlFileName);
-            $fileSize = $fileSize / 1024 >= 1024 ? round($fileSize / 1024 / 1024, 2) . 'MB' : round($fileSize / 1024, 2) . 'KB';
-            $message  = sprintf($this->lang->backup->progressSQL, $fileSize);
+            $message  = sprintf($this->lang->backup->progressSQL, $this->backup->processFileSize($fileSize));
         }
 
         $attachFileName = $this->backup->getBackupFile($fileName, 'file');
         if($attachFileName)
         {
             $fileSize = $this->backup->getBackupSize($attachFileName);
-            $fileSize = $fileSize / 1024 >= 1024 ? round($fileSize / 1024 / 1024, 2) . 'MB' : round($fileSize / 1024, 2) . 'KB';
-            $message = sprintf($this->lang->backup->progressAttach, $fileSize);
+            $message  = sprintf($this->lang->backup->progressAttach, $this->backup->processFileSize($fileSize));
         }
 
         $codeFileName = $this->backup->getBackupFile($fileName, 'code');
         if($codeFileName)
         {
             $fileSize = $this->backup->getBackupSize($codeFileName);
-            $fileSize = $fileSize / 1024 >= 1024 ? round($fileSize / 1024 / 1024, 2) . 'MB' : round($fileSize / 1024, 2) . 'KB';
-            $message = sprintf($this->lang->backup->progressCode, $fileSize);
+            $message  = sprintf($this->lang->backup->progressCode, $this->backup->processFileSize($fileSize));
         }
         die($message);
     }

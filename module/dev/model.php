@@ -134,17 +134,14 @@ class devModel extends model
     public function getAPIs($module)
     {
         $fileName = $this->app->getModuleRoot() . $module . DS . 'control.php';
-        if($module != 'common' and $module != 'dev')
-        {
-            include $fileName;
-        }
+        if($module != 'common' and $module != 'dev') include $fileName;
+
         $classReflect = new ReflectionClass($module);
         $methods = $classReflect->getMethods();
         $apis = array();
         foreach($methods as $method)
         {
             if($method->class == 'baseControl' or $method->class == 'control' or $method->name == '__construct') continue;
-
             $api = array('name' => $method->name, 'post' => false, 'default' => array());
             $methodReflect = new ReflectionMethod($module, $method->name);
             foreach($methodReflect->getParameters() as $key => $param)

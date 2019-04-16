@@ -18,7 +18,7 @@ function deleteBlock(index)
             }
             else
             {
-                $('#block' + index).remove();
+                window.location.reload(true);
             }
         });
     }

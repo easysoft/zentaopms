@@ -9,6 +9,12 @@ $lang->dev->params     = '參數列表';
 $lang->dev->type       = '類型';
 $lang->dev->desc       = '描述';
 $lang->dev->noParams   = '無參數';
+$lang->dev->post       = 'POST參數';
+
+$lang->dev->paramRange  = '取值範圍：%s';
+$lang->dev->paramDate   = '日期格式：YY-mm-dd，如：2019-01-01';
+$lang->dev->paramColor  = '顏色格式：#RGB，如：#3da7f5';
+$lang->dev->paramMailto = "填寫帳號，多個賬號用','分隔。";
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = '序號';

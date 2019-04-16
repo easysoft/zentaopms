@@ -438,6 +438,7 @@ class testtaskModel extends model
      */
     public function getLinkableCasesBySuite($productID, $task, $query, $suite, $linkedCases, $pager)
     {
+        if(strpos($query, '`product`') !== false) $query = str_replace('`product`', 't1.`product`', $query);
         return $this->dao->select('t1.*,t2.version as version')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                 ->where($query)
@@ -915,8 +916,8 @@ class testtaskModel extends model
             ->add('run', $runID)
             ->add('caseResult', $caseResult)
             ->setForce('stepResults', serialize($stepResults))
-            ->add('lastRunner', $this->app->user->account)
-            ->add('date', $now)
+            ->setDefault('lastRunner', $this->app->user->account)
+            ->setDefault('date', $now)
             ->skipSpecial('stepResults')
             ->remove('steps,reals,result')
             ->get();
@@ -1338,15 +1339,15 @@ class testtaskModel extends model
         /* Set email title. */
         if($actionType == 'opened')
         {
-            return sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtask->id, $testtask->title);
+            return sprintf($this->lang->testtask->mail->create->title, $this->app->user->realname, $testtask->id, $testtask->name);
         }
         elseif($actionType == 'closed')
         {
-            return sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtask->id, $testtask->title);
+            return sprintf($this->lang->testtask->mail->close->title, $this->app->user->realname, $testtask->id, $testtask->name);
         }
         else
         {
-            return sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtask->id, $testtask->title);
+            return sprintf($this->lang->testtask->mail->edit->title, $this->app->user->realname, $testtask->id, $testtask->name);
         }
     }
 

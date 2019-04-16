@@ -41,7 +41,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->build->name;?></th>
-          <td><?php echo html::input('name', '', "class='form-control' autocomplete='off' required");?></td>
+          <td><?php echo html::input('name', '', "class='form-control' required");?></td>
           <td class='text-muted'>
             <?php if($lastBuild):?>
             <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <a class="code label label-badge label-light" href="javascript:$(\'#name\').val(\'' . $lastBuild->name . '\').focus();">' . $lastBuild->name . '</a>';?></div>
@@ -58,11 +58,11 @@
         </tr>  
         <tr>
           <th><?php echo $lang->build->scmPath;?></th>
-          <td colspan='2'><?php echo html::input('scmPath', '', "class='form-control' placeholder='{$lang->build->placeholder->scmPath}' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('scmPath', '', "class='form-control' placeholder='{$lang->build->placeholder->scmPath}'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->build->filePath;?></th>
-          <td colspan='2'><?php echo html::input('filePath', '', "class='form-control' placeholder='{$lang->build->placeholder->filePath}' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('filePath', '', "class='form-control' placeholder='{$lang->build->placeholder->filePath}'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->build->files;?></th>

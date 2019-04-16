@@ -185,11 +185,11 @@ class testcaseModel extends model
     {
         $now  = helper::now();
         $case = fixer::input('post')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', $now)
             ->add('status', $this->forceNotReview() || $this->post->forceNotReview ? 'normal' : 'wait')
             ->add('version', 1)
             ->add('fromBug', $bugID)
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
@@ -395,7 +395,7 @@ class testcaseModel extends model
             $case->storyStatus        = $story->status;
             $case->latestStoryVersion = $story->version;
         }
-        if($case->fromBug) $case->fromBugTitle = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
+        if($case->fromBug) $case->fromBugTitle      = $this->dao->findById($case->fromBug)->from(TABLE_BUG)->fields('title')->fetch('title');
 
         $case->toBugs = array();
         $toBugs       = $this->dao->select('id, title')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
@@ -613,7 +613,7 @@ class testcaseModel extends model
      */
     public function update($caseID)
     {
-        $oldCase = $this->getById($caseID);
+        $oldCase      = $this->getById($caseID);
         if(!empty($_POST['lastEditedDate']) and $oldCase->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -655,11 +655,11 @@ class testcaseModel extends model
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
 
         $case = fixer::input('post')
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setDefault('story,branch', 0)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->setDefault('story,branch',   0)
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->remove('comment,steps,expects,files,labels,stepType')
@@ -671,6 +671,14 @@ class testcaseModel extends model
             if($stepChanged)
             {
                 $parentStepID = 0;
+                $isLibCase = ($oldCase->lib and empty($oldCase->product));
+                if($isLibCase) 
+                {
+                    $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+                    $fromcaseVersion += 1;
+                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec(); 
+                }
+
                 foreach($this->post->steps as $stepID => $stepDesc)
                 {
                     if(empty($stepDesc)) continue;
@@ -718,8 +726,8 @@ class testcaseModel extends model
         $case    = fixer::input('post')
             ->remove('result,comment')
             ->setDefault('reviewedDate', substr($now, 0, 10))
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->setIF($this->post->result == 'pass',   'status', 'normal')
             ->join('reviewedBy', ',')
             ->get();
@@ -1252,7 +1260,8 @@ class testcaseModel extends model
         $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
         foreach($libCases as $libCaseID => $case)
         {
-            $case->fromCaseID = $case->id;
+            $case->fromCaseID      = $case->id;
+            $case->fromCaseVersion = $case->version;
             $case->product    = $productID;
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
@@ -1386,7 +1395,18 @@ class testcaseModel extends model
                 echo "<span title='$stages'>$stages</span>";
                 break;
             case 'status':
-                $case->needconfirm ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                if($case->needconfirm) 
+                {
+                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromTesttask}>{$this->lang->story->changed}</span>");
+                }
+                elseif(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
+                {
+                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromCaselib}>{$this->lang->testcase->changed}</span>");
+                }
+                else
+                {
+                    print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                }
                 break;
             case 'story':
                 static $stories = array();

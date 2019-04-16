@@ -83,6 +83,19 @@ class storyModel extends model
     }
 
     /**
+     * Get test stories.
+     * 
+     * @param  array  $storyIdList 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
+    public function getTestStories($storyIdList, $projectID)
+    {
+        return $this->dao->select('story')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('type')->eq('test')->andWhere('story')->in($storyIdList)->fetchPairs('story', 'story');
+    }
+
+    /**
      * Get story specs.
      *
      * @param  array  $storyIdList
@@ -147,12 +160,12 @@ class storyModel extends model
             ->cleanInt('product,module,pri,plan')
             ->cleanFloat('estimate')
             ->callFunc('title', 'trim')
-            ->setDefault('plan,verify', '')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', $now)
             ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
+            ->setDefault('plan,verify', '')
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->needNotReview or $projectID > 0, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
@@ -416,8 +429,8 @@ class storyModel extends model
         $now   = helper::now();
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->setIF($this->post->assignedTo != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
@@ -478,13 +491,14 @@ class storyModel extends model
         $story = fixer::input('post')
             ->cleanInt('product,module,pri,duplicateStory')
             ->cleanFloat('estimate')
-            ->add('assignedDate', $oldStory->assignedDate)
-            ->add('lastEditedBy', $this->app->user->account)
+            ->setDefault('assignedDate', $oldStory->assignedDate)
+            ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('plan', '')
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
+            ->setIF(!$this->post->linkStories, 'linkStories', '')
             ->setIF($this->post->assignedTo   != $oldStory->assignedTo, 'assignedDate', $now)
             ->setIF($this->post->closedBy     != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
@@ -687,8 +701,8 @@ class storyModel extends model
         $story = fixer::input('post')
             ->remove('result,preVersion,comment')
             ->setDefault('reviewedDate', $date)
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'draft',   'status', 'active')
             ->setIF($this->post->result == 'pass' and $oldStory->status == 'changed', 'status', 'active')
             ->setIF($this->post->result == 'reject', 'closedBy',   $this->app->user->account)
@@ -830,14 +844,14 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
         $story = fixer::input('post')
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->add('closedDate', $now)
-            ->add('closedBy',   $this->app->user->account)
             ->add('assignedTo',   'closed')
-            ->add('assignedDate', $now)
             ->add('status', 'closed')
             ->add('stage', 'closed')
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('closedDate',     $now)
+            ->setDefault('closedBy',       $this->app->user->account)
+            ->setDefault('assignedDate',   $now)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
             ->setIF($this->post->closedReason == 'done', 'stage', 'released')
@@ -1056,6 +1070,31 @@ class storyModel extends model
     }
 
     /**
+     * Assign story.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return array
+     */
+    public function assign($storyID)
+    {
+        $oldStory   = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        $now        = helper::now();
+        $assignedTo = $this->post->assignedTo;
+        if($assignedTo == $oldStory->assignedTo) return array();
+
+        $story = new stdclass();
+        $story->lastEditedBy   = $this->app->user->account;
+        $story->lastEditedDate = $now;
+        $story->assignedTo     = $assignedTo;
+        $story->assignedDate   = $now;
+
+        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+        if(!dao::isError()) return common::createChanges($oldStory, $story);
+        return false;
+    }
+
+    /**
      * Batch assign to.
      *
      * @access public
@@ -1097,9 +1136,6 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
         $story = fixer::input('post')
-            ->add('lastEditedBy', $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->add('assignedDate', $now)
             ->add('closedBy', '')
             ->add('closedReason', '')
             ->add('closedDate', '0000-00-00')
@@ -1107,6 +1143,9 @@ class storyModel extends model
             ->add('reviewedDate', '0000-00-00')
             ->add('duplicateStory', 0)
             ->add('childStories', '')
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('assignedDate',   $now)
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
@@ -1770,6 +1809,7 @@ class storyModel extends model
         $stories = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
+            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
             ->beginIF($type == 'openedBy')->andWhere('openedBy')->eq($account)->fi()
@@ -2252,6 +2292,7 @@ class storyModel extends model
         if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
         if($action == 'close')    return $story->status != 'closed';
         if($action == 'activate') return $story->status == 'closed';
+        if($action == 'assignto') return $story->status != 'closed';
 
         return true;
     }
@@ -2457,7 +2498,7 @@ class storyModel extends model
                 $vars = "story={$story->id}";
                 common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-                common::printIcon('story', 'close',      $vars, $story, 'list', 'off', '', 'iframe', true);
+                common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list');
                 if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
                 break;

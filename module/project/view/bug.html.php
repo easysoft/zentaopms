@@ -100,7 +100,7 @@
           <?php
           $params = "bugID=$bug->id";
           common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-          common::printIcon('bug', 'resolve', $params, $bug, 'list', 'check', '', 'iframe', true);
+          common::printIcon('bug', 'resolve', $params, $bug, 'list', 'checked', '', 'iframe', true);
           common::printIcon('bug', 'close',   $params, $bug, 'list', '', '', 'iframe', true);
           common::printIcon('bug', 'create', "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
           common::printIcon('bug', 'edit',   $params, $bug, 'list');
@@ -119,6 +119,7 @@
           <?php
           $withSearch = count($memberPairs) > 10;
           $actionLink = $this->createLink('bug', 'batchAssignTo', "projectID={$project->id}&type=project");
+          echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
 
           if($withSearch)
           {

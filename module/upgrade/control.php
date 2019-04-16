@@ -57,6 +57,8 @@ class upgrade extends control
      */
     public function backup()
     {
+        $this->session->set('upgrading', true);
+
         $this->view->title = $this->lang->upgrade->common;
         $this->display();
     }
@@ -141,6 +143,14 @@ class upgrade extends control
      */
     public function afterExec($fromVersion, $processed = 'no')
     {
+        $alterSQL = $this->upgrade->checkConsistency($this->config->version);
+        if(!empty($alterSQL))
+        {
+            $this->view->title    = $this->lang->upgrade->consistency;
+            $this->view->alterSQL = $alterSQL;
+            die($this->display('upgrade', 'consistency'));
+        }
+
         if($processed == 'no')
         {
             $this->app->loadLang('install');
@@ -158,6 +168,7 @@ class upgrade extends control
 
             @unlink($this->app->getAppRoot() . 'www/install.php');
             @unlink($this->app->getAppRoot() . 'www/upgrade.php');
+            unset($_SESSION['upgrading']);
         }
     }
 
@@ -172,6 +183,7 @@ class upgrade extends control
         $alterSQL = $this->upgrade->checkConsistency();
         if(empty($alterSQL)) $this->locate(inlink('checkExtension'));
 
+        $this->view->title    = $this->lang->upgrade->consistency;
         $this->view->alterSQL = $alterSQL;
         $this->display();
     }
@@ -236,6 +248,7 @@ class upgrade extends control
      */
     public function ajaxUpdateFile($type = '', $lastID = 0)
     {
+        set_time_limit(0);
         $result = $this->upgrade->updateFileObjectID($type, $lastID);
         $response = array();
         if($result['type'] == 'finish')

@@ -134,8 +134,8 @@ class bugModel extends model
     {
         $now = helper::now();
         $bug = fixer::input('post')
-            ->add('openedBy', $this->app->user->account)
-            ->add('openedDate', $now)
+            ->setDefault('openedBy', $this->app->user->account)
+            ->setDefault('openedDate', $now)
             ->setDefault('project,story,task', 0)
             ->setDefault('openedBuild', '')
             ->setDefault('deadline', '0000-00-00')
@@ -360,7 +360,7 @@ class bugModel extends model
     }
 
     /**
-     * Check delay bug.
+     * Check delay bugs.
      *
      * @param  array  $bugs
      * @access public
@@ -368,25 +368,36 @@ class bugModel extends model
      */
     public function checkDelayBugs($bugs)
     {
-        foreach ($bugs as $bug)
-        {
-            // Delayed or not?.
-            if($bug->deadline != '0000-00-00')
-            {
-                if(substr($bug->resolvedDate, 0, 10) != '0000-00-00')
-                {
-                    $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
-                }
-                elseif($bug->status == 'active')
-                {
-                    $delay = helper::diffDate(helper::today(), $bug->deadline);
-                }
-
-                if(isset($delay) and $delay > 0) $bug->delay = $delay;
-            }
-        }
+        foreach ($bugs as $bug) $bug = $this->checkDelayBug($bug);
 
         return $bugs;
+    }
+
+    /**
+     * Check delay bug.
+     *
+     * @param  array  $bug
+     * @access public
+     * @return array
+     */
+    public function checkDelayBug($bug)
+    {
+        // Delayed or not?.
+        if($bug->deadline != '0000-00-00')
+        {
+            if($bug->resolvedDate and substr($bug->resolvedDate, 0, 10) != '0000-00-00')
+            {
+                $delay = helper::diffDate(substr($bug->resolvedDate, 0, 10), $bug->deadline);
+            }
+            elseif($bug->status == 'active')
+            {
+                $delay = helper::diffDate(helper::today(), $bug->deadline);
+            }
+
+            if(isset($delay) and $delay > 0) $bug->delay = $delay;
+        }
+
+        return $bug;
     }
 
     /**
@@ -469,7 +480,7 @@ class bugModel extends model
 
         $bug->files = $this->loadModel('file')->getByObject('bug', $bugID);
 
-        return $bug;
+        return $this->checkDelayBug($bug);
     }
 
     /**
@@ -502,7 +513,6 @@ class bugModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('status')->eq('active')
-            ->andWhere('toTask')->eq(0)
             ->andWhere('tostory')->eq(0)
             ->beginIF(!empty($products))->andWhere('product')->in($products)->fi()
             ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
@@ -601,9 +611,9 @@ class bugModel extends model
             ->setDefault('plan', 0)
             ->setDefault('deadline', '0000-00-00')
             ->setDefault('resolvedDate', '0000-00-00 00:00:00')
-            ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
-            ->add('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
+            ->setIF(strpos($this->config->bug->edit->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->join('openedBuild', ',')
             ->join('mailto', ',')
             ->join('linkBug', ',')
@@ -909,15 +919,15 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
-            ->add('resolvedBy',     $this->app->user->account)
-            ->add('status',         'resolved')
-            ->add('confirmed',      1)
-            ->add('assignedDate',   $now)
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->setDefault('resolvedDate', $now)
-            ->setDefault('duplicateBug', 0)
-            ->setDefault('assignedTo', $oldBug->openedBy)
+            ->add('status',    'resolved')
+            ->add('confirmed', 1)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('resolvedBy',     $this->app->user->account)
+            ->setDefault('assignedDate',   $now)
+            ->setDefault('resolvedDate',   $now)
+            ->setDefault('duplicateBug',   0)
+            ->setDefault('assignedTo',     $oldBug->openedBy)
             ->remove('comment,files,labels')
             ->get();
 
@@ -1112,8 +1122,11 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
         $now = helper::now();
         $bug = fixer::input('post')
-            ->setDefault('assignedTo', $oldBug->resolvedBy)
-            ->add('assignedDate', $now)
+            ->setDefault('assignedTo',     $oldBug->resolvedBy)
+            ->setDefault('assignedDate',   $now)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('activatedDate',  $now)
             ->add('resolution', '')
             ->add('status', 'active')
             ->add('resolvedDate', '0000-00-00')
@@ -1124,9 +1137,6 @@ class bugModel extends model
             ->add('duplicateBug', 0)
             ->add('toTask', 0)
             ->add('toStory', 0)
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->add('activatedDate', $now)
             ->join('openedBuild', ',')
             ->remove('comment,files,labels')
             ->get();
@@ -1150,14 +1160,14 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
-            ->add('assignedTo',     'closed')
-            ->add('assignedDate',   $now)
-            ->add('status',         'closed')
-            ->add('closedBy',       $this->app->user->account)
-            ->add('closedDate',     $now)
-            ->add('lastEditedBy',   $this->app->user->account)
-            ->add('lastEditedDate', $now)
-            ->add('confirmed',      1)
+            ->add('assignedTo', 'closed')
+            ->add('status',     'closed')
+            ->add('confirmed',  1)
+            ->setDefault('assignedDate',   $now)
+            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->setDefault('closedBy',       $this->app->user->account)
+            ->setDefault('closedDate',     $now)
             ->remove('comment')
             ->get();
 
@@ -1315,6 +1325,7 @@ class bugModel extends model
         $bugs = $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
+            ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('status')->ne('closed')->fi()
             ->beginIF($type != 'all')->andWhere("`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -1957,8 +1968,8 @@ class bugModel extends model
     public function saveUserBugTemplate()
     {
         $template = fixer::input('post')
-            ->add('account', $this->app->user->account)
-            ->add('type', 'bug')
+            ->setDefault('account', $this->app->user->account)
+            ->setDefault('type', 'bug')
             ->stripTags('content', $this->config->allowedTags)
             ->get();
 
@@ -2668,7 +2679,7 @@ class bugModel extends model
         $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='$bug->assignedTo' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
-        echo !common::hasPriv('bug', 'assignTo') ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+        echo !common::hasPriv('bug', 'assignTo', $bug) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**
@@ -2690,7 +2701,7 @@ class bugModel extends model
         $history            = $this->action->getHistory($actionID);
         $action->history    = isset($history[$actionID]) ? $history[$actionID] : array();
         $action->appendLink = '';
-        if(strpos($action->extra, ':')!== false)
+        if(strpos($action->extra, ':') !== false)
         {
             list($extra, $id) = explode(':', $action->extra);
             $action->extra    = $extra;

@@ -47,7 +47,7 @@ function closeWindow()
           <tr>
             <td>
               <div class='input-group'>
-                <?php echo html::input('fileName', $file->title, "class='form-control' size='40' autocomplete='off'");?>
+                <?php echo html::input('fileName', $file->title, "class='form-control' size='40'");?>
                 <input type="hidden" name="extension" value="<?php echo $file->extension;?>"/>
                 <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
               </div>

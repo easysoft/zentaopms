@@ -57,6 +57,8 @@ class product extends control
         $branch    = (int)$this->cookie->preBranch;
         $this->product->setMenu($this->products, $productID, $branch);
 
+        if(common::hasPriv('product', 'create')) $this->lang->modulePageActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
+
         $this->view->title         = $this->lang->product->index;
         $this->view->position[]    = $this->lang->product->index;
         $this->display();
@@ -588,14 +590,9 @@ class product extends control
         $this->view->extra     = $extra;
 
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in(array_keys($this->products))->orderBy('`order` desc')->fetchAll('id');
-        $productPairs = array();
-        foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $productsPinyin = common::convert2Pinyin($productPairs);
-
-        foreach($products as $key => $product) $product->key = $productsPinyin[$product->name];
 
         /* Sort products as lines' order first. */
-        $lines = $this->loadModel('tree')->getLinePairs();
+        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
         $productList = array();
         foreach($lines as $id => $name)
         {

@@ -14,10 +14,11 @@ $config->doc->edit->requiredFields   = 'title';
 
 $config->doc->customObjectLibs = 'files,customFiles';
 $config->doc->notArticleType   = '';
+$config->doc->officeTypes      = 'word,ppt,excel';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
-$config->doc->custom->showLibs   = 'zero';
+$config->doc->custom->showLibs   = 'zero,children';
 
 $config->doc->editor = new stdclass();
 $config->doc->editor->create = array('id' => 'content', 'tools' => 'fullTools');

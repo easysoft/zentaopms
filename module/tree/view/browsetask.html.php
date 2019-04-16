@@ -58,7 +58,7 @@
                   <?php if($newModule and !$productID):?>
                   <?php foreach($products as $product):?>
                   <div class="table-row row-module">
-                    <div class="table-col col-module"><?php echo html::input("products[id$product->id]", $product->name, 'class=form-control disabled="true" autocomplete="off"')?></div>
+                    <div class="table-col col-module"><?php echo html::input("products[id$product->id]", $product->name, 'class=form-control disabled="true"')?></div>
                   </div>
                   <?php endforeach;?>
                   <?php endif;?>
@@ -68,22 +68,20 @@
                   $disabled = $sonModule->type == 'task' ? '' : 'disabled';
                   ?>
                   <div class='table-row row-module'>
-                    <div class='table-col col-module'><?php echo html::input("modules[id$sonModule->id]", $sonModule->name, "class='form-control' autocomplete='off' placeholder='{$lang->tree->name}' $disabled")?></div>
+                    <div class='table-col col-module'><?php echo html::input("modules[id$sonModule->id]", $sonModule->name, "class='form-control' placeholder='{$lang->tree->name}' $disabled")?></div>
                     <div class='table-col col-shorts'>
                       <?php
-                      echo html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' autocomplete='off' placeholder='{$lang->tree->short}' $disabled");
+                      echo html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' $disabled");
                       echo html::hidden("order[id$sonModule->id]", $sonModule->order);
                       ?>
                     </div>
-                    <div class="table-col col-actions">
-                      <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                    </div>
+                    <div class="table-col col-actions"> </div>
                   </div>
                   <?php endforeach;?>
                   <?php for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++):?>
                   <div class="table-row row-module row-module-new">
-                    <div class='table-col col-module'><?php echo html::input("modules[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->name}'")?></div>
-                    <div class='table-col col-shorts'><?php echo html::input("shorts[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->short}'")?></div>
+                    <div class='table-col col-module'><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}'")?></div>
+                    <div class='table-col col-shorts'><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'")?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
                       <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
@@ -94,8 +92,8 @@
                 </div>
                 <div id="insertItemBox" class="template">
                   <div class="table-row row-module row-module-new">
-                    <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->name}'");?></div>
-                    <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' autocomplete='off' placeholder='{$lang->tree->short}'");?></div>
+                    <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$lang->tree->name}'");?></div>
+                    <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'");?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
                       <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
@@ -164,7 +162,7 @@ $(function()
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->delete ?>',
-                template: '<a href="javascript:;"><i class="icon icon-close"></i></a>'
+                template: '<a href="javascript:;"><i class="icon icon-trash"></i></a>'
             },
             subModules:
             {
@@ -186,7 +184,7 @@ $(function()
             }
             else if(action.type === 'delete')
             {
-                window.open(action.linkTemplate.format(item.id), 'hiddenwin');
+                hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
             else if(action.type === 'add')
             {

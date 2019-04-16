@@ -115,7 +115,7 @@
             <?php endif;?>
             <td style='overflow:visible'>
               <div class="input-control has-icon-right">
-                <?php echo html::input("name[$i]", '', "class='form-control title-import' autocomplete='off'");?>
+                <?php echo html::input("name[$i]", '', "class='form-control title-import'");?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                   <ul class="dropdown-menu clearfix pull-right">
@@ -127,7 +127,7 @@
             </td>
             <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
             <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[$i]", $members, $member, "class='form-control chosen'");?></td>
-            <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[$i]", '', "class='form-control text-center' autocomplete='off'");?></td>
+            <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[$i]", '', "class='form-control text-center'");?></td>
             <td <?php echo zget($visibleFields, 'estStarted', "class='hidden'")?>><?php echo html::input("estStarted[$i]", '', "class='form-control text-center form-date'");?></td>
             <td <?php echo zget($visibleFields, 'deadline', "class='hidden'")?>><?php echo html::input("deadline[$i]", '', "class='form-control text-center form-date'");?></td>
             <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control autosize'");?></td>
@@ -166,7 +166,7 @@
       </td>
       <td style='overflow:visible'>
         <div class="input-control has-icon-right">
-          <?php echo html::input("name[%s]", '', "class='form-control title-import' autocomplete='off'");?>
+          <?php echo html::input("name[%s]", '', "class='form-control title-import'");?>
           <div class="colorpicker">
             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
             <ul class="dropdown-menu clearfix pull-right">
@@ -179,7 +179,7 @@
       </td>
       <td><?php echo html::select("type[%s]", $lang->task->typeList, $type, 'class="form-control"');?></td>
       <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[%s]", $members, $member, "class='form-control chosen'");?></td>
-      <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[%s]", '', "class='form-control text-center' autocomplete='off'");?></td>
+      <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[%s]", '', "class='form-control text-center'");?></td>
       <td <?php echo zget($visibleFields, 'estStarted', "class='hidden'")?>><?php echo html::input("estStarted[%s]", '', "class='form-control text-center form-date'");?></td>
       <td <?php echo zget($visibleFields, 'deadline', "class='hidden'")?>><?php echo html::input("deadline[%s]", '', "class='form-control text-center form-date'");?></td>
       <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("desc[%s]", '', "rows='1' class='form-control autosize'");?></td>

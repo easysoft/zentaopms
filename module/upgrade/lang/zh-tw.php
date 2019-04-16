@@ -35,7 +35,7 @@ $lang->upgrade->setStatusFile      = '<h4>升級之前請先完成下面的操�
                                       <li>%s</li>
                                       <li>或者刪掉"<strong style="color:#ed980f">%s</strong>" 這個檔案 ，重新創建一個<strong style="color:#ed980f">ok.txt</strong>檔案，不需要內容。</li>
                                       </ul>
-                                      <p><strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="upgrade.php">繼續更新</a></strong></p>';
+                                      <p><strong style="color:red">我已經仔細閲讀上面提示且完成上述工作，<a href="#" onclick="location.reload()">繼續更新</a></strong></p>';
 $lang->upgrade->selectVersion = '選擇版本';
 $lang->upgrade->continue      = '繼續';
 $lang->upgrade->noteVersion   = "務必選擇正確的版本，否則會造成數據丟失。";
@@ -46,5 +46,6 @@ $lang->upgrade->sureExecute   = '確認執行';
 $lang->upgrade->forbiddenExt  = '以下插件與新版本不兼容，已經自動禁用：';
 $lang->upgrade->updateFile    = '需要更新附件信息。';
 $lang->upgrade->noticeSQL     = '檢查到你的資料庫跟標準不一致，嘗試修復失敗。請執行以下SQL語句，再刷新頁面檢查。';
+$lang->upgrade->afterDeleted  = '以上檔案未能刪除， 刪除後刷新！';
 
 include dirname(__FILE__) . '/version.php';

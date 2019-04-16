@@ -34,13 +34,13 @@
         </tr>
         <tr class='params add hide'>
           <th><?php echo $lang->user->account?></th>
-          <td><?php echo html::input('account', $data->account, "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('account', $data->account, "class='form-control'")?></td>
         </tr>
         <tr class='params add hide'>
           <th><?php echo $lang->user->password?></th>
           <td>
             <span class='input-group'>
-              <?php echo html::password('password1', '', "class='form-control' autocomplete='off' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
+              <?php echo html::password('password1', '', "class='form-control' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)'");?>
               <span class='input-group-addon' id='passwordStrength'></span>
             </span>
           </td>
@@ -51,7 +51,7 @@
         </tr>
         <tr class='params add hide'>
           <th><?php echo $lang->user->realname?></th>
-          <td><?php echo html::input('realname', $data->realname, "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('realname', $data->realname, "class='form-control'")?></td>
         </tr>
         <tr class='params add hide'>
           <th><?php echo $lang->user->gender?></th>
@@ -59,7 +59,7 @@
         </tr>
         <tr class='params add hide'>
           <th><?php echo $lang->user->email?></th>
-          <td><?php echo html::input('email', $data->email, "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('email', $data->email, "class='form-control'")?></td>
         </tr>
         <tr class='params add hide'>
           <th></th>

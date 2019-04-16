@@ -1,81 +1,36 @@
 <?php
 class xuanxuanChat extends chatModel
 {
-    public function downloadXXD($setting, $type)
-    {
-        $data = new stdClass();
-        $data->server         = $setting->server;
-        $data->uploadFileSize = $setting->uploadFileSize;
-        $data->uploadFileSize = $setting->uploadFileSize;
-        $data->isHttps        = $setting->isHttps;
-        $data->sslcrt         = $setting->sslcrt;
-        $data->sslkey         = $setting->sslkey;
-        $data->ip             = $setting->ip;
-        $data->chatPort       = $setting->chatPort;
-        $data->commonPort     = $setting->commonPort;
-        $data->maxOnlineUser  = isset($setting->maxOnlineUser) ? $setting->maxOnlineUser : 0;
-        $data->host           = commonModel::getSysURL() . getWebRoot();
-        $data->key            = $this->config->xuanxuan->key;
-        $data->os             = $setting->os;
-        $data->version        = $this->config->xuanxuan->version;
-        $data->downloadType   = $type;
-
-        $url   = "https://www.chanzhi.org/license-downloadxxd.html";
-        $agent = $this->app->loadClass('snoopy');
-        $agent->cookies['lang'] = $this->cookie->lang;
-        $agent->submit($url, $data);
-        $result = $agent->results;
-        
-        if($type == 'config')
-        {
-            $this->sendDownHeader('xxd.conf', 'conf', $result, strlen($result));
-        }
-        else
-        {
-            header("Location: $result");
-        }
-
-        $this->loadModel('setting')->setItem('system.common.xxserver.installed', 1);
-        exit;
-    }
-
-    public function sendDownHeader($fileName, $fileType, $content, $fileSize = 0)
-    {
-        /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
-        setcookie('downloading', 1, 0, '', '', false, true);
-
-        /* Append the extension name auto. */
-        $extension = '.' . $fileType;
-        if(strpos($fileName, $extension) === false) $fileName .= $extension;
-
-        /* urlencode the fileName for ie. */
-        $isIE11 = (strpos($this->server->http_user_agent, 'Trident') !== false and strpos($this->server->http_user_agent, 'rv:11.0') !== false); 
-        if(strpos($this->server->http_user_agent, 'MSIE') !== false or $isIE11) $fileName = urlencode($fileName);
-
-        /* Judge the content type. */
-        $mimes = $this->config->chat->mimes;
-        $contentType = isset($mimes[$fileType]) ? $mimes[$fileType] : $mimes['default'];
-        if(empty($fileSize) and $content) $fileSize = strlen($content);
-
-        header("Content-type: $contentType");
-        header("Content-Disposition: attachment; filename=\"$fileName\"");
-        header("Content-length: {$fileSize}");
-        header("Pragma: no-cache");
-        header("Expires: 0");
-        die($content);
-    }
-
     public function getExtensionList($userID)
     {
         $entries = array();
-        $baseURL = commonModel::getSysURL();
+        $baseURL = $this->getServer('zentao');
+
+        $this->loadModel('user');
+        $user = $this->dao->select('*')->from(TABLE_USER)->where('id')->eq($userID)->fetch();
+        $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
+        $user->rights = $this->user->authorize($user->account);
+        $user->groups = $this->user->getGroups($user->account);
+        $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
+
+        $this->session->set('user', $user);
+        $this->app->user = $this->session->user;
+
+        $products  = $this->loadModel('product')->getPairs();
+        $projects  = $this->loadModel('project')->getPairs();
+        $products  = empty($products) ? array() : array_keys($products);
+        $projects  = empty($projects) ? array() : array_keys($projects);
+        $libIdList = array_keys($this->loadModel('doc')->getLibs('all'));
+        $productID = isset($products[0])  ? $products[0]  : 1;
+        $projectID = isset($projects[0])  ? $projects[0]  : 1;
+        $libID     = isset($libIdList[0]) ? $libIdList[0] : 1;
 
         $actions = new stdclass();
-        $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('bug', 'create', 'product=1', 'xhtml')),   'height' => "600px", 'width' => "800px");
-        $actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('doc', 'create', 'lib=1', 'xhtml')),       'height' => "600px", 'width' => "800px");
-        $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('story', 'create', 'product=1', 'xhtml')), 'height' => "600px", 'width' => "800px");
-        $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('task', 'create', 'project=1', 'xhtml')),  'height' => "600px", 'width' => "800px");
-        $actions->createTodo  = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/xuanxuan.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')),           'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('bug',   'create') and !empty($products)) $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('doc',   'create') and !empty($libIdList))$actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "libID=$libID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('story', 'create') and !empty($products)) $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('task',  'create') and !empty($projects)) $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "project=$projectID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('todo',  'create')) $actions->createTodo = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "800px");
 
         $urls = array();
         foreach($this->config->chat->cards as $moduleName => $methods)
@@ -84,11 +39,11 @@ class xuanxuanChat extends chatModel
             {
                 if($this->config->requestType == 'GET')
                 {
-                    $url = "/index.php?m={$moduleName}&f={$methodName}";
+                    $url = $this->config->webRoot . "index.php?m={$moduleName}&f={$methodName}";
                 }
                 else
                 {
-                    $url = "/{$moduleName}-{$methodName}-";
+                    $url = $this->config->webRoot . "{$moduleName}-{$methodName}-";
                 }
                 $urls[$url] = $size;
             }
@@ -107,6 +62,44 @@ class xuanxuanChat extends chatModel
         $data->data['entryUrl'] = trim($baseURL . $this->config->webRoot, '/');
 
         $entries[] = $data;
+        unset($_SESSION['user']);
         return $entries;
+    }
+
+    public function editUser($user = null)
+    {
+        if(empty($user->id)) return null;
+
+        $data = array();
+        foreach($this->config->chat->user->canEditFields as $field)
+        {
+            if(!empty($user->$field)) $data[$field] = $user->$field;
+        }
+        if(!empty($user->account) && !empty($user->password)) $data['password'] = $user->password;
+        if(!$data) return null;
+
+        $data['clientLang'] = $this->app->getClientLang();
+        $this->dao->update(TABLE_USER)->data($data)->where('id')->eq($user->id)->exec();
+        return $this->getUserByUserID($user->id);
+    }
+
+    public function getServer($backend = 'xxb')
+    {
+        $server = commonModel::getSysURL();
+        if(!empty($this->config->xuanxuan->server))
+        {
+            $host     = $this->server->http_host;
+            $position = strrpos($host, ':');
+            $port     = $position === false ? '' : substr($host, $position + 1);
+            $server   = $this->config->xuanxuan->server;
+            if($port and strpos($server, ":$port") === false)
+            {
+                $server = rtrim($server, '/');
+                $server = "{$server}:{$port}";
+            }
+        }
+        $server = rtrim($server, '/');
+
+        return $server;
     }
 }

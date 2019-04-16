@@ -1,6 +1,11 @@
 $(function()
 {
-    toggleAcl($('input[name="acl"]:checked').val());
+    $('#top-submit').click(function()
+    {
+        $(this).addClass('disabled');
+        $('form').submit();
+    })
+    toggleAcl($('input[name="acl"]:checked').val(), 'doc');
     $('input[name="type"]').change(function()
     {
         var type = $(this).val();

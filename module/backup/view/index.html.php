@@ -16,24 +16,18 @@
   <div class="content"><i class='icon-exclamation-sign'></i> <?php echo $error;?></div>
 </div>
 <?php endif;?>
-
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('data');?></div>
-  <div class='btn-toolbar pull-right'>
-    <?php common::printIcon('backup', 'setting', '', '', 'button', '', '', 'iframe', '', "data-width=400px");?>
-    <?php common::printIcon('backup', 'backup', 'reload=yes', '', 'button', 'cloud', 'hiddenwin', 'backup');?>
-  </div>
 </div>
 
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
       <?php echo $lang->backup->history?>
-      <span class='label label-info'><?php echo $lang->backup->restoreTip;?></span>
     </h2>
     <div class='pull-right'>
-      <?php printf($lang->backup->holdDays, $config->backup->holdDays)?>
-      <?php if(common::hasPriv('backup', 'change')) echo html::a(inlink('change'), $lang->backup->changeAB, '', "class='iframe btn btn-sm btn-info' data-width='300'");?>
+      <?php common::printLink('backup', 'setting', '', "<i class='icon icon-cog'></i>" . $lang->backup->setting, '', "data-width='400' class='iframe btn btn-primary'");?>
+      <?php common::printLink('backup', 'backup', 'reload=yes', "<i class='icon icon-copy'></i> " . $lang->backup->backup, 'hiddenwin', "class='btn btn-primary backup'");?>
     </div>
   </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
@@ -77,6 +71,12 @@
     <?php endforeach;?>
     </tbody>
   </table>
+  <h2>
+    <span class='label label-info'>
+    <?php echo $lang->backup->restoreTip;?>
+    <?php printf($lang->backup->holdDays, $config->backup->holdDays)?>
+    </span>
+  </h2>
 </div>
 <div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog w-300px">
@@ -88,7 +88,7 @@
     </div>
   </div>
 </div>
-<?php js::set('backup', $lang->backup->backup);?>
+<?php js::set('backup', $lang->backup->common);?>
 <?php js::set('rmPHPHeader', $lang->backup->rmPHPHeader);?>
 <?php js::set('confirmRestore', $lang->backup->confirmRestore);?>
 <?php js::set('restore', $lang->backup->restore);?>

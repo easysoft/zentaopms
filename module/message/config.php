@@ -1,7 +1,7 @@
 <?php
 $config->message->objectTypes = array();
 $config->message->objectTypes['product']     = array('opened', 'edited', 'closed', 'undeleted'); 
-$config->message->objectTypes['story']       = array('opened', 'edited', 'commented', 'frombug', 'changed', 'reviewed', 'closed', 'activated');
+$config->message->objectTypes['story']       = array('opened', 'edited', 'commented', 'frombug', 'changed', 'reviewed', 'closed', 'activated', 'assigned');
 $config->message->objectTypes['productplan'] = array('opened', 'edited'); 
 $config->message->objectTypes['project']     = array('opened', 'edited', 'started', 'delayed', 'suspended', 'closed', 'activated', 'undeleted');
 $config->message->objectTypes['task']        = array('opened', 'edited', 'commented', 'assigned', 'confirmed', 'started', 'finished', 'paused', 'canceled', 'restarted', 'closed', 'activated');

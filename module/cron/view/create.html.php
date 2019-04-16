@@ -26,36 +26,36 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->cron->m;?></th>
-          <td><?php echo html::input('m', '', "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('m', '', "class='form-control'")?></td>
           <td><?php echo $lang->cron->notice->m;?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->h;?></th>
-          <td><?php echo html::input('h', '', "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('h', '', "class='form-control'")?></td>
           <td><?php echo $lang->cron->notice->h;?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->dom;?></th>
-          <td><?php echo html::input('dom', '', "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('dom', '', "class='form-control'")?></td>
           <td><?php echo $lang->cron->notice->dom;?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->mon;?></th>
-          <td><?php echo html::input('mon', '', "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('mon', '', "class='form-control'")?></td>
           <td><?php echo $lang->cron->notice->mon;?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->dow;?></th>
-          <td><?php echo html::input('dow', '', "class='form-control' autocomplete='off'")?></td>
+          <td><?php echo html::input('dow', '', "class='form-control'")?></td>
           <td><?php echo $lang->cron->notice->dow;?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->command;?></th>
-          <td colspan='2'><?php echo html::input('command', '', "class='form-control' autocomplete='off'")?></td><td></td>
+          <td colspan='2'><?php echo html::input('command', '', "class='form-control'")?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->remark;?></th>
-          <td colspan='2'><?php echo html::input('remark', '', "class='form-control' autocomplete='off'")?></td><td></td>
+          <td colspan='2'><?php echo html::input('remark', '', "class='form-control'")?></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->type;?></th>

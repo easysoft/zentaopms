@@ -21,11 +21,21 @@
             <button class="btn" type="button" data-toggle="dropdown"><i class='icon-cog'></i> <span class="caret"></span></button>
             <ul class='dropdown-menu'>
               <li><?php common::printLink('tree', 'browse', "libID=$libID&viewType=doc", "<i class='icon icon-cog'></i>" . $lang->doc->manageType);?></li>
-              <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->edit, '', "class='iframe'");?></li>
-              <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-close'></i>" . $lang->delete, 'hiddenwin');?></li>
+              <li><?php common::printLink('doc', 'editLib', "libID=$libID", "<i class='icon icon-edit'></i>" . $lang->doc->editLib, '', "class='iframe'");?></li>
+              <li><?php common::printLink('doc', 'deleteLib', "libID=$libID", "<i class='icon icon-trash'></i>" . $lang->doc->deleteLib, 'hiddenwin');?></li>
             </ul>
           </div>
-          <?php common::printLink('doc', 'create', "libID=$libID&moduleID=$moduleID", "<i class='icon icon-plus'></i> " . $this->lang->doc->create, '', "class='btn btn-primary'");?>
+          <?php if(common::hasPriv('doc', 'create')):?>
+          <div class="dropdown">
+            <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $lang->doc->create;?> <span class='caret'></span></button>
+            <ul class='dropdown-menu'>
+              <?php foreach($lang->doc->typeList as $typeKey => $typeName):?>
+              <?php $class = strpos($config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';?>
+              <li><?php echo html::a($this->createLink('doc', 'create', "libID=$libID&moduleID=$moduleID&type=$typeKey"), $typeName, '', "class='$class'");?></li>
+              <?php endforeach;?>
+            </ul>
+          </div>
+          <?php endif;?>
           <?php endif;?>
         </nav>
       </div>
@@ -65,22 +75,24 @@
             <div class="text-primary file-info"><?php echo zget($itemCounts, $lib->id, 0) . $lang->doc->item;?></div>
           </a>
           <div class="actions">
+            <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$lib->id&objectType=doclib");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <?php endif;?>
             <?php common::printLink('doc', 'editLib', "libID=$lib->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link iframe'")?>
           </div>
         </div>
         <?php endforeach;?>
         <?php endif;?>
         <?php if(!empty($attachLibs) and $browseType != 'bysearch'):?>
-        <?php foreach($attachLibs as $libID => $attachLib):?>
+        <?php foreach($attachLibs as $libType => $attachLib):?>
         <div class="col">
           <?php
           $browseLink = '';
-          if($libID == 'project')
+          if($libType == 'project')
           {
               $browseLink = inlink('allLibs', "type=project&product={$currentLib->product}");
           }
-          elseif($libID == 'files')
+          elseif($libType == 'files')
           {
               $browseLink = inlink('showFiles', "type=$type&objectID={$currentLib->$type}");
           }
@@ -105,7 +117,9 @@
             <div class="text-primary file-info"><?php echo $module->docCount . $lang->doc->item;?></div>
           </a>
           <div class="actions">
-            <?php common::printLink('doc', 'collect', "objectID={$module->id}&objectType=module", "<i class='icon {$star}'></i>", 'hiddenwin', "title='{$lang->doc->collect}' class='btn btn-link'");?>
+            <?php if(common::hasPriv('doc', 'collect')):?>
+            <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID={$module->id}&objectType=module");?>" title="<?php echo $lang->doc->collect;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <?php endif;?>
           </div>
         </div>
         <?php endforeach;?>
@@ -120,9 +134,11 @@
             <div class="text-primary file-info"><?php echo zget($users, $doc->addedBy);?></div>
           </a>
           <div class="actions">
+            <?php if(common::hasPriv('doc', 'collect')):?>
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID={$doc->id}&objectType=doc");?>" title="<?php echo $collectTitle;?>" class='btn btn-link ajaxCollect'><i class='icon <?php echo $star;?>'></i></a>
+            <?php endif;?>
             <?php common::printLink('doc', 'edit', "docID={$doc->id}", "<i class='icon icon-edit'></i>", '', "title='{$lang->edit}' class='btn btn-link'")?>
-            <?php common::printLink('doc', 'delete', "docID={$doc->id}", "<i class='icon icon-close'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
+            <?php common::printLink('doc', 'delete', "docID={$doc->id}", "<i class='icon icon-trash'></i>", '', "title='{$lang->delete}' class='btn btn-link'")?>
           </div>
         </div>
         <?php endforeach;?>

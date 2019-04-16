@@ -1,5 +1,8 @@
 .modal-dialog{width:75%}
-form{margin-bottom:130px; padding-left:65px}
+form{margin-bottom:100px; padding-left:65px}
 table{width:90% !important}
 
 #whiteListBox div.input-group {margin-bottom: 2px;}
+
+#product_chosen{width: 50%!important}
+#project_chosen{width: 50%!important}

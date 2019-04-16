@@ -31,40 +31,42 @@
             <th class='w-100px'><?php echo $lang->user->account;?></th>
             <td>
               <div class="required required-wrapper"></div>
-              <?php echo html::input('account', '', "class='form-control' placeholder='{$lang->admin->register->lblAccount}' autocomplete='off'");?>
+              <?php echo html::input('account', '', "class='form-control' placeholder='{$lang->admin->register->lblAccount}'");?>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->user->realname;?></th>
-            <td><div class="required required-wrapper"></div><?php echo html::input('realname', '', "class='form-control' autocomplete='off'");?></td>
+            <td><div class="required required-wrapper"></div><?php echo html::input('realname', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->user->company;?></th>
-            <td><div class="required required-wrapper"></div><?php echo html::input('company', $register->company, "class='form-control' autocomplete='off'");?></td>
+            <td><div class="required required-wrapper"></div><?php echo html::input('company', $register->company, "class='form-control'");?></td>
           </tr>
+          <?php if(empty($config->isINT)):?>
           <tr>
             <th><?php echo $lang->user->mobile;?></th>
             <td>
               <div class="required required-wrapper"></div>
               <div class='input-group'>
-                <?php echo html::input('mobile', '', "class='form-control' autocomplete='off'");?>
+                <?php echo html::input('mobile', '', "class='form-control'");?>
                 <span class='input-group-btn'><?php echo html::a(inlink('ajaxSendCode', 'type=mobile'), $lang->admin->getCaptcha, '', "id='mobileSender' class='btn'")?></span>
                 <span class='input-group-addon' style='border:0px;background:none'></span>
                 <span class='input-group-addon'><?php echo $lang->admin->captcha?></span>
-                <?php echo html::input('mobileCode', '', "class='form-control' autocomplete='off'");?>
+                <?php echo html::input('mobileCode', '', "class='form-control'");?>
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->user->email;?></th>
             <td>
               <div class="required required-wrapper"></div>
               <div class='input-group'>
-                <?php echo html::input('email', $register->email, "class='form-control' autocomplete='off'");?>
+                <?php echo html::input('email', $register->email, "class='form-control'");?>
                 <span class='input-group-btn'><?php echo html::a(inlink('ajaxSendCode', 'type=email'), $lang->admin->getCaptcha, '', "id='mailSender' class='btn'")?></span>
                 <span class='input-group-addon' style='border:0px;background:none'></span>
                 <span class='input-group-addon'><?php echo $lang->admin->captcha?></span>
-                <?php echo html::input('emailCode', '', "class='form-control' autocomplete='off'");?>
+                <?php echo html::input('emailCode', '', "class='form-control'");?>
               </div>
             </td>
           </tr>
@@ -102,7 +104,7 @@
             $account = zget($config->global, 'community', '');
             if($account == 'na') $account = '';
             ?>
-            <td><?php echo html::input('account', $account, "class='form-control' autocomplete='off'");?></td>
+            <td><?php echo html::input('account', $account, "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->user->password;?></th>

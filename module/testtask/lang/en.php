@@ -19,7 +19,7 @@ $lang->testtask->browse           = "Test";
 $lang->testtask->linkCase         = "Link Case";
 $lang->testtask->selectVersion    = "Select Version";
 $lang->testtask->unlinkCase       = "Unlink";
-$lang->testtask->batchUnlinkCases = "Batch unlink cases";
+$lang->testtask->batchUnlinkCases = "Batch unlink case";
 $lang->testtask->batchAssign      = "Batch assign";
 $lang->testtask->runCase          = "Run";
 $lang->testtask->batchRun         = "Batch run";
@@ -90,7 +90,7 @@ $lang->testtask->priList[1] = '1';
 $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
-$lang->testtask->unlinkedCases = 'Unlinked Cases';
+$lang->testtask->unlinkedCases = 'Unlinked Case';
 $lang->testtask->linkByBuild   = 'Copy from build';
 $lang->testtask->linkByStory   = 'Link by Story';
 $lang->testtask->linkByBug     = 'Link by Bug';
@@ -105,14 +105,14 @@ $lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testtask->noticeNoOther     = 'There are no other test for this product';
 $lang->testtask->noTesttask        = 'No tests. ';
-$lang->testtask->checkLinked       = "Please check if the product that the test is related to has been linked to a project.";
+$lang->testtask->checkLinked       = "Please check whether the product that the test is linked to has been linked to a project.";
 
 $lang->testtask->assignedToMe  = 'AssignToMe';
 $lang->testtask->allCases      = 'All Cases';
 
-$lang->testtask->lblCases      = 'Cases';
+$lang->testtask->lblCases      = 'Case';
 $lang->testtask->lblUnlinkCase = 'Unlink Case';
-$lang->testtask->lblRunCase    = 'Run Case';
+$lang->testtask->lblRunCase    = 'Execute Case';
 $lang->testtask->lblResults    = 'Result';
 
 $lang->testtask->placeholder = new stdclass();
@@ -143,7 +143,7 @@ $lang->testtask->report->create = 'Generate';
 $lang->testtask->report->charts['testTaskPerRunResult'] = 'Result Report';
 $lang->testtask->report->charts['testTaskPerType']      = 'Type Report';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Module Report';
-$lang->testtask->report->charts['testTaskPerRunner']    = 'Run By Report';
+$lang->testtask->report->charts['testTaskPerRunner']    = 'RunBy Report';
 $lang->testtask->report->charts['bugSeverityGroups']    = 'Bug Severity Distribution';
 $lang->testtask->report->charts['bugStatusGroups']      = 'Bug Status Distribution';
 $lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug CreateBy Distribution';

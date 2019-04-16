@@ -313,6 +313,9 @@ class mailModel extends model
 
         try 
         {
+            /* Add for task #5301. */
+            if(function_exists('putenv')) putenv('RES_OPTIONS=retrans:1 retry:1 timeout:1 attempts:1');
+
             $this->mta->setFrom($this->config->mail->fromAddress, $this->convertCharset($this->config->mail->fromName));
             $this->setSubject($this->convertCharset($subject));
             $this->setTO($toList, $emails);

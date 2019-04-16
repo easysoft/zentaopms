@@ -15,7 +15,6 @@ $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 js::set('type', $type);
 ?>
-<?php include '../../common/view/chosen.html.php';?>
 <div class='modal-dialog w-500px'>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
@@ -45,7 +44,7 @@ js::set('type', $type);
         <?php endif;?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
           <th class='w-80px'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->cate : $lang->tree->name;?></th>
-          <td><?php echo html::input('name', $module->name, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
         </tr>
         <?php if($type == 'bug'):?>
         <tr>
@@ -55,7 +54,7 @@ js::set('type', $type);
         <?php endif;?>
         <tr>
           <th><?php echo $lang->tree->short;?></th>
-          <td><?php echo html::input('short', $module->short, "class='form-control' autocomplete='off'");?></td>
+          <td><?php echo html::input('short', $module->short, "class='form-control'");?></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center'>

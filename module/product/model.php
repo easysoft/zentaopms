@@ -370,7 +370,7 @@ class productModel extends model
         $lib->name    = $this->lang->doclib->main['product'];
         $lib->type    = 'product';
         $lib->main    = '1';
-        $lib->acl     = $product->acl == 'open' ? 'open' : 'private';
+        $lib->acl     = 'default';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
         $this->loadModel('user')->updateUserView($productID, 'product');
 
@@ -404,10 +404,8 @@ class productModel extends model
             ->exec();
         if(!dao::isError())
         {
-            if($product->acl != $oldProduct->acl) $this->dao->update(TABLE_DOCLIB)->set('acl')->eq($product->acl == 'open' ? 'open' : 'private')->where('product')->eq($productID)->exec();
-
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
-            if($product->acl != $oldProduct->acl or $product->whitelist != $oldProduct->whitelist) $this->loadModel('user')->updateUserView($productID, 'product');
+            if($product->acl != 'open' or $product->acl != $oldProduct->acl or $product->whitelist != $oldProduct->whitelist) $this->loadModel('user')->updateUserView($productID, 'product');
             return common::createChanges($oldProduct, $product);
         }
     }
@@ -621,6 +619,18 @@ class productModel extends model
         $releases = $this->loadModel('release')->getList($productID, $branch);
         $roadmap  = array();
         $total    = 0;
+
+        $parents = array();
+        foreach($plans as $planID => $plan)
+        {
+            if($plan->parent == '-1')
+            {
+                $parents[$planID] = $plan->title;
+                unset($plans[$planID]);
+            }
+
+            if($plan->parent > 0 and isset($parents[$plan->parent])) $plan->title = $parents[$plan->parent] . ' / ' . $plan->title;
+        }
 
         foreach($plans as $plan)
         {

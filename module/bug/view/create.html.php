@@ -37,7 +37,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             <th class='w-110px'><?php echo $lang->bug->product;?></th>
             <td class='w-p45-f'>
               <div class='input-group'>
-                <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product' autocomplete='off'");?>
+                <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
                 <?php if($this->session->currentProductType != 'normal'):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
@@ -88,7 +88,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             </td>
             <?php endif;?>
             <?php if($showProject):?>
-            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)' autocomplete='off'");?></span></td>
+            <td><span id='projectIdBox'><?php echo html::select('project', $projects, $projectID, "class='form-control chosen' onchange='loadProjectRelated(this.value)'");?></span></td>
             <?php endif;?>
             <td>
               <div class='input-group' id='buildBox'>
@@ -148,7 +148,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
             <td colspan='2'>
               <div class="input-group title-group">
                 <div class="input-control has-icon-right">
-                  <?php echo html::input('title', $bugTitle, "class='form-control' autocomplete='off' required");?>
+                  <?php echo html::input('title', $bugTitle, "class='form-control' required");?>
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">
@@ -196,11 +196,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
                     }
                 }
                 $priList = $lang->bug->priList;
-                if(end($priList))
-                {
-                    unset($priList[0]);
-                    $priList[0] = '';
-                }
+                if(end($priList)) unset($priList[0]);
                 ?>
                 <?php if($hasCustomPri):?>
                 <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
@@ -299,7 +295,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           <tr>
             <td colspan="3" class="text-center form-actions">
               <?php echo html::submitButton();?>
-              <?php echo html::backButton();?>
+              <?php if($caseID == 0) echo html::backButton();?>
               <?php echo html::hidden('case', (int)$caseID) . html::hidden('caseVersion', (int)$version);?>
               <?php echo html::hidden('result', (int)$runID) . html::hidden('testtask', (int)$testtask);?>
             </td>

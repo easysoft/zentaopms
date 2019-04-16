@@ -22,7 +22,7 @@ $(function()
     {   
         var value = $(this).val();
         $('#isHttps').val(value);
-        if(value == 1)
+        if(value == 'on')
         {   
             $('.sslTR').show();
         }   

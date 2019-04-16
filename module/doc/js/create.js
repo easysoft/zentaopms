@@ -1,6 +1,7 @@
 $(function()
 {
-    toggleAcl($('#acl').val());
+    toggleAcl($('[name=acl]').val(), 'doc');
+    setTimeout(function(){initPage(docType)}, 50);
     $('input[name="type"]').change(function()
     {
         var type = $(this).val();
@@ -14,11 +15,14 @@ $(function()
             $('#contentBox').addClass('hidden');
             $('#urlBox').removeClass('hidden');
         }
-    })
-    window.editor['content'].addListener('ready', function()
-    {
-        $('div#content .edui-toolbar').append("<div class='edui-box edui-button edui-for-markdown edui-default'><div class='edui-default' onmouseover='toggleHover(this)' onmouseout='toggleHover(this)'><div class='edui-button-wrap edui-default' style='padding-right:4px;padding-left:4px;'><div class='edui-default' onclick='toggleEditor(\"markdown\")' title='Markdown'>Markdown</div></div></div></div>");
     });
+    if(typeof(window.editor) != 'undefined')
+    {
+        window.editor['content'].addListener('ready', function()
+        {
+            $('div#content .edui-toolbar').append("<div class='edui-box edui-button edui-for-markdown edui-default'><div class='edui-default' onmouseover='toggleHover(this)' onmouseout='toggleHover(this)'><div class='edui-button-wrap edui-default' style='padding-right:4px;padding-left:4px;'><div class='edui-default' onclick='toggleEditor(\"markdown\")' title='Markdown'>Markdown</div></div></div></div>");
+        });
+    }
 })
 
 function toggleHover(obj)
@@ -40,4 +44,27 @@ function toggleEditor(type)
         $('.contentmarkdown').removeClass('hidden');
     }
     $('#contentType').val(type);
+}
+
+function initPage(type)
+{
+    if(type == 'html' || type == 'markdown')
+    {
+        if(type == 'markdown')
+        {
+            $('#contentBox .contentmarkdown').removeClass('hidden');
+            $('#contentBox .contenthtml').addClass('hidden');
+            $('#contentBox #contentType').val(type);
+        }
+    }
+    else if(type == 'url')
+    {
+        $('#contentBox').addClass('hidden');
+        $('#urlBox').removeClass('hidden');
+    }
+    if(type == 'word' || type == 'ppt' || type == 'excel')
+    {
+        $('#contentBox').hide();
+        $('#urlBox').hide();
+    }
 }

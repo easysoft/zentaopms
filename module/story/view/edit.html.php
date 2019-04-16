@@ -32,7 +32,7 @@
                 </ul>
                 <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
               </div>
-              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title" disabled="disabled" autocomplete="off"');?>
+              <?php echo html::input('title', $story->title, 'class="form-control disabled story-title" disabled="disabled"');?>
             </div>
           </div>
           <div class='detail'>
@@ -116,7 +116,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->sourceNote;?></th>
-                <td><?php echo html::input('sourceNote', $story->sourceNote, "class='form-control' autocomplete='off'");?>
+                <td><?php echo html::input('sourceNote', $story->sourceNote, "class='form-control'");?>
               </td>
               </tr>
               <tr>
@@ -149,11 +149,11 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->estimate;?></th>
-                <td><?php echo html::input('estimate', $story->estimate, "class='form-control' autocomplete='off'");?></td>
+                <td><?php echo html::input('estimate', $story->estimate, "class='form-control'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->keywords;?></th>
-                <td><?php echo html::input('keywords', $story->keywords, "class='form-control' autocomplete='off'");?></td>
+                <td><?php echo html::input('keywords', $story->keywords, "class='form-control'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->mailto;?></th>
@@ -202,7 +202,7 @@
               <?php if($story->status == 'closed'):?>
               <tr id='duplicateStoryBox'>
                 <th class='w-70px'><?php echo $lang->story->duplicateStory;?></th>
-                <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control' autocomplete='off'");?></td>
+                <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control'");?></td>
               </tr>
               <?php endif;?>
               <tr>

@@ -262,7 +262,12 @@ class docModel extends model
     {
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
-        $lib = fixer::input('post')->join('groups', ',')->join('users', ',')->get();
+        $lib = fixer::input('post')
+            ->setIF(!$this->post->users, 'users', '')
+            ->setIF(!$this->post->groups, 'groups', '')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->get();
         if($lib->acl == 'private')
         {
             $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
@@ -488,7 +493,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
-            ->beginIF(!empty($module))->andWhere('module')->in($module)->fi()
+            ->beginIF(!empty($module) or strpos($this->config->doc->custom->showLibs, 'children') === false)->andWhere('module')->in($module)->fi()
             ->query();
 
 
@@ -784,6 +789,7 @@ class docModel extends model
 
         $docCounts= $this->dao->select("module, count(id) as docCount")->from(TABLE_DOC)
             ->where('module')->in(array_keys($modules))
+            ->andWhere('deleted')->eq(0)
             ->groupBy('module')
             ->fetchPairs();
 
@@ -841,15 +847,11 @@ class docModel extends model
     {
         if($this->app->user->admin) return true;
 
-        $acls = $this->app->user->rights['acls'];
-        if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
-        if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
-
         if($object->acl == 'open') return true;
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
-        if(strpos(",$object->users,", $account) !== false) return true;
+        if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
         if($object->acl == 'custom')
         {
             $userGroups = $this->app->user->groups;
@@ -866,8 +868,15 @@ class docModel extends model
             if(isset($extraDocLibs[$object->id])) return true;
         }
 
-        if($object->project) return $this->loadModel('project')->checkPriv($object->project);
-        if($object->product) return $this->loadModel('product')->checkPriv($object->product);
+        if(!empty($object->product) or !empty($object->project))
+        {
+            $acls = $this->app->user->rights['acls'];
+            if(!empty($object->product) and !empty($acls['products']) and !in_array($object->product, $acls['products'])) return false;
+            if(!empty($object->project) and !empty($acls['projects']) and !in_array($object->project, $acls['projects'])) return false;
+            if(!empty($object->project)) return $this->loadModel('project')->checkPriv($object->project);
+            if(!empty($object->product)) return $this->loadModel('product')->checkPriv($object->product);
+        }
+
         return false;
     }
 
@@ -1098,7 +1107,66 @@ class docModel extends model
             }
         }
 
-        if($type == 'product' or $type == 'project') $libs = $this->dao->select('id,name,`order`')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc, id desc')->fetchAll('id');
+        if($type == 'product' or $type == 'project') $libs = $this->dao->select('*')->from($table)->where('id')->in(array_keys($libs))->orderBy('`order` desc')->fetchAll('id');
+
+        /* Order the same as drop menu.*/
+        if($type == 'product')
+        {
+            $this->loadModel('product');
+            $products = $mineProducts = $otherProducts = $closedProducts = array();
+            foreach($libs as $lib)
+            {   
+                if(!$this->app->user->admin and !$this->product->checkPriv($lib->id)) continue;
+                if($lib->status == 'normal' and $lib->PO == $this->app->user->account) 
+                {   
+                    $mineProducts[$lib->id] = $lib;
+                }   
+                elseif($lib->status == 'normal' and $lib->PO != $this->app->user->account) 
+                {   
+                    $otherProducts[$lib->id] = $lib;
+                }   
+                elseif($lib->status == 'closed')
+                {   
+                    $closedProducts[$lib->id] = $lib;
+                }   
+            }
+            $products = $mineProducts + $otherProducts + $closedProducts;
+            $libs = array();
+            foreach($products as $product)
+            {
+                $libs[$product->id] = new stdclass();
+                $libs[$product->id]->id   = $product->id;
+                $libs[$product->id]->name = $product->name;
+            }
+        }
+        elseif($type == 'project')
+        {
+            $projects = $mineProjects = $otherProjects = $closedProjects = array();
+            foreach($libs as $lib)
+            {   
+                if(!$this->app->user->admin and !$this->checkPrivLib($lib)) continue;
+                if($lib->status != 'done' and $lib->status != 'closed' and $lib->PM == $this->app->user->account)
+                {   
+                    $mineProjects[$lib->id] = $lib;
+                }   
+                elseif($lib->status != 'done' and $lib->status != 'closed' and !($lib->PM == $this->app->user->account))
+                {   
+                    $otherProjects[$lib->id] = $lib;
+                }   
+                elseif($lib->status == 'done' or $lib->status == 'closed')
+                {   
+                    $closedProjects[$lib->id] = $lib;
+                }   
+            }   
+            $projects = $mineProjects + $otherProjects + $closedProjects;
+            $libs = array();
+            foreach($projects as $project)
+            {
+                $libs[$project->id] = new stdclass();
+                $libs[$project->id]->id   = $project->id;
+                $libs[$project->id]->name = $project->name;
+            }
+        }
 
         return $libs;
     }
@@ -1221,7 +1289,7 @@ class docModel extends model
             ->groupBy('root')
             ->fetchPairs();
 
-        $docs = $this->dao->select("`id`,`lib`,`acl`,`users`,`groups`")->from(TABLE_DOC)
+        $docs = $this->dao->select("`id`,`addedBy`,`lib`,`acl`,`users`,`groups`")->from(TABLE_DOC)
             ->where('lib')->in($idList)
             ->andWhere('deleted')->eq(0)
             ->andWhere('module')->eq(0)
@@ -1258,14 +1326,21 @@ class docModel extends model
     {
         if($type != 'project' and $type != 'product') return true;
         $this->loadModel('file');
-        $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->get();
+        $docs = $this->dao->select('*')->from(TABLE_DOC)->where($type)->eq($objectID)->fetchAll('id');
+        foreach($docs as $id => $doc)
+        {
+            if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
+        }
+
+        $idList    = array_keys($docs);
+        $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
         $searchTitle = $this->get->title;
         if($type == 'product')
         {
-            $storyIdList   = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
-            $bugIdList     = $this->dao->select('id')->from(TABLE_BUG)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
-            $releaseIdList = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
-            $planIdList    = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $storyIdList   = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
+            $bugIdList     = $this->dao->select('id')->from(TABLE_BUG)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
+            $releaseIdList = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
+            $planIdList    = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'product' and objectID = $objectID)", true)
@@ -1282,8 +1357,8 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
-            $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
-            $buildIdList = $this->dao->select('id')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->get();
+            $taskIdList  = $this->dao->select('id')->from(TABLE_TASK)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+            $buildIdList = $this->dao->select('id')->from(TABLE_BUILD)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             $files = $this->dao->select('*')->from(TABLE_FILE)->alias('t1')
                 ->where('size')->gt('0')
                 ->andWhere("(objectType = 'project' and objectID = $objectID)", true)

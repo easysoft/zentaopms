@@ -87,6 +87,7 @@ class userModel extends model
         $orderBy = strpos($params, 'first') !== false ? 'roleOrder DESC, account' : 'account';
 
         /* Get raw records. */
+        $this->app->loadConfig('user');
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
@@ -98,7 +99,7 @@ class userModel extends model
         foreach($users as $account => $user)
         {
             $firstLetter = ucfirst(substr($account, 0, 1)) . ':';
-            if(strpos($params, 'noletter') !== false) $firstLetter =  '';
+            if((strpos($params, 'noletter') !== false) or (isset($this->config->isINT) and $this->config->isINT)) $firstLetter =  '';
             $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $account : ($user->realname ? $user->realname : $account));
         }
 
@@ -158,6 +159,7 @@ class userModel extends model
      */
     public function getUserRoles($users)
     {
+        $this->app->loadLang('user');
         $users = $this->dao->select('account, role')->from(TABLE_USER)->where('account')->in($users)->fetchPairs();
         if(!$users) return array();
 
@@ -298,10 +300,11 @@ class userModel extends model
                 $data[$i]->join     = empty($users->join[$i]) ? '0000-00-00' : ($users->join[$i]);
                 $data[$i]->skype    = $users->skype[$i];
                 $data[$i]->qq       = $users->qq[$i];
-                $data[$i]->yahoo    = $users->yahoo[$i];
-                $data[$i]->gtalk    = $users->gtalk[$i];
-                $data[$i]->wangwang = $users->wangwang[$i];
+                $data[$i]->dingding = $users->dingding[$i];
+                $data[$i]->weixin   = $users->weixin[$i];
                 $data[$i]->mobile   = $users->mobile[$i];
+                $data[$i]->slack    = $users->slack[$i];
+                $data[$i]->whatsapp = $users->whatsapp[$i];
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
@@ -335,7 +338,7 @@ class userModel extends model
                 $group = new stdClass();
                 $group->account = $user->account;
                 $group->group   = $user->group;
-                $this->dao->insert(TABLE_USERGROUP)->data($group)->exec();
+                $this->dao->replace(TABLE_USERGROUP)->data($group)->exec();
             }
             unset($user->group);
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
@@ -385,10 +388,16 @@ class userModel extends model
             dao::$errors['verifyPassword'][] = $this->lang->user->error->verifyPassword;
             return false;
         }
+        $requiredFields = array();
+        foreach(explode(',', $this->config->user->edit->requiredFields) as $field)
+        {
+            if(!isset($this->lang->user->contactFieldList[$field]) or strpos($this->config->user->contactField, $field) !== false) $requiredFields[$field] = $field;
+        }
+        $requiredFields = join(',', $requiredFields);
 
         $this->dao->update(TABLE_USER)->data($user)
             ->autoCheck()
-            ->batchCheck($this->config->user->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->check('account', 'unique', "id != '$userID'")
             ->check('account', 'account')
             ->checkIF($this->post->email != '', 'email', 'email')
@@ -472,10 +481,11 @@ class userModel extends model
             $users[$id]['join']     = $data->join[$id];
             $users[$id]['skype']    = $data->skype[$id];
             $users[$id]['qq']       = $data->qq[$id];
-            $users[$id]['yahoo']    = $data->yahoo[$id];
-            $users[$id]['gtalk']    = $data->gtalk[$id];
-            $users[$id]['wangwang'] = $data->wangwang[$id];
+            $users[$id]['dingding'] = $data->dingding[$id];
+            $users[$id]['weixin']   = $data->weixin[$id];
             $users[$id]['mobile']   = $data->mobile[$id];
+            $users[$id]['slack']    = $data->slack[$id];
+            $users[$id]['whatsapp'] = $data->whatsapp[$id];
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];
             $users[$id]['zipcode']  = $data->zipcode[$id];
@@ -499,7 +509,6 @@ class userModel extends model
             if(!validater::checkAccount($users[$id]['account'])) die(js::error(sprintf($this->lang->user->error->account, $id)));
             if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
             if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));
-            if(empty($users[$id]['role'])) die(js::error(sprintf($this->lang->user->error->role, $id)));
 
             $accounts[$id] = $account;
             $prev['dept']  = $users[$id]['dept'];
@@ -1424,7 +1433,7 @@ class userModel extends model
     public function checkProductPriv($product, $account, $groups, $linkedProjects, $teams) 
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
-        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account) return true;
+        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR $product->feedback == $account) return true;
         if($product->acl == 'open') return true;
 
         if($product->acl == 'custom')

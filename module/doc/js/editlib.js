@@ -1,4 +1,4 @@
 $(function()
 {
-    toggleAcl($('input[name="acl"]:checked').val());
+    toggleAcl($('form input[name="acl"]:checked').val(), 'lib');
 })

@@ -24,7 +24,14 @@ class reportModel extends model
     {
         $sum = 0;
         foreach($datas as $data) $sum += $data->value;
-        foreach($datas as $data) $data->percent = round($data->value / $sum, 2);
+
+        $totalPercent = 0;
+        foreach($datas as $i => $data)
+        {
+            $data->percent = round($data->value / $sum, 4);
+            $totalPercent += $data->percent;
+        }
+        if(isset($i)) $datas[$i]->percent = round(1 - $totalPercent + $datas[$i]->percent, 4);
         return $datas;
     }
 
@@ -313,7 +320,7 @@ class reportModel extends model
         {
             foreach($multiTasks as $task)
             {
-                $userTask = $allTasks[$task->root];
+                $userTask = clone $allTasks[$task->root];
                 $userTask->estimate = $task->estimate;
                 $userTask->consumed = $task->consumed;
                 $userTask->left     = $task->left;
@@ -432,7 +439,7 @@ class reportModel extends model
             ->where('t1.assignedTo')->ne('')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.status')->in('wait, doing')
+            ->andWhere('t1.status')->in('wait,doing')
             ->andWhere('t3.status')->ne('suspended')
             ->andWhere('t1.deadline', true)->eq('0000-00-00')
             ->orWhere('t1.deadline')->lt(date(DT_DATE1, strtotime('+4 day')))

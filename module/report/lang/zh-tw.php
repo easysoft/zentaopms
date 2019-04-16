@@ -43,7 +43,6 @@ $lang->report->bugAssign        = 'Bug指派表';
 $lang->report->workload         = '員工負載表';
 $lang->report->workloadAB       = '工作負載';
 $lang->report->bugOpenedDate    = 'Bug創建時間';
-$lang->report->taskAssignedDate = '起止時間';
 $lang->report->beginAndEnd      = '起止時間';
 $lang->report->dept             = '部門';
 $lang->report->deviationChart   = $lang->projectCommon . '偏差曲綫';

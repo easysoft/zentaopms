@@ -3,9 +3,9 @@ $lang->backup->common      = '备份';
 $lang->backup->index       = '备份首页';
 $lang->backup->history     = '备份历史';
 $lang->backup->delete      = '删除备份';
-$lang->backup->backup      = '备份';
+$lang->backup->backup      = '开始备份';
 $lang->backup->restore     = '还原';
-$lang->backup->change      = '修改保留时间';
+$lang->backup->change      = '保留时间';
 $lang->backup->changeAB    = '修改';
 $lang->backup->rmPHPHeader = '去除安全设置';
 

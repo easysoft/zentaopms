@@ -94,7 +94,7 @@
         <div id='nameBox' class='required'>
           <?php
           $readType = ($todo->type == 'bug' or $todo->type == 'task') ? 'readonly' : '';
-          echo html::input('name', $todo->name, "$readType class='form-control' autocomplete='off'");
+          echo html::input('name', $todo->name, "$readType class='form-control'");
           ?>
         </div>
       </div>

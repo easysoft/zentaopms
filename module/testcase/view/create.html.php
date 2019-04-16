@@ -70,7 +70,7 @@
               <?php echo html::select('story', $stories, $storyID, 'class="form-control chosen" onchange="setPreview();" data-no_results_text="' . $lang->searchMore . '"');?>
               <span class='input-group-btn' style='width: 0.01%'>
               <?php if($storyID == 0): ?>
-                <a href='' id='preview' class='btn iframe hidden'><?php echo $lang->preview;?></a>
+                <a href='' id='preview' class='btn hidden'><?php echo $lang->preview;?></a>
               <?php else:?>
                 <?php echo html::a($this->createLink('story', 'view', "storyID=$storyID", '', true), $lang->preview, '', "class='btn' id='preview'");?>
               <?php endif;?>
@@ -84,7 +84,7 @@
           <td colspan='2'>
             <div class="input-group title-group">
               <div class="input-control has-icon-right">
-                <?php echo html::input('title', $caseTitle, "class='form-control' autocomplete='off'");?>
+                <?php echo html::input('title', $caseTitle, "class='form-control'");?>
                 <div class="colorpicker">
                   <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                   <ul class="dropdown-menu clearfix">
@@ -106,15 +106,12 @@
                   }
               }
               $priList = $lang->testcase->priList;
-              if(end($priList))
-              {
-                  unset($priList[0]);
-                  $priList[0] = '';
-              }
+              if(end($priList)) unset($priList[0]);
               ?>
               <?php if($hasCustomPri):?>
               <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
               <?php else: ?>
+              <?php ksort($priList);?>
               <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                   <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
@@ -206,7 +203,7 @@
         <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
         <tr>
           <th><?php echo $lang->testcase->keywords;?></th>
-          <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control' autocomplete='off'");?></td>
+          <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
         </tr>
         <?php endif;?>
         <tr>

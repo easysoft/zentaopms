@@ -410,4 +410,20 @@ class testreportModel extends model
             ->beginIF($type == 'project')->andWhere("(id " . helper::dbIN(trim($bugIdList, ',')) . " OR (resolvedBuild = 'trunk' and resolvedDate >= '$begin' and resolvedDate <= '$end 23:59:59'))")
             ->fetchAll('id');
     }
+
+    /**
+     * Get stories for test
+     * 
+     * @param  array  $builds 
+     * @return void
+     */
+    public function getStories4Test($builds)
+    {
+        $storyIdList = '';
+        foreach($builds as $build) $storyIdList .= $build->stories . ',';
+
+        return $this->dao->select('*')->from(TABLE_STORY)->where('deleted')->eq(0)
+            ->andWhere('id')->in(trim($storyIdList, ','))
+            ->fetchAll('id');
+    }
 }

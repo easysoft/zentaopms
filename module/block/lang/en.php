@@ -15,7 +15,7 @@ $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
 $lang->block->color  = 'Color';
-$lang->block->reset  = 'Restore the default';
+$lang->block->reset  = 'Reset';
 
 $lang->block->account = 'Account';
 $lang->block->module  = 'Module';
@@ -31,19 +31,19 @@ $lang->block->lblBlock     = 'Block';
 $lang->block->lblNum       = 'Number';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamic';
-$lang->block->assignToMe   = 'Assign To Me';
+$lang->block->assignToMe   = 'AssignToMe';
 $lang->block->lblFlowchart = 'Workflow';
 $lang->block->welcome      = 'Welcome';
-$lang->block->lblTesttask  = 'Show test task';
+$lang->block->lblTesttask  = 'Show Test Details';
 
-$lang->block->leftToday = 'Works for Today';
+$lang->block->leftToday = 'Work for Today';
 $lang->block->myTask    = 'My Task';
 $lang->block->myStory   = 'My Story';
 $lang->block->myBug     = 'My Bug';
 $lang->block->myProject = 'My ' . $lang->projectCommon;
 $lang->block->myProduct = 'My ' . $lang->productCommon;
 $lang->block->delayed   = 'Delayed';
-$lang->block->noData    = 'There is no data in this type of reports.';
+$lang->block->noData    = 'No data in this type of reports.';
 $lang->block->emptyTip  = 'No Information';
 
 $lang->block->params = new stdclass();
@@ -53,9 +53,9 @@ $lang->block->params->value = 'Value';
 $lang->block->createBlock        = 'Add Block';
 $lang->block->editBlock          = 'Edit';
 $lang->block->ordersSaved        = 'Order is saved.';
-$lang->block->confirmRemoveBlock = 'Do you want to remove Block?';
-$lang->block->noticeNewBlock     = 'ZenTao 10.+ has a new layout for each view. Do you want to start the new view?';
-$lang->block->confirmReset       = 'Whether to restore the default';
+$lang->block->confirmRemoveBlock = 'Do you want to remove the Block?';
+$lang->block->noticeNewBlock     = 'ZenTao 10.+ has a new layout. Do you want to start the new layout?';
+$lang->block->confirmReset       = 'Restore';
 $lang->block->closeForever       = 'Permanent Close';
 $lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be activiated at Admin->Custom.';
 $lang->block->remove             = 'Remove';
@@ -108,7 +108,7 @@ $lang->block->default['project']['3']['params']['num']     = 15;
 $lang->block->default['project']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['3']['params']['type']    = 'undone';
 
-$lang->block->default['project']['4']['title'] = 'My Tasks';
+$lang->block->default['project']['4']['title'] = 'My Task';
 $lang->block->default['project']['4']['block'] = 'task';
 $lang->block->default['project']['4']['grid']  = 4;
 
@@ -143,7 +143,7 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['4']['title'] = 'Pending Builds';
+$lang->block->default['qa']['4']['title'] = 'Wait Build';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
@@ -243,7 +243,7 @@ $lang->block->availableBlocks->project  = $lang->projectCommon . 'List';
 $lang->block->availableBlocks->plan     = 'Plan';
 $lang->block->availableBlocks->release  = 'Release';
 $lang->block->availableBlocks->build    = 'Build';
-$lang->block->availableBlocks->testtask = 'Test Build';
+$lang->block->availableBlocks->testtask = 'Test';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;
@@ -271,7 +271,7 @@ $lang->block->modules['qa']->availableBlocks->statistic = 'Test Report';
 //$lang->block->modules['qa']->availableBlocks->overview  = 'Testcase Overview';
 $lang->block->modules['qa']->availableBlocks->bug      = 'Bug';
 $lang->block->modules['qa']->availableBlocks->case     = 'Case';
-$lang->block->modules['qa']->availableBlocks->testtask = 'Test Build';
+$lang->block->modules['qa']->availableBlocks->testtask = 'Build';
 $lang->block->modules['todo'] = new stdclass();
 $lang->block->modules['todo']->availableBlocks = new stdclass();
 $lang->block->modules['todo']->availableBlocks->list = 'Todo';

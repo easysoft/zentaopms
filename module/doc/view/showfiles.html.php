@@ -53,8 +53,8 @@
           <thead>
             <tr class="text-center">
               <th class="w-80px"><?php echo $lang->doc->id;?></th>
-              <th><?php echo $lang->doc->fileTitle;?></th>
-              <th><?php echo $lang->doc->filePath;?></th>
+              <th class='text-left'><?php echo $lang->doc->fileTitle;?></th>
+              <th class='text-left'><?php echo $lang->doc->filePath;?></th>
               <th class="w-60px"><?php echo $lang->doc->extension;?></th>
               <th class="w-60px"><?php echo $lang->doc->size;?></th>
               <th class="w-100px"><?php echo $lang->doc->addedBy;?></th>
@@ -135,7 +135,7 @@
               </div>
               <div class='actions'>
                 <?php if(common::hasPriv('file', 'delete')): ?>
-                <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete btn btn-link'><i class='icon icon-close'></i></a>
+                <a href='<?php echo $this->createLink('file', 'delete', "fileID=$file->id"); ?>' target='hiddenwin' title='<?php echo $lang->delete?>' class='delete btn btn-link'><i class='icon icon-trash'></i></a>
                 <?php endif?>
               </div>
             </div>

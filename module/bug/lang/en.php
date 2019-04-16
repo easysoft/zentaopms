@@ -42,6 +42,7 @@ $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
 $lang->bug->mailto           = 'Mail To';
 <<<<<<< HEAD
+<<<<<<< HEAD
 $lang->bug->openedBy         = 'Created by';
 $lang->bug->openedDate       = 'Created';
 $lang->bug->openedDateAB     = 'Created';
@@ -50,10 +51,13 @@ $lang->bug->assignedTo       = 'To';
 $lang->bug->assignBug        = 'Assignee';
 =======
 $lang->bug->openedBy         = 'Creator';
+=======
+$lang->bug->openedBy         = 'Created by';
+>>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->bug->openedDate       = 'Created';
 $lang->bug->openedDateAB     = 'Created';
 $lang->bug->openedBuild      = 'Open Build';
-$lang->bug->assignedTo       = 'AssignToMe';
+$lang->bug->assignedTo       = 'Assign To';
 $lang->bug->assignBug        = 'Assign To';
 >>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->bug->assignedToAB     = 'To';
@@ -69,7 +73,7 @@ $lang->bug->deadline         = 'Deadline';
 $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'Closed By';
 $lang->bug->closedDate       = 'Closed';
-$lang->bug->duplicateBug     = 'Duplicate';
+$lang->bug->duplicateBug     = 'Duplicate Bug ID';
 $lang->bug->lastEditedBy     = 'Edited By';
 $lang->bug->linkBug          = 'Linked Bug';
 $lang->bug->linkBugs         = 'Link Bug';
@@ -142,27 +146,35 @@ $lang->bug->needConfirm        = 'ChangedStory';
 $lang->bug->needConfirm        = 'Story Changed';
 >>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->bug->allProduct         = 'All' . $lang->productCommon;
+<<<<<<< HEAD
 $lang->bug->my                 = 'Mine';
 $lang->bug->yesterdayResolved  = 'Resolved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Confirmed Yesterday ';
 $lang->bug->yesterdayClosed    = 'Closed Yesterday ';
+=======
+$lang->bug->my                 = 'My';
+$lang->bug->yesterdayResolved  = 'Bug Resolved Yesterday ';
+$lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
+$lang->bug->yesterdayClosed    = 'Bug Closed Yesterday ';
+>>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 
 $lang->bug->assignToMeAB   = 'AssignToMe';
 $lang->bug->openedByMeAB   = 'CreateByMe';
 $lang->bug->resolvedByMeAB = 'ResolveByMe';
 
-$lang->bug->ditto       = 'Ditto';
-$lang->bug->dittoNotice = 'This bug is not linked to the same product as the last one!';
-$lang->bug->noAssigned  = 'Assign';
-$lang->bug->noBug       = 'No bugs. ';
-$lang->bug->noModule    = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->ditto        = 'Ditto';
+$lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one!';
+$lang->bug->noAssigned   = 'Assign';
+$lang->bug->noBug        = 'No bugs. ';
+$lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'Assignee';
 $lang->bug->lblMailto     = 'Mail To';
 $lang->bug->lblLastEdited = 'Last Edited';
 $lang->bug->lblResolved   = 'Resolved By';
-$lang->bug->allUsers      = 'Load All User';
+$lang->bug->allUsers      = 'All Users';
 $lang->bug->allBuilds     = 'All';
 $lang->bug->createBuild   = 'New';
 
@@ -402,7 +414,7 @@ $lang->bug->action->linkrelatedbug      = array('main' => '$date, linked by <str
 $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, unlinked by <strong>$actor</strong> from Bug <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->chooseBuilds = 'Choose Build...';
+$lang->bug->placeholder->chooseBuilds = 'Select Build...';
 $lang->bug->placeholder->newBuildName = 'New build Name';
 
 $lang->bug->featureBar['browse']['all']          = $lang->bug->allBugs;

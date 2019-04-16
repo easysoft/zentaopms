@@ -15,7 +15,7 @@
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback') ? $lang->tree->cate : $lang->tree->name);?>
-<?php $title = $viewType == 'line' ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
+<?php $title = $viewType == 'line' or $viewType == 'trainskill' ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
@@ -24,7 +24,7 @@
     </a>
     <div class="divider"></div>
     <div class="page-title">
-      <?php $rootName = $viewType == 'line' ? '' : $root->name;?>
+      <?php $rootName = $viewType == 'line' or $viewType == 'trainskill' ? '' : $root->name;?>
       <span class="text" title='<?php echo $rootName;?>'>
         <?php
         if($viewType == 'doc')
@@ -38,6 +38,10 @@
         elseif($viewType == 'line')
         {
             echo $lang->tree->manageLine;
+        }
+        elseif($viewType == 'trainskill')
+        {
+            echo $lang->tree->manageTrainskill;
         }
         else
         {
@@ -64,7 +68,7 @@
       <div class="panel-heading">
         <div class="panel-title">
           <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
-          <?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
+          <?php if(strpos($viewType, 'trainskill') === false ) echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
         </div>
         <?php if($viewType == 'story' and $allProduct):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm'")?></div>
@@ -74,7 +78,7 @@
         <form id='childrenForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root=$rootID&viewType=$viewType");?>'>
           <table class='table table-form table-auto'>
             <tr>
-              <?php if($viewType != 'line'):?>
+              <?php if($viewType != 'line' && $viewType != 'trainskill'):?>
               <td class="text-middle text-right with-padding">
                 <?php
                 echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType"), empty($root->name) ? '' : $root->name) . "<i class='icon icon-angle-right muted'></i></span>";
@@ -102,23 +106,21 @@
                   <?php if($sonModule->order > $maxOrder) $maxOrder = $sonModule->order;?>
                   <?php $disabled = $sonModule->type == $viewType ? '' : 'disabled';?>
                   <div class="table-row row-module">
-                    <div class="table-col col-module"><?php echo html::input("modules[id$sonModule->id]", $sonModule->name, 'class="form-control" autocomplete="off"' . $disabled);?></div>
+                    <div class="table-col col-module"><?php echo html::input("modules[id$sonModule->id]", $sonModule->name, 'class="form-control"' . $disabled);?></div>
                     <?php if($hasBranch):?>
                     <div class="table-col col-module"><?php echo html::select("branch[id$sonModule->id]", $branches, $sonModule->branch, 'class="form-control" disabled');?></div>
                     <?php endif;?>
-                    <div class="table-col col-shorts"><?php echo html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' $disabled autocomplete='off'") . html::hidden("order[id$sonModule->id]", $sonModule->order);?></div>
-                    <div class="table-col col-actions">
-                      <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
-                    </div>
+                    <div class="table-col col-shorts"><?php echo html::input("shorts[id$sonModule->id]", $sonModule->short, "class='form-control' placeholder='{$lang->tree->short}' $disabled") . html::hidden("order[id$sonModule->id]", $sonModule->order);?></div>
+                    <div class="table-col col-actions"> </div>
                   </div>
                   <?php endforeach;?>
                   <?php for($i = 0; $i < TREE::NEW_CHILD_COUNT ; $i ++):?>
                   <div class="table-row row-module row-module-new">
-                    <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$name}' autocomplete='off'");?></div>
+                    <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$name}'");?></div>
                     <?php if($hasBranch):?>
                     <div class="table-col col-module"><?php echo html::select("branch[]", $branches, $branch, 'class="form-control"');?></div>
                     <?php endif;?>
-                    <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'");?></div>
+                    <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'");?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
                       <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
@@ -129,11 +131,11 @@
 
                 <div id="insertItemBox" class="template">
                   <div class="table-row row-module row-module-new">
-                    <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$name}' autocomplete='off'");?></div>
+                    <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$name}'");?></div>
                     <?php if($hasBranch):?>
                     <div class="table-col col-module"><?php echo html::select("branch[]", $branches, $branch, 'class="form-control"');?></div>
                     <?php endif;?>
-                    <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}' autocomplete='off'");?></div>
+                    <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'");?></div>
                     <div class="table-col col-actions">
                       <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
                       <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
@@ -143,7 +145,7 @@
               </td>
             </tr>
             <tr>
-              <?php if($viewType != 'line'):?>
+              <?php if($viewType != 'line' && $viewType != 'trainskill'):?>
               <td></td>
               <?php endif;?>
               <td colspan="2" class="form-actions">
@@ -206,7 +208,7 @@ $(function()
             {
                 linkTemplate: '<?php echo helper::createLink('tree', 'delete', "rootID=$rootID&moduleID={0}"); ?>',
                 title: '<?php echo $lang->tree->delete ?>',
-                template: '<a><i class="icon-close"></i></a>'
+                template: '<a><i class="icon-trash"></i></a>'
             },
             subModules:
             {
@@ -228,7 +230,7 @@ $(function()
             }
             else if(action.type === 'delete')
             {
-                window.open(action.linkTemplate.format(item.id), 'hiddenwin');
+                hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
             else if(action.type === 'sort')
             {

@@ -30,11 +30,12 @@ $lang->user->verify      = 'Verification';
 $lang->user->contactInfo = 'Contact';
 $lang->user->skype       = 'Skype';
 $lang->user->qq          = 'QQ';
-$lang->user->yahoo       = 'Yahoo!';
-$lang->user->gtalk       = 'GTalk';
-$lang->user->wangwang    = 'Wangwang';
 $lang->user->mobile      = 'Mobile';
 $lang->user->phone       = 'Phone';
+$lang->user->weixin      = 'Wechat';
+$lang->user->dingding    = 'Ding Ding';
+$lang->user->slack       = 'Slack';
+$lang->user->whatsapp    = 'WhatsApp';
 $lang->user->address     = 'Address';
 $lang->user->zipcode     = 'Zip Code';
 $lang->user->join        = 'Join Date';
@@ -146,11 +147,19 @@ $lang->user->error->accountDupl   = "ID %s，account has been used.";
 $lang->user->error->realname      = "ID %s，must be real name";
 $lang->user->error->password      = "ID %s，password must be 6 characters at least.";
 $lang->user->error->mail          = "ID %s，please enter valid Email address";
-$lang->user->error->role          = "ID %s，role cannot be null.";
 $lang->user->error->reserved      = "ID %s，account is reserved.";
 
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
+
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['qq']       = $lang->user->qq;
+$lang->user->contactFieldList['dingding'] = $lang->user->dingding;
+$lang->user->contactFieldList['weixin']   = $lang->user->weixin;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['slack']    = $lang->user->slack;
+$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contact';
