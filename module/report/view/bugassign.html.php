@@ -25,7 +25,7 @@
         <div data-ride='table'>
           <table class='table table-condensed table-striped table-bordered table-fixed no-margin' id='bugAssign'>
             <thead>
-              <tr class='colhead'>
+              <tr class='colhead text-center'>
                 <th><?php echo $lang->report->user;?></th>
                 <th><?php echo $lang->report->product;?></th>
                 <th><?php echo $lang->report->bugTotal;?></th>
@@ -35,11 +35,11 @@
             <tbody>
               <?php foreach($assigns as $account => $assign):?>
               <?php if(!array_key_exists($account, $users)) continue;?>
-              <tr class="a-center">
+              <tr class="a-center text-center">
                 <td rowspan="<?php echo count($assign['bug']);?>"><?php echo $users[$account];?></td>
                 <?php $id = 1;?>
                 <?php foreach($assign['bug'] as $product => $count):?>
-                <?php if($id != 1) echo '<tr class="a-center">';?>
+                <?php if($id != 1) echo '<tr class="a-center text-center">';?>
                 <td><?php echo html::a($this->createLink('product', 'view', "product={$count['productID']}"), $product);?></td>
                 <td><?php echo $count['count'];?></td>
                 <?php if($id == 1):?>

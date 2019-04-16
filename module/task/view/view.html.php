@@ -104,7 +104,7 @@
                 <th class='w-80px'> <?php echo $lang->task->status;?></th>
                 <th class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
                 <th class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
-                <th class='w-250px'><?php echo $lang->actions;?></th>
+                <th class='w-170px'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <tbody>
@@ -126,12 +126,12 @@
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
-                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list');
                   ?>
                 </td>
@@ -164,7 +164,7 @@
 
         if(!isonlybody()) echo "<div class='divider'></div>";
         if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button','plus','','','','',' ');
-        common::printIcon('task', 'edit', "taskID=$task->id", $task);
+        common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
         common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
         common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
 

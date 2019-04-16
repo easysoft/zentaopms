@@ -257,7 +257,7 @@ class testcase extends control
         /* Init vars. */
         $type         = 'feature';
         $stage        = '';
-        $pri          = 0;
+        $pri          = 3;
         $caseTitle    = '';
         $precondition = '';
         $keywords     = '';

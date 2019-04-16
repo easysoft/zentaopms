@@ -58,7 +58,18 @@ class control extends baseControl
 
             $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
             $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
-            if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+            if(!is_file($viewFile))
+            {
+                if($this->config->debug === false)
+                {
+                    die(js::locate($this->createLink('misc','ajaxerror', ".mhtml"), 'parent'));
+                }
+                else
+                {
+                    $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+                }
+            
+            }
 
             $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");

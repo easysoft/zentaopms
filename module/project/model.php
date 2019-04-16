@@ -126,10 +126,11 @@ class projectModel extends model
                 {
                     foreach($subMenu as $menuKey => $menu)
                     {
+                        $itemMenu = zget($projectSubMenu, $menuKey, '');
                         if($moduleName == strtolower($menu->link['module']) and 
                             (
                                 $methodName == strtolower($menu->link['method']) or
-                                (isset($projectSubMenu->$menuKey['alias']) and strpos($projectSubMenu->$menuKey['alias'], $methodName) !== false)
+                                (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false)
                             )
                         )
                         {
@@ -428,7 +429,7 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open' or $project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }

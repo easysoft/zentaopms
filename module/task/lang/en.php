@@ -38,7 +38,7 @@ $lang->task->case                = 'Linked Case';
 $lang->task->confirmStoryChange  = "Confirm Change";
 $lang->task->progress            = 'Progress';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
-$lang->task->copy                = 'Duplicated Task';
+$lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Wait Task';
 
 $lang->task->common            = 'Task';
@@ -48,7 +48,7 @@ $lang->task->module            = 'Module';
 $lang->task->moduleAB          = 'Module';
 $lang->task->story             = 'Story';
 $lang->task->storyAB           = 'Story';
-$lang->task->storySpec         = 'Description';
+$lang->task->storySpec         = 'Story Description';
 $lang->task->storyVerify       = 'Acceptance';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Type';

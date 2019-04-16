@@ -77,6 +77,8 @@ $lang->custom->user->fields['statusList']   = '狀態';
 $lang->custom->user->fields['contactField'] = '可用聯繫方式';
 $lang->custom->user->fields['deleted']      = '列出已刪除用戶';
 
+$lang->custom->system = array('flow', 'working', 'required', 'score');
+
 $lang->custom->block->fields['closed'] = '關閉的區塊';
 
 $lang->custom->currentLang = '適用當前語言';

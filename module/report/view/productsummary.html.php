@@ -1,4 +1,7 @@
 <?php include '../../common/view/header.html.php';?>
+<?php if($this->app->getClientLang() == 'en'):?>
+<style>#conditions .col-xs { width: 126px; }</style>
+<?php endif;?>
 <div id='mainContent' class='main-row'>
   <div class='side-col col-lg'>
     <?php include 'blockreportlist.html.php';?>

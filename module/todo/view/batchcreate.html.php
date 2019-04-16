@@ -13,25 +13,25 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 
-<div id="mainContent">
-  <div class="main-header">
-    <h2><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h2>
-    <div class="input-group pull-left">
-      <span class="input-group-addon"><?php echo $lang->todo->date;?></span>
-      <input type="text" name="date" value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
-      <span class="input-group-addon">
-        <div class="checkbox-primary">
-          <input type="checkbox" name="switchDate" id='switchDate' class="control-time-switch" />
-          <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
-        </div>
-      </span>
+<form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
+  <div id="mainContent">
+    <div class="main-header">
+      <h2><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h2>
+      <div class="input-group pull-left">
+        <span class="input-group-addon"><?php echo $lang->todo->date;?></span>
+        <input type="text" name="date" value="<?php echo $date;?>" class="form-control form-date" autocomplete="off" />
+        <span class="input-group-addon">
+          <div class="checkbox-primary">
+            <input type="checkbox" name="switchDate" id='switchDate' class="control-time-switch" />
+            <label for='switchDate'><?php echo $lang->todo->periods['future'];?></label>
+          </div>
+        </span>
+      </div>
+      <div class="pull-right btn-toolbar">
+        <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
+        <?php include '../../common/view/customfield.html.php';?>
+      </div>
     </div>
-    <div class="pull-right btn-toolbar">
-      <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
-      <?php include '../../common/view/customfield.html.php';?>
-    </div>
-  </div>
-  <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
     <?php
     $visibleFields = array();
     foreach(explode(',', $showFields) as $field)
@@ -86,12 +86,8 @@
         <tr><td class='text-center form-actions' colspan='<?php echo isset($visibleFields['beginAndEnd']) ? $columns + 1 : $columns;?>'><?php echo html::submitButton() . html::backButton();?></td></tr>
       </tfoot>
     </table>
-    <div class="hidden">
-      <input type="hidden" name="date" value="<?php echo $date;?>" />
-      <input type="checkbox" name="switchDate" class="control-time-switch" />
-    </div>
-  </form>
-</div>
+  </div>
+</form>
 
 <script>
 var $form = $('#todoBatchAddForm').on('change', '.control-time-switch', function()
