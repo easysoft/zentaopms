@@ -12,7 +12,7 @@ $(document).on('change', 'select', function()
         var tbody = $(this).closest('tr').parent();
 
         var value = '';
-        for(i = row - 1; i >= 0; i--)
+        for(var i = row - 1; i >= 0; i--)
         {
             value = tbody.children('tr').eq(i).find('td').eq(index).find('select').val();
             if(value != 'ditto') break;

@@ -1,8 +1,8 @@
 /**
- * Switch account 
- * 
- * @param  string $account 
- * @param  string $method 
+ * Switch account
+ *
+ * @param  string $account
+ * @param  string $method
  * @access public
  * @return void
  */
@@ -34,7 +34,7 @@ function switchAccount(account, method)
 }
 
 var mailsuffix = '';
-var account    = new Array();
+var account    = [];
 function setDefaultEmail(num)
 {
     var mailValue = $('.email_' + num).val();
