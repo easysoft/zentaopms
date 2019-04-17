@@ -12,7 +12,7 @@
 $lang->todo->common       = 'Todo';
 $lang->todo->index        = "Home";
 $lang->todo->create       = "Add Todo";
-$lang->todo->createCycle  = "Add Recur Todo";
+$lang->todo->createCycle  = "Add Recurred Todo";
 $lang->todo->assignTo     = "Assign";
 $lang->todo->activate     = "Activate";
 $lang->todo->batchCreate  = "Batch Add";
@@ -31,9 +31,9 @@ $lang->todo->legendBasic  = "Basic Info";
 $lang->todo->cycle        = "Recurrence";
 $lang->todo->cycleConfig  = "Set Recurrence";
 
-$lang->todo->reasonList['story'] = "Transfer Story";
-$lang->todo->reasonList['task']  = "Transfer Task";
-$lang->todo->reasonList['bug']   = "Transfer Bug";
+$lang->todo->reasonList['story'] = "Convert to Story";
+$lang->todo->reasonList['task']  = "Convert to Task";
+$lang->todo->reasonList['bug']   = "Convert to Bug";
 $lang->todo->reasonList['done']  = "Done";
 
 $lang->todo->id          = 'ID';
@@ -60,9 +60,9 @@ $lang->todo->every      = 'Every';
 $lang->todo->beforeDays = "%s<span class='input-group-addon'>early in advance to be done</span>";
 $lang->todo->dayNames   = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
 
-$lang->todo->confirmBug   = 'This Todo is related to Bug #%s. Do you want to edit it?';
-$lang->todo->confirmTask  = 'This Todo is related to Task #%s，Do you want to edit it?';
-$lang->todo->confirmStory = 'This Todo is related to Story #%s，Do you want to edit it?';
+$lang->todo->confirmBug   = 'This Todo is linked to Bug #%s. Do you want to edit it?';
+$lang->todo->confirmTask  = 'This Todo is linked to Task #%s，Do you want to edit it?';
+$lang->todo->confirmStory = 'This Todo is linked to Story #%s，Do you want to edit it?';
 
 $lang->todo->statusList['wait']   = 'Wait';
 $lang->todo->statusList['doing']  = 'Doing';
@@ -91,10 +91,10 @@ if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') 
 $lang->todo->confirmDelete  = "Do you want to delete this Todo?";
 $lang->todo->thisIsPrivate  = 'This is a private Todo';
 $lang->todo->lblDisableDate = 'Set it later';
-$lang->todo->lblBeforeDays  = "Create a todo %s days(s) earlier";
-$lang->todo->lblClickCreate = "Click to add a todo";
+$lang->todo->lblBeforeDays  = "Create a todo %s day(s) earlier";
+$lang->todo->lblClickCreate = "Click to Add Todo";
 $lang->todo->noTodo         = 'No todos of this type.';
-$lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
+$lang->todo->noAssignedTo   = "The AssignTo should not be empty.";
 
 $lang->todo->periods['all']        = 'All';
 $lang->todo->periods['thisYear']   = 'ThisYear';

@@ -15,11 +15,11 @@ $lang->editor->edit      = 'Edit Extension';
 $lang->editor->save      = 'Save Page';
 $lang->editor->delete    = 'Delete Page';
 
-$lang->editor->moduleList   = 'Modules';
+$lang->editor->moduleList   = 'Module';
 $lang->editor->filePath     = "Extension:";
 $lang->editor->sourceFile   = 'Source File:';
 $lang->editor->fileName     = "File Name:";
-$lang->editor->isOverride   = "Overrode Duplicated File";
+$lang->editor->isOverride   = "Overridden Duplicated File";
 $lang->editor->exampleHook  = "(e.g. ***.html.hook.php)";
 $lang->editor->exampleJs    = "(e.g. ***.js)";
 $lang->editor->exampleCss   = "(e.g. ***.css)";
@@ -34,7 +34,7 @@ $lang->editor->noticeOkFile  = 'For security reasons, your Admin account has to 
 $lang->editor->editFileError = 'You can only modify Zentao files!';
 
 $lang->editor->notWritable   = "Not wirtable. Privilege is required. Please try chmod 777 -R ";
-$lang->editor->notDelete     = 'Cannot be deleted. Please check your permission!';
+$lang->editor->notDelete     = 'Cannot be deleted. Please check your privilege!';
 $lang->editor->emptyFileName = 'Please enter a File Name!';
 
 $lang->editor->translate['config.php']  = 'config';
@@ -46,12 +46,12 @@ $lang->editor->modules['admin']       = 'Admin';
 $lang->editor->modules['api']         = 'API';
 $lang->editor->modules['bug']         = 'Bug';
 $lang->editor->modules['build']       = 'Build';
-$lang->editor->modules['common']      = 'Common Modules';
+$lang->editor->modules['common']      = 'Common Module';
 $lang->editor->modules['company']     = 'Company';
 $lang->editor->modules['convert']     = 'Convert';
 $lang->editor->modules['dept']        = 'Department';
 $lang->editor->modules['doc']         = 'Doc';
-$lang->editor->modules['extension']   = 'Extensiona';
+$lang->editor->modules['extension']   = 'Extension';
 $lang->editor->modules['file']        = 'File';
 $lang->editor->modules['group']       = 'Group';
 $lang->editor->modules['index']       = 'Homepage';
