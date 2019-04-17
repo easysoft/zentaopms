@@ -32,17 +32,34 @@ $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
 $lang->bug->activatedCount   = 'Active';
 $lang->bug->activatedCountAB = 'Active';
+<<<<<<< HEAD
+$lang->bug->activatedDate    = 'Active';
+=======
 $lang->bug->activatedDate    = 'Activated';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->bug->confirmed        = 'Confirmed';
 $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
 $lang->bug->mailto           = 'Mail To';
+<<<<<<< HEAD
+<<<<<<< HEAD
 $lang->bug->openedBy         = 'Created by';
+$lang->bug->openedDate       = 'Created';
+$lang->bug->openedDateAB     = 'Created';
+$lang->bug->openedBuild      = 'Open Build';
+$lang->bug->assignedTo       = 'To';
+$lang->bug->assignBug        = 'Assignee';
+=======
+$lang->bug->openedBy         = 'Creator';
+=======
+$lang->bug->openedBy         = 'Created by';
+>>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->bug->openedDate       = 'Created';
 $lang->bug->openedDateAB     = 'Created';
 $lang->bug->openedBuild      = 'Open Build';
 $lang->bug->assignedTo       = 'Assign To';
 $lang->bug->assignBug        = 'Assign To';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->bug->assignedToAB     = 'To';
 $lang->bug->assignedDate     = 'Assigned';
 $lang->bug->resolvedBy       = 'Resolved';
@@ -64,9 +81,15 @@ $lang->bug->unlinkBug        = 'Unlink';
 $lang->bug->case             = 'Case';
 $lang->bug->files            = 'File';
 $lang->bug->keywords         = 'Tags';
+<<<<<<< HEAD
+$lang->bug->lastEditedByAB   = 'Edited by';
+$lang->bug->lastEditedDateAB = 'Edit';
+$lang->bug->lastEditedDate   = 'Edit';
+=======
 $lang->bug->lastEditedByAB   = 'Edited By';
 $lang->bug->lastEditedDateAB = 'Edited';
 $lang->bug->lastEditedDate   = 'Edited';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->bug->fromCase         = 'From Case';
 $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color Tag';
@@ -92,7 +115,7 @@ $lang->bug->close              = 'Close';
 $lang->bug->activate           = 'Activate';
 $lang->bug->batchActivate      = 'Batch Activate';
 $lang->bug->reportChart        = 'Report';
-$lang->bug->export             = 'Export';
+$lang->bug->export             = 'Export bugs';
 $lang->bug->delete             = 'Delete';
 $lang->bug->deleted            = 'Deleted';
 $lang->bug->saveTemplate       = 'Save as Template';
@@ -103,30 +126,41 @@ $lang->bug->copy               = 'Copy';
 $lang->bug->search             = 'Search';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe         = 'Assigned To Me';
-$lang->bug->openedByMe         = 'Created By Me';
-$lang->bug->resolvedByMe       = 'Resolved By Me';
-$lang->bug->closedByMe         = 'Closed By Me';
+$lang->bug->assignToMe         = 'AssignToMe';
+$lang->bug->openedByMe         = 'CreateByMe';
+$lang->bug->resolvedByMe       = 'ResolveByMe';
+$lang->bug->closedByMe         = 'ClosedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
 $lang->bug->unResolved         = 'Unresolved';
 $lang->bug->toClosed           = 'Unclosed';
 $lang->bug->unclosed           = 'Active';
-$lang->bug->unconfirmed        = 'UnConfirmed';
+$lang->bug->unconfirmed        = 'UnConfirm';
 $lang->bug->longLifeBugs       = 'Pending';
 $lang->bug->postponedBugs      = 'Postponed';
 $lang->bug->overdueBugs        = 'Overdue';
 $lang->bug->allBugs            = 'All';
 $lang->bug->byQuery            = 'Search';
+<<<<<<< HEAD
+$lang->bug->needConfirm        = 'ChangedStory';
+=======
 $lang->bug->needConfirm        = 'Story Changed';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->bug->allProduct         = 'All' . $lang->productCommon;
+<<<<<<< HEAD
+$lang->bug->my                 = 'Mine';
+$lang->bug->yesterdayResolved  = 'Resolved Yesterday ';
+$lang->bug->yesterdayConfirmed = 'Confirmed Yesterday ';
+$lang->bug->yesterdayClosed    = 'Closed Yesterday ';
+=======
 $lang->bug->my                 = 'My';
 $lang->bug->yesterdayResolved  = 'Bug Resolved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
 $lang->bug->yesterdayClosed    = 'Bug Closed Yesterday ';
+>>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 
-$lang->bug->assignToMeAB   = 'Assigned To Me';
-$lang->bug->openedByMeAB   = 'Created By Me';
-$lang->bug->resolvedByMeAB = 'Resolved By Me';
+$lang->bug->assignToMeAB   = 'AssignToMe';
+$lang->bug->openedByMeAB   = 'CreateByMe';
+$lang->bug->resolvedByMeAB = 'ResolveByMe';
 
 $lang->bug->ditto        = 'Ditto';
 $lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one!';
@@ -146,14 +180,19 @@ $lang->bug->createBuild   = 'New';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Basic Info';
-$lang->bug->legendAttatch               = 'Attachment';
+$lang->bug->legendAttatch               = 'File';
 $lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
 $lang->bug->legendSteps                 = 'Repro Steps';
 $lang->bug->legendComment               = 'Note';
+<<<<<<< HEAD
+$lang->bug->legendLife                  = 'About the Bug';
+$lang->bug->legendMisc                  = 'Misc.';
+=======
 $lang->bug->legendLife                  = 'About';
 $lang->bug->legendMisc                  = 'Misc';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->bug->legendRelated               = 'Related Info';
 
 /* 功能按钮。*/
@@ -161,7 +200,7 @@ $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
 $lang->bug->summary               = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unresolved.";
-$lang->bug->confirmChangeProduct  = "Change {$lang->productCommon} will cause linked {$lang->projectCommon},Story and Task change. Do you want to do this?";
+$lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}, Story and Task change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->setTemplateTitle      = 'Please enter the title of template.';
 $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
