@@ -204,6 +204,19 @@ class deptModel extends model
     }
 
     /**
+     * Create the traingoal member link.
+     * 
+     * @param  int    $dept 
+     * @access public
+     * @return string
+     */
+    public function traingoalMemberLink($dept, $planID)
+    {
+        $linkHtml = html::a(helper::createLink('traingoal', 'browse', "goalID={$planID}&type=company&dept={$dept->id}&"), $dept->name, '_self', "id='dept{$dept->id}'");
+        return $linkHtml;
+    }
+
+    /**
      * Create the group manage members link.
      * 
      * @param  int    $dept 
