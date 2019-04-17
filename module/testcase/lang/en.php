@@ -12,7 +12,7 @@
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
 $lang->testcase->module           = 'Module';
-$lang->testcase->lib              = "Library";
+$lang->testcase->lib              = "Case Library";
 $lang->testcase->branch           = "Branch/Platform";
 $lang->testcase->moduleAB         = 'Module';
 $lang->testcase->story            = 'Story';
@@ -50,12 +50,12 @@ $lang->testcase->assignedTo       = 'To';
 $lang->testcase->colorTag         = 'Color Tag';
 $lang->testcase->lastRunResult    = 'Result';
 $lang->testcase->desc             = 'Step';
-$lang->testcase->expect           = 'Expect';
+$lang->testcase->expect           = 'Expectation';
 $lang->testcase->allProduct       = "All {$lang->productCommon}";
 $lang->testcase->fromBug          = 'From Bug';
 $lang->testcase->toBug            = 'To Bug';
 $lang->testcase->changed          = 'Changed';
-$lang->testcase->bugs             = 'Bugs Generated';
+$lang->testcase->bugs             = 'Bugs Reported';
 $lang->testcase->bugsAB           = 'B';
 $lang->testcase->results          = 'Results';
 $lang->testcase->resultsAB        = 'R';
@@ -120,11 +120,16 @@ $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
 $lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe   = 'Assigned To Me';
-$lang->testcase->openedByMe   = 'Created By Me';
+$lang->testcase->assignToMe   = 'AssignToMe';
+$lang->testcase->openedByMe   = 'CreateByMe';
 $lang->testcase->allCases     = 'All';
+<<<<<<< HEAD
 $lang->testcase->allTestcases = 'All Case';
 $lang->testcase->needConfirm  = 'Story Changed';
+=======
+$lang->testcase->allTestcases = 'All Cases';
+$lang->testcase->needConfirm  = 'Changed Story';
+>>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
 $lang->testcase->bySearch     = 'Search';
 $lang->testcase->unexecuted   = 'Wait';
 
@@ -144,7 +149,7 @@ $lang->testcase->summary            = "Case on this page : <strong>%s</strong> T
 $lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete these Test Cases?';
 $lang->testcase->ditto              = 'Ditto';
-$lang->testcase->dittoNotice        = 'This Case does not belong to the Product as the previous one!';
+$lang->testcase->dittoNotice        = 'This Case does not belong to the Product as the last one!';
 
 $lang->testcase->reviewList[0] = 'NO';
 $lang->testcase->reviewList[1] = 'YES';
