@@ -36,9 +36,15 @@ $lang->story->bugCountAB  = 'B';
 $lang->story->caseCountAB = 'C';
 $lang->story->linkStory   = 'Link';
 $lang->story->unlinkStory = 'UnLinked';
+<<<<<<< HEAD
+$lang->story->export      = "Export Story";
+$lang->story->zeroCase    = "Story w/o cases";
+$lang->story->zeroTask    = "Display story w/o tasks";
+=======
 $lang->story->export      = "Export Data";
 $lang->story->zeroCase    = "Story w/o case";
 $lang->story->zeroTask    = "Story w/o task";
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->story->reportChart = "Report";
 $lang->story->copyTitle   = "Copy Title";
 $lang->story->batchChangePlan   = "Batch Change Plans";
@@ -70,7 +76,11 @@ $lang->story->stage          = 'Stage';
 $lang->story->stageAB        = 'Stage';
 $lang->story->mailto         = 'Mail to';
 $lang->story->openedBy       = 'Creator';
+<<<<<<< HEAD
+$lang->story->openedDate     = 'Create';
+=======
 $lang->story->openedDate     = 'Created';
+>>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->story->assignedTo     = 'Assignee';
 $lang->story->assignedDate   = 'Assigned';
 $lang->story->lastEditedBy   = 'Last Edited';
