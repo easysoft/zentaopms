@@ -54,7 +54,7 @@ $lang->build->createdBugs   = '  %s Bug is created.';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = ' Source code repository, e.g. Subversion/Git Library path';
-$lang->build->placeholder->filePath = ' Path of this Build package for downloading.';
+$lang->build->placeholder->filePath = ' Download path for this Build.';
 
 $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, created by <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";
