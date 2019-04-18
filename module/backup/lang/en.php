@@ -3,9 +3,9 @@ $lang->backup->common      = 'Backup';
 $lang->backup->index       = 'Home';
 $lang->backup->history     = 'History';
 $lang->backup->delete      = 'Delete';
-$lang->backup->backup      = 'Start';
+$lang->backup->backup      = 'Back Up';
 $lang->backup->restore     = 'Restore';
-$lang->backup->change      = 'Modify expiration';
+$lang->backup->change      = 'Modify Expiration';
 $lang->backup->changeAB    = 'Modify';
 $lang->backup->rmPHPHeader = 'Remove PHP header';
 
@@ -13,11 +13,11 @@ $lang->backup->time  = 'Date';
 $lang->backup->files = 'Files';
 $lang->backup->size  = 'Size';
 
-$lang->backup->setting    = 'Setting';
+$lang->backup->setting    = 'Settings';
 $lang->backup->settingDir = 'Backup Directory';
-$lang->backup->settingList['nofile'] = 'No backup file and code.';
-$lang->backup->settingList['nozip']  = 'Only copy file, Uncompressed';
-$lang->backup->settingList['nosafe'] = 'No need to prevent downloading PHP file header.';
+$lang->backup->settingList['nofile'] = 'No backup files and codes.';
+$lang->backup->settingList['nozip']  = 'Only copy files and no zip.';
+$lang->backup->settingList['nosafe'] = 'No prevent downloading PHP file header.';
 
 $lang->backup->waitting       = '<span id="backupType"></span> In Progress. Please wait...';
 $lang->backup->progressSQL    = '<p>SQL backup, %s is backed up.</p>';
