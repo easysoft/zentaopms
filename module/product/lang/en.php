@@ -11,8 +11,8 @@
  */
 $lang->product->common      = $lang->productCommon;
 $lang->product->index       = $lang->productCommon . 'Home';
-$lang->product->browse      = 'Story List';
-$lang->product->dynamic     = 'Dynamic';
+$lang->product->browse      = 'Story';
+$lang->product->dynamic     = 'Dynamics';
 $lang->product->view        = 'Overview';
 $lang->product->edit        = "Edit {$lang->productCommon}";
 $lang->product->batchEdit   = 'Batch Edit';
@@ -21,7 +21,7 @@ $lang->product->delete      = "Delete {$lang->productCommon}";
 $lang->product->deleted     = 'Deleted';
 $lang->product->close       = 'Close';
 $lang->product->select      = "Select {$lang->productCommon}";
-$lang->product->mine        = 'Mine:';
+$lang->product->mine        = 'My:';
 $lang->product->other       = 'Other:';
 $lang->product->closed      = 'Closed';
 $lang->product->updateOrder = 'Order';
@@ -74,10 +74,10 @@ $lang->product->qa            = 'QA';
 $lang->product->release       = 'Release';
 $lang->product->allRelease    = 'All Release';
 $lang->product->maintain      = 'Maintaining';
-$lang->product->latestDynamic = 'Dynamic';
+$lang->product->latestDynamic = 'Dynamics';
 $lang->product->plan          = 'Plan';
-$lang->product->iteration     = 'Version Iteration';
-$lang->product->iterationInfo = '%s Iterations';
+$lang->product->iteration     = 'Build Iteration';
+$lang->product->iterationInfo = '%s Iteration';
 $lang->product->iterationView = 'Details';
 
 $lang->product->searchStory  = 'Search';

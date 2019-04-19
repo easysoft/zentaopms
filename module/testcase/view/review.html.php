@@ -18,7 +18,7 @@
   <div class='main-header'>
     <h2>
       <span class='label label-id'><?php echo $case->id;?></span>
-      <?php echo html::a($this->createLink('case', 'view', "caseID=$case->id"), $case->title);?>
+      <?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title);?>
     </h2>
   </div>
   <form method='post' target='hiddenwin'>

@@ -16,22 +16,22 @@ $lang->testsuite->view             = "Overview";
 $lang->testsuite->edit             = "Edit";
 $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Case";
-$lang->testsuite->linkVersion      = "Version";
+$lang->testsuite->linkVersion      = "Build";
 $lang->testsuite->unlinkCase       = "Unlink";
 <<<<<<< HEAD
-$lang->testsuite->batchUnlinkCases = "Batch unlink case";
+$lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
 $lang->testsuite->deleted          = 'Deleted';
-$lang->testsuite->exportTemplet    = 'Export template';
-$lang->testsuite->batchCreateCase  = 'Batch create case';
+$lang->testsuite->exportTemplet    = 'Export Template';
+$lang->testsuite->batchCreateCase  = 'Batch Create Case';
 $lang->testsuite->import           = 'Import';
-$lang->testsuite->showImport       = 'Show imported data';
+$lang->testsuite->showImport       = 'Imported Data';
 =======
 $lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
 $lang->testsuite->deleted          = 'Deleted';
-$lang->testsuite->exportTemplet    = 'Export template';
+$lang->testsuite->exportTemplet    = 'Export Template';
 $lang->testsuite->batchCreateCase  = 'Batch Create Case';
 $lang->testsuite->import           = 'Import';
-$lang->testsuite->showImport       = 'Show Imported Data';
+$lang->testsuite->showImport       = 'Imported Data';
 >>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->testsuite->successSaved     = 'Saved';
 
@@ -40,7 +40,7 @@ $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->desc           = 'Description';
 $lang->testsuite->author         = 'Access Control';
-$lang->testsuite->addedBy        = 'Creator';
+$lang->testsuite->addedBy        = 'By';
 $lang->testsuite->addedDate      = 'Date';
 
 $lang->testsuite->legendDesc      = 'Description';
@@ -66,6 +66,6 @@ $lang->caselib->all    = 'All';
 
 $lang->testsuite->createLib  = 'Create Library';
 $lang->testsuite->editLib    = 'Edit';
-$lang->testsuite->library    = 'View cases in Library';
+$lang->testsuite->library    = 'View cases in a library';
 $lang->testsuite->createCase = 'Create Case';
 $lang->testsuite->libView    = 'Overview';

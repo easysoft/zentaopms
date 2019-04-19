@@ -1555,7 +1555,7 @@ class testcaseModel extends model
             if(!isset($this->config->testcase->forceReview)) return true;
             if(strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") === false) return true;
         }
-        if($this->config->testcase->needReview && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},")) return true;
+        if($this->config->testcase->needReview && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},") !== false) return true;
 
         return false;
     }

@@ -55,19 +55,19 @@ $lang->testcase->allProduct       = "All {$lang->productCommon}";
 $lang->testcase->fromBug          = 'From Bug';
 $lang->testcase->toBug            = 'To Bug';
 $lang->testcase->changed          = 'Changed';
-$lang->testcase->bugs             = 'Bugs Reported';
+$lang->testcase->bugs             = 'Reported Bugs';
 $lang->testcase->bugsAB           = 'B';
 $lang->testcase->results          = 'Results';
 $lang->testcase->resultsAB        = 'R';
-$lang->testcase->stepNumber       = 'No.. of steps';
+$lang->testcase->stepNumber       = 'No. of steps';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = 'Convert to Bug';
 $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
 $lang->testcase->sync             = 'Sync Case';
 $lang->testcase->ignore           = 'Ignore';
-$lang->testcase->fromTesttask     = 'From Testtask';
-$lang->testcase->fromCaselib      = 'From Caselib';
+$lang->testcase->fromTesttask     = 'From Test';
+$lang->testcase->fromCaselib      = 'From CaseLib';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
@@ -86,15 +86,15 @@ $lang->testcase->batchReview             = "Batch Review";
 $lang->testcase->edit                    = "Edit";
 $lang->testcase->batchEdit               = "Batch Edit ";
 $lang->testcase->batchChangeModule       = "Batch Change Module";
-$lang->testcase->confirmLibcaseChange    = "Confirm Library Case Change";
-$lang->testcase->ignoreLibcaseChange     = "Ignore Library Case Change";
+$lang->testcase->confirmLibcaseChange    = "Confirm CaseLib Change";
+$lang->testcase->ignoreLibcaseChange     = "Ignore CaseLib Change";
 $lang->testcase->batchChangeBranch       = "Batch Change Branch";
 $lang->testcase->groupByStories          = 'Group by Story';
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->batchDelete             = "Batch Delete ";
 $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
 $lang->testcase->batchCaseTypeChange     = "Batch Change Type";
-$lang->testcase->browse                  = "Cases";
+$lang->testcase->browse                  = "Case";
 $lang->testcase->groupCase               = "By Group";
 $lang->testcase->import                  = "Import";
 $lang->testcase->importFile              = "Import CSV";
@@ -105,7 +105,7 @@ $lang->testcase->export                  = "Export Data";
 $lang->testcase->reportChart             = 'Report Chart';
 $lang->testcase->confirmChange           = 'Confirm Case Change';
 $lang->testcase->confirmStoryChange      = 'Confirm Story Change';
-$lang->testcase->copy                    = 'Duplicate Case';
+$lang->testcase->copy                    = 'Copy Case';
 $lang->testcase->group                   = 'Group';
 $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Step';
@@ -114,7 +114,7 @@ $lang->testcase->viewAll                 = 'All';
 
 $lang->testcase->new = 'New';
 
-$lang->testcase->num = 'Cases:';
+$lang->testcase->num = 'Case:';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
@@ -123,10 +123,15 @@ $lang->testcase->insertAfter  = 'Inserted After';
 $lang->testcase->assignToMe   = 'AssignToMe';
 $lang->testcase->openedByMe   = 'CreateByMe';
 $lang->testcase->allCases     = 'All';
+<<<<<<< HEAD
+$lang->testcase->allTestcases = 'All Case';
+$lang->testcase->needConfirm  = 'Story Changed';
+=======
 $lang->testcase->allTestcases = 'All Cases';
 $lang->testcase->needConfirm  = 'Changed Story';
+>>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
 $lang->testcase->bySearch     = 'Search';
-$lang->testcase->unexecuted   = 'Wait';
+$lang->testcase->unexecuted   = 'Pending';
 
 $lang->testcase->lblStory       = 'Story';
 $lang->testcase->lblLastEdited  = 'Last Edit';
@@ -138,9 +143,9 @@ $lang->testcase->legendBasicInfo    = 'Basic Info';
 $lang->testcase->legendAttatch      = 'File';
 $lang->testcase->legendLinkBugs     = 'Bug';
 $lang->testcase->legendOpenAndEdit  = 'Create/Edit';
-$lang->testcase->legendComment      = 'Remark';
+$lang->testcase->legendComment      = 'Comment';
 
-$lang->testcase->summary            = "Cases on this page : <strong>%s</strong> Total, <strong>%s</strong> runed.";
+$lang->testcase->summary            = "Case on this page : <strong>%s</strong> Total, <strong>%s</strong> runed.";
 $lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete these Test Cases?';
 $lang->testcase->ditto              = 'Ditto';
@@ -167,7 +172,7 @@ $lang->testcase->typeList['other']       = 'Other';
 
 $lang->testcase->stageList['']           = '';
 $lang->testcase->stageList['unittest']   = 'Unit Test';
-$lang->testcase->stageList['feature']    = 'Function Test';
+$lang->testcase->stageList['feature']    = 'Feature Test';
 $lang->testcase->stageList['intergrate'] = 'Integration Test';
 $lang->testcase->stageList['system']     = 'System Test';
 $lang->testcase->stageList['smoke']      = 'Smoking Test';
@@ -190,12 +195,12 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonToList = 'Back';
 
-$lang->testcase->errorEncode      = 'No Data. Please select right encoding and upload again!';
-$lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found. You cannot convert the data into the desired one!';
-$lang->testcase->noRequire        = "Row %s has“%s”which is a required field and it should not be blank.";
+$lang->testcase->errorEncode      = 'No data. Please select right encoding and upload again!';
+$lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found. You cannot change the data into the required one!';
+$lang->testcase->noRequire        = "Row %s has“%s ”which is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
-$lang->testcase->noModule         = '<div>You have no modules</div><div>Manage now</div>';
+$lang->testcase->noModule         = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->testcase->noCase           = 'No cases. ';
 
 $lang->testcase->searchStories = 'Enter to search Story';
@@ -206,7 +211,7 @@ $lang->testcase->action->fromlib  = array('main' => '$date, imported by <strong>
 $lang->testcase->action->reviewed = array('main' => '$date, recorded by <strong>$actor</strong> and the review result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['wait']        = 'Wait';
+$lang->testcase->featureBar['browse']['wait']        = 'Pending';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';

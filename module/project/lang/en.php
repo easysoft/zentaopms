@@ -57,19 +57,23 @@ $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon}";
 $lang->project->createStory   = "Create Story";
 $lang->project->all           = 'All';
-$lang->project->undone        = 'Unfinished';
+$lang->project->undone        = 'Uncompleted';
 $lang->project->unclosed      = 'Unclosed';
 <<<<<<< HEAD
 <<<<<<< HEAD
 $lang->project->typeDesc      = 'No story, bug, build, test task or Burndown is allowed in OPS';
-$lang->project->mine          = 'My Responsibility: ';
+$lang->project->mine          = 'My: ';
 =======
 $lang->project->typeDesc      = 'No story, bug, build, test task or burndown is allowed in OPS';
 =======
 $lang->project->typeDesc      = 'No story, bug, build, test or burndown is allowed in OPS';
+<<<<<<< HEAD
+$lang->project->mine          = 'My: ';
+=======
 >>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->project->mine          = 'Mine: ';
 >>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
+>>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
@@ -119,7 +123,7 @@ $lang->project->basicInfo = 'Basic Info';
 $lang->project->otherInfo = 'Other Info';
 
 /* 字段取值列表。*/
-$lang->project->statusList['wait']      = 'Wait';
+$lang->project->statusList['wait']      = 'Pending';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspend';
 $lang->project->statusList['closed']    = 'Closed';
@@ -201,18 +205,18 @@ $lang->project->viewAll           = 'View All';
 
 /* 分组浏览。*/
 $lang->project->allTasks     = 'All';
-$lang->project->assignedToMe = 'Mine';
+$lang->project->assignedToMe = 'My';
 $lang->project->myInvolved   = 'Involved';
 
 $lang->project->statusSelects['']             = 'More';
-$lang->project->statusSelects['wait']         = 'Wait';
+$lang->project->statusSelects['wait']         = 'Pending';
 $lang->project->statusSelects['doing']        = 'Doing';
 $lang->project->statusSelects['finishedbyme'] = 'FinishedByMe';
 $lang->project->statusSelects['done']         = 'Done';
 $lang->project->statusSelects['closed']       = 'Closed';
-$lang->project->statusSelects['cancel']       = 'Canceled';
+$lang->project->statusSelects['cancel']    :   = 'Canceled';
 
-$lang->project->groups['']           = 'Groups';
+$lang->project->groups['']           = 'Group';
 $lang->project->groups['story']      = 'By Story';
 $lang->project->groups['status']     = 'By Status';
 $lang->project->groups['pri']        = 'By Priority';
@@ -222,10 +226,10 @@ $lang->project->groups['closedBy']   = 'By ClosedBy';
 $lang->project->groups['type']       = 'By Type';
 
 $lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = 'Task Linked to Story';
+$lang->project->groupFilter['story']['linked']      = 'LinkedtoStory Task';
 $lang->project->groupFilter['pri']['all']           = $lang->project->all;
 $lang->project->groupFilter['pri']['noset']         = 'Not set';
-$lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';
+$lang->project->groupFilter['assignedTo']['undone'] = 'Uncompleted';
 $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 
 $lang->project->byQuery = 'Search';
@@ -334,7 +338,7 @@ $lang->project->fixFirstWithLeft      = 'Modify the left';
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong> .' . "\n";
-$lang->project->action->extra   = 'The related products are %s.';
+$lang->project->action->extra   = 'The linked products are %s.';
 
 /* 统计。*/
 $lang->project->charts = new stdclass();
@@ -381,7 +385,7 @@ $lang->project->kanbanShowOption = 'Unfold';
 $lang->project->kanbanColsColor  = 'Custom column color';
 
 $lang->kanbanSetting = new stdclass();
-$lang->kanbanSetting->noticeReset     = 'Do you want to restore the default settings of Kanban?';
+$lang->kanbanSetting->noticeReset     = 'Do you want to reset Kanban?';
 $lang->kanbanSetting->optionList['0'] = 'Hide';
 $lang->kanbanSetting->optionList['1'] = 'Show';
 
