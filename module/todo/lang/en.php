@@ -64,7 +64,7 @@ $lang->todo->confirmBug   = 'This Todo is linked to Bug #%s. Do you want to edit
 $lang->todo->confirmTask  = 'This Todo is linked to Task #%s，Do you want to edit it?';
 $lang->todo->confirmStory = 'This Todo is linked to Story #%s，Do you want to edit it?';
 
-$lang->todo->statusList['wait']   = 'Wait';
+$lang->todo->statusList['wait']   = 'Pending';
 $lang->todo->statusList['doing']  = 'Doing';
 $lang->todo->statusList['done']   = 'Done';
 $lang->todo->statusList['closed'] = 'Closed';
@@ -90,7 +90,7 @@ if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') 
 
 $lang->todo->confirmDelete  = "Do you want to delete this Todo?";
 $lang->todo->thisIsPrivate  = 'This is a private Todo';
-$lang->todo->lblDisableDate = 'Set it later';
+$lang->todo->lblDisableDate = 'Set later';
 $lang->todo->lblBeforeDays  = "Create a todo %s day(s) earlier";
 $lang->todo->lblClickCreate = "Click to Add Todo";
 $lang->todo->noTodo         = 'No todos of this type.';

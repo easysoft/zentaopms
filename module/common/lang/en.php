@@ -21,7 +21,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
-$lang->welcome        = "%s PMS";
+$lang->welcome        = "%s";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
@@ -59,7 +59,7 @@ $lang->required     = 'Required';
 $lang->noData       = 'No data.';
 
 $lang->actions         = 'Action';
-$lang->restore         = 'Restore';
+$lang->restore         = 'Reset';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
 $lang->attatch         = 'File';
@@ -142,7 +142,7 @@ $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';
 $lang->searchObjects['testtask']    = 'Test';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchObjects['testsuite']   = 'Case Library';
-$lang->searchObjects['testreport']  = 'Test Report';
+$lang->searchObjects['testreport']  = 'Testing Report';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */
@@ -186,7 +186,7 @@ $lang->my->menu->index          = 'Home|my|index';
 $lang->my->menu->calendar       = array('link' => 'Calendar|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->task           = array('link' => 'Task|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|',   'subModule' => 'bug');
-$lang->my->menu->testtask       = array('link' => 'Test Task|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
+$lang->my->menu->testtask       = array('link' => 'Test|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story          = array('link' => 'Story|my|story|',   'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = 'Dynamic|my|dynamic|';
@@ -307,7 +307,7 @@ $lang->testsuite = new stdclass();
 $lang->testsuite->menu = new stdclass();
 $lang->testsuite->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testsuite->menu->testcase  = array('link' => 'Case|testcase|browse|productID=%s');
-$lang->testsuite->menu->testtask  = array('link' => 'Test Task|testtask|browse|productID=%s');
+$lang->testsuite->menu->testtask  = array('link' => 'Test|testtask|browse|productID=%s');
 $lang->testsuite->menu->testsuite = array('link' => 'Suite|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->testsuite->menu->report    = array('link' => 'Report|testreport|browse|productID=%s');
 $lang->testsuite->menu->caselib   = array('link' => 'Case Library|testsuite|library');
@@ -808,7 +808,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
     $lang->testcase->menu->all     = 'All|testcase|browse|productID=%s&branch=%s&browseType=all';
-    $lang->testcase->menu->wait    = 'Wait|testcase|browse|productID=%s&branch=%s&browseType=wait';
+    $lang->testcase->menu->wait    = 'Pending|testcase|browse|productID=%s&branch=%s&browseType=wait';
     $lang->testcase->menu->bysuite = array('link' => 'Suite|testsuite|create|productID=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->testcase->subMenu = new stdclass();
@@ -828,7 +828,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
     $lang->testtask->menu->totalStatus = 'All|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
-    $lang->testtask->menu->wait        = 'Wait|testtask|browse|productID=%s&branch=%s&type=%s,wait';
+    $lang->testtask->menu->wait        = 'Pending|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testtask->menu->doing       = 'Doing|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testtask->menu->blocked     = 'Blocked|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
     $lang->testtask->menu->done        = 'Done|testtask|browse|productID=%s&branch=%s&type=%s,done';
@@ -849,7 +849,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();
     $lang->caselib->menu->all  = 'All|testsuite|library|libID=%s&browseType=all';
-    $lang->caselib->menu->wait = 'Wait|testsuite|library|libID=%s&browseType=wait';
+    $lang->caselib->menu->wait = 'Pending|testsuite|library|libID=%s&browseType=wait';
     $lang->caselib->menu->view = 'View|testsuite|libview|libID=%s';
 
     $lang->caselib->menuOrder[5]  = 'lib';

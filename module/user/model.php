@@ -91,7 +91,6 @@ class userModel extends model
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
-            ->andWhere('role')->ne('market')
             ->orderBy($orderBy)
             ->fetchAll('account');
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');
