@@ -55,19 +55,19 @@ $lang->testcase->allProduct       = "All {$lang->productCommon}";
 $lang->testcase->fromBug          = 'From Bug';
 $lang->testcase->toBug            = 'To Bug';
 $lang->testcase->changed          = 'Changed';
-$lang->testcase->bugs             = 'Bugs Reported';
+$lang->testcase->bugs             = 'Reported Bugs';
 $lang->testcase->bugsAB           = 'B';
 $lang->testcase->results          = 'Results';
 $lang->testcase->resultsAB        = 'R';
-$lang->testcase->stepNumber       = 'No.. of steps';
+$lang->testcase->stepNumber       = 'No. of steps';
 $lang->testcase->stepNumberAB     = 'S';
 $lang->testcase->createBug        = 'Convert to Bug';
 $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
 $lang->testcase->sync             = 'Sync Case';
 $lang->testcase->ignore           = 'Ignore';
-$lang->testcase->fromTesttask     = 'From Testtask';
-$lang->testcase->fromCaselib      = 'From Caselib';
+$lang->testcase->fromTesttask     = 'From Test';
+$lang->testcase->fromCaselib      = 'From CaseLib';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
@@ -105,7 +105,7 @@ $lang->testcase->export                  = "Export Data";
 $lang->testcase->reportChart             = 'Report Chart';
 $lang->testcase->confirmChange           = 'Confirm Case Change';
 $lang->testcase->confirmStoryChange      = 'Confirm Story Change';
-$lang->testcase->copy                    = 'Duplicate Case';
+$lang->testcase->copy                    = 'Copy Case';
 $lang->testcase->group                   = 'Group';
 $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Step';
@@ -131,7 +131,7 @@ $lang->testcase->allTestcases = 'All Cases';
 $lang->testcase->needConfirm  = 'Changed Story';
 >>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
 $lang->testcase->bySearch     = 'Search';
-$lang->testcase->unexecuted   = 'Wait';
+$lang->testcase->unexecuted   = 'Pending';
 
 $lang->testcase->lblStory       = 'Story';
 $lang->testcase->lblLastEdited  = 'Last Edit';
@@ -172,7 +172,7 @@ $lang->testcase->typeList['other']       = 'Other';
 
 $lang->testcase->stageList['']           = '';
 $lang->testcase->stageList['unittest']   = 'Unit Test';
-$lang->testcase->stageList['feature']    = 'Function Test';
+$lang->testcase->stageList['feature']    = 'Feature Test';
 $lang->testcase->stageList['intergrate'] = 'Integration Test';
 $lang->testcase->stageList['system']     = 'System Test';
 $lang->testcase->stageList['smoke']      = 'Smoking Test';
@@ -195,12 +195,12 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonToList = 'Back';
 
-$lang->testcase->errorEncode      = 'No Data. Please select right encoding and upload again!';
-$lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found. You cannot convert the data into the desired one!';
-$lang->testcase->noRequire        = "Row %s has“%s”which is a required field and it should not be blank.";
+$lang->testcase->errorEncode      = 'No data. Please select right encoding and upload again!';
+$lang->testcase->noFunction       = 'Iconv and mb_convert_encoding is not found. You cannot change the data into the required one!';
+$lang->testcase->noRequire        = "Row %s has“%s ”which is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
-$lang->testcase->noModule         = '<div>You have no modules</div><div>Manage now</div>';
+$lang->testcase->noModule         = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->testcase->noCase           = 'No cases. ';
 
 $lang->testcase->searchStories = 'Enter to search Story';
@@ -211,7 +211,7 @@ $lang->testcase->action->fromlib  = array('main' => '$date, imported by <strong>
 $lang->testcase->action->reviewed = array('main' => '$date, recorded by <strong>$actor</strong> and the review result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['wait']        = 'Wait';
+$lang->testcase->featureBar['browse']['wait']        = 'Pending';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';

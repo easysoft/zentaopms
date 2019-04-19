@@ -36,7 +36,7 @@ $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Testing Details';
 
-$lang->block->leftToday = 'Work for Today';
+$lang->block->leftToday = 'Remaining Work Report';
 $lang->block->myTask    = 'My Task';
 $lang->block->myStory   = 'My Story';
 $lang->block->myBug     = 'My Bug';
@@ -143,7 +143,7 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['4']['title'] = 'Wait Build';
+$lang->block->default['qa']['4']['title'] = 'Pending Build';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
@@ -356,12 +356,12 @@ $lang->block->typeList->product['closed']   = 'Closed';
 $lang->block->typeList->product['all']      = 'All';
 $lang->block->typeList->product['involved'] = 'Involved';
 
-$lang->block->typeList->project['undone']   = 'Unfinished';
-$lang->block->typeList->project['doing']    = 'Doing';
+$lang->block->typeList->project['undone']   = 'Uncompleted';
+$lang->block->typeList->project['doing']    = 'Ongoing';
 $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
 
-$lang->block->typeList->testtask['wait']    = 'Wait';
+$lang->block->typeList->testtask['wait']    = 'Pending';
 $lang->block->typeList->testtask['doing']   = 'Doing';
 $lang->block->typeList->testtask['blocked'] = 'Blocked';
 $lang->block->typeList->testtask['done']    = 'Done';
