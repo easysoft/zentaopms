@@ -42,7 +42,16 @@ class todo extends control
         {
             $todoID = $this->todo->create($date, $account);
             if(dao::isError()) die(js::error(dao::getError()));
-            $this->loadModel('action')->create('todo', $todoID, 'opened');
+
+            if($_POST['type'] != 'feedback')
+            {
+                $this->loadModel('action')->create('todo', $todoID, 'opened');
+            }
+            else
+            {
+                $this->loadModel('action')->create('todo', $todoID, 'FromFeedback', '', $_POST['idvalue']);
+            }
+
             $date = str_replace('-', '', $this->post->date);
             if($date == '')
             {
