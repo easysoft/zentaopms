@@ -1433,7 +1433,7 @@ class userModel extends model
     public function checkProductPriv($product, $account, $groups, $linkedProjects, $teams) 
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
-        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR $product->feedback == $account) return true;
+        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
         if($product->acl == 'open') return true;
 
         if($product->acl == 'custom')
