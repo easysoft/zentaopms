@@ -15,7 +15,7 @@
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback') ? $lang->tree->cate : $lang->tree->name);?>
-<?php $title = $viewType == 'line' or $viewType == 'trainskill' ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
+<?php $title = ($viewType == 'line' or $viewType == 'trainskill') ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>

@@ -48,9 +48,9 @@ $lang->convert->fail        = '<span class="text-danger"><i class="icon-remove-s
 
 $lang->convert->dbHost      = 'Database Server';
 $lang->convert->dbPort      = 'Server Port';
-$lang->convert->dbUser      = 'Databse User Name';
+$lang->convert->dbUser      = 'Database User Name';
 $lang->convert->dbPassword  = 'Database Password';
-$lang->convert->dbName      = 'Databse used in %s';
+$lang->convert->dbName      = 'Database used in %s';
 $lang->convert->dbCharset   = '%s Database Code';
 $lang->convert->dbPrefix    = '%s Table Prefix';
 $lang->convert->installPath = '%s Installed path';
@@ -97,7 +97,7 @@ $lang->convert->errorBuildExists   = 'Build %s existed.';
 $lang->convert->errorReleaseExists = 'Release %s existed.';
 $lang->convert->errorCopyFailed    = 'File %s copy failed.';
 
-$lang->convert->setParam = 'Please set parameters.';
+$lang->convert->setParam = 'Set parameters.';
 
 $lang->convert->statusType = new stdclass();
 $lang->convert->priType    = new stdclass();

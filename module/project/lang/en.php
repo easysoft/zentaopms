@@ -67,9 +67,13 @@ $lang->project->mine          = 'My Responsibility: ';
 $lang->project->typeDesc      = 'No story, bug, build, test task or burndown is allowed in OPS';
 =======
 $lang->project->typeDesc      = 'No story, bug, build, test or burndown is allowed in OPS';
+<<<<<<< HEAD
+$lang->project->mine          = 'My: ';
+=======
 >>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->project->mine          = 'Mine: ';
 >>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
+>>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
@@ -210,9 +214,9 @@ $lang->project->statusSelects['doing']        = 'Doing';
 $lang->project->statusSelects['finishedbyme'] = 'FinishedByMe';
 $lang->project->statusSelects['done']         = 'Done';
 $lang->project->statusSelects['closed']       = 'Closed';
-$lang->project->statusSelects['cancel']       = 'Canceled';
+$lang->project->statusSelects['cancel']    :   = 'Canceled';
 
-$lang->project->groups['']           = 'Groups';
+$lang->project->groups['']           = 'Group';
 $lang->project->groups['story']      = 'By Story';
 $lang->project->groups['status']     = 'By Status';
 $lang->project->groups['pri']        = 'By Priority';
@@ -222,7 +226,7 @@ $lang->project->groups['closedBy']   = 'By ClosedBy';
 $lang->project->groups['type']       = 'By Type';
 
 $lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = 'Task Linked to Story';
+$lang->project->groupFilter['story']['linked']      = 'LinkedtoStory Task';
 $lang->project->groupFilter['pri']['all']           = $lang->project->all;
 $lang->project->groupFilter['pri']['noset']         = 'Not set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';

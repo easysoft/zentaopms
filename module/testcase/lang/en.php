@@ -86,15 +86,15 @@ $lang->testcase->batchReview             = "Batch Review";
 $lang->testcase->edit                    = "Edit";
 $lang->testcase->batchEdit               = "Batch Edit ";
 $lang->testcase->batchChangeModule       = "Batch Change Module";
-$lang->testcase->confirmLibcaseChange    = "Confirm Library Case Change";
-$lang->testcase->ignoreLibcaseChange     = "Ignore Library Case Change";
+$lang->testcase->confirmLibcaseChange    = "Confirm CaseLib Change";
+$lang->testcase->ignoreLibcaseChange     = "Ignore CaseLib Change";
 $lang->testcase->batchChangeBranch       = "Batch Change Branch";
 $lang->testcase->groupByStories          = 'Group by Story';
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->batchDelete             = "Batch Delete ";
 $lang->testcase->batchConfirmStoryChange = "Batch Confirm";
 $lang->testcase->batchCaseTypeChange     = "Batch Change Type";
-$lang->testcase->browse                  = "Cases";
+$lang->testcase->browse                  = "Case";
 $lang->testcase->groupCase               = "By Group";
 $lang->testcase->import                  = "Import";
 $lang->testcase->importFile              = "Import CSV";
@@ -114,7 +114,7 @@ $lang->testcase->viewAll                 = 'All';
 
 $lang->testcase->new = 'New';
 
-$lang->testcase->num = 'Cases:';
+$lang->testcase->num = 'Case:';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
@@ -123,8 +123,13 @@ $lang->testcase->insertAfter  = 'Inserted After';
 $lang->testcase->assignToMe   = 'AssignToMe';
 $lang->testcase->openedByMe   = 'CreateByMe';
 $lang->testcase->allCases     = 'All';
+<<<<<<< HEAD
+$lang->testcase->allTestcases = 'All Case';
+$lang->testcase->needConfirm  = 'Story Changed';
+=======
 $lang->testcase->allTestcases = 'All Cases';
 $lang->testcase->needConfirm  = 'Changed Story';
+>>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
 $lang->testcase->bySearch     = 'Search';
 $lang->testcase->unexecuted   = 'Wait';
 
@@ -138,9 +143,9 @@ $lang->testcase->legendBasicInfo    = 'Basic Info';
 $lang->testcase->legendAttatch      = 'File';
 $lang->testcase->legendLinkBugs     = 'Bug';
 $lang->testcase->legendOpenAndEdit  = 'Create/Edit';
-$lang->testcase->legendComment      = 'Remark';
+$lang->testcase->legendComment      = 'Comment';
 
-$lang->testcase->summary            = "Cases on this page : <strong>%s</strong> Total, <strong>%s</strong> runed.";
+$lang->testcase->summary            = "Case on this page : <strong>%s</strong> Total, <strong>%s</strong> runed.";
 $lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete these Test Cases?';
 $lang->testcase->ditto              = 'Ditto';
