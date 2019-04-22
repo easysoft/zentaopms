@@ -1780,7 +1780,7 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst');
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);

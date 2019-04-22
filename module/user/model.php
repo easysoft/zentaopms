@@ -91,7 +91,6 @@ class userModel extends model
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
-            ->andWhere('role')->ne('market')
             ->orderBy($orderBy)
             ->fetchAll('account');
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll('account');
@@ -1434,7 +1433,7 @@ class userModel extends model
     public function checkProductPriv($product, $account, $groups, $linkedProjects, $teams) 
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
-        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR $product->feedback == $account) return true;
+        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
         if($product->acl == 'open') return true;
 
         if($product->acl == 'custom')
