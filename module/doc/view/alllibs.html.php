@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView) ? true : false;?>
-<div class="main-row <?php if($spliter) echo 'split-row';?>" id="mainRow">
+<div class="main-row <?php if($spliter) echo 'split-row';?> fade" id="mainRow">
   <?php include './side.html.php';?>
   <?php if($this->cookie->browseType == 'bylist'):?>
   <?php include dirname(__FILE__) . '/alllibsbylist.html.php';?>

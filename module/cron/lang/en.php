@@ -1,7 +1,7 @@
 <?php
-$lang->cron->common      = 'Scheduled Task';
+$lang->cron->common      = 'Cron';
 $lang->cron->index       = 'Home';
-$lang->cron->list        = 'Tasks';
+$lang->cron->list        = 'Task';
 $lang->cron->create      = 'Add';
 $lang->cron->edit        = 'Edit';
 $lang->cron->delete      = 'Delete';
@@ -17,7 +17,7 @@ $lang->cron->dow      = 'Week';
 $lang->cron->command  = 'Command';
 $lang->cron->status   = 'Status';
 $lang->cron->type     = 'Type';
-$lang->cron->remark   = 'Remark';
+$lang->cron->remark   = 'Comment';
 $lang->cron->lastTime = 'Last Executed';
 
 $lang->cron->turnonList['1'] = 'On';
@@ -33,11 +33,11 @@ $lang->cron->typeList['system'] = 'System Command';
 $lang->cron->toggleList['start'] = 'Activate';
 $lang->cron->toggleList['stop']  = 'Deactivate';
 
-$lang->cron->confirmDelete = 'Do you want to delete the Scheduled Task?';
-$lang->cron->confirmTurnon = 'Do you want to truncoff the Cron?';
+$lang->cron->confirmDelete = 'Do you want to delete the cron?';
+$lang->cron->confirmTurnon = 'Do you want to turn off the Cron?';
 $lang->cron->introduction  = <<<EOD
-<p>Scheduled Task can do scheduled execution, such as update burndown chart, backup, etc.</p>
-<p>This function need to be improved, so it is turned off by default.</p>
+<p>Cron is to perform scheduled actions, such as update burndown chart, backup, etc.</p>
+<p>Features of Cron need to be improved, so it is turned off by default.</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
 <p>Do you want to turn it on?<a href="%s" target='hiddenwin'><strong>Turn On Scheduled Task<strong></a></p>
@@ -49,5 +49,5 @@ $lang->cron->notice->h    = 'Range:0-23';
 $lang->cron->notice->dom  = 'Range:1-31';
 $lang->cron->notice->mon  = 'Range:1-12';
 $lang->cron->notice->dow  = 'Range:0-6';
-$lang->cron->notice->help = 'Note：If server restarted, or Scheduled Task is not working, it means Scheduled Task has stopped. You can restart it by clicking 【Restart】 or reload this page. If the last execution time in  changed, it means the Task is running.';
+$lang->cron->notice->help = 'Note：If the server is restarted, or the Cron is not working, it means the Cron has stopped. You can restart it by clicking 【Restart】 or refresh this page. If the last execution time is changed, it means the Cron is running.';
 $lang->cron->notice->errorRule = '"%s" is not valid';
