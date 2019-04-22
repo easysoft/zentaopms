@@ -14,8 +14,8 @@ $lang->convert->index   = 'Home';
 
 $lang->convert->start   = 'Start';
 $lang->convert->desc    = <<<EOT
-<p>Welcome to the System Conversion Wizard, this program will assist you to convert data to ZenTao PMS.</p>
-<strong>There is certain risk of conversion, so it is strongly recommended that you back up your databse and relavant files before conversion, and make sure no one is operating on either systems.</strong>
+<p>Welcome to the System Conversion Wizard, this program will assist you to convert data to ZenTao.</p>
+<strong>There are risks in the conversion, so it is strongly recommended that you back up your databse and relavant files before conversion, and make sure that no one is using either system.</strong>
 EOT;
 
 $lang->convert->setConfig      = 'Source Config';
@@ -31,7 +31,7 @@ $lang->convert->mustSelectSource = "You must select a source system.";
 
 $lang->convert->direction             = "{$lang->projectCommon} converted to";
 $lang->convert->questionTypeOfRedmine = 'Type in Redmine';
-$lang->convert->aimTypeOfZentao       = 'Convert to Type in Zentao';
+$lang->convert->aimTypeOfZentao       = 'Convert to Type in ZenTao';
 
 $lang->convert->directionList['bug']   = 'Bug';
 $lang->convert->directionList['task']  = 'Task';
@@ -51,17 +51,17 @@ $lang->convert->dbPort      = 'Server Port';
 $lang->convert->dbUser      = 'Database User Name';
 $lang->convert->dbPassword  = 'Database Password';
 $lang->convert->dbName      = 'Database used in %s';
-$lang->convert->dbCharset   = '%s Database Code';
+$lang->convert->dbCharset   = '%s Database Coding';
 $lang->convert->dbPrefix    = '%s Table Prefix';
-$lang->convert->installPath = '%s Installed path';
+$lang->convert->installPath = '%s Installation Root Directory';
 
 $lang->convert->checkDB    = 'Database';
 $lang->convert->checkTable = 'Table';
-$lang->convert->checkPath  = 'Installed Path';
+$lang->convert->checkPath  = 'Installation Path';
 
 $lang->convert->execute    = 'Convert';
 $lang->convert->item       = 'Item Converted';
-$lang->convert->count      = 'Count';
+$lang->convert->count      = 'No.';
 $lang->convert->info       = 'Info';
 
 $lang->convert->bugfree = new stdclass();

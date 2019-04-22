@@ -10,10 +10,10 @@
  * @link        http://www.zentao.net
  */
 $lang->dept->common      = 'Department';
-$lang->dept->manageChild = "Department";
+$lang->dept->manageChild = "Child Dept";
 $lang->dept->edit        = "Edit";
 $lang->dept->delete      = "Delete";
-$lang->dept->parent      = "Parent";
+$lang->dept->parent      = "Parent Dept";
 $lang->dept->manager     = "Manager";
 $lang->dept->name        = "Department Name";
 $lang->dept->browse      = "Manage";
