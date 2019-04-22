@@ -41,7 +41,7 @@ class control extends baseControl
         $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
 
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */
-        if(!file_exists($mainViewFile))
+        if(!file_exists($mainViewFile) and $this->app->clientDevice != 'mobile')
         {
             $originalPrefix     = $this->devicePrefix;
             $this->devicePrefix = '';
