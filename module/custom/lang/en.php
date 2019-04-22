@@ -50,9 +50,9 @@ $lang->custom->bug->fields['severityList']   = 'Severity';
 $lang->custom->bug->fields['osList']         = 'OS';
 $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
-$lang->custom->bug->fields['resolutionList'] = 'Resolution';
+$lang->custom->bug->fields['resolutionList'] = 'Solution';
 $lang->custom->bug->fields['statusList']     = 'Status';
-$lang->custom->bug->fields['longlife']       = 'Longlife days';
+$lang->custom->bug->fields['longlife']       = 'Pending Days';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = 'Priority';
@@ -82,12 +82,12 @@ $lang->custom->system = array('flow', 'working', 'required', 'score');
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
 $lang->custom->currentLang = 'Current Language';
-$lang->custom->allLang     = 'All Language';
+$lang->custom->allLang     = 'All Languages';
 
-$lang->custom->confirmRestore = 'Do you want to reset the settings?';
+$lang->custom->confirmRestore = 'Do you want to reset?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userFieldNotice      = 'Control whether the above fields are displayed on the user-related page, and leave it blank to display all';
+$lang->custom->notice->userFieldNotice      = 'Control whether the above fields are displayed on the user-related page. Leave it blank and it will  display all.';
 $lang->custom->notice->canNotAdd            = 'It will be calculated, so customization is not enabled.';
 $lang->custom->notice->forceReview          = '%s Review is required for certain committers.';
 $lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain committers.";
@@ -136,7 +136,7 @@ $lang->custom->workingList['onlyTest']  = 'Test Management';
 $lang->custom->workingList['onlyStory'] = 'Story Management';
 $lang->custom->workingList['onlyTask']  = 'Task Management';
 
-$lang->custom->menuTip  = 'Click to show/hide navigation bar. Drag to swtich display order.';
+$lang->custom->menuTip  = 'Click to show/hide the navigation bar. Drag to swtich display order.';
 $lang->custom->saveFail = 'Failed to save!';
 
 $lang->custom->scoreStatus[0] = 'Off';
