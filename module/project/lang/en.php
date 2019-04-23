@@ -166,7 +166,7 @@ $lang->project->statusSelects['doing']        = 'Doing';
 $lang->project->statusSelects['finishedbyme'] = 'FinishedByMe';
 $lang->project->statusSelects['done']         = 'Done';
 $lang->project->statusSelects['closed']       = 'Closed';
-$lang->project->statusSelects['cancel']    :   = 'Canceled';
+$lang->project->statusSelects['cancel']       = 'Canceled';
 
 $lang->project->groups['']           = 'Group';
 $lang->project->groups['story']      = 'By Story';
