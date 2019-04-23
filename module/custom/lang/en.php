@@ -111,15 +111,15 @@ $lang->custom->notice->invalidStrlen['thirty']     = 'The key should be <= 30 ch
 $lang->custom->notice->invalidStrlen['twoHundred'] = 'The key should be <= 225 characters.';
 
 $lang->custom->storyReview    = 'Review';
-$lang->custom->forceReview    = 'Required Review';
-$lang->custom->forceNotReview = 'No review';
+$lang->custom->forceReview    = 'Review';
+$lang->custom->forceNotReview = 'No Review';
 $lang->custom->reviewList[1]  = 'On';
 $lang->custom->reviewList[0]  = 'Off';
 
 $lang->custom->deletedList[1] = 'Show';
 $lang->custom->deletedList[0] = 'Hide';
 
-$lang->custom->workingHours   = 'hours/day';
+$lang->custom->workingHours   = 'hour/day';
 $lang->custom->weekend        = 'Weekend';
 $lang->custom->weekendList[2] = '2-Day Off';
 $lang->custom->weekendList[1] = '1-Day Off';

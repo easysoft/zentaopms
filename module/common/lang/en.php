@@ -103,7 +103,7 @@ $lang->showAll       = '[[Show All]]';
 
 $lang->future       = 'Pending';
 $lang->year         = 'Year';
-$lang->workingHour  = 'Hour';
+$lang->workingHour  = 'Man-hour';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -241,7 +241,7 @@ $lang->project->menu->list     = array('link' => 'More|project|grouptask|project
 $lang->project->menu->story    = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->project->menu->qa       = array('link' => 'Test|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
-$lang->project->menu->action   = array('link' => 'Dynamic|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->action   = array('link' => 'Dynamics|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
 $lang->project->menu->team     = array('link' => 'Team|project|team|projectID=%s', 'alias' => 'managemembers');
 $lang->project->menu->view     = array('link' => 'Overview|project|view|projectID=%s', 'alias' => 'edit,start,suspend,putoff,close');
@@ -254,7 +254,7 @@ $lang->project->subMenu->list->tree      = 'Tree View|project|tree|projectID=%s'
 $lang->project->subMenu->qa = new stdclass();
 $lang->project->subMenu->qa->bug      = 'Bug|project|bug|projectID=%s';
 $lang->project->subMenu->qa->build    = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'build');
-$lang->project->subMenu->qa->testtask = array('link' => 'Test Task|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
+$lang->project->subMenu->qa->testtask = array('link' => 'Test|project|testtask|projectID=%s', 'subModule' => 'testreport,testtask');
 
 $lang->project->dividerMenu = ',story,team,product,';
 
@@ -348,14 +348,14 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report is generated on search results. Please search the list before you generate a report.';
+$lang->report->notice->help = 'Note: Report is generated on search results of the list. Please search in the list before you generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup = array('link' => 'Privilege|group|browse', 'subModule' => 'group');
+$lang->company->menu->browseGroup = array('link' => 'Permission|group|browse', 'subModule' => 'group');
 $lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
 $lang->company->menu->view        = array('link' => 'Company|company|view');
 
