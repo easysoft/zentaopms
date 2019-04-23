@@ -19,21 +19,11 @@ $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
 $lang->project->dateRange     = 'Duration';
 $lang->project->to            = 'To';
-<<<<<<< HEAD
-<<<<<<< HEAD
 $lang->project->days          = 'Man-Day';
-$lang->project->day           = 'day';
-$lang->project->workHour      = 'Hours';
-=======
-$lang->project->days          = 'Man Day';
-=======
-$lang->project->days          = 'Man-Day';
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->project->day           = ' days';
 $lang->project->workHour      = ' hours';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
-$lang->project->totalHours    = 'Work Hours';
-$lang->project->totalDays     = 'Work Days';
+$lang->project->totalHours    = 'Man-Hour';
+$lang->project->totalDays     = 'Man-Day';
 $lang->project->status        = 'Status';
 $lang->project->desc          = 'Description';
 $lang->project->owner         = 'Owner';
@@ -59,32 +49,14 @@ $lang->project->createStory   = "Create Story";
 $lang->project->all           = 'All';
 $lang->project->undone        = 'Uncompleted';
 $lang->project->unclosed      = 'Unclosed';
-<<<<<<< HEAD
-<<<<<<< HEAD
-$lang->project->typeDesc      = 'No story, bug, build, test task or Burndown is allowed in OPS';
+$lang->project->typeDesc      = 'No story, bug, build, test or burndown chart is allowed in OPS';
 $lang->project->mine          = 'My: ';
-=======
-$lang->project->typeDesc      = 'No story, bug, build, test task or burndown is allowed in OPS';
-=======
-$lang->project->typeDesc      = 'No story, bug, build, test or burndown is allowed in OPS';
-<<<<<<< HEAD
-$lang->project->mine          = 'My: ';
-=======
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
-$lang->project->mine          = 'Mine: ';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
->>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
 $lang->project->other         = 'Other:';
 $lang->project->deleted       = 'Deleted';
 $lang->project->delayed       = 'Delayed';
 $lang->project->product       = $lang->project->products;
-<<<<<<< HEAD
-$lang->project->readjustTime  = 'Change project duration';
-$lang->project->readjustTask  = 'Change task duration';
-=======
 $lang->project->readjustTime  = "Adjust {$lang->projectCommon} begin and end time";
 $lang->project->readjustTask  = 'Adjust task start date and deadline';
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->project->effort        = 'Effort';
 $lang->project->relatedMember = 'Team Member';
 
@@ -134,30 +106,14 @@ $lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist 
 
 /* 方法列表。*/
 $lang->project->index             = "Home";
-<<<<<<< HEAD
 $lang->project->task              = 'Tasks';
-<<<<<<< HEAD
 $lang->project->groupTask         = 'View by Group';
-=======
-=======
-$lang->project->task              = 'Task';
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
-$lang->project->groupTask         = 'Group View';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->project->story             = 'Story';
 $lang->project->bug               = 'Bug';
 $lang->project->dynamic           = 'Dynamic';
 $lang->project->latestDynamic     = 'Latest Dynamic';
 $lang->project->build             = 'Build';
-<<<<<<< HEAD
-<<<<<<< HEAD
 $lang->project->testtask          = 'Test';
-=======
-$lang->project->testtask          = 'Test Task';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
-=======
-$lang->project->testtask          = 'Test';
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->project->burn              = 'Burndown';
 $lang->project->computeBurn       = 'Update';
 $lang->project->burnData          = 'Burndown Data';
@@ -179,11 +135,7 @@ $lang->project->delete            = "Delete";
 $lang->project->browse            = "Browse";
 $lang->project->edit              = "Edit";
 $lang->project->batchEdit         = "Batch Edit";
-<<<<<<< HEAD
-$lang->project->manageMembers     = 'Manange Team';
-=======
 $lang->project->manageMembers     = 'Manage Team';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->project->unlinkMember      = 'Unlink Member';
 $lang->project->unlinkStory       = 'Unlink Story';
 $lang->project->batchUnlinkStory  = 'Batch Unlink Story';
@@ -240,47 +192,7 @@ $lang->project->aboveAllProduct = "All the above {$lang->productCommon}";
 $lang->project->aboveAllProject = "All the above {$lang->projectCommon}";
 
 /* 页面提示。*/
-<<<<<<< HEAD
-<<<<<<< HEAD
-$lang->project->selectProject   = "Select {$lang->projectCommon}";
-$lang->project->beginAndEnd     = 'Duration';
-$lang->project->begin           = 'Begin';
-$lang->project->end             = 'End';
-$lang->project->lblStats        = 'Man-Hour Summary(h) : ';
-$lang->project->stats           = '<strong>%s</strong> Available, <strong>%s</strong> Total Estimates, <strong>%s</strong> Cost, <strong>%s</strong> Left.';
-$lang->project->taskSummary     = "Tasks on this page : <strong>%s</strong> Total, <strong>%s</strong> Wait, <strong>%s</strong> Doing;  &nbsp;&nbsp;&nbsp;  Hours : <strong>%s</strong> Est., <strong>%s</strong> Cost, <strong>%s</strong> Left.";
-$lang->project->checkedSummary  = " <strong>%total%</strong> Checked, <strong>%wait%</strong> Wait, <strong>%doing%</strong> Doing;    Hours: <strong>%estimate%</strong>  Est., <strong>%consumed%</strong> Cost, <strong>%left%</strong> Left.";
-$lang->project->memberHoursAB   = "%s has <strong>%s</strong> Hours";
-$lang->project->memberHours     = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Working Hours</div><div class="segment-value">%s</div></div></div></div>';
-$lang->project->countSummary    = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Tasks</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Doing</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">Wait</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
-$lang->project->timeSummary     = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Est.</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Cost</div><div class="segment-value text-red">%s</div></div><div class="segment"><div class="segment-title">Left</div><div class="segment-value">%s</div></div></div></div>';
-$lang->project->groupSummaryAB  = "<div>Tasks <strong>%s ：</strong><span class='text-muted'>Wait</span> %s &nbsp; <span class='text-muted'>Doing</span> %s</div><div>Est. <strong>%s ：</strong><span class='text-muted'>Cost</span> %s &nbsp; <span class='text-muted'>Left</span> %s</div>";
-$lang->project->wbs             = "Work Breakdown";
-$lang->project->batchWBS        = "Batch Work Breakdown";
-$lang->project->howToUpdateBurn = "<a href='https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-updateburndowncharts-98.html' target='_blank' title='How to Update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
-$lang->project->whyNoStories    = "No Story can be linked. Please check whether there is Story in {$lang->projectCommon} linked {$lang->productCommon} and make sure it has been reviewed.";
-$lang->project->productStories  = "{$lang->projectCommon} linked  story is the subeset of {$lang->productCommon}, which can only be linked after review. Please <a href='%s'> Link Story</a>。";
-$lang->project->haveDraft       = "There are %s draft stories that cannot be linked.";
-$lang->project->doneProjects    = 'Done';
-$lang->project->selectDept      = 'Select Department';
-$lang->project->selectDeptTitle = 'Select Department';
-$lang->project->copyTeam        = 'Copy Team';
-$lang->project->copyFromTeam    = "Copy from {$lang->projectCommon} Team: <strong>%s</strong>";
-$lang->project->noMatched       = "No $lang->projectCommon including '%s'can be found.";
-$lang->project->copyTitle       = "Choose a {$lang->projectCommon} to copy.";
-$lang->project->copyTeamTitle   = "Choose {$lang->projectCommon}Team to copy.";
-$lang->project->copyNoProject   = "No {$lang->projectCommon} can be copied.";
-$lang->project->copyFromProject = "Copy from {$lang->projectCommon} <strong>%s</strong>";
-$lang->project->cancelCopy      = 'Cancel Copy';
-$lang->project->byPeriod        = 'By Time';
-$lang->project->byUser          = 'By User';
-$lang->project->noProject       = 'No projects. ';
-$lang->project->noMembers       = 'No members. ';
-=======
-$lang->project->linkStoryByPlanTips = 'It will link all stories in this plan to the project.';
-=======
 $lang->project->linkStoryByPlanTips = "It will link all stories in this plan to the {$lang->projectCommon}.";
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->project->selectProject       = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd         = 'Duration';
 $lang->project->begin               = 'Begin';
@@ -315,7 +227,6 @@ $lang->project->byPeriod            = 'By Time';
 $lang->project->byUser              = 'By User';
 $lang->project->noProject           = "No {$lang->projectCommon}. ";
 $lang->project->noMembers           = 'No members. ';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Do you want to delete {$lang->projectCommon}[%s]?";
@@ -333,7 +244,7 @@ $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'excl. Weekend';
 $lang->project->withweekend           = 'incl. Weekend';
 $lang->project->interval              = 'Intervals';
-$lang->project->fixFirstWithLeft      = 'Modify the left';
+$lang->project->fixFirstWithLeft      = 'Modify Man-hour left';
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
@@ -356,13 +267,8 @@ $lang->project->charts->burn->graph->reference    = 'Ideal';
 $lang->project->charts->burn->graph->actuality    = 'Actual';
 
 $lang->project->placeholder = new stdclass();
-<<<<<<< HEAD
-$lang->project->placeholder->code      = 'Alias of project name';
-$lang->project->placeholder->totalLeft = 'Estimates at the beginning of the Project.';
-=======
 $lang->project->placeholder->code      = "Abbreviation of {$lang->projectCommon} name";
 $lang->project->placeholder->totalLeft = "Estimates at the beginning of the {$lang->projectCommon}.";
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
