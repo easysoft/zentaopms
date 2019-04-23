@@ -1500,8 +1500,8 @@ class bug extends control
             }
 
             /* Get related objects title or names. */
+            $relatedModules = array();
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
-            $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
             $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
@@ -1509,6 +1509,7 @@ class bug extends control
             $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+            foreach($relatedProductIdList as $relatedProductId) $relatedModules += $this->loadModel('tree')->getOptionMenu($relatedProductId, 'bug'); 
             
             foreach($bugs as $bug)
             {
@@ -1614,16 +1615,9 @@ class bug extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $fileName = $this->lang->bug->common;
+        $fileName    = $this->lang->bug->common;
         $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
-        if(isset($this->lang->bug->featureBar['browse'][$browseType]))
-        {
-            $browseType = $this->lang->bug->featureBar['browse'][$browseType];
-        }
-        else
-        {
-            $browseType = isset($this->lang->bug->moreSelects[$browseType]) ? $this->lang->bug->moreSelects[$browseType] : null;
-        }
+        $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
 
         $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
         $this->view->allExportFields = $this->config->bug->list->exportFields;

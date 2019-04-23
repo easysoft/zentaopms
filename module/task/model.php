@@ -42,7 +42,7 @@ class taskModel extends model
             ->setDefault('openedDate', helper::now())
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,feedback')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate')
             ->get();
         if($task->type != 'test') $this->post->set('selectTestStory', 0);
 
@@ -1275,11 +1275,12 @@ class taskModel extends model
             ->setDefault('account', $this->app->user->account)
             ->setDefault('task', $taskID)
             ->setDefault('date', date(DT_DATE1))
+            ->setIF($this->post->finishedDate, 'date', $this->post->finishedDate)
             ->setDefault('left', 0)
             ->remove('finishedDate,comment,assignedTo,files,labels,consumed')
             ->get();
+
         $estimate->consumed = $consumed;
-        $estimate->date     = $this->post->finishedDate;/*#task 7849*/
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team))

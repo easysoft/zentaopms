@@ -173,5 +173,3 @@ $lang->misc->feature->all['7.1.stable'][] = array('title'=>'提供rpm和deb包',
 
 $lang->misc->feature->all['6.3.stable'][] = array('title'=>'增加数据表格功能', 'desc' => '<p>可配置数据表格中可显示的字段，按照配置字段显示想看的数据</p>');
 $lang->misc->feature->all['6.3.stable'][] = array('title'=>'继续完善细节', 'desc' => '');
-
-$lang->misc->error = '此功能正在努力开发中...';
