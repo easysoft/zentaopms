@@ -12,7 +12,7 @@ $(document).on('change', '.storyChange', function()
 {
      var storyID = $(this).val();
      if(typeof(storyID) == 'undefined') storyID = 0;
-     var link  = createLink('testcase', 'ajaxGetStoryMoule', 'storyID=' + storyID);
+     var link  = createLink('testcase', 'ajaxGetStoryModule', 'storyID=' + storyID);
      var id    = $(this).attr('id');
      var index = id.substring(5);
      $.get(link, function(json)
