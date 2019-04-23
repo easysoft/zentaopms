@@ -57,12 +57,12 @@ $lang->install->result     = 'Result';
 $lang->install->action     = 'Action';
 
 $lang->install->phpVersion = 'PHP Version';
-$lang->install->phpFail    = 'PHP Version has to be 5.2.0+';
+$lang->install->phpFail    = 'PHP Version should be 5.2.0+';
 
 $lang->install->pdo          = 'PDO';
-$lang->install->pdoFail      = 'Edit php.ini to load PDO extsion.';
+$lang->install->pdoFail      = 'Edit php.ini to load PDO extension.';
 $lang->install->pdoMySQL     = 'PDO_MySQL';
-$lang->install->pdoMySQLFail = 'Edit php.ini to load PDO_MySQL extsion.';
+$lang->install->pdoMySQLFail = 'Edit php.ini to load PDO_MySQL extension.';
 $lang->install->json         = 'JSON Extension';
 $lang->install->jsonFail     = 'Edit php.ini to load JSON extension.';
 $lang->install->openssl      = 'OpenSSL Extension';
@@ -86,18 +86,18 @@ $lang->install->sessionFail  = 'Edit the php.ini file to set session.save_path.'
 $lang->install->mkdirWin     = '<p>%s directory has to be created.<br /> Run <code>mkdir %s</code> to create it.</p>';
 $lang->install->chmodWin     = ' "%s" privilege has to be changed.';
 $lang->install->mkdirLinux   = '<p>%s directory has to be created.<br /> Run <code>mkdir -p %s</code> to create it.</p>';
-$lang->install->chmodLinux   = ' "%s" privilege has to be changed.<br /> Run <code>chmod o=rwx -R %s</code> to change it.';
+$lang->install->chmodLinux   = ' "%s" permison has to be changed.<br /> Run <code>chmod o=rwx -R %s</code> to change it.';
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Default Language';
 $lang->install->dbHost         = 'Database Host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 is not accessible, try localhost.';
 $lang->install->dbPort         = 'Host Port';
-$lang->install->dbUser         = 'Database User';
+$lang->install->dbUser         = 'Database Username';
 $lang->install->dbPassword     = 'Database Password';
 $lang->install->dbName         = 'Database Name';
 $lang->install->dbPrefix       = 'Table Prefix';
-$lang->install->clearDB        = 'Clean tables if it already exists.';
+$lang->install->clearDB        = 'Clean up existing data';
 $lang->install->importDemoData = 'Import Demo Data';
 $lang->install->working        = 'Operation Mode';
 
@@ -109,20 +109,20 @@ $lang->install->workingList['onlyTest']  = 'Only Test Management';
 $lang->install->workingList['onlyStory'] = 'Only Story Management';
 $lang->install->workingList['onlyTask']  = 'Only Task Management';
 
-$lang->install->errorConnectDB      = 'Connection to database Failed. ';
+$lang->install->errorConnectDB      = 'Connection to the database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';
 $lang->install->errorCreateDB       = 'Failed to create the database.';
-$lang->install->errorTableExists    = 'Data table has existed. If ZenTao has been installed before, please return to last step and clear data. Then continue the installation.';
+$lang->install->errorTableExists    = 'The data table has existed. If ZenTao has been installed before, please return to last step and clear data. Then continue the installation.';
 $lang->install->errorCreateTable    = 'Failed to create the table.';
 $lang->install->errorImportDemoData = 'Failed to import demo data.';
 
-$lang->install->setConfig  = 'Create config file';
+$lang->install->setConfig  = 'Create configuration file';
 $lang->install->key        = 'Item';
 $lang->install->value      = 'Value';
 $lang->install->saveConfig = 'Save config';
-$lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this config file later.</div>';
-$lang->install->saved2File = 'Config file has been saved to " <strong>%s</strong> ". You can change this file later.';
-$lang->install->errorNotSaveConfig = 'Config file is not saved.';
+$lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
+$lang->install->saved2File = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
+$lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
 
 $lang->install->getPriv  = 'Set Admin';
 $lang->install->company  = 'Company Name';
@@ -132,7 +132,7 @@ $lang->install->errorEmptyPassword = 'Password should not be blank.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
 $lang->install->groupList['ADMIN']['desc']   = 'System Admin';
-$lang->install->groupList['DEV']['name']     = 'Dev';
+$lang->install->groupList['DEV']['name']     = 'Dev.';
 $lang->install->groupList['DEV']['desc']     = 'Developer';
 $lang->install->groupList['QA']['name']      = 'QA';
 $lang->install->groupList['QA']['desc']      = 'tester';
@@ -140,7 +140,7 @@ $lang->install->groupList['PM']['name']      = 'PM';
 $lang->install->groupList['PM']['desc']      = 'Project Manager';
 $lang->install->groupList['PO']['name']      = 'PO';
 $lang->install->groupList['PO']['desc']      = 'Product Owner';
-$lang->install->groupList['TD']['name']      = 'Dev Manager';
+$lang->install->groupList['TD']['name']      = 'Dev. Manager';
 $lang->install->groupList['TD']['desc']      = 'Development Manager';
 $lang->install->groupList['PD']['name']      = 'PD';
 $lang->install->groupList['PD']['desc']      = 'Product Director';
@@ -154,19 +154,19 @@ $lang->install->groupList['LIMITED']['name'] = 'Limited User';
 $lang->install->groupList['LIMITED']['desc'] = 'User can only edit contents related to itself';
 
 $lang->install->cronList[''] = 'Monitor cron';
-$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Chart';
+$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Charts';
 $lang->install->cronList['moduleName=report&methodName=remind']       = 'Daily task reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']             = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']             = 'Synchronize GIT';
 $lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup data&file';
-$lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Async sending Message';
-$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Async sending Webhook';
-$lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete overdue log';
-$lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create repeat todos';
+$lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronize sending Message';
+$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Asynchronize sending Webhook';
+$lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete overdue logs';
+$lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create recurring todos';
 
 $lang->install->success  = "Installed!";
 $lang->install->login    = 'Login ZenTao';
-$lang->install->register = 'Register in ZenTao';
+$lang->install->register = 'Register in ZenTao Community';
 
 $lang->install->joinZentao = <<<EOT
 <p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
@@ -174,9 +174,9 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'ranzhi');
 
-$lang->install->promotion     = "Products from  Nature Easy Soft team:";
+$lang->install->promotion     = "Products also from Nature Easy Soft team:";
 $lang->install->chanzhi       = new stdclass();
-$lang->install->chanzhi->name = 'ZSITE content management system.';
+$lang->install->chanzhi->name = 'ZSITE Content Management System';
 $lang->install->chanzhi->logo = 'images/main/chanzhi_en.png';
 $lang->install->chanzhi->url  = 'http://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
