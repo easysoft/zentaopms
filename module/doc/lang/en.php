@@ -31,7 +31,7 @@ $lang->doc->editedDate     = 'Edited ';
 $lang->doc->version        = 'Version';
 $lang->doc->basicInfo      = 'Basic Info';
 $lang->doc->deleted        = 'Deleted';
-$lang->doc->fileObject     = 'Linked Object';
+$lang->doc->fileObject     = 'Dependent Object';
 $lang->doc->whiteList      = 'White List';
 $lang->doc->contentType    = 'Format';
 $lang->doc->separator      = "<i class='icon-angle-right'></i>";

@@ -41,7 +41,7 @@ $lang->dev->tableList['effort']         = 'Effort';
 $lang->dev->tableList['extension']      = 'Extension';
 $lang->dev->tableList['file']           = 'File';
 $lang->dev->tableList['group']          = 'Group';
-$lang->dev->tableList['grouppriv']      = 'Privilege';
+$lang->dev->tableList['grouppriv']      = 'Permission';
 $lang->dev->tableList['history']        = 'History';
 $lang->dev->tableList['lang']           = 'Language';
 $lang->dev->tableList['module']         = 'Module';
@@ -101,7 +101,7 @@ $lang->dev->tableList['webhook']        = 'WebHook';
 $lang->dev->tableList['log']            = 'Log';
 $lang->dev->tableList['message']        = 'Message';
 $lang->dev->tableList['notify']         = 'Notify';
-$lang->dev->tableList['userview']       = 'User View';
+$lang->dev->tableList['userview']       = 'User Permission';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;

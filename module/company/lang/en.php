@@ -17,7 +17,7 @@ $lang->company->browse   = "User List";
 $lang->company->dynamic  = "Dynamics";
 $lang->company->orgView  = 'View';
 
-$lang->company->name     = 'Name';
+$lang->company->name     = 'Company Name';
 $lang->company->phone    = 'Phone';
 $lang->company->fax      = 'Fax';
 $lang->company->address  = 'Mailing Address';
@@ -25,7 +25,7 @@ $lang->company->zipcode  = 'Zip Code';
 $lang->company->website  = 'Website';
 $lang->company->backyard = 'Intranet';
 $lang->company->guest    = 'Guest Login';
-$lang->company->admins   = 'Administrators';
+$lang->company->admins   = 'Administrator';
 
 $lang->company->product = $lang->productCommon;
 $lang->company->project = $lang->projectCommon;
