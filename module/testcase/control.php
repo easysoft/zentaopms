@@ -1638,7 +1638,13 @@ class testcase extends control
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
-    
+    /**
+     * Export case getModuleByStory 
+     *
+     * @params int $storyID
+     * @return void
+     */
+
     public function ajaxGetStoryMoule($storyID)
     {
         $story = $this->dao->select('module')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
