@@ -76,7 +76,7 @@ $lang->product->allRelease    = 'All Release';
 $lang->product->maintain      = 'Maintaining';
 $lang->product->latestDynamic = 'Dynamics';
 $lang->product->plan          = 'Plan';
-$lang->product->iteration     = 'Build Iteration';
+$lang->product->iteration     = 'Version Iteration';
 $lang->product->iterationInfo = '%s Iteration';
 $lang->product->iterationView = 'Details';
 
@@ -91,7 +91,7 @@ $lang->product->changedStory = 'Changed';
 $lang->product->willClose    = 'ToBeClosed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
-$lang->product->unplan       = 'Wait';
+$lang->product->unplan       = 'Unplanned';
 
 $lang->product->allStory             = 'All';
 $lang->product->allProduct           = 'All' . $lang->productCommon;
@@ -114,9 +114,9 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
-$lang->product->aclList['open']    = "Default (User with privilege to {$lang->productCommon} can access to it.)";
+$lang->product->aclList['open']    = "Default (Users with perssions to {$lang->productCommon} can access it.)";
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
-$lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members have access to it.)';
+$lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
 
 $lang->product->storySummary   = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
 $lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> hour(s) estimated, case coverage is <strong>%rate%</strong>.";

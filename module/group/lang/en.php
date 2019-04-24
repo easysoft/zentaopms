@@ -9,16 +9,16 @@
  * @version     $Id: en.php 4719 2013-05-03 02:20:28Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->group->common             = 'Privilege';
-$lang->group->browse             = 'Group Privilge';
+$lang->group->common             = 'Permission';
+$lang->group->browse             = 'Groups';
 $lang->group->create             = 'Add Group';
 $lang->group->edit               = 'Edit';
 $lang->group->copy               = 'Copy';
 $lang->group->delete             = 'Delete';
 $lang->group->manageView         = 'View';
 $lang->group->managePriv         = 'Batch Assign';
-$lang->group->managePrivByGroup  = 'Privilege';
-$lang->group->managePrivByModule = 'Module Privilege';
+$lang->group->managePrivByGroup  = 'Permission';
+$lang->group->managePrivByModule = 'Module Permission';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Member';
 $lang->group->confirmDelete      = 'Do you want to delete this User Group?';
@@ -42,10 +42,10 @@ $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group Users';
 $lang->group->outside  = 'Other Users';
 $lang->group->other    = 'Others';
-$lang->group->all      = 'All';
+$lang->group->all      = 'All Permissions';
 
-$lang->group->copyOptions['copyPriv'] = 'Copy Privilege';
-$lang->group->copyOptions['copyUser'] = 'Copy User';
+$lang->group->copyOptions['copyPriv'] = 'Copy Permissions';
+$lang->group->copyOptions['copyUser'] = 'Copy Users';
 
 $lang->group->versions['']          = 'History';
 $lang->group->versions['10_6']      = 'ZenTao10.6';

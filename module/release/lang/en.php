@@ -69,8 +69,4 @@ $lang->release->changeStatusList['normal']    = 'Activate';
 $lang->release->changeStatusList['terminate'] = 'Terminate';
 
 $lang->release->action = new stdclass();
-<<<<<<< HEAD
-$lang->release->action->changestatus = array('main' => '$date, by <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
-=======
 $lang->release->action->changestatus = array('main' => '$date,  $extra by  <strong>$actor</strong>', 'extra' => 'changeStatusList');
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454

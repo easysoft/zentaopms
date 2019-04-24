@@ -11,6 +11,6 @@
  */
 /* Methods. */
 $lang->git->common  = 'Git';
-$lang->git->cat     = 'View Code';
-$lang->git->diff    = 'Diff Code';
-$lang->git->apiSync = 'API: Sync Git Log';
+$lang->git->cat     = 'View Source Code';
+$lang->git->diff    = 'Compare Source Code';
+$lang->git->apiSync = 'API: Synchronize Git Log';

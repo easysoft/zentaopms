@@ -96,12 +96,12 @@
           <th><?php echo $lang->todo->name;?></th>
           <td colspan='2'>
             <div id='nameBox' class='hidden'><?php echo html::input('name', '', "class='form-control'");?></div>
-            <div class='nameBox required'><?php echo html::input('name', '', "class='form-control'");?></div>
+            <div class='nameBox required'><?php echo html::input('name', isset($name) ? $name : '', "class='form-control'");?></div>
           </td>
         </tr>  
         <tr>
           <th><?php echo $lang->todo->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', isset($feedback->desc) ? $feedback->desc : '', "rows='8' class='form-control'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', isset($desc) ? $desc : '', "rows='8' class='form-control'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->todo->status;?></th>

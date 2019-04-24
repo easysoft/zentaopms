@@ -38,13 +38,13 @@ $lang->my->storyMenu->reviewedByMe = 'Reviewed By Me';
 $lang->my->storyMenu->closedByMe   = 'Closed By Me';
 
 $lang->my->home = new stdclass();
-$lang->my->home->latest        = 'Dynamic';
+$lang->my->home->latest        = 'Dynamics';
 $lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>.";
 $lang->my->home->projects      = $lang->projectCommon;
 $lang->my->home->products      = $lang->productCommon;
 $lang->my->home->createProject = "Create {$lang->projectCommon}";
 $lang->my->home->createProduct = "Create {$lang->productCommon}";
-$lang->my->home->help          = "<a href='https://www.zentao.net/help-read-79236.html' target='_blank'>Help</a>";
+$lang->my->home->help          = "<a href='https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-workflow-46.html' target='_blank'>Help</a>";
 $lang->my->home->noProductsTip = "No {$lang->productCommon} found here.";
 
 $lang->my->form = new stdclass();

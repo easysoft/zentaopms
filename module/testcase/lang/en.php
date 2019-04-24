@@ -123,13 +123,8 @@ $lang->testcase->insertAfter  = 'Inserted After';
 $lang->testcase->assignToMe   = 'AssignToMe';
 $lang->testcase->openedByMe   = 'CreateByMe';
 $lang->testcase->allCases     = 'All';
-<<<<<<< HEAD
-$lang->testcase->allTestcases = 'All Case';
-$lang->testcase->needConfirm  = 'Story Changed';
-=======
 $lang->testcase->allTestcases = 'All Cases';
-$lang->testcase->needConfirm  = 'Changed Story';
->>>>>>> 1f8899a84819dad5ffe811c8eb667fd33e01136f
+$lang->testcase->needConfirm  = 'Story Changed';
 $lang->testcase->bySearch     = 'Search';
 $lang->testcase->unexecuted   = 'Pending';
 

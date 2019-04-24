@@ -516,31 +516,16 @@ $lang->website        = "https://www.zentao.pm";
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->pasteTextInfo   = "Paste text here. Each line will be the title of each record. ";
-<<<<<<< HEAD
 $lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
 $lang->importConfirm   = "Import";
-=======
-$lang->noticeImport    = "Imported data contains something that has already existed in system. Please confirm your actions.";
-$lang->importConfirm   = "Confirm";
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->importAndCover  = "Override";
 $lang->importAndInsert = "Insert";
 
 
 $lang->noResultsMatch     = "No results match found!";
 $lang->searchMore         = "More results：";
-<<<<<<< HEAD
-<<<<<<< HEAD
 $lang->chooseUsersToMail  = "Choose users that will be notified.";
 $lang->browserNotice      = 'The browser you currently use might not get the best browsing results. It is recommended that you use Chrome, Firefox, IE9+, Opera or Safari.';
-=======
-$lang->chooseUsersToMail  = "Choose users to be notified.";
-$lang->browserNotice      = 'Your current browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
-=======
-$lang->chooseUsersToMail  = "Choose users to be notified";
-$lang->browserNotice      = 'Your browser might not display the best effect. Use Chrome, Firefox, IE9+, Opera or Safari.';
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454
 $lang->noticePasteImg     = "Paste images here";
 $lang->pasteImgFail       = "Pasting image failed. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";
@@ -751,17 +736,10 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Add bug, testcase and testtask module. */
     $lang->menu->bug       = 'Bug|bug|index';
-<<<<<<< HEAD
     $lang->menu->testcase  = 'Case|testcase|index';
     $lang->menu->testsuite = 'Suite|testsuite|index';
     $lang->menu->testtask  = 'Test|testtask|index';
     $lang->menu->caselib   = 'Case Library|testsuite|library';
-=======
-    $lang->menu->testcase  = 'Test Case|testcase|index';
-    $lang->menu->testsuite = 'Test Suite|testsuite|index';
-    $lang->menu->testtask  = 'Test|testtask|index';
-    $lang->menu->caselib   = 'Case Lib|testsuite|library';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 
     $lang->menuOrder[6]  = 'bug';
     $lang->menuOrder[7]  = 'testcase';
