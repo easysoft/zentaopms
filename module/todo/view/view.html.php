@@ -242,4 +242,9 @@
 <?php else:?>
 <?php echo $lang->todo->thisIsPrivate;?>
 <?php endif;?>
+<script>
+    $(function(){
+        parent.$('body.hide-modal-close').removeClass('hide-modal-close');
+    })
+</script>
 <?php include '../../common/view/footer.html.php';?>
