@@ -45,3 +45,4 @@
 .title-group #severity + .chosen-container > .chosen-single {border-radius: 0!important;}
 .title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
 .title-group .has-icon-right{min-width:700px}
+#dataform .chosen[name ^= "os"] + .chosen-container .chosen-drop{min-width: 200px} 
