@@ -16,7 +16,7 @@ $lang->productplan->create     = "Create Plan";
 $lang->productplan->edit       = "Edit";
 $lang->productplan->delete     = "Delete";
 $lang->productplan->view       = "Details";
-$lang->productplan->bugSummary = "Total <strong>%s</strong> Bugs on this page.";
+$lang->productplan->bugSummary = "<strong>%s</strong> Bugs in total on this page.";
 $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 
@@ -33,7 +33,7 @@ $lang->productplan->linkBug          = "Link Bug";
 $lang->productplan->unlinkBug        = "Unlink Bug";
 $lang->productplan->batchUnlinkBug   = "Batch Unlink Bug";
 $lang->productplan->linkedBugs       = 'Linked Bug';
-$lang->productplan->unlinkedBugs     = 'Unlinked';
+$lang->productplan->unlinkedBugs     = 'Unlinked Bug';
 $lang->productplan->unexpired        = 'Unexpired Plan';
 $lang->productplan->all              = 'All Plan';
 
@@ -51,12 +51,12 @@ $lang->productplan->begin   = 'Begin';
 $lang->productplan->end     = 'End';
 $lang->productplan->last    = 'Last plan';
 $lang->productplan->future  = 'Pending';
-$lang->productplan->stories = 'Stories';
-$lang->productplan->bugs    = 'Bugs';
-$lang->productplan->hour    = 'Hour';
+$lang->productplan->stories = 'Story';
+$lang->productplan->bugs    = 'Bug';
+$lang->productplan->hour    = 'Man-hour';
 $lang->productplan->project = $lang->projectCommon;
-$lang->productplan->parent  = "Father plan";
-$lang->productplan->children= "Sub plan";
+$lang->productplan->parent  = "Parent plan";
+$lang->productplan->children= "Child plan";
 
 $lang->productplan->endList[7]    = '1 Week';
 $lang->productplan->endList[14]   = '2 Weeks';
@@ -69,7 +69,7 @@ $lang->productplan->endList[365]  = '1 Year';
 $lang->productplan->errorNoTitle = 'ID %s title should not be empty.';
 $lang->productplan->errorNoBegin = 'ID %s begin time should not be empty.';
 $lang->productplan->errorNoEnd   = 'ID %s end time should not be empty.';
-$lang->productplan->beginGeEnd   = 'ID %s begin time value should not be greater than t.';
+$lang->productplan->beginGeEnd   = 'ID %s begin time should not be greater than end time.';
 
 $lang->productplan->featureBar['browse']['all']       = 'All';
 $lang->productplan->featureBar['browse']['unexpired'] = 'Unexpired';
