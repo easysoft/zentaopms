@@ -99,6 +99,7 @@ $lang->selectAll     = '全選';
 $lang->selectReverse = '反選';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您訪問的對象並不存在！';
+$lang->notPage      =  '抱歉，您訪問的功能正在開發中！';
 $lang->showAll       = '[[全部顯示]]';
 
 $lang->future      = '未來';

@@ -99,6 +99,7 @@ $lang->selectAll     = 'Select All';
 $lang->selectReverse = 'Select Inverse';
 $lang->loading       = 'Loading...';
 $lang->notFound      = 'Not found!';
+$lang->notPage       =  'Sorry, the features you are visiting are under development!';
 $lang->showAll       = '[[Show All]]';
 
 $lang->future       = 'Pending';

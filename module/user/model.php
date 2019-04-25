@@ -1504,4 +1504,43 @@ class userModel extends model
 
         return true;
     }
+
+    /**
+     * Save user template.
+     *
+     * @param  string    $type 
+     * @access public
+     * @return void
+     */
+    public function saveUserTemplate($type)
+    {
+        $template = fixer::input('post')
+            ->setDefault('account', $this->app->user->account)
+            ->setDefault('type', $type)
+            ->stripTags('content', $this->config->allowedTags)
+            ->get();
+
+        $condition = "`type`='$type' and account='{$this->app->user->account}'";
+        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
+        if(!dao::isError()) $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
+    }
+
+    /**
+     * Get User Template.
+     * 
+     * @param  string    $type 
+     * @access public
+     * @return array
+     */
+    public function getUserTemplates($type)
+    {
+        return $this->dao->select('id,account,title,content,public')
+            ->from(TABLE_USERTPL)
+            ->where('type')->eq($type)
+            ->andwhere('account', true)->eq($this->app->user->account)
+            ->orWhere('public')->eq('1')
+            ->markRight(1)
+            ->orderBy('id')
+            ->fetchAll();
+    }
 }

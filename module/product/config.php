@@ -89,6 +89,7 @@ $config->product->editor = new stdclass();
 $config->product->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->product->editor->close  = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->product->editor->view   = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 
 $config->product->report = new stdclass();
 $config->product->report->stage = array();

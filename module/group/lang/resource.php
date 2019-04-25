@@ -498,9 +498,6 @@ $lang->resource->bug->report             = 'reportChart';
 $lang->resource->bug->export             = 'export';
 $lang->resource->bug->confirmStoryChange = 'confirmStoryChange';
 $lang->resource->bug->delete             = 'delete';
-$lang->resource->bug->saveTemplate       = 'saveTemplate';
-$lang->resource->bug->deleteTemplate     = 'deleteTemplate';
-$lang->resource->bug->setPublic          = 'setPublic';
 $lang->resource->bug->batchChangeModule  = 'batchChangeModule';
 $lang->resource->bug->batchChangeBranch  = 'batchChangeBranch';
 
@@ -525,12 +522,9 @@ $lang->bug->methodOrder[80]  = 'report';
 $lang->bug->methodOrder[85]  = 'export';
 $lang->bug->methodOrder[90]  = 'confirmStoryChange';
 $lang->bug->methodOrder[95]  = 'delete';
-$lang->bug->methodOrder[100] = 'saveTemplate';
-$lang->bug->methodOrder[105] = 'deleteTemplate';
-$lang->bug->methodOrder[110] = 'setPublic';
-$lang->bug->methodOrder[115] = 'linkBugs';
-$lang->bug->methodOrder[125] = 'batchChangeModule';
-$lang->bug->methodOrder[130] = 'batchChangeBranch';
+$lang->bug->methodOrder[100] = 'linkBugs';
+$lang->bug->methodOrder[105] = 'batchChangeModule';
+$lang->bug->methodOrder[110] = 'batchChangeBranch';
 
 /* Test case. */
 $lang->resource->testcase = new stdclass();
@@ -856,6 +850,7 @@ $lang->resource->user->dynamic        = 'dynamic';
 $lang->resource->user->profile        = 'profile';
 $lang->resource->user->batchEdit      = 'batchEdit';
 $lang->resource->user->unbind         = 'unbind';
+$lang->resource->user->setPublicTemplate = 'setPublicTemplate';
 
 $lang->user->methodOrder[5]  = 'create';
 $lang->user->methodOrder[7]  = 'batchCreate';
@@ -871,6 +866,7 @@ $lang->user->methodOrder[50] = 'dynamic';
 $lang->user->methodOrder[55] = 'profile';
 $lang->user->methodOrder[60] = 'batchEdit';
 $lang->user->methodOrder[75] = 'unbind';
+$lang->user->methodOrder[80] = 'setPublicTemplate';
 
 /* Tree. */
 $lang->resource->tree = new stdclass();

@@ -679,7 +679,6 @@ class bug extends control
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
-        $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
 
         $this->display();
     }
@@ -1289,44 +1288,6 @@ class bug extends control
             if($bug->toTask != 0) echo js::alert($this->lang->bug->remindTask . $bug->toTask);
             die(js::locate($this->session->bugList, 'parent'));
         }
-    }
-
-    /**
-     * Save current template.
-     *
-     * @access public
-     * @return string
-     */
-    public function saveTemplate()
-    {
-        $this->bug->saveUserBugTemplate();
-        if(dao::isError()) echo js::error(dao::getError(), $full = false);
-        die($this->fetch('bug', 'buildTemplates'));
-    }
-
-    /**
-     * Build the user templates selection code.
-     *
-     * @access public
-     * @return void
-     */
-    public function buildTemplates()
-    {
-        $this->view->templates = $this->bug->getUserBugTemplates($this->app->user->account);
-        $this->display('bug', 'buildTemplates');
-    }
-
-    /**
-     * Delete a user template.
-     *
-     * @param  int    $templateID
-     * @access public
-     * @return void
-     */
-    public function deleteTemplate($templateID)
-    {
-        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
-        die();
     }
 
     /**

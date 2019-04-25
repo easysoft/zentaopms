@@ -64,59 +64,9 @@ function setAssignedTo(moduleID, productID)
     });
 }
 
-/* Set template. */
-function setTemplate(templateID)
-{
-    $('#tplBox .list-group-item.active').removeClass('active');
-    $('#tplTitleBox' + templateID).closest('.list-group-item').addClass('active');
-    var steps = $('#template' + templateID).html();
-    editor['#'].html(steps);
-}
-
-/* Delete template. */
-function deleteTemplate(templateID)
-{
-    if(!templateID) return;
-    if(confirm(confirmDeleteTemplate))
-    {
-        hiddenwin.location.href = createLink('bug', 'deleteTemplate', 'templateID=' + templateID);
-        $('#tplBox' + templateID).addClass('hidden');
-    }
-}
-
-/* Display template x icon. */
-function displayXIcon(templateID)
-{
-    $('#templateID' + templateID).removeClass('hidden');
-}
-
-/* Hide template x icon. */
-function hideXIcon(templateID)
-{
-    $('#templateID' + templateID).addClass('hidden');
-}
-
 $(function()
 {
     if($('#project').val()) loadProjectRelated($('#project').val());
-    $('#saveTplModal').on('hide.zui.modal', function(){$(this).find('#title').val('');});
-    $('#saveTplBtn').click(function(){$('#saveTplModal').modal('show');});
-    $('#saveTplModal #submit').click(function()
-    {
-        var $inputGroup = $('#saveTplModal div.input-group');
-        var $publicBox  = $inputGroup.find('input[id^="public"]');
-        var title       = $inputGroup.find('#title').val();
-        var content     = $('#steps').val();
-        var isPublic    = ($publicBox.size() > 0 && $publicBox.prop('checked')) ? $publicBox.val() : 0;
-        if(!title || !content) return;
-        saveTemplateLink = createLink('bug', 'saveTemplate');
-        $.post(saveTemplateLink, {title:title, content:content, public:isPublic}, function(data)
-        {
-            $('#tplBox').html(data);
-            // If has error then not hide.
-            if(data.indexOf('alert') == -1) $('#saveTplModal').modal('hide');
-        });
-    });
 
     $('[data-toggle=tooltip]').tooltip();
 
