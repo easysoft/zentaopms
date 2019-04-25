@@ -289,6 +289,8 @@ class taskModel extends model
             if($task->estimate) $task->estimate = (float)$task->estimate;
         }
 
+        $childTasks = null;
+        
         foreach($data as $i => $task)
         {
             $this->dao->insert(TABLE_TASK)->data($task)
@@ -300,6 +302,7 @@ class taskModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             $taskID = $this->dao->lastInsertID();
+            $childTasks .= html::a(helper::createLink('task', 'view', 'taskID=' . $taskID), $task->name, '', "title='$task->name' class='text-ellipsis w-p10'") .  ',';
             if($story) $this->story->setStage($task->story);
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
@@ -315,6 +318,7 @@ class taskModel extends model
             $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($parentID);
             $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($parentID)->exec();
+            $this->action->create('task', $parentID, 'batchCreate', $childTasks);
         }
         return $mails;
     }
@@ -671,6 +675,14 @@ class taskModel extends model
         if(isset($task->project) and $task->project != $oldTask->project)
         {
             $this->dao->update(TABLE_TASK)->set('project')->eq($task->project)->set('module')->eq($task->module)->where('parent')->eq($taskID)->exec();
+        }
+
+        if(isset($task->parent) and $task->parent != $oldTask->parent)
+        {
+            $comment = html::a(helper::createLink('task', 'view', 'taskID=' . $taskID), $task->name);
+            $this->loadModel('action')->create('task', $task->parent, 'linkTo', $comment);
+            $this->loadModel('action')->create('task', $oldTask->parent, 'unLink', $comment);
+        
         }
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
