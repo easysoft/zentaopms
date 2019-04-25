@@ -9,9 +9,11 @@ class admin extends control
             $server = $this->chat->getServer('zentao');
             if(strpos($server, '127.0.0.1') !== false) die(js::alert($this->lang->chat->xxdServerError));
 
+            $this->loadModel('setting')->setItem('system.common.xxserver.installed', 1);
+
             $setting     = $this->config->xuanxuan;
             $setting->os = $os;
-            $this->chat->downloadXXD('zentao', $setting, $type);
+            $this->chat->downloadXXD($setting, $type);
         }
         die("Params error.");
     }
