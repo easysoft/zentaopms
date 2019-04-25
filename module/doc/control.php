@@ -304,12 +304,16 @@ class doc extends control
             if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
+            $files = $docResult['files'];
             $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
                 $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
             }
-            $this->action->create('doc', $docID, 'Created');
+
+            $fileAction = '';
+            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+            $this->action->create('doc', $docID, 'Created', $fileAction);
 
             $vars = "libID=$libID&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
             $link = $this->createLink('doc', 'browse', $vars);
