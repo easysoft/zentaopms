@@ -217,17 +217,7 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
           <tr>
             <th><?php echo $lang->bug->steps;?></th>
             <td colspan='2'>
-              <div id='tplBoxWrapper'>
-                <div class='btn-toolbar'>
-                  <div class='btn-group'>
-                    <button id='saveTplBtn' type='button' class='btn btn-mini' data-toggle='saveTplModal'><?php echo $lang->bug->saveTemplate?></button>
-                    <button type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->bug->applyTemplate?> <span class='caret'></span></button>
-                    <ul id='tplBox' class='dropdown-menu pull-right'>
-                      <?php echo $this->fetch('bug', 'buildTemplates');?>
-                    </ul>
-                  </div>
-                </div>
-              </div>
+              <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=bug&link=steps');?>
               <?php echo html::textarea('steps', $steps, "rows='10' class='form-control'");?>
             </td>
           </tr>
@@ -303,25 +293,6 @@ js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
         </tfoot>
       </table>
     </form>
-  </div>
-</div>
-<div class="modal fade" id="saveTplModal" tabindex="-1" role="dialog">
-  <div class="modal-dialog w-600px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->bug->setTemplateTitle;?></h4>
-      </div>
-      <div class="modal-body">
-        <div class='input-group'>
-          <?php echo html::input('title', '' , "class='form-control'")?>
-          <?php if(common::hasPriv('bug', 'setPublic')):?>
-          <span class='input-group-addon'><?php echo html::checkbox('public', array('1' => $lang->public))?></span>
-          <?php endif;?>
-          <span class='input-group-btn'><?php echo html::submitButton('', '', 'btn btn-primary')?></span>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
