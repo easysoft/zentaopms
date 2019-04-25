@@ -14,28 +14,28 @@ $lang->testreport->storyTitle  = 'Story Title';
 $lang->testreport->project     = 'Project';
 $lang->testreport->testtask    = 'Test Build';
 $lang->testreport->tasks       = $lang->testreport->testtask;
-$lang->testreport->startEnd    = 'Start&End';
+$lang->testreport->startEnd    = 'Begin&End';
 $lang->testreport->owner       = 'Owner';
 $lang->testreport->members     = 'Members';
 $lang->testreport->begin       = 'Begin';
 $lang->testreport->end         = 'End';
-$lang->testreport->stories     = 'Story';
-$lang->testreport->bugs        = 'Bugs';
+$lang->testreport->stories     = 'Test Story';
+$lang->testreport->bugs        = 'Test Bug';
 $lang->testreport->builds      = 'Build Info';
 $lang->testreport->goal        = 'Project Goal';
 $lang->testreport->cases       = 'Case';
 $lang->testreport->bugInfo     = 'Bug Distribution';
 $lang->testreport->report      = 'Summary';
 $lang->testreport->legacyBugs  = 'Legacy Bug';
-$lang->testreport->createdDate = 'Date';
+$lang->testreport->createdDate = 'Created';
 $lang->testreport->objectID    = 'Object';
 $lang->testreport->profile     = 'Profile';
 $lang->testreport->value       = 'Value';
 $lang->testreport->none        = 'None';
-$lang->testreport->all         = 'All Report';
+$lang->testreport->all         = 'All Reports';
 $lang->testreport->deleted     = 'Deleted';
 
-$lang->testreport->legendBasic       = 'Basic Info';
+$lang->testreport->legendBasic       = 'Basic Info.';
 $lang->testreport->legendStoryAndBug = 'Story&Bug';
 $lang->testreport->legendBuild       = 'Build Info';
 $lang->testreport->legendCase        = 'Linked Case';
@@ -53,7 +53,7 @@ $lang->testreport->bugResolutionGroups = 'Bug Resolution Distribution';
 $lang->testreport->bugModuleGroups     = 'Bug Module Distribution';
 $lang->testreport->legacyBugs          = 'Legacy Bugs';
 $lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Resolution is fixed or postponed / status is resolved or closed)';
-$lang->testreport->bugCreateByCaseRate = 'Bug Created in Case Rate (Bugs reported in cases / Newly added bugs)';
+$lang->testreport->bugCreateByCaseRate = 'Bug Generated in Case Rate (Bugs reported in cases / Newly added bugs)';
 
 $lang->testreport->caseSummary    = ' <strong>%s</strong> cases in Total : <strong>%s</strong> performed, <strong>%s</strong> results, <strong>%s</strong> failed.';
 $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
@@ -61,15 +61,15 @@ $lang->testreport->confirmDelete  = 'Do you want to delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';
 $lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
-$lang->testreport->foundBugTip    = "Bugs created in this build and created in the test period.";
+$lang->testreport->foundBugTip    = "Bugs generated in this build and generated in the test period.";
 $lang->testreport->legacyBugTip   = "Active Bugs, or the resolved beyond the test period.";
-$lang->testreport->fromCaseBugTip = "Bugs created after failed cases in the test period.";
-$lang->testreport->errorTrunk     = "The trunk cannot create a QA report for. Please modify the linked build!";
+$lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case executions in the test period.";
+$lang->testreport->errorTrunk     = "You cannot create a Test report for the trunk. Please modify the linked build!";
 $lang->testreport->moreProduct    = "Test reports can only be generated for the same product.";
 
 $lang->testreport->bugSummary = <<<EOD
 <strong>%s</strong> Bug(s) reported in total <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,
 <strong>%s</strong> Bug(s) remained unresolve <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-help'></i></a>,
-<strong>%s</strong> Bug(s) failure of case <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
-Bug Effective Rate <a data-toggle='tooltip' class='text-warning' title='Resolution is resolved or delayed / status is resolved or closed'><i class='icon-help'></i></a>: <strong>%s</strong>，Bugs reportted from case rate<a data-toggle='tooltip' class='text-warning' title='Bugs created from cases / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
+<strong>%s</strong> Bug(s) generated due to the failure of case executions <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
+Bug Effective Rate <a data-toggle='tooltip' class='text-warning' title='Resolution is resolved or delayed / status is resolved or closed'><i class='icon-help'></i></a>: <strong>%s</strong>，Bugs reported from case rate<a data-toggle='tooltip' class='text-warning' title='Bugs created from cases / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
 EOD;
