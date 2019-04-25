@@ -11,17 +11,17 @@
  */
 $lang->release->common           = 'Release';
 $lang->release->create           = "Create Release";
-$lang->release->edit             = "Edit";
+$lang->release->edit             = "Edit Release";
 $lang->release->linkStory        = "Link Story";
 $lang->release->linkBug          = "Link Bug";
-$lang->release->delete           = "Delete";
+$lang->release->delete           = "Delete Release";
 $lang->release->deleted          = 'Deleted';
 $lang->release->view             = "Overview";
 $lang->release->browse           = "Release";
 $lang->release->changeStatus     = "Change Status";
 $lang->release->batchUnlink      = "Batch Unlink";
 $lang->release->batchUnlinkStory = "Batch Unlink Story";
-$lang->release->batchUnlinkBug   = "Batch Unlink";
+$lang->release->batchUnlinkBug   = "Batch Unlink Bug";
 
 $lang->release->confirmDelete      = "Do you want to delete this Release?";
 $lang->release->confirmUnlinkStory = "Do you want to remove this Story?";
