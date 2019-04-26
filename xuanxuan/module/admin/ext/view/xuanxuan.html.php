@@ -37,6 +37,11 @@
           <td><?php echo zget($config->xuanxuan, 'key', '');?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->chat->debug;?></th>
+          <td><?php echo $type == 'edit' ? html::radio('debug', $lang->chat->debugStatus, zget($config->xuanxuan, 'debug', 0)) : zget($lang->chat->debugStatus, zget($config->xuanxuan, 'debug', 0));?></td>
+          <td></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->chat->xxdServer;?></th>
           <td><?php echo $type == 'edit' ? html::input('server', $domain, "class='form-control'") : $domain;?></td>
           <td><?php if($type == 'edit') echo $lang->chat->xxdServerTip;?></td>
