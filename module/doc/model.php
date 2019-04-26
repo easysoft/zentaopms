@@ -1588,6 +1588,7 @@ class docModel extends model
         $parantMoudles = $this->dao->select('id, name')->from(TABLE_MODULE)
             ->where('id')->in($path)
             ->andWhere('deleted')->eq(0)
+            ->orderBy('`grade`')
             ->fetchAll('id');
 
         foreach($parantMoudles as $parentID => $moduleName)
