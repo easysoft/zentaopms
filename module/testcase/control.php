@@ -807,16 +807,16 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function delete($caseID, $confirm = 'no')
+    public function delete($caseID, $runID ,$confirm = 'no')
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testcase->confirmDelete, inlink('delete', "caseID=$caseID&confirm=yes")));
+            die(js::confirm($this->lang->testcase->confirmDelete, inlink('delete', "caseID=$caseID&runID=$runID&confirm=yes")));
         }
         else
         {
             $this->testcase->delete(TABLE_CASE, $caseID);
-
+            $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq($runID)->exec();
             /* if ajax request, send result. */
             if($this->server->ajax)
             {
