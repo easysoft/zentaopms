@@ -109,18 +109,6 @@ pms:
 	make package
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
-en:
-	make common
-	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
-	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
-	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
-	make package
-	zip -r -9 ZenTaoPMS.$(VERSION).int.zip zentaopms
-	rm -fr zentaopms
-	echo $(VERSION).int > VERSION
-	make deb
-	make rpm
-	echo $(VERSION) > VERSION
 deb:
 	mkdir buildroot
 	cp -r build/debian/DEBIAN buildroot
@@ -147,6 +135,46 @@ rpm:
 	cd ~/rpmbuild/SOURCES; tar -czvf zentaopms-${VERSION}.tar.gz etc opt; rm -rf ZenTaoPMS.${VERSION}.zip etc opt;
 	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
 	cp ~/rpmbuild/RPMS/noarch/zentaopms-${VERSION}-1.noarch.rpm ./
+	rm -rf ~/rpmbuild
+en:
+	make common
+	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
+	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
+	make package
+	mv zentaopms zentaoalm
+	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
+	rm -fr zentaoalm
+	echo $(VERSION).int > VERSION
+	make endeb
+	make enrpm
+	echo $(VERSION) > VERSION
+endeb:
+	mkdir buildroot
+	cp -r build/debian/DEBIAN buildroot
+	sed -i '/^Version/cVersion: ${VERSION}' buildroot/DEBIAN/control
+	mkdir buildroot/opt
+	mkdir buildroot/etc/apache2/sites-enabled/ -p
+	cp build/debian/zentaopms.conf buildroot/etc/apache2/sites-enabled/
+	cp ZenTaoALM.${VERSION}.zip buildroot/opt
+	cd buildroot/opt; unzip ZenTaoALM.${VERSION}.zip; mv zentaoalm zentao; rm ZenTaoALM.${VERSION}.zip
+	sed -i 's/index.php/\/zentao\/index.php/' buildroot/opt/zentao/www/.htaccess
+	sudo dpkg -b buildroot/ ZenTaoALM_${VERSION}_1_all.deb
+	rm -rf buildroot
+enrpm:
+	mkdir ~/rpmbuild/SPECS -p
+	cp build/rpm/zentaopms.spec ~/rpmbuild/SPECS
+	sed -i '/^Version/cVersion:${VERSION}' ~/rpmbuild/SPECS/zentaopms.spec
+	mkdir ~/rpmbuild/SOURCES
+	cp ZenTaoALM.${VERSION}.zip ~/rpmbuild/SOURCES
+	mkdir ~/rpmbuild/SOURCES/etc/httpd/conf.d/ -p
+	cp build/debian/zentaopms.conf ~/rpmbuild/SOURCES/etc/httpd/conf.d/zentaoalm.conf
+	mkdir ~/rpmbuild/SOURCES/opt/ -p
+	cd ~/rpmbuild/SOURCES; unzip ZenTaoALM.${VERSION}.zip; mv zentaoalm opt/zentao;
+	sed -i 's/index.php/\/zentao\/index.php/' ~/rpmbuild/SOURCES/opt/zentao/www/.htaccess
+	cd ~/rpmbuild/SOURCES; tar -czvf zentaoalm-${VERSION}.tar.gz etc opt; rm -rf ZenTaoALM.${VERSION}.zip etc opt;
+	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
+	cp ~/rpmbuild/RPMS/noarch/zentaoalm-${VERSION}-1.noarch.rpm ./
 	rm -rf ~/rpmbuild
 patchphpdoc:
 	sudo cp misc/doc/phpdoc/*.tpl /usr/share/php/data/PhpDocumentor/phpDocumentor/Converters/HTML/frames/templates/phphtmllib/templates/
