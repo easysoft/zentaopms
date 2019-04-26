@@ -15,6 +15,8 @@
 <div id='mainContent' class="main-row">
   <div class="col-8 main-col">
     <div class="row">
+    <?php $isRoadmap = common::hasPriv('product', 'roadmap');?>
+    <?php if($isRoadmap):?>
       <div class="col-sm-6">
         <div class="panel block-release">
           <div class="panel-heading">
@@ -50,7 +52,8 @@
           </div>
         </div>
       </div>
-      <div class="col-sm-6">
+      <?php endif;?>
+<div class="col-sm-<?php echo $isRoadmap ? 6 : 12?>">
         <div class="panel block-dynamic">
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->product->latestDynamic;?></div>
