@@ -53,33 +53,38 @@ zentaoxx:
 	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
-	cp xuan/ranzhi/config/ext/xuanxuan.php zentaoxx/config/ext/
-	cp -r xuan/ranzhi/lib/phpaes zentaoxx/lib/
-	cp -r xuan/ranzhi/framework/xuanxuan.class.php zentaoxx/framework/
-	cp -r xuan/ranzhi/db/*.sql zentaoxx/db/
-	cp -r xuan/ranzhi/app/sys/chat zentaoxx/module/
-	cp -r xuan/ranzhi/app/sys/common/ext/model/hook zentaoxx/module/common/ext/model/
-	cp -r xuan/ranzhi/app/sys/action zentaoxx/module/
+	cp xuan/xxb/config/ext/xuanxuan.php zentaoxx/config/ext/
+	cp -r xuan/xxb/lib/phpaes zentaoxx/lib/
+	cp -r xuan/xxb/framework/xuanxuan.class.php zentaoxx/framework/
+	cp -r xuan/xxb/db/*.sql zentaoxx/db/
+	cp -r xuan/xxb/module/chat zentaoxx/module/
+	cp -r xuan/xxb/module/client zentaoxx/module/
+	cp -r xuan/xxb/module/common/ext/model/hook zentaoxx/module/common/ext/model/
+	mkdir zentaoxx/module/action
+	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
+	mv zentaoxx/db/ zentaoxx/db_bak
+	mkdir zentaoxx/db/
+	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
+	rm -rf zentaoxx/db_bak/
 	sed -i 's/site,//' zentaoxx/module/chat/model.php
 	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
 	sed -i '/password = md5/d' zentaoxx/module/chat/control.php
 	sed -i '/getSignedTime/d' zentaoxx/module/chat/control.php
-	sed -i 's/tree/dept/' zentaoxx/module/chat/control.php
+	sed -i "s/'yahoo', //g" zentaoxx/module/chat/config.php
+	sed -i "s/'gtalk', //g" zentaoxx/module/chat/config.php
+	sed -i "s/'wangwang', //g" zentaoxx/module/chat/config.php
+	sed -i "s/'site', //g" zentaoxx/module/chat/config.php
+	sed -i "s/'reload'/inlink('browse')/g" zentaoxx/module/client/control.php
 	sed -i 's/tree/dept/' zentaoxx/module/chat/model.php
-	sed -i "s/, 'sys'//" zentaoxx/module/chat/control.php
-	sed -i 's/system.sys/system/' zentaoxx/module/chat/control.php
-	sed -i 's/&app=sys//' zentaoxx/module/chat/control.php
-	sed -i 's/file->createdBy/file->addedBy/' zentaoxx/module/chat/control.php
-	sed -i 's/file->createdDate/file->addedDate/' zentaoxx/module/chat/control.php
 	sed -i 's/im_/zt_im_/' zentaoxx/db/*.sql
-	sed -i 's/sys_user/zt_user/' zentaoxx/db/*.sql
-	sed -i 's/sys_file/zt_file/' zentaoxx/db/*.sql
-	sed -i '/sys_entry/d' zentaoxx/db/*.sql
+	sed -i 's/xxb_user/zt_user/' zentaoxx/db/*.sql
+	sed -i 's/xxb_file/zt_file/' zentaoxx/db/*.sql
+	sed -i '/xxb_entry/d' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
-	rm -rf zentaopms/tools
+	rm -rf zentaoxx/tools
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	rm -rf xuan.zip xuan zentaoxx
 package:

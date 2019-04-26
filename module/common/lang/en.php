@@ -94,12 +94,19 @@ $lang->preShortcutKey  = '[Shortcut:←]';
 $lang->nextShortcutKey = '[Shortcut:→]';
 $lang->backShortcutKey = '[Shortcut:Alt+↑]';
 
+$lang->saveTemplate          = 'Save as Template';
+$lang->setPublic             = 'Set as Public Template';
+$lang->deleteTemplate        = 'Delete Template';
+$lang->setTemplateTitle      = 'Please enter the title of template.';
+$lang->applyTemplate         = 'Template';
+$lang->confirmDeleteTemplate = 'Do you want to delete this template?';
+
 $lang->select        = 'Select';
 $lang->selectAll     = 'Select All';
 $lang->selectReverse = 'Select Inverse';
 $lang->loading       = 'Loading...';
 $lang->notFound      = 'Not found!';
-$lang->notPage       =  'Sorry, the features you are visiting are under development!';
+$lang->notPage       = 'Sorry, the features you are visiting are under development!';
 $lang->showAll       = '[[Show All]]';
 
 $lang->future       = 'Pending';

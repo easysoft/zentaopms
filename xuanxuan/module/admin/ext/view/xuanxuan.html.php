@@ -73,7 +73,7 @@
         </tr>
         <?php if($type == 'edit'):?>
         <tr>
-          <th><?php echo $lang->chat->xxd->isHttps;?></th>
+          <th><?php echo $lang->chat->xxdIsHttps;?></th>
           <td>
             <?php echo html::hidden('isHttps', $isHttps);?>
             <?php echo $type ? html::radio('https', $lang->chat->httpsOptions, $isHttps, "class='checkbox'") : $lang->chat->httpsOptions[$isHttps];?>
@@ -82,7 +82,7 @@
         </tr>
         <?php else:?>
         <tr>
-          <th><?php echo $lang->chat->xxd->isHttps;?></th>
+          <th><?php echo $lang->chat->xxdIsHttps;?></th>
           <td><?php echo zget($lang->chat->httpsOptions, $isHttps, '');?> </td>
           <td></td>
         </tr>
@@ -114,6 +114,7 @@
               <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=package'), $lang->chat->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package'");?>
               <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=config'), $lang->chat->downloadConfig, 'hiddenwin', "class='btn btn-primary download'");?>
               <?php echo html::a(helper::createLink('admin', 'xuanxuan', 'type=edit'), $lang->chat->changeSetting, '', "class='btn'");?>
+              <?php echo html::a(helper::createLink('client', 'browse'), $lang->client->browseVersion, '', "class='btn'");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->chat->help, '_blank', "class='btn'");?>
             <?php endif;?>
           </td>

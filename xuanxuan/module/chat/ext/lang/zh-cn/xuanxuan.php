@@ -17,6 +17,8 @@ $lang->chat->createStory = '创建需求';
 $lang->chat->createTask  = '创建任务';
 $lang->chat->createTodo  = '创建待办';
 
+$lang->chat->xxdIsHttps = '启用HTTPS';
+
 $lang->chat->turnonList = array();
 $lang->chat->turnonList[1] = '是';
 $lang->chat->turnonList[0] = '否';
