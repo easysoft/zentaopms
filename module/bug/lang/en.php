@@ -95,9 +95,6 @@ $lang->bug->reportChart        = 'Report';
 $lang->bug->export             = 'Export';
 $lang->bug->delete             = 'Delete';
 $lang->bug->deleted            = 'Deleted';
-$lang->bug->saveTemplate       = 'Save as Template';
-$lang->bug->setPublic          = 'Set as Public Template';
-$lang->bug->deleteTemplate     = 'Delete Template';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
 $lang->bug->copy               = 'Copy';
 $lang->bug->search             = 'Search';
@@ -163,11 +160,8 @@ $lang->bug->buttonConfirm = 'Confirm';
 $lang->bug->summary               = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unresolved.";
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}, Story and Task change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
-$lang->bug->setTemplateTitle      = 'Please enter the title of template.';
 $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
 $lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
-$lang->bug->applyTemplate         = 'Template';
-$lang->bug->confirmDeleteTemplate = 'Do you want to delete this template?';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";

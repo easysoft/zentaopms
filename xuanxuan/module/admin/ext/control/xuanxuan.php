@@ -10,6 +10,7 @@ class admin extends control
     public function xuanxuan($type = '')
     {
         $this->app->loadLang('chat');
+        $this->app->loadLang('client');
         if($_POST)
         {
             $setting = fixer::input('post')->join('staff', ',')->remove('https')->get();

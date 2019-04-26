@@ -94,6 +94,13 @@ $lang->preShortcutKey  = '[快捷鍵:←]';
 $lang->nextShortcutKey = '[快捷鍵:→]';
 $lang->backShortcutKey = '[快捷鍵:Alt+↑]';
 
+$lang->saveTemplate          = '保存模板';
+$lang->setPublic             = '設為公共模板';
+$lang->deleteTemplate        = '刪除模板';
+$lang->setTemplateTitle      = '請輸入模板標題';
+$lang->applyTemplate         = '應用模板';
+$lang->confirmDeleteTemplate = '您確認要刪除該模板嗎？';
+
 $lang->select        = '選擇';
 $lang->selectAll     = '全選';
 $lang->selectReverse = '反選';

@@ -1007,4 +1007,46 @@ class user extends control
         if(empty($contactList)) return false;
         return print(html::select('', $contactList, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\""));
     }
+
+    /**
+     * Ajax print templates.
+     * 
+     * @param  int    $type 
+     * @param  string $link 
+     * @access public
+     * @return void
+     */
+    public function ajaxPrintTemplates($type, $link = '')
+    {
+        $this->view->link      = $link;
+        $this->view->type      = $type;
+        $this->view->templates = $this->user->getUserTemplates($type);
+        $this->display();
+    }
+
+    /**
+     * Save current template.
+     *
+     * @access public
+     * @return string
+     */
+    public function ajaxSaveTemplate($type)
+    {
+        $this->user->saveUserTemplate($type);
+        if(dao::isError()) echo js::error(dao::getError(), $full = false);
+        die($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
+    }
+
+    /**
+     * Delete a user template.
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteTemplate($templateID)
+    {
+        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
+        die();
+    }
 }

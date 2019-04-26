@@ -41,7 +41,6 @@ $lang->misc->zentao->support['manual']     = "User Manual";
 
 
 
-
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
 

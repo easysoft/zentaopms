@@ -25,9 +25,9 @@ $lang->install->seeLatestRelease = 'View latest version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
 $lang->install->license          = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, QA Management, Document Management, Todos Management, Company Management etc. ZenTao is the best choice for software project management.
+ZenTao ALM is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, QA Management, Document Management, Todos Management, Company Management etc. ZenTao is the best choice for software project management.
 
-ZenTao is built on PHP + MySQL and based on ZenTaoPHP framework, an independent framework developed by our team. Third party developers/organizations can develop plug-ins or customize for their requirements.
+ZenTao ALM is built on PHP + MySQL and based on ZenTaoPHP framework, an independent framework developed by our team. Third party developers/organizations can develop plug-ins or customize for their requirements.
 EOT;
 $lang->install->links = <<<EOT
 ZenTao is developed by <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.

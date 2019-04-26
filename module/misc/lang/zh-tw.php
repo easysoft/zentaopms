@@ -41,7 +41,6 @@ $lang->misc->zentao->support['ask']        = "官方問答";
 $lang->misc->zentao->support['video']      = "使用視頻";
 $lang->misc->zentao->support['qqgroup']    = "官方QQ群";
 
-$lang->misc->zentao->cowin['donate']       = "捐助我們";
 $lang->misc->zentao->cowin['reportbug']    = "彙報Bug";
 $lang->misc->zentao->cowin['feedback']     = "反饋需求";
 $lang->misc->zentao->cowin['recommend']    = "推薦給朋友";
