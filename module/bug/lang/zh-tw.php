@@ -95,9 +95,6 @@ $lang->bug->reportChart        = '報表統計';
 $lang->bug->export             = '導出數據';
 $lang->bug->delete             = '刪除';
 $lang->bug->deleted            = '已刪除';
-$lang->bug->saveTemplate       = '保存模板';
-$lang->bug->setPublic          = '設為公共模板';
-$lang->bug->deleteTemplate     = '刪除模板';
 $lang->bug->confirmStoryChange = '確認需求變動';
 $lang->bug->copy               = '複製Bug';
 $lang->bug->search             = '搜索';
@@ -163,11 +160,8 @@ $lang->bug->buttonConfirm = '確認';
 $lang->bug->summary               = "本頁共 <strong>%s</strong> 個Bug，未解決 <strong>%s</strong>。";
 $lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}會導致相應的{$lang->projectCommon}、需求和任務發生變化，確定嗎？";
 $lang->bug->confirmDelete         = '您確認要刪除該Bug嗎？';
-$lang->bug->setTemplateTitle      = '請輸入bug模板標題';
 $lang->bug->remindTask            = '該Bug已經轉化為任務，是否更新任務(編號:%s)狀態 ?';
 $lang->bug->skipClose             = 'Bug %s 不是已解決狀態，不能關閉。';
-$lang->bug->applyTemplate         = '應用模板';
-$lang->bug->confirmDeleteTemplate = '您確認要刪除該模板嗎？';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p><br/>";
