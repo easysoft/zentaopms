@@ -138,6 +138,7 @@ class release extends control
         if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
         
         $stories = array();
+        /*task 5379*/
         if($link == 'false')
         {
             $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($release->stories)->andWhere('deleted')->eq(0)
