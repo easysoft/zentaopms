@@ -1212,9 +1212,8 @@ class task extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->task->$chartFunc();
                 $chartOption = $this->lang->task->report->$chart;
-                if(!empty($chartType)) $chartOption->type = $chartType;
+                if(!empty($chartType) and $chartType != 'default') $chartOption->type = $chartType;
                 $this->task->mergeChartOption($chart);
-
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
