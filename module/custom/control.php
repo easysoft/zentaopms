@@ -324,6 +324,31 @@ class custom extends control
     }
 
     /**
+     *Set dynamic recode what action
+     *
+     * @access public
+     * @return void
+     */
+    public function setDynamic()
+    {
+        if($_POST)
+        {
+            $actions = $this->post->actions;
+            $actions = implode(',', array_filter($actions));
+            $this->loadModel('setting')->setItem('system.common.global.setdynamic', $actions);
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            
+        }
+        $this->app->loadLang('action');
+        $this->view->title      = $this->lang->custom->setDynamic;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+        $this->view->actions    = $this->lang->action->search->label;
+        $this->view->actioned   = $this->loadModel('setting')->getItem("owner=system&module=common&section=global&key=setdynamic");
+        $this->display();
+    }
+
+    /**
      * Timezone.
      * 
      * @access public

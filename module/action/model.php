@@ -36,7 +36,7 @@ class actionModel extends model
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
         if($actor == 'guest' and $actionType == 'logout') return false;
-
+        
         $action = new stdclass();
 
         $objectType = str_replace('`', '', $objectType);
@@ -623,7 +623,11 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        return $this->transformActions($actions);
+       
+        $actions = $this->transformActions($actions);
+        $actioned = $this->loadModel('setting')->getItem("owner=system&module=common&section=global&key=setdynamic");
+        foreach($actions as $index => $action) if(strpos($actioned, $action->action)  === false) unset($actions[$index]);
+        return $actions;
     }
 
     /**
