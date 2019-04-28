@@ -52,11 +52,16 @@ foreach($templates as $key => $template)
       </div>
       <div class="modal-body">
         <div class='input-group'>
-          <?php echo html::input('title', '' , "class='form-control'")?>
+          <input type="text" id="title" value="" class="form-control" autocomplete="off">
           <?php if(common::hasPriv('user', 'setPublicTemplate')):?>
-          <span class='input-group-addon'><?php echo html::checkbox('public', array('1' => $lang->public))?></span>
+          <span class="input-group-addon">
+            <div class="checkbox-primary">
+              <input type="checkbox" value="1" id="public" />
+              <label for="public"><?php echo $lang->public;?></label>
+            </div>
+          </span>
           <?php endif;?>
-          <span class='input-group-btn'><?php echo html::commonButton($lang->save, "id='submit'", 'btn btn-primary')?></span>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->save, "id='templateSubmit'", 'btn btn-primary')?></span>
         </div>
       </div>
     </div>
@@ -97,10 +102,10 @@ $(function()
 {
     $('#saveTplModal').on('hide.zui.modal', function(){$(this).find('#title').val('');});
     $('#saveTplBtn').click(function(){$('#saveTplModal').modal('show');});
-    $('#saveTplModal #submit').click(function()
+    $('#saveTplModal #templateSubmit').click(function()
     {
         var $inputGroup = $('#saveTplModal div.input-group');
-        var $publicBox  = $inputGroup.find('input[id^="public"]');
+        var $publicBox  = $inputGroup.find('input#public');
         var title       = $inputGroup.find('#title').val();
         var content     = editor['<?php echo $link;?>'].html();
         var isPublic    = ($publicBox.size() > 0 && $publicBox.prop('checked')) ? $publicBox.val() : 0;
