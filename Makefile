@@ -79,10 +79,11 @@ zentaoxx:
 	sed -i "s/'site', //g" zentaoxx/module/chat/config.php
 	sed -i "s/'reload'/inlink('browse')/g" zentaoxx/module/client/control.php
 	sed -i 's/tree/dept/' zentaoxx/module/chat/model.php
-	sed -i 's/im_/zt_im_/' zentaoxx/db/*.sql
-	sed -i 's/xxb_user/zt_user/' zentaoxx/db/*.sql
-	sed -i 's/xxb_file/zt_file/' zentaoxx/db/*.sql
+	sed -i 's/im_/zt_im_/g' zentaoxx/db/*.sql
+	sed -i 's/xxb_user/zt_user/g' zentaoxx/db/*.sql
+	sed -i 's/xxb_file/zt_file/g' zentaoxx/db/*.sql
 	sed -i '/xxb_entry/d' zentaoxx/db/*.sql
+	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	rm -rf zentaoxx/tools
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
