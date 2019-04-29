@@ -1685,7 +1685,6 @@ EOD;
 
         unset($_GET['code']);
         unset($_GET['token']);
-        unset($_GET['time']);
     }
 
     /**
@@ -1699,19 +1698,22 @@ EOD;
     {
         parse_str($this->server->query_String, $queryString);
         unset($queryString['token']);
+
         /* Change for task #5384. */
         if(isset($queryString['time']))
         {
-            if($queryString['time'] <= $entry->calledTime) $this->response('CALLED_TIME');
             $result = $this->get->token == md5($entry->code . $entry->key . $queryString['time']);
-            if($result) $this->loadModel('entry')->updateTime($entry->code, $queryString['time']);
-            return $result;
+            if($result)
+            {
+                if($queryString['time'] <= $entry->calledTime) $this->response('CALLED_TIME');
+                $this->loadModel('entry')->updateTime($entry->code, $queryString['time']);
+                unset($_GET['time']);
+                return $result;
+            }
         }
-        else
-        {
-            $queryString = http_build_query($queryString);
-            return $this->get->token == md5(md5($queryString) . $entry->key);
-        }
+
+        $queryString = http_build_query($queryString);
+        return $this->get->token == md5(md5($queryString) . $entry->key);
     }
 
     /**
