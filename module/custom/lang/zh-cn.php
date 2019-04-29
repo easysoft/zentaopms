@@ -18,6 +18,8 @@ $lang->custom->required   = '必填项';
 $lang->custom->score      = '积分';
 $lang->custom->timezone   = '时区';
 $lang->custom->scoreReset = '重置积分';
+$lang->custom->setDynamic = '动态设置';
+$lang->custom->setAction =  '设置动作';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';
@@ -77,7 +79,7 @@ $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('flow', 'working', 'required', 'score', 'setDynamic');
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 

@@ -18,6 +18,8 @@ $lang->custom->required   = 'Required';
 $lang->custom->score      = 'Point';
 $lang->custom->timezone   = 'Timezone';
 $lang->custom->scoreReset = 'Reset Point';
+$lang->custom->setDynamic = 'Set Dynamic';
+ng->custom->setAction     =  'Set Action';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
@@ -77,7 +79,7 @@ $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact';
 $lang->custom->user->fields['deleted']      = 'Deleted User';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('flow', 'working', 'required', 'score', 'setDynamic');
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
