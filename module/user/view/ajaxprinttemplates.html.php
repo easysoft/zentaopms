@@ -14,8 +14,9 @@ foreach($templates as $key => $template)
 <?php else:?>
 <style>
 #tplBoxWrapper {position: relative; z-index: 10;}
-#tplBoxWrapper > .btn-toolbar {position: absolute; right: 0px; top: 0px;}
-#tplBoxWrapper .btn {padding: 4px 8px}
+#tplBoxWrapper > .btn-toolbar {position: absolute; right: 1px; top: 1px;}
+#tplBoxWrapper .btn {padding: 4px 8px; border-top:0px; border-bottom:0px;}
+#tplBoxWrapper .applyTplBtn {border-right:0px;}
 #tplBox li {position: relative;}
 #tplBox li .btn-delete {position: absolute; right: 0; top: -5px; display: block; width: 40px; text-align:center;}
 #tplBox li:hover .btn-delete {color:#fff;}
@@ -25,7 +26,7 @@ foreach($templates as $key => $template)
   <div class='btn-toolbar'>
     <div class='btn-group'>
       <button id='saveTplBtn' type='button' class='btn btn-mini' data-toggle='saveTplModal'><?php echo $lang->saveTemplate?></button>
-      <button type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->applyTemplate?> <span class='caret'></span></button>
+      <button id='applyTplBtn' type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->applyTemplate?> <span class='caret'></span></button>
       <ul id='tplBox' class='dropdown-menu pull-right'>
         <?php
         foreach($templates as $key => $template)
