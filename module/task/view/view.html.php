@@ -163,7 +163,7 @@
         common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
 
         if(!isonlybody()) echo "<div class='divider'></div>";
-        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}'", ' ');
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}' target='__blank'", ' ');
         common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
         common::printIcon('task', 'create', "projctID={$task->project}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
         common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
