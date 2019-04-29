@@ -19,7 +19,7 @@ $lang->custom->score      = 'Point';
 $lang->custom->timezone   = 'Timezone';
 $lang->custom->scoreReset = 'Reset Point';
 $lang->custom->setDynamic = 'Set Dynamic';
-ng->custom->setAction     =  'Set Action';
+$lang->custom->setAction  = 'Set Action';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
