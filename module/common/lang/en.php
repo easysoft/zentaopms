@@ -94,13 +94,6 @@ $lang->preShortcutKey  = '[Shortcut:←]';
 $lang->nextShortcutKey = '[Shortcut:→]';
 $lang->backShortcutKey = '[Shortcut:Alt+↑]';
 
-$lang->saveTemplate          = 'Save as Template';
-$lang->setPublic             = 'Set as Public Template';
-$lang->deleteTemplate        = 'Delete Template';
-$lang->setTemplateTitle      = 'Please enter the title of template.';
-$lang->applyTemplate         = 'Template';
-$lang->confirmDeleteTemplate = 'Do you want to delete this template?';
-
 $lang->select        = 'Select';
 $lang->selectAll     = 'Select All';
 $lang->selectReverse = 'Select Inverse';

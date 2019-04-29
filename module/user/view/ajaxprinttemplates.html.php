@@ -3,8 +3,8 @@
 foreach($templates as $key => $template)
 {
     echo "<li id='tplBox$template->id' onmouseover='displayXIcon($template->id)' onmouseout='hideXIcon($template->id)'>";
-    echo "<a title='{$lang->applyTemplate}' class='tpl-name' id='tplTitleBox$template->id' href='javascript:setTemplate($template->id)'>";
-    if($template->public) echo "<span class='label label-info label-badge'>{$lang->public}</span> ";
+    echo "<a title='{$lang->user->applyTemplate}' class='tpl-name' id='tplTitleBox$template->id' href='javascript:setTemplate($template->id)'>";
+    if($template->public) echo "<span class='label label-info label-badge'>{$lang->user->public}</span> ";
     echo $template->title . "</a>";
     if(empty($template->public) or $template->account == $app->user->account)echo "<a href='###' onclick='deleteTemplate($template->id)' id='templateID$template->id' class='btn-delete hidden'><i class='icon-close'></i></a>";
     echo "<span id='template$template->id' class='hidden'>$template->content</span>";
@@ -25,15 +25,15 @@ foreach($templates as $key => $template)
 <div id='tplBoxWrapper'>
   <div class='btn-toolbar'>
     <div class='btn-group'>
-      <button id='saveTplBtn' type='button' class='btn btn-mini' data-toggle='saveTplModal'><?php echo $lang->saveTemplate?></button>
-      <button id='applyTplBtn' type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->applyTemplate?> <span class='caret'></span></button>
+      <button id='saveTplBtn' type='button' class='btn btn-mini' data-toggle='saveTplModal'><?php echo $lang->user->saveTemplate?></button>
+      <button id='applyTplBtn' type='button' class='btn btn-mini dropdown-toggle' data-toggle='dropdown'><?php echo $lang->user->applyTemplate?> <span class='caret'></span></button>
       <ul id='tplBox' class='dropdown-menu pull-right'>
         <?php
         foreach($templates as $key => $template)
         {
             echo "<li id='tplBox$template->id' onmouseover='displayXIcon($template->id)' onmouseout='hideXIcon($template->id)'>";
-            echo "<a title='{$lang->applyTemplate}' class='tpl-name' id='tplTitleBox$template->id' href='javascript:setTemplate($template->id)'>";
-            if($template->public) echo "<span class='label label-info label-badge'>{$lang->public}</span> ";
+            echo "<a title='{$lang->user->applyTemplate}' class='tpl-name' id='tplTitleBox$template->id' href='javascript:setTemplate($template->id)'>";
+            if($template->public) echo "<span class='label label-info label-badge'>{$lang->user->public}</span> ";
             echo $template->title . "</a>";
             if(empty($template->public) or $template->account == $app->user->account)echo "<a href='###' onclick='deleteTemplate($template->id)' id='templateID$template->id' class='btn-delete hidden'><i class='icon-close'></i></a>";
             echo "<span id='template$template->id' class='hidden'>$template->content</span>";
@@ -49,7 +49,7 @@ foreach($templates as $key => $template)
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->setTemplateTitle;?></h4>
+        <h4 class="modal-title"><?php echo $lang->user->setTemplateTitle;?></h4>
       </div>
       <div class="modal-body">
         <div class='input-group'>
@@ -82,7 +82,7 @@ function setTemplate(templateID)
 function deleteTemplate(templateID)
 {
     if(!templateID) return;
-    if(confirm(<?php echo json_encode($lang->confirmDeleteTemplate);?>))
+    if(confirm(<?php echo json_encode($lang->user->confirmDeleteTemplate);?>))
     {
         hiddenwin.location.href = createLink('user', 'ajaxDeleteTemplate', 'templateID=' + templateID);
         $('#tplBox' + templateID).addClass('hidden');
