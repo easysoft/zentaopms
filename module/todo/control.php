@@ -65,7 +65,7 @@ class todo extends control
 
             if($this->app->getViewType() == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID"), 'parent'));
             if(isonlybody()) die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent.parent'));
-            die(js::locate($this->createLink('my', 'todo', "type=all"), 'parent'));
+            die(js::locate($this->createLink('my', 'todo', "type=all&account=&status=all&orderBy=id_desc"), 'parent'));
         }
 
         unset($this->lang->todo->typeList['cycle']);
