@@ -2295,6 +2295,27 @@ class upgradeModel extends model
     }
 
     /**
+     * Add unique key for stage.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addUniqueKey4Stage()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $stmt     = $this->dao->select('story,branch')->from(TABLE_STORYSTAGE)->orderBy('story,branch')->query();
+        $preStage = '';
+        while($stage = $stmt->fetch())
+        {
+            if($preStage == "{$stage->story}_{$stage->branch}") $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($stage->story)->andWhere('branch')->eq($stage->branch)->exec();
+            $preStage = "{$stage->story}_{$stage->branch}";
+        }
+        $this->dao->exec("ALTER TABLE " . TABLE_STORYSTAGE . " ADD UNIQUE `story_branch` (`story`, `branch`)");
+        $this->saveLogs($this->dao->get());
+        return true;
+    }
+
+    /**
      * Judge any error occers.
      *
      * @access public
