@@ -604,6 +604,7 @@ CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `story` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL,
   `stage` varchar(50) NOT NULL,
+  UNIQUE KEY `story_branch` (`story`,`branch`),
   KEY `story` (`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_suitecase`;

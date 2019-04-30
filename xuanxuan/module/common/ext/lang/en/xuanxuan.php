@@ -1,17 +1,12 @@
 <?php
 $lang->xuanxuan = new stdclass();
+$lang->admin->menu->xuanxuan = array('link' => 'ZT Client|admin|xuanxuan', 'subModule' => 'client');
 
-$lang->admin->menu->sso['link'] = 'Integrate|admin|xuanxuan';
-if(!isset($lang->admin->menu->sso['alias'])) $lang->admin->menu->sso['alias'] = '';
-$lang->admin->menu->sso['alias'] = $lang->admin->menu->sso['alias'] . ',sso';
-if(!isset($lang->admin->menu->sso['subModule'])) $lang->admin->menu->sso['subModule'] = '';
-$lang->admin->menu->sso['subModule'] = $lang->admin->menu->sso['subModule'] . ',client';
-
-$lang->admin->subMenu->sso->xuanxuan = array('link' => 'ZT Client|admin|xuanxuan', 'subModule' => 'client');
-$lang->admin->subMenuOrder->sso[4] = 'xuanxuan';
-
-$lang->client = new stdclass();
-$lang->client->menu = $lang->admin->menu;
+$lang->admin->subMenu->xuanxuan = new stdclass();
+$lang->admin->subMenu->xuanxuan->setting = array('link' => 'Parameter|admin|xuanxuan');
+$lang->admin->subMenu->xuanxuan->update  = array('link' => 'Update|client|browse', 'subModule' => 'client');
+$lang->admin->subMenuOrder->xuanxuan[0] = 'setting';
+$lang->admin->subMenuOrder->xuanxuan[5] = 'update';
 
 $lang->menugroup->client = 'admin';
 

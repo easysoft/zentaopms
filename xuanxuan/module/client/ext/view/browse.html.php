@@ -12,12 +12,14 @@
 ?>
 <?php include '../../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('sso');?></div>
-  <div class="btn-toolbar pull-right"><?php common::printLink('admin', 'xuanxuan', '', $lang->goback, '', "class='btn'");?></div>
+  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('xuanxuan');?></div>
 </div>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <div class='pull-right'><?php common::printLink('client', 'create', '', $lang->client->create, '', "class='btn btn-primary' data-toggle='modal'");?></div>
+    <div class='pull-right'>
+      <?php common::printLink('client', 'checkUpgrade', '', $lang->client->checkUpgrade, '', "class='btn'");?>
+      <?php common::printLink('client', 'create', '', $lang->client->create, '', "class='btn btn-primary' data-toggle='modal'");?>
+    </div>
     <div class='heading'>
       <h4><?php echo $lang->client->browseVersion;?></h4>
     </div>
