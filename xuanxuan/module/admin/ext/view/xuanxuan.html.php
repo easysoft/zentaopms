@@ -12,7 +12,7 @@
 ?>
 <?php include '../../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('sso');?></div>
+  <div class="btn-toolbar pull-left"><?php common::printAdminSubMenu('xuanxuan');?></div>
 </div>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -119,7 +119,6 @@
               <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=package'), $lang->chat->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package'");?>
               <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=config'), $lang->chat->downloadConfig, 'hiddenwin', "class='btn btn-primary download'");?>
               <?php echo html::a(helper::createLink('admin', 'xuanxuan', 'type=edit'), $lang->chat->changeSetting, '', "class='btn'");?>
-              <?php echo html::a(helper::createLink('client', 'browse'), $lang->client->browseVersion, '', "class='btn'");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->chat->help, '_blank', "class='btn'");?>
             <?php endif;?>
           </td>

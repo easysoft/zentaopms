@@ -16,7 +16,7 @@ foreach($templates as $key => $template)
 #tplBoxWrapper {position: relative; z-index: 10;}
 #tplBoxWrapper > .btn-toolbar {position: absolute; right: 1px; top: 1px;}
 #tplBoxWrapper .btn {padding: 4px 8px; border-top:0px; border-bottom:0px;}
-#tplBoxWrapper .applyTplBtn {border-right:0px;}
+#tplBoxWrapper #applyTplBtn {border-right:0px;}
 #tplBox li {position: relative;}
 #tplBox li .btn-delete {position: absolute; right: 0; top: -5px; display: block; width: 40px; text-align:center;}
 #tplBox li:hover .btn-delete {color:#fff;}
