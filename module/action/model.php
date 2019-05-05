@@ -602,7 +602,18 @@ class actionModel extends model
         $this->loadModel('doc');
         $libs = $this->doc->getLibs('all');
         $docs = $this->doc->getPrivDocs(array_keys($libs));
-
+        
+        $setDynamicActions = array();
+        $actions = '';
+        if(isset($this->config->global->setdynamic) and $this->config->global->setdynamic != 'false')
+        {
+            $setDynamicActions = json_decode($this->config->global->setdynamic, true);
+            foreach($setDynamicActions as $moudle => $action)
+            {
+                $actions .= implode(',', $action) . ',';
+            }
+        }
+        
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where(1)
@@ -620,6 +631,7 @@ class actionModel extends model
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('objectType')->notin('bug,build,project,task,taskcase,testreport,testsuite,testtask')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('objectType')->notin('product,productplan,release,story,testcase,testreport,testsuite')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('objectType')->notin('project,productplan,release,story,task')->fi()
+            ->beginIF(!empty($setDynamicActions))->andWhere('objectType')->in(array_keys($setDynamicActions))->andWhere('action')->in($actions)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -628,10 +640,7 @@ class actionModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
        
-        $actions = $this->transformActions($actions);
-        $actioned = $this->loadModel('setting')->getItem("owner=system&module=common&section=global&key=setdynamic");
-        foreach($actions as $index => $action) if(strpos($actioned, $action->action)  === false) unset($actions[$index]);
-        return $actions;
+        return $this->transformActions($actions);;
     }
 
     /**

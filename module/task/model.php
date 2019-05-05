@@ -318,7 +318,7 @@ class taskModel extends model
             $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($parentID);
             $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($parentID)->exec();
-            $this->action->create('task', $parentID, 'batchCreate', $childTasks);
+            $this->action->create('task', $parentID, 'batchCreate', '', $taskID);
         }
         return $mails;
     }
@@ -750,7 +750,7 @@ class taskModel extends model
         if($oldTask->parent > 0)
         {
             if($task->parent == 0) $this->computeWorkingHours($oldTask->parent);
-            $this->updateParentStatus($taskID, false);
+            $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($oldTask->parent);
         }
 

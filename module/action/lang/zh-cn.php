@@ -200,6 +200,42 @@ $lang->action->label->deleteestimate      = "删除了工时";
 $lang->action->label->linked2build        = "关联了";
 $lang->action->label->linked2bug          = "关联了";
 
+/* 动态信息按照对象分组 */
+$lang->action->dynamicAction = new stdclass;
+$lang->action->dynamicAction->product['opened']             = '创建';
+$lang->action->dynamicAction->product['edited']             = '编辑';
+$lang->action->dynamicAction->product['deleted']            = '删除';
+$lang->action->dynamicAction->product['closed']             = '关闭';
+$lang->action->dynamicAction->story['opened']               = '创建';
+$lang->action->dynamicAction->story['edited']               = '编辑';
+$lang->action->dynamicAction->story['deleted']              = '删除';
+$lang->action->dynamicAction->story['changed']              = '变更';
+$lang->action->dynamicAction->story['changed']              = '变更';
+$lang->action->dynamicAction->story['linked2project']       = "关联{$lang->projectCommon}";
+$lang->action->dynamicAction->story['unlinkedfromproject']  = "移除{$lang->projectCommon}";
+$lang->action->dynamicAction->story['subdividestory']       = $lang->action->label->subdividestory;
+$lang->action->dynamicAction->story['unlinkchildstory']     = $lang->action->label->unlinkchildstory;
+$lang->action->dynamicAction->story['undeleted']            = '还原';
+$lang->action->dynamicAction->story['hidden']               = '隐藏';
+$lang->action->dynamicAction->project['opened']             = '创建';
+$lang->action->dynamicAction->project['edited']             = '编辑';
+$lang->action->dynamicAction->project['deleted']            = '删除';
+$lang->action->dynamicAction->project['closed']             = '关闭';
+$lang->action->dynamicAction->project['activated']          = '激活';
+$lang->action->dynamicAction->task['opened']                = '创建';
+$lang->action->dynamicAction->task['edited']                = '编辑';
+$lang->action->dynamicAction->task['deleted']               = '删除';
+$lang->action->dynamicAction->bug['opened']                 = '创建';
+$lang->action->dynamicAction->bug['edited']                 = '编辑';
+$lang->action->dynamicAction->bug['deleted']                = '删除';
+$lang->action->dynamicAction->bug['resolved']               = '解决';
+$lang->action->dynamicAction->bug['bugconfirmed']           = '确认';
+$lang->action->dynamicAction->bug['assigned']               = '指派';
+$lang->action->dynamicAction->bug['activated']              = '激活';
+$lang->action->dynamicAction->doc['opened']                 = '创建';
+$lang->action->dynamicAction->doc['edited']                 = '编辑';
+$lang->action->dynamicAction->doc['deleted']                = '删除';
+
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = '计划|productplan|view|productID=%s';

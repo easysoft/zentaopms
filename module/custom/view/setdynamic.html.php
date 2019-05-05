@@ -10,6 +10,9 @@
  */
 ?>
 <?php include 'header.html.php';?>
+<style>
+.checkbox-primary{float:left;margin-left:5px;}
+</style>
 <div id='mainContent' class='main-content'>
   <form class="load-indicator main-form form-ajax" method='post'>
     <div class='main-header'>
@@ -17,11 +20,29 @@
         <strong><?php echo $lang->custom->setDynamic?></strong>
       </div>
     </div>
-    <table class='table table-form'>
+    <table class='table table-hover table-striped table-bordered'>
+      <thead>
+        <tr class='text-center'>
+          <th class='w-150px'><?php echo $lang->group->module;?></th>
+          <th><?php echo $lang->action->action;?></th>
+        </tr>
+      </thead>
+      <?php foreach($objectTypes as $objectKey => $objectTypeName):?>
       <tr>
-        <th class='w-100px'><?php echo $lang->custom->setAction;?></th>
-        <td><?php echo html::select("actions[]", $actions, $actioned, "class='form-control chosen' multiple");?></td>
+        <th class='text-middle  w-150px'>
+          <div class="text-center check-all">
+            <?php echo $objectTypeName?>
+          </div>
+        </th>
+        <td class='pv-10px'>
+        <?php if(isset($dynamicAction->$objectKey)):?>
+        <div class='group-item'>
+            <?php echo html::checkbox("actions[{$objectKey}]", $dynamicAction->$objectKey, isset($setActions[$objectKey]) ? $setActions[$objectKey] : '', '');?>
+        </div>
+        <?php endif;?>
+        </td>
       </tr>
+      <?php endforeach;?>
       <tr>
         <th></th>
         <td class='form-actions'>

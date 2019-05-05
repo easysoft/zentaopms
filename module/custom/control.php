@@ -331,20 +331,23 @@ class custom extends control
      */
     public function setDynamic()
     {
-        if($_POST)
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
             $actions = $this->post->actions;
-            $actions = implode(',', array_filter($actions));
+            $actions = json_encode($actions);
             $this->loadModel('setting')->setItem('system.common.global.setdynamic', $actions);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
-            
         }
+        
         $this->app->loadLang('action');
-        $this->view->title      = $this->lang->custom->setDynamic;
-        $this->view->position[] = $this->lang->custom->common;
-        $this->view->position[] = $this->view->title;
-        $this->view->actions    = $this->lang->action->search->label;
-        $this->view->actioned   = $this->loadModel('setting')->getItem("owner=system&module=common&section=global&key=setdynamic");
+        $this->app->loadLang('group');
+        $this->view->title         = $this->lang->custom->setDynamic;
+        $this->view->position[]    = $this->lang->custom->common;
+        $this->view->position[]    = $this->view->title;
+        $this->view->objectTypes   = $this->lang->action->objectTypes;
+        $this->view->dynamicAction = $this->lang->action->dynamicAction;
+        $this->view->actions       = $this->lang->action->search->label;
+        $this->view->setActions    = json_decode($this->loadModel('setting')->getItem("owner=system&module=common&section=global&key=setdynamic"), true);
         $this->display();
     }
 
