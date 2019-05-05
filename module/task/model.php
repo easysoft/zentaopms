@@ -441,8 +441,6 @@ class taskModel extends model
         $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
         if($status and $parentTask->status != $status)
         {
-            if($status == 'wait' and $parentTask->status != 'wait') $status = 'doing';
-
             $now  = helper::now();
             $task = new stdclass();
             $task->status = $status;
@@ -473,7 +471,7 @@ class taskModel extends model
                 $task->closedReason = 'done';
             }
 
-            if($status == 'doing')
+            if($status == 'doing' or $status == 'wait')
             {
                 if($parentTask->assignedTo == 'closed')
                 {
@@ -496,15 +494,19 @@ class taskModel extends model
                 if(!$createAction) return $task;
 
                 $changes = common::createChanges($parentTask, $task);
-                $action  = 'Canceled';
+                $action  = '';
                 if($status == 'done') $action = 'Finished';
                 if($status == 'closed') $action = 'Closed';
                 if($status == 'pause') $action = 'Paused';
+                if($status == 'cancel') $action = 'Canceled';
                 if($status == 'doing' and $parentTask->status == 'wait') $action = 'Started';
                 if($status == 'doing' and $parentTask->status == 'pause') $action = 'Restarted';
                 if($status == 'doing' and $parentTask->status != 'wait' and $parentTask->status != 'pause') $action = 'Activated';
-                $actionID = $this->loadModel('action')->create('task', $parentID, $action);
-                $this->action->logHistory($actionID, $changes);
+                if($action)
+                {
+                    $actionID = $this->loadModel('action')->create('task', $parentID, $action);
+                    $this->action->logHistory($actionID, $changes);
+                }
             }
         }
     }
