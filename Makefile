@@ -60,6 +60,12 @@ zentaoxx:
 	cp -r xuan/xxb/module/chat zentaoxx/module/
 	cp -r xuan/xxb/module/client zentaoxx/module/
 	cp -r xuan/xxb/module/common/ext/model/hook zentaoxx/module/common/ext/model/
+	mkdir -p zentaoxx/module/common/view
+	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/module/common/view
+	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view
+	cp -r xuan/xxb/module/common/view/footer.modal.html.php zentaoxx/module/common/view
+	mkdir -p zentaoxx/www/js/
+	cp -r xuan/xxb/www/js/markedjs zentaoxx/www/js/
 	mkdir zentaoxx/module/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
 	cp -r xuanxuan/config/* zentaoxx/config/
@@ -79,10 +85,15 @@ zentaoxx:
 	sed -i "s/'site', //g" zentaoxx/module/chat/config.php
 	sed -i "s/'reload'/inlink('browse')/g" zentaoxx/module/client/control.php
 	sed -i 's/tree/dept/' zentaoxx/module/chat/model.php
-	sed -i 's/im_/zt_im_/' zentaoxx/db/*.sql
-	sed -i 's/xxb_user/zt_user/' zentaoxx/db/*.sql
-	sed -i 's/xxb_file/zt_file/' zentaoxx/db/*.sql
+	sed -i 's/im_/zt_im_/g' zentaoxx/db/*.sql
+	sed -i 's/xxb_user/zt_user/g' zentaoxx/db/*.sql
+	sed -i 's/xxb_file/zt_file/g' zentaoxx/db/*.sql
 	sed -i '/xxb_entry/d' zentaoxx/db/*.sql
+	sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/module/client/view/checkupgrade.html.php
+	sed -i '/var serverVersions/d' zentaoxx/module/client/js/checkupgrade.js
+	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
+	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
+	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	rm -rf zentaoxx/tools
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*

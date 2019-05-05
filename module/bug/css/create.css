@@ -8,6 +8,7 @@
 #buildBoxActions {padding-left: 15px;}
 
 #module_chosen.chosen-container .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
+#os_chosen.chosen-container .chosen-drop{min-width: 200px} 
 #openedBuild_chosen.chosen-container .chosen-drop {min-width: 450px; border-top: 1px solid #ddd!important}
 #module + .chosen-container-single .chosen-single,
 #task + .chosen-container-single .chosen-single,
@@ -37,4 +38,3 @@
 .title-group #severity + .chosen-container > .chosen-single {border-radius: 0!important;}
 .title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
 .title-group .has-icon-right{min-width:700px}
-#dataform .chosen[name ^= "os"] + .chosen-container .chosen-drop{min-width: 200px} 

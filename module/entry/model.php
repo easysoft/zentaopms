@@ -126,6 +126,20 @@ class entryModel extends model
     }
 
     /**
+     * Update called time.
+     * 
+     * @param  string $code 
+     * @param  int    $time 
+     * @access public
+     * @return bool
+     */
+    public function updateTime($code, $time)
+    {
+        $this->dao->update(TABLE_ENTRY)->set('calledTime')->eq($time)->where('code')->eq($code)->exec();
+        return !dao::isError();
+    }
+
+    /**
      * Save log of an entry.
      *
      * @params int    $entryID

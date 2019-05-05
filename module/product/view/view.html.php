@@ -53,7 +53,7 @@
         </div>
       </div>
       <?php endif;?>
-<div class="col-sm-<?php echo $isRoadmap ? 6 : 12?>">
+      <div class="col-sm-<?php echo $isRoadmap ? 6 : 12?>">
         <div class="panel block-dynamic">
           <div class="panel-heading">
           <div class="panel-title"><?php echo $lang->product->latestDynamic;?></div>
