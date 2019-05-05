@@ -679,10 +679,9 @@ class taskModel extends model
 
         if(isset($task->parent) and $task->parent != $oldTask->parent)
         {
-            $comment = html::a(helper::createLink('task', 'view', 'taskID=' . $taskID), $task->name);
-            $this->loadModel('action')->create('task', $task->parent, 'linkTo', $comment);
-            $this->loadModel('action')->create('task', $oldTask->parent, 'unLink', $comment);
-        
+            $this->loadModel('action')->create('task', $task->parent, 'linkChildTask', '', $taskID);
+            $this->loadModel('action')->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $taskID);
+            $this->loadModel('action')->create('task', $taskID, 'linkParentTask', '', $task->parent);
         }
 
         $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->edit['id'], $this->post->uid);
@@ -751,7 +750,7 @@ class taskModel extends model
         if($oldTask->parent > 0)
         {
             if($task->parent == 0) $this->computeWorkingHours($oldTask->parent);
-            $this->updateParentStatus($taskID);
+            $this->updateParentStatus($taskID, false);
             $this->computeBeginAndEnd($oldTask->parent);
         }
 

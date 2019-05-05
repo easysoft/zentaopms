@@ -274,8 +274,3 @@ $lang->task->report->tasksPerClosedReason->graph->xAxisName = '关闭原因';
 
 $lang->task->report->finishedTasksPerDay->type             = 'bar';
 $lang->task->report->finishedTasksPerDay->graph->xAxisName = '日期';
-
-$lang->task->action = new stdclass();
-$lang->task->action->batchcreate = array('main' => '$date, 由 <strong>$actor</strong> 创建子任务 。');
-$lang->task->action->unlink      = array('main' => '$date, 由 <strong>$actor</strong> 取消关联父任务 。');
-$lang->task->action->linkto      = array('main' => '$date, 由 <strong>$actor</strong> 关联到父任务 。');
