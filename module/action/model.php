@@ -492,7 +492,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printAction($action)
+    public function printAction($action, $desc = '')
     {
         if(!isset($action->objectType) or !isset($action->action)) return false;
 
@@ -506,17 +506,20 @@ class actionModel extends model
          * 2. If no defined in the module language, search the common action define.
          * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
          */
-        if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+        if(empty($desc))
         {
-            $desc = $this->lang->$objectType->action->$actionType;
-        }
-        elseif(isset($this->lang->action->desc->$actionType))
-        {
-            $desc = $this->lang->action->desc->$actionType;
-        }
-        else
-        {
-            $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+            if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            {
+                $desc = $this->lang->$objectType->action->$actionType;
+            }
+            elseif(isset($this->lang->action->desc->$actionType))
+            {
+                $desc = $this->lang->action->desc->$actionType;
+            }
+            else
+            {
+                $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+            }
         }
 
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
