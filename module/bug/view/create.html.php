@@ -19,7 +19,7 @@ js::set('page', 'create');
 js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
-js::set('confirmDeleteTemplate', $lang->bug->confirmDeleteTemplate);
+js::set('flow', $config->global->flow);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">

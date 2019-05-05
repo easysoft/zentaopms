@@ -21,7 +21,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
-$lang->welcome        = "%s";
+$lang->welcome        = "%s ALM";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
@@ -93,13 +93,6 @@ $lang->youCould        = 'You could ';
 $lang->preShortcutKey  = '[Shortcut:←]';
 $lang->nextShortcutKey = '[Shortcut:→]';
 $lang->backShortcutKey = '[Shortcut:Alt+↑]';
-
-$lang->saveTemplate          = 'Save as Template';
-$lang->setPublic             = 'Set as Public Template';
-$lang->deleteTemplate        = 'Delete Template';
-$lang->setTemplateTitle      = 'Please enter the title of template.';
-$lang->applyTemplate         = 'Template';
-$lang->confirmDeleteTemplate = 'Do you want to delete this template?';
 
 $lang->select        = 'Select';
 $lang->selectAll     = 'Select All';
@@ -518,7 +511,7 @@ $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/fre
 $lang->downNotify     = "Download Desktop Notification";
 $lang->downloadClient = "Download Desktop Client";
 $lang->clientHelp     = "Client Help";
-$lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/scrum-tool-open-source-client-214.html";
+$lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/";
 $lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";

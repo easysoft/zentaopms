@@ -36,7 +36,7 @@ class actionModel extends model
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
         if($actor == 'guest' and $actionType == 'logout') return false;
-
+        
         $action = new stdclass();
 
         $objectType = str_replace('`', '', $objectType);
@@ -291,7 +291,7 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
-            elseif($actionName == 'totask')
+            elseif($actionName == 'totask' or  $actionName == 'linkchildtask' or $actionName == 'unlinkchildrentask' or $actionName == 'linkparenttask')
             {
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
@@ -346,7 +346,11 @@ class actionModel extends model
             {
                 $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
                 $action->extra  = '';
-                if($linkedProducts) $action->extra = sprintf($this->lang->project->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
+                if($linkedProducts)
+                {
+                    foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
+                    $action->extra = sprintf($this->lang->project->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
+                }
             }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
@@ -365,7 +369,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-
+            
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
@@ -623,7 +627,11 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        return $this->transformActions($actions);
+       
+        $actions = $this->transformActions($actions);
+        $actioned = $this->loadModel('setting')->getItem("owner=system&module=common&section=global&key=setdynamic");
+        foreach($actions as $index => $action) if(strpos($actioned, $action->action)  === false) unset($actions[$index]);
+        return $actions;
     }
 
     /**

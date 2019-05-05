@@ -16,7 +16,7 @@
   <div class="main-header clearfix">
     <h2 class="pull-left">
       <?php if($parent):?>
-      <span class='pull-left'><?php echo $parentTitle;?></span> 
+      <span class='pull-left'><?php echo $parentTitle . $this->lang->colon;?></span> 
       <?php echo $lang->task->batchCreateChildren;?>
       <?php else:?>
       <?php echo $lang->task->batchCreate;?>

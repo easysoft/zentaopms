@@ -375,7 +375,9 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_4');
             $this->execSQL($this->getUpgradeFile('11.4'));
         case '11_4_1':
-            $this->saveLogs('Execute 11_4');
+            $this->saveLogs('Execute 11_4_1');
+            $this->execSQL($this->getUpgradeFile('11.4.1'));
+            $this->addPriv11_5();
             if(!isset($this->config->isINT) or !($this->config->isINT))
             {
                 if(!$executeXuanxuan)
@@ -519,6 +521,7 @@ class upgradeModel extends model
             case '11_3': $confirmContent .= file_get_contents($this->getUpgradeFile('11.3'));
             case '11_4': $confirmContent .= file_get_contents($this->getUpgradeFile('11.4'));
             case '11_4_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('11.4.1'));
                 if(!isset($this->config->isINT) or !($this->config->isINT))
                 {
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
@@ -2266,6 +2269,49 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
             $this->saveLogs($this->dao->get());
         }
+        return true;
+    }
+
+    /**
+     * Add Priv for 11.5 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addPriv11_5()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('bug')->andWhere('method')->eq('setPublic')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'user';
+            $data->method = 'setPublicTemplate';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+        return true;
+    }
+
+    /**
+     * Add unique key for stage.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addUniqueKey4Stage()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $stmt     = $this->dao->select('story,branch')->from(TABLE_STORYSTAGE)->orderBy('story,branch')->query();
+        $preStage = '';
+        while($stage = $stmt->fetch())
+        {
+            if($preStage == "{$stage->story}_{$stage->branch}") $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($stage->story)->andWhere('branch')->eq($stage->branch)->exec();
+            $preStage = "{$stage->story}_{$stage->branch}";
+        }
+        $this->dao->exec("ALTER TABLE " . TABLE_STORYSTAGE . " ADD UNIQUE `story_branch` (`story`, `branch`)");
+        $this->saveLogs($this->dao->get());
         return true;
     }
 
