@@ -616,15 +616,15 @@ class actionModel extends model
         $libs = $this->doc->getLibs('all');
         $docs = $this->doc->getPrivDocs(array_keys($libs));
         
-        $setDynamicActions = array();
-        $actions = '';
-        if(isset($this->config->global->setdynamic) and $this->config->global->setdynamic != 'false')
+        $actionCondition = '';
+        if(isset($this->app->user->rights['acls']['actions']))
         {
-            $setDynamicActions = json_decode($this->config->global->setdynamic, true);
-            foreach($setDynamicActions as $moudle => $action)
+            if(empty($this->app->user->rights['acls']['actions'])) return array();
+            foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
-                $actions .= implode(',', $action) . ',';
+                $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
+            $actionCondition = trim($actionCondition, 'or ');
         }
         
         /* Get actions. */
@@ -644,7 +644,7 @@ class actionModel extends model
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('objectType')->notin('bug,build,project,task,taskcase,testreport,testsuite,testtask')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('objectType')->notin('product,productplan,release,story,testcase,testreport,testsuite')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('objectType')->notin('project,productplan,release,story,task')->fi()
-            ->beginIF(!empty($setDynamicActions))->andWhere('objectType')->in(array_keys($setDynamicActions))->andWhere('action')->in($actions)->fi()
+            ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

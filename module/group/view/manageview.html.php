@@ -21,7 +21,7 @@
   <form class="load-indicator main-form form-ajax" id="manageViewForm" method="post" target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-100px'>
+        <th class='w-110px'>
           <?php echo $lang->group->viewList;?>
         </th>
         <td>
@@ -67,6 +67,56 @@
           </div>
         </td>
       </tr>
+     <tr>
+        <th class='text-right text-top'><?php echo $lang->group->dynamic?></th>
+        <td class='pl-0px pt-0px'>
+          <table class='table table-form'>
+            <?php foreach($lang->menu as $module => $title):?>
+            <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
+            <tr id='<?php echo "{$module}ActionBox";?>'>
+              <th class='w-100px text-left'>
+                <div class='action-item'>
+                  <div class='checkbox-primary'>
+                    <input type="checkbox" id='allchecker' name="allchecker" onclick="selectAll(this)"/>
+                    <label class='priv' for='allchecker'><?php echo substr($title, 0, strpos($title, '|'));?></label>
+                  </div>
+                </div>
+              </th>
+              <td>
+                <?php if(isset($lang->action->dynamicAction->$module)):?>
+                <div class='clearfix'>
+                  <?php foreach($lang->action->dynamicAction->$module as $action => $actionTitle):?>
+                  <div class='action-item'>
+                    <div class='checkbox-primary'>
+                      <input type='checkbox' id='<?php echo "$module-$action";?>' name='actions[actions][<?php echo $module;?>][<?php echo $action;?>]' value='<?php echo $action;?>' <?php if(isset($group->acl['actions'][$module][$action]) or empty($group->acl['actions'])) echo "checked";?> />
+                      <label class='priv' for='<?php echo "$module-$action";?>'><?php echo $actionTitle;?></label>
+                    </div>
+                  </div>
+                  <?php endforeach;?>
+                </div>
+                <?php endif;?>
+                <?php if(isset($menugroup[$module])):?>
+                <?php foreach($menugroup[$module] as $subModule):?>
+                <?php if(isset($lang->action->dynamicAction->$subModule)):?>
+                <div class='clearfix'>
+                  <?php foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle):?>
+                  <div class='action-item'>
+                    <div class='checkbox-primary'>
+                      <input type='checkbox' id='<?php echo "$subModule-$action";?>' name='actions[actions][<?php echo $subModule;?>][<?php echo $action;?>]' value='<?php echo $action;?>' <?php if(isset($group->acl['actions'][$subModule][$action]) or empty($group->acl['actions'])) echo "checked";?> />
+                      <label class='priv' for='<?php echo "$subModule-$action";?>'><?php echo $actionTitle;?></label>
+                    </div>
+                  </div>
+                  <?php endforeach;?>
+                </div>
+                <?php endif;?>
+                <?php endforeach;?>
+                <?php endif;?>
+              </td>
+            </tr>
+            <?php endforeach;?>
+          </table>
+        </td>
+     </tr>
       <tr>
         <td colspan='2' class='form-actions text-center'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'");?>

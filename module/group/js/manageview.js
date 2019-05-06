@@ -12,11 +12,11 @@ function selectAll(obj)
 {
     if($(obj).prop('checked'))
     {
-        $(obj).closest('td').find(':checkbox').attr('checked', 'checked');
+        $(obj).closest('tr').find(':checkbox').attr('checked', 'checked');
     }
     else
     {
-        $(obj).closest('td').find(':checkbox').removeAttr('checked');
+        $(obj).closest('tr').find(':checkbox').removeAttr('checked');
     }
 }
 
@@ -38,6 +38,13 @@ $(function()
         {
             if(!$(this).prop('checked')) allChecked = false;
         })
-        $('input:checkbox[name^="allchecker"]').prop('checked', allChecked);
+        $('.group-item input:checkbox[name^="allchecker"]').prop('checked', allChecked);
+
+        var id = $(this).attr('id');
+        if($('#' + id + 'ActionBox').length == 1)
+        {
+            $('#' + id + 'ActionBox').toggle($(this).prop("checked"));
+            $('#' + id + 'ActionBox').closest('tr').find('td :checkbox').prop('checked', $(this).prop("checked"));
+        }
     })
 })

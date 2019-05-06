@@ -766,6 +766,7 @@ class userModel extends model
             $viewAllow    = false;
             $productAllow = false;
             $projectAllow = false;
+            $actionAllow  = false;
             foreach($groups as $group)
             {
                 $acl = json_decode($group->acl, true);
@@ -774,12 +775,14 @@ class userModel extends model
                     $productAllow = true;
                     $projectAllow = true;
                     $viewAllow    = true;
+                    $actionAllow  = true;
                     break;
                 }
 
                 if(empty($acl['products'])) $productAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
                 if(empty($acl['views']))    $viewAllow    = true;
+                if(!isset($acl['actions'])) $actionAllow  = true;
                 if(empty($acls) and !empty($acl))
                 {
                     $acls = $acl;
@@ -789,11 +792,13 @@ class userModel extends model
                 if(!empty($acl['views'])) $acls['views'] = array_merge($acls['views'], $acl['views']);
                 if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
                 if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
+                if(!empty($acl['actions'])) $acls['actions'] = !empty($acls['actions']) ? ($acl['actions'] + $acls['actions']) : $acl['actions'];
             }
 
             if($productAllow) $acls['products'] = array();
             if($projectAllow) $acls['projects'] = array();
             if($viewAllow)    $acls['views']    = array();
+            if($actionAllow)  unset($acls['actions']);
 
             $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
                 ->on('t1.group = t2.group')
