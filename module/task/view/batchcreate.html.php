@@ -14,7 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header clearfix">
-    <h2 class="pull-left" style='max-width:300px'>
+    <h2 class="pull-left">
       <?php if($parent):?>
       <span class='pull-left'><?php echo $parentTitle . $this->lang->colon;?></span> 
       <?php echo $lang->task->batchCreateChildren;?>

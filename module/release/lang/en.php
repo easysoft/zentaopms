@@ -48,7 +48,7 @@ $lang->release->bugs          = 'Resolved Bug';
 $lang->release->leftBugs      = 'Remained Bug';
 $lang->release->generatedBugs = 'Remained Bug';
 $lang->release->finishStories = 'Finished %s Story';
-$lang->release->resolvedBugs  = 'Resolved %s Bug';
+$lang->release->resolvedBugs  = 'Solved %s Bug';
 $lang->release->createdBugs   = 'Generated %s Bug';
 $lang->release->export        = 'Export as HTML';
 $lang->release->yesterday     = 'Released Yesterday';
@@ -59,7 +59,7 @@ $lang->release->scmPath  = 'SCM Path : ';
 $lang->release->exportTypeList['all']     = 'All';
 $lang->release->exportTypeList['story']   = 'Story';
 $lang->release->exportTypeList['bug']     = 'Bug';
-$lang->release->exportTypeList['leftbug'] = 'Unresolved Bug';
+$lang->release->exportTypeList['leftbug'] = 'Unsolved Bug';
 
 $lang->release->statusList['']          = '';
 $lang->release->statusList['normal']    = 'Normal';

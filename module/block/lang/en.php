@@ -340,7 +340,7 @@ $lang->block->typeList->task['canceledBy'] = 'Cancelled by Me';
 
 $lang->block->typeList->bug['assignedTo'] = 'Assigned to Me';
 $lang->block->typeList->bug['openedBy']   = 'Created by Me';
-$lang->block->typeList->bug['resolvedBy'] = 'Resolved by Me';
+$lang->block->typeList->bug['resolvedBy'] = 'Solved by Me';
 $lang->block->typeList->bug['closedBy']   = 'Closed by Me';
 
 $lang->block->typeList->case['assigntome'] = 'Assigned to Me';
@@ -396,7 +396,7 @@ $lang->block->gridOptions[8] = 'Left';
 $lang->block->gridOptions[4] = 'Right';
 
 $lang->block->flowchart   = array();
-$lang->block->flowchart[] = array('Administlrator', 'Add Department', 'Add User', 'Maintain Privileges');
+$lang->block->flowchart[] = array('Administrator', 'Add Department', 'Add User', 'Maintain Privileges');
 $lang->block->flowchart[] = array($lang->productCommon . ' Owner', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Releases');
 $lang->block->flowchart[] = array('Scrum Master', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Decompose Tasks');
 $lang->block->flowchart[] = array('Dev Team', 'Claim Tasks/Bugs', 'Update Status', 'Finish Tasks/Bugs');

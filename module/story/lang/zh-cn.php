@@ -68,6 +68,7 @@ $lang->story->hour           = '小时';
 $lang->story->status         = '当前状态';
 $lang->story->stage          = '所处阶段';
 $lang->story->stageAB        = '阶段';
+$lang->story->stagedBy       = '设置阶段者';
 $lang->story->mailto         = '抄送给';
 $lang->story->openedBy       = '由谁创建';
 $lang->story->openedDate     = '创建日期';

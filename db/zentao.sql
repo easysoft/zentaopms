@@ -567,6 +567,7 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `status` enum('','changed','active','draft','closed') NOT NULL default '',
   `color` char(7) NOT NULL,
   `stage` enum('','wait','planned','projected','developing','developed','testing','tested','verified','released', 'closed') NOT NULL DEFAULT 'wait',
+  `stagedBy` char(30) NOT NULL,
   `mailto` text,
   `openedBy` varchar(30) NOT NULL default '',
   `openedDate` datetime NOT NULL,
@@ -604,6 +605,7 @@ CREATE TABLE IF NOT EXISTS `zt_storystage` (
   `story` mediumint(8) unsigned NOT NULL,
   `branch` mediumint(8) unsigned NOT NULL,
   `stage` varchar(50) NOT NULL,
+  `stagedBy` char(30) NOT NULL,
   UNIQUE KEY `story_branch` (`story`,`branch`),
   KEY `story` (`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
