@@ -15,7 +15,7 @@ $(function()
         if(href.indexOf('browse') >= 0 || href.indexOf('batchCreate') >= 0 
             || href.indexOf('create') >= 0 || href.indexOf('delete') >= 0) return true;
 
-        if(href.indexOf('activate') >= 0 || href.indexOf('close') >= 0) 
+        if($that.hasClass('iframe'))
         {
             url = href;
             target = '';
