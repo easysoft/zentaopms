@@ -34,7 +34,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->chat->key;?></th>
-          <td><?php echo zget($config->xuanxuan, 'key', '');?></td>
+          <td>
+            <?php $key = zget($config->xuanxuan, 'key', '');?>
+            <?php echo $type == 'edit' ? html::input('key', $key, "class='form-control' readonly='readonly'") : $key;?>
+          </td>
+          <td><?php echo $type == 'edit' ? html::a('javascript:void(0)', $lang->chat->createKey, '', 'onclick="createKey()"') : '';?></td>
         </tr>
         <tr>
           <th><?php echo $lang->chat->debug;?></th>
