@@ -1,6 +1,7 @@
 VERSION     = $(shell head -n 1 VERSION)
 XUANPATH    = $(shell head -n 1 XUANPATH)
 XUANVERSION = $(shell head -n 1 XUANVERSION)
+XVERSION    = $(strip $(subst v,, $(XUANVERSION)))
 
 all: pms
 clean:
@@ -75,6 +76,8 @@ zentaoxx:
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
+	sed -i 's/xxbVersion/$(XVERSION)/g' zentaoxx/config/ext/xuanxuan.php
+	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/xuanxuan.php
 	sed -i 's/site,//' zentaoxx/module/chat/model.php
 	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
 	sed -i '/password = md5/d' zentaoxx/module/chat/control.php

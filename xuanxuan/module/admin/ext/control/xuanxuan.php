@@ -24,7 +24,7 @@ class admin extends control
                 if(empty($setting->sslkey)) $errors['sslkey'] = $this->lang->chat->errorSSLKey;
             }
 
-            if(strpos($setting->server, '127.0.0.1') !== false) $errors[] = $this->lang->chat->xxdServerError;
+            if($setting->turnon and strpos($setting->server, '127.0.0.1') !== false) $errors[] = $this->lang->chat->xxdServerError;
             if(strpos($setting->server, 'https://') !== 0 and strpos($setting->server, 'http://') !== 0) $errors[] = $this->lang->chat->xxdSchemeError;
             if(empty($setting->server)) $errors[] = $this->lang->chat->xxdServerEmpty;
 
