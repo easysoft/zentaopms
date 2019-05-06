@@ -34,7 +34,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->chat->key;?></th>
-          <td><?php echo zget($config->xuanxuan, 'key', '');?></td>
+          <td>
+            <?php $key = zget($config->xuanxuan, 'key', '');?>
+            <?php echo $type == 'edit' ? html::input('key', $key, "class='form-control' readonly='readonly'") : $key;?>
+          </td>
+          <td><?php echo $type == 'edit' ? html::a('javascript:void(0)', $lang->chat->createKey, '', 'onclick="createKey()"') : '';?></td>
         </tr>
         <tr>
           <th><?php echo $lang->chat->debug;?></th>
@@ -116,8 +120,9 @@
               <?php echo html::submitButton();?>
               <?php echo html::a(helper::createLink('admin', 'xuanxuan'), $lang->goback, '', 'class="btn" style="min-width: 120px"');?>
             <?php else:?>
-              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=package'), $lang->chat->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package'");?>
-              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=config'), $lang->chat->downloadConfig, 'hiddenwin', "class='btn btn-primary download'");?>
+              <?php $disabled = $config->xuanxuan->turnon ? '' : 'disabled';?>
+              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=package'), $lang->chat->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package $disabled'");?>
+              <?php echo html::a(helper::createLink('admin', 'downloadXXD', 'type=config'), $lang->chat->downloadConfig, 'hiddenwin', "class='btn btn-primary download $disabled'");?>
               <?php echo html::a(helper::createLink('admin', 'xuanxuan', 'type=edit'), $lang->chat->changeSetting, '', "class='btn'");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->chat->help, '_blank', "class='btn'");?>
             <?php endif;?>

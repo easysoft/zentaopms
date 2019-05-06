@@ -1335,7 +1335,7 @@ class task extends control
             if(!$this->session->taskWithChildren and $tasks)
             {
                 $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
-                    ->andWhere('parent')->ne(0)
+                    ->andWhere('parent')->gt(0)
                     ->andWhere('parent', true)->in(array_keys($tasks))
                     ->beginIF($this->post->exportType == 'selected')->orWhere('id')->in($this->cookie->checkedItem)->fi()
                     ->markRight(1)
