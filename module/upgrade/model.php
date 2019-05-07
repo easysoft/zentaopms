@@ -386,6 +386,13 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
                     $this->execSQL($xuanxuanSql);
+
+                    $hasHttps = $this->loadModel('setting')->getItem("owner=system&module=common&section=xuanxuan&key=https");
+                    if(empty($hasHttps))
+                    {
+                        $this->dao->update(TABLE_CONFIG)->set('`key`')->eq('https')->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('xuanxuan')->andWhere('`key`')->eq('isHttps')->exec();
+                        $this->saveLogs($this->dao->get());
+                    }
                 }
             }
         }

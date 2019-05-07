@@ -13,12 +13,12 @@ class admin extends control
         $this->app->loadLang('client');
         if($_POST)
         {
-            $setting = fixer::input('post')->join('staff', ',')->remove('https')->get();
+            $setting = fixer::input('post')->join('staff', ',')->get();
             $errors  = array();
 
             if(!is_numeric($setting->chatPort) or (int)$setting->chatPort <= 0 or (int)$setting->chatPort > 65535) $errors['chatPort'] = $this->lang->chat->xxdPortError;
             if(!is_numeric($setting->commonPort) or (int)$setting->commonPort <= 0 or (int)$setting->commonPort > 65535) $errors['commonPort'] = $this->lang->chat->xxdPortError;
-            if($setting->isHttps == 'on')
+            if($setting->https == 'on')
             {
                 if(empty($setting->sslcrt)) $errors['sslcrt'] = $this->lang->chat->errorSSLCrt;
                 if(empty($setting->sslkey)) $errors['sslkey'] = $this->lang->chat->errorSSLKey;
@@ -44,7 +44,7 @@ class admin extends control
         $this->view->type      = $type;
         $this->view->domain    = $this->loadModel('chat')->getServer('zentao');
         $this->view->turnon    = isset($this->config->xuanxuan->turnon) ? $this->config->xuanxuan->turnon : 1;
-        $this->view->isHttps   = $this->config->xuanxuan->isHttps ? $this->config->xuanxuan->isHttps : 0;
+        $this->view->https     = $this->config->xuanxuan->https ? $this->config->xuanxuan->https : 'off';
         $this->display();
     }
 }
