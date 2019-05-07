@@ -68,6 +68,7 @@ $lang->story->hour           = 'Hour';
 $lang->story->status         = 'Status';
 $lang->story->stage          = 'Phase';
 $lang->story->stageAB        = 'Phase';
+$lang->story->stagedBy       = '设置阶段者';
 $lang->story->mailto         = 'Mail to';
 $lang->story->openedBy       = 'Creator';
 $lang->story->openedDate     = 'Created';

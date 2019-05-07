@@ -129,6 +129,14 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. Th
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date Linked to <strong>$extra</strong> by <strong>$actor</strong>';
 
+/* 子任务修改父任务的历史操作记录 */
+$lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 关联子任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 关联子任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkchildrentask = '$date, 由 <strong>$actor</strong> 移除子任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparenttask     = '$date, 由 <strong>$actor</strong> 关联父任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkparenttask   = '$date, 由 <strong>$actor</strong> 取消关联父任务 <strong>$extra</strong>。' . "\n";
+
 /* 关联用例和移除用例时的历史操作记录。*/
 $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked to  use case <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked use case <strong>$extra</strong>.' . "\n";
@@ -193,6 +201,139 @@ $lang->action->label->logout              = "log out";
 $lang->action->label->deleteestimate      = "deleted ";
 $lang->action->label->linked2build        = "linked ";
 $lang->action->label->linked2bug          = "linked ";
+$lang->action->label->linkchildtask       = "关联子任务";
+$lang->action->label->unlinkchildrentask  = "取消关联子任务";
+$lang->action->label->linkparenttask      = "关联父任务";
+$lang->action->label->batchcreate         = "批量创建任务";
+
+/* 动态信息按照对象分组 */
+$lang->action->dynamicAction = new stdclass;
+$lang->action->dynamicAction->todo['opened']               = '创建待办';
+$lang->action->dynamicAction->todo['edited']               = '编辑待办';
+$lang->action->dynamicAction->todo['erased']               = '删除待办';
+$lang->action->dynamicAction->todo['finished']             = '完成待办';
+$lang->action->dynamicAction->todo['activated']            = '激活待办';
+$lang->action->dynamicAction->todo['closed']               = '关闭待办';
+$lang->action->dynamicAction->todo['deleted']              = '删除待办';
+$lang->action->dynamicAction->todo['assigned']             = '待办指派';
+$lang->action->dynamicAction->todo['undeleted']            = '还原待办';
+$lang->action->dynamicAction->todo['hidden']               = '隐藏待办';
+
+$lang->action->dynamicAction->product['opened']            = '创建' . $lang->productCommon;                  
+$lang->action->dynamicAction->product['edited']            = '编辑' . $lang->productCommon;
+$lang->action->dynamicAction->product['deleted']           = '删除' . $lang->productCommon;
+$lang->action->dynamicAction->product['closed']            = '关闭' . $lang->productCommon;
+$lang->action->dynamicAction->product['undeleted']         = '还原产品';
+$lang->action->dynamicAction->product['hidden']            = '隐藏产品';
+$lang->action->dynamicAction->productplan['opened']        = '创建产品计划';
+$lang->action->dynamicAction->productplan['edited']        = '编辑产品计划';
+$lang->action->dynamicAction->release['opened']            = '创建发布';
+$lang->action->dynamicAction->release['edited']            = '编辑发布';
+$lang->action->dynamicAction->release['changestatus']      = '修改状态';
+$lang->action->dynamicAction->release['undeleted']         = '还原发布';
+$lang->action->dynamicAction->release['hidden']            = '隐藏发布';
+$lang->action->dynamicAction->story['opened']              = '创建需求';
+$lang->action->dynamicAction->story['edited']              = '编辑需求';
+$lang->action->dynamicAction->story['activated']           = '激活需求';
+$lang->action->dynamicAction->story['reviewed']            = '评审需求';
+$lang->action->dynamicAction->story['closed']              = '关闭需求';
+$lang->action->dynamicAction->story['assigned']            = '指派';
+$lang->action->dynamicAction->story['closed']              = '关闭需求';
+$lang->action->dynamicAction->story['linked2plan']         = '需求关联计划';
+$lang->action->dynamicAction->story['unlinkedfromplan']    = '计划移除需求';
+$lang->action->dynamicAction->story['linked2release']      = '需求关联发布';
+$lang->action->dynamicAction->story['unlinkedfromrelease'] = '发布移除需求';
+$lang->action->dynamicAction->story['linked2build']        = '需求关联版本';
+$lang->action->dynamicAction->story['unlinkedfrombuild']   = '版本移除需求';
+$lang->action->dynamicAction->story['unlinkedfromproject'] = '移除项目';
+$lang->action->dynamicAction->story['undeleted']           = '还原需求';
+$lang->action->dynamicAction->story['hidden']              = '隐藏需求';
+
+$lang->action->dynamicAction->project['opened']            = '创建项目';
+$lang->action->dynamicAction->project['edited']            = '编辑项目';
+$lang->action->dynamicAction->project['deleted']           = '删除项目';
+$lang->action->dynamicAction->project['started']           = '开始项目';
+$lang->action->dynamicAction->project['delayed']           = '延期项目';   
+$lang->action->dynamicAction->project['suspended']         = '挂起项目';
+$lang->action->dynamicAction->project['activated']         = '激活项目';
+$lang->action->dynamicAction->project['closed']            = '关闭项目';
+$lang->action->dynamicAction->project['managed']           = '维护项目';
+$lang->action->dynamicAction->project['undeleted']         = '还原项目';
+$lang->action->dynamicAction->project['hidden']            = '隐藏项目';
+$lang->action->dynamicAction->task['opened']               = '创建任务';          
+$lang->action->dynamicAction->task['edited']               = '编辑任务';
+$lang->action->dynamicAction->task['commented']            = '任务备注';
+$lang->action->dynamicAction->task['assigned']             = '任务指派';
+$lang->action->dynamicAction->task['confirmed']            = '任务确认';
+$lang->action->dynamicAction->task['started']              = '开始任务';
+$lang->action->dynamicAction->task['editestimate']         = '编辑记录';
+$lang->action->dynamicAction->task['deleteestimate']       = '删除记录';
+$lang->action->dynamicAction->task['finished']             = '任务完成';
+$lang->action->dynamicAction->task['paused']               = '任务暂停';
+$lang->action->dynamicAction->task['closed']               = '任务关闭';
+$lang->action->dynamicAction->task['canceled']             = '任务取消';
+$lang->action->dynamicAction->task['activated']            = '任务激活';
+$lang->action->dynamicAction->task['createchildren']       = '创建子任务';
+$lang->action->dynamicAction->task['unlinkparenttask']     = '取消关联父任务';
+$lang->action->dynamicAction->task['linkparenttask']       = '关联父任务';
+$lang->action->dynamicAction->task['linkchildtask']        = '关联子任务';
+$lang->action->dynamicAction->task['recordestimate']       = '记录日志';
+$lang->action->dynamicAction->task['moved']                = '移动任务';
+$lang->action->dynamicAction->task['undeleted']            = '还原任务';
+$lang->action->dynamicAction->task['hidden']               = '隐藏任务';
+$lang->action->dynamicAction->build['opened']              = '创建版本';
+$lang->action->dynamicAction->build['edited']              = '编辑版本';
+
+$lang->action->dynamicAction->bug['opened']                = '创建Bug';
+$lang->action->dynamicAction->bug['edited']                = '编辑Bug';
+$lang->action->dynamicAction->bug['totask']                = '转任务';
+$lang->action->dynamicAction->bug['activated']             = '激活Bug';
+$lang->action->dynamicAction->bug['assigned']              = '激活Bug';
+$lang->action->dynamicAction->bug['tostory']               = '转需求';
+$lang->action->dynamicAction->bug['closed']                = '关闭Bug';
+$lang->action->dynamicAction->bug['bugconfirmed']          = '确认Bug';
+$lang->action->dynamicAction->bug['confirmed']             = '确认需求变动';
+$lang->action->dynamicAction->bug['linked2plan']           = '关联计划';
+$lang->action->dynamicAction->bug['resolved']              = '解决Bug';
+$lang->action->dynamicAction->bug['unlinkedfromplan']      = '从计划中移除';
+$lang->action->dynamicAction->bug['linked2release']        = '关联发布';
+$lang->action->dynamicAction->bug['unlinkedfromrelease']   = '从发布中移除';
+$lang->action->dynamicAction->bug['linked2bug']            = '关联到版本';
+$lang->action->dynamicAction->bug['unlinkedfrombuild']     = '从版本中移除';
+$lang->action->dynamicAction->bug['undeleted']             = '还原Bug';
+$lang->action->dynamicAction->bug['hidden']                = '隐藏Bug';
+$lang->action->dynamicAction->testtask['opened']           = '创建用例';
+$lang->action->dynamicAction->testtask['edited']           = '编辑用例';
+$lang->action->dynamicAction->testtask['started']          = '开始用例';
+$lang->action->dynamicAction->testtask['activated']        = '激活用例';
+$lang->action->dynamicAction->testtask['closed']           = '关闭用例';
+$lang->action->dynamicAction->testtask['blocked']          = '阻塞用例';
+$lang->action->dynamicAction->case['opened']               = '创建用例';
+$lang->action->dynamicAction->case['edited']               = '编辑用例';
+$lang->action->dynamicAction->case['reviewed']             = '记录评审结果';
+$lang->action->dynamicAction->case['confirmed']            = '确认用例';
+$lang->action->dynamicAction->case['fromlib']              = '从用例库导入';
+$lang->action->dynamicAction->testreport['opened']         = '创建测试报告';
+$lang->action->dynamicAction->testreport['edited']         = '编辑测试报告';
+$lang->action->dynamicAction->testsuite['opened']          = '创建测试套件';
+$lang->action->dynamicAction->caselib['opened']            = '创建用例库';
+
+$lang->action->dynamicAction->docLib['created']            = '创建文档库';
+$lang->action->dynamicAction->docLib['edited']             = '编辑文档库';
+$lang->action->dynamicAction->doc['created']               = '创建文档';
+$lang->action->dynamicAction->doc['edited']                = '编辑文档';
+$lang->action->dynamicAction->doc['commented']             = '评论文档';
+
+$lang->action->dynamicAction->user['created']              = '创建用户';
+$lang->action->dynamicAction->user['edited']               = '编辑用户';
+$lang->action->dynamicAction->user['login']                = '用户登录';
+$lang->action->dynamicAction->user['logout']               = '用户退出';
+$lang->action->dynamicAction->user['loginxuanxuan']        = '登录喧喧';
+$lang->action->dynamicAction->user['undeleted']            = '还原用户';
+$lang->action->dynamicAction->user['hidden']               = '隐藏账户';
+
+$lang->action->dynamicAction->entry['created']             = '添加应用';
+$lang->action->dynamicAction->entry['edited']              = '编辑应用';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

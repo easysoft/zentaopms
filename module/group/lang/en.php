@@ -27,6 +27,7 @@ $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
 $lang->group->viewList           = 'View';
 $lang->group->productList        = 'Product';
 $lang->group->projectList        = 'Project';
+$lang->group->dynamic            = '可访问动态';
 $lang->group->noticeVisit        = 'Empty means no access.';
 
 $lang->group->id       = 'ID';

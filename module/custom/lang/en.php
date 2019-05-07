@@ -18,8 +18,6 @@ $lang->custom->required   = 'Required';
 $lang->custom->score      = 'Point';
 $lang->custom->timezone   = 'Timezone';
 $lang->custom->scoreReset = 'Reset Point';
-$lang->custom->setDynamic = 'Set Dynamic';
-$lang->custom->setAction  = 'Set Action';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
