@@ -28,7 +28,7 @@ $lang->group->viewList           = '可访问视图';
 $lang->group->productList        = '可访问' . $lang->productCommon;
 $lang->group->projectList        = '可访问' . $lang->projectCommon;
 $lang->group->dynamic            = '可访问动态';
-$lang->group->noticeVisit        = '空代表访问没有访问限制';
+$lang->group->noticeVisit        = '空代表没有访问限制';
 
 $lang->group->id       = '编号';
 $lang->group->name     = '分组名称';
