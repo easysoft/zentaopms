@@ -319,8 +319,14 @@ $lang->action->dynamicAction->testreport['opened']         = 'Create Test Report
 $lang->action->dynamicAction->testreport['edited']         = 'Edit Test Report';
 $lang->action->dynamicAction->testsuite['opened']          = 'Create Test Suite';
 $lang->action->dynamicAction->testsuite['edited']          = 'Edit Test Suite';
+$lang->action->dynamicAction->testsuite['deleted']         = 'Deleted Test Suite';
+$lang->action->dynamicAction->testsuite['undeleted']       = 'Undeleted Test Suite';
+$lang->action->dynamicAction->testsuite['hidden']          = 'Hidden Test Suite';
 $lang->action->dynamicAction->caselib['opened']            = 'Create Case Lib';
 $lang->action->dynamicAction->caselib['edited']            = 'Edit Case Lib';
+$lang->action->dynamicAction->caseLib['deleted']           = 'Deleted Case Lib';
+$lang->action->dynamicAction->caseLib['undeleted']         = 'Undeleted Case Lib';
+$lang->action->dynamicAction->caseLib['hidden']            = 'Hidden Case Lib';
 
 $lang->action->dynamicAction->docLib['created']            = 'Create Doc Lib';
 $lang->action->dynamicAction->docLib['edited']             = 'Edit Doc Lib';

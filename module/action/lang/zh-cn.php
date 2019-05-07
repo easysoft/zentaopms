@@ -333,6 +333,9 @@ $lang->action->dynamicAction->testsuite['undeleted']       = '还原测试套件
 $lang->action->dynamicAction->testsuite['hidden']          = '隐藏测试套件';
 $lang->action->dynamicAction->caselib['opened']            = '创建用例库';
 $lang->action->dynamicAction->caselib['edited']            = '编辑用例库';
+$lang->action->dynamicAction->caseLib['deleted']           = '删除用例库';
+$lang->action->dynamicAction->caseLib['undeleted']         = '还原用例库';
+$lang->action->dynamicAction->caseLib['hidden']            = '隐藏用例库';
 
 $lang->action->dynamicAction->docLib['created']            = '创建文档库';
 $lang->action->dynamicAction->docLib['edited']             = '编辑文档库';
