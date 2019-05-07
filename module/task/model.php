@@ -317,7 +317,13 @@ public function batchCreate($projectID)
     {
         $this->updateParentStatus($taskID);
         $this->computeBeginAndEnd($parentID);
-        $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->eq($parentID)->exec();
+
+        $task = new stdclass();
+        $task->parent         = '-1';
+        $task->lastEditedBy   = $this->app->user->account;
+        $task->lastEditedDate = $now;
+        $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
+
         $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
         }
         return $mails;
@@ -763,6 +769,7 @@ public function batchCreate($projectID)
 
                 if($changed)
                 {
+                    $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
                     $this->action->create('task', $taskID, 'unlinkParentTask', '', $oldTask->parent);
                     $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $taskID);
                     $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
@@ -780,6 +787,7 @@ public function batchCreate($projectID)
 
                 if($changed)
                 {
+                    $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($task->parent)->exec();
                     $this->action->create('task', $taskID, 'linkParentTask', '', $task->parent);
                     $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $taskID);
                     $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
