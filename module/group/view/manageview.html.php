@@ -74,10 +74,10 @@
             <?php foreach($lang->menu as $module => $title):?>
             <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
-              <th class='w-100px text-left'>
+              <th class='w-100px text-left text-top'>
                 <div class='action-item'>
                   <div class='checkbox-primary'>
-                    <input type="checkbox" id='allchecker' name="allchecker" onclick="selectAll(this)"/>
+                    <input type="checkbox" id='allchecker' onclick="selectAll(this)"/>
                     <label class='priv' for='allchecker'><?php echo substr($title, 0, strpos($title, '|'));?></label>
                   </div>
                 </div>
@@ -120,7 +120,7 @@
      </tr>
       <tr>
         <td colspan='2' class='form-actions text-center'>
-          <?php echo html::submitButton('', "onclick='setNoChecked()'");?>
+          <?php echo html::submitButton();?>
           <?php echo html::backButton();?>
           <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>
         </td>
