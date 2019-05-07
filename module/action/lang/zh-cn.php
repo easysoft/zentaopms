@@ -206,6 +206,7 @@ $lang->action->label->unlinkchildrentask  = "取消关联子任务";
 $lang->action->label->linkparenttask      = "关联父任务";
 $lang->action->label->unlinkparenttask    = "取消关联父任务";
 $lang->action->label->batchcreate         = "批量创建任务";
+$lang->action->label->createchildren      = "创建子任务";
 $lang->action->label->managed             = "维护";
 
 /* 动态信息按照对象分组 */
