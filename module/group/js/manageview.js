@@ -47,11 +47,4 @@ $(function()
             $('#' + id + 'ActionBox').closest('tr').find('td :checkbox').prop('checked', $(this).prop("checked"));
         }
     })
-    
-    $('.pl-0px .table-form tbody > tr > td').each(function()
-    {
-        $(this).find('.action-item :checkbox').each(function()
-        {
-        })
-    })
 })
