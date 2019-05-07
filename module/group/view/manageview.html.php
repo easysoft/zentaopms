@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2 title='<?php echo $group->name;?>'>
-      <span class='label-id'><?php echo $group->id;?></span>
+      <span id='groupName'><i class='icon-lock'> <?php echo $group->name;?></i></span>
       <small> <?php echo $lang->arrow . $lang->group->manageView;?></small>
     </h2>
   </div>
@@ -88,7 +88,7 @@
                   <?php foreach($lang->action->dynamicAction->$module as $action => $actionTitle):?>
                   <div class='action-item'>
                     <div class='checkbox-primary'>
-                      <input type='checkbox' id='<?php echo "$module-$action";?>' name='actions[actions][<?php echo $module;?>][<?php echo $action;?>]' value='<?php echo $action;?>' <?php if(isset($group->acl['actions'][$module][$action]) or empty($group->acl['actions'])) echo "checked";?> />
+                      <input type='checkbox' id='<?php echo "$module-$action";?>' name='actions[actions][<?php echo $module;?>][<?php echo $action;?>]' value='<?php echo $action;?>' <?php if(isset($group->acl['actions'][$module][$action]) or !isset($group->acl['actions'])) echo "checked";?> />
                       <label class='priv' for='<?php echo "$module-$action";?>'><?php echo $actionTitle;?></label>
                     </div>
                   </div>
@@ -102,7 +102,7 @@
                   <?php foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle):?>
                   <div class='action-item'>
                     <div class='checkbox-primary'>
-                      <input type='checkbox' id='<?php echo "$subModule-$action";?>' name='actions[actions][<?php echo $subModule;?>][<?php echo $action;?>]' value='<?php echo $action;?>' <?php if(isset($group->acl['actions'][$subModule][$action]) or empty($group->acl['actions'])) echo "checked";?> />
+                      <input type='checkbox' id='<?php echo "$subModule-$action";?>' name='actions[actions][<?php echo $subModule;?>][<?php echo $action;?>]' value='<?php echo $action;?>' <?php if(isset($group->acl['actions'][$subModule][$action]) or !isset($group->acl['actions'])) echo "checked";?> />
                       <label class='priv' for='<?php echo "$subModule-$action";?>'><?php echo $actionTitle;?></label>
                     </div>
                   </div>
