@@ -25,7 +25,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->chat->turnon;?></th>
-          <td class='w-p20'><?php echo $type == 'edit' ? html::radio('turnon', $lang->chat->turnonList, $turnon) : zget($lang->chat->turnonList, $config->xuanxuan->turnon);?></td>
+          <td class='w-p30'><?php echo $type == 'edit' ? html::radio('turnon', $lang->chat->turnonList, $turnon) : zget($lang->chat->turnonList, $config->xuanxuan->turnon);?></td>
           <td></td>
         </tr>
         <tr>
