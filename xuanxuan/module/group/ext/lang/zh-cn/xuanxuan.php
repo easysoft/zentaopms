@@ -1,9 +1,13 @@
 <?php
-$lang->resource->admin->xuanxuan    = 'xuanxuan';
-$lang->resource->admin->downloadxxd = 'downloadXXD';
+$lang->resource->admin->xuanxuan = 'xuanxuan';
+$lang->admin->methodOrder[26] = 'xuanxuan';
 
-$lang->admin->methodOrder[25] = 'xuanxuan';
-$lang->admin->methodOrder[30] = 'downloadxxd';
+if(!isset($lang->resource->setting)) $lang->resource->setting = new stdclass();
+$lang->resource->setting->xuanxuan    = 'xuanxuan';
+$lang->resource->setting->downloadxxd = 'downloadXXD';
+
+$lang->setting->methodOrder[26] = 'xuanxuan';
+$lang->setting->methodOrder[31] = 'downloadxxd';
 
 $lang->resource->chat = new stdclass();
 $lang->resource->chat->getChatUsers  = 'getChatUsers';

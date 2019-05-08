@@ -1,5 +1,5 @@
 <?php
-class admin extends control
+class setting extends control
 {
     public function downloadXXD($type = '', $os = '')
     {
@@ -9,7 +9,7 @@ class admin extends control
             $server = $this->chat->getServer('zentao');
             if(strpos($server, '127.0.0.1') !== false) die(js::alert($this->lang->chat->xxdServerError));
 
-            $this->loadModel('setting')->setItem('system.common.xxserver.installed', 1);
+            $this->setting->setItem('system.common.xxserver.installed', 1);
 
             $setting     = $this->config->xuanxuan;
             $setting->os = $os;
