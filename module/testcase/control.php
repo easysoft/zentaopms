@@ -1105,9 +1105,10 @@ class testcase extends control
                 }
             }
 
-            $stmt = $this->dao->select('*')->from(TABLE_TESTRESULT)
-                ->where('`case`')->in(array_keys($cases))
-                ->beginIF($taskID)->andWhere('run')->eq($taskID)->fi()
+            $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+                ->leftJoin('TABLE_TESTRUN')->alias('t2')->on('t1.run=t2.id')
+                ->where('t1.`case`')->in(array_keys($cases))
+                ->beginIF($taskID)->andWhere('t2.task')->eq($taskID)->fi()
                 ->orderBy('id_desc')
                 ->query();
             $results = array();

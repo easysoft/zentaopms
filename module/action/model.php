@@ -616,17 +616,8 @@ class actionModel extends model
         $libs = $this->doc->getLibs('all');
         $docs = $this->doc->getPrivDocs(array_keys($libs));
         
-        $actionCondition = '';
-        if(isset($this->app->user->rights['acls']['actions']))
-        {
-            if(empty($this->app->user->rights['acls']['actions'])) return array();
-            foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
-            {
-                $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
-            }
-            $actionCondition = trim($actionCondition, 'or ');
-        }
-        
+        $actionCondition = $this->getActionCondition();
+        if(is_array($actionCondition)) return array();
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where(1)
@@ -654,6 +645,26 @@ class actionModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
        
         return $this->transformActions($actions);;
+    }
+
+    /**
+     * Get dynamic show action
+     * 
+     * @return String
+     */
+    public function getActionCondition()
+    {
+        $actionCondition = '';
+        if(isset($this->app->user->rights['acls']['actions']))
+        {
+            if(empty($this->app->user->rights['acls']['actions'])) return array();
+            foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
+            {
+                $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
+            }
+            $actionCondition = trim($actionCondition, 'or ');
+        }
+        return $actionCondition;
     }
 
     /**
@@ -730,8 +741,11 @@ class actionModel extends model
      */
     public function getBySQL($sql, $orderBy, $pager = null)
     {
+        $actionCondition = $this->getActionCondition();
+        if(is_array($actionCondition)) return array();
         return $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where($sql)
+            ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('objectType')->notin('bug,build,project,task,taskcase,testreport,testsuite,testtask')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('objectType')->notin('product,productplan,release,story,testcase,testreport,testsuite')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('objectType')->notin('project,productplan,release,story,task')->fi()

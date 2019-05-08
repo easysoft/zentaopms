@@ -23,7 +23,7 @@
       <span class='label label-id'><?php echo $suite->id;?></span>
       <span class='text'><?php echo $suite->name;?></span>
       <?php if($suite->deleted):?>
-      <span class='label label-danger'><?php echo $lang->suite->deleted;?></span>
+      <span class='label label-danger'><?php echo $lang->delete;?></span>
       <?php endif; ?>
     </div>
   </div>

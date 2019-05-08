@@ -25,7 +25,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->chat->turnon;?></th>
-          <td class='w-p20'><?php echo $type == 'edit' ? html::radio('turnon', $lang->chat->turnonList, $turnon) : zget($lang->chat->turnonList, $config->xuanxuan->turnon);?></td>
+          <td class='w-p30'><?php echo $type == 'edit' ? html::radio('turnon', $lang->chat->turnonList, $turnon) : zget($lang->chat->turnonList, $config->xuanxuan->turnon);?></td>
           <td></td>
         </tr>
         <tr>
@@ -84,24 +84,24 @@
         <tr>
           <th><?php echo $lang->chat->xxdIsHttps;?></th>
           <td>
-            <?php echo html::hidden('isHttps', $isHttps);?>
-            <?php echo $type ? html::radio('https', $lang->chat->httpsOptions, $isHttps, "class='checkbox'") : $lang->chat->httpsOptions[$isHttps];?>
+            <?php echo html::hidden('https', $https);?>
+            <?php echo $type ? html::radio('https', $lang->chat->httpsOptions, $https, "class='checkbox'") : $lang->chat->httpsOptions[$https];?>
           </td>
           <td></td>
         </tr>
         <?php else:?>
         <tr>
           <th><?php echo $lang->chat->xxdIsHttps;?></th>
-          <td><?php echo zget($lang->chat->httpsOptions, $isHttps, '');?> </td>
+          <td><?php echo zget($lang->chat->httpsOptions, $https, '');?> </td>
           <td></td>
         </tr>
         <?php endif;?>
-        <tr class='sslTR <?php if($isHttps == 'off' || empty($type)) echo 'hide';?>'>
+        <tr class='sslTR <?php if($https == 'off' || empty($type)) echo 'hide';?>'>
           <th><?php echo $lang->chat->xxd->sslcrt;?></th>
           <td><?php echo html::textarea('sslcrt',  zget($config->xuanxuan, 'sslcrt', ''), "placeholder='{$lang->chat->placeholder->xxd->sslcrt}' class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr class='sslTR <?php if($isHttps == 'off' || empty($type)) echo 'hide';?>'>
+        <tr class='sslTR <?php if($https == 'off' || empty($type)) echo 'hide';?>'>
           <th><?php echo $lang->chat->xxd->sslkey;?></th>
           <td><?php echo html::textarea('sslkey',  zget($config->xuanxuan, 'sslkey', ''), "placeholder='{$lang->chat->placeholder->xxd->sslkey}' class='form-control'");?></td>
           <td></td>

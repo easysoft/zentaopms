@@ -129,9 +129,17 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. Th
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date Linked to <strong>$extra</strong> by <strong>$actor</strong>';
 
+/* 子任务修改父任务的历史操作记录 */
+$lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a Child Task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a Child Task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a Child Task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> unlinked a Child Task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked a Parent Task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> unlinked a Parent Task <strong>$extra</strong>。' . "\n";
+
 /* 关联用例和移除用例时的历史操作记录。*/
-$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked to  use case <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked use case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked a Use Case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked a Use Case <strong>$extra</strong>.' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
@@ -193,6 +201,148 @@ $lang->action->label->logout              = "log out";
 $lang->action->label->deleteestimate      = "deleted ";
 $lang->action->label->linked2build        = "linked ";
 $lang->action->label->linked2bug          = "linked ";
+$lang->action->label->linkchildtask       = "linked a child task";
+$lang->action->label->unlinkchildrentask  = "unlinked a child task";
+$lang->action->label->linkparenttask      = "linked a parent task";
+$lang->action->label->batchcreate         = "batch created tasks";
+$lang->action->label->managed             = "managed";
+
+/* 动态信息按照对象分组 */
+$lang->action->dynamicAction = new stdclass;
+$lang->action->dynamicAction->todo['opened']               = 'Create Todo';
+$lang->action->dynamicAction->todo['edited']               = 'Edit Todo';
+$lang->action->dynamicAction->todo['erased']               = 'Delete Todo';
+$lang->action->dynamicAction->todo['finished']             = 'Finish Todo';
+$lang->action->dynamicAction->todo['activated']            = 'Activate Todo';
+$lang->action->dynamicAction->todo['closed']               = 'Close Todo';
+$lang->action->dynamicAction->todo['deleted']              = 'Delete Todo';
+$lang->action->dynamicAction->todo['assigned']             = 'Assign Todo';
+$lang->action->dynamicAction->todo['undeleted']            = 'Restore Todo';
+$lang->action->dynamicAction->todo['hidden']               = 'Hide Todo';
+
+$lang->action->dynamicAction->product['opened']            = 'Create ' . $lang->productCommon;
+$lang->action->dynamicAction->product['edited']            = 'Edit ' . $lang->productCommon;
+$lang->action->dynamicAction->product['deleted']           = 'Delete ' . $lang->productCommon;
+$lang->action->dynamicAction->product['closed']            = 'Close ' . $lang->productCommon;
+$lang->action->dynamicAction->product['undeleted']         = 'Restore ' . $lang->productCommon;
+$lang->action->dynamicAction->product['hidden']            = 'Hide ' . $lang->productCommon;
+$lang->action->dynamicAction->productplan['opened']        = 'Create Plan';
+$lang->action->dynamicAction->productplan['edited']        = 'Edit Plan';
+$lang->action->dynamicAction->release['opened']            = 'Create Release';
+$lang->action->dynamicAction->release['edited']            = 'Edit Release';
+$lang->action->dynamicAction->release['changestatus']      = 'Change Status';
+$lang->action->dynamicAction->release['undeleted']         = 'Restore Release';
+$lang->action->dynamicAction->release['hidden']            = 'Hide Release';
+$lang->action->dynamicAction->story['opened']              = 'Create Story';
+$lang->action->dynamicAction->story['edited']              = 'Edit Story';
+$lang->action->dynamicAction->story['activated']           = 'Activate Story';
+$lang->action->dynamicAction->story['reviewed']            = 'Review Story';
+$lang->action->dynamicAction->story['closed']              = 'Close Story';
+$lang->action->dynamicAction->story['assigned']            = 'Assign';
+$lang->action->dynamicAction->story['changed']             = 'Change Story';
+$lang->action->dynamicAction->story['linked2plan']         = 'Link Story to Plan';
+$lang->action->dynamicAction->story['unlinkedfromplan']    = 'Unlink Story from Plan';
+$lang->action->dynamicAction->story['linked2release']      = 'Link Story to Release';
+$lang->action->dynamicAction->story['unlinkedfromrelease'] = 'Unlink Story from Plan';
+$lang->action->dynamicAction->story['linked2build']        = 'Link Story to Build';
+$lang->action->dynamicAction->story['unlinkedfrombuild']   = 'Unlink Story from Build';
+$lang->action->dynamicAction->story['unlinkedfromproject'] = 'Unlink Project';
+$lang->action->dynamicAction->story['undeleted']           = 'Restore Story';
+$lang->action->dynamicAction->story['hidden']              = 'Hide Story';
+
+$lang->action->dynamicAction->project['opened']            = 'Create ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['edited']            = 'Edit ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['deleted']           = 'Delete ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['started']           = 'Start ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['delayed']           = 'Delay ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['suspended']         = 'Suspend ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['activated']         = 'Activate ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['closed']            = 'Close ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['managed']           = 'Manage ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['undeleted']         = 'Restore ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['hidden']            = 'Hide ' . $lang->projectCommon;
+$lang->action->dynamicAction->project['moved']             = 'Improt Task';
+$lang->action->dynamicAction->task['opened']               = 'Create Task';
+$lang->action->dynamicAction->task['edited']               = 'Edit Task';
+$lang->action->dynamicAction->task['commented']            = 'Task Comment';
+$lang->action->dynamicAction->task['assigned']             = 'Assign Task';
+$lang->action->dynamicAction->task['confirmed']            = 'Confirm Task';
+$lang->action->dynamicAction->task['started']              = 'Start Task';
+$lang->action->dynamicAction->task['finished']             = 'Finish Task';
+$lang->action->dynamicAction->task['recordestimate']       = 'Add Estimates';
+$lang->action->dynamicAction->task['editestimate']         = 'Edit Estimates';
+$lang->action->dynamicAction->task['deleteestimate']       = 'Delete Estimates';
+$lang->action->dynamicAction->task['paused']               = 'Pause Task';
+$lang->action->dynamicAction->task['closed']               = 'Close Task';
+$lang->action->dynamicAction->task['canceled']             = 'Cancel Task';
+$lang->action->dynamicAction->task['activated']            = 'Activate Task';
+$lang->action->dynamicAction->task['createchildren']       = 'Create Child Task';
+$lang->action->dynamicAction->task['unlinkparenttask']     = 'Unlink Parent Task';
+$lang->action->dynamicAction->task['linkparenttask']       = 'Link Parent Task';
+$lang->action->dynamicAction->task['linkchildtask']        = 'Link Child Task';
+$lang->action->dynamicAction->task['undeleted']            = 'Restore Task';
+$lang->action->dynamicAction->task['hidden']               = 'Hide Task';
+$lang->action->dynamicAction->build['opened']              = 'Create Build';
+$lang->action->dynamicAction->build['edited']              = 'Edit Build';
+
+$lang->action->dynamicAction->bug['opened']                = 'Report Bug';
+$lang->action->dynamicAction->bug['edited']                = 'Edit Bug';
+$lang->action->dynamicAction->bug['activated']             = 'Activate Bug';
+$lang->action->dynamicAction->bug['assigned']              = 'Assign Bug';
+$lang->action->dynamicAction->bug['closed']                = 'Close Bug';
+$lang->action->dynamicAction->bug['bugconfirmed']          = 'Confirm Bug';
+$lang->action->dynamicAction->bug['resolved']              = 'Solve Bug';
+$lang->action->dynamicAction->bug['undeleted']             = 'Restore Bug';
+$lang->action->dynamicAction->bug['hidden']                = 'Hide Bug';
+$lang->action->dynamicAction->bug['confirmed']             = 'Confirm Story Change';
+$lang->action->dynamicAction->bug['tostory']               = 'Convert to Story';
+$lang->action->dynamicAction->bug['totask']                = 'Convert to Task';
+$lang->action->dynamicAction->bug['linked2plan']           = 'Link Plan';
+$lang->action->dynamicAction->bug['unlinkedfromplan']      = 'Unlink Plan';
+$lang->action->dynamicAction->bug['linked2release']        = 'Link Release';
+$lang->action->dynamicAction->bug['unlinkedfromrelease']   = 'Unlink Plan';
+$lang->action->dynamicAction->bug['linked2bug']            = 'Link Build';
+$lang->action->dynamicAction->bug['unlinkedfrombuild']     = 'Unlink Build';
+$lang->action->dynamicAction->testtask['opened']           = 'Create Case';
+$lang->action->dynamicAction->testtask['edited']           = 'Edit Case';
+$lang->action->dynamicAction->testtask['started']          = 'Start Case';
+$lang->action->dynamicAction->testtask['activated']        = 'Activate Case';
+$lang->action->dynamicAction->testtask['closed']           = 'Close Case';
+$lang->action->dynamicAction->testtask['blocked']          = 'Blocked Case';
+$lang->action->dynamicAction->case['opened']               = 'Create Case';
+$lang->action->dynamicAction->case['edited']               = 'Edit Case';
+$lang->action->dynamicAction->case['reviewed']             = 'Add Review Result';
+$lang->action->dynamicAction->case['confirmed']            = 'Confirm Case';
+$lang->action->dynamicAction->case['fromlib']              = 'Import from Case Lib';
+$lang->action->dynamicAction->testreport['opened']         = 'Create Test Report';
+$lang->action->dynamicAction->testreport['edited']         = 'Edit Test Report';
+$lang->action->dynamicAction->testsuite['opened']          = 'Create Test Suite';
+$lang->action->dynamicAction->testsuite['edited']          = 'Edit Test Suite';
+$lang->action->dynamicAction->testsuite['deleted']         = 'Deleted Test Suite';
+$lang->action->dynamicAction->testsuite['undeleted']       = 'Undeleted Test Suite';
+$lang->action->dynamicAction->testsuite['hidden']          = 'Hidden Test Suite';
+$lang->action->dynamicAction->caselib['opened']            = 'Create Case Lib';
+$lang->action->dynamicAction->caselib['edited']            = 'Edit Case Lib';
+$lang->action->dynamicAction->caseLib['deleted']           = 'Deleted Case Lib';
+$lang->action->dynamicAction->caseLib['undeleted']         = 'Undeleted Case Lib';
+$lang->action->dynamicAction->caseLib['hidden']            = 'Hidden Case Lib';
+
+$lang->action->dynamicAction->docLib['created']            = 'Create Doc Lib';
+$lang->action->dynamicAction->docLib['edited']             = 'Edit Doc Lib';
+$lang->action->dynamicAction->doc['created']               = 'Create Doc';
+$lang->action->dynamicAction->doc['edited']                = 'Edit Doc';
+$lang->action->dynamicAction->doc['commented']             = 'Comment Doc';
+
+$lang->action->dynamicAction->user['created']              = 'Create User';
+$lang->action->dynamicAction->user['edited']               = 'Edit User';
+$lang->action->dynamicAction->user['login']                = 'User Login';
+$lang->action->dynamicAction->user['logout']               = 'User Logout';
+$lang->action->dynamicAction->user['undeleted']            = 'Restore User';
+$lang->action->dynamicAction->user['hidden']               = 'Hide User';
+$lang->action->dynamicAction->user['loginxuanxuan']        = 'Login Xuan';
+
+$lang->action->dynamicAction->entry['created']             = 'Add Entry';
+$lang->action->dynamicAction->entry['edited']              = 'Edit Entry';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
@@ -226,7 +376,7 @@ $lang->action->search->objectTypeList['caseresult']  = 'Case Results';
 $lang->action->search->objectTypeList['stepresult']  = 'Case Steps';
 $lang->action->search->objectTypeList['story']       = 'Story';  
 $lang->action->search->objectTypeList['task']        = 'Task'; 
-$lang->action->search->objectTypeList['testtask']    = 'Test Task';     
+$lang->action->search->objectTypeList['testtask']    = 'Test';     
 $lang->action->search->objectTypeList['user']        = 'User'; 
 $lang->action->search->objectTypeList['doc']         = 'Doc';
 $lang->action->search->objectTypeList['doclib']      = 'Doc Lib';

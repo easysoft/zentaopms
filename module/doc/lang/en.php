@@ -41,6 +41,7 @@ $lang->doc->extension      = 'Extension';
 $lang->doc->size           = 'Size';
 $lang->doc->download       = 'Download';
 $lang->doc->acl            = 'Right';
+$lang->doc->fileName       = 'Files';
 $lang->doc->groups         = 'Groups';
 $lang->doc->users          = 'Users';
 $lang->doc->item           = ' Items';
