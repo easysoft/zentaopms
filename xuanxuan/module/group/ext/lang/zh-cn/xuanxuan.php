@@ -13,3 +13,10 @@ $lang->resource->chat = new stdclass();
 $lang->resource->chat->getChatUsers  = 'getChatUsers';
 $lang->resource->chat->getChatGroups = 'getChatGroups';
 $lang->resource->chat->notifyMSG     = 'notifyMSG';
+
+$lang->resource->client = new stdclass();
+$lang->resource->client->browse       = 'browse';
+$lang->resource->client->create       = 'create';
+$lang->resource->client->edit         = 'edit';
+$lang->resource->client->delete       = 'delete';
+$lang->resource->client->checkUpgrade = 'checkUpgrade';

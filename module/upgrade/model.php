@@ -386,14 +386,8 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
                     $this->execSQL($xuanxuanSql);
-
-                    $hasHttps = $this->loadModel('setting')->getItem("owner=system&module=common&section=xuanxuan&key=https");
-                    if(empty($hasHttps))
-                    {
-                        $this->dao->update(TABLE_CONFIG)->set('`key`')->eq('https')->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('xuanxuan')->andWhere('`key`')->eq('isHttps')->exec();
-                        $this->saveLogs($this->dao->get());
-                    }
                 }
+                $this->updateXX_11_5();
             }
         }
 
@@ -3087,6 +3081,42 @@ class upgradeModel extends model
         $this->dao->update(TABLE_DOCLIB)->set('acl')->eq('default')->where('type')->in('product,project')->andWhere('acl')->in('open,private')->exec();
         $this->saveLogs($this->dao->get());
         return !dao::isError();
+    }
+
+    /**
+     * Update xuanxuan for 11_5.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function updateXX_11_5()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $hasHttps = $this->loadModel('setting')->getItem("owner=system&module=common&section=xuanxuan&key=https");
+        if(empty($hasHttps))
+        {
+            $this->dao->update(TABLE_CONFIG)->set('`key`')->eq('https')->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('xuanxuan')->andWhere('`key`')->eq('isHttps')->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('admin')->andWhere('method')->eq('xuanxuan')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group = $groupID;
+            $groupPriv->module = 'setting';
+            $groupPriv->method = 'xuanxuan';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        try
+        {
+            $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('setting')->where('module')->eq('admin')->andWhere('method')->eq('downloadxxd')->exec();
+            $this->saveLogs($this->dao->get());
+        }
+        catch(PDOException $e){}
+        return true;
     }
 
     /**
