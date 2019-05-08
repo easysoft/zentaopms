@@ -97,7 +97,6 @@
                 <?php endif;?>
                 <?php if(isset($menugroup[$module])):?>
                 <?php foreach($menugroup[$module] as $subModule):?>
-                <?php if($subModule == 'testcase') $subModule = 'case';?>
                 <?php if(isset($lang->action->dynamicAction->$subModule)):?>
                 <div class='clearfix'>
                   <?php foreach($lang->action->dynamicAction->$subModule as $action => $actionTitle):?>
