@@ -134,7 +134,7 @@ $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> create
 $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a Child Task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a Child Task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> unlinked a Child Task <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked a Parent Task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked to a Parent Task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> unlinked a Parent Task <strong>$extra</strong>。' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
