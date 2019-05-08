@@ -14,7 +14,7 @@ class myMisc extends misc
         $response['result'] = 'success';
 
         $account   = $this->app->user->account;
-        $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
+        $clientDir = $this->app->wwwRoot . 'data/client/' . "$account/";
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
         /* write login info into config file. */
