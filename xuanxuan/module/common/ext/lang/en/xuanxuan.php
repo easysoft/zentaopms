@@ -1,6 +1,7 @@
 <?php
 $lang->xuanxuan = new stdclass();
 $lang->admin->menu->xuanxuan = array('link' => 'ZT Client|admin|xuanxuan', 'subModule' => 'client');
+$lang->admin->menuOrder[6]   = 'xuanxuan';
 
 $lang->admin->subMenu->xuanxuan = new stdclass();
 $lang->admin->subMenu->xuanxuan->setting = array('link' => 'Parameter|admin|xuanxuan');
