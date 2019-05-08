@@ -269,20 +269,24 @@ class groupModel extends model
         if(isset($_POST['allchecker']))$actions['views']   = array();
         if(!isset($actions['actions']))$actions['actions'] = array();
 
-        $dynamic = array();
-        foreach($actions['actions'] as $moduleName => $moduleActions)
+        $dynamic = $actions['actions'];
+        if(!isset($_POST['allchecker']))
         {
-            if(isset($this->lang->menugroup->$moduleName))
+            $dynamic = array();
+            foreach($actions['actions'] as $moduleName => $moduleActions)
             {
-                $groupModule = $this->lang->menugroup->$moduleName;
-                if($groupModule != 'my' and !isset($actions['views'][$groupModule])) continue;
-            }
-            else
-            {
-                if($moduleName != 'my' and !isset($actions['views'][$moduleName])) continue;
-            }
+                if(isset($this->lang->menugroup->$moduleName))
+                {
+                    $groupModule = $this->lang->menugroup->$moduleName;
+                    if($groupModule != 'my' and !isset($actions['views'][$groupModule])) continue;
+                }
+                else
+                {
+                    if($moduleName != 'my' and !isset($actions['views'][$moduleName])) continue;
+                }
 
-            $dynamic[$moduleName] = $moduleActions;
+                $dynamic[$moduleName] = $moduleActions;
+            }
         }
         $actions['actions'] = $dynamic;
 
