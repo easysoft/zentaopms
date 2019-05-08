@@ -24,10 +24,11 @@ $lang->group->manageMember       = '成員維護';
 $lang->group->confirmDelete      = '您確定刪除該用戶分組嗎？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '沒有保存，請確認選擇了權限數據。';
-$lang->group->viewList           = '允許訪問視圖';
-$lang->group->productList        = '允許訪問' . $lang->productCommon;
-$lang->group->projectList        = '允許訪問' . $lang->projectCommon;
-$lang->group->noticeVisit        = '空代表訪問沒有訪問限制';
+$lang->group->viewList           = '可訪問視圖';
+$lang->group->productList        = '可訪問' . $lang->productCommon;
+$lang->group->projectList        = '可訪問' . $lang->projectCommon;
+$lang->group->dynamic            = '可查看動態';
+$lang->group->noticeVisit        = '空代表沒有訪問限制';
 
 $lang->group->id       = '編號';
 $lang->group->name     = '分組名稱';

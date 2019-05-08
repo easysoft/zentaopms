@@ -111,6 +111,9 @@ $whiteList[] = 'webhook-edit';
 $whiteList[] = 'webhook-delete';
 $whiteList[] = 'webhook-log';
 $whiteList[] = 'webhook-asyncsend';
+$whiteList[] = 'testreport-setchartdatas';
+$whiteList[] = 'chat-login';
+$whiteList[] = 'entry-visit';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";
