@@ -38,7 +38,9 @@ class admin extends control
             if(isset($block->params)) $query['param'] = base64_encode(json_encode($block->params));
         }
 
-        $this->view->title  = $this->lang->chat->common;
+        $this->view->title      = $this->lang->chat->common;
+        $this->view->position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->chat->common);
+
         $this->view->blocks = $blocks;
         $this->display();
     }

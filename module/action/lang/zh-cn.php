@@ -241,7 +241,6 @@ $lang->action->dynamicAction->story['activated']           = '激活需求';
 $lang->action->dynamicAction->story['reviewed']            = '评审需求';
 $lang->action->dynamicAction->story['closed']              = '关闭需求';
 $lang->action->dynamicAction->story['assigned']            = '指派需求';
-$lang->action->dynamicAction->story['closed']              = '关闭需求';
 $lang->action->dynamicAction->story['changed']             = '变更需求';
 $lang->action->dynamicAction->story['linked2plan']         = '需求关联计划';
 $lang->action->dynamicAction->story['unlinkedfromplan']    = '计划移除需求';
@@ -285,7 +284,8 @@ $lang->action->dynamicAction->task['linkparenttask']       = '关联到父任务
 $lang->action->dynamicAction->task['linkchildtask']        = '关联子任务';
 $lang->action->dynamicAction->task['undeleted']            = '还原任务';
 $lang->action->dynamicAction->task['hidden']               = '隐藏任务';
-$lang->action->dynamicAction->task['svncommited']          = 'svn提交';
+$lang->action->dynamicAction->task['svncommited']          = 'SVN提交';
+$lang->action->dynamicAction->task['gitcommited']          = 'GIT提交';
 $lang->action->dynamicAction->build['opened']              = '创建版本';
 $lang->action->dynamicAction->build['edited']              = '编辑版本';
 

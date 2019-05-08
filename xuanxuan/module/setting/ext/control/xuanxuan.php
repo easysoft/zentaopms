@@ -38,7 +38,11 @@ class setting extends control
         $os = 'win';
         if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
 
-        $this->view->title     = $this->lang->chat->common;
+        $this->lang->menugroup->setting = 'admin';
+        $this->view->title      = $this->lang->chat->common;
+        $this->view->position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->chat->common);
+        $this->view->position[] = $this->lang->setting->common;
+
         $this->view->adminList = $this->loadModel('user')->getPairs('admin');
         $this->view->os        = $os . '_' . php_uname('m');
         $this->view->type      = $type;

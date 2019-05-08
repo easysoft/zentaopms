@@ -35,7 +35,7 @@ $(function()
     $('#os').change(function()
     {   
         os = $(this).val();
-        $('.download-package').attr('href', createLink('admin', 'downloadxxd', "type=package&os=" + os));
+        $('.download-package').attr('href', createLink('setting', 'downloadxxd', "type=package&os=" + os));
     }); 
     $('#os').change();
 });

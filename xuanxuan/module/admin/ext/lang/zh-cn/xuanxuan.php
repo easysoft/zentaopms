@@ -2,6 +2,7 @@
 $lang->admin->xuanxuan        = '客户端首页';
 $lang->admin->blockStatus     = '状态监控';
 $lang->admin->blockStatistics = '系统统计';
+$lang->admin->xuanxuanSetting = '参数设置';
 
 $lang->admin->fileSize      = '附件大小';
 $lang->admin->countUsers    = '当前在线用户数';

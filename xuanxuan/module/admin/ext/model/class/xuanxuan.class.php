@@ -6,7 +6,7 @@ class xuanxuanAdmin extends adminModel
         if(empty($block)) return false;
         $userList = count($this->loadModel('chat')->getUserList('online'));
         $xxdStartDate = $this->getXxdStart(); 
-        $setServerBtn = html::a(helper::createLink('setting', 'xuanxuan', 'type=edit'), $this->lang->admin->setServer, '', 'class="btn"');
+        $setServerBtn = html::a(helper::createLink('setting', 'xuanxuan', 'type=edit'), $this->lang->admin->xuanxuanSetting, '', 'class="btn"');
         if(empty($xxdStartDate)) $xxdStartDate = $this->lang->noData;
 
         $html =  '<div class="table-row statusBlock">';
