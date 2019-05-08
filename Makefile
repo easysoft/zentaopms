@@ -180,6 +180,7 @@ enrpm:
 	mkdir ~/rpmbuild/SPECS -p
 	cp build/rpm/zentaopms.spec ~/rpmbuild/SPECS
 	sed -i '/^Version/cVersion:${VERSION}' ~/rpmbuild/SPECS/zentaopms.spec
+	sed -i '/^Name:/cName:zentaoalm' ~/rpmbuild/SPECS/zentaopms.spec
 	mkdir ~/rpmbuild/SOURCES
 	cp ZenTaoALM.${VERSION}.zip ~/rpmbuild/SOURCES
 	mkdir ~/rpmbuild/SOURCES/etc/httpd/conf.d/ -p
