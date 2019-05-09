@@ -1,15 +1,15 @@
 <?php
-$lang->admin->xuanxuan        = 'Clien Index';
+$lang->admin->xuanxuan        = 'Clien Home';
 $lang->admin->blockStatus     = 'Status';
 $lang->admin->blockStatistics = 'Statistics';
-$lang->admin->xuanxuanSetting = 'Setting';
+$lang->admin->xuanxuanSetting = 'Settings';
 
 $lang->admin->fileSize      = 'File Size';
 $lang->admin->countUsers    = 'Online';
 $lang->admin->setServer     = 'Set';
-$lang->admin->totalUsers    = 'Users';
-$lang->admin->totalGroups   = 'Groups';
-$lang->admin->totalMessages = 'Messages';
+$lang->admin->totalUsers    = 'User';
+$lang->admin->totalGroups   = 'Group';
+$lang->admin->totalMessages = 'Message';
 $lang->admin->xxdStartDate  = 'XXD Last Start Time';
 
 $lang->admin->message = array();
