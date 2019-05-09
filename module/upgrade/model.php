@@ -3092,13 +3092,6 @@ class upgradeModel extends model
     public function updateXX_11_5()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $hasHttps = $this->loadModel('setting')->getItem("owner=system&module=common&section=xuanxuan&key=https");
-        if(empty($hasHttps))
-        {
-            $this->dao->update(TABLE_CONFIG)->set('`key`')->eq('https')->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('xuanxuan')->andWhere('`key`')->eq('isHttps')->exec();
-            $this->saveLogs($this->dao->get());
-        }
-
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('admin')->andWhere('method')->eq('xuanxuan')->fetchPairs('group', 'group');
         foreach($groups as $groupID)
         {
