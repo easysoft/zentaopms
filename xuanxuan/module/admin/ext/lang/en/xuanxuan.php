@@ -1,7 +1,7 @@
 <?php
 $lang->admin->xuanxuan        = 'Clien Index';
-$lang->admin->blockStatus     = '状态监控';
-$lang->admin->blockStatistics = '系统统计';
+$lang->admin->blockStatus     = 'Status';
+$lang->admin->blockStatistics = 'Statistics';
 $lang->admin->xuanxuanSetting = 'Setting';
 
 $lang->admin->fileSize      = 'File Size';
