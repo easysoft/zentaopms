@@ -1,6 +1,6 @@
 <?php
 $lang->xuanxuan = new stdclass();
-$lang->admin->menu->xuanxuan = array('link' => '客户端|admin|xuanxuan', 'subModule' => 'client');
+$lang->admin->menu->xuanxuan = array('link' => '客户端|admin|xuanxuan', 'subModule' => 'client,setting');
 $lang->admin->menuOrder[6]   = 'xuanxuan';
 
 $lang->admin->subMenu->xuanxuan = new stdclass();
