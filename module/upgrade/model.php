@@ -653,6 +653,7 @@ class upgradeModel extends model
             $basePath = $this->app->getBasePath();
             foreach($deleteFiles as $file)
             {
+                if(isset($this->config->excludeFiles[$file])) continue;
                 $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
                 if(file_exists($fullPath) and !unlink($fullPath)) $result[] = $fullPath;
             }
