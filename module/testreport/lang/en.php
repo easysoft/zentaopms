@@ -9,8 +9,8 @@ $lang->testreport->view     = 'Details';
 $lang->testreport->recreate = 'Re-Create';
 
 $lang->testreport->title       = 'Title';
-$lang->testreport->bugTitle    = 'Bug Title';
-$lang->testreport->storyTitle  = 'Story Title';
+$lang->testreport->bugTitle    = 'Bug';
+$lang->testreport->storyTitle  = 'Story';
 $lang->testreport->project     = 'Project';
 $lang->testreport->testtask    = 'Test Build';
 $lang->testreport->tasks       = $lang->testreport->testtask;
