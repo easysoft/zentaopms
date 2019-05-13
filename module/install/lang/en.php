@@ -151,14 +151,14 @@ $lang->install->groupList['TOP']['desc']     = 'Senior Manager';
 $lang->install->groupList['OTHERS']['name']  = 'Other';
 $lang->install->groupList['OTHERS']['desc']  = 'other users';
 $lang->install->groupList['LIMITED']['name'] = 'Limited User';
-$lang->install->groupList['LIMITED']['desc'] = 'User can only edit contents related to itself';
+$lang->install->groupList['LIMITED']['desc'] = 'Users can only edit contents related to themselves.';
 
 $lang->install->cronList[''] = 'Monitor cron';
-$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Charts';
-$lang->install->cronList['moduleName=report&methodName=remind']       = 'Daily task reminder';
+$lang->install->cronList['moduleName=project&methodName=computeburn'] = 'Update Burndown Chart';
+$lang->install->cronList['moduleName=report&methodName=remind']       = 'Daily Task Reminder';
 $lang->install->cronList['moduleName=svn&methodName=run']             = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']             = 'Synchronize GIT';
-$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup data&file';
+$lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup Data';
 $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronize sending Message';
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Asynchronize sending Webhook';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete overdue logs';

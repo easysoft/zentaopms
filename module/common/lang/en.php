@@ -63,7 +63,7 @@ $lang->restore         = 'Reset';
 $lang->comment         = 'Note';
 $lang->history         = 'History';
 $lang->attatch         = 'File';
-$lang->reverse         = 'Reverse';
+$lang->reverse         = 'Inverse';
 $lang->switchDisplay   = 'Toggle';
 $lang->expand          = 'Expand';
 $lang->collapse        = 'Collapse';
@@ -80,7 +80,7 @@ $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='t
 $lang->unfold          = '+';
 $lang->fold            = '-';
 $lang->homepage        = 'Set Home';
-$lang->noviceTutorial  = 'Tutorial';
+$lang->noviceTutorial  = 'ZenTao Tutorial';
 $lang->changeLog       = 'Change Log';
 $lang->manual          = 'User Manual';
 $lang->manualUrl       = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html';
@@ -99,7 +99,7 @@ $lang->selectAll     = 'Select All';
 $lang->selectReverse = 'Select Inverse';
 $lang->loading       = 'Loading...';
 $lang->notFound      = 'Not found!';
-$lang->notPage       = 'Sorry, the features you are visiting are under development!';
+$lang->notPage       = 'Sorry, the features you are visiting are in development!';
 $lang->showAll       = '[[Show All]]';
 
 $lang->future       = 'Pending';
@@ -143,7 +143,7 @@ $lang->searchObjects['productplan'] = $lang->productCommon . 'Plan';
 $lang->searchObjects['testtask']    = 'Test';
 $lang->searchObjects['doc']         = 'Doc';
 $lang->searchObjects['testsuite']   = 'Case Library';
-$lang->searchObjects['testreport']  = 'Testing Report';
+$lang->searchObjects['testreport']  = 'Test Report';
 $lang->searchTips                   = 'ID (ctrl+g)';
 
 /* Code formats for import. */
@@ -237,7 +237,7 @@ $lang->project->menu = new stdclass();
 
 $lang->project->menu->task     = array('link' => 'Task|project|task|projectID=%s', 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
 $lang->project->menu->kanban   = array('link' => 'Kanban|project|kanban|projectID=%s');
-$lang->project->menu->burn     = array('link' => 'Burndown Chart|project|burn|projectID=%s');
+$lang->project->menu->burn     = array('link' => 'Burndown|project|burn|projectID=%s');
 $lang->project->menu->list     = array('link' => 'More|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story    = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->project->menu->qa       = array('link' => 'Test|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
@@ -349,15 +349,15 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report is generated on search results of the list. Please search in the list before you generate a report.';
+$lang->report->notice->help = 'Note: Report is generated based on the search results of the list. Please search in the list before you generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
 $lang->company->menu = new stdclass();
 $lang->company->menu->browseUser  = array('link' => 'User|company|browse', 'subModule' => 'user');
 $lang->company->menu->dept        = array('link' => 'Department|dept|browse', 'subModule' => 'dept');
-$lang->company->menu->browseGroup = array('link' => 'Permission|group|browse', 'subModule' => 'group');
-$lang->company->menu->dynamic     = 'Dynamic|company|dynamic|';
+$lang->company->menu->browseGroup = array('link' => 'Privilege|group|browse', 'subModule' => 'group');
+$lang->company->menu->dynamic     = 'Dynamics|company|dynamic|';
 $lang->company->menu->view        = array('link' => 'Company|company|view');
 
 $lang->dept  = new stdclass();
@@ -385,7 +385,7 @@ $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
 $lang->admin->subMenu->message->mail    = array('link' => 'Mail|mail|index', 'subModule' => 'mail');
 $lang->admin->subMenu->message->webhook = array('link' => 'Webhook|webhook|browse', 'subModule' => 'webhook');
-$lang->admin->subMenu->message->setting = array('link' => 'Setting|message|setting', 'subModule' => 'message');
+$lang->admin->subMenu->message->setting = array('link' => 'Settings|message|setting', 'subModule' => 'message');
 
 $lang->admin->subMenu->sso = new stdclass();
 $lang->admin->subMenu->sso->ranzhi = 'Zdoo|admin|sso';
@@ -398,7 +398,7 @@ $lang->admin->subMenu->dev->entry  = array('link' => 'Entry|entry|browse', 'subM
 
 $lang->admin->subMenu->data = new stdclass();
 $lang->admin->subMenu->data->backup = array('link' => 'Backup|backup|index', 'subModule' => 'backup');
-$lang->admin->subMenu->data->trash  = 'Recycle Bin|action|trash';
+$lang->admin->subMenu->data->trash  = 'Recycle|action|trash';
 
 $lang->admin->subMenu->system = new stdclass();
 $lang->admin->subMenu->system->cron     = array('link' => 'Cron|cron|index', 'subModule' => 'cron');
@@ -756,11 +756,11 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->menu = new stdclass();
     $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
     $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
-    $lang->bug->menu->openedbyme    = 'CreateByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
-    $lang->bug->menu->assigntome    = 'AssignToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
-    $lang->bug->menu->resolvedbyme  = 'ResolveByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->openedbyme    = 'CreatedByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
+    $lang->bug->menu->assigntome    = 'AssignedToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
+    $lang->bug->menu->resolvedbyme  = 'SolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
     $lang->bug->menu->toclosed      = 'ToBeClosed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
-    $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
+    $lang->bug->menu->unresolved    = 'Unsolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->more          = array('link' => 'More|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->bug->subMenu = new stdclass();
@@ -770,7 +770,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->subMenu->more->longlifebugs  = 'Pending|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
     $lang->bug->subMenu->more->postponedbugs = 'Postponed|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->subMenu->more->overduebugs   = 'Overdue|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
-    $lang->bug->subMenu->more->needconfirm   = 'ToConfirm|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
+    $lang->bug->subMenu->more->needconfirm   = 'ToBeConfirmed|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
 
     $lang->bug->menuOrder[5]  = 'product';
     $lang->bug->menuOrder[10] = 'all';

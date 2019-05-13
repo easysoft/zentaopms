@@ -87,7 +87,7 @@ $lang->team->hours      = 'Man-hour/day';
 $lang->team->days       = 'Man-day';
 $lang->team->totalHours = 'Total Hours';
 
-$lang->team->limited            = 'limited User';
+$lang->team->limited            = 'Limited User';
 $lang->team->limitedList['no']  = 'No';
 $lang->team->limitedList['yes'] = 'Yes';
 

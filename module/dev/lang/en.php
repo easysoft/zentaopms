@@ -12,8 +12,8 @@ $lang->dev->noParams   = 'No Parameters';
 $lang->dev->post       = 'POST Parameter';
 
 $lang->dev->paramRange  = 'Parameter Range: %s';
-$lang->dev->paramDate   = 'Date format: YY-mm-dd. such as 2019-01-01';
-$lang->dev->paramColor  = 'Color format: #RGB. such as #3da7f5';
+$lang->dev->paramDate   = 'Date format: YY-mm-dd, e.g 2019-01-01';
+$lang->dev->paramColor  = 'Color format: #RGB, e.g. #3da7f5';
 $lang->dev->paramMailto = "User account. Separate accounts by ','.";
 
 $lang->dev->fields = array();
@@ -41,7 +41,7 @@ $lang->dev->tableList['effort']         = 'Effort';
 $lang->dev->tableList['extension']      = 'Extension';
 $lang->dev->tableList['file']           = 'File';
 $lang->dev->tableList['group']          = 'Group';
-$lang->dev->tableList['grouppriv']      = 'Permission';
+$lang->dev->tableList['grouppriv']      = 'Privilege';
 $lang->dev->tableList['history']        = 'History';
 $lang->dev->tableList['lang']           = 'Language';
 $lang->dev->tableList['module']         = 'Module';
@@ -75,7 +75,7 @@ $lang->dev->tableList['git']            = 'GIT';
 $lang->dev->tableList['index']          = 'Home';
 $lang->dev->tableList['install']        = 'Install';
 $lang->dev->tableList['mail']           = 'Email';
-$lang->dev->tableList['misc']           = 'Misc';
+$lang->dev->tableList['misc']           = 'Misc.';
 $lang->dev->tableList['my']             = 'Dashboard';
 $lang->dev->tableList['qa']             = 'QA';
 $lang->dev->tableList['report']         = 'Report';
@@ -101,7 +101,7 @@ $lang->dev->tableList['webhook']        = 'WebHook';
 $lang->dev->tableList['log']            = 'Log';
 $lang->dev->tableList['message']        = 'Message';
 $lang->dev->tableList['notify']         = 'Notify';
-$lang->dev->tableList['userview']       = 'User Permission';
+$lang->dev->tableList['userview']       = 'User Privilege';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
