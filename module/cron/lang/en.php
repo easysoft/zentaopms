@@ -18,23 +18,23 @@ $lang->cron->command  = 'Command';
 $lang->cron->status   = 'Status';
 $lang->cron->type     = 'Type';
 $lang->cron->remark   = 'Comment';
-$lang->cron->lastTime = 'Last Executed';
+$lang->cron->lastTime = 'Last Run';
 
 $lang->cron->turnonList['1'] = 'On';
-$lang->cron->turnonList['0'] = 'Shutdown';
+$lang->cron->turnonList['0'] = 'Off';
 
 $lang->cron->statusList['normal']  = 'Normal';
 $lang->cron->statusList['running'] = 'Running';
 $lang->cron->statusList['stop']    = 'Stop';
 
-$lang->cron->typeList['zentao'] = 'Self call';
+$lang->cron->typeList['zentao'] = 'Self Call';
 $lang->cron->typeList['system'] = 'System Command';
 
 $lang->cron->toggleList['start'] = 'Activate';
 $lang->cron->toggleList['stop']  = 'Deactivate';
 
 $lang->cron->confirmDelete = 'Do you want to delete the cron?';
-$lang->cron->confirmTurnon = 'Do you want to turn off the Cron?';
+$lang->cron->confirmTurnon = 'Do you want to turn off the cron?';
 $lang->cron->introduction  = <<<EOD
 <p>Cron is to perform scheduled actions, such as update burndown chart, backup, etc.</p>
 <p>Features of Cron need to be improved, so it is turned off by default.</p>
@@ -44,7 +44,7 @@ $lang->cron->confirmOpen = <<<EOD
 EOD;
 
 $lang->cron->notice = new stdclass();
-$lang->cron->notice->m    = 'Range:0-59，"*" means the numbers within the range, "/" means "per", "-" means ranger.';
+$lang->cron->notice->m    = 'Range:0-59，"*" means the numbers within the range, "/" means "per", "-" means the range.';
 $lang->cron->notice->h    = 'Range:0-23';
 $lang->cron->notice->dom  = 'Range:1-31';
 $lang->cron->notice->mon  = 'Range:1-12';
