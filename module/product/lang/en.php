@@ -99,11 +99,11 @@ $lang->product->allProductsOfProject = 'All linked' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
 $lang->product->typeList['normal']   = 'Normal';
-$lang->product->typeList['branch']   = 'Multi Branch';
-$lang->product->typeList['platform'] = 'Multi Platform';
+$lang->product->typeList['branch']   = 'Multiple Branch';
+$lang->product->typeList['platform'] = 'Multiple Platform';
 
 $lang->product->typeTips = array();
-$lang->product->typeTips['branch']   = '(for the custom content)';
+$lang->product->typeTips['branch']   = '(for the customized content)';
 $lang->product->typeTips['platform'] = '(for IOS, Android, PC, etc.)';
 
 $lang->product->branchName['normal']   = '';
@@ -114,7 +114,7 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
-$lang->product->aclList['open']    = "Default (Users with perssions to {$lang->productCommon} can access it.)";
+$lang->product->aclList['open']    = "Default (Users with privileges to {$lang->productCommon} can access it.)";
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
 

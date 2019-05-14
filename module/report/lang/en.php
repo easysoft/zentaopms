@@ -71,8 +71,8 @@ $lang->report->manhourTotal  = "Total Man-hour";
 $lang->report->validRate     = "Valid Rate";
 $lang->report->validRateTips = "Solution is Solved/Postponed or status is Solved/Closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'Man-hour/Day';
-$lang->report->diffDays      = 'Man-Day';
+$lang->report->workday       = 'hour/day';
+$lang->report->diffDays      = 'day';
 
 $lang->report->typeList['default'] = 'Default';
 $lang->report->typeList['pie']     = 'Pie';
