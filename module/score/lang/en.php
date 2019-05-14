@@ -84,5 +84,5 @@ $lang->score->extended['user']['changePassword'] = 'Get ##strength,1## point, if
 $lang->score->extended['project']['close']       = 'After the project is close, project manager gets ##manager,close## point and team members get ##member,close## points. If it is done on time or earlier, the project manager gets ##manager,onTime## point and team members get ##member,onTime## points.';
 $lang->score->extended['bug']['resolve']         = 'After a bug is resolved, get extra points according to its severity. S1, + ##severity,3##; S2 + ##severity,2##, S3 + ##severity,1##.';
 $lang->score->extended['bug']['confirmBug']      = 'After a bug is confirmed, get extra points according to its severity. S1, + ##severity,3##; S2 + ##severity,2##, S3 + ##severity,1##.';
-$lang->score->extended['task']['finish']         = 'After a task is done, get extra points by round(man-hour / 10  Estimated / Consumed) + Priority point (p1 ##pri,1##, p2 ##pri,2##).';
+$lang->score->extended['task']['finish']         = 'After a task is done, get extra points by round(man-hour / 10  Estimates / Cost) + Priority point (p1 ##pri,1##, p2 ##pri,2##).';
 $lang->score->extended['story']['close']         = 'After a story is closed, its creator will get extra ##createID## points.';
