@@ -71,7 +71,7 @@ $lang->testcase->fromCaselib      = 'From CaseLib';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';
-$lang->testcase->stepDesc    = 'Steps';
+$lang->testcase->stepDesc    = 'Step';
 $lang->testcase->stepExpect  = 'Expectation';
 $lang->testcase->stepVersion = 'Version';
 
@@ -140,9 +140,9 @@ $lang->testcase->legendLinkBugs     = 'Bug';
 $lang->testcase->legendOpenAndEdit  = 'Create/Edit';
 $lang->testcase->legendComment      = 'Comment';
 
-$lang->testcase->summary            = "Case on this page : <strong>%s</strong> Total, <strong>%s</strong> Run.";
-$lang->testcase->confirmDelete      = 'Do you want to delete this Test Case?';
-$lang->testcase->confirmBatchDelete = 'Do you want to batch delete Test Cases?';
+$lang->testcase->summary            = "Case on this page : Total <strong>%s</strong>, Run <strong>%s</strong>.";
+$lang->testcase->confirmDelete      = 'Do you want to delete this case?';
+$lang->testcase->confirmBatchDelete = 'Do you want to batch delete cases?';
 $lang->testcase->ditto              = 'Ditto';
 $lang->testcase->dittoNotice        = 'This Case is not linked to the Product as the last one is!';
 

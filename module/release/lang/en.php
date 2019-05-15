@@ -44,12 +44,12 @@ $lang->release->last          = 'Last Release';
 $lang->release->unlinkStory   = 'Unlink Story';
 $lang->release->unlinkBug     = 'Unlink Bug';
 $lang->release->stories       = 'Finished Story';
-$lang->release->bugs          = 'Resolved Bug';
-$lang->release->leftBugs      = 'Remained Bug';
-$lang->release->generatedBugs = 'Remained Bug';
+$lang->release->bugs          = 'Solved Bug';
+$lang->release->leftBugs      = 'Unsolved Bug';
+$lang->release->generatedBugs = 'Unsolved Bug';
 $lang->release->finishStories = 'Finished %s Story';
 $lang->release->resolvedBugs  = 'Solved %s Bug';
-$lang->release->createdBugs   = 'Generated %s Bug';
+$lang->release->createdBugs   = 'Unsolved %s Bug';
 $lang->release->export        = 'Export as HTML';
 $lang->release->yesterday     = 'Released Yesterday';
 
@@ -63,10 +63,10 @@ $lang->release->exportTypeList['leftbug'] = 'Unsolved Bug';
 
 $lang->release->statusList['']          = '';
 $lang->release->statusList['normal']    = 'Normal';
-$lang->release->statusList['terminate'] = 'Terminate';
+$lang->release->statusList['terminate'] = 'Terminated';
 
-$lang->release->changeStatusList['normal']    = 'Activate';
-$lang->release->changeStatusList['terminate'] = 'Terminate';
+$lang->release->changeStatusList['normal']    = 'Active';
+$lang->release->changeStatusList['terminate'] = 'Terminated';
 
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date,  $extra by  <strong>$actor</strong>', 'extra' => 'changeStatusList');
