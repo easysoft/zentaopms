@@ -792,7 +792,7 @@ class testcase extends control
     public function batchReview($result)
     {
         $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
-        $caseIDList = array_unique($caseIDList);
+        $caseIdList = array_unique($caseIdList);
         $actions    = $this->testcase->batchReview($caseIdList, $result);
 
         if(dao::isError()) die(js::error(dao::getError()));
@@ -816,7 +816,6 @@ class testcase extends control
         else
         {
             $this->testcase->delete(TABLE_CASE, $caseID);
-
             /* if ajax request, send result. */
             if($this->server->ajax)
             {
@@ -1106,9 +1105,10 @@ class testcase extends control
                 }
             }
 
-            $stmt = $this->dao->select('*')->from(TABLE_TESTRESULT)
-                ->where('`case`')->in(array_keys($cases))
-                ->beginIF($taskID)->andWhere('run')->eq($taskID)->fi()
+            $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
+                ->leftJoin('TABLE_TESTRUN')->alias('t2')->on('t1.run=t2.id')
+                ->where('t1.`case`')->in(array_keys($cases))
+                ->beginIF($taskID)->andWhere('t2.task')->eq($taskID)->fi()
                 ->orderBy('id_desc')
                 ->query();
             $results = array();
@@ -1637,5 +1637,18 @@ class testcase extends control
         $this->view->bugs  = $this->loadModel('bug')->getCaseBugs($runID, $caseID, $version);
         $this->view->users = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     * Export case getModuleByStory 
+     *
+     * @params int $storyID
+     * @return void
+     */
+    public function ajaxGetStoryModule($storyID)
+    {
+        $story = $this->dao->select('module')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        $moduleID = !empty($story) ? $story->module : 0; 
+        die(json_encode(array('moduleID'=> $moduleID)));
     }
 }

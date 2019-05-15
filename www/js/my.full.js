@@ -733,17 +733,29 @@ function convertURL()
 
     $('.article-content, .article>.content').each(function()
     {
-        var aTags   = new Array();
+        var aTags = iframeTags = imgTags = [];
         var content = $(this).html();
         $(this).find('a').each(function(i)
         {
             aTags[i] = $(this).prop('outerHTML');
             content  = content.replace(aTags[i], '<REPLACE_' + i + '>');
         });
+        $(this).find('iframe').each(function(i)
+        {
+            iframeTags[i] = $(this).prop('outerHTML');
+            content = content.replace(iframeTags[i], '<IFRAME_' + i + '>');
+        });
+        $(this).find('img').each(function(i)
+        {
+            imgTags[i] = $(this).prop('outerHTML');
+            content = content.replace(imgTags[i], '<IMG_' + i + '>');
+        });
 
         var regexp = /(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|\&|-|%|;)+)/g;
         content = content.replace(regexp, function($url){ return "<a href='" + $url + "' target='_blank'>" + $url + "</a>";});
         for(i in aTags) content = content.replace('<REPLACE_' + i + '>', aTags[i]);
+        for(i in iframeTags) content = content.replace('<IFRAME_' + i + '>', iframeTags[i]);
+        for(i in imgTags) content = content.replace('<IMG_' + i + '>', imgTags[i]);
         $(this).html(content);
     });
 }

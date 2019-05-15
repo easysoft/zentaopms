@@ -12,7 +12,7 @@
 $lang->search->common        = 'Search';
 $lang->search->reset         = 'Reset';
 $lang->search->saveQuery     = 'Save';
-$lang->search->myQuery       = 'My Queries';
+$lang->search->myQuery       = 'My Query';
 $lang->search->group1        = 'Group 1';
 $lang->search->group2        = 'Group 2';
 $lang->search->buildForm     = 'Search Form';
@@ -20,10 +20,10 @@ $lang->search->buildQuery    = 'Execute Query';
 $lang->search->savedQuery     = 'Save Query';
 $lang->search->deleteQuery   = 'Delete Query';
 $lang->search->setQueryTitle = 'Enter the query title. Save it After searching.';
-$lang->search->select        = 'Stories/Tasks Filter';
+$lang->search->select        = 'Story/Task Filter';
 $lang->search->me            = 'Me';
-$lang->search->noQuery       = 'No query saved!';
-$lang->search->onMenuBar     = 'Show in Menu';
+$lang->search->noQuery       = 'No query saved yet!';
+$lang->search->onMenuBar     = 'Show in the  Menu';
 $lang->search->custom        = 'Custom';
 
 $lang->search->account  = 'Account';

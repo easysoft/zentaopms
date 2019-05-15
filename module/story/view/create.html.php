@@ -159,7 +159,10 @@
           </tr>
           <tr>
             <th><?php echo $lang->story->spec;?></th>
-            <td colspan="4"><?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?></td>
+            <td colspan="4">
+              <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=story&link=spec');?>
+              <?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlspecialchars($lang->story->specTemplate) . "'");?>
+            </td>
           </tr>
           <?php if(strpos(",$showFields,", ',verify,') !== false):?>
           <tr>

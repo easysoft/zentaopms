@@ -1,9 +1,16 @@
 <?php
 $lang->xuanxuan = new stdclass();
+$lang->admin->menu->xuanxuan = array('link' => 'ZT Client|admin|xuanxuan', 'subModule' => 'client,setting');
+$lang->admin->menuOrder[6]   = 'xuanxuan';
 
-$lang->admin->menu->sso['link'] = 'Integrate|admin|xuanxuan';
-if(!isset($lang->admin->menu->sso['alias'])) $lang->admin->menu->sso['alias'] = '';
-$lang->admin->menu->sso['alias'] = $lang->admin->menu->sso['alias'] . ',sso';
+$lang->admin->subMenu->xuanxuan = new stdclass();
+$lang->admin->subMenu->xuanxuan->index   = array('link' => 'Index|admin|xuanxuan');
+$lang->admin->subMenu->xuanxuan->setting = array('link' => 'Parameter|setting|xuanxuan');
+$lang->admin->subMenu->xuanxuan->update  = array('link' => 'Update|client|browse', 'subModule' => 'client');
+$lang->admin->subMenuOrder->xuanxuan[0]  = 'index';
+$lang->admin->subMenuOrder->xuanxuan[5]  = 'setting';
+$lang->admin->subMenuOrder->xuanxuan[10] = 'update';
 
-$lang->admin->subMenu->sso->xuanxuan = 'ZT Client|admin|xuanxuan';
-$lang->admin->subMenuOrder->sso[4] = 'xuanxuan';
+$lang->menugroup->client = 'admin';
+
+$lang->confirmDelete = 'Do you want to delete it?';

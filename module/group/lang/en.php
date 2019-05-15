@@ -10,24 +10,25 @@
  * @link        http://www.zentao.net
  */
 $lang->group->common             = 'Privilege';
-$lang->group->browse             = 'Group Privilge';
+$lang->group->browse             = 'Groups';
 $lang->group->create             = 'Add Group';
 $lang->group->edit               = 'Edit';
 $lang->group->copy               = 'Copy';
 $lang->group->delete             = 'Delete';
 $lang->group->manageView         = 'View';
 $lang->group->managePriv         = 'Batch Assign';
-$lang->group->managePrivByGroup  = 'Privilege';
+$lang->group->managePrivByGroup  = 'Grooup Privilege';
 $lang->group->managePrivByModule = 'Module Privilege';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
 $lang->group->manageMember       = 'Member';
 $lang->group->confirmDelete      = 'Do you want to delete this User Group?';
 $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
-$lang->group->viewList           = 'View';
-$lang->group->productList        = 'Product';
-$lang->group->projectList        = 'Project';
-$lang->group->noticeVisit        = 'Empty means no access.';
+$lang->group->viewList           = 'Access View';
+$lang->group->productList        = 'Access Product';
+$lang->group->projectList        = 'Access Project';
+$lang->group->dynamic            = 'Dynamics';
+$lang->group->noticeVisit        = 'Leave it empty, then the user group have no access';
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Name';
@@ -42,10 +43,10 @@ $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group Users';
 $lang->group->outside  = 'Other Users';
 $lang->group->other    = 'Others';
-$lang->group->all      = 'All';
+$lang->group->all      = 'All Privileges';
 
-$lang->group->copyOptions['copyPriv'] = 'Copy Privilege';
-$lang->group->copyOptions['copyUser'] = 'Copy User';
+$lang->group->copyOptions['copyPriv'] = 'Copy Privileges';
+$lang->group->copyOptions['copyUser'] = 'Copy Users';
 
 $lang->group->versions['']          = 'History';
 $lang->group->versions['10_6']      = 'ZenTao10.6';

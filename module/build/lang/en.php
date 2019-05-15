@@ -43,13 +43,13 @@ $lang->build->packageType   = 'Package Type';
 $lang->build->unlinkStory   = 'Unlink Story';
 $lang->build->unlinkBug     = 'Unlink Bug';
 $lang->build->stories       = 'Finished Story';
-$lang->build->bugs          = 'Resolved Bug';
+$lang->build->bugs          = 'Solved Bug';
 $lang->build->generatedBugs = 'Reported Bug';
 $lang->build->noProduct     = " <span style='color:red'>This {$lang->projectCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild       = 'No builds. ';
 
 $lang->build->finishStories = '  %s Story is finished.';
-$lang->build->resolvedBugs  = '  %s Bug is resolved.';
+$lang->build->resolvedBugs  = '  %s Bug is solved.';
 $lang->build->createdBugs   = '  %s Bug is created.';
 
 $lang->build->placeholder = new stdclass();

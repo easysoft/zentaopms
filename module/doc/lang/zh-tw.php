@@ -41,6 +41,7 @@ $lang->doc->extension      = '類型';
 $lang->doc->size           = '大小';
 $lang->doc->download       = '下載';
 $lang->doc->acl            = '權限';
+$lang->doc->fileName       = '附件';
 $lang->doc->groups         = '分組';
 $lang->doc->users          = '用戶';
 $lang->doc->item           = '項';

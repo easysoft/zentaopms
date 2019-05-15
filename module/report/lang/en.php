@@ -11,7 +11,7 @@
  */
 $lang->report->common     = 'Report';
 $lang->report->index      = 'Home';
-$lang->report->list       = 'Report List';
+$lang->report->list       = 'Report';
 $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
 $lang->report->percent    = '%';
@@ -31,7 +31,7 @@ $lang->report->colors[]   = '008ED6';
 $lang->report->colors[]   = '9D080D';
 $lang->report->colors[]   = 'A186BE';
 
-$lang->report->assign['noassign'] = 'Not assigned';
+$lang->report->assign['noassign'] = 'Unassigned';
 $lang->report->assign['assign'] = 'Assigned';
 
 $lang->report->singleColor[] = 'F6BD0F';
@@ -67,12 +67,12 @@ $lang->report->deviationRate = 'Deviation Rate';
 $lang->report->total         = 'Total';
 $lang->report->to            = 'to';
 $lang->report->taskTotal     = "Total Task";
-$lang->report->manhourTotal  = "Total Hour";
+$lang->report->manhourTotal  = "Total Man-hour";
 $lang->report->validRate     = "Valid Rate";
-$lang->report->validRateTips = "Solution is fixed/postponed or status is resolved/closed.";
+$lang->report->validRateTips = "Solution is Solved/Postponed or status is Solved/Closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'Hour/Day';
-$lang->report->diffDays      = 'Man-Day';
+$lang->report->workday       = 'hour/day';
+$lang->report->diffDays      = 'day';
 
 $lang->report->typeList['default'] = 'Default';
 $lang->report->typeList['pie']     = 'Pie';

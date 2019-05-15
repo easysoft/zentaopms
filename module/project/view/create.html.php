@@ -134,7 +134,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->desc;?></th>
-          <td colspan='3'><?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
+          <td colspan='3'>
+            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=project&link=desc');?>
+            <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>

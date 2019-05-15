@@ -2,6 +2,8 @@
 <style>
 .affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
 </style>
+<?php js::set('productID', $productID);?>
+<?php js::set('branch', $branch);?>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
 <?php else:?>

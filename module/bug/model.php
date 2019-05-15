@@ -1670,7 +1670,12 @@ class bugModel extends model
     {
         $datas = $this->dao->select('openedBuild as name, count(openedBuild) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        $builds = $this->loadModel('build')->getProductBuildPairs($this->session->product, $branch = 0, $params = '');
+        /* Judge if all product or not. */
+        $products = $this->session->product;
+        preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matchs);
+        if(!empty($matchs) and isset($matchs['productIdList'])) $products = str_replace('\'', '', $matchs['productIdList']);
+        $builds = $this->loadModel('build')->getProductBuildPairs($products, $branch = 0, $params = '');
+
         /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data)
         {
@@ -1937,45 +1942,6 @@ class bugModel extends model
 
         /* 合并配置。*/
         foreach($commonOption->graph as $key => $value) if(!isset($chartOption->graph->$key)) $chartOption->graph->$key = $value;
-    }
-
-    /**
-     * Get bug templates of a user.
-     *
-     * @param  string    $account
-     * @access public
-     * @return array
-     */
-    public function getUserBugTemplates($account)
-    {
-        $templates = $this->dao->select('id,account,title,content,public')
-            ->from(TABLE_USERTPL)
-            ->where('type')->eq('bug')
-            ->andwhere('account', true)->eq($account)
-            ->orWhere('public')->eq('1')
-            ->markRight(1)
-            ->orderBy('id')
-            ->fetchAll();
-        return $templates;
-    }
-
-    /**
-     * Save user template.
-     *
-     * @access public
-     * @return void
-     */
-    public function saveUserBugTemplate()
-    {
-        $template = fixer::input('post')
-            ->setDefault('account', $this->app->user->account)
-            ->setDefault('type', 'bug')
-            ->stripTags('content', $this->config->allowedTags)
-            ->get();
-
-        $condition = "`type`='bug' and account='{$this->app->user->account}'";
-        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
-        if(!dao::isError()) $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
     }
 
     /**

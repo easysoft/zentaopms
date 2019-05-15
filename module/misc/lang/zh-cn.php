@@ -41,7 +41,6 @@ $lang->misc->zentao->support['ask']        = "官方问答";
 $lang->misc->zentao->support['video']      = "使用视频";
 $lang->misc->zentao->support['qqgroup']    = "官方QQ群";
 
-$lang->misc->zentao->cowin['donate']       = "捐助我们";
 $lang->misc->zentao->cowin['reportbug']    = "汇报Bug";
 $lang->misc->zentao->cowin['feedback']     = "反馈需求";
 $lang->misc->zentao->cowin['recommend']    = "推荐给朋友";
@@ -76,6 +75,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['11.5.stable'] = '2019-05-08';
 $lang->misc->releaseDate['11.4.1']      = '2019-04-08';
 $lang->misc->releaseDate['11.4.stable'] = '2019-03-25';
 $lang->misc->releaseDate['11.3.stable'] = '2019-02-27';
@@ -101,6 +101,10 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.5.stable'][] = array('title'=>'完善细节，修复Bug', 'desc' => '');
+$lang->misc->feature->all['11.5.stable'][] = array('title'=>'新增动态过滤机制', 'desc' => '');
+$lang->misc->feature->all['11.5.stable'][] = array('title'=>'集成新版本客户端', 'desc' => '');
 
 $lang->misc->feature->all['11.4.1'][]      = array('title'=>'完善细节，修复Bug', 'desc' => '');
 
@@ -173,5 +177,3 @@ $lang->misc->feature->all['7.1.stable'][] = array('title'=>'提供rpm和deb包',
 
 $lang->misc->feature->all['6.3.stable'][] = array('title'=>'增加数据表格功能', 'desc' => '<p>可配置数据表格中可显示的字段，按照配置字段显示想看的数据</p>');
 $lang->misc->feature->all['6.3.stable'][] = array('title'=>'继续完善细节', 'desc' => '');
-
-$lang->misc->error = '此功能正在努力开发中...';

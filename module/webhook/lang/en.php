@@ -4,8 +4,8 @@ $lang->webhook->list     = 'Hook List';
 $lang->webhook->api      = 'API';
 $lang->webhook->entry    = 'Entry';
 $lang->webhook->log      = 'Log';
-$lang->webhook->assigned = 'Assign To';
-$lang->webhook->setting  = 'Setting';
+$lang->webhook->assigned = 'Assigned To';
+$lang->webhook->setting  = 'Settings';
 
 $lang->webhook->browse = 'Browse';
 $lang->webhook->create = 'Create';
@@ -18,17 +18,17 @@ $lang->webhook->name        = 'Name';
 $lang->webhook->url         = 'Webhook Address';
 $lang->webhook->domain      = 'ZenTao Domain';
 $lang->webhook->contentType = 'Content Type';
-$lang->webhook->sendType    = 'Send Type';
+$lang->webhook->sendType    = 'Sending Type';
 $lang->webhook->product     = "{$lang->productCommon}";
 $lang->webhook->project     = "{$lang->projectCommon}";
-$lang->webhook->params      = 'Params';
-$lang->webhook->action      = 'Action';
+$lang->webhook->params      = 'Parameters';
+$lang->webhook->action      = 'Trigger Action';
 $lang->webhook->desc        = 'Description';
 $lang->webhook->createdBy   = 'Created By';
 $lang->webhook->createdDate = 'Created';
 $lang->webhook->editedby    = 'Edited By';
 $lang->webhook->editedDate  = 'Edited';
-$lang->webhook->date        = 'Date';
+$lang->webhook->date        = 'Sent';
 $lang->webhook->data        = 'Data';
 $lang->webhook->result      = 'Result';
 
@@ -45,8 +45,8 @@ $lang->webhook->paramsList['objectID']   = 'Object ID';
 $lang->webhook->paramsList['product']    = "{$lang->productCommon}";
 $lang->webhook->paramsList['project']    = "{$lang->projectCommon}";
 $lang->webhook->paramsList['action']     = 'Action';
-$lang->webhook->paramsList['actor']      = 'Actor';
-$lang->webhook->paramsList['date']       = 'Date';
+$lang->webhook->paramsList['actor']      = 'Acted by';
+$lang->webhook->paramsList['date']       = 'Acted on';
 $lang->webhook->paramsList['comment']    = 'Comment';
 $lang->webhook->paramsList['text']       = 'Action Description';
 
@@ -61,7 +61,7 @@ $lang->webhook->note->project = "All actions will trigger the hook if the {$lang
 
 $lang->webhook->note->typeList['bearychat'] = 'Add a ZenTao bot in bearychat and get the webhook address.';
 $lang->webhook->note->typeList['dingding']  = 'Add a customed bot in dingding and get the webhook address.';
-$lang->webhook->note->typeList['default']   = 'Get webhook address from others';
+$lang->webhook->note->typeList['default']   = 'Get a webhook address from others';
 
 $lang->webhook->error = new stdclass();
 $lang->webhook->error->curl = 'Load php-curl in php.ini.';

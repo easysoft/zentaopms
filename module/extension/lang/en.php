@@ -9,33 +9,33 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->extension->common        = 'Extension';
-$lang->extension->browse        = 'Browse';
+$lang->extension->common        = 'Plug-in';
+$lang->extension->browse        = 'Plug-ins';
 $lang->extension->install       = 'Install';
-$lang->extension->installAuto   = 'Auto Install';
-$lang->extension->installForce  = 'Force Install';
+$lang->extension->installAuto   = 'Auto Installation';
+$lang->extension->installForce  = 'Force Installation';
 $lang->extension->uninstall     = 'Uninstall';
 $lang->extension->activate      = 'Activate';
 $lang->extension->deactivate    = 'Deactivate';
-$lang->extension->obtain        = 'Get Extension';
+$lang->extension->obtain        = 'Get Plug-in';
 $lang->extension->view          = 'Details';
 $lang->extension->downloadAB    = 'Download';
-$lang->extension->upload        = 'Local Install';
+$lang->extension->upload        = 'Local Installation';
 $lang->extension->erase         = 'Erase';
-$lang->extension->upgrade       = 'Extension Upgrade';
-$lang->extension->agreeLicense  = 'License';
+$lang->extension->upgrade       = 'Upgrade Plug-in';
+$lang->extension->agreeLicense  = 'I agree with the license.';
 
 $lang->extension->structure   = 'Structure';
 $lang->extension->installed   = 'Installed';
 $lang->extension->deactivated = 'Deactivated';
 $lang->extension->available   = 'Downloaded';
 
-$lang->extension->name        = 'Extension Name';
-$lang->extension->code        = 'Code';
-$lang->extension->desc        = 'Describe';
+$lang->extension->name        = 'Plug-in Name';
+$lang->extension->code        = 'Alias';
+$lang->extension->desc        = 'Description';
 $lang->extension->type        = 'Type';
-$lang->extension->dirs        = 'Directory';
-$lang->extension->files       = 'Files';
+$lang->extension->dirs        = 'Installation Directory';
+$lang->extension->files       = 'Installation Files';
 $lang->extension->status      = 'Status';
 $lang->extension->version     = 'Version';
 $lang->extension->latest      = '<small>Latest:<strong><a href="%s" target="_blank" class="extension">%s</a></strong>，need zentao <a href="https://api.zentao.net/goto.php?item=latest" target="_blank"><strong>%s</strong></small>';
@@ -45,18 +45,18 @@ $lang->extension->site        = 'Website';
 $lang->extension->downloads   = 'Downloads';
 $lang->extension->compatible  = 'Compatibility';
 $lang->extension->grade       = 'Score';
-$lang->extension->depends     = 'Dependent';
+$lang->extension->depends     = 'Dependency';
 $lang->extension->expireDate  = 'Expire';
 $lang->extension->zentaoCompatible  = 'Compatible Version';
 $lang->extension->installedTime     = 'Installed Time';
 
-$lang->extension->publicList[0] = 'Manually';
+$lang->extension->publicList[0] = 'Manual';
 $lang->extension->publicList[1] = 'Auto';
 
 $lang->extension->compatibleList[0] = 'Unknown';
 $lang->extension->compatibleList[1] = 'Compatible';
 
-$lang->extension->obtainOfficial[0] = 'Third party';
+$lang->extension->obtainOfficial[0] = 'Third-party';
 $lang->extension->obtainOfficial[1] = 'Official';
 
 $lang->extension->byDownloads   = 'Downloads';
@@ -67,22 +67,22 @@ $lang->extension->byCategory    = 'Category';
 
 $lang->extension->installFailed            = '%s failed. Error:';
 $lang->extension->uninstallFailed          = 'Uninstallation failed. Error:';
-$lang->extension->confirmUninstall         = 'Uninstallation will delete or change related database. Do you want to uninstall?';
-$lang->extension->installFinished          = 'Congrats! The extension is %sed!';
+$lang->extension->confirmUninstall         = 'Uninstallation will delete or change related database. Do you want to uninstall it?';
+$lang->extension->installFinished          = 'Congrats! The plug-in is %sed!';
 $lang->extension->refreshPage              = 'Refresh';
-$lang->extension->uninstallFinished        = 'Extension is uninstalled.';
-$lang->extension->deactivateFinished       = 'Extension is deactivated.';
-$lang->extension->activateFinished         = 'Extension is activated.';
-$lang->extension->eraseFinished            = 'Extension is removed.';
+$lang->extension->uninstallFinished        = 'This plug-in is uninstalled.';
+$lang->extension->deactivateFinished       = 'This plug-in is deactivated.';
+$lang->extension->activateFinished         = 'This plug-in is activated.';
+$lang->extension->eraseFinished            = 'This plug-in is removed.';
 $lang->extension->unremovedFiles           = 'File or direcroty cannot be deleted. You have to manually delete';
 $lang->extension->executeCommands          = '<h3>Execute command lines below to fix the problem:</h3>';
-$lang->extension->successDownloadedPackage = 'Extension downloaded!';
-$lang->extension->successCopiedFiles       = 'File copied!';
+$lang->extension->successDownloadedPackage = 'This plug-in is downloaded!';
+$lang->extension->successCopiedFiles       = 'File is copied!';
 $lang->extension->successInstallDB         = 'Database is installed!';
-$lang->extension->viewInstalled            = 'Installed';
-$lang->extension->viewAvailable            = 'Available';
-$lang->extension->viewDeactivated          = 'Deactivated';
-$lang->extension->backDBFile               = 'Extension data has been backed up to %s!';
+$lang->extension->viewInstalled            = 'Installed Plug-ins';
+$lang->extension->viewAvailable            = 'Available Plug-ins';
+$lang->extension->viewDeactivated          = 'Deactivated Plug-ins';
+$lang->extension->backDBFile               = 'This plug-in data has been backed up to %s!';
 $lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
     <h5>Plese login your ZenTao server and create %s.</h5>
     <p>Note</p>
@@ -98,10 +98,10 @@ $lang->extension->upgradeVersion = '(Upgrade %s to %s.)';
 $lang->extension->waring = 'Warning!';
 
 $lang->extension->errorOccurs                  = 'Error:';
-$lang->extension->errorGetModules              = 'Get Extension Category from www.zentao.net failed. It could be network error. Plase check your network and refresh it.';
-$lang->extension->errorGetExtensions           = 'Get Extension from www.zentao.net failed. It could be network error. Please go to <a href="https://www.zentao.net/extension/" target="_blank" class="alert-link">www.zentao.net</a> and download the extension, and then upload it to install.';
-$lang->extension->errorDownloadPathNotFound    = 'Extension download path <strong>%s</strong> is not found.<br /> Please run <strong>mkdir -p %s</strong> in Linux to fix it.';
-$lang->extension->errorDownloadPathNotWritable = 'Extension download path <strong>%s</strong>is not writable. <br />Please run <strong>sudo chmod 777 %s</strong> in Linux to fix it.';
+$lang->extension->errorGetModules              = 'Get Plug-in Category from www.zentao.net failed. It could be network error. Plase check your network and refresh it.';
+$lang->extension->errorGetExtensions           = 'Get Plug-in from www.zentao.net failed. It could be network error. Please go to <a href="https://www.zentao.net/extension/" target="_blank" class="alert-link">www.zentao.net</a> and download the extension, and then upload it to install.';
+$lang->extension->errorDownloadPathNotFound    = 'Plug-in download path <strong>%s</strong> is not found.<br /> Please run <strong>mkdir -p %s</strong> in Linux to fix it.';
+$lang->extension->errorDownloadPathNotWritable = 'Plug-in download path <strong>%s</strong>is not writable. <br />Please run <strong>sudo chmod 777 %s</strong> in Linux to fix it.';
 $lang->extension->errorPackageFileExists       = '<strong>%s</strong> exists in the download path.<h5> Please %s it again, <a href="%s" class="alert-link">CLICK HERE</a></h5>';
 $lang->extension->errorDownloadFailed          = 'Download failed. Please try it again. If still not OK, try to download it manually and upload it to install.';
 $lang->extension->errorMd5Checking             = 'Incomplete File. Please download it again. If still not OK, try to download it manually and upload it to install.';
@@ -112,6 +112,6 @@ $lang->extension->errorTargetPathNotWritable   = '<strong>%s </strong> is not wr
 $lang->extension->errorTargetPathNotExists     = '<strong>%s </strong> is not found.';
 $lang->extension->errorInstallDB               = 'Database report execution failed. Error: %s';
 $lang->extension->errorConflicts               = 'Conflicted with “%s”!';
-$lang->extension->errorDepends                 = 'Dependent extension has not been installed or the version is incorrect:<br /><br /> %s';
+$lang->extension->errorDepends                 = 'Dependent Plug-in has not been installed or the version is incorrect:<br /><br /> %s';
 $lang->extension->errorIncompatible            = 'Incompatible with your ZenTao.';
-$lang->extension->errorUninstallDepends        = '“%s” is dependent on this extension. Please do not install it.';
+$lang->extension->errorUninstallDepends        = '“%s” is dependent on thiPlug-in. Please do not install it.';

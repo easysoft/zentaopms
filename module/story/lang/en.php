@@ -11,7 +11,7 @@
  */
 $lang->story->create      = "Add Story";
 $lang->story->batchCreate = "Batch Add";
-$lang->story->change      = "Change";
+$lang->story->change      = "Change Story";
 $lang->story->changed     = 'Change';
 $lang->story->assignTo    = 'Assign';
 $lang->story->review      = 'Review';
@@ -36,22 +36,16 @@ $lang->story->bugCountAB  = 'B';
 $lang->story->caseCountAB = 'C';
 $lang->story->linkStory   = 'Link';
 $lang->story->unlinkStory = 'UnLinked';
-<<<<<<< HEAD
-$lang->story->export      = "Export Story";
-$lang->story->zeroCase    = "Story w/o cases";
-$lang->story->zeroTask    = "Display story w/o tasks";
-=======
 $lang->story->export      = "Export Data";
 $lang->story->zeroCase    = "Story w/o case";
 $lang->story->zeroTask    = "Story w/o task";
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->story->reportChart = "Report";
 $lang->story->copyTitle   = "Copy Title";
-$lang->story->batchChangePlan   = "Batch Change Plans";
-$lang->story->batchChangeBranch = "Batch Change Branches";
-$lang->story->batchChangeStage  = "Batch Change Phases";
+$lang->story->batchChangePlan   = "Batch Change Plan";
+$lang->story->batchChangeBranch = "Batch Change Branch";
+$lang->story->batchChangeStage  = "Batch Change Phase";
 $lang->story->batchAssignTo     = "Batch Assign";
-$lang->story->batchChangeModule = "Batch Change Modules";
+$lang->story->batchChangeModule = "Batch Change Module";
 $lang->story->viewAll           = "All";
 
 $lang->story->common         = 'Story';
@@ -74,13 +68,10 @@ $lang->story->hour           = 'Hour';
 $lang->story->status         = 'Status';
 $lang->story->stage          = 'Stage';
 $lang->story->stageAB        = 'Stage';
+$lang->story->stagedBy       = 'Set By';
 $lang->story->mailto         = 'Mail to';
 $lang->story->openedBy       = 'Creator';
-<<<<<<< HEAD
-$lang->story->openedDate     = 'Create';
-=======
 $lang->story->openedDate     = 'Created';
->>>>>>> d3fa148cb3d0ea19eb92b37374b0ec4e2a64ec6f
 $lang->story->assignedTo     = 'Assignee';
 $lang->story->assignedDate   = 'Assigned';
 $lang->story->lastEditedBy   = 'Last Edited';
@@ -111,7 +102,7 @@ $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
 
 $lang->story->ditto       = 'Ditto';
-$lang->story->dittoNotice = 'This Story does not belong to the same Product as the last one does!';
+$lang->story->dittoNotice = 'This Story is not linked to the same Product as the last one does!';
 
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
@@ -123,7 +114,7 @@ $lang->story->statusList['closed']    = 'Closed';
 $lang->story->statusList['changed']   = 'Changed';
 
 $lang->story->stageList['']           = '';
-$lang->story->stageList['wait']       = 'Wait';
+$lang->story->stageList['wait']       = 'Pending';
 $lang->story->stageList['planned']    = 'Planned';
 $lang->story->stageList['projected']  = 'Projected';
 $lang->story->stageList['developing'] = 'Developing';
@@ -236,8 +227,8 @@ $lang->story->action->unlinkchildstory    = array('main' => '$date, unlinked by 
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
 $lang->story->report->select = 'Group by';
-$lang->story->report->create = 'Generate';
-$lang->story->report->value  = 'Count';
+$lang->story->report->create = 'Generate Report';
+$lang->story->report->value  = 'No. of Reports';
 
 $lang->story->report->charts['storysPerProduct']        = 'by ' . $lang->productCommon;
 $lang->story->report->charts['storysPerModule']         = 'by Module';
@@ -302,13 +293,13 @@ $lang->story->report->storysPerModule->graph->xAxisName       = 'Module';
 $lang->story->report->storysPerSource->graph->xAxisName       = 'Source';
 $lang->story->report->storysPerPlan->graph->xAxisName         = 'Plan';
 $lang->story->report->storysPerStatus->graph->xAxisName       = 'Status';
-$lang->story->report->storysPerStage->graph->xAxisName        = 'Stage';
+$lang->story->report->storysPerStage->graph->xAxisName        = 'Phase';
 $lang->story->report->storysPerPri->graph->xAxisName          = 'Priority';
 $lang->story->report->storysPerOpenedBy->graph->xAxisName     = 'Created By';
-$lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assigned To';
+$lang->story->report->storysPerAssignedTo->graph->xAxisName   = 'Assignee';
 $lang->story->report->storysPerClosedReason->graph->xAxisName = 'Close Reason';
 $lang->story->report->storysPerEstimate->graph->xAxisName     = 'Estimates ';
-$lang->story->report->storysPerChange->graph->xAxisName       = 'Change';
+$lang->story->report->storysPerChange->graph->xAxisName       = 'Change Times';
 
 $lang->story->placeholder = new stdclass();
 $lang->story->placeholder->estimate = $lang->story->hour;
@@ -317,4 +308,4 @@ $lang->story->chosen = new stdClass();
 $lang->story->chosen->reviewedBy = 'Choose Reviewer';
 
 $lang->story->notice = new stdClass();
-$lang->story->notice->closed = 'Story that you select are closed!';
+$lang->story->notice->closed = 'Story that you select is closed!';

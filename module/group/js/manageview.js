@@ -10,27 +10,16 @@ function toggleProject()
 
 function selectAll(obj)
 {
-    if($(obj).prop('checked'))
-    {
-        $(obj).closest('td').find(':checkbox').attr('checked', 'checked');
-    }
-    else
-    {
-        $(obj).closest('td').find(':checkbox').removeAttr('checked');
-    }
+    $(obj).closest('tr').find(':checkbox').prop('checked', $(obj).prop('checked'));
 }
 
 $('input:checkbox[name^="allchecker"]').change(function()
 {
-    setTimeout(function(){toggleProduct(),toggleProject()}, 50);
+    $('.group-item :checkbox[name^="actions"]').change();
 });
-$('#product').change(function(){toggleProduct();})
-$('#project').change(function(){toggleProject();})
 
 $(function()
 {
-    toggleProduct();
-    toggleProject();
     $('.group-item :checkbox[name^="actions"]').change(function()
     {
         var allChecked = true;
@@ -38,6 +27,25 @@ $(function()
         {
             if(!$(this).prop('checked')) allChecked = false;
         })
-        $('input:checkbox[name^="allchecker"]').prop('checked', allChecked);
+        $('.group-item input:checkbox[name^="allchecker"]').prop('checked', allChecked);
+
+        var id = $(this).attr('id');
+        if(id == 'product') toggleProduct();
+        if(id == 'project') toggleProject();
+        if($('#' + id + 'ActionBox').length == 1) $('#' + id + 'ActionBox').toggle($(this).prop("checked"));
     })
-})
+    $('.group-item :checkbox[name^="actions"]').change();
+    $("tr[id$='ActionBox']").each(function()
+    {
+        var allChecked = true;
+        $(this).find('td:last :checkbox').each(function()
+        {
+            if(!$(this).prop('checked'))
+            {
+                allChecked = false;
+                return true;
+            }
+        });
+        if(allChecked) $(this).find('th :checkbox').prop('checked', true);
+    });
+});

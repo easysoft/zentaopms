@@ -24,8 +24,8 @@ $lang->user->commiter    = 'SCM Account';
 $lang->user->birthyear   = 'Birth Year';
 $lang->user->gender      = 'Gender';
 $lang->user->email       = 'Email';
-$lang->user->basicInfo   = 'Basic Info';
-$lang->user->accountInfo = 'Account';
+$lang->user->basicInfo   = 'Basic Info.';
+$lang->user->accountInfo = 'Account Info.';
 $lang->user->verify      = 'Verification';
 $lang->user->contactInfo = 'Contact';
 $lang->user->skype       = 'Skype';
@@ -48,47 +48,55 @@ $lang->user->originalPassword = 'Old Password';
 $lang->user->verifyPassword   = 'Your Login Password';
 $lang->user->resetPassword    = 'Forgot Password?';
 
-$lang->user->index           = "Home";
-$lang->user->view            = "Overview";
-$lang->user->create          = "Add User";
-$lang->user->batchCreate     = "Batch Add";
-$lang->user->edit            = "Edit";
-$lang->user->batchEdit       = "Batch Edit";
-$lang->user->unlock          = "Unlock";
-$lang->user->delete          = "Delete";
-$lang->user->unbind          = "Unbind Zdoo";
-$lang->user->login           = "Login";
-$lang->user->mobileLogin     = "Mobile";
-$lang->user->editProfile     = "Edit";
-$lang->user->deny            = "Your access is denied.";
-$lang->user->confirmDelete   = "Do you want to delete this user?";
-$lang->user->confirmUnlock   = "Do you want to unlock this user?";
-$lang->user->confirmUnbind   = "Do you want to unbind this user from Zdoo?";
-$lang->user->relogin         = "Login Again";
-$lang->user->asGuest         = "Guest";
-$lang->user->goback          = "Back";
-$lang->user->deleted         = '(Deleted)';
-$lang->user->search          = 'Search';
+$lang->user->index         = "Home";
+$lang->user->view          = "Overview";
+$lang->user->create        = "Add User";
+$lang->user->batchCreate   = "Batch Add";
+$lang->user->edit          = "Edit";
+$lang->user->batchEdit     = "Batch Edit";
+$lang->user->unlock        = "Unlock";
+$lang->user->delete        = "Delete";
+$lang->user->unbind        = "Unbind Zdoo";
+$lang->user->login         = "Login";
+$lang->user->mobileLogin   = "Mobile";
+$lang->user->editProfile   = "Edit Profile";
+$lang->user->deny          = "Your access is denied.";
+$lang->user->confirmDelete = "Do you want to delete this user?";
+$lang->user->confirmUnlock = "Do you want to unlock this user?";
+$lang->user->confirmUnbind = "Do you want to unbind this user from Zdoo?";
+$lang->user->relogin       = "Login Again";
+$lang->user->asGuest       = "Guest";
+$lang->user->goback        = "Back";
+$lang->user->deleted       = '(Deleted)';
+$lang->user->search        = 'Search';
+
+$lang->user->saveTemplate          = 'Save as Template';
+$lang->user->setPublic             = 'Set as Public Template';
+$lang->user->deleteTemplate        = 'Delete Template';
+$lang->user->setTemplateTitle      = 'Please enter the title of template.';
+$lang->user->applyTemplate         = 'Template';
+$lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
+$lang->user->setPublicTemplate     = 'Set as Public Template';
 
 $lang->user->profile     = 'Profile';
 $lang->user->project     = $lang->projectCommon;
 $lang->user->task        = 'Task';
 $lang->user->bug         = 'Bug';
-$lang->user->test        = 'Test';
-$lang->user->testTask    = 'TestTask';
-$lang->user->testCase    = 'TestCase';
+$lang->user->test        = 'QA';
+$lang->user->testTask    = 'Test';
+$lang->user->testCase    = 'Test Case';
 $lang->user->schedule    = 'Calendar';
 $lang->user->todo        = 'Todo';
 $lang->user->story       = 'Story';
-$lang->user->dynamic     = 'Dynamic';
+$lang->user->dynamic     = 'Dynamics';
 
-$lang->user->openedBy    = 'Opened';
-$lang->user->assignedTo  = 'Assigned';
-$lang->user->finishedBy  = 'Finished';
-$lang->user->resolvedBy  = 'Resolved';
-$lang->user->closedBy    = 'Closed';
-$lang->user->reviewedBy  = 'Reviewed';
-$lang->user->canceledBy  = 'Canceled';
+$lang->user->openedBy    = 'Openedby';
+$lang->user->assignedTo  = 'AssignedTo';
+$lang->user->finishedBy  = 'FinishedBy';
+$lang->user->resolvedBy  = 'SolvedBy';
+$lang->user->closedBy    = 'ClosedBy';
+$lang->user->reviewedBy  = 'ReviewedBy';
+$lang->user->canceledBy  = 'CancelledBy';
 
 $lang->user->testTask2Him = 'Build';
 $lang->user->case2Him     = 'Case Assigned';
@@ -97,7 +105,7 @@ $lang->user->caseByHim    = 'Case Opened';
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get permissions. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
-$lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s mins later.";
+$lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
 $lang->user->weakPassword = "Your password does not meet the requirements.";
 
 $lang->user->roleList['']       = '';
@@ -121,7 +129,7 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>"
 $lang->user->statusList['active'] = 'Activated';
 $lang->user->statusList['delete'] = 'Deleted';
 
-$lang->user->keepLogin['on']      = 'Remember Me';
+$lang->user->keepLogin['on']      = 'Keep Login';
 $lang->user->loginWithDemoUser    = 'Login as Demo User:';
 
 $lang->user->tpl = new stdclass();
@@ -131,21 +139,21 @@ $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = 'Letters, underline and numbers, 3 characters minimum';
-$lang->user->placeholder->password1 = 'six characters at lease ';
+$lang->user->placeholder->account   = 'Letters, underline and numbers, >= 3 characters';
+$lang->user->placeholder->password1 = '>= 6 characters';
 $lang->user->placeholder->role      = "Role is related to content and user order.";
-$lang->user->placeholder->group     = "Group is related to user privileges.";
+$lang->user->placeholder->group     = "Group is related to user permissions.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
 $lang->user->placeholder->verify    = 'Please enter your login password.';
 
-$lang->user->placeholder->passwordStrength[1] = 'Letters and Numbers, at least 6 characters';
-$lang->user->placeholder->passwordStrength[2] = 'Letters, Numbers and special characters, at lease 10 characters';
+$lang->user->placeholder->passwordStrength[1] = 'Letters and Numbers, >= 6 characters';
+$lang->user->placeholder->passwordStrength[2] = 'Letters, Numbers and special characters, >= 10 characters';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，account must contain letters, underline, or numbers,at lease three characters";
+$lang->user->error->account       = "ID %s，account must contain letters, underline, or numbers,>= 3 characters";
 $lang->user->error->accountDupl   = "ID %s，account has been used.";
 $lang->user->error->realname      = "ID %s，must be real name";
-$lang->user->error->password      = "ID %s，password must be 6 characters at least.";
+$lang->user->error->password      = "ID %s，password must be >= 6 characters.";
 $lang->user->error->mail          = "ID %s，please enter valid Email address";
 $lang->user->error->reserved      = "ID %s，account is reserved.";
 
@@ -175,7 +183,7 @@ $lang->user->contacts->noListYet     = 'No contact list exists. Please create on
 $lang->user->contacts->confirmDelete = 'Do you want to delete this list?';
 $lang->user->contacts->or            = ' or ';
 
-$lang->user->resetFail       = "Failed. Please check the account";
+$lang->user->resetFail       = "Failed. Please check the account.";
 $lang->user->resetSuccess    = "Reset! Please use your new password to login.";
 $lang->user->noticeResetFile = "<h5>Contact the Administrator to reset your password.</h5>
     <h5>If you are, please login your Zentao host and create a file named <span> '%s' </span>.</h5>

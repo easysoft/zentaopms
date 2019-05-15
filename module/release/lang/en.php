@@ -11,17 +11,17 @@
  */
 $lang->release->common           = 'Release';
 $lang->release->create           = "Create Release";
-$lang->release->edit             = "Edit";
+$lang->release->edit             = "Edit Release";
 $lang->release->linkStory        = "Link Story";
 $lang->release->linkBug          = "Link Bug";
-$lang->release->delete           = "Delete";
+$lang->release->delete           = "Delete Release";
 $lang->release->deleted          = 'Deleted';
 $lang->release->view             = "Overview";
 $lang->release->browse           = "Release";
 $lang->release->changeStatus     = "Change Status";
 $lang->release->batchUnlink      = "Batch Unlink";
 $lang->release->batchUnlinkStory = "Batch Unlink Story";
-$lang->release->batchUnlinkBug   = "Batch Unlink";
+$lang->release->batchUnlinkBug   = "Batch Unlink Bug";
 
 $lang->release->confirmDelete      = "Do you want to delete this Release?";
 $lang->release->confirmUnlinkStory = "Do you want to remove this Story?";
@@ -48,7 +48,7 @@ $lang->release->bugs          = 'Resolved Bug';
 $lang->release->leftBugs      = 'Remained Bug';
 $lang->release->generatedBugs = 'Remained Bug';
 $lang->release->finishStories = 'Finished %s Story';
-$lang->release->resolvedBugs  = 'Resolved %s Bug';
+$lang->release->resolvedBugs  = 'Solved %s Bug';
 $lang->release->createdBugs   = 'Generated %s Bug';
 $lang->release->export        = 'Export as HTML';
 $lang->release->yesterday     = 'Released Yesterday';
@@ -59,7 +59,7 @@ $lang->release->scmPath  = 'SCM Path : ';
 $lang->release->exportTypeList['all']     = 'All';
 $lang->release->exportTypeList['story']   = 'Story';
 $lang->release->exportTypeList['bug']     = 'Bug';
-$lang->release->exportTypeList['leftbug'] = 'Unresolved Bug';
+$lang->release->exportTypeList['leftbug'] = 'Unsolved Bug';
 
 $lang->release->statusList['']          = '';
 $lang->release->statusList['normal']    = 'Normal';
@@ -69,8 +69,4 @@ $lang->release->changeStatusList['normal']    = 'Activate';
 $lang->release->changeStatusList['terminate'] = 'Terminate';
 
 $lang->release->action = new stdclass();
-<<<<<<< HEAD
-$lang->release->action->changestatus = array('main' => '$date, by <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
-=======
 $lang->release->action->changestatus = array('main' => '$date,  $extra by  <strong>$actor</strong>', 'extra' => 'changeStatusList');
->>>>>>> 58a5ce3d921a17cce37484db7696956508f5d454

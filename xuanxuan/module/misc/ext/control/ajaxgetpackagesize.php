@@ -11,7 +11,7 @@ class myMisc extends misc
     public function ajaxGetPackageSize()
     {
         $account     = $this->app->user->account;
-        $packageFile = $this->app->getBasePath() . 'tmp/cache/client/' . $account . '/zentaoclient.zip';
+        $packageFile = $this->app->wwwRoot . 'data/client/' . $account . '/zentaoclient.zip';
 
         $size = 0;
         if(file_exists($packageFile))

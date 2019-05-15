@@ -468,17 +468,20 @@ function notice()
     if($('#openedBuild').find('option').length <= 1) 
     {
         var html = '';
-        if($('#project').val() == '')
+        if($('#project').length == 0 || $('#project').val() == '')
         {
-            branch = $('#branch').val();
+            var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
-            html += '<a href="' + createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch) + '" target="_blank" style="padding-right:5px">' + createRelease + '</a> ';
+            var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch); 
+            if(typeof(flow) != 'undefined' && flow == 'onlyTest') link = createLink('build', 'create','projectID=' + $('#product').val());
+            html += '<a href="' + link + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else
         {
-            html += '<a href="' + createLink('build', 'create','projectID=' + $('#project').val()) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
-            html += '<a href="javascript:loadProjectBuilds(' + $('#project').val() + ')">' + refresh + '</a>';
+            projectID = $('#project').val();
+            html += '<a href="' + createLink('build', 'create','projectID=' + projectID) + '" target="_blank" style="padding-right:5px">' + createBuild + '</a> ';
+            html += '<a href="javascript:loadProjectBuilds(' + projectID + ')">' + refresh + '</a>';
         }
         var $bba = $('#buildBoxActions');
         if($bba.length)

@@ -11,8 +11,8 @@
  */
 $lang->product->common      = $lang->productCommon;
 $lang->product->index       = $lang->productCommon . 'Home';
-$lang->product->browse      = 'Story List';
-$lang->product->dynamic     = 'Dynamic';
+$lang->product->browse      = 'Story';
+$lang->product->dynamic     = 'Dynamics';
 $lang->product->view        = 'Overview';
 $lang->product->edit        = "Edit {$lang->productCommon}";
 $lang->product->batchEdit   = 'Batch Edit';
@@ -74,9 +74,9 @@ $lang->product->qa            = 'QA';
 $lang->product->release       = 'Release';
 $lang->product->allRelease    = 'All Release';
 $lang->product->maintain      = 'Maintaining';
-$lang->product->latestDynamic = 'Dynamic';
+$lang->product->latestDynamic = 'Dynamics';
 $lang->product->plan          = 'Plan';
-$lang->product->iteration     = 'Build Iteration';
+$lang->product->iteration     = 'Version Iteration';
 $lang->product->iterationInfo = '%s Iteration';
 $lang->product->iterationView = 'Details';
 
@@ -91,7 +91,7 @@ $lang->product->changedStory = 'Changed';
 $lang->product->willClose    = 'ToBeClosed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
-$lang->product->unplan       = 'Wait';
+$lang->product->unplan       = 'Unplanned';
 
 $lang->product->allStory             = 'All';
 $lang->product->allProduct           = 'All' . $lang->productCommon;
@@ -99,11 +99,11 @@ $lang->product->allProductsOfProject = 'All linked' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
 $lang->product->typeList['normal']   = 'Normal';
-$lang->product->typeList['branch']   = 'Multi Branch';
-$lang->product->typeList['platform'] = 'Multi Platform';
+$lang->product->typeList['branch']   = 'Multiple Branch';
+$lang->product->typeList['platform'] = 'Multiple Platform';
 
 $lang->product->typeTips = array();
-$lang->product->typeTips['branch']   = '(for the custom content)';
+$lang->product->typeTips['branch']   = '(for the customized content)';
 $lang->product->typeTips['platform'] = '(for IOS, Android, PC, etc.)';
 
 $lang->product->branchName['normal']   = '';
@@ -114,12 +114,12 @@ $lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Closed';
 
-$lang->product->aclList['open']    = "Default (User with privilege to {$lang->productCommon} can access to it.)";
+$lang->product->aclList['open']    = "Default (Users with privileges to {$lang->productCommon} can access it.)";
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
-$lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members have access to it.)';
+$lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
 
-$lang->product->storySummary   = " <strong>%s</strong> Story(ies), <strong>%s</strong> hour(s) estimated, case coverage is <strong>%s</strong> on this page.";
-$lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> hour(s) estimated, case coverage is <strong>%rate%</strong>.";
+$lang->product->storySummary   = " <strong>%s</strong> Story, <strong>%s</strong> Hour Estimates, and Case Coverage is <strong>%s</strong> on this page.";
+$lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> Hour Estimates, nd Case Coverage is <strong>%rate%</strong>.";
 $lang->product->noModule       = '<div>You have no modules</div><div>Manage now</div>';
 $lang->product->noProduct      = "No {$lang->productCommon}. ";
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;

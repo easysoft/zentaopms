@@ -99,6 +99,7 @@ $lang->selectAll     = '全選';
 $lang->selectReverse = '反選';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您訪問的對象並不存在！';
+$lang->notPage      =  '抱歉，您訪問的功能正在開發中！';
 $lang->showAll       = '[[全部顯示]]';
 
 $lang->future      = '未來';
@@ -446,10 +447,13 @@ $lang->menugroup->user        = 'company';
 $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
+$lang->menugroup->case        = 'qa';
+$lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
+$lang->menugroup->doclib      = 'doc';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -858,6 +862,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust menu group. */
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
+    $lang->menugroup->case       = 'testcase';
     $lang->menugroup->testtask   = 'testtask';
     $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->testreport = 'testtask';

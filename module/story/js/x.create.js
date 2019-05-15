@@ -1,6 +1,6 @@
 $(function()
 {
-    $('#sourceNote').parent().find('span').remove();
+    $('#sourceNote').prev('span').remove();
     $('#sourceNote').remove();
     $('table tbody tr th').addClass('w-70px');
 });

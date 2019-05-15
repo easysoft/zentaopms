@@ -63,7 +63,10 @@
           </tr>  
           <tr>
             <th><?php echo $lang->product->desc;?></th>
-            <td colspan='2'><?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?></td>
+            <td colspan='2'>
+              <?php echo $this->fetch('user', 'ajaxPrintTemplates', "type=product&link=desc");?>
+              <?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
+            </td>
           </tr>  
           <tr>
             <th><?php echo $lang->product->acl;?></th>

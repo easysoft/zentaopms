@@ -57,8 +57,8 @@
           <td class='text-left'><?php echo $queue->failReason?></td>
           <td class='c-actions'>
             <?php
-            if(common::hasPriv('mail', 'delete')) echo html::a(inlink('delete', "id=$queue->id"), $lang->delete, 'hiddenwin', "class='btn btn-link'");
-            if(common::hasPriv('mail', 'resend') and $queue->status == 'fail') echo html::a(inlink('resend', "id=$queue->id"), $lang->mail->resend, 'hiddenwin', "class='btn btn-link'");
+            if(common::hasPriv('mail', 'delete')) echo html::a(inlink('delete', "id=$queue->id"), $lang->delete, 'hiddenwin');
+            if(common::hasPriv('mail', 'resend') and $queue->status == 'fail') echo html::a(inlink('resend', "id=$queue->id"), $lang->mail->resend, 'hiddenwin');
             ?>
           </td>
         </tr>

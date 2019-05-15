@@ -1212,9 +1212,8 @@ class task extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->task->$chartFunc();
                 $chartOption = $this->lang->task->report->$chart;
-                if(!empty($chartType)) $chartOption->type = $chartType;
+                if(!empty($chartType) and $chartType != 'default') $chartOption->type = $chartType;
                 $this->task->mergeChartOption($chart);
-
                 $this->view->charts[$chart] = $chartOption;
                 $this->view->datas[$chart]  = $this->report->computePercent($chartData);
             }
@@ -1336,7 +1335,7 @@ class task extends control
             if(!$this->session->taskWithChildren and $tasks)
             {
                 $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
-                    ->andWhere('parent')->ne(0)
+                    ->andWhere('parent')->gt(0)
                     ->andWhere('parent', true)->in(array_keys($tasks))
                     ->beginIF($this->post->exportType == 'selected')->orWhere('id')->in($this->cookie->checkedItem)->fi()
                     ->markRight(1)

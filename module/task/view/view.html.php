@@ -152,6 +152,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$task->deleted):?>
         <?php
+                  if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
         common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
@@ -163,11 +164,9 @@
         common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
 
         if(!isonlybody()) echo "<div class='divider'></div>";
-        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button','plus','','','','',' ');
         common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
-        common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
+        common::printIcon('task', 'create', "projctID={$task->project}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
         common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
-
         if($task->parent > 0) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
         ?>
         <?php endif;?>

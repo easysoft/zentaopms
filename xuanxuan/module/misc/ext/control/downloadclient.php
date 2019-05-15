@@ -24,21 +24,21 @@ class myMisc extends misc
             $error     = false;
             $errorInfo = '';
 
-            $cacheDir = $this->app->getBasePath() . 'tmp/cache/';
-            if(!is_dir($cacheDir))
+            $clientDir = $this->app->wwwRoot . 'data/client/' . $this->config->xuanxuan->version . '/';
+            if(!is_dir($clientDir))
             {
-                $result = mkdir($cacheDir, 0755, true);
+                $result = mkdir($clientDir, 0755, true);
                 if($result == false)
                 {
                     $error = true;
-                    $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotExist, $cacheDir, $cacheDir);
+                    $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotExist, $clientDir, $clientDir);
                 }
             }
 
-            if(!is_writable($cacheDir))
+            if(!is_writable($clientDir))
             {
                 $error = true;
-                $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotWritable, $cacheDir, $cacheDir);
+                $errorInfo = sprintf($this->lang->misc->client->errorInfo->dirNotWritable, $clientDir, $clientDir);
             }
 
             $this->view->error     = $error;
@@ -67,7 +67,7 @@ class myMisc extends misc
         if($action == 'clearTmpPackage')
         {
             $account = $this->app->user->account;
-            $tmpDir  = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
+            $tmpDir  = $this->app->wwwRoot . 'data/client/' . "$account/";
 
             if(is_dir($tmpDir))
             {
@@ -81,7 +81,7 @@ class myMisc extends misc
         if($action == 'downloadPackage')
         {
             $account   = $this->app->user->account;
-            $clientDir = $this->app->getBasePath() . 'tmp/cache/client/' . "$account/";
+            $clientDir = $this->app->wwwRoot . 'data/client/' . "$account/";
 
             $clientFile = $clientDir . 'zentaoclient.zip';
             $zipContent = file_get_contents($clientFile);

@@ -13,7 +13,7 @@ if($this->methodName != 'browse')
 }
 if(empty($type)) $type = 'product';
 ?>
-<div class="side-col" style="width: 235px" data-min-width="235">
+<div class="side-col" style="width: 238px" data-min-width="235">
   <div class="cell">
     <div class="tabs">
       <ul class='nav nav-tabs'>
@@ -88,14 +88,14 @@ if(empty($type)) $type = 'product';
                 ?>
                 <?php if($customLibCount > 0):?>
                 <li <?php echo $activeClass;?>>
-                  <?php echo html::a($subLibLink, "<i class='icon {$icon}'></i> " . $subLibName, '', "class='text-ellipsis' title='{$subLibName}'");?>
+                <?php echo html::a($subLibLink, "<i class='icon {$icon}'></i> " . $subLibName, '', "class='text-ellipsis' title='{$subLibName}'");?>
                 <?php endif;?>
-                  <?php if(isset($allModules[$subLibID])):?>
-                  <?php if($customLibCount > 0):?>
-                  <ul>
-                  <?php endif;?>
-                    <?php foreach($allModules[$subLibID] as $module):?>
-                    <?php if($module->parent != 0) continue;?>
+                  <?php if(isset($allModules[$subLibID])):?> 
+                  <?php if($customLibCount > 0):?> 
+                  <ul> 
+                  <?php endif;?> 
+                  <?php foreach($allModules[$subLibID] as $module):?>
+                  <?php if($module->parent != 0) continue;?>
                     <li <?php if($this->methodName == 'browse' && $browseType == 'bymodule' && $moduleID == $module->id) echo "class='active'";?>>
                       <?php echo html::a($this->createLink('doc', 'browse', "libID=$subLibID&browseType=byModule&param={$module->id}"), "<i class='icon icon-folder-outline'></i> " . $module->name, '', "class='text-ellipsis' title='{$module->name}'");?>
                       <?php $this->doc->printChildModule($module, $subLibID, $this->methodName, $browseType, $moduleID);?>

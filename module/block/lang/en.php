@@ -36,7 +36,7 @@ $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Testing Details';
 
-$lang->block->leftToday = 'Work for Today';
+$lang->block->leftToday = 'Remaining Work Report';
 $lang->block->myTask    = 'My Task';
 $lang->block->myStory   = 'My Story';
 $lang->block->myBug     = 'My Bug';
@@ -143,7 +143,7 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['4']['title'] = 'Wait Build';
+$lang->block->default['qa']['4']['title'] = 'Pending Build';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
@@ -340,7 +340,7 @@ $lang->block->typeList->task['canceledBy'] = 'Cancelled by Me';
 
 $lang->block->typeList->bug['assignedTo'] = 'Assigned to Me';
 $lang->block->typeList->bug['openedBy']   = 'Created by Me';
-$lang->block->typeList->bug['resolvedBy'] = 'Resolved by Me';
+$lang->block->typeList->bug['resolvedBy'] = 'Solved by Me';
 $lang->block->typeList->bug['closedBy']   = 'Closed by Me';
 
 $lang->block->typeList->case['assigntome'] = 'Assigned to Me';
@@ -356,12 +356,12 @@ $lang->block->typeList->product['closed']   = 'Closed';
 $lang->block->typeList->product['all']      = 'All';
 $lang->block->typeList->product['involved'] = 'Involved';
 
-$lang->block->typeList->project['undone']   = 'Unfinished';
-$lang->block->typeList->project['doing']    = 'Doing';
+$lang->block->typeList->project['undone']   = 'Uncompleted';
+$lang->block->typeList->project['doing']    = 'Ongoing';
 $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
 
-$lang->block->typeList->testtask['wait']    = 'Wait';
+$lang->block->typeList->testtask['wait']    = 'Pending';
 $lang->block->typeList->testtask['doing']   = 'Doing';
 $lang->block->typeList->testtask['blocked'] = 'Blocked';
 $lang->block->typeList->testtask['done']    = 'Done';
@@ -396,7 +396,7 @@ $lang->block->gridOptions[8] = 'Left';
 $lang->block->gridOptions[4] = 'Right';
 
 $lang->block->flowchart   = array();
-$lang->block->flowchart[] = array('Administlrator', 'Add Department', 'Add User', 'Maintain Privileges');
+$lang->block->flowchart[] = array('Administrator', 'Add Department', 'Add User', 'Maintain Privileges');
 $lang->block->flowchart[] = array($lang->productCommon . ' Owner', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Releases');
 $lang->block->flowchart[] = array('Scrum Master', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Decompose Tasks');
 $lang->block->flowchart[] = array('Dev Team', 'Claim Tasks/Bugs', 'Update Status', 'Finish Tasks/Bugs');

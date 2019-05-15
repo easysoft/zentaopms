@@ -629,7 +629,7 @@ class docModel extends model
             $docContent->files = join(',', array_keys($files));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->loadModel('score')->create('doc', 'create', $docID);
-            return array('status' => 'new', 'id' => $docID);
+            return array('status' => 'new', 'id' => $docID, 'files' => $files);
         }
         return false;
     }
@@ -1588,6 +1588,7 @@ class docModel extends model
         $parantMoudles = $this->dao->select('id, name')->from(TABLE_MODULE)
             ->where('id')->in($path)
             ->andWhere('deleted')->eq(0)
+            ->orderBy('`grade`')
             ->fetchAll('id');
 
         foreach($parantMoudles as $parentID => $moduleName)
