@@ -28,7 +28,7 @@ $lang->group->viewList           = 'Access View';
 $lang->group->productList        = 'Access Product';
 $lang->group->projectList        = 'Access Project';
 $lang->group->dynamic            = 'Dynamics';
-$lang->group->noticeVisit        = 'Leave it empty, then the user group have no access';
+$lang->group->noticeVisit        = 'Blank means no access limit';
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Name';
