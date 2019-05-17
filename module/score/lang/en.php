@@ -1,7 +1,7 @@
 <?php
 $lang->score->common       = 'My Point';
-$lang->score->record       = 'Point Record';
-$lang->score->current      = 'Current Point';
+$lang->score->record       = 'Point History';
+$lang->score->current      = 'My Points';
 $lang->score->level        = 'Level Point';
 $lang->score->reset        = 'Reset';
 $lang->score->tips         = 'Added yesterday: <strong>%d</strong><br/> Total: <strong>%d</strong>';
@@ -22,7 +22,7 @@ $lang->score->time    = 'Time';
 $lang->score->desc    = 'Description';
 $lang->score->noLimit = 'No limit';
 $lang->score->times   = 'Times';
-$lang->score->hour    = 'Hour';
+$lang->score->hour    = 'Hours';
 
 $lang->score->modules['task']        = 'Task';
 $lang->score->modules['tutorial']    = 'Tutorial';

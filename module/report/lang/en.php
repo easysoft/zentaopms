@@ -66,13 +66,13 @@ $lang->report->deviation     = 'Deviation';
 $lang->report->deviationRate = 'Deviation Rate';
 $lang->report->total         = 'Total';
 $lang->report->to            = 'to';
-$lang->report->taskTotal     = "Total Task";
-$lang->report->manhourTotal  = "Total Man-hour";
+$lang->report->taskTotal     = "Total Tasks";
+$lang->report->manhourTotal  = "Total Man-hours";
 $lang->report->validRate     = "Valid Rate";
 $lang->report->validRateTips = "Solution is Solved/Postponed or status is Solved/Closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'hour/day';
-$lang->report->diffDays      = 'day';
+$lang->report->workday       = 'hours/day';
+$lang->report->diffDays      = 'days';
 
 $lang->report->typeList['default'] = 'Default';
 $lang->report->typeList['pie']     = 'Pie';
@@ -98,5 +98,5 @@ $lang->report->mailTitle->task     = " Task (%s),";
 $lang->report->mailTitle->todo     = " Todo (%s),";
 $lang->report->mailTitle->testTask = " Test (%s),";
 
-$lang->report->proVersion   = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
-$lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion   = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersionEn = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';

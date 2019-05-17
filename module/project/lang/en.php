@@ -44,9 +44,9 @@ $lang->project->totalLeft     = 'Left';
 $lang->project->progress      = 'Progress';
 $lang->project->hours         = '%s Estimates, %s Cost, %s Left.';
 $lang->project->viewBug       = 'Bugs';
-$lang->project->noProduct     = "No {$lang->productCommon}";
+$lang->project->noProduct     = "No {$lang->productCommon} yet.";
 $lang->project->createStory   = "Create Story";
-$lang->project->all           = 'All';
+$lang->project->all           = 'All ';
 $lang->project->undone        = 'Uncompleted';
 $lang->project->unclosed      = 'Unclosed';
 $lang->project->typeDesc      = 'No story, bug, build, test, or burndown chart is allowed in OPS';
@@ -83,7 +83,7 @@ $lang->team = new stdclass();
 $lang->team->account    = 'Username';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Joined';
-$lang->team->hours      = 'hour/day';
+$lang->team->hours      = 'hours/day';
 $lang->team->days       = 'day';
 $lang->team->totalHours = 'Total Hours';
 
@@ -151,7 +151,7 @@ $lang->project->treeOnlyStory     = 'Story Only';
 $lang->project->storyKanban       = 'Story Kanban';
 $lang->project->storySort         = 'Sort Story';
 $lang->project->importPlanStory   = '' . $lang->projectCommon . ' is created!\nDo you want to import stories that have been linked to the plan?';
-$lang->project->iteration         = 'Iteration';
+$lang->project->iteration         = 'Iterations';
 $lang->project->iterationInfo     = '%s Iterations';
 $lang->project->viewAll           = 'View All';
 
@@ -166,7 +166,7 @@ $lang->project->statusSelects['doing']        = 'Doing';
 $lang->project->statusSelects['finishedbyme'] = 'FinishedByMe';
 $lang->project->statusSelects['done']         = 'Done';
 $lang->project->statusSelects['closed']       = 'Closed';
-$lang->project->statusSelects['cancel']       = 'Canceled';
+$lang->project->statusSelects['cancel']       = 'Cancelled';
 
 $lang->project->groups['']           = 'Group';
 $lang->project->groups['story']      = 'By Story';
@@ -187,9 +187,9 @@ $lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
 $lang->project->byQuery = 'Search';
 
 /* 查询条件列表。*/
-$lang->project->allProject      = "All {$lang->projectCommon}";
-$lang->project->aboveAllProduct = "All the above {$lang->productCommon}";
-$lang->project->aboveAllProject = "All the above {$lang->projectCommon}";
+$lang->project->allProject      = "All {$lang->projectCommon}s";
+$lang->project->aboveAllProduct = "All the above {$lang->productCommon}s";
+$lang->project->aboveAllProject = "All the above {$lang->projectCommon}s";
 
 /* 页面提示。*/
 $lang->project->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->projectCommon}.";
@@ -197,7 +197,7 @@ $lang->project->selectProject       = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd         = 'Duration';
 $lang->project->begin               = 'Begin';
 $lang->project->end                 = 'End';
-$lang->project->lblStats            = 'Total Man-hour(h) : ';
+$lang->project->lblStats            = 'Total Man-hours(h) : ';
 $lang->project->stats               = '<strong>%s</strong> Available, <strong>%s</strong> Estimates, <strong>%s</strong> Cost, <strong>%s</strong> Left.';
 $lang->project->taskSummary         = "Tasks on this page : <strong>%s</strong> Total, <strong>%s</strong> Wait, <strong>%s</strong> Doing;  &nbsp;&nbsp;&nbsp;  Hours : <strong>%s</strong> Estimates, <strong>%s</strong> Cost, <strong>%s</strong> Left.";
 $lang->project->checkedSummary      = " <strong>%total%</strong> Checked, <strong>%wait%</strong> Wait, <strong>%doing%</strong> Doing;    Hours: <strong>%estimate%</strong>  Estimates, <strong>%consumed%</strong> Cost, <strong>%left%</strong> Left.";
@@ -244,7 +244,7 @@ $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'excl. Weekend';
 $lang->project->withweekend           = 'incl. Weekend';
 $lang->project->interval              = 'Intervals';
-$lang->project->fixFirstWithLeft      = 'Modify Man-hour left';
+$lang->project->fixFirstWithLeft      = 'Modify Man-hours left';
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
@@ -277,8 +277,8 @@ $lang->project->orderList['order_asc']  = "Order Ascending";
 $lang->project->orderList['order_desc'] = "Order Descending";
 $lang->project->orderList['pri_asc']    = "Priority Ascending";
 $lang->project->orderList['pri_desc']   = "Priority Descending";
-$lang->project->orderList['stage_asc']  = "Stage Ascending";
-$lang->project->orderList['stage_desc'] = "Stage Descending";
+$lang->project->orderList['stage_asc']  = "Phase Ascending";
+$lang->project->orderList['stage_desc'] = "Phase Descending";
 
 $lang->project->kanban        = "Kanban";
 $lang->project->kanbanSetting = "Kanban Settings";

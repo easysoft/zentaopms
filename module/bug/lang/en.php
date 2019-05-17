@@ -42,10 +42,10 @@ $lang->bug->openedDate       = 'Created';
 $lang->bug->openedDateAB     = 'Created';
 $lang->bug->openedBuild      = 'Open Build';
 $lang->bug->assignedTo       = 'To';
-$lang->bug->assignBug        = 'Assignee';
+$lang->bug->assignBug        = 'AssignedTo';
 $lang->bug->assignedToAB     = 'To';
 $lang->bug->assignedDate     = 'Assigned';
-$lang->bug->resolvedBy       = 'Solved';
+$lang->bug->resolvedBy       = 'SolvedBy';
 $lang->bug->resolvedByAB     = 'Solved';
 $lang->bug->resolution       = 'Solution';
 $lang->bug->resolutionAB     = 'Solution';
@@ -62,14 +62,14 @@ $lang->bug->linkBug          = 'Linked Bug';
 $lang->bug->linkBugs         = 'Link Bug';
 $lang->bug->unlinkBug        = 'Unlink';
 $lang->bug->case             = 'Case';
-$lang->bug->files            = 'File';
+$lang->bug->files            = 'Files';
 $lang->bug->keywords         = 'Tags';
 $lang->bug->lastEditedByAB   = 'Edited By';
 $lang->bug->lastEditedDateAB = 'Edited';
 $lang->bug->lastEditedDate   = 'Edited';
 $lang->bug->fromCase         = 'From Case';
 $lang->bug->toCase           = 'To Case';
-$lang->bug->colorTag         = 'Color Tag';
+$lang->bug->colorTag         = 'Color';
 
 /* 方法列表。*/
 $lang->bug->index              = 'Home';
@@ -100,16 +100,16 @@ $lang->bug->copy               = 'Copy';
 $lang->bug->search             = 'Search';
 
 /* 查询条件列表。*/
-$lang->bug->assignToMe         = 'AssignToMe';
-$lang->bug->openedByMe         = 'CreateByMe';
-$lang->bug->resolvedByMe       = 'SolveByMe';
+$lang->bug->assignToMe         = 'AssignedToMe';
+$lang->bug->openedByMe         = 'CreatedByMe';
+$lang->bug->resolvedByMe       = 'SolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
 $lang->bug->unResolved         = 'Unsolved';
 $lang->bug->toClosed           = 'Unclosed';
 $lang->bug->unclosed           = 'Active';
-$lang->bug->unconfirmed        = 'UnConfirm';
-$lang->bug->longLifeBugs       = 'Pending';
+$lang->bug->unconfirmed        = 'Unconfirm';
+$lang->bug->longLifeBugs       = 'Stalled';
 $lang->bug->postponedBugs      = 'Postponed';
 $lang->bug->overdueBugs        = 'Overdue';
 $lang->bug->allBugs            = 'All';
@@ -121,19 +121,19 @@ $lang->bug->yesterdayResolved  = 'Bug Solved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
 $lang->bug->yesterdayClosed    = 'Bug Closed Yesterday ';
 
-$lang->bug->assignToMeAB   = 'AssignToMe';
-$lang->bug->openedByMeAB   = 'CreateByMe';
-$lang->bug->resolvedByMeAB = 'SolveByMe';
+$lang->bug->assignToMeAB   = 'AssignedToMe';
+$lang->bug->openedByMeAB   = 'CreatedByMe';
+$lang->bug->resolvedByMeAB = 'SolvedByMe';
 
 $lang->bug->ditto        = 'Ditto';
 $lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one!';
 $lang->bug->noAssigned   = 'Assign';
-$lang->bug->noBug        = 'No bugs. ';
+$lang->bug->noBug        = 'No bugs yet. ';
 $lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
 
 /* 页面标签。*/
-$lang->bug->lblAssignedTo = 'Assignee';
+$lang->bug->lblAssignedTo = 'AssignedTo';
 $lang->bug->lblMailto     = 'Mail To';
 $lang->bug->lblLastEdited = 'Last Edited';
 $lang->bug->lblResolved   = 'Solved By';
@@ -143,7 +143,7 @@ $lang->bug->createBuild   = 'New';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = 'Basic Info';
-$lang->bug->legendAttatch               = 'File';
+$lang->bug->legendAttatch               = 'Files';
 $lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Story/Task';
 $lang->bug->lblTypeAndSeverity          = 'Type/Severity';
 $lang->bug->lblSystemBrowserAndHardware = 'System/Browser';
@@ -158,7 +158,7 @@ $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
 $lang->bug->summary               = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unsolved.";
-$lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}, Story and Task change. Do you want to do this?";
+$lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, Stories and Tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
 $lang->bug->skipClose             = 'Bug %s is not solved. You cannot close it.';
@@ -229,10 +229,10 @@ $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'Code Error';
 $lang->bug->typeList['interface']    = 'Interface';
 $lang->bug->typeList['config']       = 'Configuration';
-$lang->bug->typeList['install']      = 'Install/Deploy';
+$lang->bug->typeList['install']      = 'Installation';
 $lang->bug->typeList['security']     = 'Security';
 $lang->bug->typeList['performance']  = 'Performance';
-$lang->bug->typeList['standard']     = 'Standard';
+$lang->bug->typeList['standard']     = 'Code Standard';
 $lang->bug->typeList['automation']   = 'Automation';
 $lang->bug->typeList['others']       = 'Other';
 $lang->bug->typeList['designchange'] = 'Design Change';
@@ -250,8 +250,8 @@ $lang->bug->confirmedList[0] = 'Unconfirmed';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'As Design';
-$lang->bug->resolutionList['duplicate']  = 'Duplicated Bug';
-$lang->bug->resolutionList['external']   = 'External Cause';
+$lang->bug->resolutionList['duplicate']  = 'Duplicated';
+$lang->bug->resolutionList['external']   = 'External';
 $lang->bug->resolutionList['fixed']      = 'Solved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
 $lang->bug->resolutionList['postponed']  = 'Postpone';
@@ -347,7 +347,7 @@ $lang->bug->report->closedBugsPerUser->graph->xAxisName   = 'User';
 $lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Priority';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Solution';
 $lang->bug->report->bugsPerStatus->graph->xAxisName         = 'Status';
-$lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Activated Count';
+$lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Active Count';
 $lang->bug->report->bugsPerPri->graph->xAxisName            = 'Priority';
 $lang->bug->report->bugsPerType->graph->xAxisName           = 'Type';
 $lang->bug->report->bugsPerAssignedTo->graph->xAxisName     = 'Assigned To';
@@ -369,8 +369,8 @@ $lang->bug->action->linkrelatedbug      = array('main' => '$date, linked by <str
 $lang->bug->action->unlinkrelatedbug    = array('main' => '$date, unlinked by <strong>$actor</strong> from Bug <strong>$extra</strong>.');
 
 $lang->bug->placeholder = new stdclass();
-$lang->bug->placeholder->chooseBuilds = 'Select Build...';
-$lang->bug->placeholder->newBuildName = 'New build Name';
+$lang->bug->placeholder->chooseBuilds = 'Select Build';
+$lang->bug->placeholder->newBuildName = 'New Build Name';
 
 $lang->bug->featureBar['browse']['all']          = $lang->bug->allBugs;
 $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
