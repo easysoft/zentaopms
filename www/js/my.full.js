@@ -733,7 +733,9 @@ function convertURL()
 
     $('.article-content, .article>.content').each(function()
     {
-        var aTags = iframeTags = imgTags = [];
+        var aTags = [];
+        var iframeTags = [];
+        var imgTags = [];
         var content = $(this).html();
         $(this).find('a').each(function(i)
         {

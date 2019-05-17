@@ -342,8 +342,8 @@
         <div class="detail-content">
           <table class='table table-data'>
             <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
-            <tr class='<?php echo $widthClass;?>'>
-              <th><?php echo $lang->task->estimate;?></th>
+            <tr>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estimate;?></th>
               <td><?php echo $task->estimate . $lang->workingHour;?></td>
             </tr>
             <tr>

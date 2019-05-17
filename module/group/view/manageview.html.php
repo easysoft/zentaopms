@@ -74,6 +74,7 @@
         <td class='pl-0px pt-0px'>
           <table class='table table-form'>
             <?php foreach($lang->menu as $module => $title):?>
+            <?php if(!is_string($title)) continue;?>
             <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
               <th class='w-100px text-left text-top'>
