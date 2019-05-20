@@ -19,11 +19,11 @@ $lang->search->buildForm     = 'Search Form';
 $lang->search->buildQuery    = 'Execute Query';
 $lang->search->savedQuery     = 'Saved Query';
 $lang->search->deleteQuery   = 'Delete Query';
-$lang->search->setQueryTitle = 'Enter the query title. Save it After searching.';
+$lang->search->setQueryTitle = 'Enter a title. Search then the query is saved.';
 $lang->search->select        = 'Story/Task Filter';
 $lang->search->me            = 'Me';
 $lang->search->noQuery       = 'No query saved yet!';
-$lang->search->onMenuBar     = 'Show in the  Menu';
+$lang->search->onMenuBar     = 'Show in the Menu';
 $lang->search->custom        = 'Custom';
 
 $lang->search->account  = 'Account';
@@ -39,10 +39,10 @@ $lang->search->operators['>']          = '>';
 $lang->search->operators['>=']         = '>=';
 $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
-$lang->search->operators['include']    = 'including';
+$lang->search->operators['include']    = 'incl.';
 $lang->search->operators['between']    = 'between';
-$lang->search->operators['notinclude'] = 'excluding';
-$lang->search->operators['belong']     = 'belong to';
+$lang->search->operators['notinclude'] = 'excl.';
+$lang->search->operators['belong']     = '∈';
 
 $lang->search->andor['and']         = 'And';
 $lang->search->andor['or']          = 'Or';

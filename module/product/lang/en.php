@@ -51,9 +51,9 @@ $lang->product->closedStories    = 'Closed Story';
 $lang->product->unResolvedBugs   = 'Active Bug';
 $lang->product->assignToNullBugs = 'Unassigned Bug';
 
-$lang->product->confirmDelete  = " Do you want to delete {$lang->productCommon}?";
+$lang->product->confirmDelete  = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct = "No {$lang->productCommon} is created yet!";
-$lang->product->accessDenied   = "You have no access to {$lang->productCommon}.";
+$lang->product->accessDenied   = "You have no access to the {$lang->productCommon}.";
 
 $lang->product->id            = 'ID';
 $lang->product->name          = 'Name';
