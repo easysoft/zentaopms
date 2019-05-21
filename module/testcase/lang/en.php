@@ -110,7 +110,7 @@ $lang->testcase->group                   = 'Group';
 $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Steps';
 $lang->testcase->stepChild               = 'Child Step';
-$lang->testcase->viewAll                 = 'All';
+$lang->testcase->viewAll                 = 'All Cases';
 
 $lang->testcase->new = 'New';
 

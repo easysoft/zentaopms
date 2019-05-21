@@ -16,7 +16,7 @@ $lang->build->linkStory        = "Link Story";
 $lang->build->linkBug          = "Link Bug";
 $lang->build->delete           = "Delete Build";
 $lang->build->deleted          = "Deleted";
-$lang->build->view             = "Build Details";
+$lang->build->view             = "Build Detail";
 $lang->build->batchUnlink      = 'Batch Unlink';
 $lang->build->batchUnlinkStory = 'Batch Unlink Story';
 $lang->build->batchUnlinkBug   = 'Batch Unlink Bug';
@@ -46,11 +46,11 @@ $lang->build->stories       = 'Finished Story';
 $lang->build->bugs          = 'Solved Bug';
 $lang->build->generatedBugs = 'Reported Bug';
 $lang->build->noProduct     = " <span style='color:red'>This {$lang->projectCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
-$lang->build->noBuild       = 'No builds. ';
+$lang->build->noBuild       = 'No builds yet.';
 
-$lang->build->finishStories = '  %s Story is finished.';
-$lang->build->resolvedBugs  = '  %s Bug is solved.';
-$lang->build->createdBugs   = '  %s Bug is created.';
+$lang->build->finishStories = '  Finished Story %s';
+$lang->build->resolvedBugs  = '  Solved Bug %s';
+$lang->build->createdBugs   = '  Reported Bug %s';
 
 $lang->build->placeholder = new stdclass();
 $lang->build->placeholder->scmPath  = ' Source code repository, e.g. Subversion/Git Library path';

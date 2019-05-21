@@ -85,7 +85,7 @@ $lang->bug->batchClose         = 'Batch Close';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->batchAssignTo      = 'Batch Assign';
 $lang->bug->browse             = 'Bugs';
-$lang->bug->view               = 'Bug Details';
+$lang->bug->view               = 'Bug Detail';
 $lang->bug->resolve            = 'Solve';
 $lang->bug->batchResolve       = 'Batch Solve';
 $lang->bug->close              = 'Close';
@@ -115,7 +115,7 @@ $lang->bug->overdueBugs        = 'Overdue';
 $lang->bug->allBugs            = 'All';
 $lang->bug->byQuery            = 'Search';
 $lang->bug->needConfirm        = 'Story Changed';
-$lang->bug->allProduct         = 'All' . $lang->productCommon;
+$lang->bug->allProduct         = 'All' . $lang->productCommon . 's';
 $lang->bug->my                 = 'My';
 $lang->bug->yesterdayResolved  = 'Bug Solved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
@@ -126,9 +126,9 @@ $lang->bug->openedByMeAB   = 'CreatedByMe';
 $lang->bug->resolvedByMeAB = 'SolvedByMe';
 
 $lang->bug->ditto        = 'Ditto';
-$lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one!';
-$lang->bug->noAssigned   = 'Assign';
-$lang->bug->noBug        = 'No bugs yet. ';
+$lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one is!';
+$lang->bug->noAssigned   = 'Unassigned';
+$lang->bug->noBug        = 'No bugs yet.';
 $lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
 
@@ -138,7 +138,7 @@ $lang->bug->lblMailto     = 'Mail To';
 $lang->bug->lblLastEdited = 'Last Edited';
 $lang->bug->lblResolved   = 'Solved By';
 $lang->bug->allUsers      = 'All Users';
-$lang->bug->allBuilds     = 'All';
+$lang->bug->allBuilds     = 'All Builds';
 $lang->bug->createBuild   = 'New';
 
 /* legend列表。*/
@@ -160,7 +160,7 @@ $lang->bug->buttonConfirm = 'Confirm';
 $lang->bug->summary               = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unsolved.";
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, Stories and Tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
-$lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update Status of Task(ID %s)?';
+$lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update the Status of Task(ID %s)?';
 $lang->bug->skipClose             = 'Bug %s is not solved. You cannot close it.';
 
 /* 模板。*/
@@ -347,10 +347,10 @@ $lang->bug->report->closedBugsPerUser->graph->xAxisName   = 'User';
 $lang->bug->report->bugsPerSeverity->graph->xAxisName       = 'Priority';
 $lang->bug->report->bugsPerResolution->graph->xAxisName     = 'Solution';
 $lang->bug->report->bugsPerStatus->graph->xAxisName         = 'Status';
-$lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Active Count';
+$lang->bug->report->bugsPerActivatedCount->graph->xAxisName = 'Active Bugs';
 $lang->bug->report->bugsPerPri->graph->xAxisName            = 'Priority';
 $lang->bug->report->bugsPerType->graph->xAxisName           = 'Type';
-$lang->bug->report->bugsPerAssignedTo->graph->xAxisName     = 'Assigned To';
+$lang->bug->report->bugsPerAssignedTo->graph->xAxisName     = 'AssignedTo';
 $lang->bug->report->bugLiveDays->graph->xAxisName           = 'Handling Time';
 $lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
 

@@ -78,7 +78,7 @@ $lang->product->latestDynamic = 'Dynamics';
 $lang->product->plan          = 'Plan';
 $lang->product->iteration     = 'Iterations';
 $lang->product->iterationInfo = '%s Iteration';
-$lang->product->iterationView = 'Details';
+$lang->product->iterationView = 'Detail';
 
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'AssignedToMe';

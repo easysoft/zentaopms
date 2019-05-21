@@ -95,7 +95,7 @@ $lang->todo->lblClickCreate = "Click to Add Todo";
 $lang->todo->noTodo         = 'No todos of this type.';
 $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 
-$lang->todo->periods['all']        = 'All';
+$lang->todo->periods['all']        = 'All Todos';
 $lang->todo->periods['thisYear']   = 'ThisYear';
 $lang->todo->periods['future']     = 'Pending';
 $lang->todo->periods['before']     = 'Unfinished';

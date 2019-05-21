@@ -18,12 +18,12 @@ $lang->extension->uninstall     = 'Uninstall';
 $lang->extension->activate      = 'Activate';
 $lang->extension->deactivate    = 'Deactivate';
 $lang->extension->obtain        = 'Get Plug-in';
-$lang->extension->view          = 'Details';
+$lang->extension->view          = 'Detail';
 $lang->extension->downloadAB    = 'Download';
 $lang->extension->upload        = 'Local Installation';
 $lang->extension->erase         = 'Erase';
 $lang->extension->upgrade       = 'Upgrade Plug-in';
-$lang->extension->agreeLicense  = 'I agree with the license.';
+$lang->extension->agreeLicense  = 'I agree to the license.';
 
 $lang->extension->structure   = 'Structure';
 $lang->extension->installed   = 'Installed';
@@ -31,7 +31,7 @@ $lang->extension->deactivated = 'Deactivated';
 $lang->extension->available   = 'Downloaded';
 
 $lang->extension->name        = 'Plug-in Name';
-$lang->extension->code        = 'Alias';
+$lang->extension->code        = 'Code';
 $lang->extension->desc        = 'Description';
 $lang->extension->type        = 'Type';
 $lang->extension->dirs        = 'Installation Directory';

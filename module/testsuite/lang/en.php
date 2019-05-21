@@ -44,7 +44,7 @@ $lang->testsuite->libraryDelete     = 'Do you want to delete this library？';
 $lang->testsuite->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testsuite->noticeNone        = 'You have not created any suite yet.';
 $lang->testsuite->noModule          = '<div>You have no modules.</div><div>Manage it now.</div>';
-$lang->testsuite->noTestsuite       = 'No suites. ';
+$lang->testsuite->noTestsuite       = 'No suites yet.';
 
 $lang->testsuite->lblCases      = 'Cases';
 $lang->testsuite->lblUnlinkCase = 'Unlink Case';
@@ -53,7 +53,7 @@ $lang->testsuite->authorList['private'] = 'Private';
 $lang->testsuite->authorList['public']  = 'Public';
 
 $lang->caselib->common = 'Case Library';
-$lang->caselib->all    = 'All';
+$lang->caselib->all    = 'All CaseLib';
 
 $lang->testsuite->createLib  = 'Create Library';
 $lang->testsuite->editLib    = 'Edit';

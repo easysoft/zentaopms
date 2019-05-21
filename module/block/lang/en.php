@@ -34,7 +34,7 @@ $lang->block->dynamic      = 'Dynamics';
 $lang->block->assignToMe   = 'AssignedToMe';
 $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
-$lang->block->lblTesttask  = 'Testing Details';
+$lang->block->lblTesttask  = 'Testing Detail';
 
 $lang->block->leftToday = 'Remaining Work';
 $lang->block->myTask    = 'My Tasks';
@@ -52,7 +52,7 @@ $lang->block->params->value = 'Value';
 
 $lang->block->createBlock        = 'Add Block';
 $lang->block->editBlock          = 'Edit Block';
-$lang->block->ordersSaved        = 'Order is saved.';
+$lang->block->ordersSaved        = 'The order is saved.';
 $lang->block->confirmRemoveBlock = 'Do you want to remove the Block?';
 $lang->block->noticeNewBlock     = 'A new layout is available. Do you want to switch to the new one?';
 $lang->block->confirmReset       = 'Do you want to reset the layout?';
@@ -127,7 +127,7 @@ $lang->block->default['qa']['1']['params']['num']  = '20';
 //$lang->block->default['qa']['2']['block'] = 'overview';
 //$lang->block->default['qa']['2']['grid']  = 4;
 
-$lang->block->default['qa']['2']['title'] = 'My Bug';
+$lang->block->default['qa']['2']['title'] = 'My Bugs';
 $lang->block->default['qa']['2']['block'] = 'bug';
 $lang->block->default['qa']['2']['grid']  = 4;
 
@@ -135,7 +135,7 @@ $lang->block->default['qa']['2']['params']['num']     = 15;
 $lang->block->default['qa']['2']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['2']['params']['type']    = 'assignedTo';
 
-$lang->block->default['qa']['3']['title'] = 'My Case';
+$lang->block->default['qa']['3']['title'] = 'My Cases';
 $lang->block->default['qa']['3']['block'] = 'case';
 $lang->block->default['qa']['3']['grid']  = 4;
 
@@ -163,7 +163,7 @@ $lang->block->default['full']['my']['3']['title']  = 'Flowchart';
 $lang->block->default['full']['my']['3']['block']  = 'flowchart';
 $lang->block->default['full']['my']['3']['grid']   = 8;
 $lang->block->default['full']['my']['3']['source'] = '';
-$lang->block->default['full']['my']['4']['title']  = 'My Todo';
+$lang->block->default['full']['my']['4']['title']  = 'My Todos';
 $lang->block->default['full']['my']['4']['block']  = 'list';
 $lang->block->default['full']['my']['4']['grid']   = 4;
 $lang->block->default['full']['my']['4']['source'] = 'todo';
@@ -186,7 +186,7 @@ $lang->block->default['onlyTest']['my']['2']['title']  = 'Dynamics';
 $lang->block->default['onlyTest']['my']['2']['block']  = 'dynamic';
 $lang->block->default['onlyTest']['my']['2']['grid']   = 4;
 $lang->block->default['onlyTest']['my']['2']['source'] = '';
-$lang->block->default['onlyTest']['my']['3']['title']  = 'My Todo';
+$lang->block->default['onlyTest']['my']['3']['title']  = 'My Todos';
 $lang->block->default['onlyTest']['my']['3']['block']  = 'list';
 $lang->block->default['onlyTest']['my']['3']['grid']   = 6;
 $lang->block->default['onlyTest']['my']['3']['source'] = 'todo';
@@ -202,7 +202,7 @@ $lang->block->default['onlyStory']['my']['2']['title']  = 'Dynamics';
 $lang->block->default['onlyStory']['my']['2']['block']  = 'dynamic';
 $lang->block->default['onlyStory']['my']['2']['grid']   = 4;
 $lang->block->default['onlyStory']['my']['2']['source'] = '';
-$lang->block->default['onlyStory']['my']['3']['title']  = 'My Todo';
+$lang->block->default['onlyStory']['my']['3']['title']  = 'My Todos';
 $lang->block->default['onlyStory']['my']['3']['block']  = 'list';
 $lang->block->default['onlyStory']['my']['3']['grid']   = 6;
 $lang->block->default['onlyStory']['my']['3']['source'] = 'todo';
@@ -214,11 +214,11 @@ $lang->block->default['onlyStory']['my']['4']['grid']   = 6;
 $lang->block->default['onlyTask']['my']['1'] = $lang->block->default['project']['1'];
 $lang->block->default['onlyTask']['my']['1']['source'] = 'project';
 $lang->block->default['onlyTask']['my']['1']['grid']   = 8;
-$lang->block->default['onlyTask']['my']['2']['title']  = 'Dynamic';
+$lang->block->default['onlyTask']['my']['2']['title']  = 'Dynamics';
 $lang->block->default['onlyTask']['my']['2']['block']  = 'dynamic';
 $lang->block->default['onlyTask']['my']['2']['grid']   = 4;
 $lang->block->default['onlyTask']['my']['2']['source'] = '';
-$lang->block->default['onlyTask']['my']['3']['title']  = 'My Todo';
+$lang->block->default['onlyTask']['my']['3']['title']  = 'My Todos';
 $lang->block->default['onlyTask']['my']['3']['block']  = 'list';
 $lang->block->default['onlyTask']['my']['3']['grid']   = 6;
 $lang->block->default['onlyTask']['my']['3']['source'] = 'todo';
@@ -233,17 +233,17 @@ $lang->block->orderBy = 'Order by';
 
 $lang->block->availableBlocks = new stdclass();
 
-$lang->block->availableBlocks->todo     = 'My Todo';
-$lang->block->availableBlocks->task     = 'My Task';
-$lang->block->availableBlocks->bug      = 'My Bug';
-$lang->block->availableBlocks->case     = 'My Case';
-$lang->block->availableBlocks->story    = 'My Story';
+$lang->block->availableBlocks->todo     = 'My Todos';
+$lang->block->availableBlocks->task     = 'My Tasks';
+$lang->block->availableBlocks->bug      = 'My Bugs';
+$lang->block->availableBlocks->case     = 'My Cases';
+$lang->block->availableBlocks->story    = 'My Stories';
 $lang->block->availableBlocks->product  = $lang->productCommon . 'List';
 $lang->block->availableBlocks->project  = $lang->projectCommon . 'List';
-$lang->block->availableBlocks->plan     = 'Plan';
-$lang->block->availableBlocks->release  = 'Release';
-$lang->block->availableBlocks->build    = 'Build';
-$lang->block->availableBlocks->testtask = 'Test';
+$lang->block->availableBlocks->plan     = 'Plans';
+$lang->block->availableBlocks->release  = 'Releases';
+$lang->block->availableBlocks->build    = 'Builds';
+$lang->block->availableBlocks->testtask = 'Tests';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;
@@ -332,24 +332,24 @@ $lang->block->bugNum  = 'Bug';
 
 $lang->block->typeList = new stdclass();
 
-$lang->block->typeList->task['assignedTo'] = 'Assigned to Me';
-$lang->block->typeList->task['openedBy']   = 'Created by Me';
-$lang->block->typeList->task['finishedBy'] = 'Finished by Me';
-$lang->block->typeList->task['closedBy']   = 'Closed by Me';
-$lang->block->typeList->task['canceledBy'] = 'Cancelled by Me';
+$lang->block->typeList->task['assignedTo'] = 'AssignedToMe';
+$lang->block->typeList->task['openedBy']   = 'CreatedByMe';
+$lang->block->typeList->task['finishedBy'] = 'FinishedByMe';
+$lang->block->typeList->task['closedBy']   = 'ClosedByMe';
+$lang->block->typeList->task['canceledBy'] = 'CancelledByMe';
 
-$lang->block->typeList->bug['assignedTo'] = 'Assigned to Me';
-$lang->block->typeList->bug['openedBy']   = 'Created by Me';
-$lang->block->typeList->bug['resolvedBy'] = 'Solved by Me';
-$lang->block->typeList->bug['closedBy']   = 'Closed by Me';
+$lang->block->typeList->bug['assignedTo'] = 'AssignedToMe';
+$lang->block->typeList->bug['openedBy']   = 'CreatedByMe';
+$lang->block->typeList->bug['resolvedBy'] = 'SolvedByMe';
+$lang->block->typeList->bug['closedBy']   = 'ClosedByMe';
 
-$lang->block->typeList->case['assigntome'] = 'Assigned to Me';
-$lang->block->typeList->case['openedbyme'] = 'Created by Me';
+$lang->block->typeList->case['assigntome'] = 'AssignedToMe';
+$lang->block->typeList->case['openedbyme'] = 'CreatedByMe';
 
-$lang->block->typeList->story['assignedTo'] = 'Assigned to Me';
-$lang->block->typeList->story['openedBy']   = 'Created by Me';
-$lang->block->typeList->story['reviewedBy'] = 'Reviewed by Me';
-$lang->block->typeList->story['closedBy']   = 'Closed by Me' ;
+$lang->block->typeList->story['assignedTo'] = 'AssignedToMe';
+$lang->block->typeList->story['openedBy']   = 'CreatedByMe';
+$lang->block->typeList->story['reviewedBy'] = 'ReviewedByMe';
+$lang->block->typeList->story['closedBy']   = 'ClosedByMe' ;
  
 $lang->block->typeList->product['noclosed'] = 'Open';
 $lang->block->typeList->product['closed']   = 'Closed';
@@ -362,7 +362,7 @@ $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
 
 $lang->block->typeList->testtask['wait']    = 'Pending';
-$lang->block->typeList->testtask['doing']   = 'Doing';
+$lang->block->typeList->testtask['doing']   = 'Ongoing';
 $lang->block->typeList->testtask['blocked'] = 'Blocked';
 $lang->block->typeList->testtask['done']    = 'Done';
 $lang->block->typeList->testtask['all']     = 'All';
