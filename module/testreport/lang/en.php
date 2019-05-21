@@ -5,7 +5,7 @@ $lang->testreport->create   = 'Create Report';
 $lang->testreport->edit     = 'Edit Report';
 $lang->testreport->delete   = 'Delete';
 $lang->testreport->export   = 'Export';
-$lang->testreport->view     = 'Details';
+$lang->testreport->view     = 'Detail';
 $lang->testreport->recreate = 'Re-Create';
 
 $lang->testreport->title       = 'Title';
@@ -53,7 +53,7 @@ $lang->testreport->bugResolutionGroups = 'Bug Solution Distribution';
 $lang->testreport->bugModuleGroups     = 'Bug Module Distribution';
 $lang->testreport->legacyBugs          = 'Legacy Bugs';
 $lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Solution is fixed or postponed / status is solved or closed)';
-$lang->testreport->bugCreateByCaseRate = 'Bug Generated in Case Rate (Bugs reported in cases / Newly added bugs)';
+$lang->testreport->bugCreateByCaseRate = 'Bug Generated in Case Rate (Bugs reported in cases / New added bugs)';
 
 $lang->testreport->caseSummary    = ' <strong>%s</strong> cases in Total : <strong>%s</strong> performed, <strong>%s</strong> results, <strong>%s</strong> failed.';
 $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
@@ -62,8 +62,8 @@ $lang->testreport->moreNotice     = 'More features can be extended with referenc
 $lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
 $lang->testreport->foundBugTip    = "Bugs generated in this build and generated in the test period.";
-$lang->testreport->legacyBugTip   = "Active bugs, or the solved bugs that is not in the test period.";
-$lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case executions in the test period.";
+$lang->testreport->legacyBugTip   = "Active bugs, or the solved bugs that are not in the test period.";
+$lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case run in the test period.";
 $lang->testreport->errorTrunk     = "You cannot create a Test report for the trunk. Please modify the linked build!";
 $lang->testreport->moreProduct    = "Test reports can only be generated for the same product.";
 

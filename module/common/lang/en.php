@@ -15,7 +15,7 @@ $lang->comma     = ',';
 $lang->dot       = '.';
 $lang->at        = ' on ';
 $lang->downArrow = '↓';
-$lang->null      = 'null';
+$lang->null      = 'NULL';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
@@ -72,10 +72,10 @@ $lang->fail            = 'Fail';
 $lang->addFiles        = 'Added Files';
 $lang->files           = 'Files ';
 $lang->pasteText       = 'Paste';
-$lang->uploadImages    = 'Upload Image';
+$lang->uploadImages    = 'Upload Images';
 $lang->timeout         = 'Timeout. Check your newtwork connections, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Run phpmyadmin or myisamchk to fix it.';
-$lang->duplicate       = '%s has the same title as a file title existed.';
+$lang->duplicate       = '%s has the same title as a file existed.';
 $lang->ipLimited       = "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>Sorry, your current IP is restricted. PLease contact your Administer to grant your permissions.</body></html>";
 $lang->unfold          = '+';
 $lang->fold            = '-';
@@ -104,7 +104,7 @@ $lang->showAll       = '[[Show All]]';
 
 $lang->future       = 'Pending';
 $lang->year         = 'Year';
-$lang->workingHour  = 'Man-hour';
+$lang->workingHour  = 'Man-hours';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
@@ -164,7 +164,7 @@ $lang->lang = 'Language';
 
 /* Theme style. */
 $lang->theme                = 'Theme';
-$lang->themes['default']    = 'ZenTao Blue (default)';
+$lang->themes['default']    = 'Default';
 $lang->themes['green']      = 'Green';
 $lang->themes['red']        = 'Red';
 $lang->themes['purple']     = 'Purple';
@@ -349,7 +349,7 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report is generated based on the search results of the list. Please search in the list before you generate a report.';
+$lang->report->notice->help = 'Note: Report data is retrieved from ZenTao browsing data. Please search in the list before you generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();

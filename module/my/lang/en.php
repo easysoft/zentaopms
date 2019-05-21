@@ -18,24 +18,24 @@ $lang->my->changePassword = 'Edit Password';
 $lang->my->unbind         = 'Unbind Zdoo';
 $lang->my->manageContacts = 'Manage Contact';
 $lang->my->deleteContacts = 'Delete Contact';
-$lang->my->shareContacts  = 'Share the list';
+$lang->my->shareContacts  = 'Public';
 $lang->my->limited        = 'Limited Actions (Users can only edit the content that is involved themselves.)';
-$lang->my->score          = 'My Point';
-$lang->my->scoreRule      = 'Point Rule';
-$lang->my->noTodo         = 'No todos. ';
+$lang->my->score          = 'My Points';
+$lang->my->scoreRule      = 'Point Rules';
+$lang->my->noTodo         = 'No todos yet. ';
 
 $lang->my->taskMenu = new stdclass();
-$lang->my->taskMenu->assignedToMe = 'Assigned To Me';
-$lang->my->taskMenu->openedByMe   = 'Created By Me';
-$lang->my->taskMenu->finishedByMe = 'Finished By Me';
-$lang->my->taskMenu->closedByMe   = 'Closed By Me';
-$lang->my->taskMenu->canceledByMe = 'Cancelled By Me';
+$lang->my->taskMenu->assignedToMe = 'AssignedToMe';
+$lang->my->taskMenu->openedByMe   = 'CreatedByMe';
+$lang->my->taskMenu->finishedByMe = 'FinishedByMe';
+$lang->my->taskMenu->closedByMe   = 'ClosedByMe';
+$lang->my->taskMenu->canceledByMe = 'CancelledByMe';
 
 $lang->my->storyMenu = new stdclass();
-$lang->my->storyMenu->assignedToMe = 'Assigned To Me';
-$lang->my->storyMenu->openedByMe   = 'Created By Me';
-$lang->my->storyMenu->reviewedByMe = 'Reviewed By Me';
-$lang->my->storyMenu->closedByMe   = 'Closed By Me';
+$lang->my->storyMenu->assignedToMe = 'AssignedToMe';
+$lang->my->storyMenu->openedByMe   = 'CreatedByMe';
+$lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
+$lang->my->storyMenu->closedByMe   = 'ClosedByMe';
 
 $lang->my->home = new stdclass();
 $lang->my->home->latest        = 'Dynamics';

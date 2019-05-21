@@ -25,7 +25,7 @@ $lang->product->mine        = 'My:';
 $lang->product->other       = 'Other:';
 $lang->product->closed      = 'Closed';
 $lang->product->updateOrder = 'Order';
-$lang->product->all         = "All {$lang->productCommon}";
+$lang->product->all         = "All {$lang->productCommon}s";
 $lang->product->export      = 'Export Data';
 
 $lang->product->basicInfo = 'Basic Info';
@@ -43,28 +43,28 @@ $lang->product->doc      = 'Doc';
 $lang->product->project  = $lang->projectCommon . 'List';
 $lang->product->build    = 'Build';
 
-$lang->product->currentProject   = "Current {$lang->projectCommon}";
+$lang->product->currentProject   = "{$lang->projectCommon}";
 $lang->product->activeStories    = 'Active Story';
 $lang->product->changedStories   = 'Changed Story';
 $lang->product->draftStories     = 'Draft Story';
 $lang->product->closedStories    = 'Closed Story';
-$lang->product->unResolvedBugs   = 'Unresolved Bug';
+$lang->product->unResolvedBugs   = 'Active Bug';
 $lang->product->assignToNullBugs = 'Unassigned Bug';
 
-$lang->product->confirmDelete  = " Do you want to delete {$lang->productCommon}?";
+$lang->product->confirmDelete  = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct = "No {$lang->productCommon} is created yet!";
-$lang->product->accessDenied   = "You have no access to {$lang->productCommon}.";
+$lang->product->accessDenied   = "You have no access to the {$lang->productCommon}.";
 
 $lang->product->id            = 'ID';
 $lang->product->name          = 'Name';
-$lang->product->code          = 'Alias';
+$lang->product->code          = 'Code';
 $lang->product->line          = "{$lang->productCommon} Line";
 $lang->product->order         = 'Sort';
 $lang->product->type          = 'Type';
 $lang->product->status        = 'Status';
 $lang->product->desc          = 'Description';
-$lang->product->manager       = 'Manager';
-$lang->product->PO            = 'PO';
+$lang->product->manager       = 'Managers';
+$lang->product->PO            = 'Product Owner';
 $lang->product->QD            = 'QA Manager';
 $lang->product->RD            = 'Release Manager';
 $lang->product->acl           = 'Access Control';
@@ -72,13 +72,13 @@ $lang->product->whitelist     = 'Whitelist';
 $lang->product->branch        = '%s';
 $lang->product->qa            = 'QA';
 $lang->product->release       = 'Release';
-$lang->product->allRelease    = 'All Release';
-$lang->product->maintain      = 'Maintaining';
+$lang->product->allRelease    = 'All Releases';
+$lang->product->maintain      = 'Under Maintenance';
 $lang->product->latestDynamic = 'Dynamics';
 $lang->product->plan          = 'Plan';
-$lang->product->iteration     = 'Version Iteration';
+$lang->product->iteration     = 'Iterations';
 $lang->product->iterationInfo = '%s Iteration';
-$lang->product->iterationView = 'Details';
+$lang->product->iterationView = 'Detail';
 
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'AssignedToMe';
@@ -93,14 +93,14 @@ $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
 $lang->product->unplan       = 'Unplanned';
 
-$lang->product->allStory             = 'All';
-$lang->product->allProduct           = 'All' . $lang->productCommon;
-$lang->product->allProductsOfProject = 'All linked' . $lang->productCommon;
+$lang->product->allStory             = 'All ';
+$lang->product->allProduct           = 'All ' . $lang->productCommon;
+$lang->product->allProductsOfProject = 'All Linked ' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
 $lang->product->typeList['normal']   = 'Normal';
-$lang->product->typeList['branch']   = 'Multiple Branch';
-$lang->product->typeList['platform'] = 'Multiple Platform';
+$lang->product->typeList['branch']   = 'Multi-Branch';
+$lang->product->typeList['platform'] = 'Multi-Platform';
 
 $lang->product->typeTips = array();
 $lang->product->typeTips['branch']   = '(for the customized content)';
@@ -118,10 +118,10 @@ $lang->product->aclList['open']    = "Default (Users with privileges to {$lang->
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
 
-$lang->product->storySummary   = " <strong>%s</strong> Story, <strong>%s</strong> Hour Estimates, and Case Coverage is <strong>%s</strong> on this page.";
-$lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> Hour Estimates, nd Case Coverage is <strong>%rate%</strong>.";
+$lang->product->storySummary   = " <strong>%s</strong> Stories, <strong>%s</strong> Estimates, and Case Coverage is <strong>%s</strong> on this page.";
+$lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> Estimates, nd Case Coverage is <strong>%rate%</strong>.";
 $lang->product->noModule       = '<div>You have no modules</div><div>Manage now</div>';
-$lang->product->noProduct      = "No {$lang->productCommon}. ";
+$lang->product->noProduct      = "No {$lang->productCommon} yet. ";
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
