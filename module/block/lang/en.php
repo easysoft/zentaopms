@@ -40,8 +40,8 @@ $lang->block->leftToday = 'Remaining Work';
 $lang->block->myTask    = 'My Tasks';
 $lang->block->myStory   = 'My Stories';
 $lang->block->myBug     = 'My Bugs';
-$lang->block->myProject = 'My ' . $lang->projectCommon; . 's'
-$lang->block->myProduct = 'My ' . $lang->productCommon; . 's'
+$lang->block->myProject = 'My ' . $lang->projectCommon . 's';
+$lang->block->myProduct = 'My ' . $lang->productCommon . 's';
 $lang->block->delayed   = 'Delayed';
 $lang->block->noData    = 'No data on this type of reports.';
 $lang->block->emptyTip  = 'No data.';
@@ -143,7 +143,7 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['4']['title'] = 'Pending Build';
+$lang->block->default['qa']['4']['title'] = 'Waiting Build';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
@@ -361,7 +361,7 @@ $lang->block->typeList->project['doing']    = 'Ongoing';
 $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
 
-$lang->block->typeList->testtask['wait']    = 'Pending';
+$lang->block->typeList->testtask['wait']    = 'Waiting';
 $lang->block->typeList->testtask['doing']   = 'Ongoing';
 $lang->block->typeList->testtask['blocked'] = 'Blocked';
 $lang->block->typeList->testtask['done']    = 'Done';

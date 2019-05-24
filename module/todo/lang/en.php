@@ -64,7 +64,7 @@ $lang->todo->confirmBug   = 'This Todo is linked to Bug #%s. Do you want to edit
 $lang->todo->confirmTask  = 'This Todo is linked to Task #%s，Do you want to edit it?';
 $lang->todo->confirmStory = 'This Todo is linked to Story #%s，Do you want to edit it?';
 
-$lang->todo->statusList['wait']   = 'Pending';
+$lang->todo->statusList['wait']   = 'Waiting';
 $lang->todo->statusList['doing']  = 'Doing';
 $lang->todo->statusList['done']   = 'Done';
 $lang->todo->statusList['closed'] = 'Closed';
@@ -97,7 +97,7 @@ $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 
 $lang->todo->periods['all']        = 'All Todos';
 $lang->todo->periods['thisYear']   = 'ThisYear';
-$lang->todo->periods['future']     = 'Pending';
+$lang->todo->periods['future']     = 'Waiting';
 $lang->todo->periods['before']     = 'Unfinished';
 $lang->todo->periods['cycle']      = 'Recurrence';
 

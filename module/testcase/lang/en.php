@@ -178,7 +178,7 @@ $lang->testcase->reviewResultList['pass']    = 'Pass';
 $lang->testcase->reviewResultList['clarify'] = 'Clarify';
 
 $lang->testcase->statusList['']            = '';
-$lang->testcase->statusList['wait']        = 'Pending';
+$lang->testcase->statusList['wait']        = 'Waiting';
 $lang->testcase->statusList['normal']      = 'Normal';
 $lang->testcase->statusList['blocked']     = 'Blocked';
 $lang->testcase->statusList['investigate'] = 'Studying';
@@ -206,7 +206,7 @@ $lang->testcase->action->fromlib  = array('main' => '$date, imported by <strong>
 $lang->testcase->action->reviewed = array('main' => '$date, recorded by <strong>$actor</strong> and the review result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['wait']        = 'Pending';
+$lang->testcase->featureBar['browse']['wait']        = 'Waiting';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 $lang->testcase->featureBar['browse']['group']       = '';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
