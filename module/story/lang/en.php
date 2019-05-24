@@ -114,7 +114,7 @@ $lang->story->statusList['closed']    = 'Closed';
 $lang->story->statusList['changed']   = 'Changed';
 
 $lang->story->stageList['']           = '';
-$lang->story->stageList['wait']       = 'Pending';
+$lang->story->stageList['wait']       = 'Waiting';
 $lang->story->stageList['planned']    = 'Planned';
 $lang->story->stageList['projected']  = 'Projected';
 $lang->story->stageList['developing'] = 'Developing';

@@ -102,7 +102,7 @@ $lang->notFound      = 'Not found!';
 $lang->notPage       = 'Sorry, the features you are visiting are in development!';
 $lang->showAll       = '[[Show All]]';
 
-$lang->future       = 'Pending';
+$lang->future       = 'Waiting';
 $lang->year         = 'Year';
 $lang->workingHour  = 'Man-hours';
 
@@ -110,7 +110,7 @@ $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
 $lang->statusAB     = 'Status';
 $lang->openedByAB   = 'CreatedBy';
-$lang->assignedToAB = 'AssignTo';
+$lang->assignedToAB = 'AssignedTo';
 $lang->typeAB       = 'Type';
 
 $lang->common = new stdclass();
@@ -767,7 +767,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->subMenu->more = new stdclass();
     $lang->bug->subMenu->more->unconfirmed   = 'Unconfirmed|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s';
     $lang->bug->subMenu->more->assigntonull  = 'Unassigned|bug|browse|productID=%s&branch=%s&browseType=assigntonull&param=%s';
-    $lang->bug->subMenu->more->longlifebugs  = 'Pending|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
+    $lang->bug->subMenu->more->longlifebugs  = 'Stalled|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
     $lang->bug->subMenu->more->postponedbugs = 'Postponed|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->subMenu->more->overduebugs   = 'Overdue|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
     $lang->bug->subMenu->more->needconfirm   = 'ToBeConfirmed|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
@@ -790,7 +790,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of testcase. */
     $lang->testcase->menu = new stdclass();
     $lang->testcase->menu->all     = 'All|testcase|browse|productID=%s&branch=%s&browseType=all';
-    $lang->testcase->menu->wait    = 'Pending|testcase|browse|productID=%s&branch=%s&browseType=wait';
+    $lang->testcase->menu->wait    = 'Waiting|testcase|browse|productID=%s&branch=%s&browseType=wait';
     $lang->testcase->menu->bysuite = array('link' => 'Suite|testsuite|create|productID=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->testcase->subMenu = new stdclass();
@@ -810,7 +810,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of testtask. */
     $lang->testtask->menu = new stdclass();
     $lang->testtask->menu->totalStatus = 'All|testtask|browse|productID=%s&branch=%s&type=%s,totalStatus';
-    $lang->testtask->menu->wait        = 'Pending|testtask|browse|productID=%s&branch=%s&type=%s,wait';
+    $lang->testtask->menu->wait        = 'Waiting|testtask|browse|productID=%s&branch=%s&type=%s,wait';
     $lang->testtask->menu->doing       = 'Doing|testtask|browse|productID=%s&branch=%s&type=%s,doing';
     $lang->testtask->menu->blocked     = 'Blocked|testtask|browse|productID=%s&branch=%s&type=%s,blocked';
     $lang->testtask->menu->done        = 'Done|testtask|browse|productID=%s&branch=%s&type=%s,done';
@@ -831,7 +831,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();
     $lang->caselib->menu->all  = 'All|testsuite|library|libID=%s&browseType=all';
-    $lang->caselib->menu->wait = 'Pending|testsuite|library|libID=%s&browseType=wait';
+    $lang->caselib->menu->wait = 'Waiting|testsuite|library|libID=%s&browseType=wait';
     $lang->caselib->menu->view = 'View|testsuite|libview|libID=%s';
 
     $lang->caselib->menuOrder[5]  = 'lib';
