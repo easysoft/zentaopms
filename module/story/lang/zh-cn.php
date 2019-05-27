@@ -232,16 +232,16 @@ $lang->story->report->value  = '需求数';
 
 $lang->story->report->charts['storysPerProduct']        = $lang->productCommon . '需求数量';
 $lang->story->report->charts['storysPerModule']         = '模块需求数量';
-$lang->story->report->charts['storysPerSource']         = '需求来源统计';
-$lang->story->report->charts['storysPerPlan']           = '计划进行统计';
-$lang->story->report->charts['storysPerStatus']         = '状态进行统计';
-$lang->story->report->charts['storysPerStage']          = '所处阶段进行统计';
-$lang->story->report->charts['storysPerPri']            = '优先级进行统计';
-$lang->story->report->charts['storysPerEstimate']       = '预计工时进行统计';
-$lang->story->report->charts['storysPerOpenedBy']       = '由谁创建来进行统计';
-$lang->story->report->charts['storysPerAssignedTo']     = '当前指派来进行统计';
-$lang->story->report->charts['storysPerClosedReason']   = '关闭原因来进行统计';
-$lang->story->report->charts['storysPerChange']         = '变更次数来进行统计';
+$lang->story->report->charts['storysPerSource']         = '按需求来源统计';
+$lang->story->report->charts['storysPerPlan']           = '按计划进行统计';
+$lang->story->report->charts['storysPerStatus']         = '按状态进行统计';
+$lang->story->report->charts['storysPerStage']          = '按所处阶段进行统计';
+$lang->story->report->charts['storysPerPri']            = '按优先级进行统计';
+$lang->story->report->charts['storysPerEstimate']       = '按预计工时进行统计';
+$lang->story->report->charts['storysPerOpenedBy']       = '按由谁创建来进行统计';
+$lang->story->report->charts['storysPerAssignedTo']     = '按当前指派来进行统计';
+$lang->story->report->charts['storysPerClosedReason']   = '按关闭原因来进行统计';
+$lang->story->report->charts['storysPerChange']         = '按变更次数来进行统计';
 
 $lang->story->report->options = new stdclass();
 $lang->story->report->options->graph   = new stdclass();

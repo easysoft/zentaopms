@@ -194,7 +194,7 @@ $lang->my->menu->dynamic        = 'Dynamics|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-$lang->my->menu->score          = 'Point|my|score';
+$lang->my->menu->score          = array('link' => 'Point|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',task,myProject,profile,';
 

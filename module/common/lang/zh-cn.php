@@ -194,7 +194,7 @@ $lang->my->menu->dynamic        = '动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密码|my|changepassword';
 $lang->my->menu->manageContacts = '联系人|my|managecontacts';
-$lang->my->menu->score          = '积分|my|score';
+$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',task,myProject,profile,';
 
@@ -349,7 +349,7 @@ $lang->report->menu->test    = array('link' => '测试|report|bugcreate', 'alias
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = '注：统计报表的数据，来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。';
+$lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。';
 
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
