@@ -1352,7 +1352,6 @@ class task extends control
                         {
                             array_splice($tasks, $position, 0, $children[$task->id]);
                             $position += count($children[$task->id]);
-                            unset($children[$task->id]);
                         }
                     }
                 }
