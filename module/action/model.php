@@ -1052,7 +1052,7 @@ class actionModel extends model
         foreach($actions as $action)
         {
             $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-            $date         = date(DT_DATE4, $timeStamp);
+            $date         = $this->app->getClientLang() == 'en' ? date('M d', $timeStamp) : date(DT_DATE4, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }
