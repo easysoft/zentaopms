@@ -38,7 +38,7 @@
           <th class='w-user'><?php echo $lang->task->assignedTo;?></th>
           <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
           <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
-          <th class='w-status'><?php echo $lang->statusAB;?></th>
+          <th class='w-70px'><?php echo $lang->statusAB;?></th>
           <th><?php echo $lang->task->story;?></th>
         </tr>
       </thead>
