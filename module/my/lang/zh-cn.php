@@ -42,8 +42,8 @@ $lang->my->home->latest        = '最新动态';
 $lang->my->home->action        = "%s, %s <em>%s</em> %s <a href='%s'>%s</a>。";
 $lang->my->home->projects      = $lang->projectCommon;
 $lang->my->home->products      = $lang->productCommon;
-$lang->my->home->createProject = "创建一个{$lang->projectCommon}";
-$lang->my->home->createProduct = "创建一个{$lang->productCommon}";
+$lang->my->home->createProject = "添加{$lang->projectCommon}";
+$lang->my->home->createProduct = "添加{$lang->productCommon}";
 $lang->my->home->help          = "<a href='https://www.zentao.net/help-read-79236.html' target='_blank'>帮助文档</a>";
 $lang->my->home->noProductsTip = "这里还没有{$lang->productCommon}。";
 
