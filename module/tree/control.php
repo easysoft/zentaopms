@@ -166,7 +166,7 @@ class tree extends control
         elseif($viewType == 'trainpost')
         {   
             $this->lang->set('menugroup.tree', 'train');
-            $this->lang->tree->menu = $this->lang->trainpost->menu;
+            $this->lang->tree->menu = $this->lang->train->menu;
 
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;
