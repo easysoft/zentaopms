@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->product->common      = $lang->productCommon;
-$lang->product->index       = $lang->productCommon . 'Home';
+$lang->product->index       = $lang->productCommon . ' Home';
 $lang->product->browse      = 'Story';
 $lang->product->dynamic     = 'Dynamics';
 $lang->product->view        = 'Overview';
