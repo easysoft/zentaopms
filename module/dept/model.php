@@ -147,7 +147,8 @@ class deptModel extends model
             $deptMenu[$dept->parent] .= "</li>\n"; 
         }
 
-        $lastMenu = "<ul class='tree' data-ride='tree' data-name='tree-dept'>" . @array_pop($deptMenu) . "</ul>\n";
+        $deptMenu = isset($deptMenu[0]) ? $deptMenu[0] : array_pop($deptMenu);
+        $lastMenu = "<ul class='tree' data-ride='tree' data-name='tree-dept'>{$deptMenu}</ul>\n";
         return $lastMenu; 
     }
 

@@ -48,6 +48,9 @@ $lang->user->originalPassword = '原密码';
 $lang->user->verifyPassword   = '您的系统登录密码';
 $lang->user->resetPassword    = '忘记密码';
 
+$lang->user->legendBasic        = '基本资料';
+$lang->user->legendContribution = '个人贡献';
+
 $lang->user->index         = "用户视图首页";
 $lang->user->view          = "用户详情";
 $lang->user->create        = "添加用户";
@@ -128,6 +131,12 @@ $lang->user->passwordStrengthList[2] = "<span style='color:green'>强</span>";
 
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
+
+$lang->user->personalData['createdTodo']  = '创建的待办数';
+$lang->user->personalData['createdStory'] = '创建的需求数';
+$lang->user->personalData['finishedTask'] = '完成的任务数';
+$lang->user->personalData['resolvedBug']  = '解决的Bug数';
+$lang->user->personalData['createdCase']  = '创建的用例数';
 
 $lang->user->keepLogin['on']      = '保持登录';
 $lang->user->loginWithDemoUser    = '使用demo帐号登录：';
