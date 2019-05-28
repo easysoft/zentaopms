@@ -41,8 +41,8 @@
             </form>
           </div>
           <div class="btn-group">
-            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "'");?>
             <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=card"), "<i class='icon icon-cards-view'></i>", '', "title={$lang->doc->browseTypeList['grid']} class='btn btn-icon" . ($viewType != 'list' ? ' text-primary' : '') . "'");?>
+            <?php echo html::a(inlink('showFiles', "type=$type&objectID=$objectID&viewType=list"), "<i class='icon icon-bars'></i>" , '',  "title={$lang->doc->browseTypeList['list']} class='btn btn-icon" . ($viewType == 'list' ? ' text-primary' : '') . "'");?>
           </div>
         </nav>
       </div>
@@ -77,8 +77,8 @@
                 <td class="text-center"><?php echo isset($file->addedDate) ? substr($file->addedDate, 0, 10) : '';?></td>
                 <td class="c-actions">
                   <?php
-                  common::printLink('file', 'download', "fileID=$file->id", $lang->doc->download, "data-toggle='modal'", '', true, false, $file);
-                  common::printLink('file', 'delete',   "fileID=$file->id", $lang->delete, 'hiddenwin', '', true, false, $file);
+                  common::printLink('file', 'download', "fileID=$file->id", '<i class="icon-import"></i>', "data-toggle='modal'", "class='btn' title={$lang->doc->download}", true, false, $file);
+                  common::printLink('file', 'delete',   "fileID=$file->id", '<i class="icon-trash"></i>', 'hiddenwin', "class='btn' title={$lang->delete}", true, false, $file);
                   ?>
                 </td>
               </tr>

@@ -1,5 +1,11 @@
 $(function()
 {
+    var blockTitle = '';
+    $(document).on('change', '#blockParams #paramstype', function()
+    {
+        $('#blockParams').find('#title').val(blockTitle + ' - ' + $(this).find('option:selected').html());
+    });
+
     var $form = $('#blockAdminForm');
     $form.find('.chosen').chosen();
 
@@ -16,6 +22,9 @@ $(function()
         $form.addClass('form-inited');
         $blockParams.find('input:first').focus();
         if($blockParams.find('#actionLink').size() > 0) $form.attr('action', $blockParams.find('#actionLink').val());
+
+        blockTitle = $blockParams.find('#title').val();
+        if($('#blockParams #paramstype').length > 0) $blockParams.find('#title').val(blockTitle + ' - ' + $('#blockParams #paramstype').find('option:selected').html());
     };
 
     // 获取 html 和 rss 区块参数
@@ -29,10 +38,7 @@ $(function()
         $.get(createLink('block', 'set', 'id=' + blockID + '&type=' + type), function(data)
         {
             updateParams(data);
-            if (type === 'welcome')
-            {
-                $blockParams.find('#title').closest('.form-group').hide();
-            }
+            if(type === 'welcome') $blockParams.find('#title').closest('.form-group').hide();
         });
     };
 

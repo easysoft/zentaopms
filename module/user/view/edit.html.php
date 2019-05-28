@@ -50,7 +50,7 @@
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
         <?php $thClass = ($app->getClientLang() == 'en') ? 'w-130px' : 'w-90px';?>
         <tr>
-          <th class='w-100px'><?php echo $lang->user->account;?></th>
+          <th class='w-140px'><?php echo $lang->user->account;?></th>
           <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control'");?></td>
           <th class='<?php echo $thClass?>'><?php echo $lang->user->email;?></th>
           <td>

@@ -233,7 +233,7 @@ $lang->task->report->finishedTasksPerDay  = new stdclass();
 
 $lang->task->report->tasksPerProject->item      = $lang->projectCommon;
 $lang->task->report->tasksPerModule->item       = 'Module';
-$lang->task->report->tasksPerAssignedTo->item   = 'Account';
+$lang->task->report->tasksPerAssignedTo->item   = 'AssignedTo';
 $lang->task->report->tasksPerType->item         = 'Type';
 $lang->task->report->tasksPerPri->item          = 'Priority';
 $lang->task->report->tasksPerStatus->item       = 'Status';
@@ -241,7 +241,7 @@ $lang->task->report->tasksPerDeadline->item     = 'Date';
 $lang->task->report->tasksPerEstimate->item     = 'Estimates';
 $lang->task->report->tasksPerLeft->item         = 'Man-hours Left';
 $lang->task->report->tasksPerConsumed->item     = 'Man-hours Cost';
-$lang->task->report->tasksPerFinishedBy->item   = 'User';
+$lang->task->report->tasksPerFinishedBy->item   = 'FinishedBy';
 $lang->task->report->tasksPerClosedReason->item = 'Reason';
 $lang->task->report->finishedTasksPerDay->item  = 'Date';
 
