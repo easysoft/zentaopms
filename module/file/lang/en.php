@@ -55,5 +55,5 @@ $lang->file->errorFileMove       = " Uploading failed. An error prompts when mov
 $lang->file->dangerFile          = " The file failed to be uploaded for security reasons.";
 $lang->file->errorSuffix         = 'Format is incorrect. .zip files ONLY!';
 $lang->file->errorExtract        = 'Extracting files failed. Files might be damaged or there might be invalid files in the zip package.';
-$lang->file->uploadImagesExplain = 'Note: upload .jpg, .jpeg, .gif, and .png images. The image name will be taken as the title of the story and the image as its content.';
-$lang->file->fileNotFound        = 'The file was not found, maybe the physical file has been deleted!';
+$lang->file->uploadImagesExplain = 'Note: upload .jpg, .jpeg, .gif, or .png images. The image name will be the name of the story and the image will be the description.';
+$lang->file->fileNotFound        = 'The file was not found. The physical file might have been deleted!';
