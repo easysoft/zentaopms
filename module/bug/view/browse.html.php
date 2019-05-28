@@ -204,6 +204,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           {
               if($value->show)
               {
+                  if($this->app->getClientLang() == 'en' and $value->id == 'severity') $value->name = 'Severity';
+                  if($this->app->getClientLang() == 'en' and $value->id == 'pri')      $value->name = 'Priority';
                   $this->datatable->printHead($value, $orderBy, $vars);
                   $columns ++;
               }
