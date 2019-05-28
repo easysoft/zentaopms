@@ -55,7 +55,7 @@
               <th class="w-80px"><?php echo $lang->doc->id;?></th>
               <th class='text-left'><?php echo $lang->doc->fileTitle;?></th>
               <th class='text-left'><?php echo $lang->doc->filePath;?></th>
-              <th class="w-60px"><?php echo $lang->doc->extension;?></th>
+              <th class="w-80px"><?php echo $lang->doc->extension;?></th>
               <th class="w-60px"><?php echo $lang->doc->size;?></th>
               <th class="w-100px"><?php echo $lang->doc->addedBy;?></th>
               <th class="w-160px"><?php echo $lang->doc->addedDate;?></th>

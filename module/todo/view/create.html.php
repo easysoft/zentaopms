@@ -23,7 +23,7 @@
       <table class='table table-form'> 
         <tr>
           <th class='w-80px'><?php echo $lang->todo->date;?></th>
-          <td class='w-300px'>
+          <td class='w-400px'>
             <div class='input-group'>
               <?php echo html::input('date', $date, "class='form-control form-date'");?>
               <span class='input-group-addon switchDate'>

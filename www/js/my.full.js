@@ -762,6 +762,35 @@ function convertURL()
     });
 }
 
+/**
+ * Fix feature bar width.
+ * 
+ * @access public
+ * @return void
+ */
+function fixFeatureBar()
+{
+    var winWidth   = $('#mainMenu').outerWidth(true);
+    var $left      = $('#mainMenu > .btn-toolbar.pull-left');
+    var sideWidth  = $('#mainMenu #sidebarHeader').outerWidth(true);
+
+    var toolbarWidth = 0;
+    $('#mainMenu').children('.btn-toolbar').each(function()
+    {
+        toolbarWidth += $(this).outerWidth(true);
+    });
+
+    if((sideWidth + toolbarWidth) > winWidth)
+    {
+        var $lastNav = $left.children('a.btn.btn-link').not('#bysearchTab').not('.btn-active-text').last();
+        var $moreNav = $left.find('#more .dropdown-menu');
+        $moreNav.prepend('<li>' + $lastNav.prop("outerHTML") + '</li>');
+        $lastNav.remove();
+
+        fixFeatureBar();
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
