@@ -48,6 +48,9 @@ $lang->user->originalPassword = 'Password';
 $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
 
+$lang->user->legendBasic        = '基本资料';
+$lang->user->legendContribution = '个人贡献';
+
 $lang->user->index         = "Home";
 $lang->user->view          = "Overview";
 $lang->user->create        = "Add User";
@@ -125,6 +128,15 @@ $lang->user->genderList['f'] = 'F';
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>";
+
+$lang->user->statusList['active'] = '正常';
+$lang->user->statusList['delete'] = '删除';
+
+$lang->user->personalData['createdTodo']  = '创建的待办数';
+$lang->user->personalData['createdStory'] = '创建的需求数';
+$lang->user->personalData['finishedTask'] = '完成的任务数';
+$lang->user->personalData['resolvedBug']  = '解决的Bug数';
+$lang->user->personalData['createdCase']  = '创建的用例数';
 
 $lang->user->statusList['active'] = 'Activated';
 $lang->user->statusList['delete'] = 'Deleted';

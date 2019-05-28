@@ -519,11 +519,12 @@ class my extends control
         $this->app->loadLang('user');
         $user = $this->user->getById($this->app->user->account);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
-        $this->view->position[] = $this->lang->my->profile;
-        $this->view->user       = $user;
-        $this->view->groups     = $this->loadModel('group')->getByAccount($this->app->user->account);
-        $this->view->deptPath   = $this->dept->getParents($user->dept);
+        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->profile;
+        $this->view->position[]   = $this->lang->my->profile;
+        $this->view->user         = $user;
+        $this->view->groups       = $this->loadModel('group')->getByAccount($this->app->user->account);
+        $this->view->deptPath     = $this->dept->getParents($user->dept);
+        $this->view->personalData = $this->user->getPersonalData();
         $this->display();
     }
 

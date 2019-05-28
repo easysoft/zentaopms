@@ -1,0 +1,10 @@
+.col-6{width:50% !important;}
+.cell{height:450px;}
+.main-header{margin-bottom:20px;}
+.dl-horizontal dt{color:#999; font-weight:normal; padding:5px 0px;}
+.dl-horizontal dd{padding:5px 0px;}
+.divider{border-left:1px solid #e5e5e5;}
+
+.tiles{padding-top:15px;}
+.tile{margin-bottom:30px; text-align:left !important; padding-left:60px;}
+.tile-title{color:#999; padding-bottom:5px !important;}
