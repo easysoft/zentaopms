@@ -127,6 +127,7 @@ $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
+$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
 
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
@@ -136,7 +137,6 @@ $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 $lang->product->featureBar['all']['all']      = $lang->product->allProduct;
 
-$lang->product->moreSelects['reviewedbyme'] = $lang->product->reviewedByMe;
 $lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']  = $lang->product->activeStory;
 $lang->product->moreSelects['changedstory'] = $lang->product->changedStory;

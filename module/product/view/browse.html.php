@@ -46,7 +46,7 @@
                     $moreLabel       = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                     $moreLabelActive = 'btn-active-text';
                 }
-                echo '<div class="btn-group">';
+                echo '<div class="btn-group" id="more">';
                 echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
                 echo "<ul class='dropdown-menu'>";
                 foreach($lang->product->moreSelects as $key => $value)
