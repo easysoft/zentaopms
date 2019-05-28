@@ -1,6 +1,7 @@
 $(function()
 {
     if($('#taskList thead th.c-name').width() < 150) $('#taskList thead th.c-name').width(150);
+    setTimeout(function(){fixFeatureBar();}, 500);
 });
 
 $('#module' + moduleID).closest('li').addClass('active');

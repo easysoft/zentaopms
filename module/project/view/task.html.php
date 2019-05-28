@@ -88,7 +88,7 @@ js::set('browseType', $browseType);
         }
         elseif($menuType == 'status')
         {
-            echo "<div class='btn-group'>";
+            echo "<div class='btn-group' id='more'>";
             $taskBrowseType = isset($status) ? $this->session->taskBrowseType : '';
             $current        = $menuItem->text;
             $active         = '';
