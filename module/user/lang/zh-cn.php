@@ -45,6 +45,7 @@ $lang->user->last             = '最后登录';
 $lang->user->ranzhi           = '然之帐号';
 $lang->user->ditto            = '同上';
 $lang->user->originalPassword = '原密码';
+$lang->user->newPassword      = '新密码';
 $lang->user->verifyPassword   = '您的系统登录密码';
 $lang->user->resetPassword    = '忘记密码';
 
