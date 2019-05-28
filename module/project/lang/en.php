@@ -11,7 +11,7 @@
  */
 /* Fields. */
 $lang->project->common        = $lang->projectCommon;
-$lang->project->allProjects   = 'All ' . $lang->projectCommon;
+$lang->project->allProjects   = 'All ' . $lang->projectCommon . 's';
 $lang->project->type          = 'Type';
 $lang->project->name          = 'Name';
 $lang->project->code          = 'Code';
