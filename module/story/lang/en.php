@@ -46,7 +46,7 @@ $lang->story->batchChangeBranch = "Batch Change Branch";
 $lang->story->batchChangeStage  = "Batch Change Phase";
 $lang->story->batchAssignTo     = "Batch Assign";
 $lang->story->batchChangeModule = "Batch Change Module";
-$lang->story->viewAll           = "All Stories";
+$lang->story->viewAll           = "See all";
 
 $lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
@@ -96,7 +96,7 @@ $lang->story->newStory       = 'Continue adding';
 $lang->story->colorTag       = 'Color';
 $lang->story->files          = 'Files';
 $lang->story->copy           = "Copy Story";
-$lang->story->total          = "Total";
+$lang->story->total          = "Total Stories";
 $lang->story->allStories     = 'All Stories';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
