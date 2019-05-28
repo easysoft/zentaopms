@@ -349,13 +349,14 @@ class user extends control
 
         $user = $this->user->getById($account);
 
-        $this->view->title      = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->position[] = $this->lang->user->common;
-        $this->view->position[] = $this->lang->user->profile;
-        $this->view->account    = $account;
-        $this->view->user       = $user;
-        $this->view->groups     = $this->loadModel('group')->getByAccount($account);
-        $this->view->deptPath   = $this->dept->getParents($user->dept);
+        $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
+        $this->view->position[]   = $this->lang->user->common;
+        $this->view->position[]   = $this->lang->user->profile;
+        $this->view->account      = $account;
+        $this->view->user         = $user;
+        $this->view->groups       = $this->loadModel('group')->getByAccount($account);
+        $this->view->deptPath     = $this->dept->getParents($user->dept);
+        $this->view->personalData = $this->user->getPersonalData($user->account);
 
         $this->display();
     }
