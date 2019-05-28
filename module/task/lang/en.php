@@ -193,7 +193,7 @@ $lang->task->error->assignedTo       = 'Multi-user task in the current status ca
 /* Report. */
 $lang->task->report = new stdclass();
 $lang->task->report->common = 'Report';
-$lang->task->report->select = 'Group by';
+$lang->task->report->select = 'Select Report Type';
 $lang->task->report->create = 'Create Report';
 $lang->task->report->value  = 'No. of Tasks';
 

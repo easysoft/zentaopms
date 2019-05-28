@@ -26,10 +26,10 @@
     <thead>
       <tr>
         <th class='c-id'><?php echo $lang->idAB?></th>
+        <th class='c-level'><?php echo $lang->bug->severityAB?></th>
         <?php if($longBlock):?>
         <th class='c-pri'><?php echo $lang->priAB?></th>
         <?php endif;?>
-        <th class='c-level'><?php echo $lang->bug->severityAB?></th>
         <th class='c-name'><?php echo $lang->bug->title;?></th>
         <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
       </tr>
@@ -53,9 +53,6 @@
       ?>
       <tr data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-id-xs'><?php echo sprintf('%03d', $bug->id);?></td>
-        <?php if($longBlock):?>
-        <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
-        <?php endif;?>
         <td class='c-severity'>
           <?php if($hasCustomSeverity):?>
           <span class='<?php echo 'label-severity-custom';?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
@@ -63,6 +60,9 @@
           <span class='label-severity' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'></span>
           <?php endif;?>
         </td>
+        <?php if($longBlock):?>
+        <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
+        <?php endif;?>
         <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
         <td class='c-status' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
           <span class="status-bug status-<?php echo $bug->status?>"><?php echo zget($lang->bug->statusList, $bug->status);?></span>

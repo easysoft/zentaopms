@@ -226,22 +226,22 @@ $lang->story->action->unlinkchildstory    = array('main' => '$date, unlinked by 
 /* 统计报表。*/
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
-$lang->story->report->select = 'Group by';
+$lang->story->report->select = 'Select Report Type';
 $lang->story->report->create = 'Generate Report';
 $lang->story->report->value  = 'No. of Reports';
 
-$lang->story->report->charts['storysPerProduct']        = 'by ' . $lang->productCommon;
-$lang->story->report->charts['storysPerModule']         = 'by Module';
-$lang->story->report->charts['storysPerSource']         = 'by Source';
-$lang->story->report->charts['storysPerPlan']           = 'by Plan';
-$lang->story->report->charts['storysPerStatus']         = 'by Status';
-$lang->story->report->charts['storysPerStage']          = 'by Phase';
-$lang->story->report->charts['storysPerPri']            = 'by Priority';
-$lang->story->report->charts['storysPerEstimate']       = 'by Estimates';
-$lang->story->report->charts['storysPerOpenedBy']       = 'by CreatedBy';
-$lang->story->report->charts['storysPerAssignedTo']     = 'by Assignee';
-$lang->story->report->charts['storysPerClosedReason']   = 'by Closed Reason';
-$lang->story->report->charts['storysPerChange']         = 'by Change Times';
+$lang->story->report->charts['storysPerProduct']        = 'Stories of ' . $lang->productCommon;
+$lang->story->report->charts['storysPerModule']         = 'Stories of Module';
+$lang->story->report->charts['storysPerSource']         = 'Story Source';
+$lang->story->report->charts['storysPerPlan']           = 'Plan';
+$lang->story->report->charts['storysPerStatus']         = 'Status';
+$lang->story->report->charts['storysPerStage']          = 'Phase';
+$lang->story->report->charts['storysPerPri']            = 'Priority';
+$lang->story->report->charts['storysPerEstimate']       = 'Estimates';
+$lang->story->report->charts['storysPerOpenedBy']       = 'CreatedBy';
+$lang->story->report->charts['storysPerAssignedTo']     = 'AssignedTo';
+$lang->story->report->charts['storysPerClosedReason']   = 'Closed Reason';
+$lang->story->report->charts['storysPerChange']         = 'Story Change';
 
 $lang->story->report->options = new stdclass();
 $lang->story->report->options->graph   = new stdclass();
