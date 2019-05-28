@@ -22,7 +22,7 @@ $lang->search->deleteQuery   = 'Delete Query';
 $lang->search->setQueryTitle = 'Enter a title. Search then the query is saved.';
 $lang->search->select        = 'Story/Task Filter';
 $lang->search->me            = 'Me';
-$lang->search->noQuery       = 'No query saved yet!';
+$lang->search->noQuery       = 'No query is saved yet!';
 $lang->search->onMenuBar     = 'Show in the Menu';
 $lang->search->custom        = 'Custom';
 
@@ -39,10 +39,10 @@ $lang->search->operators['>']          = '>';
 $lang->search->operators['>=']         = '>=';
 $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
-$lang->search->operators['include']    = 'incl.';
-$lang->search->operators['between']    = 'between';
-$lang->search->operators['notinclude'] = 'excl.';
-$lang->search->operators['belong']     = '∈';
+$lang->search->operators['include']    = 'INCLUDE';
+$lang->search->operators['between']    = 'BETWEEN';
+$lang->search->operators['notinclude'] = 'EXCLUDE';
+$lang->search->operators['belong']     = 'BELONG';
 
 $lang->search->andor['and']         = 'And';
 $lang->search->andor['or']          = 'Or';
