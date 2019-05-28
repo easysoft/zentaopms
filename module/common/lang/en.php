@@ -349,7 +349,7 @@ $lang->report->menu->test    = array('link' => 'Test|report|bugcreate', 'alias' 
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: Report data is retrieved from ZenTao browsing data. Please search in the list before you generate a report.';
+$lang->report->notice->help = 'Note: The data of a report is based on the data in the Story List. Click the tab,e.g. AssignedToMe, then click Report to generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
@@ -561,7 +561,7 @@ $lang->datepicker->dpText->TEXT_TODAY       = 'Today';
 $lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Next Year';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Next Month';
 $lang->datepicker->dpText->TEXT_CLOSE       = 'Close';
-$lang->datepicker->dpText->TEXT_DATE        = 'Choose Time';
+$lang->datepicker->dpText->TEXT_DATE        = 'Choose Tab';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose Date';
 
 $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');

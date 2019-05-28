@@ -33,7 +33,7 @@ $lang->admin->info->account = 'Your ZenTao account is %s.';
 $lang->admin->info->log     = 'Log that exceeds valid days will be deleted and you have to run cron.';
 
 $lang->admin->notice = new stdclass();
-$lang->admin->notice->register = "Note: You haven't registered in ZenTao(www.zentao.pm). %s then get the Latest ZenTao Upgrades and News.";
+$lang->admin->notice->register = "Note: You haven't registered in ZenTao official website(www.zentao.pm). %s then get the Latest ZenTao Upgrades and News.";
 $lang->admin->notice->ignore   = "Ignore";
 $lang->admin->notice->int      = "『%s』should be a positive integer.";
 
@@ -41,11 +41,11 @@ $lang->admin->register = new stdclass();
 $lang->admin->register->common     = 'Bind Account';
 $lang->admin->register->caption    = 'Register in ZenTao Community';
 $lang->admin->register->click      = 'Register here';
-$lang->admin->register->lblAccount = '>= 3 characters; contains letters and numbers.';
-$lang->admin->register->lblPasswd  = '>= 6 characters; contains letters and numbers.';
+$lang->admin->register->lblAccount = '>= 3 letters and numbers.';
+$lang->admin->register->lblPasswd  = '>= 6 letters and numbers.';
 $lang->admin->register->submit     = 'Register';
-$lang->admin->register->bind       = "Bind Exsit Account";
-$lang->admin->register->success    = "You have registered with us!";
+$lang->admin->register->bind       = "Bind Exsiting Account";
+$lang->admin->register->success    = "You have registered!";
 
 $lang->admin->bind = new stdclass();
 $lang->admin->bind->caption = 'Link Account';
@@ -65,8 +65,8 @@ $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
 
-$lang->admin->safe->modeRuleList[1] = ' upper and lower case, numbers. Length >= 6';
-$lang->admin->safe->modeRuleList[2] = ' upper and lower case, numbers and special characters.  Length >= 10.';
+$lang->admin->safe->modeRuleList[1] = ' >= 6 upper and lower case, numbers';
+$lang->admin->safe->modeRuleList[2] = ' >= 10 upper and lower case, numbers and special characters.';
 
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
 $lang->admin->safe->reasonList['account']  = 'Same as your account';
