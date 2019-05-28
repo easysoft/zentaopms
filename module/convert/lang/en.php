@@ -72,7 +72,7 @@ $lang->convert->bugfree->bugs     = 'Bug';
 $lang->convert->bugfree->cases    = 'Test Case';
 $lang->convert->bugfree->results  = 'Result';
 $lang->convert->bugfree->actions  = 'History';
-$lang->convert->bugfree->files    = 'File';
+$lang->convert->bugfree->files    = 'Files';
 
 $lang->convert->redmine = new stdclass();
 $lang->convert->redmine->users        = 'User';
@@ -88,7 +88,7 @@ $lang->convert->redmine->releases     = 'Release';
 $lang->convert->redmine->builds       = 'Build';
 $lang->convert->redmine->docLibs      = 'Doc Lib';
 $lang->convert->redmine->docs         = 'Doc';
-$lang->convert->redmine->files        = 'File';
+$lang->convert->redmine->files        = 'Files';
 
 $lang->convert->errorFileNotExits  = 'File %s is not found.';
 $lang->convert->errorUserExists    = 'User %s existed.';
