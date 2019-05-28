@@ -227,7 +227,7 @@ $lang->story->action->unlinkchildstory    = array('main' => '$date, unlinked by 
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
 $lang->story->report->select = 'Select Report Type';
-$lang->story->report->create = 'Generate Report';
+$lang->story->report->create = 'Create Report';
 $lang->story->report->value  = 'No. of Reports';
 
 $lang->story->report->charts['storysPerProduct']        = 'Stories of ' . $lang->productCommon;
@@ -269,8 +269,8 @@ $lang->story->report->storysPerPlan->item         = 'Plan';
 $lang->story->report->storysPerStatus->item       = 'Status';
 $lang->story->report->storysPerStage->item        = 'Phase';
 $lang->story->report->storysPerPri->item          = 'Priority';
-$lang->story->report->storysPerOpenedBy->item     = 'Account';
-$lang->story->report->storysPerAssignedTo->item   = 'User';
+$lang->story->report->storysPerOpenedBy->item     = 'Opened By';
+$lang->story->report->storysPerAssignedTo->item   = 'AssignedTo';
 $lang->story->report->storysPerClosedReason->item = 'Reason';
 $lang->story->report->storysPerEstimate->item     = 'Estimates';
 $lang->story->report->storysPerChange->item       = 'Change';
