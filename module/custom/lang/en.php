@@ -107,8 +107,8 @@ $lang->custom->notice->invalidStrlen['thirty']     = 'The key should be <= 30 ch
 $lang->custom->notice->invalidStrlen['twoHundred'] = 'The key should be <= 225 characters.';
 
 $lang->custom->storyReview    = 'Review';
-$lang->custom->forceReview    = 'Review';
-$lang->custom->forceNotReview = 'Need Review';
+$lang->custom->forceReview    = 'Review Required';
+$lang->custom->forceNotReview = 'No Review Required';
 $lang->custom->reviewList[1]  = 'On';
 $lang->custom->reviewList[0]  = 'Off';
 

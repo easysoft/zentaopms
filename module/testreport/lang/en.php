@@ -55,7 +55,7 @@ $lang->testreport->legacyBugs          = 'Legacy Bugs';
 $lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Solution is fixed or postponed / status is solved or closed)';
 $lang->testreport->bugCreateByCaseRate = 'Bug Generated in Case Rate (Bugs reported in cases / New added bugs)';
 
-$lang->testreport->caseSummary    = ' <strong>%s</strong> cases in Total : <strong>%s</strong> performed, <strong>%s</strong> results, <strong>%s</strong> failed.';
+$lang->testreport->caseSummary    = 'Total  <strong>%s</strong> cases: <strong>%s</strong> performed, <strong>%s</strong> results, <strong>%s</strong> failed.';
 $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> build.';
 $lang->testreport->confirmDelete  = 'Do you want to delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';

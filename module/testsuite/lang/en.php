@@ -31,7 +31,7 @@ $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->desc           = 'Description';
 $lang->testsuite->author         = 'Access Control';
-$lang->testsuite->addedBy        = 'Created By';
+$lang->testsuite->addedBy        = 'CreatedBy';
 $lang->testsuite->addedDate      = 'Created';
 
 $lang->testsuite->legendDesc      = 'Description';
