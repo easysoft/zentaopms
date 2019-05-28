@@ -40,7 +40,16 @@
   <div id="dynamics">
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
-    <?php $isToday = date(DT_DATE4) == $date;?>
+    <?php 
+    if($this->app->getClientLang() == 'en')
+    {
+        $isToday = date('M d') == $date;
+    }
+    else
+    {
+        $isToday = date(DT_DATE4) == $date;
+    }
+    ?>
     <div class="dynamic <?php if($isToday) echo 'active';?>">
       <div class="dynamic-date">
         <?php if($isToday):?>
