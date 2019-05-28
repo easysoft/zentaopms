@@ -28,8 +28,8 @@ $lang->todo->delete       = "Delete";
 $lang->todo->import2Today = "Import to Today";
 $lang->todo->import       = "Import";
 $lang->todo->legendBasic  = "Basic Info";
-$lang->todo->cycle        = "Recurrence";
-$lang->todo->cycleConfig  = "Set Recurrence";
+$lang->todo->cycle        = "Recur";
+$lang->todo->cycleConfig  = "Recurrence";
 
 $lang->todo->reasonList['story'] = "Convert to Story";
 $lang->todo->reasonList['task']  = "Convert to Task";
@@ -54,10 +54,10 @@ $lang->todo->private     = 'Private';
 $lang->todo->cycleDay    = 'Day';
 $lang->todo->cycleWeek   = 'Week';
 $lang->todo->cycleMonth  = 'Month';
-$lang->todo->deadline    = 'Deadline';
+$lang->todo->deadline    = 'Expiration';
 
 $lang->todo->every      = 'Every';
-$lang->todo->beforeDays = "%s<span class='input-group-addon'>early in advance to be done</span>";
+$lang->todo->beforeDays = "%s<span class='input-group-addon'>days earlier</span>";
 $lang->todo->dayNames   = array(1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday', 0 => 'Sunday');
 
 $lang->todo->confirmBug   = 'This Todo is linked to Bug #%s. Do you want to edit it?';
