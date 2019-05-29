@@ -97,7 +97,7 @@ $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 
 $lang->todo->periods['all']        = 'All Todos';
 $lang->todo->periods['thisYear']   = 'ThisYear';
-$lang->todo->periods['future']     = 'Waiting';
+$lang->todo->periods['future']     = 'TBD';
 $lang->todo->periods['before']     = 'Unfinished';
 $lang->todo->periods['cycle']      = 'Recurrence';
 
