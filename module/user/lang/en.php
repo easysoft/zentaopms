@@ -45,6 +45,7 @@ $lang->user->last        = 'Last Login';
 $lang->user->ranzhi      = 'Zdoo Account';
 $lang->user->ditto       = 'Ditto';
 $lang->user->originalPassword = 'Password';
+$lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
 
