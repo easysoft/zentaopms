@@ -173,7 +173,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <p>
         <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
         <?php if(common::hasPriv('bug', 'create')):?>
-        <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
