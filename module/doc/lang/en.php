@@ -65,7 +65,7 @@ $lang->doc->myCollection   = 'My Favorites';
 
 /* 方法列表。*/
 $lang->doc->index            = 'Doc Home';
-$lang->doc->create           = 'Add Document';
+$lang->doc->create           = 'Create Document';
 $lang->doc->edit             = 'Edit';
 $lang->doc->delete           = 'Delete';
 $lang->doc->browse           = 'List';
@@ -84,7 +84,7 @@ $lang->doc->deleteFile       = 'Delete File';
 $lang->doc->libName        = 'Document Library';
 $lang->doc->libType        = 'Category';
 $lang->doc->custom         = 'Custom Document Library';
-$lang->doc->customAB       = 'Custom Document Library';
+$lang->doc->customAB       = 'Custom Doc Lib';
 $lang->doc->createLib      = 'Create Document Library';
 $lang->doc->allLibs        = 'Libraries';
 $lang->doc->objectLibs     = "{$lang->productCommon}/{$lang->projectCommon} Libraries";
@@ -191,7 +191,7 @@ $lang->doclib->name    = 'Name';
 $lang->doclib->control = 'ACL';
 $lang->doclib->group   = 'Group';
 $lang->doclib->user    = 'User';
-$lang->doclib->files   = 'Files';
+$lang->doclib->files   = 'Attachments';
 $lang->doclib->all     = 'All Libraries';
 $lang->doclib->select  = 'Select';
 $lang->doclib->project = $lang->projectCommon . ' Library';

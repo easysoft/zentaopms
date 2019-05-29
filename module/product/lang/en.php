@@ -22,11 +22,11 @@ $lang->product->deleted     = 'Deleted';
 $lang->product->close       = 'Close';
 $lang->product->select      = "Select {$lang->productCommon}";
 $lang->product->mine        = 'My:';
-$lang->product->other       = 'Other:';
+$lang->product->other       = 'Others';
 $lang->product->closed      = 'Closed';
 $lang->product->updateOrder = 'Order';
 $lang->product->all         = "All {$lang->productCommon}s";
-$lang->product->export      = 'Export Data';
+$lang->product->export      = 'Export';
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';

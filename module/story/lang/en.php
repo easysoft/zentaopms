@@ -138,7 +138,7 @@ $lang->story->reasonList['bydesign']   = 'As Design';
 $lang->story->reviewResultList['']        = '';
 $lang->story->reviewResultList['pass']    = 'Pass';
 $lang->story->reviewResultList['revert']  = 'Revert';
-$lang->story->reviewResultList['clarify'] = 'To be clarified';
+$lang->story->reviewResultList['clarify'] = 'To Be Clarified';
 $lang->story->reviewResultList['reject']  = 'Reject';
 
 $lang->story->reviewList[0] = 'No';

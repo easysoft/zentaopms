@@ -175,7 +175,7 @@ $lang->testcase->stageList['bvt']        = 'BVT Test';
 
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = 'Pass';
-$lang->testcase->reviewResultList['clarify'] = 'Clarify';
+$lang->testcase->reviewResultList['clarify'] = 'To Be Clarified';
 
 $lang->testcase->statusList['']            = '';
 $lang->testcase->statusList['wait']        = 'Waiting';
