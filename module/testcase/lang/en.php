@@ -39,7 +39,7 @@ $lang->testcase->reviewResult     = 'Review Result';
 $lang->testcase->reviewedByAB     = 'By';
 $lang->testcase->reviewedDateAB   = 'Date';
 $lang->testcase->reviewResultAB   = 'Result';
-$lang->testcase->forceNotReview   = 'Need Review';
+$lang->testcase->forceNotReview   = 'No Review Required';
 $lang->testcase->lastEditedByAB   = 'EditedBy';
 $lang->testcase->lastEditedDateAB = 'Edited';
 $lang->testcase->lastEditedDate   = 'Edited';
@@ -66,7 +66,7 @@ $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
 $lang->testcase->sync             = 'Sync. Case';
 $lang->testcase->ignore           = 'Ignore';
-$lang->testcase->fromTesttask     = 'From Test';
+$lang->testcase->fromTesttask     = 'From Test Request';
 $lang->testcase->fromCaselib      = 'From CaseLib';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 

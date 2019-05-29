@@ -34,7 +34,7 @@ $lang->block->dynamic      = 'Dynamics';
 $lang->block->assignToMe   = 'AssignedToMe';
 $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
-$lang->block->lblTesttask  = 'Testing Detail';
+$lang->block->lblTesttask  = 'Request Detail';
 
 $lang->block->leftToday = 'Remaining Work';
 $lang->block->myTask    = 'My Tasks';
@@ -243,7 +243,7 @@ $lang->block->availableBlocks->project  = $lang->projectCommon . 'List';
 $lang->block->availableBlocks->plan     = 'Plans';
 $lang->block->availableBlocks->release  = 'Releases';
 $lang->block->availableBlocks->build    = 'Builds';
-$lang->block->availableBlocks->testtask = 'Tests';
+$lang->block->availableBlocks->testtask = 'Requests';
 
 $lang->block->moduleList['product'] = $lang->productCommon;
 $lang->block->moduleList['project'] = $lang->projectCommon;

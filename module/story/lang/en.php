@@ -126,13 +126,13 @@ $lang->story->stageList['released']   = 'Released';
 $lang->story->stageList['closed']     = 'Closed';
 
 $lang->story->reasonList['']           = '';
-$lang->story->reasonList['done']       = 'Done';
+$lang->story->reasonList['done']       = 'Already Done';
 $lang->story->reasonList['subdivided'] = 'Decomposed';
 $lang->story->reasonList['duplicate']  = 'Duplicated';
 $lang->story->reasonList['postponed']  = 'Postponed';
-$lang->story->reasonList['willnotdo']  = "Ignore";
+$lang->story->reasonList['willnotdo']  = "Won't Do";
 $lang->story->reasonList['cancel']     = 'Cancelled';
-$lang->story->reasonList['bydesign']   = 'By Design';
+$lang->story->reasonList['bydesign']   = 'As Design';
 //$lang->story->reasonList['isbug']      = 'Bug!';
 
 $lang->story->reviewResultList['']        = '';
@@ -192,7 +192,7 @@ $lang->story->affectedBugs         = 'Bug';
 $lang->story->affectedCases        = 'Case';
 
 $lang->story->specTemplate          = "As a < type of user >, I want < some goal > so that < some reason >.";
-$lang->story->needNotReview         = 'No Review';
+$lang->story->needNotReview         = 'No Review Required';
 $lang->story->successSaved          = "Story is saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
 $lang->story->errorEmptyChildStory  = '『Subdivide Story』canot be blank.';

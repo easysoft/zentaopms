@@ -44,7 +44,7 @@ $lang->report->workload         = 'Team Workload';
 $lang->report->workloadAB       = 'Workload';
 $lang->report->bugOpenedDate    = 'Bug reported from';
 $lang->report->beginAndEnd      = ' From';
-$lang->report->dept             = 'Dept';
+$lang->report->dept             = 'Department';
 $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|report|projectdeviation';
@@ -88,7 +88,7 @@ $lang->report->idAB  = 'ID';
 $lang->report->bugTitle     = 'Bug Name';
 $lang->report->taskName     = 'Task Name';
 $lang->report->todoName     = 'Todo Name';
-$lang->report->testTaskName = 'Test Name';
+$lang->report->testTaskName = 'Request Name';
 $lang->report->deadline     = 'Deadline';
 
 $lang->report->mailTitle           = new stdclass();
@@ -96,7 +96,7 @@ $lang->report->mailTitle->begin    = 'Notice: You have';
 $lang->report->mailTitle->bug      = " Bug (%s),";
 $lang->report->mailTitle->task     = " Task (%s),";
 $lang->report->mailTitle->todo     = " Todo (%s),";
-$lang->report->mailTitle->testTask = " Test (%s),";
+$lang->report->mailTitle->testTask = " Request (%s),";
 
 $lang->report->proVersion   = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
 $lang->report->proVersionEn = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';

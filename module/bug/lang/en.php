@@ -36,10 +36,10 @@ $lang->bug->activatedDate    = 'Active';
 $lang->bug->confirmed        = 'Confirmed';
 $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
-$lang->bug->mailto           = 'Mail To';
-$lang->bug->openedBy         = 'CreatedBy';
-$lang->bug->openedDate       = 'Created';
-$lang->bug->openedDateAB     = 'Created';
+$lang->bug->mailto           = 'Mailto';
+$lang->bug->openedBy         = 'ReportedBy';
+$lang->bug->openedDate       = 'Reported';
+$lang->bug->openedDateAB     = 'Reported';
 $lang->bug->openedBuild      = 'Open Build';
 $lang->bug->assignedTo       = 'To';
 $lang->bug->assignBug        = 'AssignedTo';
@@ -54,17 +54,17 @@ $lang->bug->resolvedDate     = 'Solved';
 $lang->bug->resolvedDateAB   = 'Solved';
 $lang->bug->deadline         = 'Deadline';
 $lang->bug->plan             = 'Plan';
-$lang->bug->closedBy         = 'Closed By';
+$lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'Closed';
 $lang->bug->duplicateBug     = 'Duplicated Bug ID';
-$lang->bug->lastEditedBy     = 'Edited By';
+$lang->bug->lastEditedBy     = 'EditedBy';
 $lang->bug->linkBug          = 'Linked Bug';
 $lang->bug->linkBugs         = 'Link Bug';
 $lang->bug->unlinkBug        = 'Unlink';
 $lang->bug->case             = 'Case';
 $lang->bug->files            = 'Files';
 $lang->bug->keywords         = 'Tags';
-$lang->bug->lastEditedByAB   = 'Edited By';
+$lang->bug->lastEditedByAB   = 'EditedBy';
 $lang->bug->lastEditedDateAB = 'Edited';
 $lang->bug->lastEditedDate   = 'Edited';
 $lang->bug->fromCase         = 'From Case';
@@ -101,7 +101,7 @@ $lang->bug->search             = 'Search';
 
 /* 查询条件列表。*/
 $lang->bug->assignToMe         = 'AssignedToMe';
-$lang->bug->openedByMe         = 'CreatedByMe';
+$lang->bug->openedByMe         = 'ReportedByMe';
 $lang->bug->resolvedByMe       = 'SolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
@@ -112,7 +112,7 @@ $lang->bug->unconfirmed        = 'Unconfirm';
 $lang->bug->longLifeBugs       = 'Stalled';
 $lang->bug->postponedBugs      = 'Postponed';
 $lang->bug->overdueBugs        = 'Overdue';
-$lang->bug->allBugs            = 'All';
+$lang->bug->allBugs            = 'All Bugs';
 $lang->bug->byQuery            = 'Search';
 $lang->bug->needConfirm        = 'Story Changed';
 $lang->bug->allProduct         = 'All' . $lang->productCommon . 's';
@@ -122,7 +122,7 @@ $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
 $lang->bug->yesterdayClosed    = 'Bug Closed Yesterday ';
 
 $lang->bug->assignToMeAB   = 'AssignedToMe';
-$lang->bug->openedByMeAB   = 'CreatedByMe';
+$lang->bug->openedByMeAB   = 'ReportedByMe';
 $lang->bug->resolvedByMeAB = 'SolvedByMe';
 
 $lang->bug->ditto        = 'Ditto';
@@ -134,9 +134,9 @@ $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'AssignedTo';
-$lang->bug->lblMailto     = 'Mail To';
+$lang->bug->lblMailto     = 'Mailto';
 $lang->bug->lblLastEdited = 'Last Edited';
-$lang->bug->lblResolved   = 'Solved By';
+$lang->bug->lblResolved   = 'SolvedBy';
 $lang->bug->allUsers      = 'All Users';
 $lang->bug->allBuilds     = 'All Builds';
 $lang->bug->createBuild   = 'New';
@@ -226,17 +226,17 @@ $lang->bug->browserList['uc']       = 'UC';
 $lang->bug->browserList['other']    = 'Other';
 
 $lang->bug->typeList['']             = '';
-$lang->bug->typeList['codeerror']    = 'Code Error';
+$lang->bug->typeList['codeerror']    = 'CodeError';
 $lang->bug->typeList['interface']    = 'Interface';
 $lang->bug->typeList['config']       = 'Configuration';
 $lang->bug->typeList['install']      = 'Installation';
 $lang->bug->typeList['security']     = 'Security';
 $lang->bug->typeList['performance']  = 'Performance';
-$lang->bug->typeList['standard']     = 'Code Standard';
-$lang->bug->typeList['automation']   = 'Automation';
-$lang->bug->typeList['designchange'] = 'Design Change';
-$lang->bug->typeList['newfeature']   = 'New Feature';
-$lang->bug->typeList['designdefect'] = 'Design Defect';
+$lang->bug->typeList['standard']     = 'CodingConventions';
+$lang->bug->typeList['automation']   = 'TestScript';
+$lang->bug->typeList['designchange'] = 'DesignChange';
+$lang->bug->typeList['newfeature']   = 'NewFeature';
+$lang->bug->typeList['designdefect'] = 'DesignDefect';
 $lang->bug->typeList['trackthings']  = 'Tracking';
 $lang->bug->typeList['others']       = 'Other';
 
@@ -254,8 +254,8 @@ $lang->bug->resolutionList['duplicate']  = 'Duplicated';
 $lang->bug->resolutionList['external']   = 'External';
 $lang->bug->resolutionList['fixed']      = 'Solved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
-$lang->bug->resolutionList['postponed']  = 'Postpone';
-$lang->bug->resolutionList['willnotfix'] = "Ignore";
+$lang->bug->resolutionList['postponed']  = 'Postponed';
+$lang->bug->resolutionList['willnotfix'] = "Won't Fix";
 $lang->bug->resolutionList['tostory']    = 'Convert to Story';
 
 /* 统计报表。*/

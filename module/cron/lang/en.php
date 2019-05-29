@@ -9,7 +9,7 @@ $lang->cron->toggle      = 'Activate/Deactivate';
 $lang->cron->turnon      = 'On/Off';
 $lang->cron->openProcess = 'Restart';
 
-$lang->cron->m        = 'Min';
+$lang->cron->m        = 'Minute';
 $lang->cron->h        = 'Hour';
 $lang->cron->dom      = 'Day';
 $lang->cron->mon      = 'Month';

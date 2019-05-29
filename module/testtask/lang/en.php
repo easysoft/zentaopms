@@ -9,13 +9,13 @@
  * @version     $Id: en.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testtask->index            = "Home";
-$lang->testtask->create           = "Submit Test Request";
+$lang->testtask->index            = "Request Home";
+$lang->testtask->create           = "Submit Request";
 $lang->testtask->reportChart      = 'Report';
 $lang->testtask->delete           = "Delete";
 $lang->testtask->view             = "Overview";
 $lang->testtask->edit             = "Edit";
-$lang->testtask->browse           = "Test";
+$lang->testtask->browse           = "Test Request";
 $lang->testtask->linkCase         = "Link Case";
 $lang->testtask->selectVersion    = "Select Version";
 $lang->testtask->unlinkCase       = "Unlink";
@@ -40,12 +40,12 @@ $lang->testtask->blocked          = "Blocked";
 $lang->testtask->done             = "Tested";
 $lang->testtask->totalStatus      = "All";
 $lang->testtask->all              = "All " . $lang->productCommon . "s";  
-$lang->testtask->allTasks         = 'All Tests';
+$lang->testtask->allTasks         = 'All Requests';
 $lang->testtask->collapseAll      = 'Collapse';
 $lang->testtask->expandAll        = 'Expand';
 
 $lang->testtask->id             = 'ID';
-$lang->testtask->common         = 'Test';
+$lang->testtask->common         = 'Request';
 $lang->testtask->product        = $lang->productCommon;
 $lang->testtask->project        = $lang->projectCommon;
 $lang->testtask->build          = 'Build';
@@ -98,14 +98,14 @@ $lang->testtask->linkBySuite   = 'Link by Suite';
 $lang->testtask->passAll       = 'Pass All';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Failed';
-$lang->testtask->showResult    = 'Executed <span class="text-info">%s</span> times';
+$lang->testtask->showResult    = 'Run <span class="text-info">%s</span> times';
 $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> times';
 
 $lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this case?';
 $lang->testtask->noticeNoOther     = 'There are no test requests for this product';
-$lang->testtask->noTesttask        = 'No tests. ';
-$lang->testtask->checkLinked       = "Please check whether the product that the test is linked to has been linked to a project.";
+$lang->testtask->noTesttask        = 'No requests. ';
+$lang->testtask->checkLinked       = "Please check whether the product that the test request is linked to has been linked to a project.";
 
 $lang->testtask->assignedToMe  = 'AssignedToMe';
 $lang->testtask->allCases      = 'All Cases';
@@ -123,16 +123,16 @@ $lang->testtask->mail = new stdclass();
 $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
 $lang->testtask->mail->close  = new stdclass();
-$lang->testtask->mail->create->title = "%s created test #%s:%s";
-$lang->testtask->mail->edit->title   = "%s finished test #%s:%s";
-$lang->testtask->mail->close->title  = "%s closed test #%s:%s";
+$lang->testtask->mail->create->title = "%s created test request #%s:%s";
+$lang->testtask->mail->edit->title   = "%s finished test request #%s:%s";
+$lang->testtask->mail->close->title  = "%s closed test request #%s:%s";
 
 $lang->testtask->action = new stdclass();
-$lang->testtask->action->testtaskopened  = '$date,  <strong>$actor</strong> submitted test <strong>$extra</strong>.' . "\n";
-$lang->testtask->action->testtaskstarted = '$date,  <strong>$actor</strong> started test <strong>$extra</strong>.' . "\n";
-$lang->testtask->action->testtaskclosed  = '$date,  <strong>$actor</strong> completed test<strong>$extra</strong>.' . "\n";
+$lang->testtask->action->testtaskopened  = '$date,  <strong>$actor</strong> submitted Test Request<strong>$extra</strong>.' . "\n";
+$lang->testtask->action->testtaskstarted = '$date,  <strong>$actor</strong> started Test Request<strong>$extra</strong>.' . "\n";
+$lang->testtask->action->testtaskclosed  = '$date,  <strong>$actor</strong> completed Test Request<strong>$extra</strong>.' . "\n";
 
-$lang->testtask->unexecuted = 'Not performed';
+$lang->testtask->unexecuted = 'Pending';
 
 /* 统计报表。*/
 $lang->testtask->report = new stdclass();
@@ -146,8 +146,8 @@ $lang->testtask->report->charts['testTaskPerModule']    = 'Module Report';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'RunBy Report';
 $lang->testtask->report->charts['bugSeverityGroups']    = 'Bug Severity Distribution';
 $lang->testtask->report->charts['bugStatusGroups']      = 'Bug Status Distribution';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug CreateBy Distribution';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug SolveBy Distribution';
+$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug ReportedBy Distribution';
+$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug SolvedBy Distribution';
 $lang->testtask->report->charts['bugResolutionGroups']  = 'Bug Solution Distribution';
 $lang->testtask->report->charts['bugModuleGroups']      = 'Bug Module Distribution';
 
