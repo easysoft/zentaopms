@@ -104,7 +104,7 @@ $lang->product->typeList['platform'] = '多平台';
 
 $lang->product->typeTips = array();
 $lang->product->typeTips['branch']   = '(适用于客户定制场景)';
-$lang->product->typeTips['platform'] = '(适用于跨平台应用开发，比如ios、安卓、pc端等)';
+$lang->product->typeTips['platform'] = '(适用于跨平台应用开发，比如IOS、安卓、PC端等)';
 
 $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = '分支';
