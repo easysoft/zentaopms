@@ -36,6 +36,7 @@ $lang->task->reportChart         = "报表统计";
 $lang->task->fromBug             = '来源Bug';
 $lang->task->case                = '相关用例';
 $lang->task->confirmStoryChange  = "确认需求变动";
+$lang->task->storyChange         = "需求变更";
 $lang->task->progress            = '进度';
 $lang->task->progressTips        = '已消耗/(已消耗+剩余)';
 $lang->task->copy                = '复制任务';

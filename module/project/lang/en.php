@@ -310,7 +310,7 @@ $lang->project->featureBar['task']['unclosed']     = $lang->project->unclosed;
 $lang->project->featureBar['task']['assignedtome'] = $lang->project->assignedToMe;
 $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
-$lang->project->featureBar['task']['needconfirm']  = 'StoryChanged';
+$lang->project->featureBar['task']['needconfirm']  = 'Changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
 $lang->project->treeLevel = array();
