@@ -6,3 +6,5 @@
 .dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
 .dropdown-list > li > a:hover,
 .dropdown-list > li > a:focus {color: #1a4f85;text-decoration: none;background-color: #ddd;}
+
+.btn-toolbar .nav-title{float:left; display:inline-block; padding: 6px 12px; margin-bottom: 0; font-size: 13px; font-weight: bolder; line-height: 18px; text-align: center; white-space: nowrap; vertical-align: middle;}
