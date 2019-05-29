@@ -36,7 +36,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->project->noMembers;?></span>
       <?php if((!empty($app->user->admin) or empty($app->user->rights['rights']['my']['limited'])) && common::hasPriv('project', 'manageMembers')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('project', 'manageMembers', "projectID=$project->id"), "<i class='icon icon-persons'></i> " . $lang->project->manageMembers, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

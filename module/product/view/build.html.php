@@ -26,7 +26,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->build->noBuild;?></span>
       <?php if(common::hasPriv('build', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('build', 'create', "productID=$product->id"), "<i class='icon icon-plus'></i> " . $lang->build->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

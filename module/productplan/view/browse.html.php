@@ -33,7 +33,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
       <?php if(common::hasPriv('productplan', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

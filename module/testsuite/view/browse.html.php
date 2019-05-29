@@ -32,7 +32,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->testsuite->noTestsuite;?></span>
       <?php if(common::hasPriv('testsuite', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('testsuite', 'create', "product=$productID"), "<i class='icon icon-plus'></i> " . $lang->testsuite->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

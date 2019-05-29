@@ -46,7 +46,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->my->noTodo;?></span>
       <?php if(common::hasPriv('todo', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('todo', 'create'), "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

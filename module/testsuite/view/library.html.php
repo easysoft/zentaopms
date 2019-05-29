@@ -87,7 +87,6 @@ js::set('flow',          $config->global->flow);
       <p>
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
         <?php if(common::hasPriv('testsuite', 'createCase')):?>
-        <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('testsuite', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
