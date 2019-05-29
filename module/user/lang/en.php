@@ -139,9 +139,6 @@ $lang->user->personalData['finishedTask'] = 'Tasks Finished';
 $lang->user->personalData['resolvedBug']  = 'Bugs Solved';
 $lang->user->personalData['createdCase']  = 'Cases Created';
 
-$lang->user->statusList['active'] = 'Activated';
-$lang->user->statusList['delete'] = 'Deleted';
-
 $lang->user->keepLogin['on']      = 'Keep Login';
 $lang->user->loginWithDemoUser    = 'Login as Demo User:';
 
