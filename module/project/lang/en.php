@@ -139,7 +139,7 @@ $lang->project->manageMembers     = 'Manage Team';
 $lang->project->unlinkMember      = 'Remove Member';
 $lang->project->unlinkStory       = 'Unlink Story';
 $lang->project->batchUnlinkStory  = 'Batch Unlink Stories';
-$lang->project->importTask        = 'Import Task';
+$lang->project->importTask        = 'Transfer Task';
 $lang->project->importPlanStories = 'Link Story From Plan';
 $lang->project->importBug         = 'Import Bug';
 $lang->project->updateOrder       = 'Rank';
@@ -281,12 +281,12 @@ $lang->project->orderList['stage_asc']  = "Story Phase ASC";
 $lang->project->orderList['stage_desc'] = "Story Phase DESC";
 
 $lang->project->kanban        = "Kanban";
-$lang->project->kanbanSetting = "Kanban Settings";
-$lang->project->resetKanban   = "Reset Settings";
-$lang->project->printKanban   = "Print Kanban";
+$lang->project->kanbanSetting = "Settings";
+$lang->project->resetKanban   = "Reset";
+$lang->project->printKanban   = "Print";
 $lang->project->bugList       = "Bugs";
 
-$lang->project->kanbanHideCols   = 'Hide closed and cancelled columns in Kanban';
+$lang->project->kanbanHideCols   = 'Closed and Cancelled columns';
 $lang->project->kanbanShowOption = 'Unfold';
 $lang->project->kanbanColsColor  = 'Customize column color';
 

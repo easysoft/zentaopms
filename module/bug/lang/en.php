@@ -57,7 +57,7 @@ $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'Closed';
 $lang->bug->duplicateBug     = 'Duplicated Bug ID';
-$lang->bug->lastEditedBy     = 'EditedBy';
+$lang->bug->lastEditedBy     = 'ModifiedBy';
 $lang->bug->linkBug          = 'Linked Bug';
 $lang->bug->linkBugs         = 'Link Bug';
 $lang->bug->unlinkBug        = 'Unlink';
@@ -135,7 +135,7 @@ $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'AssignedTo';
 $lang->bug->lblMailto     = 'Mailto';
-$lang->bug->lblLastEdited = 'Last Edited';
+$lang->bug->lblLastEdited = 'ModifiedBy';
 $lang->bug->lblResolved   = 'SolvedBy';
 $lang->bug->allUsers      = 'All Users';
 $lang->bug->allBuilds     = 'All Builds';
@@ -157,7 +157,7 @@ $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
-$lang->bug->summary               = "Bugs on this page : <strong>%s</strong> Total, <strong>%s</strong> Unsolved.";
+$lang->bug->summary               = "Bugs on this page: Total <strong>%s</strong>, Unsolved <strong>%s</strong>.";
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, Stories and Tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->remindTask            = 'This Bug has been converted to Task. Do you want to update the Status of Task(ID %s)?';

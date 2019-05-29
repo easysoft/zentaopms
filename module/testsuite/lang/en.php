@@ -30,14 +30,14 @@ $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->desc           = 'Description';
-$lang->testsuite->author         = 'Access Control';
+$lang->testsuite->author         = 'ACL';
 $lang->testsuite->addedBy        = 'CreatedBy';
 $lang->testsuite->addedDate      = 'Created';
 
 $lang->testsuite->legendDesc      = 'Description';
 $lang->testsuite->legendBasicInfo = 'Basic Info';
 
-$lang->testsuite->unlinkedCases = 'Unlinked Case';
+$lang->testsuite->unlinkedCases = 'Unlinked Cases';
 
 $lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
 $lang->testsuite->libraryDelete     = 'Do you want to delete this library？';
@@ -53,7 +53,7 @@ $lang->testsuite->authorList['private'] = 'Private';
 $lang->testsuite->authorList['public']  = 'Public';
 
 $lang->caselib->common = 'Case Library';
-$lang->caselib->all    = 'All CaseLib';
+$lang->caselib->all    = 'All Case Libraries';
 
 $lang->testsuite->createLib  = 'Create Library';
 $lang->testsuite->editLib    = 'Edit';
