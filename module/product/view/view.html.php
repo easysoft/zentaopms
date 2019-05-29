@@ -31,14 +31,14 @@
                 <?php if(isset($plan->begin)):?>
                 <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
                   <a href="<?php echo $this->createLink('productplan', 'view', "planID={$plan->id}");?>">
-                    <span class="title"><?php echo $plan->title;?></span>
+                    <span class="title" title='<?php echo $plan->title;?>'><?php echo $plan->title;?></span>
                     <span class="date"><?php echo $plan->begin;?></span>
                   </a>
                 </li>
                 <?php else:?>
                 <li>
                   <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
-                    <span class="title"><?php echo $plan->name;?></span>
+                    <span class="title" title='<?php echo $plan->name;?>'><?php echo $plan->name;?></span>
                     <span class="date"><?php echo $plan->date;?></span>
                   </a>
                 </li>

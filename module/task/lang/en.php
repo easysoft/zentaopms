@@ -36,6 +36,7 @@ $lang->task->reportChart         = "Report Chart";
 $lang->task->fromBug             = 'From Bug';
 $lang->task->case                = 'Linked Case';
 $lang->task->confirmStoryChange  = "Confirm Change";
+$lang->task->storyChange         = "Story Changed";
 $lang->task->progress            = '%';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
 $lang->task->copy                = 'Copy Task';

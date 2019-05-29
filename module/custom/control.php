@@ -43,6 +43,7 @@ class custom extends control
 
         if($module == 'bug' and $field == 'typeList')
         {
+            unset($fieldList['interface']);
             unset($fieldList['designchange']);
             unset($fieldList['newfeature']);
             unset($fieldList['trackthings']);

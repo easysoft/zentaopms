@@ -84,7 +84,8 @@ js::set('browseType', $browseType);
             $label   = "<span class='text'>{$menuItem->text}</span>";
             $label  .= $menuType == $browseType ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : '';
             $active  = $menuType == $browseType ? 'btn-active-text' : '';
-            echo html::a(inlink('task', "project=$projectID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active'");
+            $title   = $menuType == 'needconfirm' ? "title='{$lang->task->storyChange}'" : '';
+            echo html::a(inlink('task', "project=$projectID&type=$menuType"), $label, '', "id='{$menuType}' class='btn btn-link $active' $title");
         }
         elseif($menuType == 'status')
         {
