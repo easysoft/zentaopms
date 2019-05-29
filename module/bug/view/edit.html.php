@@ -128,6 +128,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                      * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
                      * These thress types if upgrade from bugfree2.x.
                      */
+                    if($bug->type != 'interface')    unset($lang->bug->typeList['interface']);
                     if($bug->type != 'designchange') unset($lang->bug->typeList['designchange']);
                     if($bug->type != 'newfeature')   unset($lang->bug->typeList['newfeature']);
                     if($bug->type != 'trackthings')  unset($lang->bug->typeList['trackthings']);

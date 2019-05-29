@@ -87,6 +87,7 @@
            * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
            * These thress types if upgrade from bugfree2.x.
            */
+          if($bug->type != 'interface')    unset($typeList['interface']);
           if($bug->type != 'designchange') unset($typeList['designchange']);
           if($bug->type != 'newfeature')   unset($typeList['newfeature']);
           if($bug->type != 'trackthings')  unset($typeList['trackthings']);

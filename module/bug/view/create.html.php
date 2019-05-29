@@ -71,6 +71,7 @@ js::set('flow', $config->global->flow);
               <div class='input-group' id='bugTypeInputGroup'>
                 <?php
                 /* Remove the unused types. */
+                unset($lang->bug->typeList['interface']);
                 unset($lang->bug->typeList['designchange']);
                 unset($lang->bug->typeList['newfeature']);
                 unset($lang->bug->typeList['trackthings']);
@@ -126,6 +127,7 @@ js::set('flow', $config->global->flow);
               <div class='input-group' id='bugTypeInputGroup'>
                 <?php
                 /* Remove the unused types. */
+                unset($lang->bug->typeList['interface']);
                 unset($lang->bug->typeList['designchange']);
                 unset($lang->bug->typeList['newfeature']);
                 unset($lang->bug->typeList['trackthings']);

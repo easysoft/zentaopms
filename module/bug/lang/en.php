@@ -234,11 +234,11 @@ $lang->bug->typeList['security']     = 'Security';
 $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Code Standard';
 $lang->bug->typeList['automation']   = 'Automation';
-$lang->bug->typeList['others']       = 'Other';
 $lang->bug->typeList['designchange'] = 'Design Change';
 $lang->bug->typeList['newfeature']   = 'New Feature';
 $lang->bug->typeList['designdefect'] = 'Design Defect';
 $lang->bug->typeList['trackthings']  = 'Tracking';
+$lang->bug->typeList['others']       = 'Other';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
