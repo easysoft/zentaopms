@@ -49,7 +49,6 @@ $account = $this->app->user->account;
     <p>
       <span class="text-muted"><?php echo $lang->story->noStory;?></span>
       <?php if(common::hasPriv('project', 'linkStory')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

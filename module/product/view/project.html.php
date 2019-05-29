@@ -21,7 +21,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->project->noProject;?></span>
       <?php if(common::hasPriv('project', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('project', 'create'), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
