@@ -12,6 +12,8 @@
 .main-table .table{cursor:pointer;}
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th{background:none;}
 
+#pageNav .btn-group.angle-btn{margin-right:10px !important;}
+
 #dropMenu.show-right-col{width:502px;max-width:520px;}
 #dropMenu.has-search-text{width:250px;max-width:260px;}
 #dropMenu.has-search-text .col-right{margin-left:0px;}
