@@ -92,6 +92,7 @@ $lang->product->willClose    = 'ToBeClosed';
 $lang->product->closedStory  = 'Closed';
 $lang->product->unclosed     = 'Open';
 $lang->product->unplan       = 'Unplanned';
+$lang->product->viewByUser   = 'By User';
 
 $lang->product->allStory             = 'All ';
 $lang->product->allProduct           = 'All';

@@ -25,8 +25,22 @@
     echo html::a(inlink('dynamic', "productID=$productID&type=$period"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
-    <div class="input-control space w-150px">
-      <?php echo html::select('account', $users, $account, "onchange='changeUser(this.value, $productID)' class='form-control chosen'");?>
+    <div class="btn-group">
+      <?php 
+      $active  = $param ? 'btn-active-text' : '';
+      $current = $param ? zget($users, $param, $param) : $lang->product->viewByUser;
+      $current = "<span class='text'>" . $current . '</span>' . ' <span class="caret"></span>';
+      ?>
+      <?php echo html::a($this->createLink('product', 'dynamic', "productID=$productID&type=all"), $current, '', "class='btn btn-link $active' data-toggle='dropdown'");?>
+      <ul class='dropdown-menu'>
+        <?php 
+        foreach($users as $account => $name)
+        {
+            if(!$account) continue;
+            echo '<li>' . html::a($this->createLink('product', 'dynamic', "productID=$productID&type=account&param=$account"), $name) .  '</li>';
+        }
+        ?>
+      </ul>
     </div>
   </div>
 </div>
