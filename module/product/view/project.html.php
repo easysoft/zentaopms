@@ -12,7 +12,8 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->desc;?></span></span>
+    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->project;?></span></span>
+    <span class="label label-info"><?php echo $lang->product->projectInfo;?></span>
   </div>
 </div>
 <div id="mainContent">
