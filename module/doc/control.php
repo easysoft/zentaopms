@@ -114,9 +114,11 @@ class doc extends control
             $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
         }
-
-        $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
-        $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
+        else
+        {
+            $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
+            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
+        }
         $this->session->set('docList', $this->app->getURI(true));
 
         /* Set header and position. */
