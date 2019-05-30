@@ -115,4 +115,16 @@ class search extends control
         }
         die($html);
     }
+
+    /**
+     * Ajax remove from menu.
+     * 
+     * @param  int    $queryID 
+     * @access public
+     * @return void
+     */
+    public function ajaxRemoveMenu($queryID)
+    {
+        $this->dao->update(TABLE_USERQUERY)->set('shortcut')->eq(0)->where('id')->eq($queryID)->exec();
+    }
 }

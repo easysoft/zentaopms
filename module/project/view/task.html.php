@@ -55,29 +55,9 @@ js::set('browseType', $browseType);
         $menuType = $menuItem->name;
         if($menuType == 'QUERY')
         {
-            if(isset($lang->custom->queryList))
-            {
-                echo "<div class='btn-group' id='query'>";
-                $current      = $menuItem->text;
-                $active       = '';
-                $dropdownHtml = "<ul class='dropdown-menu'>";
-                foreach($lang->custom->queryList as $queryID => $queryTitle)
-                {
-                    if($this->session->taskBrowseType == 'bysearch' and $queryID == $param)
-                    {
-                        $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                        $active  = 'btn-active-text';
-                    }
-
-                    $dropdownHtml .= '<li' . ($queryID == $param ? " class='active'" : '') . '>';
-                    $dropdownHtml .= html::a($this->createLink('project', 'task', "project=$projectID&type=bySearch&param=$queryID"), $queryTitle);
-                }
-                $dropdownHtml .= '</ul>';
-
-                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
-                echo $dropdownHtml;
-                echo '</div>';
-            }
+            $searchBrowseLink = $this->createLink('project', 'task', "project=$projectID&type=bySearch&param=%s");
+            $isBySearch       = $this->session->taskBrowseType == 'bysearch';
+            include '../../common/view/querymenu.html.php';
         }
         elseif($menuType != 'status' and $menuType != 'QUERY')
         {
