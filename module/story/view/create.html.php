@@ -73,7 +73,7 @@
               </div>
             </td>
             <?php if(strpos(",$showFields,", ',source,') !== false):?>
-            <td colspan="2">
+            <td colspan="2" class='sourceTd'>
               <div class="input-group">
                 <div class="input-group">
                   <div class="input-group-addon"><?php echo $lang->story->source;?></div>
