@@ -22,7 +22,7 @@ $lang->product->deleted     = 'Deleted';
 $lang->product->close       = 'Close';
 $lang->product->select      = "Select {$lang->productCommon}";
 $lang->product->mine        = 'My:';
-$lang->product->other       = 'Others';
+$lang->product->other       = 'Others:';
 $lang->product->closed      = 'Closed';
 $lang->product->updateOrder = 'Order';
 $lang->product->all         = "All {$lang->productCommon}s";
@@ -118,9 +118,9 @@ $lang->product->aclList['open']    = "Default (Users with privileges to {$lang->
 $lang->product->aclList['private'] = "Private {$lang->productCommon} ({$lang->projectCommon} team members only)";
 $lang->product->aclList['custom']  = 'Custom (Team members and Whitelist members can access it.)';
 
-$lang->product->storySummary   = " <strong>%s</strong> Stories, <strong>%s</strong> Estimates, and Case Coverage is <strong>%s</strong> on this page.";
-$lang->product->checkedSummary = " <strong>%total%</strong> Checked, <strong>%estimate%</strong> Estimates, nd Case Coverage is <strong>%rate%</strong>.";
-$lang->product->noModule       = '<div>You have no modules</div><div>Manage now</div>';
+$lang->product->storySummary   = "Total <strong>%s</strong> stories on this page, Estimates: <strong>%s</strong>, and Case Coverage: <strong>%s</strong>.";
+$lang->product->checkedSummary = "<strong>%total%</strong> stories selected, Esitmates: <strong>%estimate%</strong>, and Case Coverage: <strong>%rate%</strong>.";
+$lang->product->noModule       = '<div>You have no modules. </div><div>Manage Now</div>';
 $lang->product->noProduct      = "No {$lang->productCommon} yet. ";
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 

@@ -48,6 +48,8 @@
             <dd><?php echo $lang->user->roleList[$user->role];?></dd>
             <dt><?php echo $lang->group->priv;?></dt>
             <dd><?php foreach($groups as $group) echo $group->name . ' '; ?></dd>
+            <dt><?php echo $lang->user->commiter;?></dt>
+            <dd><?php echo $user->commiter;?></dd>
             <dt><?php echo $lang->user->join;?></dt>
             <dd><?php echo formatTime($user->join);?></dd>
             <dt><?php echo $lang->user->visits;?></dt>
@@ -67,10 +69,8 @@
         </div>
         <div class='col-md-6 divider'>
           <dl class='dl-horizontal'>
-            <dt><?php echo $lang->user->commiter;?></dt>
-            <dd><?php echo $user->commiter;?></dd>
             <dt><?php echo $lang->user->email;?></dt>
-            <dd><?php echo $user->email;?></dd>
+            <dd title='<?php echo $user->email;?>'><?php echo $user->email;?></dd>
             <?php foreach(explode(',', $config->user->contactField) as $field):?>
             <dt><?php echo $lang->user->$field;?></dt>
             <dd>
