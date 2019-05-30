@@ -94,7 +94,7 @@ $lang->product->unclosed     = 'Open';
 $lang->product->unplan       = 'Unplanned';
 
 $lang->product->allStory             = 'All ';
-$lang->product->allProduct           = 'All ' . $lang->productCommon;
+$lang->product->allProduct           = 'All';
 $lang->product->allProductsOfProject = 'All Linked ' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
