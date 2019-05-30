@@ -47,7 +47,7 @@
             ?>
             </dd>
             <dt><?php echo $lang->user->role;?></dt>
-            <dd><?php echo $lang->user->roleList[$user->role];?></dd>
+            <dd><?php echo zget($lang->user->roleList, $user->role);?></dd>
             <dt><?php echo $lang->group->priv;?></dt>
             <dd><?php foreach($groups as $group) echo $group->name . ' '; ?></dd>
             <dt><?php echo $lang->user->commiter;?></dt>
@@ -69,10 +69,12 @@
             <?php endif;?>
           </dl>
         </div>
-        <div class='col-md-6 divider'>
+        <div class='divider'></div>
+        <div class='col-md-6'>
           <dl class='dl-horizontal'>
             <dt><?php echo $lang->user->email;?></dt>
             <dd title='<?php echo $user->email;?>'><?php echo $user->email;?></dd>
+            <?php if(!empty($config->user->contactField)):?>
             <?php foreach(explode(',', $config->user->contactField) as $field):?>
             <dt><?php echo $lang->user->$field;?></dt>
             <dd>
@@ -92,6 +94,7 @@
               ?>
             </dd>
             <?php endforeach;?>
+            <?php endif;?>
             <dt><?php echo $lang->user->address;?></dt>
             <dd><?php echo $user->address;?></dd>
             <dt><?php echo $lang->user->zipcode;?></dt>
