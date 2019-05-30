@@ -1,3 +1,4 @@
+#mainMenu .btn-group ul.dropdown-menu{max-height: 300px; overflow: auto;}
 #dynamics {padding: 10px 0;}
 .dynamic {position: relative; padding-left: 170px;}
 .dynamic-date {position: absolute; left: 0; top: 0; width: 150px; border: 2px solid #eee; border-radius: 4px; padding: 14px 20px; height: 58px;}
