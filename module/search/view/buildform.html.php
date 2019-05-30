@@ -58,6 +58,8 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 #<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 200px;}
 #queryBox.show {min-height: 66px;}
 <?php endif;?>
+#toggle-queries{position: absolute; right: 0px; top: 40px; width: 13px; background: #79cdfb; border-radius: 6px; height: 30px;cursor: pointer}
+#toggle-queries .icon{ position: absolute; top: 6px; right: -2px; color: #fff;}
 </style>
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
@@ -201,7 +203,10 @@ foreach($fieldParams as $fieldName => $param)
         </table>
       </td>
       <?php if($style != 'simple'):?>
-      <td class='w-160px' rowspan='2' id='userQueries'>
+      <div id='toggle-queries'>
+      <i class='icon icon-angle-left'></i>
+      </div>
+      <td class='w-160px hidden' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <ul>
           <?php foreach($queries as $queryID => $queryName):?>
@@ -262,6 +267,20 @@ $(function()
 {
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen();
+    $('#toggle-queries').click(function()
+    {
+        $('#userQueries').toggleClass('hidden');
+        if(!$('#userQueries').hasClass('hidden')) 
+        {
+            $('#toggle-queries .icon').removeClass('icon-angle-left');
+            $('#toggle-queries .icon').addClass('icon-angle-right');
+        }
+        else
+        {
+            $('#toggle-queries .icon').removeClass('icon-angle-right');
+            $('#toggle-queries .icon').addClass('icon-angle-left');
+        }
+    });
 
     /*
      * Load queries form
