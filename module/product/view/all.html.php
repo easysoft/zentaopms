@@ -63,7 +63,7 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?></th>
-            <th class='w-80px text-left'><?php common::printOrderLink('line', $orderBy, $vars, $lang->product->line);?></th>
+            <th class='w-110px text-left'><?php common::printOrderLink('line', $orderBy, $vars, $lang->product->line);?></th>
             <th class='w-80px'><?php echo $lang->product->activeStories;?></th>
             <th class='w-90px'><?php echo $lang->product->changedStories;?></th>
             <th class='w-70px'><?php echo $lang->product->draftStories;?></th>
@@ -72,7 +72,7 @@
             <th class='w-70px'><?php echo $lang->product->releases;?></th>
             <th class='w-80px'><?php echo $lang->product->bugs;?></th>
             <th class='w-80px'><?php echo $lang->product->unResolvedBugs;?></th>
-            <th class='w-80px'><?php echo $lang->product->assignToNullBugs;?></th>
+            <th class='w-100px'><?php echo $lang->product->assignToNullBugs;?></th>
             <?php if($canOrder):?>
             <th class='w-70px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->product->updateOrder);?></th>
             <?php endif;?>
