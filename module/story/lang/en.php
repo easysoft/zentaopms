@@ -157,6 +157,7 @@ $lang->story->sourceList['partner']    = 'Partner';
 $lang->story->sourceList['dev']        = 'Dev Team';
 $lang->story->sourceList['tester']     = 'QA Team';
 $lang->story->sourceList['bug']        = 'Bug';
+$lang->story->sourceList['forum']      = 'Forum';
 $lang->story->sourceList['other']      = 'Others';
 
 $lang->story->priList[]  = '';

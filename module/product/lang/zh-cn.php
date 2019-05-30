@@ -61,6 +61,7 @@ $lang->product->code          = "{$lang->productCommon}代号";
 $lang->product->line          = "{$lang->productCommon}线";
 $lang->product->order         = '排序';
 $lang->product->type          = "{$lang->productCommon}类型";
+$lang->product->typeAB        = "类型";
 $lang->product->status        = '状态';
 $lang->product->desc          = "{$lang->productCommon}描述";
 $lang->product->manager       = '负责人';
