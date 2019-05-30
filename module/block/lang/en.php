@@ -108,7 +108,7 @@ $lang->block->default['project']['3']['params']['num']     = 15;
 $lang->block->default['project']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['3']['params']['type']    = 'undone';
 
-$lang->block->default['project']['4']['title'] = 'My Task';
+$lang->block->default['project']['4']['title'] = 'My Tasks';
 $lang->block->default['project']['4']['block'] = 'task';
 $lang->block->default['project']['4']['grid']  = 4;
 
@@ -143,7 +143,7 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['4']['title'] = 'Waiting Build';
+$lang->block->default['qa']['4']['title'] = 'Waiting Builds';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
