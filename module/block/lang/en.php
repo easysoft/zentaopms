@@ -38,10 +38,10 @@ $lang->block->lblTesttask  = 'Request Detail';
 
 $lang->block->leftToday = 'Remaining Work';
 $lang->block->myTask    = 'My Tasks';
-$lang->block->myStory   = 'My Stories';
-$lang->block->myBug     = 'My Bugs';
-$lang->block->myProject = 'My ' . $lang->projectCommon . 's';
-$lang->block->myProduct = 'My ' . $lang->productCommon . 's';
+$lang->block->myStory   = 'Stories';
+$lang->block->myBug     = 'Bugs';
+$lang->block->myProject = '' . $lang->projectCommon . 's';
+$lang->block->myProduct = '' . $lang->productCommon . 's';
 $lang->block->delayed   = 'Delayed';
 $lang->block->noData    = 'No data on this type of reports.';
 $lang->block->emptyTip  = 'No data.';
