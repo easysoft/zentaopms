@@ -11,24 +11,24 @@
  */
 $lang->group->common             = 'Privilege';
 $lang->group->browse             = 'Groups';
-$lang->group->create             = 'Add Group';
-$lang->group->edit               = 'Edit';
-$lang->group->copy               = 'Copy';
-$lang->group->delete             = 'Delete';
-$lang->group->manageView         = 'View';
+$lang->group->create             = 'Create Group';
+$lang->group->edit               = 'Edit Group';
+$lang->group->copy               = 'Copy Group';
+$lang->group->delete             = 'Delete Group';
+$lang->group->manageView         = 'Manage View';
 $lang->group->managePriv         = 'Batch Assign';
-$lang->group->managePrivByGroup  = 'Grooup Privilege';
+$lang->group->managePrivByGroup  = 'Manage Privilege';
 $lang->group->managePrivByModule = 'Module Privilege';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
-$lang->group->manageMember       = 'Member';
+$lang->group->manageMember       = 'Manage Member';
 $lang->group->confirmDelete      = 'Do you want to delete this User Group?';
 $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
 $lang->group->viewList           = 'Access View';
 $lang->group->productList        = 'Access Product';
 $lang->group->projectList        = 'Access Project';
-$lang->group->dynamic            = 'Dynamics';
-$lang->group->noticeVisit        = 'Blank means no access limit';
+$lang->group->dynamic            = 'Access Dynamics';
+$lang->group->noticeVisit        = 'Blank means no access limit.';
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Name';
