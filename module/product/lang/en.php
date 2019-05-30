@@ -40,7 +40,7 @@ $lang->product->cases    = 'Case';
 $lang->product->builds   = 'Build';
 $lang->product->roadmap  = 'Roadmap';
 $lang->product->doc      = 'Doc';
-$lang->product->project  = $lang->projectCommon . 'List';
+$lang->product->project  = $lang->projectCommon . ' List';
 $lang->product->build    = 'Build';
 
 $lang->product->currentProject   = "{$lang->projectCommon}";
