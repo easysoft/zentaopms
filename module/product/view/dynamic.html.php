@@ -80,7 +80,7 @@
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
               <?php echo zget($users, $action->actor) . ' ' . $action->actionLabel;?>
-              <span class="text-muted"><?php echo $action->objectLabel;?></span>
+              <span class="text"><?php echo $action->objectLabel;?></span>
               <span class="label label-id"><?php echo $action->objectID;?></span>
               <?php echo html::a($action->objectLink, $action->objectName);?>
             </span>

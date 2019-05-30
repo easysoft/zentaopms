@@ -267,6 +267,7 @@ $(function()
 {
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen();
+    /* Toggle user queries action. */
     $('#toggle-queries').click(function()
     {
         $('#userQueries').toggleClass('hidden');
@@ -274,11 +275,13 @@ $(function()
         {
             $('#toggle-queries .icon').removeClass('icon-angle-left');
             $('#toggle-queries .icon').addClass('icon-angle-right');
+            $('#toggle-queries').css('right', $('#userQueries').outerWidth());
         }
         else
         {
             $('#toggle-queries .icon').removeClass('icon-angle-right');
             $('#toggle-queries .icon').addClass('icon-angle-left');
+            $('#toggle-queries').css('right', '0px');
         }
     });
 
