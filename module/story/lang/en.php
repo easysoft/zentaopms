@@ -9,12 +9,12 @@
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->story->create      = "Add Story";
-$lang->story->batchCreate = "Batch Add";
+$lang->story->create      = "Create Story";
+$lang->story->batchCreate = "Batch Create Story";
 $lang->story->change      = "Change Story";
 $lang->story->changed     = 'Change';
 $lang->story->assignTo    = 'Assign';
-$lang->story->review      = 'Review';
+$lang->story->review      = 'Need Review';
 $lang->story->batchReview = 'Batch Review';
 $lang->story->edit        = "Edit";
 $lang->story->batchEdit   = "Batch Edit";
