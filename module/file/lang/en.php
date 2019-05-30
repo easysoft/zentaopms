@@ -28,7 +28,7 @@ $lang->file->defaultTPL    = "Default Template";
 $lang->file->setExportTPL  = "Settings";
 $lang->file->preview       = "Preview";
 $lang->file->addFile       = 'Add';
-$lang->file->beginUpload   = 'Upload';
+$lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';
 
 $lang->file->pathname  = 'Path Name';
