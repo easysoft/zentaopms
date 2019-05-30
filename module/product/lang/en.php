@@ -44,12 +44,12 @@ $lang->product->project  = $lang->projectCommon . 'List';
 $lang->product->build    = 'Build';
 
 $lang->product->currentProject   = "{$lang->projectCommon}";
-$lang->product->activeStories    = 'Active Story';
-$lang->product->changedStories   = 'Changed Story';
-$lang->product->draftStories     = 'Draft Story';
-$lang->product->closedStories    = 'Closed Story';
-$lang->product->unResolvedBugs   = 'Active Bug';
-$lang->product->assignToNullBugs = 'Unassigned Bug';
+$lang->product->activeStories    = 'Active [S]';
+$lang->product->changedStories   = 'Changed [S]';
+$lang->product->draftStories     = 'Draft [S]';
+$lang->product->closedStories    = 'Closed [S]';
+$lang->product->unResolvedBugs   = 'Active [B]';
+$lang->product->assignToNullBugs = 'Unassigned [B]';
 
 $lang->product->confirmDelete  = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct = "No {$lang->productCommon} is created yet!";
@@ -94,7 +94,7 @@ $lang->product->unclosed     = 'Open';
 $lang->product->unplan       = 'Unplanned';
 
 $lang->product->allStory             = 'All ';
-$lang->product->allProduct           = 'All ' . $lang->productCommon;
+$lang->product->allProduct           = 'All';
 $lang->product->allProductsOfProject = 'All Linked ' . $lang->productCommon;
 
 $lang->product->typeList['']         = '';
