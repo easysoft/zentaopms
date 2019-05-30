@@ -61,6 +61,7 @@ $lang->product->code          = 'Code';
 $lang->product->line          = "{$lang->productCommon} Line";
 $lang->product->order         = 'Rank';
 $lang->product->type          = 'Type';
+$lang->product->typeAB        = 'Type';
 $lang->product->status        = 'Status';
 $lang->product->desc          = 'Description';
 $lang->product->manager       = 'Managers';
