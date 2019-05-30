@@ -21,7 +21,7 @@ var browseType = '<?php echo $browseType;?>';
 
 <?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView && $this->from == 'doc') ? true : false;?>
 <div class="main-row fade <?php if($spliter) echo 'split-row';?>" id="mainRow">
-  <?php include './side.html.php';?>
+  <?php if($this->from == 'doc') include './side.html.php';?>
   <?php if($this->cookie->browseType == 'bygrid'):?>
   <?php include dirname(__FILE__) . '/browsebygrid.html.php';?>
   <?php else:?>

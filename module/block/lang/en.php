@@ -38,10 +38,10 @@ $lang->block->lblTesttask  = 'Request Detail';
 
 $lang->block->leftToday = 'Remaining Work';
 $lang->block->myTask    = 'My Tasks';
-$lang->block->myStory   = 'My Stories';
-$lang->block->myBug     = 'My Bugs';
-$lang->block->myProject = 'My ' . $lang->projectCommon . 's';
-$lang->block->myProduct = 'My ' . $lang->productCommon . 's';
+$lang->block->myStory   = 'Stories';
+$lang->block->myBug     = 'Bugs';
+$lang->block->myProject = '' . $lang->projectCommon . 's';
+$lang->block->myProduct = '' . $lang->productCommon . 's';
 $lang->block->delayed   = 'Delayed';
 $lang->block->noData    = 'No data on this type of reports.';
 $lang->block->emptyTip  = 'No data.';
@@ -108,7 +108,7 @@ $lang->block->default['project']['3']['params']['num']     = 15;
 $lang->block->default['project']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['project']['3']['params']['type']    = 'undone';
 
-$lang->block->default['project']['4']['title'] = 'My Task';
+$lang->block->default['project']['4']['title'] = 'My Tasks';
 $lang->block->default['project']['4']['block'] = 'task';
 $lang->block->default['project']['4']['grid']  = 4;
 
@@ -143,7 +143,7 @@ $lang->block->default['qa']['3']['params']['num']     = 15;
 $lang->block->default['qa']['3']['params']['orderBy'] = 'id_desc';
 $lang->block->default['qa']['3']['params']['type']    = 'assigntome';
 
-$lang->block->default['qa']['4']['title'] = 'Waiting Build';
+$lang->block->default['qa']['4']['title'] = 'Waiting Builds';
 $lang->block->default['qa']['4']['block'] = 'testtask';
 $lang->block->default['qa']['4']['grid']  = 4;
 
