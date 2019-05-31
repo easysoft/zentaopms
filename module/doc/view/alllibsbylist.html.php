@@ -14,11 +14,8 @@
       <table class="table table-borderless table-hover table-files table-fixed no-margin">
         <thead>
           <tr>
-            <?php $name = '';?>
-            <?php if($type == 'product') $name = $lang->product->name;?>
-            <?php if($type == 'project') $name = $lang->project->name;?>
             <?php if($type != 'product' and $type != 'project')  $name = $lang->doclib->nameList[$type];?>
-            <th class="c-name"><?php echo $name;?></th>
+            <th class="c-name"><?php echo $lang->doc->libName;?></th>
             <th class="c-num"><?php echo $lang->doc->num;?></th>
             <?php if($type == 'product' or $type == 'project'):?>
             <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
