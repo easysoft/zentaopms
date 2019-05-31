@@ -23,3 +23,6 @@
 #dropMenu.show-right-col .col-left>.list-group{width:250px;max-width:260px;}
 #dropMenu.show-right-col .col-right>.list-group{width:250px;max-width:260px;}
 #dropMenu .col-footer{width:230px;}
+
+/* Pager v-align. */
+.pager>li>.pager-label { padding: 2px; line-height: 21px; }
