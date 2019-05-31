@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if($doc->contentType == 'html')     include '../../common/view/ueditor.html.php';?>
 <?php if($doc->contentType == 'markdown') include '../../common/view/markdown.html.php';?>
+<?php if($this->app->getClientLang() == 'en'):?>
+<style> #whiteListBox .input-group:last-child .input-group-addon{padding:5px 16px} </style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

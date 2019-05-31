@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php if($this->app->getClientLang() == 'en'):?>
+<style> #whiteListBox .input-group:last-child .input-group-addon{padding:5px 16px} </style>
+<?php endif;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
