@@ -138,7 +138,10 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td>
+            <?php echo html::submitButton();?>
+            <?php if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=user&field=contactField"), 'hiddenwin', '', 'btn btn-wide');?>
+          </td>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>

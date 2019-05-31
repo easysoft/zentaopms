@@ -71,7 +71,7 @@ $lang->report->manhourTotal  = "Total Hours";
 $lang->report->validRate     = "Valid Rate";
 $lang->report->validRateTips = "Solution is Solved/Postponed or status is Solved/Closed.";
 $lang->report->unplanned     = 'Unplanned';
-$lang->report->workday       = 'hours/day';
+$lang->report->workday       = 'Hours/Day';
 $lang->report->diffDays      = 'days';
 
 $lang->report->typeList['default'] = 'Default';
