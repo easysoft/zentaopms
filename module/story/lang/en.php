@@ -102,7 +102,7 @@ $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
 
 $lang->story->ditto       = 'Ditto';
-$lang->story->dittoNotice = 'This Story is not linked to the same Product as the last one is!';
+$lang->story->dittoNotice = 'This story is not linked to the same product as the last one is!';
 
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
