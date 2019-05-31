@@ -27,7 +27,7 @@
 </html>
 <?php else:?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/ueditor.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
