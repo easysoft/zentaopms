@@ -20,15 +20,15 @@ $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
 $lang->entry->desc        = 'Description';
 $lang->entry->createdBy   = 'CreatedBy';
-$lang->entry->createdDate = 'Created';
+$lang->entry->createdDate = 'CreateDate';
 $lang->entry->editedby    = 'EditedBy';
-$lang->entry->editedDate  = 'Edited';
+$lang->entry->editedDate  = 'EditedDate';
 $lang->entry->date        = 'Requesting Time';
 $lang->entry->url         = 'Requesting URL';
 
 $lang->entry->confirmDelete = 'Do you want to delete this entry?';
 $lang->entry->help          = 'Help';
-$lang->entry->notify        = 'Notify';
+$lang->entry->notify        = 'Notification';
 
 $lang->entry->note = new stdClass();
 $lang->entry->note->name    = 'Name';
