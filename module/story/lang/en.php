@@ -102,7 +102,7 @@ $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
 
 $lang->story->ditto       = 'Ditto';
-$lang->story->dittoNotice = 'This Story is not linked to the same Product as the last one is!';
+$lang->story->dittoNotice = 'This story is not linked to the same product as the last one is!';
 
 $lang->story->useList[0] = 'Yes';
 $lang->story->useList[1] = 'No';
@@ -196,10 +196,10 @@ $lang->story->specTemplate          = "As a < type of user >, I want < some goal
 $lang->story->needNotReview         = 'No Review Required';
 $lang->story->successSaved          = "Story is saved!";
 $lang->story->confirmDelete         = "Do you want to delete this Story?";
-$lang->story->errorEmptyChildStory  = '『Decompose Story』canot be blank.';
+$lang->story->errorEmptyChildStory  = '『Decomposed Story』canot be blank.';
 $lang->story->mustChooseResult      = 'Select Result';
 $lang->story->mustChoosePreVersion  = 'Select a version to revert to.';
-$lang->story->noStory               = 'No stories. ';
+$lang->story->noStory               = 'No stories yet. ';
 $lang->story->ignoreChangeStage     = 'Story %s is a draft. Please review it..';
 
 $lang->story->form = new stdclass();
