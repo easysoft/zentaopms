@@ -27,7 +27,7 @@ $lang->doc->files          = 'Files';
 $lang->doc->addedBy        = 'Author';
 $lang->doc->addedDate      = 'Added';
 $lang->doc->editedBy       = 'EditBy';
-$lang->doc->editedDate     = 'Edited ';
+$lang->doc->editedDate     = 'EditedDate';
 $lang->doc->version        = 'Version';
 $lang->doc->basicInfo      = 'Basic Info';
 $lang->doc->deleted        = 'Deleted';
@@ -53,7 +53,7 @@ $lang->doc->retrack        = 'Retrack';
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
 $lang->doc->fast           = 'Qucik Entry';
-$lang->doc->allDoc         = 'All Docs';
+$lang->doc->allDoc         = 'All Documents';
 $lang->doc->openedByMe     = 'My';
 $lang->doc->orderByOpen    = 'Last Added';
 $lang->doc->orderByEdit    = 'Recent Edited';
@@ -64,7 +64,7 @@ $lang->doc->myDoc          = 'My Documents';
 $lang->doc->myCollection   = 'My Favorites';
 
 /* 方法列表。*/
-$lang->doc->index            = 'Doc Home';
+$lang->doc->index            = 'Document Home';
 $lang->doc->create           = 'Create Document';
 $lang->doc->edit             = 'Edit';
 $lang->doc->delete           = 'Delete';
@@ -171,15 +171,15 @@ $lang->doc->noEditedDoc        = 'You have not edited any documents.';
 $lang->doc->noOpenedDoc        = 'You have not created any documents.';
 $lang->doc->noCollectedDoc     = 'You have not favorited any documents.';
 
-$lang->doc->noticeAcl['lib']['product']['default'] = 'Users with privileges to access the selected product can access it.';
-$lang->doc->noticeAcl['lib']['product']['custom']  = 'Users with privileges to access the selected product or users in the whiltelist can access it.';
-$lang->doc->noticeAcl['lib']['project']['default'] = 'Users with privileges to access the selected project can access it.';
-$lang->doc->noticeAcl['lib']['project']['custom']  = 'Users with privileges to access the selected project or users in the whiltelist can access it.';
+$lang->doc->noticeAcl['lib']['product']['default'] = 'Users who can access the selected product can access it.';
+$lang->doc->noticeAcl['lib']['product']['custom']  = 'Users who can access the selected product or users in the whiltelist can access it.';
+$lang->doc->noticeAcl['lib']['project']['default'] = 'Users who can access the selected project can access it.';
+$lang->doc->noticeAcl['lib']['project']['custom']  = 'Users who can access the selected project or users in the whiltelist can access it.';
 $lang->doc->noticeAcl['lib']['custom']['open']     = 'All users can access it.';
 $lang->doc->noticeAcl['lib']['custom']['custom']   = 'Users in the whitelist can access it.';
 $lang->doc->noticeAcl['lib']['custom']['private']  = 'Only the one who created it can access it.';
 
-$lang->doc->noticeAcl['doc']['open']    = 'Users with privileges to access the document library which the document belongs to have access to it.';
+$lang->doc->noticeAcl['doc']['open']    = 'Users who can access the document library which the document belongs can access it.';
 $lang->doc->noticeAcl['doc']['custom']  = 'Users in the whiltelist can access it.';
 $lang->doc->noticeAcl['doc']['private'] = 'Only the one who created it can access it.';
 
