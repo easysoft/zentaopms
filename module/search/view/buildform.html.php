@@ -25,13 +25,11 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 #<?php echo $formId;?> > table {margin: 0 auto;}
 #<?php echo $formId;?> > table > tbody > tr > td {padding: 8px;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
-#<?php echo $formId;?> .chosen-container[id^="field"] .chosen-drop {min-width: 180px;}
 <?php if($app->getClientLang() == 'en'):?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 70px;}
 <?php else:?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
 <?php endif;?>
-#<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #<?php echo $formId;?> .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #<?php echo $formId;?> input.date::-webkit-input-placeholder {color: #838A9D; opacity: 1;}
 #<?php echo $formId;?> input.date::-moz-placeholder {color: #838A9D; opacity: 1;}
