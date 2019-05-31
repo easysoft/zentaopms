@@ -96,6 +96,12 @@ zentaoxx:
 	sed -i '/var serverVersions/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/setRequiredFields(/d' zentaoxx/module/common/view/header.modal.html.php
+	sed -i 's/header.html.php/header.lite.html.php/g' zentaoxx/module/common/view/header.modal.html.php
+	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/header.modal.html.php
+	sed -i 's/footer.html.php/footer.lite.html.php/g' zentaoxx/module/common/view/footer.modal.html.php
+	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/footer.modal.html.php
+	sed -i 's/v\.//g' zentaoxx/module/chat/js/debug.js
+	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/chat/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
