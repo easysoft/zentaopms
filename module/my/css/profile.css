@@ -1,5 +1,7 @@
 .col-6{width:50% !important;}
+.col-md-6{width:49% !important;}
 .cell{height:430px;}
+.cell .divider{ display: block; width: 1px; height: 340px; background-color: rgba(0,0,0,.05); float: left;}
 .main-header{margin-bottom:20px;}
 .dl-horizontal{margin:0px;}
 .dl-horizontal dt{color:#999; font-weight:normal; padding:5px 0px; width:120px;height:30px;}

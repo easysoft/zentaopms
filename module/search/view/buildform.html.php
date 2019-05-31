@@ -296,9 +296,14 @@ $(function()
             if($('#mainMenu .btn-toolbar.pull-left #query').size() == 0)
             {
                 var html = '<div class="btn-group" id="query"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link " style="border-radius: 2px;">' + searchCustom + ' <span class="caret"></span></a><ul class="dropdown-menu"></ul></div>';
+                html += '<style>#mainMenu #query.btn-group li {position: relative;} #mainMenu #query.btn-group li a{margin-right:20px;} #mainMenu #query.btn-group li .btn-delete{ padding:0 7px; position: absolute; right: -10px; top: -5px; display: block; width: 20px; text-align: center; } </style>';
+                html += "<script> function removeQueryFromMenu(obj) { var $obj = $(obj); var link = createLink('search', 'ajaxRemoveMenu', 'queryID=' + $obj.data('id')); $.get(link, function() { $obj.closest('li').remove(); if($('#mainMenu #query.btn-group').find('li').length == 0) $('#mainMenu #query.btn-group').remove(); })}<\/script>";
                 $('#mainMenu .btn-toolbar.pull-left #bysearchTab').before(html);
             }
-            $('#mainMenu .btn-toolbar.pull-left #query ul.dropdown-menu').append("<li><a href='" + actionURL.replace('myQueryID', queryID) + "'>" + name + "</a></li>")
+            html  = "<li><a href='" + actionURL.replace('myQueryID', queryID) + "'>" + name + "</a>";
+            html += "<a href='###' class='btn-delete' data-id='" + queryID + "' onclick='removeQueryFromMenu(this)'><i class='icon icon-close'></i></a></li>";
+            $('#mainMenu .btn-toolbar.pull-left #query ul.dropdown-menu').append(html);
+            fixFeatureBar();
         }
     };
 
