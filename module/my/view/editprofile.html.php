@@ -63,6 +63,7 @@
     </table>
     <table class='table table-form'>
       <caption><?php echo $lang->my->form->lblContact;?></caption>
+      <?php if(!empty($config->user->contactField)):?>
       <?php $i = 0;?>
       <?php foreach(explode(',', $config->user->contactField) as $field):?>
       <?php if($i % 2 == 0) echo '<tr>';?>
@@ -71,6 +72,7 @@
         <td><?php echo html::input($field, $user->$field, "class='form-control'");?></td>
       <?php if($i % 2 == 0) echo '</tr>';?>
       <?php endforeach;?>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->user->address;?></th>
         <td><?php echo html::input('address', $user->address, "class='form-control'");?></td>

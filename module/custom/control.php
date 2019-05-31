@@ -214,7 +214,14 @@ class custom extends control
     {
         if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
 
-        $this->custom->deleteItems("module=$module&section=$field");
+        if($module == 'user' and $field == 'contactField')
+        {
+            $this->loadModel('setting')->deleteItems("module=$module&key=$field");
+        }
+        else
+        {
+            $this->custom->deleteItems("module=$module&section=$field");
+        }
         die(js::reload('parent'));
     }
 
