@@ -7,9 +7,6 @@
 
 #buildBoxActions {padding-left: 15px;}
 
-#module_chosen.chosen-container .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
-#os_chosen.chosen-container .chosen-drop{min-width: 200px} 
-#openedBuild_chosen.chosen-container .chosen-drop {min-width: 450px; border-top: 1px solid #ddd!important}
 #module + .chosen-container-single .chosen-single,
 #task + .chosen-container-single .chosen-single,
 #openedBuild + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0;}

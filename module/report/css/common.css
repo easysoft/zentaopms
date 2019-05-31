@@ -31,10 +31,6 @@ td .deviation{padding-left:20px; text-align:left;}
 .d0{color:#76B043;}
 .d20{color:#33A52E;}
 
-.chosen-container[id^="product"] .chosen-drop {min-width: 300px;!important}
-.chosen-container[id^="project"] .chosen-drop {min-width: 300px;!important}
-.chosen-container[id^="dept"]    .chosen-drop {min-width: 400px;!important}
-
 .checkboxes {margin-bottom: 10px;}
 .checkboxes .checkbox-primary {margin-bottom: 5px;}
 .fixed-header-copy thead tr th{color:#fff !important;}

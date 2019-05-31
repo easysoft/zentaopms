@@ -14,7 +14,6 @@
 #story_chosen .chosen-results > li.no-results {cursor: pointer;}
 #story_chosen .chosen-results > li.no-results:hover {color: #1a4f85; background-color: #ddd;}
 #story_chosen .chosen-results > li.no-results > span {font-weight: bold;}
-#module_chosen .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
 
 .row .col-sm-10{width:89%;}
 .row .col-sm-2{padding-left:0px; width:11%;}
