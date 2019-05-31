@@ -10,6 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php if($this->app->getClientLang() == 'en'):?>
+<style> #whiteListBox .input-group:last-child .input-group-addon{padding:5px 16px} </style>
+<?php endif;?>
 <?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div id="mainContent" class="main-content">

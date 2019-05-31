@@ -111,6 +111,7 @@ class custom extends control
             elseif($module == 'user' and $field == 'contactField')
             {
                 $data = fixer::input('post')->join('contactField', ',')->get();
+                if(!isset($data->contactField)) $data->contactField = '';
                 $this->loadModel('setting')->setItem('system.user.contactField', $data->contactField);
             }
             elseif($module == 'user' and $field == 'deleted')

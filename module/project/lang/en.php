@@ -83,7 +83,7 @@ $lang->team = new stdclass();
 $lang->team->account    = 'Username';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Joined';
-$lang->team->hours      = 'hours/day';
+$lang->team->hours      = 'Hours/day';
 $lang->team->days       = 'day';
 $lang->team->totalHours = 'Total Hours';
 

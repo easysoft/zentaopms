@@ -13,7 +13,7 @@ if($this->methodName != 'browse')
 }
 if(empty($type)) $type = 'product';
 ?>
-<div class="side-col" style="width: 238px" data-min-width="235">
+<div class="side-col" style="width: 238px" data-min-width="240">
   <div class="cell">
     <div class="tabs">
       <ul class='nav nav-tabs'>

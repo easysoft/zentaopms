@@ -8,7 +8,7 @@
       <table class='table table-form'>
         <tr>
           <td class='text-center w-160px'>
-            <img src='<?php echo $config->webRoot . 'theme/default/images/main/zt-logo.png';?>' />
+            <img src='<?php echo $config->webRoot . 'theme/default/images/main/' . ($app->getClientLang() != 'en' ? 'zt-logo.png' : 'zt-logo-en.png');?>' />
             <h4><?php printf($lang->misc->zentao->version, $config->version);?></h4>
           </td>
           <td><?php include './links.html.php';?></td>
