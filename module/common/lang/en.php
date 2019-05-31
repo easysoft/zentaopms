@@ -103,7 +103,7 @@ $lang->showAll       = '[[Show All]]';
 
 $lang->future       = 'Waiting';
 $lang->year         = 'Year';
-$lang->workingHour  = 'Man-hours';
+$lang->workingHour  = 'Hours';
 
 $lang->idAB         = 'ID';
 $lang->priAB        = 'P';
