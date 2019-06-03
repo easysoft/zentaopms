@@ -1,8 +1,6 @@
 #batchCreateForm .col-id {width: 50px; text-align: center; color: #838A9D}
 #batchCreateForm .col-module,
 #batchCreateForm .col-plan {width: 180px;}
-#batchCreateForm .chosen[name^="plan"] + .chosen-container .chosen-drop,
-#batchCreateForm .chosen[name^="module"] + .chosen-container .chosen-drop {min-width: 300px;}
 #batchCreateForm .col-pri {width: 100px;}
 #batchCreateForm .col-review,
 #batchCreateForm .col-estimate {width: 90px;}

@@ -84,7 +84,7 @@ $lang->team->account    = 'Username';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Joined';
 $lang->team->hours      = 'Hours/day';
-$lang->team->days       = 'day';
+$lang->team->days       = 'Day';
 $lang->team->totalHours = 'Total Hours';
 
 $lang->team->limited            = 'Limited User';
@@ -100,7 +100,7 @@ $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspended';
 $lang->project->statusList['closed']    = 'Closed';
 
-$lang->project->aclList['open']    = "Default (Users who have the privilege to visit {$lang->projectCommon} can access it.)";
+$lang->project->aclList['open']    = "Default (Users who can visit {$lang->projectCommon} can access it.)";
 $lang->project->aclList['private'] = 'Private (For team members only.)';
 $lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist members can access it.)';
 
@@ -119,12 +119,12 @@ $lang->project->computeBurn       = 'Update';
 $lang->project->burnData          = 'Burndown Data';
 $lang->project->fixFirst          = 'Edit Estimates of 1st Day';
 $lang->project->team              = 'Team Member';
-$lang->project->doc               = 'Doc';
-$lang->project->doclib            = 'Doc Library';
+$lang->project->doc               = 'Document';
+$lang->project->doclib            = 'Docoment Library';
 $lang->project->manageProducts    = 'Link ' . $lang->productCommon . 's';
-$lang->project->linkStory         = 'Link Story';
-$lang->project->linkStoryByPlan   = 'Link Story From Plan';
-$lang->project->linkPlan          = 'Link Plan';
+$lang->project->linkStory         = 'Link Stories';
+$lang->project->linkStoryByPlan   = 'Link Stories By Plans';
+$lang->project->linkPlan          = 'Link Plans';
 $lang->project->unlinkStoryTasks  = 'Unlink';
 $lang->project->linkedProducts    = 'Linked Products';
 $lang->project->unlinkedProducts  = 'Unlinked Products';
@@ -140,7 +140,7 @@ $lang->project->unlinkMember      = 'Remove Member';
 $lang->project->unlinkStory       = 'Unlink Story';
 $lang->project->batchUnlinkStory  = 'Batch Unlink Stories';
 $lang->project->importTask        = 'Transfer Task';
-$lang->project->importPlanStories = 'Link Story From Plan';
+$lang->project->importPlanStories = 'Link Stories By Plans';
 $lang->project->importBug         = 'Import Bug';
 $lang->project->updateOrder       = 'Rank';
 $lang->project->tree              = 'Tree';
@@ -206,13 +206,13 @@ $lang->project->memberHours         = '<div class="table-col"><div class="clearf
 $lang->project->countSummary        = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Tasks</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Doing</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">Waiting</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
 $lang->project->timeSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Estimates</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Cost</div><div class="segment-value text-red">%s</div></div><div class="segment"><div class="segment-title">Left</div><div class="segment-value">%s</div></div></div></div>';
 $lang->project->groupSummaryAB      = "<div>Tasks <strong>%s ：</strong><span class='text-muted'>Waiting</span> %s &nbsp; <span class='text-muted'>Doing</span> %s</div><div>Estimates <strong>%s ：</strong><span class='text-muted'>Cost</span> %s &nbsp; <span class='text-muted'>Left</span> %s</div>";
-$lang->project->wbs                 = "Decompose Task";
-$lang->project->batchWBS            = "Batch Decompose";
+$lang->project->wbs                 = "Create Task";
+$lang->project->batchWBS            = "Batch Create";
 $lang->project->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='How to update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories        = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->productStories      = "Stories linked to {$lang->projectCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Story</a> now.";
 $lang->project->haveDraft           = "%s stories in draft, so they can't be linked.";
-$lang->project->doneProjects        = 'Done';
+$lang->project->doneProjects        = 'Finished';
 $lang->project->selectDept          = 'Select Department';
 $lang->project->selectDeptTitle     = 'Select User';
 $lang->project->copyTeam            = 'Copy Team';
@@ -226,7 +226,7 @@ $lang->project->cancelCopy          = 'Cancel Copy';
 $lang->project->byPeriod            = 'By Time';
 $lang->project->byUser              = 'By User';
 $lang->project->noProject           = "No {$lang->projectCommon}. ";
-$lang->project->noMembers           = 'No members. ';
+$lang->project->noMembers           = 'No members yet. ';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Do you want to delete the {$lang->projectCommon}[%s]?";
@@ -241,8 +241,8 @@ $lang->project->setTeam               = 'Set Team';
 $lang->project->linkStory             = 'Link Story';
 $lang->project->createTask            = 'Create Task';
 $lang->project->goback                = "Go Back";
-$lang->project->noweekend             = 'excl. Weekend';
-$lang->project->withweekend           = 'incl. Weekend';
+$lang->project->noweekend             = 'Exclude Weekend';
+$lang->project->withweekend           = 'Include Weekend';
 $lang->project->interval              = 'Intervals';
 $lang->project->fixFirstWithLeft      = 'Edit Hours Left';
 
@@ -286,9 +286,9 @@ $lang->project->resetKanban   = "Reset";
 $lang->project->printKanban   = "Print";
 $lang->project->bugList       = "Bugs";
 
-$lang->project->kanbanHideCols   = 'Closed and Cancelled columns';
+$lang->project->kanbanHideCols   = 'Closed & Cancelled Columns';
 $lang->project->kanbanShowOption = 'Unfold';
-$lang->project->kanbanColsColor  = 'Customize column color';
+$lang->project->kanbanColsColor  = 'Customize Column Color';
 
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Do you want to reset Kanban?';
