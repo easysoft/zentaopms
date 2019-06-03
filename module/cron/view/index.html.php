@@ -29,11 +29,11 @@
   <table class='table table-condensed table-bordered table-fixed main-table'>
     <thead>
       <tr>
-        <th class='w-50px'><?php echo $lang->cron->m?></th>
-        <th class='w-50px'><?php echo $lang->cron->h?></th>
-        <th class='w-50px'><?php echo $lang->cron->dom?></th>
-        <th class='w-50px'><?php echo $lang->cron->mon?></th>
-        <th class='w-50px'><?php echo $lang->cron->dow?></th>
+        <th class='w-70px text-center'><?php echo $lang->cron->m?></th>
+        <th class='w-50px text-center'><?php echo $lang->cron->h?></th>
+        <th class='w-50px text-center'><?php echo $lang->cron->dom?></th>
+        <th class='w-60px text-center'><?php echo $lang->cron->mon?></th>
+        <th class='w-60px text-center'><?php echo $lang->cron->dow?></th>
         <th><?php echo $lang->cron->command?></th>
         <th class='w-200px'><?php echo $lang->cron->remark?></th>
         <th class='w-130px'><?php echo $lang->cron->lastTime?></th>
