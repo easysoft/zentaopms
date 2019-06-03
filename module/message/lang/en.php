@@ -1,8 +1,8 @@
 <?php
-$lang->message->common  = 'Message';
-$lang->message->index   = 'Index';
-$lang->message->setting = 'Setting';
+$lang->message->common  = 'Notification';
+$lang->message->index   = 'Home';
+$lang->message->setting = 'Settings';
 
-$lang->message->typeList['mail']     = 'Mail';
+$lang->message->typeList['mail']     = 'Email';
 $lang->message->typeList['message']  = 'Browser notifications';
 $lang->message->typeList['webhook']  = 'Webhook';
