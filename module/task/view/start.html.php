@@ -39,7 +39,7 @@
     <form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->task->realStarted;?></th>
+          <th class='w-90px'><?php echo $lang->task->realStarted;?></th>
           <td class='w-p25-f'><div class='datepicker-wrapper datepicker-date'><?php echo html::input('realStarted', $task->realStarted == '0000-00-00' ? helper::today() : $task->realStarted, "class='form-control form-date' data-picker-position='bottom-right'");?></div></td>
           <td></td>
         </tr>  
