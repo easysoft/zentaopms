@@ -6,7 +6,7 @@ $lang->testreport->edit     = 'Edit Report';
 $lang->testreport->delete   = 'Delete';
 $lang->testreport->export   = 'Export';
 $lang->testreport->view     = 'Detail';
-$lang->testreport->recreate = 'Re-Create';
+$lang->testreport->recreate = 'ReCreate';
 
 $lang->testreport->title       = 'Title';
 $lang->testreport->bugTitle    = 'Bug';
@@ -36,9 +36,9 @@ $lang->testreport->all         = 'All Reports';
 $lang->testreport->deleted     = 'Deleted';
 
 $lang->testreport->legendBasic       = 'Basic Info.';
-$lang->testreport->legendStoryAndBug = 'Story&Bug';
-$lang->testreport->legendBuild       = 'Build Info';
-$lang->testreport->legendCase        = 'Linked Case';
+$lang->testreport->legendStoryAndBug = 'Test Scope';
+$lang->testreport->legendBuild       = 'Test Rounds';
+$lang->testreport->legendCase        = 'Linked Cases';
 $lang->testreport->legendLegacyBugs  = 'Left Bugs';
 $lang->testreport->legendReport      = 'Report';
 $lang->testreport->legendComment     = 'Summary';
@@ -62,7 +62,7 @@ $lang->testreport->moreNotice     = 'More features can be extended with referenc
 $lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
 $lang->testreport->foundBugTip    = "Bugs generated in this build and generated in the test period.";
-$lang->testreport->legacyBugTip   = "Active bugs, or the solved bugs that are not in the test period.";
+$lang->testreport->legacyBugTip   = "Active bugs, or solved bugs that are not in the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case run in the test period.";
 $lang->testreport->errorTrunk     = "You cannot create a Test report for the trunk. Please modify the linked build!";
 $lang->testreport->moreProduct    = "Testing reports can only be generated for the same product.";
