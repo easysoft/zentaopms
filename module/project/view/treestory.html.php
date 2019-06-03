@@ -39,7 +39,7 @@
     <table class="table table-data">
       <tbody>
       <tr>
-        <th><?php echo $lang->story->product;?></th>
+        <th class='w-100px'><?php echo $lang->story->product;?></th>
         <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
       </tr>
       <?php if($product->type != 'normal'):?>
@@ -196,10 +196,11 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
+        <?php $class = $this->app->getClientLang() == 'en' ? 'w-120px' : 'w-100px';?>
         <?php if($config->global->flow != 'onlyStory'):?>
         <?php if(!empty($fromBug)):?>
         <tr class='text-top'>
-          <th class='w-70px'><?php echo $lang->story->legendFromBug;?></th>
+          <th class=<?php echo $class;?>><?php echo $lang->story->legendFromBug;?></th>
           <td class='pd-0'>
             <ul class='list-unstyled'>
                 <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</li>';?>
@@ -208,7 +209,7 @@
         </tr>
         <?php endif;?>
         <tr class='text-top'>
-          <th class='w-70px'><?php echo $lang->story->legendBugs;?></th>
+          <th class=<?php echo $class;?>><?php echo $lang->story->legendBugs;?></th>
           <td class='pd-0'>
             <?php if(empty($bugs)):?>
             <?php echo $lang->noData;?>
@@ -289,7 +290,7 @@
     <table class="table table-data">
       <tbody>
       <tr>
-        <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
+        <th class='w-100px'><?php echo $lang->story->openedBy;?></th>
         <td><?php echo $users[$story->openedBy] . $lang->at . $story->openedDate;?></td>
       </tr>
       <tr>

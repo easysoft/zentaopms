@@ -100,7 +100,7 @@ $lang->dev->tableList['entry']          = 'Entry';
 $lang->dev->tableList['webhook']        = 'WebHook';
 $lang->dev->tableList['log']            = 'Log';
 $lang->dev->tableList['message']        = 'Message';
-$lang->dev->tableList['notify']         = 'Notify';
+$lang->dev->tableList['notify']         = 'Notification';
 $lang->dev->tableList['userview']       = 'User Privilege';
 
 $lang->dev->groupList['my']      = 'Dashboard';

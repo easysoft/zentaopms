@@ -1,5 +1,6 @@
 #linkButton {border-radius: 4px !important;}
 tbody > tr > td > .btn-icon {margin-right: 4px}
+#modules a.active{color: #0c64eb}
 @media (max-width: 1200px) {#storyList .c-user, #storyList .c-estimate {display: none!important;}}
 @media (max-width: 1000px) {#storyList .c-status, #storyList .c-pri {display: none!important;}}
 @media (max-width: 820px) {#storyList .c-sort, #storyList .c-stage {display: none!important;}}

@@ -61,7 +61,7 @@ $lang->testcase->results          = 'Result';
 $lang->testcase->resultsAB        = 'R';
 $lang->testcase->stepNumber       = 'Steps';
 $lang->testcase->stepNumberAB     = 'S';
-$lang->testcase->createBug        = 'Convert to Bug';
+$lang->testcase->createBug        = 'Create Bug';
 $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
 $lang->testcase->sync             = 'Sync. Case';
@@ -136,11 +136,11 @@ $lang->testcase->lblStatusValue = 'Status Value';
 
 $lang->testcase->legendBasicInfo    = 'Basic Info';
 $lang->testcase->legendAttatch      = 'Files';
-$lang->testcase->legendLinkBugs     = 'Bug';
+$lang->testcase->legendLinkBugs     = 'Bugs';
 $lang->testcase->legendOpenAndEdit  = 'Create/Edit';
 $lang->testcase->legendComment      = 'Comment';
 
-$lang->testcase->summary            = "Cases on this page : Total <strong>%s</strong>, Run <strong>%s</strong>.";
+$lang->testcase->summary            = "Total <strong>%s</strong> cases on this page, and <strong>%s</strong> cases run.";
 $lang->testcase->confirmDelete      = 'Do you want to delete this case?';
 $lang->testcase->confirmBatchDelete = 'Do you want to batch delete cases?';
 $lang->testcase->ditto              = 'Ditto';
@@ -202,7 +202,7 @@ $lang->testcase->searchStories = 'Enter to search for stories';
 $lang->testcase->selectLib     = 'Select Library';
 
 $lang->testcase->action = new stdclass();
-$lang->testcase->action->fromlib  = array('main' => '$date, imported by <strong>$actor</strong> from Library <strong>$extra</strong>.');
+$lang->testcase->action->fromlib  = array('main' => '$date, imported by <strong>$actor</strong> from <strong>$extra</strong>.');
 $lang->testcase->action->reviewed = array('main' => '$date, recorded by <strong>$actor</strong> and the review result is <strong>$extra</strong>.', 'extra' => 'reviewResultList');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
