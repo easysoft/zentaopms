@@ -38,7 +38,7 @@
           <th><?php echo $lang->team->role;?></th>
           <th class='w-100px'><?php echo $lang->team->days;?></th>
           <th class='w-100px'><?php echo $lang->team->hours;?></th>
-          <th class='w-100px'><?php echo $lang->team->limited;?></th>
+          <th class='w-110px'><?php echo $lang->team->limited;?></th>
           <th class="w-90px"> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
