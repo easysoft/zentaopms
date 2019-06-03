@@ -1509,7 +1509,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function tree($projectID, $type = '')
+    public function tree($projectID, $type = 'task')
     {
         $this->project->setMenu($this->projects, $projectID);
         $project = $this->loadModel('project')->getById($projectID);

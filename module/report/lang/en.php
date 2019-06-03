@@ -38,9 +38,9 @@ $lang->report->singleColor[] = 'F6BD0F';
 
 $lang->report->projectDeviation = $lang->projectCommon . ' Deviation';
 $lang->report->productSummary   = $lang->productCommon . ' Summary';
-$lang->report->bugCreate        = 'Bug Reported';
-$lang->report->bugAssign        = 'Bug Assigned';
-$lang->report->workload         = 'Team Workload';
+$lang->report->bugCreate        = 'Bug Reported Summary';
+$lang->report->bugAssign        = 'Bug Assigned Summary';
+$lang->report->workload         = 'Team Workload Summary';
 $lang->report->workloadAB       = 'Workload';
 $lang->report->bugOpenedDate    = 'Bug reported from';
 $lang->report->beginAndEnd      = ' From';

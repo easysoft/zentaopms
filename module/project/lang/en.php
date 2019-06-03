@@ -133,7 +133,7 @@ $lang->project->create            = "Create {$lang->projectCommon}";
 $lang->project->copy              = "Copy {$lang->projectCommon}";
 $lang->project->delete            = "Delete";
 $lang->project->browse            = "Browse";
-$lang->project->edit              = "Edit";
+$lang->project->edit              = "Edit Project";
 $lang->project->batchEdit         = "Batch Edit";
 $lang->project->manageMembers     = 'Manage Team';
 $lang->project->unlinkMember      = 'Remove Member';
@@ -316,8 +316,8 @@ $lang->project->featureBar['task']['status']       = $lang->project->statusSelec
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
+$lang->project->treeLevel['task']  = 'Show All';
 $lang->project->treeLevel['story'] = 'Show Story';
-$lang->project->treeLevel['task']  = 'Show Task';
 
 global $config;
 if($config->global->flow == 'onlyTask')
