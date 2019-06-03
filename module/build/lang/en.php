@@ -11,15 +11,15 @@
  */
 $lang->build->common           = "Build";
 $lang->build->create           = "Create Build";
-$lang->build->edit             = "Edit";
+$lang->build->edit             = "Edit Build";
 $lang->build->linkStory        = "Link Story";
 $lang->build->linkBug          = "Link Bug";
 $lang->build->delete           = "Delete Build";
 $lang->build->deleted          = "Deleted";
-$lang->build->view             = "Build Detail";
+$lang->build->view             = "Detail";
 $lang->build->batchUnlink      = 'Batch Unlink';
-$lang->build->batchUnlinkStory = 'Batch Unlink Story';
-$lang->build->batchUnlinkBug   = 'Batch Unlink Bug';
+$lang->build->batchUnlinkStory = 'Batch Unlink Stories';
+$lang->build->batchUnlinkBug   = 'Batch Unlink Bugs';
 
 $lang->build->confirmDelete      = "Do you want to delete this Build?";
 $lang->build->confirmUnlinkStory = "Do you want to unlink this Story?";
@@ -42,9 +42,9 @@ $lang->build->last          = 'Last Build';
 $lang->build->packageType   = 'Package Type';
 $lang->build->unlinkStory   = 'Unlink Story';
 $lang->build->unlinkBug     = 'Unlink Bug';
-$lang->build->stories       = 'Finished Story';
-$lang->build->bugs          = 'Solved Bug';
-$lang->build->generatedBugs = 'Reported Bug';
+$lang->build->stories       = 'Finished Stories';
+$lang->build->bugs          = 'Solved Bugs';
+$lang->build->generatedBugs = 'Reported Bugs';
 $lang->build->noProduct     = " <span style='color:red'>This {$lang->projectCommon} is not linked to {$lang->productCommon}, so the Build cannot be created. Please first <a href='%s'> link {$lang->productCommon}</a></span>";
 $lang->build->noBuild       = 'No builds yet.';
 

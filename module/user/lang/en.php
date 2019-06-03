@@ -56,7 +56,7 @@ $lang->user->index         = "Home";
 $lang->user->view          = "Overview";
 $lang->user->create        = "Add User";
 $lang->user->batchCreate   = "Batch Add";
-$lang->user->edit          = "Edit";
+$lang->user->edit          = "Edit User";
 $lang->user->batchEdit     = "Batch Edit";
 $lang->user->unlock        = "Unlock";
 $lang->user->delete        = "Delete";
@@ -78,7 +78,7 @@ $lang->user->saveTemplate          = 'Save as Template';
 $lang->user->setPublic             = 'Set as Public Template';
 $lang->user->deleteTemplate        = 'Delete Template';
 $lang->user->setTemplateTitle      = 'Please enter the title of template.';
-$lang->user->applyTemplate         = 'Template';
+$lang->user->applyTemplate         = 'Templates';
 $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
 
