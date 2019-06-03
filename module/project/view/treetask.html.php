@@ -11,9 +11,9 @@
   </h2>
   <div class="detail-content article-content">
     <div class="infos">
-      <span><?php echo $lang->task->estimate;?> <?php echo $task->estimate . $lang->workingHour;?></span>
-      <span><?php echo $lang->task->consumed;?> <?php echo round($task->consumed, 2) . $lang->workingHour;?></span>
-      <span><?php echo $lang->task->left;?> <?php echo $task->left . $lang->workingHour;?></span>
+      <span><?php echo $lang->task->estimate;?> <?php echo $task->estimate . ' ' . $lang->workingHour;?></span>
+      <span><?php echo $lang->task->consumed;?> <?php echo round($task->consumed, 2) . ' ' . $lang->workingHour;?></span>
+      <span><?php echo $lang->task->left;?> <?php echo $task->left . ' ' . $lang->workingHour;?></span>
     </div>
     <div class="infos">
       <span><?php echo $lang->task->type;?> <?php echo $lang->task->typeList[$task->type];?></span>
