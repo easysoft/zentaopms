@@ -11,9 +11,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id="mainMenu" class="clearfix">
-  <div id="sidebarHeader">
-    <div class="title" title='<?php echo $project->name?>'><?php echo $project->name;?></div>
-  </div>
   <div class="btn-toolbar pull-left">
     <?php $total = 0;?>
     <?php foreach($stories as $colStories) $total += count($colStories);?>

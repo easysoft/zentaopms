@@ -1656,9 +1656,9 @@ class projectModel extends model
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromproject', '', $projectID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('project')->eq($projectID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
-        $this->dao->update(TABLE_TASK)->set('status')->eq('cancel')->where('id')->in($tasks)->exec();
         foreach($tasks as $taskID)
         {
+            if(empty($taskID)) continue;
             $changes  = $this->loadModel('task')->cancel($taskID);
             $actionID = $this->action->create('task', $taskID, 'Canceled');
             $this->action->logHistory($actionID, $changes);

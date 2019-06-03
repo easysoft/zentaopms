@@ -1131,7 +1131,7 @@ class task extends control
         else
         {
             $this->task->delete(TABLE_TASK, $taskID);
-            if($task->parent) $this->task->updateParentStatus($task->id);
+            if($task->parent > 0) $this->task->updateParentStatus($task->id);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($task->story) $this->loadModel('story')->setStage($task->story);
             if(!empty($task->children))

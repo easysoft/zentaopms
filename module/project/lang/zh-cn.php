@@ -88,8 +88,8 @@ $lang->team->days       = '可用工日';
 $lang->team->totalHours = '总计';
 
 $lang->team->limited            = '受限用户';
-$lang->team->limitedList['no']  = '否';
 $lang->team->limitedList['yes'] = '是';
+$lang->team->limitedList['no']  = '否';
 
 $lang->project->basicInfo = '基本信息';
 $lang->project->otherInfo = '其他信息';
