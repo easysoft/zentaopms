@@ -25,7 +25,7 @@ $lang->welcome        = "%s ALM";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
-$lang->aboutZenTao    = 'ZenTao';
+$lang->aboutZenTao    = 'About ZenTao';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Change Password';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
@@ -155,8 +155,8 @@ $lang->exportFileTypeList['csv']  = 'csv';
 $lang->exportFileTypeList['xml']  = 'xml';
 $lang->exportFileTypeList['html'] = 'html';
 
-$lang->exportTypeList['all']      = 'All';
-$lang->exportTypeList['selected'] = 'Selected';
+$lang->exportTypeList['all']      = 'All Data';
+$lang->exportTypeList['selected'] = 'Selected Data';
 
 /* Language. */
 $lang->lang = 'Language';

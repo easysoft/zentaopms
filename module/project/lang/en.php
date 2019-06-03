@@ -13,7 +13,7 @@
 $lang->project->common        = $lang->projectCommon;
 $lang->project->allProjects   = 'All ' . $lang->projectCommon . 's';
 $lang->project->type          = 'Type';
-$lang->project->name          = 'Name';
+$lang->project->name          = 'Project Name';
 $lang->project->code          = 'Code';
 $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
@@ -80,7 +80,7 @@ $lang->project->endList[186] = '6 Months';
 $lang->project->endList[365] = '1 Year';
 
 $lang->team = new stdclass();
-$lang->team->account    = 'Username';
+$lang->team->account    = 'User';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Joined';
 $lang->team->hours      = 'Hours/day';
@@ -102,7 +102,7 @@ $lang->project->statusList['closed']    = 'Closed';
 
 $lang->project->aclList['open']    = "Default (Users who can visit {$lang->projectCommon} can access it.)";
 $lang->project->aclList['private'] = 'Private (For team members only.)';
-$lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist members can access it.)';
+$lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist users can access it.)';
 
 /* 方法列表。*/
 $lang->project->index             = "Home";
@@ -198,7 +198,7 @@ $lang->project->beginAndEnd         = 'Duration';
 $lang->project->begin               = 'Begin';
 $lang->project->end                 = 'End';
 $lang->project->lblStats            = 'Total Hours(h): ';
-$lang->project->stats               = 'Available: <strong>%s</strong>(h), Estimates: <strong>%s</strong>(h), Cost: <strong>%s</strong>(h), Left: <strong>%s</strong>(h).';
+$lang->project->stats               = 'Available: <strong>%s</strong>(h). Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).';
 $lang->project->taskSummary         = "Total <strong>%s</strong> tasks on this page. Waiting: <strong>%s</strong>. Doing: <strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).";
 $lang->project->checkedSummary      = "Selected: <strong>%total%</strong>. Wait:<strong>%wait%</strong>. Doing: <strong>%doing%</strong>.    Estimates: <strong>%estimate%</strong>(h). Cost: <strong>%consumed%</strong>(h). Left: <strong>%left%</strong>(h).";
 $lang->project->memberHoursAB       = "%s has <strong>%s</ strong> hours.";
@@ -219,14 +219,14 @@ $lang->project->copyTeam            = 'Copy Team';
 $lang->project->copyFromTeam        = "Copy from {$lang->projectCommon} Team: <strong>%s</strong>";
 $lang->project->noMatched           = "No $lang->projectCommon including '%s'can be found.";
 $lang->project->copyTitle           = "Choose a {$lang->projectCommon} to copy.";
-$lang->project->copyTeamTitle       = "Choose a {$lang->projectCommon}Team to copy.";
+$lang->project->copyTeamTitle       = "Choose a {$lang->projectCommon} Team to copy.";
 $lang->project->copyNoProject       = "No {$lang->projectCommon} can be copied.";
 $lang->project->copyFromProject     = "Copy from {$lang->projectCommon} <strong>%s</strong>";
 $lang->project->cancelCopy          = 'Cancel Copy';
 $lang->project->byPeriod            = 'By Time';
 $lang->project->byUser              = 'By User';
 $lang->project->noProject           = "No {$lang->projectCommon}. ";
-$lang->project->noMembers           = 'No members yet. ';
+$lang->project->noMembers           = 'No team members yet. ';
 
 /* 交互提示。*/
 $lang->project->confirmDelete         = "Do you want to delete the {$lang->projectCommon}[%s]?";
