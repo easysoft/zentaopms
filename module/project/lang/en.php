@@ -88,8 +88,8 @@ $lang->team->days       = 'day';
 $lang->team->totalHours = 'Total Hours';
 
 $lang->team->limited            = 'Limited User';
-$lang->team->limitedList['no']  = 'No';
 $lang->team->limitedList['yes'] = 'Yes';
+$lang->team->limitedList['no']  = 'No';
 
 $lang->project->basicInfo = 'Basic Info';
 $lang->project->otherInfo = 'Other Info';
