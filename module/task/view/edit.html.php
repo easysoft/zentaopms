@@ -20,6 +20,7 @@
 <?php js::set('confirmChangeProject', $lang->task->confirmChangeProject);?>
 <?php js::set('changeProjectConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
+<?php $thWidth = $this->app->getClientLang() == 'en' ? 'w-85px' : 'w-70px';?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -146,7 +147,7 @@
             <div class='detail-title'><?php echo $lang->task->legendEffort;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-70px'><?php echo $lang->task->estStarted;?></th>
+                <th class=<?php echo $thWidth;?>><?php echo $lang->task->estStarted;?></th>
                 <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
               </tr>
               <tr>
@@ -181,7 +182,7 @@
             <div class='detail-title'><?php echo $lang->task->legendLife;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-70px'><?php echo $lang->task->openedBy;?></th>
+                <th class=<?php echo $thWidth;?>><?php echo $lang->task->openedBy;?></th>
                 <td><?php echo $users[$task->openedBy];?></td>
               </tr>
               <tr>
