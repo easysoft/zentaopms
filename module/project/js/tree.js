@@ -29,51 +29,33 @@ $(function()
     // 根据列表展开树形列表
     var showTreeLevel = function(level)
     {
-        $('.btn-tree-view').removeClass('btn-active-text');
+        if(level === 'task' || level === 'story') $('.btn-tree-view').removeClass('btn-active-text');
         $('#taskTree li.item-product').removeClass('hidden');
         $('#taskTree li.item-module').removeClass('hidden');
         $('#taskTree li.item-story').removeClass('hidden');
         $('#taskTree li.item-task').removeClass('hidden');
 
-        if(level === 'root')
+        console.log((level === 'root' && collapse == false) || (level === 'task' && collapse == true) || (level === 'story' && collapse == true));
+        if((level === 'root' && collapse == false) || (level === 'task' && collapse == true) || (level === 'story' && collapse == true))
         {
-            $('[data-type=root]').addClass('btn-active-text');
             taskTree.collapse();
+            collapse = true;
+            if(level === 'task')  type = 'task';
+            if(level === 'story') type = 'story';
+            $('[data-type=' + type + ']').addClass('btn-active-text');
         }
-        else if(level === 'all')
+        else if((level === 'all' && type === 'task') || level === 'task')
         {
-            $('[data-type=all]').addClass('btn-active-text');
+            type = 'task';
+            collapse = false;
+            $('[data-type=task]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.expand($taskTree.find('li.has-list'), true);
         }
-        else if(level === 'task')
+        else if((level === 'all' && type === 'story') || level === 'story')
         {
-            $('[data-type=task]').addClass('btn-active-text');
-            taskTree.collapse();
-            taskTree.show($taskTree.find('li.item-task').parent().parent(), true);
-
-            var $storyItems = $('#taskTree li.item-story');
-            $storyItems.each(function()
-            {
-                var items = $(this).find('ul li:not(.hidden)').length;
-                if(items == 0) $(this).addClass('hidden');
-            });
-            var $moduleItems = $('#taskTree li.item-module');
-            moduleItems = sortItems($moduleItems);
-            for(i = 0; i < moduleItems.length; i++)
-            {
-                var items = $(moduleItems[i]).find('ul li:not(.hidden)').length;
-                if(items == 0) $(moduleItems[i]).addClass('hidden');
-            }
-            var $productItems = $('#taskTree li.item-product');
-            $productItems.each(function()
-            {
-                var items = $(this).find('ul li:not(.hidden)').length;
-                if(items == 0) $(this).addClass('hidden');
-            });
-        }
-        else if(level === 'story')
-        {
+            type = 'story';
+            collapse = false;
             $('[data-type=story]').addClass('btn-active-text');
             taskTree.collapse();
             taskTree.show($taskTree.find('li.item-story').parent().parent(), true);
@@ -93,7 +75,7 @@ $(function()
                 if(items == 0) $(this).addClass('hidden');
             });
         }
-        $('#main').toggleClass('tree-show-root', level === 'root');
+        $('#main').toggleClass('tree-show-root', collapse);
     };
 
     $(document).on('click', '.btn-tree-view', function()
@@ -103,7 +85,7 @@ $(function()
     });
 
     // 第一次访问时，展示所以节点
-    if (!$.zui.store.get('zui.tree::taskTree#taskTree')) showTreeLevel('all');
+    showTreeLevel(type);
 
     // 在右侧显示内容
     var $itemContent = $('#itemContent');
