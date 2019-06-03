@@ -90,12 +90,12 @@
             <table class='table table-form'>
               <?php if($task->parent <= 0):?>
               <tr>
-                <th class='w-80px'><?php echo $lang->task->project;?></th>
+                <th class=<?php echo $thWidth;?>><?php echo $lang->task->project;?></th>
                 <td><?php echo html::select('project', $projects, $task->project, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
               </tr>
               <?php endif;?>
               <tr>
-                <th class='w-80px'><?php echo $lang->task->module;?></th>
+                <th class=<?php echo $thWidth;?>><?php echo $lang->task->module;?></th>
                 <td id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></td>
               </tr>
               <?php if($config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
