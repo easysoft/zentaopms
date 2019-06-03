@@ -22,7 +22,7 @@
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-130px'><?php echo $lang->product->name;?></th>
+            <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control input-product-title' required");?></td><td></td>
           </tr>  
           <tr>
