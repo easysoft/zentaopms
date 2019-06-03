@@ -21,6 +21,12 @@ js::set('createBuild', $lang->build->create);
 js::set('refresh', $lang->refresh);
 js::set('flow', $config->global->flow);
 ?>
+<?php if($this->app->getClientLang() == 'en'):?>
+<style>
+#moduleIdBox .input-group-addon{padding: 5px 23px}
+#deadlineTd .input-group-addon{padding: 5px 18px}
+</style>
+<?php endif;?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
@@ -110,7 +116,7 @@ js::set('flow', $config->global->flow);
             </td>
           <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
           <?php if($showDeadline):?>
-            <td>
+            <td id='deadlineTd'>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
                 <span><?php echo html::input('deadline', $deadline, "class='form-control form-date'");?></span>

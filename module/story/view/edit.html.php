@@ -170,7 +170,7 @@
             <div class='detail-title'><?php echo $lang->story->legendLifeTime;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
+                <th class='w-80px'><?php echo $lang->story->openedBy;?></th>
                 <td><?php echo $users[$story->openedBy];?></td>
               </tr>
               <tr>
@@ -206,7 +206,8 @@
               </tr>
               <?php endif;?>
               <tr>
-                <th class='w-70px'><?php echo $lang->story->linkStories;?></th>
+              <?php $width = $this->app->getClientLang() == 'en' ? 'w-110px': 'w-70px'?>
+                <th class=<?php echo $width?>><?php echo $lang->story->linkStories;?></th>
                 <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
               </tr>
               <tr>

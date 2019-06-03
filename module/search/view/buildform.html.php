@@ -16,7 +16,7 @@ include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
 $fieldWidth    = $app->getClientLang() == 'en' ? 'w-130px' : 'w-110px';
-$operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
+$operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-90px';
 ?>
 <style>
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
@@ -53,7 +53,7 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
 @media (max-width: 1150px) {#userQueries {display: none}}
 <?php if($style == 'simple'):?>
-#<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 200px;}
+#<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 100px;}
 #queryBox.show {min-height: 66px;}
 <?php endif;?>
 #toggle-queries{position: absolute; right: 0px; top: 40px; width: 13px; background: #79cdfb; border-radius: 6px; height: 30px;cursor: pointer}

@@ -26,8 +26,8 @@
         <th><?php echo $lang->user->account;?></th>
         <th class='w-150px'><?php echo $lang->user->phone;?></th>
         <th class='w-150px'><?php echo $lang->user->mobile;?></th>
-        <th class='w-150px'><?php echo $lang->admin->safe->reason;?></th>
-        <th class='c-actions-1'><?php echo $lang->actions;?></th>
+        <th class='w-200px'><?php echo $lang->admin->safe->reason;?></th>
+        <th class='c-actions-2'><?php echo $lang->actions;?></th>
       </thead>
       <tbody>
         <?php foreach($weakUsers as $user):?>
@@ -38,7 +38,7 @@
           <td><?php echo $user->phone?></td>
           <td><?php echo $user->mobile?></td>
           <td><?php echo $lang->admin->safe->reasonList[$user->weakReason];?></td>
-          <td class='c-actions'><?php common::printIcon('user', 'edit', "userID=$user->id", '', 'list');?></td>
+          <td class='c-actions text-center'><?php common::printIcon('user', 'edit', "userID=$user->id", '', 'list');?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
