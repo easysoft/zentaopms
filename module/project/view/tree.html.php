@@ -85,4 +85,12 @@
   </div>
   <?php endif;?>
 </div>
+<?php js::set('type', $level);?>
+<?php js::set('collapse', false);?>
+<script>
+$(function()
+{
+    $('[data-type=<?php echo $level;?>]').addClass('btn-active-text');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>
