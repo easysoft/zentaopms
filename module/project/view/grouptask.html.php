@@ -114,8 +114,8 @@
         <th class="c-name"><?php echo $lang->task->name;?></th>
         <th class="c-status"><?php echo $lang->task->status;?></th>
         <th class="c-assign text-left"><?php echo $lang->task->assignedTo;?></th>
-        <th class="c-user"><?php echo $lang->task->finishedBy;?></th>
-        <th class="w-50px"><?php echo $lang->task->estimateAB;?></th>
+        <th class="w-90px"><?php echo $lang->task->finishedBy;?></th>
+        <th class="w-60px"><?php echo $lang->task->estimateAB;?></th>
         <th class="w-50px"><?php echo $lang->task->consumedAB;?></th>
         <th class="w-50px"><?php echo $lang->task->leftAB;?></th>
         <th class="w-50px"><?php echo $lang->task->progress;?></th>
