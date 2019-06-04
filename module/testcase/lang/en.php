@@ -61,7 +61,7 @@ $lang->testcase->results          = 'Result';
 $lang->testcase->resultsAB        = 'R';
 $lang->testcase->stepNumber       = 'Steps';
 $lang->testcase->stepNumberAB     = 'S';
-$lang->testcase->createBug        = 'Create Bug';
+$lang->testcase->createBug        = 'Report Bug';
 $lang->testcase->fromModule       = 'Source Module';
 $lang->testcase->fromCase         = 'Source Case';
 $lang->testcase->sync             = 'Sync. Case';
@@ -166,12 +166,12 @@ $lang->testcase->typeList['interface']   = 'Interface';
 $lang->testcase->typeList['other']       = 'Other';
 
 $lang->testcase->stageList['']           = '';
-$lang->testcase->stageList['unittest']   = 'Unit Test';
-$lang->testcase->stageList['feature']    = 'Function Test';
-$lang->testcase->stageList['intergrate'] = 'Integration Test';
-$lang->testcase->stageList['system']     = 'System Test';
-$lang->testcase->stageList['smoke']      = 'Smoking Test';
-$lang->testcase->stageList['bvt']        = 'BVT Test';
+$lang->testcase->stageList['unittest']   = 'Unit Testing';
+$lang->testcase->stageList['feature']    = 'Function Testing';
+$lang->testcase->stageList['intergrate'] = 'Integration Testing';
+$lang->testcase->stageList['system']     = 'System Testing';
+$lang->testcase->stageList['smoke']      = 'Smoking Testing';
+$lang->testcase->stageList['bvt']        = 'BVT Testing';
 
 $lang->testcase->reviewResultList['']        = '';
 $lang->testcase->reviewResultList['pass']    = 'Pass';
