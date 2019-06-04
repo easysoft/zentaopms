@@ -354,8 +354,8 @@ $lang->action->dynamicAction->user['undeleted']            = 'Restore User';
 $lang->action->dynamicAction->user['hidden']               = 'Hide User';
 $lang->action->dynamicAction->user['loginxuanxuan']        = 'Login Xuan';
 
-$lang->action->dynamicAction->entry['created']             = 'Add Entry';
-$lang->action->dynamicAction->entry['edited']              = 'Edit Entry';
+$lang->action->dynamicAction->entry['created']             = 'Add Application';
+$lang->action->dynamicAction->entry['edited']              = 'Edit Application';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
@@ -375,7 +375,7 @@ $lang->action->label->doclib      = 'Doc Library|doc|browse|libID=%s';
 $lang->action->label->doc         = 'Doc|doc|view|docID=%s';
 $lang->action->label->user        = 'User|user|view|account=%s';
 $lang->action->label->testreport  = 'Report|testreport|view|report=%s';
-$lang->action->label->entry       = 'Entry|entry|browse|';
+$lang->action->label->entry       = 'Application|entry|browse|';
 $lang->action->label->webhook     = 'Webhook|webhook|browse|';
 $lang->action->label->space       = ' ';
 
@@ -385,7 +385,7 @@ $lang->action->search->objectTypeList['product']     = $lang->productCommon;
 $lang->action->search->objectTypeList['project']     = $lang->projectCommon;
 $lang->action->search->objectTypeList['bug']         = 'Bug';
 $lang->action->search->objectTypeList['case']        = 'Case'; 
-$lang->action->search->objectTypeList['caseresult']  = 'Case Results';
+$lang->action->search->objectTypeList['caseresult']  = 'Case Result';
 $lang->action->search->objectTypeList['stepresult']  = 'Case Steps';
 $lang->action->search->objectTypeList['story']       = 'Story';  
 $lang->action->search->objectTypeList['task']        = 'Task'; 

@@ -41,8 +41,8 @@ $lang->admin->register = new stdclass();
 $lang->admin->register->common     = 'Bind Account';
 $lang->admin->register->caption    = 'Register in ZenTao Community';
 $lang->admin->register->click      = 'Register here';
-$lang->admin->register->lblAccount = '>= 3 letters and numbers.';
-$lang->admin->register->lblPasswd  = '>= 6 letters and numbers.';
+$lang->admin->register->lblAccount = '>= 3 letters and numbers';
+$lang->admin->register->lblPasswd  = '>= 6 letters and numbers';
 $lang->admin->register->submit     = 'Register';
 $lang->admin->register->bind       = "Bind Exsiting Account";
 $lang->admin->register->success    = "You have registered!";
@@ -65,7 +65,7 @@ $lang->admin->safe->modeList[0] = 'N/A';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
 
-$lang->admin->safe->modeRuleList[1] = ' >= 6 upper and lower case, numbers';
+$lang->admin->safe->modeRuleList[1] = ' >= 6 upper and lower case, and numbers';
 $lang->admin->safe->modeRuleList[2] = ' >= 10 upper and lower case, numbers and special characters.';
 
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
@@ -77,5 +77,5 @@ $lang->admin->safe->reasonList['birthday'] = 'Same as your DOB';
 $lang->admin->safe->modifyPasswordList[1] = 'Yes';
 $lang->admin->safe->modifyPasswordList[0] = 'No';
 
-$lang->admin->safe->noticeMode   = 'Password will be checked when Login, Add and Edit user.';
+$lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added and edited.';
 $lang->admin->safe->noticeStrong = '';

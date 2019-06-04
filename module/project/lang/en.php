@@ -46,7 +46,7 @@ $lang->project->hours         = 'Estimates: %s, Cost: %s, Left: %s.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon} yet.";
 $lang->project->createStory   = "Create Story";
-$lang->project->all           = 'All ';
+$lang->project->all           = 'All Projects';
 $lang->project->undone        = 'Unfinished';
 $lang->project->unclosed      = 'Unclosed';
 $lang->project->typeDesc      = 'No story, bug, build, test, or burndown chart is allowed in OPS';
@@ -70,7 +70,7 @@ $lang->project->export   = 'Export';
 $lang->project->typeList['sprint']    = 'Sprint';
 $lang->project->typeList['waterfall'] = 'Waterfall';
 $lang->project->typeList['ops']       = 'OPS';
-
+    
 $lang->project->endList[7]   = '1 Week';
 $lang->project->endList[14]  = '2 Weeks';
 $lang->project->endList[31]  = '1 Month';
@@ -105,7 +105,7 @@ $lang->project->aclList['private'] = 'Private (For team members only.)';
 $lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist users can access it.)';
 
 /* 方法列表。*/
-$lang->project->index             = "Home";
+$lang->project->index             = "Project Home";
 $lang->project->task              = 'Tasks';
 $lang->project->groupTask         = 'Group View';
 $lang->project->story             = 'Story';
@@ -118,7 +118,7 @@ $lang->project->burn              = 'Burndown';
 $lang->project->computeBurn       = 'Update';
 $lang->project->burnData          = 'Burndown Data';
 $lang->project->fixFirst          = 'Edit 1st-Day Estimates';
-$lang->project->team              = 'Team Member';
+$lang->project->team              = 'Members';
 $lang->project->doc               = 'Document';
 $lang->project->doclib            = 'Docoment Library';
 $lang->project->manageProducts    = 'Linked ' . $lang->productCommon . 's';
@@ -137,7 +137,7 @@ $lang->project->edit              = "Edit Project";
 $lang->project->batchEdit         = "Batch Edit";
 $lang->project->manageMembers     = 'Manage Team';
 $lang->project->unlinkMember      = 'Remove Member';
-$lang->project->unlinkStory       = 'Unlink Story';
+$lang->project->unlinkStory       = 'Unlink';
 $lang->project->batchUnlinkStory  = 'Batch Unlink Stories';
 $lang->project->importTask        = 'Transfer Task';
 $lang->project->importPlanStories = 'Link Stories By Plans';
