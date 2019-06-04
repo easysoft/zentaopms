@@ -80,8 +80,8 @@ $lang->report->typeList['bar']     = 'Bar';
 $lang->report->typeList['line']    = 'Line';
 
 $lang->report->conditions    = 'Filter by:';
-$lang->report->closedProduct = 'Closed ' . $lang->productCommon;
-$lang->report->overduePlan   = 'Expired Plan';
+$lang->report->closedProduct = 'Closed ' . $lang->productCommon . 's';
+$lang->report->overduePlan   = 'Expired Plans';
 
 /* daily reminder. */
 $lang->report->idAB  = 'ID';
