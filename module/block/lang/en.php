@@ -81,7 +81,7 @@ $lang->block->default['product']['3']['grid']  = 8;
 $lang->block->default['product']['3']['params']['num']  = 15;
 $lang->block->default['product']['3']['params']['type'] = 'noclosed';
 
-$lang->block->default['product']['4']['title'] = 'My Story';
+$lang->block->default['product']['4']['title'] = 'My Stories';
 $lang->block->default['product']['4']['block'] = 'story';
 $lang->block->default['product']['4']['grid']  = 4;
 
@@ -238,8 +238,8 @@ $lang->block->availableBlocks->task     = 'My Tasks';
 $lang->block->availableBlocks->bug      = 'My Bugs';
 $lang->block->availableBlocks->case     = 'My Cases';
 $lang->block->availableBlocks->story    = 'My Stories';
-$lang->block->availableBlocks->product  = $lang->productCommon . 'List';
-$lang->block->availableBlocks->project  = $lang->projectCommon . 'List';
+$lang->block->availableBlocks->product  = $lang->productCommon . 's';
+$lang->block->availableBlocks->project  = $lang->projectCommon . 's';
 $lang->block->availableBlocks->plan     = 'Plans';
 $lang->block->availableBlocks->release  = 'Releases';
 $lang->block->availableBlocks->build    = 'Builds';
