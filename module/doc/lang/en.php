@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* Fields. */
-$lang->doc->common         = 'Doc';
+$lang->doc->common         = 'Document';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = $lang->productCommon;
 $lang->doc->project        = $lang->projectCommon;
