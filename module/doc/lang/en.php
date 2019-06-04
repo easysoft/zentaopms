@@ -150,8 +150,8 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Show Attachment Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
-$lang->doc->orderLib = 'Library Rank Settings';
-$lang->doc->customShowLibs = 'Library Display Settings';
+$lang->doc->orderLib = 'Rank Settings';
+$lang->doc->customShowLibs = 'Display Settings';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty Library';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category Documents';
 $lang->doc->customShowLibsList['unclosed'] = 'Display Active Projects Only';
