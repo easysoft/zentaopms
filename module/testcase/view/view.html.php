@@ -302,7 +302,7 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendOpenAndEdit;?></summary>
         <div class="detail-content">
-          <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-60px';?>
+          <?php $widthClass = $app->getClientLang() == 'en' ? 'w-100px' : 'w-60px';?>
           <table class='table table-data'>
             <tr>
               <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->openedBy;?></th>

@@ -66,7 +66,8 @@
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-80px'><?php echo $lang->story->product;?></th>
+                <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+                <th class='<?php echo $colWidth;?>'><?php echo $lang->story->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
