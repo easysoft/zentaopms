@@ -1,6 +1,6 @@
 <?php
-$lang->testreport->common   = 'QA Report';
-$lang->testreport->browse   = 'QA Report';
+$lang->testreport->common   = 'Testing Report';
+$lang->testreport->browse   = 'Testing Reports';
 $lang->testreport->create   = 'Create Report';
 $lang->testreport->edit     = 'Edit Report';
 $lang->testreport->delete   = 'Delete';
@@ -64,7 +64,7 @@ $lang->testreport->noReport       = "No report has been generated. Please check 
 $lang->testreport->foundBugTip    = "Bugs generated in this build and generated in the test period.";
 $lang->testreport->legacyBugTip   = "Active bugs, or solved bugs that are not in the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case run in the test period.";
-$lang->testreport->errorTrunk     = "You cannot create a Test report for the trunk. Please modify the linked build!";
+$lang->testreport->errorTrunk     = "You cannot create a Testing report for the trunk. Please modify the linked build!";
 $lang->testreport->moreProduct    = "Testing reports can only be generated for the same product.";
 
 $lang->testreport->bugSummary = <<<EOD

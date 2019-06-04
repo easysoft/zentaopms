@@ -49,8 +49,8 @@ $lang->report->deviationChart   = $lang->projectCommon . ' Deviation Chart';
 
 $lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|report|projectdeviation';
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
-$lang->reportList->test->lists[10]    = 'Bug Reported|report|bugcreate';
-$lang->reportList->test->lists[13]    = 'Bug Assigned|report|bugassign';
+$lang->reportList->test->lists[10]    = 'Bug Reported Summary|report|bugcreate';
+$lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
 $lang->reportList->staff->lists[10]   = 'Team Workload|report|workload';
 
 $lang->report->id            = 'ID';
@@ -80,8 +80,8 @@ $lang->report->typeList['bar']     = 'Bar';
 $lang->report->typeList['line']    = 'Line';
 
 $lang->report->conditions    = 'Filter by:';
-$lang->report->closedProduct = 'Closed ' . $lang->productCommon;
-$lang->report->overduePlan   = 'Expired Plan';
+$lang->report->closedProduct = 'Closed ' . $lang->productCommon . 's';
+$lang->report->overduePlan   = 'Expired Plans';
 
 /* daily reminder. */
 $lang->report->idAB  = 'ID';
