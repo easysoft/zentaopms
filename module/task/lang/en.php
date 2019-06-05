@@ -76,7 +76,7 @@ $lang->task->desc              = 'Description';
 $lang->task->assign            = 'Assign';
 $lang->task->assignTo          = $lang->task->assign;
 $lang->task->batchAssignTo     = 'Batch Assign';
-$lang->task->assignedTo        = 'AssignedTo';
+$lang->task->assignedTo        = 'AssignTo';
 $lang->task->assignedToAB      = 'AssignedTo';
 $lang->task->assignedDate      = 'AssignedDate';
 $lang->task->openedBy          = 'CreatedBy';
@@ -154,21 +154,21 @@ $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Cancelled';
 
 $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
-$lang->task->afterChoices['toTaskList']     = 'Back to Task List';
-$lang->task->afterChoices['toStoryList']    = 'Back to Story List';
+$lang->task->afterChoices['toTaskList']     = 'Go to Task List Page';
+$lang->task->afterChoices['toStoryList']    = 'Go to Story List Page';
 
 $lang->task->legendBasic  = 'Basic Info';
 $lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Task Life';
 $lang->task->legendDesc   = 'Task Description';
 
-$lang->task->confirmDelete         = "Do you want to delete this Task?";
+$lang->task->confirmDelete         = "Do you want to delete this task?";
 $lang->task->confirmDeleteEstimate = "Do you want to delete it?";
 $lang->task->copyStoryTitle        = "Copy Story";
-$lang->task->afterSubmit           = "After it is created, ";
+$lang->task->afterSubmit           = "Next ";
 $lang->task->successSaved          = "Created!";
 $lang->task->delayWarning          = " <strong class='text-danger'> Delay %s days </strong>";
-$lang->task->remindBug             = "This Task is converted from a Bug. Do you want to update the Bug:%s?";
+$lang->task->remindBug             = "This task is converted from a bug. Do you want to update the Bug:%s?";
 $lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, the linked Module, Story and AssignedTo will be changed. Do you want to do it?";
 $lang->task->confirmFinish         = '"Left Hour" is 0. Do you want to change the Status to "Finished"?';
 $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set Task as "Finished"?';

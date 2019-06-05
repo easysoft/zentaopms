@@ -101,7 +101,7 @@ $lang->testtask->fail          = 'Failed';
 $lang->testtask->showResult    = 'Run <span class="text-info">%s</span> times';
 $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> times';
 
-$lang->testtask->confirmDelete     = 'Do you want to delete this test build?';
+$lang->testtask->confirmDelete     = 'Do you want to delete this build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this case?';
 $lang->testtask->noticeNoOther     = 'There are no test requests for this product';
 $lang->testtask->noTesttask        = 'No requests. ';

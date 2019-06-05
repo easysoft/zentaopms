@@ -187,15 +187,15 @@ $lang->story->lblActivate          = 'Activate';
 $lang->story->lblClose             = 'Close';
 $lang->story->lblTBC               = 'Task/Bug/Case';
 
-$lang->story->checkAffection       = 'Impact';
-$lang->story->affectedProjects     = '' . $lang->projectCommon;
-$lang->story->affectedBugs         = 'Bug';
-$lang->story->affectedCases        = 'Case';
+$lang->story->checkAffection       = 'Influence';
+$lang->story->affectedProjects     = '' . $lang->projectCommon . 's';
+$lang->story->affectedBugs         = 'Bugs';
+$lang->story->affectedCases        = 'Cases';
 
 $lang->story->specTemplate          = "As a < type of user >, I want < some goal > so that < some reason >.";
 $lang->story->needNotReview         = 'No Review Required';
 $lang->story->successSaved          = "Story is saved!";
-$lang->story->confirmDelete         = "Do you want to delete this Story?";
+$lang->story->confirmDelete         = "Do you want to delete this story?";
 $lang->story->errorEmptyChildStory  = '『Decomposed Stories』canot be blank.';
 $lang->story->mustChooseResult      = 'Select Result';
 $lang->story->mustChoosePreVersion  = 'Select a version to revert to.';

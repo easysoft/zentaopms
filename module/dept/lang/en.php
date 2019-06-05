@@ -22,7 +22,7 @@ $lang->dept->updateOrder = "Sort";
 $lang->dept->add         = "Add Department";
 $lang->dept->dragAndSort = "Drag to order";
 
-$lang->dept->confirmDelete = " Do you want to delete this Department?";
+$lang->dept->confirmDelete = " Do you want to delete this department?";
 $lang->dept->successSave   = " Saved!";
 
 $lang->dept->error = new stdclass();
