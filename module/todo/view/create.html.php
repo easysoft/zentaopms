@@ -22,7 +22,8 @@
     <form method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'> 
         <tr>
-          <th class='w-80px'><?php echo $lang->todo->date;?></th>
+          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-80px';?>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->date;?></th>
           <td class='w-400px'>
             <div class='input-group'>
               <?php echo html::input('date', $date, "class='form-control form-date'");?>

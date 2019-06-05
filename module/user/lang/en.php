@@ -60,7 +60,7 @@ $lang->user->edit          = "Edit User";
 $lang->user->batchEdit     = "Batch Edit";
 $lang->user->unlock        = "Unlock";
 $lang->user->delete        = "Delete";
-$lang->user->unbind        = "Unbind Zdoo";
+$lang->user->unbind        = "Unbind from Zdoo";
 $lang->user->login         = "Login";
 $lang->user->mobileLogin   = "Mobile";
 $lang->user->editProfile   = "Edit Profile";
@@ -103,8 +103,8 @@ $lang->user->reviewedBy  = 'ReviewedBy';
 $lang->user->canceledBy  = 'CancelledBy';
 
 $lang->user->testTask2Him = 'BuildBy';
-$lang->user->case2Him     = 'Case AssignedTo';
-$lang->user->caseByHim    = 'Case CreatedBy';
+$lang->user->case2Him     = 'CaseAssignedTo';
+$lang->user->caseByHim    = 'CaseCreatedBy';
 
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
@@ -125,6 +125,9 @@ $lang->user->roleList['others'] = 'Others';
 
 $lang->user->genderList['m'] = 'Male';
 $lang->user->genderList['f'] = 'Female';
+
+$lang->user->thirdPerson['m'] = 'Him';
+$lang->user->thirdPerson['f'] = 'Her';
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";

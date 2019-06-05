@@ -121,12 +121,12 @@ $(document).ready(function()
         };
 
         var defaultWidth = $.zui.store.get('splitRowFirstSize:' + id);
-        if(typeof(defaultWidth) != undefined)
+        if(typeof(defaultWidth) == 'undefined')
         {
             defaultWidth = 0;
             $firstCol.find('.tabs ul.nav-tabs li').each(function(){defaultWidth += $(this).outerWidth()});
             defaultWidth += ($firstCol.find('.tabs ul.nav-tabs li').length - 1) * 10;
-            defaultWidth += 20;
+            defaultWidth += 30;
         }
         setFirstColWidth(defaultWidth);
 

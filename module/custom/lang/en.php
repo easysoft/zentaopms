@@ -14,7 +14,11 @@ $lang->custom->module     = 'Module';
 $lang->custom->section    = 'Section';
 $lang->custom->lang       = 'Language';
 $lang->custom->setPublic  = 'Set Public';
+<<<<<<< HEAD
 $lang->custom->required   = 'Required Fields';
+=======
+$lang->custom->required   = 'Form';
+>>>>>>> 10e0c46c717357a938473ad63b4fce485c870ebd
 $lang->custom->score      = 'Point';
 $lang->custom->timezone   = 'Timezone';
 $lang->custom->scoreReset = 'Reset Point';

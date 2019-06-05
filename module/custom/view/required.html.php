@@ -33,9 +33,10 @@
         </div>
       </div>
       <table class='table table-form mw-800px'>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-200px' : 'w-100px';?>
         <?php foreach($requiredFields as $method => $requiredField):?>
         <tr>
-          <th class='w-100px'>
+          <th class='<?php echo $colWidth;?>'>
           <?php
           $fields = $this->custom->getFormFields($moduleName, $method);
 

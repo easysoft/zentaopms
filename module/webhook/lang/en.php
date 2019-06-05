@@ -55,7 +55,7 @@ $lang->webhook->confirmDelete = 'Do you want to delete this hook?';
 $lang->webhook->trimWords = '';
 
 $lang->webhook->note = new stdClass();
-$lang->webhook->note->async   = 'If the sending type is asynchronous, you need turn on cron.';
+$lang->webhook->note->async   = 'If the sending type is asynchronous, you have to go to Admin-Notification to turn on the cron.';
 $lang->webhook->note->product = "All actions will trigger the hook if {$lang->productCommon} is empty, or only actions of {$lang->productCommon} will trigger it.";
 $lang->webhook->note->project = "All actions will trigger the hook if {$lang->projectCommon} is empty, or only actions of {$lang->projectCommon} will trigger it.";
 

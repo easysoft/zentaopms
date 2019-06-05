@@ -17,20 +17,21 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
+      $that   = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $app->user->gender) : '';
       $active = $type == 'assignedTo' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=assignedTo"), $lang->user->assignedTo . $that) . "</li>";
 
       $active = $type == 'openedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=openedBy"),   $lang->user->openedBy . $that)   . "</li>";
 
       $active = $type == 'finishedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=finishedBy"), $lang->user->finishedBy) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=finishedBy"), $lang->user->finishedBy . $that) . "</li>";
 
       $active = $type == 'closedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=closedBy"),   $lang->user->closedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=closedBy"),   $lang->user->closedBy . $that)   . "</li>";
 
       $active = $type == 'canceledBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=canceledBy"), $lang->user->canceledBy) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=canceledBy"), $lang->user->canceledBy . $that) . "</li>";
       ?>
     </ul>
   </nav>
@@ -43,7 +44,7 @@
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->task->project;?></th>
           <th><?php echo $lang->task->name;?></th>
-          <th class='w-hour'><?php echo $lang->task->estimateAB;?></th>
+          <th class='w-70px'><?php echo $lang->task->estimateAB;?></th>
           <th class='w-70px'><?php echo $lang->task->consumedAB;?></th>
           <th class='w-hour'><?php echo $lang->task->leftAB;?></th>
           <th class='w-date'><?php echo $lang->task->deadlineAB;?></th>
