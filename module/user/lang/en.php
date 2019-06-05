@@ -94,7 +94,7 @@ $lang->user->todo        = 'Todo';
 $lang->user->story       = 'Story';
 $lang->user->dynamic     = 'Dynamics';
 
-$lang->user->openedBy    = 'Openedby';
+$lang->user->openedBy    = 'CreatedBy';
 $lang->user->assignedTo  = 'AssignedTo';
 $lang->user->finishedBy  = 'FinishedBy';
 $lang->user->resolvedBy  = 'SolvedBy';
@@ -106,7 +106,7 @@ $lang->user->testTask2Him = 'BuildBy';
 $lang->user->case2Him     = 'Case AssignedTo';
 $lang->user->caseByHim    = 'Case CreatedBy';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get permissions. Click Back to return.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
@@ -149,10 +149,10 @@ $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = 'Letters, underline and numbers, >= 3 characters';
+$lang->user->placeholder->account   = '>= 3 letters, underline and numbers';
 $lang->user->placeholder->password1 = '>= 6 characters';
-$lang->user->placeholder->role      = "Role is related to content and user order.";
-$lang->user->placeholder->group     = "Group is related to user permissions.";
+$lang->user->placeholder->role      = "Role is related to content and user listing order.";
+$lang->user->placeholder->group     = "Group is related to user privileges.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
 $lang->user->placeholder->verify    = 'Please enter your login password.';
 
