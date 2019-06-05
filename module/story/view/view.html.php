@@ -12,6 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php if($app->getClientLang() == 'en'):?>
+<style>
+.main-actions .btn-toolbar .btn { padding-right: 5px !important; padding-left: 5px !important;}
+.main-actions .btn-toolbar .divider { margin-right: 5px !important; margin-left: 5px !important;}
+.main-actions .btn-toolbar .btn+.btn { margin-left: 0px !important;}
+.main-actions .btn-toolbar .btn+.btn-group {margin-left: 5px !important;}
+.main-actions .btn-toolbar { padding: 4px 5px;}
+</style>
+<?php endif;?>
 <?php $browseLink = $app->session->storyList != false ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch&moduleID=$story->module");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id="mainMenu" class="clearfix">
