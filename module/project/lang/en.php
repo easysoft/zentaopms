@@ -200,7 +200,7 @@ $lang->project->end                 = 'End';
 $lang->project->lblStats            = 'Efforts';
 $lang->project->stats               = 'Available: <strong>%s</strong>(h). Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).';
 $lang->project->taskSummary         = "Total <strong>%s</strong> tasks on this page. Waiting: <strong>%s</strong>. Doing: <strong>%s</strong>.  &nbsp;&nbsp;&nbsp;  Estimates: <strong>%s</strong>(h). Cost: <strong>%s</strong>(h). Left: <strong>%s</strong>(h).";
-$lang->project->checkedSummary      = "Selected: <strong>%total%</strong>. Wait:<strong>%wait%</strong>. Doing: <strong>%doing%</strong>.    Estimates: <strong>%estimate%</strong>(h). Cost: <strong>%consumed%</strong>(h). Left: <strong>%left%</strong>(h).";
+$lang->project->checkedSummary      = "Selected: <strong>%total%</strong>. Waiting: <strong>%wait%</strong>. Doing: <strong>%doing%</strong>.    Estimates: <strong>%estimate%</strong>(h). Cost: <strong>%consumed%</strong>(h). Left: <strong>%left%</strong>(h).";
 $lang->project->memberHoursAB       = "%s has <strong>%s</ strong> hours.";
 $lang->project->memberHours         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">%s Available Hours</div><div class="segment-value">%s</div></div></div></div>';
 $lang->project->countSummary        = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Tasks</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Doing</div><div class="segment-value"><span class="label label-dot label-primary"></span> %s</div></div><div class="segment"><div class="segment-title">Waiting</div><div class="segment-value"><span class="label label-dot label-primary muted"></span> %s</div></div></div></div>';
@@ -238,7 +238,7 @@ $lang->project->accessDenied          = "Your access to {$lang->projectCommon} i
 $lang->project->tips                  = 'Note';
 $lang->project->afterInfo             = "{$lang->projectCommon} is created. Next you can ";
 $lang->project->setTeam               = 'Set Team';
-$lang->project->linkStory             = 'Link Story';
+$lang->project->linkStory             = 'Link Stories';
 $lang->project->createTask            = 'Create Task';
 $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'Exclude Weekend';

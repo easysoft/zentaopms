@@ -49,7 +49,7 @@ $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
 
-$lang->user->legendBasic        = 'Basic Info.';
+$lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
 
 $lang->user->index         = "Home";
@@ -102,9 +102,9 @@ $lang->user->closedBy    = 'ClosedBy';
 $lang->user->reviewedBy  = 'ReviewedBy';
 $lang->user->canceledBy  = 'CancelledBy';
 
-$lang->user->testTask2Him = 'Build';
-$lang->user->case2Him     = 'Case Assigned';
-$lang->user->caseByHim    = 'Case Opened';
+$lang->user->testTask2Him = 'BuildBy';
+$lang->user->case2Him     = 'Case AssignedTo';
+$lang->user->caseByHim    = 'Case CreatedBy';
 
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get permissions. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
@@ -121,10 +121,10 @@ $lang->user->roleList['td']     = 'Technical Manager';
 $lang->user->roleList['pd']     = 'Product Manager';
 $lang->user->roleList['qd']     = 'QA Manager';
 $lang->user->roleList['top']    = 'Senior Manager';
-$lang->user->roleList['others'] = 'Other';
+$lang->user->roleList['others'] = 'Others';
 
-$lang->user->genderList['m'] = 'M';
-$lang->user->genderList['f'] = 'F';
+$lang->user->genderList['m'] = 'Male';
+$lang->user->genderList['f'] = 'Female';
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
