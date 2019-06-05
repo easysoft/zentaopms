@@ -154,7 +154,7 @@ $lang->doc->orderLib = 'Rank Settings';
 $lang->doc->customShowLibs = 'Display Settings';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty Library';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category Documents';
-$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->productCommon}s Only";
+$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->projectCommon}s Only";
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this document library?";

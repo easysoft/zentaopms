@@ -16,7 +16,7 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
-      $that = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $app->user->gender) : '';
+      $that = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $user->gender) : '';
       echo "<li id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask2Him . $that) . "</li>";
     
       $active = $type == 'case2Him' ? 'active' : '';

@@ -17,7 +17,7 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
-      $that   = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $app->user->gender) : '';
+      $that   = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $user->gender) : '';
       $active = $type == 'assignedTo' ? 'active' : '';
       echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->user->assignedTo . $that) . "</li>";
 
@@ -42,7 +42,7 @@
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th class='w-type'><?php echo $lang->typeAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
-          <th class='w-user'><?php echo $lang->openedByAB;?></th>
+          <th class='w-90px'><?php echo $lang->openedByAB;?></th>
           <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
           <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
         </tr>

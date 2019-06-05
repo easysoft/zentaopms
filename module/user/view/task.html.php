@@ -17,7 +17,7 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
-      $that   = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $app->user->gender) : '';
+      $that   = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $user->gender) : '';
       $active = $type == 'assignedTo' ? 'active' : '';
       echo "<li class='$active'>" . html::a(inlink('task', "account=$account&type=assignedTo"), $lang->user->assignedTo . $that) . "</li>";
 

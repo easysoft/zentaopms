@@ -83,15 +83,15 @@ $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
 
 $lang->user->profile     = 'Profile';
-$lang->user->project     = $lang->projectCommon;
-$lang->user->task        = 'Task';
-$lang->user->bug         = 'Bug';
+$lang->user->project     = $lang->projectCommon . 's';
+$lang->user->task        = 'Tasks';
+$lang->user->bug         = 'Bugs';
 $lang->user->test        = 'QA';
 $lang->user->testTask    = 'Test Request';
 $lang->user->testCase    = 'Test Case';
 $lang->user->schedule    = 'Schedule';
 $lang->user->todo        = 'Todo';
-$lang->user->story       = 'Story';
+$lang->user->story       = 'Stories';
 $lang->user->dynamic     = 'Dynamics';
 
 $lang->user->openedBy    = 'CreatedBy';
