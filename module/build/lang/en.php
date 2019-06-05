@@ -21,7 +21,7 @@ $lang->build->batchUnlink      = 'Batch Unlink';
 $lang->build->batchUnlinkStory = 'Batch Unlink Stories';
 $lang->build->batchUnlinkBug   = 'Batch Unlink Bugs';
 
-$lang->build->confirmDelete      = "Do you want to delete this Build?";
+$lang->build->confirmDelete      = "Do you want to delete this build?";
 $lang->build->confirmUnlinkStory = "Do you want to unlink this Story?";
 $lang->build->confirmUnlinkBug   = "Do you want to unlink this Bug?";
 

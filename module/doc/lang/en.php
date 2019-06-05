@@ -55,11 +55,11 @@ $lang->doc->searchDoc      = 'Search';
 $lang->doc->fast           = 'Qucik Entry';
 $lang->doc->allDoc         = 'All Documents';
 $lang->doc->openedByMe     = 'My';
-$lang->doc->orderByOpen    = 'Last Added';
+$lang->doc->orderByOpen    = 'Recent Added';
 $lang->doc->orderByEdit    = 'Recent Edited';
 $lang->doc->orderByVisit   = 'Last Visited';
 $lang->doc->todayEdited    = 'Update Today';
-$lang->doc->pastEdited     = 'Updated';
+$lang->doc->pastEdited     = 'Updated Yesterday';
 $lang->doc->myDoc          = 'My Documents';
 $lang->doc->myCollection   = 'My Favorites';
 

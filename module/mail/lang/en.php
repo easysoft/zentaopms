@@ -95,7 +95,7 @@ $lang->mail->sendCloudHelp  = <<<EOD
 EOD;
 $lang->mail->sendCloudSuccess = 'Done';
 $lang->mail->closeSendCloud   = 'Close SendCloud';
-$lang->mail->addressWhiteList = 'Add email addresses to the whiltelist of your email server to avoid being blocked';
+$lang->mail->addressWhiteList = 'Add it to the whiltelist of your email server to avoid being blocked';
 $lang->mail->ztCloudNotice    = <<<EOD
 
 
