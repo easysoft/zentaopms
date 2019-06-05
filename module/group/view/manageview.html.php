@@ -21,9 +21,8 @@
   <form class="load-indicator main-form form-ajax" id="manageViewForm" method="post" target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-110px'>
-          <?php echo $lang->group->viewList;?>
-        </th>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-130px' : 'w-100px';?>
+        <th class='<?php echo $colWidth;?>'><?php echo $lang->group->viewList;?></th>
         <td>
           <?php foreach($lang->menu as $menuKey => $menu):?>
           <?php if(!is_string($menu)) continue;?>
