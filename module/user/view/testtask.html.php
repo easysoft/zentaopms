@@ -16,9 +16,10 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
-      echo "<li class='active'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask2Him) . "</li>";
-      echo "<li>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  $lang->user->case2Him) . "</li>";
-      echo "<li>" . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  $lang->user->caseByHim) . "</li>";
+      $that = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $app->user->gender) : '';
+      echo "<li class='active'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask2Him . $that) . "</li>";
+      echo "<li>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  $lang->user->case2Him . $that) . "</li>";
+      echo "<li>" . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  $lang->user->caseByHim . $that) . "</li>";
       ?>
     </ul>
   </nav>

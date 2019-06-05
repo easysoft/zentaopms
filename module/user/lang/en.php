@@ -103,8 +103,8 @@ $lang->user->reviewedBy  = 'ReviewedBy';
 $lang->user->canceledBy  = 'CancelledBy';
 
 $lang->user->testTask2Him = 'BuildBy';
-$lang->user->case2Him     = 'Case AssignedTo';
-$lang->user->caseByHim    = 'Case CreatedBy';
+$lang->user->case2Him     = 'CaseAssignedTo';
+$lang->user->caseByHim    = 'CaseCreatedBy';
 
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get permissions. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
