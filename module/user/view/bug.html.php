@@ -17,17 +17,18 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
+      $that   = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $user->gender) : '';
       $active = $type == 'assignedTo' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->user->assignedTo . $that) . "</li>";
 
       $active = $type == 'openedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=openedBy"),   $lang->user->openedBy . $that)   . "</li>";
 
       $active = $type == 'resolvedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=resolvedBy"), $lang->user->resolvedBy) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=resolvedBy"), $lang->user->resolvedBy . $that) . "</li>";
 
       $active = $type == 'closedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=closedBy"),   $lang->user->closedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=closedBy"),   $lang->user->closedBy . $that)   . "</li>";
       ?>
     </ul>
   </nav>
@@ -41,7 +42,7 @@
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th class='w-type'><?php echo $lang->typeAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
-          <th class='w-user'><?php echo $lang->openedByAB;?></th>
+          <th class='w-90px'><?php echo $lang->openedByAB;?></th>
           <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
           <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
         </tr>

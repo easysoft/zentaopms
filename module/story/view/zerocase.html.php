@@ -32,7 +32,8 @@
         <th class='w-pri'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
         <th class='w-p30'>  <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
         <th>                <?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
-        <th class='w-100px'><?php common::printOrderLink('source',     $orderBy, $vars, $lang->story->source);?></th>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-120px' : 'w-90px';?>
+        <th class='<?php echo $colWidth;?>'><?php common::printOrderLink('source',     $orderBy, $vars, $lang->story->source);?></th>
         <th class='w-100px'><?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
         <th class='w-100px'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
         <th class='w-70px'> <?php common::printOrderLink('estimate',   $orderBy, $vars, $lang->story->estimateAB);?></th>

@@ -27,7 +27,8 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
     <form method='post' target='hiddenwin'>
         <table class='table table-form'>
           <tr>
-            <th class='w-80px'><?php echo $lang->story->reviewedDate;?></th>
+            <?php $colWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-80px';?>
+            <th class='<?php echo $colWidth;?>'><?php echo $lang->story->reviewedDate;?></th>
             <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), "class='form-control form-date'");?></td><td></td>
           </tr>
           <tr>

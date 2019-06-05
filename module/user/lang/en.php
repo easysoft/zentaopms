@@ -17,7 +17,7 @@ $lang->user->account     = 'Account';
 $lang->user->password    = 'Password';
 $lang->user->password2   = 'Repeat Password';
 $lang->user->role        = 'Role';
-$lang->user->group       = 'Group';
+$lang->user->group       = 'Privilege Group';
 $lang->user->realname    = 'Name';
 $lang->user->nickname    = 'Nickname';
 $lang->user->commiter    = 'SVN/GIT Account';
@@ -49,7 +49,7 @@ $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
 
-$lang->user->legendBasic        = 'Basic Info.';
+$lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
 
 $lang->user->index         = "Home";
@@ -60,7 +60,7 @@ $lang->user->edit          = "Edit User";
 $lang->user->batchEdit     = "Batch Edit";
 $lang->user->unlock        = "Unlock";
 $lang->user->delete        = "Delete";
-$lang->user->unbind        = "Unbind Zdoo";
+$lang->user->unbind        = "Unbind from Zdoo";
 $lang->user->login         = "Login";
 $lang->user->mobileLogin   = "Mobile";
 $lang->user->editProfile   = "Edit Profile";
@@ -83,18 +83,18 @@ $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
 
 $lang->user->profile     = 'Profile';
-$lang->user->project     = $lang->projectCommon;
-$lang->user->task        = 'Task';
-$lang->user->bug         = 'Bug';
+$lang->user->project     = $lang->projectCommon . 's';
+$lang->user->task        = 'Tasks';
+$lang->user->bug         = 'Bugs';
 $lang->user->test        = 'QA';
 $lang->user->testTask    = 'Test Request';
 $lang->user->testCase    = 'Test Case';
 $lang->user->schedule    = 'Schedule';
 $lang->user->todo        = 'Todo';
-$lang->user->story       = 'Story';
+$lang->user->story       = 'Stories';
 $lang->user->dynamic     = 'Dynamics';
 
-$lang->user->openedBy    = 'Openedby';
+$lang->user->openedBy    = 'CreatedBy';
 $lang->user->assignedTo  = 'AssignedTo';
 $lang->user->finishedBy  = 'FinishedBy';
 $lang->user->resolvedBy  = 'SolvedBy';
@@ -102,11 +102,11 @@ $lang->user->closedBy    = 'ClosedBy';
 $lang->user->reviewedBy  = 'ReviewedBy';
 $lang->user->canceledBy  = 'CancelledBy';
 
-$lang->user->testTask2Him = 'Build';
-$lang->user->case2Him     = 'Case Assigned';
-$lang->user->caseByHim    = 'Case Opened';
+$lang->user->testTask2Him = 'BuildBy';
+$lang->user->case2Him     = 'CaseAssignedTo';
+$lang->user->caseByHim    = 'CaseCreatedBy';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get permissions. Click Back to return.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
@@ -121,10 +121,13 @@ $lang->user->roleList['td']     = 'Technical Manager';
 $lang->user->roleList['pd']     = 'Product Manager';
 $lang->user->roleList['qd']     = 'QA Manager';
 $lang->user->roleList['top']    = 'Senior Manager';
-$lang->user->roleList['others'] = 'Other';
+$lang->user->roleList['others'] = 'Others';
 
-$lang->user->genderList['m'] = 'M';
-$lang->user->genderList['f'] = 'F';
+$lang->user->genderList['m'] = 'Male';
+$lang->user->genderList['f'] = 'Female';
+
+$lang->user->thirdPerson['m'] = 'Him';
+$lang->user->thirdPerson['f'] = 'Her';
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
@@ -149,10 +152,10 @@ $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = 'Letters, underline and numbers, >= 3 characters';
+$lang->user->placeholder->account   = '>= 3 letters, underline and numbers';
 $lang->user->placeholder->password1 = '>= 6 characters';
-$lang->user->placeholder->role      = "Role is related to content and user order.";
-$lang->user->placeholder->group     = "Group is related to user permissions.";
+$lang->user->placeholder->role      = "Role is related to content and user listing order.";
+$lang->user->placeholder->group     = "Group is related to user privileges.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
 $lang->user->placeholder->verify    = 'Please enter your login password.';
 

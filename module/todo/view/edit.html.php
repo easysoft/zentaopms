@@ -13,6 +13,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php if($app->getClientLang() == 'en'):?>
+<style> label.col-sm-1{width:100px;} </style>
+<?php endif;?>
 <div class="modal-content">
   <div class="modal-header">
     <h4 class='modal-title pull-left'><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), "TODO #{$todo->id} {$todo->name}");?></h4>

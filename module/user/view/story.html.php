@@ -17,17 +17,18 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
+      $that   = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $user->gender) : '';
       $active = $type == 'assignedTo' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=assignedTo"),  $lang->user->assignedTo) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=assignedTo"),  $lang->user->assignedTo . $that) . "</li>";
 
       $active = $type == 'openedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=openedBy"),    $lang->user->openedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=openedBy"),    $lang->user->openedBy . $that)   . "</li>";
 
       $active = $type == 'reviewedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=reviewedBy"),  $lang->user->reviewedBy) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=reviewedBy"),  $lang->user->reviewedBy . $that) . "</li>";
 
       $active = $type == 'closedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=closedBy"),    $lang->user->closedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('story', "account=$account&type=closedBy"),    $lang->user->closedBy . $that)   . "</li>";
       ?>
     </ul>
   </nav>
@@ -41,8 +42,8 @@
           <th class='w-200px'> <?php echo $lang->story->product;?></th>
           <th>                 <?php echo $lang->story->title;?></th>
           <th class='w-150px'> <?php echo $lang->story->plan;?></th>
-          <th class='w-user'>  <?php echo $lang->openedByAB;?></th>
-          <th class='w-hour'>  <?php echo $lang->story->estimateAB;?></th>
+          <th class='w-90px'>  <?php echo $lang->openedByAB;?></th>
+          <th class='w-60px'>  <?php echo $lang->story->estimateAB;?></th>
           <th class='w-status'><?php echo $lang->statusAB;?></th>
           <th class='w-100px'> <?php echo $lang->story->stageAB;?></th>
         </tr>
