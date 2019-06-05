@@ -38,6 +38,7 @@ $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
 $lang->bug->mailto           = 'Mailto';
 $lang->bug->openedBy         = 'ReportedBy';
+$lang->bug->openedByAB       = 'Reporter';
 $lang->bug->openedDate       = 'ReportedDate';
 $lang->bug->openedDateAB     = 'Reported';
 $lang->bug->openedBuild      = 'Open Build';
