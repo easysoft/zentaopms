@@ -311,7 +311,7 @@
           </div>
           <?php endif;?>
           <div class="tab-pane <?php if($config->global->flow == 'onlyStory') echo 'active';?>" id='legendRelated'>
-            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-120px' : 'w-70px';?>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-130px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <?php if($config->global->flow != 'onlyStory'):?>
