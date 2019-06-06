@@ -27,7 +27,8 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-70px'><?php echo $lang->task->assignedTo;?></th>
+          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $members, $task->finishedBy, "class='form-control chosen'");?></td>
           <td></td>
         </tr>
