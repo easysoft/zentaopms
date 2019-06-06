@@ -15,9 +15,9 @@ $lang->custom->section    = 'Section';
 $lang->custom->lang       = 'Language';
 $lang->custom->setPublic  = 'Set Public';
 $lang->custom->required   = 'Required Fields';
-$lang->custom->score      = 'Point';
+$lang->custom->score      = 'Point Feature';
 $lang->custom->timezone   = 'Timezone';
-$lang->custom->scoreReset = 'Reset Point';
+$lang->custom->scoreReset = 'Reset Points';
 
 $lang->custom->object['story']    = 'Story';
 $lang->custom->object['task']     = 'Task';
