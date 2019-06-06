@@ -62,7 +62,7 @@
                   <strong class="progress-value"><?php echo $statisticInfo->lastEditedDocs;?></strong>
                 </div>
               </div>
-              <div class="table-row text-center small text-muted with-padding">
+              <div class="table-row text-center small text-muted">
                 <div class="col-4">
                   <span class="label label-dot label-primary"></span>
                   <span><?php echo $lang->doc->todayEdited;?></span>

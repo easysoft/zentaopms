@@ -15,6 +15,7 @@ $lang->story->change      = "变更";
 $lang->story->changed     = '需求变更';
 $lang->story->assignTo    = '指派';
 $lang->story->review      = '评审';
+$lang->story->needReview  = '需要评审';
 $lang->story->batchReview = '批量评审';
 $lang->story->edit        = "编辑";
 $lang->story->batchEdit   = "批量编辑";
