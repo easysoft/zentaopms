@@ -34,7 +34,7 @@ $lang->block->dynamic      = 'Dynamics';
 $lang->block->assignToMe   = 'AssignedToMe';
 $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
-$lang->block->lblTesttask  = 'Request Detail';
+$lang->block->lblTesttask  = 'Test Request Detail';
 
 $lang->block->leftToday = 'Remaining Work';
 $lang->block->myTask    = 'My Tasks';
