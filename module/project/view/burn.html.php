@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
 <?php js::set('projectID', $projectID);?>
+<?php js::set('projectName', $project->name);?>
+<?php js::set('watermark', $lang->project->watermark);?>
 <?php js::set('type', $type);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

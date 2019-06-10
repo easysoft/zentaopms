@@ -59,6 +59,7 @@ $lang->project->readjustTime  = "Adjust {$lang->projectCommon} Begin and End";
 $lang->project->readjustTask  = 'Adjust Task Begin and End';
 $lang->project->effort        = 'Effort';
 $lang->project->relatedMember = 'Team';
+$lang->project->watermark     = 'Exported by ZenTao';
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';
