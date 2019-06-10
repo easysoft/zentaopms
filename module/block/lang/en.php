@@ -34,7 +34,7 @@ $lang->block->dynamic      = 'Dynamics';
 $lang->block->assignToMe   = 'AssignedToMe';
 $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
-$lang->block->lblTesttask  = 'Request Detail';
+$lang->block->lblTesttask  = 'Test Request Detail';
 
 $lang->block->leftToday = 'Remaining Work';
 $lang->block->myTask    = 'My Tasks';
@@ -81,7 +81,7 @@ $lang->block->default['product']['3']['grid']  = 8;
 $lang->block->default['product']['3']['params']['num']  = 15;
 $lang->block->default['product']['3']['params']['type'] = 'noclosed';
 
-$lang->block->default['product']['4']['title'] = 'My Story';
+$lang->block->default['product']['4']['title'] = 'My Stories';
 $lang->block->default['product']['4']['block'] = 'story';
 $lang->block->default['product']['4']['grid']  = 4;
 
@@ -238,8 +238,8 @@ $lang->block->availableBlocks->task     = 'My Tasks';
 $lang->block->availableBlocks->bug      = 'My Bugs';
 $lang->block->availableBlocks->case     = 'My Cases';
 $lang->block->availableBlocks->story    = 'My Stories';
-$lang->block->availableBlocks->product  = $lang->productCommon . 'List';
-$lang->block->availableBlocks->project  = $lang->projectCommon . 'List';
+$lang->block->availableBlocks->product  = $lang->productCommon . 's';
+$lang->block->availableBlocks->project  = $lang->projectCommon . 's';
 $lang->block->availableBlocks->plan     = 'Plans';
 $lang->block->availableBlocks->release  = 'Releases';
 $lang->block->availableBlocks->build    = 'Builds';
@@ -356,7 +356,7 @@ $lang->block->typeList->product['closed']   = 'Closed';
 $lang->block->typeList->product['all']      = 'All';
 $lang->block->typeList->product['involved'] = 'Involved';
 
-$lang->block->typeList->project['undone']   = 'Uncompleted';
+$lang->block->typeList->project['undone']   = 'Unfinished';
 $lang->block->typeList->project['doing']    = 'Ongoing';
 $lang->block->typeList->project['all']      = 'All';
 $lang->block->typeList->project['involved'] = 'Involved';
@@ -398,6 +398,6 @@ $lang->block->gridOptions[4] = 'Right';
 $lang->block->flowchart   = array();
 $lang->block->flowchart[] = array('Administrator', 'Add Department', 'Add User', 'Maintain Privileges');
 $lang->block->flowchart[] = array($lang->productCommon . ' Owner', 'Add ' . $lang->productCommon, 'Maintain Modules', 'Maintain Plans', 'Maintain Stories', 'Create Releases');
-$lang->block->flowchart[] = array('Scrum Master', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Decompose Tasks');
+$lang->block->flowchart[] = array('Scrum Master', 'Add ' . $lang->projectCommon, 'Maintain Teams', 'Link ' . $lang->productCommon . 's', 'Link Stories', 'Create Tasks');
 $lang->block->flowchart[] = array('Dev Team', 'Claim Tasks/Bugs', 'Update Status', 'Finish Tasks/Bugs');
 $lang->block->flowchart[] = array('QA Team', 'Write Cases', 'Run Cases', 'Report Bugs', 'Verify Bugs', 'Close Bugs');

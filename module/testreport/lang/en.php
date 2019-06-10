@@ -1,6 +1,6 @@
 <?php
-$lang->testreport->common   = 'QA Report';
-$lang->testreport->browse   = 'QA Report';
+$lang->testreport->common   = 'Testing Report';
+$lang->testreport->browse   = 'Testing Reports';
 $lang->testreport->create   = 'Create Report';
 $lang->testreport->edit     = 'Edit Report';
 $lang->testreport->delete   = 'Delete';
@@ -52,10 +52,10 @@ $lang->testreport->bugResolvedByGroups = 'Bug SolvedBy Distribution';
 $lang->testreport->bugResolutionGroups = 'Bug Solution Distribution';
 $lang->testreport->bugModuleGroups     = 'Bug Module Distribution';
 $lang->testreport->legacyBugs          = 'Left Bugs';
-$lang->testreport->bugConfirmedRate    = 'Confirmed Bug Rate (Solution is fixed or postponed / status is solved or closed)';
-$lang->testreport->bugCreateByCaseRate = 'Bug Generated in Case Rate (Bugs reported in cases / New added bugs)';
+$lang->testreport->bugConfirmedRate    = 'Confirmed-Bug Rate (Solution is fixed or postponed / status is solved or closed)';
+$lang->testreport->bugCreateByCaseRate = 'Bug-Reported-in-Case Rate (Bugs reported in cases / New added bugs)';
 
-$lang->testreport->caseSummary    = 'Total <strong>%s</strong> cases, <strong>%s</strong> cases run , <strong>%s</strong> results generated, and <strong>%s</strong> cases failed.';
+$lang->testreport->caseSummary    = 'Total <strong>%s</strong> cases. <strong>%s</strong> cases run. <strong>%s</strong> results generated. <strong>%s</strong> cases failed.';
 $lang->testreport->buildSummary   = 'Tested <strong>%s</strong> builds.';
 $lang->testreport->confirmDelete  = 'Do you want to delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';
@@ -64,7 +64,7 @@ $lang->testreport->noReport       = "No report has been generated. Please check 
 $lang->testreport->foundBugTip    = "Bugs generated in this build and generated in the test period.";
 $lang->testreport->legacyBugTip   = "Active bugs, or solved bugs that are not in the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case run in the test period.";
-$lang->testreport->errorTrunk     = "You cannot create a Test report for the trunk. Please modify the linked build!";
+$lang->testreport->errorTrunk     = "You cannot create a Testing report for the trunk. Please modify the linked build!";
 $lang->testreport->moreProduct    = "Testing reports can only be generated for the same product.";
 
 $lang->testreport->bugSummary = <<<EOD

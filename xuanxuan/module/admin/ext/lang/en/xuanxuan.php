@@ -5,17 +5,17 @@ $lang->admin->blockStatistics = 'Statistics';
 $lang->admin->xuanxuanSetting = 'Settings';
 
 $lang->admin->fileSize      = 'File Size';
-$lang->admin->countUsers    = 'Online';
-$lang->admin->setServer     = 'Set';
-$lang->admin->totalUsers    = 'User';
-$lang->admin->totalGroups   = 'Group';
-$lang->admin->totalMessages = 'Message';
-$lang->admin->xxdStartDate  = 'XXD Last Start Time';
+$lang->admin->countUsers    = 'Online Users';
+$lang->admin->setServer     = 'Sever Settings';
+$lang->admin->totalUsers    = 'Users';
+$lang->admin->totalGroups   = 'Groups';
+$lang->admin->totalMessages = 'Messages';
+$lang->admin->xxdStartDate  = 'XXD Last Start';
 
 $lang->admin->message = array();
-$lang->admin->message['total'] = 'Total'; 
-$lang->admin->message['hour']  = 'An Hour'; 
-$lang->admin->message['day']   = 'An Day'; 
+$lang->admin->message['total'] = 'Total Messages';
+$lang->admin->message['hour']  = 'Last Hour Messages'; 
+$lang->admin->message['day']   = 'Last 24 Hours Messages'; 
 
 $lang->admin->sizeType = array();
 $lang->admin->sizeType['K'] = 1024;

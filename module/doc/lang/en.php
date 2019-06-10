@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* Fields. */
-$lang->doc->common         = 'Doc';
+$lang->doc->common         = 'Document';
 $lang->doc->id             = 'ID';
 $lang->doc->product        = $lang->productCommon;
 $lang->doc->project        = $lang->projectCommon;
@@ -55,11 +55,11 @@ $lang->doc->searchDoc      = 'Search';
 $lang->doc->fast           = 'Qucik Entry';
 $lang->doc->allDoc         = 'All Documents';
 $lang->doc->openedByMe     = 'My';
-$lang->doc->orderByOpen    = 'Last Added';
+$lang->doc->orderByOpen    = 'Recent Added';
 $lang->doc->orderByEdit    = 'Recent Edited';
 $lang->doc->orderByVisit   = 'Last Visited';
 $lang->doc->todayEdited    = 'Update Today';
-$lang->doc->pastEdited     = 'Updated';
+$lang->doc->pastEdited     = 'Total Updated';
 $lang->doc->myDoc          = 'My Documents';
 $lang->doc->myCollection   = 'My Favorites';
 
@@ -150,11 +150,11 @@ $lang->doc->fastMenuIconList['collectedbyme'] = 'icon-folder-star';
 $lang->doc->customObjectLibs['files']       = 'Show Attachment Library';
 $lang->doc->customObjectLibs['customFiles'] = 'Show Custom Library';
 
-$lang->doc->orderLib = 'Library Rank Settings';
-$lang->doc->customShowLibs = 'Library Display Settings';
+$lang->doc->orderLib = 'Rank Settings';
+$lang->doc->customShowLibs = 'Display Settings';
 $lang->doc->customShowLibsList['zero']     = 'Display Empty Library';
 $lang->doc->customShowLibsList['children'] = 'Display Child-category Documents';
-$lang->doc->customShowLibsList['unclosed'] = 'Display Active Projects Only';
+$lang->doc->customShowLibsList['unclosed'] = "Display Active {$lang->projectCommon}s Only";
 
 $lang->doc->confirmDelete      = "Do you want to delete this document?";
 $lang->doc->confirmDeleteLib   = "Do you want to delete this document library?";

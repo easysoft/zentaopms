@@ -15,7 +15,7 @@ $lang->webhook->delete = 'Delete';
 $lang->webhook->id          = 'ID';
 $lang->webhook->type        = 'Type';
 $lang->webhook->name        = 'Name';
-$lang->webhook->url         = 'Webhook Address';
+$lang->webhook->url         = 'Webhook URL';
 $lang->webhook->domain      = 'ZenTao Domain';
 $lang->webhook->contentType = 'Content Type';
 $lang->webhook->sendType    = 'Sending Type';
@@ -55,13 +55,13 @@ $lang->webhook->confirmDelete = 'Do you want to delete this hook?';
 $lang->webhook->trimWords = '';
 
 $lang->webhook->note = new stdClass();
-$lang->webhook->note->async   = 'If the send type is asynchronous, you need open cron.';
-$lang->webhook->note->product = "All actions will trigger the hook if the {$lang->productCommon} is empty, else only actions of the {$lang->productCommon} will trigger it.";
-$lang->webhook->note->project = "All actions will trigger the hook if the {$lang->projectCommon} is empty, else only actions of the {$lang->projectCommon} will trigger it.";
+$lang->webhook->note->async   = 'If the sending type is asynchronous, you have to go to Admin-System to turn on the cron.';
+$lang->webhook->note->product = "All actions will trigger the hook if {$lang->productCommon} is empty, or only actions of {$lang->productCommon} will trigger it.";
+$lang->webhook->note->project = "All actions will trigger the hook if {$lang->projectCommon} is empty, or only actions of {$lang->projectCommon} will trigger it.";
 
-$lang->webhook->note->typeList['bearychat'] = 'Add a ZenTao bot in bearychat and get the webhook address.';
-$lang->webhook->note->typeList['dingding']  = 'Add a customed bot in dingding and get the webhook address.';
-$lang->webhook->note->typeList['default']   = 'Get a webhook address from others';
+$lang->webhook->note->typeList['bearychat'] = 'Add a ZenTao bot in bearychat and get the webhook url.';
+$lang->webhook->note->typeList['dingding']  = 'Add a customized bot in dingding and get the webhook url.';
+$lang->webhook->note->typeList['default']   = 'Get a webhook url from others';
 
 $lang->webhook->error = new stdclass();
 $lang->webhook->error->curl = 'Load php-curl in php.ini.';

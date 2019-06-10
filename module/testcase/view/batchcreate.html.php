@@ -63,7 +63,7 @@
             <th class='w-150px<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', '', ' required')?>'><?php echo $lang->testcase->precondition;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'keywords',     ' hidden') . zget($requiredFields, 'keywords',     '', ' required')?>'><?php echo $lang->testcase->keywords;?></th>
             <th class='w-140px<?php echo zget($visibleFields, 'stage',        ' hidden') . zget($requiredFields, 'stage',        '', ' required')?>'><?php echo $lang->testcase->stage;?></th>
-            <th class='w-70px<?php  echo zget($visibleFields, 'review',       ' hidden') . zget($requiredFields, 'review',       '', ' required')?>'><?php echo $lang->testcase->review;?></th>
+            <th class='w-100px<?php  echo zget($visibleFields, 'review',       ' hidden') . zget($requiredFields, 'review',       '', ' required')?>'><?php echo $lang->testcase->review;?></th>
           </tr>
         </thead>
         <tbody>

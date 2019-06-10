@@ -25,7 +25,8 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->story->closedReason;?></th>
+          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-140px' : 'w-80px';?>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->story->closedReason;?></th>
           <td class='w-p25-f'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
         </tr>
         <tr id='duplicateStoryBox' style='display:none'>

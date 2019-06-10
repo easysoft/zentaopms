@@ -59,6 +59,7 @@ $lang->project->readjustTime  = "调整{$lang->projectCommon}起止时间";
 $lang->project->readjustTask  = '顺延任务的起止时间';
 $lang->project->effort        = '日志';
 $lang->project->relatedMember = '相关成员';
+$lang->project->watermark     = '由禅道导出';
 
 $lang->project->start    = "开始";
 $lang->project->activate = "激活";
