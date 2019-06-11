@@ -26,7 +26,7 @@ $lang->productplan->unlinkStory      = "Unlink Story";
 $lang->productplan->batchUnlinkStory = "Batch Unlink";
 $lang->productplan->linkedStories    = 'Linked Stories';
 $lang->productplan->unlinkedStories  = 'Unlinked Stories';
-$lang->productplan->updateOrder      = 'Rank';
+$lang->productplan->updateOrder      = 'Order';
 $lang->productplan->createChildren   = "Create Child Plans";
 
 $lang->productplan->linkBug          = "Link Bug";
