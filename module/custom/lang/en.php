@@ -36,7 +36,7 @@ $lang->custom->story->fields['reasonList']       = 'Close Reason';
 $lang->custom->story->fields['stageList']        = 'Phase';
 $lang->custom->story->fields['statusList']       = 'Status';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
-$lang->custom->story->fields['review']           = 'Review Required';
+$lang->custom->story->fields['review']           = 'Need Review';
 
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['priList']    = 'Priority';
@@ -61,7 +61,7 @@ $lang->custom->testcase->fields['typeList']   = 'Type';
 $lang->custom->testcase->fields['stageList']  = 'Phase';
 $lang->custom->testcase->fields['resultList'] = 'Result';
 $lang->custom->testcase->fields['statusList'] = 'Status';
-$lang->custom->testcase->fields['review']     = 'Review Required';
+$lang->custom->testcase->fields['review']     = 'Need Review';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = 'Priority';
@@ -90,8 +90,8 @@ $lang->custom->confirmRestore = 'Do you want to reset?';
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userFieldNotice      = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
 $lang->custom->notice->canNotAdd            = 'It will be calculated, so customization is not enabled.';
-$lang->custom->notice->forceReview          = '%s Review is required for certain committers.';
-$lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain committers.";
+$lang->custom->notice->forceReview          = '%s review is required for committers selected.';
+$lang->custom->notice->forceNotReview       = "%s review is not required for committers selected.";
 $lang->custom->notice->longlife             = 'Define stalled bugs.';
 $lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
 $lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase letters, numbers or underlines.';

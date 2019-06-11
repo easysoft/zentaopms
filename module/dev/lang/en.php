@@ -116,4 +116,4 @@ $lang->dev->groupList['message'] = 'Message';
 
 $lang->dev->endGroupList['admin']  = 'Admin';
 $lang->dev->endGroupList['system'] = 'System';
-$lang->dev->endGroupList['other']  = 'Other';
+$lang->dev->endGroupList['other']  = 'Others';
