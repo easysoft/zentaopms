@@ -23,15 +23,16 @@ $jsRoot  = $webRoot . "js/";
     <form action="<?php echo inlink('edit', 'deptID=' . $dept->id);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form' style='width:100%'>
         <tr>
-          <th class='w-80px'><?php echo $lang->dept->parent;?></th>
+          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-130px' : 'w-80px';?>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->dept->parent;?></th>
           <td><?php echo html::select('parent', $optionMenu, $dept->parent, "class='form-control chosen'");?></td>
         </tr>
         <tr>
-          <th class='w-80px'><?php echo $lang->dept->name;?></th>
+          <th><?php echo $lang->dept->name;?></th>
           <td><?php echo html::input('name', $dept->name, "class='form-control'");?></td>
         </tr>
         <tr>
-          <th class='w-80px'><?php echo $lang->dept->manager;?></th>
+          <th><?php echo $lang->dept->manager;?></th>
           <td><?php echo html::select('manager', $users, $dept->manager, "class='form-control chosen'", true);?></td>
         </tr>
         <tr>

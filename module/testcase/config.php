@@ -123,7 +123,7 @@ $config->testcase->datatable->fieldList['assignedTo']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['openedBy']['title']    = 'openedByAB';
 $config->testcase->datatable->fieldList['openedBy']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['openedBy']['width']    = '80';
+$config->testcase->datatable->fieldList['openedBy']['width']    = '90';
 $config->testcase->datatable->fieldList['openedBy']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['openedDate']['title']    = 'openedDate';
