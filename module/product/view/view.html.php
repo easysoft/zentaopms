@@ -202,7 +202,7 @@
                     <td><em><?php echo $product->stories['active']?></em></td>
                     <th><?php echo $lang->product->plans?></th>
                     <td><em><?php echo $product->plans?></em></td>
-                    <th><?php echo $lang->product->bugs?></th>
+                    <th class='w-80px'><?php echo $lang->product->bugs?></th>
                     <td><em><?php echo $product->bugs?></em></td>
                   </tr>
                   <tr>

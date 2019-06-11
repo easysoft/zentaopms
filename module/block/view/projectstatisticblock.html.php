@@ -175,7 +175,7 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->bug->allBugs . ' Bug';?> :</td>
+                      <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
                       <td class='text-left'><?php echo $project->totalBugs;?></td>
                     </tr>
                     <tr>

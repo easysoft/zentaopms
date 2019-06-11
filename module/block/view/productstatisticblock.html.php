@@ -135,7 +135,7 @@ $(function()
             </ul>
           </div>
           <?php if($product->stories):?>
-          <div class="col-6">
+          <div class="col-5">
             <div class="product-info">
               <?php $totalPlan     = $product->plans ? array_sum($product->plans) : 0;?>
               <?php $unexpiredPlan = $product->plans ? zget($product->plans, 'unexpired', 0) : 0;?>

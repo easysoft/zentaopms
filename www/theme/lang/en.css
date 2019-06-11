@@ -5,3 +5,6 @@
 .main-actions .btn-toolbar .btn+.btn { margin-left: 0px !important;}
 .main-actions .btn-toolbar .btn+.btn-group {margin-left: 5px !important;}
 .main-actions .btn-toolbar { padding: 4px 5px;}
+
+.c-user{width:95px !important;}
+.c-hours{width:65px !important;}

@@ -29,3 +29,4 @@
 
 .side .leftmenu .nav-primary>li.active>a { background-color: #e7f1fc;}
 .side .leftmenu .nav-primary>li.active>a:hover {background-color: #006af1;}
+.label-severity:after{z-index:0 !important;}

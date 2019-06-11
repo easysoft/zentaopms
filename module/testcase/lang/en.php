@@ -82,6 +82,7 @@ $lang->testcase->batchCreate             = "Batch Add";
 $lang->testcase->delete                  = "Delete";
 $lang->testcase->view                    = "Overview";
 $lang->testcase->review                  = "Need Review";
+$lang->testcase->reviewAB                = "Review";
 $lang->testcase->batchReview             = "Batch Review";
 $lang->testcase->edit                    = "Edit Case";
 $lang->testcase->batchEdit               = "Batch Edit ";
