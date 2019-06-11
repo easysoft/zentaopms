@@ -8,7 +8,7 @@ $lang->score->tips         = 'Point added yesterday: <strong>%d</strong><br/> To
 $lang->score->resetTips    = 'It will take a while. <strong>Do not close the window.</strong>';
 $lang->score->resetStart   = 'Start';
 $lang->score->resetLoading = 'Processing: ';
-$lang->score->resetFinish  = 'Completed';
+$lang->score->resetFinish  = 'Finish';
 
 $lang->score->id      = 'ID';
 $lang->score->userID  = 'UserID';
@@ -73,7 +73,7 @@ $lang->score->methods['testtask']['runCase']         = 'Run Test Case';
 $lang->score->methods['testcase']['create']          = 'Create Test Case';
 $lang->score->methods['build']['create']             = 'Create Build';
 $lang->score->methods['project']['create']           = 'Create Project';
-$lang->score->methods['project']['close']            = 'Complete Project';
+$lang->score->methods['project']['close']            = 'Finish Project';
 $lang->score->methods['productplan']['create']       = 'Create Plan';
 $lang->score->methods['release']['create']           = 'Create Release';
 $lang->score->methods['block']['set']                = 'Custom Block';

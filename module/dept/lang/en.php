@@ -18,7 +18,7 @@ $lang->dept->manager     = "Manager";
 $lang->dept->name        = "Department Name";
 $lang->dept->browse      = "Manage";
 $lang->dept->manage      = "Manage Department";
-$lang->dept->updateOrder = "Sort";
+$lang->dept->updateOrder = "Order";
 $lang->dept->add         = "Add Department";
 $lang->dept->dragAndSort = "Drag to order";
 

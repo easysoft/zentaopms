@@ -16,7 +16,7 @@ $lang->productplan->create     = "Create Plan";
 $lang->productplan->edit       = "Edit Plan";
 $lang->productplan->delete     = "Delete";
 $lang->productplan->view       = "Detail";
-$lang->productplan->bugSummary = "Total <strong>%s</strong> Bugs on this page.";
+$lang->productplan->bugSummary = "Total <strong>%s</strong> bugs on this page.";
 $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 
