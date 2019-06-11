@@ -41,16 +41,17 @@ if(!$selfCall) die(include('./todolist.html.php'));
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
         <div class="form-group">
-          <label for="todoName" class="col-sm-2"><?php echo $lang->todo->name?></label>
+          <?php $leftWidth  = $app->getClientLang() == 'en' ? 'col-sm-3' : 'col-sm-2';?>
+          <label for="todoName" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->name?></label>
           <div class="col-sm-9 required"><input type="text" class="form-control" autocomplete="off" name="name"></div>
         </div>
         <div class="form-group">
-          <label for="todoPri" class="col-sm-2"><?php echo $lang->todo->pri?></label>
+          <label for="todoPri" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->pri?></label>
           <div class="col-sm-4"><?php echo html::select('pri', $lang->todo->priList, '', "class='form-control chosen'");?></div>
         </div>
         <div class="form-group">
-          <label for="todoDate" class="col-sm-2"><?php echo $lang->todo->date?></label>
-          <div class="col-sm-9 ">
+          <label for="todoDate" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->date?></label>
+          <div class="col-sm-9">
             <div class="input-control has-icon-right">
               <input type="text" class="form-control date" id="todoDate" name="date" placeholder="" autocomplete='off'>
               <label for='todoDate' class="input-control-icon-right"><i class="icon icon-delay"></i></label>
@@ -58,7 +59,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
           </div>
         </div>
         <div class="form-group">
-          <label for="todoBegin" class="col-sm-2"><?php echo $lang->todo->beginAndEnd?></label>
+          <label for="todoBegin" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->beginAndEnd?></label>
           <div class="col-sm-4">
             <select name="begin" id="todoBegin" class="form-control">
               <option value=""><?php echo $lang->todo->lblDisableDate;?></option>
@@ -70,8 +71,8 @@ if(!$selfCall) die(include('./todolist.html.php'));
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-2"></div>
-          <div class="col-sm-10">
+          <div class="<?php echo $leftWidth;?>"></div>
+          <div class="col-sm-9">
             <div class="checkbox-primary">
               <input type="checkbox" name="private" id="private" value="1">
               <label for="private"><?php echo $lang->todo->private?></label>
@@ -79,8 +80,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
           </div>
         </div>
         <div class="form-group">
-          <div class="col-sm-2"></div>
-          <div class="col-sm-10 form-actions no-margin">
+          <div class="col-sm-12 form-actions no-margin text-center">
             <?php echo html::hidden('type', 'custom');?>
             <?php echo html::commonButton($lang->save, "onclick='ajaxCreateTodo(this)'", "btn btn-primary btn-wide");?>
             <button type="button" class="btn btn-wide todo-form-trigger" data-trigger="false"><?php echo $lang->goback;?></button>

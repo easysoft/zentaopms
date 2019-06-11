@@ -42,6 +42,7 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-90px';
 #queryBox select#groupAndOr {padding-right:2px; padding-left:5px;}
 #queryBox .chosen-container-single .chosen-single>span {margin-right:5px;}
 
+#queryBox .form-actions .btn {margin-right: 5px;}
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
 #userQueries ul {list-style: none; padding-left: 0; margin: 0; max-height:75px; overflow:auto;}
