@@ -26,3 +26,6 @@
 
 /* Pager v-align. */
 .pager>li>.pager-label { padding: 2px; line-height: 21px; }
+
+.side .leftmenu .nav-primary>li.active>a { background-color: #e7f1fc;}
+.side .leftmenu .nav-primary>li.active>a:hover {background-color: #006af1;}

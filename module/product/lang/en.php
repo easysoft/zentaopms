@@ -11,7 +11,7 @@
  */
 $lang->product->common      = $lang->productCommon;
 $lang->product->index       = $lang->productCommon . ' Home';
-$lang->product->browse      = 'Story';
+$lang->product->browse      = 'Story List';
 $lang->product->dynamic     = 'Dynamics';
 $lang->product->view        = 'Overview';
 $lang->product->edit        = "Edit {$lang->productCommon}";
@@ -39,9 +39,9 @@ $lang->product->projects    = "Linked {$lang->projectCommon}";
 $lang->product->cases       = 'Case';
 $lang->product->builds      = 'Build';
 $lang->product->roadmap     = 'Roadmap';
-$lang->product->doc         = 'Doc';
+$lang->product->doc         = 'Documents';
 $lang->product->project     = $lang->projectCommon . ' List';
-$lang->product->build       = 'Build';
+$lang->product->build       = 'Build List';
 $lang->product->projectInfo = "{$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";
 
 $lang->product->currentProject   = "{$lang->projectCommon}";
