@@ -11,7 +11,7 @@
           $list .= '|';
           list($label, $module, $method, $params) = explode('|', $list);
           $class = $label == $title ? 'selected' : '';
-          if(common::hasPriv($module, $method)) echo html::a($this->createLink($module, $method, $params), '<i class="icon icon-file-text"></i> ' . $label, '', "class='$class'");
+          if(common::hasPriv($module, $method)) echo html::a($this->createLink($module, $method, $params), '<i class="icon icon-file-text"></i> ' . $label, '', "class='$class' title='$label'");
       }
       ?>
     </div>

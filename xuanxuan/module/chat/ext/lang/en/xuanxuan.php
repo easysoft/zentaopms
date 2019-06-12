@@ -1,5 +1,5 @@
 <?php
-$lang->chat->common          = 'Xuanxuan';
+$lang->chat->common          = 'Desktop';
 $lang->chat->turnon          = 'On';
 $lang->chat->help            = 'Help';
 $lang->chat->settings        = 'Settings';
