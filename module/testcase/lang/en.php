@@ -130,7 +130,7 @@ $lang->testcase->bySearch     = 'Search';
 $lang->testcase->unexecuted   = 'Pending';
 
 $lang->testcase->lblStory       = 'Linked Story';
-$lang->testcase->lblLastEdited  = 'Last Edit';
+$lang->testcase->lblLastEdited  = 'Last Edited';
 $lang->testcase->lblTypeValue   = 'Type Value';
 $lang->testcase->lblStageValue  = 'Phase Value';
 $lang->testcase->lblStatusValue = 'Status Value';
@@ -164,7 +164,7 @@ $lang->testcase->typeList['config']      = 'Config';
 $lang->testcase->typeList['install']     = 'Install';
 $lang->testcase->typeList['security']    = 'Security';
 $lang->testcase->typeList['interface']   = 'Interface';
-$lang->testcase->typeList['other']       = 'Other';
+$lang->testcase->typeList['other']       = 'Others';
 
 $lang->testcase->stageList['']           = '';
 $lang->testcase->stageList['unittest']   = 'Unit Testing';
