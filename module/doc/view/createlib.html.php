@@ -45,8 +45,7 @@
               <td>
                 <span><?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
                 <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib']['product']['default'];?></span>
-</td>
-            </tr>
+              </td>
             </tr>
             <tr id='whiteListBox' class='hidden'>
               <th><?php echo $lang->doc->whiteList;?></th>
