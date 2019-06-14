@@ -220,7 +220,7 @@ $lang->action->dynamicAction->todo['closed']               = 'closed a todo';
 $lang->action->dynamicAction->todo['deleted']              = 'deleted a todo';
 $lang->action->dynamicAction->todo['assigned']             = 'assigned a todo';
 $lang->action->dynamicAction->todo['undeleted']            = 'restored a todo';
-$lang->action->dynamicAction->todo['hidden']               = 'Hid a todo';
+$lang->action->dynamicAction->todo['hidden']               = 'hid a todo';
 
 $lang->action->dynamicAction->product['opened']            = 'created a ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']            = 'edited a ' . $lang->productCommon;
@@ -352,7 +352,7 @@ $lang->action->dynamicAction->user['login']                = 'login';
 $lang->action->dynamicAction->user['logout']               = 'logout';
 $lang->action->dynamicAction->user['undeleted']            = 'restored user';
 $lang->action->dynamicAction->user['hidden']               = 'hid a user';
-$lang->action->dynamicAction->user['loginxuanxuan']        = 'login Xuan';
+$lang->action->dynamicAction->user['loginxuanxuan']        = 'login desktop';
 
 $lang->action->dynamicAction->entry['created']             = 'edited an application';
 $lang->action->dynamicAction->entry['edited']              = 'edited an application';
