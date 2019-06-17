@@ -98,7 +98,7 @@ class deptModel extends model
             }
         }
 
-        $topMenu = @array_pop($deptMenu);
+        $topMenu = isset($deptMenu[0]) ? $deptMenu[0] : array_pop($deptMenu);
         $topMenu = explode("\n", trim($topMenu));
         $lastMenu[] = '/';
         foreach($topMenu as $menu)
