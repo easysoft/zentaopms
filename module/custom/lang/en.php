@@ -77,7 +77,7 @@ $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact';
 $lang->custom->user->fields['deleted']      = 'Deleted User';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score', 'setDynamic');
+$lang->custom->system = array('flow', 'working', 'required', 'score');
 
 $lang->custom->block->fields['closed'] = 'Closed Block';
 
