@@ -93,7 +93,8 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <th class='w-90px'><?php echo $lang->todo->pri;?></th>
+              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->pri;?></th>
               <td><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
             </tr>
             <tr>
@@ -136,11 +137,12 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <th class='w-80px'><?php echo $lang->todo->beginAndEnd?></th>
+              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->beginAndEnd?></th>
               <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
             </tr>
             <tr>
-              <th class='w-80px text-top'><?php echo $lang->todo->cycleConfig?></th>
+              <th class='<?php echo $colWidth;?> text-top'><?php echo $lang->todo->cycleConfig?></th>
               <td>
                 <?php
                 if($todo->config->type == 'day')

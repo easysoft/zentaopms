@@ -6,7 +6,7 @@
 $(function()
 {
     <?php if(!empty($setShowModule)):?>
-    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='text-secondary small'><?php echo $lang->datatable->showModule?></a><hr class='space-sm' />");
+    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='text-secondary small'><?php echo $lang->datatable->showModuleAB?></a><hr class='space-sm' />");
     <?php endif;?>
 
     var $btnToolbar = $('#main .table-header .btn-toolbar:first');

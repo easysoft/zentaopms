@@ -25,6 +25,7 @@
   $visibleFields = array();
   foreach(explode(',', $showFields) as $field)
   {
+      if(strpos(",{$config->user->customBatchCreateFields},", ",{$field},") === false) continue;
       if($field) $visibleFields[$field] = '';
   }
   $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
@@ -36,12 +37,14 @@
           <tr class='text-center'>
             <th class='w-40px'><?php echo $lang->idAB;?></th> 
             <th class='w-150px<?php echo zget($visibleFields, 'dept', ' hidden')?>'><?php echo $lang->user->dept;?></th>
-            <th class='w-180px required'><?php echo $lang->user->account;?></th>
+            <?php $colWidth = $app->getClientLang() == 'en' ? 'w-200px' : 'w-180px';?>
+            <th class='<?php echo $colWidth;?> required'><?php echo $lang->user->account;?></th>
             <th class='w-130px required'><?php echo $lang->user->realname;?></th>
             <th class='w-120px'><?php echo $lang->user->role;?></th>
             <th class='w-120px'><?php echo $lang->user->group;?></th>
             <th class='<?php echo zget($visibleFields, 'email', "$minWidth hidden", $minWidth)?>'><?php echo $lang->user->email;?></th>
-            <th class='w-90px<?php echo zget($visibleFields, 'gender', ' hidden')?>'><?php echo $lang->user->gender;?></th>
+            <?php $colWidth = $app->getClientLang() == 'en' ? 'w-140px' : 'w-90px';?>
+            <th class='<?php echo $colWidth; echo zget($visibleFields, 'gender', ' hidden')?>'><?php echo $lang->user->gender;?></th>
             <th class="<?php echo $minWidth;?> required"><?php echo $lang->user->password;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'commiter', ' hidden')?>'><?php echo $lang->user->commiter;?></th>
             <th class='w-120px<?php echo zget($visibleFields, 'join', ' hidden')?>'>    <?php echo $lang->user->join;?></th>

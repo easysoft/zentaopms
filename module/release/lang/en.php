@@ -17,15 +17,15 @@ $lang->release->linkBug          = "Link Bug";
 $lang->release->delete           = "Delete Release";
 $lang->release->deleted          = 'Deleted';
 $lang->release->view             = "Overview";
-$lang->release->browse           = "Release";
+$lang->release->browse           = "Releases";
 $lang->release->changeStatus     = "Change Status";
 $lang->release->batchUnlink      = "Batch Unlink";
 $lang->release->batchUnlinkStory = "Batch Unlink Story";
 $lang->release->batchUnlinkBug   = "Batch Unlink Bug";
 
-$lang->release->confirmDelete      = "Do you want to delete this Release?";
-$lang->release->confirmUnlinkStory = "Do you want to remove this Story?";
-$lang->release->confirmUnlinkBug   = "Do you want to remove this Bug?";
+$lang->release->confirmDelete      = "Do you want to delete this release?";
+$lang->release->confirmUnlinkStory = "Do you want to remove this story?";
+$lang->release->confirmUnlinkBug   = "Do you want to remove this bug?";
 $lang->release->existBuild         = '『Build』『%s』existed. You could change『name』or choose a『build』.';
 $lang->release->noRelease          = 'No releases yet.';
 

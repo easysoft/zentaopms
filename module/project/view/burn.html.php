@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
 <?php js::set('projectID', $projectID);?>
+<?php js::set('projectName', $project->name);?>
+<?php js::set('watermark', $lang->project->watermark);?>
 <?php js::set('type', $type);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -21,7 +23,7 @@
     common::printLink('project', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->project->computeBurn, 'hiddenwin', "title='{$lang->project->computeBurn}{$lang->project->burn}' class='btn btn-primary' id='computeBurn'");
     echo '<div class="space"></div>';
     echo html::a($this->createLink('project', 'burn', "projectID=$projectID&type=$weekend&interval=$interval"), $lang->project->$weekend, '', "class='btn btn-link'");
-    common::printLink('project', 'fixFirst', "project=$project->id", $lang->project->fixFirst, '', "class='btn btn-link iframe' data-width='600'");
+    common::printLink('project', 'fixFirst', "project=$project->id", $lang->project->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
     echo $lang->project->howToUpdateBurn;
     ?>
     <?php if($interval):?>

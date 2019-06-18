@@ -30,6 +30,9 @@ $lang->entry->confirmDelete = '您确认要删除该应用吗？';
 $lang->entry->help          = '使用说明';
 $lang->entry->notify        = '消息通知';
 
+$lang->entry->helpLink   = 'https://www.zentao.net/book/zentaopmshelp/integration-287.html';
+$lang->entry->notifyLink = 'https://www.zentao.net/book/zentaopmshelp/301.html';
+
 $lang->entry->note = new stdClass();
 $lang->entry->note->name    = '授权应用名称';
 $lang->entry->note->code    = '授权应用代号，必须为字母或数字的组合';

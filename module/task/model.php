@@ -406,7 +406,7 @@ class taskModel extends model
     {
         $childTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($parentID)) $parentID = $childTask->parent;
-        if(empty($parentID)) return true;
+        if($parentID <= 0) return true;
 
         $this->computeWorkingHours($parentID);
 

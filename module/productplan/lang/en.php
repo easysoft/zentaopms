@@ -10,12 +10,12 @@
  * @link        http://www.zentao.net
  */
 $lang->productplan->common     = $lang->productCommon . ' Plan';
-$lang->productplan->browse     = "View";
+$lang->productplan->browse     = "Plans";
 $lang->productplan->index      = "List";
 $lang->productplan->create     = "Create Plan";
 $lang->productplan->edit       = "Edit Plan";
-$lang->productplan->delete     = "Delete";
-$lang->productplan->view       = "Detail";
+$lang->productplan->delete     = "Delete Plan";
+$lang->productplan->view       = "Plan Detail";
 $lang->productplan->bugSummary = "Total <strong>%s</strong> Bugs on this page.";
 $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
@@ -26,7 +26,7 @@ $lang->productplan->unlinkStory      = "Unlink Story";
 $lang->productplan->batchUnlinkStory = "Batch Unlink";
 $lang->productplan->linkedStories    = 'Linked Stories';
 $lang->productplan->unlinkedStories  = 'Unlinked Stories';
-$lang->productplan->updateOrder      = 'Rank';
+$lang->productplan->updateOrder      = 'Order';
 $lang->productplan->createChildren   = "Create Child Plans";
 
 $lang->productplan->linkBug          = "Link Bug";
@@ -37,9 +37,9 @@ $lang->productplan->unlinkedBugs     = 'Unlinked Bugs';
 $lang->productplan->unexpired        = 'Unexpired Plans';
 $lang->productplan->all              = 'All Plans';
 
-$lang->productplan->confirmDelete      = "Do you want to delete this Plan?";
-$lang->productplan->confirmUnlinkStory = "Do you want to unlink this Story?";
-$lang->productplan->confirmUnlinkBug   = "Do you want to unlink this Bug?";
+$lang->productplan->confirmDelete      = "Do you want to delete this plan?";
+$lang->productplan->confirmUnlinkStory = "Do you want to unlink this story?";
+$lang->productplan->confirmUnlinkBug   = "Do you want to unlink this bug?";
 $lang->productplan->noPlan             = 'No plans yet. ';
 
 $lang->productplan->id      = 'ID';

@@ -24,7 +24,7 @@ $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';
 $lang->action->hideOne     = 'Hide';
 $lang->action->hideAll     = 'Hide All';
-$lang->action->editComment = 'Edit';
+$lang->action->editComment = 'Edit Comment';
 $lang->action->create      = 'Add Comment';
 $lang->action->comment     = 'Comment';
 
@@ -76,7 +76,7 @@ $lang->action->objectTypes['caseresult']  = 'Case Result';
 $lang->action->objectTypes['stepresult']  = 'Case Steps';
 $lang->action->objectTypes['testtask']    = 'Test Build';
 $lang->action->objectTypes['user']        = 'User';
-$lang->action->objectTypes['doc']         = 'Doc';
+$lang->action->objectTypes['doc']         = 'Document';
 $lang->action->objectTypes['doclib']      = 'Document Library';
 $lang->action->objectTypes['todo']        = 'Todo';
 $lang->action->objectTypes['branch']      = 'Branch';
@@ -127,19 +127,19 @@ $lang->action->desc->verified       = '$date, verified by <strong>$actor</strong
 $lang->action->desc->diff1          = '<strong><i>%s</i></strong> is changed. It was "%s" and it is "%s".<br />' . "\n";
 $lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. The difference is ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
-$lang->action->desc->linked2bug     = '$date Linked to <strong>$extra</strong> by <strong>$actor</strong>';
+$lang->action->desc->linked2bug     = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 
 /* 子任务修改父任务的历史操作记录 */
-$lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a Child Task <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a Child Task <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a Child Task <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> unlinked a Child Task <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked to a Parent Task <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> unlinked a Parent Task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a child task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a child task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> unlinked a child task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked to a parent task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> unlinked a parent task <strong>$extra</strong>。' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
-$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked a Use Case <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked a Use Case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked a case <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked a case <strong>$extra</strong>.' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
@@ -158,7 +158,7 @@ $lang->action->label->hidden              = 'hid ';
 $lang->action->label->commented           = 'commented ';
 $lang->action->label->activated           = 'activated ';
 $lang->action->label->blocked             = 'blocked ';
-$lang->action->label->resolved            = 'solved ';
+$lang->action->label->resolved            = 'resolved ';
 $lang->action->label->reviewed            = 'reviewed ';
 $lang->action->label->moved               = 'moved ';
 $lang->action->label->confirmed           = 'confirmed story';

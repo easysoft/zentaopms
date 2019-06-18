@@ -1,5 +1,5 @@
 <?php
-$lang->dev->common     = 'Develop';
+$lang->dev->common     = 'CSD';
 $lang->dev->api        = 'API';
 $lang->dev->db         = 'Database';
 $lang->dev->editor     = 'Editor';
@@ -70,7 +70,7 @@ $lang->dev->tableList['api']            = 'API';
 $lang->dev->tableList['backup']         = 'Backup';
 $lang->dev->tableList['common']         = 'Common';
 $lang->dev->tableList['convert']        = 'Convert';
-$lang->dev->tableList['dev']            = 'Develop';
+$lang->dev->tableList['dev']            = 'CSD';
 $lang->dev->tableList['git']            = 'GIT';
 $lang->dev->tableList['index']          = 'Home';
 $lang->dev->tableList['install']        = 'Install';
@@ -116,4 +116,4 @@ $lang->dev->groupList['message'] = 'Message';
 
 $lang->dev->endGroupList['admin']  = 'Admin';
 $lang->dev->endGroupList['system'] = 'System';
-$lang->dev->endGroupList['other']  = 'Other';
+$lang->dev->endGroupList['other']  = 'Others';

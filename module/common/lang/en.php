@@ -54,7 +54,7 @@ $lang->day          = 'Day';
 $lang->customConfig = 'Custom Config';
 $lang->public       = 'Public';
 $lang->trunk        = 'Trunk';
-$lang->sort         = 'Sort';
+$lang->sort         = 'Order';
 $lang->required     = 'Required';
 $lang->noData       = 'No data.';
 
@@ -193,7 +193,7 @@ $lang->my->menu->dynamic        = 'Dynamics|my|dynamic|';
 $lang->my->menu->profile        = array('link' => 'Profile|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = 'Password|my|changepassword';
 $lang->my->menu->manageContacts = 'Contact|my|managecontacts';
-$lang->my->menu->score          = array('link' => 'Point|my|score', 'subModule' => 'score');
+$lang->my->menu->score          = array('link' => 'Points|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',task,myProject,profile,';
 
@@ -262,7 +262,6 @@ $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => 'Build|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA menu settings. */
 $lang->qa = new stdclass();
@@ -348,7 +347,7 @@ $lang->report->menu->test    = array('link' => 'Request|report|bugcreate', 'alia
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: The data of a report is based on the data in the Story List. Click the tab,e.g. AssignedToMe, then click Report to generate a report.';
+$lang->report->notice->help = 'Note: The data of a report is based on the data in the List. Click the tab, e.g. All, then click Report to generate a report.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
@@ -375,7 +374,7 @@ $lang->admin->menu->message   = array('link' => 'Notification|message|index', 's
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
 
-$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->dev       = array('link' => 'CSD|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');
@@ -518,7 +517,7 @@ $lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
-$lang->pasteTextInfo   = "Paste text here. Each line will be the title of each record. ";
+$lang->pasteTextInfo   = "Paste the text of items here. Each item will be the title of a story. ";
 $lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
 $lang->importConfirm   = "Import";
 $lang->importAndCover  = "Override";

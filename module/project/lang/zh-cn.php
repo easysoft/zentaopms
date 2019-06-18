@@ -36,6 +36,7 @@ $lang->project->release       = '发布';
 $lang->project->acl           = '访问控制';
 $lang->project->teamname      = '团队名称';
 $lang->project->order         = $lang->projectCommon . '排序';
+$lang->project->orderAB       = '排序';
 $lang->project->products      = '相关' . $lang->productCommon;
 $lang->project->whitelist     = '分组白名单';
 $lang->project->totalEstimate = '预计';
@@ -59,6 +60,7 @@ $lang->project->readjustTime  = "调整{$lang->projectCommon}起止时间";
 $lang->project->readjustTask  = '顺延任务的起止时间';
 $lang->project->effort        = '日志';
 $lang->project->relatedMember = '相关成员';
+$lang->project->watermark     = '由禅道导出';
 
 $lang->project->start    = "开始";
 $lang->project->activate = "激活";

@@ -87,8 +87,8 @@ global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);
 if($config->global->flow == 'onlyTask' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['bug']);
 
-$lang->todo->confirmDelete  = "Do you want to delete this Todo?";
-$lang->todo->thisIsPrivate  = 'This is a private Todo';
+$lang->todo->confirmDelete  = "Do you want to delete this todo?";
+$lang->todo->thisIsPrivate  = 'This is a private todo';
 $lang->todo->lblDisableDate = 'TBD';
 $lang->todo->lblBeforeDays  = "Create a todo %s day(s) earlier";
 $lang->todo->lblClickCreate = "Click to Add Todo";
