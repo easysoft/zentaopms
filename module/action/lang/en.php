@@ -211,16 +211,16 @@ $lang->action->label->managed             = "managed";
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction = new stdclass;
-$lang->action->dynamicAction->todo['opened']               = 'Create Todo';
-$lang->action->dynamicAction->todo['edited']               = 'Edit Todo';
-$lang->action->dynamicAction->todo['erased']               = 'Delete Todo';
-$lang->action->dynamicAction->todo['finished']             = 'Finish Todo';
-$lang->action->dynamicAction->todo['activated']            = 'Activate Todo';
-$lang->action->dynamicAction->todo['closed']               = 'Close Todo';
-$lang->action->dynamicAction->todo['deleted']              = 'Delete Todo';
-$lang->action->dynamicAction->todo['assigned']             = 'Assign Todo';
-$lang->action->dynamicAction->todo['undeleted']            = 'Restore Todo';
-$lang->action->dynamicAction->todo['hidden']               = 'Hide Todo';
+$lang->action->dynamicAction->todo['opened']               = 'created a todo';
+$lang->action->dynamicAction->todo['edited']               = 'edited a todo';
+$lang->action->dynamicAction->todo['erased']               = 'deleted a todo';
+$lang->action->dynamicAction->todo['finished']             = 'finished a todo';
+$lang->action->dynamicAction->todo['activated']            = 'activated a todo';
+$lang->action->dynamicAction->todo['closed']               = 'closed a todo';
+$lang->action->dynamicAction->todo['deleted']              = 'deleted a todo';
+$lang->action->dynamicAction->todo['assigned']             = 'assigned a todo';
+$lang->action->dynamicAction->todo['undeleted']            = 'restored a todo';
+$lang->action->dynamicAction->todo['hidden']               = 'hid a todo';
 
 $lang->action->dynamicAction->product['opened']            = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']            = 'Edit ' . $lang->productCommon;
@@ -346,13 +346,13 @@ $lang->action->dynamicAction->doc['deleted']               = 'Delete Document';
 $lang->action->dynamicAction->doc['undeleted']             = 'Restore Document';
 $lang->action->dynamicAction->doc['hidden']                = 'Hide Document';
 
-$lang->action->dynamicAction->user['created']              = 'Create User';
-$lang->action->dynamicAction->user['edited']               = 'Edit User';
-$lang->action->dynamicAction->user['login']                = 'User Login';
-$lang->action->dynamicAction->user['logout']               = 'User Logout';
-$lang->action->dynamicAction->user['undeleted']            = 'Restore User';
-$lang->action->dynamicAction->user['hidden']               = 'Hide User';
-$lang->action->dynamicAction->user['loginxuanxuan']        = 'Login Xuan';
+$lang->action->dynamicAction->user['created']              = 'create a user';
+$lang->action->dynamicAction->user['edited']               = 'edited au user';
+$lang->action->dynamicAction->user['login']                = 'login';
+$lang->action->dynamicAction->user['logout']               = 'logout';
+$lang->action->dynamicAction->user['undeleted']            = 'restored user';
+$lang->action->dynamicAction->user['hidden']               = 'hid a user';
+$lang->action->dynamicAction->user['loginxuanxuan']        = 'login desktop';
 
 $lang->action->dynamicAction->entry['created']             = 'Add Application';
 $lang->action->dynamicAction->entry['edited']              = 'Edit Application';
