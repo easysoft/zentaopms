@@ -708,6 +708,7 @@ class userModel extends model
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
     }
 
@@ -729,6 +730,7 @@ class userModel extends model
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
 
         $this->keepLogin($user);
