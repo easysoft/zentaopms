@@ -36,6 +36,7 @@ $lang->project->release       = 'Release';
 $lang->project->acl           = 'ACL';
 $lang->project->teamname      = 'Team Name';
 $lang->project->order         = "Rank {$lang->projectCommon}";
+$lang->project->orderAB       = "Rank";
 $lang->project->products      = "Link {$lang->productCommon}";
 $lang->project->whitelist     = 'Whitelist';
 $lang->project->totalEstimate = 'Estimates';

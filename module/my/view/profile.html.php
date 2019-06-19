@@ -94,7 +94,7 @@
             <?php endforeach;?>
             <?php endif;?>
             <dt><?php echo $lang->user->address;?></dt>
-            <dd><?php echo $user->address;?></dd>
+            <dd title='<?php echo $user->address;?>'><?php echo $user->address;?></dd>
             <dt><?php echo $lang->user->zipcode;?></dt>
             <dd><?php echo $user->zipcode;?></dd>
           </dl>

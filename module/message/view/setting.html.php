@@ -47,7 +47,12 @@
           ?>
           <td>
           <?php
-          echo html::checkbox("messageSetting[$type][setting][$objectType]", $availableActions, isset($messageSetting[$type]['setting'][$objectType]) ? join(',', $messageSetting[$type]['setting'][$objectType]) : '');
+          $selected = isset($messageSetting[$type]['setting'][$objectType]) ? join(',', $messageSetting[$type]['setting'][$objectType]) : '';
+          foreach($availableActions as $key => $value)
+          {
+              $checked = strpos(",$selected,", ",{$key},") !== false ? "checked='checked'" : '';
+              echo "<div class='checkbox-primary' title='$value'><input type='checkbox' name='messageSetting[$type][setting][$objectType][]' value='$key' $checked id='messageSetting[$type][setting][$objectType]$key'> <label for='messageSetting[$type][setting][$objectType]$key'>$value</label></div>";
+          }
           if(isset($config->message->condition[$type][$objectType]))
           {
               $moduleName = $objectType == 'case' ? 'testcase' : $objectType;

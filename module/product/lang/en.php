@@ -57,7 +57,7 @@ $lang->product->errorNoProduct = "No {$lang->productCommon} is created yet!";
 $lang->product->accessDenied   = "You have no access to the {$lang->productCommon}.";
 
 $lang->product->id            = 'ID';
-$lang->product->name          = 'Product Name';
+$lang->product->name          = "{$lang->productCommon} Name";
 $lang->product->code          = 'Code';
 $lang->product->line          = "{$lang->productCommon} Line";
 $lang->product->order         = 'Rank';
@@ -66,7 +66,7 @@ $lang->product->typeAB        = 'Type';
 $lang->product->status        = 'Status';
 $lang->product->desc          = 'Description';
 $lang->product->manager       = 'Managers';
-$lang->product->PO            = 'Product Owner';
+$lang->product->PO            = "{$lang->productCommon} Owner";
 $lang->product->QD            = 'QA Manager';
 $lang->product->RD            = 'Release Manager';
 $lang->product->acl           = 'ACL';
