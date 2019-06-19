@@ -381,12 +381,13 @@ class commonModel extends model
             $link['method'] = $subMenuMethod;
             $link['vars']   = $subMenuParams;
 
-            $menu = new stdclass();
+            $subMenuItem     = isset($items->$subMenuKey) ? $items->$subMenuKey : array();
+            $menu            = new stdclass();
             $menu->name      = $subMenuKey;
             $menu->link      = $link;
             $menu->text      = $subMenuName;
-            $menu->subModule = isset($items->$subMenuKey['subModule']) ? $items->$subMenuKey['subModule'] : '';
-            $menu->alias     = isset($items->$subMenuKey['alias']) ? $items->$subMenuKey['alias'] : '';
+            $menu->subModule = isset($subMenuItem['subModule']) ? $subMenuItem['subModule'] : '';
+            $menu->alias     = isset($subMenuItem['alias'])     ? $subMenuItem['alias'] : '';
             $menu->hidden    = false;
             $subMenu[$subMenuKey] = $menu;
         }
