@@ -346,7 +346,6 @@ $lang->action->dynamicAction->doc['deleted']               = 'Delete Document';
 $lang->action->dynamicAction->doc['undeleted']             = 'Restore Document';
 $lang->action->dynamicAction->doc['hidden']                = 'Hide Document';
 
-<<<<<<< HEAD
 $lang->action->dynamicAction->user['created']              = 'create a user';
 $lang->action->dynamicAction->user['edited']               = 'edited au user';
 $lang->action->dynamicAction->user['login']                = 'login';
@@ -354,15 +353,6 @@ $lang->action->dynamicAction->user['logout']               = 'logout';
 $lang->action->dynamicAction->user['undeleted']            = 'restored user';
 $lang->action->dynamicAction->user['hidden']               = 'hid a user';
 $lang->action->dynamicAction->user['loginxuanxuan']        = 'login desktop';
-=======
-$lang->action->dynamicAction->user['created']              = 'Create User';
-$lang->action->dynamicAction->user['edited']               = 'Edit User';
-$lang->action->dynamicAction->user['login']                = 'User Login';
-$lang->action->dynamicAction->user['logout']               = 'User Logout';
-$lang->action->dynamicAction->user['undeleted']            = 'Restore User';
-$lang->action->dynamicAction->user['hidden']               = 'Hide User';
-$lang->action->dynamicAction->user['loginxuanxuan']        = 'Login Xuan';
->>>>>>> 811d68443ca24d3a7d686b938b61661eab12ac8e
 
 $lang->action->dynamicAction->entry['created']             = 'Add Application';
 $lang->action->dynamicAction->entry['edited']              = 'Edit Application';
