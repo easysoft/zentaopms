@@ -211,7 +211,6 @@ $lang->action->label->managed             = "managed";
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction = new stdclass;
-<<<<<<< HEAD
 $lang->action->dynamicAction->todo['opened']               = 'created a todo';
 $lang->action->dynamicAction->todo['edited']               = 'edited a todo';
 $lang->action->dynamicAction->todo['erased']               = 'deleted a todo';
@@ -222,18 +221,6 @@ $lang->action->dynamicAction->todo['deleted']              = 'deleted a todo';
 $lang->action->dynamicAction->todo['assigned']             = 'assigned a todo';
 $lang->action->dynamicAction->todo['undeleted']            = 'restored a todo';
 $lang->action->dynamicAction->todo['hidden']               = 'hid a todo';
-=======
-$lang->action->dynamicAction->todo['opened']               = 'Create Todo';
-$lang->action->dynamicAction->todo['edited']               = 'Edit Todo';
-$lang->action->dynamicAction->todo['erased']               = 'Delete Todo';
-$lang->action->dynamicAction->todo['finished']             = 'Finish Todo';
-$lang->action->dynamicAction->todo['activated']            = 'Activate Todo';
-$lang->action->dynamicAction->todo['closed']               = 'Close Todo';
-$lang->action->dynamicAction->todo['deleted']              = 'Delete Todo';
-$lang->action->dynamicAction->todo['assigned']             = 'Assign Todo';
-$lang->action->dynamicAction->todo['undeleted']            = 'Restore Todo';
-$lang->action->dynamicAction->todo['hidden']               = 'Hide Todo';
->>>>>>> 811d68443ca24d3a7d686b938b61661eab12ac8e
 
 $lang->action->dynamicAction->product['opened']            = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']            = 'Edit ' . $lang->productCommon;
