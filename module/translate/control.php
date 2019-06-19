@@ -38,6 +38,12 @@ class translate extends control
         $this->display();
     }
 
+    /**
+     * Add lang.
+     * 
+     * @access public
+     * @return void
+     */
     public function addLang()
     {
         if($_POST)
@@ -73,38 +79,21 @@ class translate extends control
     }
 
     /**
-     * Show selected language.
+     * Choose module to translate.
      * 
-     * @param  string $zentaoVersion 
      * @param  string $language 
-     * @param  string $module 
-     * @param  string $consultLang 
      * @access public
      * @return void
      */
-    public function showLang($zentaoVersion = '3.0', $language = 'en', $module = '', $consultLang = 'en')
+    public function chooseModule($language)
     {
-        $langContent = '';
-        $modules  = $this->translate->getModules($zentaoVersion);
-        if(empty($module)) $module = current($modules);
-        $filePath = $this->translate->getLangFilePath($zentaoVersion, $consultLang, $module);
-        if(!in_array($language, $this->config->translate->defaultLang))
-        {
-            $this->view->translations = $this->translate->getTranslations($zentaoVersion, $language, $module);
-        }
-        else
-        {
-            $filePath    = $this->translate->getLangFilePath($zentaoVersion, $language, $module);
-            $consultLang = $language;
-        }
+        $this->view->title      = $this->lang->translate->chooseModule;
+        $this->view->position[] = html::a($this->createLink('translate', 'index'), $this->lang->translate->common);
+        $this->view->position[] = $this->lang->translate->chooseModule;
+        $this->view->modules    = $this->translate->getModules();
+        $this->view->language   = $language;
 
-        if(file_exists($filePath)) $this->view->langHandle = fopen($filePath, "r");
-        $this->view->percents      = $this->translate->getPercents($zentaoVersion, $language);
-        $this->view->modules       = $modules;
-        $this->view->module        = $module; 
-        $this->view->language      = $language;
-        $this->view->consultLang   = $consultLang;
-        $this->view->zentaoVersion = $zentaoVersion;
+        foreach($this->lang->dev->endGroupList as $group => $groupName) $this->lang->dev->groupList[$group] = $groupName;
 
         $this->display();
     }
@@ -119,11 +108,10 @@ class translate extends control
      * @access public
      * @return void
      */
-    public function translate($zentaoVersion = '3.0', $language = 'en', $module = '', $consultLang = 'en')
+    public function module($language, $module = '', $referLang = 'en')
     {
-        $modules = $this->translate->getModules($zentaoVersion);
+        $modules = $this->translate->getModules();
         if(empty($module)) $module = current($modules);
-        if($this->app->user->account == 'guest') $this->locate($this->createLink('user', 'login'));
         if($_POST)
         {
             $this->translate->addTranslation($zentaoVersion, $language, $module);

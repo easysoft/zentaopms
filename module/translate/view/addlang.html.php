@@ -17,7 +17,7 @@
       <div class='heading'><h4><?php echo $lang->translate->addLang;?></h4></div>
     </div>
     <?php if($cmd):?>
-    <div class='article-content text-danger'><?php printf($lang->translate->failDirPriv, $cmd);?></div>
+    <div class='article-content text-danger'><?php printf($lang->translate->notice->failDirPriv, $cmd);?></div>
     <hr>
     <?php echo html::commonButton($lang->translate->refreshPage, 'onclick=location.href=location.href', 'btn btn-primary');?>
     <?php else:?>

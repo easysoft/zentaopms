@@ -31,7 +31,7 @@ class translateModel extends model
             {
                 $this->initLangByFile($mainLangFile, $moduleName, $data->code);
                 $targetFile = $modulePath . DS . 'lang' . DS . $data->code . '.php';
-                if(!copy($mainLangFile, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->failCopyFile, $mainLangFile, $targetFile);
+                if(!copy($mainLangFile, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->notice->failCopyFile, $mainLangFile, $targetFile);
             }
 
             $extLangPath = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->reference;
@@ -43,7 +43,7 @@ class translateModel extends model
                     $fileName = basename($extLangFile);
                     $this->initLangByFile($extLangFile, $moduleName, $data->code);
                     $targetFile = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->code . DS . $fileName;
-                    if(!copy($extLangPath, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->failCopyFile, $extLangFile, $targetFile);
+                    if(!copy($extLangPath, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->notice->failCopyFile, $extLangFile, $targetFile);
                 }
             }
         }
@@ -121,24 +121,18 @@ class translateModel extends model
         return $cmd;
     }
 
-    /**
-     * Get modules in selected version.
-     * 
-     * @param  string $zentaoVersion 
-     * @access public
-     * @return void
-     */
-    public function getModules($zentaoVersion = '3.0')
+    public function getModules()
     {
-        $langPath = '';
-        $dir      = dir($langPath);
-        while(false !== ($entry = $dir->read())) 
-        { 
-            if($entry != '.' and $entry != '..' and $entry != '.svn') $modules[] = $entry;
+        $this->loadModel('dev');
+        $moduleList = glob($this->app->getModuleRoot() . '*');
+        $modules    = array();
+        foreach($moduleList as $module)
+        {
+            if(!is_dir($module . '/lang') and !is_dir($module . '/ext/lang')) continue;
+            $module = basename($module);
+            $group  = zget($this->config->dev->group, $module, 'other');
+            $modules[$group][] = $module;
         }
-        $dir->close();
-        sort($modules);
-
         return $modules;
     }
 
