@@ -996,7 +996,7 @@ class treeModel extends model
     }
 
     /**
-     * Create link of trainskill.
+     * Create link of traincourse.
      *
      * @param  string $type
      * @param  object $module
@@ -1007,6 +1007,19 @@ class treeModel extends model
     {
         return html::a(helper::createLink('traincourse', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
     }
+
+    /**
+     * Create link of trainpost.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainPostLink($type, $module, $extra = '')
+    {    
+        return html::a(helper::createLink('trainpost', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    } 
 
     /**
      * Get sons of a module.
