@@ -1200,7 +1200,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function report($projectID, $browseType = 'all', $chartType = '')
+    public function report($projectID, $browseType = 'all', $chartType = 'default')
     {
         $this->loadModel('report');
         $this->view->charts   = array();

@@ -21,6 +21,21 @@ include dirname(__FILE__) . '/base/router.class.php';
 class router extends baseRouter
 {
     /**
+     * Add config langs.
+     *
+     * @param   string $lang  zh-cn|zh-tw|zh-hk|en
+     * @access  public
+     * @return  void
+     */
+    public function setClientLang($lang = '')
+    {
+        $langs = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'")->fetch();
+        $langs = empty($langs) ? array() : json_decode($langs->value, true);
+        foreach($langs as $langKey => $langData) $this->config->langs[$langKey] = $langData['name'];
+        return parent::setClientLang($lang);
+    }
+
+    /**
      * 加载语言文件，返回全局$lang对象。
      * Load lang and return it as the global lang object.
      * 

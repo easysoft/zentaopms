@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->dept->common      = 'Department';
-$lang->dept->manageChild = "Department";
+$lang->dept->manageChild = "Child Department";
 $lang->dept->edit        = "Edit";
 $lang->dept->delete      = "Delete";
 $lang->dept->parent      = "Parent Dept";
@@ -18,7 +18,7 @@ $lang->dept->manager     = "Manager";
 $lang->dept->name        = "Department Name";
 $lang->dept->browse      = "Manage";
 $lang->dept->manage      = "Manage Department";
-$lang->dept->updateOrder = "Sort";
+$lang->dept->updateOrder = "Order";
 $lang->dept->add         = "Add Department";
 $lang->dept->dragAndSort = "Drag to order";
 

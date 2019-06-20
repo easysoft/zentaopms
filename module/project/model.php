@@ -127,11 +127,11 @@ class projectModel extends model
                     foreach($subMenu as $menuKey => $menu)
                     {
                         $itemMenu = zget($projectSubMenu, $menuKey, '');
-                        if($moduleName == strtolower($menu->link['module']) and 
+                        if(($moduleName == strtolower($menu->link['module']) and 
                             (
                                 $methodName == strtolower($menu->link['method']) or
                                 (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false)
-                            )
+                            )) or (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false)
                         )
                         {
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);

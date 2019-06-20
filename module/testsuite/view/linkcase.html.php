@@ -33,7 +33,7 @@
     <table class='table tablesorter' id='testcaseList'>
       <thead>
         <tr>
-          <th class='w-id'>
+          <th class='c-id'>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
@@ -43,8 +43,8 @@
           <th class='w-pri text-center'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->title;?></th>
           <th class='w-type'><?php echo $lang->testcase->type;?></th>
-          <th class='w-user text-center'><?php echo $lang->openedByAB;?></th>
-          <th class='w-status text-center'><?php echo $lang->statusAB;?></th>
+          <th class='c-user text-center'><?php echo $lang->openedByAB;?></th>
+          <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
         </tr>
       </thead>
       <tbody>

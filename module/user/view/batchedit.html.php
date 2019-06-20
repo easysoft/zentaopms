@@ -24,6 +24,7 @@
   $visibleFields = array();
   foreach(explode(',', $showFields) as $field)
   {
+      if(strpos(",{$config->user->customBatchEditFields},", ",{$field},") === false) continue;
       if($field)$visibleFields[$field] = '';
   }
   $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';

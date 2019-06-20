@@ -36,6 +36,7 @@ $lang->project->release       = '发布';
 $lang->project->acl           = '访问控制';
 $lang->project->teamname      = '团队名称';
 $lang->project->order         = $lang->projectCommon . '排序';
+$lang->project->orderAB       = '排序';
 $lang->project->products      = '相关' . $lang->productCommon;
 $lang->project->whitelist     = '分组白名单';
 $lang->project->totalEstimate = '预计';

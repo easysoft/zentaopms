@@ -730,6 +730,7 @@ function getFingerprint()
 function convertURL()
 {
     if($('.article-content, .article>.content').size() == 0) return;
+    if($('.article-content>.kindeditor').size() != 0) return;
 
     $('.article-content, .article>.content').each(function()
     {
