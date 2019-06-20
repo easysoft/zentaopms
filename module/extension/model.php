@@ -893,18 +893,21 @@ class extensionModel extends model
         $today       = date('Y-m-d');
         $expireDate  = '';
 
-        $licenceOrderFile = $licencePath . 'order' . $extension->code . $extension->version . '.txt';
-        if(file_exists($licenceOrderFile))
+        $licenceOrderFiles = glob($licencePath . 'order*' . $extension->code . $extension->version . '.txt');
+        foreach($licenceOrderFiles as $licenceOrderFile)
         {
-            $order = file_get_contents($licenceOrderFile);
-            $order = unserialize($order);
-            if($order->type != 'life')
+            if(file_exists($licenceOrderFile))
             {
-                $days = isset($order->days) ? $order->days : 0;
-                if($order->type == 'demo') $days = 31;
-                if($order->type == 'year') $days = 365;
-                $startDate  = $order->paidDate != '0000-00-00 00:00:00' ? $order->paidDate : $order->createdDate;
-                if($days) $expireDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
+                $order = file_get_contents($licenceOrderFile);
+                $order = unserialize($order);
+                if($order->type != 'life')
+                {
+                    $days = isset($order->days) ? $order->days : 0;
+                    if($order->type == 'demo') $days = 31;
+                    if($order->type == 'year') $days = 365;
+                    $startDate  = $order->paidDate != '0000-00-00 00:00:00' ? $order->paidDate : $order->createdDate;
+                    if($days) $expireDate = date('Y-m-d', strtotime($startDate) + $days * 24 * 3600);
+                }
             }
         }
 
