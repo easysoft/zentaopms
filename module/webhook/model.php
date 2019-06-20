@@ -78,7 +78,14 @@ class webhookModel extends model
             $action = $actions[$log->action];
             $data   = json_decode($log->data);
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
-            $field  = $this->config->action->objectNameFields[$action->objectType];
+            $field  = zget($this->config->action->objectNameFields, $action->objectType, $action->objectType);
+
+            if(!is_object($object)) 
+            {
+                $object = new stdclass;
+                $object->$field = '';
+            }
+
             $text   = zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
 
             $log->action    = $text;
