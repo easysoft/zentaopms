@@ -23,13 +23,14 @@ class translateModel extends model
         $langs[$data->code] = $data;
         $this->loadModel('setting')->setItem('system.common.global.langs', json_encode($langs));
 
-        foreach(glob($this->app->getModuleRoot() . '*') as $modulePath)
+        $modules = glob($this->app->getModuleRoot() . '*');
+        foreach($modules as $modulePath)
         {
             $moduleName   = basename($modulePath);
             $mainLangFile = $modulePath . DS . 'lang' . DS . $data->reference . '.php';
+            $this->initModuleLang($moduleName, $data->code);
             if(file_exists($mainLangFile))
             {
-                $this->initLangByFile($mainLangFile, $moduleName, $data->code);
                 $targetFile = $modulePath . DS . 'lang' . DS . $data->code . '.php';
                 if(!copy($mainLangFile, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->notice->failCopyFile, $mainLangFile, $targetFile);
             }
@@ -38,11 +39,10 @@ class translateModel extends model
             if(is_dir($extLangPath))
             {
                 mkdir($modulePath . DS . 'ext' . DS . 'lang' . DS . $data->code);
-                foreach(glob($extLangPath . DS . '*.php') as $extLangFile)
+                $extLangFiles = glob($extLangPath . DS . '*.php');
+                foreach($extLangFiles as $extLangFile)
                 {
-                    $fileName = basename($extLangFile);
-                    $this->initLangByFile($extLangFile, $moduleName, $data->code);
-                    $targetFile = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->code . DS . $fileName;
+                    $targetFile = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->code . DS . basename($extLangFile);
                     if(!copy($extLangPath, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->notice->failCopyFile, $extLangFile, $targetFile);
                 }
             }
@@ -51,18 +51,18 @@ class translateModel extends model
         return true;
     }
 
-    public function initLangByFile($fileName, $moduleName, $langCode)
+    public function initModuleLang($moduleName, $langCode)
     {
         $flow = $this->config->global->flow;
         $now  = helper::now();
-        $initLangs = $this->getActiveItems($fileName);
+        $initLangs = $this->getModuleLangs($moduleName, $langCode);
         foreach($initLangs as $key => $value)
         {
             $translation = new stdclass();
             $translation->lang            = $langCode;
             $translation->module          = $moduleName;
             $translation->key             = $key;
-            $translation->value           = $value;
+            $translation->value           = trim($value, ';');
             $translation->status          = 'waiting';
             $translation->version         = $this->config->version;
             $translation->translator      = $this->app->user->account;
@@ -72,7 +72,23 @@ class translateModel extends model
         }
     }
 
-    public function getActiveItems($fileName)
+    public function getModuleLangs($moduleName, $langCode)
+    {
+        $modulePath   = $this->app->getModuleRoot() . $moduleName;
+        $mainLangFile = $modulePath . "/lang/{$langCode}.php";
+        $langItems    = array();
+        if(file_exists($mainLangFile)) $langItems += $this->getActiveItemsByFile($mainLangFile);
+
+        $extLangPath = $modulePath . DS . 'ext' . DS . 'lang' . DS . $langCode;
+        if(is_dir($extLangPath))
+        {
+            $extLangFiles = glob($extLangPath . DS . '*.php');
+            foreach($extLangFiles as $extLangFile) $langItems += $this->getActiveItemsByFile($extLangFile);
+        }
+        return $langItems;
+    }
+
+    public function getActiveItemsByFile($fileName)
     {
         $lines       = file($fileName);
         $flow        = $this->config->global->flow;
@@ -83,8 +99,12 @@ class translateModel extends model
         foreach($lines as $i => $line)
         {
             $line = trim($line);
+            if(empty($line)) continue;
             if(strpos($line, '$lang->menuOrder') === 0) continue;
-            if(strpos($line, 'if(') !== false and trim($lines[$i + 1]) == '{')
+            if(strpos($line, 'include') === 0 or strpos($line, 'global') === 0) continue;
+            if(strpos($line, 'unset(') !== false) continue;
+            if(strpos($line, '/*') === 0 or strpos($line, '//') === 0 or strpos($line, '<?php') === 0) continue;
+            if(strpos($line, 'if') !== false and trim($lines[$i + 1]) == '{')
             {
                 $inCondition = true;
                 $level ++;
@@ -99,12 +119,20 @@ class translateModel extends model
                     $inFlow      = true;
                 }
             }
-            if(strpos($line, '$lang') === 0 and strpos($line, '=') !== false and $inFlow)
+            if($line == '{' or $line == '}' or strpos($line, 'if') === 0 or strpos($line, 'else') === 0) continue;
+            if($inFlow)
             {
-                $position = strpos($line, '=');
-                $key      = trim(substr($line, 0, $position));
-                $value    = trim(trim(substr($line, $position + 1)), ';');
-                $items[$key] = $value;
+                if(strpos($line, '$lang') === 0 and strpos($line, '=') !== false)
+                {
+                    $position = strpos($line, '=');
+                    $key      = trim(substr($line, 0, $position));
+                    $value    = trim(trim(substr($line, $position + 1)), ';');
+                    $items[$key] = $value;
+                }
+                elseif(isset($key) and strpos($key, '$lang') === 0)
+                {
+                    $items[$key] .= "\n" . $line;
+                }
             }
         }
         return $items;
@@ -112,8 +140,9 @@ class translateModel extends model
 
     public function checkDirPriv()
     {
-        $cmd = '';
-        foreach(glob($this->app->getModuleRoot() . '*') as $modulePath)
+        $cmd     = '';
+        $modules = glob($this->app->getModuleRoot() . '*');
+        foreach($modules as $modulePath)
         {
             if(is_dir($modulePath . '/lang') and !is_writable($modulePath . '/lang')) $cmd .= "chmod 777 {$modulePath}/lang <br />";
             if(is_dir($modulePath . '/ext/lang') and !is_writable($modulePath . '/ext/lang')) $cmd .= "chmod -R 777 {$modulePath}/ext/lang <br />";
@@ -124,6 +153,8 @@ class translateModel extends model
     public function getModules()
     {
         $this->loadModel('dev');
+        foreach($this->lang->dev->endGroupList as $group => $groupName) $this->lang->dev->groupList[$group] = $groupName;
+
         $moduleList = glob($this->app->getModuleRoot() . '*');
         $modules    = array();
         foreach($moduleList as $module)
@@ -133,50 +164,31 @@ class translateModel extends model
             $group  = zget($this->config->dev->group, $module, 'other');
             $modules[$group][] = $module;
         }
+
         return $modules;
     }
 
-    /**
-     * Get lang file path.
-     * 
-     * @param  string    $zentaoVersion 
-     * @param  string    $language 
-     * @param  string    $module 
-     * @access public
-     * @return void
-     */
-    public function getLangFilePath($zentaoVersion, $language, $module)
+    public function getLangItemCount()
     {
-        $language = str_replace('_', '-', $language);
-        $langPath = dirname(__FILE__) . "/zentaoLangs/module$zentaoVersion/";
-        return $langPath . $module . "/lang/$language.php";
+        $moduleGroups = $this->getModules();
+        $moduleRoot   = $this->app->getModuleRoot();
+        $itemCount    = 0;
+        foreach($moduleGroups as $group => $modules)
+        {
+            foreach($modules as $module)
+            {
+                $items = $this->getModuleLangs($module, 'zh-cn');
+                $itemCount += count($items);
+            }
+        }
+        return $itemCount;
     }
 
-    /**
-     * Get language percents 
-     * 
-     * @param  string $version 
-     * @param  string $language 
-     * @access public
-     * @return void
-     */
-    public function getPercents($version, $language = '')
+    public function getProgress()
     {
-        if(empty($language))
-        {
-            $langPercents = array();
-            $allPercents = $this->dao->select('*')->from(TABLE_LANGUAGELOG)->where('version')->eq($version)->fetchGroup('language', 'module', false);
-            $modules   = $this->getModules($version);
-            $moduleNum = count($modules);
-            foreach($allPercents as $lang => $percents)
-            {
-                $sum = 0;
-                foreach($percents as $percent) $sum += $percent->percent;
-                $langPercents[$lang] = round($sum / $moduleNum, 2) . '%';
-            }
-            return $langPercents;
-        }
-        return $this->dao->select('*')->from(TABLE_LANGUAGELOG)->where('version')->eq($version)->andWhere('language')->eq($language)->fetchAll('module', false);
+        $langs = $this->dao->select("`lang`,sum(if((status != 'waiting'),1,0)) as waitItems, count(*) as count")->from(TABLE_TRANSLATION)->groupBy('`lang`')->fetchAll('lang');
+        foreach($langs as $lang => $data) $data->progress = round($data->waitItems / $data->count, 3);
+        return $langs;
     }
 
     /**
@@ -189,15 +201,14 @@ class translateModel extends model
      * @access public
      * @return void
      */
-    public function getTranslations($version, $language, $module = '', $langKeys = array())
+    public function getTranslations($language, $module = '', $langKeys = array())
     {
-        return $this->dao->select('id, account, langKey, translation, vote')->from(TABLE_TRANSLATE)
-            ->where('version')->eq($version)
-            ->andWhere('language')->eq($language)
+        return $this->dao->select('id,lang,`key`,`value`,status')->from(TABLE_TRANSLATION)
+            ->where('lang')->eq($language)
             ->beginIF(!empty($module))->andWhere('module')->eq($module)->fi()
             ->beginIF(!empty($langKeys))->andWhere('langKey')->in($langKeys)->fi()
-            ->orderBy('vote desc, id asc')
-            ->fetchGroup('langKey', 'translation', false);
+            ->orderBy('id asc')
+            ->fetchAll('key');
     }
 
     /**

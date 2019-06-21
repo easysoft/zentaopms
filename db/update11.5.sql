@@ -9,8 +9,9 @@ CREATE TABLE `zt_translation` (
   `translationTime` datetime NOT NULL,
   `reviewer` char(30) NOT NULL,
   `reviewTime` datetime NOT NULL,
+  `reason` text NOT NULL,
   `version` varchar(20) NOT NULL,
   `mode` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `lang_module_key_mode` (`lang`,`module`,`key`,`mode`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=5216 DEFAULT CHARSET=utf8

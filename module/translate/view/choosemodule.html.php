@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->dev->moduleList;?></h2>
+    <h2><?php echo $lang->dev->moduleList . ' > ' . $lang->translate->chooseModule;?></h2>
   </div>
   <table class='table table-form'>
     <?php foreach($lang->dev->groupList as $group => $groupName):?>

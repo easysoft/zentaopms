@@ -33,8 +33,28 @@ class translate extends control
      */
     public function index()
     {
-        $this->view->title      = $this->lang->translate->common;
-        $this->view->position[] = $this->lang->translate->common;
+        $itemCount = $this->translate->getLangItemCount();
+        $progress  = $this->translate->getProgress();
+        $finishedLangs = $translatingLangs = array();
+        foreach($this->config->translate->defaultLang as $defaultLang) $finishedLangs[$defaultLang] = $this->config->langs[$defaultLang];
+        foreach($progress as $translateLang => $data)
+        {
+            if($data->progress == 1)
+            {
+                $finishedLangs[$translateLang] = $this->config->langs[$translateLang];
+            }
+            else
+            {
+                $data->name = $this->config->langs[$translateLang];
+                $translatingLangs[$translateLang] = $data;
+            }
+        }
+
+        $this->view->title            = $this->lang->translate->common;
+        $this->view->position[]       = $this->lang->translate->common;
+        $this->view->finishedLangs    = $finishedLangs;
+        $this->view->translatingLangs = $translatingLangs;
+        $this->view->itemCount        = $itemCount;
         $this->display();
     }
 
@@ -93,8 +113,6 @@ class translate extends control
         $this->view->modules    = $this->translate->getModules();
         $this->view->language   = $language;
 
-        foreach($this->lang->dev->endGroupList as $group => $groupName) $this->lang->dev->groupList[$group] = $groupName;
-
         $this->display();
     }
 
@@ -108,29 +126,39 @@ class translate extends control
      * @access public
      * @return void
      */
-    public function module($language, $module = '', $referLang = 'en')
+    public function module($language, $module = '', $referLang = '')
     {
-        $modules = $this->translate->getModules();
-        if(empty($module)) $module = current($modules);
+        $moduleGroup = $this->translate->getModules();
+        if(empty($module))
+        {
+            $group  = current($this->lang->dev->groupList);
+            $module = current($moduleGroup[$group]);
+        }
+        else
+        {
+            foreach($moduleGroup as $group => $modules)
+            {
+                if(in_array($module, $modules)) break;
+            }
+        }
+        if(empty($referLang))
+        {
+            $langs     = json_decode($this->config->global->langs, true);
+            $referLang = $langs[$language]['reference'];
+        }
         if($_POST)
         {
             $this->translate->addTranslation($zentaoVersion, $language, $module);
             if(dao::isError()) die(js::error(dao::getError()));
             die(js::locate(inlink('showLang', "zentaoVersion=$zentaoVersion&language=$language&module=$module&consultLang=$consultLang"), 'parent'));
         }
-        $filePath = $this->translate->getLangFilePath($zentaoVersion, $consultLang, $module);
-        if(file_exists($filePath)) include($filePath);
 
-        $this->view->percents      = $this->translate->getPercents($zentaoVersion, $language);
-        $this->view->modules       = $modules;
-        $this->view->module        = $module; 
+        $this->view->referItems    = $this->translate->getModuleLangs($module, $referLang);
+        $this->view->translations  = $this->translate->getTranslations($language, $module);
+        $this->view->moduleGroup   = $moduleGroup;
+        $this->view->currentModule = $module; 
+        $this->view->currentGroup  = $group; 
         $this->view->language      = $language;
-        $this->view->zentaoVersion = $zentaoVersion;
-        $this->view->consultLang   = $consultLang;
-        $this->view->moduleLangs   = $this->translate->untieModuleLang($lang);
-        $this->view->translations  = $this->translate->getTranslations($zentaoVersion, $language, $module);
-
-        unset($lang);
         $this->display();
     }
 
