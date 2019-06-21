@@ -115,6 +115,8 @@ class entryModel extends model
             ->remove('allIP')
             ->get();
 
+        if($this->post->freePasswd == 1) $this->config->entry->edit->requiredFields = 'name, code, key';
+
         $this->dao->update(TABLE_ENTRY)->data($entry)
             ->batchCheck($this->config->entry->edit->requiredFields, 'notempty')
             ->check('code', 'code')

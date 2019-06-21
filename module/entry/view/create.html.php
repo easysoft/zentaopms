@@ -34,7 +34,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->entry->freePasswd;?></th>
-          <td><?php echo html::radio('freePasswd', $lang->entry->freePasswdList, "class='form-control'");?></td>
+          <td><?php echo html::radio('freePasswd', $lang->entry->freePasswdList, '');?></td>
           <td></td>
         </tr>
         <tr>
