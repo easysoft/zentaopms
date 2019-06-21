@@ -4,3 +4,4 @@
 .panel .text-progress{color:#999;}
 .panel p{padding-bottom:5px;}
 .item .pull-right{color:#999;}
+.table-condensed td, .table-condensed th{padding:2px !important;}

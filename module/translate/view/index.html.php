@@ -6,7 +6,7 @@
       <div class='panel'>
         <div class='panel-heading'>
           <div class='panel-title'><?php echo $lang->translate->finishedLang;?></div>
-          <div class='panel-actions'><?php echo "(" . count($finishedLangs) . ")";?></div>
+          <div class='panel-actions'><?php printf($lang->translate->count, count($finishedLangs));?></div>
         </div>
         <div class='panel-body'>
           <?php foreach($finishedLangs as $langKey => $langName):?>
@@ -22,15 +22,15 @@
       <div class='panel'>
         <div class='panel-heading'>
           <div class='panel-title'><?php echo $lang->translate->translatingLang;?></div>
-          <div class='panel-actions'><?php echo "(" . count($translatingLangs) . ")";?></div>
+          <div class='panel-actions'><?php printf($lang->translate->count, count($translatingLangs));?></div>
         </div>
         <div class='panel-body'>
-          <table class='table table-form'>
+          <table class='table table-form table-condensed'>
             <?php foreach($translatingLangs as $langKey => $data):?>
             <tr>
               <th class='text-left'><?php echo $data->name;?></th>
               <td class='text-progress text-center'><?php printf($lang->translate->progress, ($data->progress * 100) . '%');?></td>
-              <td class='w-50px'><?php echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm'");?></td>
+              <td class='w-50px'><?php echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-mini'");?></td>
             </tr>
             <?php endforeach;?>
           </table>

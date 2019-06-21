@@ -20,15 +20,22 @@ class translateModel extends model
         if(dao::isError()) return false;
 
         $langs = empty($this->config->global->langs) ? array() : json_decode($this->config->global->langs, true);
+        if(isset($langs[$data->code]))
+        {
+            dao::$errors['message'][] = sprintf($this->lang->translate->notice->failUnique, $data->code);
+            return false;
+        }
+
         $langs[$data->code] = $data;
         $this->loadModel('setting')->setItem('system.common.global.langs', json_encode($langs));
 
         $modules = glob($this->app->getModuleRoot() . '*');
         foreach($modules as $modulePath)
         {
-            $moduleName   = basename($modulePath);
+            $moduleName = basename($modulePath);
+            $this->initModuleLang($moduleName, $data->code, $data->reference);
+
             $mainLangFile = $modulePath . DS . 'lang' . DS . $data->reference . '.php';
-            $this->initModuleLang($moduleName, $data->code);
             if(file_exists($mainLangFile))
             {
                 $targetFile = $modulePath . DS . 'lang' . DS . $data->code . '.php';
@@ -51,11 +58,11 @@ class translateModel extends model
         return true;
     }
 
-    public function initModuleLang($moduleName, $langCode)
+    public function initModuleLang($moduleName, $langCode, $referLang)
     {
         $flow = $this->config->global->flow;
         $now  = helper::now();
-        $initLangs = $this->getModuleLangs($moduleName, $langCode);
+        $initLangs = $this->getModuleLangs($moduleName, $referLang);
         foreach($initLangs as $key => $value)
         {
             $translation = new stdclass();

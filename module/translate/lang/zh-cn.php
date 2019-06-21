@@ -24,6 +24,7 @@ $lang->translate->refreshPage = '刷新';
 $lang->translate->builtIn  = '内置语言';
 $lang->translate->finished = '翻译完成';
 $lang->translate->progress = '完成 %s';
+$lang->translate->count    = '（%s 种）';
 
 $lang->translate->finishedLang    = '已经完成的语言';
 $lang->translate->translatingLang = '正在翻译的语言';
@@ -38,3 +39,4 @@ $lang->translate->statusList['changed']    = '已改变';
 $lang->translate->notice = new stdclass();
 $lang->translate->notice->failDirPriv  = "目录没有写入权限，请修改权限。<br /><code>%s</code>";
 $lang->translate->notice->failCopyFile = "复制文件%s到%s失败，请检查权限！";
+$lang->translate->notice->failUnique   = "已经有代号 %s 的记录";
