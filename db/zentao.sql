@@ -898,6 +898,7 @@ CREATE TABLE IF NOT EXISTS `zt_entry` (
   `account` varchar(30) NOT NULL DEFAULT '',
   `code` varchar(20) NOT NULL,
   `key` varchar(32) NOT NULL,
+  `freePasswd` enum('0','1') NOT NULL DEFAULT '0',
   `ip` varchar(100) NOT NULL,
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,

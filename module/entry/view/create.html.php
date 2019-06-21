@@ -20,7 +20,7 @@
         <small><?php echo $lang->arrow . ' ' . $lang->entry->create;?></small>
       </h2>
     </div>
-    <form id='entryForm' method='post' class='ajaxForm'>
+    <form id='entryForm' method='post' class='form-ajax'>
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->entry->name;?></th>
@@ -30,6 +30,11 @@
         <tr>
           <th><?php echo $lang->entry->code;?></th>
           <td><?php echo html::input('code', '', "class='form-control' title='{$lang->entry->note->code}' placeholder='{$lang->entry->note->code}'");?></td>
+          <td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->entry->freePasswd;?></th>
+          <td><?php echo html::radio('freePasswd', $lang->entry->freePasswdList, "class='form-control'");?></td>
           <td></td>
         </tr>
         <tr>

@@ -18,3 +18,4 @@ $config->entry->errcode['IP_DENIED']             = 403;
 $config->entry->errcode['ACCOUNT_UNBOUND']       = 403;
 $config->entry->errcode['EMPTY_ENTRY']           = 404;
 $config->entry->errcode['CALLED_TIME']           = 405;
+$config->entry->errcode['INVALID_ACCOUNT']       = 406;

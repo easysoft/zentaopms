@@ -45,5 +45,6 @@ $lang->entry->errmsg['INVALID_TOKEN']         = 'Invalid token.';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'Session verification failed.';
 $lang->entry->errmsg['IP_DENIED']             = 'IP is denied.';
 $lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Account is not bound.';
+$lang->entry->errmsg['INVALID_ACCOUNT']       = 'Invalid account.';
 $lang->entry->errmsg['EMPTY_ENTRY']           = 'Entry does not exist.';
 $lang->entry->errmsg['CALLED_TIME']           = 'Token has expired';
