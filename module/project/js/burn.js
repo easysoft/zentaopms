@@ -20,6 +20,11 @@ function downloadBurn()
         /* Add watermark */
         var canvas = document.querySelector('#cloneCanvas #burnCanvas');
         var cans = canvas.getContext('2d');
+
+        // Set background color to white
+        cans.fillStyle = '#fff';
+        cans.fillRect(0, 0, canvas.width, canvas.height);
+
         cans.drawImage($('#cloneCanvas #cloneImage').get(0), 0, 0);
         cans.font = "16px Microsoft JhengHei";
         cans.fillStyle = "rgba(17, 17, 17, 0.50)";
@@ -30,7 +35,7 @@ function downloadBurn()
         var type     = 'png';
         var $canvas  = $('#cloneCanvas #burnCanvas');
         var imgSrc   = $canvas.get(0).toDataURL("image/png");
-        imgData      = imgSrc.replace(type,'image/octet-stream');
+        var imgData  = imgSrc.replace(type,'image/octet-stream');
         var filename = projectName + '.' + type;
         saveFile(imgData,filename);
         $('#burnWrapper #cloneCanvas').remove();
