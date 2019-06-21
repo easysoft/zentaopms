@@ -389,8 +389,8 @@ class upgradeModel extends model
                 }
                 $this->updateXX_11_5();
             }
-        case '11_4':
-            $this->saveLogs('Execute 11_4');
+        case '11_5':
+            $this->saveLogs('Execute 11_5');
             $this->execSQL($this->getUpgradeFile('11.5'));
         }
 
