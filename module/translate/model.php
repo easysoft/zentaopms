@@ -103,7 +103,7 @@ class translateModel extends model
             if(strpos($line, '$lang->menuOrder') === 0) continue;
             if(strpos($line, 'include') === 0 or strpos($line, 'global') === 0) continue;
             if(strpos($line, 'unset(') !== false) continue;
-            if(strpos($line, '/*') === 0 or strpos($line, '//') === 0 or strpos($line, '<?php') === 0) continue;
+            if(strpos($line, '/*') === 0 or strpos($line, '//') === 0 or strpos($line, '<?php') === 0 or strpos($line, '*') === 0) continue;
             if(strpos($line, 'if') !== false and trim($lines[$i + 1]) == '{')
             {
                 $inCondition = true;
@@ -126,7 +126,7 @@ class translateModel extends model
                 {
                     $position = strpos($line, '=');
                     $key      = trim(substr($line, 0, $position));
-                    $value    = trim(trim(substr($line, $position + 1)), ';');
+                    $value    = trim(substr($line, $position + 1));
                     $items[$key] = $value;
                 }
                 elseif(isset($key) and strpos($key, '$lang') === 0)
@@ -135,13 +135,27 @@ class translateModel extends model
                 }
             }
         }
+
+        foreach($items as $key => $value)
+        {
+            /* Remove Notes. */
+            if(preg_match( '/; *\/\//', $value)) $value = preg_replace('/; *\/\/.*/', '', $value);
+            $value = trim($value, ';');
+            /* Trim ['] or ["] when not [.] . */
+            if(preg_match('/["\'] *\./', $value) == 0 and preg_match('/\. *[\'"]/', $value) == 0)
+            {
+                if($value{0} == '"' or $value{0} == "'") $value = trim($value, $value{0});
+            }
+            $items[$key] = $value;
+        }
         return $items;
     }
 
-    public function checkDirPriv()
+    public function checkDirPriv($moduleName = '')
     {
-        $cmd     = '';
-        $modules = glob($this->app->getModuleRoot() . '*');
+        $cmd        = '';
+        $moduleRoot = $this->app->getModuleRoot();
+        $modules    = empty($moduleName) ? array($moduleRoot . $moduleName) : glob($moduleRoot . '*');
         foreach($modules as $modulePath)
         {
             if(is_dir($modulePath . '/lang') and !is_writable($modulePath . '/lang')) $cmd .= "chmod 777 {$modulePath}/lang <br />";
@@ -203,8 +217,9 @@ class translateModel extends model
      */
     public function getTranslations($language, $module = '', $langKeys = array())
     {
-        return $this->dao->select('id,lang,`key`,`value`,status')->from(TABLE_TRANSLATION)
+        return $this->dao->select('*')->from(TABLE_TRANSLATION)
             ->where('lang')->eq($language)
+            ->andWhere('mode')->eq($this->config->global->flow)
             ->beginIF(!empty($module))->andWhere('module')->eq($module)->fi()
             ->beginIF(!empty($langKeys))->andWhere('langKey')->in($langKeys)->fi()
             ->orderBy('id asc')
@@ -220,158 +235,148 @@ class translateModel extends model
      * @access public
      * @return void
      */
-    public function addTranslation($zentaoVersion, $language, $module)
+    public function addTranslation($language, $module, $referLang)
     {
-        $addData       = '';
-        $allWords      = ''; //Use to stat word count.
-        $account       = $this->app->user->account;
-        $postData      = $this->untieModuleLang($_POST);
-        $allEntry      = count($postData);
-        $translateData = $this->getTranslations($zentaoVersion, $language, $module, array_keys($postData));
-        $translated    = count(array_keys($translateData));
-
-        foreach($postData as $langKey => $translation)
+        $referItems   = $this->getModuleLangs($module, $referLang);
+        $dbItems      = $this->getTranslations($language, $module);
+        $translations = array();
+        $flow         = $this->config->global->flow;
+        foreach($this->post->keys as $i => $key)
         {
-            if(empty($translation))
+            $dbItem = zget($dbItems, $key, '');
+            $value  = $referItems[$key];
+            $now    = helper::now();
+            if(!empty($_POST['values'][$i])) $value = $this->post->values[$i];
+            if($dbItem)
             {
-                unset($postData[$langKey]);
-                continue;
-            }
-
-            /* Check duplicate translation.*/
-            if(isset($translateData[$langKey]) and in_array($translation, array_keys($translateData[$langKey])))
-            {
-                unset($postData[$langKey]);
-                continue;
-            }
-
-            if(!isset($translateData[$langKey])) $translated++;
-            if(get_magic_quotes_gpc()) $translation = stripslashes($translation);
-            $allWords[$langKey] = $translation;
-
-            $translation = $this->dbh->quote($translation);
-            $addData  .= "('" . $account . "', '$zentaoVersion', '$module', '$language', '$langKey', $translation, '" . helper::now() . "'),";
-        }
-
-        if($addData)
-        {
-            /* Delete old translation when user edit these.*/
-            $havingTranslate = $this->dao->select('id, translation')->from(TABLE_TRANSLATE)
-                ->where('account')->eq($account)
-                ->andWhere('version')->eq($zentaoVersion)
-                ->andWhere('module')->eq($module)
-                ->andWhere('language')->eq($language)
-                ->andWhere('langKey')->in(array_keys($allWords))
-                ->fetchPairs('id', 'translation', false);
-            if($havingTranslate)
-            {
-                $this->dao->delete()->from(TABLE_TRANSLATE)->where('id')->in(array_keys($havingTranslate))->exec(false);
-                $addedScores = $this->countWords(join(' ', $havingTranslate));
-            }
-
-            /* Add translate content*/
-            $addTranslateData = "INSERT INTO `" . TABLE_TRANSLATE . "` (`account`, `version`, `module`, `language`, `langKey`, `translation`, `time`) VALUES" . rtrim($addData, ',');
-            $this->dbh->exec($addTranslateData);
-
-            /* Add translate log*/
-            if(get_magic_quotes_gpc()) $postData = stripslashes(json_encode($postData));
-            $postData = $this->dbh->quote($postData);
-            $addLogData = "INSERT INTO `" . TABLE_TRANSLATELOG . "` (`account`, `version`, `module`, `language`, `content`, `time`) VALUES('" . $account . "', '$zentaoVersion', '$module', '$language', " . $postData . ", '" . helper::now() . "')";
-            $this->dbh->exec($addLogData);
-
-            /* Count words as scores*/
-            $scores = $this->countWords(join(' ', $allWords));
-            if(empty($addedScores))
-            {
-                $this->loadModel('score')->log($account, 'translate', 'in', $scores, 'TRANSLATE');
+                unset($dbItem->id);
+                $translation = $dbItem;
+                $translation->version = $this->config->version;
+                if($dbItem->value != $value)
+                {
+                    $translation->value  = $value;
+                    $translation->status = 'translated';
+                    $translation->translator = $this->app->user->account;
+                    $translation->translationTime = $now;
+                    if($translation->reason) $translation->reason = '';
+                }
+                elseif(!$this->checkNeedTranslate($value) and !empty($_POST['values'][$i]) and strpos("waiting|changed", $translation->status) !== false)
+                {
+                    $translation->status = 'translated';
+                }
             }
             else
             {
-                $scores = $scores - $addedScores;
-                $scoreType = $scores >= 0 ? 'in' : 'out';
-                $this->loadModel('score')->log($account, 'edittranslate', $scoreType, abs($scores), 'TRANSLATE');
+                $translation = new stdclass();
+                $translation->lang            = $language;
+                $translation->module          = $module;
+                $translation->key             = $key;
+                $translation->value           = $value;
+                $translation->status          = 'translated';
+                $translation->translator      = $this->app->user->account;
+                $translation->translationTime = $now;
+                $translation->version         = $this->config->version;
+                $translation->mode            = $flow;
             }
-
-            /* compute percent of translation and save.*/
-            $percent = round($translated / $allEntry * 100, 1) . '%';
-            $languageLog = $this->dao->select('*')->from(TABLE_LANGUAGELOG)->where('version')->eq($zentaoVersion)
-                ->andWhere('language')->eq($language)
-                ->andWhere('module')->eq($module)
-                ->fetch('', false);
-
-            if($languageLog)
-            {
-                $this->dao->update(TABLE_LANGUAGELOG)->set('translated')->eq($translated)->set('percent')->eq($percent)->where('id')->eq($languageLog->id)->exec(false);
-            }
-            else
-            {
-                $languageLog->version    = $zentaoVersion;
-                $languageLog->language   = $language;
-                $languageLog->module     = $module;
-                $languageLog->allEntry   = $allEntry;
-                $languageLog->translated = $translated;
-                $languageLog->percent    = $percent;
-                $this->dao->insert(TABLE_LANGUAGELOG)->data($languageLog, false)->exec();
-            }
+            $translations[$key] = $translation;
         }
+
+        $this->dao->delete()->from(TABLE_TRANSLATION)->where('lang')->eq($language)->andWhere('module')->eq($module)->andWhere('mode')->eq($flow)->exec();
+        foreach($translations as $translation) $this->dao->replace(TABLE_TRANSLATION)->data($translation)->exec();
+        if(!dao::isError()) $this->buildLangFile($language, $module, $translations, $referLang);
     }
 
-    /**
-     * untieModuleLang 
-     * 
-     * @param  string $moduleLangs 
-     * @param  string $key 
-     * @access public
-     * @return void
-     */
-    public function untieModuleLang($moduleLangs = '', $key = '')
+    public function buildLangFile($language, $module, $translations, $referLang)
     {
-        $untieLang = array();
-        if(is_object($moduleLangs))
+        $moduleRoot  = $this->app->getModuleRoot();
+        $newLangFile = $moduleRoot . $module . "/lang/{$language}.php";
+        $newContent  = "<?php\n";
+
+        $mainReferLangFile = $moduleRoot . $module . "/lang/{$referLang}.php";
+        if(file_exists($mainReferLangFile)) $newContent .= $this->getTranslatedLang($mainReferLangFile, $translations) . "\n";
+        if(is_dir($moduleRoot . $module . "/ext/lang/$referLang"))
         {
-            foreach($moduleLangs as $langKey => $moduleLang)
+            $extLangFiles = glob($moduleRoot . $module . "/ext/lang/{$referLang}/*.php");
+            foreach($extLangFiles as $extLangFile) $newContent .= $this->getTranslatedLang($extLangFile, $translations) . "\n";
+        }
+        file_put_contents($newLangFile, $newContent);
+    }
+
+    public function getTranslatedLang($referLang, $translations)
+    {
+        $lines   = file($referLang);
+        $flow    = $this->config->global->flow;
+        $inFlow  = true;
+        $level   = 0;
+        $content = '';
+        foreach($lines as $i => $line)
+        {
+            $line = trim($line);
+            if(strpos($line, '/*') === 0 or strpos($line, '//') === 0 or strpos($line, '<?php') === 0 or strpos($line, '*') === 0) continue;
+            if(empty($line))
             {
-                $nextKey = empty($key) ? $langKey : "$key->$langKey";
-                if(is_array($moduleLang) or is_object($moduleLang))
+                $content .= "\n";
+                continue;
+            }
+            if(strpos($line, '$lang->menuOrder') === 0 or strpos($line, 'include') === 0 or strpos($line, 'global') === 0 or strpos($line, 'unset(') !== false)
+            {
+                $content .= $line . "\n";
+                continue;
+            }
+            if(strpos($line, 'if') !== false and trim($lines[$i + 1]) == '{')
+            {
+                $inCondition = true;
+                $level ++;
+                if(strpos($line, 'config->global->flow') !== false and strpos($line, $flow) === false) $inFlow = false;
+            }
+            if($line == '}' and $inCondition)
+            {
+                $level --;
+                if($level == 0)
                 {
-                    $untieLang += $this->untieModuleLang($moduleLang, $nextKey);
+                    $inCondition = false;
+                    $inFlow      = true;
+                }
+            }
+            if($line == '{' or $line == '}' or strpos($line, 'if') === 0 or strpos($line, 'else') === 0)
+            {
+                $content .= $line . "\n";
+                continue;
+            }
+            if(!$inFlow and $inCondition)
+            {
+                $content .= $line . "\n";
+            }
+            elseif($inFlow and strpos($line, '$lang') === 0 and strpos($line, '=') !== false)
+            {
+                $position = strpos($line, '=');
+                $key      = trim(substr($line, 0, $position));
+                if(isset($translations[$key]))
+                {
+                    $translation = $translations[$key];
+                    $value       = $translation->value;
+                    if($this->checkNeedTranslate($value) and strpos($value, 'array(') === false)
+                    {
+                        $value = '"' . addslashes($value) . '"';
+                    }
+                    $content .= $key . " = $value;\n";
                 }
                 else
                 {
-                    $untieLang[$nextKey] = $moduleLang;
+                    $content .= $line . "\n";
                 }
             }
         }
-        elseif(is_array($moduleLangs))
-        {
-            foreach($moduleLangs as $arrayKey => $moduleLang)
-            {
-                /* Init key for delete '"'*/
-                if(strpos($arrayKey, '\"') !== false) $arrayKey = str_replace(array('\"', '\"'), '', $arrayKey);
-                $arrayKey = !$arrayKey ? '' : (is_string($arrayKey) and !empty($key)) ? '"' . $arrayKey . '"' : $arrayKey;
-                $nextKey = empty($key) ? $arrayKey : $key . '[' . $arrayKey . ']';
-                if(is_array($moduleLang) or is_object($moduleLang))
-                {
-                    $untieLang += $this->untieModuleLang($moduleLang, $nextKey);
-                }
-                else
-                {
-                    $untieLang[$nextKey] = $moduleLang;
-                }
-            }
-        }
-        return $untieLang;
+        return $content;
     }
 
-    public function countWords($allWords)
+    public function checkNeedTranslate($value)
     {
-        $scores    = 0;
+        $result = true;
+        if($value == 'new stdclass()') $result = false;
+        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and preg_match('/["\'] *\./', $value) == 0 and preg_match('/\. *["\']/', $value) == 0) $result = false;
+        if($value == '$lang->productCommon' or $value == '$lang->projectCommon') $result = false;
 
-        $allWords  = trim($allWords);
-        $allWords  = preg_replace('/<[a-z\/]+.*>/Ui', '', $allWords);
-
-        $allWords  = preg_replace('/[\x80-\xff]{1,3}/', '', $allWords, -1, $scores); //Count chinese.
-        $scores   += str_word_count($allWords);
-        return $scores;
+        return $result;
     }
 }

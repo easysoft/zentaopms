@@ -143,14 +143,23 @@ class translate extends control
         }
         if(empty($referLang))
         {
-            $langs     = json_decode($this->config->global->langs, true);
-            $referLang = $langs[$language]['reference'];
+            $langs = json_decode($this->config->global->langs, true);
+            if(isset($langs[$language]))
+            {
+                $referLang = $langs[$language]['reference'];
+            }
+            else
+            {
+                $referLang = $language == 'zh-cn' ? 'en' : 'zh-cn';
+            }
         }
+        $this->view->cmd = $this->translate->checkDirPriv($module);
+
         if($_POST)
         {
-            $this->translate->addTranslation($zentaoVersion, $language, $module);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inlink('showLang', "zentaoVersion=$zentaoVersion&language=$language&module=$module&consultLang=$consultLang"), 'parent'));
+            $this->translate->addTranslation($language, $module, $referLang);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->referItems    = $this->translate->getModuleLangs($module, $referLang);
@@ -159,6 +168,7 @@ class translate extends control
         $this->view->currentModule = $module; 
         $this->view->currentGroup  = $group; 
         $this->view->language      = $language;
+        $this->view->referLang     = $referLang;
         $this->display();
     }
 

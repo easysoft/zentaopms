@@ -20,7 +20,7 @@ $lang->translate->reference   = '参考语言';
 $lang->translate->status      = '状态';
 $lang->translate->refreshPage = '刷新';
 
-$lang->translate->builtIn = '内置语音';
+$lang->translate->builtIn  = '内置语言';
 $lang->translate->finished = '翻译完成';
 $lang->translate->progress = '完成 %s';
 
