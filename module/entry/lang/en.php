@@ -16,6 +16,7 @@ $lang->entry->id          = 'ID';
 $lang->entry->name        = 'Name';
 $lang->entry->account     = 'Account';
 $lang->entry->code        = 'Code';
+$lang->entry->freePasswd  = 'Free Password Login';
 $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
 $lang->entry->desc        = 'Description';
@@ -36,6 +37,9 @@ $lang->entry->note->code    = 'Alias should be letters and numbers';
 $lang->entry->note->ip      = "Use comma to seperate IPs. IP segment is supported, e.g. 192.168.1.*";
 $lang->entry->note->allIP   = 'All IPs';
 $lang->entry->note->account = 'Entry Account';
+
+$lang->entry->freePasswdList[0] = 'Off';
+$lang->entry->freePasswdList[1] = 'On';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Parameter code is missing.';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Parameter token is missing.';

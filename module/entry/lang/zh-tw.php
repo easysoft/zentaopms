@@ -16,6 +16,7 @@ $lang->entry->id          = 'ID';
 $lang->entry->name        = '名稱';
 $lang->entry->account     = '賬號';
 $lang->entry->code        = '代號';
+$lang->entry->freePasswd  = '免密登錄';
 $lang->entry->key         = '密鑰';
 $lang->entry->ip          = 'IP';
 $lang->entry->desc        = '描述';
@@ -37,6 +38,9 @@ $lang->entry->note->ip      = "允許訪問API的應用ip，多個ip用逗號隔
 $lang->entry->note->allIP   = '無限制';
 $lang->entry->note->account = '授權應用賬號';
 
+$lang->entry->freePasswdList[0] = '關閉';
+$lang->entry->freePasswdList[1] = '開啟';
+
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = '缺少code參數';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = '缺少token參數';
 $lang->entry->errmsg['SESSION_CODE_MISSING']  = '缺少session code';
@@ -45,5 +49,6 @@ $lang->entry->errmsg['INVALID_TOKEN']         = '無效的token參數';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'session驗證失敗';
 $lang->entry->errmsg['IP_DENIED']             = '該IP被限制訪問';
 $lang->entry->errmsg['ACCOUNT_UNBOUND']       = '未綁定用戶';
+$lang->entry->errmsg['INVALID_ACCOUNT']       = '用戶不存在';
 $lang->entry->errmsg['EMPTY_ENTRY']           = '應用不存在';
 $lang->entry->errmsg['CALLED_TIME']           = 'Token已失效';
