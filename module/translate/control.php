@@ -162,6 +162,10 @@ class translate extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
+        $this->view->title      = $this->lang->translate->module;
+        $this->view->position[] = html::a($this->createLink('translate', 'index'), $this->lang->translate->common);
+        $this->view->position[] = $this->lang->translate->module;
+
         $this->view->referItems    = $this->translate->getModuleLangs($module, $referLang);
         $this->view->translations  = $this->translate->getTranslations($language, $module);
         $this->view->moduleGroup   = $moduleGroup;

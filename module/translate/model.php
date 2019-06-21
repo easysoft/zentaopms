@@ -142,7 +142,7 @@ class translateModel extends model
             if(preg_match( '/; *\/\//', $value)) $value = preg_replace('/; *\/\/.*/', '', $value);
             $value = trim($value, ';');
             /* Trim ['] or ["] when not [.] . */
-            if(preg_match('/["\'] *\./', $value) == 0 and preg_match('/\. *[\'"]/', $value) == 0)
+            if(preg_match('/["\'] *\.[^\.]/', $value) == 0 and preg_match('/[^\.]\. *["\']/', $value) == 0)
             {
                 if($value{0} == '"' or $value{0} == "'") $value = trim($value, $value{0});
             }
@@ -374,7 +374,7 @@ class translateModel extends model
     {
         $result = true;
         if($value == 'new stdclass()') $result = false;
-        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and preg_match('/["\'] *\./', $value) == 0 and preg_match('/\. *["\']/', $value) == 0) $result = false;
+        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and preg_match('/["\'] *\.[^\.]/', $value) == 0 and preg_match('/[^\.]\. *["\']/', $value) == 0) $result = false;
         if($value == '$lang->productCommon' or $value == '$lang->projectCommon') $result = false;
 
         return $result;

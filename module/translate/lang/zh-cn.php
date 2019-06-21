@@ -11,6 +11,7 @@
 $lang->translate->common  = '翻译';
 $lang->translate->index   = '首页';
 $lang->translate->addLang = '新增语言';
+$lang->translate->module  = '翻译模块';
 $lang->translate->chooseModule = '选择翻译模块';
 
 $lang->translate->name        = '语言名称';
