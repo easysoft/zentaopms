@@ -1,4 +1,6 @@
 <?php
-$config->translate->columnNum   = 2;
 $config->translate->defaultLang = array('en', 'zh-cn', 'zh-tw');
-$config->translate->limit       = 10;
+$config->translate->needReview  = '1';
+
+$config->translate->editor = new stdclass();
+$config->translate->editor->result = array('id' => 'reason', 'tools' => 'simpleTools');

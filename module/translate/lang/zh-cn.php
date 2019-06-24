@@ -12,6 +12,8 @@ $lang->translate->common  = '翻译';
 $lang->translate->index   = '首页';
 $lang->translate->addLang = '新增语言';
 $lang->translate->module  = '翻译模块';
+$lang->translate->review  = '审校';
+$lang->translate->setting = '设置';
 $lang->translate->chooseModule = '选择翻译模块';
 
 $lang->translate->name        = '语言名称';
@@ -20,6 +22,22 @@ $lang->translate->key         = '键';
 $lang->translate->reference   = '参考语言';
 $lang->translate->status      = '状态';
 $lang->translate->refreshPage = '刷新';
+$lang->translate->reason      = '拒绝原因';
+
+$lang->translate->reviewTurnon = '评审流程';
+$lang->translate->reviewTurnonList['1'] = '开启';
+$lang->translate->reviewTurnonList['0'] = '关闭';
+
+$lang->translate->resultList['pass']   = '通过';
+$lang->translate->resultList['reject'] = '拒绝';
+
+$lang->translate->group              = '分组';
+$lang->translate->allTotal           = '总条目';
+$lang->translate->translatedTotal    = '已翻译条目数';
+$lang->translate->changedTotal       = '已修改条目数';
+$lang->translate->reviewedTotal      = '已审校条目数';
+$lang->translate->translatedProgress = '翻译进度';
+$lang->translate->reviewedProgress   = '审校进度';
 
 $lang->translate->builtIn  = '内置语言';
 $lang->translate->finished = '翻译完成';

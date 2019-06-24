@@ -10,6 +10,8 @@
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php echo html::a(inlink('chooseModule', "language=$language"), $lang->goback, '', "class='btn btn-secondary'");?>
+    <div class='divider'></div>
     <?php foreach($lang->dev->groupList as $group => $groupName):?>
     <?php $active = $group == $currentGroup ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('module', "language=$language&module=" . current($moduleGroup[$group])), "<span class='text'>{$groupName}</span>", '', "class='btn btn-link $active'");?>
@@ -34,7 +36,7 @@
     </div>
   </div>
   <div class='main-col main-content'>
-    <form class='main-form form-ajax' method='post'>
+    <form class='main-form form-ajax' method='post' data-ride="table">
       <table class='table table-bordered table-data'>
         <thead>
           <tr>
@@ -46,7 +48,7 @@
             <?php else:?>
             <th><?php echo $config->langs[$referLang] . ' / ' . $config->langs[$language];?></th>
             <?php endif;;?>
-            <th class='w-70px'><?php echo $lang->translate->status;?></th>
+            <th class='w-80px'><?php echo $lang->translate->status;?></th>
           </tr>
         </thead>
         <tbody>
@@ -73,7 +75,15 @@
             echo html::$function('values[]', ($translation and $translation->value != $item) ? htmlspecialchars($translation->value) : '', "class='form-control'");
             ?>
             </td>
-            <td><?php echo $translation ? zget($lang->translate->statusList, $translation->status) : '';?></td>
+            <td>
+              <?php
+              if($translation)
+              {
+                  echo zget($lang->translate->statusList, $translation->status);
+                  if($translation->status == 'rejected') echo " <span title='$translation->reason'><i class='icon icon-help'></i></span>";
+              }
+              ?>
+            </td>
           </tr>
           <?php else:?>
           <tr <?php echo $hideClass;?>>
@@ -81,7 +91,15 @@
             <td class='text-right' rowspan='2'><?php echo $i;?></td>
             <td class='text-right' rowspan='2'><?php echo "<nobr>$key</nobr>" . $hiddenKey;?></td>
             <td><?php echo $hasNL ? nl2br(htmlspecialchars($item)) : htmlspecialchars($item);?></td>
-            <td rowspan='2'><?php echo $translation ? zget($lang->translate->statusList, $translation->status) : '';?></td>
+            <td rowspan='2'>
+              <?php
+              if($translation)
+              {
+                  echo zget($lang->translate->statusList, $translation->status);
+                  if($translation->status == 'rejected') echo " <span title='$translation->reason'><i class='icon icon-help'></i></span>";
+              }
+              ?>
+            </td>
           </tr>
           <tr <?php echo $hideClass;?>>
             <td class='translated'>
@@ -94,12 +112,8 @@
           <?php endif;?>
           <?php endforeach;?>
         </tbody>
-        <tfoot>
-          <tr>
-            <td colspan='<?php echo $isSplit ? 5 : 4;?>' class='text-center'><?php echo html::submitButton()?></td>
-          </tr>
-        </tfoot>
       </table>
+      <div class="table-footer text-center"><?php echo html::submitButton();?></div>
     </form>
   </div>
 </div>

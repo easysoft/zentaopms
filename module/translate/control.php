@@ -33,11 +33,11 @@ class translate extends control
      */
     public function index()
     {
-        $itemCount = $this->translate->getLangItemCount();
-        $progress  = $this->translate->getProgress();
+        $itemCount  = $this->translate->getLangItemCount();
+        $statistics = $this->translate->getLangStatistics();
         $finishedLangs = $translatingLangs = array();
         foreach($this->config->translate->defaultLang as $defaultLang) $finishedLangs[$defaultLang] = $this->config->langs[$defaultLang];
-        foreach($progress as $translateLang => $data)
+        foreach($statistics as $translateLang => $data)
         {
             if($data->progress == 1)
             {
@@ -111,6 +111,7 @@ class translate extends control
         $this->view->position[] = html::a($this->createLink('translate', 'index'), $this->lang->translate->common);
         $this->view->position[] = $this->lang->translate->chooseModule;
         $this->view->modules    = $this->translate->getModules();
+        $this->view->statistics = $this->translate->getModuleStatistics($language);
         $this->view->language   = $language;
 
         $this->display();
@@ -126,20 +127,12 @@ class translate extends control
      * @access public
      * @return void
      */
-    public function module($language, $module = '', $referLang = '')
+    public function module($language, $module, $referLang = '')
     {
         $moduleGroup = $this->translate->getModules();
-        if(empty($module))
+        foreach($moduleGroup as $group => $modules)
         {
-            $group  = current($this->lang->dev->groupList);
-            $module = current($moduleGroup[$group]);
-        }
-        else
-        {
-            foreach($moduleGroup as $group => $modules)
-            {
-                if(in_array($module, $modules)) break;
-            }
+            if(in_array($module, $modules)) break;
         }
         if(empty($referLang))
         {
@@ -169,111 +162,130 @@ class translate extends control
         $this->view->referItems    = $this->translate->getModuleLangs($module, $referLang);
         $this->view->translations  = $this->translate->getTranslations($language, $module);
         $this->view->moduleGroup   = $moduleGroup;
-        $this->view->currentModule = $module; 
-        $this->view->currentGroup  = $group; 
+        $this->view->currentModule = $module;
+        $this->view->currentGroup  = $group;
         $this->view->language      = $language;
         $this->view->referLang     = $referLang;
         $this->display();
     }
 
-    /**
-     * Download selected language.
-     * 
-     * @param  string $zentaoVersion 
-     * @param  string $language 
-     * @access public
-     * @return void
-     */
-    public function download($zentaoVersion = '3.0', $language = 'en', $downloadModule = '')
+    public function review($language, $module, $referLang = '')
     {
-        $translateDir = $this->app->getBasePath() . "www/data/guard/zentaopms-$language" . date('His') . mt_rand(0, 100);
-        $moduleDir    = $translateDir . '/module/';
-        mkdir($translateDir);
-        mkdir($moduleDir);
-        $modules = $this->translate->getModules($zentaoVersion);
-        foreach ($modules as $module)
+        $moduleGroup = $this->translate->getModules();
+        foreach($moduleGroup as $group => $modules)
         {
-            if(!empty($downloadModule) and $downloadModule != $module) continue;
-            $langPath = $moduleDir . $module . '/lang/';
-            mkdir($moduleDir . $module);
-            mkdir($langPath);
-            $fileName = $langPath . $language . '.php';
-            $filePath = $this->translate->getLangFilePath($zentaoVersion, 'en', $module);
-            if(in_array($language, $this->config->translate->defaultLang))
+            if(in_array($module, $modules)) break;
+        }
+        if(empty($referLang))
+        {
+            $langs = json_decode($this->config->global->langs, true);
+            if(isset($langs[$language]))
             {
-                $filePath = $this->translate->getLangFilePath($zentaoVersion, $language, $module);
-                copy($filePath, $fileName);
-                continue;
+                $referLang = $langs[$language]['reference'];
             }
-
-            $translations = $this->translate->getTranslations($zentaoVersion, $language, $module);
-
-            /* Write content for new lang file*/
-            if(file_exists($filePath))
+            else
             {
-                $langHandle = fopen($filePath, "r");
-                $writeHandle = fopen($fileName, 'w');
-                while(!feof($langHandle))
+                $referLang = $language == 'zh-cn' ? 'en' : 'zh-cn';
+            }
+        }
+
+        $this->view->title      = $this->lang->translate->review;
+        $this->view->position[] = html::a($this->createLink('translate', 'index'), $this->lang->translate->common);
+        $this->view->position[] = $this->lang->translate->review;
+
+        $this->view->referItems    = $this->translate->getModuleLangs($module, $referLang);
+        $this->view->translations  = $this->translate->getTranslations($language, $module);
+        $this->view->moduleGroup   = $moduleGroup;
+        $this->view->currentModule = $module;
+        $this->view->currentGroup  = $group;
+        $this->view->language      = $language;
+        $this->view->referLang     = $referLang;
+        $this->display();
+    }
+
+    public function result($translationID, $result)
+    {
+        if($result == 'pass')
+        {
+            $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('reviewed')->set('reviewer')->eq($this->app->user->account)->set('reviewTime')->eq(helper::now())->where('id')->eq($translationID)->exec();
+            die(js::reload());
+        }
+        if($result == 'reject' and empty($_POST)) die($this->display());
+        if($result == 'reject' and $_POST)
+        {
+            $data = fixer::input('post')->get();
+            if(empty($data->reason)) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->translate->reason)));
+            $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('rejected')->set('reviewer')->eq($this->app->user->account)->set('reviewTime')->eq(helper::now())->set('reason')->eq($data->reason)->where('id')->eq($translationID)->exec();
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.reloadStatus($translationID)"));
+        }
+    }
+
+    public function batchPass()
+    {
+        $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('reviewed')->set('reviewer')->eq($this->app->user->account)->set('reviewTime')->eq(helper::now())->where('id')->in($this->post->idList)->exec();
+        $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+    }
+
+    public function setting()
+    {
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+            $this->loadModel('setting')->setItem('system.translate.needReview', $data->needReview);
+            die(js::reload('parent.parent'));
+        }
+        $this->display();
+    }
+
+    public function export($language)
+    {
+        if($_POST)
+        {
+            $account      = $this->app->user->account;
+            $cacheRoot    = $this->app->getCacheRoot();
+
+            $zfile = $this->app->loadClass('zfile');
+            if(is_dir($cacheRoot . "{$account}_lang/")) $zfile->removeDir($cacheRoot . "{$account}_lang/");
+
+            $downloadFile = $cacheRoot . "{$account}_lang/zentao.zip";
+            $downloadPath = $cacheRoot . "{$account}_lang/zentao/";
+            mkdir($downloadPath, 0777, true);
+
+            $langs     = json_decode($this->config->global->langs, true);
+            $referLang = isset($langs[$language]) ? $langs[$language]['reference'] : '';
+
+            $moduleRoot = $this->app->getModuleRoot();
+            foreach(glob($moduleRoot . '/*') as $modulePath)
+            {
+                $moduleName = basename($modulePath);
+                if(!is_dir($downloadPath . "module/{$moduleName}/lang/")) mkdir($downloadPath . "module/{$moduleName}/lang/", 0777, true);
+                if(!file_exists($modulePath . "/lang/{$language}.php") and !empty($referLang) and file_exists($modulePath . "/lang/{$referLang}.php"))
                 {
-                    $line     = fgets($langHandle);
-                    $position = strpos($line, '=');
-                    if($position !== false and strrpos(ltrim($line), '$lang->') === 0)
-                    {
-                        $leftContent  = substr($line, 0, $position);
-                        $langKey      = str_replace(array("'", '$lang->'), array('"', ''), trim($leftContent));
-                        $write        = $line;
-                        if(isset($translations[$langKey]))
-                        {
-                            $translation = current($translations[$langKey]);
-                            $write = $leftContent . "= '" . $translation->translation . "';\n";
-                        }
-                        fwrite($writeHandle, $write);
-                    }
-                    else
-                    {
-                        fwrite($writeHandle, $line);
-                    }
+                    $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('lang')->eq($language)->andWhere('module')->eq($moduleName)->andWhere('flow')->eq($this->config->global->flow)->fetchAll('key');
+                    $this->translate->buildLangFile($language, $moduleName, $translations, $referLang);
                 }
-                fclose($langHandle);
+                if(file_exists($modulePath . "/lang/{$language}.php")) copy($modulePath . "/lang/{$language}.php", $downloadPath . "module/{$moduleName}/lang/{$language}.php");
             }
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($downloadFile);
+            $zip->create($downloadPath, PCLZIP_OPT_REMOVE_PATH, dirname($downloadPath));
+
+            $content = file_get_contents($downloadFile);
+            if(is_dir($cacheRoot . "{$account}_lang/")) $zfile->removeDir($cacheRoot . "{$account}_lang/");
+
+            $this->loadModel('file')->sendDownHeader($this->post->fileName . '.zip', 'zip', $content);
         }
-        $downloadDir  = dirname($translateDir);
-        $fileDir      = basename($translateDir);
-        $fileName     = $fileDir . '.zip';
-        $downloadFile = $downloadDir . '/' . $fileName;
-        `cd $downloadDir; zip -rm -9 $fileName $fileDir`;
-        if(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') !== false) $fileName = urlencode($fileName);
-        header('Content-Description: File Transfer');
-        header('Content-type: application/octet-stream');
-        header("Content-Disposition: attachment; filename=$fileName");
-        header('Content-Length: ' . filesize($downloadFile));
-        readfile($downloadFile);
-        unlink($downloadFile);
-        die();
+        $this->app->loadLang('file');
+        $this->display();
     }
 
-    public function ajaxVote($translateID)
+    public function ajaxGetStatus($id)
     {
-        $this->dao->update(TABLE_TRANSLATE)->set('vote = vote + 1')->where('id')->eq($translateID)->exec(false);
-        $userVotes  = $this->cookie->votes;
-        $userVotes .= $userVotes . "_" . $translateID . "_";
-        setCookie('votes', $userVotes, $this->config->cookieLife);
-        $translation = $this->dao->findByID($translateID)->from(TABLE_TRANSLATE)->fetch('', false);
-        echo $translation->vote;
-    }
+        $translation = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('id')->eq($id)->fetch();
 
-    public function delete($translateID, $consultLang, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->translate->notice->delete, inlink('delete', "translateID=$translateID&consultLang=$consultLang&confirm=yes")));
-        }
-        $translation = $this->dao->findByID($translateID)->from(TABLE_TRANSLATE)->fetch('', false);
-
-        $scores = $this->translate->countWords($translation->translation);
-        $this->loadModel('score')->log($translation->account, 'deleteTranslate', 'punish', $scores, 'TRANSLATE');
-
-        $this->dao->delete()->from(TABLE_TRANSLATE)->where('id')->eq($translateID)->exec(false);
-        die(js::locate(inLink('showLang', "version=$translation->version&language=$translation->language&module=$translation->module&consultLang=$consultLang"), 'parent'));
+        $status = zget($this->lang->translate->statusList, $translation->status);
+        if($translation->status == 'rejected') $status .= " <span title='{$translation->reason}'><i class='icon icon-help'></i></span>";
+        die($status);
     }
 }

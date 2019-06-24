@@ -162,7 +162,7 @@ class translateModel extends model
     {
         $cmd        = '';
         $moduleRoot = $this->app->getModuleRoot();
-        $modules    = empty($moduleName) ? array($moduleRoot . $moduleName) : glob($moduleRoot . '*');
+        $modules    = !empty($moduleName) ? array($moduleRoot . $moduleName) : glob($moduleRoot . '*');
         foreach($modules as $modulePath)
         {
             if(is_dir($modulePath . '/lang') and !is_writable($modulePath . '/lang')) $cmd .= "chmod 777 {$modulePath}/lang <br />";
@@ -205,11 +205,19 @@ class translateModel extends model
         return $itemCount;
     }
 
-    public function getProgress()
+    public function getLangStatistics()
     {
-        $langs = $this->dao->select("`lang`,sum(if((status != 'waiting'),1,0)) as waitItems, count(*) as count")->from(TABLE_TRANSLATION)->groupBy('`lang`')->fetchAll('lang');
-        foreach($langs as $lang => $data) $data->progress = round($data->waitItems / $data->count, 3);
+        $langs = $this->dao->select("`lang`,sum(if((status = 'translated'),1,0)) as translatedItems,sum(if((status = 'reviewed'),1,0)) as reviewedItems, count(*) as count")->from(TABLE_TRANSLATION)->groupBy('`lang`')->fetchAll('lang');
+        foreach($langs as $lang => $data) $data->progress = round(($data->translatedItems + $data->reviewedItems) / $data->count, 3);
         return $langs;
+    }
+
+    public function getModuleStatistics($language)
+    {
+        $fields = 'lang,module,';
+        foreach($this->lang->translate->statusList as $status => $title) $fields .= "sum(if((status = '$status'),1,0)) as $status,";
+        $fields .= "count(*) as count";
+        return $this->dao->select($fields)->from(TABLE_TRANSLATION)->where('lang')->eq($language)->groupBy('module')->fetchAll('module');
     }
 
     /**
@@ -256,7 +264,6 @@ class translateModel extends model
             if(!empty($_POST['values'][$i])) $value = $this->post->values[$i];
             if($dbItem)
             {
-                unset($dbItem->id);
                 $translation = $dbItem;
                 $translation->version = $this->config->version;
                 if($dbItem->value != $value)
