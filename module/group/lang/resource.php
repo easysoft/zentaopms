@@ -1077,6 +1077,27 @@ $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
+$lang->resource->translate = new stdclass();
+$lang->resource->translate->index        = 'index';
+$lang->resource->translate->addLang      = 'addLang';
+$lang->resource->translate->chooseModule = 'chooseModule';
+$lang->resource->translate->module       = 'module';
+$lang->resource->translate->review       = 'review';
+$lang->resource->translate->result       = 'result';
+$lang->resource->translate->batchPass    = 'batchPass';
+$lang->resource->translate->setting      = 'setting';
+$lang->resource->translate->export       = 'export';
+
+$lang->translate->methodOrder[5]  = 'index';
+$lang->translate->methodOrder[10] = 'addLang';
+$lang->translate->methodOrder[15] = 'chooseModule';
+$lang->translate->methodOrder[20] = 'module';
+$lang->translate->methodOrder[25] = 'review';
+$lang->translate->methodOrder[30] = 'result';
+$lang->translate->methodOrder[35] = 'batchPass';
+$lang->translate->methodOrder[40] = 'setting';
+$lang->translate->methodOrder[45] = 'export';
+
 $lang->resource->dev = new stdclass();
 $lang->resource->dev->api = 'api';
 $lang->resource->dev->db  = 'db';

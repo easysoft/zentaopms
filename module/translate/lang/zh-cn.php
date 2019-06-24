@@ -8,12 +8,15 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->translate->common  = '翻译';
-$lang->translate->index   = '首页';
-$lang->translate->addLang = '新增语言';
-$lang->translate->module  = '翻译模块';
-$lang->translate->review  = '审校';
-$lang->translate->setting = '设置';
+$lang->translate->common       = '翻译';
+$lang->translate->index        = '首页';
+$lang->translate->addLang      = '新增语言';
+$lang->translate->module       = '翻译模块';
+$lang->translate->review       = '审校';
+$lang->translate->result       = '审校结果';
+$lang->translate->batchPass    = '批量通过';
+$lang->translate->export       = '导出新语言';
+$lang->translate->setting      = '设置';
 $lang->translate->chooseModule = '选择翻译模块';
 
 $lang->translate->name        = '语言名称';
