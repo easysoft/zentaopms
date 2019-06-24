@@ -4,6 +4,7 @@ CREATE TABLE `zt_translation` (
   `module` varchar(30) NOT NULL,
   `key` varchar(100) NOT NULL,
   `value` text NOT NULL,
+  `refer` text NOT NULL,
   `status` varchar(30) NOT NULL,
   `translator` char(30) NOT NULL,
   `translationTime` datetime NOT NULL,
@@ -14,4 +15,4 @@ CREATE TABLE `zt_translation` (
   `mode` varchar(20) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `lang_module_key_mode` (`lang`,`module`,`key`,`mode`)
-) ENGINE=MyISAM AUTO_INCREMENT=5216 DEFAULT CHARSET=utf8
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;

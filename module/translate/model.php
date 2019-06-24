@@ -60,45 +60,51 @@ class translateModel extends model
 
     public function initModuleLang($moduleName, $langCode, $referLang)
     {
-        $flow = $this->config->global->flow;
+        $this->app->loadLang('custom');
+        $flows = array_keys($this->lang->custom->workingList);
         $now  = helper::now();
-        $initLangs = $this->getModuleLangs($moduleName, $referLang);
-        foreach($initLangs as $key => $value)
+        foreach($flows as $flow)
         {
-            $translation = new stdclass();
-            $translation->lang            = $langCode;
-            $translation->module          = $moduleName;
-            $translation->key             = $key;
-            $translation->value           = trim($value, ';');
-            $translation->status          = 'waiting';
-            $translation->version         = $this->config->version;
-            $translation->translator      = $this->app->user->account;
-            $translation->translationTime = $now;
-            $translation->mode            = $flow;
-            $this->dao->replace(TABLE_TRANSLATION)->data($translation)->exec();
+            $initLangs = $this->getModuleLangs($moduleName, $referLang, $flow);
+            foreach($initLangs as $key => $value)
+            {
+                $translation = new stdclass();
+                $translation->lang            = $langCode;
+                $translation->module          = $moduleName;
+                $translation->key             = $key;
+                $translation->value           = $value;
+                $translation->refer           = htmlspecialchars($translation->value);
+                $translation->status          = 'waiting';
+                $translation->version         = $this->config->version;
+                $translation->translator      = $this->app->user->account;
+                $translation->translationTime = $now;
+                $translation->mode            = $flow;
+                $this->dao->replace(TABLE_TRANSLATION)->data($translation)->exec();
+            }
         }
     }
 
-    public function getModuleLangs($moduleName, $langCode)
+    public function getModuleLangs($moduleName, $langCode, $flow = '')
     {
+        if(empty($flow))$flow = $this->config->global->flow;
         $modulePath   = $this->app->getModuleRoot() . $moduleName;
         $mainLangFile = $modulePath . "/lang/{$langCode}.php";
         $langItems    = array();
-        if(file_exists($mainLangFile)) $langItems += $this->getActiveItemsByFile($mainLangFile);
+        if(file_exists($mainLangFile)) $langItems += $this->getActiveItemsByFile($mainLangFile, $flow);
 
         $extLangPath = $modulePath . DS . 'ext' . DS . 'lang' . DS . $langCode;
         if(is_dir($extLangPath))
         {
             $extLangFiles = glob($extLangPath . DS . '*.php');
-            foreach($extLangFiles as $extLangFile) $langItems += $this->getActiveItemsByFile($extLangFile);
+            foreach($extLangFiles as $extLangFile) $langItems += $this->getActiveItemsByFile($extLangFile, $flow);
         }
         return $langItems;
     }
 
-    public function getActiveItemsByFile($fileName)
+    public function getActiveItemsByFile($fileName, $flow = '')
     {
+        if(empty($flow)) $flow = $this->config->global->flow;
         $lines       = file($fileName);
-        $flow        = $this->config->global->flow;
         $inCondition = false;
         $inFlow      = true;
         $level       = 0;
@@ -127,7 +133,7 @@ class translateModel extends model
                 }
             }
             if($line == '{' or $line == '}' or strpos($line, 'if') === 0 or strpos($line, 'else') === 0) continue;
-            if($inFlow)
+            if($inFlow and ($flow == 'full' or ($flow != 'full' and $inCondition)))
             {
                 if(strpos($line, '$lang') === 0 and strpos($line, '=') !== false)
                 {
@@ -260,6 +266,7 @@ class translateModel extends model
         {
             $dbItem = zget($dbItems, $key, '');
             $value  = $referItems[$key];
+            $refer  = $this->post->refers[$i];
             $now    = helper::now();
             if(!empty($_POST['values'][$i])) $value = $this->post->values[$i];
             if($dbItem)
@@ -268,13 +275,14 @@ class translateModel extends model
                 $translation->version = $this->config->version;
                 if($dbItem->value != $value)
                 {
-                    $translation->value  = $value;
-                    $translation->status = 'translated';
-                    $translation->translator = $this->app->user->account;
+                    $translation->value           = $value;
+                    $translation->refer           = $refer;
+                    $translation->status          = 'translated';
+                    $translation->translator      = $this->app->user->account;
                     $translation->translationTime = $now;
                     if($translation->reason) $translation->reason = '';
                 }
-                elseif(!$this->checkNeedTranslate($value) and !empty($_POST['values'][$i]) and strpos("waiting|changed", $translation->status) !== false)
+                elseif(!empty($_POST['values'][$i]) and strpos("waiting|changed", $translation->status) !== false)
                 {
                     $translation->status = 'translated';
                 }
@@ -286,6 +294,7 @@ class translateModel extends model
                 $translation->module          = $module;
                 $translation->key             = $key;
                 $translation->value           = $value;
+                $translation->refer           = $refer;
                 $translation->status          = 'translated';
                 $translation->translator      = $this->app->user->account;
                 $translation->translationTime = $now;
@@ -297,14 +306,15 @@ class translateModel extends model
 
         $this->dao->delete()->from(TABLE_TRANSLATION)->where('lang')->eq($language)->andWhere('module')->eq($module)->andWhere('mode')->eq($flow)->exec();
         foreach($translations as $translation) $this->dao->replace(TABLE_TRANSLATION)->data($translation)->exec();
-        if(!dao::isError()) $this->buildLangFile($language, $module, $translations, $referLang);
+        if(!dao::isError()) $this->buildLangFile($language, $module, $referLang);
     }
 
-    public function buildLangFile($language, $module, $translations, $referLang)
+    public function buildLangFile($language, $module, $referLang)
     {
-        $moduleRoot  = $this->app->getModuleRoot();
-        $newLangFile = $moduleRoot . $module . "/lang/{$language}.php";
-        $newContent  = "<?php\n";
+        $moduleRoot   = $this->app->getModuleRoot();
+        $newLangFile  = $moduleRoot . $module . "/lang/{$language}.php";
+        $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('lang')->eq($language)->andWhere('module')->eq($module)->fetchGroup('mode', 'key');
+        $newContent   = "<?php\n";
 
         $mainReferLangFile = $moduleRoot . $module . "/lang/{$referLang}.php";
         if(file_exists($mainReferLangFile)) $newContent .= $this->getTranslatedLang($mainReferLangFile, $translations) . "\n";
@@ -319,10 +329,11 @@ class translateModel extends model
     public function getTranslatedLang($referLang, $translations)
     {
         $lines   = file($referLang);
-        $flow    = $this->config->global->flow;
         $inFlow  = true;
         $level   = 0;
         $content = '';
+        $flow    = 'full';
+        $flows   = array_keys($translations);
         foreach($lines as $i => $line)
         {
             $line = trim($line);
@@ -341,7 +352,16 @@ class translateModel extends model
             {
                 $inCondition = true;
                 $level ++;
-                if(strpos($line, 'config->global->flow') !== false and strpos($line, $flow) === false) $inFlow = false;
+
+                $inFlow = false;
+                foreach($flows as $flow)
+                {
+                    if(strpos($line, 'config->global->flow') !== false and strpos($line, $flow) === false)
+                    {
+                        $inFlow = true;
+                        break;
+                    }
+                }
             }
             if($line == '}' and $inCondition)
             {
@@ -350,6 +370,7 @@ class translateModel extends model
                 {
                     $inCondition = false;
                     $inFlow      = true;
+                    $flow        = 'full';
                 }
             }
             if($line == '{' or $line == '}' or strpos($line, 'if') === 0 or strpos($line, 'else') === 0)
@@ -365,9 +386,9 @@ class translateModel extends model
             {
                 $position = strpos($line, '=');
                 $key      = trim(substr($line, 0, $position));
-                if(isset($translations[$key]))
+                if(isset($translations[$flow][$key]))
                 {
-                    $translation = $translations[$key];
+                    $translation = $translations[$flow][$key];
                     $value       = $translation->value;
                     if($this->checkNeedTranslate($value) and strpos($value, 'array(') === false)
                     {
@@ -392,5 +413,80 @@ class translateModel extends model
         if($value == '$lang->productCommon' or $value == '$lang->projectCommon') $result = false;
 
         return $result;
+    }
+
+    public function compare()
+    {
+        $version      = $this->config->version;
+        $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('version')->ne($version)->fetchAll();
+        if(empty($translations)) return true;
+
+        $translateGroups = array();
+        foreach($translations as $translation) $translateGroups[$translation->lang][$translation->mode][$translation->module][$translation->key] = $translation;
+
+        $moduleGroups = $this->getModules();
+        $allModules   = array();
+        foreach($moduleGroups as $group => $modules)
+        {
+            foreach($modules as $module) $allModules[$module] = $module;
+        }
+
+        $this->app->loadLang('custom');
+        $flows = array_keys($this->lang->custom->workingList);
+        $langs = json_decode($this->config->global->langs, true);
+        $referGroups = array();
+        foreach($langs as $code => $data) $referGroups[$data['reference']][$code] = $code;
+        foreach($referGroups as $referLang => $languages)
+        {
+            foreach($languages as $langCode)
+            {
+                $langTranslations = zget($translateGroups, $translation->lang, array());
+                foreach($flows as $flow)
+                {
+                    foreach($allModules as $moduleName)
+                    {
+                        $langItems    = $this->getModuleLangs($moduleName, $referLang, $flow);
+                        $translations = isset($langTranslations[$flow][$moduleName]) ? $langTranslations[$flow][$moduleName] : array();
+                        foreach($langItems as $langKey => $langValue)
+                        {
+                            $translation = isset($translations[$langKey]) ? $translations[$langKey] : '';
+                            if(empty($translation))
+                            {
+                                $translation = new stdclass();
+                                $translation->lang            = $langCode;
+                                $translation->module          = $moduleName;
+                                $translation->key             = $langKey;
+                                $translation->value           = $langValue;
+                                $translation->refer           = htmlspecialchars($langValue);
+                                $translation->status          = 'waiting';
+                                $translation->translator      = $this->app->user->account;
+                                $translation->translationTime = helper::now();
+                                $translation->version         = $version;
+                                $translation->mode            = $flow;
+                                $this->dao->replace(TABLE_TRANSLATION)->data($translation)->exec();
+                            }
+                            else
+                            {
+                                if($langValue == $translation->refer)
+                                {
+                                    $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->where('id')->eq($translation->id)->exec();
+                                }
+                                elseif($langValue != $translation->refer)
+                                {
+                                    $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->set('status')->eq('changed')->set('refer')->eq(htmlspecialchars($langValue))->where('id')->eq($translation->id)->exec();
+                                }
+                                unset($translations[$langKey]);
+                            }
+                            if($translations)
+                            {
+                                $idList = array();
+                                foreach($translations as $translation) $idList[$translation->id] = $translation->id;
+                                $this->dao->delete()->from(TABLE_TRANSLATION)->where('id')->in($idList)->exec();
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

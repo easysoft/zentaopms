@@ -2,6 +2,8 @@
 .panel{margin-bottom:0px; border:0px;}
 .panel .panel-body{padding-bottom:5px;}
 #translatingLangs .panel .panel-body{padding-right:0px;}
+#translatingLangs .panel .panel-body .actions{padding:0px; width:95px;}
 .panel .text-progress{color:#999;}
+.panel .panel-actions{top:5px;}
 .panel p{padding-bottom:5px;}
 .item .pull-right{color:#999;}

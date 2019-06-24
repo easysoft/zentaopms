@@ -35,7 +35,7 @@
             <tr>
               <th class='text-left'><?php echo $data->name;?></th>
               <td class='text-progress text-center'><?php printf($lang->translate->progress, ($data->progress * 100) . '%');?></td>
-              <td class='w-110px'>
+              <td class='actions'>
                 <?php
                 echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm'");
                 echo html::a(inlink('export', "language=$langKey"), $lang->export, '', "class='btn btn-sm iframe'");

@@ -33,6 +33,7 @@ class translate extends control
      */
     public function index()
     {
+        $this->translate->compare();
         $itemCount  = $this->translate->getLangItemCount();
         $statistics = $this->translate->getLangStatistics();
         $finishedLangs = $translatingLangs = array();
@@ -261,8 +262,7 @@ class translate extends control
                 if(!is_dir($downloadPath . "module/{$moduleName}/lang/")) mkdir($downloadPath . "module/{$moduleName}/lang/", 0777, true);
                 if(!file_exists($modulePath . "/lang/{$language}.php") and !empty($referLang) and file_exists($modulePath . "/lang/{$referLang}.php"))
                 {
-                    $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('lang')->eq($language)->andWhere('module')->eq($moduleName)->andWhere('flow')->eq($this->config->global->flow)->fetchAll('key');
-                    $this->translate->buildLangFile($language, $moduleName, $translations, $referLang);
+                    $this->translate->buildLangFile($language, $moduleName, $referLang);
                 }
                 if(file_exists($modulePath . "/lang/{$language}.php")) copy($modulePath . "/lang/{$language}.php", $downloadPath . "module/{$moduleName}/lang/{$language}.php");
             }

@@ -67,7 +67,13 @@
           <tr <?php echo $hideClass;?>>
             <td class='text-right'><?php echo $i;?></td>
             <td class='text-right'><?php echo "<nobr>$key</nobr>" . $hiddenKey;?></td>
-            <td><?php echo $hasNL ? nl2br(htmlspecialchars($item)) : htmlspecialchars($item);?></td>
+            <td>
+              <?php
+              $specialItem = htmlspecialchars($item);
+              echo $hasNL ? nl2br($specialItem) : $specialItem;
+              echo html::hidden('refers[]', $specialItem);
+              ?>
+            </td>
             <?php $translation = zget($translations, $key, '');?>
             <td class='translated'>
             <?php
@@ -90,7 +96,13 @@
             <?php $translation = zget($translations, $key, '');?>
             <td class='text-right' rowspan='2'><?php echo $i;?></td>
             <td class='text-right' rowspan='2'><?php echo "<nobr>$key</nobr>" . $hiddenKey;?></td>
-            <td><?php echo $hasNL ? nl2br(htmlspecialchars($item)) : htmlspecialchars($item);?></td>
+            <td>
+              <?php
+              $specialItem = htmlspecialchars($item);
+              echo $hasNL ? nl2br($specialItem) : $specialItem;
+              echo html::hidden('refers[]', $specialItem);
+              ?>
+            </td>
             <td rowspan='2'>
               <?php
               if($translation)
