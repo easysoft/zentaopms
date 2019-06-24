@@ -86,7 +86,15 @@ class webhookModel extends model
                 $object->$field = '';
             }
 
-            $text   = substr($data->text, 0, strpos($data->text, '(http')) ? substr($data->text, 0, strpos($data->text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            $text = '';
+            if(isset($data->markdown) and is_object($data->markdown)) 
+            {
+                $text = substr($data->markdown->text, 0, strpos($data->markdown->text, '(http'));
+            }
+            else
+            {
+                $text = substr($data->text, 0, strpos($data->text, '(http')) ? substr($data->text, 0, strpos($data->text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            }
 
             $log->action    = $text;
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);
