@@ -1662,7 +1662,8 @@ EOD;
         if(!$this->checkEntryToken($entry))      $this->response('INVALID_TOKEN');
         if($entry->freePasswd == 0 and empty($entry->account)) $this->response('ACCOUNT_UNBOUND');
 
-        if($_GET['m'] == 'user' and strtolower($_GET['f']) == 'apilogin' and $_GET['account'] and $entry->freePasswd) $entry->account = $_GET['account'];
+        $isFreepasswd = ($_GET['m'] == 'user' and strtolower($_GET['f']) == 'apilogin' and $_GET['account'] and $entry->freePasswd);
+        if($isFreepasswd) $entry->account = $_GET['account'];
 
         $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->fetch();
         if(!$user) $this->response('INVALID_ACCOUNT');
@@ -1675,10 +1676,7 @@ EOD;
         $this->session->set('user', $user);
         $this->app->user = $user;
 
-        if($_GET['m'] == 'user' and strtolower($_GET['f']) == 'apilogin' and $_GET['account'] and $entry->freePasswd)
-        {
-             die(js::locate($this->config->webRoot));
-        }
+        if($isFreepasswd) die(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));

@@ -13,3 +13,8 @@ public function getServer($backend = 'xxb')
 {
     return $this->loadExtension('xuanxuan')->getServer($backend);
 }
+
+public function uploadFile($fileName, $path, $size, $time, $userID, $users, $chat)
+{
+    return $this->loadExtension('xuanxuan')->uploadFile($fileName, $path, $size, $time, $userID, $users, $chat);
+}

@@ -533,6 +533,7 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '11_5': $confirmContent .= file_get_contents($this->getUpgradeFile('11.5'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -656,6 +657,7 @@ class upgradeModel extends model
             $basePath = $this->app->getBasePath();
             foreach($deleteFiles as $file)
             {
+                if(isset($this->config->excludeFiles[$file])) continue;
                 $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
                 if(file_exists($fullPath) and !unlink($fullPath)) $result[] = $fullPath;
             }
@@ -3095,12 +3097,6 @@ class upgradeModel extends model
     public function updateXX_11_5()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $hasHttps = $this->loadModel('setting')->getItem("owner=system&module=common&section=xuanxuan&key=https");
-        if(empty($hasHttps))
-        {
-            $this->dao->update(TABLE_CONFIG)->set('`key`')->eq('https')->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('section')->eq('xuanxuan')->andWhere('`key`')->eq('isHttps')->exec();
-            $this->saveLogs($this->dao->get());
-        }
 
         $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('admin')->andWhere('method')->eq('xuanxuan')->fetchPairs('group', 'group');
         foreach($groups as $groupID)

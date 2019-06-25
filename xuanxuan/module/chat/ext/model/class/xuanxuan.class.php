@@ -102,4 +102,28 @@ class xuanxuanChat extends chatModel
 
         return $server;
     }
+
+    public function uploadFile($fileName, $path, $size, $time, $userID, $users, $chat)
+    {    
+        $user      = $this->getUserByUserID($userID);
+        $extension = $this->loadModel('file')->getExtension($fileName);
+
+        $file = new stdclass();
+        $file->pathname    = $path;
+        $file->title       = rtrim($fileName, ".$extension");
+        $file->extension   = $extension;
+        $file->size        = $size;
+        $file->objectType  = 'chat';
+        $file->objectID    = $chat->id;
+        $file->addedBy     = !empty($user->account) ? $user->account : '';
+        $file->addedDate   = date(DT_DATETIME1, $time);
+
+        $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+        $fileID = $this->dao->lastInsertID();
+        $path  .= md5($fileName . $fileID . $time);
+        $this->dao->update(TABLE_FILE)->set('pathname')->eq($path)->where('id')->eq($fileID)->exec();
+
+        return $fileID;
+    }
 }

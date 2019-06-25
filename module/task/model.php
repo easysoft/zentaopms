@@ -769,7 +769,9 @@ public function batchCreate($projectID)
 
                 if($changed)
                 {
-                    $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->set('parent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
+                    $oldChildCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
+                    if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
+                    $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
                     $this->action->create('task', $taskID, 'unlinkParentTask', '', $oldTask->parent);
                     $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $taskID);
                     $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
