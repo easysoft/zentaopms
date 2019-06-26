@@ -67,11 +67,11 @@
               </thead>
               <tbody>
               <?php foreach($datas[$chartType] as $key => $data):?>
-              <tr class='text-center'>
+              <tr>
                 <td class='chart-color w-20px'><i class='chart-color-dot'></i></td>
-                <td class='chart-label'><?php echo $data->name;?></td>
-                <td class='chart-value'><?php echo $data->value;?></td>
-                <td><?php echo ($data->percent * 100) . '%';?></td>
+                <td class='chart-label text-left'><?php echo $data->name;?></td>
+                <td class='chart-value text-right'><?php echo $data->value;?></td>
+                <td class='text-right'><?php echo ($data->percent * 100) . '%';?></td>
               </tr>
               <?php endforeach;?>
               </tbody>
