@@ -393,7 +393,7 @@ $lang->admin->subMenu->sso->ranzhi = '然之協同|admin|sso';
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => '資料庫|dev|db');
-$lang->admin->subMenu->dev->editor = array('link' => '編輯器|editor|index', 'subModule' => 'editor');
+//$lang->admin->subMenu->dev->editor = array('link' => '編輯器|editor|index', 'subModule' => 'editor');
 $lang->admin->subMenu->dev->entry  = array('link' => '應用|entry|browse', 'subModule' => 'entry');
 
 $lang->admin->subMenu->data = new stdclass();
