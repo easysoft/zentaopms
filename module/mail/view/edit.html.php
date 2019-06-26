@@ -56,7 +56,9 @@
         <tr>
           <th><?php echo $lang->mail->port; ?></th>
           <td><?php echo html::input('port', $mailConfig->port, "class='form-control'");?></td>
-          <th class='w-70px'><?php echo $lang->mail->secure; ?></th>
+        </tr>
+        <tr>
+          <th><?php echo $lang->mail->secure; ?></th>
           <td>
           <?php
           if(!$openssl)
