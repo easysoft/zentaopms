@@ -19,6 +19,9 @@
       <span class="label label-light label-badge"><?php echo $pager->recTotal;?></span>
     </span>
   </div>
+  <div class='pull-right btn-toolbar'>
+    <?php if($objectType == 'product') common::printLink('testreport', 'selectTask', "productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary iframe'", '', true);?>
+  </div>
 </div>
 <?php endif;?>
 <div id='mainContent' class='main-table'>

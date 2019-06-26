@@ -112,6 +112,32 @@ class testreport extends control
     }
 
     /**
+     * Select a testtask for reporttask.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function selectTask($productID)
+    {
+        if($_POST)
+        {
+            $taskID = $this->post->testtask;
+            die(js::locate(inlink('create', "objectID=$taskID&objectType=testtask"), 'parent'));
+        }
+
+        $taskPairs         = array();
+        $scopeAndStatus[0] = 'local';
+        $scopeAndStatus[1] = 'totalStatus';
+        $tasks = $this->testtask->getProductTasks($productID, 0, 'id_desc', null, $scopeAndStatus);
+        foreach($tasks as $task) $taskPairs[$task->id] = $task->name;
+
+        $this->view->taskPairs = $taskPairs;
+        $this->display();
+    }
+
+    /**
      * Create report.
      *
      * @param  int    $objectID

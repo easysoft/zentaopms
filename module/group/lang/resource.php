@@ -626,17 +626,19 @@ $lang->testtask->methodOrder[85] = 'batchUnlinkCases';
 $lang->testtask->methodOrder[90] = 'report';
 
 $lang->resource->testreport = new stdclass();
-$lang->resource->testreport->browse = 'browse';
-$lang->resource->testreport->create = 'create';
-$lang->resource->testreport->view   = 'view';
-$lang->resource->testreport->delete = 'delete';
-$lang->resource->testreport->edit   = 'edit';
+$lang->resource->testreport->browse     = 'browse';
+$lang->resource->testreport->create     = 'create';
+$lang->resource->testreport->view       = 'view';
+$lang->resource->testreport->delete     = 'delete';
+$lang->resource->testreport->edit       = 'edit';
+$lang->resource->testreport->selectTask = 'selectTask';
 
 $lang->testreport->methodOrder[0]  = 'browse';
 $lang->testreport->methodOrder[5]  = 'create';
 $lang->testreport->methodOrder[10] = 'view';
 $lang->testreport->methodOrder[15] = 'delete';
 $lang->testreport->methodOrder[20] = 'edit';
+$lang->testreport->methodOrder[25] = 'selectTask';
 
 $lang->resource->testsuite = new stdclass();
 $lang->resource->testsuite->index            = 'index';

@@ -34,6 +34,7 @@ $lang->testreport->value       = 'Value';
 $lang->testreport->none        = 'None';
 $lang->testreport->all         = 'All Reports';
 $lang->testreport->deleted     = 'Deleted';
+$lang->testreport->selectTask  = 'Create report by request';
 
 $lang->testreport->legendBasic       = 'Basic Info.';
 $lang->testreport->legendStoryAndBug = 'Test Scope';
