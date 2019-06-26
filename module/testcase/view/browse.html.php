@@ -105,6 +105,10 @@ js::set('suiteID',        $suiteID);
             <?php
             $class = "class='disabled'";
 
+            $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
+            $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
+            echo html::commonButton($lang->testtask->runCase, $misc);
+
             $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
             $misc       = common::hasPriv('testcase', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
@@ -136,11 +140,6 @@ js::set('suiteID',        $suiteID);
                   $misc = common::hasPriv('testcase', 'batchConfirmStoryChange') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
                   echo "<li>" . html::a('#', $lang->testcase->confirmStoryChange, '', $misc) . "</li>";
               }
-
-
-              $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-              $misc = common::hasPriv('testtask', 'batchRun') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
-              echo "<li>" . html::a('#', $lang->testtask->runCase, '', $misc) . "</li>";
 
               if(common::hasPriv('testcase', 'batchCaseTypeChange'))
               {
