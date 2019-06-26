@@ -11,6 +11,11 @@
  */
 class editor extends control
 {
+    public function __construct()
+    {
+        die();
+    }
+
     /**
      * Show module files and edit them. 
      * 
