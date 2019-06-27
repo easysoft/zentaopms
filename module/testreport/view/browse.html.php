@@ -20,7 +20,7 @@
     </span>
   </div>
   <div class='pull-right btn-toolbar'>
-    <?php if($objectType == 'product') common::printLink('testreport', 'selectTask', "productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary iframe'", '', true);?>
+    <?php if($objectType == 'product') common::printLink('testreport', 'selectTask', "productID=$objectID", "<i class='icon icon-plus'></i>" . $lang->testreport->create, '', "class='btn btn-primary iframe' data-width=40%", '', true);?>
   </div>
 </div>
 <?php endif;?>
