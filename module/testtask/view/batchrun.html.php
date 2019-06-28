@@ -16,16 +16,16 @@
   <div class='main-header'>
     <h2><?php echo $lang->testtask->common . $lang->colon . $lang->testtask->batchRun;?></h2>
   </div>
-  <form method='post' target='hiddenwin'>
+  <form class='main-form' method='post' target='hiddenwin'>
     <table class='table table-fixed table-form table-bordered'>
       <thead>
         <tr>
           <th class='w-id'>   <?php  echo $lang->idAB;?></th> 
           <th class='w-100px'><?php echo $lang->testcase->module;?></th>
           <th class='w-200px'><?php echo $lang->testcase->title;?></th>
-          <th class='precondition w-60px'><?php echo $lang->testcase->precondition;?></th>
+          <th class='precondition w-90px'><?php echo $lang->testcase->precondition;?></th>
           <th class='w-80px'><?php echo $lang->testcase->result?></th>
-          <th>                <?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
+          <th><?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
         </tr>
       </thead>
       <?php foreach($caseIDList as $caseID):?>
@@ -35,7 +35,7 @@
         <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$cases[$caseID]->module] . "'>" . $moduleOptionMenu[$cases[$caseID]->module] . "</span>"?></td>
         <td class='text-left wordwrap'><?php echo "<span title='{$cases[$caseID]->title}'>{$cases[$caseID]->title}</span>"?></td>
         <td class='text-left precondition wordwrap'><?php echo "<span title='{$cases[$caseID]->precondition}'>{$cases[$caseID]->precondition}</span>"?></td>
-        <td><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'", 'block')?></td>
+        <td class='text-left'><?php echo html::radio("results[$caseID]", $this->lang->testcase->resultList, 'pass', "onclick='showAction(this.value,\".action$caseID\")'", 'block')?></td>
         <td>
           <?php if(!empty($steps[$caseID])):?>
           <table class='table table-fixed'>
