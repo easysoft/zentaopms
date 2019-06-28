@@ -31,6 +31,7 @@
     </thead>
     <tbody>
       <?php foreach($lang->dev->groupList as $group => $groupName):?>
+      <?php if(!isset($modules[$group])) continue;?>
       <?php $i = 0;?>
       <?php foreach($modules[$group] as $module):?>
       <?php $moduleStatistics = $statistics[$module];?>

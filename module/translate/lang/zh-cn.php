@@ -61,3 +61,4 @@ $lang->translate->notice = new stdclass();
 $lang->translate->notice->failDirPriv  = "目录没有写入权限，请修改权限。<br /><code>%s</code>";
 $lang->translate->notice->failCopyFile = "复制文件%s到%s失败，请检查权限！";
 $lang->translate->notice->failUnique   = "已经有代号 %s 的记录";
+$lang->translate->notice->failMaxInput = "请修改php.ini的max_input_vars参数，修改为 %s，以保证表单提交。";

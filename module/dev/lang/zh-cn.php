@@ -120,7 +120,6 @@ $lang->dev->groupList['repo']    = '代码';
 $lang->dev->groupList['api']     = 'API';
 $lang->dev->groupList['message'] = '消息';
 
-
 $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';
 $lang->dev->endGroupList['other']  = '其他';

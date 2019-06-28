@@ -13,6 +13,7 @@
     <?php echo html::a(inlink('chooseModule', "language=$language"), $lang->goback, '', "class='btn btn-secondary'");?>
     <div class='divider'></div>
     <?php foreach($lang->dev->groupList as $group => $groupName):?>
+    <?php if(!isset($moduleGroup[$group])) continue;?>
     <?php $active = $group == $currentGroup ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('module', "language=$language&module=" . current($moduleGroup[$group])), "<span class='text'>{$groupName}</span>", '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
@@ -99,7 +100,7 @@
             <td>
               <?php
               $specialItem = htmlspecialchars($item);
-              echo $hasNL ? nl2br($specialItem) : $specialItem;
+              echo $hasNL ? nl2br($specialItem) : (!empty($specialItem) ? $specialItem : '&nbsp;');
               echo html::hidden('refers[]', $specialItem);
               ?>
             </td>

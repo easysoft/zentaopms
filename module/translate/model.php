@@ -15,14 +15,14 @@ class translateModel extends model
     public function addLang()
     {
         $data  = fixer::input('post')->add('createdBy', $this->app->user->account)->get();
-        if(empty($data->name)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->translate->name);
-        if(empty($data->code)) dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->translate->code);
+        if(empty($data->name)) dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->translate->name);
+        if(empty($data->code)) dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->translate->code);
         if(dao::isError()) return false;
 
         $langs = empty($this->config->global->langs) ? array() : json_decode($this->config->global->langs, true);
         if(isset($langs[$data->code]))
         {
-            dao::$errors['message'][] = sprintf($this->lang->translate->notice->failUnique, $data->code);
+            dao::$errors['code'] = sprintf($this->lang->translate->notice->failUnique, $data->code);
             return false;
         }
 
@@ -39,7 +39,7 @@ class translateModel extends model
             if(file_exists($mainLangFile))
             {
                 $targetFile = $modulePath . DS . 'lang' . DS . $data->code . '.php';
-                if(!copy($mainLangFile, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->notice->failCopyFile, $mainLangFile, $targetFile);
+                if(!copy($mainLangFile, $targetFile)) dao::$errors[] = sprintf($this->lang->translate->notice->failCopyFile, $mainLangFile, $targetFile);
             }
 
             $extLangPath = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->reference;
@@ -50,7 +50,7 @@ class translateModel extends model
                 foreach($extLangFiles as $extLangFile)
                 {
                     $targetFile = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->code . DS . basename($extLangFile);
-                    if(!copy($extLangPath, $targetFile)) dao::$errors['message'][] = sprintf($this->lang->translate->notice->failCopyFile, $extLangFile, $targetFile);
+                    if(!copy($extLangPath, $targetFile)) dao::$errors[] = sprintf($this->lang->translate->notice->failCopyFile, $extLangFile, $targetFile);
                 }
             }
         }
@@ -117,7 +117,7 @@ class translateModel extends model
             if(strpos($line, 'include') === 0 or strpos($line, 'global') === 0) continue;
             if(strpos($line, 'unset(') !== false) continue;
             if(strpos($line, '/*') === 0 or strpos($line, '//') === 0 or strpos($line, '<?php') === 0 or strpos($line, '*') === 0) continue;
-            if(strpos($line, 'if') !== false and trim($lines[$i + 1]) == '{')
+            if(strpos($line, 'if') !== false and isset($lines[$i + 1]) and trim($lines[$i + 1]) == '{')
             {
                 $inCondition = true;
                 $level ++;
@@ -348,7 +348,7 @@ class translateModel extends model
                 $content .= $line . "\n";
                 continue;
             }
-            if(strpos($line, 'if') !== false and trim($lines[$i + 1]) == '{')
+            if(strpos($line, 'if') !== false and isset($lines[$i + 1]) and trim($lines[$i + 1]) == '{')
             {
                 $inCondition = true;
                 $level ++;

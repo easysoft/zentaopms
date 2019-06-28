@@ -4,6 +4,7 @@
     <?php echo html::a(inlink('chooseModule', "language=$language"), $lang->goback, '', "class='btn btn-secondary'");?>
     <div class='divider'></div>
     <?php foreach($lang->dev->groupList as $group => $groupName):?>
+    <?php if(!isset($moduleGroup[$group])) continue;?>
     <?php $active = $group == $currentGroup ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('review', "language=$language&module=" . current($moduleGroup[$group])), "<span class='text'>{$groupName}</span>", '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
