@@ -63,6 +63,7 @@ $lang->task->estimateAB        = 'Est.';
 $lang->task->left              = 'Hours Left';
 $lang->task->leftAB            = 'Left';
 $lang->task->consumed          = 'Hours Cost';
+$lang->task->currentConsumed   = 'Current Cost';
 $lang->task->myConsumed        = 'My Cost';
 $lang->task->consumedAB        = 'Cost';
 $lang->task->hour              = 'Hours';
@@ -193,6 +194,7 @@ $lang->task->error->work             = '"Comment" must be <  %d characters.';
 $lang->task->error->skipClose        = 'Task: %s is not "Finished” or “Cancelled”. Do you want to close it?';
 $lang->task->error->consumed         = 'Task: %s hour must be < 0. Ignore changes to this task.';
 $lang->task->error->assignedTo       = 'Multi-user task in the current status cannot be assigned to a member who is not in the task team.';
+$lang->task->error->consumedEmpty    = '"Current Cost" should not be empty.';
 
 /* Report. */
 $lang->task->report = new stdclass();
