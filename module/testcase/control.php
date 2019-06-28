@@ -324,8 +324,10 @@ class testcase extends control
             $modules = $this->loadModel('tree')->getStoryModule($currentModuleID);
             $modules = $this->tree->getAllChildID($modules);
         }
-        $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50);
-        if($storyID and !isset($stories[$storyID])) $stories = $this->story->formatStories(array($storyID => $story)) + $stories;//Fix bug #2406.
+        $storyPairs = array('' => '');
+        $stories    = $this->story->getProductStories($productID, $branch, $modules, array_keys($storyStatus), 'id_desc');
+        foreach($stories as $productStory) $storyPairs[$productStory->id] = $productStory->id . ':' . $productStory->title;
+        if($storyID and !isset($storyPairs[$storyID])) $storyPairs = array($storyID => $story) + $storyPairs;//Fix bug #2406.
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
@@ -338,7 +340,7 @@ class testcase extends control
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
         $this->view->currentModuleID  = $currentModuleID;
-        $this->view->stories          = $stories;
+        $this->view->stories          = $storyPairs;
         $this->view->caseTitle        = $caseTitle;
         $this->view->color            = $color;
         $this->view->type             = $type;
