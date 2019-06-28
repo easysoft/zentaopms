@@ -1,3 +1,5 @@
 .linkBox #queryBox .search-form .form-actions {padding-bottom: 5px;}
 .linkBox .table-header {padding: 8px 15px; border-bottom: 1px solid #cbd0db;}
 #unlinkStoryList, #unlinkBugList {border-top: 1px solid #cbd0db;}
+.page-title .dropdown-menu{top: 15%; left: 170px;}
+.page-title .text>a{font-weight: 700}

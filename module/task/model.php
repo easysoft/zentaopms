@@ -1286,12 +1286,18 @@ class taskModel extends model
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
             ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
-            ->remove('comment,files,labels')
+            ->remove('comment,files,labels,currentConsumed')
             ->get();
 
         if(!is_numeric($task->consumed))
         {
             dao::$errors[] = $this->lang->task->error->consumedNumber;
+            return false;
+        }
+
+        if(!$this->post->currentConsumed)
+        {
+            dao::$errors[] = $this->lang->task->error->consumedEmpty;
             return false;
         }
 
@@ -1343,7 +1349,6 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
-            ->batchCheck($this->config->task->finish->requiredFields, 'notempty')
             ->where('id')->eq((int)$taskID)
             ->exec();
 

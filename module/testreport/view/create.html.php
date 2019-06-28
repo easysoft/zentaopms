@@ -14,6 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
+<?php js::set('objectType', $objectType);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

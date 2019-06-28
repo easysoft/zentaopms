@@ -62,7 +62,8 @@ $lang->task->estimate         = '最初预计';
 $lang->task->estimateAB       = '预计';
 $lang->task->left             = '预计剩余';
 $lang->task->leftAB           = '剩余';
-$lang->task->consumed         = '总消耗';
+$lang->task->consumed         = '总计消耗';
+$lang->task->currentConsumed  = '本次消耗';
 $lang->task->myConsumed       = '我的总消耗';
 $lang->task->consumedAB       = '消耗';
 $lang->task->hour             = '小时';
@@ -103,7 +104,7 @@ $lang->task->editEstimate     = '编辑工时';
 $lang->task->deleteEstimate   = '删除工时';
 $lang->task->colorTag         = '颜色标签';
 $lang->task->files            = '附件';
-$lang->task->hasConsumed      = '已消耗';
+$lang->task->hasConsumed      = '之前消耗';
 $lang->task->multiple         = '多人任务';
 $lang->task->multipleAB       = '多人';
 $lang->task->team             = '团队';
@@ -193,6 +194,7 @@ $lang->task->error->work             = '"备注"必须小于%d个字符';
 $lang->task->error->skipClose        = '任务：%s 不是“已完成”或“已取消”状态，确定要关闭吗？';
 $lang->task->error->consumed         = '任务：%s工时不能小于0，忽略该任务工时的改动';
 $lang->task->error->assignedTo       = '当前状态的多人任务不能指派给任务团队外的成员。';
+$lang->task->error->consumedEmpty    = '"本次消耗"不能为空';
 
 /* Report. */
 $lang->task->report         = new stdclass();

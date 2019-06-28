@@ -16,13 +16,13 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
-      $that = $app->getClientLang() == 'en' ? zget($lang->user->thirdPerson, $user->gender) : '';
-      echo "<li id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  $lang->user->testTask2Him . $that) . "</li>";
+      $that = zget($lang->user->thirdPerson, $user->gender);
+      echo "<li id='testtaskTab'>"  . html::a($this->createLink('user', 'testtask', "account=$account"),  sprintf($lang->user->testTask2Him, $that)) . "</li>";
     
       $active = $type == 'case2Him' ? 'active' : '';
-      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  $lang->user->case2Him . $that) . "</li>";
+      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=case2Him"),  sprintf($lang->user->case2Him, $that)) . "</li>";
       $active = $type == 'caseByHim' ? 'active' : '';
-      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  $lang->user->caseByHim . $that) . "</li>";
+      echo "<li class='$active'>"  . html::a($this->createLink('user', 'testcase', "account=$account&type=caseByHim"),  sprintf($lang->user->caseByHim, $that)) . "</li>";
       ?>
     </ul>
   </nav>

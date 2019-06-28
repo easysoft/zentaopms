@@ -47,10 +47,19 @@
         </tr>
         <?php endif;?>
         <tr>
+          <th><?php echo $lang->task->currentConsumed;?></th>
+          <td>
+            <div class='input-group'><?php echo html::input('currentConsumed', 0, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
+          </td>
+        </tr>
+        <tr>
           <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
             <?php $consumed = empty($task->team) ? $task->consumed : $task->myConsumed;?>
-            <div class='input-group'><?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span></div>
+            <?php 
+              echo "<span id='totalConsumed'>" . $consumed . "</span>" . $lang->workingHour . html::hidden('consumed', $consumed);
+              js::set('consumed', $consumed);
+            ?>
           </td>
         </tr>
         <tr>

@@ -94,17 +94,17 @@ $lang->user->todo        = '待办';
 $lang->user->story       = '需求';
 $lang->user->dynamic     = '动态';
 
-$lang->user->openedBy    = '由他创建';
-$lang->user->assignedTo  = '指派给他';
-$lang->user->finishedBy  = '由他完成';
-$lang->user->resolvedBy  = '由他解决';
-$lang->user->closedBy    = '由他关闭';
-$lang->user->reviewedBy  = '由他评审';
-$lang->user->canceledBy  = '由他取消';
+$lang->user->openedBy    = '由%s创建';
+$lang->user->assignedTo  = '指派给%s';
+$lang->user->finishedBy  = '由%s完成';
+$lang->user->resolvedBy  = '由%s解决';
+$lang->user->closedBy    = '由%s关闭';
+$lang->user->reviewedBy  = '由%s评审';
+$lang->user->canceledBy  = '由%s取消';
 
-$lang->user->testTask2Him = '负责版本';
-$lang->user->case2Him     = '给他的用例';
-$lang->user->caseByHim    = '他建的用例';
+$lang->user->testTask2Him = '%s负责版本';
+$lang->user->case2Him     = '给%s的用例';
+$lang->user->caseByHim    = '%s建的用例';
 
 $lang->user->errorDeny    = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
 $lang->user->loginFailed  = "登录失败，请检查您的用户名或密码是否填写正确。";
@@ -125,6 +125,9 @@ $lang->user->roleList['others'] = '其他';
 
 $lang->user->genderList['m'] = '男';
 $lang->user->genderList['f'] = '女';
+
+$lang->user->thirdPerson['m'] = '他';
+$lang->user->thirdPerson['f'] = '她';
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>弱</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>中</span>";

@@ -171,20 +171,6 @@ class projectModel extends model
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
 
-        if($buildID and !$isMobile)
-        {
-            setCookie('lastBuild', $buildID, $this->config->cookieLife, $this->config->webRoot);
-            $currentBuild = $this->loadModel('build')->getById($buildID);
-
-            if($currentBuild)
-            {
-                $dropMenuLink = helper::createLink('build', 'ajaxGetProjectBuilds', "projectID=$projectID&productID=&varName=dropdownList");
-                $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentBuild->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $output .= "</div></div></div>";
-            }
-        }
-
         return $output;
     }
 
@@ -1766,6 +1752,8 @@ class projectModel extends model
         extract($data);
 
         $accounts = array_unique($accounts);
+        $limited  = array_values($limited);
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->exec();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1776,24 +1764,12 @@ class projectModel extends model
             $member->hours   = $hours[$key];
             $member->limited = $limited[$key];
 
-            $mode = $modes[$key];
-            if($mode == 'update')
-            {
-                $this->dao->update(TABLE_TEAM)
-                    ->data($member)
-                    ->where('root')->eq((int)$projectID)
-                    ->andWhere('type')->eq('project')
-                    ->andWhere('account')->eq($account)
-                    ->exec();
-            }
-            else
-            {
-                $member->root    = (int)$projectID;
-                $member->account = $account;
-                $member->join    = helper::today();
-                $member->type    = 'project';
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-            }
+            $member->root    = (int)$projectID;
+            $member->account = $account;
+            $member->join    = helper::today();
+            $member->type    = 'project';
+
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
         $this->loadModel('user')->updateUserView($projectID, 'project', $accounts);
 

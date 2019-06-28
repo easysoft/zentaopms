@@ -1264,7 +1264,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0)
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full')
     {
         if($moduleID)
         {
@@ -1280,7 +1280,7 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit);
+        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type);
         $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */

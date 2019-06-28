@@ -227,6 +227,7 @@ class build extends control
         /* Assign. */
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
+        $this->view->buildPairs    = $this->build->getProjectBuildPairs($build->project, 0, 0, 'noempty,notrunk');
         $this->view->actions       = $this->loadModel('action')->getList('build', $buildID);
         $this->view->link          = $link;
         $this->view->param         = $param;

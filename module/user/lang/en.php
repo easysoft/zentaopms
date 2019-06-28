@@ -94,17 +94,17 @@ $lang->user->todo        = 'Todo';
 $lang->user->story       = 'Stories';
 $lang->user->dynamic     = 'Dynamics';
 
-$lang->user->openedBy    = 'CreatedBy';
-$lang->user->assignedTo  = 'AssignedTo';
-$lang->user->finishedBy  = 'FinishedBy';
-$lang->user->resolvedBy  = 'SolvedBy';
-$lang->user->closedBy    = 'ClosedBy';
-$lang->user->reviewedBy  = 'ReviewedBy';
-$lang->user->canceledBy  = 'CancelledBy';
+$lang->user->openedBy    = 'CreatedBy %s';
+$lang->user->assignedTo  = 'AssignedTo %s';
+$lang->user->finishedBy  = 'FinishedBy %s';
+$lang->user->resolvedBy  = 'SolvedBy %s';
+$lang->user->closedBy    = 'ClosedBy %s';
+$lang->user->reviewedBy  = 'ReviewedBy %s';
+$lang->user->canceledBy  = 'CancelledBy %s';
 
-$lang->user->testTask2Him = 'BuildBy';
-$lang->user->case2Him     = 'CaseAssignedTo';
-$lang->user->caseByHim    = 'CaseCreatedBy';
+$lang->user->testTask2Him = 'BuildBy %s';
+$lang->user->case2Him     = 'CaseAssignedTo %s';
+$lang->user->caseByHim    = 'CaseCreatedBy %s';
 
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";

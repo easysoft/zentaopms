@@ -25,7 +25,7 @@ function addItem(obj)
 
 function deleteItem(obj)
 {
-    $(obj).closest('.addedItem').remove();
+    $(obj).closest('tr').remove();
 }
 
 function setDeptUsers(obj)
