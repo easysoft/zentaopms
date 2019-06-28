@@ -1752,6 +1752,8 @@ class projectModel extends model
         extract($data);
 
         $accounts = array_unique($accounts);
+        $limited  = array_values($limited);
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->exec();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1762,24 +1764,12 @@ class projectModel extends model
             $member->hours   = $hours[$key];
             $member->limited = $limited[$key];
 
-            $mode = $modes[$key];
-            if($mode == 'update')
-            {
-                $this->dao->update(TABLE_TEAM)
-                    ->data($member)
-                    ->where('root')->eq((int)$projectID)
-                    ->andWhere('type')->eq('project')
-                    ->andWhere('account')->eq($account)
-                    ->exec();
-            }
-            else
-            {
-                $member->root    = (int)$projectID;
-                $member->account = $account;
-                $member->join    = helper::today();
-                $member->type    = 'project';
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-            }
+            $member->root    = (int)$projectID;
+            $member->account = $account;
+            $member->join    = helper::today();
+            $member->type    = 'project';
+
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
         $this->loadModel('user')->updateUserView($projectID, 'project', $accounts);
 
