@@ -20,7 +20,7 @@ $lang->file->delete        = 'Delete File';
 $lang->file->label         = 'Label:';
 $lang->file->maxUploadSize = "<span class='text-red'>%s</span>";
 $lang->file->applyTemplate = "Apply Template";
-$lang->file->tplTitle      = "Name";
+$lang->file->tplTitle      = "Template Name";
 $lang->file->setPublic     = "Set Public Template";
 $lang->file->exportFields  = "Fields";
 $lang->file->exportRange   = "Data";
