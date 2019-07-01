@@ -29,7 +29,19 @@ tbody tr td:first-child input{display:none;}
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $build->id;?></span>
-      <span class='text' title='<?php echo $build->name;?>'><?php echo $build->name;?></span>
+      <span class='text' title='<?php echo $build->name;?>'> 
+      <?php echo html::a('javascript:void(0)', $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
+      <?php 
+      echo "<ul class='dropdown-menu'>";
+      foreach($buildPairs as $id => $name)
+      {   
+          echo '<li' . ($id == $build->id ? " class='active'" : '') . '>';
+          echo html::a($this->createLink('build', 'view', "buildID=$id"), $name);
+          echo '</li>';
+      }       
+      echo '</ul>';
+      ?>
+      </span>
       <?php if($build->deleted):?>
       <span class='label label-danger'><?php echo $lang->build->deleted;?></span>
       <?php endif; ?>

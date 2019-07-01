@@ -62,16 +62,16 @@
               <thead>
                 <tr>
                   <th class='chart-label' colspan='2'><?php echo $lang->story->report->$chartType->item;?></th>
-                  <th class='w-50px'><?php echo $lang->story->report->value;?></th>
+                  <th class='w-50px text-right'><?php echo $lang->story->report->value;?></th>
                   <th class='w-50px'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
               <?php foreach($datas[$chartType] as $key => $data):?>
-              <tr class='text-center'>
+              <tr>
                 <td class='chart-color'><i class='chart-color-dot'></i></td>
-                <td class='chart-label'><?php echo $data->name;?></td>
-                <td class='chart-value'><?php echo $data->value;?></td>
-                <td><?php echo ($data->percent * 100) . '%';?></td>
+                <td class='chart-label text-left'><?php echo $data->name;?></td>
+                <td class='chart-value text-right'><?php echo $data->value;?></td>
+                <td class='text-right'><?php echo ($data->percent * 100) . '%';?></td>
               </tr>
               <?php endforeach;?>
             </table>

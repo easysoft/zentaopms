@@ -13,23 +13,62 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->dev->moduleList;?></h2>
+    <h2><?php echo "[{$config->langs[$language]}] " . $lang->dev->moduleList . ' > ' . $lang->translate->chooseModule;?></h2>
   </div>
-  <table class='table table-form'>
-    <?php foreach($lang->dev->groupList as $group => $groupName):?>
-    <tr>
-      <th class='w-100px text-top'>
-        <div class='item'><?php echo $groupName;?></div>
-      </th>
-      <td>
-        <div class='clearfix'>
-          <?php foreach($modules[$group] as $module):?>
-          <div class='item'><?php echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), zget($lang->dev->tableList, $module, $module));?></div>
-          <?php endforeach;?>
-        </div>
-      </td>
-    </tr>
-    <?php endforeach;?>
+  <table class='table table-bordered table-hover'>
+    <thead>
+      <tr class='text-center'>
+        <th><?php echo $lang->translate->group;?></th>
+        <th class='text-left'><?php echo $lang->dev->moduleList;?></th>
+        <th class='w-80px'><?php echo $lang->translate->allTotal;?></th>
+        <th class='w-100px'><?php echo $lang->translate->translatedTotal;?></th>
+        <th class='w-100px'><?php echo $lang->translate->changedTotal;?></th>
+        <?php if($config->translate->needReview):?>
+        <th class='w-100px'><?php echo $lang->translate->reviewedTotal;?></th>
+        <?php endif;?>
+        <th class='w-80px'><?php echo $lang->translate->translatedProgress;?></th>
+        <?php if($config->translate->needReview):?>
+        <th class='w-80px'><?php echo $lang->translate->reviewedProgress;?></th>
+        <?php endif;?>
+        <th class='w-110px'><?php echo $lang->actions;?></th>
+      </tr>
+    </thead>
+    <tbody class='text-center'>
+      <?php foreach($lang->dev->groupList as $group => $groupName):?>
+      <?php if(!isset($modules[$group])) continue;?>
+      <?php $i = 0;?>
+      <?php foreach($modules[$group] as $module):?>
+      <?php $moduleStatistics = $statistics[$module];?>
+      <tr>
+        <?php if($i == 0):?>
+        <th rowspan='<?php echo count($modules[$group]);?>' class='w-100px text-middle'>
+          <div><?php echo $groupName;?></div>
+        </th>
+        <?php endif;?>
+        <td class='text-left'><?php echo zget($lang->dev->tableList, $module, $module);?></td>
+        <td><?php echo $moduleStatistics->count;?></td>
+        <td><?php echo $moduleStatistics->translated + $moduleStatistics->reviewed;?></td>
+        <td><?php echo $moduleStatistics->changed;?></td>
+        <?php if($config->translate->needReview):?>
+        <td><?php echo $moduleStatistics->reviewed;?></td>
+        <?php endif;?>
+        <td><?php echo (round(($moduleStatistics->translated + $moduleStatistics->reviewed) / $moduleStatistics->count, 3) * 100) . '%';?></td>
+        <?php if($config->translate->needReview):?>
+        <td><?php echo (round($moduleStatistics->reviewed / $moduleStatistics->count, 3) * 100) . '%';?></td>
+        <?php endif;?>
+        <td>
+          <div class='btn-group'>
+          <?php
+          if(common::hasPriv('translate', 'module')) echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), $lang->translate->common, '', "class='btn btn-sm'");
+          if(common::hasPriv('translate', 'review') and $config->translate->needReview) echo html::a($this->createLink('translate', 'review', "language=$language&module=$module"), $lang->translate->review, '', "class='btn btn-sm'");
+          ?>
+          </div>
+        </td>
+      </tr>
+      <?php $i++;?>
+      <?php endforeach;?>
+      <?php endforeach;?>
+    </tbody>
   </table>
 </div>
 <?php include '../../common/view/footer.html.php';?> 

@@ -77,5 +77,6 @@ $lang->translate->langs['en']     = 'English';
 $lang->translate->langs['zh_cn']  = '中文简体';
 $lang->translate->langs['zh_tw']  = '中文繁体';
 
+$lang->translate->notice = new stdclass();
 $lang->translate->notice->noVersion = 'Select zentao version please';
 $lang->translate->notice->delete    = 'Are you sure delete this translation?';

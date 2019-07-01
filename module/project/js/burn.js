@@ -22,7 +22,7 @@ function downloadBurn()
         var cans = canvas.getContext('2d');
 
         // Set background color to white
-        cans.fillStyle = 'white';
+        cans.fillStyle = '#fff';
         cans.fillRect(0, 0, canvas.width, canvas.height);
 
         cans.drawImage($('#cloneCanvas #cloneImage').get(0), 0, 0);

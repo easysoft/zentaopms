@@ -45,6 +45,7 @@ $filter->mail       = new stdclass();
 $filter->user       = new stdclass();
 $filter->block      = new stdclass();
 $filter->file       = new stdclass();
+$filter->translate  = new stdclass();
 
 $filter->block->default          = new stdclass();
 $filter->block->main             = new stdclass();
@@ -210,3 +211,5 @@ $filter->git->cat->get['repoUrl']  = 'reg::base64';
 $filter->git->diff->get['repoUrl'] = 'reg::base64';
 $filter->svn->cat->get['repoUrl']  = 'reg::base64';
 $filter->svn->diff->get['repoUrl'] = 'reg::base64';
+
+$filter->translate->module->cookie['translateView'] = 'equal::split';
