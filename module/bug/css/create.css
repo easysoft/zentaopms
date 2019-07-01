@@ -1,3 +1,6 @@
+html[lang='en'] #moduleIdBox .input-group-addon{padding: 5px 23px}
+html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
+
 .ke-toolbar .ke-outline[data-name='savetemplate'] {display: block;}
 .ke-outline  .ke-icon-savetemplate {background-image: url(theme/default/images/kindeditor/save.gif); background-position: center; width: 56px; height: 20px;}
 

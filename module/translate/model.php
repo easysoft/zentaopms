@@ -17,6 +17,7 @@ class translateModel extends model
         $data  = fixer::input('post')->add('createdBy', $this->app->user->account)->get();
         if(empty($data->name)) dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->translate->name);
         if(empty($data->code)) dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->translate->code);
+        if(!baseValidater::checkREG($data->code, '|^[A-Za-z0-9_]+$|')) dao::$errors['code'] = $this->lang->translate->notice->failRuleCode;
         if(dao::isError()) return false;
 
         $langs = empty($this->config->global->langs) ? array() : json_decode($this->config->global->langs, true);
@@ -34,25 +35,7 @@ class translateModel extends model
         {
             $moduleName = basename($modulePath);
             $this->initModuleLang($moduleName, $data->code, $data->reference);
-
-            $mainLangFile = $modulePath . DS . 'lang' . DS . $data->reference . '.php';
-            if(file_exists($mainLangFile))
-            {
-                $targetFile = $modulePath . DS . 'lang' . DS . $data->code . '.php';
-                if(!copy($mainLangFile, $targetFile)) dao::$errors[] = sprintf($this->lang->translate->notice->failCopyFile, $mainLangFile, $targetFile);
-            }
-
-            $extLangPath = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->reference;
-            if(is_dir($extLangPath))
-            {
-                mkdir($modulePath . DS . 'ext' . DS . 'lang' . DS . $data->code);
-                $extLangFiles = glob($extLangPath . DS . '*.php');
-                foreach($extLangFiles as $extLangFile)
-                {
-                    $targetFile = $modulePath . DS . 'ext' . DS . 'lang' . DS . $data->code . DS . basename($extLangFile);
-                    if(!copy($extLangPath, $targetFile)) dao::$errors[] = sprintf($this->lang->translate->notice->failCopyFile, $extLangFile, $targetFile);
-                }
-            }
+            $this->buildLangFile($data->code, $moduleName, $data->reference);
         }
 
         return true;
@@ -213,7 +196,7 @@ class translateModel extends model
 
     public function getLangStatistics()
     {
-        $langs = $this->dao->select("`lang`,sum(if((status = 'translated'),1,0)) as translatedItems,sum(if((status = 'reviewed'),1,0)) as reviewedItems, count(*) as count")->from(TABLE_TRANSLATION)->groupBy('`lang`')->fetchAll('lang');
+        $langs = $this->dao->select("`lang`,sum(if((status = 'translated'),1,0)) as translatedItems,sum(if((status = 'reviewed'),1,0)) as reviewedItems, count(*) as count")->from(TABLE_TRANSLATION)->where('`lang`')->in(array_keys($this->config->langs))->groupBy('`lang`')->fetchAll('lang');
         foreach($langs as $lang => $data) $data->progress = round(($data->translatedItems + $data->reviewedItems) / $data->count, 3);
         return $langs;
     }
@@ -314,7 +297,7 @@ class translateModel extends model
         $moduleRoot   = $this->app->getModuleRoot();
         $newLangFile  = $moduleRoot . $module . "/lang/{$language}.php";
         $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('lang')->eq($language)->andWhere('module')->eq($module)->fetchGroup('mode', 'key');
-        $newContent   = "<?php\n";
+        $newContent   = "";
 
         $mainReferLangFile = $moduleRoot . $module . "/lang/{$referLang}.php";
         if(file_exists($mainReferLangFile)) $newContent .= $this->getTranslatedLang($mainReferLangFile, $translations) . "\n";
@@ -323,7 +306,35 @@ class translateModel extends model
             $extLangFiles = glob($moduleRoot . $module . "/ext/lang/{$referLang}/*.php");
             foreach($extLangFiles as $extLangFile) $newContent .= $this->getTranslatedLang($extLangFile, $translations) . "\n";
         }
-        file_put_contents($newLangFile, $newContent);
+        if(!empty($newContent))
+        {
+            $translateInfo = $this->getTranslateInfo($translations);
+            $newContent = "<?php\n" . $translateInfo . $newContent;
+            file_put_contents($newLangFile, $newContent);
+        }
+    }
+
+    public function getTranslateInfo($translateGroups)
+    {
+        $translators = $reviewers = array();
+        $lastReviewTime = '';
+        foreach($translateGroups as $mode => $translatedItems)
+        {
+            foreach($translatedItems as $key => $translation)
+            {
+                $translators[$translation->translator] = $translation->translator;
+                $reviewers[$translation->reviewer]     = $translation->reviewer;
+                if(empty($lastReviewTime)) $lastReviewTime = $translation->reviewTime;
+                if($lastReviewTime < $translation->reviewTime) $lastReviewTime = $translation->reviewTime;
+            }
+        }
+
+        $translateInfo  = "/**\n";
+        $translateInfo .= " * Translators : " . join(' ', $translators) . "\n";
+        $translateInfo .= " * Reviewers : " . join(' ', $reviewers) . "\n";
+        $translateInfo .= " * Last Review Time : " . $lastReviewTime . "\n";
+        $translateInfo .= " */\n";
+        return $translateInfo;
     }
 
     public function getTranslatedLang($referLang, $translations)
@@ -392,7 +403,76 @@ class translateModel extends model
                     $value       = $translation->value;
                     if($this->checkNeedTranslate($value) and strpos($value, 'array(') === false)
                     {
-                        $value = '"' . addslashes($value) . '"';
+                        if(strpos($value, '.') === false)
+                        {
+                            $value = '"' . addslashes($value) . '"';
+                        }
+                        else
+                        {
+                            $parts    = explode('.', $value);
+                            $value    = '';
+                            $isJoin   = false;
+                            $preFirst = '';
+                            $preLast  = '';
+                            foreach($parts as $part)
+                            {
+                                $part = trim($part);
+                                if(empty($part)) continue;
+
+                                $firstLetter = $part{0};
+                                $lastLetter  = $part{strlen($part) - 1};
+                                /* Item like "a" or 'b'. */
+                                if($firstLetter == $lastLetter and ($firstLetter == '"' or $firstLetter == "'"))
+                                {
+                                    $isJoin = true;
+                                    $value  = empty($value) ? $part : $value . " . $part";
+                                }
+                                /* Item like $test or $test). */
+                                elseif($firstLetter != $lastLetter and $firstLetter == '$')
+                                {
+                                    $isJoin = true;
+                                    if($lastLetter == ')') $part = "'$part'";
+                                    $value  = empty($value) ? $part : $value . " . $part";
+                                }
+                                /* Item like <a href="www.baidu.com"> or $test . exec(). */
+                                elseif(($preLast and strpos('\'|"', $preLast) === false or $preFirst == '$') and strpos('\'|"', $firstLetter) === false)
+                                {
+                                    if($preFirst == '$')
+                                    {
+                                        $isJoin = true;
+                                        $value .= " . '" . addslashes($part) . "'";
+                                    }
+                                    else
+                                    {
+                                        $value .= '.' . $part;
+                                    }
+                                }
+                                /* Item like "aaa" . exec() or $test . exec(). */
+                                elseif(($preLast and strpos('\'|"', $preLast) !== false or $preFirst == '$') and strpos('\'|"', $firstLetter) === false)
+                                {
+                                    $isJoin = true;
+                                    $value .= " . '" . addslashes($part) . "'";
+                                }
+                                /* Item like `echo test`. */
+                                elseif($firstLetter == $lastLetter and strpos('\'|"', $firstLetter) === false)
+                                {
+                                    $value = empty($value) ? "'" . addslashes($part) . "'"  : $value . " . '" . addslashes($part) . "'";
+                                }
+                                elseif($lastLetter == ')')
+                                {
+                                    $part  = "'" . addslashes($part) . "'";
+                                    $value = empty($value) ? $part : $value . " . $part";
+                                }
+                                else
+                                {
+                                    $value = empty($value) ? $part : $value . ".$part";
+                                }
+
+                                $preFirst = $firstLetter;
+                                $preLast  = $lastLetter;
+                            }
+                            if(!$isJoin) $value = '"' . addslashes($value) . '"';
+                        }
                     }
                     $content .= $key . " = $value;\n";
                 }
@@ -409,7 +489,7 @@ class translateModel extends model
     {
         $result = true;
         if($value == 'new stdclass()') $result = false;
-        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and preg_match('/["\'] *\.[^\.]/', $value) == 0 and preg_match('/[^\.]\. *["\']/', $value) == 0) $result = false;
+        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and strpos($value, '.') === false) $result = false;
         if($value == '$lang->productCommon' or $value == '$lang->projectCommon') $result = false;
 
         return $result;
@@ -418,7 +498,7 @@ class translateModel extends model
     public function compare()
     {
         $version      = $this->config->version;
-        $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('version')->ne($version)->fetchAll();
+        $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('version')->ne($version)->andWhere('lang')->in(array_keys($this->config->langs))->fetchAll();
         if(empty($translations)) return true;
 
         $translateGroups = array();

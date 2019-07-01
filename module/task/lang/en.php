@@ -185,7 +185,7 @@ $lang->task->noTask                = 'No tasks yet. ';
 $lang->task->createDenied          = 'Create Task is denied in this project';
 
 $lang->task->error = new stdclass();
-$lang->task->error->consumedNumber   = '"Hours Cost" must be numbers.';
+$lang->task->error->consumedNumber   = '"Current Cost" must be numbers.';
 $lang->task->error->estimateNumber   = '"Estimates" must be numbers.';
 $lang->task->error->consumedSmall    = '"Hours Cost" must be > the last number.';
 $lang->task->error->consumedThisTime = 'Please enter "Hours Cost"';
