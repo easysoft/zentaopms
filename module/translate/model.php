@@ -17,6 +17,7 @@ class translateModel extends model
         $data  = fixer::input('post')->add('createdBy', $this->app->user->account)->get();
         if(empty($data->name)) dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->translate->name);
         if(empty($data->code)) dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->translate->code);
+        if(!baseValidater::checkREG($data->code, '|^[A-Za-z0-9_]+$|')) dao::$errors['code'] = $this->lang->translate->notice->failRuleCode;
         if(dao::isError()) return false;
 
         $langs = empty($this->config->global->langs) ? array() : json_decode($this->config->global->langs, true);
@@ -195,7 +196,7 @@ class translateModel extends model
 
     public function getLangStatistics()
     {
-        $langs = $this->dao->select("`lang`,sum(if((status = 'translated'),1,0)) as translatedItems,sum(if((status = 'reviewed'),1,0)) as reviewedItems, count(*) as count")->from(TABLE_TRANSLATION)->groupBy('`lang`')->fetchAll('lang');
+        $langs = $this->dao->select("`lang`,sum(if((status = 'translated'),1,0)) as translatedItems,sum(if((status = 'reviewed'),1,0)) as reviewedItems, count(*) as count")->from(TABLE_TRANSLATION)->where('`lang`')->in(array_keys($this->config->langs))->groupBy('`lang`')->fetchAll('lang');
         foreach($langs as $lang => $data) $data->progress = round(($data->translatedItems + $data->reviewedItems) / $data->count, 3);
         return $langs;
     }
@@ -497,7 +498,7 @@ class translateModel extends model
     public function compare()
     {
         $version      = $this->config->version;
-        $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('version')->ne($version)->fetchAll();
+        $translations = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('version')->ne($version)->andWhere('lang')->in(array_keys($this->config->langs))->fetchAll();
         if(empty($translations)) return true;
 
         $translateGroups = array();
