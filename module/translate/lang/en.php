@@ -8,58 +8,58 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->translate->common       = '翻译';
-$lang->translate->index        = '首页';
-$lang->translate->addLang      = '新增语言';
-$lang->translate->module       = '翻译模块';
-$lang->translate->review       = '审校';
-$lang->translate->result       = '审校结果';
-$lang->translate->batchPass    = '批量通过';
-$lang->translate->export       = '导出新语言';
-$lang->translate->setting      = '设置';
-$lang->translate->chooseModule = '选择翻译模块';
+$lang->translate->common       = 'Translate';
+$lang->translate->index        = 'Home';
+$lang->translate->addLang      = 'Add Language';
+$lang->translate->module       = 'Module';
+$lang->translate->review       = 'Review';
+$lang->translate->result       = 'Result';
+$lang->translate->batchPass    = 'Batch Pass';
+$lang->translate->export       = 'Export Lang File';
+$lang->translate->setting      = 'Settings';
+$lang->translate->chooseModule = 'Choose Module';
 
-$lang->translate->name        = '语言名称';
-$lang->translate->code        = '代号';
-$lang->translate->key         = '键';
-$lang->translate->reference   = '参考语言';
-$lang->translate->status      = '状态';
-$lang->translate->refreshPage = '刷新';
-$lang->translate->reason      = '拒绝原因';
+$lang->translate->name        = 'Language';
+$lang->translate->code        = 'Code';
+$lang->translate->key         = 'Key';
+$lang->translate->reference   = 'Reference Language';
+$lang->translate->status      = 'Status';
+$lang->translate->refreshPage = 'Refresh';
+$lang->translate->reason      = 'Reason';
 
-$lang->translate->reviewTurnon = '评审流程';
-$lang->translate->reviewTurnonList['1'] = '开启';
-$lang->translate->reviewTurnonList['0'] = '关闭';
+$lang->translate->reviewTurnon = 'Review';
+$lang->translate->reviewTurnonList['1'] = 'On';
+$lang->translate->reviewTurnonList['0'] = 'Off';
 
-$lang->translate->resultList['pass']   = '通过';
-$lang->translate->resultList['reject'] = '拒绝';
+$lang->translate->resultList['pass']   = 'Pass';
+$lang->translate->resultList['reject'] = 'Reject';
 
-$lang->translate->group              = '分组';
-$lang->translate->allTotal           = '总条目';
-$lang->translate->translatedTotal    = '已翻译条目数';
-$lang->translate->changedTotal       = '已修改条目数';
-$lang->translate->reviewedTotal      = '已审校条目数';
-$lang->translate->translatedProgress = '翻译进度';
-$lang->translate->reviewedProgress   = '审校进度';
+$lang->translate->group              = 'Group';
+$lang->translate->allTotal           = 'Total Items';
+$lang->translate->translatedTotal    = 'Translated Items';
+$lang->translate->changedTotal       = 'Modified Items';
+$lang->translate->reviewedTotal      = 'Reviewed Items';
+$lang->translate->translatedProgress = 'Translation Progress';
+$lang->translate->reviewedProgress   = 'Review Porgress';
 
-$lang->translate->builtIn  = '内置语言';
-$lang->translate->finished = '翻译完成';
-$lang->translate->progress = '完成 %s';
-$lang->translate->count    = '（%s 种）';
+$lang->translate->builtIn  = 'Built-in Languages';
+$lang->translate->finished = 'Finished Translation';
+$lang->translate->progress = 'Finished %s';
+$lang->translate->count    = '（%s languages）';
 
-$lang->translate->finishedLang    = '已经完成的语言';
-$lang->translate->translatingLang = '正在翻译的语言';
-$lang->translate->allItems        = '所有的语言条目数：%s条';
+$lang->translate->finishedLang    = 'Finished Translation';
+$lang->translate->translatingLang = 'Translating';
+$lang->translate->allItems        = 'Items of All Languages：%s';
 
-$lang->translate->statusList['waiting']    = '未翻译';
-$lang->translate->statusList['translated'] = '已翻译';
-$lang->translate->statusList['reviewed']   = '已评审';
-$lang->translate->statusList['rejected']   = '已拒绝';
-$lang->translate->statusList['changed']    = '已改变';
+$lang->translate->statusList['waiting']    = 'Waiting';
+$lang->translate->statusList['translated'] = 'Done';
+$lang->translate->statusList['reviewed']   = 'Reviewed';
+$lang->translate->statusList['rejected']   = 'Rejected';
+$lang->translate->statusList['changed']    = 'Modified';
 
 $lang->translate->notice = new stdclass();
-$lang->translate->notice->failDirPriv  = "目录没有写入权限，请修改权限。<br /><code>%s</code>";
-$lang->translate->notice->failCopyFile = "复制文件%s到%s失败，请检查权限！";
-$lang->translate->notice->failUnique   = "已经有代号 %s 的记录";
-$lang->translate->notice->failMaxInput = "请修改php.ini的max_input_vars参数，修改为 %s，以保证表单提交。";
-$lang->translate->notice->failRuleCode = "『语言代号』应当为字母、数字或下划线的组合。";
+$lang->translate->notice->failDirPriv  = "You don't have the privilege to write this directory. Please edit your privilege. <br /><code>%s</code>";
+$lang->translate->notice->failCopyFile = "Failed to copy %s to %s. Please edit your privilege.";
+$lang->translate->notice->failUnique   = "Item with Code %s exists.";
+$lang->translate->notice->failMaxInput = "Edit the value of max_input_vars to % in php.ini to make sure your form is submitted.";
+$lang->translate->notice->failRuleCode = "『Code shoud be letters, numbers and underlines.";
