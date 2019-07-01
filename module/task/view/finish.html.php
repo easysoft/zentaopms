@@ -35,7 +35,7 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-120px' : 'w-80px';?>
+          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-120px' : 'w-100px';?>
           <th class='<?php echo $colWidth;?>'><?php echo !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo $task->consumed;?> <?php echo $lang->workingHour;?></td>
           <td></td>
@@ -55,11 +55,11 @@
         <tr>
           <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
-            <?php $consumed = empty($task->team) ? $task->consumed : $task->myConsumed;?>
-            <?php 
-              echo "<span id='totalConsumed'>" . $consumed . "</span>" . $lang->workingHour . html::hidden('consumed', $consumed);
-              js::set('consumed', $consumed);
-            ?>
+          <?php $consumed = empty($task->team) ? $task->consumed : $task->myConsumed;?>
+          <?php 
+          echo "<span id='totalConsumed'>" . $consumed . "</span>" . $lang->workingHour . html::hidden('consumed', $consumed);
+          js::set('consumed', $consumed);
+          ?>
           </td>
         </tr>
         <tr>

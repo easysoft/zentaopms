@@ -153,12 +153,12 @@ $config->testcase->datatable->fieldList['lastRunDate']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastRunResult']['title']    = 'lastRunResult';
 $config->testcase->datatable->fieldList['lastRunResult']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['lastRunResult']['width']    = '50';
+$config->testcase->datatable->fieldList['lastRunResult']['width']    = '70';
 $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['status']['title']    = 'statusAB';
 $config->testcase->datatable->fieldList['status']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['status']['width']    = '50';
+$config->testcase->datatable->fieldList['status']['width']    = '70';
 $config->testcase->datatable->fieldList['status']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
