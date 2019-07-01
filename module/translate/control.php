@@ -44,7 +44,7 @@ class translate extends control
             {
                 $finishedLangs[$translateLang] = $this->config->langs[$translateLang];
             }
-            else
+            elseif(isset($this->config->langs[$translateLang]))
             {
                 $data->name = $this->config->langs[$translateLang];
                 $translatingLangs[$translateLang] = $data;
