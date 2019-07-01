@@ -185,7 +185,7 @@ $lang->task->noTask                = '暂时没有任务。';
 $lang->task->createDenied          = '你不能在该项目添加任务';
 
 $lang->task->error                   = new stdclass();
-$lang->task->error->consumedNumber   = '"已经消耗"必须为数字';
+$lang->task->error->consumedNumber   = '"本次消耗"必须为数字';
 $lang->task->error->estimateNumber   = '"预计剩余"必须为数字';
 $lang->task->error->consumedSmall    = '"已经消耗"必须大于之前消耗';
 $lang->task->error->consumedThisTime = '请填写"工时"';

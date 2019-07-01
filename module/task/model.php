@@ -1289,7 +1289,7 @@ class taskModel extends model
             ->remove('comment,files,labels,currentConsumed')
             ->get();
 
-        if(!is_numeric($task->consumed))
+        if(!is_numeric($this->post->currentConsumed))
         {
             dao::$errors[] = $this->lang->task->error->consumedNumber;
             return false;
