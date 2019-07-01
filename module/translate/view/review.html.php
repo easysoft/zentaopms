@@ -34,9 +34,10 @@
               <?php endif;?>
             </th>
             <th><?php echo $lang->translate->key;?></th>
-            <th><?php echo $config->langs[$referLang] . ' / ' . $config->langs[$language];?></th>
+            <th><?php echo $config->langs[$referLang];?>
+            <th><?php echo $config->langs[$language];?></th>
             <th class='w-80px'><?php echo $lang->translate->status;?></th>
-            <th class='w-80px'><?php echo $lang->actions?></th>
+            <th class='w-90px'><?php echo $lang->actions?></th>
           </tr>
         </thead>
         <tbody>
@@ -50,16 +51,17 @@
           if(empty($hideClass)) $i++;
           ?>
           <tr <?php echo $hideClass;?>>
-            <td class='text-left' rowspan='2'><?php echo $hasPriv ? html::checkbox('idList', array($translation->id => $i)) : $i;?></td>
-            <td class='text-right' rowspan='2'><?php echo "<nobr>$key</nobr>"?></td>
+            <td class='text-left'><?php echo $hasPriv ? html::checkbox('idList', array($translation->id => $i)) : $i;?></td>
+            <td class='text-right'><?php echo "<nobr>$key</nobr>"?></td>
             <td><?php echo $hasNL ? nl2br(htmlspecialchars($item)) : htmlspecialchars($item);?></td>
-            <td rowspan='2' class='status'>
+            <td><?php echo $hasNL ? nl2br(htmlspecialchars($translation->value)) : htmlspecialchars($translation->value);?></td>
+            <td class='status'>
               <?php
               echo zget($lang->translate->statusList, $translation->status);
               if($translation->status == 'rejected') echo " <span title='$translation->reason'><i class='icon icon-help'></i></span>";
               ?>
             </td>
-            <td rowspan='2'>
+            <td>
               <?php
               if($translation->status == 'translated' and common::hasPriv('translate', 'result'))
               {
@@ -67,10 +69,7 @@
                   echo html::a(inlink('result', "id={$translation->id}&result=reject"), $lang->translate->resultList['reject'], '', "class='iframe'");
               }
               ?>
-          </td>
-          </tr>
-          <tr <?php echo $hideClass;?>>
-            <td><?php echo $hasNL ? nl2br(htmlspecialchars($translation->value)) : htmlspecialchars($translation->value);?></td>
+            </td>
           </tr>
           <?php endforeach;?>
         </tbody>

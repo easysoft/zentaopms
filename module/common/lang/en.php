@@ -375,6 +375,7 @@ $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule'
 $lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
 
 $lang->admin->menu->dev       = array('link' => 'CSD|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+$lang->admin->menu->translate = array('link' => 'Translate|translate|index', 'subModule' => 'translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');
@@ -414,6 +415,7 @@ $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
+$lang->translate = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -427,6 +429,7 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
+$lang->translate->menu = $lang->admin->menu;
 
 /* Menu group. */
 $lang->menugroup = new stdclass();
@@ -463,6 +466,7 @@ $lang->menugroup->dev         = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
+$lang->menugroup->translate   = 'admin';
 
 /* Error info. */
 $lang->error = new stdclass();

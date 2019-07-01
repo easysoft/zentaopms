@@ -502,7 +502,12 @@ class translateModel extends model
         if(empty($translations)) return true;
 
         $translateGroups = array();
-        foreach($translations as $translation) $translateGroups[$translation->lang][$translation->mode][$translation->module][$translation->key] = $translation;
+        $translateIdList = array();
+        foreach($translations as $translation)
+        {
+            $translateIdList[$translation->id] = $translation->id;
+            $translateGroups[$translation->lang][$translation->mode][$translation->module][$translation->key] = $translation;
+        }
 
         $moduleGroups = $this->getModules();
         $allModules   = array();
@@ -520,7 +525,7 @@ class translateModel extends model
         {
             foreach($languages as $langCode)
             {
-                $langTranslations = zget($translateGroups, $translation->lang, array());
+                $langTranslations = zget($translateGroups, $langCode, array());
                 foreach($flows as $flow)
                 {
                     foreach($allModules as $moduleName)
@@ -547,26 +552,23 @@ class translateModel extends model
                             }
                             else
                             {
-                                if($langValue == $translation->refer)
+                                if(!isset($translateIdList[$translation->id])) continue;
+                                $specialedValue = htmlspecialchars($langValue);
+                                if($specialedValue == $translation->refer)
                                 {
                                     $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->where('id')->eq($translation->id)->exec();
                                 }
-                                elseif($langValue != $translation->refer)
+                                elseif($specialedValue != $translation->refer)
                                 {
-                                    $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->set('status')->eq('changed')->set('refer')->eq(htmlspecialchars($langValue))->where('id')->eq($translation->id)->exec();
+                                    $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->set('status')->eq('changed')->set('refer')->eq($specialedValue)->where('id')->eq($translation->id)->exec();
                                 }
-                                unset($translations[$langKey]);
-                            }
-                            if($translations)
-                            {
-                                $idList = array();
-                                foreach($translations as $translation) $idList[$translation->id] = $translation->id;
-                                $this->dao->delete()->from(TABLE_TRANSLATION)->where('id')->in($idList)->exec();
+                                unset($translateIdList[$translation->id]);
                             }
                         }
                     }
                 }
             }
         }
+        if($translateIdList) $this->dao->delete()->from(TABLE_TRANSLATION)->where('id')->in($translateIdList)->exec();
     }
 }

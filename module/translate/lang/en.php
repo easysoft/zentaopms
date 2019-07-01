@@ -34,22 +34,22 @@ $lang->translate->reviewTurnonList['0'] = 'Off';
 $lang->translate->resultList['pass']   = 'Pass';
 $lang->translate->resultList['reject'] = 'Reject';
 
-$lang->translate->group              = 'Group';
-$lang->translate->allTotal           = 'Total Items';
-$lang->translate->translatedTotal    = 'Translated Items';
-$lang->translate->changedTotal       = 'Modified Items';
-$lang->translate->reviewedTotal      = 'Reviewed Items';
-$lang->translate->translatedProgress = 'Translation Progress';
-$lang->translate->reviewedProgress   = 'Review Porgress';
+$lang->translate->group              = 'View';
+$lang->translate->allTotal           = 'Total';
+$lang->translate->translatedTotal    = 'Translated';
+$lang->translate->changedTotal       = 'Modified';
+$lang->translate->reviewedTotal      = 'Reviewed';
+$lang->translate->translatedProgress = 'Translation';
+$lang->translate->reviewedProgress   = 'Review';
 
-$lang->translate->builtIn  = 'Built-in Languages';
+$lang->translate->builtIn  = 'Built-in Language';
 $lang->translate->finished = 'Finished Translation';
-$lang->translate->progress = 'Finished %s';
+$lang->translate->progress = '%s Done';
 $lang->translate->count    = '（%s languages）';
 
-$lang->translate->finishedLang    = 'Finished Translation';
+$lang->translate->finishedLang    = 'Translated';
 $lang->translate->translatingLang = 'Translating';
-$lang->translate->allItems        = 'Items of All Languages：%s';
+$lang->translate->allItems        = 'All Items：%s';
 
 $lang->translate->statusList['waiting']    = 'Waiting';
 $lang->translate->statusList['translated'] = 'Done';
@@ -62,4 +62,4 @@ $lang->translate->notice->failDirPriv  = "You don't have the privilege to write 
 $lang->translate->notice->failCopyFile = "Failed to copy %s to %s. Please edit your privilege.";
 $lang->translate->notice->failUnique   = "Item with Code %s exists.";
 $lang->translate->notice->failMaxInput = "Edit the value of max_input_vars to % in php.ini to make sure your form is submitted.";
-$lang->translate->notice->failRuleCode = "『Code shoud be letters, numbers and underlines.";
+$lang->translate->notice->failRuleCode = "『Code』 shoud be letters, numbers and underlines.";

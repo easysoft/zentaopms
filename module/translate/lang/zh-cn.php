@@ -34,7 +34,7 @@ $lang->translate->reviewTurnonList['0'] = '关闭';
 $lang->translate->resultList['pass']   = '通过';
 $lang->translate->resultList['reject'] = '拒绝';
 
-$lang->translate->group              = '分组';
+$lang->translate->group              = '视图';
 $lang->translate->allTotal           = '总条目';
 $lang->translate->translatedTotal    = '已翻译条目数';
 $lang->translate->changedTotal       = '已修改条目数';

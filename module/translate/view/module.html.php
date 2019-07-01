@@ -126,7 +126,7 @@
           <?php endforeach;?>
         </tbody>
       </table>
-      <div class="table-footer text-center"><?php echo html::submitButton();?></div>
+      <div class="table-footer text-center"><?php echo html::submitButton() . ' ' . html::a(inlink('chooseModule', "language=$language"), $lang->goback, '', "class='btn btn-wide'");?></div>
     </form>
   </div>
 </div>
