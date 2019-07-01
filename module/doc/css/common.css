@@ -13,6 +13,8 @@
 .row-spliting .col-spliter:before,
 .row-spliting .col-spliter:after {opacity: 1;}
 
+html[lang='en'] #whiteListBox .input-group:last-child .input-group-addon{padding:5px 16px}
+
 @media (max-width: 720px)
 {
   .split-row > .side-col,
