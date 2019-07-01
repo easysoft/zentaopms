@@ -1327,7 +1327,7 @@ class taskModel extends model
             ->setDefault('date', date(DT_DATE1))
             ->setIF($this->post->finishedDate, 'date', $this->post->finishedDate)
             ->setDefault('left', 0)
-            ->remove('finishedDate,comment,assignedTo,files,labels,consumed')
+            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,currentConsumed')
             ->get();
 
         $estimate->consumed = $consumed;
