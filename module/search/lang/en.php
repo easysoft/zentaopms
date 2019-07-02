@@ -39,10 +39,10 @@ $lang->search->operators['>']          = '>';
 $lang->search->operators['>=']         = '>=';
 $lang->search->operators['<']          = '<';
 $lang->search->operators['<=']         = '<=';
-$lang->search->operators['include']    = 'INCLUDE';
-$lang->search->operators['between']    = 'BETWEEN';
-$lang->search->operators['notinclude'] = 'EXCLUDE';
-$lang->search->operators['belong']     = 'BELONG';
+$lang->search->operators['include']    = 'Include';
+$lang->search->operators['between']    = 'Between';
+$lang->search->operators['notinclude'] = 'Exclude';
+$lang->search->operators['belong']     = 'Belong';
 
 $lang->search->andor['and']         = 'And';
 $lang->search->andor['or']          = 'Or';
