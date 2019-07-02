@@ -174,13 +174,13 @@ $lang->user->error->verifyPassword   = "Verification failed. Please enter your L
 $lang->user->error->originalPassword = "Old password is incorrect.";
 
 $lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['slack']    = $lang->user->slack;
+$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['qq']       = $lang->user->qq;
 $lang->user->contactFieldList['dingding'] = $lang->user->dingding;
 $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
-$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
-$lang->user->contactFieldList['slack']    = $lang->user->slack;
-$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
-$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';

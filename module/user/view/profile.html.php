@@ -17,7 +17,7 @@
   <div class='main-col col-6'>
     <div class='cell'>
       <div class='main-header'>
-        <h2><?php echo $lang->user->legendBasic;?></h2>
+        <h2><?php echo $lang->user->profile;?></h2>
         <div class='actions pull-right'>
           <?php echo html::a($this->createLink('user', 'edit', "userID=$user->id"), html::icon('pencil') . ' ' . $lang->user->editProfile, '', "class='btn btn-primary'"); ?>
         </div>

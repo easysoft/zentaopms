@@ -173,14 +173,14 @@ $lang->user->error->reserved      = "【ID %s】的用户名已被系统预留";
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";
 
-$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
 $lang->user->contactFieldList['qq']       = $lang->user->qq;
 $lang->user->contactFieldList['dingding'] = $lang->user->dingding;
 $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
-$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
 $lang->user->contactFieldList['slack']    = $lang->user->slack;
 $lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
-$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';
