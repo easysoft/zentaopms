@@ -12,6 +12,12 @@
 <?php
 class translateModel extends model
 {
+    /**
+     * Add new language.
+     * 
+     * @access public
+     * @return bool
+     */
     public function addLang()
     {
         $data  = fixer::input('post')->add('createdBy', $this->app->user->account)->get();
@@ -41,6 +47,15 @@ class translateModel extends model
         return true;
     }
 
+    /**
+     * Init lang for module.
+     * 
+     * @param  string    $moduleName 
+     * @param  string    $langCode 
+     * @param  string    $referLang 
+     * @access public
+     * @return void
+     */
     public function initModuleLang($moduleName, $langCode, $referLang)
     {
         $this->app->loadLang('custom');
@@ -67,6 +82,15 @@ class translateModel extends model
         }
     }
 
+    /**
+     * Get module lang items.
+     * 
+     * @param  string $moduleName 
+     * @param  string $langCode 
+     * @param  string $flow 
+     * @access public
+     * @return array
+     */
     public function getModuleLangs($moduleName, $langCode, $flow = '')
     {
         if(empty($flow))$flow = $this->config->global->flow;
@@ -84,6 +108,14 @@ class translateModel extends model
         return $langItems;
     }
 
+    /**
+     * Get active items by file.
+     * 
+     * @param  string $fileName 
+     * @param  string $flow 
+     * @access public
+     * @return array
+     */
     public function getActiveItemsByFile($fileName, $flow = '')
     {
         if(empty($flow)) $flow = $this->config->global->flow;
@@ -147,6 +179,13 @@ class translateModel extends model
         return $items;
     }
 
+    /**
+     * Check dir priv.
+     * 
+     * @param  string $moduleName 
+     * @access public
+     * @return void
+     */
     public function checkDirPriv($moduleName = '')
     {
         $cmd        = '';
@@ -160,6 +199,12 @@ class translateModel extends model
         return $cmd;
     }
 
+    /**
+     * Get all modules.
+     * 
+     * @access public
+     * @return array
+     */
     public function getModules()
     {
         $this->loadModel('dev');
@@ -178,6 +223,12 @@ class translateModel extends model
         return $modules;
     }
 
+    /**
+     * Get lang item count by zh-cn.
+     * 
+     * @access public
+     * @return int
+     */
     public function getLangItemCount()
     {
         $moduleGroups = $this->getModules();
@@ -194,6 +245,12 @@ class translateModel extends model
         return $itemCount;
     }
 
+    /**
+     * Get lang statistics.
+     * 
+     * @access public
+     * @return array
+     */
     public function getLangStatistics()
     {
         $langs = $this->dao->select("`lang`,sum(if((status = 'translated'),1,0)) as translatedItems,sum(if((status = 'reviewed'),1,0)) as reviewedItems, count(*) as count")->from(TABLE_TRANSLATION)->where('`lang`')->in(array_keys($this->config->langs))->groupBy('`lang`')->fetchAll('lang');
@@ -201,6 +258,13 @@ class translateModel extends model
         return $langs;
     }
 
+    /**
+     * Get module statistics.
+     * 
+     * @param  string $language 
+     * @access public
+     * @return array
+     */
     public function getModuleStatistics($language)
     {
         $fields = 'lang,module,';
@@ -292,6 +356,15 @@ class translateModel extends model
         if(!dao::isError()) $this->buildLangFile($language, $module, $referLang);
     }
 
+    /**
+     * Build lang file for module by reference and db.
+     * 
+     * @param  string $language 
+     * @param  string $module 
+     * @param  string $referLang 
+     * @access public
+     * @return void
+     */
     public function buildLangFile($language, $module, $referLang)
     {
         $moduleRoot   = $this->app->getModuleRoot();
@@ -314,6 +387,13 @@ class translateModel extends model
         }
     }
 
+    /**
+     * Get translate info.
+     * 
+     * @param  array $translateGroups 
+     * @access public
+     * @return string
+     */
     public function getTranslateInfo($translateGroups)
     {
         $translators = $reviewers = array();
@@ -337,6 +417,14 @@ class translateModel extends model
         return $translateInfo;
     }
 
+    /**
+     * Get translated items for lang file.
+     * 
+     * @param  string $referLang 
+     * @param  array  $translations 
+     * @access public
+     * @return string
+     */
     public function getTranslatedLang($referLang, $translations)
     {
         $lines   = file($referLang);
@@ -485,6 +573,13 @@ class translateModel extends model
         return $content;
     }
 
+    /**
+     * Check need translate.
+     * 
+     * @param  string $value 
+     * @access public
+     * @return bool
+     */
     public function checkNeedTranslate($value)
     {
         $result = true;
@@ -495,6 +590,12 @@ class translateModel extends model
         return $result;
     }
 
+    /**
+     * Compare languages for new version.
+     * 
+     * @access public
+     * @return void
+     */
     public function compare()
     {
         $version      = $this->config->version;
