@@ -13,7 +13,10 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo "[{$config->langs[$language]}] " . $lang->dev->moduleList . ' > ' . $lang->translate->chooseModule;?></h2>
+    <h2>
+<?php echo html::a($this->createLink('translate', 'index'), $lang->translate->index) . ' > ';?>
+<?php echo "[{$config->langs[$language]}] " . $lang->dev->moduleList . ' > ' . $lang->translate->chooseModule;?>
+</h2>
   </div>
   <table class='table table-bordered table-hover'>
     <thead>
@@ -30,7 +33,7 @@
         <?php if($config->translate->needReview):?>
         <th class='w-80px'><?php echo $lang->translate->reviewedProgress;?></th>
         <?php endif;?>
-        <th class='w-110px'><?php echo $lang->actions;?></th>
+        <th class='<?php echo $app->getClientLang() == 'en' ? 'w-150px' : 'w-110px';?>'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody class='text-center'>

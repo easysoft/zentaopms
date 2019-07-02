@@ -1,6 +1,6 @@
 <?php
 /**
- * The translate module English file of ZenTaoCMS.
+ * The translate module zh-cn file of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2012 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @author      Yidong Wang <yidong@cnezsoft.com>
@@ -8,75 +8,58 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->translate->common = 'The platform translate together';
+$lang->translate->common       = 'Translate';
+$lang->translate->index        = 'Home';
+$lang->translate->addLang      = 'Add Language';
+$lang->translate->module       = 'Module';
+$lang->translate->review       = 'Review';
+$lang->translate->result       = 'Result';
+$lang->translate->batchPass    = 'Batch Pass';
+$lang->translate->export       = 'Export Lang File';
+$lang->translate->setting      = 'Settings';
+$lang->translate->chooseModule = 'Choose Module';
 
-$lang->translate->allModules  = 'All Zentao Modules';
-$lang->translate->consultLang = 'Current consult language:%s. You can change language for';
-$lang->translate->item        = 'Item';
-$lang->translate->action      = 'Action';
-$lang->translate->other       = 'Other';
-$lang->translate->moduleTitle = 'Zentao%s - %s Module %s Language';
+$lang->translate->name        = 'Language';
+$lang->translate->code        = 'Code';
+$lang->translate->key         = 'Key';
+$lang->translate->reference   = 'Reference Language';
+$lang->translate->status      = 'Status';
+$lang->translate->refreshPage = 'Refresh';
+$lang->translate->reason      = 'Reason';
 
-$lang->translate->translate = 'Translate';
-$lang->translate->download  = 'Download';
-$lang->translate->back      = 'Back Translation Index';
-$lang->translate->vote      = 'Vote';
+$lang->translate->reviewTurnon = 'Review';
+$lang->translate->reviewTurnonList['1'] = 'On';
+$lang->translate->reviewTurnonList['0'] = 'Off';
 
-$lang->translate->zentaoVersions[]           = 'Select zentao version';
-$lang->translate->zentaoVersions['3.0beta1'] = 'Zentao3.0.beta1';
+$lang->translate->resultList['pass']   = 'Pass';
+$lang->translate->resultList['reject'] = 'Reject';
 
-$lang->translate->langs['af']     = 'Afrikaans';
-$lang->translate->langs['sq']     = 'Shqip                                                                  - albanian            ';
-$lang->translate->langs['ar']     = '&#1575;&#1604;&#1593;&#1585;&#1576;&#1610;&#1577;                      - arabic              ';
-$lang->translate->langs['az']     = 'Az&#601;rbaycanca                                                      - azerbaijani         ';
-$lang->translate->langs['eu']     = 'Euskara                                                                - basque              ';
-$lang->translate->langs['be']     = '&#1041;&#1077;&#1083;&#1072;&#1088;&#1091;&#1089;&#1082;&#1072;&#1103; - belarusian          ';
-$lang->translate->langs['be_lat'] = 'Byelorussian                                                           - belarusian latin    ';
-$lang->translate->langs['bs']     = 'Bosanski                                                               - bosnian             ';
-$lang->translate->langs['pt_br']  = 'Portugu&ecirc;s                                                        - brazilian portuguese';
-$lang->translate->langs['bg']     = '&#1041;&#1098;&#1083;&#1075;&#1072;&#1088;&#1089;&#1082;&#1080;        - bulgarian           ';
-$lang->translate->langs['ca']     = 'Catal&agrave;                                                          - catalan             ';
-$lang->translate->langs['hr']     = 'Hrvatski                                                               - croatian            ';
-$lang->translate->langs['cs']     = '&#268;esky                                                             - czech               ';
-$lang->translate->langs['da']     = 'Dansk                                                                  - danish              ';
-$lang->translate->langs['nl']     = 'Nederlands                                                             - dutch               ';
-$lang->translate->langs['et']     = 'Eesti                                                                  - estonian            ';
-$lang->translate->langs['fi']     = 'Suomi                                                                  - finnish             ';
-$lang->translate->langs['fr']     = 'Fran&ccedil;ais                                                        - french              ';
-$lang->translate->langs['gl']     = 'Galego                                                                 - galician            ';
-$lang->translate->langs['de']     = 'Deutsch                                                                - german              ';
-$lang->translate->langs['el']     = '&Epsilon;&lambda;&lambda;&eta;&nu;&iota;&kappa;&#940;                  - greek               ';
-$lang->translate->langs['he']     = '&#1506;&#1489;&#1512;&#1497;&#1514;                                    - hebrew              ';
-$lang->translate->langs['hu']     = 'Magyar                                                                 - hungarian           ';
-$lang->translate->langs['id']     = 'Bahasa Indonesia                                                       - indonesian          ';
-$lang->translate->langs['it']     = 'Italiano                                                               - italian             ';
-$lang->translate->langs['ja']     = '&#26085;&#26412;&#35486;                                               - japanese            ';
-$lang->translate->langs['ko']     = '&#54620;&#44397;&#50612;                                               - korean              ';
-$lang->translate->langs['lt']     = 'Lietuvi&#371;                                                          - lithuanian          ';
-$lang->translate->langs['lv']     = 'Latvie&scaron;u                                                        - latvian             ';
-$lang->translate->langs['mk']     = 'Macedonian                                                             - macedonian          ';
-$lang->translate->langs['ms']     = 'Bahasa Melayu                                                          - malay               ';
-$lang->translate->langs['mn']     = '&#1052;&#1086;&#1085;&#1075;&#1086;&#1083;                             - mongolian           ';
-$lang->translate->langs['no']     = 'Norsk                                                                  - norwegian           ';
-$lang->translate->langs['fa']     = '&#1601;&#1575;&#1585;&#1587;&#1740;                                    - persian             ';
-$lang->translate->langs['pl']     = 'Polski                                                                 - polish              ';
-$lang->translate->langs['pt']     = 'Portugu&ecirc;s                                                        - portuguese          ';
-$lang->translate->langs['ro']     = 'Rom&acirc;n&#259;                                                      - romanian            ';
-$lang->translate->langs['ru']     = '&#1056;&#1091;&#1089;&#1089;&#1082;&#1080;&#1081;                      - russian             ';
-$lang->translate->langs['sr_lat'] = 'Srpski                                                                 - serbian latin       ';
-$lang->translate->langs['sr']     = '&#1057;&#1088;&#1087;&#1089;&#1082;&#1080;                             - serbian             ';
-$lang->translate->langs['es']     = 'Espa&ntilde;ol                                                         - spanish             ';
-$lang->translate->langs['sk']     = 'Sloven&#269;ina                                                        - slovak              ';
-$lang->translate->langs['sl']     = 'Sloven&scaron;&#269;ina                                                - slovenian           ';
-$lang->translate->langs['sv']     = 'Svenska                                                                - swedish             ';
-$lang->translate->langs['th']     = '&#3616;&#3634;&#3625;&#3634;&#3652;&#3607;&#3618;                      - thai                ';
-$lang->translate->langs['tr']     = 'T&uuml;rk&ccedil;e                                                     - turkish             ';
-$lang->translate->langs['tt']     = 'Tatar&ccedil;a                                                         - tatarish            ';
-$lang->translate->langs['uk']     = '&#1059;&#1082;&#1088;&#1072;&#1111;&#1085;&#1089;&#1100;&#1082;&#1072; - ukrainian           ';
-$lang->translate->langs['en']     = 'English';
-$lang->translate->langs['zh_cn']  = '中文简体';
-$lang->translate->langs['zh_tw']  = '中文繁体';
+$lang->translate->group              = 'View';
+$lang->translate->allTotal           = 'Total';
+$lang->translate->translatedTotal    = 'Translated';
+$lang->translate->changedTotal       = 'Modified';
+$lang->translate->reviewedTotal      = 'Reviewed';
+$lang->translate->translatedProgress = 'Translation';
+$lang->translate->reviewedProgress   = 'Review';
+
+$lang->translate->builtIn  = 'Built-in Language';
+$lang->translate->finished = 'Finished Translation';
+$lang->translate->progress = '%s Done';
+$lang->translate->count    = '（%s languages）';
+
+$lang->translate->finishedLang    = 'Translated';
+$lang->translate->translatingLang = 'Translating';
+$lang->translate->allItems        = 'All Items：%s';
+
+$lang->translate->statusList['waiting']    = 'Waiting';
+$lang->translate->statusList['translated'] = 'Done';
+$lang->translate->statusList['reviewed']   = 'Reviewed';
+$lang->translate->statusList['rejected']   = 'Rejected';
+$lang->translate->statusList['changed']    = 'Modified';
 
 $lang->translate->notice = new stdclass();
-$lang->translate->notice->noVersion = 'Select zentao version please';
-$lang->translate->notice->delete    = 'Are you sure delete this translation?';
+$lang->translate->notice->failDirPriv  = "You don't have the privilege to write this directory. Please edit your privilege. <br /><code>%s</code>";
+$lang->translate->notice->failCopyFile = "Failed to copy %s to %s. Please edit your privilege.";
+$lang->translate->notice->failUnique   = "Item with Code %s exists.";
+$lang->translate->notice->failMaxInput = "Edit the value of max_input_vars to % in php.ini to make sure your form is submitted.";
+$lang->translate->notice->failRuleCode = "『Code』 shoud be letters, numbers and underlines.";

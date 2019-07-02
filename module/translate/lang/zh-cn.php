@@ -34,7 +34,7 @@ $lang->translate->reviewTurnonList['0'] = '关闭';
 $lang->translate->resultList['pass']   = '通过';
 $lang->translate->resultList['reject'] = '拒绝';
 
-$lang->translate->group              = '分组';
+$lang->translate->group              = '视图';
 $lang->translate->allTotal           = '总条目';
 $lang->translate->translatedTotal    = '已翻译条目数';
 $lang->translate->changedTotal       = '已修改条目数';
@@ -62,3 +62,4 @@ $lang->translate->notice->failDirPriv  = "目录没有写入权限，请修改�
 $lang->translate->notice->failCopyFile = "复制文件%s到%s失败，请检查权限！";
 $lang->translate->notice->failUnique   = "已经有代号 %s 的记录";
 $lang->translate->notice->failMaxInput = "请修改php.ini的max_input_vars参数，修改为 %s，以保证表单提交。";
+$lang->translate->notice->failRuleCode = "『语言代号』应当为字母、数字或下划线的组合。";

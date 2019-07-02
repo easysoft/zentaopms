@@ -7,7 +7,7 @@
 </div>
 </div>
   <div class='row'>
-    <div class='col-sm-6'>
+    <div class='col-sm-6' id='finishedLangs'>
       <div class='panel'>
         <div class='panel-heading'>
           <div class='panel-title'><?php echo $lang->translate->finishedLang;?></div>
@@ -16,7 +16,19 @@
         <div class='panel-body'>
           <?php foreach($finishedLangs as $langKey => $langName):?>
           <div class='item'>
-            <div class='pull-right'><?php echo in_array($langKey, $config->translate->defaultLang) ? $lang->translate->builtIn : $lang->translate->finished;?></div>
+            <div class='pull-right'>
+              <?php
+              if(in_array($langKey, $config->translate->defaultLang))
+              {
+                  echo $lang->translate->builtIn;
+              }
+              else
+              {
+                  echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm'");
+                  echo html::a(inlink('export', "language=$langKey"), $lang->export, '', "class='btn btn-sm iframe'");
+              }
+              ?>
+              </div>
             <h4><?php echo $langName;?></h4>
           </div>
           <?php endforeach;?>
@@ -35,7 +47,7 @@
             <tr>
               <th class='text-left'><?php echo $data->name;?></th>
               <td class='text-progress text-center'><?php printf($lang->translate->progress, ($data->progress * 100) . '%');?></td>
-              <td class='actions'>
+              <td class='actions <?php echo $app->getClientLang() == 'en' ? 'w-130px' : 'w-95px';?>'>
                 <?php
                 echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm'");
                 echo html::a(inlink('export', "language=$langKey"), $lang->export, '', "class='btn btn-sm iframe'");

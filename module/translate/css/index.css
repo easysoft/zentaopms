@@ -2,9 +2,14 @@
 .panel{margin-bottom:0px; border:0px;}
 .panel .panel-heading{border-bottom:1px solid #ddd;}
 .panel .panel-body{padding-bottom:5px;}
-#translatingLangs .panel .panel-body{padding-right:0px;}
-#translatingLangs .panel .panel-body .actions{padding:0px; width:95px;}
+#translatingLangs .panel .panel-body{padding-right:0px; padding-top:5px;}
+#translatingLangs .panel .panel-body .actions{padding:0px;}
+.w-95px{width:95px !important;}
+.w-130px{width:130px !important;}
 .panel .text-progress{color:#999;}
-.panel .panel-actions{top:5px;}
+.panel .panel-actions{top:8px;}
 .panel p{padding-bottom:5px;}
-.item .pull-right{color:#999;}
+#finishedLangs .panel-body{padding-top:5px;}
+#finishedLangs .item{height:30px;}
+#finishedLangs .item h4{margin:0; height:100%; line-height:30px;}
+#finishedLangs .item .pull-right{color:#999; line-height:30px;}

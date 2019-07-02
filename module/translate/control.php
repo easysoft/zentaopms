@@ -33,7 +33,6 @@ class translate extends control
      */
     public function index()
     {
-        $this->translate->compare();
         $itemCount  = $this->translate->getLangItemCount();
         $statistics = $this->translate->getLangStatistics();
         $finishedLangs = $translatingLangs = array();
@@ -44,7 +43,7 @@ class translate extends control
             {
                 $finishedLangs[$translateLang] = $this->config->langs[$translateLang];
             }
-            else
+            elseif(isset($this->config->langs[$translateLang]))
             {
                 $data->name = $this->config->langs[$translateLang];
                 $translatingLangs[$translateLang] = $data;
@@ -174,6 +173,15 @@ class translate extends control
         $this->display();
     }
 
+    /**
+     * Review translate. 
+     * 
+     * @param  string $language 
+     * @param  string $module 
+     * @param  string $referLang 
+     * @access public
+     * @return void
+     */
     public function review($language, $module, $referLang = '')
     {
         $moduleGroup = $this->translate->getModules();
@@ -208,6 +216,14 @@ class translate extends control
         $this->display();
     }
 
+    /**
+     * Set review result.
+     * 
+     * @param  int    $translationID 
+     * @param  string $result 
+     * @access public
+     * @return void
+     */
     public function result($translationID, $result)
     {
         if($result == 'pass')
@@ -225,12 +241,24 @@ class translate extends control
         }
     }
 
+    /**
+     * Batch pass for review
+     * 
+     * @access public
+     * @return void
+     */
     public function batchPass()
     {
         $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('reviewed')->set('reviewer')->eq($this->app->user->account)->set('reviewTime')->eq(helper::now())->where('id')->in($this->post->idList)->exec();
         $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
     }
 
+    /**
+     * Setting review or not
+     * 
+     * @access public
+     * @return void
+     */
     public function setting()
     {
         if($_POST)
@@ -242,6 +270,13 @@ class translate extends control
         $this->display();
     }
 
+    /**
+     * Export translation.
+     * 
+     * @param  string $language 
+     * @access public
+     * @return void
+     */
     public function export($language)
     {
         if($_POST)
@@ -284,6 +319,13 @@ class translate extends control
         $this->display();
     }
 
+    /**
+     * Ajax get translation status.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return void
+     */
     public function ajaxGetStatus($id)
     {
         $translation = $this->dao->select('*')->from(TABLE_TRANSLATION)->where('id')->eq($id)->fetch();
