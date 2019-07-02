@@ -2443,6 +2443,10 @@ class bugModel extends model
                 $class .= ' bug-' . $bug->status;
                 $title  = "title='" . zget($this->lang->bug->statusList, $bug->status) . "'";
             }
+            if($id == 'confirmed')
+            {
+                $class .= ' text-center';
+            }
             if($id == 'title')
             {
                 $class .= ' text-left';
@@ -2488,9 +2492,11 @@ class bugModel extends model
                 echo zget($this->lang->bug->priList, $bug->pri, $bug->pri);
                 echo "</span>";
                 break;
-            case 'title':
+            case 'confirmed':
                 $class = 'confirm' . $bug->confirmed;
-                echo "<span class='$class'>[{$this->lang->bug->confirmedList[$bug->confirmed]}]</span> ";
+                echo "<span class='$class'>" . zget($this->lang->bug->confirmedList, $bug->confirmed, $bug->confirmed) . "</span> ";
+                break;
+            case 'title':
                 if($bug->branch and isset($branches[$bug->branch]))    echo "<span class='label label-outline label-badge'>{$branches[$bug->branch]}</span> ";
                 if($bug->module and isset($modulePairs[$bug->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$bug->module]}</span> ";
                 echo $canView ? html::a($bugLink, $bug->title, null, "style='color: $bug->color'") : "<span style='color: $bug->color'>{$bug->title}</span>";
