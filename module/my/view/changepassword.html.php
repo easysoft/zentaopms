@@ -22,7 +22,7 @@
   </div>
   <form method='post' target='hiddenwin'>
     <table align='center' class='table table-form w-320px'>
-      <?php $thWidth = ($app->getClientLang() == 'en') ? 'w-130px' : 'w-90px';?>
+      <?php $thWidth = ($app->getClientLang() == 'en') ? 'w-160px' : 'w-90px';?>
       <tr>
         <th class='rowhead <?php echo $thWidth?>'><?php echo $lang->user->account;?></th>
         <td><?php echo $user->account . html::hidden('account',$user->account);?></td>
