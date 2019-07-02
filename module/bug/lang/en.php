@@ -34,6 +34,7 @@ $lang->bug->activatedCount   = 'Activation Times';
 $lang->bug->activatedCountAB = 'Activation';
 $lang->bug->activatedDate    = 'ActivatedDate';
 $lang->bug->confirmed        = 'Confirmed';
+$lang->bug->confirmedAB      = 'C';
 $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
 $lang->bug->mailto           = 'Mailto';
@@ -246,8 +247,8 @@ $lang->bug->statusList['active']   = 'Active';
 $lang->bug->statusList['resolved'] = 'Solved';
 $lang->bug->statusList['closed']   = 'Closed';
 
-$lang->bug->confirmedList[1] = 'Confirmed';
-$lang->bug->confirmedList[0] = 'Unconfirmed';
+$lang->bug->confirmedList[1] = 'Yes';
+$lang->bug->confirmedList[0] = 'No';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'As Design';
