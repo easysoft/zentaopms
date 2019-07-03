@@ -34,6 +34,7 @@ $lang->bug->activatedCount   = 'Activation Times';
 $lang->bug->activatedCountAB = 'Activation';
 $lang->bug->activatedDate    = 'ActivatedDate';
 $lang->bug->confirmed        = 'Confirmed';
+$lang->bug->confirmedAB      = 'C';
 $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
 $lang->bug->mailto           = 'Mailto';
@@ -46,12 +47,12 @@ $lang->bug->assignedTo       = 'AssignTo';
 $lang->bug->assignBug        = 'AssignedTo';
 $lang->bug->assignedToAB     = 'AssignedTo';
 $lang->bug->assignedDate     = 'AssignedDate';
-$lang->bug->resolvedBy       = 'SolvedBy';
+$lang->bug->resolvedBy       = 'ResolvedBy';
 $lang->bug->resolvedByAB     = 'SolvedBy';
-$lang->bug->resolution       = 'Solution';
+$lang->bug->resolution       = 'Resolution';
 $lang->bug->resolutionAB     = 'Solution';
 $lang->bug->resolvedBuild    = 'Build';
-$lang->bug->resolvedDate     = 'Solved Date';
+$lang->bug->resolvedDate     = 'Resolved Date';
 $lang->bug->resolvedDateAB   = 'SolvedDate';
 $lang->bug->deadline         = 'Deadline';
 $lang->bug->plan             = 'Plan';
@@ -103,7 +104,7 @@ $lang->bug->search             = 'Search';
 /* 查询条件列表。*/
 $lang->bug->assignToMe         = 'AssignedToMe';
 $lang->bug->openedByMe         = 'ReportedByMe';
-$lang->bug->resolvedByMe       = 'SolvedByMe';
+$lang->bug->resolvedByMe       = 'ResolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
 $lang->bug->unResolved         = 'Unresolved';
@@ -118,13 +119,13 @@ $lang->bug->byQuery            = 'Search';
 $lang->bug->needConfirm        = 'Story Changed';
 $lang->bug->allProduct         = 'All' . $lang->productCommon . 's';
 $lang->bug->my                 = 'My';
-$lang->bug->yesterdayResolved  = 'Bug Solved Yesterday ';
+$lang->bug->yesterdayResolved  = 'Bug Resolved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
 $lang->bug->yesterdayClosed    = 'Bug Closed Yesterday ';
 
 $lang->bug->assignToMeAB   = 'AssignedToMe';
 $lang->bug->openedByMeAB   = 'ReportedByMe';
-$lang->bug->resolvedByMeAB = 'SolvedByMe';
+$lang->bug->resolvedByMeAB = 'ResolvedByMe';
 
 $lang->bug->ditto        = 'Ditto';
 $lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one is!';
@@ -137,7 +138,7 @@ $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong
 $lang->bug->lblAssignedTo = 'AssignTo';
 $lang->bug->lblMailto     = 'Mailto';
 $lang->bug->lblLastEdited = 'ModifiedBy';
-$lang->bug->lblResolved   = 'SolvedBy';
+$lang->bug->lblResolved   = 'ResolvedBy';
 $lang->bug->allUsers      = 'Load All Users';
 $lang->bug->allBuilds     = 'All Builds';
 $lang->bug->createBuild   = 'New';
@@ -246,8 +247,8 @@ $lang->bug->statusList['active']   = 'Active';
 $lang->bug->statusList['resolved'] = 'Solved';
 $lang->bug->statusList['closed']   = 'Closed';
 
-$lang->bug->confirmedList[1] = 'Confirmed';
-$lang->bug->confirmedList[0] = 'Unconfirmed';
+$lang->bug->confirmedList[1] = 'Yes';
+$lang->bug->confirmedList[0] = 'No';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'As Design';
@@ -269,10 +270,10 @@ $lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' B
 $lang->bug->report->charts['bugsPerBuild']          = 'Bugs Per Build';
 $lang->bug->report->charts['bugsPerModule']         = 'Bugs Per Module';
 $lang->bug->report->charts['openedBugsPerDay']      = 'Reported Bugs Per Day';
-$lang->bug->report->charts['resolvedBugsPerDay']    = 'Solved Bugs Per Day';
+$lang->bug->report->charts['resolvedBugsPerDay']    = 'Resolved Bugs Per Day';
 $lang->bug->report->charts['closedBugsPerDay']      = 'Closed Bugs Per Day';
 $lang->bug->report->charts['openedBugsPerUser']     = 'Reported Bugs Per User';
-$lang->bug->report->charts['resolvedBugsPerUser']   = 'Solved Bugs Per User';
+$lang->bug->report->charts['resolvedBugsPerUser']   = 'Resolved Bugs Per User';
 $lang->bug->report->charts['closedBugsPerUser']     = 'Closed Bugs Per User';
 $lang->bug->report->charts['bugsPerSeverity']       = 'Bug Severity Report';
 $lang->bug->report->charts['bugsPerResolution']     = 'Bug Solution Report';
@@ -357,7 +358,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved            = array('main' => '$date, solved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
+$lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, converted by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->totask              = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->linked2plan         = array('main' => '$date, linked by <strong>$actor</strong> to Plan <strong>$extra</strong>.');

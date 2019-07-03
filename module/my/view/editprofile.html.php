@@ -23,7 +23,7 @@
       <tr>
         <th class='w-90px'><?php echo $lang->user->realname;?></th>
         <td><?php echo html::input('realname', $user->realname, "class='form-control'");?></td>
-        <th class='w-90px'><?php echo $lang->user->email;?></th>
+        <th class='w-140px'><?php echo $lang->user->email;?></th>
         <td><?php echo html::input('email', $user->email, "class='form-control'");?></td>
       </tr>
       <tr>
@@ -44,7 +44,7 @@
       <caption><?php echo $lang->my->form->lblAccount;?></caption>
       <tr>
         <th class='w-90px'><?php echo $lang->user->account;?></th>
-        <td style='width:33%'><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly'");?></td>
+        <td style=''><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly'");?></td>
         <th class='w-140px'><?php echo $lang->user->commiter;?></th>
         <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
       </tr>
@@ -68,7 +68,7 @@
       <?php foreach(explode(',', $config->user->contactField) as $field):?>
       <?php if($i % 2 == 0) echo '<tr>';?>
       <?php $i++;?>
-        <th class='w-90px'><?php echo $lang->user->$field;?></th>
+        <th <?php echo $i % 2 == 0 ? "class='w-140px'" : "class='w-90px'"?>><?php echo $lang->user->$field;?></th>
         <td><?php echo html::input($field, $user->$field, "class='form-control'");?></td>
       <?php if($i % 2 == 0) echo '</tr>';?>
       <?php endforeach;?>
@@ -83,11 +83,13 @@
     <table class='table table-form'>
       <caption><?php echo $lang->user->verify;?></caption>
       <tr>
-        <th class='w-verifyPassword'><?php echo $lang->user->verifyPassword;?></th>
+        <th class='w-90px'><?php echo $lang->user->verifyPassword;?></th>
         <td>
           <div class="required required-wrapper"></div>
           <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' placeholder='{$lang->user->placeholder->verify}'");?>
         </td>
+        <th class='w-140px'></th>
+        <td></td>
       </tr>
     </table>
     <div class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></div>
