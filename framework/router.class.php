@@ -21,7 +21,7 @@ include dirname(__FILE__) . '/base/router.class.php';
 class router extends baseRouter
 {
     /**
-     * Add config langs.
+     * Add custom langs when set client lang.
      *
      * @param   string $lang  zh-cn|zh-tw|zh-hk|en
      * @access  public

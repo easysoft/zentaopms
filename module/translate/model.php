@@ -152,6 +152,7 @@ class translateModel extends model
             {
                 if(strpos($line, '$lang') === 0 and strpos($line, '=') !== false)
                 {
+                    if(strpos($line, '.=') !== false) continue;
                     $position = strpos($line, '=');
                     $key      = trim(substr($line, 0, $position));
                     $value    = trim(substr($line, $position + 1));
@@ -229,8 +230,14 @@ class translateModel extends model
      * @access public
      * @return int
      */
-    public function getLangItemCount()
+    public function getLangItemCount($module = '')
     {
+        if(!empty($module))
+        {
+            $items = $this->getModuleLangs($module, 'zh-cn');
+            return count($items);
+        }
+
         $moduleGroups = $this->getModules();
         $moduleRoot   = $this->app->getModuleRoot();
         $itemCount    = 0;
@@ -455,7 +462,7 @@ class translateModel extends model
                 $inFlow = false;
                 foreach($flows as $flow)
                 {
-                    if(strpos($line, 'config->global->flow') !== false and strpos($line, $flow) === false)
+                    if(strpos($line, 'config->global->flow') !== false and strpos($line, $flow) !== false)
                     {
                         $inFlow = true;
                         break;
@@ -481,7 +488,7 @@ class translateModel extends model
             {
                 $content .= $line . "\n";
             }
-            elseif($inFlow and strpos($line, '$lang') === 0 and strpos($line, '=') !== false)
+            elseif($inFlow and strpos($line, '$lang') === 0 and strpos($line, '=') !== false and strpos($line, '.=') === false)
             {
                 $position = strpos($line, '=');
                 $key      = trim(substr($line, 0, $position));
@@ -493,7 +500,7 @@ class translateModel extends model
                     {
                         if(strpos($value, '.') === false)
                         {
-                            $value = '"' . addslashes($value) . '"';
+                            $value = "'" . addslashes($value) . "'";
                         }
                         else
                         {
@@ -569,6 +576,10 @@ class translateModel extends model
                     $content .= $line . "\n";
                 }
             }
+            else
+            {
+                $content .= $line . "\n";
+            }
         }
         return $content;
     }
@@ -583,8 +594,9 @@ class translateModel extends model
     public function checkNeedTranslate($value)
     {
         $result = true;
-        if($value == 'new stdclass()') $result = false;
-        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and strpos($value, '.') === false) $result = false;
+        $tolowerValue = strtolower($value);
+        if($tolowerValue == 'new stdclass()' or $tolowerValue == 'new stdclass') $result = false;
+        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and strpos($value, '.') === false and !preg_match('/[^\$\-\>\w]/', $value)) $result = false;
         if($value == '$lang->productCommon' or $value == '$lang->projectCommon') $result = false;
 
         return $result;

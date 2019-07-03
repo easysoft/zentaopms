@@ -41,7 +41,21 @@
       <?php if(!isset($modules[$group])) continue;?>
       <?php $i = 0;?>
       <?php foreach($modules[$group] as $module):?>
-      <?php $moduleStatistics = $statistics[$module];?>
+      <?php
+      if(isset($statistics[$module]))
+      {
+          $moduleStatistics = $statistics[$module];
+          $moduleStatistics->count = $this->translate->getLangItemCount($module);
+      }
+      else
+      {
+          $moduleStatistics = new stdclass();
+          $moduleStatistics->count      = $this->translate->getLangItemCount($module);
+          $moduleStatistics->translated = 0;
+          $moduleStatistics->changed    = 0;
+          $moduleStatistics->reviewed   = 0;
+      }
+      ?>
       <tr>
         <?php if($i == 0):?>
         <th rowspan='<?php echo count($modules[$group]);?>' class='w-100px text-middle'>
