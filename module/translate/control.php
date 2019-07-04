@@ -22,6 +22,13 @@ class translate extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+
+        $remoteIP = helper::getRemoteIp();
+        if($remoteIP != '127.0.0.1')
+        {
+            $this->app->loadLang('editor');
+            die("<html><head><meta chatset='utf-8'></head><body>{$this->lang->editor->onlyLocalVisit}</body></html>");
+        }
     }
 
     /**

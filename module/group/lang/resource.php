@@ -43,6 +43,7 @@ $lang->moduleOrder[110] = 'user';
 $lang->moduleOrder[115] = 'admin';
 $lang->moduleOrder[120] = 'extension';
 $lang->moduleOrder[125] = 'custom';
+$lang->moduleOrder[130] = 'editor';
 $lang->moduleOrder[135] = 'convert';
 $lang->moduleOrder[140] = 'action';
 
@@ -1089,6 +1090,21 @@ $lang->resource->dev->db  = 'db';
 
 $lang->dev->methodOrder[5]  = 'api';
 $lang->dev->methodOrder[10] = 'db';
+
+$lang->resource->editor = new stdclass();
+$lang->resource->editor->index   = 'index';
+$lang->resource->editor->extend  = 'extend';
+$lang->resource->editor->edit    = 'edit';
+$lang->resource->editor->newPage = 'newPage';
+$lang->resource->editor->save    = 'save';
+$lang->resource->editor->delete  = 'delete';
+
+$lang->editor->methodOrder[5]  = 'index';
+$lang->editor->methodOrder[10] = 'extend';
+$lang->editor->methodOrder[15] = 'edit';
+$lang->editor->methodOrder[20] = 'newPage';
+$lang->editor->methodOrder[25] = 'save';
+$lang->editor->methodOrder[30] = 'delete';
 
 /* Every version of new privilege. */
 $lang->changelog['1.0.1'][] = 'project-computeBurn';

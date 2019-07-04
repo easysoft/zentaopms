@@ -102,7 +102,7 @@ $lang->testcase->importFile              = "Import CSV";
 $lang->testcase->importFromLib           = "Import From Library";
 $lang->testcase->showImport              = "Show Import";
 $lang->testcase->exportTemplet           = "Export Template";
-$lang->testcase->export                  = "Export";
+$lang->testcase->export                  = "Export Data";
 $lang->testcase->reportChart             = 'Report Chart';
 $lang->testcase->confirmChange           = 'Confirm Case Change';
 $lang->testcase->confirmStoryChange      = 'Confirm Story Change';
@@ -115,7 +115,7 @@ $lang->testcase->viewAll                 = 'All Cases';
 
 $lang->testcase->new = 'New';
 
-$lang->testcase->num = 'Case:';
+$lang->testcase->num = 'Case Rows:';
 
 $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';

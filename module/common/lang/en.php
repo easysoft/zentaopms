@@ -374,7 +374,7 @@ $lang->admin->menu->message   = array('link' => 'Notification|message|index', 's
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
 
-$lang->admin->menu->dev       = array('link' => 'Devel|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+$lang->admin->menu->dev       = array('link' => 'CSD|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->translate = array('link' => 'Translate|translate|index', 'subModule' => 'translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
@@ -392,6 +392,7 @@ $lang->admin->subMenu->sso->ranzhi = 'Zdoo|admin|sso';
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => 'Database|dev|db');
+$lang->admin->subMenu->dev->editor = array('link' => 'Editor|editor|index', 'subModule' => 'editor');
 $lang->admin->subMenu->dev->entry  = array('link' => 'Application|entry|browse', 'subModule' => 'entry');
 
 $lang->admin->subMenu->data = new stdclass();
@@ -416,6 +417,7 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 $lang->translate = new stdclass();
+$lang->editor    = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -430,6 +432,7 @@ $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
 $lang->translate->menu = $lang->admin->menu;
+$lang->editor->menu    = $lang->admin->menu;
 
 /* Menu group. */
 $lang->menugroup = new stdclass();
@@ -467,6 +470,7 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 $lang->menugroup->translate   = 'admin';
+$lang->menugroup->editor      = 'admin';
 
 /* Error info. */
 $lang->error = new stdclass();

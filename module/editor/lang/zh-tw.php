@@ -1,0 +1,75 @@
+<?php
+$lang->editor->common    = '編輯器';
+$lang->editor->api       = 'API';
+$lang->editor->index     = '首頁';
+$lang->editor->newMethod = '新增方法';
+$lang->editor->extend    = '擴展';
+$lang->editor->api       = 'API';
+$lang->editor->newLang   = '新增語言';
+$lang->editor->newConfig = '新增配置';
+$lang->editor->newHook   = '新增鈎子';
+$lang->editor->newExtend = '新增擴展';
+$lang->editor->newPage   = '新增頁面';
+$lang->editor->override  = '覆蓋';
+$lang->editor->edit      = '編輯擴展';
+$lang->editor->save      = '保存頁面';
+$lang->editor->delete    = '刪除頁面';
+
+$lang->editor->moduleList   = '模組列表';
+$lang->editor->filePath     = "擴展：";
+$lang->editor->sourceFile   = '源檔案：';
+$lang->editor->fileName     = "檔案名：";
+$lang->editor->isOverride   = "覆蓋重複檔案";
+$lang->editor->exampleHook  = "(例如：***.html.hook.php)";
+$lang->editor->exampleJs    = "(例如：***.js)";
+$lang->editor->exampleCss   = "(例如：***.css)";
+$lang->editor->examplePHP   = "(例如：***.php)";
+$lang->editor->pageName     = "頁面名稱：";
+
+$lang->editor->deleteConfirm = '是否要刪除？';
+$lang->editor->extendConfirm = '是否要重用原來代碼？';
+$lang->editor->repeatFile    = '檔案名重複';
+$lang->editor->repeatPage    = '已經有此頁面。是否覆蓋？';
+$lang->editor->noticeOkFile  = '為了安全起見，系統需要確認您的管理員身份。\n 請登錄禪道所在的伺服器，創建%s檔案。\n 注意：\n 1. 檔案內容為空。\n 2. 如果之前檔案存在，刪除之後重新創建。';
+$lang->editor->editFileError = '只能修改禪道檔案！';
+
+$lang->editor->notWritable   = "無法寫入，可能沒有權限。請嘗試執行 chmod 777 -R ";
+$lang->editor->notDelete     = '無法刪除，請檢查權限！';
+$lang->editor->emptyFileName = '請寫入一個檔案名！';
+
+$lang->editor->translate['config.php']  = 'config';
+$lang->editor->translate['control.php'] = 'control';
+$lang->editor->translate['model.php']   = 'model';
+
+$lang->editor->modules['action']      = '系統日誌';
+$lang->editor->modules['admin']       = '後台管理';
+$lang->editor->modules['api']         = 'API介面';
+$lang->editor->modules['bug']         = 'Bug管理';
+$lang->editor->modules['build']       = 'Build';
+$lang->editor->modules['common']      = '公有模組';
+$lang->editor->modules['company']     = '組織視圖';
+$lang->editor->modules['convert']     = '從其他系統導入';
+$lang->editor->modules['dept']        = '部門結構';
+$lang->editor->modules['doc']         = '文檔視圖';
+$lang->editor->modules['extension']   = '插件管理';
+$lang->editor->modules['file']        = '附件';
+$lang->editor->modules['group']       = '權限分組';
+$lang->editor->modules['index']       = '首頁';
+$lang->editor->modules['install']     = '安裝';
+$lang->editor->modules['misc']        = '雜項';
+$lang->editor->modules['my']          = '我的地盤';
+$lang->editor->modules['product']     = $lang->productCommon . '視圖';
+$lang->editor->modules['productplan'] = '計劃';
+$lang->editor->modules['project']     = $lang->projectCommon . '視圖';
+$lang->editor->modules['qa']          = '測試視圖';
+$lang->editor->modules['release']     = '發佈';
+$lang->editor->modules['report']      = '報表';
+$lang->editor->modules['search']      = '搜索';
+$lang->editor->modules['story']       = '需求';
+$lang->editor->modules['task']        = '任務';
+$lang->editor->modules['testcase']    = '用例管理';
+$lang->editor->modules['testtask']    = '測試任務';
+$lang->editor->modules['todo']        = '待辦';
+$lang->editor->modules['tree']        = '模組維護';
+$lang->editor->modules['upgrade']     = '升級';
+$lang->editor->modules['user']        = '用戶';
