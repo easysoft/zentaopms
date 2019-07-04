@@ -173,7 +173,7 @@ $lang->task->afterSubmit           = "Next ";
 $lang->task->successSaved          = "Created!";
 $lang->task->delayWarning          = " <strong class='text-danger'> Delay %s days </strong>";
 $lang->task->remindBug             = "This task is converted from a bug. Do you want to update the Bug:%s?";
-$lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, the linked Module, Story and AssignedTo will be changed. Do you want to do it?";
+$lang->task->confirmChangeProject  = "If you change {$lang->projectCommon}, Module, Story and AssignedTo will also be changed. Do you want to change it?";
 $lang->task->confirmFinish         = '"Left Hour" is 0. Do you want to change the status to "Finished"?';
 $lang->task->confirmRecord         = '"Left Hour" is 0. Do you want to set the task as "Finished"?';
 $lang->task->confirmTransfer       = '"Left Hour" is 0，Do you want to transfer task?';

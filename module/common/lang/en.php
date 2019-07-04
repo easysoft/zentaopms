@@ -510,7 +510,7 @@ $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
-$lang->downloadClient = "Download Desktop Client";
+$lang->downloadClient = "Download ZenTao Desktop";
 $lang->clientHelp     = "Client Help";
 $lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/";
 $lang->website        = "https://www.zentao.pm";
