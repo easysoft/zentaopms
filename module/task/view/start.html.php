@@ -47,7 +47,7 @@
           <th><?php echo $lang->task->consumed;?></th>
           <td>
             <div class='input-group'>
-              <?php $consumed = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? $task->team[$task->assignedTo]->consumed : $task->consumed;?>
+              <?php $consumed = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->consumed : $task->consumed;?>
               <?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
@@ -56,7 +56,7 @@
           <th><?php echo $lang->task->left;?></th>
           <td>
             <div class='input-group'>
-              <?php $left = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? $task->team[$task->assignedTo]->left : $task->left;?>
+              <?php $left = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->left : $task->left;?>
               <?php echo html::input('left', $left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
