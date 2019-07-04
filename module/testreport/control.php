@@ -130,25 +130,38 @@ class testreport extends control
             die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
-        if($objectType == 'testtask' and empty($objectID) and $extra)
+        if($objectType == 'testtask')
         {
-            $productID         = $extra;
+            if(empty($objectID) and $extra) $productID = $extra;
+            if($objectID)
+            {
+                $task      = $this->testtask->getById($objectID);
+                $productID = $this->commonAction($task->product, 'product');
+            }
+
             $taskPairs         = array();
             $scopeAndStatus[0] = 'local';
             $scopeAndStatus[1] = 'totalStatus';
             $tasks = $this->testtask->getProductTasks($productID, 0, 'id_desc', null, $scopeAndStatus);
-            foreach($tasks as $task) $taskPairs[$task->id] = $task->name;
+            foreach($tasks as $testTask)
+            {
+                if($testTask->build == 'trunk') continue;
+                $taskPairs[$testTask->id] = $testTask->name;
+            }
             if(empty($taskPairs)) die(js::alert($this->lang->testreport->noTestTask) . js::locate('back'));
 
+            if(empty($objectID))
+            {
+                $objectID  = key($taskPairs);
+                $task      = $this->testtask->getById($objectID);
+                $productID = $this->commonAction($task->product, 'product');
+            }
             $this->view->taskPairs = $taskPairs;
-            die($this->display('testreport', 'selectTask'));
         }
 
         if(empty($objectID)) die(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
         if($objectType == 'testtask')
         {
-            $task      = $this->testtask->getById($objectID);
-            $productID = $this->commonAction($task->product, 'product');
             if($productID != $task->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
             $productIdList[$productID] = $productID;
 

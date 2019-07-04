@@ -18,7 +18,15 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->testreport->create;?></h2>
+      <h2 class='clearfix'>
+        <div class='heading'><?php echo $lang->testreport->create;?></div>
+        <?php if(!empty($taskPairs)):?>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->testtask->common;?></span>
+          <?php echo html::select('selectTask', $taskPairs, $objectID, "class='form-control chosen'");?>
+        </div>
+        <?php endif;?>
+      </h2>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <div class='detail'>
