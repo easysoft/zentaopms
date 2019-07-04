@@ -10,24 +10,33 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->testreport->selectTask;?></h2>
     </div>
-    <form method='post'>
-      <table class='table table-form'>
-        <tr>
-          <th><?php echo $lang->testtask->common;?></th>
-          <td><?php echo html::select('testtask', $taskPairs, '', "class='form-control chosen'");?></td>
-        </tr>
-        <tr>
-          <th></th>
-          <td colspan='2'><?php echo html::submitButton();?></td>
-        </tr>
-      </table>
-    </form>
+    <table class='table table-form'>
+      <tr>
+        <th><?php echo $lang->testtask->common;?></th>
+        <td><?php echo html::select('testtask', $taskPairs, '', "class='form-control chosen'");?></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td colspan='2'><?php echo html::commonButton($lang->testreport->create, "onclick=locateToCreate(this)", 'btn btn-wide btn-primary') . ' ' . html::backButton();?></td>
+      </tr>
+    </table>
   </div>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
+<script>
+function locateToCreate(obj)
+{
+    var taskID = $(obj).closest('table').find('#testtask').val();
+    if(taskID)
+    {
+        location.href = createLink('testreport', 'create', 'objectID=' + taskID + '&objectType=testtask');
+        return false;
+    }
+}
+</script>
+<?php include '../../common/view/footer.html.php';?>
