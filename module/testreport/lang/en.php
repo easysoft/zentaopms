@@ -66,8 +66,8 @@ $lang->testreport->foundBugTip    = "Bugs generated in this build and generated 
 $lang->testreport->legacyBugTip   = "Active bugs, or solved bugs that are not in the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case run in the test period.";
 $lang->testreport->errorTrunk     = "You cannot create a Testing report for the trunk. Please modify the linked build!";
-$lang->testreport->noTestTask     = "该{$lang->productCommon}下还没有测试单，不能创建报告。请切换到有测试单的{$lang->productCommon}，再创建。";
-$lang->testreport->noObjectID     = "没有选定测试单或{$lang->projectCommon}，无法创建测试报告！";
+$lang->testreport->noTestTask     = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";
+$lang->testreport->noObjectID     = "No test request or {$lang->projectCommon} is selected, so no report can be generated.";
 $lang->testreport->moreProduct    = "Testing reports can only be generated for the same {$lang->productCommon}.";
 
 $lang->testreport->bugSummary = <<<EOD
