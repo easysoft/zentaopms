@@ -51,7 +51,7 @@ $lang->custom->bug->fields['severityList']   = 'Severity';
 $lang->custom->bug->fields['osList']         = 'OS';
 $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
-$lang->custom->bug->fields['resolutionList'] = 'Solution';
+$lang->custom->bug->fields['resolutionList'] = 'Resolution';
 $lang->custom->bug->fields['statusList']     = 'Status';
 $lang->custom->bug->fields['longlife']       = 'Pending Days';
 

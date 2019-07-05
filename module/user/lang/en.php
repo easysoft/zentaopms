@@ -97,7 +97,7 @@ $lang->user->dynamic     = 'Dynamics';
 $lang->user->openedBy    = 'CreatedBy %s';
 $lang->user->assignedTo  = 'AssignedTo %s';
 $lang->user->finishedBy  = 'FinishedBy %s';
-$lang->user->resolvedBy  = 'SolvedBy %s';
+$lang->user->resolvedBy  = 'ResolvedBy %s';
 $lang->user->closedBy    = 'ClosedBy %s';
 $lang->user->reviewedBy  = 'ReviewedBy %s';
 $lang->user->canceledBy  = 'CancelledBy %s';
@@ -139,7 +139,7 @@ $lang->user->statusList['delete'] = 'Deleted';
 $lang->user->personalData['createdTodo']  = 'Todos Created';
 $lang->user->personalData['createdStory'] = 'Stories Created';
 $lang->user->personalData['finishedTask'] = 'Tasks Finished';
-$lang->user->personalData['resolvedBug']  = 'Bugs Solved';
+$lang->user->personalData['resolvedBug']  = 'Bugs Resolved';
 $lang->user->personalData['createdCase']  = 'Cases Created';
 
 $lang->user->keepLogin['on']      = 'Keep Login';

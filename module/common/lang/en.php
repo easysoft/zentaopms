@@ -760,9 +760,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->openedbyme    = 'ReportedByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
     $lang->bug->menu->assigntome    = 'AssignedToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
-    $lang->bug->menu->resolvedbyme  = 'SolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->resolvedbyme  = 'ResolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
     $lang->bug->menu->toclosed      = 'ToBeClosed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
-    $lang->bug->menu->unresolved    = 'Unsolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
+    $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->more          = array('link' => 'More|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->bug->subMenu = new stdclass();
