@@ -51,7 +51,7 @@ $lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|repor
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug Reported Summary|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
-$lang->reportList->staff->lists[10]   = 'Team Workload|report|workload';
+$lang->reportList->staff->lists[10]   = 'Team Workload Summary|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->project       = $lang->projectCommon;
