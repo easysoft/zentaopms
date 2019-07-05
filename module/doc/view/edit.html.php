@@ -63,7 +63,7 @@
           <th><?php echo $lang->doclib->control;?></th>
           <td colspan='2'>
             <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
-            <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$doc->acl];?></span>
+            <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$doc->acl];?></span>
           </td>
         </tr>
         <tr id='whiteListBox' class='hidden'>
