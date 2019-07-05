@@ -151,10 +151,6 @@
                 <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
               </tr>
               <tr>
-                <th><?php echo $lang->task->realStarted;?></th>
-                <td><?php echo html::input('realStarted', $task->realStarted, "class='form-control form-date'");?></td>
-              </tr>
-              <tr>
                 <th><?php echo $lang->task->deadline;?></th>
                 <td><?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?></td>
               </tr>
@@ -180,10 +176,15 @@
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->legendLife;?></div>
+            <?php $thWidth = $this->app->getClientLang() == 'en' ? 'w-120px' : 'w-70px';?>
             <table class='table table-form'>
               <tr>
                 <th class=<?php echo $thWidth;?>><?php echo $lang->task->openedBy;?></th>
                 <td><?php echo $users[$task->openedBy];?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->task->realStarted;?></th>
+                <td><?php echo html::input('realStarted', $task->realStarted, "class='form-control form-date'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->finishedBy;?></th>
