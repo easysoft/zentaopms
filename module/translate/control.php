@@ -40,6 +40,9 @@ class translate extends control
      */
     public function index()
     {
+        /* Compare language when version is changed. */
+        $this->translate->compare();
+
         $itemCount  = $this->translate->getLangItemCount();
         $statistics = $this->translate->getLangStatistics();
         $finishedLangs = $translatingLangs = array();
