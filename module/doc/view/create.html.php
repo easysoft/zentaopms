@@ -37,7 +37,7 @@
       <table class='table table-form'> 
         <tbody>
           <tr>
-            <th><?php echo $lang->doc->lib;?></th>
+            <th class='w-110px'><?php echo $lang->doc->lib;?></th>
             <td> <?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td><td></td>
           </tr>  
           <tr>

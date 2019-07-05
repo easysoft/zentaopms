@@ -26,7 +26,7 @@
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'> 
         <tr>
-          <th><?php echo $lang->doc->lib;?></th>
+          <th class='w-110px'><?php echo $lang->doc->lib;?></th>
           <td> <?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td><td></td>
         </tr>  
         <tr>

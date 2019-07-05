@@ -22,7 +22,7 @@
         <form method='post' target='hiddenwin' >
           <table class='table table-form'>
             <tr>
-              <th class='w-80px'><?php echo $lang->doc->libType?></th>
+              <th class='w-110px'><?php echo $lang->doc->libType?></th>
               <td><?php echo html::radio('type', $libTypeList, $type ? $type : 'product')?></td>
             </tr>
             <tr class='product'>
