@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->story->create       = "Create Story";
-$lang->story->batchCreate  = "Batch Create Stories";
+$lang->story->batchCreate  = "Batch Create";
 $lang->story->change       = "Change";
 $lang->story->changeAction = "Change Story";
 $lang->story->changed      = 'Change';
@@ -40,8 +40,8 @@ $lang->story->caseCountAB  = 'C';
 $lang->story->linkStory    = 'Link Story';
 $lang->story->unlinkStory  = 'UnLinked';
 $lang->story->export       = "Export";
-$lang->story->zeroCase     = "Story with 0 case";
-$lang->story->zeroTask     = "Story with 0 task";
+$lang->story->zeroCase     = "Stories without cases";
+$lang->story->zeroTask     = "Stories without tasks";
 $lang->story->reportChart  = "Report";
 $lang->story->copyTitle    = "Copy Title";
 $lang->story->batchChangePlan   = "Batch Change Plans";

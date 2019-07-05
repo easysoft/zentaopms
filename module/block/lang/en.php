@@ -36,7 +36,7 @@ $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Test Request Detail';
 
-$lang->block->leftToday = 'Remaining Work';
+$lang->block->leftToday = 'Remained Work';
 $lang->block->myTask    = 'My Tasks';
 $lang->block->myStory   = 'Stories';
 $lang->block->myBug     = 'Bugs';

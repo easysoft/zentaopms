@@ -43,7 +43,7 @@ $lang->file->addedDate = 'Added';
 $lang->file->downloads = 'Downloads';
 $lang->file->extra     = 'Comment';
 
-$lang->file->dragFile            = 'Drag files here';
+$lang->file->dragFile            = 'Drag images here.';
 $lang->file->childTaskTips       = 'It\'s a child task if there is a \'>\' before the name.';
 $lang->file->errorNotExists      = "<span class='text-red'>'%s' is not found.</span>";
 $lang->file->errorCanNotWrite    = "<span class='text-red'>'%s' is not writable. Please change its permission. Enter <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";

@@ -1,7 +1,7 @@
 <?php
 $lang->mail->common        = 'Email Settings';
 $lang->mail->index         = 'Home';
-$lang->mail->detect        = 'Testing';
+$lang->mail->detect        = 'Detect';
 $lang->mail->edit          = 'Edit Settings';
 $lang->mail->save          = 'Save';
 $lang->mail->test          = 'Email Sending Test';
