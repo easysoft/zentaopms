@@ -107,9 +107,9 @@ $lang->bug->openedByMe         = 'ReportedByMe';
 $lang->bug->resolvedByMe       = 'ResolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
-$lang->bug->unResolved         = 'Unresolved';
-$lang->bug->toClosed           = 'Unclosed';
-$lang->bug->unclosed           = 'Active';
+$lang->bug->unResolved         = 'Active';
+$lang->bug->toClosed           = 'ToClose';
+$lang->bug->unclosed           = 'Unclosed';
 $lang->bug->unconfirmed        = 'Unconfirmed';
 $lang->bug->longLifeBugs       = 'Stalled';
 $lang->bug->postponedBugs      = 'Postponed';
@@ -159,11 +159,11 @@ $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
-$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> unresolved.";
+$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, stories and tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
+$lang->bug->skipClose             = 'Bug %s is active. You cannot close it.';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";
