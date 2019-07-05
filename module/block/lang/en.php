@@ -340,7 +340,7 @@ $lang->block->typeList->task['canceledBy'] = 'CancelledByMe';
 
 $lang->block->typeList->bug['assignedTo'] = 'AssignedToMe';
 $lang->block->typeList->bug['openedBy']   = 'CreatedByMe';
-$lang->block->typeList->bug['resolvedBy'] = 'SolvedByMe';
+$lang->block->typeList->bug['resolvedBy'] = 'ResolvedByMe';
 $lang->block->typeList->bug['closedBy']   = 'ClosedByMe';
 
 $lang->block->typeList->case['assigntome'] = 'AssignedToMe';

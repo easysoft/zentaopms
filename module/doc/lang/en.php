@@ -188,7 +188,7 @@ $lang->doc->placeholder->url = 'URL';
 
 $lang->doclib = new stdclass();
 $lang->doclib->name    = 'Name';
-$lang->doclib->control = 'ACL';
+$lang->doclib->control = 'Access Control';
 $lang->doclib->group   = 'Group';
 $lang->doclib->user    = 'User';
 $lang->doclib->files   = 'Attachments';

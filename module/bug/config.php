@@ -289,17 +289,17 @@ $config->bug->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedByAB';
 $config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedBy']['width']    = '70';
+$config->bug->datatable->fieldList['resolvedBy']['width']    = '100';
 $config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
 $config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolution']['width']    = '80';
+$config->bug->datatable->fieldList['resolution']['width']    = '100';
 $config->bug->datatable->fieldList['resolution']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';
 $config->bug->datatable->fieldList['resolvedDate']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedDate']['width']    = '90';
+$config->bug->datatable->fieldList['resolvedDate']['width']    = '120';
 $config->bug->datatable->fieldList['resolvedDate']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedBuild']['title']    = 'resolvedBuild';

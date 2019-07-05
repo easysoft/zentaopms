@@ -159,11 +159,11 @@ $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
-$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> unsolved.";
+$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> unresolved.";
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, stories and tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s is not solved. You cannot close it.';
+$lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";
@@ -244,7 +244,7 @@ $lang->bug->typeList['others']       = 'Others';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
-$lang->bug->statusList['resolved'] = 'Solved';
+$lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
 $lang->bug->confirmedList[1] = 'Yes';
@@ -254,7 +254,7 @@ $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = 'As Design';
 $lang->bug->resolutionList['duplicate']  = 'Duplicated';
 $lang->bug->resolutionList['external']   = 'External';
-$lang->bug->resolutionList['fixed']      = 'Solved';
+$lang->bug->resolutionList['fixed']      = 'Resolved';
 $lang->bug->resolutionList['notrepro']   = 'Irreproducible';
 $lang->bug->resolutionList['postponed']  = 'Postponed';
 $lang->bug->resolutionList['willnotfix'] = "Won't Fix";
@@ -358,7 +358,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
 
 /* 操作记录。*/
 $lang->bug->action = new stdclass();
-$lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the solution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
+$lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the resolution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, converted by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->totask              = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->linked2plan         = array('main' => '$date, linked by <strong>$actor</strong> to Plan <strong>$extra</strong>.');

@@ -152,7 +152,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$task->deleted):?>
         <?php
-                  if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
         common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
@@ -326,9 +326,9 @@
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
                   <td class='text-left'><?php echo zget($users, $member->account)?></td>
-                  <td><?php echo $member->estimate?></td>
-                  <td><?php echo $member->consumed?></td>
-                  <td><?php echo $member->left?></td>
+                  <td><?php echo (float)$member->estimate?></td>
+                  <td><?php echo (float)$member->consumed?></td>
+                  <td><?php echo (float)$member->left?></td>
                 </tr>
                 <?php endforeach;?>
             </table>

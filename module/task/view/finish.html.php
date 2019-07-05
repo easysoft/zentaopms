@@ -43,7 +43,7 @@
         <?php if(!empty($task->team)):?>
         <tr>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->task->hasConsumed;?></th>
-          <td class='w-p25-f'><?php echo $task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
+          <td class='w-p25-f'><?php echo (float)$task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -55,9 +55,9 @@
         <tr>
           <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
-          <?php $consumed = empty($task->team) ? $task->consumed : $task->myConsumed;?>
+          <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
           <?php 
-          echo "<span id='totalConsumed'>" . $consumed . "</span>" . $lang->workingHour . html::hidden('consumed', $consumed);
+          echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
           js::set('consumed', $consumed);
           ?>
           </td>

@@ -147,8 +147,8 @@ $lang->testtask->report->charts['testTaskPerRunner']    = 'RunBy Report';
 $lang->testtask->report->charts['bugSeverityGroups']    = 'Bug Severity Distribution';
 $lang->testtask->report->charts['bugStatusGroups']      = 'Bug Status Distribution';
 $lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug ReportedBy Distribution';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug SolvedBy Distribution';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug Solution Distribution';
+$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug ResolvedBy Distribution';
+$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug Resolution Distribution';
 $lang->testtask->report->charts['bugModuleGroups']      = 'Bug Module Distribution';
 
 $lang->testtask->report->options = new stdclass();

@@ -39,8 +39,8 @@ $lang->translate->allTotal           = 'Total';
 $lang->translate->translatedTotal    = 'Translated';
 $lang->translate->changedTotal       = 'Modified';
 $lang->translate->reviewedTotal      = 'Reviewed';
-$lang->translate->translatedProgress = 'Translation';
-$lang->translate->reviewedProgress   = 'Review';
+$lang->translate->translatedProgress = 'Translation %';
+$lang->translate->reviewedProgress   = 'Review %';
 
 $lang->translate->builtIn  = 'Built-in Language';
 $lang->translate->finished = 'Finished Translation';

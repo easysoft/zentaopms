@@ -54,6 +54,7 @@ class testtask extends control
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
+        $this->session->set('buildList', $this->app->getURI(true));
 
         $scopeAndStatus = explode(',',$type);
         $this->session->set('testTaskVersionScope', $scopeAndStatus[0]);
