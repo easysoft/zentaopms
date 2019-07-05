@@ -24,7 +24,7 @@
     <form class='main-form form-ajax' method='post' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-100px'><?php echo $lang->translate->name;?></th>
+          <th class='w-150px'><?php echo $lang->translate->name;?></th>
           <td class='w-p30 required'><?php echo html::input('name', '', "class='form-control'");?></td>
           <td></td>
         </tr>
