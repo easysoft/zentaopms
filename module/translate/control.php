@@ -160,6 +160,13 @@ class translate extends control
 
         if($_POST)
         {
+            $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+            if($statusFile)
+            {
+                $this->app->loadLang('editor');
+                $this->send(array('result' => 'fail', 'message' => str_replace('\n', '<br />', sprintf($this->lang->editor->noticeOkFile, $statusFile))));
+            }
+
             $this->translate->addTranslation($language, $module, $referLang);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
