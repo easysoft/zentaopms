@@ -18,10 +18,10 @@ $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Case";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
-$lang->testsuite->batchUnlinkCases = "Batch Unlink Cases";
+$lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
 $lang->testsuite->deleted          = 'Deleted';
 $lang->testsuite->exportTemplet    = 'Export Template';
-$lang->testsuite->batchCreateCase  = 'Batch Create Cases';
+$lang->testsuite->batchCreateCase  = 'Batch Create';
 $lang->testsuite->import           = 'Import';
 $lang->testsuite->showImport       = 'Imported Data';
 $lang->testsuite->successSaved     = 'Saved';
@@ -39,7 +39,7 @@ $lang->testsuite->legendBasicInfo = 'Basic Info';
 
 $lang->testsuite->unlinkedCases = 'Unlinked Cases';
 
-$lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
+$lang->testsuite->confirmDelete     = 'Do you want to delete this test suite?';
 $lang->testsuite->libraryDelete     = 'Do you want to delete this library？';
 $lang->testsuite->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testsuite->noticeNone        = 'You have not created any suite yet.';

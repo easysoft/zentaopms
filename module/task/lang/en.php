@@ -11,7 +11,7 @@
  */
 $lang->task->index               = "Home";
 $lang->task->create              = "Create Task";
-$lang->task->batchCreate         = "Batch Create Tasks";
+$lang->task->batchCreate         = "Batch Create";
 $lang->task->batchCreateChildren = "Batch Create Child Tasks";
 $lang->task->batchEdit           = "Batch Edit";
 $lang->task->batchChangeModule   = "Batch Change Modules";
@@ -70,8 +70,8 @@ $lang->task->hour              = 'Hours';
 $lang->task->consumedThisTime  = 'Cost';
 $lang->task->leftThisTime      = 'Left';
 $lang->task->datePlan          = 'Timeframe';
-$lang->task->estStarted        = 'Start';
-$lang->task->realStarted       = 'Started';
+$lang->task->estStarted        = 'Start Date';
+$lang->task->realStarted       = 'Actual Start';
 $lang->task->date              = 'Date';
 $lang->task->deadline          = 'Deadline';
 $lang->task->deadlineAB        = 'Deadline';
