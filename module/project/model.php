@@ -119,13 +119,20 @@ class projectModel extends model
             /* Replace for dropdown submenu. */
             if(isset($this->lang->project->subMenu->$key))
             {
+                $projectSubMenu = $this->lang->project->subMenu->$key;
                 $subMenu = common::createSubMenu($this->lang->project->subMenu->$key, $projectID);
 
                 if(!empty($subMenu))
                 {
-                    foreach($subMenu as $menu)
+                    foreach($subMenu as $menuKey => $menu)
                     {
-                        if($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']))
+                        $itemMenu = zget($projectSubMenu, $menuKey, '');
+                        if(($moduleName == strtolower($menu->link['module']) and 
+                            (
+                                $methodName == strtolower($menu->link['method']) or
+                                (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false)
+                            )) or (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false)
+                        )
                         {
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
@@ -163,20 +170,6 @@ class projectModel extends model
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div></div>";
         if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProject->name} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
-
-        if($buildID and !$isMobile)
-        {
-            setCookie('lastBuild', $buildID, $this->config->cookieLife, $this->config->webRoot);
-            $currentBuild = $this->loadModel('build')->getById($buildID);
-
-            if($currentBuild)
-            {
-                $dropMenuLink = helper::createLink('build', 'ajaxGetProjectBuilds', "projectID=$projectID&productID=&varName=dropdownList");
-                $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem'>{$currentBuild->name} <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-                $output .= "</div></div></div>";
-            }
-        }
 
         return $output;
     }
@@ -422,7 +415,7 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open' or $project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }
@@ -603,7 +596,7 @@ class projectModel extends model
             $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
                 ->where('deadline')->ne('0000-00-00')
                 ->andWhere('status')->in('wait,doing')
-                ->andWhere('project')->eq($project->id)
+                ->andWhere('project')->eq($projectID)
                 ->fetchAll();
             foreach($tasks as $task)
             {
@@ -897,6 +890,7 @@ class projectModel extends model
         $burns = $this->dao->select('project, date AS name, `left` AS value')
             ->from(TABLE_BURN)
             ->where('project')->in($projectKeys)
+            ->andWhere('task')->eq(0)
             ->orderBy('date desc')
             ->fetchGroup('project', 'name');
 
@@ -1648,9 +1642,9 @@ class projectModel extends model
         $this->loadModel('action')->create('story', $storyID, 'unlinkedfromproject', '', $projectID);
 
         $tasks = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('project')->eq($projectID)->andWhere('status')->in('wait,doing')->fetchPairs('id');
-        $this->dao->update(TABLE_TASK)->set('status')->eq('cancel')->where('id')->in($tasks)->exec();
         foreach($tasks as $taskID)
         {
+            if(empty($taskID)) continue;
             $changes  = $this->loadModel('task')->cancel($taskID);
             $actionID = $this->action->create('task', $taskID, 'Canceled');
             $this->action->logHistory($actionID, $changes);
@@ -1758,6 +1752,8 @@ class projectModel extends model
         extract($data);
 
         $accounts = array_unique($accounts);
+        $limited  = array_values($limited);
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->exec();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1768,24 +1764,12 @@ class projectModel extends model
             $member->hours   = $hours[$key];
             $member->limited = $limited[$key];
 
-            $mode = $modes[$key];
-            if($mode == 'update')
-            {
-                $this->dao->update(TABLE_TEAM)
-                    ->data($member)
-                    ->where('root')->eq((int)$projectID)
-                    ->andWhere('type')->eq('project')
-                    ->andWhere('account')->eq($account)
-                    ->exec();
-            }
-            else
-            {
-                $member->root    = (int)$projectID;
-                $member->account = $account;
-                $member->join    = helper::today();
-                $member->type    = 'project';
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-            }
+            $member->root    = (int)$projectID;
+            $member->account = $account;
+            $member->join    = helper::today();
+            $member->type    = 'project';
+
+            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
         $this->loadModel('user')->updateUserView($projectID, 'project', $accounts);
 
@@ -1876,7 +1860,7 @@ class projectModel extends model
     public function fixFirst($projectID)
     {
         $project  = $this->getById($projectID);
-        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('date')->eq($project->begin)->fetch();
+        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('project')->eq($projectID)->andWhere('task')->eq(0)->andWhere('date')->eq($project->begin)->fetch();
         $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
 
         $data = fixer::input('post')
@@ -1904,7 +1888,7 @@ class projectModel extends model
         $project    = $this->getById($projectID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
-        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->orderBy('date DESC')->fetchAll('name');
+        $sets = $this->dao->select('date AS name, `left` AS value, estimate')->from(TABLE_BURN)->where('project')->eq((int)$projectID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
 
         $count    = 0;
         $burnData = array();

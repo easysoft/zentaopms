@@ -77,11 +77,11 @@ $lang->todo->priList[2] = '較高';
 $lang->todo->priList[4] = '最低';
 $lang->todo->priList[0] = '';
 
-$lang->todo->typeList['custom'] = '自定義';
-$lang->todo->typeList['cycle']  = '周期';
-$lang->todo->typeList['bug']    = 'Bug';
-$lang->todo->typeList['task']   = $lang->projectCommon . '任務';
-$lang->todo->typeList['story']  = $lang->projectCommon . '需求';
+$lang->todo->typeList['custom']   = '自定義';
+$lang->todo->typeList['cycle']    = '周期';
+$lang->todo->typeList['bug']      = 'Bug';
+$lang->todo->typeList['task']     = $lang->projectCommon . '任務';
+$lang->todo->typeList['story']    = $lang->projectCommon . '需求';
 
 global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);

@@ -14,12 +14,12 @@
   <form class="load-indicator main-form form-ajax" method='post'>
     <div class='main-header'>
       <div class='heading'>
-        <strong><?php echo $lang->custom->score?></strong>
+        <strong><?php echo $lang->custom->scoreTitle?></strong>
       </div>
     </div>
     <table class='table table-form'>
       <tr>
-        <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
+        <th class='w-100px text-top'><?php echo $lang->custom->scoreTitle;?></th>
         <td>
           <?php $checkedKey = isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0;?>
           <?php foreach($lang->custom->scoreStatus as $key => $value):?>

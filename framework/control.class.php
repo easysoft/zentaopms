@@ -41,7 +41,7 @@ class control extends baseControl
         $mainViewFile = $modulePath . 'view' . DS . $this->devicePrefix . $methodName . '.' . $viewType . '.php';
 
         /* If the main view file doesn't exist, set the device prefix to empty and reset the main view file. */
-        if(!file_exists($mainViewFile))
+        if(!file_exists($mainViewFile) and $this->app->clientDevice != 'mobile')
         {
             $originalPrefix     = $this->devicePrefix;
             $this->devicePrefix = '';
@@ -58,7 +58,10 @@ class control extends baseControl
 
             $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
             $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
-            if(!is_file($viewFile)) $this->app->triggerError("the view file $viewFile not found", __FILE__, __LINE__, $exit = true);
+            if(!is_file($viewFile))
+            {
+                die(js::error($this->lang->notPage) . js::locate('back'));
+            }
 
             $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");

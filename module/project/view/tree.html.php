@@ -66,7 +66,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
       <?php if(common::hasPriv('task', 'create', $checkObject)):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -86,4 +85,12 @@
   </div>
   <?php endif;?>
 </div>
+<?php js::set('type', $level);?>
+<?php js::set('collapse', false);?>
+<script>
+$(function()
+{
+    $('[data-type=<?php echo $level;?>]').addClass('btn-active-text');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

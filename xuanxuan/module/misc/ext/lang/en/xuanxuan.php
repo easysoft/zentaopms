@@ -5,8 +5,8 @@ $lang->misc->client->os          = 'Select OS';
 $lang->misc->client->download    = 'Download';
 $lang->misc->client->downloading = 'Downloading:';
 $lang->misc->client->downloaded  = 'Downloaded!';
-$lang->misc->client->setting     = 'Setting';
-$lang->misc->client->setted      = 'Setting is done!';
+$lang->misc->client->setting     = 'Settings';
+$lang->misc->client->setted      = 'Done!';
 
 $lang->misc->client->osList['win64']   = 'Windows 64';
 $lang->misc->client->osList['win32']   = 'Windows 32';

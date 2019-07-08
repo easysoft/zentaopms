@@ -36,7 +36,7 @@ class actionModel extends model
         $actor      = $actor ? $actor : $this->app->user->account;
         $actionType = strtolower($actionType);
         if($actor == 'guest' and $actionType == 'logout') return false;
-
+        
         $action = new stdclass();
 
         $objectType = str_replace('`', '', $objectType);
@@ -161,7 +161,7 @@ class actionModel extends model
             $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
 
             /* Process story, release and task. */
-            if($objectType == 'story')   $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->fetch('project');
+            if($objectType == 'story')   $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
             if($objectType == 'task')    
             {
@@ -291,7 +291,17 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
-            elseif($actionName == 'totask')
+            elseif($actionName == 'createchildren')
+            {
+                $names = $this->dao->select('id,name')->from(TABLE_TASK)->where('id')->in($action->extra)->fetchPairs('id', 'name');
+                $action->extra = '';
+                if($names)
+                {
+                    foreach($names as $id => $name) $action->extra .= common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
+                }
+                $action->extra = trim(trim($action->extra), ',');
+            }
+            elseif($actionName == 'totask' or $actionName == 'linkchildtask' or $actionName == 'unlinkchildrentask' or $actionName == 'linkparenttask' or $actionName == 'unlinkparenttask')
             {
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
@@ -346,7 +356,11 @@ class actionModel extends model
             {
                 $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
                 $action->extra  = '';
-                if($linkedProducts) $action->extra = sprintf($this->lang->project->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
+                if($linkedProducts)
+                {
+                    foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
+                    $action->extra = sprintf($this->lang->project->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
+                }
             }
             $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
 
@@ -365,7 +379,7 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-
+            
             $action->comment = $this->file->setImgSize($action->comment, $this->config->action->commonImgSize);
             $actions[$actionID] = $action;
         }
@@ -488,7 +502,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printAction($action)
+    public function printAction($action, $desc = '')
     {
         if(!isset($action->objectType) or !isset($action->action)) return false;
 
@@ -502,17 +516,20 @@ class actionModel extends model
          * 2. If no defined in the module language, search the common action define.
          * 3. If not found in the lang->action->desc, use the $lang->action->desc->common or $lang->action->desc->extra as the default.
          */
-        if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+        if(empty($desc))
         {
-            $desc = $this->lang->$objectType->action->$actionType;
-        }
-        elseif(isset($this->lang->action->desc->$actionType))
-        {
-            $desc = $this->lang->action->desc->$actionType;
-        }
-        else
-        {
-            $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+            if(isset($this->lang->$objectType) && isset($this->lang->$objectType->action->$actionType))
+            {
+                $desc = $this->lang->$objectType->action->$actionType;
+            }
+            elseif(isset($this->lang->action->desc->$actionType))
+            {
+                $desc = $this->lang->action->desc->$actionType;
+            }
+            else
+            {
+                $desc = $action->extra ? $this->lang->action->desc->extra : $this->lang->action->desc->common;
+            }
         }
 
         if($this->app->getViewType() == 'mhtml') $action->date = date('m-d H:i', strtotime($action->date));
@@ -598,7 +615,9 @@ class actionModel extends model
         $this->loadModel('doc');
         $libs = $this->doc->getLibs('all');
         $docs = $this->doc->getPrivDocs(array_keys($libs));
-
+        
+        $actionCondition = $this->getActionCondition();
+        if(is_array($actionCondition)) return array();
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where(1)
@@ -616,6 +635,7 @@ class actionModel extends model
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('objectType')->notin('bug,build,project,task,taskcase,testreport,testsuite,testtask')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('objectType')->notin('product,productplan,release,story,testcase,testreport,testsuite')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('objectType')->notin('project,productplan,release,story,task')->fi()
+            ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -623,7 +643,28 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        return $this->transformActions($actions);
+       
+        return $this->transformActions($actions);;
+    }
+
+    /**
+     * Get dynamic show action
+     * 
+     * @return String
+     */
+    public function getActionCondition()
+    {
+        $actionCondition = '';
+        if(isset($this->app->user->rights['acls']['actions']))
+        {
+            if(empty($this->app->user->rights['acls']['actions'])) return array();
+            foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
+            {
+                $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
+            }
+            $actionCondition = trim($actionCondition, 'or ');
+        }
+        return $actionCondition;
     }
 
     /**
@@ -700,8 +741,11 @@ class actionModel extends model
      */
     public function getBySQL($sql, $orderBy, $pager = null)
     {
+        $actionCondition = $this->getActionCondition();
+        if(is_array($actionCondition)) return array();
         return $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where($sql)
+            ->beginIF(!empty($actionCondition))->andWhere("($actionCondition)")->fi()
             ->beginIF($this->config->global->flow == 'onlyStory')->andWhere('objectType')->notin('bug,build,project,task,taskcase,testreport,testsuite,testtask')->fi()
             ->beginIF($this->config->global->flow == 'onlyTask')->andWhere('objectType')->notin('product,productplan,release,story,testcase,testreport,testsuite')->fi()
             ->beginIF($this->config->global->flow == 'onlyTest')->andWhere('objectType')->notin('project,productplan,release,story,task')->fi()
@@ -1008,7 +1052,7 @@ class actionModel extends model
         foreach($actions as $action)
         {
             $timeStamp    = strtotime(isset($action->originalDate) ? $action->originalDate : $action->date);
-            $date         = date(DT_DATE4, $timeStamp);
+            $date         = $this->app->getClientLang() == 'en' ? date('M d', $timeStamp) : date(DT_DATE4, $timeStamp);
             $action->time = date(DT_TIME2, $timeStamp);
             $dateGroup[$date][] = $action;
         }

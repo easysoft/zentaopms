@@ -10,10 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include $this->app->getModuleRoot() . 'message/view/header.html.php';?>
+<?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-600px'>
+  <div class='main-header'>
+    <h2><?php echo $lang->webhook->setting;?></h2>
+  </div>
+  <div class='center-block mw-700px'>
     <form id='logForm' method='post' class='ajaxForm'>
       <table class='table table-form'>
         <tr>
@@ -31,7 +34,4 @@
     </form>
   </div>
 </div>
-<script>
-$(function(){$('#mainMenu #webhookTab').addClass('btn-active-text');})
-</script>
 <?php include '../../common/view/footer.html.php';?>

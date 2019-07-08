@@ -155,6 +155,22 @@ class tree extends control
             $title      = $this->lang->tree->manageLine;
             $position[] = $this->lang->tree->manageLine;
         }
+        elseif($viewType == 'trainskill')
+        {
+            $this->lang->set('menugroup.tree', 'train');
+            $this->lang->tree->menu = $this->lang->trainskill->menu;
+
+            $title      = $this->lang->tree->manageTrainskill;
+            $position[] = $this->lang->tree->manageTrainskill;
+        }
+        elseif($viewType == 'trainpost')
+        {   
+            $this->lang->set('menugroup.tree', 'train');
+            $this->lang->tree->menu = $this->lang->train->menu;
+
+            $title      = $this->lang->tree->manageTrainpost;
+            $position[] = $this->lang->tree->manageTrainpost;
+        }
 
         $parentModules = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;

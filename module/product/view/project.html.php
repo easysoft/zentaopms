@@ -13,6 +13,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->project;?></span></span>
+    <span class="label label-info"><?php echo $lang->product->projectInfo;?></span>
   </div>
 </div>
 <div id="mainContent">
@@ -21,7 +22,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->project->noProject;?></span>
       <?php if(common::hasPriv('project', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('project', 'create'), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -31,11 +31,11 @@
     <table class="table table-fixed">
       <thead>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th><?php echo $lang->projectCommon;?></th>
           <th class='w-100px'><?php echo $lang->project->code;?></th>
           <th class='w-120px'><?php echo $lang->project->end;?></th>
           <th class='w-80px'><?php echo $lang->project->status;?></th>
-          <th class='w-50px'><?php echo $lang->project->totalEstimate;?></th>
+          <th class='w-80px'><?php echo $lang->project->totalEstimate;?></th>
           <th class='w-50px'><?php echo $lang->project->totalConsumed;?></th>
           <th class='w-50px'><?php echo $lang->project->totalLeft;?></th>
           <th class='w-150px'><?php echo $lang->project->progress;?></th>

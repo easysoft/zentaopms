@@ -31,17 +31,18 @@ $lang->product->export      = '导出数据';
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
 
-$lang->product->plans    = '计划数';
-$lang->product->releases = '发布数';
-$lang->product->docs     = '文档数';
-$lang->product->bugs     = '相关Bug';
-$lang->product->projects = "关联{$lang->projectCommon}数";
-$lang->product->cases    = '用例数';
-$lang->product->builds   = 'BUILD数';
-$lang->product->roadmap  = '路线图';
-$lang->product->doc      = '文档列表';
-$lang->product->project  = $lang->projectCommon . '列表';
-$lang->product->build    = '版本列表';
+$lang->product->plans       = '计划数';
+$lang->product->releases    = '发布数';
+$lang->product->docs        = '文档数';
+$lang->product->bugs        = '相关Bug';
+$lang->product->projects    = "关联{$lang->projectCommon}数";
+$lang->product->cases       = '用例数';
+$lang->product->builds      = 'BUILD数';
+$lang->product->roadmap     = '路线图';
+$lang->product->doc         = '文档列表';
+$lang->product->project     = $lang->projectCommon . '列表';
+$lang->product->build       = '版本列表';
+$lang->product->projectInfo = "所有与此产品关联的{$lang->projectCommon}";
 
 $lang->product->currentProject   = '当前' . $lang->projectCommon;
 $lang->product->activeStories    = '激活需求';
@@ -61,6 +62,7 @@ $lang->product->code          = "{$lang->productCommon}代号";
 $lang->product->line          = "{$lang->productCommon}线";
 $lang->product->order         = '排序';
 $lang->product->type          = "{$lang->productCommon}类型";
+$lang->product->typeAB        = "类型";
 $lang->product->status        = '状态';
 $lang->product->desc          = "{$lang->productCommon}描述";
 $lang->product->manager       = '负责人';
@@ -92,6 +94,7 @@ $lang->product->willClose    = '待关闭';
 $lang->product->closedStory  = '已关闭';
 $lang->product->unclosed     = '未关闭';
 $lang->product->unplan       = '未计划';
+$lang->product->viewByUser   = '按用户查看';
 
 $lang->product->allStory             = '所有';
 $lang->product->allProduct           = '全部' . $lang->productCommon;
@@ -104,7 +107,7 @@ $lang->product->typeList['platform'] = '多平台';
 
 $lang->product->typeTips = array();
 $lang->product->typeTips['branch']   = '(适用于客户定制场景)';
-$lang->product->typeTips['platform'] = '(适用于跨平台应用开发，比如ios、安卓、pc端等)';
+$lang->product->typeTips['platform'] = '(适用于跨平台应用开发，比如IOS、安卓、PC端等)';
 
 $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = '分支';

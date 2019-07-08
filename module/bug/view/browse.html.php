@@ -68,28 +68,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         }
         elseif($menuItem->name == 'QUERY')
         {
-            if(isset($lang->custom->queryList))
-            {
-                echo '<div class="btn-group" id="query">';
-                $active  = '';
-                $current = $menuItem->text;
-                $dropdownHtml = "<ul class='dropdown-menu'>";
-                foreach($lang->custom->queryList as $queryID => $queryTitle)
-                {
-                    if($browseType == 'bysearch' and $queryID == $param)
-                    {
-                        $active  = 'btn-active-text';
-                        $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                    }
-                    $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
-                    $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $queryTitle);
-                }
-                $dropdownHtml .= '</ul>';
-
-                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
-                echo $dropdownHtml;
-                echo '</div>';
-            }
+            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
+            $isBySearch       = $browseType == 'bysearch';
+            include '../../common/view/querymenu.html.php';
         }
         elseif($menuItem->name == 'more')
         {
@@ -173,7 +154,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <p>
         <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
         <?php if(common::hasPriv('bug', 'create')):?>
-        <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -204,6 +184,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           {
               if($value->show)
               {
+                  if($this->app->getClientLang() == 'en' and $value->id == 'severity')  $value->name = $lang->bug->severity;
+                  if($this->app->getClientLang() == 'en' and $value->id == 'pri')       $value->name = $lang->bug->pri;
+                  if($this->app->getClientLang() == 'en' and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
                   $this->datatable->printHead($value, $orderBy, $vars);
                   $columns ++;
               }

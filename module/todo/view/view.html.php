@@ -35,6 +35,7 @@
         </div>
         <div class='detail-content'><?php echo $todo->desc;?></div>
       </div>
+      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
     <div class='main-actions'>
@@ -44,8 +45,6 @@
         if($todo->status == 'done') common::printLink('todo', 'close', "todoID=$todo->id", "<i class='icon icon-off'></i>", 'hiddenwin', "title='{$lang->todo->close}' class='btn showinonlybody'");
         common::printLink('todo', 'edit', "todoID=$todo->id", "<i class='icon icon-edit'></i>", '', "title='{$lang->todo->edit}' class='btn showinonlybody'");
         common::printLink('todo', 'delete', "todoID=$todo->id", "<i class='icon icon-trash'></i>", 'hiddenwin', "title='{$lang->todo->delete}' class='btn showinonlybody'");
-
-        if(common::hasPriv('action', 'comment', $todo)) echo html::a('#commentModal', '<i class="icon-chat-line"></i>', '', "title='{$lang->comment}' data-toggle='modal' class='btn'");
 
         if($this->session->todoList)
         {
@@ -94,7 +93,8 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <th class='w-90px'><?php echo $lang->todo->pri;?></th>
+              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->pri;?></th>
               <td><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
             </tr>
             <tr>
@@ -137,11 +137,12 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <th class='w-80px'><?php echo $lang->todo->beginAndEnd?></th>
+              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->beginAndEnd?></th>
               <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
             </tr>
             <tr>
-              <th class='w-80px text-top'><?php echo $lang->todo->cycleConfig?></th>
+              <th class='<?php echo $colWidth;?> text-top'><?php echo $lang->todo->cycleConfig?></th>
               <td>
                 <?php
                 if($todo->config->type == 'day')
@@ -170,22 +171,6 @@
 </div>
 <div id="mainActions" class='main-actions'>
   <div class="container"></div>
-</div>
-<div class="modal fade" id="commentModal">
-  <div class="modal-dialog mw-600px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->comment;?></h4>
-      </div>
-      <div class="modal-body">
-        <form method='post' action='<?php echo $this->createLink('action', 'comment', "objectType=todo&objectID=$todo->id")?>' target='hiddenwin'>
-          <div class="form-group"><?php echo html::textarea('comment', '',"rows='5' class='w-p100'");?></div>
-          <div class='text-center'><?php echo html::submitButton();?></div>
-        </form>
-      </div>
-    </div>
-  </div>
 </div>
 <div class="modal fade" id="projectModal">
   <div class="modal-dialog mw-500px">
@@ -242,4 +227,7 @@
 <?php else:?>
 <?php echo $lang->todo->thisIsPrivate;?>
 <?php endif;?>
+<script>
+$(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
+</script>
 <?php include '../../common/view/footer.html.php';?>

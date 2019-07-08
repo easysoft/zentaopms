@@ -5,3 +5,4 @@
 @-moz-document url-prefix(){.table.table-form tbody > tr:last-child td, .table.table-form tbody > tr:last-child th {border-bottom: 1px solid #ddd}}
 
 #mainMenu #groupName{line-height:33px; float: left}
+.checkbox-right{padding-left:0px !important;}

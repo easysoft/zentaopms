@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
   <div id='mainContent' class="main-row">
     <div class="col-8 main-col">
       <div class="row">
@@ -132,7 +133,7 @@
                 <?php $i++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">
-                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe'");?>
+                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe' data-width='1000px'");?>
                 </div>
                 <?php endif;?>
               </div>
@@ -141,6 +142,7 @@
         </div>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
+          <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
           <?php include '../../common/view/action.html.php';?>
         </div>
       </div>
@@ -223,8 +225,9 @@
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
+                    <tr class='widthTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
                     <tr>
-                      <td colspan="2">
+                      <td colspan="4">
                         <?php $progress = ($project->totalConsumed + $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;?>
                         <?php echo $lang->projectCommon . $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
                         <div class="progress inline-block">

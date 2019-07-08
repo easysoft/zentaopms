@@ -158,7 +158,7 @@ class story extends control
         /* Init vars. */
         $source     = '';
         $sourceNote = '';
-        $pri        = 0;
+        $pri        = 3;
         $estimate   = '';
         $title      = '';
         $spec       = '';
@@ -1264,7 +1264,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0)
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full')
     {
         if($moduleID)
         {
@@ -1280,7 +1280,7 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit);
+        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type);
         $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
@@ -1453,7 +1453,8 @@ class story extends control
             }
             else
             {
-                $stmt = $this->dbh->query($this->session->storyQueryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+                $field = $projectID ? 't2.id' : 't1.id';
+                $stmt  = $this->dbh->query($this->session->storyQueryCondition . ($this->post->exportType == 'selected' ? " AND $field IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
                 while($row = $stmt->fetch()) $stories[$row->id] = $row;
             }
 

@@ -18,7 +18,7 @@ class myMisc extends misc
         $response['result']  = 'success';
         $response['message'] = '';
 
-        $clientDir = $this->app->getBasePath() . 'tmp/cache/client/';
+        $clientDir = $this->app->wwwRoot . 'data/client/';
         if(!is_dir($clientDir)) mkdir($clientDir, 0755, true);
 
         $version    = $this->config->xuanxuan->version;

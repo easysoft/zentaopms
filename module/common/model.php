@@ -254,12 +254,12 @@ class commonModel extends model
             if(!$isGuest)
             {
                 echo '<li class="user-profile-item">';
-                echo "<a href='". helper::createLink('my', 'profile', '', '', true) . "' class='iframe" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "' data-width='600'>";
+                echo "<a href='". helper::createLink('my', 'profile') . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
                 echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile'), $lang->profile) . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
 
                 echo "<li class='divider'></li>";
@@ -320,7 +320,7 @@ class commonModel extends model
         echo '<li>' . html::a($lang->manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
-        echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
+        echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='950' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
     }
 
     /**
@@ -381,11 +381,14 @@ class commonModel extends model
             $link['method'] = $subMenuMethod;
             $link['vars']   = $subMenuParams;
 
-            $menu = new stdclass();
-            $menu->name   = $subMenuKey;
-            $menu->link   = $link;
-            $menu->text   = $subMenuName;
-            $menu->hidden = false;
+            $subMenuItem     = isset($items->$subMenuKey) ? $items->$subMenuKey : array();
+            $menu            = new stdclass();
+            $menu->name      = $subMenuKey;
+            $menu->link      = $link;
+            $menu->text      = $subMenuName;
+            $menu->subModule = isset($subMenuItem['subModule']) ? $subMenuItem['subModule'] : '';
+            $menu->alias     = isset($subMenuItem['alias'])     ? $subMenuItem['alias'] : '';
+            $menu->hidden    = false;
             $subMenu[$subMenuKey] = $menu;
         }
 
@@ -1645,7 +1648,6 @@ EOD;
     public function checkEntry()
     {
         $this->loadModel('entry');
-
         if($this->session->valid_entry)
         {
             if(!$this->session->entry_code) $this->response('SESSION_CODE_MISSING');
@@ -1661,7 +1663,7 @@ EOD;
         if(!$entry->key)                         $this->response('EMPTY_KEY');
         if(empty($entry->account))               $this->response('ACCOUNT_UNBOUND');
         if(!$this->checkIP($entry->ip))          $this->response('IP_DENIED');
-        if(!$this->checkEntryToken($entry->key)) $this->response('INVALID_TOKEN');
+        if(!$this->checkEntryToken($entry))      $this->response('INVALID_TOKEN');
 
         $this->loadModel('user');
         $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->fetch();
@@ -1676,6 +1678,14 @@ EOD;
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
         $this->loadModel('entry')->saveLog($entry->id, $this->server->request_uri);
 
+        /* Add for task #5384. */
+        if($_SERVER['REQUEST_METHOD'] == 'POST' and empty($_POST))
+        {
+            $post = file_get_contents("php://input");
+            if(!empty($post)) $post  = json_decode($post, true);
+            if(!empty($post)) $_POST = $post;
+        }
+
         unset($_GET['code']);
         unset($_GET['token']);
     }
@@ -1683,16 +1693,30 @@ EOD;
     /**
      * Check token of an entry.
      *
-     * @param  string $key
+     * @param  object $entry
      * @access public
-     * @return void
+     * @return bool
      */
-    public function checkEntryToken($key)
+    public function checkEntryToken($entry)
     {
         parse_str($this->server->query_String, $queryString);
         unset($queryString['token']);
+
+        /* Change for task #5384. */
+        if(isset($queryString['time']))
+        {
+            $result = $this->get->token == md5($entry->code . $entry->key . $queryString['time']);
+            if($result)
+            {
+                if($queryString['time'] <= $entry->calledTime) $this->response('CALLED_TIME');
+                $this->loadModel('entry')->updateTime($entry->code, $queryString['time']);
+                unset($_GET['time']);
+                return $result;
+            }
+        }
+
         $queryString = http_build_query($queryString);
-        return $this->get->token == md5(md5($queryString) . $key);
+        return $this->get->token == md5(md5($queryString) . $entry->key);
     }
 
     /**

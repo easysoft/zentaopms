@@ -42,7 +42,6 @@
         <p>
           <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
           <?php if(common::hasPriv('release', 'create')):?>
-          <span class="text-muted"><?php echo $lang->youCould;?></span>
           <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branchKey"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
           <?php endif;?>
         </p>
@@ -53,7 +52,7 @@
       <?php $groupRoadmaps = zget($yearRoadmaps, $branchKey, array());?>
       <div class="release-path">
         <div class="release-head">
-          <div class="title text-primary"><?php echo $year . (is_numeric($year) ? $lang->year : '');?></div>
+          <div class="title text-primary"><?php echo $year . (is_numeric($year) ? ($this->app->getClientLang() == 'en' ? '' : $lang->year) : '');?></div>
           <div class="subtitle"><?php echo sprintf($lang->product->iterationInfo, count($groupRoadmaps, 1) - count($groupRoadmaps));?></div>
         </div>
         <?php $i = 0;?>

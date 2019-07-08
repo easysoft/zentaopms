@@ -41,7 +41,6 @@ $lang->misc->zentao->support['ask']        = "官方問答";
 $lang->misc->zentao->support['video']      = "使用視頻";
 $lang->misc->zentao->support['qqgroup']    = "官方QQ群";
 
-$lang->misc->zentao->cowin['donate']       = "捐助我們";
 $lang->misc->zentao->cowin['reportbug']    = "彙報Bug";
 $lang->misc->zentao->cowin['feedback']     = "反饋需求";
 $lang->misc->zentao->cowin['recommend']    = "推薦給朋友";
@@ -76,6 +75,8 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->releaseDate['11.5.stable'] = '2019-05-08';
+$lang->misc->releaseDate['11.4.1']      = '2019-04-08';
 $lang->misc->releaseDate['11.4.stable'] = '2019-03-25';
 $lang->misc->releaseDate['11.3.stable'] = '2019-02-27';
 $lang->misc->releaseDate['11.2.stable'] = '2019-01-30';
@@ -100,6 +101,12 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.5.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '');
+$lang->misc->feature->all['11.5.stable'][] = array('title'=>'新增動態過濾機制', 'desc' => '');
+$lang->misc->feature->all['11.5.stable'][] = array('title'=>'整合新版本客戶端', 'desc' => '');
+
+$lang->misc->feature->all['11.4.1'][]      = array('title'=>'完善細節，修復Bug', 'desc' => '');
 
 $lang->misc->feature->all['11.4.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '<p>增強測試任務管理</p><p>優化計劃、發佈、版本關聯需求和bug的交互</p><p>文檔庫可以自定義是否顯示子分類裡的文檔</p><p>修復bug，完善細節</p>');
 

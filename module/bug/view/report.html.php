@@ -43,7 +43,7 @@
     <div class='cell'>
       <div class='btn-toolbar'>
         <?php foreach($lang->report->typeList as $type => $typeName):?>
-        <?php echo html::a("javascript:changeChartType(\"$type\")", ($type == 'default' ? "<i class='icon icon-list-alt muted'></i> " : "<i class='icon icon-chart-{$type}'></i>") . $typeName, '', "class='btn btn-link " . ($type == $chartType ? 'btn-active-line' : '') . "'")?>
+        <?php echo html::a("javascript:changeChartType(\"$type\")", ($type == 'default' ? "<i class='icon icon-list-alt muted'></i> " : "<i class='icon icon-chart-{$type} muted'></i>") . $typeName, '', "class='btn btn-link " . ($type == $chartType ? 'btn-active-line' : '') . "'")?>
         <?php endforeach;?>
         <div class='pull-right with-padding text-muted'><?php echo $lang->report->notice->help;?></div>
       </div>
@@ -61,16 +61,16 @@
               <thead>
                 <tr>
                   <th class='chart-label' colspan='2'><?php echo $lang->report->item;?></th>
-                  <th class='w-50px'><?php echo $lang->report->value;?></th>
+                  <th class='w-50px text-right'><?php echo $lang->report->value;?></th>
                   <th class='w-50px'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
               <?php foreach($datas[$chartType] as $key => $data):?>
-              <tr class='text-center'>
+              <tr>
                 <td class='chart-color'><i class='chart-color-dot'></i></td>
-                <td class='chart-label'><?php echo $data->name;?></td>
-                <td class='chart-value'><?php echo $data->value;?></td>
-                <td><?php echo ($data->percent * 100) . '%';?></td>
+                <td class='chart-label text-left'><?php echo $data->name;?></td>
+                <td class='chart-value text-right'><?php echo $data->value;?></td>
+                <td class='text-right'><?php echo ($data->percent * 100) . '%';?></td>
               </tr>
               <?php endforeach;?>
             </table>

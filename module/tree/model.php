@@ -983,6 +983,45 @@ class treeModel extends model
     }
 
     /**
+     * Create link of trainskill.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainSkillLink($type, $module, $extra = '')
+    {
+        return html::a(helper::createLink('trainskill', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    }
+
+    /**
+     * Create link of traincourse.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainCourseLink($type, $module, $extra = '')
+    {
+        return html::a(helper::createLink('traincourse', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    }
+
+    /**
+     * Create link of trainpost.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @access public
+     * @return string
+     */
+    public function createTrainPostLink($type, $module, $extra = '')
+    {    
+        return html::a(helper::createLink('trainpost', 'browse', "type=byModule&param={$module->id}"), $module->name, '', "id='module{$module->id}'");
+    } 
+
+    /**
      * Get sons of a module.
      *
      * @param  int    $rootID
@@ -1658,7 +1697,7 @@ class treeModel extends model
      */
     public function getDocStructure()
     {
-        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`order`')->get());
+        $stmt = $this->dbh->query($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`grade`_desc, `order`')->get());
         $parent = array();
         while($module = $stmt->fetch())
         {

@@ -155,9 +155,9 @@
                     </th>
                     <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
                     <th class='w-100px'>  <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
-                    <th class='w-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
+                    <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
                     <th class='w-date'>   <?php common::printOrderLink('openedDate',   $orderBy, $vars, $lang->bug->openedDateAB);?></th>
-                    <th class='w-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+                    <th class='c-user'>   <?php common::printOrderLink('resolvedBy',   $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
                     <th class='w-100px'>  <?php common::printOrderLink('resolvedDate', $orderBy, $vars, $lang->bug->resolvedDateAB);?></th>
                     <th class='w-50px'>   <?php echo $lang->actions;?></th>
                   </tr>
@@ -301,7 +301,7 @@
                 <div class='detail-content'>
                   <table class='table table-data'>
                     <tr>
-                      <th class='w-80px'><?php echo $lang->release->product;?></th>
+                      <th class='w-90px'><?php echo $lang->release->product;?></th>
                       <td><?php echo $release->productName;?></td>
                     </tr>
                       <?php if($release->productType != 'normal'):?>

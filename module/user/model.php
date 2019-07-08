@@ -708,6 +708,7 @@ class userModel extends model
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
     }
 
@@ -729,6 +730,7 @@ class userModel extends model
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
 
         $this->keepLogin($user);
@@ -766,6 +768,7 @@ class userModel extends model
             $viewAllow    = false;
             $productAllow = false;
             $projectAllow = false;
+            $actionAllow  = false;
             foreach($groups as $group)
             {
                 $acl = json_decode($group->acl, true);
@@ -774,12 +777,14 @@ class userModel extends model
                     $productAllow = true;
                     $projectAllow = true;
                     $viewAllow    = true;
+                    $actionAllow  = true;
                     break;
                 }
 
                 if(empty($acl['products'])) $productAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
                 if(empty($acl['views']))    $viewAllow    = true;
+                if(!isset($acl['actions'])) $actionAllow  = true;
                 if(empty($acls) and !empty($acl))
                 {
                     $acls = $acl;
@@ -789,11 +794,13 @@ class userModel extends model
                 if(!empty($acl['views'])) $acls['views'] = array_merge($acls['views'], $acl['views']);
                 if(!empty($acl['products'])) $acls['products'] = !empty($acls['products']) ? array_merge($acls['products'], $acl['products']) : $acl['products'];
                 if(!empty($acl['projects'])) $acls['projects'] = !empty($acls['projects']) ? array_merge($acls['projects'], $acl['projects']) : $acl['projects'];
+                if(!empty($acl['actions'])) $acls['actions'] = !empty($acls['actions']) ? ($acl['actions'] + $acls['actions']) : $acl['actions'];
             }
 
             if($productAllow) $acls['products'] = array();
             if($projectAllow) $acls['projects'] = array();
             if($viewAllow)    $acls['views']    = array();
+            if($actionAllow)  unset($acls['actions']);
 
             $sql = $this->dao->select('module, method')->from(TABLE_USERGROUP)->alias('t1')->leftJoin(TABLE_GROUPPRIV)->alias('t2')
                 ->on('t1.group = t2.group')
@@ -1332,7 +1339,9 @@ class userModel extends model
         $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
 
         if(empty($userView)) $userView = $this->computeUserView($account);
-        if(!empty($acls['products']) and !$this->session->user->admin)
+        if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
+        if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
+        if(!empty($acls['products']) and !$isAdmin)
         {
             $grantProducts = '';
             foreach($acls['products'] as $productID)
@@ -1341,7 +1350,7 @@ class userModel extends model
             }
             $userView->products = $grantProducts;
         }
-        if(!empty($acls['projects']) and !$this->session->user->admin)
+        if(!empty($acls['projects']) and !$isAdmin)
         {
             $grantProjects = '';
             foreach($acls['projects'] as $projectID)
@@ -1433,7 +1442,7 @@ class userModel extends model
     public function checkProductPriv($product, $account, $groups, $linkedProjects, $teams) 
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
-        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account) return true;
+        if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;
         if($product->acl == 'open') return true;
 
         if($product->acl == 'custom')
@@ -1503,5 +1512,65 @@ class userModel extends model
         if($action == 'unlock' and (strtotime(date('Y-m-d H:i:s')) - strtotime($user->locked)) >= $config->user->lockMinutes * 60) return false;
 
         return true;
+    }
+
+    /**
+     * Save user template.
+     *
+     * @param  string    $type 
+     * @access public
+     * @return void
+     */
+    public function saveUserTemplate($type)
+    {
+        $template = fixer::input('post')
+            ->setDefault('account', $this->app->user->account)
+            ->setDefault('type', $type)
+            ->stripTags('content', $this->config->allowedTags)
+            ->get();
+
+        $condition = "`type`='$type' and account='{$this->app->user->account}'";
+        $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
+        if(!dao::isError()) $this->loadModel('score')->create('bug', 'saveTplModal', $this->dao->lastInsertID());
+    }
+
+    /**
+     * Get User Template.
+     * 
+     * @param  string    $type 
+     * @access public
+     * @return array
+     */
+    public function getUserTemplates($type)
+    {
+        return $this->dao->select('id,account,title,content,public')
+            ->from(TABLE_USERTPL)
+            ->where('type')->eq($type)
+            ->andwhere('account', true)->eq($this->app->user->account)
+            ->orWhere('public')->eq('1')
+            ->markRight(1)
+            ->orderBy('id')
+            ->fetchAll();
+    }
+
+    /**
+     * Get personal data.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return array
+     */
+    public function getPersonalData($account = '')
+    {
+        if(empty($account)) $account = $this->app->user->account;
+
+        $personalData = array();
+        $personalData['createdTodo']  = $this->dao->select('count(*) as count')->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
+        $personalData['createdStory'] = $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['finishedTask'] = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['resolvedBug']  = $this->dao->select('count(*) as count')->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['createdCase']  = $this->dao->select('count(*) as count')->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+
+        return $personalData;
     }
 }

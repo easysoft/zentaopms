@@ -99,7 +99,7 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
-            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-80px' : 'w-70px';?>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-110px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr valign='middle'>

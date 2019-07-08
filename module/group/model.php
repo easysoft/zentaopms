@@ -266,7 +266,29 @@ class groupModel extends model
     public function updateView($groupID)
     {
         $actions = $this->post->actions;
-        if(isset($_POST['allchecker']))$actions['views'] = array();
+        if(isset($_POST['allchecker']))$actions['views']   = array();
+        if(!isset($actions['actions']))$actions['actions'] = array();
+
+        $dynamic = $actions['actions'];
+        if(!isset($_POST['allchecker']))
+        {
+            $dynamic = array();
+            foreach($actions['actions'] as $moduleName => $moduleActions)
+            {
+                if(isset($this->lang->menugroup->$moduleName))
+                {
+                    $groupModule = $this->lang->menugroup->$moduleName;
+                    if($groupModule != 'my' and !isset($actions['views'][$groupModule])) continue;
+                }
+                else
+                {
+                    if($moduleName != 'my' and !isset($actions['views'][$moduleName])) continue;
+                }
+
+                $dynamic[$moduleName] = $moduleActions;
+            }
+        }
+        $actions['actions'] = $dynamic;
 
         $actions = empty($actions) ? '' : json_encode($actions);
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();

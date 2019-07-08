@@ -42,14 +42,14 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='w-60px'>      <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='w-50px'>      <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-50px' title='<?php echo $lang->bug->severity;?>'> <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='w-50px' title='<?php echo $lang->bug->pri;?>'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='w-type'>      <?php common::printOrderLink('type',       $orderBy, $vars, $lang->typeAB);?></th>
           <th>                     <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
-          <th class='w-user'>      <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-100px c-assignedTo'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
-          <th class='w-user'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
-          <th class='w-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
+          <th class='w-90px'>      <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-110px'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedTo);?></th>
+          <th class='w-100px'>      <?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
+          <th class='w-100px'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='c-actions-5'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>

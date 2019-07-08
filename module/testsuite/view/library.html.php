@@ -53,7 +53,7 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
-     <?php common::printLink('testsuite', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->testsuite->exportTemplet, '', "class='btn btn-link export'");?>
+     <?php common::printLink('testsuite', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->testsuite->exportTemplet, '', "class='btn btn-link export' data-width=35%");?>
      <?php common::printLink('testsuite', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->importFile, '', "class='btn btn-link export'");?>
     </div>
     <?php $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);?>
@@ -87,7 +87,6 @@ js::set('flow',          $config->global->flow);
       <p>
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
         <?php if(common::hasPriv('testsuite', 'createCase')):?>
-        <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('testsuite', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>

@@ -181,7 +181,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID, $chartType = '')
+    public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'default')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -193,7 +193,7 @@ class bug extends control
                 $chartFunc   = 'getDataOf' . $chart;
                 $chartData   = $this->bug->$chartFunc();
                 $chartOption = $this->lang->bug->report->$chart;
-                if(!empty($chartType)) $chartOption->type = $chartType;
+                if(!empty($chartType) and $chartType != 'default') $chartOption->type = $chartType;
                 $this->bug->mergeChartOption($chart);
 
                 $this->view->charts[$chart] = $chartOption;
@@ -679,7 +679,6 @@ class bug extends control
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
-        $this->view->templates        = $this->bug->getUserBugTemplates($this->app->user->account);
 
         $this->display();
     }
@@ -1292,44 +1291,6 @@ class bug extends control
     }
 
     /**
-     * Save current template.
-     *
-     * @access public
-     * @return string
-     */
-    public function saveTemplate()
-    {
-        $this->bug->saveUserBugTemplate();
-        if(dao::isError()) echo js::error(dao::getError(), $full = false);
-        die($this->fetch('bug', 'buildTemplates'));
-    }
-
-    /**
-     * Build the user templates selection code.
-     *
-     * @access public
-     * @return void
-     */
-    public function buildTemplates()
-    {
-        $this->view->templates = $this->bug->getUserBugTemplates($this->app->user->account);
-        $this->display('bug', 'buildTemplates');
-    }
-
-    /**
-     * Delete a user template.
-     *
-     * @param  int    $templateID
-     * @access public
-     * @return void
-     */
-    public function deleteTemplate($templateID)
-    {
-        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
-        die();
-    }
-
-    /**
      * AJAX: get bugs of a user in html select.
      *
      * @param  string $account
@@ -1500,8 +1461,8 @@ class bug extends control
             }
 
             /* Get related objects title or names. */
+            $relatedModules = array();
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
-            $relatedModules = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
             $relatedBugs    = $this->dao->select('id, title')->from(TABLE_BUG)->where('id')->in($relatedBugIdList)->fetchPairs();
@@ -1509,7 +1470,8 @@ class bug extends control
             $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-
+            foreach($relatedProductIdList as $relatedProductId) $relatedModules += $this->loadModel('tree')->getOptionMenu($relatedProductId, 'bug'); 
+            
             foreach($bugs as $bug)
             {
                 if($this->post->fileType == 'csv')
@@ -1614,16 +1576,9 @@ class bug extends control
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
-        $fileName = $this->lang->bug->common;
+        $fileName    = $this->lang->bug->common;
         $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
-        if(isset($this->lang->bug->featureBar['browse'][$browseType]))
-        {
-            $browseType = $this->lang->bug->featureBar['browse'][$browseType];
-        }
-        else
-        {
-            $browseType = $this->lang->bug->moreSelects[$browseType];
-        }
+        $browseType  = isset($this->lang->bug->featureBar['browse'][$browseType]) ? $this->lang->bug->featureBar['browse'][$browseType] : zget($this->lang->bug->moreSelects, $browseType, '');
 
         $this->view->fileName        = $productName . $this->lang->dash . $browseType . $fileName;
         $this->view->allExportFields = $this->config->bug->list->exportFields;

@@ -43,6 +43,7 @@ class todo extends control
             $todoID = $this->todo->create($date, $account);
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('todo', $todoID, 'opened');
+
             $date = str_replace('-', '', $this->post->date);
             if($date == '')
             {
@@ -64,7 +65,7 @@ class todo extends control
 
             if($this->app->getViewType() == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID"), 'parent'));
             if(isonlybody()) die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent.parent'));
-            die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
+            die(js::locate($this->createLink('my', 'todo', "type=all&account=&status=all&orderBy=id_desc"), 'parent'));
         }
 
         unset($this->lang->todo->typeList['cycle']);

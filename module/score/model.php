@@ -185,7 +185,7 @@ class scoreModel extends model
      * @access private
      * @return bool
      */
-    private function saveScore($account = '', $rule = array(), $module = '', $method = '', $desc = '', $time = '')
+    public function saveScore($account = '', $rule = array(), $module = '', $method = '', $desc = '', $time = '')
     {
         if($rule['score'] == 0) return true;
         if(!empty($rule['times']) || !empty($rule['hour']))

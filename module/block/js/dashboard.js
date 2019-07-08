@@ -18,7 +18,7 @@ function deleteBlock(index)
             }
             else
             {
-                $('#block' + index).remove();
+                window.location.reload(true);
             }
         });
     }
@@ -247,5 +247,3 @@ $(function()
         refreshBlock($(this).closest('.panel'));
     });
 });
-
-

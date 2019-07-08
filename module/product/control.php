@@ -501,7 +501,7 @@ class product extends control
         /* Assign. */
         $this->view->productID  = $productID;
         $this->view->type       = $type;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
         $this->view->account    = $account;
         $this->view->orderBy    = $orderBy;
         $this->view->param      = $param;

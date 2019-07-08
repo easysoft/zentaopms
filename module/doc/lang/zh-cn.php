@@ -41,6 +41,7 @@ $lang->doc->extension      = '类型';
 $lang->doc->size           = '大小';
 $lang->doc->download       = '下载';
 $lang->doc->acl            = '权限';
+$lang->doc->fileName       = '附件';
 $lang->doc->groups         = '分组';
 $lang->doc->users          = '用户';
 $lang->doc->item           = '项';

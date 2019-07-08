@@ -44,13 +44,13 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri'>     <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-project'> <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
-          <th class='c-name'>    <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
-          <th class='c-user'>    <?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-100px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
-          <th class='c-user'>    <?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
-          <th class='c-hours'>   <?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='c-pri w-40px'> <?php common::printOrderLink('pri',         $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-project'>    <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
+          <th class='c-name'>       <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
+          <th class='c-user w-90px'><?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='w-120px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
+          <th class='c-user w-100px'><?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
+          <th class='c-hours w-70px'><?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
           <th class='c-hours'>   <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
           <th class='c-hours'>   <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
           <th class='c-date'>    <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
@@ -101,7 +101,7 @@
 
                 common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                 common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'plus', '', '', '', '', $this->lang->task->children);
+                common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'treemap-alt', '', '', '', '', $this->lang->task->children);
             }
             ?>
           </td>

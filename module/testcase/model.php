@@ -672,7 +672,13 @@ class testcaseModel extends model
             {
                 $parentStepID = 0;
                 $isLibCase = ($oldCase->lib and empty($oldCase->product));
-                if($isLibCase) $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($version)->where('`fromCaseID`')->eq($caseID)->exec(); 
+                if($isLibCase) 
+                {
+                    $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+                    $fromcaseVersion += 1;
+                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec(); 
+                }
+
                 foreach($this->post->steps as $stepID => $stepDesc)
                 {
                     if(empty($stepDesc)) continue;
@@ -1461,7 +1467,7 @@ class testcaseModel extends model
                     break;
                 }
 
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true);
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true, "data-width='95%'");
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
@@ -1549,7 +1555,7 @@ class testcaseModel extends model
             if(!isset($this->config->testcase->forceReview)) return true;
             if(strpos(",{$this->config->testcase->forceReview},", ",{$this->app->user->account},") === false) return true;
         }
-        if($this->config->testcase->needReview && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},")) return true;
+        if($this->config->testcase->needReview && strpos(",{$this->config->testcase->forceNotReview},", ",{$this->app->user->account},") !== false) return true;
 
         return false;
     }

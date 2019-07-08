@@ -33,7 +33,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
       <?php if(common::hasPriv('productplan', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -112,7 +111,7 @@
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
         <td class='text-center'><?php if(!empty($plan->projectID)) echo html::a(helper::createLink('project', 'task', 'projectID=' . $plan->projectID), '<i class="icon-search"></i>');?></td>
-        <td title='<?php echo strip_tags(str_replace("</p>", "\n", str_replace("\n", '', $plan->desc)));?>' class='text-left content'><?php echo nl2br(strip_tags(str_replace("</p>", "\n", str_replace("\n", '', $plan->desc))));?></td>
+        <td title='<?php echo strip_tags(str_replace("</p>", "\n", str_replace(array("\n", "\r"), '', $plan->desc)));?>' class='text-left content'><?php echo nl2br(strip_tags(str_replace("</p>", "\n", str_replace(array("\n", "\r"), '', $plan->desc))));?></td>
         <td class='c-actions'>
           <?php
           if(common::hasPriv('project', 'create')) echo html::a(helper::createLink('project', 'create', "projectID=&copyProjectID=&planID=$plan->id"), '<i class="icon-plus"></i>', '', "class='btn' title='{$lang->project->create}'");

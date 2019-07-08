@@ -23,32 +23,33 @@ js::set('type', $type);
   <div class='modal-body'>
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-120px' : 'w-80px';?>
         <?php if($showProduct):?>
         <tr>
-          <th class='w-80px'><?php echo $lang->tree->product;?></th>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->tree->product;?></th>
           <td><?php echo html::select('root', $products, $module->root, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
         <?php if($type == 'doc'):?>
         <tr>
-          <th class='w-80px'><?php echo $lang->doc->lib;?></th>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->doc->lib;?></th>
           <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen' onchange=loadDocModule(this.value)");?></td>
         </tr>
         <?php endif;?>
         <?php if($module->type != 'line'):?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='w-80px'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
+          <th class='<?php echo $colWidth;?>'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->parentCate : $lang->tree->parent;?></th>
           <td><?php echo html::select('parent', $optionMenu, $module->parent, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='w-80px'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->cate : $lang->tree->name;?></th>
+          <th class='<?php echo $colWidth;?>'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->cate : $lang->tree->name;?></th>
           <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
         </tr>
         <?php if($type == 'bug'):?>
         <tr>
-          <th class='w-80px'><?php echo $lang->tree->owner;?></th>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->tree->owner;?></th>
           <td><?php echo html::select('owner', $users, $module->owner, "class='form-control chosen'", true);?></td>
         </tr>
         <?php endif;?>

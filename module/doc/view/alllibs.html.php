@@ -12,10 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView) ? true : false;?>
-<div class="main-row <?php if($spliter) echo 'split-row';?>" id="mainRow">
-  <?php if($spliter):?>
+<div class="main-row <?php if($spliter) echo 'split-row';?> fade" id="mainRow">
   <?php include './side.html.php';?>
-  <?php endif;?>
   <?php if($this->cookie->browseType == 'bylist'):?>
   <?php include dirname(__FILE__) . '/alllibsbylist.html.php';?>
   <?php else:?>
@@ -26,8 +24,8 @@
           <?php $panelTitle = zget($lang->doclib->tabList, $type);?>
           <i class="icon icon-folder-open-o text-muted"></i> <?php echo $panelTitle;?>
           <div class="btn-group">
-            <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon text-primary'");?>
+            <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon'");?>
           </div>
         </div>
       </div>

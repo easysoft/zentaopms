@@ -15,8 +15,8 @@
                 <th class='text-left'><?php echo $lang->task->name;?></th>
                 <th class='w-100px'><?php echo $lang->task->assignedTo;?></th>
                 <th class='c-status'><?php echo $lang->task->status;?></th>
-                <th class='c-num'><?php echo $lang->task->consumed;?></th>
-                <th class='c-num'><?php echo $lang->task->left;?></th>
+                <th class='w-100px'><?php echo $lang->task->consumed;?></th>
+                <th class='w-90px'><?php echo $lang->task->left;?></th>
               </tr>
             </thead>
             <?php if(isset($story->tasks[$projectID])):?>

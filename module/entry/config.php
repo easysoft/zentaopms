@@ -5,9 +5,6 @@ $config->entry->create->requiredFields = 'name, code, account, key';
 $config->entry->edit = new stdclass();
 $config->entry->edit->requiredFields = 'name, code, account, key';
 
-$config->entry->help   = 'https://www.zentao.net/book/zentaopmshelp/integration-287.html';
-$config->entry->notify = 'https://www.zentao.net/book/zentaopmshelp/301.html';
-
 $config->entry->errcode['PARAM_CODE_MISSING']    = 401;
 $config->entry->errcode['PARAM_TOKEN_MISSING']   = 401;
 $config->entry->errcode['SESSION_CODE_MISSING']  = 401;
@@ -17,3 +14,4 @@ $config->entry->errcode['SESSION_VERIFY_FAILED'] = 401;
 $config->entry->errcode['IP_DENIED']             = 403;
 $config->entry->errcode['ACCOUNT_UNBOUND']       = 403;
 $config->entry->errcode['EMPTY_ENTRY']           = 404;
+$config->entry->errcode['CALLED_TIME']           = 405;

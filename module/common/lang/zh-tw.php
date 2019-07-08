@@ -88,7 +88,6 @@ $lang->customMenu      = '自定義導航';
 $lang->customField     = '自定義表單項';
 $lang->lineNumber      = '行號';
 $lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現在退出？';
-$lang->youCould        = '您現在可以 ';
 
 $lang->preShortcutKey  = '[快捷鍵:←]';
 $lang->nextShortcutKey = '[快捷鍵:→]';
@@ -99,6 +98,7 @@ $lang->selectAll     = '全選';
 $lang->selectReverse = '反選';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您訪問的對象並不存在！';
+$lang->notPage      =  '抱歉，您訪問的功能正在開發中！';
 $lang->showAll       = '[[全部顯示]]';
 
 $lang->future      = '未來';
@@ -446,10 +446,13 @@ $lang->menugroup->user        = 'company';
 $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
+$lang->menugroup->case        = 'qa';
+$lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
+$lang->menugroup->doclib      = 'doc';
 $lang->menugroup->people      = 'company';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -858,6 +861,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust menu group. */
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
+    $lang->menugroup->case       = 'testcase';
     $lang->menugroup->testtask   = 'testtask';
     $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->testreport = 'testtask';

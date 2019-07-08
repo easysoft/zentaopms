@@ -1,1 +1,6 @@
-.group-item {display:block; width:90px; float:left; margin-top:5px;}
+.group-item {display:block; width:93px; float:left; margin-top:5px;}
+.action-item {display:block; width:200px; float:left; margin-top:5px;}
+
+.checkbox-primary>label{padding-left:20px;}
+.pl-0px {padding-left:0px !important;}
+.pt-0px {padding-top:0px !important;}

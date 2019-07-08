@@ -10,42 +10,43 @@
  * @link        http://www.zentao.net
  */
 $lang->group->common             = 'Privilege';
-$lang->group->browse             = 'Group Privilge';
-$lang->group->create             = 'Add Group';
-$lang->group->edit               = 'Edit';
-$lang->group->copy               = 'Copy';
-$lang->group->delete             = 'Delete';
-$lang->group->manageView         = 'View';
+$lang->group->browse             = 'Privilege Group';
+$lang->group->create             = 'Create Group';
+$lang->group->edit               = 'Edit Group';
+$lang->group->copy               = 'Copy Group';
+$lang->group->delete             = 'Delete Group';
+$lang->group->manageView         = 'Manage Sight';
 $lang->group->managePriv         = 'Batch Assign';
-$lang->group->managePrivByGroup  = 'Privilege';
-$lang->group->managePrivByModule = 'Module Privilege';
+$lang->group->managePrivByGroup  = 'Manage Privileges by Group';
+$lang->group->managePrivByModule = 'Manage Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
-$lang->group->manageMember       = 'Member';
-$lang->group->confirmDelete      = 'Do you want to delete this User Group?';
+$lang->group->manageMember       = 'Manage Members';
+$lang->group->confirmDelete      = 'Do you want to delete this user group?';
 $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
-$lang->group->viewList           = 'View';
-$lang->group->productList        = 'Product';
-$lang->group->projectList        = 'Project';
-$lang->group->noticeVisit        = 'Empty means no access.';
+$lang->group->viewList           = 'Access View';
+$lang->group->productList        = 'Access Product';
+$lang->group->projectList        = 'Access Project';
+$lang->group->dynamic            = 'Access Dynamics';
+$lang->group->noticeVisit        = 'Blank means no access limit.';
 
 $lang->group->id       = 'ID';
-$lang->group->name     = 'Name';
+$lang->group->name     = 'Group';
 $lang->group->desc     = 'Description';
 $lang->group->role     = 'Role';
 $lang->group->acl      = 'Right';
-$lang->group->users    = 'Users';
+$lang->group->users    = 'Group Members';
 $lang->group->module   = 'Module';
 $lang->group->method   = 'Method';
-$lang->group->priv     = 'Group';
+$lang->group->priv     = 'Privilege Group';
 $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group Users';
 $lang->group->outside  = 'Other Users';
 $lang->group->other    = 'Others';
-$lang->group->all      = 'All';
+$lang->group->all      = 'All Privileges';
 
-$lang->group->copyOptions['copyPriv'] = 'Copy Privilege';
-$lang->group->copyOptions['copyUser'] = 'Copy User';
+$lang->group->copyOptions['copyPriv'] = 'Copy Privileges';
+$lang->group->copyOptions['copyUser'] = 'Copy Users';
 
 $lang->group->versions['']          = 'History';
 $lang->group->versions['10_6']      = 'ZenTao10.6';

@@ -629,7 +629,7 @@ class docModel extends model
             $docContent->files = join(',', array_keys($files));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->loadModel('score')->create('doc', 'create', $docID);
-            return array('status' => 'new', 'id' => $docID);
+            return array('status' => 'new', 'id' => $docID, 'files' => $files);
         }
         return false;
     }
@@ -900,6 +900,7 @@ class docModel extends model
         if(!isset($libs[$object->lib]) and !isset($extraDocLibs[$object->lib])) return false;
 
         if($object->acl == 'open' and !isset($extraDocLibs[$object->lib])) return true;
+        if($object->acl == 'public' and !isset($extraDocLibs[$object->lib])) return true;
 
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
@@ -1588,6 +1589,7 @@ class docModel extends model
         $parantMoudles = $this->dao->select('id, name')->from(TABLE_MODULE)
             ->where('id')->in($path)
             ->andWhere('deleted')->eq(0)
+            ->orderBy('`grade`')
             ->fetchAll('id');
 
         foreach($parantMoudles as $parentID => $moduleName)

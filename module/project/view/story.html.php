@@ -19,17 +19,6 @@
 <?php js::set('branchID', ($type == 'byBranch' ? (int)$param : ''));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id="mainMenu" class="clearfix">
-  <div id="sidebarHeader">
-    <?php if(!empty($module->name)):?>
-    <div class="title" title='<?php echo $module->name?>'>
-      <?php $removeLink = inlink('story', "projectID=$project->id&orderBy=$orderBy&type=$type&param=0&recTotal=0&recPerPage={$pager->recPerPage}");?>
-      <?php echo $module->name;?>
-      <?php echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
-    </div>
-    <?php else:?>
-    <div class="title" title='<?php echo $project->name?>'><?php echo $project->name;?></div>
-    <?php endif;?>
-  </div>
   <div class="btn-toolbar pull-left">
     <?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "projectID=$project->id"), "<span class='text'>{$lang->story->allStories}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");?>
     <?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "projectID=$project->id"), "<span class='text'>{$lang->project->kanban}</span>", '', "class='btn btn-link'");?>
@@ -88,7 +77,6 @@
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
         <?php if(common::hasPriv('project', 'linkStory')):?>
-        <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -116,7 +104,7 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <?php if($canOrder):?>
-            <th class='w-80px c-sort {sorter:false}'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->updateOrder);?></th>
+            <th class='w-60px c-sort {sorter:false}'> <?php common::printOrderLink('order',      $orderBy, $vars, $lang->project->orderAB);?></th>
             <?php endif;?>
             <th class='c-pri {sorter:false}'>  <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
             <th class='c-name {sorter:false}'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>

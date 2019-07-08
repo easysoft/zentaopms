@@ -16,7 +16,7 @@ include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
 $fieldWidth    = $app->getClientLang() == 'en' ? 'w-130px' : 'w-110px';
-$operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
+$operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-90px';
 ?>
 <style>
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
@@ -25,13 +25,11 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 #<?php echo $formId;?> > table {margin: 0 auto;}
 #<?php echo $formId;?> > table > tbody > tr > td {padding: 8px;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
-#<?php echo $formId;?> .chosen-container[id^="field"] .chosen-drop {min-width: 180px;}
 <?php if($app->getClientLang() == 'en'):?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 70px;}
 <?php else:?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
 <?php endif;?>
-#<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-drop {min-width: 300px;}
 #<?php echo $formId;?> .chosen-container .chosen-drop ul.chosen-results li {white-space:normal}
 #<?php echo $formId;?> input.date::-webkit-input-placeholder {color: #838A9D; opacity: 1;}
 #<?php echo $formId;?> input.date::-moz-placeholder {color: #838A9D; opacity: 1;}
@@ -44,6 +42,7 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 #queryBox select#groupAndOr {padding-right:2px; padding-left:5px;}
 #queryBox .chosen-container-single .chosen-single>span {margin-right:5px;}
 
+#queryBox .form-actions .btn {margin-right: 5px;}
 #userQueries {border-left: 1px solid #eee; vertical-align: top;}
 #userQueries > h4 {margin: 0 0 6px;}
 #userQueries ul {list-style: none; padding-left: 0; margin: 0; max-height:75px; overflow:auto;}
@@ -55,9 +54,11 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-90px';
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
 @media (max-width: 1150px) {#userQueries {display: none}}
 <?php if($style == 'simple'):?>
-#<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 200px;}
+#<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 100px;}
 #queryBox.show {min-height: 66px;}
 <?php endif;?>
+#toggle-queries{position: absolute; right: 0px; top: 40px; width: 13px; background: #79cdfb; border-radius: 6px; height: 30px;cursor: pointer}
+#toggle-queries .icon{ position: absolute; top: 6px; right: -2px; color: #fff;}
 </style>
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
@@ -101,7 +102,7 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-70px'>";
+                echo "<td class='text-right w-80px'>";
                 if($i == 1) echo "<span id='searchgroup1'><strong>{$lang->search->group1}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';
@@ -161,7 +162,7 @@ foreach($fieldParams as $fieldName => $param)
                 $param = $fieldParams[$currentField];
 
                 /* Print and or. */
-                echo "<td class='text-right w-70px'>";
+                echo "<td class='text-right w-80px'>";
                 if($i == 1) echo "<span id='searchgroup2'><strong>{$lang->search->group2}</strong></span>" . html::hidden("andOr$fieldNO", 'AND');
                 if($i > 1)  echo html::select("andOr$fieldNO", $lang->search->andor, $formSession["andOr$fieldNO"], "class='form-control'");
                 echo '</td>';
@@ -201,7 +202,10 @@ foreach($fieldParams as $fieldName => $param)
         </table>
       </td>
       <?php if($style != 'simple'):?>
-      <td class='w-160px' rowspan='2' id='userQueries'>
+      <div id='toggle-queries'>
+      <i class='icon icon-angle-left'></i>
+      </div>
+      <td class='w-160px hidden' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <ul>
           <?php foreach($queries as $queryID => $queryName):?>
@@ -262,6 +266,23 @@ $(function()
 {
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen();
+    /* Toggle user queries action. */
+    $('#toggle-queries').click(function()
+    {
+        $('#userQueries').toggleClass('hidden');
+        if(!$('#userQueries').hasClass('hidden')) 
+        {
+            $('#toggle-queries .icon').removeClass('icon-angle-left');
+            $('#toggle-queries .icon').addClass('icon-angle-right');
+            $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+        }
+        else
+        {
+            $('#toggle-queries .icon').removeClass('icon-angle-right');
+            $('#toggle-queries .icon').addClass('icon-angle-left');
+            $('#toggle-queries').css('right', '0px');
+        }
+    });
 
     /*
      * Load queries form
@@ -274,9 +295,14 @@ $(function()
             if($('#mainMenu .btn-toolbar.pull-left #query').size() == 0)
             {
                 var html = '<div class="btn-group" id="query"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link " style="border-radius: 2px;">' + searchCustom + ' <span class="caret"></span></a><ul class="dropdown-menu"></ul></div>';
+                html += '<style>#mainMenu #query.btn-group li {position: relative;} #mainMenu #query.btn-group li a{margin-right:20px;} #mainMenu #query.btn-group li .btn-delete{ padding:0 7px; position: absolute; right: -10px; top: -5px; display: block; width: 20px; text-align: center; } </style>';
+                html += "<script> function removeQueryFromMenu(obj) { var $obj = $(obj); var link = createLink('search', 'ajaxRemoveMenu', 'queryID=' + $obj.data('id')); $.get(link, function() { $obj.closest('li').remove(); if($('#mainMenu #query.btn-group').find('li').length == 0) $('#mainMenu #query.btn-group').remove(); })}<\/script>";
                 $('#mainMenu .btn-toolbar.pull-left #bysearchTab').before(html);
             }
-            $('#mainMenu .btn-toolbar.pull-left #query ul.dropdown-menu').append("<li><a href='" + actionURL.replace('myQueryID', queryID) + "'>" + name + "</a></li>")
+            html  = "<li><a href='" + actionURL.replace('myQueryID', queryID) + "'>" + name + "</a>";
+            html += "<a href='###' class='btn-delete' data-id='" + queryID + "' onclick='removeQueryFromMenu(this)'><i class='icon icon-close'></i></a></li>";
+            $('#mainMenu .btn-toolbar.pull-left #query ul.dropdown-menu').append(html);
+            fixFeatureBar();
         }
     };
 

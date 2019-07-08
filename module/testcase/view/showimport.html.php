@@ -2,6 +2,8 @@
 <style>
 .affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
 </style>
+<?php js::set('productID', $productID);?>
+<?php js::set('branch', $branch);?>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
 <?php else:?>
@@ -58,8 +60,11 @@
             ?>
           </td>
           <td><?php echo html::input("title[$key]", htmlspecialchars($case->title, ENT_QUOTES), "class='form-control'")?></td>
-          <td style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
-          <td style='overflow:visible'><?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : ''), "class='form-control chosen'")?></td>
+          <td style='overflow:visible'>
+            <?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
+          </td>
+          <td style='overflow:visible'>
+          <?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : ''), "class='form-control chosen storyChange'")?></td>
           <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
           <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control chosen'")?></td>
           <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>

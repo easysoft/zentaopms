@@ -24,7 +24,7 @@
 </html>
 <?php else:?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/ueditor.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/markdown.html.php';?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
@@ -37,7 +37,7 @@
       <table class='table table-form'> 
         <tbody>
           <tr>
-            <th><?php echo $lang->doc->lib;?></th>
+            <th class='w-110px'><?php echo $lang->doc->lib;?></th>
             <td> <?php echo html::select('lib', $libs, $libID, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td><td></td>
           </tr>  
           <tr>
@@ -82,7 +82,7 @@
             <th><?php echo $lang->doclib->control;?></th>
             <td colspan='2'>
               <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
-              <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc']['open'];?></span>
+              <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc']['open'];?></span>
             </td>
           </tr>
           <tr id='whiteListBox' class='hidden'>

@@ -13,38 +13,38 @@ $lang->testsuite->index            = "Home";
 $lang->testsuite->create           = "Create Suite";
 $lang->testsuite->delete           = "Delete";
 $lang->testsuite->view             = "Overview";
-$lang->testsuite->edit             = "Edit";
+$lang->testsuite->edit             = "Edit Suite";
 $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Case";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
 $lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
 $lang->testsuite->deleted          = 'Deleted';
-$lang->testsuite->exportTemplet    = 'Export template';
-$lang->testsuite->batchCreateCase  = 'Batch Create Case';
+$lang->testsuite->exportTemplet    = 'Export Template';
+$lang->testsuite->batchCreateCase  = 'Batch Create';
 $lang->testsuite->import           = 'Import';
-$lang->testsuite->showImport       = 'Show Imported Data';
+$lang->testsuite->showImport       = 'Imported Data';
 $lang->testsuite->successSaved     = 'Saved';
 
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->desc           = 'Description';
-$lang->testsuite->author         = 'Access Control';
-$lang->testsuite->addedBy        = 'Creator';
-$lang->testsuite->addedDate      = 'Date';
+$lang->testsuite->author         = 'ACL';
+$lang->testsuite->addedBy        = 'CreatedBy';
+$lang->testsuite->addedDate      = 'CreatedDate';
 
 $lang->testsuite->legendDesc      = 'Description';
 $lang->testsuite->legendBasicInfo = 'Basic Info';
 
-$lang->testsuite->unlinkedCases = 'Unlinked Case';
+$lang->testsuite->unlinkedCases = 'Unlinked Cases';
 
-$lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
+$lang->testsuite->confirmDelete     = 'Do you want to delete this test suite?';
 $lang->testsuite->libraryDelete     = 'Do you want to delete this library？';
 $lang->testsuite->confirmUnlinkCase = 'Do you want to unlink this Case?';
-$lang->testsuite->noticeNone        = 'You have not created a suite yet.';
-$lang->testsuite->noModule          = '<div>You have no modules</div><div>Manage now</div>';
-$lang->testsuite->noTestsuite       = 'No suites. ';
+$lang->testsuite->noticeNone        = 'You have not created any suite yet.';
+$lang->testsuite->noModule          = '<div>You have no modules.</div><div>Manage it now.</div>';
+$lang->testsuite->noTestsuite       = 'No suites yet.';
 
 $lang->testsuite->lblCases      = 'Cases';
 $lang->testsuite->lblUnlinkCase = 'Unlink Case';
@@ -53,10 +53,10 @@ $lang->testsuite->authorList['private'] = 'Private';
 $lang->testsuite->authorList['public']  = 'Public';
 
 $lang->caselib->common = 'Case Library';
-$lang->caselib->all    = 'All';
+$lang->caselib->all    = 'All Case Libraries';
 
 $lang->testsuite->createLib  = 'Create Library';
 $lang->testsuite->editLib    = 'Edit';
-$lang->testsuite->library    = 'View cases in Library';
+$lang->testsuite->library    = 'View Cases in Library';
 $lang->testsuite->createCase = 'Create Case';
 $lang->testsuite->libView    = 'Overview';

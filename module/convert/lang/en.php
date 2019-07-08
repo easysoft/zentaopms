@@ -14,8 +14,8 @@ $lang->convert->index   = 'Home';
 
 $lang->convert->start   = 'Start';
 $lang->convert->desc    = <<<EOT
-<p>Welcome to the System Conversion Wizard, this program will assist you to convert data to ZenTao PMS.</p>
-<strong>There is certain risk of conversion, so it is strongly recommended that you back up your databse and relavant files before conversion, and make sure no one is operating on either systems.</strong>
+<p>Welcome to the System Conversion Wizard, this program will assist you to convert data to ZenTao.</p>
+<strong>There are risks in the conversion, so it is strongly recommended that you back up your databse and relavant files before conversion, and make sure that no one is using either system.</strong>
 EOT;
 
 $lang->convert->setConfig      = 'Source Config';
@@ -31,7 +31,7 @@ $lang->convert->mustSelectSource = "You must select a source system.";
 
 $lang->convert->direction             = "{$lang->projectCommon} converted to";
 $lang->convert->questionTypeOfRedmine = 'Type in Redmine';
-$lang->convert->aimTypeOfZentao       = 'Convert to Type in Zentao';
+$lang->convert->aimTypeOfZentao       = 'Convert to Type in ZenTao';
 
 $lang->convert->directionList['bug']   = 'Bug';
 $lang->convert->directionList['task']  = 'Task';
@@ -48,20 +48,20 @@ $lang->convert->fail        = '<span class="text-danger"><i class="icon-remove-s
 
 $lang->convert->dbHost      = 'Database Server';
 $lang->convert->dbPort      = 'Server Port';
-$lang->convert->dbUser      = 'Databse User Name';
+$lang->convert->dbUser      = 'Database User Name';
 $lang->convert->dbPassword  = 'Database Password';
-$lang->convert->dbName      = 'Databse used in %s';
-$lang->convert->dbCharset   = '%s Database Code';
+$lang->convert->dbName      = 'Database used in %s';
+$lang->convert->dbCharset   = '%s Database Coding';
 $lang->convert->dbPrefix    = '%s Table Prefix';
-$lang->convert->installPath = '%s Installed path';
+$lang->convert->installPath = '%s Installation Root Directory';
 
 $lang->convert->checkDB    = 'Database';
 $lang->convert->checkTable = 'Table';
-$lang->convert->checkPath  = 'Installed Path';
+$lang->convert->checkPath  = 'Installation Path';
 
 $lang->convert->execute    = 'Convert';
 $lang->convert->item       = 'Item Converted';
-$lang->convert->count      = 'Count';
+$lang->convert->count      = 'No.';
 $lang->convert->info       = 'Info';
 
 $lang->convert->bugfree = new stdclass();
@@ -72,7 +72,7 @@ $lang->convert->bugfree->bugs     = 'Bug';
 $lang->convert->bugfree->cases    = 'Test Case';
 $lang->convert->bugfree->results  = 'Result';
 $lang->convert->bugfree->actions  = 'History';
-$lang->convert->bugfree->files    = 'File';
+$lang->convert->bugfree->files    = 'Files';
 
 $lang->convert->redmine = new stdclass();
 $lang->convert->redmine->users        = 'User';
@@ -88,7 +88,7 @@ $lang->convert->redmine->releases     = 'Release';
 $lang->convert->redmine->builds       = 'Build';
 $lang->convert->redmine->docLibs      = 'Doc Lib';
 $lang->convert->redmine->docs         = 'Doc';
-$lang->convert->redmine->files        = 'File';
+$lang->convert->redmine->files        = 'Files';
 
 $lang->convert->errorFileNotExits  = 'File %s is not found.';
 $lang->convert->errorUserExists    = 'User %s existed.';
@@ -97,7 +97,7 @@ $lang->convert->errorBuildExists   = 'Build %s existed.';
 $lang->convert->errorReleaseExists = 'Release %s existed.';
 $lang->convert->errorCopyFailed    = 'File %s copy failed.';
 
-$lang->convert->setParam = 'Please set parameters.';
+$lang->convert->setParam = 'Set parameters.';
 
 $lang->convert->statusType = new stdclass();
 $lang->convert->priType    = new stdclass();

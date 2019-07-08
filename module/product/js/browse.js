@@ -1,6 +1,7 @@
 $(function()
 {
     if($('#storyList thead th.c-title').width() < 150) $('#storyList thead th.c-title').width(150);
+    setTimeout(function(){fixFeatureBar();}, 10);
 
     // Fix state dropdown menu position
     $('.c-stage > .dropdown').each(function()

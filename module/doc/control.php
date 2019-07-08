@@ -114,9 +114,11 @@ class doc extends control
             $this->project->setMenu($this->project->getPairs('nocode'), $lib->project);
             $this->lang->set('menugroup.doc', 'project');
         }
-
-        $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
-        $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
+        else
+        {
+            $menuType = (!$type && (in_array($browseType, array_keys($this->lang->doc->fastMenuList)) || $browseType == 'bysearch')) ? $browseType : $type;
+            $this->doc->setMenu($menuType, $libID, $moduleID, $productID, $projectID);
+        }
         $this->session->set('docList', $this->app->getURI(true));
 
         /* Set header and position. */
@@ -304,12 +306,16 @@ class doc extends control
             if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $docID = $docResult['id'];
+            $files = $docResult['files'];
             $lib   = $this->doc->getLibByID($this->post->lib);
             if($docResult['status'] == 'exists')
             {
                 $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->duplicate, $this->lang->doc->common), 'locate' => $this->createLink('doc', 'view', "docID=$docID")));
             }
-            $this->action->create('doc', $docID, 'Created');
+
+            $fileAction = '';
+            if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
+            $this->action->create('doc', $docID, 'Created', $fileAction);
 
             $vars = "libID=$libID&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
             $link = $this->createLink('doc', 'browse', $vars);
@@ -803,7 +809,6 @@ class doc extends control
         }
         elseif($from == 'project')
         {
-            $this->lang->modulePageActions = common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
             $this->lang->doc->menu      = $this->lang->project->menu;
             $this->lang->doc->menuOrder = $this->lang->project->menuOrder;
             $this->project->setMenu($this->project->getPairs('nocode'), $objectID);

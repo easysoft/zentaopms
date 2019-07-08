@@ -1,2 +1,3 @@
 #whitelistBox .checkbox-primary, #whitelistBox .radio-inline{margin-left: 10px; display: inline-block; padding-left: 0px; padding-right: 10px;}
 .c-pri {overflow:hidden;}
+#mainMenu .btn-toolbar .dropdown-menu li a.btn{text-align:left;}

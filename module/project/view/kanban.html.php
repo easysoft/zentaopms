@@ -37,8 +37,8 @@
     <?php
     $checkObject = new stdclass();
     $checkObject->project = $projectID;
-    $misc = common::hasPriv('task', 'create', $checkObject) ? "class='btn btn-primary'" : "class='btn btn-primary disabled'";
-    $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')) : '#';
+    $misc = common::hasPriv('task', 'create', $checkObject) ? "class='btn btn-primary iframe' data-width='1200px'" : "class='btn btn-primary disabled'";
+    $link = common::hasPriv('task', 'create', $checkObject) ?  $this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''), '', true) : '#';
     echo html::a($link, "<i class='icon icon-plus'></i>" . $lang->task->create, '', $misc);
     ?>
   </div>
@@ -70,7 +70,6 @@ $account = $this->app->user->account;
     <p>
       <span class="text-muted"><?php echo $lang->task->noTask;?></span>
       <?php if(common::hasPriv('task', 'create', $checkObject)):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('task', 'create', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : '')), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

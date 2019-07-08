@@ -200,7 +200,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->task->desc;?></th>
-          <td colspan='3'><?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?></td>
+          <td colspan='3'>
+            <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=task&link=desc');?>
+            <?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->files;?></th>

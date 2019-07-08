@@ -21,7 +21,7 @@
     <div class='btn-toolbar pull-right'>
       <div class='btn-group'>
         <div class='btn-group' id='createActionMenu'>
-          <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'> </i>" . $lang->webhook->setting, '', "class='btn btn-primary'");?>
+          <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'> </i>" . $lang->webhook->setting, '', "class='btn btn-primary iframe'", '', true);?>
         </div>
       </div>
     </div>

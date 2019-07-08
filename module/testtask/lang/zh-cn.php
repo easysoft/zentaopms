@@ -140,10 +140,10 @@ $lang->testtask->report->common = '报表';
 $lang->testtask->report->select = '请选择报表类型';
 $lang->testtask->report->create = '生成报表';
     
-$lang->testtask->report->charts['testTaskPerRunResult'] = '用例结果统计';
-$lang->testtask->report->charts['testTaskPerType']      = '用例类型统计';
-$lang->testtask->report->charts['testTaskPerModule']    = '用例模块统计';
-$lang->testtask->report->charts['testTaskPerRunner']    = '用例执行人统计';
+$lang->testtask->report->charts['testTaskPerRunResult'] = '按用例结果统计';
+$lang->testtask->report->charts['testTaskPerType']      = '按用例类型统计';
+$lang->testtask->report->charts['testTaskPerModule']    = '按用例模块统计';
+$lang->testtask->report->charts['testTaskPerRunner']    = '按用例执行人统计';
 $lang->testtask->report->charts['bugSeverityGroups']    = 'Bug严重级别分布';
 $lang->testtask->report->charts['bugStatusGroups']      = 'Bug状态分布';
 $lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug创建者分布';

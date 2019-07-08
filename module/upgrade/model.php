@@ -371,6 +371,24 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_3');
             $this->execSQL($this->getUpgradeFile('11.3'));
             $this->addPriv11_4();
+        case '11_4':
+            $this->saveLogs('Execute 11_4');
+            $this->execSQL($this->getUpgradeFile('11.4'));
+        case '11_4_1':
+            $this->saveLogs('Execute 11_4_1');
+            $this->execSQL($this->getUpgradeFile('11.4.1'));
+            $this->addPriv11_5();
+            if(!isset($this->config->isINT) or !($this->config->isINT))
+            {
+                if(!$executeXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+                $this->updateXX_11_5();
+            }
         }
 
         $this->deletePatch();
@@ -502,6 +520,16 @@ class upgradeModel extends model
                 }
             case '11_2': $confirmContent .= file_get_contents($this->getUpgradeFile('11.2'));
             case '11_3': $confirmContent .= file_get_contents($this->getUpgradeFile('11.3'));
+            case '11_4': $confirmContent .= file_get_contents($this->getUpgradeFile('11.4'));
+            case '11_4_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('11.4.1'));
+                if(!isset($this->config->isINT) or !($this->config->isINT))
+                {
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                }
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -625,6 +653,7 @@ class upgradeModel extends model
             $basePath = $this->app->getBasePath();
             foreach($deleteFiles as $file)
             {
+                if(isset($this->config->excludeFiles[$file])) continue;
                 $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
                 if(file_exists($fullPath) and !unlink($fullPath)) $result[] = $fullPath;
             }
@@ -2246,6 +2275,49 @@ class upgradeModel extends model
     }
 
     /**
+     * Add Priv for 11.5 
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addPriv11_5()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('bug')->andWhere('method')->eq('setPublic')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $data = new stdclass();
+            $data->group  = $groupID;
+            $data->module = 'user';
+            $data->method = 'setPublicTemplate';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+        return true;
+    }
+
+    /**
+     * Add unique key for stage.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function addUniqueKey4Stage()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $stmt     = $this->dao->select('story,branch')->from(TABLE_STORYSTAGE)->orderBy('story,branch')->query();
+        $preStage = '';
+        while($stage = $stmt->fetch())
+        {
+            if($preStage == "{$stage->story}_{$stage->branch}") $this->dao->delete()->from(TABLE_STORYSTAGE)->where('story')->eq($stage->story)->andWhere('branch')->eq($stage->branch)->exec();
+            $preStage = "{$stage->story}_{$stage->branch}";
+        }
+        $this->dao->exec("ALTER TABLE " . TABLE_STORYSTAGE . " ADD UNIQUE `story_branch` (`story`, `branch`)");
+        $this->saveLogs($this->dao->get());
+        return true;
+    }
+
+    /**
      * Judge any error occers.
      *
      * @access public
@@ -3010,6 +3082,35 @@ class upgradeModel extends model
         $this->dao->update(TABLE_DOCLIB)->set('acl')->eq('default')->where('type')->in('product,project')->andWhere('acl')->in('open,private')->exec();
         $this->saveLogs($this->dao->get());
         return !dao::isError();
+    }
+
+    /**
+     * Update xuanxuan for 11_5.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function updateXX_11_5()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('admin')->andWhere('method')->eq('xuanxuan')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group = $groupID;
+            $groupPriv->module = 'setting';
+            $groupPriv->method = 'xuanxuan';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        try
+        {
+            $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('setting')->where('module')->eq('admin')->andWhere('method')->eq('downloadxxd')->exec();
+            $this->saveLogs($this->dao->get());
+        }
+        catch(PDOException $e){}
+        return true;
     }
 
     /**

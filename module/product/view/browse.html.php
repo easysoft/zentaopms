@@ -46,7 +46,7 @@
                     $moreLabel       = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                     $moreLabelActive = 'btn-active-text';
                 }
-                echo '<div class="btn-group">';
+                echo '<div class="btn-group" id="more">';
                 echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
                 echo "<ul class='dropdown-menu'>";
                 foreach($lang->product->moreSelects as $key => $value)
@@ -59,28 +59,9 @@
         }
         elseif($menuItem->name == 'QUERY')
         {
-            if(isset($lang->custom->queryList))
-            {
-                echo '<div class="btn-group" id="query">';
-                $active  = '';
-                $current = $menuItem->text;
-                $dropdownHtml = "<ul class='dropdown-menu'>";
-                foreach($lang->custom->queryList as $queryID => $queryTitle)
-                {
-                    if($this->session->storyBrowseType == 'bysearch' and $queryID == $param)
-                    {
-                        $active  = 'btn-active-text';
-                        $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                    }
-                    $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
-                    $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=$queryID"), $queryTitle);
-                }
-                $dropdownHtml .= '</ul>';
-
-                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
-                echo $dropdownHtml;
-                echo '</div>';
-            }
+            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s");
+            $isBySearch       = $this->session->storyBrowseType == 'bysearch';
+            include '../../common/view/querymenu.html.php';
         }
         else
         {
@@ -144,7 +125,6 @@
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
         <?php if(common::hasPriv('story', 'create')):?>
-        <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -273,6 +253,7 @@
                   foreach($lang->story->stageList as $key => $stage)
                   {
                       if(empty($key)) continue;
+                      if(strpos('tested|verified|released|closed', $key) === false) continue;
                       $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                       echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
                   }

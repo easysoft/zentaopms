@@ -12,13 +12,14 @@ $lang->datatable->switchToTable      = 'Switch to Common Table';
 $lang->datatable->switchToDatatable  = 'Switch to Advanced Table';
 $lang->datatable->required           = 'Required';
 $lang->datatable->confirmReset       = 'Do you want to restore the default settings?';
-$lang->datatable->setGlobal          = 'Global';
-$lang->datatable->resetGlobal        = 'Reset Global Default';
+$lang->datatable->setGlobal          = 'Set as Global';
+$lang->datatable->resetGlobal        = 'Global Reset';
 
 $lang->datatable->branch   = 'Branch';
 $lang->datatable->platform = 'Platform';
 
-$lang->datatable->showModule             = 'Show/Hide module name';
+$lang->datatable->showModule             = 'Show module names on the list page';
+$lang->datatable->showModuleAB           = 'Show Module Names';
 $lang->datatable->showModuleList[]       = 'N/A';
 $lang->datatable->showModuleList['base'] = 'Base Node';
 $lang->datatable->showModuleList['end']  = 'End Node';

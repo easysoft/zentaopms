@@ -111,7 +111,7 @@
 
             if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe', '', "data-width='90%'");
         }
-        if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe');
+        if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe', '', '', $lang->testcase->reviewAB);
         ?>
         <?php
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
@@ -302,7 +302,7 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendOpenAndEdit;?></summary>
         <div class="detail-content">
-          <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-60px';?>
+          <?php $widthClass = $app->getClientLang() == 'en' ? 'w-100px' : 'w-60px';?>
           <table class='table table-data'>
             <tr>
               <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->openedBy;?></th>

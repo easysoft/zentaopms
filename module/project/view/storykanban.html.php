@@ -11,9 +11,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id="mainMenu" class="clearfix">
-  <div id="sidebarHeader">
-    <div class="title" title='<?php echo $project->name?>'><?php echo $project->name;?></div>
-  </div>
   <div class="btn-toolbar pull-left">
     <?php $total = 0;?>
     <?php foreach($stories as $colStories) $total += count($colStories);?>
@@ -49,7 +46,6 @@ $account = $this->app->user->account;
     <p>
       <span class="text-muted"><?php echo $lang->story->noStory;?></span>
       <?php if(common::hasPriv('project', 'linkStory')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('project', 'linkStory', "project=$project->id"), "<i class='icon icon-link'></i> " . $lang->project->linkStory, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

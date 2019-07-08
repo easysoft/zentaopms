@@ -21,9 +21,7 @@ var browseType = '<?php echo $browseType;?>';
 
 <?php $spliter = (empty($this->app->user->feedback) && !$this->cookie->feedbackView && $this->from == 'doc') ? true : false;?>
 <div class="main-row fade <?php if($spliter) echo 'split-row';?>" id="mainRow">
-  <?php if($spliter):?>
-  <?php include './side.html.php';?>
-  <?php endif;?>
+  <?php if($this->from == 'doc') include './side.html.php';?>
   <?php if($this->cookie->browseType == 'bygrid'):?>
   <?php include dirname(__FILE__) . '/browsebygrid.html.php';?>
   <?php else:?>
@@ -41,8 +39,8 @@ var browseType = '<?php echo $browseType;?>';
         </div>
         <nav class="panel-actions btn-toolbar">
           <div class="btn-group">
-            <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
             <?php echo html::a('javascript:setBrowseType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='{$lang->doc->browseTypeList['grid']}' class='btn btn-icon'");?>
+            <?php echo html::a('javascript:setBrowseType("bylist")', "<i class='icon icon-bars'></i>", '', "title='{$lang->doc->browseTypeList['list']}' class='btn btn-icon text-primary'");?>
           </div>
           <?php if($libID):?>
           <div class="dropdown">
@@ -77,7 +75,6 @@ var browseType = '<?php echo $browseType;?>';
           <?php if($libID):?>
           <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
           <?php if(common::hasPriv('doc', 'create')):?>
-          <span class="text-muted"><?php echo $lang->youCould;?></span>
           <?php echo html::a($this->createLink('doc', 'create', "libID={$libID}&moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->doc->create, '', "class='btn btn-info'");?>
           <?php endif;?>
           <?php elseif($browseType == 'byediteddate'):?>

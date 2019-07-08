@@ -1509,7 +1509,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function tree($projectID, $type = '')
+    public function tree($projectID, $type = 'task')
     {
         $this->project->setMenu($this->projects, $projectID);
         $project = $this->loadModel('project')->getById($projectID);
@@ -1668,9 +1668,9 @@ class project extends control
         $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
         if($productPairs) $productID = key($productPairs);
 
-        $this->view->title      = $this->lang->project->kanban;
+        $this->view->title      = $this->lang->project->storyKanban;
         $this->view->position[] = html::a($this->createLink('project', 'story', "projectID=$projectID"), $project->name);
-        $this->view->position[] = $this->lang->project->kanban;
+        $this->view->position[] = $this->lang->project->storyKanban;
         $this->view->stories    = $this->story->getKanbanGroupData($stories);
         $this->view->realnames  = $this->loadModel('user')->getPairs('noletter');
         $this->view->projectID  = $projectID;
@@ -1780,7 +1780,7 @@ class project extends control
         $this->loadModel('dept');
 
         $project        = $this->project->getById($projectID);
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst');
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $currentMembers = $this->project->getTeamMembers($projectID);

@@ -104,7 +104,7 @@
                 <th class='w-80px'> <?php echo $lang->task->status;?></th>
                 <th class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
                 <th class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
-                <th class='w-250px'><?php echo $lang->actions;?></th>
+                <th class='w-170px'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <tbody>
@@ -126,12 +126,12 @@
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
-                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
-                  common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                  common::printIcon('task', 'assignTo', "projectID=$child->project&taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list');
                   ?>
                 </td>
@@ -152,6 +152,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$task->deleted):?>
         <?php
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
         common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
@@ -163,11 +164,9 @@
         common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
 
         if(!isonlybody()) echo "<div class='divider'></div>";
-        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button','plus','','','','',' ');
-        common::printIcon('task', 'edit', "taskID=$task->id", $task);
-        common::printIcon('task', 'create', "productID=0&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
+        common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
+        common::printIcon('task', 'create', "projctID={$task->project}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
         common::printIcon('task', 'delete', "projectID=$task->project&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
-
         if($task->parent > 0) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
         ?>
         <?php endif;?>
@@ -189,7 +188,7 @@
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th><?php echo $lang->task->project;?></th>
+                  <th class='w-90px'><?php echo $lang->task->project;?></th>
                   <td><?php if(!common::printLink('project', 'view', "projectID=$task->project", $project->name)) echo $project->name;?></td>
                 </tr>
                 <tr>
@@ -327,9 +326,9 @@
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
                   <td class='text-left'><?php echo zget($users, $member->account)?></td>
-                  <td><?php echo $member->estimate?></td>
-                  <td><?php echo $member->consumed?></td>
-                  <td><?php echo $member->left?></td>
+                  <td><?php echo (float)$member->estimate?></td>
+                  <td><?php echo (float)$member->consumed?></td>
+                  <td><?php echo (float)$member->left?></td>
                 </tr>
                 <?php endforeach;?>
             </table>
@@ -343,8 +342,8 @@
         <div class="detail-content">
           <table class='table table-data'>
             <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
-            <tr class='<?php echo $widthClass;?>'>
-              <th><?php echo $lang->task->estimate;?></th>
+            <tr>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estimate;?></th>
               <td><?php echo $task->estimate . $lang->workingHour;?></td>
             </tr>
             <tr>

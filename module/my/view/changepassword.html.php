@@ -32,7 +32,7 @@
         <td><?php echo html::password('originalPassword', '', "class='form-control'");?></td>
       </tr>  
       <tr>
-        <th><?php echo $lang->user->password;?></th>
+        <th><?php echo $lang->user->newPassword;?></th>
         <td>
           <span class='input-group'>
             <?php echo html::password('password1', '', "class='form-control' onmouseup='checkPassword(this.value)' onkeyup='checkPassword(this.value)' placeholder='" . (!empty($config->safe->mode) ? $lang->user->placeholder->passwordStrength[$config->safe->mode] : '') . "'");?>

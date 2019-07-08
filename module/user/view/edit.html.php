@@ -26,13 +26,13 @@
       <table align='center' class="table table-form">
         <caption class='text-left text-muted'><?php echo $lang->user->basicInfo;?></caption>
         <tr>
-          <th class='w-90px'><?php echo $lang->user->realname;?></th>
+          <th class='w-140px'><?php echo $lang->user->realname;?></th>
           <td class='w-p40'><?php echo html::input('realname', $user->realname, "class='form-control'");?></td>
-          <th class='w-90px'><?php echo $lang->user->join;?></th>
+          <th class='w-130px'><?php echo $lang->user->join;?></th>
           <td><?php echo html::input('join', formatTime($user->join), "class='form-control form-date'");?></td>  
         </tr>
         <tr>
-          <th class='w-90px'><?php echo $lang->user->dept;?></th>
+          <th class='w-140px'><?php echo $lang->user->dept;?></th>
           <td class='w-p40'><?php echo html::select('dept', $depts, $user->dept, "class='form-control chosen'");?></td>
           <th><?php echo $lang->user->role;?></th>
           <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='form-control'");?></td>
@@ -48,11 +48,10 @@
       </table>
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
-        <?php $thClass = ($app->getClientLang() == 'en') ? 'w-130px' : 'w-90px';?>
         <tr>
-          <th class='w-100px'><?php echo $lang->user->account;?></th>
+          <th class='w-140px'><?php echo $lang->user->account;?></th>
           <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control'");?></td>
-          <th class='<?php echo $thClass?>'><?php echo $lang->user->email;?></th>
+          <th class='w-130px'><?php echo $lang->user->email;?></th>
           <td>
             <?php echo html::input('email', $user->email, "class='form-control'");?>
             <input type='text' style="display:none"> <!-- Disable input account by browser automatically. -->
@@ -77,14 +76,16 @@
       </table>
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->contactInfo;?></caption>
+        <?php if(!empty($config->user->contactField)):?>
         <?php $i = 0;?>
         <?php foreach(explode(',', $config->user->contactField) as $field):?>
         <?php if($i % 2 == 0) echo '<tr>';?>
         <?php $i++;?>
-          <th class='w-90px'><?php echo $lang->user->$field;?></th>
-          <td><?php echo html::input($field, $user->$field, "class='form-control'");?></td>
+          <th <?php echo $i % 2 == 0 ? "class='w-130px'" : 'class="w-140px"'?>><?php echo $lang->user->$field;?></th>
+          <td <?php if($i % 2 != 0) echo "class='w-p40'"?>><?php echo html::input($field, $user->$field, "class='form-control'");?></td>
         <?php if($i % 2 == 0) echo '</tr>';?>
         <?php endforeach;?>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->user->address;?></th>
           <td><?php echo html::input('address', $user->address, "class='form-control'");?></td>
@@ -94,13 +95,14 @@
       </table>
       <table align='center' class='table table-form'>
         <caption class='text-left text-muted'><?php echo $lang->user->verify;?></caption>
-        <?php $thClass = ($app->getClientLang() == 'en') ? 'w-enVerifyPassword' : 'w-verifyPassword';?>
         <tr>
-          <th class='<?php echo $thClass?>'><?php echo $lang->user->verifyPassword;?></th>
+          <th class='w-140px'><?php echo $lang->user->verifyPassword;?></th>
           <td>
             <div class="required required-wrapper"></div>
             <?php echo html::password('verifyPassword', '', "class='form-control disabled-ie-placeholder' placeholder='{$lang->user->placeholder->verify}'");?>
           </td>
+          <th class='w-130px'></th>
+          <td></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center form-actions'>

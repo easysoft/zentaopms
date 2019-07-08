@@ -332,6 +332,10 @@ class backup extends control
         if(strtolower($this->server->request_method) == "post")
         {
             $data    = fixer::input('post')->join('setting', ',')->get();
+            
+            /*save change*/
+            if(isset($data->holdDays)) $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
+
             $setting = '';
             if(isset($data->setting)) $setting = $data->setting;
             $this->loadModel('setting')->setItem('system.backup.setting', $setting);

@@ -127,6 +127,7 @@ class user extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
         $this->view->account    = $account;
+        $this->view->user       = $this->user->getById($account);
         $this->view->pager      = $pager;
 
         $this->display();
@@ -244,13 +245,13 @@ class user extends control
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->account    = $account;
+        $this->view->user       = $this->user->getById($account);
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->display();
-
     }
 
     /**
@@ -296,6 +297,7 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
         $this->view->position[] = $this->lang->user->testCase;
         $this->view->account    = $account;
+        $this->view->user       = $this->user->getById($account);
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
@@ -349,13 +351,14 @@ class user extends control
 
         $user = $this->user->getById($account);
 
-        $this->view->title      = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->position[] = $this->lang->user->common;
-        $this->view->position[] = $this->lang->user->profile;
-        $this->view->account    = $account;
-        $this->view->user       = $user;
-        $this->view->groups     = $this->loadModel('group')->getByAccount($account);
-        $this->view->deptPath   = $this->dept->getParents($user->dept);
+        $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
+        $this->view->position[]   = $this->lang->user->common;
+        $this->view->position[]   = $this->lang->user->profile;
+        $this->view->account      = $account;
+        $this->view->user         = $user;
+        $this->view->groups       = $this->loadModel('group')->getByAccount($account);
+        $this->view->deptPath     = $this->dept->getParents($user->dept);
+        $this->view->personalData = $this->user->getPersonalData($user->account);
 
         $this->display();
     }
@@ -1006,5 +1009,47 @@ class user extends control
         $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
         if(empty($contactList)) return false;
         return print(html::select('', $contactList, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\""));
+    }
+
+    /**
+     * Ajax print templates.
+     * 
+     * @param  int    $type 
+     * @param  string $link 
+     * @access public
+     * @return void
+     */
+    public function ajaxPrintTemplates($type, $link = '')
+    {
+        $this->view->link      = $link;
+        $this->view->type      = $type;
+        $this->view->templates = $this->user->getUserTemplates($type);
+        $this->display();
+    }
+
+    /**
+     * Save current template.
+     *
+     * @access public
+     * @return string
+     */
+    public function ajaxSaveTemplate($type)
+    {
+        $this->user->saveUserTemplate($type);
+        if(dao::isError()) echo js::error(dao::getError(), $full = false);
+        die($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
+    }
+
+    /**
+     * Delete a user template.
+     *
+     * @param  int    $templateID
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteTemplate($templateID)
+    {
+        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
+        die();
     }
 }

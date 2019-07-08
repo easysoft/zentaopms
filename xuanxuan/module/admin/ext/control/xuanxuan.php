@@ -7,43 +7,41 @@ class admin extends control
      * @access public
      * @return void
      */
-    public function xuanxuan($type = '')
+    public function xuanxuan()
     {
-        $this->app->loadLang('chat');
-        if($_POST)
+        $this->loadModel('chat');
+
+        $block = new stdclass();
+        $block->title = $this->lang->admin->blockStatus;
+        $block->block = 'status';
+        $block->grid  = '6';
+        $blocks[] = $block;
+
+        $block = new stdclass();
+        $block->title = $this->lang->admin->blockStatistics;
+        $block->block = 'statistics';
+        $block->grid  = '6';
+        $blocks[] = $block;
+
+        foreach($blocks as $key => $block)
         {
-            $setting = fixer::input('post')->join('staff', ',')->remove('https')->get();
-            $errors  = array();
+            $block->params = new stdclass();
+            $block->params->account = $this->app->user->account;
+            $block->params->uid     = $this->app->user->id;
 
-            if(!is_numeric($setting->chatPort) or (int)$setting->chatPort <= 0 or (int)$setting->chatPort > 65535) $errors['chatPort'] = $this->lang->chat->xxdPortError;
-            if(!is_numeric($setting->commonPort) or (int)$setting->commonPort <= 0 or (int)$setting->commonPort > 65535) $errors['commonPort'] = $this->lang->chat->xxdPortError;
-            if($setting->isHttps == 'on')
-            {
-                if(empty($setting->sslcrt)) $errors['sslcrt'] = $this->lang->chat->errorSSLCrt;
-                if(empty($setting->sslkey)) $errors['sslkey'] = $this->lang->chat->errorSSLKey;
-            }
-
-            if(strpos($setting->server, '127.0.0.1') !== false) $errors[] = $this->lang->chat->xxdServerError;
-            if(strpos($setting->server, 'https://') !== 0 and strpos($setting->server, 'http://') !== 0) $errors[] = $this->lang->chat->xxdSchemeError;
-            if(empty($setting->server)) $errors[] = $this->lang->chat->xxdServerEmpty;
-
-            if($errors) $this->send(array('result' => 'fail', 'message' => $errors));
-
-            $result = $this->loadModel('setting')->setItems('system.common.xuanxuan', $setting);
-            if(!$result) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('xuanxuan')));
+            $query            = array();
+            $query['mode']    = 'getblockdata';
+            $query['blockid'] = $block->block;
+            $query['hash']    = ''; 
+            $query['lang']    = $this->app->getClientLang();
+            $query['sso']     = ''; 
+            if(isset($block->params)) $query['param'] = base64_encode(json_encode($block->params));
         }
 
-        $os = 'win';
-        if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
+        $this->view->title      = $this->lang->chat->common;
+        $this->view->position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->chat->common);
 
-        $this->view->title     = $this->lang->chat->common;
-        $this->view->adminList = $this->loadModel('user')->getPairs('admin');
-        $this->view->os        = $os . '_' . php_uname('m');
-        $this->view->type      = $type;
-        $this->view->domain    = $this->loadModel('chat')->getServer('zentao');
-        $this->view->turnon    = isset($this->config->xuanxuan->turnon) ? $this->config->xuanxuan->turnon : 1;
-        $this->view->isHttps   = $this->config->xuanxuan->isHttps ? $this->config->xuanxuan->isHttps : 0;
+        $this->view->blocks = $blocks;
         $this->display();
     }
 }

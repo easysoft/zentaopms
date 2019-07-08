@@ -17,17 +17,18 @@
   <nav id='contentNav'>
     <ul class='nav nav-default'>
       <?php
+      $that   = zget($lang->user->thirdPerson, $user->gender);
       $active = $type == 'assignedTo' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=assignedTo"), $lang->user->assignedTo) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=assignedTo"), sprintf($lang->user->assignedTo, $that)) . "</li>";
 
       $active = $type == 'openedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=openedBy"),   $lang->user->openedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=openedBy"),   sprintf($lang->user->openedBy, $that))   . "</li>";
 
       $active = $type == 'resolvedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=resolvedBy"), $lang->user->resolvedBy) . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=resolvedBy"), sprintf($lang->user->resolvedBy, $that)) . "</li>";
 
       $active = $type == 'closedBy' ? 'active' : '';
-      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=closedBy"),   $lang->user->closedBy)   . "</li>";
+      echo "<li class='$active'>" . html::a(inlink('bug', "account=$account&type=closedBy"),   sprintf($lang->user->closedBy, $that)) . "</li>";
       ?>
     </ul>
   </nav>
@@ -35,15 +36,15 @@
   <div class='main-table'>
     <table class='table has-sort-head tablesorter'>
       <thead>
-        <tr class='colhead'>
+        <tr class='text-center'>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th class='w-type'><?php echo $lang->typeAB;?></th>
-          <th><?php echo $lang->bug->title;?></th>
-          <th class='w-user'><?php echo $lang->openedByAB;?></th>
-          <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
-          <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
+          <th class='text-left'><?php echo $lang->bug->title;?></th>
+          <th class='w-90px'><?php echo $lang->openedByAB;?></th>
+          <th class='w-100px'><?php echo $lang->bug->resolvedBy;?></th>
+          <th class='w-100px'><?php echo $lang->bug->resolutionAB;?></th>
         </tr>
       </thead>
       <tbody>

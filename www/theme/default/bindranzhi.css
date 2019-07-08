@@ -3,6 +3,7 @@ body.has-fixed-footer{padding-bottom:20px;}
 #header{padding-top:0px;}
 #header #heading{display:none !important;}
 #header #navbar{text-align:left !important;}
+#header #navbar ul.nav{padding-left:10px !important;}
 .datatable .scroll-wrapper .scroll-slide {bottom:-55px !important;}
 .table-footer.fixed-footer{bottom:0px !important;}
 #footer{display:none;}

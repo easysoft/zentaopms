@@ -15,7 +15,7 @@
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php $name = $viewType == 'line' ? $lang->tree->line : (($viewType == 'doc' or $viewType == 'feedback') ? $lang->tree->cate : $lang->tree->name);?>
-<?php $title = $viewType == 'line' ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
+<?php $title = ($viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost') ? '' : ((strpos($viewType, 'doc') !== false || strpos($viewType, 'feedback') !== false) ? $lang->doc->childType : $lang->tree->child);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->{$viewType . 'List'} ? $this->session->{$viewType . 'List'} : 'javascript:history.go(-1)';?>
@@ -24,7 +24,7 @@
     </a>
     <div class="divider"></div>
     <div class="page-title">
-      <?php $rootName = $viewType == 'line' ? '' : $root->name;?>
+      <?php $rootName = $viewType == 'line' or $viewType == 'trainskill' or $viewType == 'trainpost' ? '' : $root->name;?>
       <span class="text" title='<?php echo $rootName;?>'>
         <?php
         if($viewType == 'doc')
@@ -38,6 +38,14 @@
         elseif($viewType == 'line')
         {
             echo $lang->tree->manageLine;
+        }
+        elseif($viewType == 'trainskill')
+        {
+            echo $lang->tree->manageTrainskill;
+        }
+        elseif($viewType == 'trainpost')
+        {
+            echo $lang->tree->manageTrainpost;
         }
         else
         {
@@ -64,7 +72,7 @@
       <div class="panel-heading">
         <div class="panel-title">
           <?php $manageChild = 'manage' . ucfirst($viewType) . 'Child';?>
-          <?php echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
+          <?php if(strpos($viewType, 'trainskill') === false and strpos($viewType, 'trainpost') === false) echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
         </div>
         <?php if($viewType == 'story' and $allProduct):?>
         <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm'")?></div>
@@ -74,7 +82,7 @@
         <form id='childrenForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root=$rootID&viewType=$viewType");?>'>
           <table class='table table-form table-auto'>
             <tr>
-              <?php if($viewType != 'line'):?>
+              <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost'):?>
               <td class="text-middle text-right with-padding">
                 <?php
                 echo "<span>" . html::a($this->createLink('tree', 'browse', "root=$rootID&viewType=$viewType"), empty($root->name) ? '' : $root->name) . "<i class='icon icon-angle-right muted'></i></span>";
@@ -141,7 +149,7 @@
               </td>
             </tr>
             <tr>
-              <?php if($viewType != 'line'):?>
+              <?php if($viewType != 'line' && $viewType != 'trainskill' && $viewType != 'trainpost'):?>
               <td></td>
               <?php endif;?>
               <td colspan="2" class="form-actions">

@@ -11,6 +11,14 @@
  */
 class editor extends control
 {
+    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+
+        $remoteIP = helper::getRemoteIp();
+        if($remoteIP != '127.0.0.1') die("<html><head><meta chatset='utf-8'></head><body>{$this->lang->editor->onlyLocalVisit}</body></html>");
+    }
+
     /**
      * Show module files and edit them. 
      * 
@@ -172,4 +180,3 @@ class editor extends control
 
     }
 }
-
