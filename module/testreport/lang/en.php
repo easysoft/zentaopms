@@ -36,7 +36,7 @@ $lang->testreport->all         = 'All Reports';
 $lang->testreport->deleted     = 'Deleted';
 $lang->testreport->selectTask  = 'Create report by request';
 
-$lang->testreport->legendBasic       = 'Basic Info.';
+$lang->testreport->legendBasic       = 'Basic Info';
 $lang->testreport->legendStoryAndBug = 'Test Scope';
 $lang->testreport->legendBuild       = 'Test Rounds';
 $lang->testreport->legendCase        = 'Linked Cases';
