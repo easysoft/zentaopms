@@ -24,7 +24,7 @@
     <form method='post' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='rowhead w-120px'><?php echo $lang->sso->turnon; ?></th>
+          <th class='rowhead w-150px'><?php echo $lang->sso->turnon; ?></th>
           <td><?php echo html::radio('turnon', $lang->sso->turnonList, $turnon);?></td>
         </tr>
         <tr>
