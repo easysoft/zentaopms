@@ -126,14 +126,14 @@ $lang->custom->productProject->relation['0_0'] = 'Product - Project';
 $lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
 $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
-$lang->custom->productProject->notice = 'Select according to your team';
+$lang->custom->productProject->notice = 'Select the work mode that fits your team.';
 
 $lang->custom->workingList['full']      = 'Application Lifecycle Management';
 $lang->custom->workingList['onlyTest']  = 'Test Management';
 $lang->custom->workingList['onlyStory'] = 'Story Management';
 $lang->custom->workingList['onlyTask']  = 'Task Management';
 
-$lang->custom->menuTip  = 'Click to show/hide the navigation bar. Drag to swtich display order.';
+$lang->custom->menuTip  = 'Click to show/hide the menu. Drag to switch display order.';
 $lang->custom->saveFail = 'Failed to save!';
 
 $lang->custom->scoreStatus[0] = 'Off';
