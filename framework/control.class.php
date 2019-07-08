@@ -21,6 +21,67 @@ include dirname(__FILE__) . '/base/control.class.php';
 class control extends baseControl
 {
     /**
+     * 加载指定模块的model文件。
+     * Load the model file of one module.
+     *
+     * Extension: set appName as empty.
+     *
+     * @param   string  $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
+     * @param   string  $appName    The app name, if empty, use current app's name.
+     * @access  public
+     * @return  object|bool 如果没有model文件，返回false，否则返回model对象。If no model file, return false, else return the model object.
+     */
+    public function loadModel($moduleName = '', $appName = '')
+    {
+        $appName = '';
+
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+        if(empty($appName))    $appName    = $this->appName;
+
+        global $loadedModels;
+        if(isset($loadedModels[$appName][$moduleName]))
+        {
+            $this->$moduleName = $loadedModels[$appName][$moduleName];
+            $this->dao = $this->$moduleName->dao;
+            return $this->$moduleName;
+        }
+
+        $modelFile = $this->app->setModelFile($moduleName, $appName);
+
+        /**
+         * 如果没有model文件，尝试加载config配置信息。
+         * If no model file, try load config.
+         */
+        if(!helper::import($modelFile))
+        {
+            $this->app->loadModuleConfig($moduleName, $appName);
+            $this->app->loadLang($moduleName, $appName);
+            $this->dao = new dao();
+            return false;
+        }
+
+        /**
+         * 如果没有扩展文件，model类名是$moduleName + 'model'，如果有扩展，还需要增加ext前缀。
+         * If no extension file, model class name is $moduleName + 'model', else with 'ext' as the prefix.
+         */
+        $modelClass = class_exists('ext' . $appName . $moduleName. 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
+        if(!class_exists($modelClass))
+        {
+            $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
+            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
+        }
+
+        /**
+         * 初始化model对象，在control对象中可以通过$this->$moduleName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
+         * Init the model object thus you can try $this->$moduleName to access it. Also assign the $dao object as a member of control object.
+         */
+        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
+        $this->$moduleName = $loadedModels[$appName][$moduleName];
+        $this->dao = $this->$moduleName->dao;
+        return $this->$moduleName;
+    }
+
+    /**
      * 设置视图文件：主视图文件，扩展视图文件， 站点扩展视图文件，以及钩子脚本。
      * Set view files: the main file, extension view file, site extension view file and hook files.
      *
