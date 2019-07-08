@@ -12,7 +12,7 @@
 $lang->sso = new stdclass();
 $lang->sso->settings = 'Settings';
 $lang->sso->turnon   = 'Zdoo';
-$lang->sso->redirect = 'Back to Zdoo';
+$lang->sso->redirect = 'Auto Jump to Zdoo';
 $lang->sso->code     = 'Code';
 $lang->sso->key      = 'Secret Key';
 $lang->sso->addr     = 'Address';
