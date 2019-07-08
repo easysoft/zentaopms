@@ -347,7 +347,7 @@ $lang->report->menu->test    = array('link' => 'Request|report|bugcreate', 'alia
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: The data of a report is based on the data in the List. Click the tab, e.g. All, then click Report to generate a report.';
+$lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click the tab, e.g. AssignedToMe, then click Report to generate a report based on AssignedToMe list.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
