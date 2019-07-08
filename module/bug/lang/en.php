@@ -59,7 +59,7 @@ $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'ClosedDate';
 $lang->bug->duplicateBug     = 'Duplicated Bug ID';
-$lang->bug->lastEditedBy     = 'ModifiedBy';
+$lang->bug->lastEditedBy     = 'EditedBy';
 $lang->bug->linkBug          = 'Linked Bugs';
 $lang->bug->linkBugs         = 'Link Bug';
 $lang->bug->unlinkBug        = 'Unlink';
@@ -107,9 +107,9 @@ $lang->bug->openedByMe         = 'ReportedByMe';
 $lang->bug->resolvedByMe       = 'ResolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
-$lang->bug->unResolved         = 'Unresolved';
-$lang->bug->toClosed           = 'Unclosed';
-$lang->bug->unclosed           = 'Active';
+$lang->bug->unResolved         = 'Active';
+$lang->bug->toClosed           = 'ToClose';
+$lang->bug->unclosed           = 'Unclosed';
 $lang->bug->unconfirmed        = 'Unconfirmed';
 $lang->bug->longLifeBugs       = 'Stalled';
 $lang->bug->postponedBugs      = 'Postponed';
@@ -137,7 +137,7 @@ $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'AssignTo';
 $lang->bug->lblMailto     = 'Mailto';
-$lang->bug->lblLastEdited = 'ModifiedBy';
+$lang->bug->lblLastEdited = 'EditedBy';
 $lang->bug->lblResolved   = 'ResolvedBy';
 $lang->bug->allUsers      = 'Load All Users';
 $lang->bug->allBuilds     = 'All Builds';
@@ -159,11 +159,11 @@ $lang->bug->legendRelated               = 'Related Info';
 $lang->bug->buttonConfirm = 'Confirm';
 
 /* 交互提示。*/
-$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> unresolved.";
+$lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, stories and tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s is not resolved. You cannot close it.';
+$lang->bug->skipClose             = 'Bug %s is active. You cannot close it.';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";

@@ -247,7 +247,7 @@ $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'Exclude Weekend';
 $lang->project->withweekend           = 'Include Weekend';
 $lang->project->interval              = 'Intervals';
-$lang->project->fixFirstWithLeft      = 'Update hours left';
+$lang->project->fixFirstWithLeft      = 'Update hours left too';
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
@@ -271,7 +271,7 @@ $lang->project->charts->burn->graph->actuality    = 'Actual';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = "Abbreviation of {$lang->projectCommon} name";
-$lang->project->placeholder->totalLeft = "Estimates at the beginning of the {$lang->projectCommon}.";
+$lang->project->placeholder->totalLeft = "Hours estimated on the first day of the {$lang->projectCommon}.";
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
@@ -319,8 +319,8 @@ $lang->project->featureBar['task']['status']       = $lang->project->statusSelec
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
-$lang->project->treeLevel['task']  = 'Show All';
-$lang->project->treeLevel['story'] = 'Show Story';
+$lang->project->treeLevel['task']  = 'Stories&Tasks';
+$lang->project->treeLevel['story'] = 'Only Stories';
 
 global $config;
 if($config->global->flow == 'onlyTask')

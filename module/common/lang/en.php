@@ -486,6 +486,7 @@ $lang->error->equal           = "『%s』has to be『%s』.";
 $lang->error->int             = array("『%s』should be numbers", "『%s』should be 『%s-%s』.");
 $lang->error->float           = "『%s』should have numbers, or decimals.";
 $lang->error->email           = "『%s』should be valid Email.";
+$lang->error->URL             = "『%s』should be url.";
 $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";
@@ -757,12 +758,12 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
     $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
-    $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
+    $lang->bug->menu->unclosed      = 'Unclosed|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->openedbyme    = 'ReportedByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
     $lang->bug->menu->assigntome    = 'AssignedToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
     $lang->bug->menu->resolvedbyme  = 'ResolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
     $lang->bug->menu->toclosed      = 'ToBeClosed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
-    $lang->bug->menu->unresolved    = 'Unresolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
+    $lang->bug->menu->unresolved    = 'Active|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->more          = array('link' => 'More|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->bug->subMenu = new stdclass();
