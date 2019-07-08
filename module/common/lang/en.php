@@ -71,8 +71,8 @@ $lang->saveSuccess     = 'Saved';
 $lang->fail            = 'Fail';
 $lang->addFiles        = 'Added Files';
 $lang->files           = 'Files ';
-$lang->pasteText       = 'Paste Multi-Items';
-$lang->uploadImages    = 'Upload Multi-Images';
+$lang->pasteText       = 'Multi-lines Paste';
+$lang->uploadImages    = 'Multi-images Upload';
 $lang->timeout         = 'Timeout. Check your newtwork connections, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Run phpmyadmin or myisamchk to fix it.';
 $lang->duplicate       = '%s has the same title as a file existed.';
@@ -347,7 +347,7 @@ $lang->report->menu->test    = array('link' => 'Request|report|bugcreate', 'alia
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: The data of a report is based on the data in the List. Click the tab, e.g. All, then click Report to generate a report.';
+$lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click the tab, e.g. AssignedToMe, then click Report to generate a report based on AssignedToMe list.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
@@ -486,6 +486,7 @@ $lang->error->equal           = "『%s』has to be『%s』.";
 $lang->error->int             = array("『%s』should be numbers", "『%s』should be 『%s-%s』.");
 $lang->error->float           = "『%s』should have numbers, or decimals.";
 $lang->error->email           = "『%s』should be valid Email.";
+$lang->error->URL             = "『%s』should be url.";
 $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";

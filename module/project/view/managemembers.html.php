@@ -56,7 +56,7 @@
             <input type='hidden' name='accounts[]' value='<?php echo $member->account;?>' />
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, $member->limited);?></td>
-          <td class='c-actions'>
+          <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
@@ -73,7 +73,7 @@
             <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $member2Import->hours;?>' />
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
-          <td class='c-actions'>
+          <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
@@ -91,7 +91,7 @@
             <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
-          <td class='c-actions'>
+          <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
@@ -109,7 +109,7 @@
             <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
           </td>
           <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, 'no');?></td>
-          <td class='c-actions'>
+          <td class='c-actions text-center'>
             <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
@@ -133,7 +133,7 @@
         <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
       </td>
       <td><?php echo html::radio("limited[$i]", $lang->team->limitedList, $member->realname ? $member->limited : 'no');?></td>
-      <td class='c-actions'>
+      <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>

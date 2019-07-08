@@ -180,12 +180,12 @@ $lang->project->groups['finishedBy'] = 'Group by FinishedBy';
 $lang->project->groups['closedBy']   = 'Group by ClosedBy';
 $lang->project->groups['type']       = 'Group by Type';
 
-$lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = 'LinkedtoStory Task';
-$lang->project->groupFilter['pri']['all']           = $lang->project->all;
+$lang->project->groupFilter['story']['all']         = 'All';
+$lang->project->groupFilter['story']['linked']      = 'Tasks of linked story';
+$lang->project->groupFilter['pri']['all']           = 'All';
 $lang->project->groupFilter['pri']['noset']         = 'Not Set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';
-$lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
+$lang->project->groupFilter['assignedTo']['all']    = 'All';
 
 $lang->project->byQuery = 'Search';
 
@@ -210,7 +210,7 @@ $lang->project->countSummary        = '<div class="table-col"><div class="clearf
 $lang->project->timeSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Estimates</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Cost</div><div class="segment-value text-red">%s</div></div><div class="segment"><div class="segment-title">Left</div><div class="segment-value">%s</div></div></div></div>';
 $lang->project->groupSummaryAB      = "<div>Tasks <strong>%s ：</strong><span class='text-muted'>Waiting</span> %s &nbsp; <span class='text-muted'>Doing</span> %s</div><div>Estimates <strong>%s ：</strong><span class='text-muted'>Cost</span> %s &nbsp; <span class='text-muted'>Left</span> %s</div>";
 $lang->project->wbs                 = "Create Task";
-$lang->project->batchWBS            = "Batch Create";
+$lang->project->batchWBS            = "Batch Create Tasks";
 $lang->project->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='How to update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories        = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->productStories      = "Stories linked to {$lang->projectCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
@@ -247,7 +247,7 @@ $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'Exclude Weekend';
 $lang->project->withweekend           = 'Include Weekend';
 $lang->project->interval              = 'Intervals';
-$lang->project->fixFirstWithLeft      = 'Update hours left';
+$lang->project->fixFirstWithLeft      = 'Update hours left too';
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
@@ -271,7 +271,7 @@ $lang->project->charts->burn->graph->actuality    = 'Actual';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = "Abbreviation of {$lang->projectCommon} name";
-$lang->project->placeholder->totalLeft = "Estimates at the beginning of the {$lang->projectCommon}.";
+$lang->project->placeholder->totalLeft = "Hours estimated on the first day of the {$lang->projectCommon}.";
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
@@ -319,8 +319,8 @@ $lang->project->featureBar['task']['status']       = $lang->project->statusSelec
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
-$lang->project->treeLevel['task']  = 'Show All';
-$lang->project->treeLevel['story'] = 'Show Story';
+$lang->project->treeLevel['task']  = 'Stories&Tasks';
+$lang->project->treeLevel['story'] = 'Only Stories';
 
 global $config;
 if($config->global->flow == 'onlyTask')

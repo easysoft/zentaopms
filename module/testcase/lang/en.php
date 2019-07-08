@@ -130,7 +130,7 @@ $lang->testcase->bySearch     = 'Search';
 $lang->testcase->unexecuted   = 'Pending';
 
 $lang->testcase->lblStory       = 'Linked Story';
-$lang->testcase->lblLastEdited  = 'Last Edited';
+$lang->testcase->lblLastEdited  = 'EditedBy';
 $lang->testcase->lblTypeValue   = 'Type Value';
 $lang->testcase->lblStageValue  = 'Phase Value';
 $lang->testcase->lblStatusValue = 'Status Value';

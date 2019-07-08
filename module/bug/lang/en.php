@@ -59,7 +59,7 @@ $lang->bug->plan             = 'Plan';
 $lang->bug->closedBy         = 'ClosedBy';
 $lang->bug->closedDate       = 'ClosedDate';
 $lang->bug->duplicateBug     = 'Duplicated Bug ID';
-$lang->bug->lastEditedBy     = 'ModifiedBy';
+$lang->bug->lastEditedBy     = 'EditedBy';
 $lang->bug->linkBug          = 'Linked Bugs';
 $lang->bug->linkBugs         = 'Link Bug';
 $lang->bug->unlinkBug        = 'Unlink';
@@ -137,7 +137,7 @@ $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = 'AssignTo';
 $lang->bug->lblMailto     = 'Mailto';
-$lang->bug->lblLastEdited = 'ModifiedBy';
+$lang->bug->lblLastEdited = 'EditedBy';
 $lang->bug->lblResolved   = 'ResolvedBy';
 $lang->bug->allUsers      = 'Load All Users';
 $lang->bug->allBuilds     = 'All Builds';
@@ -276,7 +276,7 @@ $lang->bug->report->charts['openedBugsPerUser']     = 'Reported Bugs Per User';
 $lang->bug->report->charts['resolvedBugsPerUser']   = 'Resolved Bugs Per User';
 $lang->bug->report->charts['closedBugsPerUser']     = 'Closed Bugs Per User';
 $lang->bug->report->charts['bugsPerSeverity']       = 'Bug Severity Report';
-$lang->bug->report->charts['bugsPerResolution']     = 'Bug Solution Report';
+$lang->bug->report->charts['bugsPerResolution']     = 'Bug Resolution Report';
 $lang->bug->report->charts['bugsPerStatus']         = 'Bug Status Report';
 $lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug Activation Times Report';
 $lang->bug->report->charts['bugsPerPri']            = 'Bug Priority Report';

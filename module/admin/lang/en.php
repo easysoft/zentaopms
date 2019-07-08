@@ -53,15 +53,15 @@ $lang->admin->bind->success = "Account is linked!";
 
 $lang->admin->safe = new stdclass();
 $lang->admin->safe->common     = 'Security Policy';
-$lang->admin->safe->set        = 'Strong Password';
-$lang->admin->safe->password   = 'Strong Password';
-$lang->admin->safe->weak       = 'Weak Password';
+$lang->admin->safe->set        = 'Password Settings';
+$lang->admin->safe->password   = 'Password Strength';
+$lang->admin->safe->weak       = 'Common Weak Password';
 $lang->admin->safe->reason     = 'Type';
-$lang->admin->safe->checkWeak  = 'Weak Password';
-$lang->admin->safe->changeWeak = 'Require to change weak password';
-$lang->admin->safe->modifyPasswordFirstLogin = 'Require to change password after first login';
+$lang->admin->safe->checkWeak  = 'Weak Password Scan';
+$lang->admin->safe->changeWeak = 'Force to change weak password';
+$lang->admin->safe->modifyPasswordFirstLogin = 'Force to change password after first login';
 
-$lang->admin->safe->modeList[0] = 'N/A';
+$lang->admin->safe->modeList[0] = 'I don\'t care.';
 $lang->admin->safe->modeList[1] = 'Medium';
 $lang->admin->safe->modeList[2] = 'Strong';
 
@@ -69,10 +69,10 @@ $lang->admin->safe->modeRuleList[1] = ' >= 6 upper and lower case, and numbers';
 $lang->admin->safe->modeRuleList[2] = ' >= 10 upper and lower case, numbers and special characters.';
 
 $lang->admin->safe->reasonList['weak']     = 'Common Weak Password';
-$lang->admin->safe->reasonList['account']  = 'Same as your account';
-$lang->admin->safe->reasonList['mobile']   = 'Same as your cellphone number';
-$lang->admin->safe->reasonList['phone']    = 'Same as your phone number';
-$lang->admin->safe->reasonList['birthday'] = 'Same as your DOB';
+$lang->admin->safe->reasonList['account']  = 'Same as account';
+$lang->admin->safe->reasonList['mobile']   = 'Same as mobilephone number';
+$lang->admin->safe->reasonList['phone']    = 'Same as phone number';
+$lang->admin->safe->reasonList['birthday'] = 'Same as DOB';
 
 $lang->admin->safe->modifyPasswordList[1] = 'Yes';
 $lang->admin->safe->modifyPasswordList[0] = 'No';
