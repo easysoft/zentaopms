@@ -39,6 +39,7 @@
         <div class="detail-content article-content"><?php echo $task->report;?></div>
       </div>
       <?php endif;?>
+      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=testtask&objectID=$task->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
@@ -116,6 +117,7 @@
               <th><?php echo $lang->testtask->status;?></th>
               <td class='task-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
             </tr>
+            <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
           </table>
         </div>
       </div>

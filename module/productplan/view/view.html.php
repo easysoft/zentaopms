@@ -453,10 +453,12 @@
                   </td>
                 </tr>
                 <?php endif;?>
+                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
                 <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>
                 </tr>
+                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
               </table>
             </div>
           </div>

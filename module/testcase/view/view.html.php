@@ -94,6 +94,7 @@
           </table>
         </div>
       </div>
+      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
       <?php include '../../common/view/action.html.php';?>
     </div>
@@ -263,6 +264,7 @@
               </td>
             </tr>
             <?php endif;?>
+            <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
           </table>
         </div>
       </details>

@@ -328,10 +328,12 @@
                       <th><?php echo $lang->release->date;?></th>
                       <td><?php echo $release->date;?></td>
                     </tr>
+                    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
                     <tr>
                       <th><?php echo $lang->release->desc;?></th>
                       <td><?php echo $release->desc;?></td>
                     </tr>
+                    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
                   </table>
                 </div>
               </div>

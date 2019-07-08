@@ -140,6 +140,7 @@
             </div>
           </div>
         </div>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
           <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
@@ -278,7 +279,7 @@
                 </table>
               </div>
             </div>
-
+            <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
               <div class="detail-content">

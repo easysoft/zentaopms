@@ -142,6 +142,7 @@
         </div>
       </div>
       <?php endif;?>
+      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
       <?php include '../../common/view/action.html.php';?>
@@ -281,6 +282,7 @@
                     ?>
                   </td>
                 </tr>
+                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
               </tbody>
             </table>
           </div>
