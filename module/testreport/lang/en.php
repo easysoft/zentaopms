@@ -62,9 +62,9 @@ $lang->testreport->confirmDelete  = 'Do you want to delete this report?';
 $lang->testreport->moreNotice     = 'More features can be extended with reference to the ZenTao extension manual, or you can contact us at renee@easysoft.ltd for customization.';
 $lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
-$lang->testreport->foundBugTip    = "Bugs generated in this build and generated in the test period.";
+$lang->testreport->foundBugTip    = "Bugs found in this build period and the affected build is in this test period.";
 $lang->testreport->legacyBugTip   = "Active bugs, or resolved bugs that are not in the test period.";
-$lang->testreport->fromCaseBugTip = "Bugs generated due to the failed case run in the test period.";
+$lang->testreport->fromCaseBugTip = "Bugs found from the running of cases in the test period.";
 $lang->testreport->errorTrunk     = "You cannot create a Testing report for the trunk. Please modify the linked build!";
 $lang->testreport->noTestTask     = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";
 $lang->testreport->noObjectID     = "No test request or {$lang->projectCommon} is selected, so no report can be generated.";
@@ -73,6 +73,6 @@ $lang->testreport->moreProduct    = "Testing reports can only be generated for t
 $lang->testreport->bugSummary = <<<EOD
 Total <strong>%s</strong> Bugs reported <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,
 <strong>%s</strong> Bugs remained unresolved <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-help'></i></a>,
-<strong>%s</strong> Bugs generated due to the failure of case run <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
-Bug Effective Rate <a data-toggle='tooltip' class='text-warning' title='Resolution is resolved or delayed / status is resolved or closed'><i class='icon-help'></i></a>: <strong>%s</strong>，Bugs reported from case rate<a data-toggle='tooltip' class='text-warning' title='Bugs created from cases / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
+<strong>%s</strong> Bugs found from the running of cases<a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
+Bug Effective Rate <a data-toggle='tooltip' class='text-warning' title='Resolution is resolved or delayed / status is resolved or closed'><i class='icon-help'></i></a>: <strong>%s</strong>，Bugs-reported-from-cases rate<a data-toggle='tooltip' class='text-warning' title='Bugs created from cases / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
 EOD;

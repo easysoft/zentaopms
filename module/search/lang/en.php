@@ -23,7 +23,7 @@ $lang->search->setQueryTitle = 'Enter a title. Search then the query is saved.';
 $lang->search->select        = 'Story/Task Filter';
 $lang->search->me            = 'Me';
 $lang->search->noQuery       = 'No query is saved yet!';
-$lang->search->onMenuBar     = 'Show in the Menu';
+$lang->search->onMenuBar     = 'Show in Menu';
 $lang->search->custom        = 'Custom';
 
 $lang->search->account  = 'Account';

@@ -319,8 +319,8 @@ $lang->project->featureBar['task']['status']       = $lang->project->statusSelec
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
-$lang->project->treeLevel['task']  = 'Show All';
-$lang->project->treeLevel['story'] = 'Show Story';
+$lang->project->treeLevel['task']  = 'Stories&Tasks';
+$lang->project->treeLevel['story'] = 'Only Stories';
 
 global $config;
 if($config->global->flow == 'onlyTask')
