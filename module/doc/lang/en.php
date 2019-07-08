@@ -58,8 +58,8 @@ $lang->doc->openedByMe     = 'My';
 $lang->doc->orderByOpen    = 'Recent Added';
 $lang->doc->orderByEdit    = 'Recent Edited';
 $lang->doc->orderByVisit   = 'Last Visited';
-$lang->doc->todayEdited    = 'Update Today';
-$lang->doc->pastEdited     = 'Total Updated';
+$lang->doc->todayEdited    = 'Edited Today';
+$lang->doc->pastEdited     = 'Total Edited';
 $lang->doc->myDoc          = 'My Documents';
 $lang->doc->myCollection   = 'My Favorites';
 
