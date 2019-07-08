@@ -180,12 +180,12 @@ $lang->project->groups['finishedBy'] = 'Group by FinishedBy';
 $lang->project->groups['closedBy']   = 'Group by ClosedBy';
 $lang->project->groups['type']       = 'Group by Type';
 
-$lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = 'LinkedtoStory Task';
-$lang->project->groupFilter['pri']['all']           = $lang->project->all;
+$lang->project->groupFilter['story']['all']         = 'All';
+$lang->project->groupFilter['story']['linked']      = 'Tasks of linked story';
+$lang->project->groupFilter['pri']['all']           = 'All';
 $lang->project->groupFilter['pri']['noset']         = 'Not Set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';
-$lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
+$lang->project->groupFilter['assignedTo']['all']    = 'All';
 
 $lang->project->byQuery = 'Search';
 
