@@ -102,7 +102,7 @@ $lang->user->closedBy    = '由%s关闭';
 $lang->user->reviewedBy  = '由%s评审';
 $lang->user->canceledBy  = '由%s取消';
 
-$lang->user->testTask2Him = '%s负责版本';
+$lang->user->testTask2Him = '%s负责的版本';
 $lang->user->case2Him     = '给%s的用例';
 $lang->user->caseByHim    = '%s建的用例';
 
