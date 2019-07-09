@@ -180,12 +180,12 @@ $lang->project->groups['finishedBy'] = '完成者分组';
 $lang->project->groups['closedBy']   = '关闭者分组';
 $lang->project->groups['type']       = '类型分组';
 
-$lang->project->groupFilter['story']['all']         = $lang->project->all;
+$lang->project->groupFilter['story']['all']         = '所有';
 $lang->project->groupFilter['story']['linked']      = '已关联需求的任务';
-$lang->project->groupFilter['pri']['all']           = $lang->project->all;
+$lang->project->groupFilter['pri']['all']           = '所有';
 $lang->project->groupFilter['pri']['noset']         = '未设置';
 $lang->project->groupFilter['assignedTo']['undone'] = '未完成';
-$lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
+$lang->project->groupFilter['assignedTo']['all']    = '所有';
 
 $lang->project->byQuery = '搜索';
 

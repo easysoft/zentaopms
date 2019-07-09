@@ -27,6 +27,6 @@ $lang->chat->info            = "ZenTao client is powered by <a href='https://xua
 $lang->chat->xxClientConfirm = 'Click Download ZenTao Client at the right bottom to download it!';
 $lang->chat->xxServerConfirm = 'Go to Admin-ZT Client to download the ZenTao Client Server!';
 
-$lang->chat->xxdServerTip   = 'XXD server address contains protocol, host and port，such as http://192.168.1.35 or http://pms.zentao.com. It should not be 127.0.0.1.';
+$lang->chat->xxdServerTip   = 'XXD server address contains protocol, host and port，such as http://192.168.1.35 or http://domain. It should not be 127.0.0.1.';
 $lang->chat->xxdServerEmpty = 'XXD server address is empty.';
 $lang->chat->xxdServerError = 'XXD server address should not be 127.0.0.1.';

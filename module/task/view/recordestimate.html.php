@@ -24,6 +24,7 @@
 <?php $team = array_keys($task->team);?>
 <?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
+<?php $colWidth = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -41,7 +42,6 @@
           <tr class='text-center'>
             <th class="w-id"><?php echo $lang->idAB;?></th>
             <th class="w-120px"><?php echo $lang->task->date;?></th>
-            <?php $colWidth = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
             <th class="<?php echo $colWidth;?>"><?php echo $lang->task->consumed;?></th>
             <th class="<?php echo $colWidth;?>"><?php echo $lang->task->left;?></th>
             <th><?php echo $lang->comment;?></th>

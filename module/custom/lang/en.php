@@ -97,6 +97,7 @@ $lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
 $lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase letters, numbers or underlines.';
 $lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
 $lang->custom->notice->noClosedBlock        = 'You have no blocks that are closed permanently.';
+$lang->custom->notice->required             = 'The selected field is required.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
@@ -135,6 +136,7 @@ $lang->custom->workingList['onlyTask']  = 'Task Management';
 
 $lang->custom->menuTip  = 'Click to show/hide the menu. Drag to switch display order.';
 $lang->custom->saveFail = 'Failed to save!';
+$lang->custom->page     = ' Page';
 
 $lang->custom->scoreStatus[0] = 'Off';
 $lang->custom->scoreStatus[1] = 'On';
