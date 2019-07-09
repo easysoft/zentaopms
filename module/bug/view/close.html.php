@@ -26,6 +26,7 @@
     </div>
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'table', 'columns=1');?>
         <tr>
           <th class='w-60px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
