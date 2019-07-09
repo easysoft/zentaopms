@@ -75,7 +75,7 @@
           </div>
         </div>
       </div>
-      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
+      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', "position=left&divCell=false");?>
       <div class="col-sm-12">
         <?php $blockHistory = true;?>
         <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=product&objectID=$product->id");?>
@@ -187,7 +187,6 @@
                     </td>
                   </tr>
                   <?php endif;?>
-                  <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
                 </tbody>
               </table>
             </div>
@@ -234,6 +233,7 @@
             </div>
           </div>
           <?php endif;?>
+          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', "position=right&divCell=false");?>
         </div>
       </div>
     </div>
