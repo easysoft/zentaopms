@@ -38,6 +38,7 @@
             ?>
           </td>
         </tr>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
