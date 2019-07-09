@@ -49,6 +49,7 @@
           </div>
         </td>
       </tr>
+      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'table', 'columns=5');?>
       <tr>
         <th><?php echo $lang->comment;?></th>
         <td colspan='5'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
