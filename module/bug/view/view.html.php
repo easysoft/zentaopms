@@ -55,11 +55,11 @@
           ?>
         </div>
       </div>
-      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', "position=left&divCell=true");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <?php
     $params        = "bugID=$bug->id";
     $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
@@ -225,7 +225,6 @@
                   <th><?php echo $lang->bug->mailto;?></th>
                   <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
                 </tr>
-                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
               </tbody>
             </table>
           </div>
@@ -377,6 +376,7 @@
         </div>
       </div>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

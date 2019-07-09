@@ -144,15 +144,14 @@
   </div>
   <div class='side-col col-4'>
     <div class='cell'>
-      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'basic');?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testsuite->legendDesc;?></div>
         <div class='detail-content article-content'>
           <?php echo $suite->desc;?>
         </div>
       </div>
-      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'detail');?>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', "position=right&divCell=true");?>
     <div class='cell'>
       <?php include '../../common/view/action.html.php';?>
     </div>
