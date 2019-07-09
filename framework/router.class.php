@@ -268,13 +268,13 @@ class router extends baseRouter
     public function setControlFile($exitIfNone = true)
     {
         /* If the module and method is defined in workflow, run workflow engine. */
-        if(defined('TABLE_WORKFLOW'))
+        if(defined('TABLE_WORKFLOW') && defined('TABLE_WORKFLOWACTION'))
         {
             $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
             if($flow)
             {
                 $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
-                if($action)
+                if(zget($action, 'extensionType') == 'override')
                 {
                     $this->workflowModule = $this->moduleName;
                     $this->workflowMethod = $this->methodName;
