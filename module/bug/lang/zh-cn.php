@@ -34,6 +34,7 @@ $lang->bug->activatedCount   = '激活次数';
 $lang->bug->activatedCountAB = '激活次数';
 $lang->bug->activatedDate    = '激活日期';
 $lang->bug->confirmed        = '是否确认';
+$lang->bug->confirmedAB      = '已确认';
 $lang->bug->toTask           = '转任务';
 $lang->bug->toStory          = '转需求';
 $lang->bug->mailto           = '抄送给';
@@ -245,8 +246,8 @@ $lang->bug->statusList['active']   = '激活';
 $lang->bug->statusList['resolved'] = '已解决';
 $lang->bug->statusList['closed']   = '已关闭';
 
-$lang->bug->confirmedList[1] = '已确认';
-$lang->bug->confirmedList[0] = '未确认';
+$lang->bug->confirmedList[1] = '是';
+$lang->bug->confirmedList[0] = '否';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '设计如此';

@@ -43,9 +43,12 @@ $lang->misc->zentao->support['manual']     = "User Manual";
 
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
-
 $lang->misc->zentao->cowin['cowinmore']    = "More";
 
+$lang->misc->zentao->service['zentaotrain']= 'Zentao Train';
+$lang->misc->zentao->service['idc']        = 'Zentao Cloud';
+$lang->misc->zentao->service['custom']     = 'Zentao Custom';
+$lang->misc->zentao->service['servicemore']= 'More';
 
 
 

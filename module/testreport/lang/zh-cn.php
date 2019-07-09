@@ -66,7 +66,9 @@ $lang->testreport->foundBugTip    = "影响版本在测试轮次内，并且创�
 $lang->testreport->legacyBugTip   = "Bug状态是激活，或Bug的解决时间在测试结束时间之后。";
 $lang->testreport->fromCaseBugTip = "测试时间范围内，用例执行失败后创建的Bug。";
 $lang->testreport->errorTrunk     = "主干版本不能创建测试报告，请修改关联版本！";
-$lang->testreport->moreProduct    = "只能对同一个产品生成测试报告。";
+$lang->testreport->noTestTask     = "该{$lang->productCommon}下还没有关联非Trunk的测试单，不能创建报告。请先创建测试单，再创建。";
+$lang->testreport->noObjectID     = "没有选定测试单或{$lang->projectCommon}，无法创建测试报告！";
+$lang->testreport->moreProduct    = "只能对同一个{$lang->productCommon}生成测试报告。";
 
 $lang->testreport->bugSummary = <<<EOD
 共发现<strong>%s</strong>个Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>，

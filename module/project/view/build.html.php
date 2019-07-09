@@ -14,12 +14,6 @@
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
-    <?php if(!empty($projectBuilds)):?>
-    <div class="pull-left table-group-btns">
-      <button type="button" class="btn btn-link group-collapse-all"><?php echo $lang->project->treeLevel['root'];?> <i class="icon-fold-all"> </i></button>
-      <button type="button" class="btn btn-link group-expand-all"><?php echo $lang->project->treeLevel['all'];?> <i class="icon-unfold-all"> </i></button>
-    </div>
-    <?php endif;?>
     <span class='btn btn-link btn-active-text'>
       <span class='text'><?php echo $lang->project->build;?></span>
       <span class='label label-light label-badge'><?php echo $buildsTotal;?></span>
@@ -40,11 +34,11 @@
     </p>
   </div>
   <?php else:?>
-  <div class='main-table' data-ride="table" data-checkable="false" data-group="true">
-    <table class="table table-grouped text-center" id='buildList'>
+  <div class='main-table' data-ride="table" data-checkable="false">
+    <table class="table text-center" id='buildList'>
       <thead>
-        <tr class="<?php if($buildsTotal) echo 'divider';?>">
-          <th class="c-side"><?php echo $lang->build->product;?></th>
+        <tr>
+          <th class="w-200px"><?php echo $lang->build->product;?></th>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
           <th class="c-name"><?php echo $lang->build->name;?></th>
           <th class="c-url"><?php echo $lang->build->scmPath;?></th>
@@ -58,12 +52,9 @@
         <?php foreach($projectBuilds as $productID => $builds):?>
         <?php $total = count($builds);?>
         <?php foreach($builds as $index => $build):?>
-        <tr data-id="<?php echo $productID;?>" class="<?php echo $index == 0 ? 'divider-top' : '';?>">
+        <tr data-id="<?php echo $productID;?>">
           <?php if($index == 0):?>
-          <td rowspan="<?php echo $total;?>" class="c-side text-left group-toggle">
-            <a title="<?php echo $build->productName;?>" class="text-primary"><i class="icon-caret-down"></i> <?php echo $build->productName;?></a>
-            <div class="small"><span class="text-muted"><?php echo $lang->project->build;?></span> <?php echo $total;?></div>
-          </td>
+          <td rowspan="<?php echo $total;?>" class="text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <?php endif;?>
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink('build', 'view', "buildID=$build->id"), sprintf('%03d', $build->id));?></td>
           <td class="c-name">
@@ -92,16 +83,6 @@
             ?>
           </td>
         </tr>
-        <?php if(($index + 1) == $total):?>
-        <tr class="group-toggle group-summary divider hidden" data-id="<?php echo $productID;?>">
-          <td class="c-side text-left">
-            <a title="<?php echo $build->productName;?>"><i class="icon-caret-right text-muted"></i> <?php echo $build->productName;?></a>
-          </td>
-          <td colspan="7" class="text-left">
-            <div class="small with-padding"><span class="text-muted"><?php echo $lang->project->build;?></span> <?php echo $total;?></div>
-          </td>
-        </tr>
-        <?php endif;?>
         <?php endforeach;?>
         <?php endforeach;?>
       </tbody>

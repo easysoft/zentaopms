@@ -6,5 +6,6 @@ function setTranslateView(view)
 
 $(function()
 {
+    $('input[id^=values]:first').focus();
     adjustKeyWidth();
 });

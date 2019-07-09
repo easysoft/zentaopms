@@ -1599,8 +1599,8 @@ class baseRouter
         $moduleName = isset($_GET[$this->config->moduleVar]) ? strtolower($_GET[$this->config->moduleVar]) : $this->config->default->module;
         $methodName = isset($_GET[$this->config->methodVar]) ? strtolower($_GET[$this->config->methodVar]) : $this->config->default->method;
         $this->setModuleName($moduleName);
-        $this->setControlFile();
         $this->setMethodName($methodName);
+        $this->setControlFile();
     }
 
     /**

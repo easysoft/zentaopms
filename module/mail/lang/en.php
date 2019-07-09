@@ -1,7 +1,7 @@
 <?php
 $lang->mail->common        = 'Email Settings';
 $lang->mail->index         = 'Home';
-$lang->mail->detect        = 'Testing';
+$lang->mail->detect        = 'Detect';
 $lang->mail->edit          = 'Edit Settings';
 $lang->mail->save          = 'Save';
 $lang->mail->test          = 'Email Sending Test';
@@ -28,13 +28,13 @@ $lang->mail->auth        = 'SMTP Validation';
 $lang->mail->username    = 'SMTP Account';
 $lang->mail->password    = 'SMTP Password';
 $lang->mail->secure      = 'Encryption';
-$lang->mail->debug       = 'Debugging Level';
+$lang->mail->debug       = 'Debugging';
 $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'Access Key';
 $lang->mail->secretKey   = 'Secret Key';
 $lang->mail->license     = 'ZenTao CloudMail Notice';
 
-$lang->mail->selectMTA = 'Select MTA (Mail Transfer Agent)';
+$lang->mail->selectMTA = 'Select Type';
 $lang->mail->smtp      = 'SMTP';
 
 $lang->mail->syncedUser = 'Synchronized';

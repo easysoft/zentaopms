@@ -32,7 +32,7 @@
         <table class='table table-form'> 
           <?php if($groupUsers):?>
           <tr>
-            <th class='w-130px'>
+            <th class='w-140px'>
               <div class="checkbox-primary checkbox-inline checkbox-right check-all">
                 <input type='checkbox' id='allInsideChecker' checked />
                 <label class='text-right' for='allInsideChecker'><?php echo $lang->group->inside;?></label>
@@ -46,7 +46,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <th>
+            <th class='w-140px'>
               <div class="checkbox-primary checkbox-inline checkbox-right check-all">
                 <input type='checkbox' id='allOutSideChecker'>
                 <label class='text-right' for='allOutSideChecker'><?php echo $lang->group->outside;?></label>

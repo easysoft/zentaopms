@@ -44,7 +44,7 @@ $lang->user->ip          = 'Last IP';
 $lang->user->last        = 'Last Login';
 $lang->user->ranzhi      = 'Zdoo Account';
 $lang->user->ditto       = 'Ditto';
-$lang->user->originalPassword = 'Password';
+$lang->user->originalPassword = 'Old Password';
 $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
@@ -94,17 +94,17 @@ $lang->user->todo        = 'Todo';
 $lang->user->story       = 'Stories';
 $lang->user->dynamic     = 'Dynamics';
 
-$lang->user->openedBy    = 'CreatedBy %s';
-$lang->user->assignedTo  = 'AssignedTo %s';
-$lang->user->finishedBy  = 'FinishedBy %s';
-$lang->user->resolvedBy  = 'SolvedBy %s';
-$lang->user->closedBy    = 'ClosedBy %s';
-$lang->user->reviewedBy  = 'ReviewedBy %s';
-$lang->user->canceledBy  = 'CancelledBy %s';
+$lang->user->openedBy    = 'CreatedBy%s';
+$lang->user->assignedTo  = 'AssignedTo%s';
+$lang->user->finishedBy  = 'FinishedBy%s';
+$lang->user->resolvedBy  = 'ResolvedBy%s';
+$lang->user->closedBy    = 'ClosedBy%s';
+$lang->user->reviewedBy  = 'ReviewedBy%s';
+$lang->user->canceledBy  = 'CancelledBy%s';
 
-$lang->user->testTask2Him = 'BuildBy %s';
-$lang->user->case2Him     = 'CaseAssignedTo %s';
-$lang->user->caseByHim    = 'CaseCreatedBy %s';
+$lang->user->testTask2Him = 'AssignTo%s';
+$lang->user->case2Him     = 'CaseAssignedTo%s';
+$lang->user->caseByHim    = 'CaseCreatedBy%s';
 
 $lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Click Back to return.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
@@ -139,7 +139,7 @@ $lang->user->statusList['delete'] = 'Deleted';
 $lang->user->personalData['createdTodo']  = 'Todos Created';
 $lang->user->personalData['createdStory'] = 'Stories Created';
 $lang->user->personalData['finishedTask'] = 'Tasks Finished';
-$lang->user->personalData['resolvedBug']  = 'Bugs Solved';
+$lang->user->personalData['resolvedBug']  = 'Bugs Resolved';
 $lang->user->personalData['createdCase']  = 'Cases Created';
 
 $lang->user->keepLogin['on']      = 'Keep Login';
@@ -174,13 +174,13 @@ $lang->user->error->verifyPassword   = "Verification failed. Please enter your L
 $lang->user->error->originalPassword = "Old password is incorrect.";
 
 $lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['slack']    = $lang->user->slack;
+$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['qq']       = $lang->user->qq;
 $lang->user->contactFieldList['dingding'] = $lang->user->dingding;
 $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
-$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
-$lang->user->contactFieldList['slack']    = $lang->user->slack;
-$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
-$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';

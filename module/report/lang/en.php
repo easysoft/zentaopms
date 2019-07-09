@@ -51,7 +51,7 @@ $lang->reportList->project->lists[10] = $lang->projectCommon . ' Deviation|repor
 $lang->reportList->product->lists[10] = $lang->productCommon . ' Summary|report|productsummary';
 $lang->reportList->test->lists[10]    = 'Bug Reported Summary|report|bugcreate';
 $lang->reportList->test->lists[13]    = 'Bug Assigned Summary|report|bugassign';
-$lang->reportList->staff->lists[10]   = 'Team Workload|report|workload';
+$lang->reportList->staff->lists[10]   = 'Team Workload Summary|report|workload';
 
 $lang->report->id            = 'ID';
 $lang->report->project       = $lang->projectCommon;
@@ -69,7 +69,7 @@ $lang->report->to            = 'to';
 $lang->report->taskTotal     = "Total Tasks";
 $lang->report->manhourTotal  = "Total Hours";
 $lang->report->validRate     = "Valid Rate";
-$lang->report->validRateTips = "Solution is Solved/Postponed or status is Solved/Closed.";
+$lang->report->validRateTips = "Resolution is Resolved/Postponed or status is Resolved/Closed.";
 $lang->report->unplanned     = 'Unplanned';
 $lang->report->workday       = 'Hours/Day';
 $lang->report->diffDays      = 'days';

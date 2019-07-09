@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2 title='<?php echo $group->name;?>'>
-      <span id='groupName'><i class='icon-lock'> <?php echo $group->name;?></i></span>
+      <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?></span>
       <small> <?php echo $lang->arrow . $lang->group->manageView;?></small>
     </h2>
   </div>

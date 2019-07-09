@@ -29,9 +29,9 @@
         <?php if($config->translate->needReview):?>
         <th class='w-100px'><?php echo $lang->translate->reviewedTotal;?></th>
         <?php endif;?>
-        <th class='w-80px'><?php echo $lang->translate->translatedProgress;?></th>
+        <th class='w-110px'><?php echo $lang->translate->translatedProgress;?></th>
         <?php if($config->translate->needReview):?>
-        <th class='w-80px'><?php echo $lang->translate->reviewedProgress;?></th>
+        <th class='w-90px'><?php echo $lang->translate->reviewedProgress;?></th>
         <?php endif;?>
         <th class='<?php echo $app->getClientLang() == 'en' ? 'w-150px' : 'w-110px';?>'><?php echo $lang->actions;?></th>
       </tr>
@@ -41,7 +41,21 @@
       <?php if(!isset($modules[$group])) continue;?>
       <?php $i = 0;?>
       <?php foreach($modules[$group] as $module):?>
-      <?php $moduleStatistics = $statistics[$module];?>
+      <?php
+      if(isset($statistics[$module]))
+      {
+          $moduleStatistics = $statistics[$module];
+          $moduleStatistics->count = $this->translate->getLangItemCount($module);
+      }
+      else
+      {
+          $moduleStatistics = new stdclass();
+          $moduleStatistics->count      = $this->translate->getLangItemCount($module);
+          $moduleStatistics->translated = 0;
+          $moduleStatistics->changed    = 0;
+          $moduleStatistics->reviewed   = 0;
+      }
+      ?>
       <tr>
         <?php if($i == 0):?>
         <th rowspan='<?php echo count($modules[$group]);?>' class='w-100px text-middle'>
@@ -60,12 +74,10 @@
         <td><?php echo (round($moduleStatistics->reviewed / $moduleStatistics->count, 3) * 100) . '%';?></td>
         <?php endif;?>
         <td>
-          <div class='btn-group'>
           <?php
-          if(common::hasPriv('translate', 'module')) echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), $lang->translate->common, '', "class='btn btn-sm'");
-          if(common::hasPriv('translate', 'review') and $config->translate->needReview) echo html::a($this->createLink('translate', 'review', "language=$language&module=$module"), $lang->translate->review, '', "class='btn btn-sm'");
+          if(common::hasPriv('translate', 'module')) echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), $lang->translate->common, '', "class='btn btn-sm btn-success'");
+          if(common::hasPriv('translate', 'review') and $config->translate->needReview) echo html::a($this->createLink('translate', 'review', "language=$language&module=$module"), $lang->translate->review, '', "class='btn btn-sm btn-info'");
           ?>
-          </div>
         </td>
       </tr>
       <?php $i++;?>

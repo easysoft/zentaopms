@@ -15,7 +15,7 @@ $lang->comma     = ',';
 $lang->dot       = '.';
 $lang->at        = ' on ';
 $lang->downArrow = '↓';
-$lang->null      = 'NULL';
+$lang->null      = 'Null';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
@@ -25,7 +25,7 @@ $lang->welcome        = "%s ALM";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
-$lang->aboutZenTao    = 'About ZenTao';
+$lang->aboutZenTao    = 'About';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Change Password';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
@@ -71,8 +71,8 @@ $lang->saveSuccess     = 'Saved';
 $lang->fail            = 'Fail';
 $lang->addFiles        = 'Added Files';
 $lang->files           = 'Files ';
-$lang->pasteText       = 'Paste Multi-Items';
-$lang->uploadImages    = 'Upload Multi-Images';
+$lang->pasteText       = 'Multi-lines Paste';
+$lang->uploadImages    = 'Multi-images Upload';
 $lang->timeout         = 'Timeout. Check your newtwork connections, or try it again!';
 $lang->repairTable     = 'Database table might be damaged. Run phpmyadmin or myisamchk to fix it.';
 $lang->duplicate       = '%s has the same title as a file existed.';
@@ -347,7 +347,7 @@ $lang->report->menu->test    = array('link' => 'Request|report|bugcreate', 'alia
 $lang->report->menu->staff   = array('link' => 'Company|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = 'Note: The data of a report is based on the data in the List. Click the tab, e.g. All, then click Report to generate a report.';
+$lang->report->notice->help = 'Note: The report is generated on the results of browsing the list. Click the tab, e.g. AssignedToMe, then click Report to generate a report based on AssignedToMe list.';
 
 /* Company menu settings. */
 $lang->company = new stdclass();
@@ -374,7 +374,7 @@ $lang->admin->menu->message   = array('link' => 'Notification|message|index', 's
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
 
-$lang->admin->menu->dev       = array('link' => 'CSD|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+$lang->admin->menu->dev       = array('link' => 'Develop|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->translate = array('link' => 'Translate|translate|index', 'subModule' => 'translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Security|admin|safe', 'alias' => 'checkweak');
@@ -392,6 +392,7 @@ $lang->admin->subMenu->sso->ranzhi = 'Zdoo|admin|sso';
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => 'Database|dev|db');
+$lang->admin->subMenu->dev->editor = array('link' => 'Editor|editor|index', 'subModule' => 'editor');
 $lang->admin->subMenu->dev->entry  = array('link' => 'Application|entry|browse', 'subModule' => 'entry');
 
 $lang->admin->subMenu->data = new stdclass();
@@ -416,6 +417,7 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 $lang->translate = new stdclass();
+$lang->editor    = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -430,6 +432,7 @@ $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
 $lang->translate->menu = $lang->admin->menu;
+$lang->editor->menu    = $lang->admin->menu;
 
 /* Menu group. */
 $lang->menugroup = new stdclass();
@@ -467,6 +470,7 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 $lang->menugroup->translate   = 'admin';
+$lang->menugroup->editor      = 'admin';
 
 /* Error info. */
 $lang->error = new stdclass();
@@ -482,6 +486,7 @@ $lang->error->equal           = "『%s』has to be『%s』.";
 $lang->error->int             = array("『%s』should be numbers", "『%s』should be 『%s-%s』.");
 $lang->error->float           = "『%s』should have numbers, or decimals.";
 $lang->error->email           = "『%s』should be valid Email.";
+$lang->error->URL             = "『%s』should be url.";
 $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
 $lang->error->code            = "『%s』should be letters or numbers.";
@@ -510,7 +515,7 @@ $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
 
 $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/free-open-source-project-management-software-zentaopro-127.html' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";
-$lang->downloadClient = "Download Desktop Client";
+$lang->downloadClient = "Download ZenTao Desktop";
 $lang->clientHelp     = "Client Help";
 $lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/";
 $lang->website        = "https://www.zentao.pm";
@@ -753,12 +758,12 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
     $lang->bug->menu->all           = 'All|bug|browse|productID=%s&branch=%s&browseType=all&param=%s';
-    $lang->bug->menu->unclosed      = 'Open|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
+    $lang->bug->menu->unclosed      = 'Unclosed|bug|browse|productID=%s&branch=%s&browseType=unclosed&param=%s';
     $lang->bug->menu->openedbyme    = 'ReportedByMe|bug|browse|productID=%s&branch=%s&browseType=openedbyme&param=%s';
     $lang->bug->menu->assigntome    = 'AssignedToMe|bug|browse|productID=%s&branch=%s&browseType=assigntome&param=%s';
-    $lang->bug->menu->resolvedbyme  = 'SolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
+    $lang->bug->menu->resolvedbyme  = 'ResolvedByMe|bug|browse|productID=%s&branch=%s&browseType=resolvedbyme&param=%s';
     $lang->bug->menu->toclosed      = 'ToBeClosed|bug|browse|productID=%s&branch=%s&browseType=toclosed&param=%s';
-    $lang->bug->menu->unresolved    = 'Unsolved|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
+    $lang->bug->menu->unresolved    = 'Active|bug|browse|productID=%s&branch=%s&browseType=unresolved&param=%s';
     $lang->bug->menu->more          = array('link' => 'More|bug|browse|productID=%s&branch=%s&browseType=unconfirmed&param=%s', 'class' => 'dropdown dropdown-hover');
 
     $lang->bug->subMenu = new stdclass();

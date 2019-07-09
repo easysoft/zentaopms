@@ -112,32 +112,6 @@ class testreport extends control
     }
 
     /**
-     * Select a testtask for reporttask.
-     *
-     * @param  int    $objectID
-     * @param  string $objectType
-     * @access public
-     * @return void
-     */
-    public function selectTask($productID)
-    {
-        if($_POST)
-        {
-            $taskID = $this->post->testtask;
-            die(js::locate(inlink('create', "objectID=$taskID&objectType=testtask"), 'parent'));
-        }
-
-        $taskPairs         = array();
-        $scopeAndStatus[0] = 'local';
-        $scopeAndStatus[1] = 'totalStatus';
-        $tasks = $this->testtask->getProductTasks($productID, 0, 'id_desc', null, $scopeAndStatus);
-        foreach($tasks as $task) $taskPairs[$task->id] = $task->name;
-
-        $this->view->taskPairs = $taskPairs;
-        $this->display();
-    }
-
-    /**
      * Create report.
      *
      * @param  int    $objectID
@@ -146,7 +120,7 @@ class testreport extends control
      * @access public
      * @return void
      */
-    public function create($objectID, $objectType = 'testtask', $extra = '')
+    public function create($objectID = 0, $objectType = 'testtask', $extra = '')
     {
         if($_POST)
         {
@@ -158,8 +132,36 @@ class testreport extends control
 
         if($objectType == 'testtask')
         {
-            $task      = $this->testtask->getById($objectID);
-            $productID = $this->commonAction($task->product, 'product');
+            if(empty($objectID) and $extra) $productID = $extra;
+            if($objectID)
+            {
+                $task      = $this->testtask->getById($objectID);
+                $productID = $this->commonAction($task->product, 'product');
+            }
+
+            $taskPairs         = array();
+            $scopeAndStatus[0] = 'local';
+            $scopeAndStatus[1] = 'totalStatus';
+            $tasks = $this->testtask->getProductTasks($productID, 0, 'id_desc', null, $scopeAndStatus);
+            foreach($tasks as $testTask)
+            {
+                if($testTask->build == 'trunk') continue;
+                $taskPairs[$testTask->id] = $testTask->name;
+            }
+            if(empty($taskPairs)) die(js::alert($this->lang->testreport->noTestTask) . js::locate('back'));
+
+            if(empty($objectID))
+            {
+                $objectID  = key($taskPairs);
+                $task      = $this->testtask->getById($objectID);
+                $productID = $this->commonAction($task->product, 'product');
+            }
+            $this->view->taskPairs = $taskPairs;
+        }
+
+        if(empty($objectID)) die(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
+        if($objectType == 'testtask')
+        {
             if($productID != $task->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
             $productIdList[$productID] = $productID;
 

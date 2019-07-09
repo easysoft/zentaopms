@@ -33,7 +33,8 @@
         </div>
       </div>
       <table class='table table-form mw-800px'>
-        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-200px' : 'w-100px';?>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-250px' : 'w-120px';?>
+        <?php $i = 0;?>
         <?php foreach($requiredFields as $method => $requiredField):?>
         <tr>
           <th class='<?php echo $colWidth;?>'>
@@ -49,15 +50,16 @@
               $fields = $this->custom->getFormFields('testcase', $method);
               $method = 'createCase';
           }
-          echo $lang->$moduleName->$method;
+          echo $lang->$moduleName->$method . $lang->custom->page;
           ?>
           </th>
-          <td><?php echo html::select("requiredFields[{$method}][]", $fields, $requiredField, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select("requiredFields[{$method}][]", $fields, $requiredField, "class='form-control chosen' multiple " . ($i == 0 ? "data-placeholder='{$lang->custom->notice->required}'" : ''));?></td>
           <td></td>
         </tr>
+        <?php $i++;?>
         <?php endforeach;?>
         <tr>
-          <td colspan='2' class='text-center form-actions'>
+          <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>
           <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>

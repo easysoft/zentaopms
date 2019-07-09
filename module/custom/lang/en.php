@@ -51,9 +51,9 @@ $lang->custom->bug->fields['severityList']   = 'Severity';
 $lang->custom->bug->fields['osList']         = 'OS';
 $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
-$lang->custom->bug->fields['resolutionList'] = 'Solution';
+$lang->custom->bug->fields['resolutionList'] = 'Resolution';
 $lang->custom->bug->fields['statusList']     = 'Status';
-$lang->custom->bug->fields['longlife']       = 'Pending Days';
+$lang->custom->bug->fields['longlife']       = 'Stalled Days';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = 'Priority';
@@ -97,6 +97,7 @@ $lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
 $lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase letters, numbers or underlines.';
 $lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
 $lang->custom->notice->noClosedBlock        = 'You have no blocks that are closed permanently.';
+$lang->custom->notice->required             = 'The selected field is required.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
@@ -126,15 +127,16 @@ $lang->custom->productProject->relation['0_0'] = 'Product - Project';
 $lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
 $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
-$lang->custom->productProject->notice = 'Select according to your team';
+$lang->custom->productProject->notice = 'Select the work mode that fits your team.';
 
 $lang->custom->workingList['full']      = 'Application Lifecycle Management';
 $lang->custom->workingList['onlyTest']  = 'Test Management';
 $lang->custom->workingList['onlyStory'] = 'Story Management';
 $lang->custom->workingList['onlyTask']  = 'Task Management';
 
-$lang->custom->menuTip  = 'Click to show/hide the navigation bar. Drag to swtich display order.';
+$lang->custom->menuTip  = 'Click to show/hide the menu. Drag to switch display order.';
 $lang->custom->saveFail = 'Failed to save!';
+$lang->custom->page     = ' Page';
 
 $lang->custom->scoreStatus[0] = 'Off';
 $lang->custom->scoreStatus[1] = 'On';

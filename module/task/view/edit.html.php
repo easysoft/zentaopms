@@ -151,10 +151,6 @@
                 <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
               </tr>
               <tr>
-                <th><?php echo $lang->task->realStarted;?></th>
-                <td><?php echo html::input('realStarted', $task->realStarted, "class='form-control form-date'");?></td>
-              </tr>
-              <tr>
                 <th><?php echo $lang->task->deadline;?></th>
                 <td><?php echo html::input('deadline', $task->deadline, "class='form-control form-date'");?></td>
               </tr>
@@ -180,10 +176,15 @@
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->legendLife;?></div>
+            <?php $thWidth = $this->app->getClientLang() == 'en' ? 'w-120px' : 'w-70px';?>
             <table class='table table-form'>
               <tr>
                 <th class=<?php echo $thWidth;?>><?php echo $lang->task->openedBy;?></th>
                 <td><?php echo $users[$task->openedBy];?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->task->realStarted;?></th>
+                <td><?php echo html::input('realStarted', $task->realStarted, "class='form-control form-date'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->finishedBy;?></th>
@@ -235,11 +236,11 @@
                 <td>
                   <div class='input-group'>
                     <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
-                    <?php echo html::input("teamEstimate[]", $member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
-                    <?php echo html::input("teamConsumed[]", $member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->left?></span>
-                    <?php echo html::input("teamLeft[]", $member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
+                    <?php echo html::input("teamLeft[]", (float)$member->left, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                   </div>
                 </td>
                 <td class='w-130px sort-handler'>
