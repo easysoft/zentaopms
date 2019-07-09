@@ -34,7 +34,7 @@
         <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->task->start;?></small>
         <?php endif;?>
-      </div>
+      </h2>
     </div>
     <form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
       <table class='table table-form'>
