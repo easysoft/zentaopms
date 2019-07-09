@@ -522,7 +522,7 @@ $lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
-$lang->pasteTextInfo   = "Paste the text of items here. Each item will be the title of a story. ";
+$lang->pasteTextInfo   = "Paste the text here. Each line will be a title. ";
 $lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
 $lang->importConfirm   = "Import";
 $lang->importAndCover  = "Override";
