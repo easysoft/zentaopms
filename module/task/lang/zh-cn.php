@@ -134,7 +134,7 @@ $lang->task->noStory           = '无需求';
 $lang->task->noAssigned        = '未指派';
 $lang->task->noFinished        = '未完成';
 $lang->task->noClosed          = '未关闭';
-$lang->task->yesterdayFinished = '昨日完成';
+$lang->task->yesterdayFinished = '昨日完成任务数';
 $lang->task->allTasks          = '总任务';
 
 $lang->task->statusList['']       = '';

@@ -127,7 +127,7 @@ $lang->bug->byQuery            = '搜索';
 $lang->bug->needConfirm        = '需求变动';
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
-$lang->bug->yesterdayResolved  = '昨天解决';
+$lang->bug->yesterdayResolved  = '昨天解决Bug数';
 $lang->bug->yesterdayConfirmed = '昨天确认';
 $lang->bug->yesterdayClosed    = '昨天关闭';
 

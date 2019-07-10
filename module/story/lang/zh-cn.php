@@ -104,6 +104,7 @@ $lang->story->total          = '总需求';
 $lang->story->allStories     = '所有需求';
 $lang->story->unclosed       = '未关闭';
 $lang->story->deleted        = '已删除';
+$lang->story->released       = '已发布关联需求数';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = '该需求与上一需求不属于同一产品！';
