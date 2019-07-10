@@ -564,7 +564,7 @@ $lang->datepicker->dpText->TEXT_TODAY       = 'Today';
 $lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Next Year';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Next Month';
 $lang->datepicker->dpText->TEXT_CLOSE       = 'Close';
-$lang->datepicker->dpText->TEXT_DATE        = 'Choose Tab';
+$lang->datepicker->dpText->TEXT_DATE        = '';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose Date';
 
 $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');
