@@ -9,23 +9,27 @@
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-$lang->extension->common        = 'Extension';
-$lang->extension->browse        = 'Extensions';
-$lang->extension->install       = 'Install';
-$lang->extension->installAuto   = 'Auto Installation';
-$lang->extension->installForce  = 'Force Installation';
-$lang->extension->uninstall     = 'Uninstall';
-$lang->extension->activate      = 'Activate';
-$lang->extension->deactivate    = 'Deactivate';
-$lang->extension->obtain        = 'Get Extension';
-$lang->extension->view          = 'Detail';
-$lang->extension->downloadAB    = 'Download';
-$lang->extension->upload        = 'Local Installation';
-$lang->extension->erase         = 'Erase';
-$lang->extension->upgrade       = 'Upgrade Extension';
-$lang->extension->agreeLicense  = 'I agree to the license.';
+$lang->extension->common           = 'Extension';
+$lang->extension->browse           = 'Extensions';
+$lang->extension->install          = 'Install Extension';
+$lang->extension->installAuto      = 'Auto Installation';
+$lang->extension->installForce     = 'Force Installation';
+$lang->extension->uninstall        = 'Uninstall';
+$lang->extension->uninstallAction  = 'Uninstall Extension';
+$lang->extension->activate         = 'Activate';
+$lang->extension->activateAction   = 'Activate Extension';
+$lang->extension->deactivate       = 'Deactivate';
+$lang->extension->deactivateAction = 'Deactivate Extension';
+$lang->extension->obtain           = 'Get Extension';
+$lang->extension->view             = 'Detail';
+$lang->extension->downloadAB       = 'Download';
+$lang->extension->upload           = 'Local Installation';
+$lang->extension->erase            = 'Erase';
+$lang->extension->eraseAction      = 'Erase Extension';
+$lang->extension->upgrade          = 'Upgrade Extension';
+$lang->extension->agreeLicense     = 'I agree to the license.';
 
-$lang->extension->structure   = 'Structure';
+$lang->extension->structure   = 'Extension Structure';
 $lang->extension->installed   = 'Installed';
 $lang->extension->deactivated = 'Deactivated';
 $lang->extension->available   = 'Downloaded';

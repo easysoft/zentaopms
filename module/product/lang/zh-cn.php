@@ -9,24 +9,27 @@
  * @version     $Id: zh-cn.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common      = $lang->productCommon . '视图';
-$lang->product->index       = $lang->productCommon . '主页';
-$lang->product->browse      = '需求列表';
-$lang->product->dynamic     = '动态';
-$lang->product->view        = "{$lang->productCommon}概况";
-$lang->product->edit        = "编辑{$lang->productCommon}";
-$lang->product->batchEdit   = '批量编辑';
-$lang->product->create      = "添加{$lang->productCommon}";
-$lang->product->delete      = "删除{$lang->productCommon}";
-$lang->product->deleted     = '已删除';
-$lang->product->close       = '关闭';
-$lang->product->select      = "请选择{$lang->productCommon}";
-$lang->product->mine        = '我负责：';
-$lang->product->other       = '其他：';
-$lang->product->closed      = '已关闭';
-$lang->product->updateOrder = '排序';
-$lang->product->all         = "所有{$lang->productCommon}";
-$lang->product->export      = '导出数据';
+$lang->product->common       = $lang->productCommon . '视图';
+$lang->product->index        = $lang->productCommon . '主页';
+$lang->product->browse       = '需求列表';
+$lang->product->dynamic      = '产品动态';
+$lang->product->view         = "{$lang->productCommon}概况";
+$lang->product->edit         = "编辑{$lang->productCommon}";
+$lang->product->batchEdit    = '批量编辑';
+$lang->product->create       = "添加{$lang->productCommon}";
+$lang->product->delete       = "删除{$lang->productCommon}";
+$lang->product->deleted      = '已删除';
+$lang->product->close        = '关闭';
+$lang->product->closeAction  = "关闭{$lang->productCommon}";
+$lang->product->select       = "请选择{$lang->productCommon}";
+$lang->product->mine         = '我负责：';
+$lang->product->other        = '其他：';
+$lang->product->closed       = '已关闭';
+$lang->product->updateOrder  = '排序';
+$lang->product->orderAction  = "{$lang->productCommon}排序";
+$lang->product->all          = "所有{$lang->productCommon}";
+$lang->product->export       = '导出数据';
+$lang->product->exportAction = "导出{$lang->productCommon}";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -38,7 +41,7 @@ $lang->product->bugs        = '相关Bug';
 $lang->product->projects    = "关联{$lang->projectCommon}数";
 $lang->product->cases       = '用例数';
 $lang->product->builds      = 'BUILD数';
-$lang->product->roadmap     = '路线图';
+$lang->product->roadmap     = "{$lang->productCommon}路线图";
 $lang->product->doc         = '文档列表';
 $lang->product->project     = $lang->projectCommon . '列表';
 $lang->product->build       = '版本列表';

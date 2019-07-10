@@ -9,24 +9,27 @@
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->common      = $lang->productCommon;
-$lang->product->index       = $lang->productCommon . ' Home';
-$lang->product->browse      = 'Story List';
-$lang->product->dynamic     = 'Dynamics';
-$lang->product->view        = 'Overview';
-$lang->product->edit        = "Edit {$lang->productCommon}";
-$lang->product->batchEdit   = 'Batch Edit';
-$lang->product->create      = "Create {$lang->productCommon}";
-$lang->product->delete      = "Delete {$lang->productCommon}";
-$lang->product->deleted     = 'Deleted';
-$lang->product->close       = 'Close';
-$lang->product->select      = "Select {$lang->productCommon}";
-$lang->product->mine        = 'My:';
-$lang->product->other       = 'Others:';
-$lang->product->closed      = 'Closed';
-$lang->product->updateOrder = 'Order';
-$lang->product->all         = "All {$lang->productCommon}s";
-$lang->product->export      = 'Export';
+$lang->product->common       = $lang->productCommon;
+$lang->product->index        = $lang->productCommon . ' Home';
+$lang->product->browse       = 'Story List';
+$lang->product->dynamic      = 'Dynamics';
+$lang->product->view         = "{$lang->productCommon} Detail";
+$lang->product->edit         = "Edit {$lang->productCommon}";
+$lang->product->batchEdit    = 'Batch Edit';
+$lang->product->create       = "Create {$lang->productCommon}";
+$lang->product->delete       = "Delete {$lang->productCommon}";
+$lang->product->deleted      = 'Deleted';
+$lang->product->close        = "Close";
+$lang->product->closeAction  = "Close {$lang->productCommon}";
+$lang->product->select       = "Select {$lang->productCommon}";
+$lang->product->mine         = 'My:';
+$lang->product->other        = 'Others:';
+$lang->product->closed       = 'Closed';
+$lang->product->updateOrder  = 'Order';
+$lang->product->orderAction  = "Order {$lang->productCommon}";
+$lang->product->all          = "All {$lang->productCommon}s";
+$lang->product->export       = 'Export';
+$lang->product->exportAction = "Export {$lang->productCommon}";
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
@@ -38,8 +41,8 @@ $lang->product->bugs        = 'Linked Bug';
 $lang->product->projects    = "Linked {$lang->projectCommon}";
 $lang->product->cases       = 'Case';
 $lang->product->builds      = 'Build';
-$lang->product->roadmap     = 'Roadmap';
-$lang->product->doc         = 'Documents';
+$lang->product->roadmap     = "{$lang->productCommon} Roadmap";
+$lang->product->doc         = "{$lang->productCommon} Documents";
 $lang->product->project     = $lang->projectCommon . ' List';
 $lang->product->build       = 'Build List';
 $lang->product->projectInfo = "{$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";

@@ -9,20 +9,22 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testsuite->index            = "Home";
+$lang->testsuite->index            = "Suite Home";
 $lang->testsuite->create           = "Create Suite";
-$lang->testsuite->delete           = "Delete";
-$lang->testsuite->view             = "Overview";
+$lang->testsuite->delete           = "Delete Suite";
+$lang->testsuite->view             = "Suite Detail";
 $lang->testsuite->edit             = "Edit Suite";
 $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Case";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
+$lang->testsuite->unlinkCaseAction = "Unlink Cases";
 $lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
 $lang->testsuite->deleted          = 'Deleted';
 $lang->testsuite->exportTemplet    = 'Export Template';
 $lang->testsuite->batchCreateCase  = 'Batch Create';
 $lang->testsuite->import           = 'Import';
+$lang->testsuite->importAction     = 'Import Cases';
 $lang->testsuite->showImport       = 'Imported Data';
 $lang->testsuite->successSaved     = 'Saved';
 
@@ -56,7 +58,7 @@ $lang->caselib->common = 'Case Library';
 $lang->caselib->all    = 'All Case Libraries';
 
 $lang->testsuite->createLib  = 'Create Library';
-$lang->testsuite->editLib    = 'Edit';
+$lang->testsuite->editLib    = 'Edit Library';
 $lang->testsuite->library    = 'View Cases in Library';
 $lang->testsuite->createCase = 'Create Case';
-$lang->testsuite->libView    = 'Overview';
+$lang->testsuite->libView    = 'Library Detail';

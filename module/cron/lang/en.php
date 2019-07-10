@@ -1,13 +1,15 @@
 <?php
-$lang->cron->common      = 'Cron';
-$lang->cron->index       = 'Home';
-$lang->cron->list        = 'Task';
-$lang->cron->create      = 'Add';
-$lang->cron->edit        = 'Edit';
-$lang->cron->delete      = 'Delete';
-$lang->cron->toggle      = 'Activate/Deactivate';
-$lang->cron->turnon      = 'On/Off';
-$lang->cron->openProcess = 'Restart';
+$lang->cron->common       = 'Cron';
+$lang->cron->index        = 'Cron Home';
+$lang->cron->list         = 'Task';
+$lang->cron->create       = 'Add';
+$lang->cron->createAction = 'Add Cron';
+$lang->cron->edit         = 'Edit Cron';
+$lang->cron->delete       = 'Delete Cron';
+$lang->cron->toggle       = 'Activate/Deactivate';
+$lang->cron->turnon       = 'On/Off';
+$lang->cron->openProcess  = 'Restart';
+$lang->cron->restart      = 'Restart Cron';
 
 $lang->cron->m        = 'Minute';
 $lang->cron->h        = 'Hour';

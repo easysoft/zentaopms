@@ -1,12 +1,13 @@
 <?php
-$lang->testreport->common   = '测试报告';
-$lang->testreport->browse   = '报告列表';
-$lang->testreport->create   = '创建报告';
-$lang->testreport->edit     = '编辑报告';
-$lang->testreport->delete   = '删除报告';
-$lang->testreport->export   = '导出报告';
-$lang->testreport->view     = '报告详情';
-$lang->testreport->recreate = '重新生成报告';
+$lang->testreport->common       = '测试报告';
+$lang->testreport->browse       = '报告列表';
+$lang->testreport->create       = '创建报告';
+$lang->testreport->edit         = '编辑报告';
+$lang->testreport->delete       = '删除报告';
+$lang->testreport->export       = '导出';
+$lang->testreport->exportAction = '导出报告';
+$lang->testreport->view         = '报告详情';
+$lang->testreport->recreate     = '重新生成报告';
 
 $lang->testreport->title       = '标题';
 $lang->testreport->bugTitle    = 'Bug 标题';

@@ -1,12 +1,16 @@
 <?php
 $lang->mail->common        = 'Email Settings';
-$lang->mail->index         = 'Home';
+$lang->mail->index         = 'Email Home';
 $lang->mail->detect        = 'Detect';
+$lang->mail->detectAction  = 'Detect By Email Address';
 $lang->mail->edit          = 'Edit Settings';
 $lang->mail->save          = 'Save';
+$lang->mail->saveAction    = 'Save Settings';
 $lang->mail->test          = 'Email Sending Test';
 $lang->mail->reset         = 'Reset';
+$lang->mail->resetAction   = 'Reset Settings';
 $lang->mail->resend        = 'Resend';
+$lang->mail->resendAction  = 'Resend Email';
 $lang->mail->browse        = 'Email List';
 $lang->mail->delete        = 'Delete Email';
 $lang->mail->ztCloud       = 'ZenTao CloudMail';
