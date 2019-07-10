@@ -75,7 +75,7 @@
           <?php if(strpos($viewType, 'trainskill') === false and strpos($viewType, 'trainpost') === false) echo strpos($viewType, 'doc') !== false ? $lang->doc->manageType : $lang->tree->$manageChild;?>
         </div>
         <?php if($viewType == 'story' and $allProduct):?>
-        <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm'")?></div>
+        <div class="panel-actions btn-toolbar"><?php echo html::a('javascript:toggleCopy()', $lang->tree->syncFromProduct, '', "class='btn btn-sm btn-primary'")?></div>
         <?php endif;?>
       </div>
       <div class="panel-body">
