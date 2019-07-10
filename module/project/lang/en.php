@@ -288,12 +288,12 @@ $lang->project->placeholder->totalLeft = "Hours estimated on the first day of th
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
 
-$lang->project->orderList['order_asc']  = "Story Rank ASC";
-$lang->project->orderList['order_desc'] = "Story Rank DESC";
-$lang->project->orderList['pri_asc']    = "Story Priority ASC";
-$lang->project->orderList['pri_desc']   = "Story Priority DESC";
-$lang->project->orderList['stage_asc']  = "Story Phase ASC";
-$lang->project->orderList['stage_desc'] = "Story Phase DESC";
+$lang->project->orderList['order_asc']  = "Story Rank Ascending";
+$lang->project->orderList['order_desc'] = "Story Rank Descending";
+$lang->project->orderList['pri_asc']    = "Story Priority Ascending";
+$lang->project->orderList['pri_desc']   = "Story Priority Descending";
+$lang->project->orderList['stage_asc']  = "Story Phase Ascending";
+$lang->project->orderList['stage_desc'] = "Story Phase Descending";
 
 $lang->project->kanban        = "Kanban";
 $lang->project->kanbanSetting = "Settings";
