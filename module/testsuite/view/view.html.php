@@ -31,6 +31,9 @@
     <?php
     if(!$suite->deleted)
     {
+        $flow = $this->loadModel('workflow')->getByModule('testsuite');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $suite, 'view');
+
         common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'button', 'link');
         common::printIcon('testsuite', 'edit',     "suiteID=$suite->id");
         common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", '', 'button', 'trash', 'hiddenwin');

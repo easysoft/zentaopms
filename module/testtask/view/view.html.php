@@ -56,6 +56,12 @@
         common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'sitemap');
         common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
         ?>
+
+        <?php
+        $flow = $this->loadModel('workflow')->getByModule('testtask');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $task, 'view');
+        ?>
+
         <div class='divider'></div>
         <?php
         common::printIcon('testtask', 'edit',     "taskID=$task->id", $task);

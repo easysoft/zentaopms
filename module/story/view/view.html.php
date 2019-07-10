@@ -104,6 +104,9 @@
 
         if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'plus', '', 'showinonlybody');
 
+        $flow = $this->loadModel('workflow')->getByModule('story');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $story, 'view');
+
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
         common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', '', true, "data-width='1050'");

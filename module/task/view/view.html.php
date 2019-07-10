@@ -164,6 +164,9 @@
         common::printIcon('task', 'close',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
 
+        $flow = $this->loadModel('workflow')->getByModule('task');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $task, 'view');
+
         if(!isonlybody()) echo "<div class='divider'></div>";
         common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
         common::printIcon('task', 'create', "projctID={$task->project}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');

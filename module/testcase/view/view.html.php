@@ -114,6 +114,12 @@
         }
         if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe', '', '', $lang->testcase->reviewAB);
         ?>
+
+        <?php
+        $flow = $this->loadModel('workflow')->getByModule('testcase');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $case, 'view');
+        ?>
+
         <?php
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
         if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');

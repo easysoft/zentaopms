@@ -162,6 +162,9 @@
               common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
               common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
 
+              $flow = $this->loadModel('workflow')->getByModule('project');
+              echo $this->loadModel('flow')->buildOperateMenu($flow, $project, 'view');
+
               echo "<div class='divider'></div>";
               common::printIcon('project', 'edit', $params, $project);
               common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin');

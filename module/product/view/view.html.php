@@ -90,7 +90,11 @@
         common::printBack($browseLink);
         if(!$product->deleted)
         {
+            $flow = $this->loadModel('workflow')->getByModule('product');
+            echo $this->loadModel('flow')->buildOperateMenu($flow, $product, 'view');
+
             echo "<div class='divider'></div>";
+
             if($product->status != 'closed')
             {
                 common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
