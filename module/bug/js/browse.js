@@ -1,7 +1,6 @@
 $(function()
 {
     if($('#bugList thead th.c-title').width() < 150) $('#bugList thead th.c-title').width(150);
-    setTimeout(function(){fixFeatureBar();}, 10);
 
     if(flow == 'onlyTest')
     {

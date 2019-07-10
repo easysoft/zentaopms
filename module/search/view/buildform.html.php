@@ -302,7 +302,6 @@ $(function()
             html  = "<li><a href='" + actionURL.replace('myQueryID', queryID) + "'>" + name + "</a>";
             html += "<a href='###' class='btn-delete' data-id='" + queryID + "' onclick='removeQueryFromMenu(this)'><i class='icon icon-close'></i></a></li>";
             $('#mainMenu .btn-toolbar.pull-left #query ul.dropdown-menu').append(html);
-            fixFeatureBar();
         }
     };
 

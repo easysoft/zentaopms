@@ -45,7 +45,7 @@
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-120px'><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td></td><td></td>
         </tr>
