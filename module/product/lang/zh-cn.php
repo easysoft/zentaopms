@@ -47,13 +47,19 @@ $lang->product->project     = $lang->projectCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->projectInfo = "所有与此产品关联的{$lang->projectCommon}";
 
-$lang->product->currentProject   = '当前' . $lang->projectCommon;
-$lang->product->activeStories    = '激活需求';
-$lang->product->changedStories   = '已变更需求';
-$lang->product->draftStories     = '草稿需求';
-$lang->product->closedStories    = '已关闭需求';
-$lang->product->unResolvedBugs   = '未解决Bug';
-$lang->product->assignToNullBugs = '未指派Bug';
+$lang->product->currentProject        = '当前' . $lang->projectCommon;
+$lang->product->activeStories         = '激活需求';
+$lang->product->activeStoriesTitle    = '激活需求';
+$lang->product->changedStories        = '已变更需求';
+$lang->product->changedStoriesTitle   = '已变更需求';
+$lang->product->draftStories          = '草稿需求';
+$lang->product->draftStoriesTitle     = '草稿需求';
+$lang->product->closedStories         = '已关闭需求';
+$lang->product->closedStoriesTitle    = '已关闭需求';
+$lang->product->unResolvedBugs        = '未解决Bug';
+$lang->product->unResolvedBugsTitle   = '未解决Bug';
+$lang->product->assignToNullBugs      = '未指派Bug';
+$lang->product->assignToNullBugsTitle = '未指派Bug';
 
 $lang->product->confirmDelete  = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct = "还没有创建{$lang->productCommon}！";

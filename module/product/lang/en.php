@@ -47,13 +47,19 @@ $lang->product->project     = $lang->projectCommon . ' List';
 $lang->product->build       = 'Build List';
 $lang->product->projectInfo = "{$lang->projectCommon}s that are linked to this {$lang->productCommon} are listed below.";
 
-$lang->product->currentProject   = "{$lang->projectCommon}";
-$lang->product->activeStories    = 'Active [S]';
-$lang->product->changedStories   = 'Changed [S]';
-$lang->product->draftStories     = 'Draft [S]';
-$lang->product->closedStories    = 'Closed [S]';
-$lang->product->unResolvedBugs   = 'Active [B]';
-$lang->product->assignToNullBugs = 'Unassigned [B]';
+$lang->product->currentProject        = "{$lang->projectCommon}";
+$lang->product->activeStories         = 'Active [S]';
+$lang->product->activeStoriesTitle    = 'Active Stories';
+$lang->product->changedStories        = 'Changed [S]';
+$lang->product->changedStoriesTitle   = 'Changed Stories';
+$lang->product->draftStories          = 'Draft [S]';
+$lang->product->draftStoriesTitle     = 'Draft Stories';
+$lang->product->closedStories         = 'Closed [S]';
+$lang->product->closedStoriesTitle    = 'Closed Stories';
+$lang->product->unResolvedBugs        = 'Active [B]';
+$lang->product->unResolvedBugsTitle   = 'Active Bugs';
+$lang->product->assignToNullBugs      = 'Unassigned [B]';
+$lang->product->assignToNullBugsTitle = 'Unassigned Bugs';
 
 $lang->product->confirmDelete  = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct = "No {$lang->productCommon} is created yet!";
