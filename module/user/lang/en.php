@@ -102,7 +102,7 @@ $lang->user->closedBy    = 'ClosedBy%s';
 $lang->user->reviewedBy  = 'ReviewedBy%s';
 $lang->user->canceledBy  = 'CancelledBy%s';
 
-$lang->user->testTask2Him = 'AssignTo%s';
+$lang->user->testTask2Him = 'AssignedTo%s';
 $lang->user->case2Him     = 'CaseAssignedTo%s';
 $lang->user->caseByHim    = 'CaseCreatedBy%s';
 
