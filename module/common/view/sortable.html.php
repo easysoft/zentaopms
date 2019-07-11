@@ -10,7 +10,7 @@ tbody.sortable-sorting > tr.drag-row + tr > td {box-shadow: inset 0 4px 2px rgba
 tbody.sortable-sorting > tr.drag-row > td {background-color: #E9F2FB!important}
 tbody.sortable > tr.drop-success > td {background-color: #cfe0ff; transition: background-color 2s;}
 </style>
-<script> 
+<script>
 $(document).ready(function()
 {
     $('.sortable:not(tbody)').sortable();
@@ -27,8 +27,7 @@ $(document).ready(function()
             {
                 var orders = {};
                 e.list.each(function(){
-                    var $this = $(this);
-                    orders[$this.data('id')] = parseInt($this.attr('data-order'));
+                    orders[$(this.item).data('id')] = this.order;
                 });
                 e.orders = orders;
                 $tbody.trigger('sort.sortable', e);
