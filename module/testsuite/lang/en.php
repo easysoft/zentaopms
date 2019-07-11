@@ -18,13 +18,13 @@ $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Case";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
-$lang->testsuite->unlinkCaseAction = "Unlink Cases";
-$lang->testsuite->batchUnlinkCases = "Batch Unlink Case";
+$lang->testsuite->unlinkCaseAction = "Unlink Case";
+$lang->testsuite->batchUnlinkCases = "Batch Unlink Cases";
 $lang->testsuite->deleted          = 'Deleted';
 $lang->testsuite->exportTemplet    = 'Export Template';
 $lang->testsuite->batchCreateCase  = 'Batch Create';
 $lang->testsuite->import           = 'Import';
-$lang->testsuite->importAction     = 'Import Cases';
+$lang->testsuite->importAction     = 'Import Case';
 $lang->testsuite->showImport       = 'Imported Data';
 $lang->testsuite->successSaved     = 'Saved';
 

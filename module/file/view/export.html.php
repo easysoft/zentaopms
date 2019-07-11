@@ -177,7 +177,7 @@ if($isCustomExport)
             </tr>
             <?php if($isCustomExport):?>
             <tr>
-              <th><?php echo $lang->file->tplTitle;?></th>
+              <th><?php echo $lang->file->tplTitleAB;?></th>
               <td id="tplBox"><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></td>
               <td>
                 <button type='button' onclick='setExportTPL()' class='btn'><?php echo $lang->file->setExportTPL?></button>
