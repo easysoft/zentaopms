@@ -236,7 +236,7 @@
           if(common::hasPriv('project', 'batchUnlinkStory'))
           {
               $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
-              echo html::commonButton($lang->project->unlinkStory, "data-form-action='$actionLink'");
+              echo html::commonButton($lang->project->unlinkStoryAB, "data-form-action='$actionLink'");
           }
           ?>
         </div>

@@ -152,6 +152,7 @@ $lang->project->batchEdit         = "Batch Edit";
 $lang->project->manageMembers     = 'Manage Team';
 $lang->project->unlinkMember      = 'Remove Member';
 $lang->project->unlinkStory       = 'Unlink Story';
+$lang->project->unlinkStoryAB     = 'Unlink';
 $lang->project->batchUnlinkStory  = 'Batch Unlink Stories';
 $lang->project->importTask        = 'Transfer Task';
 $lang->project->importPlanStories = 'Link Stories By Plan';

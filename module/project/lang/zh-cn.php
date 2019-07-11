@@ -153,6 +153,7 @@ $lang->project->batchEdit         = "批量编辑";
 $lang->project->manageMembers     = '团队管理';
 $lang->project->unlinkMember      = '移除成员';
 $lang->project->unlinkStory       = '移除需求';
+$lang->project->unlinkStoryAB     = '移除需求';
 $lang->project->batchUnlinkStory  = '批量移除需求';
 $lang->project->importTask        = '转入任务';
 $lang->project->importPlanStories = '按计划关联需求';
