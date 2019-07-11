@@ -20,8 +20,8 @@ $lang->release->view             = "Release Detail";
 $lang->release->browse           = "Release List";
 $lang->release->changeStatus     = "Change Status";
 $lang->release->batchUnlink      = "Batch Unlink";
-$lang->release->batchUnlinkStory = "Batch Unlink Story";
-$lang->release->batchUnlinkBug   = "Batch Unlink Bug";
+$lang->release->batchUnlinkStory = "Batch Unlink Stories";
+$lang->release->batchUnlinkBug   = "Batch Unlink Bugs";
 
 $lang->release->confirmDelete      = "Do you want to delete this release?";
 $lang->release->confirmUnlinkStory = "Do you want to remove this story?";

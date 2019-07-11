@@ -44,7 +44,6 @@ $lang->moduleOrder[115] = 'admin';
 $lang->moduleOrder[120] = 'extension';
 $lang->moduleOrder[125] = 'custom';
 $lang->moduleOrder[130] = 'editor';
-$lang->moduleOrder[135] = 'convert';
 $lang->moduleOrder[140] = 'action';
 
 $lang->moduleOrder[145] = 'mail';
@@ -118,7 +117,7 @@ $lang->resource->todo->export       = 'export';
 $lang->resource->todo->finish       = 'finish';
 $lang->resource->todo->batchFinish  = 'batchFinish';
 $lang->resource->todo->import2Today = 'import2Today';
-$lang->resource->todo->assignTo     = 'assignTo';
+$lang->resource->todo->assignTo     = 'assignAction';
 $lang->resource->todo->activate     = 'activate';
 $lang->resource->todo->close        = 'close';
 $lang->resource->todo->batchClose   = 'batchClose';
@@ -950,32 +949,6 @@ $lang->extension->methodOrder[35] = 'deactivate';
 $lang->extension->methodOrder[40] = 'upload';
 $lang->extension->methodOrder[45] = 'erase';
 $lang->extension->methodOrder[50] = 'upgrade';
-
-/* Convert. */
-$lang->resource->convert = new stdclass();
-$lang->resource->convert->index          = 'index';
-$lang->resource->convert->selectSource   = 'selectSource';
-$lang->resource->convert->setConfig      = 'setConfig';
-$lang->resource->convert->setBugfree     = 'setBugfree';
-$lang->resource->convert->setRedmine     = 'setRedmine';
-$lang->resource->convert->checkConfig    = 'checkConfig';
-$lang->resource->convert->checkBugFree   = 'checkBugFree';
-$lang->resource->convert->checkRedmine   = 'checkRedmine';
-$lang->resource->convert->execute        = 'execute';
-$lang->resource->convert->convertBugFree = 'convertBugFree';
-$lang->resource->convert->convertRedmine = 'convertRedmine';
-
-$lang->convert->methodOrder[5]  = 'index';
-$lang->convert->methodOrder[10] = 'selectSource';
-$lang->convert->methodOrder[15] = 'setConfig';
-$lang->convert->methodOrder[20] = 'setBugfree';
-$lang->convert->methodOrder[25] = 'setRedmine';
-$lang->convert->methodOrder[30] = 'checkConfig';
-$lang->convert->methodOrder[35] = 'checkBugFree';
-$lang->convert->methodOrder[40] = 'checkRedmine';
-$lang->convert->methodOrder[45] = 'execute';
-$lang->convert->methodOrder[50] = 'convertBugFree';
-$lang->convert->methodOrder[55] = 'convertRedmine';
 
 /* Others. */
 $lang->resource->api = new stdclass();
