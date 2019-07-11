@@ -43,6 +43,7 @@ $uid = uniqid('');
     {
         cssPath: [config.themeRoot + 'zui/css/min.css'],
         width: '100%',
+        placeholder: <?php echo json_encode($lang->noticePasteImg);?>,
         height: '200px',
         filterMode: true,
         bodyClass: 'article-content',
