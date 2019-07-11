@@ -1,12 +1,13 @@
 <?php
-$lang->testreport->common   = 'Testing Report';
-$lang->testreport->browse   = 'Testing Reports';
-$lang->testreport->create   = 'Create Report';
-$lang->testreport->edit     = 'Edit Report';
-$lang->testreport->delete   = 'Delete';
-$lang->testreport->export   = 'Export';
-$lang->testreport->view     = 'Detail';
-$lang->testreport->recreate = 'ReCreate';
+$lang->testreport->common       = 'Testing Report';
+$lang->testreport->browse       = 'Testing Reports';
+$lang->testreport->create       = 'Create Report';
+$lang->testreport->edit         = 'Edit Report';
+$lang->testreport->delete       = 'Delete Report';
+$lang->testreport->export       = 'Export';
+$lang->testreport->exportAction = 'Export Report';
+$lang->testreport->view         = 'Report Detail';
+$lang->testreport->recreate     = 'ReCreate';
 
 $lang->testreport->title       = 'Title';
 $lang->testreport->bugTitle    = 'Bug';

@@ -3,3 +3,5 @@
 .addbtn .icon-plus {font-size: 18px; display: block; opacity: 0.5; transition: opacity .2s; text-shadow: 1px 1px 3px rgba(0,0,0,.2);}
 .addbtn:hover .icon-plus {opacity: .9; animation: flash-icon 1s linear alternate infinite}
 #dropMenu{min-width:250px;padding:10px 15px;box-sizing:inhert;}
+.main-col .block-files .panel-heading{padding-right:20px;}
+.main-col .block-files .panel-heading .panel-title{height:35px; line-height:30px;}

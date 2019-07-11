@@ -239,7 +239,7 @@ $lang->project->menu->kanban   = array('link' => 'Kanban|project|kanban|projectI
 $lang->project->menu->burn     = array('link' => 'Burndown|project|burn|projectID=%s');
 $lang->project->menu->list     = array('link' => 'More|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->story    = array('link' => 'Story|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
-$lang->project->menu->qa       = array('link' => 'Request|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
+$lang->project->menu->qa       = array('link' => 'Test|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc      = array('link' => 'Doc|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->action   = array('link' => 'Dynamics|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->product  = $lang->productCommon . '|project|manageproducts|projectID=%s';
@@ -517,12 +517,12 @@ $lang->proVersion     = "<a href='https://www.zentao.pm/book/zentaopromanual/fre
 $lang->downNotify     = "Download Desktop Notification";
 $lang->downloadClient = "Download ZenTao Desktop";
 $lang->clientHelp     = "Client Help";
-$lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/";
+$lang->clientHelpLink = "https://www.zentao.pm/book/zentaomanual/scrum-tool-im-integration-206.html";
 $lang->website        = "https://www.zentao.pm";
 
 $lang->suhosinInfo     = "Warning! Data is reaching the limit. Please change <font color=red>sohusin.post.max_vars</font> and <font color=red>sohusin.request.max_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
 $lang->maxVarsInfo     = "Warning! Data is reaching the limit. Please change <font color=red>max_input_vars</font> (set larger %s value) in php.ini, then save and restart Apache or php-fpm, or some data will not be saved.";
-$lang->pasteTextInfo   = "Paste the text of items here. Each item will be the title of a story. ";
+$lang->pasteTextInfo   = "Paste the text here. Each line will be a title. ";
 $lang->noticeImport    = "Imported data contains data that has already existed in system. Please confirm you actions on the date.";
 $lang->importConfirm   = "Import";
 $lang->importAndCover  = "Override";
@@ -564,7 +564,7 @@ $lang->datepicker->dpText->TEXT_TODAY       = 'Today';
 $lang->datepicker->dpText->TEXT_NEXT_YEAR   = 'Next Year';
 $lang->datepicker->dpText->TEXT_NEXT_MONTH  = 'Next Month';
 $lang->datepicker->dpText->TEXT_CLOSE       = 'Close';
-$lang->datepicker->dpText->TEXT_DATE        = 'Choose Tab';
+$lang->datepicker->dpText->TEXT_DATE        = '';
 $lang->datepicker->dpText->TEXT_CHOOSE_DATE = 'Choose Date';
 
 $lang->datepicker->dayNames     = array('Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday');

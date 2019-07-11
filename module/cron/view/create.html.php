@@ -27,7 +27,7 @@
         <tr>
           <th><?php echo $lang->cron->m;?></th>
           <td><?php echo html::input('m', '', "class='form-control'")?></td>
-          <td><?php echo $lang->cron->notice->m;?></td><td></td>
+          <td colspan='2'><?php echo $lang->cron->notice->m;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->cron->h;?></th>

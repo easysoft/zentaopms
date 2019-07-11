@@ -11,7 +11,7 @@
  */
 $lang->search->common        = '搜索';
 $lang->search->reset         = '重置';
-$lang->search->saveQuery     = '保存';
+$lang->search->saveQuery     = '保存查询';
 $lang->search->myQuery       = '我的查询';
 $lang->search->group1        = '第一组';
 $lang->search->group2        = '第二组';

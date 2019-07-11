@@ -102,7 +102,7 @@ class docModel extends model
             }
 
             $actions  = $this->setFastMenu($fastLib);
-            $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-folder-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
+            $actions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib', "type={$type}&objectID={$currentLib}"), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe'") : '';
 
             $this->lang->modulePageActions = $actions;
         }

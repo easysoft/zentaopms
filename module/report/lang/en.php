@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->report->common     = 'Report';
-$lang->report->index      = 'Home';
+$lang->report->index      = 'Report Home';
 $lang->report->list       = 'Report';
 $lang->report->item       = 'Item';
 $lang->report->value      = 'Value';
@@ -84,7 +84,7 @@ $lang->report->closedProduct = 'Closed ' . $lang->productCommon . 's';
 $lang->report->overduePlan   = 'Expired Plans';
 
 /* daily reminder. */
-$lang->report->idAB  = 'ID';
+$lang->report->idAB         = 'ID';
 $lang->report->bugTitle     = 'Bug Name';
 $lang->report->taskName     = 'Task Name';
 $lang->report->todoName     = 'Todo Name';

@@ -11,12 +11,12 @@
  */
 $lang->tree = new stdclass();
 $lang->tree->common             = 'Module';
-$lang->tree->edit               = 'Edit';
-$lang->tree->delete             = 'Delete';
+$lang->tree->edit               = 'Edit Module';
+$lang->tree->delete             = 'Delete Module';
 $lang->tree->browse             = 'Manage General Module';
 $lang->tree->browseTask         = 'Manage Task Module';
 $lang->tree->manage             = 'Manage Module';
-$lang->tree->fix                = 'Fix';
+$lang->tree->fix                = 'Fix Module';
 $lang->tree->manageProduct      = "Manage {$lang->productCommon} Modules";
 $lang->tree->manageProject      = "Manage {$lang->projectCommon} Modules";
 $lang->tree->manageLine         = 'Manage Product Line';
@@ -24,7 +24,7 @@ $lang->tree->manageBug          = 'Manage Bug';
 $lang->tree->manageCase         = 'Manage Case';
 $lang->tree->manageCaseLib      = 'Manage Library';
 $lang->tree->manageCustomDoc    = 'Manage Document Library';
-$lang->tree->updateOrder        = 'Order';
+$lang->tree->updateOrder        = 'Rank Module';
 $lang->tree->manageChild        = 'Manage Child Modules';
 $lang->tree->manageStoryChild   = 'Manage Child Modules';
 $lang->tree->manageLineChild    = 'Manage Product Line';

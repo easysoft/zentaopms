@@ -24,10 +24,10 @@
         <?php if($longBlock):?>
         <th class='c-name c-project'><?php echo $lang->product->currentProject;?></th>
         <?php endif;?>
-        <th class='c-num'><?php echo $lang->product->plans;?></th>
-        <th class='c-num'><?php echo $lang->product->releases;?></th>
-        <th class='c-num w-100px'><?php echo $lang->story->statusList['active'] . $lang->story->common;?></th>
-        <th class='c-num w-120px'><?php echo $lang->bug->unResolved . $lang->bug->common;?></th>
+        <th title='<?php echo $lang->product->plans?>' class='c-num'><?php echo $lang->product->plans;?></th>
+        <th title='<?php echo $lang->product->releases?>' class='c-num'><?php echo $lang->product->releases;?></th>
+        <th title='<?php echo $lang->product->activeStoriesTitle?>' class='c-num <?php echo 'w-90px'?>'><?php echo $lang->product->activeStories;?></th>
+        <th title='<?php echo $lang->product->unResolvedBugsTitle?>' class='c-num <?php echo 'w-90px'?>'><?php echo $lang->product->unResolvedBugs;?></th>
       </tr>
     </thead>
     <tbody>

@@ -11,9 +11,10 @@
 $lang->translate->common       = 'Translate';
 $lang->translate->index        = 'Home';
 $lang->translate->addLang      = 'Add Language';
-$lang->translate->module       = 'Module';
+$lang->translate->module       = 'Translate Module';
 $lang->translate->review       = 'Review';
-$lang->translate->result       = 'Result';
+$lang->translate->reviewAction = 'Review Translation';
+$lang->translate->result       = 'Save Review Result';
 $lang->translate->batchPass    = 'Batch Pass';
 $lang->translate->export       = 'Export Lang File';
 $lang->translate->setting      = 'Settings';

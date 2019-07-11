@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->productplan->common     = $lang->productCommon . ' Plan';
-$lang->productplan->browse     = "Plans";
+$lang->productplan->browse     = "Plan List";
 $lang->productplan->index      = "List";
 $lang->productplan->create     = "Create Plan";
 $lang->productplan->edit       = "Edit Plan";

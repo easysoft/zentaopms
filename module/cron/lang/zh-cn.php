@@ -1,13 +1,15 @@
 <?php
-$lang->cron->common      = '计划任务';
-$lang->cron->index       = '首页';
-$lang->cron->list        = '任务列表';
-$lang->cron->create      = '添加';
-$lang->cron->edit        = '编辑';
-$lang->cron->delete      = '删除';
-$lang->cron->toggle      = '激活/禁用';
-$lang->cron->turnon      = '打开/关闭';
-$lang->cron->openProcess = '重启';
+$lang->cron->common       = '计划任务';
+$lang->cron->index        = '首页';
+$lang->cron->list         = '任务列表';
+$lang->cron->create       = '添加';
+$lang->cron->createAction = '添加任务';
+$lang->cron->edit         = '编辑任务';
+$lang->cron->delete       = '删除任务';
+$lang->cron->toggle       = '激活/禁用';
+$lang->cron->turnon       = '打开/关闭';
+$lang->cron->openProcess  = '重启';
+$lang->cron->restart      = '重启计划任务';
 
 $lang->cron->m        = '分';
 $lang->cron->h        = '小时';

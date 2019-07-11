@@ -4,7 +4,7 @@
 <?php else:?>
 <div class="detail histories" id='actionbox' data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
 <?php endif;?>
-<style>.histories-list > li{word-break: break-all; word-wrap: break-word;}</style>
+<style>.histories-list > li{word-break: break-word; word-wrap: break-word;}</style>
   <script>
   $(function()
   {

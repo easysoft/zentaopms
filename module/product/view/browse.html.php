@@ -84,6 +84,7 @@
         ?>
       </ul>
     </div>
+    <?php if($app->getClientLang() != 'en'):?>
     <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
     <?php
     if(commonModel::isTutorialMode())
@@ -98,6 +99,29 @@
         if(common::hasPriv('story', 'create')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");
     }
     ?>
+    <?php else:?>
+    <div class='btn-group dropdown-hover'>
+      <?php
+      $link = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID") : '###';
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
+          $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
+      }
+      $disabled = common::hasPriv('story', 'create') ? '' : "disabled";
+      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
+      ?>
+      <ul class='dropdown-menu'>
+        <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
+        <li <?php echo $disabled?>>
+        <?php
+          $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
+          echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->story->batchCreate) . "</li>";
+        ?>
+        </li>
+      </ul>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">

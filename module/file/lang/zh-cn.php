@@ -21,6 +21,7 @@ $lang->file->label         = '标题：';
 $lang->file->maxUploadSize = "（不超过%s）";
 $lang->file->applyTemplate = "应用模板";
 $lang->file->tplTitle      = "模板名称";
+$lang->file->tplTitleAB    = "模板名称";
 $lang->file->setPublic     = "设置公共模板";
 $lang->file->exportFields  = "要导出字段";
 $lang->file->exportRange   = "要导出的数据";

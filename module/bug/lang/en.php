@@ -74,10 +74,11 @@ $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
 
 /* 方法列表。*/
-$lang->bug->index              = 'Home';
+$lang->bug->index              = 'Bug Home';
 $lang->bug->create             = 'Report Bug';
 $lang->bug->batchCreate        = 'Batch Report';
 $lang->bug->confirmBug         = 'Confirm';
+$lang->bug->confirmAction      = 'Confirm Bug';
 $lang->bug->batchConfirm       = 'Batch Confirm';
 $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch Edit';
@@ -85,17 +86,24 @@ $lang->bug->batchChangeModule  = 'Batch Edit Module';
 $lang->bug->batchChangeBranch  = 'Batch Edit Branch';
 $lang->bug->batchClose         = 'Batch Close';
 $lang->bug->assignTo           = 'Assign';
+$lang->bug->assignAction       = 'Assign Bug';
 $lang->bug->batchAssignTo      = 'Batch Assign';
 $lang->bug->browse             = 'Bug List';
 $lang->bug->view               = 'Bug Detail';
-$lang->bug->resolve            = 'Resolve Bug';
+$lang->bug->resolve            = 'Resolve';
+$lang->bug->resolveAction      = 'Resolve Bug';
 $lang->bug->batchResolve       = 'Batch Resolve';
 $lang->bug->close              = 'Close';
+$lang->bug->closeAction        = 'Close Bug';
 $lang->bug->activate           = 'Activate';
+$lang->bug->activateAction     = 'Activate Bug';
 $lang->bug->batchActivate      = 'Batch Activate';
 $lang->bug->reportChart        = 'Report';
+$lang->bug->reportAction       = 'Bug Report';
 $lang->bug->export             = 'Export Data';
+$lang->bug->exportAction       = 'Export Bug';
 $lang->bug->delete             = 'Delete';
+$lang->bug->deleteAction       = 'Delete Bug';
 $lang->bug->deleted            = 'Deleted';
 $lang->bug->confirmStoryChange = 'Confirm Story Change';
 $lang->bug->copy               = 'Copy';
@@ -263,7 +271,7 @@ $lang->bug->resolutionList['tostory']    = 'Convert to Story';
 /* 统计报表。*/
 $lang->bug->report = new stdclass();
 $lang->bug->report->common = 'Report';
-$lang->bug->report->select = 'Type ';
+$lang->bug->report->select = 'Select Report Type';
 $lang->bug->report->create = 'Create Report';
 
 $lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' Bugs';
@@ -275,13 +283,13 @@ $lang->bug->report->charts['closedBugsPerDay']      = 'Closed Bugs Per Day';
 $lang->bug->report->charts['openedBugsPerUser']     = 'Reported Bugs Per User';
 $lang->bug->report->charts['resolvedBugsPerUser']   = 'Resolved Bugs Per User';
 $lang->bug->report->charts['closedBugsPerUser']     = 'Closed Bugs Per User';
-$lang->bug->report->charts['bugsPerSeverity']       = 'Bug Severity Report';
-$lang->bug->report->charts['bugsPerResolution']     = 'Bug Resolution Report';
-$lang->bug->report->charts['bugsPerStatus']         = 'Bug Status Report';
-$lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug Activation Times Report';
-$lang->bug->report->charts['bugsPerPri']            = 'Bug Priority Report';
-$lang->bug->report->charts['bugsPerType']           = 'Bug Type Report';
-$lang->bug->report->charts['bugsPerAssignedTo']     = 'Bug Assignment Report';
+$lang->bug->report->charts['bugsPerSeverity']       = 'Bug Severity';
+$lang->bug->report->charts['bugsPerResolution']     = 'Bug Resolution';
+$lang->bug->report->charts['bugsPerStatus']         = 'Bug Status';
+$lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug Activation Times';
+$lang->bug->report->charts['bugsPerPri']            = 'Bug Priority';
+$lang->bug->report->charts['bugsPerType']           = 'Bug Type';
+$lang->bug->report->charts['bugsPerAssignedTo']     = 'Bug Assignment';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug Handling Time Report';
 //$lang->bug->report->charts['bugHistories']       = 'Bug Handling Steps Report';
 
@@ -379,10 +387,12 @@ $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
-$lang->bug->featureBar['browse']['toclosed']     = $lang->bug->toClosed;
-$lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
+
+
+$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
+$lang->bug->moreSelects['unresolved']    = $lang->bug->unResolved;
 $lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;

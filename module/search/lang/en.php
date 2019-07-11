@@ -11,7 +11,7 @@
  */
 $lang->search->common        = 'Search';
 $lang->search->reset         = 'Reset';
-$lang->search->saveQuery     = 'Save';
+$lang->search->saveQuery     = 'Save Query';
 $lang->search->myQuery       = 'My Query';
 $lang->search->group1        = 'Group 1';
 $lang->search->group2        = 'Group 2';

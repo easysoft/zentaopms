@@ -1,7 +1,7 @@
 <?php
 $lang->branch->common = 'Branch';
 $lang->branch->manage = 'Manage Branch';
-$lang->branch->sort   = 'Order';
+$lang->branch->sort   = 'Rank Branch';
 $lang->branch->delete = 'Delete Branch';
 $lang->branch->add    = 'Add';
 

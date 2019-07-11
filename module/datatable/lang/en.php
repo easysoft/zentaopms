@@ -7,7 +7,7 @@ $lang->datatable->hide   = 'Hide';
 $lang->datatable->reset  = 'Reset';
 
 $lang->datatable->custom             = 'Customize Columns';
-$lang->datatable->customTip          = 'Check Columns to Display，Drag Column name to Sort';
+$lang->datatable->customTip          = 'Check columns to display and drag columns to order.';
 $lang->datatable->switchToTable      = 'Switch to Common Table';
 $lang->datatable->switchToDatatable  = 'Switch to Advanced Table';
 $lang->datatable->required           = 'Required';
