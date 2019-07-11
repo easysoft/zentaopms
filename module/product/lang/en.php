@@ -34,8 +34,8 @@ $lang->product->exportAction = "Export {$lang->productCommon}";
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
 
-$lang->product->plans       = 'Plan';
-$lang->product->releases    = 'Release';
+$lang->product->plans       = 'Plans';
+$lang->product->releases    = 'Releases';
 $lang->product->docs        = 'Doc';
 $lang->product->bugs        = 'Linked Bug';
 $lang->product->projects    = "Linked {$lang->projectCommon}";

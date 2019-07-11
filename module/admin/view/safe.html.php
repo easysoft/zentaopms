@@ -24,7 +24,7 @@
         <tr>
           <?php $colWidth = $app->getClientLang() == 'en' ? 'w-300px' : 'w-130px';?>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->admin->safe->password?></th>
-          <td class='w-230px'><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0, "onclick=showModeRule(this.value)")?></td>
+          <td class='w-250px'><?php echo html::radio('mode', $lang->admin->safe->modeList, isset($config->safe->mode) ? $config->safe->mode : 0, "onclick=showModeRule(this.value)")?></td>
           <td><?php echo $lang->admin->safe->noticeMode?></td>
         </tr>
         <tr id='mode1Rule' class='hidden'>
