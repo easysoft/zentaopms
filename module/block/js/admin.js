@@ -1,9 +1,14 @@
 $(function()
 {
     var blockTitle = '';
+    var preValue   = '';
     $(document).on('change', '#blockParams #paramstype', function()
     {
-        $('#blockParams').find('#title').val(blockTitle + ' - ' + $(this).find('option:selected').html());
+        console.log(preValue);
+        $title = $('#blockParams').find('#title');
+        var value = $(this).find('option:selected').html();
+        if($title.val().indexOf(blockTitle + ' - ' + preValue) >= 0) $title.val(blockTitle + ' - ' + value);
+        preValue = value;
     });
 
     var $form = $('#blockAdminForm');
@@ -24,7 +29,11 @@ $(function()
         if($blockParams.find('#actionLink').size() > 0) $form.attr('action', $blockParams.find('#actionLink').val());
 
         blockTitle = $blockParams.find('#title').val();
-        if($('#blockParams #paramstype').length > 0) $blockParams.find('#title').val(blockTitle + ' - ' + $('#blockParams #paramstype').find('option:selected').html());
+        if($('#blockParams #paramstype').length > 0)
+        {
+            preValue = $('#blockParams #paramstype').find('option:selected').html();
+            $blockParams.find('#title').val(blockTitle + ' - ' + preValue);
+        }
     };
 
     // 获取 html 和 rss 区块参数
