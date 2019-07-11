@@ -271,7 +271,7 @@ $lang->bug->resolutionList['tostory']    = 'Convert to Story';
 /* 统计报表。*/
 $lang->bug->report = new stdclass();
 $lang->bug->report->common = 'Report';
-$lang->bug->report->select = 'Type ';
+$lang->bug->report->select = 'Select Report Type';
 $lang->bug->report->create = 'Create Report';
 
 $lang->bug->report->charts['bugsPerProject']        = $lang->projectCommon . ' Bugs';
@@ -283,13 +283,13 @@ $lang->bug->report->charts['closedBugsPerDay']      = 'Closed Bugs Per Day';
 $lang->bug->report->charts['openedBugsPerUser']     = 'Reported Bugs Per User';
 $lang->bug->report->charts['resolvedBugsPerUser']   = 'Resolved Bugs Per User';
 $lang->bug->report->charts['closedBugsPerUser']     = 'Closed Bugs Per User';
-$lang->bug->report->charts['bugsPerSeverity']       = 'Bug Severity Report';
-$lang->bug->report->charts['bugsPerResolution']     = 'Bug Resolution Report';
-$lang->bug->report->charts['bugsPerStatus']         = 'Bug Status Report';
-$lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug Activation Times Report';
-$lang->bug->report->charts['bugsPerPri']            = 'Bug Priority Report';
-$lang->bug->report->charts['bugsPerType']           = 'Bug Type Report';
-$lang->bug->report->charts['bugsPerAssignedTo']     = 'Bug Assignment Report';
+$lang->bug->report->charts['bugsPerSeverity']       = 'Bug Severity';
+$lang->bug->report->charts['bugsPerResolution']     = 'Bug Resolution';
+$lang->bug->report->charts['bugsPerStatus']         = 'Bug Status';
+$lang->bug->report->charts['bugsPerActivatedCount'] = 'Bug Activation Times';
+$lang->bug->report->charts['bugsPerPri']            = 'Bug Priority';
+$lang->bug->report->charts['bugsPerType']           = 'Bug Type';
+$lang->bug->report->charts['bugsPerAssignedTo']     = 'Bug Assignment';
 //$lang->bug->report->charts['bugLiveDays']        = 'Bug Handling Time Report';
 //$lang->bug->report->charts['bugHistories']       = 'Bug Handling Steps Report';
 
