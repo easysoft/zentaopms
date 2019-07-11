@@ -76,7 +76,7 @@
               </div>
             </div>
             <?php echo html::hidden('config[type]', 'day')?>
-            <div class='input-group' style='width:200px; padding-top:5px;'>
+            <div class='input-group' style='width:<?php echo $app->getClientLang() == 'en' ? '270px' : '200px';?>; padding-top:5px;'>
             <?php printf($lang->todo->beforeDays, html::input('config[beforeDays]', 0, "class='form-control'"));?>
             </div>
           </td>
