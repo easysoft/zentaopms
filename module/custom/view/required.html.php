@@ -50,7 +50,15 @@
               $fields = $this->custom->getFormFields('testcase', $method);
               $method = 'createCase';
           }
-          echo $lang->$moduleName->$method . $lang->custom->page;
+          $actionKey = $method . 'Action';
+          if(isset($lang->$moduleName->$actionKey))
+          {
+              echo $lang->$moduleName->$actionKey . $lang->custom->page;
+          }
+          else
+          {
+              echo $lang->$moduleName->$method . $lang->custom->page;
+          }
           ?>
           </th>
           <td><?php echo html::select("requiredFields[{$method}][]", $fields, $requiredField, "class='form-control chosen' multiple " . ($i == 0 ? "data-placeholder='{$lang->custom->notice->required}'" : ''));?></td>
@@ -59,7 +67,8 @@
         <?php $i++;?>
         <?php endforeach;?>
         <tr>
-          <td colspan='3' class='text-center form-actions'>
+          <th></th>
+          <td colspan='2' class='form-actions'>
           <?php echo html::submitButton();?>
           <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>
