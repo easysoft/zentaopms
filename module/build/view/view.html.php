@@ -25,11 +25,22 @@ tbody tr td:first-child input{display:none;}
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->buildList ? $this->session->buildList : $this->createLink('project', 'build', "projectID=$build->project");?>
-    <?php common::printBack($browseLink, 'btn btn-link');?>
+    <?php common::printBack($browseLink, 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
-      <span class='label label-id'><?php echo $build->id;?></span>
-      <span class='text' title='<?php echo $build->name;?>'><?php echo $build->name;?></span>
+      <span class='text' title='<?php echo $build->name;?>'> 
+      <?php echo html::a('javascript:void(0)', "<span class='label label-id'>{$build->id}</span> " . $build->name . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link btn-active-text'");?>
+      <?php 
+      echo "<ul class='dropdown-menu'>";
+      foreach($buildPairs as $id => $name)
+      {   
+          echo '<li' . ($id == $build->id ? " class='active'" : '') . '>';
+          echo html::a($this->createLink('build', 'view', "buildID=$id"), $name);
+          echo '</li>';
+      }       
+      echo '</ul>';
+      ?>
+      </span>
       <?php if($build->deleted):?>
       <span class='label label-danger'><?php echo $lang->build->deleted;?></span>
       <?php endif; ?>
@@ -147,7 +158,7 @@ tbody tr td:first-child input{display:none;}
               <?php echo html::submitButton($lang->build->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
-            <div class='table-statistic'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
+            <div class='text'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
           </div>
           <?php endif;?>
         </form>

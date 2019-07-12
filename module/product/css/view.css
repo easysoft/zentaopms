@@ -5,3 +5,4 @@
 .block-release .panel-body {padding-bottom: 50px;}
 .block-release .panel-body > .btn.pull-right {position: absolute; right: 20px; bottom: 20px;}
 .col-4 .cell table td{word-wrap: break-word; word-break: normal;}
+.release-line li .title{  overflow:hidden; text-overflow:ellipsis; white-space:nowrap}

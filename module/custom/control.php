@@ -43,6 +43,7 @@ class custom extends control
 
         if($module == 'bug' and $field == 'typeList')
         {
+            unset($fieldList['interface']);
             unset($fieldList['designchange']);
             unset($fieldList['newfeature']);
             unset($fieldList['trackthings']);
@@ -110,6 +111,7 @@ class custom extends control
             elseif($module == 'user' and $field == 'contactField')
             {
                 $data = fixer::input('post')->join('contactField', ',')->get();
+                if(!isset($data->contactField)) $data->contactField = '';
                 $this->loadModel('setting')->setItem('system.user.contactField', $data->contactField);
             }
             elseif($module == 'user' and $field == 'deleted')
@@ -212,7 +214,14 @@ class custom extends control
     {
         if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
 
-        $this->custom->deleteItems("module=$module&section=$field");
+        if($module == 'user' and $field == 'contactField')
+        {
+            $this->loadModel('setting')->deleteItems("module=$module&key=$field");
+        }
+        else
+        {
+            $this->custom->deleteItems("module=$module&section=$field");
+        }
         die(js::reload('parent'));
     }
 

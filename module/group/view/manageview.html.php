@@ -14,17 +14,16 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2 title='<?php echo $group->name;?>'>
-      <span id='groupName'><i class='icon-lock'> <?php echo $group->name;?></i></span>
+      <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?></span>
       <small> <?php echo $lang->arrow . $lang->group->manageView;?></small>
     </h2>
   </div>
   <form class="load-indicator main-form form-ajax" id="manageViewForm" method="post" target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-110px'>
-          <?php echo $lang->group->viewList;?>
-        </th>
-        <td>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-130px' : 'w-100px';?>
+        <th class='text-bottom <?php echo $colWidth;?>'><?php echo $lang->group->viewList;?></th>
+        <td class='text-bottom'>
           <?php foreach($lang->menu as $menuKey => $menu):?>
           <?php if(!is_string($menu)) continue;?>
           <?php list($moduleName, $module) = explode('|', $menu);?>
@@ -74,6 +73,7 @@
         <td class='pl-0px pt-0px'>
           <table class='table table-form'>
             <?php foreach($lang->menu as $module => $title):?>
+            <?php if(!is_string($title)) continue;?>
             <?php if(!isset($lang->action->dynamicAction->$module) and !isset($menugroup[$module])) continue;?>
             <tr id='<?php echo "{$module}ActionBox";?>'>
               <th class='w-100px text-left text-top'>

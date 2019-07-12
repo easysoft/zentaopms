@@ -54,7 +54,8 @@ EOT;
       <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>
-          <th class='w-80px'><?php echo $lang->custom->storyReview;?></th>
+          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-140px' : 'w-80px';?>
+          <th class='<?php echo $colWidth;?>'><?php echo $lang->custom->storyReview;?></th>
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
           <td></td>
         </tr>
@@ -138,7 +139,10 @@ EOT;
         </tr>
         <tr>
           <td></td>
-          <td><?php echo html::submitButton();?></td>
+          <td>
+            <?php echo html::submitButton();?>
+            <?php if(common::hasPriv('custom', 'restore')) echo html::linkButton($lang->custom->restore, inlink('restore', "module=user&field=contactField"), 'hiddenwin', '', 'btn btn-wide');?>
+          </td>
         </tr>
       </table>
       <?php elseif($module == 'user' and $field == 'deleted'):?>

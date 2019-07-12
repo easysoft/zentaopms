@@ -14,10 +14,19 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/chart.html.php';?>
+<?php js::set('objectType', $objectType);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->testreport->create;?></h2>
+      <h2 class='clearfix'>
+        <div class='heading'><?php echo $lang->testreport->create;?></div>
+        <?php if(!empty($taskPairs)):?>
+        <div class='input-group'>
+          <span class='input-group-addon'><?php echo $lang->testtask->common;?></span>
+          <?php echo html::select('selectTask', $taskPairs, $objectID, "class='form-control chosen'");?>
+        </div>
+        <?php endif;?>
+      </h2>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <div class='detail'>
@@ -25,7 +34,7 @@
         <div class="detail-content">
           <table class='table table-form'>
             <tr>
-              <th class='w-80px'><?php echo $lang->testreport->startEnd?></th>
+              <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
               <td class='w-p50'>
                 <div class='input-group'>
                   <?php echo html::input('begin', $begin, "class='form-control form-date'")?>

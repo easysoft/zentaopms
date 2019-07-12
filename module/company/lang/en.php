@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->company->common   = 'Company';
-$lang->company->index    = "Home";
+$lang->company->index    = "Company Home";
 $lang->company->edit     = "Edit Company";
 $lang->company->view     = "Company Information";
 $lang->company->browse   = "User List";

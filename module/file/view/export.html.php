@@ -155,7 +155,7 @@ if($isCustomExport)
         <table class="table table-form">
           <tbody>
             <tr>
-              <th><?php echo $lang->file->fileName;?></th>
+              <th class='w-120px'><?php echo $lang->file->fileName;?></th>
               <td class="w-300px"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus placeholder='{$lang->file->untitled}'");?></td>
               <td></td>
             </tr>
@@ -177,7 +177,7 @@ if($isCustomExport)
             </tr>
             <?php if($isCustomExport):?>
             <tr>
-              <th><?php echo $lang->file->tplTitle;?></th>
+              <th><?php echo $lang->file->tplTitleAB;?></th>
               <td id="tplBox"><?php echo $this->fetch('file', 'buildExportTPL', 'module=' . $this->moduleName);?></td>
               <td>
                 <button type='button' onclick='setExportTPL()' class='btn'><?php echo $lang->file->setExportTPL?></button>

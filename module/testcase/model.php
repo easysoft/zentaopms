@@ -1380,7 +1380,7 @@ class testcaseModel extends model
             case 'title':
                 if($case->branch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[{$this->lang->testcase->fromCase}#$fromCaseID]") : html::a($caseLink, $case->title, null, "style='color: $case->color'")) : "<span style='color: $case->color'>$case->title</span>";
+                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-arrow-left' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]") : html::a($caseLink, $case->title, null, "style='color: $case->color'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':
                 echo $branches[$case->branch];
@@ -1397,11 +1397,11 @@ class testcaseModel extends model
             case 'status':
                 if($case->needconfirm) 
                 {
-                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromTesttask}>{$this->lang->story->changed}</span>");
+                    print("<span class='status-story status-changed' title='{$this->lang->testcase->fromTesttask}'>{$this->lang->story->changed}</span>");
                 }
                 elseif(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
                 {
-                    print("<span class='status-story status-changed' title={$this->lang->testcase->fromCaselib}>{$this->lang->testcase->changed}</span>");
+                    print("<span class='status-story status-changed' title='{$this->lang->testcase->fromCaselib}'>{$this->lang->testcase->changed}</span>");
                 }
                 else
                 {
@@ -1467,7 +1467,7 @@ class testcaseModel extends model
                     break;
                 }
 
-                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true);
+                common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true, "data-width='95%'");
                 common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
                 common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
                 if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');

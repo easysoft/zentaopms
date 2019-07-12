@@ -43,9 +43,12 @@ $lang->misc->zentao->support['manual']     = "User Manual";
 
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
-
 $lang->misc->zentao->cowin['cowinmore']    = "More";
 
+$lang->misc->zentao->service['zentaotrain']= 'Zentao Train';
+$lang->misc->zentao->service['idc']        = 'Zentao Cloud';
+$lang->misc->zentao->service['custom']     = 'Zentao Custom';
+$lang->misc->zentao->service['servicemore']= 'More';
 
 
 
@@ -73,7 +76,7 @@ $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenT
 
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
-$lang->misc->feature->detailed = 'Details';
+$lang->misc->feature->detailed = 'Detail';
 
 $lang->misc->releaseDate['11.5.2']      = '2019-06-26';
 $lang->misc->releaseDate['11.5.1']      = '2019-06-24';
@@ -137,12 +140,12 @@ $lang->misc->feature->all['10.4.stable'][] = array('title'=>'Upgrade existing in
 $lang->misc->feature->all['10.3.stable'][] = array('title'=>'Fix Bug.', 'desc' => '');
 $lang->misc->feature->all['10.2.stable'][] = array('title'=>'Xuan.im is integrated!', 'desc' => '');
 
-$lang->misc->feature->all['10.0.stable'][] = array('title'=>'New UI/UX and new experience', 'desc' => '<ol><li>My Dashboard</li><li>Dynamic</li><li>Product Home</li><li>Product overview</li><li>Roadmap</li><li>Project Home</li><li>Project overview</li><li>QA Home</li><li>Document Home</li><li>Added work report on My Dashboard</li><li>Add/Edit/Finish todos on My Dashboard</li><li>Add prodcut report on Product Home</li><li>Add prodcut overview on Product Home</li><li>Add project report on Project Home</li><li>Add project overview on Project Home</li><li>Add QA report on QA Home</li><li>All Product/product Home/All Project/Project Home/QA Home is moved from the right of the secondary Narbar to the left.</li><li>Kanban/Burndown/Tree/ByGroup of Project/Task has been moved from the third Navbar to the secondary one; Tree/ByGroup/Task Liat has been integrated to a drop-down.</li><li>Bug/Build of Project on the secondary Navbar has been integrated to a drop-down.</li><li>Display build and list by group, which is more reasonable.</li><li>Added tree to display docuemnt on the left of the page.</li><li>Added quick entry to document, including Last Update, My Doc and My Favorite</li><li>Added My Favorite to Doc module.</li></ol>');
+$lang->misc->feature->all['10.0.stable'][] = array('title'=>'New UI/UX and new experience', 'desc' => '<ol><li>My Dashboard</li><li>Dynamics</li><li>Product Home</li><li>Product Overview</li><li>Roadmap</li><li>Project Home</li><li>Project overview</li><li>QA Home</li><li>Document Home</li><li>Added work report on My Dashboard</li><li>Add/Edit/Finish todos on My Dashboard</li><li>Add prodcut report on Product Home</li><li>Add prodcut overview on Product Home</li><li>Add project report on Project Home</li><li>Add project overview on Project Home</li><li>Add Testing report on QA Home</li><li>All Product/product Home/All Project/Project Home/QA Home is moved from the right of the secondary Navbar to the left.</li><li>Kanban/Burndown/Tree/ByGroup of Project/Task has been moved from the third Navbar to the secondary one; Tree/ByGroup/Task List has been integrated to a drop-down.</li><li>Bug/Build of Project on the secondary Navbar has been integrated to a drop-down.</li><li>Display build and list by group, which is more reasonable.</li><li>Added tree to display document on the left of the page.</li><li>Added quick entry to document, including Last Update, My Doc and My Favorite</li><li>Added My Favorite to Doc module.</li></ol>');
 
 $lang->misc->feature->all['9.8.stable'][] = array('title'=>'Message centralized management', 'desc' => '<p>Gather Mail，SMS，webhook into Message</p>');
-$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Add recuured Todo', 'desc' => '');
-$lang->misc->feature->all['9.8.stable'][] = array('title'=>"Add Block of 'AssignToMe'", 'desc' => '');
-$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Support generating reports of TestBuilds', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Add recurred Todo', 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>"Add Block of 'AssignedToMe'", 'desc' => '');
+$lang->misc->feature->all['9.8.stable'][] = array('title'=>'Support generating reports on Test Builds', 'desc' => '');
 
 $lang->misc->feature->all['9.7.stable'][] = array('title'=>'Optimize International package. Added Demo data.', 'desc' => '');
 

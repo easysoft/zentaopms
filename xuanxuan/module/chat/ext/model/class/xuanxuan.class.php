@@ -104,7 +104,7 @@ class xuanxuanChat extends chatModel
     }
 
     public function uploadFile($fileName, $path, $size, $time, $userID, $users, $chat)
-    {    
+    {
         $user      = $this->getUserByUserID($userID);
         $extension = $this->loadModel('file')->getExtension($fileName);
 

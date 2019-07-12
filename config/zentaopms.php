@@ -36,6 +36,10 @@ $config->productCommonList['zh-tw'][0] = '產品';
 $config->productCommonList['zh-tw'][1] = '項目';
 $config->projectCommonList['zh-tw'][0] = '項目';
 $config->projectCommonList['zh-tw'][1] = '迭代';
+$config->productCommonList['de'][0]    = 'Produkt';
+$config->productCommonList['de'][1]    = 'Projekt';
+$config->projectCommonList['de'][0]    = 'Projekt';
+$config->projectCommonList['de'][1]    = 'Iteration';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
@@ -44,6 +48,8 @@ $config->charsets['zh-tw']['utf-8'] = 'UTF-8';
 $config->charsets['zh-tw']['big5']  = 'BIG5';
 $config->charsets['en']['utf-8']    = 'UTF-8';
 $config->charsets['en']['GBK']      = 'GBK';
+$config->charsets['de']['utf-8']    = 'UTF-8';
+$config->charsets['de']['GBK']      = 'GBK';
 
 /* IP white list settings.*/
 $config->ipWhiteList = '*';
@@ -107,6 +113,7 @@ define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
 define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
+define('TABLE_TRANSLATION',   '`' . $config->db->prefix . 'translation`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;

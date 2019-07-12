@@ -12,6 +12,9 @@
 ?>
 <?php include './header.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
+<?php if($this->app->getClientLang() == 'en'):?>
+<style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
+<?php endif;?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -55,7 +58,7 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->story->plan;?></th>
+            <th><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
               <div class='input-group' id='planIdBox'>
                 <?php
@@ -73,7 +76,7 @@
               </div>
             </td>
             <?php if(strpos(",$showFields,", ',source,') !== false):?>
-            <td colspan="2">
+            <td colspan="2" class='sourceTd'>
               <div class="input-group">
                 <div class="input-group">
                   <div class="input-group-addon"><?php echo $lang->story->source;?></div>

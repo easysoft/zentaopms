@@ -11,13 +11,13 @@
  */
 $lang->search->common        = '搜索';
 $lang->search->reset         = '重置';
-$lang->search->saveQuery     = '保存';
+$lang->search->saveQuery     = '保存查询';
 $lang->search->myQuery       = '我的查询';
 $lang->search->group1        = '第一组';
 $lang->search->group2        = '第二组';
 $lang->search->buildForm     = '搜索表单';
 $lang->search->buildQuery    = '执行搜索';
-$lang->search->savedQuery    = '已保存的检索历史';
+$lang->search->savedQuery    = '已保存的查询条件';
 $lang->search->deleteQuery   = '删除查询';
 $lang->search->setQueryTitle = '请输入查询标题（保存之前请先查询）：';
 $lang->search->select        = '需求/任务筛选';

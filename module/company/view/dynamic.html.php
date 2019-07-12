@@ -39,7 +39,16 @@
   <div id='dynamics'>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
-    <?php $isToday = date(DT_DATE4) == $date;?>
+    <?php 
+    if($this->app->getClientLang() == 'en')
+    {   
+        $isToday = date('M d') == $date;
+    }   
+    else
+    {   
+        $isToday = date(DT_DATE4) == $date;
+    } 
+    ?>
     <div class="dynamic <?php if($isToday) echo 'active';?>">
       <div class="dynamic-date">
         <?php if($isToday):?>
@@ -58,7 +67,7 @@
             <span class="timeline-text">
               <?php echo zget($users, $action->actor) . ' ' . $action->actionLabel;?>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
-              <span class="text-muted"><?php echo $action->objectLabel;?></span>
+              <span class="text"><?php echo $action->objectLabel;?></span>
               <?php echo html::a($action->objectLink, $action->objectName);?>
               <span class="label label-id"><?php echo $action->objectID;?></span>
               <?php endif;?>

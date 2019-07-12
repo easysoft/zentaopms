@@ -708,6 +708,7 @@ class userModel extends model
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
     }
 
@@ -729,6 +730,7 @@ class userModel extends model
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
         $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
         $this->loadModel('common')->loadConfigFromDB();
 
         $this->keepLogin($user);
@@ -1549,5 +1551,26 @@ class userModel extends model
             ->markRight(1)
             ->orderBy('id')
             ->fetchAll();
+    }
+
+    /**
+     * Get personal data.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return array
+     */
+    public function getPersonalData($account = '')
+    {
+        if(empty($account)) $account = $this->app->user->account;
+
+        $personalData = array();
+        $personalData['createdTodo']  = $this->dao->select('count(*) as count')->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
+        $personalData['createdStory'] = $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['finishedTask'] = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['resolvedBug']  = $this->dao->select('count(*) as count')->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['createdCase']  = $this->dao->select('count(*) as count')->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+
+        return $personalData;
     }
 }

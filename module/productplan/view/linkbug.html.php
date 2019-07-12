@@ -66,7 +66,7 @@
       <div class="btn-toolbar">
         <?php echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
       </div>
-      <div class='table-statistic'></div>
+      <div class=''></div>
     </div>
   </form>
 </div>

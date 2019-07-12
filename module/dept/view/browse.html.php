@@ -110,19 +110,19 @@ $(function()
             sort:
             {
                 title: '<?php echo $lang->dept->dragAndSort ?>',
-                template: '<a class="sort-handler" href="javascript:;"><?php echo $lang->sort;?></a>'
+                template: '<a class="sort-handler"><i class="icon-move"></i></a>'
             },
             edit:
             {
                 linkTemplate: '<?php echo helper::createLink('dept', 'edit', "deptid={0}"); ?>',
                 title: '<?php echo $lang->dept->edit ?>',
-                template: '<a href="javascript:;" data-width="600"><?php echo $lang->edit?></a>'
+                template: '<a><i class="icon-edit"></i></a>'
             },
             "delete":
             {
                 linkTemplate: '<?php echo helper::createLink('dept', 'delete', "deptid={0}"); ?>',
                 title: '<?php echo $lang->dept->delete ?>',
-                template: '<a href="javascript:;"><?php echo $lang->delete?></a>'
+                template: '<a><i class="icon-trash"></i></a>'
             }
         },
         action: function(event)

@@ -127,6 +127,7 @@ class user extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
         $this->view->account    = $account;
+        $this->view->user       = $this->user->getById($account);
         $this->view->pager      = $pager;
 
         $this->display();
@@ -244,13 +245,13 @@ class user extends control
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($account, $pager, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->account    = $account;
+        $this->view->user       = $this->user->getById($account);
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->display();
-
     }
 
     /**
@@ -296,6 +297,7 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testCase;
         $this->view->position[] = $this->lang->user->testCase;
         $this->view->account    = $account;
+        $this->view->user       = $this->user->getById($account);
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
@@ -349,13 +351,14 @@ class user extends control
 
         $user = $this->user->getById($account);
 
-        $this->view->title      = "USER #$user->id $user->account/" . $this->lang->user->profile;
-        $this->view->position[] = $this->lang->user->common;
-        $this->view->position[] = $this->lang->user->profile;
-        $this->view->account    = $account;
-        $this->view->user       = $user;
-        $this->view->groups     = $this->loadModel('group')->getByAccount($account);
-        $this->view->deptPath   = $this->dept->getParents($user->dept);
+        $this->view->title        = "USER #$user->id $user->account/" . $this->lang->user->profile;
+        $this->view->position[]   = $this->lang->user->common;
+        $this->view->position[]   = $this->lang->user->profile;
+        $this->view->account      = $account;
+        $this->view->user         = $user;
+        $this->view->groups       = $this->loadModel('group')->getByAccount($account);
+        $this->view->deptPath     = $this->dept->getParents($user->dept);
+        $this->view->personalData = $this->user->getPersonalData($user->account);
 
         $this->display();
     }

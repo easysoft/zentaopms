@@ -10,24 +10,31 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
-<div class="alert with-icon" id="scoreStart">
-  <i class="icon-cube"></i>
-  <div class="content">
-    <p><?php echo $lang->score->resetTips; ?></p>
-    <p><button class="btn btn-primary" id="scoreReset"><?php echo $lang->score->resetStart; ?></button></p>
-  </div>
-</div>
-<div class="alert with-icon hidden" id="scoreLoading">
-  <i class="icon-exclamation-sign"></i>
-  <div class="content">
-    <p><?php echo $lang->score->resetTips; ?></p>
-    <p id="loadingContent"></p>
-  </div>
-</div>
-<div class="alert with-icon hidden" id="scoreFinish">
-  <i class="icon-check-circle"></i>
-  <div class="content">
-    <strong><?php echo $lang->score->resetFinish; ?></strong>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2><?php echo $lang->score->reset;?></h2>
+    </div>
+    <div class="alert with-icon" id="scoreStart">
+      <i class="icon-cube"></i>
+      <div class="content">
+        <p><?php echo $lang->score->resetTips; ?></p>
+        <p><button class="btn btn-primary" id="scoreReset"><?php echo $lang->score->resetStart; ?></button></p>
+      </div>
+    </div>
+    <div class="alert with-icon hidden" id="scoreLoading">
+      <i class="icon-exclamation-sign"></i>
+      <div class="content">
+        <p><?php echo $lang->score->resetTips; ?></p>
+        <p id="loadingContent"></p>
+      </div>
+    </div>
+    <div class="alert with-icon hidden" id="scoreFinish">
+      <i class="icon-check-circle"></i>
+      <div class="content">
+        <strong><?php echo $lang->score->resetFinish; ?></strong>
+      </div>
+    </div>
   </div>
 </div>
 <script>

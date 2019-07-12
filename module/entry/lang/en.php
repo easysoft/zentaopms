@@ -1,13 +1,13 @@
 <?php
-$lang->entry->common  = 'Entry';
-$lang->entry->list    = 'Entry List';
+$lang->entry->common  = 'Application';
+$lang->entry->list    = 'Applications';
 $lang->entry->api     = 'API';
 $lang->entry->webhook = 'Webhook';
 $lang->entry->log     = 'Log';
 $lang->entry->setting = 'Settings';
 
 $lang->entry->browse    = 'Browse';
-$lang->entry->create    = 'Create Entry';
+$lang->entry->create    = 'Add Application';
 $lang->entry->edit      = 'Edit';
 $lang->entry->delete    = 'Delete';
 $lang->entry->createKey = 'Regenerate Secret Key';
@@ -20,23 +20,26 @@ $lang->entry->freePasswd  = 'Free Password Login';
 $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
 $lang->entry->desc        = 'Description';
-$lang->entry->createdBy   = 'Created By';
-$lang->entry->createdDate = 'Created';
-$lang->entry->editedby    = 'Edited By';
-$lang->entry->editedDate  = 'Edited';
+$lang->entry->createdBy   = 'CreatedBy';
+$lang->entry->createdDate = 'CreateDate';
+$lang->entry->editedby    = 'EditedBy';
+$lang->entry->editedDate  = 'EditedDate';
 $lang->entry->date        = 'Requesting Time';
 $lang->entry->url         = 'Requesting URL';
 
 $lang->entry->confirmDelete = 'Do you want to delete this entry?';
 $lang->entry->help          = 'Help';
-$lang->entry->notify        = 'Notify';
+$lang->entry->notify        = 'Notification';
+
+$lang->entry->helpLink   = 'https://www.zentao.pm/book/zentaomanual/scrum-tool-open-source-integrate-third-party-application-221.html';
+$lang->entry->notifyLink = 'https://www.zentao.net/book/zentaopmshelp/301.html';
 
 $lang->entry->note = new stdClass();
 $lang->entry->note->name    = 'Name';
-$lang->entry->note->code    = 'Alias should be letters and numbers';
+$lang->entry->note->code    = 'Code should be letters and numbers';
 $lang->entry->note->ip      = "Use comma to seperate IPs. IP segment is supported, e.g. 192.168.1.*";
 $lang->entry->note->allIP   = 'All IPs';
-$lang->entry->note->account = 'Entry Account';
+$lang->entry->note->account = 'Application Account';
 
 $lang->entry->freePasswdList[0] = 'Off';
 $lang->entry->freePasswdList[1] = 'On';
@@ -50,5 +53,5 @@ $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'Session verification failed.';
 $lang->entry->errmsg['IP_DENIED']             = 'IP is denied.';
 $lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Account is not bound.';
 $lang->entry->errmsg['INVALID_ACCOUNT']       = 'Invalid account.';
-$lang->entry->errmsg['EMPTY_ENTRY']           = 'Entry does not exist.';
+$lang->entry->errmsg['EMPTY_ENTRY']           = 'Application does not exist.';
 $lang->entry->errmsg['CALLED_TIME']           = 'Token has expired';

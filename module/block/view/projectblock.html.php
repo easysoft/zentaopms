@@ -43,11 +43,12 @@
         <td class='c-name text-left' title='<?php echo $project->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title='$project->name'");?></nobr></td>
         <td class="c-date"><?php echo $project->end;?></td>
         <?php if($longBlock):?>
-        <td class="c-status">
+        <td class="w-70px">
           <?php if(isset($project->delay)):?>
-          <span class="status-project status-delayed"><?php echo $lang->project->delayed;?></span>
+          <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
           <?php else:?>
-          <span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span>
+          <?php $statusName = zget($lang->project->statusList, $project->status, '');?>
+          <span class="status-project status-<?php echo $project->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>
         <td class="c-hours"><?php echo $project->hours->totalEstimate;?></td>

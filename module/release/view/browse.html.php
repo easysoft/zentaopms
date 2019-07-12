@@ -29,7 +29,6 @@
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
       <?php if(common::hasPriv('release', 'create')):?>
-      <span class="text-muted"><?php echo $lang->youCould;?></span>
       <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

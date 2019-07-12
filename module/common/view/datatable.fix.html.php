@@ -6,7 +6,7 @@
 $(function()
 {
     <?php if(!empty($setShowModule)):?>
-    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='text-secondary small'><?php echo $lang->datatable->showModule?></a><hr class='space-sm' />");
+    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='text-secondary small'><?php echo $lang->datatable->showModuleAB?></a><hr class='space-sm' />");
     <?php endif;?>
 
     var $btnToolbar = $('#main .table-header .btn-toolbar:first');
@@ -49,7 +49,7 @@ $(function()
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->datatable->showModule?></h4>
+        <h4 class="modal-title" style="font-size:14px;"><i class="icon-cog"></i> <?php echo $lang->datatable->showModule?></h4>
       </div>
       <div class="modal-body">
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>

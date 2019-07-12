@@ -66,7 +66,8 @@
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-80px'><?php echo $lang->story->product;?></th>
+                <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+                <th class='<?php echo $colWidth;?>'><?php echo $lang->story->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
@@ -160,7 +161,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?>
-                    <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists')?></div>
+                    <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
               </tr>
@@ -170,7 +171,7 @@
             <div class='detail-title'><?php echo $lang->story->legendLifeTime;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-70px'><?php echo $lang->story->openedBy;?></th>
+                <th class='w-80px'><?php echo $lang->story->openedBy;?></th>
                 <td><?php echo $users[$story->openedBy];?></td>
               </tr>
               <tr>
@@ -206,7 +207,8 @@
               </tr>
               <?php endif;?>
               <tr>
-                <th class='w-70px'><?php echo $lang->story->linkStories;?></th>
+              <?php $width = $this->app->getClientLang() == 'en' ? 'w-110px': 'w-70px'?>
+                <th class=<?php echo $width?>><?php echo $lang->story->linkStories;?></th>
                 <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
               </tr>
               <tr>

@@ -152,7 +152,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$task->deleted):?>
         <?php
-                  if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
+        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "project=$task->project&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'treemap-alt', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
         common::printIcon('task', 'assignTo',       "projectID=$task->project&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
@@ -188,7 +188,7 @@
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th><?php echo $lang->task->project;?></th>
+                  <th class='w-90px'><?php echo $lang->task->project;?></th>
                   <td><?php if(!common::printLink('project', 'view', "projectID=$task->project", $project->name)) echo $project->name;?></td>
                 </tr>
                 <tr>
@@ -326,9 +326,9 @@
                 <?php foreach($task->team as $member):?>
                 <tr class='text-center'>
                   <td class='text-left'><?php echo zget($users, $member->account)?></td>
-                  <td><?php echo $member->estimate?></td>
-                  <td><?php echo $member->consumed?></td>
-                  <td><?php echo $member->left?></td>
+                  <td><?php echo (float)$member->estimate?></td>
+                  <td><?php echo (float)$member->consumed?></td>
+                  <td><?php echo (float)$member->left?></td>
                 </tr>
                 <?php endforeach;?>
             </table>
@@ -342,8 +342,8 @@
         <div class="detail-content">
           <table class='table table-data'>
             <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
-            <tr class='<?php echo $widthClass;?>'>
-              <th><?php echo $lang->task->estimate;?></th>
+            <tr>
+              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estimate;?></th>
               <td><?php echo $task->estimate . $lang->workingHour;?></td>
             </tr>
             <tr>

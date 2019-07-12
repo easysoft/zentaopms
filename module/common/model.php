@@ -254,12 +254,12 @@ class commonModel extends model
             if(!$isGuest)
             {
                 echo '<li class="user-profile-item">';
-                echo "<a href='". helper::createLink('my', 'profile', '', '', true) . "' class='iframe" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "' data-width='600'>";
+                echo "<a href='". helper::createLink('my', 'profile') . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
                 echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile'), $lang->profile) . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), $lang->changePassword, '', "class='iframe' data-width='500'") . '</li>';
 
                 echo "<li class='divider'></li>";
@@ -320,7 +320,7 @@ class commonModel extends model
         echo '<li>' . html::a($lang->manualUrl, $lang->manual, '_blank', "class='open-help-tab'") . '</li>';
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
-        echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='900' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
+        echo '<li>' . html::a(helper::createLink('misc', 'about'), $lang->aboutZenTao, '', "class='about iframe' data-width='950' data-headerless='true' data-backdrop='true' data-keyboard='true' data-class='modal-about'") . '</li>';
     }
 
     /**
@@ -381,11 +381,14 @@ class commonModel extends model
             $link['method'] = $subMenuMethod;
             $link['vars']   = $subMenuParams;
 
-            $menu = new stdclass();
-            $menu->name   = $subMenuKey;
-            $menu->link   = $link;
-            $menu->text   = $subMenuName;
-            $menu->hidden = false;
+            $subMenuItem     = isset($items->$subMenuKey) ? $items->$subMenuKey : array();
+            $menu            = new stdclass();
+            $menu->name      = $subMenuKey;
+            $menu->link      = $link;
+            $menu->text      = $subMenuName;
+            $menu->subModule = isset($subMenuItem['subModule']) ? $subMenuItem['subModule'] : '';
+            $menu->alias     = isset($subMenuItem['alias'])     ? $subMenuItem['alias'] : '';
+            $menu->hidden    = false;
             $subMenu[$subMenuKey] = $menu;
         }
 

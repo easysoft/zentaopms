@@ -26,7 +26,7 @@
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='w-120px'><?php echo $lang->project->name;?></th>
           <td><?php echo html::input('name', $project->name, "class='form-control' required");?></td><td></td>
         </tr>
         <tr>

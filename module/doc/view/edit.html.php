@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($doc->contentType == 'html')     include '../../common/view/ueditor.html.php';?>
+<?php if($doc->contentType == 'html')     include '../../common/view/kindeditor.html.php';?>
 <?php if($doc->contentType == 'markdown') include '../../common/view/markdown.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -26,7 +26,7 @@
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'> 
         <tr>
-          <th><?php echo $lang->doc->lib;?></th>
+          <th class='w-110px'><?php echo $lang->doc->lib;?></th>
           <td> <?php echo html::select('lib', $libs, $doc->lib, "class='form-control chosen' onchange=loadDocModule(this.value)");?> </td><td></td>
         </tr>  
         <tr>
@@ -63,7 +63,7 @@
           <th><?php echo $lang->doclib->control;?></th>
           <td colspan='2'>
             <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
-            <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$doc->acl];?></span>
+            <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$doc->acl];?></span>
           </td>
         </tr>
         <tr id='whiteListBox' class='hidden'>

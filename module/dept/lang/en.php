@@ -10,19 +10,19 @@
  * @link        http://www.zentao.net
  */
 $lang->dept->common      = 'Department';
-$lang->dept->manageChild = "Child Dept";
-$lang->dept->edit        = "Edit";
-$lang->dept->delete      = "Delete";
+$lang->dept->manageChild = "Child Department";
+$lang->dept->edit        = "Edit Department";
+$lang->dept->delete      = "Delete Department";
 $lang->dept->parent      = "Parent Dept";
 $lang->dept->manager     = "Manager";
 $lang->dept->name        = "Department Name";
-$lang->dept->browse      = "Manage";
+$lang->dept->browse      = "Manage Department";
 $lang->dept->manage      = "Manage Department";
-$lang->dept->updateOrder = "Sort";
+$lang->dept->updateOrder = "Rank Department";
 $lang->dept->add         = "Add Department";
-$lang->dept->dragAndSort = "Drag and Sort";
+$lang->dept->dragAndSort = "Drag to order";
 
-$lang->dept->confirmDelete = " Do you want to delete this Department?";
+$lang->dept->confirmDelete = " Do you want to delete this department?";
 $lang->dept->successSave   = " Saved!";
 
 $lang->dept->error = new stdclass();

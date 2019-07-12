@@ -14,21 +14,18 @@
   <form class="load-indicator main-form form-ajax" method='post'>
     <div class='main-header'>
       <div class='heading'>
-        <strong><?php echo $lang->custom->score?></strong>
+        <strong><?php echo $lang->custom->scoreTitle?></strong>
       </div>
     </div>
     <table class='table table-form'>
       <tr>
-        <th class='w-100px text-top'><?php echo $lang->custom->score;?></th>
-        <td>
+        <th class='w-300px'><?php echo $lang->custom->scoreTitle;?></th>
+        <td class='w-120px text-center'>
           <?php $checkedKey = isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0;?>
           <?php foreach($lang->custom->scoreStatus as $key => $value):?>
-          <p><label class="radio-inline"><input type="radio" name="score" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="score<?php echo $key;?>"><?php echo $value;?></label></p>
+          <label class="radio-inline"><input type="radio" name="score" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="score<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
         </td>
-      </tr>
-      <tr>
-        <th></th>
         <td class='form-actions'>
           <?php echo html::submitButton();?>
           <?php common::printLink('score', 'reset', '', "<i class='icon-refresh'></i> " . $lang->custom->scoreReset, '', ' id="scoreRefresh" class="btn btn-wide iframe" data-width="480"', true, true);?>

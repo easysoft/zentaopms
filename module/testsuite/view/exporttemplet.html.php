@@ -31,15 +31,13 @@ function closeWindow()
             <td>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->testcase->num;?></span>
-                <?php
-                echo html::input('num', '10', "class='form-control'");
-                ?>
+                <?php echo html::input('num', '10', "class='form-control'");?>
               </div>
             </td>
             <td class='w-100px'>
               <?php echo html::select('encode', $config->charsets[$this->cookie->lang], 'utf-8', "class='form-control'");?>
             </td>
-            <td class="w-150px">
+            <td class="w-100px">
               <?php echo html::submitButton('', '', 'btn btn-primary btn-block');?>
             </td>
           </tr>

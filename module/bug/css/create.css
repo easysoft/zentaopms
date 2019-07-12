@@ -1,3 +1,6 @@
+html[lang='en'] #moduleIdBox .input-group-addon{padding: 5px 23px}
+html[lang='en'] #deadlineTd .input-group-addon{padding: 5px 18px}
+
 .ke-toolbar .ke-outline[data-name='savetemplate'] {display: block;}
 .ke-outline  .ke-icon-savetemplate {background-image: url(theme/default/images/kindeditor/save.gif); background-position: center; width: 56px; height: 20px;}
 
@@ -7,9 +10,6 @@
 
 #buildBoxActions {padding-left: 15px;}
 
-#module_chosen.chosen-container .chosen-drop {min-width: 400px; border-top: 1px solid #ddd!important}
-#os_chosen.chosen-container .chosen-drop{min-width: 200px} 
-#openedBuild_chosen.chosen-container .chosen-drop {min-width: 450px; border-top: 1px solid #ddd!important}
 #module + .chosen-container-single .chosen-single,
 #task + .chosen-container-single .chosen-single,
 #openedBuild + .chosen-container-multi .chosen-choices {border-top-left-radius: 0; border-bottom-left-radius: 0;}
@@ -38,3 +38,6 @@
 .title-group #severity + .chosen-container > .chosen-single {border-radius: 0!important;}
 .title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0!important; border-bottom-left-radius: 0!important;}
 .title-group .has-icon-right{min-width:700px}
+
+#typeBox {width:180px;}
+#osBox {width:190px;}

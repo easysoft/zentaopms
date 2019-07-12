@@ -123,7 +123,8 @@ class messageModel extends model
         if($toList == $this->app->user->account) return false;
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        $data  = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
+        $space = $this->app->getClientLang() == 'en' ? ' ' : '';
+        $data  = $this->app->user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
         $data .= ' ' . html::a(helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
 
         $notify = new stdclass();

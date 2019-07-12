@@ -9,43 +9,43 @@
  * @version     $Id: en.php 4719 2013-05-03 02:20:28Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->group->common             = 'Permission';
-$lang->group->browse             = 'Groups';
-$lang->group->create             = 'Add Group';
-$lang->group->edit               = 'Edit';
-$lang->group->copy               = 'Copy';
-$lang->group->delete             = 'Delete';
-$lang->group->manageView         = 'View';
-$lang->group->managePriv         = 'Batch Assign';
-$lang->group->managePrivByGroup  = 'Permission';
-$lang->group->managePrivByModule = 'Module Permission';
+$lang->group->common             = 'Privilege';
+$lang->group->browse             = 'Privilege Group';
+$lang->group->create             = 'Create Group';
+$lang->group->edit               = 'Edit Group';
+$lang->group->copy               = 'Copy Group';
+$lang->group->delete             = 'Delete Group';
+$lang->group->manageView         = 'Manage Sight';
+$lang->group->managePriv         = 'Manage Privileges';
+$lang->group->managePrivByGroup  = 'Manage Privileges by Group';
+$lang->group->managePrivByModule = 'Manage Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
-$lang->group->manageMember       = 'Member';
-$lang->group->confirmDelete      = 'Do you want to delete this User Group?';
+$lang->group->manageMember       = 'Manage Members';
+$lang->group->confirmDelete      = 'Do you want to delete this user group?';
 $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
-$lang->group->viewList           = 'View';
-$lang->group->productList        = 'Product';
-$lang->group->projectList        = 'Project';
-$lang->group->dynamic            = 'Dynamics';
-$lang->group->noticeVisit        = 'Empty means no access.';
+$lang->group->viewList           = 'Access Sight';
+$lang->group->productList        = 'Access Product';
+$lang->group->projectList        = 'Access Project';
+$lang->group->dynamic            = 'Access Dynamics';
+$lang->group->noticeVisit        = 'Blank means no access limit.';
 
 $lang->group->id       = 'ID';
-$lang->group->name     = 'Name';
+$lang->group->name     = 'Group';
 $lang->group->desc     = 'Description';
 $lang->group->role     = 'Role';
 $lang->group->acl      = 'Right';
-$lang->group->users    = 'Users';
+$lang->group->users    = 'Group Members';
 $lang->group->module   = 'Module';
 $lang->group->method   = 'Method';
-$lang->group->priv     = 'Group';
+$lang->group->priv     = 'Privilege Group';
 $lang->group->option   = 'Option';
 $lang->group->inside   = 'Group Users';
 $lang->group->outside  = 'Other Users';
 $lang->group->other    = 'Others';
-$lang->group->all      = 'All Permissions';
+$lang->group->all      = 'All Privileges';
 
-$lang->group->copyOptions['copyPriv'] = 'Copy Permissions';
+$lang->group->copyOptions['copyPriv'] = 'Copy Privileges';
 $lang->group->copyOptions['copyUser'] = 'Copy Users';
 
 $lang->group->versions['']          = 'History';

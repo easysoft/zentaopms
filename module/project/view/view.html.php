@@ -133,7 +133,7 @@
                 <?php $i++;?>
                 <?php endforeach;?>
                 <div class="col-xs-6">
-                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe'");?>
+                  <?php common::printLink('doc', 'createLib', "type=project&objectID=$project->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->doc->createLib, '', "class='text-muted iframe' data-width='1000px'");?>
                 </div>
                 <?php endif;?>
               </div>
@@ -225,10 +225,11 @@
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
+                    <tr class='widthTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
                     <tr>
-                      <td colspan="2">
+                      <td colspan="4">
                         <?php $progress = ($project->totalConsumed + $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;?>
-                        <?php echo $lang->projectCommon . $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
+                        <?php echo $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
                         <div class="progress inline-block">
                           <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
                         </div>

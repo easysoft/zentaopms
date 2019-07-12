@@ -165,7 +165,7 @@ $config->bug->search['params']['lastEditedDate']= array('operator' => '=',      
 $config->bug->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
-$config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
+$config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'confirmed', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
 
 $config->bug->datatable->fieldList['id']['title']    = 'idAB';
 $config->bug->datatable->fieldList['id']['fixed']    = 'left';
@@ -174,13 +174,18 @@ $config->bug->datatable->fieldList['id']['required'] = 'yes';
 
 $config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
 $config->bug->datatable->fieldList['severity']['fixed']    = 'left';
-$config->bug->datatable->fieldList['severity']['width']    = '60';
+$config->bug->datatable->fieldList['severity']['width']    = '50';
 $config->bug->datatable->fieldList['severity']['required'] = 'no';
 
 $config->bug->datatable->fieldList['pri']['title']    = 'P';
 $config->bug->datatable->fieldList['pri']['fixed']    = 'left';
 $config->bug->datatable->fieldList['pri']['width']    = '50';
 $config->bug->datatable->fieldList['pri']['required'] = 'no';
+
+$config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
+$config->bug->datatable->fieldList['confirmed']['fixed']    = 'left';
+$config->bug->datatable->fieldList['confirmed']['width']    = '60';
+$config->bug->datatable->fieldList['confirmed']['required'] = 'no';
 
 $config->bug->datatable->fieldList['title']['title']    = 'title';
 $config->bug->datatable->fieldList['title']['fixed']    = 'left';
@@ -284,17 +289,17 @@ $config->bug->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedBy']['title']    = 'resolvedByAB';
 $config->bug->datatable->fieldList['resolvedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedBy']['width']    = '70';
+$config->bug->datatable->fieldList['resolvedBy']['width']    = '100';
 $config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
 $config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolution']['width']    = '70';
+$config->bug->datatable->fieldList['resolution']['width']    = '100';
 $config->bug->datatable->fieldList['resolution']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';
 $config->bug->datatable->fieldList['resolvedDate']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolvedDate']['width']    = '90';
+$config->bug->datatable->fieldList['resolvedDate']['width']    = '120';
 $config->bug->datatable->fieldList['resolvedDate']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedBuild']['title']    = 'resolvedBuild';

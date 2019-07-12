@@ -124,7 +124,7 @@
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th><?php echo $lang->story->product;?></th>
+                  <th class='w-90px'><?php echo $lang->story->product;?></th>
                   <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name);?></td>
                 </tr>
                 <?php if($product->type != 'normal'):?>
@@ -229,7 +229,7 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLifeTime'>
-            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-100px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
@@ -311,7 +311,7 @@
           </div>
           <?php endif;?>
           <div class="tab-pane <?php if($config->global->flow == 'onlyStory') echo 'active';?>" id='legendRelated'>
-            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-120px' : 'w-70px';?>
+            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-110px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <?php if($config->global->flow != 'onlyStory'):?>

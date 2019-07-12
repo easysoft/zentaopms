@@ -25,7 +25,7 @@
         <tr>
           <th class='w-80px'><?php echo $lang->entry->name;?></th>
           <td><?php echo html::input('name', '', "class='form-control' title='{$lang->entry->note->name}' placeholder='{$lang->entry->note->name}'");?></td>
-          <td class='w-120px'></td>
+          <td class='w-200px'></td>
         </tr>
         <tr>
           <th><?php echo $lang->entry->code;?></th>
@@ -66,8 +66,8 @@
           <th></th>
           <td>
             <?php echo html::submitButton();?>
-            <?php echo html::a($config->entry->help, $lang->entry->help, '_blank', "class='help'");?>
-            <?php echo html::a($config->entry->notify, $lang->entry->notify, '_blank', "class='help'");?>
+            <?php echo html::a($lang->entry->helpLink, $lang->entry->help, '_blank', "class='help'");?>
+            <?php echo html::a($lang->entry->notifyLink, $lang->entry->notify, '_blank', "class='help'");?>
           </td>
           <td></td>
         </tr>

@@ -36,7 +36,8 @@
         <th class='w-150px'><?php echo $lang->backup->time?></th>
         <th><?php echo $lang->backup->files?></th>
         <th class='w-150px'><?php echo $lang->backup->size?></th>
-        <th class='w-110px'><?php echo $lang->actions?></th>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-140px' : 'w-110px';?>
+        <th class='<?php echo $colWidth;?>'><?php echo $lang->actions?></th>
       </tr>
     </thead>
     <tbody class='text-center'>

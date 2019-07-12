@@ -48,7 +48,7 @@
           <?php if($productType != 'normal'):?>
           <th class='w-80px'><?php echo $lang->product->branchName[$productType];?></th>
           <?php endif;?>
-          <th class='w-user'><?php echo $lang->openedByAB;?></th>
+          <th class='c-user'><?php echo $lang->openedByAB;?></th>
           <th class='w-80px text-center'><?php echo $lang->story->estimateAB;?></th>
         </tr>
       </thead>

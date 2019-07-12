@@ -194,6 +194,7 @@ $(function()
             shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
             hidden: refresh
         });
-		return false;
+        return false;
     });
+    setTimeout(function(){$('#kanban .c-side.has-btn').removeAttr('title');}, 500);
 });

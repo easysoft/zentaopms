@@ -1,0 +1,3 @@
+.table-data tbody>tr>td{border:1px solid #cbd0db !important; padding-right:8px !important;}
+.table-data tbody>tr>td.translated{padding:0px !important;}
+.translated input, .translated textarea{border:0px;}

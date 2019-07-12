@@ -15,6 +15,22 @@ $webRoot   = $config->webRoot;
 $jsRoot    = $webRoot . "js/";
 $themeRoot = $webRoot . "theme/";
 ?>
+<?php if(!empty($params) && is_array($params) && isset($params['type'])):?>
+<?php $param = $params['type'];?>
+<div class='form-group'>
+  <label for='type' class='col-sm-3'><?php echo $param['name']?></label>
+  <div class='col-sm-7'>
+    <?php
+    $control = $param['control'];
+    $attr    = empty($param['attr']) ? '' : $param['attr'];
+    $default = $block ? (isset($block->params->$key) ? $block->params->$key : '') : (isset($param['default']) ? $param['default'] : '');
+    $options = isset($param['options']) ? $param['options'] : array();
+    echo html::$control("params[type]", $options, $default, "class='form-control chosen' $attr");
+    ?>
+  </div>
+</div>
+<?php unset($params['type']);?>
+<?php endif;?>
 <?php include './publicform.html.php'?>
 <?php echo html::hidden('actionLink', $this->createLink('block', 'set', "id=$id&type=$type&source=$source"));?>
 <?php if(!empty($params) && is_array($params)):?>

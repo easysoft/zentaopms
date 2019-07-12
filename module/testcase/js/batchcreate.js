@@ -9,22 +9,26 @@ $(document).ready(function()
         var id     = $(select).attr('id');
         if(id.indexOf('story') != -1)
         {
-            index  = id.substring(5);
-            module = $('#module' + index).val();
-            branch = $('#branch' + index).val();
-            if(module == 'ditto')
+            var index     = id.substring(5);
+            var moduleID  = $('#module' + index).val();
+            var branch    = $('#branch' + index).val();
+            if(moduleID == 'ditto')
             {
                 for(var i = index - 1; i >=0; i--)
                 {
                     if($('#module' + i).val() != 'ditto')
                     {
-                        module = $('#module' + i).val();
+                        moduleID = $('#module' + i).val();
                         break;
                     }
                 }
             }
-            link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + module + '&storyID='+ $(select).val() + '&onlyOption=true&status=noclosed');
-            $('#story' + index).load(link, function(){$(this).trigger("chosen:updated");});
+            var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID='+ ($(select).val() || '0') + '&onlyOption=true&status=noclosed&limit=0&type=null');
+            var $story = $('#story' + index);
+            if($story.data('loadLink') !== link)
+            {
+                $story.load(link, function(){$story.data('loadLink', link).trigger("chosen:updated");});
+            }
         }
         if($(select).val() == 'ditto')
         {

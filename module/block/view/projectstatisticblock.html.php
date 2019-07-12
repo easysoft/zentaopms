@@ -12,7 +12,7 @@
 .product-info .progress {position: absolute; left: 10px; top: 35px; right: 100px;}
 .product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
 .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
-html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 130px;}
+html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 110px;}
 .product-info .type-value,
 .product-info .type-label {font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .product-info .type-value {font-size: 14px;}
@@ -146,7 +146,7 @@ $(function()
               </div>
             </div>
             <div class="product-info">
-              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->stageList['released'];?></span> <strong><?php echo $project->releasedStories;?></strong></div>
+              <div class="progress-info"><i class="icon icon-check-circle text-success icon-sm"></i> <span class="text-muted"><?php echo $lang->story->released;?></span> <strong><?php echo $project->releasedStories;?></strong></div>
               <div class="progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $project->storyProgress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $project->storyProgress;?>%"></div>
               </div>
@@ -175,7 +175,7 @@ $(function()
                 <div class="type-label">
                   <table class='status-count'>
                     <tr>
-                      <td class='text-right'><?php echo $lang->bug->allBugs . ' Bug';?> :</td>
+                      <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
                       <td class='text-left'><?php echo $project->totalBugs;?></td>
                     </tr>
                     <tr>

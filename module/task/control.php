@@ -1131,7 +1131,7 @@ class task extends control
         else
         {
             $this->task->delete(TABLE_TASK, $taskID);
-            if($task->parent) $this->task->updateParentStatus($task->id);
+            if($task->parent > 0) $this->task->updateParentStatus($task->id);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($task->story) $this->loadModel('story')->setStage($task->story);
             if(!empty($task->children))
@@ -1200,7 +1200,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function report($projectID, $browseType = 'all', $chartType = '')
+    public function report($projectID, $browseType = 'all', $chartType = 'default')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -1266,7 +1266,6 @@ class task extends control
             if($this->session->taskOnlyCondition)
             {
                 $tasks = $this->dao->select('*')->from(TABLE_TASK)->alias('t1')->where($this->session->taskQueryCondition)
-                    ->andWhere('parent')->le(0)
                     ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($sort)->fetchAll('id');
 
@@ -1332,38 +1331,19 @@ class task extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
 
-            if(!$this->session->taskWithChildren and $tasks)
+            if($tasks)
             {
-                $children = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)
-                    ->andWhere('parent')->gt(0)
-                    ->andWhere('parent', true)->in(array_keys($tasks))
-                    ->beginIF($this->post->exportType == 'selected')->orWhere('id')->in($this->cookie->checkedItem)->fi()
-                    ->markRight(1)
-                    ->orderBy($sort)
-                    ->fetchGroup('parent', 'id');
+                $children = array();
+                foreach($tasks as $task)
+                {
+                    if(!empty($task->parent) and isset($tasks[$task->parent]))
+                    {
+                        $children[$task->parent][$task->id] = $task;
+                        unset($tasks[$task->id]);
+                    }
+                }
                 if(!empty($children))
                 {
-                    foreach($children as $parent => $childTasks)
-                    {
-                        foreach($childTasks as $task)
-                        {
-                            /* Compute task progress. */
-                            if($task->consumed == 0 and $task->left == 0)
-                            {
-                                $task->progress = 0;
-                            }
-                            elseif($task->consumed != 0 and $task->left == 0)
-                            {
-                                $task->progress = 100;
-                            }
-                            else
-                            {
-                                $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
-                            }
-                            $task->progress .= '%';
-                        }
-                    }
-
                     $position = 0;
                     foreach($tasks as $task)
                     {
@@ -1372,12 +1352,7 @@ class task extends control
                         {
                             array_splice($tasks, $position, 0, $children[$task->id]);
                             $position += count($children[$task->id]);
-                            unset($children[$task->id]);
                         }
-                    }
-                    if($children)
-                    {
-                        foreach($children as $childTasks) $tasks += $childTasks;
                     }
                 }
             }

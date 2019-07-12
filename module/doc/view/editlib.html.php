@@ -24,18 +24,18 @@
     <table class='table table-form'>
       <?php if(!empty($lib->product)):?>
       <tr>
-        <th><?php echo $lang->doc->product?></th>
+        <th class='w-130px'><?php echo $lang->doc->product?></th>
         <td><?php echo $product->name?></td>
       </tr>
       <?php endif;?>
       <?php if(!empty($lib->project)):?>
       <tr>
-        <th><?php echo $lang->doc->project?></th>
+        <th class='w-130px'><?php echo $lang->doc->project?></th>
         <td><?php echo $project->name?></td>
       </tr>
       <?php endif;?>
       <tr>
-        <th class='w-80px'><?php echo $lang->doc->libName?></th>
+        <th class='w-130px'><?php echo $lang->doc->libName?></th>
         <td>
           <?php echo html::input('name', $lib->name, "class='form-control'");?>
           <span class='hidden'><?php echo html::radio('type', $lang->doc->libTypeList, $lib->type);?></span>
@@ -46,12 +46,12 @@
         <?php if($lib->type == 'product' or $lib->type == 'project'):?>
         <td>
           <?php echo html::radio('acl', $lang->doclib->aclListA, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
+          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
         </td>
         <?php else:?>
         <td>
           <?php echo html::radio('acl', $lang->doclib->aclListB, $lib->acl, "onchange='toggleAcl(this.value, \"lib\")'")?>
-          <span class='text-warning' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
+          <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['lib'][$lib->type][$lib->acl];?></span>
         </td>
         <?php endif;?>
       </tr>

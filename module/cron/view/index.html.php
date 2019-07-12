@@ -13,27 +13,25 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('system');?></div>
-  <div class='btn-toolbar pull-right'>
-    <?php if(common::hasPriv('cron', 'openProcess') and !empty($config->global->cron)) echo html::a(inlink('openProcess'), $lang->cron->openProcess, 'hiddenwin', "class='btn'")?>
-    <?php if(common::hasPriv('cron', 'turnon') and !empty($config->global->cron)) echo html::a(inlink('turnon'), $lang->cron->turnonList[0], 'hiddenwin', "class='btn'");?>
-  </div>
 </div>
 <div id='mainContent' class='main-content'>
   <?php if(!empty($config->global->cron)):?>
   <div class='main-header'>
     <h2><?php echo $lang->cron->list?></h2>
     <div class='btn-toolbar pull-right'>
+    <?php if(common::hasPriv('cron', 'openProcess') and !empty($config->global->cron)) echo html::a(inlink('openProcess'), $lang->cron->openProcess, 'hiddenwin', "class='btn'")?>
+    <?php if(common::hasPriv('cron', 'turnon') and !empty($config->global->cron)) echo html::a(inlink('turnon'), $lang->cron->turnonList[0], 'hiddenwin', "class='btn'");?>
       <?php if(common::hasPriv('cron', 'create')) echo html::a(inlink('create'), $lang->cron->create, '', "class='btn btn-primary'")?>
     </div>
   </div>
   <table class='table table-condensed table-bordered table-fixed main-table'>
     <thead>
       <tr>
-        <th class='w-50px'><?php echo $lang->cron->m?></th>
-        <th class='w-50px'><?php echo $lang->cron->h?></th>
-        <th class='w-50px'><?php echo $lang->cron->dom?></th>
-        <th class='w-50px'><?php echo $lang->cron->mon?></th>
-        <th class='w-50px'><?php echo $lang->cron->dow?></th>
+        <th class='w-70px text-center'><?php echo $lang->cron->m?></th>
+        <th class='w-50px text-center'><?php echo $lang->cron->h?></th>
+        <th class='w-50px text-center'><?php echo $lang->cron->dom?></th>
+        <th class='w-60px text-center'><?php echo $lang->cron->mon?></th>
+        <th class='w-60px text-center'><?php echo $lang->cron->dow?></th>
         <th><?php echo $lang->cron->command?></th>
         <th class='w-200px'><?php echo $lang->cron->remark?></th>
         <th class='w-130px'><?php echo $lang->cron->lastTime?></th>

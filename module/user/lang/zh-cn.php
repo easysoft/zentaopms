@@ -17,7 +17,7 @@ $lang->user->account          = '用户名';
 $lang->user->password         = '密码';
 $lang->user->password2        = '请重复密码';
 $lang->user->role             = '职位';
-$lang->user->group            = '分组';
+$lang->user->group            = '权限分组';
 $lang->user->realname         = '真实姓名';
 $lang->user->nickname         = '昵称';
 $lang->user->commiter         = '源代码帐号';
@@ -45,8 +45,12 @@ $lang->user->last             = '最后登录';
 $lang->user->ranzhi           = '然之帐号';
 $lang->user->ditto            = '同上';
 $lang->user->originalPassword = '原密码';
+$lang->user->newPassword      = '新密码';
 $lang->user->verifyPassword   = '您的系统登录密码';
 $lang->user->resetPassword    = '忘记密码';
+
+$lang->user->legendBasic        = '基本资料';
+$lang->user->legendContribution = '个人贡献';
 
 $lang->user->index         = "用户视图首页";
 $lang->user->view          = "用户详情";
@@ -90,17 +94,17 @@ $lang->user->todo        = '待办';
 $lang->user->story       = '需求';
 $lang->user->dynamic     = '动态';
 
-$lang->user->openedBy    = '由他创建';
-$lang->user->assignedTo  = '指派给他';
-$lang->user->finishedBy  = '由他完成';
-$lang->user->resolvedBy  = '由他解决';
-$lang->user->closedBy    = '由他关闭';
-$lang->user->reviewedBy  = '由他评审';
-$lang->user->canceledBy  = '由他取消';
+$lang->user->openedBy    = '由%s创建';
+$lang->user->assignedTo  = '指派给%s';
+$lang->user->finishedBy  = '由%s完成';
+$lang->user->resolvedBy  = '由%s解决';
+$lang->user->closedBy    = '由%s关闭';
+$lang->user->reviewedBy  = '由%s评审';
+$lang->user->canceledBy  = '由%s取消';
 
-$lang->user->testTask2Him = '负责版本';
-$lang->user->case2Him     = '给他的用例';
-$lang->user->caseByHim    = '他建的用例';
+$lang->user->testTask2Him = '%s负责的版本';
+$lang->user->case2Him     = '给%s的用例';
+$lang->user->caseByHim    = '%s建的用例';
 
 $lang->user->errorDeny    = "抱歉，您无权访问『<b>%s</b>』模块的『<b>%s</b>』功能。请联系管理员获取权限。点击后退返回上页。";
 $lang->user->loginFailed  = "登录失败，请检查您的用户名或密码是否填写正确。";
@@ -122,12 +126,21 @@ $lang->user->roleList['others'] = '其他';
 $lang->user->genderList['m'] = '男';
 $lang->user->genderList['f'] = '女';
 
+$lang->user->thirdPerson['m'] = '他';
+$lang->user->thirdPerson['f'] = '她';
+
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>弱</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>中</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>强</span>";
 
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
+
+$lang->user->personalData['createdTodo']  = '创建的待办数';
+$lang->user->personalData['createdStory'] = '创建的需求数';
+$lang->user->personalData['finishedTask'] = '完成的任务数';
+$lang->user->personalData['resolvedBug']  = '解决的Bug数';
+$lang->user->personalData['createdCase']  = '创建的用例数';
 
 $lang->user->keepLogin['on']      = '保持登录';
 $lang->user->loginWithDemoUser    = '使用demo帐号登录：';
@@ -160,14 +173,14 @@ $lang->user->error->reserved      = "【ID %s】的用户名已被系统预留";
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";
 
-$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
 $lang->user->contactFieldList['qq']       = $lang->user->qq;
 $lang->user->contactFieldList['dingding'] = $lang->user->dingding;
 $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
-$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
 $lang->user->contactFieldList['slack']    = $lang->user->slack;
 $lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
-$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '联系人';

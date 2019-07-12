@@ -115,7 +115,7 @@ $(function()
             <div class="progress-pie inline-block space progress-pie-100" data-value="<?php echo $product->assignedRate;?>" data-doughnut-size="80">
               <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
               <div class="progress-info">
-                <small><?php echo $lang->bug->allBugs . ' Bug';?></small>
+                <small><?php echo $lang->bug->allBugs;?></small>
                 <strong><span class="progress-value"><?php echo $product->total;?></span></strong>
               </div>
             </div>

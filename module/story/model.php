@@ -1425,7 +1425,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0)
+    public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full')
     {
         if($branch) $branch = "0,$branch";//Fix bug 1059.
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
@@ -1439,7 +1439,7 @@ class storyModel extends model
             ->orderBy($order)
             ->fetchAll();
         if(!$stories) return array();
-        return $this->formatStories($stories, 'full', $limit);
+        return $this->formatStories($stories, $type, $limit);
     }
 
     /**
@@ -2027,9 +2027,13 @@ class storyModel extends model
             {
                 $property = '[p' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ', ' . $story->estimate . 'h]';
             }
-            else
+            elseif($type == 'full')
             {
                 $property = '(' . $this->lang->story->pri . ':' . (!empty($this->lang->story->priList[$story->pri]) ? $this->lang->story->priList[$story->pri] : 0) . ',' . $this->lang->story->estimate . ':' . $story->estimate . ')';
+            }
+            else
+            {
+                $property = '';
             }
             $storyPairs[$story->id] = $story->id . ':' . $story->title . ' ' . $property;
 

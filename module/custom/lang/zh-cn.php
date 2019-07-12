@@ -96,6 +96,7 @@ $lang->custom->notice->invalidNumberKey            = '键值应为不大于255�
 $lang->custom->notice->invalidStringKey            = '键值应当为小写英文字母、数字或下划线的组合';
 $lang->custom->notice->cannotSetTimezone           = 'date_default_timezone_set方法不存在或禁用，不能设置时区。';
 $lang->custom->notice->noClosedBlock               = '没有永久关闭的区块';
+$lang->custom->notice->required                    = '页面提交时，选中的字段必填';
 
 $lang->custom->notice->indexPage['product']        = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project']        = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
@@ -134,9 +135,10 @@ $lang->custom->workingList['onlyTask']  = '任务管理工具';
 
 $lang->custom->menuTip  = '点击显示或隐藏导航条目，拖拽来更改显示顺序。';
 $lang->custom->saveFail = '保存失败！';
+$lang->custom->page     = '页面';
 
-$lang->custom->scoreStatus[0] = '关闭';
 $lang->custom->scoreStatus[1] = '开启';
+$lang->custom->scoreStatus[0] = '关闭';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';

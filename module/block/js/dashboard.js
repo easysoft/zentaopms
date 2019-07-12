@@ -247,5 +247,3 @@ $(function()
         refreshBlock($(this).closest('.panel'));
     });
 });
-
-

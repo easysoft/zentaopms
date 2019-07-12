@@ -33,9 +33,11 @@
         </div>
       </div>
       <table class='table table-form mw-800px'>
+        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-250px' : 'w-120px';?>
+        <?php $i = 0;?>
         <?php foreach($requiredFields as $method => $requiredField):?>
         <tr>
-          <th class='w-100px'>
+          <th class='<?php echo $colWidth;?>'>
           <?php
           $fields = $this->custom->getFormFields($moduleName, $method);
 
@@ -48,15 +50,25 @@
               $fields = $this->custom->getFormFields('testcase', $method);
               $method = 'createCase';
           }
-          echo $lang->$moduleName->$method;
+          $actionKey = $method . 'Action';
+          if(isset($lang->$moduleName->$actionKey))
+          {
+              echo $lang->$moduleName->$actionKey . $lang->custom->page;
+          }
+          else
+          {
+              echo $lang->$moduleName->$method . $lang->custom->page;
+          }
           ?>
           </th>
-          <td><?php echo html::select("requiredFields[{$method}][]", $fields, $requiredField, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select("requiredFields[{$method}][]", $fields, $requiredField, "class='form-control chosen' multiple " . ($i == 0 ? "data-placeholder='{$lang->custom->notice->required}'" : ''));?></td>
           <td></td>
         </tr>
+        <?php $i++;?>
         <?php endforeach;?>
         <tr>
-          <td colspan='2' class='text-center form-actions'>
+          <th></th>
+          <td colspan='2' class='form-actions'>
           <?php echo html::submitButton();?>
           <?php if(common::hasPriv('custom', 'resetRequired')) echo html::a(inlink('resetRequired', "module=$moduleName"), $lang->custom->restore, 'hiddenwin', "class='btn btn-wide'");?>
           </td>

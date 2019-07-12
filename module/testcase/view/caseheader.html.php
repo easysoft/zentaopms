@@ -28,28 +28,9 @@
     if($config->global->flow == 'onlyTest' and (strpos(',needconfirm,group,zerocase,', ',' . $menuType . ',') !== false)) continue;
     if($hasBrowsePriv and $menuType == 'QUERY')
     {
-        if(isset($lang->custom->queryList))
-        {
-            echo '<div class="btn-group" id="query">';
-            $active  = '';
-            $current = $menuItem->text;
-            $dropdownHtml = "<ul class='dropdown-menu'>";
-            foreach($lang->custom->queryList as $queryID => $queryTitle)
-            {
-                if($browseType == 'bysearch' and $queryID == $param)
-                {
-                    $active  = 'btn-active-text';
-                    $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                }
-                $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
-                $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=$queryID"), $queryTitle);
-            }
-            $dropdownHtml .= '</ul>';
-
-            echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
-            echo $dropdownHtml;
-            echo '</div>';
-        }
+        $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
+        $isBySearch       = $browseType == 'bysearch';
+        include '../../common/view/querymenu.html.php';
     }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
@@ -75,9 +56,6 @@
         foreach($suiteList as $suiteID => $suite)
         {
             $suiteName = $suite->name;
-            if($suite->type == 'public') $suiteName .= " <span class='label label-success label-badge'>{$lang->testsuite->authorList[$suite->type]}</span>";
-            if($suite->type == 'private') $suiteName .= " <span class='label label-info label-badge'>{$lang->testsuite->authorList[$suite->type]}</span>";
-
             echo '<li' . ($suiteID == (int)$currentSuiteID ? " class='active'" : '') . '>';
             echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=bySuite&param=$suiteID"), $suiteName);
             echo "</li>";
@@ -140,9 +118,9 @@
       ?>
       </ul>
     </div>
+    <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
+    <?php if($app->getClientLang() != 'en'):?>
     <?php
-    $initModule = isset($moduleID) ? (int)$moduleID : 0;
-
     if(common::hasPriv('testcase', 'batchCreate'))
     {
         $link = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
@@ -155,6 +133,24 @@
         echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
     }
     ?>
+    <?php else:?>
+    <div class='btn-group dropdown-hover'>
+      <?php
+      $link = common::hasPriv('testcase', 'create') ? $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '###';
+      $disabled = common::hasPriv('testcase', 'create') ? '' : "disabled";
+      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->testcase->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
+      ?>
+      <ul class='dropdown-menu'>
+        <?php $disabled = common::hasPriv('testcase', 'batchCreate') ? '' : "class='disabled'";?>
+        <li <?php echo $disabled?>>
+        <?php
+        $batchLink = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->testcase->batchCreate) . "</li>";
+        ?>
+        </li>
+      </ul>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <?php endif;?>

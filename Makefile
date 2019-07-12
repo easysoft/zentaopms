@@ -76,7 +76,7 @@ zentaoxx:
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
 	rm -rf zentaoxx/db_bak/
-	sed -i 's/xxbVersion/$(XVERSION)/g' zentaoxx/config/ext/xuanxuan.php
+	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/xuanxuan.php
 	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/xuanxuan.php
 	sed -i 's/site,//' zentaoxx/module/chat/model.php
 	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
@@ -96,6 +96,12 @@ zentaoxx:
 	sed -i '/var serverVersions/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/setRequiredFields(/d' zentaoxx/module/common/view/header.modal.html.php
+	sed -i 's/header.html.php/header.lite.html.php/g' zentaoxx/module/common/view/header.modal.html.php
+	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/header.modal.html.php
+	sed -i 's/footer.html.php/footer.lite.html.php/g' zentaoxx/module/common/view/footer.modal.html.php
+	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/footer.modal.html.php
+	sed -i 's/v\.//g' zentaoxx/module/chat/js/debug.js
+	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/chat/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
@@ -180,6 +186,7 @@ enrpm:
 	mkdir ~/rpmbuild/SPECS -p
 	cp build/rpm/zentaopms.spec ~/rpmbuild/SPECS
 	sed -i '/^Version/cVersion:${VERSION}' ~/rpmbuild/SPECS/zentaopms.spec
+	sed -i '/^Name:/cName:zentaoalm' ~/rpmbuild/SPECS/zentaopms.spec
 	mkdir ~/rpmbuild/SOURCES
 	cp ZenTaoALM.${VERSION}.zip ~/rpmbuild/SOURCES
 	mkdir ~/rpmbuild/SOURCES/etc/httpd/conf.d/ -p

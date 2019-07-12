@@ -46,7 +46,7 @@
                     $moreLabel       = "<span class='text'>{$lang->product->moreSelects[$storyBrowseType]}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
                     $moreLabelActive = 'btn-active-text';
                 }
-                echo '<div class="btn-group">';
+                echo '<div class="btn-group" id="more">';
                 echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
                 echo "<ul class='dropdown-menu'>";
                 foreach($lang->product->moreSelects as $key => $value)
@@ -59,28 +59,9 @@
         }
         elseif($menuItem->name == 'QUERY')
         {
-            if(isset($lang->custom->queryList))
-            {
-                echo '<div class="btn-group" id="query">';
-                $active  = '';
-                $current = $menuItem->text;
-                $dropdownHtml = "<ul class='dropdown-menu'>";
-                foreach($lang->custom->queryList as $queryID => $queryTitle)
-                {
-                    if($this->session->storyBrowseType == 'bysearch' and $queryID == $param)
-                    {
-                        $active  = 'btn-active-text';
-                        $current = "<span class='text'>{$queryTitle}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-                    }
-                    $dropdownHtml .= '<li' . ($param == $queryID ? " class='active'" : '') . '>';
-                    $dropdownHtml .= html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=$queryID"), $queryTitle);
-                }
-                $dropdownHtml .= '</ul>';
-
-                echo html::a('javascript:;', $current . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $active'");
-                echo $dropdownHtml;
-                echo '</div>';
-            }
+            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s");
+            $isBySearch       = $this->session->storyBrowseType == 'bysearch';
+            include '../../common/view/querymenu.html.php';
         }
         else
         {
@@ -103,6 +84,7 @@
         ?>
       </ul>
     </div>
+    <?php if($app->getClientLang() != 'en'):?>
     <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
     <?php
     if(commonModel::isTutorialMode())
@@ -117,6 +99,29 @@
         if(common::hasPriv('story', 'create')) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create}", '', "class='btn btn-primary'");
     }
     ?>
+    <?php else:?>
+    <div class='btn-group dropdown-hover'>
+      <?php
+      $link = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID") : '###';
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID");
+          $link = $this->createLink('tutorial', 'wizard', "module=story&method=create&params=$wizardParams");
+      }
+      $disabled = common::hasPriv('story', 'create') ? '' : "disabled";
+      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->story->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
+      ?>
+      <ul class='dropdown-menu'>
+        <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
+        <li <?php echo $disabled?>>
+        <?php
+          $batchLink = $this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID");
+          echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->story->batchCreate) . "</li>";
+        ?>
+        </li>
+      </ul>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
@@ -144,7 +149,6 @@
       <p>
         <span class="text-muted"><?php echo $lang->story->noStory;?></span>
         <?php if(common::hasPriv('story', 'create')):?>
-        <span class="text-muted"><?php echo $lang->youCould;?></span>
         <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>

@@ -31,14 +31,14 @@
                 <?php if(isset($plan->begin)):?>
                 <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
                   <a href="<?php echo $this->createLink('productplan', 'view', "planID={$plan->id}");?>">
-                    <span class="title"><?php echo $plan->title;?></span>
+                    <span class="title" title='<?php echo $plan->title;?>'><?php echo $plan->title;?></span>
                     <span class="date"><?php echo $plan->begin;?></span>
                   </a>
                 </li>
                 <?php else:?>
                 <li>
                   <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
-                    <span class="title"><?php echo $plan->name;?></span>
+                    <span class="title" title='<?php echo $plan->name;?>'><?php echo $plan->name;?></span>
                     <span class="date"><?php echo $plan->date;?></span>
                   </a>
                 </li>
@@ -112,8 +112,8 @@
             <div class="detail-content article-content">
               <p><span class="text-limit" data-limit-size="40"><?php echo $product->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
               <p>
-                <span class="label label-primary label-outline" title='<?php echo $lang->product->type;?>'><?php echo zget($lang->product->typeList, $product->type);?></span>
-                <span class="label label-success label-outline" title='<?php echo $lang->product->status;?>'><?php echo zget($lang->product->statusList, $product->status);?></span>
+                <span class="label label-primary label-outline"><?php echo $lang->product->typeAB . ':' . zget($lang->product->typeList, $product->type);?></span>
+                <span class="label label-success label-outline"><?php echo $lang->product->status . ':' . zget($lang->product->statusList, $product->status);?></span>
                 <?php if($product->deleted):?>
                 <span class='label label-danger label-outline'><?php echo $lang->product->deleted;?></span>
                 <?php endif; ?>
@@ -202,7 +202,7 @@
                     <td><em><?php echo $product->stories['active']?></em></td>
                     <th><?php echo $lang->product->plans?></th>
                     <td><em><?php echo $product->plans?></em></td>
-                    <th><?php echo $lang->product->bugs?></th>
+                    <th class='w-80px'><?php echo $lang->product->bugs?></th>
                     <td><em><?php echo $product->bugs?></em></td>
                   </tr>
                   <tr>

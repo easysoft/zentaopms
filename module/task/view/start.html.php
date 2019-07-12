@@ -34,12 +34,12 @@
         <?php if(!isonlybody()):?>
         <small><?php echo $lang->arrow . $lang->task->start;?></small>
         <?php endif;?>
-      </div>
+      </h2>
     </div>
     <form method='post' target='hiddenwin' onsubmit='return checkLeft();'>
       <table class='table table-form'>
         <tr>
-          <th class='w-80px'><?php echo $lang->task->realStarted;?></th>
+          <th class='w-90px'><?php echo $lang->task->realStarted;?></th>
           <td class='w-p25-f'><div class='datepicker-wrapper datepicker-date'><?php echo html::input('realStarted', $task->realStarted == '0000-00-00' ? helper::today() : $task->realStarted, "class='form-control form-date' data-picker-position='bottom-right'");?></div></td>
           <td></td>
         </tr>  
@@ -47,7 +47,7 @@
           <th><?php echo $lang->task->consumed;?></th>
           <td>
             <div class='input-group'>
-              <?php $consumed = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? $task->team[$task->assignedTo]->consumed : $task->consumed;?>
+              <?php $consumed = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->consumed : $task->consumed;?>
               <?php echo html::input('consumed', $consumed, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
@@ -56,7 +56,7 @@
           <th><?php echo $lang->task->left;?></th>
           <td>
             <div class='input-group'>
-              <?php $left = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? $task->team[$task->assignedTo]->left : $task->left;?>
+              <?php $left = (!empty($task->team) && isset($task->team[$task->assignedTo])) ? (float)$task->team[$task->assignedTo]->left : $task->left;?>
               <?php echo html::input('left', $left, "class='form-control'");?> <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
             </div>
           </td>
