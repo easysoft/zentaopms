@@ -25,7 +25,7 @@
         <div class='detail-title'><?php echo $lang->testreport->legendBasic?></div>
         <table class='table table-form'>
           <tr>
-            <th class='w-80px'><?php echo $lang->testreport->startEnd?></th>
+            <th class='w-100px'><?php echo $lang->testreport->startEnd?></th>
             <td class='w-p50'>
               <div class='input-group'>
                 <?php echo html::input('begin', $report->begin, "class='form-control form-date'")?>

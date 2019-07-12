@@ -23,6 +23,7 @@ $lang->productplan->batchEdit  = 'Batch Edit';
 $lang->productplan->batchUnlink      = "Batch Unlink";
 $lang->productplan->linkStory        = "Link Story";
 $lang->productplan->unlinkStory      = "Unlink Story";
+$lang->productplan->unlinkStoryAB    = "Unlink";
 $lang->productplan->batchUnlinkStory = "Batch Unlink";
 $lang->productplan->linkedStories    = 'Linked Stories';
 $lang->productplan->unlinkedStories  = 'Unlinked Stories';
