@@ -139,9 +139,8 @@ $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;
 $lang->product->featureBar['browse']['allstory']     = $lang->product->allStory;
 $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
-$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
-
+$lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 

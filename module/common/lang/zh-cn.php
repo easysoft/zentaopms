@@ -392,7 +392,7 @@ $lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => '数据库|dev|db');
-//$lang->admin->subMenu->dev->editor = array('link' => '编辑器|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->editor = array('link' => '编辑器|editor|index', 'subModule' => 'editor');
 $lang->admin->subMenu->dev->entry  = array('link' => '应用|entry|browse', 'subModule' => 'entry');
 
 $lang->admin->subMenu->data = new stdclass();
@@ -540,7 +540,6 @@ $lang->noticeImport    = "导入数据中，含有已经存在系统的数据，
 $lang->importConfirm   = "导入确认";
 $lang->importAndCover  = "覆盖";
 $lang->importAndInsert = "全新插入";
-
 
 $lang->noResultsMatch    = "没有匹配结果";
 $lang->searchMore        = "搜索此关键字的更多结果：";

@@ -31,6 +31,9 @@ $lang->entry->confirmDelete = '您確認要刪除該應用嗎？';
 $lang->entry->help          = '使用說明';
 $lang->entry->notify        = '消息通知';
 
+$lang->entry->helpLink   = 'https://www.zentao.net/book/zentaopmshelp/integration-287.html';
+$lang->entry->notifyLink = 'https://www.zentao.net/book/zentaopmshelp/301.html';
+
 $lang->entry->note = new stdClass();
 $lang->entry->note->name    = '授權應用名稱';
 $lang->entry->note->code    = '授權應用代號，必須為字母或數字的組合';
@@ -38,8 +41,8 @@ $lang->entry->note->ip      = "允許訪問API的應用ip，多個ip用逗號隔
 $lang->entry->note->allIP   = '無限制';
 $lang->entry->note->account = '授權應用賬號';
 
-$lang->entry->freePasswdList[0] = '關閉';
 $lang->entry->freePasswdList[1] = '開啟';
+$lang->entry->freePasswdList[0] = '關閉';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = '缺少code參數';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = '缺少token參數';

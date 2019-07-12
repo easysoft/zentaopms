@@ -210,7 +210,7 @@ $lang->action->label->createchildren      = "創建子任務";
 $lang->action->label->managed             = "維護";
 
 /* 動態信息按照對象分組 */
-$lang->action->dynamicAction = new stdclass;
+$lang->action->dynamicAction = new stdclass();
 $lang->action->dynamicAction->todo['opened']               = '創建待辦';
 $lang->action->dynamicAction->todo['edited']               = '編輯待辦';
 $lang->action->dynamicAction->todo['erased']               = '刪除待辦';

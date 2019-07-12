@@ -125,6 +125,7 @@ $lang->project->team              = 'Members';
 $lang->project->doc               = 'Document';
 $lang->project->doclib            = 'Docoment Library';
 $lang->project->manageProducts    = 'Linked ' . $lang->productCommon . 's';
+$lang->project->linkStory         = 'Link Stories';
 $lang->project->linkStoryByPlan   = 'Link Stories By Plan';
 $lang->project->linkPlan          = 'Linked Plans';
 $lang->project->unlinkStoryTasks  = 'Unlink';

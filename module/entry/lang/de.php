@@ -16,6 +16,7 @@ $lang->entry->id          = 'ID';
 $lang->entry->name        = 'Name';
 $lang->entry->account     = 'Account';
 $lang->entry->code        = 'Code';
+$lang->entry->freePasswd  = 'Secret-free login';
 $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
 $lang->entry->desc        = 'Beschreibung';
@@ -40,6 +41,9 @@ $lang->entry->note->ip      = "Benutzen Sie eine Komma zwischen den IPs. IP Segm
 $lang->entry->note->allIP   = 'Alle';
 $lang->entry->note->account = 'Application Account';
 
+$lang->entry->freePasswdList[1] = 'On';
+$lang->entry->freePasswdList[0] = 'Off';
+
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Parameter code fehlt.';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Parameter token fehlt.';
 $lang->entry->errmsg['SESSION_CODE_MISSING']  = 'Session code fehlt.';
@@ -48,4 +52,5 @@ $lang->entry->errmsg['INVALID_TOKEN']         = 'Ungültiger token.';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'Session überprüfung fehlgeschlagen.';
 $lang->entry->errmsg['IP_DENIED']             = 'IP ist unzulässig.';
 $lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Account is not bound.';
+$lang->entry->errmsg['INVALID_ACCOUNT']       = 'Account is not exists';
 $lang->entry->errmsg['EMPTY_ENTRY']           = 'Key des Eintrags fehlt.';

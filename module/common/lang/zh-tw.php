@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->arrow     = '&nbsp;<i class="icon-angle-right"></i>&nbsp;';
-$lang->colon     = '::';
+$lang->colon     = '-';
 $lang->comma     = '，';
 $lang->dot       = '。';
 $lang->at        = ' 于 ';
@@ -193,7 +193,7 @@ $lang->my->menu->dynamic        = '動態|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '檔案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密碼|my|changepassword';
 $lang->my->menu->manageContacts = '聯繫人|my|managecontacts';
-$lang->my->menu->score          = '積分|my|score';
+$lang->my->menu->score          = array('link' => '積分|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',task,myProject,profile,';
 
@@ -262,7 +262,6 @@ $lang->task  = new stdclass();
 $lang->build = new stdclass();
 $lang->task->menu  = $lang->project->menu;
 $lang->build->menu = $lang->project->menu;
-$lang->build->menu->qa = array('link' => '版本|project|build|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 
 /* QA視圖菜單設置。*/
 $lang->qa = new stdclass();
@@ -348,7 +347,7 @@ $lang->report->menu->test    = array('link' => '測試|report|bugcreate', 'alias
 $lang->report->menu->staff   = array('link' => '組織|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = '註：統計報表的數據，來源於列表頁面的檢索結果，生成統計報表前請先在列表頁面進行檢索。';
+$lang->report->notice->help = '註：統計報表的數據來源於列表頁面的檢索結果，生成統計報表前請先在列表頁面進行檢索。比如列表頁面我們檢索的是%tab%，那麼報表就是基于之前檢索的%tab%的結果集進行統計。';
 
 /* 組織結構視圖菜單設置。*/
 $lang->company = new stdclass();
@@ -376,6 +375,7 @@ $lang->admin->menu->custom    = array('link' => '自定義|custom|set', 'subModu
 $lang->admin->menu->sso       = array('link' => '整合|admin|sso');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
+$lang->admin->menu->translate = array('link' => '翻譯|translate|index', 'subModule' => 'translate');
 $lang->admin->menu->data      = array('link' => '數據|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => '系統|cron|index', 'subModule' => 'cron');
@@ -392,7 +392,7 @@ $lang->admin->subMenu->sso->ranzhi = '然之協同|admin|sso';
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => '資料庫|dev|db');
-//$lang->admin->subMenu->dev->editor = array('link' => '編輯器|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->editor = array('link' => '編輯器|editor|index', 'subModule' => 'editor');
 $lang->admin->subMenu->dev->entry  = array('link' => '應用|entry|browse', 'subModule' => 'entry');
 
 $lang->admin->subMenu->data = new stdclass();
@@ -409,7 +409,6 @@ $lang->action    = new stdclass();
 $lang->backup    = new stdclass();
 $lang->extension = new stdclass();
 $lang->custom    = new stdclass();
-$lang->editor    = new stdclass();
 $lang->mail      = new stdclass();
 $lang->cron      = new stdclass();
 $lang->dev       = new stdclass();
@@ -417,6 +416,8 @@ $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
+$lang->translate = new stdclass();
+$lang->editor    = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -425,12 +426,13 @@ $lang->backup->menu    = $lang->admin->menu;
 $lang->cron->menu      = $lang->admin->menu;
 $lang->extension->menu = $lang->admin->menu;
 $lang->custom->menu    = $lang->admin->menu;
-$lang->editor->menu    = $lang->admin->menu;
 $lang->mail->menu      = $lang->admin->menu;
 $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
+$lang->translate->menu = $lang->admin->menu;
+$lang->editor->menu    = $lang->admin->menu;
 
 /* 菜單分組。*/
 $lang->menugroup = new stdclass();
@@ -462,12 +464,13 @@ $lang->menugroup->backup      = 'admin';
 $lang->menugroup->cron        = 'admin';
 $lang->menugroup->extension   = 'admin';
 $lang->menugroup->custom      = 'admin';
-$lang->menugroup->editor      = 'admin';
 $lang->menugroup->mail        = 'admin';
 $lang->menugroup->dev         = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
+$lang->menugroup->translate   = 'admin';
+$lang->menugroup->editor      = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
@@ -483,6 +486,7 @@ $lang->error->equal           = "『%s』必須為『%s』。";
 $lang->error->int             = array("『%s』應當是數字。", "『%s』應當介於『%s-%s』之間。");
 $lang->error->float           = "『%s』應當是數字，可以是小數。";
 $lang->error->email           = "『%s』應當為合法的EMAIL。";
+$lang->error->URL             = "『%s』應當為合法的URL。";
 $lang->error->date            = "『%s』應當為合法的日期。";
 $lang->error->datetime        = "『%s』應當為合法的日期。";
 $lang->error->code            = "『%s』應當為字母或數字的組合。";
@@ -508,6 +512,19 @@ $lang->pager->locate       = "GO!";
 $lang->pager->previousPage = "上一頁";
 $lang->pager->nextPage     = "下一頁";
 $lang->pager->summery      = "第 <strong>%s-%s</strong> 項，共 <strong>%s</strong> 項";
+$lang->pager->pageOfText   = '第 {0} 頁';
+$lang->pager->firstPage    = '第一頁';
+$lang->pager->lastPage     = '最後一頁';
+$lang->pager->goto         = '跳轉';
+$lang->pager->pageOf       = '第 <strong>{page}</strong> 頁';
+$lang->pager->totalPage    = '共 <strong>{totalPage}</strong> 頁';
+$lang->pager->totalCount   = '共 <strong>{recTotal}</strong> 項';
+$lang->pager->pageSize     = '每頁 <strong>{recPerPage}</strong> 項';
+$lang->pager->itemsRange   = '第 <strong>{start}</strong> ~ <strong>{end}</strong> 項';
+$lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</strong> 頁';
+
+$lang->colorPicker = new stdclass();
+$lang->colorPicker->errorTip = '不是有效的顏色值';
 
 $lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>專業版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下載桌面提醒";
@@ -523,7 +540,6 @@ $lang->noticeImport    = "導入數據中，含有已經存在系統的數據，
 $lang->importConfirm   = "導入確認";
 $lang->importAndCover  = "覆蓋";
 $lang->importAndInsert = "全新插入";
-
 
 $lang->noResultsMatch    = "沒有匹配結果";
 $lang->searchMore        = "搜索此關鍵字的更多結果：";

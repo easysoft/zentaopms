@@ -41,8 +41,8 @@ $lang->entry->note->ip      = "Use comma to seperate IPs. IP segment is supporte
 $lang->entry->note->allIP   = 'All IPs';
 $lang->entry->note->account = 'Application Account';
 
-$lang->entry->freePasswdList[0] = 'Off';
 $lang->entry->freePasswdList[1] = 'On';
+$lang->entry->freePasswdList[0] = 'Off';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Parameter code is missing.';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Parameter token is missing.';

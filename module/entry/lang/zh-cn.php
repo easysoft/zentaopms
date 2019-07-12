@@ -41,8 +41,8 @@ $lang->entry->note->ip      = "允许访问API的应用ip，多个ip用逗号隔
 $lang->entry->note->allIP   = '无限制';
 $lang->entry->note->account = '授权应用账号';
 
-$lang->entry->freePasswdList[0] = '关闭';
 $lang->entry->freePasswdList[1] = '开启';
+$lang->entry->freePasswdList[0] = '关闭';
 
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = '缺少code参数';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = '缺少token参数';
