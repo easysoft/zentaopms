@@ -46,7 +46,7 @@
         <?php echo html::a("javascript:changeChartType(\"$type\")", ($type == 'default' ? "<i class='icon icon-list-alt muted'></i> " : "<i class='icon icon-chart-{$type} muted'></i> ") . $typeName, '', "class='btn btn-link " . ($type == $chartType ? 'btn-active-line' : '') . "'")?>
         <?php endforeach;?>
       </div>
-      <div class='text-muted'><?php echo $lang->report->notice->help;?></div>
+      <div class='text-muted'><?php echo str_replace('%tab%', $lang->project->unclosed . $lang->task->common, $lang->report->notice->help);?></div>
       <?php foreach($charts as $chartType => $chartOption):?>
       <div class='table-row chart-row'>
         <div class='main-col'>
