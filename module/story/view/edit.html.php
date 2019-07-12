@@ -161,7 +161,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?>
-                    <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists')?></div>
+                    <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
               </tr>

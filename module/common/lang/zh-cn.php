@@ -347,7 +347,7 @@ $lang->report->menu->test    = array('link' => '测试|report|bugcreate', 'alias
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。';
+$lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();

@@ -43,7 +43,7 @@
         <td class='c-name text-left' title='<?php echo $project->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title='$project->name'");?></nobr></td>
         <td class="c-date"><?php echo $project->end;?></td>
         <?php if($longBlock):?>
-        <td class="c-status">
+        <td class="w-70px">
           <?php if(isset($project->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
           <?php else:?>

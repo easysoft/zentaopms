@@ -177,7 +177,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                   <td>
                     <div class='input-group'>
                       <?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="form-control chosen" multiple');?>
-                      <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists');?></div>
+                      <?php echo $this->fetch('my', 'buildContactLists');?>
                     </div>
                   </td>
                 </tr>
