@@ -334,7 +334,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function report($productID, $taskID, $browseType, $branchID, $moduleID = 0, $chartType = '')
+    public function report($productID, $taskID, $browseType, $branchID, $moduleID = 0, $chartType = 'default')
     {
         $this->loadModel('report');
         $this->view->charts = array();
