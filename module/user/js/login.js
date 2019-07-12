@@ -24,7 +24,9 @@ $(document).ready(function()
 
     $('#loginPanel #submit').click(function()
     {
-        var password = $('input:password').val().trim();
+        var password         = $('input:password').val().trim();
+        var passwordStrength = computePasswordStrength(password);
+        $('#submit').after("<input type='hidden' name='passwordStrength' value='" + passwordStrength + "'>");
         var rand = $('input#verifyRand').val();
         if(password.length != 32 && typeof(md5) == 'function') $('input:password').val(md5(md5(password) + rand));
     });

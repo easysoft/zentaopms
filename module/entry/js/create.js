@@ -32,4 +32,16 @@ $(function()
     })
     
     $('#name').focus();
+
+    $("input[id^=freePasswd]").change(function()
+    {
+        if($(this).val() == 1) 
+        {
+            $('#account').closest('tr').addClass('hidden'); 
+        }
+        else
+        {
+            $('#account').closest('tr').removeClass('hidden'); 
+        }
+    })
 });

@@ -76,9 +76,25 @@ class webhookModel extends model
             }
 
             $action = $actions[$log->action];
+            $data   = json_decode($log->data);
             $object = $this->dao->select('*')->from($this->config->objectTables[$action->objectType])->where('id')->eq($action->objectID)->fetch();
-            $field  = $this->config->action->objectNameFields[$action->objectType];
-            $text   = $this->app->user->realname . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            $field  = zget($this->config->action->objectNameFields, $action->objectType, $action->objectType);
+
+            if(!is_object($object)) 
+            {
+                $object = new stdclass;
+                $object->$field = '';
+            }
+
+            $text = '';
+            if(isset($data->markdown) and is_object($data->markdown)) 
+            {
+                $text = substr($data->markdown->text, 0, strpos($data->markdown->text, '(http'));
+            }
+            else
+            {
+                $text = substr($data->text, 0, strpos($data->text, '(http')) ? substr($data->text, 0, strpos($data->text, '(http')) : zget($users, $data->user, $this->app->user->realname) . $this->lang->action->label->{$action->action} . $this->lang->action->objectTypes[$action->objectType] . "[#{$action->objectID}::{$object->$field}]";
+            }
 
             $log->action    = $text;
             $log->actionURL = $this->getViewLink($action->objectType, $action->objectID);

@@ -17,7 +17,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->webhook->edit;?></h2>
     </div>
-    <form id='webhookForm' method='post' class='ajaxForm'>
+    <form id='webhookForm' method='post' class='form-ajax'>
       <table class='table table-form'>
         <tr>
           <?php $colWidth = $app->getClientLang() == 'en' ? 'w-120px' : 'w-90px';?>

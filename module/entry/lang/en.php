@@ -16,6 +16,7 @@ $lang->entry->id          = 'ID';
 $lang->entry->name        = 'Name';
 $lang->entry->account     = 'Account';
 $lang->entry->code        = 'Code';
+$lang->entry->freePasswd  = 'Free Password Login';
 $lang->entry->key         = 'Key';
 $lang->entry->ip          = 'IP';
 $lang->entry->desc        = 'Description';
@@ -40,6 +41,9 @@ $lang->entry->note->ip      = "Use comma to seperate IPs. IP segment is supporte
 $lang->entry->note->allIP   = 'All IPs';
 $lang->entry->note->account = 'Application Account';
 
+$lang->entry->freePasswdList[0] = 'Off';
+$lang->entry->freePasswdList[1] = 'On';
+
 $lang->entry->errmsg['PARAM_CODE_MISSING']    = 'Parameter code is missing.';
 $lang->entry->errmsg['PARAM_TOKEN_MISSING']   = 'Parameter token is missing.';
 $lang->entry->errmsg['SESSION_CODE_MISSING']  = 'Session code is missing.';
@@ -48,5 +52,6 @@ $lang->entry->errmsg['INVALID_TOKEN']         = 'Invalid token.';
 $lang->entry->errmsg['SESSION_VERIFY_FAILED'] = 'Session verification failed.';
 $lang->entry->errmsg['IP_DENIED']             = 'IP is denied.';
 $lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Account is not bound.';
+$lang->entry->errmsg['INVALID_ACCOUNT']       = 'Invalid account.';
 $lang->entry->errmsg['EMPTY_ENTRY']           = 'Application does not exist.';
 $lang->entry->errmsg['CALLED_TIME']           = 'Token has expired';

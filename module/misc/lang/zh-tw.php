@@ -75,6 +75,8 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->releaseDate['11.5.2']      = '2019-06-26';
+$lang->misc->releaseDate['11.5.1']      = '2019-06-24';
 $lang->misc->releaseDate['11.5.stable'] = '2019-05-08';
 $lang->misc->releaseDate['11.4.1']      = '2019-04-08';
 $lang->misc->releaseDate['11.4.stable'] = '2019-03-25';
@@ -101,6 +103,10 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.5.2'][]      = array('title'=>'增加禪道安全性，增加登錄禪道弱口令檢查', 'desc' => '');
+
+$lang->misc->feature->all['11.5.1'][]      = array('title'=>'新增第三方應用免密登錄禪道，修復Bug', 'desc' => '');
 
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'完善細節，修復Bug', 'desc' => '');
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'新增動態過濾機制', 'desc' => '');
