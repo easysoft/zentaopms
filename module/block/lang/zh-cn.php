@@ -60,6 +60,7 @@ $lang->block->closeForever       = '永久关闭';
 $lang->block->confirmClose       = '确定永久关闭该区块吗？关闭后所有人都将无法使用该区块，可以在后台自定义中打开。';
 $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
+$lang->block->nbsp               = '';  
 $lang->block->hidden             = '隐藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
