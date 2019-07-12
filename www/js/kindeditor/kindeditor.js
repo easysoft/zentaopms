@@ -10119,7 +10119,7 @@ KindEditor.plugin('pasteimage', function(K) {
         },
         en: {
             notSupportMsg: 'Image is not allowed to paste in your browser!',
-            placeholder: 'Paste images here.',
+            placeholder: 'You can paste images in the editor.',
             failMsg: 'Pasting image failed. Try again later.',
             uploadingHint: 'Uploading...',
         }
