@@ -57,6 +57,7 @@ if($config->global->flow == 'onlyTask')
 $config->task->datatable = new stdclass();
 $config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
 
+global $lang;
 $config->task->datatable->fieldList['id']['title']    = 'idAB';
 $config->task->datatable->fieldList['id']['fixed']    = 'left';
 $config->task->datatable->fieldList['id']['width']    = '70';
@@ -102,6 +103,7 @@ $config->task->datatable->fieldList['progress']['fixed']    = 'no';
 $config->task->datatable->fieldList['progress']['width']    = '50';
 $config->task->datatable->fieldList['progress']['required'] = 'no';
 $config->task->datatable->fieldList['progress']['sort']     = 'no';
+$config->task->datatable->fieldList['story']['name']        = $lang->task->progress;
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
@@ -173,7 +175,6 @@ $config->task->datatable->fieldList['closedReason']['fixed']    = 'no';
 $config->task->datatable->fieldList['closedReason']['width']    = '120';
 $config->task->datatable->fieldList['closedReason']['required'] = 'no';
 
-global $lang;
 $config->task->datatable->fieldList['story']['title']    = "storyAB";
 $config->task->datatable->fieldList['story']['fixed']    = 'no';
 $config->task->datatable->fieldList['story']['width']    = '70';
