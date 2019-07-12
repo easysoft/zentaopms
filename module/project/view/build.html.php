@@ -38,9 +38,9 @@
     <table class="table text-center" id='buildList'>
       <thead>
         <tr>
-          <th class="w-200px"><?php echo $lang->build->product;?></th>
+          <th class="w-200px text-left"><?php echo $lang->build->product;?></th>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
-          <th class="c-name"><?php echo $lang->build->name;?></th>
+          <th class="c-name text-left"><?php echo $lang->build->name;?></th>
           <th class="c-url"><?php echo $lang->build->scmPath;?></th>
           <th class="c-url"><?php echo $lang->build->filePath;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>

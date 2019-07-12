@@ -16,7 +16,7 @@ $lang->group->edit               = 'Edit Group';
 $lang->group->copy               = 'Copy Group';
 $lang->group->delete             = 'Delete Group';
 $lang->group->manageView         = 'Manage Sight';
-$lang->group->managePriv         = 'Batch Assign';
+$lang->group->managePriv         = 'Manage Privileges';
 $lang->group->managePrivByGroup  = 'Manage Privileges by Group';
 $lang->group->managePrivByModule = 'Manage Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';

@@ -138,8 +138,8 @@ $lang->custom->menuTip  = 'Click to show/hide the menu. Drag to switch display o
 $lang->custom->saveFail = 'Failed to save!';
 $lang->custom->page     = ' Page';
 
-$lang->custom->scoreStatus[0] = 'Off';
 $lang->custom->scoreStatus[1] = 'On';
+$lang->custom->scoreStatus[0] = 'Off';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';

@@ -229,7 +229,7 @@
                     <tr>
                       <td colspan="4">
                         <?php $progress = ($project->totalConsumed + $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;?>
-                        <?php echo $lang->projectCommon . $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
+                        <?php echo $lang->project->progress;?> <em><?php echo $progress . $lang->percent;?></em> &nbsp;
                         <div class="progress inline-block">
                           <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>
                         </div>

@@ -106,7 +106,7 @@ js::set('browseType', $browseType);
         $class = common::hasPriv('task', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('task', 'export') ? "class='export'" : "class=disabled";
         $link  = common::hasPriv('task', 'export') ? $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=$browseType") : '#';
-        echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
+        echo "<li $class>" . html::a($link, $lang->task->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>

@@ -13,4 +13,4 @@
 $lang->git->common  = 'Git';
 $lang->git->cat     = 'View Source Code';
 $lang->git->diff    = 'Compare Source Code';
-$lang->git->apiSync = 'API: Synchronize Git Log';
+$lang->git->apiSync = 'API: Synchronize Git Logs';

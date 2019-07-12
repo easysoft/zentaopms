@@ -15,7 +15,7 @@ $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
 $lang->block->grid   = 'Grid';
 $lang->block->color  = 'Color';
-$lang->block->reset  = 'Reset';
+$lang->block->reset  = 'Reset Layout';
 
 $lang->block->account = 'Account';
 $lang->block->module  = 'Module';
@@ -60,6 +60,7 @@ $lang->block->closeForever       = 'Permanent Close';
 $lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be activiated at Admin->Custom.';
 $lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
+$lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 

@@ -12,9 +12,9 @@ if($this->methodName != 'browse')
     $moduleID   = '';
 }
 if(empty($type)) $type = 'product';
-$sideWidth = $app->getClientLang() == 'en' ? '270px' : '238px';
+$sideWidth = $app->getClientLang() == 'en' ? '270' : '238';
 ?>
-<div class="side-col" style="width:<?php echo $sideWidth;?>" data-min-width="240">
+<div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
   <div class="cell">
     <div class="tabs">
       <ul class='nav nav-tabs'>

@@ -23,7 +23,7 @@
         <tr>
           <?php $colWidth = $app->getClientLang() == 'en' ? 'w-120px' : 'w-90px';?>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->webhook->type;?></th>
-          <td><?php echo html::select('type', $lang->webhook->typeList, '', "class='form-control'");?></td>
+          <td style="width:550px" ><?php echo html::select('type', $lang->webhook->typeList, '', "class='form-control'");?></td>
           <td></td>
         </tr>
         <tr>

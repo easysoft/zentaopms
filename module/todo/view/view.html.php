@@ -123,7 +123,7 @@
               <td><?php echo zget($users, $todo->assignedTo);?></td>
             </tr>
             <tr>
-              <th><?php echo $lang->todo->assignTo . $lang->todo->date;?></th>
+              <th><?php echo $lang->todo->assignedDate;?></th>
               <td><?php echo formatTime($todo->assignedDate, DT_DATE1);?></td>
             </tr>
             <?php endif;?>
