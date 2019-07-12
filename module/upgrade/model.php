@@ -393,8 +393,6 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_5');
             $this->execSQL($this->getUpgradeFile('11.5'));
         case '11_5_1':
-            $this->saveLogs('Execute 11_5_1');
-            $this->execSQL($this->getUpgradeFile('11.5.1'));
         case '11_5_2':
             $this->saveLogs('Execute 11_5_2');
             $this->execSQL($this->getUpgradeFile('11.5.2'));
@@ -540,7 +538,7 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '11_5'   : $confirmContent .= file_get_contents($this->getUpgradeFile('11.5'));
-            case '11_5_1' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.5.1'));
+            case '11_5_1' :
             case '11_5_2' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.5.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
