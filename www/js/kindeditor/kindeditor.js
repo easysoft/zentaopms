@@ -10124,7 +10124,7 @@ KindEditor.plugin('pasteimage', function(K) {
             uploadingHint: 'Uploading...',
         }
     };
-    var lang = $.extend({}, allLangs[($.clientLang || $.zui.clientLang)()]);
+
     self.afterCreate(function() {
         var edit    = self.edit;
         var doc     = edit.doc;
@@ -10136,9 +10136,8 @@ KindEditor.plugin('pasteimage', function(K) {
         if (typeof options === 'string') {
             options = {postUrl: options};
         }
-        $.extend({
-            placeholder: placeholder
-        }, options);
+        var lang = $.extend({}, allLangs[($.clientLang || $.zui.clientLang)()], options.lang);
+
         if(!K.WEBKIT && !K.GECKO)
         {
             $(doc.body).on('keyup.ke' + uuid, function(ev)
@@ -10264,6 +10263,7 @@ KindEditor.plugin('pasteimage', function(K) {
         });
     });
 });
+
 /*  cellPos jQuery plugin
     ---------------------
     Get visual position of cell in HTML table (or its block like thead).
