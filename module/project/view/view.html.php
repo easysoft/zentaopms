@@ -140,7 +140,7 @@
             </div>
           </div>
         </div>
-        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', "position=left&divCell=false");?>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $project, 'div', "position=left&divCell=false");?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
           <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
@@ -296,7 +296,7 @@
                 <?php endif;?>
               </div>
             </div>
-            <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', "position=right&divCell=false");?>
+            <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $project, 'div', "position=right&divCell=false");?>
           </div>
         </div>
       </div>
