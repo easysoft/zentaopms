@@ -34,7 +34,7 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <?php if($branches):?>
-          <th class='w-100px'><?php echo $lang->testcase->branch ?></th>
+          <th class='w-110px'><?php echo $lang->testcase->branch ?></th>
           <?php endif;?>
           <th class='w-pri'>  <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
           <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
@@ -80,7 +80,7 @@
       <div class="btn-toolbar">
         <?php echo html::linkButton($lang->goback, $this->session->caseList);?>
       </div>
-      <div class='table-statistic'></div>
+      <div class='text'></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
