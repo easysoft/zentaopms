@@ -70,7 +70,7 @@
             <div class='detail-title'><?php echo $lang->comment;?></div>
             <div class='detail-content'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
           </div>
-          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', 'position=left&divCell=false');?>
+          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'div', 'position=left&divCell=false');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->files;?></div>
             <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>

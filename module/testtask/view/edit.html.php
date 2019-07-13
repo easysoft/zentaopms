@@ -83,7 +83,7 @@
             </div>
           </td>
         </tr>
-        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'table', 'columns=2');?>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'table', 'columns=2');?>
         <tr>
           <td class='text-center form-actions' colspan='3'>
             <?php echo html::submitButton();?>

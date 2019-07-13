@@ -74,7 +74,7 @@ js::set('productID' , $bug->product);
           <th><?php echo $lang->bug->assignedTo;?></th>
           <td><?php echo html::select('assignedTo', $users, $assignedTo, "class='form-control chosen'");?></td>
         </tr>
-        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'table', 'columns=1');?>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $bug, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->bug->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>

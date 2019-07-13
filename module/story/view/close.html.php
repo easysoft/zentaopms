@@ -37,7 +37,7 @@
           <th><?php echo $lang->story->childStories;?></th>
           <td><?php echo html::input('childStories', '', "class='form-control'");?></td><td></td>
         </tr>
-        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'table', 'columns=2');?>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $story, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>
