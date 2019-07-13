@@ -113,6 +113,8 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
+
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -433,6 +435,9 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 die(array('status' => 'success', 'data' => $storyID));
@@ -616,6 +621,9 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
+
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -648,6 +656,8 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -739,6 +749,9 @@ class story extends control
         else
         {
             $this->story->delete(TABLE_STORY, $storyID);
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
+
             die(js::locate($this->session->storyList, 'parent'));
         }
     }
@@ -762,6 +775,9 @@ class story extends control
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
             }
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
+
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
@@ -830,6 +846,9 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
+
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
@@ -1056,6 +1075,8 @@ class story extends control
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->story->getById($storyID));
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));

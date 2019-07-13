@@ -105,6 +105,9 @@ class testtask extends control
             $taskID = $this->testtask->create();
             if(dao::isError()) die(js::error(dao::getError()));
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->testtask->getById($taskID));
+
             die(js::locate($this->createLink('testtask', 'browse', "productID=$productID"), 'parent'));
         }
 
@@ -458,6 +461,9 @@ class testtask extends control
                 $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->testtask->getById($taskID));
+
             die(js::locate(inlink('view', "taskID=$taskID"), 'parent'));
         }
 
@@ -504,6 +510,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->testtask->getById($taskID));
+
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
@@ -545,6 +553,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->testtask->getById($taskID));
+
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent')); 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
@@ -585,6 +595,8 @@ class testtask extends control
                 $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->testtask->getById($taskID));
 
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             $this->send(array('result' => 'success', 'message' => $this->lang->success, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
@@ -629,6 +641,8 @@ class testtask extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->testtask->getById($taskID));
+
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
@@ -666,6 +680,8 @@ class testtask extends control
         {
             $task = $this->testtask->getByID($taskID);
             $this->testtask->delete(TABLE_TESTTASK, $taskID);
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $task);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
