@@ -5,9 +5,9 @@ $lang->custom->set        = 'Customize';
 $lang->custom->restore    = 'Reset to Default';
 $lang->custom->key        = 'Key';
 $lang->custom->value      = 'Value';
-$lang->custom->flow       = 'Workflow';
+$lang->custom->flow       = 'Concept';
 $lang->custom->working    = 'WorkStyle';
-$lang->custom->select     = 'Select Workflow';
+$lang->custom->select     = 'Select Concept';
 $lang->custom->branch     = 'Multi Branch';
 $lang->custom->owner      = 'Owner';
 $lang->custom->module     = 'Module';
@@ -53,7 +53,7 @@ $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
 $lang->custom->bug->fields['resolutionList'] = 'Solution';
 $lang->custom->bug->fields['statusList']     = 'Status';
-$lang->custom->bug->fields['longlife']       = 'Shelved Days';
+$lang->custom->bug->fields['longlife']       = 'Stalled Days';
 
 $lang->custom->testcase = new stdClass();
 $lang->custom->testcase->fields['priList']    = 'Priority';
@@ -127,7 +127,7 @@ $lang->custom->productProject->relation['0_0'] = 'Product - Project';
 $lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
 $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
-$lang->custom->productProject->notice = 'Please select according to your team.';
+$lang->custom->productProject->notice = 'Please select a concept according to your team.';
 
 $lang->custom->workingList['full']      = 'Full Management of Dev';
 $lang->custom->workingList['onlyTest']  = 'Test Management';
