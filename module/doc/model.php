@@ -1145,7 +1145,7 @@ class docModel extends model
             $projects = $mineProjects = $otherProjects = $closedProjects = array();
             foreach($libs as $lib)
             {   
-                if(!$this->app->user->admin and !$this->checkPrivLib($lib)) continue;
+                if(!$this->app->user->admin and !$this->project->checkPriv($lib->id)) continue;
                 if($lib->status != 'done' and $lib->status != 'closed' and $lib->PM == $this->app->user->account)
                 {   
                     $mineProjects[$lib->id] = $lib;
