@@ -119,7 +119,7 @@
       </ul>
     </div>
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-    <?php if($app->getClientLang() != 'en'):?>
+    <?php if(!common::checkEnLang()):?>
     <?php
     if(common::hasPriv('testcase', 'batchCreate'))
     {

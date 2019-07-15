@@ -93,7 +93,7 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <?php $colWidth = common::checkEnLang() ? 'w-100px' : 'w-80px';?>
               <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->pri;?></th>
               <td><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
             </tr>
@@ -137,7 +137,7 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <?php $colWidth = common::checkEnLang() ? 'w-100px' : 'w-80px';?>
               <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->beginAndEnd?></th>
               <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
             </tr>

@@ -28,7 +28,7 @@
           <?php $idx++; ?>
           <?php endforeach; ?>
         </div>
-        <?php if($detailed and $this->app->getClientLang() != 'en'):?>
+        <?php if($detailed and !common::checkEnLang()):?>
         <div id="details" class='article-content'>
           <a href='###' class="btn btn-link text-primary btn-block text-left" onclick="$('#details').toggleClass('show-details')"><i class="icon icon-angle-right"></i> <?php echo $lang->misc->feature->detailed;?></a>
           <div class='details-list'><?php echo $detailed;?></div>

@@ -41,7 +41,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
         <div class="form-group">
-          <?php $leftWidth  = $app->getClientLang() == 'en' ? 'col-sm-3' : 'col-sm-2';?>
+          <?php $leftWidth  = common::checkEnLang() ? 'col-sm-3' : 'col-sm-2';?>
           <label for="todoName" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->name?></label>
           <div class="col-sm-9 required"><input type="text" class="form-control" autocomplete="off" name="name"></div>
         </div>
