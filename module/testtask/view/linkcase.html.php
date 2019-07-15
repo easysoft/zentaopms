@@ -126,7 +126,7 @@
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton('', '', 'btn btn-secondary');?></div>
-      <div class="table-statistic"></div>
+      <div class="text"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

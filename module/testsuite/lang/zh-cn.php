@@ -57,8 +57,8 @@ $lang->testsuite->authorList['public']  = '公开';
 $lang->caselib->common = '公共用例库';
 $lang->caselib->all    = '所有用例库';
 
-$lang->testsuite->createLib  = '创建库';
-$lang->testsuite->editLib    = '编辑库';
+$lang->testsuite->createLib  = '创建用例库';
+$lang->testsuite->editLib    = '编辑用例库';
 $lang->testsuite->library    = '浏览库用例';
 $lang->testsuite->createCase = '创建用例';
 $lang->testsuite->libView    = '查看库概况';

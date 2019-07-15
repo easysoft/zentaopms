@@ -893,8 +893,8 @@ class extensionModel extends model
         $today       = date('Y-m-d');
         $expireDate  = '';
 
-        $licenceOrderFile = $licencePath . 'order' . $extension->code . $extension->version . '.txt';
-        if(file_exists($licenceOrderFile))
+        $licenceOrderFiles = glob($licencePath . 'order*' . $extension->code . $extension->version . '.txt');
+        foreach($licenceOrderFiles as $licenceOrderFile)
         {
             $order = file_get_contents($licenceOrderFile);
             $order = unserialize($order);

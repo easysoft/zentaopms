@@ -23,6 +23,7 @@ $lang->productplan->batchEdit  = '批量編輯';
 $lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->linkStory        = "關聯需求";
 $lang->productplan->unlinkStory      = "移除需求";
+$lang->productplan->unlinkStoryAB    = "移除";
 $lang->productplan->batchUnlinkStory = "批量移除需求";
 $lang->productplan->linkedStories    = '需求';
 $lang->productplan->unlinkedStories  = '未關聯需求';

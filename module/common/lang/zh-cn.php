@@ -512,6 +512,19 @@ $lang->pager->locate       = "GO!";
 $lang->pager->previousPage = "上一页";
 $lang->pager->nextPage     = "下一页";
 $lang->pager->summery      = "第 <strong>%s-%s</strong> 项，共 <strong>%s</strong> 项";
+$lang->pager->pageOfText   = '第 {0} 页';
+$lang->pager->firstPage    = '第一页';
+$lang->pager->lastPage     = '最后一页';
+$lang->pager->goto         = '跳转';
+$lang->pager->pageOf       = '第 <strong>{page}</strong> 页';
+$lang->pager->totalPage    = '共 <strong>{totalPage}</strong> 页';
+$lang->pager->totalCount   = '共 <strong>{recTotal}</strong> 项';
+$lang->pager->pageSize     = '每页 <strong>{recPerPage}</strong> 项';
+$lang->pager->itemsRange   = '第 <strong>{start}</strong> ~ <strong>{end}</strong> 项';
+$lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</strong> 页';
+
+$lang->colorPicker = new stdclass();
+$lang->colorPicker->errorTip = '不是有效的颜色值';
 
 $lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
@@ -527,7 +540,6 @@ $lang->noticeImport    = "导入数据中，含有已经存在系统的数据，
 $lang->importConfirm   = "导入确认";
 $lang->importAndCover  = "覆盖";
 $lang->importAndInsert = "全新插入";
-
 
 $lang->noResultsMatch    = "没有匹配结果";
 $lang->searchMore        = "搜索此关键字的更多结果：";

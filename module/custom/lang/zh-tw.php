@@ -18,6 +18,7 @@ $lang->custom->required   = '必填項';
 $lang->custom->score      = '積分';
 $lang->custom->timezone   = '時區';
 $lang->custom->scoreReset = '重置積分';
+$lang->custom->scoreTitle = '積分功能';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任務';
@@ -96,6 +97,7 @@ $lang->custom->notice->invalidNumberKey            = '鍵值應為不大於255�
 $lang->custom->notice->invalidStringKey            = '鍵值應當為小寫英文字母、數字或下劃線的組合';
 $lang->custom->notice->cannotSetTimezone           = 'date_default_timezone_set方法不存在或禁用，不能設置時區。';
 $lang->custom->notice->noClosedBlock               = '沒有永久關閉的區塊';
+$lang->custom->notice->required                    = '頁面提交時，選中的欄位必填';
 
 $lang->custom->notice->indexPage['product']        = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
 $lang->custom->notice->indexPage['project']        = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
@@ -134,9 +136,10 @@ $lang->custom->workingList['onlyTask']  = '任務管理工具';
 
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
 $lang->custom->saveFail = '保存失敗！';
+$lang->custom->page     = '頁面';
 
-$lang->custom->scoreStatus[0] = '關閉';
 $lang->custom->scoreStatus[1] = '開啟';
+$lang->custom->scoreStatus[0] = '關閉';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '計劃';

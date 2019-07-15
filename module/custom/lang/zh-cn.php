@@ -18,6 +18,7 @@ $lang->custom->required   = '必填项';
 $lang->custom->score      = '积分';
 $lang->custom->timezone   = '时区';
 $lang->custom->scoreReset = '重置积分';
+$lang->custom->scoreTitle = '积分功能';
 
 $lang->custom->object['story']    = '需求';
 $lang->custom->object['task']     = '任务';

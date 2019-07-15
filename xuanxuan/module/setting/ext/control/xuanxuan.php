@@ -38,7 +38,7 @@ class setting extends control
         $os = 'win';
         if(strpos(strtolower(PHP_OS), 'win') !== 0) $os = strtolower(PHP_OS);
 
-        $this->lang->setting->menu = $this->lang->admin->menu;
+        $this->lang->setting->menu      = $this->lang->admin->menu;
         $this->lang->menugroup->setting = 'admin';
 
         $this->view->title      = $this->lang->chat->common;

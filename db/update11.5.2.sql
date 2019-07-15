@@ -1,4 +1,4 @@
-CREATE TABLE `zt_translation` (
+CREATE TABLE IF NOT EXISTS `zt_translation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `lang` varchar(30) NOT NULL,
   `module` varchar(30) NOT NULL,

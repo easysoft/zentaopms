@@ -1661,18 +1661,25 @@ EOD;
         $entry = $this->entry->getByCode($this->get->code);
         if(!$entry)                              $this->response('EMPTY_ENTRY');
         if(!$entry->key)                         $this->response('EMPTY_KEY');
-        if(empty($entry->account))               $this->response('ACCOUNT_UNBOUND');
         if(!$this->checkIP($entry->ip))          $this->response('IP_DENIED');
         if(!$this->checkEntryToken($entry))      $this->response('INVALID_TOKEN');
+        if($entry->freePasswd == 0 and empty($entry->account)) $this->response('ACCOUNT_UNBOUND');
+
+        $isFreepasswd = ($_GET['m'] == 'user' and strtolower($_GET['f']) == 'apilogin' and $_GET['account'] and $entry->freePasswd);
+        if($isFreepasswd) $entry->account = $_GET['account'];
+
+        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->fetch();
+        if(!$user) $this->response('INVALID_ACCOUNT');
 
         $this->loadModel('user');
-        $user = $this->dao->findByAccount($entry->account)->from(TABLE_USER)->fetch();
         $user->rights = $this->user->authorize($user->account);
         $user->groups = $this->user->getGroups($user->account);
         $user->view   = $this->user->grantUserView($user->account, $user->rights['acls']);
         $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
         $this->session->set('user', $user);
         $this->app->user = $user;
+
+        if($isFreepasswd) die(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));

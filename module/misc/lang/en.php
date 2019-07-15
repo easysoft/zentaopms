@@ -43,15 +43,11 @@ $lang->misc->zentao->support['manual']     = "User Manual";
 
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
-$lang->misc->zentao->cowin['cowinmore']    = "More";
+$lang->misc->zentao->cowin['recommend']    = "More";
 
 $lang->misc->zentao->service['zentaotrain']= 'Zentao Train';
 $lang->misc->zentao->service['idc']        = 'Zentao Cloud';
 $lang->misc->zentao->service['custom']     = 'Zentao Custom';
-$lang->misc->zentao->service['servicemore']= 'More';
-
-
-
 $lang->misc->zentao->service['servicemore']= 'More';
 
 $lang->misc->mobile      = "Mobile Access";
@@ -78,6 +74,9 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Detail';
 
+$lang->misc->releaseDate['11.6.stable'] = '2019-07-12';
+$lang->misc->releaseDate['11.5.2']      = '2019-06-26';
+$lang->misc->releaseDate['11.5.1']      = '2019-06-24';
 $lang->misc->releaseDate['11.5.stable'] = '2019-05-08';
 $lang->misc->releaseDate['11.4.1']      = '2019-04-08';
 $lang->misc->releaseDate['11.4.stable'] = '2019-03-25';
@@ -104,6 +103,13 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.6.stable'][] = array('title'=>'Improving the International Edition Interface', 'desc' => '');
+$lang->misc->feature->all['11.6.stable'][] = array('title'=>'Add translate function', 'desc' => '');
+
+$lang->misc->feature->all['11.5.2'][]      = array('title'=>'Increase the security of ZenTao and increase the login password for weak password check', 'desc' => '');
+
+$lang->misc->feature->all['11.5.1'][]      = array('title'=>'Add a third-party authentication and fix bugs.', 'desc' => '');
 
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'Added filters to Dynamics', 'desc' => '');

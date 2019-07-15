@@ -45,7 +45,6 @@ $lang->misc->zentao->cowin['reportbug']    = "汇报Bug";
 $lang->misc->zentao->cowin['feedback']     = "反馈需求";
 $lang->misc->zentao->cowin['recommend']    = "推荐给朋友";
 
-
 $lang->misc->zentao->service['zentaotrain']= '禅道使用培训';
 $lang->misc->zentao->service['idc']        = '禅道在线托管';
 $lang->misc->zentao->service['custom']     = '禅道定制开发';
@@ -75,6 +74,9 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['11.6.stable'] = '2019-07-12';
+$lang->misc->releaseDate['11.5.2']      = '2019-06-26';
+$lang->misc->releaseDate['11.5.1']      = '2019-06-24';
 $lang->misc->releaseDate['11.5.stable'] = '2019-05-08';
 $lang->misc->releaseDate['11.4.1']      = '2019-04-08';
 $lang->misc->releaseDate['11.4.stable'] = '2019-03-25';
@@ -101,6 +103,13 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.6.stable'][] = array('title'=>'改善国际版界面', 'desc' => '');
+$lang->misc->feature->all['11.6.stable'][] = array('title'=>'添加翻译功能', 'desc' => '');
+
+$lang->misc->feature->all['11.5.2'][]      = array('title'=>'增加禅道安全性，增加登录禅道弱口令检查', 'desc' => '');
+
+$lang->misc->feature->all['11.5.1'][]      = array('title'=>'新增第三方应用免密登录禅道，修复Bug', 'desc' => '');
 
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'完善细节，修复Bug', 'desc' => '');
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'新增动态过滤机制', 'desc' => '');
