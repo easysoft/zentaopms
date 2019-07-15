@@ -49,6 +49,9 @@ class productplan extends control
             $planID = $this->productplan->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->productplan->getById($planID));
+
             if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$product&branch=$branch")));
         }
@@ -96,6 +99,7 @@ class productplan extends control
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->productplan->getById($planID));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "planID=$planID")));
         }
 
@@ -161,6 +165,8 @@ class productplan extends control
         {
             $plan = $this->productplan->getById($planID);
             $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
+
+            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->productplan->getById($planID));
 
             /* if ajax request, send result. */
             if($this->server->ajax)

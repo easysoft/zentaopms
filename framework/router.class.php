@@ -273,19 +273,35 @@ class router extends baseRouter
             $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
             if($flow)
             {
-                $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
-                if(zget($action, 'extensionType') == 'override')
+                if($flow->buildin && $this->methodName == 'browselabel')
                 {
-                    $this->workflowModule = $this->moduleName;
-                    $this->workflowMethod = $this->methodName;
+                        $this->workflowModule = $this->moduleName;
+                        $this->workflowMethod = 'browse';
 
-                    $this->loadModuleConfig('workflowaction');
+                        $this->loadModuleConfig('workflowaction');
 
-                    $moduleName = 'flow';
-                    $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
+                        $moduleName = 'flow';
+                        $methodName = 'browse';
 
-                    $this->setModuleName($moduleName);
-                    $this->setMethodName($methodName);
+                        $this->setModuleName($moduleName);
+                        $this->setMethodName($methodName);
+                }
+                else
+                {
+                    $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
+                    if(zget($action, 'extensionType') == 'override')
+                    {
+                        $this->workflowModule = $this->moduleName;
+                        $this->workflowMethod = $this->methodName;
+
+                        $this->loadModuleConfig('workflowaction');
+
+                        $moduleName = 'flow';
+                        $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
+
+                        $this->setModuleName($moduleName);
+                        $this->setMethodName($methodName);
+                    }
                 }
             }
         }
