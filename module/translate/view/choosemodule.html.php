@@ -75,8 +75,8 @@
         <?php endif;?>
         <td>
           <?php
-          if(common::hasPriv('translate', 'module')) echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), $lang->translate->common, '', "class='btn btn-sm btn-success'");
-          if(common::hasPriv('translate', 'review') and $config->translate->needReview) echo html::a($this->createLink('translate', 'review', "language=$language&module=$module"), $lang->translate->review, '', "class='btn btn-sm btn-info'");
+          if(common::hasPriv('translate', 'module')) echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), $lang->translate->common, '', "class='btn btn-sm btn-primary'");
+          if(common::hasPriv('translate', 'review') and $config->translate->needReview) echo html::a($this->createLink('translate', 'review', "language=$language&module=$module"), $lang->translate->review, '', "class='btn btn-sm btn-primary'");
           ?>
         </td>
       </tr>
