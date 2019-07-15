@@ -78,5 +78,5 @@ $lang->admin->safe->reasonList['birthday'] = 'Same as DOB';
 $lang->admin->safe->modifyPasswordList[1] = 'Yes';
 $lang->admin->safe->modifyPasswordList[0] = 'No';
 
-$lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added and edited.';
+$lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';
 $lang->admin->safe->noticeStrong = '';
