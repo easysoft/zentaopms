@@ -16,7 +16,7 @@ class editor extends control
         parent::__construct($moduleName, $methodName, $appName);
 
         $remoteIP = helper::getRemoteIp();
-        if($remoteIP != '127.0.0.1') die("<html><head><meta chatset='utf-8'></head><body>{$this->lang->editor->onlyLocalVisit}</body></html>");
+        if($remoteIP != '127.0.0.1') die($this->display('editor', 'deny'));
     }
 
     /**
