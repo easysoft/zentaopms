@@ -13,7 +13,7 @@ $lang->block = new stdclass();
 $lang->block->common = 'Block';
 $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
-$lang->block->grid   = 'Grid';
+$lang->block->grid   = 'Position';
 $lang->block->color  = 'Color';
 $lang->block->reset  = 'Reset Layout';
 
