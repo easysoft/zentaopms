@@ -27,7 +27,7 @@ class translate extends control
         if($remoteIP != '127.0.0.1')
         {
             $this->app->loadLang('editor');
-            die("<html><head><meta chatset='utf-8'></head><body>{$this->lang->editor->onlyLocalVisit}</body></html>");
+            die($this->display('translate', 'deny'));
         }
     }
 
