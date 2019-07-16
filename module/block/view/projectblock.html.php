@@ -20,7 +20,7 @@
         <th class='c-name text-left'><?php echo $lang->project->name;?></th>
         <th class="c-date"><?php echo $lang->project->end;?></th>
         <?php if($longBlock):?>
-        <?php $thClass = ($app->getClientLang() == 'en') ? 'w-85px' : 'c-hours';?>
+        <?php $thClass = common::checkEnLang() ? 'w-85px' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
         <th class='<?php echo $thClass?>'><?php echo $lang->project->totalEstimate;?></th>
         <th class="c-hours"><?php echo $lang->project->totalConsumed;?></th>

@@ -5,16 +5,16 @@ $lang->custom->set        = 'Customize';
 $lang->custom->restore    = 'Reset';
 $lang->custom->key        = 'Key';
 $lang->custom->value      = 'Value';
-$lang->custom->flow       = 'Workflow';
+$lang->custom->flow       = 'Concept';
 $lang->custom->working    = 'Mode';
-$lang->custom->select     = 'Select Workflow';
+$lang->custom->select     = 'Select Concept';
 $lang->custom->branch     = 'Multi-Branch';
 $lang->custom->owner      = 'Owner';
 $lang->custom->module     = 'Module';
 $lang->custom->section    = 'Section';
 $lang->custom->lang       = 'Language';
 $lang->custom->setPublic  = 'Set Public';
-$lang->custom->required   = 'Required Fields';
+$lang->custom->required   = 'Required Field';
 $lang->custom->score      = 'Point';
 $lang->custom->timezone   = 'Timezone';
 $lang->custom->scoreReset = 'Reset Points';
@@ -94,7 +94,7 @@ $lang->custom->notice->forceReview          = '%s review is required for committ
 $lang->custom->notice->forceNotReview       = "%s review is not required for committers selected.";
 $lang->custom->notice->longlife             = 'Define stalled bugs.';
 $lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
-$lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase letters, numbers or underlines.';
+$lang->custom->notice->invalidStringKey     = 'The key should be lowercase letters, numbers or underlines.';
 $lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
 $lang->custom->notice->noClosedBlock        = 'You have no blocks that are closed permanently.';
 $lang->custom->notice->required             = 'The selected field is required.';
@@ -127,7 +127,7 @@ $lang->custom->productProject->relation['0_0'] = 'Product - Project';
 $lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
 $lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
 
-$lang->custom->productProject->notice = 'Select the work mode that fits your team.';
+$lang->custom->productProject->notice = 'Select a concept that fits your team.';
 
 $lang->custom->workingList['full']      = 'Application Lifecycle Management';
 $lang->custom->workingList['onlyTest']  = 'Test Management';

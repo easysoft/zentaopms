@@ -763,6 +763,19 @@ function convertURL()
     });
 }
 
+/**
+ * Alert message with bootbox.
+ * 
+ * @param  message $message 
+ * @access public
+ * @return bool
+ */
+function bootAlert(message)
+{
+    bootbox.alert(message);
+    return false;
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
