@@ -47,7 +47,7 @@
         <?php endforeach;?>
       </div>
       <?php $this->app->loadLang('testcase');?>
-      <div class='text-muted'><?php echo str_replace('%tab%', $lang->testcase->featureBar['browse']['wait'] . $lang->testcase->common, $lang->report->notice->help);?></div>
+      <div class='text-muted' style='padding-top:5px'><?php echo str_replace('%tab%', $lang->testcase->featureBar['browse']['wait'] . $lang->testcase->common, $lang->report->notice->help);?></div>
       <?php foreach($charts as $chartType => $chartOption):?>
       <div class='table-row chart-row'>
         <div class='main-col'>
