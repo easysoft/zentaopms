@@ -1,10 +1,11 @@
 <?php include '../../common/view/header.html.php';?>
+<?php $disabled = $active ? '' : "disabled";?>
 <div class='center-block mw-800px'>
   <div id="mainMenu" class="clearfix">
-<?php printf($lang->translate->allItems, $itemCount);?>
-<div class='pull-right'>
-<?php echo html::a(inlink('setting'), "<i class='icon icon-cog'></i>", '', "class='iframe btn btn-sm btn-link'");?>
-</div>
+  <?php printf($lang->translate->allItems, $itemCount);?>
+  <div class='pull-right'>
+  <?php echo html::a(inlink('setting'), "<i class='icon icon-cog'></i>", '', "class='iframe btn btn-sm btn-link $disabled'");?>
+  </div>
 </div>
   <div class='row'>
     <div class='col-sm-6' id='finishedLangs'>
@@ -24,8 +25,8 @@
               }
               else
               {
-                  echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm'");
-                  echo html::a(inlink('export', "language=$langKey"), $lang->export, '', "class='btn btn-sm iframe'");
+                  echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm $disabled'");
+                  echo html::a(inlink('export', "language=$langKey"), $lang->export, '', "class='btn btn-sm iframe $disabled'");
               }
               ?>
               </div>
@@ -49,17 +50,20 @@
               <td class='text-progress text-center'><?php printf($lang->translate->progress, ($data->progress * 100) . '%');?></td>
               <td class='actions <?php echo common::checkEnLang() ? 'w-130px' : 'w-95px';?>'>
                 <?php
-                echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm'");
-                echo html::a(inlink('export', "language=$langKey"), $lang->export, '', "class='btn btn-sm iframe'");
+                echo html::a(inlink('chooseModule', "language=$langKey"), $lang->translate->common, '', "class='btn btn-sm $disabled'");
+                echo html::a(inlink('export', "language=$langKey"), $lang->export, '', "class='btn btn-sm iframe $disabled'");
                 ?>
               </td>
             </tr>
             <?php endforeach;?>
           </table>
         </div>
-        <p class='text-center'><?php echo html::a(inlink('addLang'), $lang->translate->addLang, '', "class='btn btn-primary'");?></p>
+        <p class='text-center'><?php echo html::a(inlink('addLang'), $lang->translate->addLang, '', "class='btn btn-primary $disabled'");?></p>
       </div>
     </div>
   </div>
+  <?php if(!$active):?>
+  <div class='alert alert-warning'><?php echo $this->lang->editor->onlyLocalVisit;?></div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
