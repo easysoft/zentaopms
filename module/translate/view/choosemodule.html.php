@@ -33,7 +33,7 @@
         <?php if($config->translate->needReview):?>
         <th class='w-90px'><?php echo $lang->translate->reviewedProgress;?></th>
         <?php endif;?>
-        <th class='<?php echo $app->getClientLang() == 'en' ? 'w-150px' : 'w-110px';?>'><?php echo $lang->actions;?></th>
+        <th class='<?php echo common::checkEnLang() ? 'w-150px' : 'w-110px';?>'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody class='text-center'>
@@ -75,8 +75,8 @@
         <?php endif;?>
         <td>
           <?php
-          if(common::hasPriv('translate', 'module')) echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), $lang->translate->common, '', "class='btn btn-sm btn-success'");
-          if(common::hasPriv('translate', 'review') and $config->translate->needReview) echo html::a($this->createLink('translate', 'review', "language=$language&module=$module"), $lang->translate->review, '', "class='btn btn-sm btn-info'");
+          if(common::hasPriv('translate', 'module')) echo html::a($this->createLink('translate', 'module', "language=$language&module=$module"), $lang->translate->common, '', "class='btn btn-sm btn-primary'");
+          if(common::hasPriv('translate', 'review') and $config->translate->needReview) echo html::a($this->createLink('translate', 'review', "language=$language&module=$module"), $lang->translate->review, '', "class='btn btn-sm btn-primary'");
           ?>
         </td>
       </tr>

@@ -64,7 +64,7 @@ $lang->testreport->moreNotice     = 'More features can be extended with referenc
 $lang->testreport->exportNotice   = "Exported By <a href='https://www.zentao.net' target='_blank' style='color:grey'>ZenTao</a>";
 $lang->testreport->noReport       = "No report has been generated. Please check it later.";
 $lang->testreport->foundBugTip    = "Bugs found in this build period and the affected build is in this test period.";
-$lang->testreport->legacyBugTip   = "Active bugs, or resolved bugs that are not in the test period.";
+$lang->testreport->legacyBugTip   = "Active bugs, or bugs that are not resolved in the test period.";
 $lang->testreport->fromCaseBugTip = "Bugs found from the running of cases in the test period.";
 $lang->testreport->errorTrunk     = "You cannot create a Testing report for the trunk. Please modify the linked build!";
 $lang->testreport->noTestTask     = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";

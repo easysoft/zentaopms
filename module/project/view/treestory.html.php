@@ -196,7 +196,7 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
-        <?php $class = $this->app->getClientLang() == 'en' ? 'w-120px' : 'w-100px';?>
+        <?php $class = common::checkEnLang() ? 'w-120px' : 'w-100px';?>
         <?php if($config->global->flow != 'onlyStory'):?>
         <?php if(!empty($fromBug)):?>
         <tr class='text-top'>

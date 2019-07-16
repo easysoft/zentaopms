@@ -902,7 +902,7 @@ class project extends control
         $chartData = $this->project->buildBurnData($projectID, $dateList, $type);
 
         /* Set a space when assemble the string for english. */
-        $space   = $this->app->getClientLang() == 'en' ? ' ' : '';
+        $space   = common::checkEnLang() ? ' ' : '';
         $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . $space . ($key + 1) . $space . $this->lang->day;
 

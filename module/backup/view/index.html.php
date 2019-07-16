@@ -36,7 +36,7 @@
         <th class='w-150px'><?php echo $lang->backup->time?></th>
         <th><?php echo $lang->backup->files?></th>
         <th class='w-150px'><?php echo $lang->backup->size?></th>
-        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-140px' : 'w-110px';?>
+        <?php $colWidth = common::checkEnLang() ? 'w-140px' : 'w-110px';?>
         <th class='<?php echo $colWidth;?>'><?php echo $lang->actions?></th>
       </tr>
     </thead>
@@ -52,7 +52,7 @@
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>><?php echo date(DT_DATETIME1, $backupFile->time);?></td>
         <?php endif;?>
         <td class='text-left' style='padding-left:5px;'><?php echo $file;?></td>
-        <td><?php echo $size / 1024 >= 1024 ? round($size / 1024 / 1024, 2) . 'MB' : round($size / 1024, 2) . 'KB';?></td>
+        <td><?php echo $size / 1024 / 1024 >= 1024 ? round($size / 1024 / 1024 / 1024, 2) . 'GB' : ($size / 1024 >= 1024 ? round($size / 1024 / 1024, 2) . 'MB' : round($size / 1024, 2) . 'KB');?></td>
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>>
           <?php

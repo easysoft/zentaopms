@@ -25,7 +25,7 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-150px' : 'w-80px';?>
+          <?php $colWidth = common::checkEnLang() ? 'w-150px' : 'w-80px';?>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->story->closedReason;?></th>
           <td class='w-p25-f'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
         </tr>

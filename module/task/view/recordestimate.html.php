@@ -24,7 +24,7 @@
 <?php $team = array_keys($task->team);?>
 <?php js::set('confirmRecord',    (!empty($team) && $task->assignedTo != end($team)) ? $lang->task->confirmTransfer : $lang->task->confirmRecord);?>
 <?php js::set('noticeSaveRecord', $lang->task->noticeSaveRecord);?>
-<?php $colWidth = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
+<?php $colWidth = common::checkEnLang() ? 'w-90px' : 'w-70px';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

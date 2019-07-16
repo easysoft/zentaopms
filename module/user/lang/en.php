@@ -86,7 +86,7 @@ $lang->user->profile     = 'Profile';
 $lang->user->project     = $lang->projectCommon . 's';
 $lang->user->task        = 'Tasks';
 $lang->user->bug         = 'Bugs';
-$lang->user->test        = 'QA';
+$lang->user->test        = 'Test';
 $lang->user->testTask    = 'Requests';
 $lang->user->testCase    = 'Cases';
 $lang->user->schedule    = 'Schedule';
@@ -102,7 +102,7 @@ $lang->user->closedBy    = 'ClosedBy%s';
 $lang->user->reviewedBy  = 'ReviewedBy%s';
 $lang->user->canceledBy  = 'CancelledBy%s';
 
-$lang->user->testTask2Him = 'AssignedTo%s';
+$lang->user->testTask2Him = 'RequestsAssignedTo%s';
 $lang->user->case2Him     = 'CaseAssignedTo%s';
 $lang->user->caseByHim    = 'CaseCreatedBy%s';
 
@@ -173,14 +173,14 @@ $lang->user->error->reserved      = "ID %s，account is reserved.";
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
 
-$lang->user->contactFieldList['skype']    = $lang->user->skype;
-$lang->user->contactFieldList['slack']    = $lang->user->slack;
-$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
-$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
 $lang->user->contactFieldList['qq']       = $lang->user->qq;
 $lang->user->contactFieldList['dingding'] = $lang->user->dingding;
 $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['slack']    = $lang->user->slack;
+$lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = 'Contacts';

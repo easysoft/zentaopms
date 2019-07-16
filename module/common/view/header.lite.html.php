@@ -36,7 +36,9 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
   }
   else
   {
-      css::import($defaultTheme . $this->cookie->lang . '.' . $this->cookie->theme . '.css');
+      $minCssFile = $defaultTheme . $this->cookie->lang . '.' . $this->cookie->theme . '.css';
+      if(!file_exists($this->app->getThemeRoot() . 'default/' . $this->cookie->lang . '.' . $this->cookie->theme . '.css')) $minCssFile = $defaultTheme . 'en.' . $this->cookie->theme . '.css';
+      css::import($minCssFile);
       js::import($jsRoot . 'all.js');
   }
   if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');

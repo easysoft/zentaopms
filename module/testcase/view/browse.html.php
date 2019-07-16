@@ -214,7 +214,7 @@ js::set('suiteID',        $suiteID);
           </div>
           <?php endif;?>
         </div>
-        <div class="table-statistic"><?php echo $summary;?></div>
+        <div class="text"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

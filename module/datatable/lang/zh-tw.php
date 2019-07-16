@@ -19,6 +19,7 @@ $lang->datatable->branch   = '分支';
 $lang->datatable->platform = '平台';
 
 $lang->datatable->showModule             = '列表頁是否顯示模組名';
+$lang->datatable->showModuleAB           = '列表頁是否顯示模組名';
 $lang->datatable->showModuleList[]       = '不顯示';
 $lang->datatable->showModuleList['base'] = '只顯示一級模組';
 $lang->datatable->showModuleList['end']  = '只顯示最後一級模組';

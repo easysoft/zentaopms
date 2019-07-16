@@ -125,6 +125,7 @@ $lang->project->team              = 'Members';
 $lang->project->doc               = 'Document';
 $lang->project->doclib            = 'Docoment Library';
 $lang->project->manageProducts    = 'Linked ' . $lang->productCommon . 's';
+$lang->project->linkStory         = 'Link Stories';
 $lang->project->linkStoryByPlan   = 'Link Stories By Plan';
 $lang->project->linkPlan          = 'Linked Plans';
 $lang->project->unlinkStoryTasks  = 'Unlink';
@@ -193,7 +194,7 @@ $lang->project->groups['closedBy']   = 'Group by ClosedBy';
 $lang->project->groups['type']       = 'Group by Type';
 
 $lang->project->groupFilter['story']['all']         = 'All';
-$lang->project->groupFilter['story']['linked']      = 'Tasks of linked story';
+$lang->project->groupFilter['story']['linked']      = 'Tasks linked to stories';
 $lang->project->groupFilter['pri']['all']           = 'All';
 $lang->project->groupFilter['pri']['noset']         = 'Not Set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';

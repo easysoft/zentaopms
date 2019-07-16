@@ -71,7 +71,7 @@
       <div class="btn-toolbar">
         <?php echo html::a(inlink('view', "releaseID=$release->id&type=story"), $lang->goback, '', "class='btn'");?>
       </div>
-      <div class='table-statistic'></div>
+      <div class='text'></div>
     </div>
   </form>
 </div>

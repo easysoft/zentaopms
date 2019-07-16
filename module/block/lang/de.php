@@ -60,6 +60,7 @@ $lang->block->closeForever       = 'Dauerhaft schließen';
 $lang->block->confirmClose       = 'Möchten Sie den Block dauerhaft schlißen? Nach der Ausführung ist der Block nicht mehr verfügbar. Er kann unter Admin->Custom aber wieder aktiviert werden.';
 $lang->block->remove             = 'Entfernen';
 $lang->block->refresh            = 'Aktualisieren';
+$lang->block->nbsp               = '';  
 $lang->block->hidden             = 'Verstecken';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
 

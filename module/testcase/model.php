@@ -1397,11 +1397,11 @@ class testcaseModel extends model
             case 'status':
                 if($case->needconfirm) 
                 {
-                    print("<span class='status-story status-changed' title='{$this->lang->testcase->fromTesttask}'>{$this->lang->story->changed}</span>");
+                    print("<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>");
                 }
                 elseif(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
                 {
-                    print("<span class='status-story status-changed' title='{$this->lang->testcase->fromCaselib}'>{$this->lang->testcase->changed}</span>");
+                    print("<span class='status-story status-changed' title='{$this->lang->testcase->changed}'>{$this->lang->testcase->changed}</span>");
                 }
                 else
                 {

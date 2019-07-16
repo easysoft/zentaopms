@@ -116,7 +116,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         ?>
       </ul>
     </div>
-    <?php if($app->getClientLang() != 'en'):?>
+    <?php if(!common::checkEnLang()):?>
     <?php
     common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
     if(commonModel::isTutorialMode())
@@ -208,9 +208,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           {
               if($value->show)
               {
-                  if($this->app->getClientLang() == 'en' and $value->id == 'severity')  $value->name = $lang->bug->severity;
-                  if($this->app->getClientLang() == 'en' and $value->id == 'pri')       $value->name = $lang->bug->pri;
-                  if($this->app->getClientLang() == 'en' and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
+                  if(common::checkEnLang() and $value->id == 'severity')  $value->name = $lang->bug->severity;
+                  if(common::checkEnLang() and $value->id == 'pri')       $value->name = $lang->bug->pri;
+                  if(common::checkEnLang() and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
                   $this->datatable->printHead($value, $orderBy, $vars);
                   $columns ++;
               }
@@ -379,7 +379,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           </div>
           <?php endif;?>
         </div>
-        <div class="table-statistic"><?php echo $summary;?></div>
+        <div class="text"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

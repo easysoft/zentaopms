@@ -91,8 +91,8 @@ $lang->team->days       = 'Arbeitstage';
 $lang->team->totalHours = 'Summe';
 
 $lang->team->limited            = 'Eingeschränkte Benutzer';
-$lang->team->limitedList['no']  = 'Nein';
 $lang->team->limitedList['yes'] = 'Ja';
+$lang->team->limitedList['no']  = 'Nein';
 
 $lang->project->basicInfo = 'Basis Info';
 $lang->project->otherInfo = 'Andere Info';
@@ -125,6 +125,7 @@ $lang->project->team              = 'Teammitglieder';
 $lang->project->doc               = 'Dok';
 $lang->project->doclib            = 'Dok Bibliothek';
 $lang->project->manageProducts    = 'Verküpfe ' . $lang->productCommon;
+$lang->project->linkStory         = 'Link Stories';
 $lang->project->linkStoryByPlan   = 'Verküpfe Story aus Plan';
 $lang->project->linkPlan          = 'Verküpfe Plan';
 $lang->project->unlinkStoryTasks  = 'Verknüpfung aufheben';

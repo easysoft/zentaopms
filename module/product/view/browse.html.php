@@ -84,7 +84,7 @@
         ?>
       </ul>
     </div>
-    <?php if($app->getClientLang() != 'en'):?>
+    <?php if(!common::checkEnLang()):?>
     <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
     <?php
     if(commonModel::isTutorialMode())
@@ -416,7 +416,7 @@ $(function()
                 checkedEstimate += data.estimate;
                 if(data.cases > 0) checkedCase += 1;
             });
-            var rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
+            var rate = Math.round(checkedCase / checkedTotal * 10000 / 100) + '' + '%';
             return checkedSummary.replace('%total%', checkedTotal)
                   .replace('%estimate%', checkedEstimate.toFixed(1))
                   .replace('%rate%', rate);

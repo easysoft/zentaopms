@@ -512,6 +512,19 @@ $lang->pager->locate       = "Go!";
 $lang->pager->previousPage = "Prev";
 $lang->pager->nextPage     = "Next";
 $lang->pager->summery      = "<strong>%s-%s</strong> of <strong>%s</strong>.";
+$lang->pager->pageOfText   = "Page {0}";
+$lang->pager->firstPage    = "First";
+$lang->pager->lastPage     = "Last";
+$lang->pager->goto         = "Goto";
+$lang->pager->pageOf       = "Page <strong>{page}</strong>";
+$lang->pager->totalPage    = "<strong>{totalPage}</strong> pages";
+$lang->pager->totalCount   = "Total: <strong>{recTotal}</strong> items";
+$lang->pager->pageSize     = "<strong>{recPerPage}</strong> per page";
+$lang->pager->itemsRange   = "From <strong>{start}</strong> to <strong>{end}</strong>";
+$lang->pager->pageOfTotal  = "Page <strong>{page}</strong> of <strong>{totalPage}</strong>";
+
+$lang->colorPicker = new stdclass();
+$lang->colorPicker->errorTip = 'Not a valid color value';
 
 $lang->proVersion     = "<a href='http://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>ZenTao Pro <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "Download Desktop Notification";

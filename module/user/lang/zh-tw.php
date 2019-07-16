@@ -17,7 +17,7 @@ $lang->user->account          = '用戶名';
 $lang->user->password         = '密碼';
 $lang->user->password2        = '請重複密碼';
 $lang->user->role             = '職位';
-$lang->user->group            = '分組';
+$lang->user->group            = '權限分組';
 $lang->user->realname         = '真實姓名';
 $lang->user->nickname         = '暱稱';
 $lang->user->commiter         = '原始碼帳號';
@@ -45,8 +45,12 @@ $lang->user->last             = '最後登錄';
 $lang->user->ranzhi           = '然之帳號';
 $lang->user->ditto            = '同上';
 $lang->user->originalPassword = '原密碼';
+$lang->user->newPassword      = '新密碼';
 $lang->user->verifyPassword   = '您的系統登錄密碼';
 $lang->user->resetPassword    = '忘記密碼';
+
+$lang->user->legendBasic        = '基本資料';
+$lang->user->legendContribution = '個人貢獻';
 
 $lang->user->index         = "用戶視圖首頁";
 $lang->user->view          = "用戶詳情";
@@ -90,17 +94,17 @@ $lang->user->todo        = '待辦';
 $lang->user->story       = '需求';
 $lang->user->dynamic     = '動態';
 
-$lang->user->openedBy    = '由他創建';
-$lang->user->assignedTo  = '指派給他';
-$lang->user->finishedBy  = '由他完成';
-$lang->user->resolvedBy  = '由他解決';
-$lang->user->closedBy    = '由他關閉';
-$lang->user->reviewedBy  = '由他評審';
-$lang->user->canceledBy  = '由他取消';
+$lang->user->openedBy    = '由%s創建';
+$lang->user->assignedTo  = '指派給%s';
+$lang->user->finishedBy  = '由%s完成';
+$lang->user->resolvedBy  = '由%s解決';
+$lang->user->closedBy    = '由%s關閉';
+$lang->user->reviewedBy  = '由%s評審';
+$lang->user->canceledBy  = '由%s取消';
 
-$lang->user->testTask2Him = '負責版本';
-$lang->user->case2Him     = '給他的用例';
-$lang->user->caseByHim    = '他建的用例';
+$lang->user->testTask2Him = '%s負責的版本';
+$lang->user->case2Him     = '給%s的用例';
+$lang->user->caseByHim    = '%s建的用例';
 
 $lang->user->errorDeny    = "抱歉，您無權訪問『<b>%s</b>』模組的『<b>%s</b>』功能。請聯繫管理員獲取權限。點擊後退返回上頁。";
 $lang->user->loginFailed  = "登錄失敗，請檢查您的用戶名或密碼是否填寫正確。";
@@ -122,12 +126,21 @@ $lang->user->roleList['others'] = '其他';
 $lang->user->genderList['m'] = '男';
 $lang->user->genderList['f'] = '女';
 
+$lang->user->thirdPerson['m'] = '他';
+$lang->user->thirdPerson['f'] = '她';
+
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>弱</span>";
 $lang->user->passwordStrengthList[1] = "<span style='color:#000'>中</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>強</span>";
 
 $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
+
+$lang->user->personalData['createdTodo']  = '創建的待辦數';
+$lang->user->personalData['createdStory'] = '創建的需求數';
+$lang->user->personalData['finishedTask'] = '完成的任務數';
+$lang->user->personalData['resolvedBug']  = '解決的Bug數';
+$lang->user->personalData['createdCase']  = '創建的用例數';
 
 $lang->user->keepLogin['on']      = '保持登錄';
 $lang->user->loginWithDemoUser    = '使用demo帳號登錄：';
@@ -160,14 +173,14 @@ $lang->user->error->reserved      = "【ID %s】的用戶名已被系統預留";
 $lang->user->error->verifyPassword   = "驗證失敗，請檢查您的系統登錄密碼是否正確";
 $lang->user->error->originalPassword = "原密碼不正確";
 
-$lang->user->contactFieldList['skype']    = $lang->user->skype;
+$lang->user->contactFieldList['phone']    = $lang->user->phone;
+$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
 $lang->user->contactFieldList['qq']       = $lang->user->qq;
 $lang->user->contactFieldList['dingding'] = $lang->user->dingding;
 $lang->user->contactFieldList['weixin']   = $lang->user->weixin;
-$lang->user->contactFieldList['mobile']   = $lang->user->mobile;
+$lang->user->contactFieldList['skype']    = $lang->user->skype;
 $lang->user->contactFieldList['slack']    = $lang->user->slack;
 $lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
-$lang->user->contactFieldList['phone']    = $lang->user->phone;
 
 $lang->user->contacts = new stdclass();
 $lang->user->contacts->common   = '聯繫人';

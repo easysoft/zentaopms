@@ -510,6 +510,7 @@ class testtaskModel extends model
 
         if(!$datas) return array();
 
+        $this->app->loadLang('testcase');
         foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
 
         return $datas;

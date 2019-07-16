@@ -389,6 +389,13 @@ class upgradeModel extends model
                 }
                 $this->updateXX_11_5();
             }
+        case '11_5':
+            $this->saveLogs('Execute 11_5');
+            $this->execSQL($this->getUpgradeFile('11.5'));
+        case '11_5_1':
+        case '11_5_2':
+            $this->saveLogs('Execute 11_5_2');
+            $this->execSQL($this->getUpgradeFile('11.5.2'));
         }
 
         $this->deletePatch();
@@ -530,6 +537,9 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.0.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '11_5'   : $confirmContent .= file_get_contents($this->getUpgradeFile('11.5'));
+            case '11_5_1' :
+            case '11_5_2' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.5.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
