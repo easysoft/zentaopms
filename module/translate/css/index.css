@@ -1,4 +1,5 @@
 #mainMenu{font-size:14px;padding:5px 0px; line-height: 25px;}
+.row{margin-bottom:10px;}
 .panel{margin-bottom:0px; border:0px;}
 .panel .panel-heading{border-bottom:1px solid #ddd;}
 .panel .panel-body{padding-bottom:5px;}
