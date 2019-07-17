@@ -147,7 +147,7 @@ class editor extends control
         $statusFile = $this->loadModel('upgrade')->checkSafeFile();
         if($statusFile)
         {
-            die(js::alert(sprintf($this->lang->editor->noticeOkFile, $statusFile)));
+            die(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
         }
         if($filePath and $_POST)
         {

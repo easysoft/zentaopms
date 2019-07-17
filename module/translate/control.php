@@ -175,7 +175,7 @@ class translate extends control
             if($statusFile)
             {
                 $this->app->loadLang('editor');
-                $this->send(array('result' => 'fail', 'callback' => 'bootAlert("' . str_replace('\n', '<br />', sprintf($this->lang->editor->noticeOkFile, $statusFile) . '")')));
+                $this->send(array('result' => 'fail', 'callback' => 'bootAlert("' . str_replace('\n', '<br />', sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile)) . '")')));
             }
 
             $this->translate->addTranslation($language, $module, $referLang);

@@ -36,7 +36,7 @@ $lang->editor->editFileError = 'Sie können nur ZenTao Dateien verändern!';
 $lang->editor->notWritable    = "Nicht beschreibbar. Berechtigung erforderlich. Bitte versuchen Sie chmod 777 -R ";
 $lang->editor->notDelete      = 'Kann nicht gelöscht werden. Bitte prüfen Sie Ihre Berechtigungen!';
 $lang->editor->emptyFileName  = 'Bitte geben Sie einen Dateinamen an!';
-$lang->editor->onlyLocalVisit = "This feature only works when the IP is 127.0.0.1. <a href='https://api.zentao.pm/goto.php?item=howtodevelop&from=en' target='_blank'>Document</a>";
+$lang->editor->onlyLocalVisit = "This feature only works when the IP is 127.0.0.1. <a href='https://api.zentao.pm/goto.php?item=howtodevelop&from=en' target='_blank'>Help</a>";
 
 $lang->editor->translate['config.php']  = 'config';
 $lang->editor->translate['control.php'] = 'control';
