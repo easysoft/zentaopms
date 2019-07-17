@@ -210,7 +210,7 @@ class translateModel extends model
      * @access public
      * @return void
      */
-    public function checkDirPriv($moduleName = '')
+    public function checkDirPriv($moduleName = '', $language = '')
     {
         $cmd        = '';
         $moduleRoot = $this->app->getModuleRoot();
@@ -219,6 +219,7 @@ class translateModel extends model
         {
             if(is_dir($modulePath . '/lang') and !is_writable($modulePath . '/lang')) $cmd .= "chmod 777 {$modulePath}/lang <br />";
             if(is_dir($modulePath . '/ext/lang') and !is_writable($modulePath . '/ext/lang')) $cmd .= "chmod -R 777 {$modulePath}/ext/lang <br />";
+            if($language and file_exists($modulePath . "/lang/{$language}.php") and !is_writable($modulePath . "/lang/{$language}.php")) $cmd .= "chmod 777 {$modulePath}/lang/{$language}.php <br />";
         }
         return $cmd;
     }

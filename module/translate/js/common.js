@@ -1,6 +1,6 @@
 function adjustKeyWidth()
 {
-    var maxWidth = 0;
+    var maxWidth = 30;
     $('.table-data tbody tr').each(function()
     {
         keyWidth = $(this).find('td').eq(1).find('nobr').width();

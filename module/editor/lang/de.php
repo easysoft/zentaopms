@@ -30,13 +30,13 @@ $lang->editor->deleteConfirm = 'Möchten Sie das löschen?';
 $lang->editor->extendConfirm = 'Möchten Sie den Originalcode verwenden?';
 $lang->editor->repeatFile    = 'Datei existiert bereits';
 $lang->editor->repeatPage    = 'Seite existiert bereits. Möchten Sie die Seite überschreiben?';
-$lang->editor->noticeOkFile  = 'Aus Sicherheitsgründen muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %sFile.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
+$lang->editor->noticeOkFile  = 'Aus Sicherheitsgründen muss Ihr Adminkonto bestätigt werden. \n Bitte melden Sie sich an und erstellen Sie die Datei %s File.\n Hinweis:\n 1. Die Datei ist leer.\n 2. Wenn die Datei bereits existiert, löschen Sie sie und erstellen Sie eine neue Datei.';
 $lang->editor->editFileError = 'Sie können nur ZenTao Dateien verändern!';
 
 $lang->editor->notWritable    = "Nicht beschreibbar. Berechtigung erforderlich. Bitte versuchen Sie chmod 777 -R ";
 $lang->editor->notDelete      = 'Kann nicht gelöscht werden. Bitte prüfen Sie Ihre Berechtigungen!';
 $lang->editor->emptyFileName  = 'Bitte geben Sie einen Dateinamen an!';
-$lang->editor->onlyLocalVisit = 'This feature only works when the IP is 127.0.0.1.';
+$lang->editor->onlyLocalVisit = "This feature only works when the IP is 127.0.0.1. <a href='https://api.zentao.pm/goto.php?item=howtodevelop&from=en' target='_blank'>Document</a>";
 
 $lang->editor->translate['config.php']  = 'config';
 $lang->editor->translate['control.php'] = 'control';

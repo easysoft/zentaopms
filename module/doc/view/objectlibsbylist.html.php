@@ -18,7 +18,7 @@
           <tr>
             <th class="c-name"><?php echo $lang->doc->libName;?></th>
             <th class="c-num"><?php echo $lang->doc->num;?></th>
-            <th class="w-120px"><?php echo $lang->actions;?></th>
+            <th class="w-90px text-center"><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>

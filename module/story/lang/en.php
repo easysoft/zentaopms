@@ -110,7 +110,7 @@ $lang->story->total          = "Total Stories";
 $lang->story->allStories     = 'All Stories';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
-$lang->story->released       = 'Released Linked Stories';
+$lang->story->released       = 'Released Stories';
 
 $lang->story->ditto       = 'Ditto';
 $lang->story->dittoNotice = 'This story is not linked to the same product as the last one is!';

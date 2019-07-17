@@ -285,7 +285,7 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLife'>
-            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-100px' : 'w-70px';?>
+            <?php $widthClass = common::checkEnLang() ? 'w-100px' : 'w-70px';?>
             <table class='table table-data'>
               <tr>
                 <th class='<?php echo $widthClass;?>'><?php echo $lang->task->openedBy;?></th>
@@ -341,7 +341,7 @@
         <summary class="detail-title"><?php echo $lang->task->legendEffort;?></summary>
         <div class="detail-content">
           <table class='table table-data'>
-            <?php $widthClass = $app->getClientLang() == 'en' ? 'w-90px' : 'w-70px';?>
+            <?php $widthClass = common::checkEnLang() ? 'w-90px' : 'w-70px';?>
             <tr>
               <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estimate;?></th>
               <td><?php echo $task->estimate . $lang->workingHour;?></td>

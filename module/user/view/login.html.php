@@ -27,7 +27,7 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
       </header>
       <div class="table-row">
         <div class="col-4 text-center" id='logo-box'>
-        <img src="<?php echo $config->webRoot . 'theme/default/images/main/' . ($app->getClientLang() != 'en' ? 'zt-logo.png' : 'zt-logo-en.png');?>" alt="">
+        <img src="<?php echo $config->webRoot . 'theme/default/images/main/' . (common::checkEnLang() ? 'zt-logo.png' : 'zt-logo-en.png');?>" alt="">
         </div>
         <div class="col-8">
           <form method='post' target='hiddenwin'>

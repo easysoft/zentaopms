@@ -67,6 +67,7 @@ zentaoxx:
 	cp -r xuan/xxb/module/common/view/footer.modal.html.php zentaoxx/module/common/view
 	mkdir -p zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/markedjs zentaoxx/www/js/
+	cp -r xuan/xxb/www/x.php zentaoxx/www/
 	mkdir zentaoxx/module/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
 	cp -r xuanxuan/config/* zentaoxx/config/

@@ -28,7 +28,7 @@ $lang->translate->status      = '状态';
 $lang->translate->refreshPage = '刷新';
 $lang->translate->reason      = '拒绝原因';
 
-$lang->translate->reviewTurnon = '评审流程';
+$lang->translate->reviewTurnon = '审校流程';
 $lang->translate->reviewTurnonList['1'] = '开启';
 $lang->translate->reviewTurnonList['0'] = '关闭';
 
@@ -54,7 +54,7 @@ $lang->translate->allItems        = '所有的语言条目数：%s条';
 
 $lang->translate->statusList['waiting']    = '未翻译';
 $lang->translate->statusList['translated'] = '已翻译';
-$lang->translate->statusList['reviewed']   = '已评审';
+$lang->translate->statusList['reviewed']   = '已审校';
 $lang->translate->statusList['rejected']   = '已拒绝';
 $lang->translate->statusList['changed']    = '已改变';
 

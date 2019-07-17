@@ -131,7 +131,7 @@ js::set('browseType', $browseType);
     $checkObject = new stdclass();
     $checkObject->project = $projectID;
     ?>
-    <?php if($app->getClientLang() != 'en'):?>
+    <?php if(!common::checkEnLang()):?>
     <?php
     $link = $this->createLink('task', 'batchCreate', "project=$projectID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
     if(common::hasPriv('task', 'batchCreate', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->batchCreate}", '', "class='btn btn btn-secondary'");

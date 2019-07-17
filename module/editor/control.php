@@ -15,8 +15,9 @@ class editor extends control
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        $remoteIP = helper::getRemoteIp();
-        if($remoteIP != '127.0.0.1') die($this->display('editor', 'deny'));
+        $this->active = helper::getRemoteIp() == '127.0.0.1';
+        $methodName   = $this->app->getMethodName();
+        if(!$this->active and $methodName != 'index' and $methodName != 'extend') die($this->display('editor', 'deny'));
     }
 
     /**

@@ -10136,7 +10136,7 @@ KindEditor.plugin('pasteimage', function(K) {
         if (typeof options === 'string') {
             options = {postUrl: options};
         }
-        var lang = $.extend({}, allLangs[($.clientLang || $.zui.clientLang)()], options.lang);
+        var lang = $.extend({}, allLangs.en, allLangs[($.clientLang || $.zui.clientLang)()], options.lang);
 
         if(!K.WEBKIT && !K.GECKO)
         {
@@ -10401,7 +10401,7 @@ KindEditor.plugin('table', function (K) {
         }
     };
     var $elements = [];
-    var lang = $.extend({}, self.lang('table.'), allLangs[($.clientLang || $.zui.clientLang)()]);
+    var lang = $.extend({}, allLangs.en, self.lang('table.'), allLangs[($.clientLang || $.zui.clientLang)()]);
     var defaultTableBorderColor = self.options.tableBorderColor || '#ddd';
 
     self.tableIdIndex = 0;
