@@ -27,7 +27,7 @@ class translate extends control
         if($remoteIP != '127.0.0.1')
         {
             $this->app->loadLang('editor');
-            die($this->display('translate', 'deny'));
+//            die($this->display('translate', 'deny'));
         }
     }
 
