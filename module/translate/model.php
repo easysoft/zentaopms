@@ -537,6 +537,7 @@ class translateModel extends model
                             $parts    = explode('.', $value);
                             $value    = '';
                             $isJoin   = false;
+                            $prePart  = '';
                             $preFirst = '';
                             $preLast  = '';
                             foreach($parts as $part)
@@ -544,6 +545,7 @@ class translateModel extends model
                                 $part = trim($part);
                                 if(empty($part)) continue;
 
+                                $processed   = str_replace(array('\\"', '\\\''), '', $part);
                                 $firstLetter = $part{0};
                                 $lastLetter  = $part{strlen($part) - 1};
                                 /* Item like "a" or 'b'. */
@@ -559,6 +561,10 @@ class translateModel extends model
                                     if($lastLetter == ')') $part = "'$part'";
                                     $value  = empty($value) ? $part : $value . " . $part";
                                 }
+                                elseif(empty($prePart))
+                                {
+                                    $value = $part;
+                                }
                                 /* Item like <a href="www.baidu.com"> or $test . exec(). */
                                 elseif(($preLast and strpos('\'|"', $preLast) === false or $preFirst == '$') and strpos('\'|"', $firstLetter) === false)
                                 {
@@ -570,6 +576,30 @@ class translateModel extends model
                                     else
                                     {
                                         $value .= '.' . $part;
+                                    }
+                                }
+                                /* Item like '"a".<br/>'. */
+                                elseif($prePart and strpos($prePart, '"') !== false and substr_count($prePart, '"') % 2 != 0)
+                                {
+                                    if(strpos($processed, '"') === false or (strpos($processed, '"') !== false and substr_count($processed, '"') % 2 != 0))
+                                    {
+                                        $value .= '.' . $part;
+                                    }
+                                    else
+                                    {
+                                        $value .= " . '" . addslashes($part) . "'";
+                                    }
+                                }
+                                /* Item like "'a'.<br/>". */
+                                elseif($prePart and strpos($prePart, "'") !== false and substr_count($prePart, "'") % 2 != 0)
+                                {
+                                    if(strpos($processed, "'") === false or (strpos($processed, "'") !== false and substr_count($processed, "'") % 2 != 0))
+                                    {
+                                        $value .= '.' . $part;
+                                    }
+                                    else
+                                    {
+                                        $value .= " . '" . addslashes($part) . "'";
                                     }
                                 }
                                 /* Item like "aaa" . exec() or $test . exec(). */
@@ -593,6 +623,7 @@ class translateModel extends model
                                     $value = empty($value) ? $part : $value . ".$part";
                                 }
 
+                                $prePart .= str_replace(array('\\"', '\\\''), '', $part);
                                 $preFirst = $firstLetter;
                                 $preLast  = $lastLetter;
                             }
