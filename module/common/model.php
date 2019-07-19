@@ -1720,6 +1720,19 @@ EOD;
     }
 
     /**
+     * Check English Lang. 
+     * 
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkEnLang()
+    {
+        global $app;
+        return strpos('|zh-cn|zh-tw|', '|' . $app->getClientLang() . '|') === false;
+    }
+
+    /**
      * Response.
      *
      * @param  string $code
