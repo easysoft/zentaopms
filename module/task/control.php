@@ -127,7 +127,7 @@ class task extends control
             /* If link from no head then reload*/
             if(isonlybody())
             {
-                if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+                if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             }
 
@@ -137,7 +137,7 @@ class task extends control
                 $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             /* Locate the browser. */
             if($this->app->getViewType() == 'xhtml')
@@ -321,7 +321,7 @@ class task extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if($task->fromBug != 0)
             {
@@ -485,7 +485,7 @@ class task extends control
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -636,7 +636,7 @@ class task extends control
         $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
         $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
 
-        if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+        if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
         die(js::reload('parent'));
     }
@@ -668,7 +668,7 @@ class task extends control
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $task);
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if($changes and $this->task->needUpdateBugStatus($task))
             {
@@ -820,7 +820,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $task);
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if($this->task->needUpdateBugStatus($task))
             {
@@ -899,7 +899,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -936,7 +936,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -971,7 +971,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1096,7 +1096,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -1132,7 +1132,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $this->task->getById($taskID));
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -1176,7 +1176,7 @@ class task extends control
                 }
             }
 
-            if(isset($this->config->bizVersion)) $this->loadModel('workflowResult')->execute($this->moduleName, $this->methodName, $task);
+            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $taskID);
 
             die(js::locate($this->session->taskList, 'parent'));
         }
