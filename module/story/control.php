@@ -113,7 +113,7 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             if($this->post->newStory)
             {
@@ -436,7 +436,7 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
@@ -622,7 +622,7 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
@@ -657,7 +657,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -750,7 +750,7 @@ class story extends control
         {
             $this->story->delete(TABLE_STORY, $storyID);
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             die(js::locate($this->session->storyList, 'parent'));
         }
@@ -776,7 +776,7 @@ class story extends control
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
@@ -847,7 +847,7 @@ class story extends control
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1076,7 +1076,7 @@ class story extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $storyID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $storyID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));

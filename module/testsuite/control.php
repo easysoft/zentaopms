@@ -89,7 +89,7 @@ class testsuite extends control
             }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $suiteID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $suiteID);
 
             $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
             $response['message'] = $this->lang->testsuite->successSaved;
@@ -188,7 +188,7 @@ class testsuite extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $suiteID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $suiteID);
 
             $method = $suite->type == 'library' ? 'libView' : 'view';
             $response['locate']  = inlink($method, "suiteID=$suiteID");
@@ -250,7 +250,7 @@ class testsuite extends control
 
             $this->testsuite->delete($suiteID);
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $suiteID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $suiteID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)

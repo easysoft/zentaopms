@@ -238,7 +238,7 @@ class testcase extends control
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $caseID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $caseID);
 
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
@@ -567,7 +567,7 @@ class testcase extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $caseID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $caseID);
 
             die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
         }
@@ -779,7 +779,7 @@ class testcase extends control
             $result = $this->post->result;
             $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $caseID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $caseID);
 
             die(js::reload('parent.parent'));
         }
@@ -825,7 +825,7 @@ class testcase extends control
         {
             $this->testcase->delete(TABLE_CASE, $caseID);
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $caseID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $caseID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)

@@ -196,14 +196,14 @@ class control extends baseControl
     }
 
     /**
-     * Execute extension.
+     * Execute hooks of a method.
      *
      * @param  string $methodName
      * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function executeExtension($methodName, $objectID)
+    public function executeHooks($methodName, $objectID)
     {
         $flowFile   = $this->app->getModuleRoot() . 'workflow/model.php';
         $actionFile = $this->app->getModuleRoot() . 'workflowaction/model.php';

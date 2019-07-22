@@ -210,7 +210,7 @@ class product extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $productID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $productID);
 
             $locate = $this->createLink($this->moduleName, 'browse', "productID=$productID");
             if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest') $locate = $this->createLink($this->moduleName, 'build', "productID=$productID");
@@ -260,7 +260,7 @@ class product extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $productID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $productID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "product=$productID")));
         }
 
@@ -360,7 +360,7 @@ class product extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $productID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $productID);
 
             die(js::reload('parent.parent'));
         }
@@ -428,7 +428,7 @@ class product extends control
             $this->product->delete(TABLE_PRODUCT, $productID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
             $this->session->set('product', '');     // 清除session。
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $productID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $productID);
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
     }

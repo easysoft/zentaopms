@@ -1055,7 +1055,7 @@ class project extends control
 
             $this->loadModel('action')->create('project', $projectID, 'opened', '', join(',', $_POST['products']));
 
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
 
             $planID = reset($_POST['plans']);
             if(!empty($planID))
@@ -1124,7 +1124,7 @@ class project extends control
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "projectID=$projectID")));
         }
 
@@ -1252,7 +1252,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1287,7 +1287,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Delayed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1322,7 +1322,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1357,7 +1357,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1399,7 +1399,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1708,7 +1708,7 @@ class project extends control
             $this->project->delete(TABLE_PROJECT, $projectID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->session->set('project', '');
-            if(isset($this->config->bizVersion)) $this->executeExtension($this->methodName, $projectID);
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $projectID);
             die(js::locate(inlink('index'), 'parent'));
         }
     }
