@@ -2420,10 +2420,11 @@ class taskModel extends model
         $tasks = $this->dao->select('id, DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->having('date != "0000-00-00"')
+            ->orderBy('date asc')
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->having('date != "0000-00-00"')->fetchAll('id');
+        $children = $this->dao->select('id,parent,DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->having('date != "0000-00-00"')->orderBy('date asc')->fetchAll('id');
         $datas    = $this->processData4Report($tasks, $children, 'date');
         return $datas;
     }
@@ -2472,8 +2473,7 @@ class taskModel extends model
             if(!isset($fields[$task->$field])) $fields[$task->$field] = 0;
             $fields[$task->$field] ++;
         }
-
-        arsort($fields);
+        asort($fields);
         foreach($fields as $field => $count)
         {
             $data = new stdclass();
@@ -2611,7 +2611,7 @@ class taskModel extends model
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $task->pri . "' title='" . zget($this->lang->task->priList, $task->pri, $task->pri) . "'>";
-                echo zget($this->lang->task->priList, $task->pri, $task->pri);
+  周期待办测试2周期待办测试2              echo zget($this->lang->task->priList, $task->pri, $task->pri);
                 echo "</span>";
                 break;
             case 'name':

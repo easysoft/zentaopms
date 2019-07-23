@@ -535,7 +535,7 @@ class todoModel extends model
 
                 $this->dao->insert(TABLE_TODO)->data($newTodo)->exec();
                 $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
-
+                if($today>$begin) continue;
                 $lastCycleList[$todoID] = $newTodo;
             }
         }
