@@ -456,7 +456,7 @@
                   </td>
                 </tr>
                 <?php endif;?>
-                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $plan, 'table', "columns=1");?>
+                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $plan, 'table', "position=all&columns=1");?>
                 <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>
