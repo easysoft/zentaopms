@@ -462,7 +462,6 @@ class todoModel extends model
      */
     public function createByCycle($todoList)
     {
-        a($todoList);
         $this->loadModel('action');
         $today = helper::today();
         $now   = helper::now();
