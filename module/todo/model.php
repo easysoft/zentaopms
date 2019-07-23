@@ -462,6 +462,7 @@ class todoModel extends model
      */
     public function createByCycle($todoList)
     {
+        a($todoList);
         $this->loadModel('action');
         $today = helper::today();
         $now   = helper::now();
@@ -490,13 +491,13 @@ class todoModel extends model
             $newTodo->assignedBy = $todo->assignedBy;
             if($todo->assignedTo) $newTodo->assignedDate = $now;
 
-            $date   = '';
             $start  = strtotime($begin);
             $finish = strtotime("$today +{$beforeDays} days");
             foreach(range($start, $finish, 86400) as $today)
             {
                 $today     = date('Y-m-d', $today);
                 $lastCycle = zget($lastCycleList, $todoID, '');
+                $date      = '';
 
                 if($todo->config->type == 'day')
                 {
@@ -535,7 +536,6 @@ class todoModel extends model
 
                 $this->dao->insert(TABLE_TODO)->data($newTodo)->exec();
                 $this->action->create('todo', $this->dao->lastInsertID(), 'opened', '', '', $newTodo->account);
-                if($today>$begin) continue;
                 $lastCycleList[$todoID] = $newTodo;
             }
         }
