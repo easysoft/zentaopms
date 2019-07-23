@@ -502,6 +502,12 @@ class file extends control
         $mime = in_array($file->extension, $this->config->file->imageExtensions) ? "image/{$file->extension}" : $this->config->file->mimes['default'];
         header("Content-type: $mime");
 
+        $cacheMaxAge = $this->config->cookieLife - time();
+        header("Cache-Control: private");
+        header("Pragma: cache");
+        header("Expires:" . gmdate("D, d M Y H:i:s", $this->config->cookieLife) . " GMT");
+        header("Cache-Control: max-age=$cacheMaxAge");
+
         $handle = fopen($file->realPath, "r");
         if($handle)
         {
