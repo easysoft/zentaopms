@@ -48,7 +48,12 @@
                 $methodName = 'libview';
                 $module     = 'testsuite';
             }
-            if(strpos(',doclib,module,webhook,', ",{$module},") !== false)
+            if(isset($config->action->customFlows[$action->objectType]))
+            {
+                $flow   = $config->action->customFlows[$action->objectType];
+                $module = $flow->module;
+            }
+            if(strpos(',doclib,module,webhook,workflowdatasource,workflowfield,workflowlabel,workflowlayout,workflowrule,', ",{$module},") !== false)
             {
                 echo $action->objectName;
             }
