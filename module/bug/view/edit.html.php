@@ -299,7 +299,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               </tbody>
             </table>
           </div>
-          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', 'position=right&divCell=false');?>
+          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $bug, 'div', 'position=right&divCell=false');?>
         </div>
       </div>
     </div>
