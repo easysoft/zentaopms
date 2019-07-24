@@ -606,6 +606,8 @@ class task extends control
         $project = $this->project->getById($task->project);
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
+        $this->executeHooks($this->methodName, $taskID);
+
         $title      = "TASK#$task->id $task->name / $project->name";
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
         $position[] = $this->lang->task->common;

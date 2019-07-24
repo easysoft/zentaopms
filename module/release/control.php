@@ -162,6 +162,8 @@ class release extends control
         $this->commonAction($release->product);
         $product = $this->product->getById($release->product);
 
+        $this->executeHooks($this->methodName, $releaseID);
+
         $this->view->title         = "RELEASE #$release->id $release->name/" . $product->name;
         $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;

@@ -705,6 +705,8 @@ class story extends control
             if($project->status == 'done') $from = '';
         }
 
+        $this->executeHooks($this->methodName, $storyID);
+
         $title      = "STORY #$story->id $story->title - $product->name";
         $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $position[] = $this->lang->story->common;

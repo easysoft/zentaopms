@@ -394,6 +394,8 @@ class product extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
+        $this->executeHooks($this->methodName, $productID);
+
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
         $this->view->position[] = $this->lang->product->view;

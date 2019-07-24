@@ -554,6 +554,8 @@ class bug extends control
         $productName = $this->products[$productID];
         $branches    = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
+        $this->executeHooks($this->methodName, $bugID);
+
         /* Header and positon. */
         $this->view->title      = "BUG #$bug->id $bug->title - " . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);

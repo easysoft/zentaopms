@@ -1441,6 +1441,8 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
+        $this->executeHooks($this->methodName, $projectID);
+
         $this->view->title      = $this->lang->project->view;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->view->title;
