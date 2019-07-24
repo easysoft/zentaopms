@@ -230,6 +230,8 @@ class build extends control
             $this->view->type          = $type;
         }
 
+        $this->executeHooks($this->methodName, $buildID);
+
         /* Assign. */
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;

@@ -516,6 +516,8 @@ class testcase extends control
             ->fetch('count');
         $case->caseFails = $caseFails;
 
+        $this->executeHooks($this->methodName, $caseID);
+
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;
 

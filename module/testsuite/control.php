@@ -142,6 +142,8 @@ class testsuite extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $this->executeHooks($this->methodName, $suiteID);
+
         $this->view->title      = "SUITE #$suite->id $suite->name/" . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testsuite->common;

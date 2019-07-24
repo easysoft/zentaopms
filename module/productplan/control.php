@@ -276,6 +276,8 @@ class productplan extends control
             $orderBy = str_replace('id', 'order', $orderBy);
         }
 
+        $this->executeHooks($this->methodName, $planID);
+
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
