@@ -319,15 +319,17 @@ class router extends baseRouter
      */
     public function setFlowURI($moduleName, $methodName)
     {
-        $this->rawURI = $this->URI;
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         if($this->config->requestType != 'GET')
         {
             $params = explode($this->config->requestFix, $this->URI);
+
             /* Remove module and method. */
             $params = array_slice($params, 2);
+
             /* Prepend other params. */
+            if($methodName == 'operate') array_unshift($params, $this->workflowMethod);
             array_unshift($params, $this->workflowModule);
             array_unshift($params, $methodName);
             array_unshift($params, $moduleName);
@@ -404,7 +406,7 @@ class router extends baseRouter
             $passedParams = array_reverse($passedParams);
             if(!in_array($this->workflowMethod, $this->config->workflowaction->default->actions))
             {
-                $passedParams['method'] = $this->workflowMethod;
+                $passedParams['action'] = $this->workflowMethod;
             }
             $passedParams['module'] = $this->workflowModule;
 
