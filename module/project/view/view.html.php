@@ -140,6 +140,7 @@
             </div>
           </div>
         </div>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $project, 'div', "position=left&divCell=false");?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
           <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
@@ -160,6 +161,9 @@
               common::printIcon('project', 'putoff',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
               common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
               common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+
+              $flow = $this->loadModel('workflow')->getByModule('project');
+              echo $this->loadModel('flow')->buildOperateMenu($flow, $project, 'view');
 
               echo "<div class='divider'></div>";
               common::printIcon('project', 'edit', $params, $project);
@@ -278,7 +282,6 @@
                 </table>
               </div>
             </div>
-
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
               <div class="detail-content">
@@ -293,6 +296,7 @@
                 <?php endif;?>
               </div>
             </div>
+            <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $project, 'div', "position=right&divCell=false");?>
           </div>
         </div>
       </div>

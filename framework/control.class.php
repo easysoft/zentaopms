@@ -50,9 +50,9 @@ class control extends baseControl
 
         /**
          * 如果没有model文件，尝试加载config配置信息。
-         * If no model file, try load config. 
+         * If no model file, try load config.
          */
-        if(!helper::import($modelFile)) 
+        if(!helper::import($modelFile))
         {
             $this->app->loadModuleConfig($moduleName, $appName);
             $this->app->loadLang($moduleName, $appName);
@@ -193,5 +193,26 @@ class control extends baseControl
          * At the end, chang the dir to the previous.
          */
         chdir($currentPWD);
+    }
+
+    /**
+     * Execute hooks of a method.
+     *
+     * @param  string $methodName
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function executeHooks($methodName, $objectID)
+    {
+        $flowFile   = $this->app->getModuleRoot() . 'workflow/model.php';
+        $actionFile = $this->app->getModuleRoot() . 'workflowaction/model.php';
+        $hookFile   = $this->app->getModuleRoot() . 'workflowhook/model.php';
+        if(is_file($flowFile) && is_file($actionFile) && is_file($hookFile))
+        {
+            $flow   = $this->loadModel('workflow')->getByModule($this->moduleName);
+            $action = $this->loadModel('workflowaction')->getByModuleAndAction($this->moduleName, $this->methodName);
+            if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
+        }
     }
 }

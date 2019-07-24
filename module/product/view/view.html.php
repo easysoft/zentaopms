@@ -75,6 +75,7 @@
           </div>
         </div>
       </div>
+      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $product, 'div', "position=left&divCell=false");?>
       <div class="col-sm-12">
         <?php $blockHistory = true;?>
         <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=product&objectID=$product->id");?>
@@ -89,7 +90,11 @@
         common::printBack($browseLink);
         if(!$product->deleted)
         {
+            $flow = $this->loadModel('workflow')->getByModule('product');
+            echo $this->loadModel('flow')->buildOperateMenu($flow, $product, 'view');
+
             echo "<div class='divider'></div>";
+
             if($product->status != 'closed')
             {
                 common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
@@ -232,6 +237,7 @@
             </div>
           </div>
           <?php endif;?>
+          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $product, 'div', "position=right&divCell=false");?>
         </div>
       </div>
     </div>

@@ -19,7 +19,6 @@ $(document).ready(function()
         var $tbody = $(this);
         $tbody.sortable(
         {
-            reverse: true,
             selector: 'tr',
             dragCssClass: 'drag-row',
             trigger: $tbody.find('.sort-handler').length ? '.sort-handler' : null,
@@ -27,6 +26,7 @@ $(document).ready(function()
             {
                 var orders = {};
                 e.list.each(function(){
+                    var $this = $(this);
                     orders[$(this.item).data('id')] = this.order;
                 });
                 e.orders = orders;

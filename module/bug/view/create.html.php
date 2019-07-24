@@ -288,6 +288,7 @@ js::set('flow', $config->global->flow);
              <?php endif;?>
           </tr>
           <?php endif;?>
+          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, '', 'table', 'columns=2');?>
           <tr>
             <th><?php echo $lang->bug->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>

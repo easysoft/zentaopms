@@ -27,6 +27,7 @@
           <th><?php echo $lang->testsuite->desc;?></th>
           <td><?php echo html::textarea('desc', htmlspecialchars($suite->desc), "rows=10 class='form-control'");?></td>
         </tr>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $suite, 'table', 'columns=1');?>
         <?php if($suite->type != 'library'):?>
         <tr>
           <th><?php echo $lang->testsuite->author;?></th>

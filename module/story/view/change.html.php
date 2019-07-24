@@ -51,6 +51,7 @@
           <th><?php echo $lang->story->comment;?></th>
           <td><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
         </tr>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $story, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->attatch;?></th>
           <td><?php echo $this->fetch('file', 'buildform');?></td>

@@ -329,6 +329,13 @@ $lang->project->featureBar['task']['delayed']      = '已延期';
 $lang->project->featureBar['task']['needconfirm']  = '需求变更';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
 
+$lang->project->featureBar['all']['all']       = $lang->project->all;
+$lang->project->featureBar['all']['undone']    = $lang->project->undone;
+$lang->project->featureBar['all']['wait']      = $lang->project->statusList['wait'];
+$lang->project->featureBar['all']['doing']     = $lang->project->statusList['doing'];
+$lang->project->featureBar['all']['suspended'] = $lang->project->statusList['suspended'];
+$lang->project->featureBar['all']['closed']    = $lang->project->statusList['closed'];
+
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = '全部展开';
 $lang->project->treeLevel['root']  = '全部折叠';

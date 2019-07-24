@@ -50,6 +50,9 @@ tbody tr td:first-child input{display:none;}
     <?php
     if(!$build->deleted)
     {
+        $flow = $this->loadModel('workflow')->getByModule('build');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $build, 'view');
+
         if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
         if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
@@ -333,6 +336,7 @@ tbody tr td:first-child input{display:none;}
                   <th><?php echo $lang->build->filePath;?></th>
                   <td style='word-break:break-all;'><?php echo html::a($build->filePath, $build->filePath, '_blank');?></td>
                 </tr>
+                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $build, 'table', "position=all&columns=1");?>
                 <?php if($config->global->flow != 'onlyTest'):?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>

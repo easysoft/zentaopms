@@ -88,6 +88,9 @@ class testsuite extends control
                 $this->send($response);
             }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $suiteID);
+
             $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
             $response['message'] = $this->lang->testsuite->successSaved;
             $this->send($response);
@@ -184,6 +187,9 @@ class testsuite extends control
                 $actionID = $this->loadModel('action')->create($objectType, $suiteID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $suiteID);
+
             $method = $suite->type == 'library' ? 'libView' : 'view';
             $response['locate']  = inlink($method, "suiteID=$suiteID");
             $response['message'] = $this->lang->testsuite->successSaved;
@@ -243,6 +249,8 @@ class testsuite extends control
             if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $this->testsuite->delete($suiteID);
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $suiteID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)

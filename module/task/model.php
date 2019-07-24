@@ -2597,6 +2597,7 @@ class taskModel extends model
             if($id == 'story') $title = " title='{$task->storyTitle}'";
 
             echo "<td class='" . $class . "'" . $title . ">";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('task', $task, $id);
             switch($id)
             {
             case 'id':

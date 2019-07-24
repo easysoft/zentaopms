@@ -31,6 +31,9 @@
     <?php
     if(!$suite->deleted)
     {
+        $flow = $this->loadModel('workflow')->getByModule('testsuite');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $suite, 'view');
+
         common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'button', 'link');
         common::printIcon('testsuite', 'edit',     "suiteID=$suite->id");
         common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", '', 'button', 'trash', 'hiddenwin');
@@ -151,6 +154,7 @@
         </div>
       </div>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $suite, 'div', "position=right&divCell=true");?>
     <div class='cell'>
       <?php include '../../common/view/action.html.php';?>
     </div>

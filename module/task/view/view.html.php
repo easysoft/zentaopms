@@ -144,8 +144,9 @@
       <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'div', "position=left&divCell=true");?>
+    <div class="cell"><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -162,6 +163,9 @@
         common::printIcon('task', 'activate',       "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody text-success', true);
         common::printIcon('task', 'close',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'cancel',         "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
+
+        $flow = $this->loadModel('workflow')->getByModule('task');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $task, 'view');
 
         if(!isonlybody()) echo "<div class='divider'></div>";
         common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
@@ -375,6 +379,7 @@
         </div>
       </details>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

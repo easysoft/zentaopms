@@ -2432,6 +2432,7 @@ class storyModel extends model
             }
 
             echo "<td class='" . $class . "' title='$title'>";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('story', $story, $id);
             switch($id)
             {
             case 'id':

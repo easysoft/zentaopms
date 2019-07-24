@@ -205,6 +205,7 @@
             <?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?>
           </td>
         </tr>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, '', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->files;?></th>
           <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>

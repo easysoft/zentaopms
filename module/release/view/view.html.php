@@ -33,6 +33,9 @@
     <?php
     if(!$release->deleted)
     {
+        $flow = $this->loadModel('workflow')->getByModule('release');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $release, 'view');
+
         if(common::hasPriv('release', 'changeStatus', $release))
         {
             $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
@@ -328,6 +331,7 @@
                       <th><?php echo $lang->release->date;?></th>
                       <td><?php echo $release->date;?></td>
                     </tr>
+                    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $release, 'table', "position=all&columns=1");?>
                     <tr>
                       <th><?php echo $lang->release->desc;?></th>
                       <td><?php echo $release->desc;?></td>

@@ -295,6 +295,8 @@ class bug extends control
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
             }
 
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
+
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
             setcookie('bugModule', (int)$this->post->module, 0, $this->config->webRoot);
@@ -612,6 +614,9 @@ class bug extends control
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
+
             if($bug->toTask != 0)
             {
                 foreach($changes as $change)
@@ -827,6 +832,8 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
+
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -939,6 +946,9 @@ class bug extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
+
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -994,6 +1004,9 @@ class bug extends control
             $this->action->logHistory($actionID, $changes);
 
             $bug = $this->bug->getById($bugID);
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
+
             if($bug->toTask != 0)
             {
                 /* If task is not finished, update it's status. */
@@ -1084,6 +1097,8 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
+
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -1120,6 +1135,8 @@ class bug extends control
 
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1286,6 +1303,9 @@ class bug extends control
         {
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0) echo js::alert($this->lang->bug->remindTask . $bug->toTask);
+
+            if(isset($this->config->bizVersion)) $this->executeHooks($this->methodName, $bugID);
+
             die(js::locate($this->session->bugList, 'parent'));
         }
     }

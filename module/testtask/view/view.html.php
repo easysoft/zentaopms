@@ -40,8 +40,9 @@
       </div>
       <?php endif;?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=testtask&objectID=$task->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'div', "position=left&divCell=true");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -55,6 +56,12 @@
         common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'sitemap');
         common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
         ?>
+
+        <?php
+        $flow = $this->loadModel('workflow')->getByModule('testtask');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $task, 'view');
+        ?>
+
         <div class='divider'></div>
         <?php
         common::printIcon('testtask', 'edit',     "taskID=$task->id", $task);
@@ -120,6 +127,7 @@
         </div>
       </div>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

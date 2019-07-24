@@ -35,6 +35,7 @@
         <th><?php echo $lang->testcase->reviewedByAB;?></th>
         <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control chosen' multiple");?></td>
       </tr>
+      <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $case, 'table', 'columns=2');?> 
       <tr>
         <th><?php echo $lang->comment;?></th>
         <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

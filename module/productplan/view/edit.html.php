@@ -56,6 +56,7 @@
             <th><?php echo $lang->productplan->desc;?></th>
             <td colspan='3'><?php echo html::textarea('desc', htmlspecialchars($plan->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
+          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $plan, 'table', 'columns=3');?>
           <tr>
             <td colspan='4' class='text-center form-actions'>
               <?php echo html::submitButton();?>

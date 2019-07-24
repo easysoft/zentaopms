@@ -95,8 +95,9 @@
         </div>
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $case, 'div', "position=left&divCell=true");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -113,6 +114,12 @@
         }
         if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe', '', '', $lang->testcase->reviewAB);
         ?>
+
+        <?php
+        $flow = $this->loadModel('workflow')->getByModule('testcase');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $case, 'view');
+        ?>
+
         <?php
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
         if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
@@ -326,6 +333,7 @@
         </div>
       </details>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $case, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 <div id="mainActions" class='main-actions'>

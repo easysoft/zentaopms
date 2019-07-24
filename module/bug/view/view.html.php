@@ -57,8 +57,9 @@
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $bug, 'div', "position=left&divCell=true");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <?php
     $params        = "bugID=$bug->id";
     $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
@@ -78,6 +79,9 @@
 
         if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
         common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
+
+        $flow = $this->loadModel('workflow')->getByModule('bug');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $bug, 'view');
 
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
@@ -375,6 +379,7 @@
         </div>
       </div>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $bug, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

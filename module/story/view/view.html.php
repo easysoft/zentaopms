@@ -61,8 +61,9 @@
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $story, 'div', "position=left&divCell=true");?>
+    <div class="cell"><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -102,6 +103,9 @@
         }
 
         if($from == 'project') common::printIcon('task', 'create', "project=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'plus', '', 'showinonlybody');
+
+        $flow = $this->loadModel('workflow')->getByModule('story');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $story, 'view');
 
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
@@ -386,6 +390,7 @@
         </div>
       </div>
     </div>
+    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $story, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

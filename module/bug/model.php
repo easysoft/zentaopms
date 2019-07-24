@@ -2465,6 +2465,7 @@ class bugModel extends model
             if(strpos(',project,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='" . $class . "' $title>";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('bug', $bug, $id);
             switch($id)
             {
             case 'id':

@@ -150,6 +150,7 @@
           <th><?php echo $lang->project->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($project->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
+        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $project, 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $project->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
