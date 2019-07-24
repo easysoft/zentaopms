@@ -36,15 +36,15 @@
   <div class='main-table'>
     <table class='table has-sort-head tablesorter'>
       <thead>
-        <tr class='colhead'>
+        <tr class='text-center'>
           <th class='w-id'><?php echo $lang->idAB;?></th>
           <th class='w-severity'><?php echo $lang->bug->severityAB;?></th>
           <th class='w-pri'><?php echo $lang->priAB;?></th>
           <th class='w-type'><?php echo $lang->typeAB;?></th>
-          <th><?php echo $lang->bug->title;?></th>
+          <th class='text-left'><?php echo $lang->bug->title;?></th>
           <th class='w-90px'><?php echo $lang->openedByAB;?></th>
-          <th class='w-user'><?php echo $lang->bug->resolvedBy;?></th>
-          <th class='w-resolution'><?php echo $lang->bug->resolutionAB;?></th>
+          <th class='w-100px'><?php echo $lang->bug->resolvedBy;?></th>
+          <th class='w-100px'><?php echo $lang->bug->resolutionAB;?></th>
         </tr>
       </thead>
       <tbody>

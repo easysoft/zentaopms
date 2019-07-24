@@ -52,7 +52,7 @@ var browseType = '<?php echo $browseType;?>';
             </ul>
           </div>
           <?php if(common::hasPriv('doc', 'create')):?>
-          <div class="dropdown">
+          <div class="dropdown" id='createDropdown'>
             <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $lang->doc->create;?> <span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php foreach($lang->doc->typeList as $typeKey => $typeName):?>
@@ -96,7 +96,7 @@ var browseType = '<?php echo $browseType;?>';
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
               <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
-              <th class="w-90px"><?php echo $lang->actions;?></th>
+              <th class="w-90px text-center"><?php echo $lang->actions;?></th>
             </tr>
           </thead>
           <tbody>

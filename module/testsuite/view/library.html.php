@@ -47,7 +47,7 @@ js::set('flow',          $config->global->flow);
     if(common::hasPriv('testsuite', 'libView'))
     {
         $link = helper::createLink('testsuite', 'libView', "libID=$libID");
-        echo html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->testsuite->view, '', "class='btn btn-link'");
+        echo html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->testsuite->libView, '', "class='btn btn-link'");
     }
     ?>
   </div>

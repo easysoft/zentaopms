@@ -13,7 +13,7 @@
 $lang->project->common        = $lang->projectCommon;
 $lang->project->allProjects   = 'All ' . $lang->projectCommon . 's';
 $lang->project->type          = 'Type';
-$lang->project->name          = 'Project Name';
+$lang->project->name          = "{$lang->projectCommon} Name";
 $lang->project->code          = 'Code';
 $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
@@ -27,13 +27,13 @@ $lang->project->totalDays     = 'Available Days';
 $lang->project->status        = 'Status';
 $lang->project->desc          = 'Description';
 $lang->project->owner         = 'Owner';
-$lang->project->PO            = 'Project Owner';
-$lang->project->PM            = 'Project Manager';
+$lang->project->PO            = "{$lang->projectCommon} Owner";
+$lang->project->PM            = "{$lang->projectCommon} Manager";
 $lang->project->QD            = 'QA Manager';
 $lang->project->RD            = 'Release Manager';
 $lang->project->qa            = 'QA';
 $lang->project->release       = 'Release';
-$lang->project->acl           = 'ACL';
+$lang->project->acl           = 'Access Control';
 $lang->project->teamname      = 'Team Name';
 $lang->project->order         = "Rank {$lang->projectCommon}";
 $lang->project->orderAB       = "Rank";
@@ -47,7 +47,7 @@ $lang->project->hours         = 'Estimates: %s, Cost: %s, Left: %s.';
 $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon} yet.";
 $lang->project->createStory   = "Create Story";
-$lang->project->all           = 'All Projects';
+$lang->project->all           = "All {$lang->projectCommon}s";
 $lang->project->undone        = 'Unfinished';
 $lang->project->unclosed      = 'Unclosed';
 $lang->project->typeDesc      = 'No story, bug, build, test, or burndown chart is allowed in OPS';
@@ -73,7 +73,7 @@ $lang->project->export   = 'Export';
 $lang->project->typeList['sprint']    = 'Sprint';
 $lang->project->typeList['waterfall'] = 'Waterfall';
 $lang->project->typeList['ops']       = 'OPS';
-    
+
 $lang->project->endList[7]   = '1 Week';
 $lang->project->endList[14]  = '2 Weeks';
 $lang->project->endList[31]  = '1 Month';
@@ -108,7 +108,7 @@ $lang->project->aclList['private'] = 'Private (For team members only.)';
 $lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist users can access it.)';
 
 /* 方法列表。*/
-$lang->project->index             = "Project Home";
+$lang->project->index             = "{$lang->projectCommon} Home";
 $lang->project->task              = 'Task List';
 $lang->project->groupTask         = 'Group View';
 $lang->project->story             = 'Story List';
@@ -126,24 +126,37 @@ $lang->project->doc               = 'Document';
 $lang->project->doclib            = 'Docoment Library';
 $lang->project->manageProducts    = 'Linked ' . $lang->productCommon . 's';
 $lang->project->linkStory         = 'Link Stories';
-$lang->project->linkStoryByPlan   = 'Link Stories By Plans';
+$lang->project->linkStoryByPlan   = 'Link Stories By Plan';
 $lang->project->linkPlan          = 'Linked Plans';
 $lang->project->unlinkStoryTasks  = 'Unlink';
-$lang->project->linkedProducts    = 'Linked Products';
-$lang->project->unlinkedProducts  = 'Unlinked Products';
-$lang->project->view              = "Overview";
+$lang->project->linkedProducts    = "Linked {$lang->productCommon}s";
+$lang->project->unlinkedProducts  = "Unlinked {$lang->productCommon}s";
+$lang->project->view              = "{$lang->projectCommon} Detail";
+$lang->project->startAction       = "Start {$lang->projectCommon}";
+$lang->project->activateAction    = "Activate {$lang->projectCommon}";
+$lang->project->delayAction       = "Delay {$lang->projectCommon}";
+$lang->project->suspendAction     = "Suspend {$lang->projectCommon}";
+$lang->project->closeAction       = "Close {$lang->projectCommon}";
+$lang->project->testtaskAction    = "{$lang->projectCommon} Request";
+$lang->project->teamAction        = "{$lang->projectCommon} Members";
+$lang->project->kanbanAction      = "{$lang->projectCommon} Kanban";
+$lang->project->printKanbanAction = "Print Kanban";
+$lang->project->treeAction        = "{$lang->projectCommon} Tree View";
+$lang->project->exportAction      = "Export {$lang->projectCommon}";
+$lang->project->computeBurnAction = "Compute Burn";
 $lang->project->create            = "Create {$lang->projectCommon}";
 $lang->project->copy              = "Copy {$lang->projectCommon}";
 $lang->project->delete            = "Delete {$lang->projectCommon}";
 $lang->project->browse            = "{$lang->projectCommon} List";
-$lang->project->edit              = "Edit Project";
+$lang->project->edit              = "Edit {$lang->projectCommon}";
 $lang->project->batchEdit         = "Batch Edit";
 $lang->project->manageMembers     = 'Manage Team';
 $lang->project->unlinkMember      = 'Remove Member';
 $lang->project->unlinkStory       = 'Unlink Story';
+$lang->project->unlinkStoryAB     = 'Unlink';
 $lang->project->batchUnlinkStory  = 'Batch Unlink Stories';
 $lang->project->importTask        = 'Transfer Task';
-$lang->project->importPlanStories = 'Link Stories By Plans';
+$lang->project->importPlanStories = 'Link Stories By Plan';
 $lang->project->importBug         = 'Import Bug';
 $lang->project->updateOrder       = "Rank {$lang->projectCommon}";
 $lang->project->tree              = 'Tree';
@@ -152,8 +165,8 @@ $lang->project->treeStory         = 'Show Story Only';
 $lang->project->treeOnlyTask      = 'Show Task Only';
 $lang->project->treeOnlyStory     = 'Show Story Only';
 $lang->project->storyKanban       = 'Story Kanban';
-$lang->project->storySort         = 'Order Story';
-$lang->project->importPlanStory   = '' . $lang->projectCommon . ' is created!\nDo you want to import stories that have been linked to the plan?';
+$lang->project->storySort         = 'Rank Story';
+$lang->project->importPlanStory   = $lang->projectCommon . ' is created!\nDo you want to import stories that have been linked to the plan?';
 $lang->project->iteration         = 'Iterations';
 $lang->project->iterationInfo     = '%s Iterations';
 $lang->project->viewAll           = 'View All';
@@ -180,12 +193,12 @@ $lang->project->groups['finishedBy'] = 'Group by FinishedBy';
 $lang->project->groups['closedBy']   = 'Group by ClosedBy';
 $lang->project->groups['type']       = 'Group by Type';
 
-$lang->project->groupFilter['story']['all']         = $lang->project->all;
-$lang->project->groupFilter['story']['linked']      = 'LinkedtoStory Task';
-$lang->project->groupFilter['pri']['all']           = $lang->project->all;
+$lang->project->groupFilter['story']['all']         = 'All';
+$lang->project->groupFilter['story']['linked']      = 'Tasks linked to stories';
+$lang->project->groupFilter['pri']['all']           = 'All';
 $lang->project->groupFilter['pri']['noset']         = 'Not Set';
 $lang->project->groupFilter['assignedTo']['undone'] = 'Unfinished';
-$lang->project->groupFilter['assignedTo']['all']    = $lang->project->all;
+$lang->project->groupFilter['assignedTo']['all']    = 'All';
 
 $lang->project->byQuery = 'Search';
 
@@ -210,7 +223,7 @@ $lang->project->countSummary        = '<div class="table-col"><div class="clearf
 $lang->project->timeSummary         = '<div class="table-col"><div class="clearfix segments"><div class="segment"><div class="segment-title">Estimates</div><div class="segment-value">%s</div></div><div class="segment"><div class="segment-title">Cost</div><div class="segment-value text-red">%s</div></div><div class="segment"><div class="segment-title">Left</div><div class="segment-value">%s</div></div></div></div>';
 $lang->project->groupSummaryAB      = "<div>Tasks <strong>%s ：</strong><span class='text-muted'>Waiting</span> %s &nbsp; <span class='text-muted'>Doing</span> %s</div><div>Estimates <strong>%s ：</strong><span class='text-muted'>Cost</span> %s &nbsp; <span class='text-muted'>Left</span> %s</div>";
 $lang->project->wbs                 = "Create Task";
-$lang->project->batchWBS            = "Batch Create";
+$lang->project->batchWBS            = "Batch Create Tasks";
 $lang->project->howToUpdateBurn     = "<a href='https://api.zentao.pm/goto.php?item=burndown' target='_blank' title='How to update the Burndown Chart?' class='btn btn-link'>Help <i class='icon icon-help'></i></a>";
 $lang->project->whyNoStories        = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
 $lang->project->productStories      = "Stories linked to {$lang->projectCommon} are the subeset of stories linked to {$lang->productCommon}. Stories can only be linked after they pass the review. <a href='%s'> Link Stories</a> now.";
@@ -241,18 +254,18 @@ $lang->project->accessDenied          = "Your access to {$lang->projectCommon} i
 $lang->project->tips                  = 'Note';
 $lang->project->afterInfo             = "{$lang->projectCommon} is created. Next you can ";
 $lang->project->setTeam               = 'Set Team';
-$lang->project->linkStory             = 'Link Stories';
+$lang->project->linkStory             = 'Link Story';
 $lang->project->createTask            = 'Create Task';
 $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'Exclude Weekend';
 $lang->project->withweekend           = 'Include Weekend';
 $lang->project->interval              = 'Intervals';
-$lang->project->fixFirstWithLeft      = 'Update hours left';
+$lang->project->fixFirstWithLeft      = 'Update hours left too';
 
 $lang->project->action = new stdclass();
 $lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' . "\n";
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong> .' . "\n";
-$lang->project->action->extra   = 'The linked products are %s.';
+$lang->project->action->extra   = "The linked {$lang->productCommon}s are %s.";
 
 /* 统计。*/
 $lang->project->charts = new stdclass();
@@ -271,17 +284,17 @@ $lang->project->charts->burn->graph->actuality    = 'Actual';
 
 $lang->project->placeholder = new stdclass();
 $lang->project->placeholder->code      = "Abbreviation of {$lang->projectCommon} name";
-$lang->project->placeholder->totalLeft = "Estimates at the beginning of the {$lang->projectCommon}.";
+$lang->project->placeholder->totalLeft = "Hours estimated on the first day of the {$lang->projectCommon}.";
 
 $lang->project->selectGroup = new stdclass();
 $lang->project->selectGroup->done = '(Done)';
 
-$lang->project->orderList['order_asc']  = "Story Rank ASC";
-$lang->project->orderList['order_desc'] = "Story Rank DESC";
-$lang->project->orderList['pri_asc']    = "Story Priority ASC";
-$lang->project->orderList['pri_desc']   = "Story Priority DESC";
-$lang->project->orderList['stage_asc']  = "Story Phase ASC";
-$lang->project->orderList['stage_desc'] = "Story Phase DESC";
+$lang->project->orderList['order_asc']  = "Story Rank Ascending";
+$lang->project->orderList['order_desc'] = "Story Rank Descending";
+$lang->project->orderList['pri_asc']    = "Story Priority Ascending";
+$lang->project->orderList['pri_desc']   = "Story Priority Descending";
+$lang->project->orderList['stage_asc']  = "Story Phase Ascending";
+$lang->project->orderList['stage_desc'] = "Story Phase Descending";
 
 $lang->project->kanban        = "Kanban";
 $lang->project->kanbanSetting = "Settings";
@@ -326,8 +339,8 @@ $lang->project->featureBar['all']['closed']    = $lang->project->statusList['clo
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = 'Expand All';
 $lang->project->treeLevel['root']  = 'Collapse All';
-$lang->project->treeLevel['task']  = 'Show All';
-$lang->project->treeLevel['story'] = 'Show Story';
+$lang->project->treeLevel['task']  = 'Stories&Tasks';
+$lang->project->treeLevel['story'] = 'Only Stories';
 
 global $config;
 if($config->global->flow == 'onlyTask')

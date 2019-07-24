@@ -67,7 +67,7 @@
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tr>
-                <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+                <?php $colWidth = common::checkEnLang() ? 'w-100px' : 'w-80px';?>
                 <th class='<?php echo $colWidth;?>'><?php echo $lang->story->product;?></th>
                 <td>
                   <div class='input-group'>
@@ -162,7 +162,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control' multiple");?>
-                    <div class='input-group-btn'><?php echo $this->fetch('my', 'buildContactLists')?></div>
+                    <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
               </tr>
@@ -210,7 +210,7 @@
               </tr>
               <?php endif;?>
               <tr>
-              <?php $width = $this->app->getClientLang() == 'en' ? 'w-110px': 'w-70px'?>
+              <?php $width = common::checkEnLang() ? 'w-110px': 'w-70px'?>
                 <th class=<?php echo $width?>><?php echo $lang->story->linkStories;?></th>
                 <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
               </tr>

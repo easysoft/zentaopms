@@ -1298,7 +1298,7 @@ class testcase extends control
                 {
                     $row = new stdclass();
                     $row->module     = $module . "(#$moduleID)";
-                    $row->stepDesc   = "1. \n2. \n3. num:" . $num;
+                    $row->stepDesc   = "1. \n2. \n3.";
                     $row->stepExpect = "1. \n2. \n3.";
 
                     if(empty($rows))

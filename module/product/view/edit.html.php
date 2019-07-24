@@ -26,7 +26,7 @@
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-130px'><?php echo $lang->product->name;?></th>
+            <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>  
           <tr>

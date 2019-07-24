@@ -15,8 +15,8 @@ $jsRoot = $this->app->getWebRoot() . "js/";
 include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
-$fieldWidth    = $app->getClientLang() == 'en' ? 'w-130px' : 'w-110px';
-$operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-90px';
+$fieldWidth    = common::checkEnLang() ? 'w-130px' : 'w-110px';
+$operatorWidth = common::checkEnLang() ? 'w-110px' : 'w-90px';
 ?>
 <style>
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
@@ -25,7 +25,7 @@ $operatorWidth = $app->getClientLang() == 'en' ? 'w-110px' : 'w-90px';
 #<?php echo $formId;?> > table {margin: 0 auto;}
 #<?php echo $formId;?> > table > tbody > tr > td {padding: 8px;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
-<?php if($app->getClientLang() == 'en'):?>
+<?php if(common::checkEnLang()):?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 70px;}
 <?php else:?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
@@ -302,7 +302,6 @@ $(function()
             html  = "<li><a href='" + actionURL.replace('myQueryID', queryID) + "'>" + name + "</a>";
             html += "<a href='###' class='btn-delete' data-id='" + queryID + "' onclick='removeQueryFromMenu(this)'><i class='icon icon-close'></i></a></li>";
             $('#mainMenu .btn-toolbar.pull-left #query ul.dropdown-menu').append(html);
-            fixFeatureBar();
         }
     };
 

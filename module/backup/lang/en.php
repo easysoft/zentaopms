@@ -1,9 +1,9 @@
 <?php
 $lang->backup->common      = 'Backup';
-$lang->backup->index       = 'Home';
+$lang->backup->index       = 'Backup Home';
 $lang->backup->history     = 'History';
-$lang->backup->delete      = 'Delete';
-$lang->backup->backup      = 'Back Up';
+$lang->backup->delete      = 'Delete Backup';
+$lang->backup->backup      = 'Backup';
 $lang->backup->restore     = 'Restore';
 $lang->backup->change      = 'Edit Expiration';
 $lang->backup->changeAB    = 'Edit';

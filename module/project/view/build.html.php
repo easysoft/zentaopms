@@ -38,9 +38,9 @@
     <table class="table text-center" id='buildList'>
       <thead>
         <tr>
-          <th class="w-200px"><?php echo $lang->build->product;?></th>
           <th class="c-id-sm"><?php echo $lang->build->id;?></th>
-          <th class="c-name"><?php echo $lang->build->name;?></th>
+          <th class="w-200px text-left"><?php echo $lang->build->product;?></th>
+          <th class="c-name text-left"><?php echo $lang->build->name;?></th>
           <th class="c-url"><?php echo $lang->build->scmPath;?></th>
           <th class="c-url"><?php echo $lang->build->filePath;?></th>
           <th class="c-date"><?php echo $lang->build->date;?></th>
@@ -50,13 +50,10 @@
       </thead>
       <tbody>
         <?php foreach($projectBuilds as $productID => $builds):?>
-        <?php $total = count($builds);?>
         <?php foreach($builds as $index => $build):?>
         <tr data-id="<?php echo $productID;?>">
-          <?php if($index == 0):?>
-          <td rowspan="<?php echo $total;?>" class="text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
-          <?php endif;?>
           <td class="c-id-sm text-muted"><?php echo html::a(helper::createLink('build', 'view', "buildID=$build->id"), sprintf('%03d', $build->id));?></td>
+          <td class="text-left" title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <td class="c-name">
             <?php if($build->branchName) echo "<span class='label label-outline label-badge'>{$build->branchName}</span>"?>
             <?php echo html::a($this->createLink('build', 'view', "build=$build->id"), $build->name);?>

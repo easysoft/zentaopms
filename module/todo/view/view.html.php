@@ -93,7 +93,7 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <?php $colWidth = common::checkEnLang() ? 'w-100px' : 'w-80px';?>
               <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->pri;?></th>
               <td><span title="<?php echo zget($lang->todo->priList, $todo->pri);?>" class='label-pri <?php echo 'label-pri-' . $todo->pri;?>' title='<?php echo zget($lang->todo->priList, $todo->pri, $todo->pri);?>'><?php echo zget($lang->todo->priList, $todo->pri)?></span></td>
             </tr>
@@ -123,7 +123,7 @@
               <td><?php echo zget($users, $todo->assignedTo);?></td>
             </tr>
             <tr>
-              <th><?php echo $lang->todo->assignTo . $lang->todo->date;?></th>
+              <th><?php echo $lang->todo->assignedDate;?></th>
               <td><?php echo formatTime($todo->assignedDate, DT_DATE1);?></td>
             </tr>
             <?php endif;?>
@@ -137,7 +137,7 @@
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <?php $colWidth = $app->getClientLang() == 'en' ? 'w-100px' : 'w-80px';?>
+              <?php $colWidth = common::checkEnLang() ? 'w-100px' : 'w-80px';?>
               <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->beginAndEnd?></th>
               <td><?php echo $todo->config->begin . " ~ " . $todo->config->end;?></td>
             </tr>

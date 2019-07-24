@@ -236,7 +236,7 @@
           if(common::hasPriv('project', 'batchUnlinkStory'))
           {
               $actionLink = $this->createLink('project', 'batchUnlinkStory', "projectID=$project->id");
-              echo html::commonButton($lang->project->unlinkStory, "data-form-action='$actionLink'");
+              echo html::commonButton($lang->project->unlinkStoryAB, "data-form-action='$actionLink'");
           }
           ?>
         </div>
@@ -276,7 +276,8 @@ $(function()
     {
         statisticCreator: function(table)
         {
-            var $checkedRows = table.$.find('tbody>tr.checked');
+            var $checkedRows = table.getTable().find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
             var checkedTotal = $checkedRows.length;
             if(!checkedTotal) return;
 
@@ -285,13 +286,17 @@ $(function()
             $checkedRows.each(function()
             {
                 var $row = $(this);
+                if ($originTable)
+                {
+                    $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                }
                 var data = $row.data();
                 checkedEstimate += data.estimate;
-                checkedCase += data.cases;
+                if(data.cases > 0) checkedCase += 1;
             });
-            var rate = Math.round(checkedCase / checkedTotal * 10000) / 100 + '' + '%';
+            var rate = Math.round(checkedCase / checkedTotal * 10000 / 100) + '' + '%';
             return checkedSummary.replace('%total%', checkedTotal)
-                  .replace('%estimate%', checkedEstimate)
+                  .replace('%estimate%', checkedEstimate.toFixed(1))
                   .replace('%rate%', rate);
         }
     });

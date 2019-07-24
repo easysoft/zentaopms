@@ -2,11 +2,15 @@
 $lang->mail->common        = '發信配置';
 $lang->mail->index         = '首頁';
 $lang->mail->detect        = '檢測';
+$lang->mail->detectAction  = '通過郵箱地址檢測';
 $lang->mail->edit          = '編輯配置';
 $lang->mail->save          = '保存';
+$lang->mail->saveAction    = '保存發信設置';
 $lang->mail->test          = '測試發信';
 $lang->mail->reset         = '重置';
+$lang->mail->resetAction   = '重置發信設置';
 $lang->mail->resend        = '重發';
+$lang->mail->resendAction  = '重發郵件';
 $lang->mail->browse        = '郵件列表';
 $lang->mail->delete        = '刪除郵件';
 $lang->mail->ztCloud       = '禪道雲發信';

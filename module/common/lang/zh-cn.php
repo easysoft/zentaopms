@@ -30,7 +30,7 @@ $lang->profile        = '个人档案';
 $lang->changePassword = '更改密码';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
 $lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
-$lang->designedByAIUX = "<a href='http://aiuxstudio.com/' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
+$lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
 
 $lang->reset        = '重填';
 $lang->cancel       = '取消';
@@ -347,7 +347,7 @@ $lang->report->menu->test    = array('link' => '测试|report|bugcreate', 'alias
 $lang->report->menu->staff   = array('link' => '组织|report|workload');
 
 $lang->report->notice = new stdclass();
-$lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。';
+$lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 
 /* 组织结构视图菜单设置。*/
 $lang->company = new stdclass();
@@ -486,6 +486,7 @@ $lang->error->equal           = "『%s』必须为『%s』。";
 $lang->error->int             = array("『%s』应当是数字。", "『%s』应当介于『%s-%s』之间。");
 $lang->error->float           = "『%s』应当是数字，可以是小数。";
 $lang->error->email           = "『%s』应当为合法的EMAIL。";
+$lang->error->URL             = "『%s』应当为合法的URL。";
 $lang->error->date            = "『%s』应当为合法的日期。";
 $lang->error->datetime        = "『%s』应当为合法的日期。";
 $lang->error->code            = "『%s』应当为字母或数字的组合。";
@@ -511,6 +512,19 @@ $lang->pager->locate       = "GO!";
 $lang->pager->previousPage = "上一页";
 $lang->pager->nextPage     = "下一页";
 $lang->pager->summery      = "第 <strong>%s-%s</strong> 项，共 <strong>%s</strong> 项";
+$lang->pager->pageOfText   = '第 {0} 页';
+$lang->pager->firstPage    = '第一页';
+$lang->pager->lastPage     = '最后一页';
+$lang->pager->goto         = '跳转';
+$lang->pager->pageOf       = '第 <strong>{page}</strong> 页';
+$lang->pager->totalPage    = '共 <strong>{totalPage}</strong> 页';
+$lang->pager->totalCount   = '共 <strong>{recTotal}</strong> 项';
+$lang->pager->pageSize     = '每页 <strong>{recPerPage}</strong> 项';
+$lang->pager->itemsRange   = '第 <strong>{start}</strong> ~ <strong>{end}</strong> 项';
+$lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</strong> 页';
+
+$lang->colorPicker = new stdclass();
+$lang->colorPicker->errorTip = '不是有效的颜色值';
 
 $lang->proVersion     = "<a href='https://api.zentao.net/goto.php?item=proversion&from=footer' target='_blank' id='proLink' class='text-important'>专业版 <i class='text-danger icon-pro-version'></i></a> &nbsp; ";
 $lang->downNotify     = "下载桌面提醒";
@@ -526,7 +540,6 @@ $lang->noticeImport    = "导入数据中，含有已经存在系统的数据，
 $lang->importConfirm   = "导入确认";
 $lang->importAndCover  = "覆盖";
 $lang->importAndInsert = "全新插入";
-
 
 $lang->noResultsMatch    = "没有匹配结果";
 $lang->searchMore        = "搜索此关键字的更多结果：";

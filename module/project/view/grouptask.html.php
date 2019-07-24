@@ -118,7 +118,7 @@
         <th class="w-60px"><?php echo $lang->task->estimateAB;?></th>
         <th class="w-50px"><?php echo $lang->task->consumedAB;?></th>
         <th class="w-50px"><?php echo $lang->task->leftAB;?></th>
-        <th class="w-50px"><?php echo $lang->task->progress;?></th>
+        <th class="w-50px" title='<?php echo $lang->task->progress;?>'><?php echo $lang->task->progressAB;?></th>
         <th class="c-type"><?php echo $lang->typeAB;?></th>
         <th class="c-date"><?php echo $lang->task->deadlineAB;?></th>
         <th class="c-actions-3"><?php echo $lang->actions;?></th>

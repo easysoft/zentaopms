@@ -33,9 +33,10 @@ $lang->editor->repeatPage    = '已經有此頁面。是否覆蓋？';
 $lang->editor->noticeOkFile  = '為了安全起見，系統需要確認您的管理員身份。\n 請登錄禪道所在的伺服器，創建%s檔案。\n 注意：\n 1. 檔案內容為空。\n 2. 如果之前檔案存在，刪除之後重新創建。';
 $lang->editor->editFileError = '只能修改禪道檔案！';
 
-$lang->editor->notWritable   = "無法寫入，可能沒有權限。請嘗試執行 chmod 777 -R ";
-$lang->editor->notDelete     = '無法刪除，請檢查權限！';
-$lang->editor->emptyFileName = '請寫入一個檔案名！';
+$lang->editor->notWritable    = "無法寫入，可能沒有權限。請嘗試執行 chmod 777 -R ";
+$lang->editor->notDelete      = '無法刪除，請檢查權限！';
+$lang->editor->emptyFileName  = '請寫入一個檔案名！';
+$lang->editor->onlyLocalVisit = "該功能只能在IP：127.0.0.1下訪問。<a href='https://api.zentao.net/goto.php?item=howtodevelop' target='_blank'>說明文檔</a>";
 
 $lang->editor->translate['config.php']  = 'config';
 $lang->editor->translate['control.php'] = 'control';

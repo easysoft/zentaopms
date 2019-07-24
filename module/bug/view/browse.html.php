@@ -116,6 +116,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         ?>
       </ul>
     </div>
+    <?php if(!common::checkEnLang()):?>
     <?php
     common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
     if(commonModel::isTutorialMode())
@@ -128,6 +129,29 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         common::printLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'");
     }
     ?>
+    <?php else:?>
+    <div class='btn-group dropdown-hover'>
+      <?php
+      $link = common::hasPriv('bug', 'create') ? $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID") : '###';
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+          $link = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
+      }
+      $disabled = common::hasPriv('bug', 'create') ? '' : "disabled";
+      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->bug->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
+      ?>
+      <ul class='dropdown-menu'>
+        <?php $disabled = common::hasPriv('bug', 'batchCreate') ? '' : "class='disabled'";?>
+        <li <?php echo $disabled?>>
+        <?php
+          $batchLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
+          echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate) . "</li>";
+        ?>
+        </li>
+      </ul>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <?php endif;?>
@@ -184,9 +208,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           {
               if($value->show)
               {
-                  if($this->app->getClientLang() == 'en' and $value->id == 'severity')  $value->name = $lang->bug->severity;
-                  if($this->app->getClientLang() == 'en' and $value->id == 'pri')       $value->name = $lang->bug->pri;
-                  if($this->app->getClientLang() == 'en' and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
+                  if(common::checkEnLang() and $value->id == 'severity')  $value->name = $lang->bug->severity;
+                  if(common::checkEnLang() and $value->id == 'pri')       $value->name = $lang->bug->pri;
+                  if(common::checkEnLang() and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
                   $this->datatable->printHead($value, $orderBy, $vars);
                   $columns ++;
               }
@@ -355,7 +379,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           </div>
           <?php endif;?>
         </div>
-        <div class="table-statistic"><?php echo $summary;?></div>
+        <div class="text"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

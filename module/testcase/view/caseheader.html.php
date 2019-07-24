@@ -118,9 +118,9 @@
       ?>
       </ul>
     </div>
+    <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
+    <?php if(!common::checkEnLang()):?>
     <?php
-    $initModule = isset($moduleID) ? (int)$moduleID : 0;
-
     if(common::hasPriv('testcase', 'batchCreate'))
     {
         $link = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
@@ -133,6 +133,24 @@
         echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
     }
     ?>
+    <?php else:?>
+    <div class='btn-group dropdown-hover'>
+      <?php
+      $link = common::hasPriv('testcase', 'create') ? $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '###';
+      $disabled = common::hasPriv('testcase', 'create') ? '' : "disabled";
+      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->testcase->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
+      ?>
+      <ul class='dropdown-menu'>
+        <?php $disabled = common::hasPriv('testcase', 'batchCreate') ? '' : "class='disabled'";?>
+        <li <?php echo $disabled?>>
+        <?php
+        $batchLink = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
+        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->testcase->batchCreate) . "</li>";
+        ?>
+        </li>
+      </ul>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <?php endif;?>

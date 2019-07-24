@@ -40,7 +40,7 @@
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
     <?php 
-    if($this->app->getClientLang() == 'en')
+    if(common::checkEnLang())
     {   
         $isToday = date('M d') == $date;
     }   

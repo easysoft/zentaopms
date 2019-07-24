@@ -60,7 +60,7 @@ class control extends baseControl
             return false;
         }
 
-        /**
+        /** 
          * 如果没有扩展文件，model类名是$moduleName + 'model'，如果有扩展，还需要增加ext前缀。
          * If no extension file, model class name is $moduleName + 'model', else with 'ext' as the prefix.
          */
@@ -71,7 +71,7 @@ class control extends baseControl
             if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
         }
 
-        /**
+        /** 
          * 初始化model对象，在control对象中可以通过$this->$moduleName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
          * Init the model object thus you can try $this->$moduleName to access it. Also assign the $dao object as a member of control object.
          */

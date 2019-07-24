@@ -79,12 +79,14 @@
             <td class='translated'>
             <?php
             $function = $hasNL ? 'textarea' : 'input';
-            echo html::$function('values[]', ($translation and $translation->value != $item) ? htmlspecialchars($translation->value) : '', "class='form-control'");
+            $value    = $translation;
+            if(is_object($translation)) $value = $translation->value;
+            echo html::$function('values[]', ($value != $item) ? htmlspecialchars($value) : '', "class='form-control'");
             ?>
             </td>
             <td>
               <?php
-              if($translation)
+              if(is_object($translation))
               {
                   echo zget($lang->translate->statusList, $translation->status);
                   if($translation->status == 'rejected') echo " <span title='$translation->reason'><i class='icon icon-help'></i></span>";
@@ -106,7 +108,7 @@
             </td>
             <td rowspan='2'>
               <?php
-              if($translation)
+              if(is_object($translation))
               {
                   echo zget($lang->translate->statusList, $translation->status);
                   if($translation->status == 'rejected') echo " <span title='$translation->reason'><i class='icon icon-help'></i></span>";
@@ -118,7 +120,9 @@
             <td class='translated'>
             <?php
             $function = $hasNL ? 'textarea' : 'input';
-            echo html::$function('values[]', ($translation and $translation->value != $item) ? htmlspecialchars($translation->value) : '', "class='form-control'");
+            $value    = $translation;
+            if(is_object($translation)) $value = $translation->value;
+            echo html::$function('values[]', ($value != $item) ? htmlspecialchars($value) : '', "class='form-control'");
             ?>
             </td>
           </tr>

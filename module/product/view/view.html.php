@@ -201,7 +201,7 @@
             <div class="detail-content">
               <table class="table table-data data-basic">
                 <tbody>
-                  <?php $space = $this->app->getClientLang() == 'en' ? ' ' : '';?>
+                  <?php $space = common::checkEnLang() ? ' ' : '';?>
                   <tr>
                     <th><?php echo $lang->story->statusList['active']  . $space . $lang->story->common;?></th>
                     <td><em><?php echo $product->stories['active']?></em></td>

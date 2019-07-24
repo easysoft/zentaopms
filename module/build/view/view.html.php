@@ -161,7 +161,7 @@ tbody tr td:first-child input{display:none;}
               <?php echo html::submitButton($lang->build->batchUnlink, '', 'btn');?>
             </div>
             <?php endif;?>
-            <div class='table-statistic'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
+            <div class='text'><?php echo sprintf($lang->build->finishStories, $countStories);?></div>
           </div>
           <?php endif;?>
         </form>

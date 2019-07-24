@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-160px' : 'w-150px';?>
+        <?php $colWidth = common::checkEnLang() ? 'w-160px' : 'w-150px';?>
         <th class='text-right <?php echo $colWidth;?>'><?php echo $lang->my->common;?></th>
         <td id='my' class='pv-10px'>
           <div class='checkbox-primary'>
@@ -49,7 +49,7 @@
 <?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-  <span id='groupName'><i class='icon-lock'> <?php echo $group->name;?></i><i class="icon icon-chevron-right"></i></span>
+  <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
     <?php $params = "type=byGroup&param=$groupID&menu=%s&version=$version";?>
     <?php $active = empty($menu) ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>
@@ -73,7 +73,7 @@
     <table class='table table-hover table-striped table-bordered' id='privList'>
       <thead>
         <tr class='text-center'>
-          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-160px' : 'w-150px';?>
+          <?php $colWidth = common::checkEnLang() ? 'w-160px' : 'w-150px';?>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->group->module;?></th>
           <th><?php echo $lang->group->method;?></th>
         </tr>
@@ -98,7 +98,7 @@
       }
       ?>
       <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-160px' : 'w-150px';?>
+        <?php $colWidth = common::checkEnLang() ? 'w-160px' : 'w-150px';?>
         <th class='text-middle text-right <?php echo $colWidth;?>'>
           <div class="checkbox-primary checkbox-inline checkbox-right check-all">
             <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>

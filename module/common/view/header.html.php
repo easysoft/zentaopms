@@ -2,6 +2,7 @@
 if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}
 include 'header.lite.html.php';
 include 'chosen.html.php';
+include 'pager.html.php';
 //include 'validation.html.php';
 ?>
 <?php

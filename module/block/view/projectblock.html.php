@@ -20,7 +20,7 @@
         <th class='c-name text-left'><?php echo $lang->project->name;?></th>
         <th class="c-date"><?php echo $lang->project->end;?></th>
         <?php if($longBlock):?>
-        <?php $thClass = ($app->getClientLang() == 'en') ? 'w-85px' : 'c-hours';?>
+        <?php $thClass = common::checkEnLang() ? 'w-85px' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
         <th class='<?php echo $thClass?>'><?php echo $lang->project->totalEstimate;?></th>
         <th class="c-hours"><?php echo $lang->project->totalConsumed;?></th>
@@ -43,7 +43,7 @@
         <td class='c-name text-left' title='<?php echo $project->name;?>'><nobr><?php echo html::a($this->createLink('project', 'task', 'project=' . $project->id), $project->name, '', "title='$project->name'");?></nobr></td>
         <td class="c-date"><?php echo $project->end;?></td>
         <?php if($longBlock):?>
-        <td class="c-status">
+        <td class="w-70px">
           <?php if(isset($project->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
           <?php else:?>

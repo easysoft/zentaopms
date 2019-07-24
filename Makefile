@@ -67,6 +67,7 @@ zentaoxx:
 	cp -r xuan/xxb/module/common/view/footer.modal.html.php zentaoxx/module/common/view
 	mkdir -p zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/markedjs zentaoxx/www/js/
+	cp -r xuan/xxb/www/x.php zentaoxx/www/
 	mkdir zentaoxx/module/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
 	cp -r xuanxuan/config/* zentaoxx/config/
@@ -105,6 +106,7 @@ zentaoxx:
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
+	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
 	rm -rf zentaoxx/tools
 	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	rm -rf xuan.zip xuan zentaoxx

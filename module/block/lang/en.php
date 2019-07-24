@@ -13,9 +13,9 @@ $lang->block = new stdclass();
 $lang->block->common = 'Block';
 $lang->block->name   = 'Name';
 $lang->block->style  = 'Style';
-$lang->block->grid   = 'Grid';
+$lang->block->grid   = 'Position';
 $lang->block->color  = 'Color';
-$lang->block->reset  = 'Reset';
+$lang->block->reset  = 'Reset Layout';
 
 $lang->block->account = 'Account';
 $lang->block->module  = 'Module';
@@ -36,7 +36,7 @@ $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Test Request Detail';
 
-$lang->block->leftToday = 'Remaining Work';
+$lang->block->leftToday = 'Remained Work';
 $lang->block->myTask    = 'My Tasks';
 $lang->block->myStory   = 'Stories';
 $lang->block->myBug     = 'Bugs';
@@ -60,6 +60,7 @@ $lang->block->closeForever       = 'Permanent Close';
 $lang->block->confirmClose       = 'Do you want to permanently close this block? Once done, it is not available to anyone. It can be activiated at Admin->Custom.';
 $lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
+$lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Hide';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 
@@ -340,7 +341,7 @@ $lang->block->typeList->task['canceledBy'] = 'CancelledByMe';
 
 $lang->block->typeList->bug['assignedTo'] = 'AssignedToMe';
 $lang->block->typeList->bug['openedBy']   = 'CreatedByMe';
-$lang->block->typeList->bug['resolvedBy'] = 'SolvedByMe';
+$lang->block->typeList->bug['resolvedBy'] = 'ResolvedByMe';
 $lang->block->typeList->bug['closedBy']   = 'ClosedByMe';
 
 $lang->block->typeList->case['assigntome'] = 'AssignedToMe';

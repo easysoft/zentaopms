@@ -1,10 +1,10 @@
 <?php
-$lang->score->common       = 'My Point';
+$lang->score->common       = 'My Points';
 $lang->score->record       = 'Points';
 $lang->score->current      = 'My Points';
 $lang->score->level        = 'Level Point';
 $lang->score->reset        = 'Reset';
-$lang->score->tips         = 'Point added yesterday: <strong>%d</strong><br/> Total Points: <strong>%d</strong>';
+$lang->score->tips         = 'Points added yesterday: <strong>%d</strong><br/> Total Points: <strong>%d</strong>';
 $lang->score->resetTips    = 'It will take a while. <strong>Do not close the window.</strong>';
 $lang->score->resetStart   = 'Start';
 $lang->score->resetLoading = 'Processing: ';
@@ -67,7 +67,7 @@ $lang->score->methods['story']['close']              = 'Close Story';
 $lang->score->methods['bug']['create']               = 'Report Bug';
 $lang->score->methods['bug']['confirmBug']           = 'Confirm Bug';
 $lang->score->methods['bug']['createFormCase']       = 'Report Bug form Case';
-$lang->score->methods['bug']['resolve']              = 'Solve Bug';
+$lang->score->methods['bug']['resolve']              = 'Resolve Bug';
 $lang->score->methods['bug']['saveTplModal']         = 'Save Template';
 $lang->score->methods['testtask']['runCase']         = 'Run Test Case';
 $lang->score->methods['testcase']['create']          = 'Create Test Case';

@@ -9,20 +9,22 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testsuite->index            = "Home";
+$lang->testsuite->index            = "Suite Home";
 $lang->testsuite->create           = "Create Suite";
-$lang->testsuite->delete           = "Delete";
-$lang->testsuite->view             = "Overview";
+$lang->testsuite->delete           = "Delete Suite";
+$lang->testsuite->view             = "Suite Detail";
 $lang->testsuite->edit             = "Edit Suite";
 $lang->testsuite->browse           = "Suite List";
 $lang->testsuite->linkCase         = "Link Case";
 $lang->testsuite->linkVersion      = "Version";
 $lang->testsuite->unlinkCase       = "Unlink";
+$lang->testsuite->unlinkCaseAction = "Unlink Case";
 $lang->testsuite->batchUnlinkCases = "Batch Unlink Cases";
 $lang->testsuite->deleted          = 'Deleted';
 $lang->testsuite->exportTemplet    = 'Export Template';
-$lang->testsuite->batchCreateCase  = 'Batch Create Cases';
+$lang->testsuite->batchCreateCase  = 'Batch Create';
 $lang->testsuite->import           = 'Import';
+$lang->testsuite->importAction     = 'Import Case';
 $lang->testsuite->showImport       = 'Imported Data';
 $lang->testsuite->successSaved     = 'Saved';
 
@@ -30,7 +32,7 @@ $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->desc           = 'Description';
-$lang->testsuite->author         = 'ACL';
+$lang->testsuite->author         = 'Access Control';
 $lang->testsuite->addedBy        = 'CreatedBy';
 $lang->testsuite->addedDate      = 'CreatedDate';
 
@@ -39,7 +41,7 @@ $lang->testsuite->legendBasicInfo = 'Basic Info';
 
 $lang->testsuite->unlinkedCases = 'Unlinked Cases';
 
-$lang->testsuite->confirmDelete     = 'Do you want to delete this suite?';
+$lang->testsuite->confirmDelete     = 'Do you want to delete this test suite?';
 $lang->testsuite->libraryDelete     = 'Do you want to delete this library？';
 $lang->testsuite->confirmUnlinkCase = 'Do you want to unlink this Case?';
 $lang->testsuite->noticeNone        = 'You have not created any suite yet.';
@@ -55,8 +57,8 @@ $lang->testsuite->authorList['public']  = 'Public';
 $lang->caselib->common = 'Case Library';
 $lang->caselib->all    = 'All Case Libraries';
 
-$lang->testsuite->createLib  = 'Create Library';
-$lang->testsuite->editLib    = 'Edit';
+$lang->testsuite->createLib  = 'Create Case Library';
+$lang->testsuite->editLib    = 'Edit Case Library';
 $lang->testsuite->library    = 'View Cases in Library';
 $lang->testsuite->createCase = 'Create Case';
-$lang->testsuite->libView    = 'Overview';
+$lang->testsuite->libView    = 'Library Detail';

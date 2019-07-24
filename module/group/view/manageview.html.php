@@ -14,14 +14,14 @@
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2 title='<?php echo $group->name;?>'>
-      <span id='groupName'><i class='icon-lock'> <?php echo $group->name;?></i></span>
+      <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?></span>
       <small> <?php echo $lang->arrow . $lang->group->manageView;?></small>
     </h2>
   </div>
   <form class="load-indicator main-form form-ajax" id="manageViewForm" method="post" target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <?php $colWidth = $app->getClientLang() == 'en' ? 'w-130px' : 'w-100px';?>
+        <?php $colWidth = common::checkEnLang() ? 'w-130px' : 'w-100px';?>
         <th class='text-bottom <?php echo $colWidth;?>'><?php echo $lang->group->viewList;?></th>
         <td class='text-bottom'>
           <?php foreach($lang->menu as $menuKey => $menu):?>

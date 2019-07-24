@@ -26,21 +26,33 @@
     ?>
     <?php endforeach;?>
     <div class="btn-group">
-      <?php 
-      $active  = $param ? 'btn-active-text' : '';
-      $current = $param ? zget($users, $param, $param) : $lang->product->viewByUser;
-      $current = "<span class='text'>" . $current . '</span>' . ' <span class="caret"></span>';
+      <?php
+      $withSearch = count($users) > 8;
+      $active     = $param ? 'btn-active-text' : '';
+      $current    = $param ? zget($users, $param, $param) : $lang->product->viewByUser;
+      $current    = "<span class='text'>" . $current . '</span>' . ' <span class="caret"></span>';
       ?>
-      <?php echo html::a($this->createLink('product', 'dynamic', "productID=$productID&type=all"), $current, '', "class='btn btn-link $active' data-toggle='dropdown'");?>
-      <ul class='dropdown-menu'>
-        <?php 
-        foreach($users as $account => $name)
-        {
-            if(!$account) continue;
-            echo '<li>' . html::a($this->createLink('product', 'dynamic', "productID=$productID&type=account&param=$account"), $name) .  '</li>';
-        }
-        ?>
-      </ul>
+      <?php echo html::a('###', $current, '', "class='btn btn-link $active' data-toggle='dropdown'");?>
+      <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
+        <?php if($withSearch):?>
+        <div class="input-control search-box has-icon-left has-icon-right search-example">
+          <input id="userSearchBox" type="search" autocomplete="off" class="form-control search-input">
+          <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+          <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+        </div>
+        <?php endif;?>
+        <div class='list-group'>
+          <?php
+          $usersPinYin = common::convert2Pinyin($users);
+          foreach($users as $account => $name)
+          {
+              if(!$account) continue;
+              $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $account, '') . '"') : '';
+              echo html::a($this->createLink('product', 'dynamic', "productID=$productID&type=account&param=$account"), $name, '', $searchKey);
+          }
+          ?>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -54,7 +66,7 @@
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
     <?php 
-    if($this->app->getClientLang() == 'en')
+    if(common::checkEnLang())
     {   
         $isToday = date('M d') == $date;
     }   

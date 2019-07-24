@@ -6,8 +6,8 @@ if(!isset($config->$module->markdown->$method)) return;
 $editor = $config->$module->markdown->$method;
 $editor['id'] = explode(',', $editor['id']);
 ?>
-<link rel="stylesheet" href="<?php echo $jsRoot?>markdown/simplemde.min.css"  type='text/css' media='screen' />
-<script type="text/javascript" charset="utf-8" src="<?php echo $jsRoot?>markdown/simplemde.min.js"></script>
+<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
+<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
 <style>
 .CodeMirror,.CodeMirror-scroll{min-height:200px!important;}
 .CodeMirror-fullscreen + .editor-preview-side{display:block;}

@@ -11,14 +11,14 @@
  */
 $lang->dept->common      = 'Department';
 $lang->dept->manageChild = "Child Department";
-$lang->dept->edit        = "Edit";
-$lang->dept->delete      = "Delete";
+$lang->dept->edit        = "Edit Department";
+$lang->dept->delete      = "Delete Department";
 $lang->dept->parent      = "Parent Dept";
 $lang->dept->manager     = "Manager";
 $lang->dept->name        = "Department Name";
-$lang->dept->browse      = "Manage";
+$lang->dept->browse      = "Manage Department";
 $lang->dept->manage      = "Manage Department";
-$lang->dept->updateOrder = "Order";
+$lang->dept->updateOrder = "Rank Department";
 $lang->dept->add         = "Add Department";
 $lang->dept->dragAndSort = "Drag to order";
 

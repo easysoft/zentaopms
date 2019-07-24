@@ -55,11 +55,12 @@ $lang->block->editBlock          = '編輯區塊';
 $lang->block->ordersSaved        = '排序已保存';
 $lang->block->confirmRemoveBlock = '確定移除區塊嗎？';
 $lang->block->noticeNewBlock     = '10.0版本以後各個視圖主頁提供了全新的視圖，您要啟用新的視圖佈局嗎？';
-$lang->block->confirmReset       = '是否恢復預設佈局';
+$lang->block->confirmReset       = '是否恢復預設佈局？';
 $lang->block->closeForever       = '永久關閉';
 $lang->block->confirmClose       = '確定永久關閉該區塊嗎？關閉後所有人都將無法使用該區塊，可以在後台自定義中打開。';
 $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
+$lang->block->nbsp               = '';  
 $lang->block->hidden             = '隱藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
 

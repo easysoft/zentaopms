@@ -47,9 +47,12 @@ class router extends baseRouter
      */
     public function setClientLang($lang = '')
     {
-        $langs = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'")->fetch();
-        $langs = empty($langs) ? array() : json_decode($langs->value, true);
-        foreach($langs as $langKey => $langData) $this->config->langs[$langKey] = $langData['name'];
+        if($this->dbh)
+        {
+            $langs = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='common' AND `section`='global' AND `key`='langs'")->fetch();
+            $langs = empty($langs) ? array() : json_decode($langs->value, true);
+            foreach($langs as $langKey => $langData) $this->config->langs[$langKey] = $langData['name'];
+        }
         return parent::setClientLang($lang);
     }
 
@@ -109,8 +112,8 @@ class router extends baseRouter
                 $productProject = $productProject->value;
                 list($productCommon, $projectCommon) = explode('_', $productProject);
             }
-            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['zh-cn'][0];
-            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['zh-cn'][0];
+            $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][0];
+            $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][0];
         }
 
         parent::loadLang($moduleName, $appName);

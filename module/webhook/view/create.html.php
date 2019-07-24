@@ -18,12 +18,12 @@
     <div class='main-header'>
       <h2><?php echo $lang->webhook->create;?></h2>
     </div>
-    <form id='webhookForm' method='post' class='ajaxForm'>
+    <form id='webhookForm' method='post' class='form-ajax'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = $app->getClientLang() == 'en' ? 'w-120px' : 'w-90px';?>
+          <?php $colWidth = common::checkEnLang() ? 'w-120px' : 'w-90px';?>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->webhook->type;?></th>
-          <td><?php echo html::select('type', $lang->webhook->typeList, '', "class='form-control'");?></td>
+          <td style="width:550px" ><?php echo html::select('type', $lang->webhook->typeList, '', "class='form-control'");?></td>
           <td></td>
         </tr>
         <tr>

@@ -23,11 +23,12 @@ class translate extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $remoteIP = helper::getRemoteIp();
-        if($remoteIP != '127.0.0.1')
+        $this->active = helper::getRemoteIp() == '127.0.0.1';
+        if(!$this->active) $this->app->loadLang('editor');
+        if(!$this->active and $this->app->getMethodName() != 'index')
         {
             $this->app->loadLang('editor');
-            die("<html><head><meta chatset='utf-8'></head><body>{$this->lang->editor->onlyLocalVisit}</body></html>");
+            die($this->display('translate', 'deny'));
         }
     }
 
@@ -40,10 +41,21 @@ class translate extends control
      */
     public function index()
     {
+        /* Compare language when version is changed. */
+        $this->translate->compare();
+
         $itemCount  = $this->translate->getLangItemCount();
         $statistics = $this->translate->getLangStatistics();
         $finishedLangs = $translatingLangs = array();
         foreach($this->config->translate->defaultLang as $defaultLang) $finishedLangs[$defaultLang] = $this->config->langs[$defaultLang];
+
+        $addLangs = json_decode($this->config->global->langs, true);
+        foreach($this->config->langs as $langKey => $langName)
+        {
+            if(isset($finishedLangs[$langKey])) continue;
+            if(!isset($addLangs[$langKey])) $finishedLangs[$langKey] = $langName;
+        }
+
         foreach($statistics as $translateLang => $data)
         {
             if($data->progress == 1)
@@ -62,6 +74,7 @@ class translate extends control
         $this->view->finishedLangs    = $finishedLangs;
         $this->view->translatingLangs = $translatingLangs;
         $this->view->itemCount        = $itemCount;
+        $this->view->active           = $this->active;
         $this->display();
     }
 
@@ -141,6 +154,7 @@ class translate extends control
         {
             if(in_array($module, $modules)) break;
         }
+
         if(empty($referLang))
         {
             $langs = json_decode($this->config->global->langs, true);
@@ -153,10 +167,17 @@ class translate extends control
                 $referLang = $language == 'zh-cn' ? 'en' : 'zh-cn';
             }
         }
-        $this->view->cmd = $this->translate->checkDirPriv($module);
+        $this->view->cmd = $this->translate->checkDirPriv($module, $language);
 
         if($_POST)
         {
+            $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+            if($statusFile)
+            {
+                $this->app->loadLang('editor');
+                $this->send(array('result' => 'fail', 'callback' => 'bootAlert("' . str_replace('\n', '<br />', sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile)) . '")')));
+            }
+
             $this->translate->addTranslation($language, $module, $referLang);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
@@ -170,9 +191,12 @@ class translate extends control
         $this->view->position[] = html::a($this->createLink('translate', 'index'), $this->lang->translate->common);
         $this->view->position[] = $this->lang->translate->module;
 
+        $translations  = $this->translate->getTranslations($language, $module);
+        if(empty($translations)) $translations = $this->translate->getModuleLangs($module, $language);
+
         $this->view->referItems    = $referItems;
-        $this->view->translations  = $this->translate->getTranslations($language, $module);
         $this->view->moduleGroup   = $moduleGroup;
+        $this->view->translations  = $translations;
         $this->view->currentModule = $module;
         $this->view->currentGroup  = $group;
         $this->view->language      = $language;
@@ -312,6 +336,17 @@ class translate extends control
                 }
                 if(file_exists($modulePath . "/lang/{$language}.php")) copy($modulePath . "/lang/{$language}.php", $downloadPath . "module/{$moduleName}/lang/{$language}.php");
             }
+
+            mkdir($downloadPath . 'config/ext/', 0777, true);
+            $langConfig  = "<?php\n";
+            $langConfig .= "\$config->langs['$language'] = '" . addslashes($this->config->langs[$language]) . "';\n";
+            $langConfig .= "\$config->productCommonList['$language'][0] = '" . $this->config->productCommonList['en'][0] . "';\n";
+            $langConfig .= "\$config->productCommonList['$language'][1] = '" . $this->config->productCommonList['en'][1] . "';\n";
+            $langConfig .= "\$config->projectCommonList['$language'][0] = '" . $this->config->projectCommonList['en'][0] . "';\n";
+            $langConfig .= "\$config->projectCommonList['$language'][1] = '" . $this->config->projectCommonList['en'][1] . "';\n";
+            $langConfig .= "\$config->charsets['$language']['utf-8']    = 'UTF-8';\n";
+            $langConfig .= "\$config->charsets['$language']['GBK']      = 'GBK';\n";
+            file_put_contents($downloadPath . "config/ext/{$language}.php", $langConfig);
 
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($downloadFile);

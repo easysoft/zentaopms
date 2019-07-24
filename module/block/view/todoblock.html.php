@@ -19,9 +19,9 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
 .block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -20px; max-height: 350px; overflow: auto; overflow-x:hidden}
-.block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap;}
+.block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap; overflow: auto; overflow-x:hidden;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
-.block-todoes .todo-title {padding: 5px;}
+.block-todoes .todo-title {padding: 5px 15px 5px 5px;}
 .block-todoes .todo-pri {margin: 0 5px;}
 .block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 75px;}
 .block-todoes .todo-check {position: absolute; top: 5px; left: 10px; display: block; width: 20px; height: 20px; font-size: 20px; color: transparent; cursor: pointer; background: #fff; border: 2px solid #eee; border-radius: 50%;}
@@ -41,7 +41,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
       <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&account=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
         <div class="form-group">
-          <?php $leftWidth  = $app->getClientLang() == 'en' ? 'col-sm-3' : 'col-sm-2';?>
+          <?php $leftWidth  = common::checkEnLang() ? 'col-sm-3' : 'col-sm-2';?>
           <label for="todoName" class="<?php echo $leftWidth;?>"><?php echo $lang->todo->name?></label>
           <div class="col-sm-9 required"><input type="text" class="form-control" autocomplete="off" name="name"></div>
         </div>

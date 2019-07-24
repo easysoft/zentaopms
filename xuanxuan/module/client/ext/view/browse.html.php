@@ -20,8 +20,8 @@ $position[] = $this->lang->client->browse;
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <div class='pull-right'>
+      <?php common::printLink('client', 'create', '', $lang->client->create, '', "class='btn' data-toggle='modal'");?>
       <?php common::printLink('client', 'checkUpgrade', '', $lang->client->checkUpgrade, '', "class='btn btn-primary'");?>
-      <?php common::printLink('client', 'create', '', $lang->client->create, '', "class='btn btn-primary' data-toggle='modal'");?>
     </div>
     <div class='heading'>
       <h4><?php echo $lang->client->browseVersion;?></h4>

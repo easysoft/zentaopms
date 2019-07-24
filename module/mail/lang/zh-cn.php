@@ -2,11 +2,15 @@
 $lang->mail->common        = '发信配置';
 $lang->mail->index         = '首页';
 $lang->mail->detect        = '检测';
+$lang->mail->detectAction  = '通过邮箱地址检测';
 $lang->mail->edit          = '编辑配置';
 $lang->mail->save          = '保存';
+$lang->mail->saveAction    = '保存发信设置';
 $lang->mail->test          = '测试发信';
 $lang->mail->reset         = '重置';
+$lang->mail->resetAction   = '重置发信设置';
 $lang->mail->resend        = '重发';
+$lang->mail->resendAction  = '重发邮件';
 $lang->mail->browse        = '邮件列表';
 $lang->mail->delete        = '删除邮件';
 $lang->mail->ztCloud       = '禅道云发信';

@@ -46,7 +46,7 @@ class branchModel extends model
             $product = $this->loadModel('product')->getById($productID);
             if(!$product or $product->type == 'normal') return array();
 
-            $space = $this->app->getClientLang() == 'en' ? ' ' : '';
+            $space = common::checkEnLang() ? ' ' : '';
             $branches = array('0' => $this->lang->branch->all . $space . $this->lang->product->branchName[$product->type]) + $branches;
         }
         return $branches;
@@ -107,7 +107,7 @@ class branchModel extends model
             }
         }
 
-        $space = $this->app->getClientLang() == 'en' ? ' ' : '';
+        $space = common::checkEnLang() ? ' ' : '';
         foreach($products as $product)
         {
             if($product->type == 'normal') continue;

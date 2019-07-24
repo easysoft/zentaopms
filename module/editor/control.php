@@ -15,8 +15,9 @@ class editor extends control
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        $remoteIP = helper::getRemoteIp();
-        if($remoteIP != '127.0.0.1') die("<html><head><meta chatset='utf-8'></head><body>{$this->lang->editor->onlyLocalVisit}</body></html>");
+        $this->active = helper::getRemoteIp() == '127.0.0.1';
+        $methodName   = $this->app->getMethodName();
+        if(!$this->active and $methodName != 'index' and $methodName != 'extend') die($this->display('editor', 'deny'));
     }
 
     /**
@@ -146,7 +147,7 @@ class editor extends control
         $statusFile = $this->loadModel('upgrade')->checkSafeFile();
         if($statusFile)
         {
-            die(js::alert(sprintf($this->lang->editor->noticeOkFile, $statusFile)));
+            die(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
         }
         if($filePath and $_POST)
         {

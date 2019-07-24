@@ -1,12 +1,16 @@
 <?php
 $lang->mail->common        = 'Email Settings';
-$lang->mail->index         = 'Home';
-$lang->mail->detect        = 'Testing';
+$lang->mail->index         = 'Email Home';
+$lang->mail->detect        = 'Detect';
+$lang->mail->detectAction  = 'Detect By Email Address';
 $lang->mail->edit          = 'Edit Settings';
 $lang->mail->save          = 'Save';
+$lang->mail->saveAction    = 'Save Settings';
 $lang->mail->test          = 'Email Sending Test';
 $lang->mail->reset         = 'Reset';
+$lang->mail->resetAction   = 'Reset Settings';
 $lang->mail->resend        = 'Resend';
+$lang->mail->resendAction  = 'Resend Email';
 $lang->mail->browse        = 'Email List';
 $lang->mail->delete        = 'Delete Email';
 $lang->mail->ztCloud       = 'ZenTao CloudMail';
@@ -28,13 +32,13 @@ $lang->mail->auth        = 'SMTP Validation';
 $lang->mail->username    = 'SMTP Account';
 $lang->mail->password    = 'SMTP Password';
 $lang->mail->secure      = 'Encryption';
-$lang->mail->debug       = 'Debugging Level';
+$lang->mail->debug       = 'Debugging';
 $lang->mail->charset     = 'Charset';
 $lang->mail->accessKey   = 'Access Key';
 $lang->mail->secretKey   = 'Secret Key';
 $lang->mail->license     = 'ZenTao CloudMail Notice';
 
-$lang->mail->selectMTA = 'Select MTA (Mail Transfer Agent)';
+$lang->mail->selectMTA = 'Select Type';
 $lang->mail->smtp      = 'SMTP';
 
 $lang->mail->syncedUser = 'Synchronized';
@@ -95,7 +99,7 @@ $lang->mail->sendCloudHelp  = <<<EOD
 EOD;
 $lang->mail->sendCloudSuccess = 'Done';
 $lang->mail->closeSendCloud   = 'Close SendCloud';
-$lang->mail->addressWhiteList = 'Add it to the whiltelist of your email server to avoid being blocked';
+$lang->mail->addressWhiteList = 'Add it to the whiltelist of your email server to avoid being blocked.';
 $lang->mail->ztCloudNotice    = <<<EOD
 
 

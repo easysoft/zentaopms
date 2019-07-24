@@ -1,5 +1,5 @@
 <?php
-$lang->dev->common     = 'CSD';
+$lang->dev->common     = 'Develop';
 $lang->dev->api        = 'API';
 $lang->dev->db         = 'Database';
 $lang->dev->editor     = 'Editor';
@@ -70,7 +70,8 @@ $lang->dev->tableList['api']              = 'API';
 $lang->dev->tableList['backup']           = 'Backup';
 $lang->dev->tableList['common']           = 'Common';
 $lang->dev->tableList['convert']          = 'Convert';
-$lang->dev->tableList['dev']              = 'CSD';
+$lang->dev->tableList['dev']              = 'Develop';
+$lang->dev->tableList['editor']           = 'Editor';
 $lang->dev->tableList['git']              = 'GIT';
 $lang->dev->tableList['index']            = 'Home';
 $lang->dev->tableList['install']          = 'Install';
@@ -93,6 +94,7 @@ $lang->dev->tableList['block']            = 'Block';
 $lang->dev->tableList['branch']           = 'Branch';
 $lang->dev->tableList['doccontent']       = 'Doc Content';
 $lang->dev->tableList['storystage']       = 'Story Phase';
+$lang->dev->tableList['translate']        = 'Translate';
 $lang->dev->tableList['tutorial']         = 'Tutorial';
 $lang->dev->tableList['suitecase']        = 'Suite Case';
 $lang->dev->tableList['score']            = 'Score';
