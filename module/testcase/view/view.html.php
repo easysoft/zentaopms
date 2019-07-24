@@ -96,7 +96,7 @@
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
     </div>
-    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $case, 'div', "position=left&divCell=true");?>
+    <?php $this->printExtendFields($case, 'div', "position=left&divCell=true");?>
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
@@ -333,7 +333,7 @@
         </div>
       </details>
     </div>
-    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $case, 'div', "position=right&divCell=true");?>
+    <?php $this->printExtendFields($case, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 <div id="mainActions" class='main-actions'>

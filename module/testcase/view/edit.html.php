@@ -113,7 +113,7 @@
               </table>
             </div>
           </div>
-          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $case, 'div', 'position=left&divCell=false');?>
+          <?php $this->printExtendFields($case, 'div', 'position=left&divCell=false');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->testcase->legendComment;?></div>
             <div class='detail-content'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>

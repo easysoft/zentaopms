@@ -64,7 +64,7 @@
           <th><?php echo $lang->build->filePath;?></th>
           <td colspan='2'><?php echo html::input('filePath', '', "class='form-control' placeholder='{$lang->build->placeholder->filePath}'");?></td>
         </tr>  
-        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, '', 'table', 'columns=2');?>
+        <?php $this->printExtendFields('', 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->build->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildForm');?></td>

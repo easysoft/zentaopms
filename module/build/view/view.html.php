@@ -336,7 +336,7 @@ tbody tr td:first-child input{display:none;}
                   <th><?php echo $lang->build->filePath;?></th>
                   <td style='word-break:break-all;'><?php echo html::a($build->filePath, $build->filePath, '_blank');?></td>
                 </tr>
-                <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $build, 'table', "position=all&columns=1");?>
+                <?php $this->printExtendFields($build, 'table', "position=all&columns=1");?>
                 <?php if($config->global->flow != 'onlyTest'):?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>

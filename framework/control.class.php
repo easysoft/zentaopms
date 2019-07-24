@@ -215,4 +215,19 @@ class control extends baseControl
             if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
         }
     }
+
+    /**
+     * Print extend fields.
+     *
+     * @param  object $object
+     * @param  string $type
+     * @param  string $extras
+     * @access public
+     * @return void
+     */
+    public function printExtendFields($object, $type, $extras)
+    {
+        if(!isset($this->config->bizVersion)) return false;
+        $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
+    }
 }

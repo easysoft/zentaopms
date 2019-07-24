@@ -58,7 +58,7 @@
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
     </div>
-    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $bug, 'div', "position=left&divCell=true");?>
+    <?php $this->printExtendFields($bug, 'div', "position=left&divCell=true");?>
     <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <?php
     $params        = "bugID=$bug->id";
@@ -379,7 +379,7 @@
         </div>
       </div>
     </div>
-    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $bug, 'div', "position=right&divCell=true");?>
+    <?php $this->printExtendFields($bug, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

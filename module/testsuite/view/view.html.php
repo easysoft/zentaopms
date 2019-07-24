@@ -154,7 +154,7 @@
         </div>
       </div>
     </div>
-    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $suite, 'div', "position=right&divCell=true");?>
+    <?php $this->printExtendFields($suite, 'div', "position=right&divCell=true");?>
     <div class='cell'>
       <?php include '../../common/view/action.html.php';?>
     </div>

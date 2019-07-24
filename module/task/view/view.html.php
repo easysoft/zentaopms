@@ -145,7 +145,7 @@
       <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
     </div>
-    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'div', "position=left&divCell=true");?>
+    <?php $this->printExtendFields($task, 'div', "position=left&divCell=true");?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
@@ -379,7 +379,7 @@
         </div>
       </details>
     </div>
-    <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, $task, 'div', "position=right&divCell=true");?>
+    <?php $this->printExtendFields($task, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 
