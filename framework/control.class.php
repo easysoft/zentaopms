@@ -205,6 +205,8 @@ class control extends baseControl
      */
     public function executeHooks($methodName, $objectID)
     {
+        if(!isset($this->config->bizVersion)) return false;
+
         $flowFile   = $this->app->getModuleRoot() . 'workflow/model.php';
         $actionFile = $this->app->getModuleRoot() . 'workflowaction/model.php';
         $hookFile   = $this->app->getModuleRoot() . 'workflowhook/model.php';
