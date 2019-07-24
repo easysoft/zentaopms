@@ -233,9 +233,7 @@ class router extends baseRouter
      */
     public function loadConfig($moduleName, $appName = '')
     {
-        $appName = '';
-
-        return parent::loadModuleConfig($moduleName, $appName);
+        return parent::loadModuleConfig($moduleName);
     }
 
     /**
@@ -278,16 +276,15 @@ class router extends baseRouter
             {
                 if($flow->buildin && $this->methodName == 'browselabel')
                 {
-                        $this->workflowModule = $this->moduleName;
-                        $this->workflowMethod = 'browse';
+                    $this->workflowModule = $this->moduleName;
+                    $this->workflowMethod = 'browse';
 
-                        $this->loadModuleConfig('workflowaction');
+                    $this->loadModuleConfig('workflowaction');
 
-                        $moduleName = 'flow';
-                        $methodName = 'browse';
+                    $moduleName = 'flow';
+                    $methodName = 'browse';
 
-                        $this->setModuleName($moduleName);
-                        $this->setMethodName($methodName);
+                    $this->setFlowURI($moduleName, $methodName);
                 }
                 else
                 {
@@ -302,8 +299,7 @@ class router extends baseRouter
                         $moduleName = 'flow';
                         $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
 
-                        $this->setModuleName($moduleName);
-                        $this->setMethodName($methodName);
+                        $this->setFlowURI($moduleName, $methodName);
                     }
                 }
             }
@@ -311,6 +307,54 @@ class router extends baseRouter
 
         /* Call method of parent. */
         return parent::setControlFile($exitIfNone);
+    }
+
+    /**
+     * Reset URI to flow's URI.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function setFlowURI($moduleName, $methodName)
+    {
+        $this->rawURI = $this->URI;
+        $this->setModuleName($moduleName);
+        $this->setMethodName($methodName);
+        if($this->config->requestType != 'GET')
+        {
+            $params = explode($this->config->requestFix, $this->URI);
+            /* Remove module and method. */
+            $params = array_slice($params, 2);
+            /* Prepend other params. */
+            array_unshift($params, $this->workflowModule);
+            array_unshift($params, $methodName);
+            array_unshift($params, $moduleName);
+
+            $this->URI = implode($this->config->requestFix, $params);
+        }
+        else
+        {
+            $params = parse_url($this->URI);
+            /* Extract $path and $query from $params. */
+            extract($params); 
+            parse_str($query, $params);
+            /* Remove module and method. */
+            unset($params[$this->config->moduleVar]);
+            unset($params[$this->config->methodVar]);
+
+            $params = array_reverse($params);
+
+            /* Prepend other params. */
+            $params['module']                 = $this->workflowModule;
+            $params[$this->config->methodVar] = $methodName;
+            $params[$this->config->moduleVar] = $moduleName;
+
+            $params = array_reverse($params);
+
+            $this->URI = $path . '?' . http_build_query($params);
+        }
     }
 
     /**

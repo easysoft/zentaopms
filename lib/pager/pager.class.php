@@ -21,6 +21,60 @@ helper::import(dirname(dirname(__FILE__)) . '/base/pager/pager.class.php');
 class pager extends basePager
 {
     /**
+     * 设置模块名。
+     * Set the $moduleName property.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setModuleName()
+    {
+        if(isset($this->app->workflowModule))
+        {
+            $this->moduleName = $this->app->workflowModule;
+        }
+        else
+        {
+            $this->moduleName = $this->app->getModuleName();
+        }
+    }
+
+    /**
+     * 设置方法名。
+     * Set the $methodName property.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setMethodName()
+    {
+        if(isset($this->app->workflowMethod))
+        {
+            $this->methodName = $this->app->workflowMethod;
+        }
+        else
+        {
+            $this->methodName = $this->app->getMethodName();
+        }
+    }
+
+    /**
+     * 从请求网址中获取记录总数、每页记录数、页码。
+     * Get recTotal, recPerpage, pageID from the request params, and add them to params.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setParams()
+    {
+        parent::setParams();
+        if(isset($this->app->workflowModule) && isset($this->app->workflowMethod))
+        {
+            unset($this->params['module']);
+        }
+    }
+
+    /**
      * Show pager.
      * 
      * @param  string $align 
