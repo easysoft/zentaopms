@@ -238,7 +238,7 @@ class testcase extends control
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
 
-            $this->executeHooks($this->methodName, $caseID);
+            $this->executeHooks($caseID);
 
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
@@ -516,7 +516,7 @@ class testcase extends control
             ->fetch('count');
         $case->caseFails = $caseFails;
 
-        $this->executeHooks($this->methodName, $caseID);
+        $this->executeHooks($caseID);
 
         $this->view->position[] = $this->lang->testcase->common;
         $this->view->position[] = $this->lang->testcase->view;
@@ -569,7 +569,7 @@ class testcase extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $caseID);
+            $this->executeHooks($caseID);
 
             die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
         }
@@ -781,7 +781,7 @@ class testcase extends control
             $result = $this->post->result;
             $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
 
-            $this->executeHooks($this->methodName, $caseID);
+            $this->executeHooks($caseID);
 
             die(js::reload('parent.parent'));
         }
@@ -827,7 +827,7 @@ class testcase extends control
         {
             $this->testcase->delete(TABLE_CASE, $caseID);
 
-            $this->executeHooks($this->methodName, $caseID);
+            $this->executeHooks($caseID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
