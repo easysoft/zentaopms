@@ -241,18 +241,18 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               <?php
               $class = "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchConfirm');
-              $misc = (common::hasPriv('bug', 'batchConfirm') && common::hasPriv('bug','confirmBug')) ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : "";
+              $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
               if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
 
               $actionLink = $this->createLink('bug', 'batchClose');
-              $misc = (common::hasPriv('bug', 'batchClose') && common::hasPriv('bug','close')) ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : "";
+              $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
               if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
 
               $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
-              $misc = (common::hasPriv('bug', 'batchActivate') && common::hasPriv('bug','activate')) ? "onclick=\"setFormAction('$actionLink')\"" : "";
+              $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
               if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
-              $misc = (common::hasPriv('bug', 'batchResolve') && common::hasPriv('bug','resolve')) ? "id='resolveItem'" : '';
+              $misc = common::hasPriv('bug', 'batchResolve') ? "id='resolveItem'" : '';
               if($misc)
               {
                   echo "<li class='dropdown-submenu'>" . html::a('javascript:;', $lang->bug->resolve,  '', $misc);
