@@ -115,10 +115,7 @@
         if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review', "caseID=$case->id", $case, 'button', '', '', 'iframe', '', '', $lang->testcase->reviewAB);
         ?>
 
-        <?php
-        $flow = $this->loadModel('workflow')->getByModule('testcase');
-        echo $this->loadModel('flow')->buildOperateMenu($flow, $case, 'view');
-        ?>
+        <?php echo $this->buildOperateMenu($case, 'view');?>
 
         <?php
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case);

@@ -90,8 +90,7 @@
         common::printBack($browseLink);
         if(!$product->deleted)
         {
-            $flow = $this->loadModel('workflow')->getByModule('product');
-            echo $this->loadModel('flow')->buildOperateMenu($flow, $product, 'view');
+            echo $this->buildOperateMenu($product, 'view');
 
             echo "<div class='divider'></div>";
 

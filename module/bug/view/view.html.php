@@ -80,8 +80,7 @@
         if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
         common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
 
-        $flow = $this->loadModel('workflow')->getByModule('bug');
-        echo $this->loadModel('flow')->buildOperateMenu($flow, $bug, 'view');
+        echo $this->buildOperateMenu($bug, 'view');
 
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
