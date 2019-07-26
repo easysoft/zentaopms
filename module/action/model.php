@@ -894,7 +894,7 @@ class actionModel extends model
      * @access public
      * @return void
      */
-    public function printChanges($objectType, $histories)
+    public function printChanges($objectType, $histories, $canChangeTag = true)
     {
         if(empty($histories)) return;
 
@@ -921,7 +921,7 @@ class actionModel extends model
                 $history->diff      = ($history->field != 'subversion' and $history->field != 'git') ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
                 $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
                 $history->diff      = nl2br($history->diff);
-                $history->noTagDiff = preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff);
+                $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
                 printf($this->lang->action->desc->diff2, $history->fieldLabel, $history->noTagDiff, $history->diff);
             }
             else
