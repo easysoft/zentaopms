@@ -60,6 +60,11 @@ $operatorWidth = common::checkEnLang() ? 'w-110px' : 'w-90px';
 #toggle-queries{position: absolute; right: 0px; top: 40px; width: 13px; background: #79cdfb; border-radius: 6px; height: 30px;cursor: pointer}
 #toggle-queries .icon{ position: absolute; top: 6px; right: -2px; color: #fff;}
 </style>
+<?php if($style != 'simple'):?>
+  <div id='toggle-queries'>
+    <i class='icon icon-angle-left'></i>
+  </div>
+<?php endif;?>
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
 <?php
@@ -202,9 +207,6 @@ foreach($fieldParams as $fieldName => $param)
         </table>
       </td>
       <?php if($style != 'simple'):?>
-      <div id='toggle-queries'>
-      <i class='icon icon-angle-left'></i>
-      </div>
       <td class='w-160px hidden' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <ul>

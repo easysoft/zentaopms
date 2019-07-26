@@ -74,7 +74,7 @@
       <div class="btn-toolbar">
         <?php echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
       </div>
-      <div class=''></div>
+      <div class='text'></div>
     </div>
   </form>
 </div>

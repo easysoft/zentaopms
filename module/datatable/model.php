@@ -41,7 +41,7 @@ class datatableModel extends model
             $fields = $this->loadModel('workflowfield')->getList($module);
             foreach($fields as $field)
             {
-                if($field->buildin == 1) continue;    
+                if($field->buildin) continue;    
                 $this->config->$module->datatable->fieldList[$field->field]['title']    = $field->name;
                 $this->config->$module->datatable->fieldList[$field->field]['width']    = '120';
                 $this->config->$module->datatable->fieldList[$field->field]['fixed']    = 'no';

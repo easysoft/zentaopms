@@ -1,5 +1,5 @@
 .block-burn .panel-body{margin-top: 20px;}
-.data-stats .widthTr td{padding:0px;}
+.data-stats .statsTr td{padding:0px;}
 
 #burnWrapper {max-width: 400px; margin: 0 auto; padding: 8px; position: relative;}
 #burnYUnit {position: absolute; color: #CBD0DB; top: -10px; left: 10px;}
