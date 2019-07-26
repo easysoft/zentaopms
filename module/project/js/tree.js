@@ -26,7 +26,7 @@ $(function()
         return items;
     }
 
-    // 根据列表展开树形列表
+    /* Expand the tree list according to the list config.*/
     var showTreeLevel = function(level)
     {
         if(level === 'task' || level === 'story') $('.btn-tree-view').removeClass('btn-active-text');
@@ -35,7 +35,6 @@ $(function()
         $('#taskTree li.item-story').removeClass('hidden');
         $('#taskTree li.item-task').removeClass('hidden');
 
-        console.log((level === 'root' && collapse == false) || (level === 'task' && collapse == true) || (level === 'story' && collapse == true));
         if((level === 'root' && collapse == false) || (level === 'task' && collapse == true) || (level === 'story' && collapse == true))
         {
             taskTree.collapse();
@@ -84,10 +83,10 @@ $(function()
         return false;
     });
 
-    // 第一次访问时，展示所以节点
+    /* Expand the all nodes of tree when first visit.*/
     showTreeLevel(type);
 
-    // 在右侧显示内容
+    /* Show the content of story or task on right area.*/
     var $itemContent = $('#itemContent');
     var $mainContent = $('#mainContent');
     var isItemLoading = false, lastAjaxRequest;
