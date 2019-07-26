@@ -217,7 +217,7 @@
               </tr>
             </table>
           </div>
-          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', 'position=right&divCell=false');?>
+          <?php $this->printExtendFields($task, 'div', 'position=right&divCell=false');?>
         </div>
       </div>
     </div>
@@ -276,7 +276,7 @@
             </tfoot>
           </table>
         </div>
-        <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', 'position=left&divCell=false');?>
+        <?php $this->printExtendFields($task, 'div', 'position=left&divCell=false');?>
       </div>
     </div>
   </form>

@@ -247,7 +247,7 @@
               <?php endif;?>
             </table>
           </div>
-          <?php if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFields($app->moduleName, $app->methodName, 'div', 'position=right&divCell=false');?>
+          <?php $this->printExtendFields($case, 'div', 'position=right&divCell=false');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->testcase->legendOpenAndEdit;?></div>
             <table class='table table-form'>
