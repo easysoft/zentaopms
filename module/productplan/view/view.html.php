@@ -38,7 +38,7 @@
     if(!$plan->deleted)
     {
         $flow = $this->loadModel('workflow')->getByModule('productplan');
-        echo $this->loadModel('flow')->buildOperateMenu($flow, $productplan, 'view');
+        echo $this->loadModel('flow')->buildOperateMenu($flow, $plan, 'view');
 
         if(common::hasPriv('productplan', 'create') and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
         if(common::hasPriv('productplan', 'edit')) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
