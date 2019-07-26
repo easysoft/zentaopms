@@ -212,6 +212,22 @@ class control extends baseControl
     }
 
     /**
+     * Build operate menu of a method.
+     *
+     * @param  object $object product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
+     * @param  string $displayOn view|browse
+     * @access public
+     * @return void
+     */
+    public function buildOperateMenu($object, $displayOn = 'view')
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        $flow = $this->loadModel('workflow')->getByModule($this->moduleName);
+        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $displayOn);
+    }
+
+    /**
      * Print extend fields.
      *
      * @param  object $object

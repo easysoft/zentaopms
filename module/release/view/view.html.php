@@ -33,8 +33,7 @@
     <?php
     if(!$release->deleted)
     {
-        $flow = $this->loadModel('workflow')->getByModule('release');
-        echo $this->loadModel('flow')->buildOperateMenu($flow, $release, 'view');
+        echo $this->buildOperateMenu($release, 'view');
 
         if(common::hasPriv('release', 'changeStatus', $release))
         {
