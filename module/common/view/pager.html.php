@@ -1,6 +1,8 @@
 <script>
-$.extend($.fn.pager.Constructor.LANG, {
-    '<?php echo $app->getClientLang();?>': {
+$.extend($.fn.pager.Constructor.LANG,
+{
+    '<?php echo $app->getClientLang();?>':
+    {
         'pageOfText': "<?php echo $lang->pager->pageOfText;?>",
         'prev': "<?php echo $lang->pager->previousPage;?>",
         'next': "<?php echo $lang->pager->nextPage;?>",
@@ -15,8 +17,10 @@ $.extend($.fn.pager.Constructor.LANG, {
         'pageOfTotal': "<?php echo $lang->pager->pageOfTotal;?>"
     }
 });
-$.extend($.fn.colorPicker.Constructor.LANG, {
-    '<?php echo $app->getClientLang();?>': {
+$.extend($.fn.colorPicker.Constructor.LANG,
+{
+    '<?php echo $app->getClientLang();?>':
+    {
         'errorTip': "<?php echo $lang->colorPicker->errorTip;?>"
     }
 });
