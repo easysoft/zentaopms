@@ -1870,7 +1870,7 @@ class storyModel extends model
             ->page($pager)
             ->fetchAll();
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $productIdList = array();
         foreach($stories as $story) $productIdList[$story->product] = $story->product;
 

@@ -1183,11 +1183,6 @@ EOD;
         $orderBy = $this->session->$orderBy;
         if(empty($queryCondition) or $this->session->$typeOnlyCondition)
         {
-            if($type='story')
-            {
-                $queryCondition=false;
-                $orderBy=false;
-            }
             $queryObjects = $this->dao->select('*')->from($table)->where('id')->eq($objectID)
                 ->beginIF($queryCondition != false)->orWhere($queryCondition)->fi()
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()

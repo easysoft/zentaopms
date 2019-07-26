@@ -4,7 +4,6 @@ $(function()
     var preValue   = '';
     $(document).on('change', '#blockParams #paramstype', function()
     {
-        console.log(preValue);
         $title = $('#blockParams').find('#title');
         var value = $(this).find('option:selected').html();
         if($title.val().indexOf(blockTitle + ' - ' + preValue) >= 0) $title.val(blockTitle + ' - ' + value);

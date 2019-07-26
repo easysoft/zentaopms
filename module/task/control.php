@@ -127,7 +127,7 @@ class task extends control
             /* If link from no head then reload*/
             if(isonlybody())
             {
-                $this->executeHooks($this->methodName, $taskID);
+                $this->executeHooks($taskID);
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             }
 
@@ -137,7 +137,7 @@ class task extends control
                 $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             /* Locate the browser. */
             if($this->app->getViewType() == 'xhtml')
@@ -321,7 +321,7 @@ class task extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if($task->fromBug != 0)
             {
@@ -485,7 +485,7 @@ class task extends control
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -606,6 +606,8 @@ class task extends control
         $project = $this->project->getById($task->project);
         $this->project->setMenu($this->project->getPairs(), $project->id);
 
+        $this->executeHooks($taskID);
+
         $title      = "TASK#$task->id $task->name / $project->name";
         $position[] = html::a($this->createLink('project', 'browse', "projectID=$task->project"), $project->name);
         $position[] = $this->lang->task->common;
@@ -636,7 +638,7 @@ class task extends control
         $this->dao->update(TABLE_TASK)->set('storyVersion')->eq($task->latestStoryVersion)->where('id')->eq($taskID)->exec();
         $this->loadModel('action')->create('task', $taskID, 'confirmed', '', $task->latestStoryVersion);
 
-        $this->executeHooks($this->methodName, $taskID);
+        $this->executeHooks($taskID);
 
         die(js::reload('parent'));
     }
@@ -668,7 +670,7 @@ class task extends control
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if($changes and $this->task->needUpdateBugStatus($task))
             {
@@ -820,7 +822,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if($this->task->needUpdateBugStatus($task))
             {
@@ -899,7 +901,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -936,7 +938,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -971,7 +973,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1096,7 +1098,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -1132,7 +1134,7 @@ class task extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
@@ -1176,7 +1178,7 @@ class task extends control
                 }
             }
 
-            $this->executeHooks($this->methodName, $taskID);
+            $this->executeHooks($taskID);
 
             die(js::locate($this->session->taskList, 'parent'));
         }

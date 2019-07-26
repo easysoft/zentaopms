@@ -89,7 +89,7 @@ class testsuite extends control
             }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
-            $this->executeHooks($this->methodName, $suiteID);
+            $this->executeHooks($suiteID);
 
             $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
             $response['message'] = $this->lang->testsuite->successSaved;
@@ -142,6 +142,8 @@ class testsuite extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        $this->executeHooks($suiteID);
+
         $this->view->title      = "SUITE #$suite->id $suite->name/" . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('testsuite', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testsuite->common;
@@ -188,7 +190,7 @@ class testsuite extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($this->methodName, $suiteID);
+            $this->executeHooks($suiteID);
 
             $method = $suite->type == 'library' ? 'libView' : 'view';
             $response['locate']  = inlink($method, "suiteID=$suiteID");
@@ -250,7 +252,7 @@ class testsuite extends control
 
             $this->testsuite->delete($suiteID);
 
-            $this->executeHooks($this->methodName, $suiteID);
+            $this->executeHooks($suiteID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)

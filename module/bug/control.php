@@ -295,7 +295,7 @@ class bug extends control
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
             }
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
@@ -554,6 +554,8 @@ class bug extends control
         $productName = $this->products[$productID];
         $branches    = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
+        $this->executeHooks($bugID);
+
         /* Header and positon. */
         $this->view->title      = "BUG #$bug->id $bug->title - " . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
@@ -615,7 +617,7 @@ class bug extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             if($bug->toTask != 0)
             {
@@ -832,7 +834,7 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
@@ -947,7 +949,7 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
@@ -1005,7 +1007,7 @@ class bug extends control
 
             $bug = $this->bug->getById($bugID);
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             if($bug->toTask != 0)
             {
@@ -1097,7 +1099,7 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
@@ -1136,7 +1138,7 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1304,7 +1306,7 @@ class bug extends control
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0) echo js::alert($this->lang->bug->remindTask . $bug->toTask);
 
-            $this->executeHooks($this->methodName, $bugID);
+            $this->executeHooks($bugID);
 
             die(js::locate($this->session->bugList, 'parent'));
         }

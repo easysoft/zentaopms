@@ -198,24 +198,17 @@ class control extends baseControl
     /**
      * Execute hooks of a method.
      *
-     * @param  string $methodName
      * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function executeHooks($methodName, $objectID)
+    public function executeHooks($objectID)
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        $flowFile   = $this->app->getModuleRoot() . 'workflow/model.php';
-        $actionFile = $this->app->getModuleRoot() . 'workflowaction/model.php';
-        $hookFile   = $this->app->getModuleRoot() . 'workflowhook/model.php';
-        if(is_file($flowFile) && is_file($actionFile) && is_file($hookFile))
-        {
-            $flow   = $this->loadModel('workflow')->getByModule($this->moduleName);
-            $action = $this->loadModel('workflowaction')->getByModuleAndAction($this->moduleName, $this->methodName);
-            if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
-        }
+        $flow   = $this->loadModel('workflow')->getByModule($this->moduleName);
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($this->moduleName, $this->methodName);
+        if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
     }
 
     /**
