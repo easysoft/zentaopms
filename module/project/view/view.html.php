@@ -229,7 +229,7 @@
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
-                    <tr class='widthTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
+                    <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
                     <tr>
                       <td colspan="4">
                         <?php $progress = ($project->totalConsumed + $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;?>
