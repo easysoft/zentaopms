@@ -3,8 +3,8 @@ $(function()
     $('#currentConsumed').keyup(function()
     {
         var currentConsumed = $(this).val();
-        if(!parseInt(currentConsumed)) currentConsumed = 0;
-        var totalConsumed = parseInt(currentConsumed) + parseInt(consumed);
+        if(!parseFloat(currentConsumed)) currentConsumed = 0;
+        var totalConsumed = parseFloat(currentConsumed) + parseFloat(consumed);
         $('#totalConsumed').html(totalConsumed);
         $('#consumed').val(totalConsumed);
     })        
