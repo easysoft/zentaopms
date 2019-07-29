@@ -21,22 +21,22 @@ include dirname(__FILE__) . '/base/router.class.php';
 class router extends baseRouter
 {
     /**
-     * 工作流模块名。
-     * The module name of a flow.
+     * 请求的原始模块名。
+     * The requestd module name parsed from a URL.
      *
      * @var string
      * @access public
      */
-    public $workflowModule;
+    public $rawModule;
 
     /**
-     * 工作流方法名。
-     * The method name of a flow.
+     * 请求的原始方法名。
+     * The requested method name parsed from a URL.
      *
      * @var string
      * @access public
      */
-    public $workflowMethod;
+    public $rawMethod;
 
     /**
      * Add custom langs when set client lang.
@@ -222,9 +222,8 @@ class router extends baseRouter
     }
 
     /**
-     * Alias load  module config.
-     *
-     * Extension: set appName as empty.
+     * 调用父类方法时不传递$appName参数，保证父类方法中$appName值为空。 
+     * The $appName parameter is not passed when calling the parent class method, ensuring that the $appName value in the parent class method is null.
      *
      * @param  string $moduleName
      * @param  string $appName
@@ -256,57 +255,81 @@ class router extends baseRouter
     }
 
     /**
-     * 设置要被调用的控制器文件。
-     * Set the control file of the module to be called.
+     * 检查请求的模块和方法是否应该调用工作流引擎进行处理。
+     * Check if the requested module and method should call the workflow engine for processing.
      *
-     * Extension: If the module and method is defined in workflow, run workflow engine.
+     * 处理逻辑：
+     * Processing logic:
+     * 1、如果当前版本不是企业版，或者当前请求处于安装模式或升级模式，调用父类方法并返回。
+     * 1. If the current version is not the enterprise version, or if the current request is in install mode or upgrade mode, call the parent class method and return.
+     *
+     * 2、如果当前请求的模块在TABLE_WORKFLOW表中不存在，调用父类方法并返回。
+     * 2. If the currently requested module does not exist in the TABLE_WORKFLOW table, call the parent class method and return.
+     *
+     * 3、如果当前请求的模块在TABLE_WORKFLOW表中存在并且是内置模块，并且请求的方法名是browselabel，则修改请求的模块名为flow，修改请求的方法名为browse，重新设置URI参数，调用父类方法并返回。
+     * 3. If the currently requested module exists in the TABLE_WORKFLOW table and is a built-in module, and the requested method name is
+     * browselabel, rename the module of the request to flow and the method of the request to browse, and reset the URI, call the parent class method and return.
+     *
+     * 4、如果不满足3中的条件但当前请求的方法在TABLE_WORKFLOWACTION表中存在，且方法扩展类型为重写，则修改请求的模块名为flow，方法名根据5中的规则修改，重新设置URI参数，调用父类方法并返回。
+     * 4. If the condition of 3 is not satisfied but the currently requested method exists in the TABLE_WORKFLOWACTION table, and the method
+     * extension type is overwrite, rename the module of the request to flow, and rename the method of the request according to the rule in 5.
+     * Then reset the URI, call the parent class method and return.
+     *
+     * 5、如果当前请求的方法名为browse、create、edit、view、delete、export中任意一个，则方法名不变，否则方法名改为operate。
+     * 5. If the currently requested method is named any one of browse, create, edit, view, delete, or export, the method name is unchanged, otherwise the method name is changed to operate.
      *
      * @param   bool    $exitIfNone     没有找到该控制器文件的情况：如果该参数为true，则终止程序；如果为false，则打印错误日志
-     *                                  If control file not foundde, how to do. True, die the whole app. false, log error.
+     *                                  The controller file was not found: if the parameter is true, the program is terminated;
+     *                                                                     if false, the error log is printed. 
      * @access  public
      * @return  bool
      */
     public function setControlFile($exitIfNone = true)
     {
-        /* If the module and method is defined in workflow, run workflow engine. */
-        if(defined('TABLE_WORKFLOW') && defined('TABLE_WORKFLOWACTION') && $this->dbh)
+        /* If is not a biz version or is in install mode or in in upgrade mode, call parent method. */
+        if(!isset($this->config->bizVersion) or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
+
+        /* Check if the requested module is defined in workflow. */
+        $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
+        if(!$flow) return parent::setControlFile($exitIfNone);
+
+        /**
+         * 工作流中配置的标签应该请求browse方法，而某些内置流程本身包含browse方法。在这里处理请求的时候会无法区分是内置的browse方法还是工作
+         * 流标签的browse方法，为了避免此类冲突，在工作流中配置出的标签请求的方法改为browseLabel，在设置控制器文件时需要将其重设为browse。
+         * Tags configured in the workflow should request the browse method, and some built-in processes themselves contain the browse
+         * method. When processing a request here, it is impossible to distinguish between the built-in browse method and the browse
+         * method of the workflow tag. In order to avoid such conflicts, the method of configuring the label request in the workflow
+         * is changed to browseLabel, which needs to be reset to browse when setting the controller file.
+         */
+        if($flow->buildin && $this->methodName == 'browselabel')
         {
-            try
+            $this->rawModule = $this->moduleName;
+            $this->rawMethod = 'browse';
+
+            $moduleName = 'flow';
+            $methodName = 'browse';
+
+            $this->setFlowURI($moduleName, $methodName);
+        }
+        else
+        {
+            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
+            if(zget($action, 'extensionType') == 'override')
             {
-                $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
-                if($flow)
-                {
-                    if($flow->buildin && $this->methodName == 'browselabel')
-                    {
-                        $this->workflowModule = $this->moduleName;
-                        $this->workflowMethod = 'browse';
+                $this->rawModule = $this->moduleName;
+                $this->rawMethod = $this->methodName;
 
-                        $this->loadModuleConfig('workflowaction');
+                $this->loadModuleConfig('workflowaction');
 
-                        $moduleName = 'flow';
-                        $methodName = 'browse';
+                $moduleName = 'flow';
+                /*
+                 * 工作流中除了browse、create、edit、view、delete、export外其他的方法都调用operate方法来执行。
+                 * In addition to browse, create, edit, view, delete and export, all methods in the workflow call the operate method to execute.
+                 */
+                $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
 
-                        $this->setFlowURI($moduleName, $methodName);
-                    }
-                    else
-                    {
-                        $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
-                        if(zget($action, 'extensionType') == 'override')
-                        {
-                            $this->workflowModule = $this->moduleName;
-                            $this->workflowMethod = $this->methodName;
-
-                            $this->loadModuleConfig('workflowaction');
-
-                            $moduleName = 'flow';
-                            $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
-
-                            $this->setFlowURI($moduleName, $methodName);
-                        }
-                    }
-                }
+                $this->setFlowURI($moduleName, $methodName);
             }
-            catch(PDOException $exception){}
         }
 
         /* Call method of parent. */
@@ -314,7 +337,22 @@ class router extends baseRouter
     }
 
     /**
-     * Reset URI to flow's URI.
+     * 把请求的URI重设成工作流引擎可以解析的URI。
+     * Reset the requested URI to a URI that the workflow engine can resolve.
+     *
+     * e.g. /$module-browse-search-1.html   =>  /flow-browse-$module-search-1.html
+     *      /$module-create.html            =>  /flow-create-$module.html
+     *      /$module-edit-1.html            =>  /flow-edit-$module-1.html
+     *      /$module-view-1.html            =>  /flow-view-$module-1.html
+     *      /$module-delete-1.html          =>  /flow-delete-$module-1.html
+     *      /$module-close-1.html           =>  /flow-operate-$module-close-1.html
+     *
+     *      /index.php?m=$module&f=browse&mode=search&label=1   =>  /index.php?m=flow&f=browse&module=$module&mode=search&label=1
+     *      /index.php?m=$module&f=create&id=1                  =>  /index.php?m=flow&f=create&module=$module&$id=1
+     *      /index.php?m=$module&f=edit&id=1                    =>  /index.php?m=flow&f=edit&module=$module&$id=1
+     *      /index.php?m=$module&f=view&id=1                    =>  /index.php?m=flow&f=view&module=$module&$id=1
+     *      /index.php?m=$module&f=delete&id=1                  =>  /index.php?m=flow&f=delete&module=$module&$id=1
+     *      /index.php?m=$module&f=close&id=1                   =>  /index.php?m=flow&f=operate&module=$module&action=close&$id=1
      *
      * @param  string $moduleName
      * @param  string $methodName
@@ -325,41 +363,45 @@ class router extends baseRouter
     {
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
+
         if($this->config->requestType != 'GET')
         {
-            $params = explode($this->config->requestFix, $this->URI);
+            /* e.g. $this->URI = /$module-close-1.html. */
+            $params = explode($this->config->requestFix, $this->URI); // $params = array($module, 'close', 1);
 
             /* Remove module and method. */
-            $params = array_slice($params, 2);
+            $params = array_slice($params, 2); // $params = array(1);
 
             /* Prepend other params. */
-            if($methodName == 'operate') array_unshift($params, $this->workflowMethod);
-            array_unshift($params, $this->workflowModule);
-            array_unshift($params, $methodName);
-            array_unshift($params, $moduleName);
+            if($methodName == 'operate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
+            array_unshift($params, $this->rawModule);                              // $params = array($module, 'close', 1);
+            array_unshift($params, $methodName);                                   // $params = array('operate', $module, 'close', 1);
+            array_unshift($params, $moduleName);                                   // $params = array('flow', 'operate', $module, 'close', 1);
 
-            $this->URI = implode($this->config->requestFix, $params);
+            $this->URI = implode($this->config->requestFix, $params);              // $this->URI = flow-operate-$module-close-1.html;
         }
         else
         {
-            $params = parse_url($this->URI);
             /* Extract $path and $query from $params. */
-            extract($params); 
-            parse_str($query, $params);
-            /* Remove module and method. */
-            unset($params[$this->config->moduleVar]);
-            unset($params[$this->config->methodVar]);
+            /* e.g. $tshi->URI = /index.php?m=$module&f=browse&mode=search&label=1. */
+            $params = parse_url($this->URI);    // $params = array('path' => '/index.php', 'query' => m=$module&f=browse&mode=search&label=1;
+            extract($params);                   // $path = '/index.php'; $query = 'm=$module&f=browse&mode=search&label=1';
+            parse_str($query, $params);         // $params = array('m' => $module, 'f' => 'browse', 'mode' = 'search', 'label' => 1);
 
-            $params = array_reverse($params);
+            /* Remove module and method. */
+            unset($params[$this->config->moduleVar]);   // $params = array('f' => 'browse', 'mode' => 'search', 'label' => 1);
+            unset($params[$this->config->methodVar]);   // $params = array('mode' => 'search', 'label' => 1);
+
+            $params = array_reverse($params);           // $params = array('label' => 1, 'mode' => 'search');
 
             /* Prepend other params. */
-            $params['module']                 = $this->workflowModule;
-            $params[$this->config->methodVar] = $methodName;
-            $params[$this->config->moduleVar] = $moduleName;
+            $params['module']                 = $this->rawModule;   // $param = array('label' => 1, 'mode' => 'search', 'module' => $module);
+            $params[$this->config->methodVar] = $methodName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse');
+            $params[$this->config->moduleVar] = $moduleName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse', 'm' => 'flow');
 
-            $params = array_reverse($params);
+            $params = array_reverse($params);   // $params = array('m' => 'flow', 'f' => 'browse', 'module' => $module, 'mode' => 'search', 'label' => 1);
 
-            $this->URI = $path . '?' . http_build_query($params);
+            $this->URI = $path . '?' . http_build_query($params);   // $this->URI = '/index.php?m=flow&f=browse&module=$module&mode=search&label=1';
         }
     }
 
@@ -392,10 +434,9 @@ class router extends baseRouter
     }
 
     /**
-     * 合并请求的参数和默认参数，这样就可以省略已经有默认值的参数了。
-     * Merge the params passed in and the default params. Thus the params which have default values needn't pass value, just like a function.
-     *
-     * Extension: If the workflowmodule and workflowmethod is not empty, reset the passed params.
+     * 如果$this->rawModule和$this->rawMethod的值不为空，说明这个请求需要工作流引擎来处理，则要根据工作流引擎的需要重新设置参数。
+     * If the values of $this->rawModule and $this->rawMethod are not empty, indicating that the request needs to be processed
+     * by the workflow engine, the parameters are reset according to the needs of the workflow engine.
      *
      * @param   array $defaultParams     the default params defined by the method.
      * @param   array $passedParams      the params passed in through url.
@@ -404,20 +445,25 @@ class router extends baseRouter
      */
     public function mergeParams($defaultParams, $passedParams)
     {
-        /* If the workflowmodule and workflowmethod is not empty, reset the passed params. */
-        if($this->workflowModule && $this->workflowMethod)
+        /* If the rawModule and rawMethod is not empty, reset the passed params. */
+        if($this->rawModule && $this->rawMethod)
         {
             $passedParams = array_reverse($passedParams);
-            if(!in_array($this->workflowMethod, $this->config->workflowaction->default->actions))
-            {
-                $passedParams['action'] = $this->workflowMethod;
-            }
-            $passedParams['module'] = $this->workflowModule;
+
+            /* 如果请求的方法名不是browse、create、edit、view、delete、export中的任何一个，则需要添加action参数来传递请求的方法名。 */
+            /* If the requested method name is not any of browse, create, edit, view, delete, or export, you need to add an action parameter to pass the requested method name. */
+            if(!in_array($this->rawMethod, $this->config->workflowaction->default->actions)) $passedParams['action'] = $this->rawMethod;
+            /* 添加module参数来传递请求的模块名。 */
+            /* Add the module parameter to pass the requested module name. */
+            $passedParams['module'] = $this->rawModule;
 
             $passedParams = array_reverse($passedParams);
         }
 
+        /* display参数用来标记请求是否来自禅道客户端的卡片展示页面，此处应该删掉以避免对方法调用产生影响。 */
+        /* The display parameter is used to mark whether the request comes from the card display page of the ZenTao client. It should be deleted here to avoid affecting the method call. */
         unset($passedParams['display']);
+
         return parent::mergeParams($defaultParams, $passedParams);
     }
 }
