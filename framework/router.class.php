@@ -274,7 +274,6 @@ class router extends baseRouter
             try
             {
                 $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
-                var_dump($flow);
                 if($flow)
                 {
                     if($flow->buildin && $this->methodName == 'browselabel')
