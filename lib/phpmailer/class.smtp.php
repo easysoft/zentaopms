@@ -235,7 +235,7 @@ class SMTP {
             if (empty($authtype)) {
                 //If no auth mechanism is specified, attempt to use these, in this order
                 //Try CRAM-MD5 first as it's more secure than the others
-                foreach (['CRAM-MD5', 'LOGIN', 'PLAIN', 'XOAUTH2', 'NTLM'] as $method) {
+                foreach (array('CRAM-MD5', 'LOGIN', 'PLAIN', 'XOAUTH2', 'NTLM') as $method) {
                     if (in_array($method, $this->server_caps['AUTH'])) {
                         $authtype = $method;
                         break;
@@ -665,7 +665,7 @@ class SMTP {
 
         $this->last_reply = $this->get_lines();
         // Fetch SMTP code and possible error code explanation
-        $matches = [];
+        $matches = array();
         if (preg_match('/^([0-9]{3})[ -](?:([0-9]\\.[0-9]\\.[0-9]) )?/', $this->last_reply, $matches)) {
             $code = $matches[1];
             $code_ex = (count($matches) > 2 ? $matches[2] : null);
