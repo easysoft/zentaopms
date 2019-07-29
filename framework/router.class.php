@@ -269,40 +269,45 @@ class router extends baseRouter
     public function setControlFile($exitIfNone = true)
     {
         /* If the module and method is defined in workflow, run workflow engine. */
-        if(defined('TABLE_WORKFLOW') && defined('TABLE_WORKFLOWACTION'))
+        if(defined('TABLE_WORKFLOW') && defined('TABLE_WORKFLOWACTION') && $this->dbh)
         {
-            $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
-            if($flow)
+            try
             {
-                if($flow->buildin && $this->methodName == 'browselabel')
+                $flow = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOW . " WHERE `module` = '$this->moduleName'")->fetch();
+                var_dump($flow);
+                if($flow)
                 {
-                    $this->workflowModule = $this->moduleName;
-                    $this->workflowMethod = 'browse';
-
-                    $this->loadModuleConfig('workflowaction');
-
-                    $moduleName = 'flow';
-                    $methodName = 'browse';
-
-                    $this->setFlowURI($moduleName, $methodName);
-                }
-                else
-                {
-                    $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
-                    if(zget($action, 'extensionType') == 'override')
+                    if($flow->buildin && $this->methodName == 'browselabel')
                     {
                         $this->workflowModule = $this->moduleName;
-                        $this->workflowMethod = $this->methodName;
+                        $this->workflowMethod = 'browse';
 
                         $this->loadModuleConfig('workflowaction');
 
                         $moduleName = 'flow';
-                        $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
+                        $methodName = 'browse';
 
                         $this->setFlowURI($moduleName, $methodName);
                     }
+                    else
+                    {
+                        $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
+                        if(zget($action, 'extensionType') == 'override')
+                        {
+                            $this->workflowModule = $this->moduleName;
+                            $this->workflowMethod = $this->methodName;
+
+                            $this->loadModuleConfig('workflowaction');
+
+                            $moduleName = 'flow';
+                            $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
+
+                            $this->setFlowURI($moduleName, $methodName);
+                        }
+                    }
                 }
             }
+            catch(PDOException $exception){}
         }
 
         /* Call method of parent. */
