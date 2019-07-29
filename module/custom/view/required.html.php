@@ -33,7 +33,7 @@
         </div>
       </div>
       <table class='table table-form mw-800px'>
-        <?php $colWidth = common::checkEnLang() ? 'w-250px' : 'w-120px';?>
+        <?php $colWidth = common::checkNotCN() ? 'w-250px' : 'w-120px';?>
         <?php $i = 0;?>
         <?php foreach($requiredFields as $method => $requiredField):?>
         <tr>

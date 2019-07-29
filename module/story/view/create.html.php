@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
-<?php if(common::checkEnLang()):?>
+<?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
 <div id="mainContent" class="main-content">

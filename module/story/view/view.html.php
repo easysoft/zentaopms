@@ -232,7 +232,7 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLifeTime'>
-            <?php $widthClass = common::checkEnLang() ? 'w-100px' : 'w-70px';?>
+            <?php $widthClass = common::checkNotCN() ? 'w-100px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
@@ -314,7 +314,7 @@
           </div>
           <?php endif;?>
           <div class="tab-pane <?php if($config->global->flow == 'onlyStory') echo 'active';?>" id='legendRelated'>
-            <?php $widthClass = common::checkEnLang() ? 'w-110px' : 'w-70px';?>
+            <?php $widthClass = common::checkNotCN() ? 'w-110px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <?php if($config->global->flow != 'onlyStory'):?>

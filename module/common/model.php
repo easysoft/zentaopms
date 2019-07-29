@@ -1726,13 +1726,13 @@ EOD;
     }
 
     /**
-     * Check English Lang. 
+     * Check Not CN Lang. 
      * 
      * @static
      * @access public
      * @return bool
      */
-    public static function checkEnLang()
+    public static function checkNotCN()
     {
         global $app;
         return strpos('|zh-cn|zh-tw|', '|' . $app->getClientLang() . '|') === false;

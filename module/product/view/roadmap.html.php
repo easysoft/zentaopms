@@ -52,7 +52,7 @@
       <?php $groupRoadmaps = zget($yearRoadmaps, $branchKey, array());?>
       <div class="release-path">
         <div class="release-head">
-          <div class="title text-primary"><?php echo $year . (is_numeric($year) ? (common::checkEnLang() ? '' : $lang->year) : '');?></div>
+          <div class="title text-primary"><?php echo $year . (is_numeric($year) ? (common::checkNotCN() ? '' : $lang->year) : '');?></div>
           <div class="subtitle"><?php echo sprintf($lang->product->iterationInfo, count($groupRoadmaps, 1) - count($groupRoadmaps));?></div>
         </div>
         <?php $i = 0;?>

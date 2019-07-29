@@ -26,7 +26,7 @@
         </tr>
       </thead>
       <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <?php $colWidth = common::checkEnLang() ? 'w-180px' : 'w-150px';?>
+        <?php $colWidth = common::checkNotCN() ? 'w-180px' : 'w-150px';?>
         <th class='text-right <?php echo $colWidth;?>'><?php echo $lang->my->common;?></th>
         <td id='my' class='pv-10px'>
           <div class='checkbox-primary'>
@@ -73,7 +73,7 @@
     <table class='table table-hover table-striped table-bordered' id='privList'>
       <thead>
         <tr class='text-center'>
-          <?php $colWidth = common::checkEnLang() ? 'w-180px' : 'w-150px';?>
+          <?php $colWidth = common::checkNotCN() ? 'w-180px' : 'w-150px';?>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->group->module;?></th>
           <th><?php echo $lang->group->method;?></th>
         </tr>
@@ -98,7 +98,7 @@
       }
       ?>
       <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <?php $colWidth = common::checkEnLang() ? 'w-180px' : 'w-150px';?>
+        <?php $colWidth = common::checkNotCN() ? 'w-180px' : 'w-150px';?>
         <th class='text-middle text-right <?php echo $colWidth;?>'>
           <div class="checkbox-primary checkbox-inline checkbox-right check-all">
             <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>

@@ -84,7 +84,7 @@
         ?>
       </ul>
     </div>
-    <?php if(!common::checkEnLang()):?>
+    <?php if(!common::checkNotCN()):?>
     <?php if(common::hasPriv('story', 'batchCreate')) echo html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$moduleID"), "<i class='icon icon-plus'></i> {$lang->story->batchCreate}", '', "class='btn btn btn-secondary'");?>
     <?php
     if(commonModel::isTutorialMode())

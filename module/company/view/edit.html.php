@@ -23,7 +23,7 @@
   <form class='main-form' method='post' target='hiddenwin'>
     <table class='table table-form'> 
       <tr>
-        <?php $colWidth = common::checkEnLang() ? 'w-120px' : 'w-80px';?>
+        <?php $colWidth = common::checkNotCN() ? 'w-120px' : 'w-80px';?>
         <th class='<?php echo $colWidth;?>'><?php echo $lang->company->name;?></th>
         <td><?php echo html::input('name', $company->name, "class='form-control'");?></td>
       </tr>  
