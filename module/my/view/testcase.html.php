@@ -61,7 +61,7 @@
           <th class='w-120px'> <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='w-80px'>  <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
           <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-5'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
