@@ -132,7 +132,7 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendBasicInfo;?></summary>
         <div class="detail-content">
-          <?php $widthClass = common::checkEnLang() ? 'w-90px' : 'w-60px';?>
+          <?php $widthClass = common::checkNotCN() ? 'w-90px' : 'w-60px';?>
           <table class='table table-data'>
             <?php if($isLibCase):?>
             <tr>
@@ -276,7 +276,7 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendLinkBugs;?></summary>
         <div class="detail-content">
-          <?php $widthClass = common::checkEnLang() ? 'w-90px' : 'w-60px';?>
+          <?php $widthClass = common::checkNotCN() ? 'w-90px' : 'w-60px';?>
           <table class='table table-data'>
             <?php if($case->fromBug):?>
             <tr>
@@ -306,7 +306,7 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendOpenAndEdit;?></summary>
         <div class="detail-content">
-          <?php $widthClass = common::checkEnLang() ? 'w-100px' : 'w-60px';?>
+          <?php $widthClass = common::checkNotCN() ? 'w-100px' : 'w-60px';?>
           <table class='table table-data'>
             <tr>
               <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->openedBy;?></th>

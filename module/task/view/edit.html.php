@@ -20,7 +20,7 @@
 <?php js::set('confirmChangeProject', $lang->task->confirmChangeProject);?>
 <?php js::set('changeProjectConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
-<?php $thWidth = common::checkEnLang() ? 'w-85px' : 'w-70px';?>
+<?php $thWidth = common::checkNotCN() ? 'w-85px' : 'w-70px';?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -177,7 +177,7 @@
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->legendLife;?></div>
-            <?php $thWidth = common::checkEnLang() ? 'w-120px' : 'w-70px';?>
+            <?php $thWidth = common::checkNotCN() ? 'w-120px' : 'w-70px';?>
             <table class='table table-form'>
               <tr>
                 <th class=<?php echo $thWidth;?>><?php echo $lang->task->openedBy;?></th>

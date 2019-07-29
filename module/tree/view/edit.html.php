@@ -23,7 +23,7 @@ js::set('type', $type);
   <div class='modal-body'>
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
       <table class='table table-form'>
-        <?php $colWidth = common::checkEnLang() ? 'w-120px' : 'w-80px';?>
+        <?php $colWidth = common::checkNotCN() ? 'w-120px' : 'w-80px';?>
         <?php if($showProduct):?>
         <tr>
           <th class='<?php echo $colWidth;?>'><?php echo $lang->tree->product;?></th>

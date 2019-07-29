@@ -123,7 +123,7 @@ class messageModel extends model
         if($toList == $this->app->user->account) return false;
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        $space = common::checkEnLang() ? ' ' : '';
+        $space = common::checkNotCN() ? ' ' : '';
         $data  = $this->app->user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
         $data .= ' ' . html::a(helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
 

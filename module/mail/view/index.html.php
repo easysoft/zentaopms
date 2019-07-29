@@ -21,7 +21,7 @@
     <table class='table table-form' id='selectmta'>
       <tr>
         <td class='text-center'>
-          <?php if(!common::checkEnLang() and common::hasPriv('mail', 'ztCloud')):?>
+          <?php if(!common::checkNotCN() and common::hasPriv('mail', 'ztCloud')):?>
           <?php echo html::a(inlink('ztCloud'), $lang->mail->ztCloud, '', "class='btn w-120px'")?>
           <?php endif;?>
           <?php if(common::hasPriv('mail', 'detect')):?>
