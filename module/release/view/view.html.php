@@ -109,7 +109,7 @@
                     <td><?php echo $users[$story->openedBy];?></td>
                     <td><?php echo $story->estimate;?></td>
                     <td>
-                      <span class='status-story status-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span>
+                      <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
                     </td>
                     <td><?php echo $lang->story->stageList[$story->stage];?></td>
                     <td class='c-actions'>
@@ -179,7 +179,7 @@
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
                     <td>
-                      <span class='status-bug status-<?php echo $bug->status?>'><?php echo zget($lang->bug->statusList, $bug->status);?></span>
+                      <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
                     </td>
                     <td><?php echo $users[$bug->openedBy];?></td>
                     <td><?php echo substr($bug->openedDate, 5, 11)?></td>
@@ -268,7 +268,7 @@
                       <?php endif;?>
                     </td>
                     <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='preview'");?></td>
-                    <td><span class='status-<?php echo $bug->status?>'> <?php echo zget($lang->bug->statusList, $bug->status);?></span></td>
+                    <td><span class='status-<?php echo $bug->status?>'> <?php echo $this->processStatus('bug', $bug);?></span></td>
                     <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo $bug->openedDate?></td>
                     <td class='c-actions'>
@@ -324,7 +324,7 @@
                     </tr>
                     <tr>
                       <th><?php echo $lang->release->status;?></th>
-                      <td><?php echo $lang->release->statusList[$release->status];?></td>
+                      <td><?php echo $this->processStatus('release', $release);?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->release->date;?></th>
