@@ -9,5 +9,5 @@ ALTER TABLE `zt_story` ADD `subStatus` varchar(30) NOT NULL AFTER `status`;
 ALTER TABLE `zt_project` ADD `subStatus` varchar(30) NOT NULL AFTER `status`;
 ALTER TABLE `zt_task` ADD `subStatus` varchar(30) NOT NULL AFTER `status`;
 ALTER TABLE `zt_bug` ADD `subStatus` varchar(30) NOT NULL AFTER `status`;
-ALTER TABLE `zt_testcase` ADD `subStatus` varchar(30) NOT NULL AFTER `status`;
+ALTER TABLE `zt_case` ADD `subStatus` varchar(30) NOT NULL AFTER `status`;
 ALTER TABLE `zt_testtask` ADD `subStatus` varchar(30) NOT NULL AFTER `status`;
