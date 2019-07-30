@@ -153,10 +153,9 @@
             <td class='c-user' title='<?php echo $users[$story->openedBy];?>'><?php echo $users[$story->openedBy];?></td>
             <td class='c-user' title='<?php echo $users[$story->assignedTo];?>'><?php echo $users[$story->assignedTo];?></td>
             <td class='c-estimate'><?php echo $story->estimate;?></td>
-            <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
-              <span class='status-story status-<?php echo $story->status;?>'>
-                <?php echo zget($lang->story->statusList, $story->status);?>
-              </span>
+            <?php $status = $this->processStatus('story', $story);?>
+            <td class='c-status' title='<?php echo $status;?>'>
+              <span class='status-story status-<?php echo $story->status;?>'><?php echo $status;?></span>
             </td>
             <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
             <td class='linkbox'>
