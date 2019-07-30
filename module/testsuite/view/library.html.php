@@ -137,7 +137,7 @@ js::set('flow',          $config->global->flow);
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
               <td><?php echo $users[$case->openedBy];?></td>
-              <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $lang->testcase->statusList[$case->status];?></td>
+              <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <td class='c-actions'>
                 <?php
                 if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
