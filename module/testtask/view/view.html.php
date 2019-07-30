@@ -118,7 +118,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testtask->status;?></th>
-              <td class='task-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
+              <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
             </tr>
           </table>
         </div>
