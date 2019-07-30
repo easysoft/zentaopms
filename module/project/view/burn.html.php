@@ -27,7 +27,7 @@
     echo $lang->project->howToUpdateBurn;
     ?>
     <?php if($interval):?>
-    <div class='input-control <?php echo common::checkNotCN() ? "w-150px" : "w-120px" ?>'>
+    <div class='input-control thWidth'>
       <?php echo html::select('interval', $dayList, $interval, "class='form-control chosen'");?>
     </div>
     <?php endif;?>

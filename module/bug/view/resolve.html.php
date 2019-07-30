@@ -32,8 +32,7 @@ js::set('productID' , $bug->product);
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkNotCN() ? 'w-130px' : 'w-100px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->bug->resolution;?></th>
+          <th class='thWidth'><?php echo $lang->bug->resolution;?></th>
           <td class='w-p35-f'><?php echo html::select('resolution', $lang->bug->resolutionList, '', "class='form-control chosen'  onchange=setDuplicate(this.value)");?></td>
           <td></td>
         </tr>

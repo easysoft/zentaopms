@@ -288,10 +288,9 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLife'>
-            <?php $widthClass = common::checkNotCN() ? 'w-100px' : 'w-70px';?>
             <table class='table table-data'>
               <tr>
-                <th class='<?php echo $widthClass;?>'><?php echo $lang->task->openedBy;?></th>
+                <th class='thWidth'><?php echo $lang->task->openedBy;?></th>
                 <td><?php echo $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData;?></td>
               </tr>
               <tr>
@@ -344,9 +343,8 @@
         <summary class="detail-title"><?php echo $lang->task->legendEffort;?></summary>
         <div class="detail-content">
           <table class='table table-data'>
-            <?php $widthClass = common::checkNotCN() ? 'w-90px' : 'w-70px';?>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estimate;?></th>
+              <th class='effortThWidth'><?php echo $lang->task->estimate;?></th>
               <td><?php echo $task->estimate . $lang->workingHour;?></td>
             </tr>
             <tr>

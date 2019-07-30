@@ -35,14 +35,13 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkNotCN() ? 'w-120px' : 'w-100px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed;?></th>
+          <th class='thWidth'><?php echo !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo $task->consumed;?> <?php echo $lang->workingHour;?></td>
           <td></td>
         </tr>
         <?php if(!empty($task->team)):?>
         <tr>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->task->hasConsumed;?></th>
+          <th class='thWidth'><?php echo $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo (float)$task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
         </tr>
         <?php endif;?>

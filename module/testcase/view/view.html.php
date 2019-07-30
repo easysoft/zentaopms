@@ -132,16 +132,15 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendBasicInfo;?></summary>
         <div class="detail-content">
-          <?php $widthClass = common::checkNotCN() ? 'w-90px' : 'w-60px';?>
           <table class='table table-data'>
             <?php if($isLibCase):?>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->lib;?></th>
+              <th class='thWidth'><?php echo $lang->testcase->lib;?></th>
               <td><?php if(!common::printLink('testsuite', 'library', "libID=$case->lib", $libName)) echo $libName;?></td>
             </tr>
             <?php else:?>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->product;?></th>
+              <th class='thWidth'><?php echo $lang->testcase->product;?></th>
               <td><?php if(!common::printLink('testcase', 'browse', "productID=$case->product", $productName)) echo $productName;?></td>
             </tr>
             <?php if($this->session->currentProductType != 'normal'):?>
@@ -276,17 +275,16 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendLinkBugs;?></summary>
         <div class="detail-content">
-          <?php $widthClass = common::checkNotCN() ? 'w-90px' : 'w-60px';?>
           <table class='table table-data'>
             <?php if($case->fromBug):?>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->fromBug;?></th>
+              <th class='thWidth'><?php echo $lang->testcase->fromBug;?></th>
               <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugTitle, '', "class='iframe' data-width='80%'");?></td>
             </tr>
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
-              <th class='<?php echo $widthClass;?>' valign="top"><?php echo $lang->testcase->toBug;?></th>
+              <th class='thWidth' valign="top"><?php echo $lang->testcase->toBug;?></th>
               <td>
               <?php
               foreach($case->toBugs as $bugID => $bugTitle)
@@ -306,10 +304,9 @@
       <details class="detail" open>
         <summary class="detail-title"><?php echo $lang->testcase->legendOpenAndEdit;?></summary>
         <div class="detail-content">
-          <?php $widthClass = common::checkNotCN() ? 'w-100px' : 'w-60px';?>
           <table class='table table-data'>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->testcase->openedBy;?></th>
+              <th class='lifeThWidth'><?php echo $lang->testcase->openedBy;?></th>
               <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
             </tr>
             <?php if($config->testcase->needReview or !empty($config->testcase->forceReview)):?>

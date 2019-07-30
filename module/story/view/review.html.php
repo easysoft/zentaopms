@@ -27,8 +27,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkNotCN() ? 'w-110px' : 'w-80px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->story->reviewedDate;?></th>
+          <th class='thWidth'><?php echo $lang->story->reviewedDate;?></th>
           <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), "class='form-control form-date'");?></td><td></td>
         </tr>
         <tr>

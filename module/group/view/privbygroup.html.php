@@ -26,8 +26,7 @@
         </tr>
       </thead>
       <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <?php $colWidth = common::checkNotCN() ? 'w-180px' : 'w-150px';?>
-        <th class='text-right <?php echo $colWidth;?>'><?php echo $lang->my->common;?></th>
+        <th class='text-right thWidth'><?php echo $lang->my->common;?></th>
         <td id='my' class='pv-10px'>
           <div class='checkbox-primary'>
             <input type='checkbox' name='actions[my][]' value='limited' <?php if(isset($groupPrivs['my']['limited'])) echo "checked";?> />
@@ -73,8 +72,7 @@
     <table class='table table-hover table-striped table-bordered' id='privList'>
       <thead>
         <tr class='text-center'>
-          <?php $colWidth = common::checkNotCN() ? 'w-180px' : 'w-150px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->group->module;?></th>
+          <th class='thWidth'><?php echo $lang->group->module;?></th>
           <th><?php echo $lang->group->method;?></th>
         </tr>
       </thead>
@@ -98,8 +96,7 @@
       }
       ?>
       <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <?php $colWidth = common::checkNotCN() ? 'w-180px' : 'w-150px';?>
-        <th class='text-middle text-right <?php echo $colWidth;?>'>
+        <th class='text-middle text-right thWidth'>
           <div class="checkbox-primary checkbox-inline checkbox-right check-all">
             <input type='checkbox' id='allChecker<?php echo $moduleName;?>'>
             <label class='text-right' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>

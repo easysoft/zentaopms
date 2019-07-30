@@ -27,8 +27,7 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkNotCN() ? 'w-90px' : 'w-70px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->task->assignedTo;?></th>
+          <th class='thWidth'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $members, $task->finishedBy, "class='form-control chosen'");?></td>
           <td></td>
         </tr>

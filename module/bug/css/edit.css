@@ -4,3 +4,6 @@
 .col-side .chosen-container[id^="resolvedBuild"] {width: 172px!important}
 .chosen-choices li.search-choice{word-break: break-all;}
 #linkBugBox > li {margin-left:-56px}
+
+.thWidth{width:100px !important;}
+html[lang^='zh-'] .thWidth{width:80px !important;}
