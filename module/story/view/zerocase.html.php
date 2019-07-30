@@ -63,7 +63,7 @@
         <td><?php echo $users[$story->openedBy];?></td>
         <td><?php echo $users[$story->assignedTo];?></td>
         <td><?php echo $story->estimate;?></td>
-        <td><span class='status-story status-<?php echo $story->status;?>'><?php echo zget($lang->story->statusList, $story->status);?></span></td>
+        <td><span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         <td class='c-actions'>
           <?php

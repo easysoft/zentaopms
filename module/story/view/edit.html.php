@@ -123,7 +123,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>
-                <td><span class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span></td>
+                <td><span class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>
               </tr>
               <?php if($story->status != 'draft'):?>
               <tr>

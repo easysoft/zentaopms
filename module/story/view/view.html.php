@@ -195,7 +195,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->status;?></th>
-                  <td><span class='status-story status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
+                  <td><span class='status-story status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->stage;?></th>
