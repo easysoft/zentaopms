@@ -2279,8 +2279,8 @@ class project extends control
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($projectStats as $i => $project)
             {
-                $project->PM    = zget($users, $project->PM);
-                $project->status = isset($project->delay) ? $projectLang->delayed : $projectLang->statusList[$project->status];
+                $project->PM            = zget($users, $project->PM);
+                $project->status        = isset($project->delay) ? $projectLang->delayed : $this->processStatus('project', $project);
                 $project->totalEstimate = $project->hours->totalEstimate;
                 $project->totalConsumed = $project->hours->totalConsumed;
                 $project->totalLeft     = $project->hours->totalLeft;

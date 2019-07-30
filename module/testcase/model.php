@@ -1360,7 +1360,7 @@ class testcaseModel extends model
             if($id == 'status')
             {
                 $class .= $case->status;
-                $title  = "title='" . zget($this->lang->testcase->statusList, $case->status) . "'";
+                $title  = "title='" . $this->processStatus('testcase', $case) . "'";
             }
             if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
@@ -1406,7 +1406,7 @@ class testcaseModel extends model
                 }
                 else
                 {
-                    print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                    print("<span class='status-testcase status-{$case->status}'>" . $this->processStatus('testcase', $case) . "</span>");
                 }
                 break;
             case 'story':

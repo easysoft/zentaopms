@@ -252,8 +252,8 @@ class control extends baseControl
      */
     public function processStatus($module, $record)
     {
-        if(!isset($this->config->bizVersion) or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
+        $moduleName = $this->moduleName;
 
-        return $this->loadModel('workflowfield')->processSubStatus($module, $record);
+        return $this->$moduleName->processStatus($module, $record);
     }
 }

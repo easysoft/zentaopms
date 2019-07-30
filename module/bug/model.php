@@ -2441,7 +2441,7 @@ class bugModel extends model
             if($id == 'status')
             {
                 $class .= ' bug-' . $bug->status;
-                $title  = "title='" . zget($this->lang->bug->statusList, $bug->status) . "'";
+                $title  = "title='" . $this->processStatus('bug', $bug) . "'";
             }
             if($id == 'confirmed')
             {
@@ -2530,7 +2530,7 @@ class bugModel extends model
                 break;
             case 'status':
                 echo "<span class='status-bug status-{$bug->status}'>";
-                echo zget($this->lang->bug->statusList, $bug->status);
+                echo $this->processStatus('bug', $bug);
                 echo  '</span>';
                 break;
             case 'activatedCount':

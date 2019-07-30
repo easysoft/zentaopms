@@ -1567,7 +1567,7 @@ class story extends control
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
-                if(isset($storyLang->statusList[$story->status]))       $story->status       = $storyLang->statusList[$story->status];
+                if(isset($storyLang->statusList[$story->status]))       $story->status       = $this->processStatus('story', $story);
                 if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
                 if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
                 if(isset($storyLang->sourceList[$story->source]))       $story->source       = $storyLang->sourceList[$story->source];
