@@ -23,7 +23,8 @@ class translate extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $this->active = helper::getRemoteIp() == '127.0.0.1';
+        $remoteIp     = helper::getRemoteIp();
+        $this->active = ($remoteIp == '127.0.0.1' or $remoteIp == '::1');
         if(!$this->active) $this->app->loadLang('editor');
         if(!$this->active and $this->app->getMethodName() != 'index')
         {
