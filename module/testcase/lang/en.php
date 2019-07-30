@@ -21,6 +21,7 @@ $lang->testcase->precondition     = 'Prerequisite';
 $lang->testcase->pri              = 'Priority';
 $lang->testcase->type             = 'Type';
 $lang->testcase->status           = 'Status';
+$lang->testcase->subStatus        = 'Sub Status';
 $lang->testcase->steps            = 'Steps';
 $lang->testcase->openedBy         = 'CreatedBy';
 $lang->testcase->openedDate       = 'CreatedDate';

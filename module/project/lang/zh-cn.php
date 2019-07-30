@@ -25,6 +25,7 @@ $lang->project->workHour      = '工时';
 $lang->project->totalHours    = '可用工时';
 $lang->project->totalDays     = '可用工日';
 $lang->project->status        = $lang->projectCommon . '状态';
+$lang->project->subStatus     = $lang->projectCommon . '子状态';
 $lang->project->desc          = $lang->projectCommon . '描述';
 $lang->project->owner         = '负责人';
 $lang->project->PO            = $lang->productCommon . '负责人';

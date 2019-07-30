@@ -73,6 +73,7 @@ $lang->product->order         = '排序';
 $lang->product->type          = "{$lang->productCommon}类型";
 $lang->product->typeAB        = "类型";
 $lang->product->status        = '状态';
+$lang->product->subStatus     = '子状态';
 $lang->product->desc          = "{$lang->productCommon}描述";
 $lang->product->manager       = '负责人';
 $lang->product->PO            = "{$lang->productCommon}负责人";

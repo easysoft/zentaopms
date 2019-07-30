@@ -76,6 +76,7 @@ $lang->story->estimate       = '预计工时';
 $lang->story->estimateAB     = '预计';
 $lang->story->hour           = '小时';
 $lang->story->status         = '当前状态';
+$lang->story->subStatus      = '子状态';
 $lang->story->stage          = '所处阶段';
 $lang->story->stageAB        = '阶段';
 $lang->story->stagedBy       = '设置阶段者';

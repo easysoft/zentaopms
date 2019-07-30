@@ -30,6 +30,7 @@ $lang->bug->browser          = 'Browser';
 $lang->bug->steps            = 'Repro Steps';
 $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
+$lang->bug->subStatus        = 'Sub Status';
 $lang->bug->activatedCount   = 'Activated Times';
 $lang->bug->activatedCountAB = 'Active';
 $lang->bug->activatedDate    = 'ActivatedDate';

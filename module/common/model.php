@@ -1075,7 +1075,29 @@ EOD;
      */
     public static function createChanges($old, $new)
     {
-        global $config;
+        global $app, $config;
+
+        /**
+         * 当主状态改变并且未设置子状态的值时把子状态的值置空并记录日志。
+         * Change sub status when status is changed and sub status is not set, and record the changes.
+         */
+        if(isset($config->bizVersion))
+        {
+            $oldID        = zget($old, 'id', '');
+            $oldStatus    = zget($old, 'status', '');
+            $oldSubStatus = zget($old, 'subStatus', '');
+            $newStatus    = zget($new, 'status', '');
+            $newSubStatus = zget($new, 'subStatus', '');
+
+            if($oldID && $oldStatus && $oldSubStatus && $newStatus && !$newSubStatus && $oldStatus != $newStatus)
+            {
+                $table = zget($config->objectTables, $app->getModuleName());
+                $app->dbh->exec("UPDATE $table SET `subStatus` = '' WHERE `id` = $oldID");
+
+                $new->subStatus = '';
+            }
+        }
+
         $changes    = array();
         $magicQuote = get_magic_quotes_gpc();
         foreach($new as $key => $value)

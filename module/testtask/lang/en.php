@@ -63,6 +63,7 @@ $lang->testtask->end            = 'End';
 $lang->testtask->desc           = 'Description';
 $lang->testtask->mailto         = 'Mailto';
 $lang->testtask->status         = 'Status';
+$lang->testtask->subStatus      = 'Sub Status';
 $lang->testtask->assignedTo     = 'Assigned';
 $lang->testtask->linkVersion    = 'Build';
 $lang->testtask->lastRunAccount = 'RunBy';
