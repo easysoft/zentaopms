@@ -62,7 +62,7 @@ class cronModel extends model
                     $parsedCron['schema']   = trim($matchs[0][0]);
                     $parsedCron['command']  = trim($matchs[0][1]);
                     $parsedCron['cron']     = CronExpression::factory($parsedCron['schema']);
-                    $parsedCron['time']     = $parsedCron['cron']->getNextRunDate($cron->lastTime);
+                    $parsedCron['time']     = $parsedCron['cron']->getNextRunDate();
                     $parsedCrons[$cron->id] = $parsedCron;
                 }   
                 catch(InvalidArgumentException $e) 
