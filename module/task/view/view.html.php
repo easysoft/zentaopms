@@ -121,7 +121,7 @@
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
                 <td><?php if(isset($users[$child->assignedTo])) echo $users[$child->assignedTo];?></td>
-                <td><?php echo zget($lang->task->statusList, $child->status);?></td>
+                <td><?php echo $this->processStatus('task', $child);?></td>
                 <td class='visible-lg'><?php echo $child->consumed;?></td>
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
@@ -258,7 +258,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->status;?></th>
-                  <td><span class='status-task status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo zget($lang->task->statusList, $task->status);?></td>
+                  <td><span class='status-task status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo $this->processStatus('task', $task);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->progress;?></th>
