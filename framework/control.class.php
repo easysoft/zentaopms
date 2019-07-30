@@ -241,4 +241,19 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
         $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
     }
+
+    /**
+     * Process status of an object according to its subStatus.
+     *
+     * @param  string $module   product | release | story | project | task | bug | testcase | testsuite | feedback
+     * @param  object $record   a record of above modules.
+     * @access public
+     * @return string
+     */
+    public function processStatus($module, $record)
+    {
+        if(!isset($this->config->bizVersion)) return zget($this->lang->$module->statusList, $record->status);
+
+        return $this->loadModel('workflowfield')->processSubStatus($module, $record->subStatus);
+    }
 }
