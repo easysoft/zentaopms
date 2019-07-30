@@ -48,7 +48,7 @@
           <td><?php echo $users[$bug->assignedTo];?></td>
           <td>
             <span class='status-bug status-<?php echo $bug->status?>'>
-              <?php echo $lang->bug->statusList[$bug->status];?>
+              <?php echo $this->processStatus('bug', $bug);?>
             </span>
           </td>
         </tr>

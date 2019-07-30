@@ -151,7 +151,7 @@
                 <td><?php echo $story->estimate;?></td>
                 <td>
                   <span class='status-story status-<?php echo $story->status?>'>
-                    <?php echo $lang->story->statusList[$story->status];?>
+                    <?php echo $this->processStatus('story', $story);?>
                   </span>
                 </td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
@@ -386,7 +386,7 @@
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
-                    <?php echo $lang->bug->statusList[$bug->status];?>
+                    <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
                 <td class='c-actions'>

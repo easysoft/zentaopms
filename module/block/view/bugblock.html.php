@@ -64,8 +64,9 @@
         <td class='c-pri'><span class='label-pri label-pri-<?php echo $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
         <?php endif;?>
         <td class='c-name' style='color: <?php echo $bug->color?>' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
-        <td class='c-status' title='<?php echo zget($lang->bug->statusList, $bug->status)?>'>
-          <span class="status-bug status-<?php echo $bug->status?>"><?php echo zget($lang->bug->statusList, $bug->status);?></span>
+        <?php $status = $this->processStatus('bug', $bug);?>
+        <td class='c-status' title='<?php echo $status;?>'>
+          <span class="status-bug status-<?php echo $bug->status?>"><?php echo $status;?></span>
         </td>
       </tr>
       <?php endforeach;?>

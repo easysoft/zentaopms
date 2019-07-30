@@ -58,7 +58,7 @@
           <td><?php echo $users[$case->lastRunner];?></td>
           <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-          <td class='<?php echo $case->status;?>'><?php echo $lang->testcase->statusList[$case->status];?></td>
+          <td class='<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
         </tr>
         <?php endforeach;?>
       </tbody> 

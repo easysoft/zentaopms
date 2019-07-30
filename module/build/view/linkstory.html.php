@@ -52,7 +52,7 @@
           <td><?php echo $story->estimate;?></td>
           <td>
             <span class='status-story status-<?php echo $story->status?>'>
-              <?php echo $lang->story->statusList[$story->status];?>
+              <?php echo $this->processStatus('story', $story);?>
             </span>
           </td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>

@@ -22,10 +22,9 @@
       <td><?php echo zget($users, $story->openedBy);?></td>
       <td><?php echo zget($users, $story->assignedTo);?></td>
       <td><?php echo $story->estimate?></td>
-      <td title='<?php echo zget($lang->story->statusList, $story->status);?>'>
-        <span class="status-story status-<?php echo $story->status?>">
-          <?php echo zget($lang->story->statusList, $story->status);?>
-        </span>
+      <?php $status = $this->processStatus('story', $story);?>
+      <td title='<?php echo $status;?>'>
+        <span class="status-story status-<?php echo $story->status?>"><?php echo $status;?></span>
       </td>
       <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
     </tr>

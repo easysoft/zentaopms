@@ -41,7 +41,7 @@
           <?php if(isset($project->delay)):?>
           <td class='project-delay'><?php echo $lang->project->delayed;?></td>
           <?php else:?>
-          <td class='project-<?php echo $project->status?>'><?php echo $lang->project->statusList[$project->status];?></td>
+          <td class='project-<?php echo $project->status?>'><?php echo $this->processStatus('project', $project);?></td>
           <?php endif;?>
           <td><?php echo $project->role;?></td>
           <td><?php echo $project->join;?></td>
