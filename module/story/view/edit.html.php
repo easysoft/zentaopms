@@ -43,6 +43,7 @@
             <div class='detail-title'><?php echo $lang->story->verify;?></div>
             <div class='detail-content article-content'><?php echo $story->verify;?></div>
           </div>
+          <?php $this->printExtendFields($story, 'div', 'position=left&divCell=false');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
             <div class='form-group'>
@@ -66,8 +67,7 @@
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tr>
-                <?php $colWidth = common::checkEnLang() ? 'w-100px' : 'w-80px';?>
-                <th class='<?php echo $colWidth;?>'><?php echo $lang->story->product;?></th>
+                <th class='thWidth'><?php echo $lang->story->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
@@ -122,7 +122,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>
-                <td><span class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span></td>
+                <td><span class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>
               </tr>
               <?php if($story->status != 'draft'):?>
               <tr>
@@ -197,6 +197,8 @@
             </table>
           </div>
     
+          <?php $this->printExtendFields($story, 'div', 'position=right&divCell=false');?>
+
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>
             <table class='table table-form'>
@@ -207,8 +209,7 @@
               </tr>
               <?php endif;?>
               <tr>
-              <?php $width = common::checkEnLang() ? 'w-110px': 'w-70px'?>
-                <th class=<?php echo $width?>><?php echo $lang->story->linkStories;?></th>
+                <th class='linkThWidth'><?php echo $lang->story->linkStories;?></th>
                 <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
               </tr>
               <tr>

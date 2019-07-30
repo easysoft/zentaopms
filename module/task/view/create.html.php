@@ -205,6 +205,7 @@
             <?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?>
           </td>
         </tr>
+        <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->files;?></th>
           <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>

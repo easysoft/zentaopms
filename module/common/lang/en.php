@@ -30,7 +30,7 @@ $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
 $lang->agreement      = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
-$lang->designedByAIUX = "<a href='http://aiuxstudio.com/' class='link-aiux' target='_blank'>Designed by <strong>AIUX</strong></a>";
+$lang->designedByAIUX = "<a href='https://api.zentao.pm/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>AIUX</strong></a>";
 
 $lang->reset        = 'Reset';
 $lang->cancel       = 'Cancel';
@@ -557,7 +557,7 @@ if(!defined('DT_MONTHTIME2'))define('DT_MONTHTIME2', 'n/d H:i');
 if(!defined('DT_DATE1'))     define('DT_DATE1',     'Y-m-d');
 if(!defined('DT_DATE2'))     define('DT_DATE2',     'Ymd');
 if(!defined('DT_DATE3'))     define('DT_DATE3',     'Y/m/d');
-if(!defined('DT_DATE4'))     define('DT_DATE4',     'n/j');
+if(!defined('DT_DATE4'))     define('DT_DATE4',     'M d');
 if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
 

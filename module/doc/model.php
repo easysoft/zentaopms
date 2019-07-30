@@ -696,7 +696,7 @@ class docModel extends model
             $docContent = new stdclass();
             $docContent->doc     = $docID;
             $docContent->title   = $doc->title;
-            $docContent->content = $doc->content;
+            $docContent->content = isset($doc->content) ? $doc->content : '';
             $docContent->version = $doc->version;
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
@@ -1142,10 +1142,11 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
+            $this->loadModel('project');
             $projects = $mineProjects = $otherProjects = $closedProjects = array();
             foreach($libs as $lib)
             {   
-                if(!$this->app->user->admin and !$this->checkPrivLib($lib)) continue;
+                if(!$this->app->user->admin and !$this->project->checkPriv($lib->id)) continue;
                 if($lib->status != 'done' and $lib->status != 'closed' and $lib->PM == $this->app->user->account)
                 {   
                     $mineProjects[$lib->id] = $lib;

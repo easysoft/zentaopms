@@ -15,8 +15,6 @@ $jsRoot = $this->app->getWebRoot() . "js/";
 include '../../common/view/datepicker.html.php';
 include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
-$fieldWidth    = common::checkEnLang() ? 'w-130px' : 'w-110px';
-$operatorWidth = common::checkEnLang() ? 'w-110px' : 'w-90px';
 ?>
 <style>
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
@@ -25,7 +23,7 @@ $operatorWidth = common::checkEnLang() ? 'w-110px' : 'w-90px';
 #<?php echo $formId;?> > table {margin: 0 auto;}
 #<?php echo $formId;?> > table > tbody > tr > td {padding: 8px;}
 #<?php echo $formId;?> .form-actions {padding-bottom: 20px; padding-top: 0;}
-<?php if(common::checkEnLang()):?>
+<?php if(common::checkNotCN()):?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 70px;}
 <?php else:?>
 #<?php echo $formId;?> [id^="valueBox"] .chosen-container .chosen-single {min-width: 100px;}
@@ -59,7 +57,17 @@ $operatorWidth = common::checkEnLang() ? 'w-110px' : 'w-90px';
 <?php endif;?>
 #toggle-queries{position: absolute; right: 0px; top: 40px; width: 13px; background: #79cdfb; border-radius: 6px; height: 30px;cursor: pointer}
 #toggle-queries .icon{ position: absolute; top: 6px; right: -2px; color: #fff;}
+
+.fieldWidth{width:130px !important;}
+.operatorWidth{width:110px !important;}
+html[lang^='zh-'] .fieldWidth{width:110px !important;}
+html[lang^='zh-'] .operatorWidth{width:90px !important;}
 </style>
+<?php if($style != 'simple'):?>
+  <div id='toggle-queries'>
+    <i class='icon icon-angle-left'></i>
+  </div>
+<?php endif;?>
 <form method='post' action='<?php echo $this->createLink('search', 'buildQuery');?>' target='hiddenwin' id='<?php echo $formId;?>' class='search-form<?php if($style == 'simple') echo ' search-form-simple';?>'>
 <div class='hidden'>
 <?php
@@ -108,10 +116,10 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='{$fieldWidth}' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='{$operatorWidth}'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
@@ -168,10 +176,10 @@ foreach($fieldParams as $fieldName => $param)
                 echo '</td>';
 
                 /* Print field. */
-                echo "<td class='{$fieldWidth}' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
+                echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='{$operatorWidth}'>" .  html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
@@ -202,9 +210,6 @@ foreach($fieldParams as $fieldName => $param)
         </table>
       </td>
       <?php if($style != 'simple'):?>
-      <div id='toggle-queries'>
-      <i class='icon icon-angle-left'></i>
-      </div>
       <td class='w-160px hidden' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <ul>

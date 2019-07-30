@@ -35,14 +35,13 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkEnLang() ? 'w-120px' : 'w-100px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed;?></th>
+          <th class='thWidth'><?php echo !empty($task->team) ? $lang->task->common . $lang->task->consumed : $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo $task->consumed;?> <?php echo $lang->workingHour;?></td>
           <td></td>
         </tr>
         <?php if(!empty($task->team)):?>
         <tr>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->task->hasConsumed;?></th>
+          <th class='thWidth'><?php echo $lang->task->hasConsumed;?></th>
           <td class='w-p25-f'><?php echo (float)$task->myConsumed;?> <?php echo $lang->workingHour;?></td><td></td>
         </tr>
         <?php endif;?>
@@ -70,6 +69,7 @@
           <th><?php echo $lang->task->finishedDate;?></th>
           <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-date'");?></div></td><td></td>
         </tr>
+        <?php $this->printExtendFields($task, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>

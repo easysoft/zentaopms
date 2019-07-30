@@ -73,6 +73,7 @@ $lang->product->order         = 'Sortierung';
 $lang->product->type          = 'Typ';
 $lang->product->typeAB        = 'Typ';
 $lang->product->status        = 'Status';
+$lang->product->subStatus     = 'Sub Status';
 $lang->product->desc          = 'Beschreibung';
 $lang->product->manager       = 'Manager';
 $lang->product->PO            = 'PO';

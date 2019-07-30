@@ -34,6 +34,7 @@
           <th><?php echo $lang->bug->openedBuild;?></th>
           <td colspan='2'><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control chosen"');?></td>
         </tr>
+        <?php $this->printExtendFields($bug, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>

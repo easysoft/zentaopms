@@ -2,7 +2,7 @@
   <h2 class="detail-title"><span class="label-id"><?php echo $story->id?></span> <span class="label label-story"><?php echo $lang->story->common?></span> <span class="title"><?php echo $story->title;?></span></h2>
   <div class="detail-content article-content">
     <div class="infos">
-      <span class="status-story status-draft"><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>
+      <span class="status-story status-draft"><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span>
       <span><?php echo $lang->story->stage;?> <?php echo $lang->story->stageList[$story->stage];?></span>
       <span><?php echo $lang->story->estimate;?> <?php echo $story->estimate;?></span>
     </div>
@@ -105,7 +105,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->story->status;?></th>
-        <td><span class='status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span></td>
+        <td><span class='status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span></td>
       </tr>
       <tr>
         <th><?php echo $lang->story->stage;?></th>
@@ -196,11 +196,10 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
-        <?php $class = common::checkEnLang() ? 'w-120px' : 'w-100px';?>
         <?php if($config->global->flow != 'onlyStory'):?>
         <?php if(!empty($fromBug)):?>
         <tr class='text-top'>
-          <th class=<?php echo $class;?>><?php echo $lang->story->legendFromBug;?></th>
+          <th class='thWidth'><?php echo $lang->story->legendFromBug;?></th>
           <td class='pd-0'>
             <ul class='list-unstyled'>
                 <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id"), "#$fromBug->id $fromBug->title") . '</li>';?>
@@ -209,7 +208,7 @@
         </tr>
         <?php endif;?>
         <tr class='text-top'>
-          <th class=<?php echo $class;?>><?php echo $lang->story->legendBugs;?></th>
+          <th class='thWidth'><?php echo $lang->story->legendBugs;?></th>
           <td class='pd-0'>
             <?php if(empty($bugs)):?>
             <?php echo $lang->noData;?>

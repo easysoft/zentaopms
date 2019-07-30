@@ -12,7 +12,7 @@
 ?>
 <?php include './header.html.php';?>
 <?php js::set('holders', $lang->story->placeholder); ?>
-<?php if(common::checkEnLang()):?>
+<?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
 <div id="mainContent" class="main-content">
@@ -173,6 +173,7 @@
             <td colspan="4"><?php echo html::textarea('verify', $verify, "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
           <?php endif;?>
+          <?php $this->printExtendFields('', 'table', 'columns=4');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
             <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>

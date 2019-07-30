@@ -127,12 +127,10 @@ class projectModel extends model
                     foreach($subMenu as $menuKey => $menu)
                     {
                         $itemMenu = zget($projectSubMenu, $menuKey, '');
-                        if(($moduleName == strtolower($menu->link['module']) and 
-                            (
-                                $methodName == strtolower($menu->link['method']) or
-                                (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false)
-                            )) or (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false)
-                        )
+                        $isActive['method']    = ($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method']));
+                        $isActive['alias']     = ($moduleName == strtolower($menu->link['module']) and (is_array($itemMenu) and isset($itemMenu['alias']) and strpos($itemMenu['alias'], $methodName) !== false));
+                        $isActive['subModule'] = (is_array($itemMenu) and isset($itemMenu['subModule']) and strpos($itemMenu['subModule'], $moduleName) !== false);
+                        if($isActive['method'] or $isActive['alias'] or $isActive['subModule'])
                         {
                             $this->lang->project->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
                             break;
@@ -899,7 +897,7 @@ class projectModel extends model
             /* If projectBurns > $itemCounts, split it, else call processBurnData() to pad burns. */
             $begin = $projects[$projectID]->begin;
             $end   = $projects[$projectID]->end;
-            if($begin == '0000-00-00') $projects[$projectID]->openedDate;
+            if($begin == '0000-00-00') $begin = $projects[$projectID]->openedDate;
             $projectBurns = $this->processBurnData($projectBurns, $itemCounts, $begin, $end);
 
             /* Shorter names.  */

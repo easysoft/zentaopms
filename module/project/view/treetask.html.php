@@ -2,7 +2,7 @@
   <h2 class="detail-title">
     <span class="label-id"><?php echo $task->id?></span>
     <span class="label label-task"><?php echo $lang->task->common?></span>
-    <span class="label label-task"><?php echo zget($lang->task->statusList, $task->status);?></span>
+    <span class="label label-task"><?php echo $this->processStatus('task', $task);?></span>
     <span class="title">
       <?php if($task->parent > 0) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->childrenAB . '</span>';?>
       <?php if(!empty($task->team)) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->multipleAB . '</span>';?>

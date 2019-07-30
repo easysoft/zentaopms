@@ -1,7 +1,7 @@
-<script src="<?php echo $jsRoot;?>jquery/syntaxhighlighter/scripts/shCore.js" type="text/javascript"></script>
-<script src="<?php echo $jsRoot;?>jquery/syntaxhighlighter/scripts/shAutoloader.js" type="text/javascript"></script>
-<link href="<?php echo $jsRoot;?>jquery/syntaxhighlighter/styles/shCore.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo $jsRoot;?>jquery/syntaxhighlighter/styles/shThemeDefault.css" rel="stylesheet" type="text/css" />
+<?php css::import($jsRoot . "jquery/syntaxhighlighter/styles/shCore.css");?>
+<?php css::import($jsRoot . "jquery/syntaxhighlighter/styles/shThemeDefault.css");?>
+<?php js::import($jsRoot . "jquery/syntaxhighlighter/scripts/shCore.js");?>
+<?php js::import($jsRoot . "jquery/syntaxhighlighter/scripts/shAutoloader.js");?>
 <script type="text/javascript">
 function path()
 {

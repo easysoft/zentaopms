@@ -33,7 +33,7 @@
         <?php if($config->translate->needReview):?>
         <th class='w-90px'><?php echo $lang->translate->reviewedProgress;?></th>
         <?php endif;?>
-        <th class='<?php echo common::checkEnLang() ? 'w-150px' : 'w-110px';?>'><?php echo $lang->actions;?></th>
+        <th class='thWidth'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody class='text-center'>

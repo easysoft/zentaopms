@@ -236,6 +236,7 @@ class adminModel extends model
     {
         $weaks = array();
 
+        /* Check weak password when login. */
         if($this->app->moduleName == 'user' and $this->app->methodName == 'login')
         {
             if(isset($this->config->safe->mode) and $this->post->passwordStrength < $this->config->safe->mode) return true;

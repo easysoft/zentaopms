@@ -210,6 +210,8 @@ class product extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
 
+            $this->executeHooks($productID);
+
             $locate = $this->createLink($this->moduleName, 'browse', "productID=$productID");
             if(isset($this->config->global->flow) and $this->config->global->flow == 'onlyTest') $locate = $this->createLink($this->moduleName, 'build', "productID=$productID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
@@ -258,6 +260,7 @@ class product extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            $this->executeHooks($productID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "product=$productID")));
         }
 
@@ -356,6 +359,9 @@ class product extends control
                 $actionID = $this->action->create('product', $productID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($productID);
+
             die(js::reload('parent.parent'));
         }
 
@@ -387,6 +393,8 @@ class product extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
+
+        $this->executeHooks($productID);
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
@@ -422,6 +430,7 @@ class product extends control
             $this->product->delete(TABLE_PRODUCT, $productID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
             $this->session->set('product', '');     // 清除session。
+            $this->executeHooks($productID);
             die(js::locate($this->createLink('product', 'browse'), 'parent'));
         }
     }

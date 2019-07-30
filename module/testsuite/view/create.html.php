@@ -27,6 +27,7 @@
           <th><?php echo $lang->testsuite->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', '', "rows=10 class='form-control'");?></td>
         </tr>
+        <?php $this->printExtendFields('', 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->testsuite->author;?></th>
           <td><?php echo html::radio('type', $lang->testsuite->authorList, 'private');?></td>

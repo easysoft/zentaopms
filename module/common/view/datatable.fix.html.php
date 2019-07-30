@@ -49,7 +49,7 @@ $(function()
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title" style="font-size:14px;"><i class="icon-cog"></i> <?php echo $lang->datatable->showModule?></h4>
+        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->datatable->showModule?></h4>
       </div>
       <div class="modal-body">
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>

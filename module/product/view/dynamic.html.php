@@ -65,16 +65,7 @@
     <?php else:?>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
-    <?php 
-    if(common::checkEnLang())
-    {   
-        $isToday = date('M d') == $date;
-    }   
-    else
-    {   
-        $isToday = date(DT_DATE4) == $date;
-    }
-    ?>
+    <?php $isToday = date(DT_DATE4) == $date;?>
     <div class="dynamic <?php if($isToday) echo 'active';?>">
       <div class="dynamic-date">
         <?php if($isToday):?>

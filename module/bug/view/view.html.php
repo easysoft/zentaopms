@@ -57,8 +57,9 @@
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $bug->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=bug&objectID=$bug->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php $this->printExtendFields($bug, 'div', "position=left&divCell=true");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <?php
     $params        = "bugID=$bug->id";
     $copyParams    = "productID=$productID&branch=$bug->branch&extras=bugID=$bug->id";
@@ -78,6 +79,8 @@
 
         if($config->global->flow != 'onlyTest') common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&project=0&bugID=$bug->id", $bug, 'button', $lang->icons['story']);
         common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
+
+        echo $this->buildOperateMenu($bug, 'view');
 
         echo "<div class='divider'></div>";
         common::printIcon('bug', 'edit', $params, $bug);
@@ -99,11 +102,10 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
-            <?php $widthClass = common::checkEnLang() ? 'w-110px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr valign='middle'>
-                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->product;?></th>
+                  <th class='thWidth'><?php echo $lang->bug->product;?></th>
                   <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
                 </tr>
                 <?php if($this->session->currentProductType != 'normal'):?>
@@ -181,7 +183,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><span class='status-bug status-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></span></td>
+                  <td><span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->activatedCount;?></th>
@@ -268,11 +270,10 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendLife'>
-            <?php $widthClass = common::checkEnLang() ? 'w-100px' : 'w-90px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->openedBy;?></th>
+                  <th class='thWidth'><?php echo $lang->bug->openedBy;?></th>
                   <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
                 </tr>
                 <tr>
@@ -375,6 +376,7 @@
         </div>
       </div>
     </div>
+    <?php $this->printExtendFields($bug, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

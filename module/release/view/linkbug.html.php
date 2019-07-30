@@ -51,9 +51,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
           <td><?php echo $users[$bug->openedBy];?></td>
           <td><?php echo $users[$bug->resolvedBy];?></td>
           <td>
-            <span class='status-bug status-<?php echo $bug->status?>'>
-              <?php echo $lang->bug->statusList[$bug->status];?>
-            </span>
+            <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
           </td>
         </tr>
         <?php $unlinkedCount++;?>

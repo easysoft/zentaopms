@@ -76,6 +76,7 @@ $lang->story->estimate       = 'Schätzung(h)';
 $lang->story->estimateAB     = 'Schätzung(h)';
 $lang->story->hour           = 'Stunde';
 $lang->story->status         = 'Status';
+$lang->story->subStatus      = 'Sub Status';
 $lang->story->stage          = 'Phase';
 $lang->story->stageAB        = 'Phase';
 $lang->story->stagedBy       = 'SetBy';

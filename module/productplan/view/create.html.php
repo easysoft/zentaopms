@@ -63,6 +63,7 @@
             <th><?php echo $lang->productplan->desc;?></th>
             <td colspan='3'><?php echo html::textarea('desc', '', "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
+          <?php $this->printExtendFields('', 'table', 'columns=3');?>
           <tr>
             <td colspan='4' class='text-center form-actions'>
               <?php echo html::submitButton();?>

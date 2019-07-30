@@ -1199,7 +1199,8 @@ class baseRouter
      * Set the control file of the module to be called.
      * 
      * @param   bool    $exitIfNone     没有找到该控制器文件的情况：如果该参数为true，则终止程序；如果为false，则打印错误日志
-     *                                  If control file not foundde, how to do. True, die the whole app. false, log error.
+     *                                  The controller file was not found: if the parameter is true, the program is terminated;
+     *                                                                     if false, the error log is printed. 
      * @access  public
      * @return  bool
      */

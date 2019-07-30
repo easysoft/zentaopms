@@ -21,6 +21,7 @@ $lang->testcase->precondition     = '前置条件';
 $lang->testcase->pri              = '优先级';
 $lang->testcase->type             = '用例类型';
 $lang->testcase->status           = '用例状态';
+$lang->testcase->subStatus        = '用例子状态';
 $lang->testcase->steps            = '用例步骤';
 $lang->testcase->openedBy         = '由谁创建';
 $lang->testcase->openedDate       = '创建日期';

@@ -56,8 +56,9 @@
         <?php if($longBlock):?>
         <td class='c-estimate text-center'><?php echo $story->estimate?></td>
         <?php endif;?>
-        <td class='c-status' title='<?php echo zget($lang->story->statusList, $story->status);?>'>
-          <span class="status-story status-<?php echo $story->status?>"><?php echo zget($lang->story->statusList, $story->status);?></span>
+        <?php $status = $this->processStatus('story', $story);?>
+        <td class='c-status' title='<?php echo $status;?>'>
+          <span class="status-story status-<?php echo $story->status?>"><?php echo $status;?></span>
         </td>
         <?php if($longBlock):?>
         <td class='c-stage'>

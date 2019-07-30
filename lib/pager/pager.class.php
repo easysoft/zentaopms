@@ -21,6 +21,64 @@ helper::import(dirname(dirname(__FILE__)) . '/base/pager/pager.class.php');
 class pager extends basePager
 {
     /**
+     * 设置模块名。
+     * Set the $moduleName property.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setModuleName()
+    {
+        /* 如果设置了请求的原始模块名，则把其赋值给$this->moduleName。*/
+        /* If the original module name of the request is set, assign it to $this->moduleName. */
+        if(isset($this->app->rawModule))
+        {
+            $this->moduleName = $this->app->rawModule;
+        }
+        else
+        {
+            $this->moduleName = $this->app->getModuleName();
+        }
+    }
+
+    /**
+     * 设置方法名。
+     * Set the $methodName property.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setMethodName()
+    {
+        /* 如果设置了请求的原始方法名，则把其赋值给$this->methodName。*/
+        /* If the original method name of the request is set, assign it to $this->methodName. */
+        if(isset($this->app->rawMethod))
+        {
+            $this->methodName = $this->app->rawMethod;
+        }
+        else
+        {
+            $this->methodName = $this->app->getMethodName();
+        }
+    }
+
+    /**
+     * 如果设置了请求的原始模块名和方法名，则去掉module参数，以便分页功能生成原始请求的URL而不是转换后的工作流URL。
+     * If the original module name and method name of the request are set, the module parameter is removed so that
+     * the paging function generates the URL of the original request instead of the converted workflow URL. 
+     *
+     * @access public
+     * @return void
+     */
+    public function setParams()
+    {
+        parent::setParams();
+
+        /* If the original module name and method name of the request are set, the module parameter is removed. */
+        if(isset($this->app->rawModule) && isset($this->app->rawMethod)) unset($this->params['module']);
+    }
+
+    /**
      * Show pager.
      * 
      * @param  string $align 

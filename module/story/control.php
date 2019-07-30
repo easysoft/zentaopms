@@ -113,6 +113,8 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
+            $this->executeHooks($storyID);
+
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -433,6 +435,9 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($storyID);
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 die(array('status' => 'success', 'data' => $storyID));
@@ -616,6 +621,9 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($storyID);
+
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -648,6 +656,8 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
+
+            $this->executeHooks($storyID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -695,6 +705,8 @@ class story extends control
             if($project->status == 'done') $from = '';
         }
 
+        $this->executeHooks($storyID);
+
         $title      = "STORY #$story->id $story->title - $product->name";
         $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $position[] = $this->lang->story->common;
@@ -739,6 +751,9 @@ class story extends control
         else
         {
             $this->story->delete(TABLE_STORY, $storyID);
+
+            $this->executeHooks($storyID);
+
             die(js::locate($this->session->storyList, 'parent'));
         }
     }
@@ -762,6 +777,9 @@ class story extends control
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
             }
+
+            $this->executeHooks($storyID);
+
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
@@ -830,6 +848,9 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
+
+            $this->executeHooks($storyID);
+
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
@@ -1056,6 +1077,8 @@ class story extends control
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($storyID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -1493,12 +1516,15 @@ class story extends control
 
             /* Get related objects title or names. */
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
-            $relatedModules = $this->loadModel('tree')->getOptionMenu($productID);
             $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in(@array_keys($stories))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
             $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
+
+            $relatedModules = array();
+            $this->loadModel('tree');
+            foreach($relatedProductIdList as $relatedProductId) $relatedModules += $this->tree->getOptionMenu($relatedProductId);
 
             foreach($stories as $story)
             {
@@ -1541,7 +1567,7 @@ class story extends control
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
-                if(isset($storyLang->statusList[$story->status]))       $story->status       = $storyLang->statusList[$story->status];
+                if(isset($storyLang->statusList[$story->status]))       $story->status       = $this->processStatus('story', $story);
                 if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
                 if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
                 if(isset($storyLang->sourceList[$story->source]))       $story->source       = $storyLang->sourceList[$story->source];

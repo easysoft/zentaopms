@@ -1870,7 +1870,7 @@ class storyModel extends model
             ->page($pager)
             ->fetchAll();
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $productIdList = array();
         foreach($stories as $story) $productIdList[$story->product] = $story->product;
 
@@ -2432,6 +2432,7 @@ class storyModel extends model
             }
 
             echo "<td class='" . $class . "' title='$title'>";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('story', $story, $id);
             switch($id)
             {
             case 'id':
@@ -2464,7 +2465,7 @@ class storyModel extends model
                 break;
             case 'status':
                 echo "<span class='status-{$story->status}'>";
-                echo $this->lang->story->statusList[$story->status];
+                echo $this->processStatus('story', $story);
                 echo '</span>';
                 break;
             case 'estimate':

@@ -20,8 +20,7 @@
     <form id='webhookForm' method='post' class='form-ajax'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkEnLang() ? 'w-120px' : 'w-90px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->webhook->type;?></th>
+          <th class='thWidth'><?php echo $lang->webhook->type;?></th>
           <td><?php echo html::select('type', $lang->webhook->typeList, $webhook->type, "class='form-control'");?></td>
           <td></td>
         </tr>

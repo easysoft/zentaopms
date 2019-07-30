@@ -50,6 +50,8 @@ tbody tr td:first-child input{display:none;}
     <?php
     if(!$build->deleted)
     {
+        echo $this->buildOperateMenu($build, 'view');
+
         if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
         if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }
@@ -133,7 +135,7 @@ tbody tr td:first-child input{display:none;}
                 <td><?php echo $story->estimate;?></td>
                 <td>
                   <span class='status-story status-<?php echo $story->status;?>'>
-                    <?php echo $lang->story->statusList[$story->status];?>
+                    <?php echo $this->processStatus('story', $story);?>
                   </span>
                 </td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
@@ -204,7 +206,7 @@ tbody tr td:first-child input{display:none;}
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
-                    <?php echo $lang->bug->statusList[$bug->status];?>
+                    <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
                 <td><?php echo $users[$bug->openedBy];?></td>
@@ -279,7 +281,7 @@ tbody tr td:first-child input{display:none;}
                 <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($bugLink, $bug->title, '', "class='iframe' data-width='1000'");?></td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
-                    <?php echo $lang->bug->statusList[$bug->status];?>
+                    <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
                 <td><?php echo $users[$bug->openedBy];?></td>
@@ -333,6 +335,7 @@ tbody tr td:first-child input{display:none;}
                   <th><?php echo $lang->build->filePath;?></th>
                   <td style='word-break:break-all;'><?php echo html::a($build->filePath, $build->filePath, '_blank');?></td>
                 </tr>
+                <?php $this->printExtendFields($build, 'table', "position=all&columns=1");?>
                 <?php if($config->global->flow != 'onlyTest'):?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>

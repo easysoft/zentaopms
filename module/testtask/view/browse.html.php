@@ -35,11 +35,9 @@ $status = $this->session->testTaskVersionStatus;
         ?>
       </ul>
     </div>
-    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,totalStatus"), "<span class='text'>{$lang->testtask->totalStatus}</span>", '', "id='totalStatusTab' class='btn btn-link'");?>
-    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,wait"), "<span class='text'>{$lang->testtask->wait}</span>", '', "id='waitTab' class='btn btn-link'");?>
-    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,doing"), "<span class='text'>{$lang->testtask->testing}</span>", '', "id='doingTab' class='btn btn-link'");?>
-    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,blocked"), "<span class='text'>{$lang->testtask->blocked}</span>", '', "id='blockedTab' class='btn btn-link'");?>
-    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,done"), "<span class='text'>{$lang->testtask->done}</span>", '', "id='doneTab' class='btn btn-link'");?>
+    <?php foreach($lang->testtask->featureBar['browse'] as $key => $label):?>
+    <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
+    <?php endforeach;?>
     <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>
     <div class='input-group w-300px input-group-sm'>
       <span class='input-group-addon'><?php echo $lang->testtask->beginAndEnd;?></span>
@@ -93,9 +91,10 @@ $status = $this->session->testTaskVersionStatus;
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
-      <td title='<?php echo $lang->testtask->statusList[$task->status];?>'>
+      <?php $status = $this->processStatus('testtask', $task);?>
+      <td title='<?php echo $status;?>'>
         <span class='status-task status-<?php echo $task->status?>'>
-          <?php echo $lang->testtask->statusList[$task->status];?>
+          <?php echo $status;?>
         </span>
       </td>
       <td class='c-actions'>

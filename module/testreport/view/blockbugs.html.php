@@ -21,10 +21,9 @@
       <td><?php echo zget($users, $bug->openedBy);?></td>
       <td><?php echo zget($users, $bug->resolvedBy);?></td>
       <td><?php if($bug->resolvedDate != '0000-00-00 00:00:00') echo substr($bug->resolvedDate, 2);?></td>
-      <td title='<?php echo zget($lang->bug->statusList, $bug->status);?>'>
-        <span class="status-bug status-<?php echo $bug->status?>">
-          <?php echo zget($lang->bug->statusList, $bug->status);?>
-        </span>
+      <?php $status = $this->processStatus('bug', $bug);?>
+      <td title='<?php echo $status;?>'>
+        <span class="status-bug status-<?php echo $bug->status?>"><?php echo $status;?></span>
       </td>
     </tr>
     <?php endforeach;?>

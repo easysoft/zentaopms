@@ -1,1 +1,6 @@
 th.required:after {position: relative; right: 10px;}
+
+.accountThWidth{width:200px !important;}
+.genderThWidth{width:140px !important;}
+html[lang^='zh-'] .accountThWidth{width:180px !important;}
+html[lang^='zh-'] .genderThWidth{width:90px !important;}

@@ -53,7 +53,7 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
-     <?php common::printLink('testsuite', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->testsuite->exportTemplet, '', "class='btn btn-link export' data-width=35%");?>
+     <?php common::printLink('testsuite', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->testsuite->exportTemplet, '', "class='btn btn-link export' data-width='35%'");?>
      <?php common::printLink('testsuite', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->importFile, '', "class='btn btn-link export'");?>
     </div>
     <?php $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);?>
@@ -137,7 +137,7 @@ js::set('flow',          $config->global->flow);
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
               <td><?php echo $users[$case->openedBy];?></td>
-              <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $lang->testcase->statusList[$case->status];?></td>
+              <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <td class='c-actions'>
                 <?php
                 if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');

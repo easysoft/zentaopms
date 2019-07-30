@@ -1360,13 +1360,14 @@ class testcaseModel extends model
             if($id == 'status')
             {
                 $class .= $case->status;
-                $title  = "title='" . zget($this->lang->testcase->statusList, $case->status) . "'";
+                $title  = "title='" . $this->processStatus('testcase', $case) . "'";
             }
             if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
             if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='{$class}' {$title}>";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('testcase', $case, $id);
             switch($id)
             {
             case 'id':
@@ -1380,7 +1381,7 @@ class testcaseModel extends model
             case 'title':
                 if($case->branch) echo "<span class='label label-info label-outline'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
-                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-arrow-left' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]") : html::a($caseLink, $case->title, null, "style='color: $case->color'")) : "<span style='color: $case->color'>$case->title</span>";
+                echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]") : html::a($caseLink, $case->title, null, "style='color: $case->color'")) : "<span style='color: $case->color'>$case->title</span>";
                 break;
             case 'branch':
                 echo $branches[$case->branch];
@@ -1405,7 +1406,7 @@ class testcaseModel extends model
                 }
                 else
                 {
-                    print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                    print("<span class='status-testcase status-{$case->status}'>" . $this->processStatus('testcase', $case) . "</span>");
                 }
                 break;
             case 'story':

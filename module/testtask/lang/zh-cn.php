@@ -63,6 +63,7 @@ $lang->testtask->end            = '结束日期';
 $lang->testtask->desc           = '描述';
 $lang->testtask->mailto         = '抄送给';
 $lang->testtask->status         = '当前状态';
+$lang->testtask->subStatus      = '子状态';
 $lang->testtask->assignedTo     = '指派给';
 $lang->testtask->linkVersion    = '版本';
 $lang->testtask->lastRunAccount = '执行人';
@@ -162,3 +163,9 @@ $lang->testtask->report->options->graph  = new stdclass();
 $lang->testtask->report->options->type   = 'pie';
 $lang->testtask->report->options->width  = 500;
 $lang->testtask->report->options->height = 140;
+
+$lang->testtask->featureBar['browse']['totalStatus'] = $lang->testtask->totalStatus;
+$lang->testtask->featureBar['browse']['wait']        = $lang->testtask->wait;
+$lang->testtask->featureBar['browse']['doing']       = $lang->testtask->testing;
+$lang->testtask->featureBar['browse']['blocked']     = $lang->testtask->blocked;
+$lang->testtask->featureBar['browse']['done']        = $lang->testtask->done;

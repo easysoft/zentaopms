@@ -25,6 +25,7 @@ $lang->project->workHour      = 'Stunden';
 $lang->project->totalHours    = 'Arbeitsstunden';
 $lang->project->totalDays     = 'Arbeitstage';
 $lang->project->status        = 'Status';
+$lang->project->subStatus     = 'Sub Status';
 $lang->project->desc          = 'Beschreibung';
 $lang->project->owner         = 'Besitzer';
 $lang->project->PO            = 'PO';

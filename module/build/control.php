@@ -25,6 +25,9 @@ class build extends control
             $buildID = $this->build->create($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
+
+            $this->executeHooks($buildID);
+
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProjectBuilds($projectID)"));//Code for task #5126.
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
         }
@@ -104,6 +107,9 @@ class build extends control
                 $actionID = $this->loadModel('action')->create('build', $buildID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($buildID);
+
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
         }
 
@@ -224,6 +230,8 @@ class build extends control
             $this->view->type          = $type;
         }
 
+        $this->executeHooks($buildID);
+
         /* Assign. */
         $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->view->build         = $build;
@@ -254,6 +262,8 @@ class build extends control
         {
             $build = $this->build->getById($buildID);
             $this->build->delete(TABLE_BUILD, $buildID);
+
+            $this->executeHooks($buildID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)

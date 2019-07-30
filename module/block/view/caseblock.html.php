@@ -53,9 +53,10 @@
         <td class='c-runtime'><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
         <td class='c-result'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
         <?php endif;?>
-        <td class='c-status' title='<?php echo zget($lang->testcase->statusList, $case->status)?>'>
+        <?php $status = $this->processStatus('testcase', $case);?>
+        <td class='c-status' title='<?php echo $status;?>'>
           <span class="case-status-<?php echo $case->status?>">
-            <span class='status-text'><?php echo zget($lang->testcase->statusList, $case->status);?></span>
+            <span class='status-text'><?php echo $status;?></span>
           </span>
         </td>
       </tr>

@@ -10,9 +10,14 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../dev/view/header.html.php';?>
+<?php include '../../common/view/header.lite.html.php';?>
+<style>
+html{height:100%}
+body{height:100%;padding-bottom:0px;}
+#mainContent{height:100%}
+</style>
 <div id='mainContent' class='main-content'>
   <div class='alert alert-warning'><?php echo $this->lang->editor->onlyLocalVisit;?></div>
 </div>
-<?php include '../../common/view/footer.html.php';?>
+<?php include '../../common/view/footer.lite.html.php';?>
 

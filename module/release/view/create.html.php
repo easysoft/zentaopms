@@ -43,6 +43,7 @@
             <th><?php echo $lang->release->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
+          <?php $this->printExtendFields('', 'table', 'columns=2');?>
           <tr>
             <th><?php echo $lang->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>

@@ -27,8 +27,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkEnLang() ? 'w-110px' : 'w-80px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->story->reviewedDate;?></th>
+          <th class='thWidth'><?php echo $lang->story->reviewedDate;?></th>
           <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), "class='form-control form-date'");?></td><td></td>
         </tr>
         <tr>
@@ -69,6 +68,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           <th><?php echo $lang->story->reviewedBy;?></th>
           <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td>
         </tr>
+        <?php $this->printExtendFields($story, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

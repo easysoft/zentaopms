@@ -140,6 +140,7 @@
             </div>
           </div>
         </div>
+        <?php $this->printExtendFields($project, 'div', "position=left&divCell=false");?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
           <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
@@ -160,6 +161,8 @@
               common::printIcon('project', 'putoff',   "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
               common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
               common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', '', '', 'iframe', true);
+
+              echo $this->buildOperateMenu($project, 'view');
 
               echo "<div class='divider'></div>";
               common::printIcon('project', 'edit', $params, $project);
@@ -185,7 +188,7 @@
                   <?php if(isset($project->delay)):?>
                   <span class="label label-danger label-outline"><?php echo $lang->project->delayed;?></span>
                   <?php else:?>
-                  <span class="label label-success label-outline"><?php echo zget($lang->project->statusList, $project->status);?></span>
+                  <span class="label label-success label-outline"><?php echo $this->processStatus('project', $project);?></span>
                   <?php endif;?>
                 </p>
               </div>
@@ -225,7 +228,7 @@
               <div class="detail-content">
                 <table class='table table-data data-stats'>
                   <tbody>
-                    <tr class='widthTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
+                    <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
                     <tr>
                       <td colspan="4">
                         <?php $progress = ($project->totalConsumed + $project->totalLeft) ? round($project->totalConsumed / ($project->totalConsumed + $project->totalLeft), 3) * 100 : 0;?>
@@ -278,7 +281,6 @@
                 </table>
               </div>
             </div>
-
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->project->acl;?></strong></div>
               <div class="detail-content">
@@ -293,6 +295,7 @@
                 <?php endif;?>
               </div>
             </div>
+            <?php $this->printExtendFields($project, 'div', "position=right&divCell=false");?>
           </div>
         </div>
       </div>

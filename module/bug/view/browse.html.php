@@ -116,7 +116,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         ?>
       </ul>
     </div>
-    <?php if(!common::checkEnLang()):?>
+    <?php if(!common::checkNotCN()):?>
     <?php
     common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
     if(commonModel::isTutorialMode())
@@ -204,13 +204,13 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <thead>
           <tr>
           <?php
-          foreach($setting as $key => $value)
+          foreach($setting as $value)
           {
               if($value->show)
               {
-                  if(common::checkEnLang() and $value->id == 'severity')  $value->name = $lang->bug->severity;
-                  if(common::checkEnLang() and $value->id == 'pri')       $value->name = $lang->bug->pri;
-                  if(common::checkEnLang() and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
+                  if(common::checkNotCN() and $value->id == 'severity')  $value->name = $lang->bug->severity;
+                  if(common::checkNotCN() and $value->id == 'pri')       $value->name = $lang->bug->pri;
+                  if(common::checkNotCN() and $value->id == 'confirmed') $value->name = $lang->bug->confirmed;
                   $this->datatable->printHead($value, $orderBy, $vars);
                   $columns ++;
               }
@@ -221,7 +221,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <tbody>
           <?php foreach($bugs as $bug):?>
           <tr data-id='<?php echo $bug->id?>'>
-            <?php foreach($setting as $key => $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $projects, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
           </tr>
           <?php endforeach;?>
         </tbody>

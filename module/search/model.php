@@ -23,6 +23,25 @@ class searchModel extends model
      */
     public function setSearchParams($searchConfig)
     {
+        if(isset($this->config->bizVersion))
+        {
+            $module = $searchConfig['module'];
+            if($module == 'projectStory') $module = 'story';
+            if($module == 'projectBug')   $module = 'bug';
+
+            $fields = $this->loadModel('workflowfield')->getList($module);
+
+            foreach($fields as $field)
+            {
+                if($field->buildin) continue;
+                $operator = ($field->control == 'input' or $field->control == 'textarea') ? 'include' : '=';
+                $options  = $this->workflowfield->getFieldOptions($field);
+                $control  = ($field->control == 'select' || $field->control == 'radio' || $field->control == 'checkbox') ? 'select' : 'input';
+                $searchConfig['fields'][$field->field] = $field->name;
+                $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options);
+            }
+        }
+
         $searchParams['module']       = $searchConfig['module'];
         $searchParams['searchFields'] = json_encode($searchConfig['fields']);
         $searchParams['fieldParams']  = json_encode($searchConfig['params']);

@@ -12,9 +12,18 @@
 /* Fields. */
 $lang->project->common        = $lang->projectCommon;
 $lang->project->allProjects   = 'All ' . $lang->projectCommon . 's';
+$lang->project->id            = $lang->projectCommon . ' ID';
 $lang->project->type          = 'Type';
 $lang->project->name          = "{$lang->projectCommon} Name";
 $lang->project->code          = 'Code';
+$lang->project->statge        = 'Stage';
+$lang->project->pri           = 'Priority';
+$lang->project->openedBy      = 'OpenedBy';
+$lang->project->openedDate    = 'OpenedDate';
+$lang->project->closedBy      = 'ClosedBy';
+$lang->project->closedDate    = 'ClosedDate';
+$lang->project->canceledBy    = 'CanceledBy';
+$lang->project->canceledDate  = 'CanceledDate';
 $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
 $lang->project->dateRange     = 'Duration';
@@ -25,6 +34,7 @@ $lang->project->workHour      = ' Hours';
 $lang->project->totalHours    = 'Available Hours';
 $lang->project->totalDays     = 'Available Days';
 $lang->project->status        = 'Status';
+$lang->project->subStatus     = 'Sub Status';
 $lang->project->desc          = 'Description';
 $lang->project->owner         = 'Owner';
 $lang->project->PO            = "{$lang->projectCommon} Owner";
@@ -328,6 +338,13 @@ $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = 'Delayed';
 $lang->project->featureBar['task']['needconfirm']  = 'Changed';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
+
+$lang->project->featureBar['all']['all']       = $lang->project->all;
+$lang->project->featureBar['all']['undone']    = $lang->project->undone;
+$lang->project->featureBar['all']['wait']      = $lang->project->statusList['wait'];
+$lang->project->featureBar['all']['doing']     = $lang->project->statusList['doing'];
+$lang->project->featureBar['all']['suspended'] = $lang->project->statusList['suspended'];
+$lang->project->featureBar['all']['closed']    = $lang->project->statusList['closed'];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = 'Expand All';
