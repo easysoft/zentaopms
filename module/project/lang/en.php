@@ -25,6 +25,7 @@ $lang->project->workHour      = ' Hours';
 $lang->project->totalHours    = 'Available Hours';
 $lang->project->totalDays     = 'Available Days';
 $lang->project->status        = 'Status';
+$lang->project->subStatus     = 'Sub Status';
 $lang->project->desc          = 'Description';
 $lang->project->owner         = 'Owner';
 $lang->project->PO            = "{$lang->projectCommon} Owner";

@@ -83,6 +83,7 @@ $lang->task->date              = 'Date';
 $lang->task->deadline          = 'Deadline';
 $lang->task->deadlineAB        = 'Deadline';
 $lang->task->status            = 'Status';
+$lang->task->subStatus         = 'Sub Status';
 $lang->task->desc              = 'Description';
 $lang->task->assign            = 'Assign';
 $lang->task->assignAction      = 'Assign Task';
