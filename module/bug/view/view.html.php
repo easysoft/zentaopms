@@ -184,7 +184,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><span class='status-bug status-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></span></td>
+                  <td><span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->activatedCount;?></th>
