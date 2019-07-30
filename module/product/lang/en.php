@@ -73,6 +73,7 @@ $lang->product->order         = 'Rank';
 $lang->product->type          = 'Type';
 $lang->product->typeAB        = 'Type';
 $lang->product->status        = 'Status';
+$lang->product->subStatus     = 'Sub Status';
 $lang->product->desc          = 'Description';
 $lang->product->manager       = 'Managers';
 $lang->product->PO            = "{$lang->productCommon} Owner";
@@ -90,6 +91,8 @@ $lang->product->plan          = 'Plan';
 $lang->product->iteration     = 'Iterations';
 $lang->product->iterationInfo = '%s Iteration';
 $lang->product->iterationView = 'Detail';
+$lang->product->createdBy     = 'CreatedBy';
+$lang->product->createdDate   = 'createdDate';
 
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'AssignedToMe';
