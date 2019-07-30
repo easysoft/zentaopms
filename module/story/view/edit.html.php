@@ -172,7 +172,7 @@
             <table class='table table-form'>
               <tr>
                 <th class='w-80px'><?php echo $lang->story->openedBy;?></th>
-                <td><?php echo $users[$story->openedBy];?></td>
+                <td><?php echo zget($users, $story->openedBy);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->assignedTo;?></th>

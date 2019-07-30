@@ -307,12 +307,12 @@
           <table class='table table-data'>
             <tr>
               <th class='lifeThWidth'><?php echo $lang->testcase->openedBy;?></th>
-              <td><?php echo $users[$case->openedBy] . $lang->at . $case->openedDate;?></td>
+              <td><?php echo zget($users, $case->openedBy) . $lang->at . $case->openedDate;?></td>
             </tr>
             <?php if($config->testcase->needReview or !empty($config->testcase->forceReview)):?>
             <tr>
               <th><?php echo $lang->testcase->reviewedBy;?></th>
-              <td><?php $reviewedBy = explode(',', $case->reviewedBy); foreach($reviewedBy as $account) echo ' ' . $users[trim($account)]; ?></td>
+              <td><?php $reviewedBy = explode(',', $case->reviewedBy); foreach($reviewedBy as $account) echo ' ' . zget($users, trim($account)); ?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testcase->reviewedDate;?></th>
@@ -321,7 +321,7 @@
             <?php endif;?>
             <tr>
               <th><?php echo $lang->testcase->lblLastEdited;?></th>
-              <td><?php if($case->lastEditedBy) echo $users[$case->lastEditedBy] . $lang->at . $case->lastEditedDate;?></td>
+              <td><?php if($case->lastEditedBy) echo zget($users, $case->lastEditedBy) . $lang->at . $case->lastEditedDate;?></td>
             </tr>
           </table>
         </div>

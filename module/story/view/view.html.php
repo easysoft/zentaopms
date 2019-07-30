@@ -226,7 +226,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->legendMailto;?></th>
-                  <td><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) {if(empty($account)) continue; echo "<span>" . $users[trim($account)] . '</span> &nbsp;'; }?></td>
+                  <td><?php $mailto = explode(',', $story->mailto); foreach($mailto as $account) {if(empty($account)) continue; echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;'; }?></td>
                 </tr>
               </tbody>
             </table>
@@ -236,15 +236,15 @@
               <tbody>
                 <tr>
                   <th class='thWidth'><?php echo $lang->story->openedBy;?></th>
-                  <td><?php echo $users[$story->openedBy] . $lang->at . $story->openedDate;?></td>
+                  <td><?php echo zget($users, $story->openedBy) . $lang->at . $story->openedDate;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->assignedTo;?></th>
-                  <td><?php if($story->assignedTo) echo $users[$story->assignedTo] . $lang->at . $story->assignedDate;?></td>
+                  <td><?php if($story->assignedTo) echo zget($users, $story->assignedTo) . $lang->at . $story->assignedDate;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->reviewedBy;?></th>
-                  <td><?php $reviewedBy = explode(',', $story->reviewedBy); foreach($reviewedBy as $account) echo ' ' . $users[trim($account)]; ?></td>
+                  <td><?php $reviewedBy = explode(',', $story->reviewedBy); foreach($reviewedBy as $account) echo ' ' . zget($users, trim($account)); ?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->reviewedDate;?></th>
@@ -252,7 +252,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->closedBy;?></th>
-                  <td><?php if($story->closedBy) echo $users[$story->closedBy] . $lang->at . $story->closedDate;?></td>
+                  <td><?php if($story->closedBy) echo zget($users, $story->closedBy) . $lang->at . $story->closedDate;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->closedReason;?></th>
@@ -268,7 +268,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->lastEditedBy;?></th>
-                  <td><?php if($story->lastEditedBy) echo $users[$story->lastEditedBy] . $lang->at . $story->lastEditedDate;?></td>
+                  <td><?php if($story->lastEditedBy) echo zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate;?></td>
                 </tr>
               </tbody>
             </table>

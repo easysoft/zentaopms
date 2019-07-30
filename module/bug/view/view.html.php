@@ -199,7 +199,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->lblAssignedTo;?></th>
-                  <td><?php if($bug->assignedTo) echo $users[$bug->assignedTo] . $lang->at . $bug->assignedDate;?></td>
+                  <td><?php if($bug->assignedTo) echo zget($users, $bug->assignedTo) . $lang->at . $bug->assignedDate;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
@@ -224,7 +224,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->mailto;?></th>
-                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
+                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account); ?></td>
                 </tr>
               </tbody>
             </table>

@@ -131,7 +131,7 @@ tbody tr td:first-child input{display:none;}
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='iframe' data-width='1000'");?></td>
-                <td><?php echo $users[$story->openedBy];?></td>
+                <td><?php echo zget($users, $story->openedBy);?></td>
                 <td><?php echo $story->estimate;?></td>
                 <td>
                   <span class='status-story status-<?php echo $story->status;?>'>
@@ -209,9 +209,9 @@ tbody tr td:first-child input{display:none;}
                     <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
-                <td><?php echo $users[$bug->openedBy];?></td>
+                <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo substr($bug->openedDate, 5, 11)?></td>
-                <td><?php echo $users[$bug->resolvedBy];?></td>
+                <td><?php echo zget($users, $bug->resolvedBy);?></td>
                 <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
                 <td class='c-actions'>
                   <?php
@@ -284,9 +284,9 @@ tbody tr td:first-child input{display:none;}
                     <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
-                <td><?php echo $users[$bug->openedBy];?></td>
+                <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo substr($bug->openedDate, 5, 11)?></td>
-                <td><?php echo $users[$bug->resolvedBy];?></td>
+                <td><?php echo zget($users, $bug->resolvedBy);?></td>
                 <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
               </tr>
               <?php endforeach;?>
@@ -321,7 +321,7 @@ tbody tr td:first-child input{display:none;}
                 </tr>
                 <tr>
                   <th><?php echo $lang->build->builder;?></th>
-                  <td><?php echo $users[$build->builder];?></td>
+                  <td><?php echo zget($users, $build->builder);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->build->date;?></th>

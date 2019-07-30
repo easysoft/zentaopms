@@ -73,7 +73,7 @@
             ?>
           </td>
           <td class='text-left'><?php echo $project->code;?></td>
-          <td><?php echo $users[$project->PM];?></td>
+          <td><?php echo zget($users, $project->PM);?></td>
           <td><?php echo $project->end;?></td>
           <?php $status = $this->processStatus('project', $project);?>
           <td class='c-status' title='<?php echo $status;?>'>

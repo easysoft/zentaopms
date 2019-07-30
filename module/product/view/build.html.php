@@ -51,7 +51,7 @@
         <td class='text-left' title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
         <td class='text-left' title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
         <td><?php echo $build->date?></td>
-        <td><?php echo $users[$build->builder]?></td>
+        <td><?php echo zget($users, $build->builder);?></td>
         <td class='c-actions'>
           <?php
           common::printIcon('testtask', 'create', "product=$product->id&project=0&build=$build->id", '', 'list', 'bullhorn');

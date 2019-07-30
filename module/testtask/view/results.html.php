@@ -40,7 +40,7 @@
         <tr class='result-item' id='result-<?php echo $class?>' style='cursor: pointer'>
           <td class='w-120px'> &nbsp; #<?php echo $result->id?></td>
           <td class='w-180px'><?php echo $result->date;?></td>
-          <td><?php echo $users[$result->lastRunner] . ' ' . $lang->testtask->runCase;?></td>
+          <td><?php echo zget($users, $result->lastRunner) . ' ' . $lang->testtask->runCase;?></td>
           <td class='w-150px'><?php echo zget($builds, $result->build, '');?></td>
           <td class='w-50px text-right'><strong class='text-<?php echo $class;?>'><?php echo $lang->testcase->resultList[$result->caseResult]?></strong></td>
           <td class='w-60px'><?php if(!empty($result->files)) echo html::a("#caseResult{$result->id}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
