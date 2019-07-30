@@ -90,6 +90,8 @@ $lang->product->plan          = 'Plan';
 $lang->product->iteration     = 'Iterations';
 $lang->product->iterationInfo = '%s Iteration';
 $lang->product->iterationView = 'Detail';
+$lang->product->createdBy     = 'CreatedBy';
+$lang->product->createdDate   = 'createdDate';
 
 $lang->product->searchStory  = 'Search';
 $lang->product->assignedToMe = 'AssignedToMe';
