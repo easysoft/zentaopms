@@ -245,15 +245,15 @@ class control extends baseControl
     /**
      * Process status of an object according to its subStatus.
      *
-     * @param  string $module   product | release | story | project | task | bug | testcase | testsuite | feedback
+     * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
      * @param  object $record   a record of above modules.
      * @access public
      * @return string
      */
     public function processStatus($module, $record)
     {
-        if(!isset($this->config->bizVersion)) return zget($this->lang->$module->statusList, $record->status);
+        if(!isset($this->config->bizVersion) or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
 
-        return $this->loadModel('workflowfield')->processSubStatus($module, $record->subStatus);
+        return $this->loadModel('workflowfield')->processSubStatus($module, $record);
     }
 }
