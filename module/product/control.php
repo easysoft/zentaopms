@@ -739,6 +739,7 @@ class product extends control
                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
                 }
             }
+            if(isset($this->config->bizVersion)) list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($this->app->getModuleName(), $fields, $productStats);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $productStats);

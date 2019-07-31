@@ -1490,6 +1490,7 @@ class task extends control
                     }
                 }
             }
+            if(isset($this->config->bizVersion)) list($fields, $tasks) = $this->loadModel('workflowfield')->appendDataFromFlow($this->app->getModuleName(), $fields, $tasks);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $tasks);

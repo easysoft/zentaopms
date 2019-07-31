@@ -1240,6 +1240,7 @@ class testcase extends control
                     $case->linkCase = join("; \n", $tmpLinkCases);
                 }
             }
+            if(isset($this->config->bizVersion)) list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($this->app->getModuleName(), $fields, $cases);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $cases);
