@@ -39,9 +39,9 @@ class router extends baseRouter
     public $rawMethod;
 
     /**
-     * Add custom langs when set client lang.
+     * Merge system and translated langs.
      *
-     * @param   string $lang  zh-cn|zh-tw|zh-hk|en
+     * @param   string $lang  zh-cn|zh-tw|en
      * @access  public
      * @return  void
      */
