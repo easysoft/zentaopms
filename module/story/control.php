@@ -1654,7 +1654,7 @@ class story extends control
             }
             if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
 
-            if(isset($this->config->bizVersion)) list($fields, $stories) = $this->loadModel('workflowfield')->appendDataFromFlow($this->app->getModuleName(), $fields, $stories);
+            if(isset($this->config->bizVersion)) list($fields, $stories) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $stories);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $stories);

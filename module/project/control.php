@@ -2292,7 +2292,7 @@ class project extends control
                     if(strpos(",$checkedItem,", ",{$project->id},") === false) unset($projectStats[$i]);
                 }
             }
-            if(isset($this->config->bizVersion)) list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($this->app->getModuleName(), $fields, $projectStats);
+            if(isset($this->config->bizVersion)) list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projectStats);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $projectStats);
