@@ -48,6 +48,7 @@ $lang->user->originalPassword = 'Old Password';
 $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
 $lang->user->resetPassword    = 'Forgot Password?';
+$lang->user->score            = 'Score';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
