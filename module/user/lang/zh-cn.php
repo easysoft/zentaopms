@@ -48,6 +48,7 @@ $lang->user->originalPassword = '原密码';
 $lang->user->newPassword      = '新密码';
 $lang->user->verifyPassword   = '您的密码';
 $lang->user->resetPassword    = '忘记密码';
+$lang->user->score            = '分数';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
