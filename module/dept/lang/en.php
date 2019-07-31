@@ -20,6 +20,8 @@ $lang->dept->browse      = "Manage Department";
 $lang->dept->manage      = "Manage Department";
 $lang->dept->updateOrder = "Rank Department";
 $lang->dept->add         = "Add Department";
+$lang->dept->grade       = "Department Grade";
+$lang->dept->order       = "Department Order";
 $lang->dept->dragAndSort = "Drag to order";
 
 $lang->dept->confirmDelete = " Do you want to delete this department?";
