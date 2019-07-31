@@ -29,10 +29,11 @@ $lang->extension->eraseAction      = 'Erase Extension';
 $lang->extension->upgrade          = 'Upgrade Extension';
 $lang->extension->agreeLicense     = 'I agree to the license.';
 
-$lang->extension->structure   = 'Extension Structure';
-$lang->extension->installed   = 'Installed';
-$lang->extension->deactivated = 'Deactivated';
-$lang->extension->available   = 'Downloaded';
+$lang->extension->structure        = 'Structure';
+$lang->extension->extstructure     = 'Extension Structure';
+$lang->extension->installed        = 'Installed';
+$lang->extension->deactivated      = 'Deactivated';
+$lang->extension->available        = 'Downloaded';
 
 $lang->extension->name        = 'Extension Name';
 $lang->extension->code        = 'Code';

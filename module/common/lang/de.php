@@ -21,6 +21,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
+$lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s PMS";
 $lang->logout         = 'Abmelden';
 $lang->login          = 'Anmelden';

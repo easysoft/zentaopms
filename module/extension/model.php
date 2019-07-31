@@ -626,7 +626,7 @@ class extensionModel extends model
             rsort($dirs);    // remove from the lower level directory.
             foreach($dirs as $dir)
             {
-                if(!@rmdir($appRoot . $dir)) $removeCommands[] = "rmdir $appRoot$dir";
+                if(!is_writable($appRoot . $dir) or !rmdir($appRoot . $dir)) $removeCommands[] = "rmdir $appRoot$dir";
             }
         }
 

@@ -63,7 +63,7 @@ $lang->doc->pastEdited     = 'Total Updated';
 $lang->doc->myDoc          = 'My Documents';
 $lang->doc->myCollection   = 'My Favorites';
 
-/* 方法列表。*/
+/* Methods list */
 $lang->doc->index            = 'Document Home';
 $lang->doc->create           = 'Create Document';
 $lang->doc->edit             = 'Edit Document';
@@ -96,7 +96,7 @@ $lang->doc->fixedMenu      = 'Fix to Menu';
 $lang->doc->removeMenu     = 'Remove from Menu';
 $lang->doc->search         = 'Search';
 
-/* 查询条件列表 */
+/* Query condition list. */
 $lang->doc->allProduct     = 'All' . $lang->productCommon . 's';
 $lang->doc->allProject     = 'All' . $lang->projectCommon . 's';
 
