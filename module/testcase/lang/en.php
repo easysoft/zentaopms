@@ -16,6 +16,9 @@ $lang->testcase->lib              = "Case Library";
 $lang->testcase->branch           = "Branch/Platform";
 $lang->testcase->moduleAB         = 'Module';
 $lang->testcase->story            = 'Story';
+$lang->testcase->storyVersion     = 'Story Version';
+$lang->testcase->color            = 'Color';
+$lang->testcase->order            = 'Order';
 $lang->testcase->title            = 'Title';
 $lang->testcase->precondition     = 'Prerequisite';
 $lang->testcase->pri              = 'Priority';
@@ -69,6 +72,7 @@ $lang->testcase->sync             = 'Sync. Case';
 $lang->testcase->ignore           = 'Ignore';
 $lang->testcase->fromTesttask     = 'From Test Request';
 $lang->testcase->fromCaselib      = 'From CaseLib';
+$lang->testcase->deleted          = 'Deleted';
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
 $lang->testcase->stepID      = 'ID';

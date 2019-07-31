@@ -16,6 +16,9 @@ $lang->testcase->lib              = "所属库";
 $lang->testcase->branch           = "分支/平台";
 $lang->testcase->moduleAB         = '模块';
 $lang->testcase->story            = '相关需求';
+$lang->testcase->storyVersion     = '需求版本';
+$lang->testcase->color            = '标题颜色';
+$lang->testcase->order            = '排序';
 $lang->testcase->title            = '用例标题';
 $lang->testcase->precondition     = '前置条件';
 $lang->testcase->pri              = '优先级';
@@ -69,6 +72,7 @@ $lang->testcase->sync             = '同步';
 $lang->testcase->ignore           = '忽略';
 $lang->testcase->fromTesttask     = '来自测试单用例';
 $lang->testcase->fromCaselib      = '来自用例库用例';
+$lang->testcase->deleted          = '是否删除';
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
 $lang->testcase->stepID      = '编号';
