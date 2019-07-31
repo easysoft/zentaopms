@@ -97,7 +97,7 @@ $lang->team->limitedList['no']  = 'No';
 $lang->project->basicInfo = 'Basic Information';
 $lang->project->otherInfo = 'Other Information';
 
-/* 字段取值列表。*/
+/* Field value list. */
 $lang->project->statusList['wait']      = 'Waiting';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspended';
@@ -107,7 +107,7 @@ $lang->project->aclList['open']    = "Default (Users who can visit {$lang->proje
 $lang->project->aclList['private'] = 'Private (For team members only.)';
 $lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist users can access it.)';
 
-/* 方法列表。*/
+/* Method list. */
 $lang->project->index             = "{$lang->projectCommon} Home";
 $lang->project->task              = 'Task List';
 $lang->project->groupTask         = 'Group View';
@@ -171,7 +171,7 @@ $lang->project->iteration         = 'Iterations';
 $lang->project->iterationInfo     = '%s Iterations';
 $lang->project->viewAll           = 'View All';
 
-/* 分组浏览。*/
+/* Group browsing. */
 $lang->project->allTasks     = 'All';
 $lang->project->assignedToMe = 'My';
 $lang->project->myInvolved   = 'Involved';
@@ -202,12 +202,12 @@ $lang->project->groupFilter['assignedTo']['all']    = 'All';
 
 $lang->project->byQuery = 'Search';
 
-/* 查询条件列表。*/
+/* Query condition list. */
 $lang->project->allProject      = "All {$lang->projectCommon}s";
 $lang->project->aboveAllProduct = "All the above {$lang->productCommon}s";
 $lang->project->aboveAllProject = "All the above {$lang->projectCommon}s";
 
-/* 页面提示。*/
+/* Page prompt. */
 $lang->project->linkStoryByPlanTips = "This action will link all stories in this plan to the {$lang->projectCommon}.";
 $lang->project->selectProject       = "Select {$lang->projectCommon}";
 $lang->project->beginAndEnd         = 'Duration';
@@ -244,7 +244,7 @@ $lang->project->byUser              = 'By User';
 $lang->project->noProject           = "No {$lang->projectCommon}. ";
 $lang->project->noMembers           = 'No team members yet. ';
 
-/* 交互提示。*/
+/* Interactive prompts. */
 $lang->project->confirmDelete         = "Do you want to delete the {$lang->projectCommon}[%s]?";
 $lang->project->confirmUnlinkMember   = "Do you want to unlink this User from {$lang->projectCommon}?";
 $lang->project->confirmUnlinkStory    = "Do you want to unlink this Story from {$lang->projectCommon}?";
@@ -267,7 +267,7 @@ $lang->project->action->opened  = '$date, created by <strong>$actor</strong> .' 
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong> .' . "\n";
 $lang->project->action->extra   = "The linked {$lang->productCommon}s are %s.";
 
-/* 统计。*/
+/* Statistics. */
 $lang->project->charts = new stdclass();
 $lang->project->charts->burn = new stdclass();
 $lang->project->charts->burn->graph = new stdclass();

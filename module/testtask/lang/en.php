@@ -140,7 +140,7 @@ $lang->testtask->action->testtaskclosed  = '$date,  <strong>$actor</strong> comp
 
 $lang->testtask->unexecuted = 'Pending';
 
-/* 统计报表。*/
+/* Statistical statement. */
 $lang->testtask->report = new stdclass();
 $lang->testtask->report->common = 'Report';
 $lang->testtask->report->select = 'Select Report Type';

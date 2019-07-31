@@ -235,7 +235,7 @@ $lang->story->action->subdividestory      = array('main' => '$date, decomposed b
 $lang->story->action->unlinkrelatedstory  = array('main' => '$date, unlinked by <strong>$actor</strong> from Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory    = array('main' => '$date, unlinked by <strong>$actor</strong> Decomposed Story <strong>$extra</strong>.');
 
-/* 统计报表。*/
+/* Statistical statement. */
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
 $lang->story->report->select = 'Select Report Type';
