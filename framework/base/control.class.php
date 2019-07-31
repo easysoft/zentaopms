@@ -739,8 +739,11 @@ class baseControl
          * Load the control file. 
          */
         if(!is_file($file2Included)) $this->app->triggerError("The control file $file2Included not found", __FILE__, __LINE__, $exit = true);
-        chdir(dirname($file2Included));
-        if(!class_exists($moduleName)) helper::import($file2Included);
+        if(!class_exists($moduleName))
+        {
+            chdir(dirname($file2Included));
+            helper::import($file2Included);
+        }
 
         /**
          * 设置调用的类名。
