@@ -20,7 +20,6 @@
 <?php js::set('confirmChangeProject', $lang->task->confirmChangeProject);?>
 <?php js::set('changeProjectConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
-<?php $thWidth = common::checkNotCN() ? 'w-85px' : 'w-70px';?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -91,12 +90,12 @@
             <table class='table table-form'>
               <?php if($task->parent <= 0):?>
               <tr>
-                <th class=<?php echo $thWidth;?>><?php echo $lang->task->project;?></th>
+                <th class='thWidth'><?php echo $lang->task->project;?></th>
                 <td><?php echo html::select('project', $projects, $task->project, 'class="form-control chosen" onchange="loadAll(this.value)"');?></td>
               </tr>
               <?php endif;?>
               <tr>
-                <th class=<?php echo $thWidth;?>><?php echo $lang->task->module;?></th>
+                <th class='thWidth'><?php echo $lang->task->module;?></th>
                 <td id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></td>
               </tr>
               <?php if($config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
@@ -148,7 +147,7 @@
             <div class='detail-title'><?php echo $lang->task->legendEffort;?></div>
             <table class='table table-form'>
               <tr>
-                <th class=<?php echo $thWidth;?>><?php echo $lang->task->estStarted;?></th>
+                <th class='thWidth'><?php echo $lang->task->estStarted;?></th>
                 <td><?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date'");?></td>
               </tr>
               <tr>
@@ -177,11 +176,10 @@
           </div>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->legendLife;?></div>
-            <?php $thWidth = common::checkNotCN() ? 'w-120px' : 'w-70px';?>
             <table class='table table-form'>
               <tr>
-                <th class=<?php echo $thWidth;?>><?php echo $lang->task->openedBy;?></th>
-                <td><?php echo $users[$task->openedBy];?></td>
+                <th class='lifeThWidth'><?php echo $lang->task->openedBy;?></th>
+                <td><?php echo zget($users, $task->openedBy);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->realStarted;?></th>

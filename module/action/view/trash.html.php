@@ -63,7 +63,7 @@
             }
             ?>
           </td>
-          <td><?php echo $users[$action->actor];?></td>
+          <td><?php echo zget($users, $action->actor);?></td>
           <td><?php echo $action->date;?></td>
           <td>
             <?php

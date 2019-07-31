@@ -67,8 +67,7 @@
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
               <tr>
-                <?php $colWidth = common::checkNotCN() ? 'w-100px' : 'w-80px';?>
-                <th class='<?php echo $colWidth;?>'><?php echo $lang->story->product;?></th>
+                <th class='thWidth'><?php echo $lang->story->product;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
@@ -123,7 +122,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>
-                <td><span class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></span></td>
+                <td><span class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>
               </tr>
               <?php if($story->status != 'draft'):?>
               <tr>
@@ -173,7 +172,7 @@
             <table class='table table-form'>
               <tr>
                 <th class='w-80px'><?php echo $lang->story->openedBy;?></th>
-                <td><?php echo $users[$story->openedBy];?></td>
+                <td><?php echo zget($users, $story->openedBy);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->assignedTo;?></th>
@@ -210,8 +209,7 @@
               </tr>
               <?php endif;?>
               <tr>
-              <?php $width = common::checkNotCN() ? 'w-110px': 'w-70px'?>
-                <th class=<?php echo $width?>><?php echo $lang->story->linkStories;?></th>
+                <th class='linkThWidth'><?php echo $lang->story->linkStories;?></th>
                 <td><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=linkStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
               </tr>
               <tr>

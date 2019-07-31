@@ -91,9 +91,10 @@ $status = $this->session->testTaskVersionStatus;
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->begin?></td>
       <td><?php echo $task->end?></td>
-      <td title='<?php echo $lang->testtask->statusList[$task->status];?>'>
+      <?php $status = $this->processStatus('testtask', $task);?>
+      <td title='<?php echo $status;?>'>
         <span class='status-task status-<?php echo $task->status?>'>
-          <?php echo $lang->testtask->statusList[$task->status];?>
+          <?php echo $status;?>
         </span>
       </td>
       <td class='c-actions'>

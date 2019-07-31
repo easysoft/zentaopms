@@ -212,9 +212,8 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <table class='table table-form'>
               <tbody>
                 <tr>
-                  <?php $colWidth = common::checkNotCN() ? 'w-100px' : 'w-80px';?>
-                  <th class='<?php echo $colWidth;?>'><?php echo $lang->bug->openedBy;?></th>
-                  <td><?php echo $users[$bug->openedBy];?></td>
+                  <th class='thWidth'><?php echo $lang->bug->openedBy;?></th>
+                  <td><?php echo zget($users, $bug->openedBy);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->openedBuild;?></th>
@@ -266,8 +265,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
             <table class='table table-form'>
               <tbody>
                 <tr class='text-top'>
-                  <?php $colWidth = common::checkNotCN() ? 'w-100px' : 'w-80px';?>
-                  <th class='<?php echo $colWidth;?>'><?php echo $lang->bug->linkBug;?></th>
+                  <th class='thWidth'><?php echo $lang->bug->linkBug;?></th>
                   <td><?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
                 </tr>
                 <tr>

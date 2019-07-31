@@ -1,1 +1,4 @@
 .form-condensed .table-form {margin-bottom: 20px;}
+
+.thWidth{width:90px !important;}
+html[lang^='zh-'] .thWidth{width:70px !important;}

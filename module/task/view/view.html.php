@@ -120,8 +120,8 @@
                 </td>
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
-                <td><?php if(isset($users[$child->assignedTo])) echo $users[$child->assignedTo];?></td>
-                <td><?php echo zget($lang->task->statusList, $child->status);?></td>
+                <td><?php echo zget($users, $child->assignedTo);?></td>
+                <td><?php echo $this->processStatus('task', $child);?></td>
                 <td class='visible-lg'><?php echo $child->consumed;?></td>
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
@@ -258,7 +258,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->status;?></th>
-                  <td><span class='status-task status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo zget($lang->task->statusList, $task->status);?></td>
+                  <td><span class='status-task status-<?php echo $task->status;?>'><span class="label label-dot"></span> <?php echo $this->processStatus('task', $task);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->progress;?></th>
@@ -288,10 +288,9 @@
             </table>
           </div>
           <div class='tab-pane' id='legendLife'>
-            <?php $widthClass = common::checkNotCN() ? 'w-100px' : 'w-70px';?>
             <table class='table table-data'>
               <tr>
-                <th class='<?php echo $widthClass;?>'><?php echo $lang->task->openedBy;?></th>
+                <th class='thWidth'><?php echo $lang->task->openedBy;?></th>
                 <td><?php echo $task->openedBy ? zget($users, $task->openedBy, $task->openedBy) . $lang->at . $task->openedDate : $lang->noData;?></td>
               </tr>
               <tr>
@@ -344,9 +343,8 @@
         <summary class="detail-title"><?php echo $lang->task->legendEffort;?></summary>
         <div class="detail-content">
           <table class='table table-data'>
-            <?php $widthClass = common::checkNotCN() ? 'w-90px' : 'w-70px';?>
             <tr>
-              <th class='<?php echo $widthClass;?>'><?php echo $lang->task->estimate;?></th>
+              <th class='effortThWidth'><?php echo $lang->task->estimate;?></th>
               <td><?php echo $task->estimate . $lang->workingHour;?></td>
             </tr>
             <tr>

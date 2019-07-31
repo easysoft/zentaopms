@@ -12,9 +12,18 @@
 /* 字段列表。*/
 $lang->project->common        = $lang->projectCommon . '视图';
 $lang->project->allProjects   = '所有' . $lang->projectCommon;
+$lang->project->id            = $lang->projectCommon . '编号';
 $lang->project->type          = $lang->projectCommon . '类型';
 $lang->project->name          = $lang->projectCommon . '名称';
 $lang->project->code          = $lang->projectCommon . '代号';
+$lang->project->statge        = '阶段';
+$lang->project->pri           = '优先级';
+$lang->project->openedBy      = '由谁创建';
+$lang->project->openedDate    = '创建日期';
+$lang->project->closedBy      = '由谁关闭';
+$lang->project->closedDate    = '关闭日期';
+$lang->project->canceledBy    = '由谁取消';
+$lang->project->canceledDate  = '取消日期';
 $lang->project->begin         = '开始日期';
 $lang->project->end           = '结束日期';
 $lang->project->dateRange     = '起始日期';
@@ -25,6 +34,7 @@ $lang->project->workHour      = '工时';
 $lang->project->totalHours    = '可用工时';
 $lang->project->totalDays     = '可用工日';
 $lang->project->status        = $lang->projectCommon . '状态';
+$lang->project->subStatus     = $lang->projectCommon . '子状态';
 $lang->project->desc          = $lang->projectCommon . '描述';
 $lang->project->owner         = '负责人';
 $lang->project->PO            = $lang->productCommon . '负责人';

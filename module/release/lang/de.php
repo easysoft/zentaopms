@@ -40,6 +40,7 @@ $lang->release->marker        = 'Meilensteine';
 $lang->release->date          = 'Datum';
 $lang->release->desc          = 'Beschreibung';
 $lang->release->status        = 'Status';
+$lang->release->subStatus     = 'Sub Status';
 $lang->release->last          = 'Letztes Release';
 $lang->release->unlinkStory   = 'Story entfernen';
 $lang->release->unlinkBug     = 'Bug entfernen';

@@ -18,7 +18,7 @@
         <?php echo $entry->name;?>
         <span class='label label-info'><?php echo $lang->entry->log;?></span>
         <div class="btn-toolbar pull-right">
-          <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'></i> " . $lang->entry->setting, '', "class='btn btn-primary'");?>
+          <?php common::printLink('admin', 'log', '', "<i class='icon icon-cog'></i> " . $lang->entry->setting, '', "class='btn btn-primary iframe'", '', true);?>
           <?php echo html::backButton('', '' , 'btn');?>
         </div>
       </h2>

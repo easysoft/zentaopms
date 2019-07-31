@@ -6,7 +6,7 @@ $lang->branch->delete = 'Delete Branch';
 $lang->branch->add    = 'Add';
 
 $lang->branch->manageTitle = '%s Management';
-$lang->branch->all         = 'All';
+$lang->branch->all         = 'All ';
 
 $lang->branch->id      = 'ID';
 $lang->branch->product = 'Product';

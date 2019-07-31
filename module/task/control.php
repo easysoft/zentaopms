@@ -1458,7 +1458,7 @@ class task extends control
                 if(isset($projects[$task->project]))                  $task->project      = $projects[$task->project] . "(#$task->project)";
                 if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];
                 if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];
-                if(isset($taskLang->statusList[$task->status]))       $task->status       = $taskLang->statusList[$task->status];
+                if(isset($taskLang->statusList[$task->status]))       $task->status       = $this->processStatus('task', $task);
                 if(isset($taskLang->reasonList[$task->closedReason])) $task->closedReason = $taskLang->reasonList[$task->closedReason];
                 if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module] . "(#$task->module)";
 

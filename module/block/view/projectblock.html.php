@@ -47,7 +47,7 @@
           <?php if(isset($project->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
           <?php else:?>
-          <?php $statusName = zget($lang->project->statusList, $project->status, '');?>
+          <?php $statusName = $this->processStatus('project', $project);?>
           <span class="status-project status-<?php echo $project->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>

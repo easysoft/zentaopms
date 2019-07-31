@@ -12,9 +12,18 @@
 /* Fields. */
 $lang->project->common        = $lang->projectCommon;
 $lang->project->allProjects   = 'All ' . $lang->projectCommon . 's';
+$lang->project->id            = $lang->projectCommon . ' ID';
 $lang->project->type          = 'Type';
 $lang->project->name          = "{$lang->projectCommon} Name";
 $lang->project->code          = 'Code';
+$lang->project->statge        = 'Stage';
+$lang->project->pri           = 'Priority';
+$lang->project->openedBy      = 'OpenedBy';
+$lang->project->openedDate    = 'OpenedDate';
+$lang->project->closedBy      = 'ClosedBy';
+$lang->project->closedDate    = 'ClosedDate';
+$lang->project->canceledBy    = 'CanceledBy';
+$lang->project->canceledDate  = 'CanceledDate';
 $lang->project->begin         = 'Begin';
 $lang->project->end           = 'End';
 $lang->project->dateRange     = 'Duration';
@@ -25,6 +34,7 @@ $lang->project->workHour      = ' Hours';
 $lang->project->totalHours    = 'Available Hours';
 $lang->project->totalDays     = 'Available Days';
 $lang->project->status        = 'Status';
+$lang->project->subStatus     = 'Sub Status';
 $lang->project->desc          = 'Description';
 $lang->project->owner         = 'Owner';
 $lang->project->PO            = "{$lang->projectCommon} Owner";

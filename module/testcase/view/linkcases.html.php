@@ -55,8 +55,8 @@
           <td><?php echo html::a($this->createLink('product', 'browse', "productID={$case2Link->product}&branch={$case2Link->branch}"), $products[$case2Link->product], '_blank');?></td>
           <td class='text-left' title='<?php echo $case2Link->title;?>'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case2Link->id"), $case2Link->title, '_blank');?></td>
           <td><?php echo $lang->testcase->typeList[$case2Link->type];?></td>
-          <td><?php echo $users[$case2Link->openedBy];?></td>
-          <td class='case-<?php echo $case2Link->status?>'><?php echo $lang->testcase->statusList[$case2Link->status];?></td>
+          <td><?php echo zget($users, $case2Link->openedBy);?></td>
+          <td class='case-<?php echo $case2Link->status?>'><?php echo $this->processStatus('testcase', $case2Link);?></td>
         </tr>
         <?php $caseCount ++;?>
         <?php endforeach;?>

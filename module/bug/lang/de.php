@@ -30,6 +30,7 @@ $lang->bug->browser          = 'Browser';
 $lang->bug->steps            = 'Reproduktionsschritte';
 $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
+$lang->bug->subStatus        = 'Sub Status';
 $lang->bug->activatedCount   = 'Aktiv';
 $lang->bug->activatedCountAB = 'Aktiv';
 $lang->bug->activatedDate    = 'Aktiv seit';

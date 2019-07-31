@@ -33,10 +33,23 @@ class searchModel extends model
 
             foreach($fields as $field)
             {
+                /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
+                if($field->field == 'subStatus')
+                {
+                    $searchConfig['fields'][$field->field] = $field->name;
+                    $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $this->workflowfield->getSubStatusList($module));
+
+                    continue;
+                }
+
+                /* The other built-in fields do not need to set their configuration. */
                 if($field->buildin) continue;
+
+                /* Set configuration for user defined fields. */
                 $operator = ($field->control == 'input' or $field->control == 'textarea') ? 'include' : '=';
+                $control  = ($field->control == 'select' or $field->control == 'radio' or $field->control == 'checkbox') ? 'select' : 'input';
                 $options  = $this->workflowfield->getFieldOptions($field);
-                $control  = ($field->control == 'select' || $field->control == 'radio' || $field->control == 'checkbox') ? 'select' : 'input';
+
                 $searchConfig['fields'][$field->field] = $field->name;
                 $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options);
             }

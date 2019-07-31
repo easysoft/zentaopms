@@ -73,9 +73,9 @@
           <td class='c-product'><?php echo $story->productTitle;?></td>
           <td class='c-name nobr'><?php echo html::a($storyLink, $story->title, null, "style='color: $story->color'");?></td>
           <td class='c-plan'><?php echo $story->planTitle;?></td>
-          <td class='c-user'><?php echo $users[$story->openedBy];?></td>
+          <td class='c-user'><?php echo zget($users, $story->openedBy);?></td>
           <td class='c-hours'><?php echo $story->estimate;?></td>
-          <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo zget($lang->story->statusList, $story->status);?></span></td>
+          <td class='c-status'><span class='status-story status-<?php echo $story->status;?>'> <?php echo $this->processStatus('story', $story);?></span></td>
           <td class='c-stage'><?php echo zget($lang->story->stageList, $story->stage);?></td>
           <td class='c-actions'>
             <?php

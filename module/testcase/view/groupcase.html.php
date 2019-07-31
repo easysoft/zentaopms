@@ -82,7 +82,7 @@
           else
           {
               echo "<span class='status-case status-{$case->status}'>";
-              echo $lang->testcase->statusList[$case->status];
+              echo $this->processStatus('testcase', $case);
               echo '</span>';
           }
           ?>

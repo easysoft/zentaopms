@@ -102,11 +102,10 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendBasicInfo'>
-            <?php $widthClass = common::checkNotCN() ? 'w-110px' : 'w-70px';?>
             <table class="table table-data">
               <tbody>
                 <tr valign='middle'>
-                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->product;?></th>
+                  <th class='thWidth'><?php echo $lang->bug->product;?></th>
                   <td><?php if(!common::printLink('bug', 'browse', "productID=$bug->product", $productName)) echo $productName;?></td>
                 </tr>
                 <?php if($this->session->currentProductType != 'normal'):?>
@@ -184,7 +183,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><span class='status-bug status-<?php echo $bug->status?>'><?php echo $lang->bug->statusList[$bug->status];?></span></td>
+                  <td><span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->activatedCount;?></th>
@@ -200,7 +199,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->lblAssignedTo;?></th>
-                  <td><?php if($bug->assignedTo) echo $users[$bug->assignedTo] . $lang->at . $bug->assignedDate;?></td>
+                  <td><?php if($bug->assignedTo) echo zget($users, $bug->assignedTo) . $lang->at . $bug->assignedDate;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
@@ -225,7 +224,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->mailto;?></th>
-                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . $users[$account]; ?></td>
+                  <td><?php $mailto = explode(',', str_replace(' ', '', $bug->mailto)); foreach($mailto as $account) echo ' ' . zget($users, $account); ?></td>
                 </tr>
               </tbody>
             </table>
@@ -271,11 +270,10 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane active' id='legendLife'>
-            <?php $widthClass = common::checkNotCN() ? 'w-100px' : 'w-90px';?>
             <table class="table table-data">
               <tbody>
                 <tr>
-                  <th class='<?php echo $widthClass;?>'><?php echo $lang->bug->openedBy;?></th>
+                  <th class='thWidth'><?php echo $lang->bug->openedBy;?></th>
                   <td> <?php echo zget($users, $bug->openedBy) . $lang->at . $bug->openedDate;?></td>
                 </tr>
                 <tr>

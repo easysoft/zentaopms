@@ -98,7 +98,8 @@ class deptModel extends model
             }
         }
 
-        $topMenu = isset($deptMenu[0]) ? $deptMenu[0] : array_pop($deptMenu);
+        arsort($deptMenu);
+        $topMenu = array_pop($deptMenu);
         $topMenu = explode("\n", trim($topMenu));
         $lastMenu[] = '/';
         foreach($topMenu as $menu)
@@ -147,7 +148,8 @@ class deptModel extends model
             $deptMenu[$dept->parent] .= "</li>\n"; 
         }
 
-        $deptMenu = isset($deptMenu[0]) ? $deptMenu[0] : array_pop($deptMenu);
+        arsort($deptMenu);
+        $deptMenu = array_pop($deptMenu);
         $lastMenu = "<ul class='tree' data-ride='tree' data-name='tree-dept'>{$deptMenu}</ul>\n";
         return $lastMenu; 
     }
