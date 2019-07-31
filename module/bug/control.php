@@ -295,6 +295,8 @@ class bug extends control
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
             }
 
+            $this->executeHooks($bugID);
+
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
             setcookie('bugModule', (int)$this->post->module, 0, $this->config->webRoot);
@@ -552,6 +554,8 @@ class bug extends control
         $productName = $this->products[$productID];
         $branches    = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
+        $this->executeHooks($bugID);
+
         /* Header and positon. */
         $this->view->title      = "BUG #$bug->id $bug->title - " . $this->products[$productID];
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $productName);
@@ -612,6 +616,9 @@ class bug extends control
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
             $bug = $this->bug->getById($bugID);
+
+            $this->executeHooks($bugID);
+
             if($bug->toTask != 0)
             {
                 foreach($changes as $change)
@@ -827,6 +834,8 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
+            $this->executeHooks($bugID);
+
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -939,6 +948,9 @@ class bug extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            $this->executeHooks($bugID);
+
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -994,6 +1006,9 @@ class bug extends control
             $this->action->logHistory($actionID, $changes);
 
             $bug = $this->bug->getById($bugID);
+
+            $this->executeHooks($bugID);
+
             if($bug->toTask != 0)
             {
                 /* If task is not finished, update it's status. */
@@ -1084,6 +1099,8 @@ class bug extends control
             $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
+            $this->executeHooks($bugID);
+
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
@@ -1120,6 +1137,8 @@ class bug extends control
 
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            $this->executeHooks($bugID);
 
             if(isonlybody()) die(js::closeModal('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
@@ -1286,6 +1305,9 @@ class bug extends control
         {
             $this->bug->delete(TABLE_BUG, $bugID);
             if($bug->toTask != 0) echo js::alert($this->lang->bug->remindTask . $bug->toTask);
+
+            $this->executeHooks($bugID);
+
             die(js::locate($this->session->bugList, 'parent'));
         }
     }
@@ -1500,7 +1522,7 @@ class bug extends control
                 if(isset($bugLang->severityList[$bug->severity]))     $bug->severity   = $bugLang->severityList[$bug->severity];
                 if(isset($bugLang->osList[$bug->os]))                 $bug->os         = $bugLang->osList[$bug->os];
                 if(isset($bugLang->browserList[$bug->browser]))       $bug->browser    = $bugLang->browserList[$bug->browser];
-                if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $bugLang->statusList[$bug->status];
+                if(isset($bugLang->statusList[$bug->status]))         $bug->status     = $this->processStatus('bug', $bug);
                 if(isset($bugLang->confirmedList[$bug->confirmed]))   $bug->confirmed  = $bugLang->confirmedList[$bug->confirmed];
                 if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
 
@@ -1569,6 +1591,7 @@ class bug extends control
             }
 
             if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
+            if(isset($this->config->bizVersion)) list($fields, $bugs) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $bugs);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $bugs);

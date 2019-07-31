@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php if(common::checkEnLang()):?>
+<?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>
 <div class="modal-content">

@@ -40,8 +40,9 @@
       </div>
       <?php endif;?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=testtask&objectID=$task->id");?>
-      <?php include '../../common/view/action.html.php';?>
     </div>
+    <?php $this->printExtendFields($task, 'div', "position=left&divCell=true");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -55,6 +56,9 @@
         common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'sitemap');
         common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
         ?>
+
+        <?php echo $this->buildOperateMenu($task, 'view');?>
+
         <div class='divider'></div>
         <?php
         common::printIcon('testtask', 'edit',     "taskID=$task->id", $task);
@@ -114,12 +118,13 @@
             </tr>
             <tr>
               <th><?php echo $lang->testtask->status;?></th>
-              <td class='task-<?php echo $task->status?>'><?php echo $lang->testtask->statusList[$task->status];?></td>
+              <td class='task-<?php echo $task->status?>'><?php echo $this->processStatus('testtask', $task);?></td>
             </tr>
           </table>
         </div>
       </div>
     </div>
+    <?php $this->printExtendFields($task, 'div', "position=right&divCell=true");?>
   </div>
 </div>
 

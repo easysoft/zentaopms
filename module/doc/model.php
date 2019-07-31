@@ -696,7 +696,7 @@ class docModel extends model
             $docContent = new stdclass();
             $docContent->doc     = $docID;
             $docContent->title   = $doc->title;
-            $docContent->content = $doc->content;
+            $docContent->content = isset($doc->content) ? $doc->content : '';
             $docContent->version = $doc->version;
             $docContent->type    = $oldDocContent->type;
             $docContent->files   = $oldDocContent->files;
@@ -1142,6 +1142,7 @@ class docModel extends model
         }
         elseif($type == 'project')
         {
+            $this->loadModel('project');
             $projects = $mineProjects = $otherProjects = $closedProjects = array();
             foreach($libs as $lib)
             {   

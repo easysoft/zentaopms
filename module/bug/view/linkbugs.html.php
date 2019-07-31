@@ -55,7 +55,7 @@
           <td><span class='label-pri <?php echo 'label-pri-' . $bug2Link->pri?>' title='<?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?></span></td>
           <td><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
           <td class='text-left nobr' title="<?php echo $bug2Link->title?>"><?php echo html::a($bugLink, $bug2Link->title);?></td>
-          <td><?php echo zget($lang->bug->statusList, $bug->status, '');?></td>
+          <td><?php echo $this->processStatus('bug', $bug);?></td>
           <td><?php echo zget($users, $bug2Link->openedBy);?></td>
           <td><?php echo zget($users, $bug2Link->assignedTo);?></td>
         </tr>

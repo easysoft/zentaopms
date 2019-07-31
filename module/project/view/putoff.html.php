@@ -55,6 +55,7 @@
           </td> 
           <td></td>
         </tr> 
+        <?php $this->printExtendFields($project, 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='3'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>

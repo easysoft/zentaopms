@@ -7,7 +7,7 @@
   <div class='tab-content'>
     <div class='tab-pane active' id='affectedProjects'>
       <?php foreach($story->projects as $projectID => $project):?>
-        <h6><?php echo $project->name ?> &nbsp; <small><i class='icon-group'></i> <?php foreach($story->teams[$projectID] as $member) echo zget($users, $member->account, $member->account) . ' ';?></small></h6>
+        <h6><?php echo $project->name ?> &nbsp; <small><i class='icon-group'></i> <?php foreach($story->teams[$projectID] as $member) echo zget($users, $member->account) . ' ';?></small></h6>
           <table class='table'>
             <thead>
               <tr class='text-center'>
@@ -25,11 +25,9 @@
               <tr class='text-center'>
                 <td><?php echo $task->id;?></td>
                 <td class='text-left'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '_blank');?></td>
-                <td><?php echo $users[$task->assignedTo];?></td>
+                <td><?php echo zget($users, $task->assignedTo);?></td>
                 <td>
-                  <span class='status-task status-<?php echo $task->status?>'>
-                    <?php echo $lang->task->statusList[$task->status];?>
-                  </span>
+                  <span class='status-task status-<?php echo $task->status?>'><?php echo $this->processStatus('task', $task);?></span>
                 </td>
                 <td><?php echo $task->consumed;?></td>
                 <td><?php echo $task->left;?></td>
@@ -59,14 +57,12 @@
             <td><?php echo $bug->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '_blank');?></td>
             <td>
-              <span class='status-bug status-<?php echo $bug->status?>'>
-                <?php echo $lang->bug->statusList[$bug->status];?>
-              </span>
+              <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
             </td>
-            <td><?php echo $users[$bug->openedBy];?></td>
-            <td><?php echo $users[$bug->resolvedBy];?></td>
+            <td><?php echo zget($users, $bug->openedBy);?></td>
+            <td><?php echo zget($users, $bug->resolvedBy);?></td>
             <td class='text-left'><?php echo $lang->bug->resolutionList[$bug->resolution];?></td>
-            <td><?php echo $users[$bug->lastEditedBy];?></td>
+            <td><?php echo zget($users, $bug->lastEditedBy);?></td>
           </tr>
           <?php endforeach;?>
         </tbody>
@@ -89,12 +85,10 @@
             <td><?php echo $case->id;?></td>
             <td class='text-left'><?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id"), $case->title, '_blank');?></td>
             <td>
-              <span class='status-case status-<?php echo $case->status?>'>
-                <?php echo $lang->testcase->statusList[$case->status];?>
-              </span>
+              <span class='status-case status-<?php echo $case->status?>'><?php echo $this->processStatus('testcase', $case);?></span>
             </td>
-            <td><?php echo $users[$case->openedBy];?></td>
-            <td><?php echo $users[$case->lastEditedBy];?></td>
+            <td><?php echo zget($users, $case->openedBy);?></td>
+            <td><?php echo zget($users, $case->lastEditedBy);?></td>
           </tr>
           <?php endforeach;?>
         </tbody>

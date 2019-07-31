@@ -20,7 +20,7 @@
         <th class='c-name text-left'><?php echo $lang->project->name;?></th>
         <th class="c-date"><?php echo $lang->project->end;?></th>
         <?php if($longBlock):?>
-        <?php $thClass = common::checkEnLang() ? 'w-85px' : 'c-hours';?>
+        <?php $thClass = common::checkNotCN() ? 'w-85px' : 'c-hours';?>
         <th class="c-status"><?php echo $lang->statusAB;?></th>
         <th class='<?php echo $thClass?>'><?php echo $lang->project->totalEstimate;?></th>
         <th class="c-hours"><?php echo $lang->project->totalConsumed;?></th>
@@ -47,7 +47,7 @@
           <?php if(isset($project->delay)):?>
           <span class="status-project status-delayed" title='<?php echo $lang->project->delayed;?>'><?php echo $lang->project->delayed;?></span>
           <?php else:?>
-          <?php $statusName = zget($lang->project->statusList, $project->status, '');?>
+          <?php $statusName = $this->processStatus('project', $project);?>
           <span class="status-project status-<?php echo $project->status?>" title='<?php echo $statusName;?>'><?php echo $statusName;?></span>
           <?php endif;?>
         </td>

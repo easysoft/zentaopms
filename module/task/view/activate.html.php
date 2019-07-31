@@ -27,8 +27,7 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkEnLang() ? 'w-90px' : 'w-70px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->task->assignedTo;?></th>
+          <th class='thWidth'><?php echo $lang->task->assignedTo;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $members, $task->finishedBy, "class='form-control chosen'");?></td>
           <td></td>
         </tr>
@@ -41,6 +40,7 @@
             </div>
           </td>
         </tr>
+        <?php $this->printExtendFields($task, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>

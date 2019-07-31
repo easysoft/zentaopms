@@ -37,6 +37,8 @@
     <?php
     if(!$plan->deleted)
     {
+        echo $this->buildOperateMenu($plan, 'view');
+
         if(common::hasPriv('productplan', 'create') and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-treemap-alt'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
         if(common::hasPriv('productplan', 'edit')) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
         if(common::hasPriv('productplan', 'delete')) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
@@ -149,7 +151,7 @@
                 <td><?php echo $story->estimate;?></td>
                 <td>
                   <span class='status-story status-<?php echo $story->status?>'>
-                    <?php echo $lang->story->statusList[$story->status];?>
+                    <?php echo $this->processStatus('story', $story);?>
                   </span>
                 </td>
                 <td><?php echo $lang->story->stageList[$story->stage];?></td>
@@ -384,7 +386,7 @@
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
                   <span class='status-bug status-<?php echo $bug->status?>'>
-                    <?php echo $lang->bug->statusList[$bug->status];?>
+                    <?php echo $this->processStatus('bug', $bug);?>
                   </span>
                 </td>
                 <td class='c-actions'>
@@ -453,6 +455,7 @@
                   </td>
                 </tr>
                 <?php endif;?>
+                <?php $this->printExtendFields($plan, 'table', "position=all&columns=1");?>
                 <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>

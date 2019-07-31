@@ -54,8 +54,9 @@
             <span class="status-project status-delayed"><?php echo $lang->project->delayed;?></span>
           </td>
           <?php else:?>
-          <td class='c-status' title='<?php echo zget($lang->project->statusList, $project->status);?>'>
-            <span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status);?></span>
+          <?php $status = $this->processStatus('project', $project);?>
+          <td class='c-status' title='<?php echo $status;?>'>
+            <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
           </td>
           <?php endif;?>
           <td><?php echo $project->hours->totalEstimate;?></td>

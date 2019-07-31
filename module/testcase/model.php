@@ -1360,13 +1360,14 @@ class testcaseModel extends model
             if($id == 'status')
             {
                 $class .= $case->status;
-                $title  = "title='" . zget($this->lang->testcase->statusList, $case->status) . "'";
+                $title  = "title='" . $this->processStatus('testcase', $case) . "'";
             }
             if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
             if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='{$class}' {$title}>";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('testcase', $case, $id);
             switch($id)
             {
             case 'id':
@@ -1405,7 +1406,7 @@ class testcaseModel extends model
                 }
                 else
                 {
-                    print("<span class='status-testcase status-{$case->status}'>{$this->lang->testcase->statusList[$case->status]}</span>");
+                    print("<span class='status-testcase status-{$case->status}'>" . $this->processStatus('testcase', $case) . "</span>");
                 }
                 break;
             case 'story':

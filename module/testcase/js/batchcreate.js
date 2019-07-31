@@ -9,9 +9,9 @@ $(document).ready(function()
         var id     = $(select).attr('id');
         if(id.indexOf('story') != -1)
         {
-            var index     = id.substring(5);
-            var moduleID  = $('#module' + index).val();
-            var branch    = $('#branch' + index).val();
+            var index    = id.substring(5);
+            var moduleID = $('#module' + index).val();
+            var branch   = $('#branch' + index).val();
             if(moduleID == 'ditto')
             {
                 for(var i = index - 1; i >=0; i--)

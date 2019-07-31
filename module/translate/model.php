@@ -71,11 +71,11 @@ class translateModel extends model
                 $translation->module          = $moduleName;
                 $translation->key             = $key;
                 $translation->value           = $value;
-                $translation->refer           = htmlspecialchars($translation->value);
+                $translation->referer         = htmlspecialchars($translation->value);
                 $translation->status          = 'waiting';
                 $translation->version         = $this->config->version;
                 $translation->translator      = $this->app->user->account;
-                $translation->translationTime = $now;
+                $translation->translatedTime  = $now;
                 $translation->mode            = $flow;
                 $this->dao->replace(TABLE_TRANSLATION)->data($translation)->exec();
             }
@@ -354,10 +354,10 @@ class translateModel extends model
                 if($dbItem->value != $value)
                 {
                     $translation->value           = $value;
-                    $translation->refer           = $refer;
+                    $translation->referer         = $refer;
                     $translation->status          = 'translated';
                     $translation->translator      = $this->app->user->account;
-                    $translation->translationTime = $now;
+                    $translation->translatedTime  = $now;
                     if($translation->reason) $translation->reason = '';
                 }
                 elseif(!empty($_POST['values'][$i]) and strpos("waiting|changed", $translation->status) !== false)
@@ -372,10 +372,10 @@ class translateModel extends model
                 $translation->module          = $module;
                 $translation->key             = $key;
                 $translation->value           = $value;
-                $translation->refer           = $refer;
+                $translation->referer         = $refer;
                 $translation->status          = 'translated';
                 $translation->translator      = $this->app->user->account;
-                $translation->translationTime = $now;
+                $translation->translatedTime  = $now;
                 $translation->version         = $this->config->version;
                 $translation->mode            = $flow;
             }
@@ -435,8 +435,8 @@ class translateModel extends model
             {
                 $translators[$translation->translator] = $translation->translator;
                 $reviewers[$translation->reviewer]     = $translation->reviewer;
-                if(empty($lastReviewTime)) $lastReviewTime = $translation->reviewTime;
-                if($lastReviewTime < $translation->reviewTime) $lastReviewTime = $translation->reviewTime;
+                if(empty($lastReviewTime)) $lastReviewTime = $translation->reviewedTime;
+                if($lastReviewTime < $translation->reviewedTime) $lastReviewTime = $translation->reviewedTime;
             }
         }
 
@@ -532,11 +532,16 @@ class translateModel extends model
                                 $value = "'" . addslashes($value) . "'";
                             }
                         }
+                        elseif(strpos($value, "'") === false and strpos($value, '"') === false)
+                        {
+                            $value = "'" . addslashes($value) . "'";
+                        }
                         else
                         {
                             $parts    = explode('.', $value);
                             $value    = '';
                             $isJoin   = false;
+                            $prePart  = '';
                             $preFirst = '';
                             $preLast  = '';
                             foreach($parts as $part)
@@ -547,17 +552,21 @@ class translateModel extends model
                                 $firstLetter = $part{0};
                                 $lastLetter  = $part{strlen($part) - 1};
                                 /* Item like "a" or 'b'. */
-                                if($firstLetter == $lastLetter and ($firstLetter == '"' or $firstLetter == "'"))
+                                if(strlen($part) >= 2 and $firstLetter == $lastLetter and ($firstLetter == '"' or $firstLetter == "'"))
                                 {
                                     $isJoin = true;
                                     $value  = empty($value) ? $part : $value . " . $part";
                                 }
                                 /* Item like $test or $test). */
-                                elseif($firstLetter != $lastLetter and $firstLetter == '$')
+                                elseif($firstLetter != $lastLetter and $firstLetter == '$' and preg_match('/\s+/', $part) == 0)
                                 {
                                     $isJoin = true;
                                     if($lastLetter == ')') $part = "'$part'";
                                     $value  = empty($value) ? $part : $value . " . $part";
+                                }
+                                elseif(empty($prePart) and strpos('\'|"', $firstLetter) !== false)
+                                {
+                                    $value = $part;
                                 }
                                 /* Item like <a href="www.baidu.com"> or $test . exec(). */
                                 elseif(($preLast and strpos('\'|"', $preLast) === false or $preFirst == '$') and strpos('\'|"', $firstLetter) === false)
@@ -572,6 +581,11 @@ class translateModel extends model
                                         $value .= '.' . $part;
                                     }
                                 }
+                                /* Item like '"a".<br/>' or "'a'.<br/>". */
+                                elseif($prePart and ((strpos($prePart, '"') !== false and substr_count($prePart, '"') % 2 != 0) or (strpos($prePart, "'") !== false and substr_count($prePart, "'") % 2 != 0)))
+                                {
+                                    $value .= '.' . $part;
+                                }
                                 /* Item like "aaa" . exec() or $test . exec(). */
                                 elseif(($preLast and strpos('\'|"', $preLast) !== false or $preFirst == '$') and strpos('\'|"', $firstLetter) === false)
                                 {
@@ -583,6 +597,7 @@ class translateModel extends model
                                 {
                                     $value = empty($value) ? "'" . addslashes($part) . "'"  : $value . " . '" . addslashes($part) . "'";
                                 }
+                                /* Item like has function. */
                                 elseif($lastLetter == ')')
                                 {
                                     $part  = "'" . addslashes($part) . "'";
@@ -593,10 +608,11 @@ class translateModel extends model
                                     $value = empty($value) ? $part : $value . ".$part";
                                 }
 
+                                $prePart .= str_replace(array('\\"', '\\\''), '', $part);
                                 $preFirst = $firstLetter;
                                 $preLast  = $lastLetter;
                             }
-                            if(!$isJoin) $value = '"' . addslashes($value) . '"';
+                            if(!$isJoin and strpos("\'|\"", $value{0}) === false) $value = '"' . addslashes($value) . '"';
                         }
                     }
                     $content .= $key . " = $value;\n";
@@ -681,10 +697,10 @@ class translateModel extends model
                                 $translation->module          = $moduleName;
                                 $translation->key             = $langKey;
                                 $translation->value           = $langValue;
-                                $translation->refer           = htmlspecialchars($langValue);
+                                $translation->referer         = htmlspecialchars($langValue);
                                 $translation->status          = 'waiting';
                                 $translation->translator      = $this->app->user->account;
-                                $translation->translationTime = helper::now();
+                                $translation->translatedTime  = helper::now();
                                 $translation->version         = $version;
                                 $translation->mode            = $flow;
                                 $this->dao->replace(TABLE_TRANSLATION)->data($translation)->exec();
@@ -693,13 +709,13 @@ class translateModel extends model
                             {
                                 if(!isset($translateIdList[$translation->id])) continue;
                                 $specialedValue = htmlspecialchars($langValue);
-                                if($specialedValue == $translation->refer)
+                                if($specialedValue == $translation->referer)
                                 {
                                     $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->where('id')->eq($translation->id)->exec();
                                 }
-                                elseif($specialedValue != $translation->refer)
+                                elseif($specialedValue != $translation->referer)
                                 {
-                                    $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->set('status')->eq('changed')->set('refer')->eq($specialedValue)->where('id')->eq($translation->id)->exec();
+                                    $this->dao->update(TABLE_TRANSLATION)->set('version')->eq($version)->set('status')->eq('changed')->set('referer')->eq($specialedValue)->where('id')->eq($translation->id)->exec();
                                 }
                                 unset($translateIdList[$translation->id]);
                             }

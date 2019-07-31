@@ -54,8 +54,7 @@ EOT;
       <?php if(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
       <table class='table table-form mw-800px'>
         <tr>
-          <?php $colWidth = common::checkEnLang() ? 'w-140px' : 'w-80px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->custom->storyReview;?></th>
+          <th class='thWidth'><?php echo $lang->custom->storyReview;?></th>
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
           <td></td>
         </tr>

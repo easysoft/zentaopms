@@ -61,7 +61,7 @@
           <td class="c-url" title="<?php echo $build->scmPath?>"><?php  echo strpos($build->scmPath,  'http') === 0 ? html::a($build->scmPath)  : $build->scmPath;?></td>
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
           <td class="c-date"><?php echo $build->date?></td>
-          <td class="c-user em"><?php echo $users[$build->builder]?></td>
+          <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
           <td class="c-actions">
             <?php
             if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view'))

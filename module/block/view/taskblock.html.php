@@ -49,8 +49,9 @@
         <td class='c-estimate text-center'><?php echo $task->estimate?></td>
         <td class='c-deadline'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
         <?php endif;?>
-        <td class='c-status' title='<?php echo zget($lang->task->statusList, $task->status)?>'>
-          <span class="status-task status-<?php echo $task->status?>"><?php echo zget($lang->task->statusList, $task->status);?></span>
+        <?php $status = $this->processStatus('task', $task);?>
+        <td class='c-status' title='<?php echo $status;?>'>
+          <span class="status-task status-<?php echo $task->status?>"><?php echo $status;?></span>
         </td>
       </tr>
       <?php endforeach;?>

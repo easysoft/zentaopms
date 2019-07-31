@@ -27,7 +27,7 @@
           <td class='text-left' title="<?php echo $case->title?>"><?php echo $case->title;?></td>
           <td><span class='<?php echo 'pri' . zget($lang->testcase->priList, $case->pri, $case->pri)?>'><?php echo $case->pri == '0' ? '' : zget($lang->case->priList, $case->pri, $case->pri);?></span></td>
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-          <td><?php echo $lang->testcase->statusList[$case->status];?></td>
+          <td><?php echo $this->processStatus('testcase', $case);?></td>
           <td><?php echo zget($users, $case->lastRunner, $case->lastRunner);?></td>
           <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
           <td><?php echo $case->lastRunResult ? $lang->testcase->resultList[$case->lastRunResult] : '';?></td>

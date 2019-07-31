@@ -2420,10 +2420,11 @@ class taskModel extends model
         $tasks = $this->dao->select('id, DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->having('date != "0000-00-00"')
+            ->orderBy('date asc')
             ->fetchAll('id');
         if(!$tasks) return array();
 
-        $children = $this->dao->select('id,parent,DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->having('date != "0000-00-00"')->fetchAll('id');
+        $children = $this->dao->select('id,parent,DATE_FORMAT(finishedDate, "%Y-%m-%d") AS date')->from(TABLE_TASK)->where('parent')->in(array_keys($tasks))->having('date != "0000-00-00"')->orderBy('date asc')->fetchAll('id');
         $datas    = $this->processData4Report($tasks, $children, 'date');
         return $datas;
     }
@@ -2472,8 +2473,7 @@ class taskModel extends model
             if(!isset($fields[$task->$field])) $fields[$task->$field] = 0;
             $fields[$task->$field] ++;
         }
-
-        arsort($fields);
+        asort($fields);
         foreach($fields as $field => $count)
         {
             $data = new stdclass();
@@ -2597,6 +2597,7 @@ class taskModel extends model
             if($id == 'story') $title = " title='{$task->storyTitle}'";
 
             echo "<td class='" . $class . "'" . $title . ">";
+            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('task', $task, $id);
             switch($id)
             {
             case 'id':
@@ -2627,7 +2628,7 @@ class taskModel extends model
                 echo $this->lang->task->typeList[$task->type];
                 break;
             case 'status':
-                $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> {$this->lang->task->statusList[$task->status]}</span>");
+                $storyChanged ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");
                 break;
             case 'estimate':
                 echo round($task->estimate, 1);

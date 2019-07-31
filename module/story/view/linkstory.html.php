@@ -61,7 +61,7 @@
         <td><?php echo html::a($this->createLink('product', 'browse', "productID=$story2Link->product&branch=$story2Link->branch"), $products[$story2Link->product], '_blank');?></td>
         <td class='text-left nobr' title="<?php echo $story2Link->title?>"><?php echo html::a($storyLink, $story2Link->title, '_blank');?></td>
         <td><?php echo $story2Link->planTitle;?></td>
-        <td><?php echo zget($lang->story->statusList, $story2Link->status);?></td>
+        <td><?php echo $this->processStatus('story', $story2Link);?></td>
         <td><?php echo zget($lang->story->stageList, $story2Link->stage);?></td>
         <td><?php echo zget($users, $story2Link->openedBy);?></td>
         <td><?php echo $story2Link->estimate;?></td>

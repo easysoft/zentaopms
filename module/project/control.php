@@ -902,7 +902,7 @@ class project extends control
         $chartData = $this->project->buildBurnData($projectID, $dateList, $type);
 
         /* Set a space when assemble the string for english. */
-        $space   = common::checkEnLang() ? ' ' : '';
+        $space   = common::checkNotCN() ? ' ' : '';
         $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
         foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . $space . ($key + 1) . $space . $this->lang->day;
 
@@ -1055,6 +1055,8 @@ class project extends control
 
             $this->loadModel('action')->create('project', $projectID, 'opened', '', join(',', $_POST['products']));
 
+            $this->executeHooks($projectID);
+
             $planID = reset($_POST['plans']);
             if(!empty($planID))
             {
@@ -1122,6 +1124,7 @@ class project extends control
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
+            $this->executeHooks($projectID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "projectID=$projectID")));
         }
 
@@ -1249,6 +1252,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            $this->executeHooks($projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1283,6 +1287,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Delayed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            $this->executeHooks($projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1317,6 +1322,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Suspended', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            $this->executeHooks($projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1351,6 +1357,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            $this->executeHooks($projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1392,6 +1399,7 @@ class project extends control
                 $actionID = $this->action->create('project', $projectID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+            $this->executeHooks($projectID);
             die(js::reload('parent.parent'));
         }
 
@@ -1432,6 +1440,8 @@ class project extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
+
+        $this->executeHooks($projectID);
 
         $this->view->title      = $this->lang->project->view;
         $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
@@ -1700,6 +1710,7 @@ class project extends control
             $this->project->delete(TABLE_PROJECT, $projectID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
             $this->session->set('project', '');
+            $this->executeHooks($projectID);
             die(js::locate(inlink('index'), 'parent'));
         }
     }
@@ -2268,8 +2279,8 @@ class project extends control
             $users        = $this->loadModel('user')->getPairs('noletter');
             foreach($projectStats as $i => $project)
             {
-                $project->PM    = zget($users, $project->PM);
-                $project->status = isset($project->delay) ? $projectLang->delayed : $projectLang->statusList[$project->status];
+                $project->PM            = zget($users, $project->PM);
+                $project->status        = isset($project->delay) ? $projectLang->delayed : $this->processStatus('project', $project);
                 $project->totalEstimate = $project->hours->totalEstimate;
                 $project->totalConsumed = $project->hours->totalConsumed;
                 $project->totalLeft     = $project->hours->totalLeft;
@@ -2281,6 +2292,7 @@ class project extends control
                     if(strpos(",$checkedItem,", ",{$project->id},") === false) unset($projectStats[$i]);
                 }
             }
+            if(isset($this->config->bizVersion)) list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projectStats);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $projectStats);

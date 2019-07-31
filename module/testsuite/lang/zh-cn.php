@@ -28,13 +28,17 @@ $lang->testsuite->importAction     = '导入用例';
 $lang->testsuite->showImport       = '显示导入数据';
 $lang->testsuite->successSaved     = '保存成功';
 
+$lang->testsuite->id             = '编号';
 $lang->testsuite->common         = '套件';
 $lang->testsuite->product        = '所属' . $lang->productCommon;
 $lang->testsuite->name           = '名称';
+$lang->testsuite->type           = '类型';
 $lang->testsuite->desc           = '描述';
 $lang->testsuite->author         = '访问权限';
 $lang->testsuite->addedBy        = '由谁创建';
 $lang->testsuite->addedDate      = '创建时间';
+$lang->testsuite->lastEditedBy   = '最后编辑人';
+$lang->testsuite->lastEditedDate = '最后编辑时间';
 
 $lang->testsuite->legendDesc      = '描述';
 $lang->testsuite->legendBasicInfo = '基本信息';

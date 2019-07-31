@@ -23,6 +23,38 @@ class searchModel extends model
      */
     public function setSearchParams($searchConfig)
     {
+        if(isset($this->config->bizVersion))
+        {
+            $module = $searchConfig['module'];
+            if($module == 'projectStory') $module = 'story';
+            if($module == 'projectBug')   $module = 'bug';
+
+            $fields = $this->loadModel('workflowfield')->getList($module);
+
+            foreach($fields as $field)
+            {
+                /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
+                if($field->field == 'subStatus')
+                {
+                    $searchConfig['fields'][$field->field] = $field->name;
+                    $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $this->workflowfield->getSubStatusList($module));
+
+                    continue;
+                }
+
+                /* The other built-in fields do not need to set their configuration. */
+                if($field->buildin) continue;
+
+                /* Set configuration for user defined fields. */
+                $operator = ($field->control == 'input' or $field->control == 'textarea') ? 'include' : '=';
+                $control  = ($field->control == 'select' or $field->control == 'radio' or $field->control == 'checkbox') ? 'select' : 'input';
+                $options  = $this->workflowfield->getFieldOptions($field);
+
+                $searchConfig['fields'][$field->field] = $field->name;
+                $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options);
+            }
+        }
+
         $searchParams['module']       = $searchConfig['module'];
         $searchParams['searchFields'] = json_encode($searchConfig['fields']);
         $searchParams['fieldParams']  = json_encode($searchConfig['params']);

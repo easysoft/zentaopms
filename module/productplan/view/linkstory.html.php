@@ -55,7 +55,7 @@
           <td><?php echo $story->estimate;?></td>
           <td>
             <span class='status-story status-<?php echo $story->status?>'>
-              <?php echo $lang->story->statusList[$story->status];?>
+              <?php echo $this->processStatus('story', $story);?>
             </span>
           </td>
           <td class='text-center'><?php echo $lang->story->stageList[$story->stage];?></td>
@@ -74,7 +74,7 @@
       <div class="btn-toolbar">
         <?php echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
       </div>
-      <div class=''></div>
+      <div class='text'></div>
     </div>
   </form>
 </div>

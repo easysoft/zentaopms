@@ -10,6 +10,7 @@ $lang->testreport->view         = '报告详情';
 $lang->testreport->recreate     = '重新生成报告';
 
 $lang->testreport->title       = '标题';
+$lang->testreport->product     = "所属{$lang->productCommon}";
 $lang->testreport->bugTitle    = 'Bug 标题';
 $lang->testreport->storyTitle  = '需求标题';
 $lang->testreport->project     = '所属项目';
@@ -28,8 +29,10 @@ $lang->testreport->cases       = '用例';
 $lang->testreport->bugInfo     = 'Bug分布';
 $lang->testreport->report      = '总结';
 $lang->testreport->legacyBugs  = '遗留的Bug';
+$lang->testreport->createdBy   = '由谁创建';
 $lang->testreport->createdDate = '创建时间';
 $lang->testreport->objectID    = '所属对象';
+$lang->testreport->objectType  = '对象类型';
 $lang->testreport->profile     = '概况';
 $lang->testreport->value       = '值';
 $lang->testreport->none        = '无';
@@ -47,7 +50,7 @@ $lang->testreport->legendComment     = '总结';
 $lang->testreport->legendMore        = '更多功能';
 
 $lang->testreport->bugSeverityGroups   = 'Bug严重级别分布';
-$lang->testreport->bugTypeGroups       = 'Bug类型别分布';
+$lang->testreport->bugTypeGroups       = 'Bug类型分布';
 $lang->testreport->bugStatusGroups     = 'Bug状态分布';
 $lang->testreport->bugOpenedByGroups   = 'Bug创建者分布';
 $lang->testreport->bugResolvedByGroups = 'Bug解决者分布';

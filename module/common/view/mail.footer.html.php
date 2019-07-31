@@ -19,15 +19,15 @@ if(file_exists($extViewFile))
             <?php endif;?>
             <tr>
               <td style='padding: 10px; background-color: #FFF0D5'>
-                <?php if(isset($users[$action->actor])) $action->actor = $users[$action->actor];?>
-                <?php if(isset($users[$action->extra])) $action->extra = $users[$action->extra];?>
+                <?php $action->actor = zget($users, $action->actor);?>
+                <?php $action->extra = zget($users, $action->extra);?>
                 <span style='font-size: 16px; color: #F1A325'>●</span> &nbsp;<span><?php $this->action->printAction($action);?></span>
               </td>
             </tr>
             <?php if(!empty($action->history)):?>
             <tr>
               <td style='padding: 10px;'>
-                <div><?php echo $this->action->printChanges($action->objectType, $action->history);?></div>
+                <div><?php $this->action->printChanges($action->objectType, $action->history, false);?></div>
               </td>
             </tr>
             <?php endif;?>

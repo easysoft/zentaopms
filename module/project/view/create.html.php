@@ -139,6 +139,7 @@
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
           </td>
         </tr>
+        <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>

@@ -30,4 +30,38 @@ class validater extends baseValidater
  */
 class fixer extends baseFixer
 {
+    public function get($fields = '')
+    {
+        $fields = str_replace(' ', '', trim($fields));
+
+        /* Get extend field by flow. */
+        global $config;
+        $flowFields = array();
+        if(isset($config->bizVersion))
+        {
+            global $app, $dbh;
+            $moduleName = $app->getModuleName();
+            $stmt = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `buildin` = '0'");
+            while($flowField = $stmt->fetch()) $flowFields[$flowField->field] = $flowField;
+        }
+        foreach($this->data as $field => $value)
+        {
+            /* Implode array when form has array. */
+            if(isset($flowFields[$field]) and is_array($value)) $this->data->$field = implode(',', $value);
+            $this->specialChars($field);
+        }
+
+        if(empty($fields)) return $this->data;
+        if(strpos($fields, ',') === false) return $this->data->$fields;
+
+        /* Process fields for check by key. */
+        $fields = array_flip(explode(',', $fields));
+        foreach($this->data as $field => $value)
+        {
+            if(!isset($fields[$field])) unset($this->data->$field);
+            if(!in_array($field, $this->stripedFields)) $this->specialChars($field);
+        }
+
+        return $this->data;
+    }
 }

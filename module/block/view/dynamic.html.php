@@ -11,7 +11,7 @@
     $i = 0;
     foreach($actions as $action)
     {
-        $user = isset($users[$action->actor]) ? $users[$action->actor] : $action->actor;
+        $user = zget($users, $action->actor);
         if($action->action == 'login' or $action->action == 'logout' or empty($action->objectLink)) $action->objectName = $action->objectLabel = '';
         $class = $action->major ? "class='active'" : '';
         echo "<li $class><div>";

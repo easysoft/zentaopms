@@ -29,10 +29,11 @@ $lang->extension->eraseAction      = 'Erase Extension';
 $lang->extension->upgrade       = 'Erweiterung Upgraden';
 $lang->extension->agreeLicense  = 'Lizenz';
 
-$lang->extension->structure   = 'Struktur';
-$lang->extension->installed   = 'Installiert';
-$lang->extension->deactivated = 'Deaktiviert';
-$lang->extension->available   = 'Heruntergeladen';
+$lang->extension->structure     = 'Struktur';
+$lang->extension->extstructure  = 'Struktur';
+$lang->extension->installed     = 'Installiert';
+$lang->extension->deactivated   = 'Deaktiviert';
+$lang->extension->available     = 'Heruntergeladen';
 
 $lang->extension->name        = 'Erweiterungsname';
 $lang->extension->code        = 'Code';

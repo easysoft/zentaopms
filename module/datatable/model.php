@@ -35,6 +35,20 @@ class datatableModel extends model
             $title = zget($this->lang->$module, $items['title'], zget($this->lang, $items['title'], $items['title']));
             $this->config->$module->datatable->fieldList[$field]['title'] = $title;
         }
+
+        if(isset($this->config->bizVersion))
+        {
+            $fields = $this->loadModel('workflowfield')->getList($module);
+            foreach($fields as $field)
+            {
+                if($field->buildin) continue;    
+                $this->config->$module->datatable->fieldList[$field->field]['title']    = $field->name;
+                $this->config->$module->datatable->fieldList[$field->field]['width']    = '120';
+                $this->config->$module->datatable->fieldList[$field->field]['fixed']    = 'no';
+                $this->config->$module->datatable->fieldList[$field->field]['required'] = 'no';
+            }
+        }
+
         return $this->config->$module->datatable->fieldList;
     }
 

@@ -113,6 +113,8 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
+            $this->executeHooks($storyID);
+
             if($this->post->newStory)
             {
                 $response['message'] = $this->lang->story->successSaved . $this->lang->story->newStory;
@@ -433,6 +435,9 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($storyID);
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 die(array('status' => 'success', 'data' => $storyID));
@@ -616,6 +621,9 @@ class story extends control
                 $actionID = $this->action->create('story', $storyID, $action, $fileAction . $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($storyID);
+
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
@@ -648,6 +656,8 @@ class story extends control
             $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
+
+            $this->executeHooks($storyID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -695,6 +705,8 @@ class story extends control
             if($project->status == 'done') $from = '';
         }
 
+        $this->executeHooks($storyID);
+
         $title      = "STORY #$story->id $story->title - $product->name";
         $position[] = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$story->branch"), $product->name);
         $position[] = $this->lang->story->common;
@@ -739,6 +751,9 @@ class story extends control
         else
         {
             $this->story->delete(TABLE_STORY, $storyID);
+
+            $this->executeHooks($storyID);
+
             die(js::locate($this->session->storyList, 'parent'));
         }
     }
@@ -762,6 +777,9 @@ class story extends control
             {
                 $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
             }
+
+            $this->executeHooks($storyID);
+
             die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
         }
 
@@ -830,6 +848,9 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
             $this->action->logHistory($actionID, $changes);
+
+            $this->executeHooks($storyID);
+
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
@@ -1056,6 +1077,8 @@ class story extends control
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->executeHooks($storyID);
 
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
             die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
@@ -1544,7 +1567,7 @@ class story extends control
                 if(isset($relatedStories[$story->duplicateStory])) $story->duplicateStory = $relatedStories[$story->duplicateStory];
 
                 if(isset($storyLang->priList[$story->pri]))             $story->pri          = $storyLang->priList[$story->pri];
-                if(isset($storyLang->statusList[$story->status]))       $story->status       = $storyLang->statusList[$story->status];
+                if(isset($storyLang->statusList[$story->status]))       $story->status       = $this->processStatus('story', $story);
                 if(isset($storyLang->stageList[$story->stage]))         $story->stage        = $storyLang->stageList[$story->stage];
                 if(isset($storyLang->reasonList[$story->closedReason])) $story->closedReason = $storyLang->reasonList[$story->closedReason];
                 if(isset($storyLang->sourceList[$story->source]))       $story->source       = $storyLang->sourceList[$story->source];
@@ -1630,6 +1653,8 @@ class story extends control
                 $this->post->set('header', $header);
             }
             if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
+
+            if(isset($this->config->bizVersion)) list($fields, $stories) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $stories);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $stories);

@@ -58,6 +58,7 @@
           <th><?php echo $lang->build->filePath;?></th>
           <td colspan='2'><?php echo html::input('filePath', $build->filePath, "class='form-control' placeholder='{$lang->build->placeholder->filePath}'");?></td>
         </tr>
+        <?php $this->printExtendFields($build, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->build->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildForm');?></td>

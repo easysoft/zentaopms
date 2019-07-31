@@ -1,1 +1,4 @@
 .chosen-container[id^="buildProject"] {max-width: 160px; border-radius: 0}
+
+.thWidth{width:130px !important;}
+html[lang^='zh-'] .thWidth{width:100px !important;}

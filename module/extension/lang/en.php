@@ -29,10 +29,11 @@ $lang->extension->eraseAction      = 'Erase Extension';
 $lang->extension->upgrade          = 'Upgrade Extension';
 $lang->extension->agreeLicense     = 'I agree to the license.';
 
-$lang->extension->structure   = 'Extension Structure';
-$lang->extension->installed   = 'Installed';
-$lang->extension->deactivated = 'Deactivated';
-$lang->extension->available   = 'Downloaded';
+$lang->extension->structure        = 'Structure';
+$lang->extension->extstructure     = 'Extension Structure';
+$lang->extension->installed        = 'Installed';
+$lang->extension->deactivated      = 'Deactivated';
+$lang->extension->available        = 'Downloaded';
 
 $lang->extension->name        = 'Extension Name';
 $lang->extension->code        = 'Code';
@@ -118,4 +119,4 @@ $lang->extension->errorInstallDB               = 'Database report execution fail
 $lang->extension->errorConflicts               = 'Conflicted with “%s”!';
 $lang->extension->errorDepends                 = 'Dependent extension has not been installed or the version is incorrect:<br /><br /> %s';
 $lang->extension->errorIncompatible            = 'Incompatible with your ZenTao.';
-$lang->extension->errorUninstallDepends        = '“%s” is dependent on ts extension. Please do not install it.';
+$lang->extension->errorUninstallDepends        = '“%s” is dependent on this extension. Please do not uninstall it.';

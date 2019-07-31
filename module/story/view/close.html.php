@@ -25,8 +25,7 @@
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <?php $colWidth = common::checkEnLang() ? 'w-150px' : 'w-80px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->story->closedReason;?></th>
+          <th class='thWidth'><?php echo $lang->story->closedReason;?></th>
           <td class='w-p25-f'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class="form-control" onchange="setStory(this.value)"');?></td><td></td>
         </tr>
         <tr id='duplicateStoryBox' style='display:none'>
@@ -37,6 +36,7 @@
           <th><?php echo $lang->story->childStories;?></th>
           <td><?php echo html::input('childStories', '', "class='form-control'");?></td><td></td>
         </tr>
+        <?php $this->printExtendFields($story, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

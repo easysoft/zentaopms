@@ -21,6 +21,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = '禪道';
+$lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s項目管理系統";
 $lang->logout         = '退出';
 $lang->login          = '登錄';

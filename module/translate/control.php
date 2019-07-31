@@ -23,7 +23,8 @@ class translate extends control
     {
         parent::__construct($moduleName, $methodName);
 
-        $this->active = helper::getRemoteIp() == '127.0.0.1';
+        $remoteIp     = helper::getRemoteIp();
+        $this->active = ($remoteIp == '127.0.0.1' or $remoteIp == '::1');
         if(!$this->active) $this->app->loadLang('editor');
         if(!$this->active and $this->app->getMethodName() != 'index')
         {
@@ -175,7 +176,7 @@ class translate extends control
             if($statusFile)
             {
                 $this->app->loadLang('editor');
-                $this->send(array('result' => 'fail', 'callback' => 'bootAlert("' . str_replace('\n', '<br />', sprintf($this->lang->editor->noticeOkFile, $statusFile) . '")')));
+                $this->send(array('result' => 'fail', 'callback' => 'bootAlert("' . str_replace('\n', '<br />', sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile)) . '")')));
             }
 
             $this->translate->addTranslation($language, $module, $referLang);
@@ -259,7 +260,7 @@ class translate extends control
     {
         if($result == 'pass')
         {
-            $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('reviewed')->set('reviewer')->eq($this->app->user->account)->set('reviewTime')->eq(helper::now())->where('id')->eq($translationID)->exec();
+            $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('reviewed')->set('reviewer')->eq($this->app->user->account)->set('reviewedTime')->eq(helper::now())->where('id')->eq($translationID)->exec();
             die(js::reload());
         }
         if($result == 'reject' and empty($_POST)) die($this->display());
@@ -267,7 +268,7 @@ class translate extends control
         {
             $data = fixer::input('post')->get();
             if(empty($data->reason)) $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->error->notempty, $this->lang->translate->reason)));
-            $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('rejected')->set('reviewer')->eq($this->app->user->account)->set('reviewTime')->eq(helper::now())->set('reason')->eq($data->reason)->where('id')->eq($translationID)->exec();
+            $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('rejected')->set('reviewer')->eq($this->app->user->account)->set('reviewedTime')->eq(helper::now())->set('reason')->eq($data->reason)->where('id')->eq($translationID)->exec();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.reloadStatus($translationID)"));
         }
     }
@@ -280,7 +281,7 @@ class translate extends control
      */
     public function batchPass()
     {
-        $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('reviewed')->set('reviewer')->eq($this->app->user->account)->set('reviewTime')->eq(helper::now())->where('id')->in($this->post->idList)->exec();
+        $this->dao->update(TABLE_TRANSLATION)->set('status')->eq('reviewed')->set('reviewer')->eq($this->app->user->account)->set('reviewedTime')->eq(helper::now())->where('id')->in($this->post->idList)->exec();
         $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
     }
 

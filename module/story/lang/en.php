@@ -68,6 +68,9 @@ $lang->story->source         = 'From';
 $lang->story->sourceNote     = 'Note';
 $lang->story->fromBug        = 'From Bug';
 $lang->story->title          = 'Title';
+$lang->story->type           = 'Type';
+$lang->story->color          = 'Color';
+$lang->story->toBug          = 'ToBug';
 $lang->story->spec           = 'Description';
 $lang->story->assign         = 'Assign';
 $lang->story->verify         = 'Acceptance';
@@ -76,6 +79,7 @@ $lang->story->estimate       = 'Estimates';
 $lang->story->estimateAB     = 'Est.(h)';
 $lang->story->hour           = 'Hours';
 $lang->story->status         = 'Status';
+$lang->story->subStatus      = 'Sub Status';
 $lang->story->stage          = 'Phase';
 $lang->story->stageAB        = 'Phase';
 $lang->story->stagedBy       = 'SetBy';
@@ -235,7 +239,7 @@ $lang->story->action->subdividestory      = array('main' => '$date, decomposed b
 $lang->story->action->unlinkrelatedstory  = array('main' => '$date, unlinked by <strong>$actor</strong> from Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory    = array('main' => '$date, unlinked by <strong>$actor</strong> Decomposed Story <strong>$extra</strong>.');
 
-/* 统计报表。*/
+/* Statistical statement. */
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Report';
 $lang->story->report->select = 'Select Report Type';

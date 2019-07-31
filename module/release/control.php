@@ -62,6 +62,9 @@ class release extends control
             $releaseID = $this->release->create($productID, $branch);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
+
+            $this->executeHooks($releaseID);
+
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
@@ -100,6 +103,7 @@ class release extends control
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
+            $this->executeHooks($releaseID);
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
@@ -158,6 +162,8 @@ class release extends control
         $this->commonAction($release->product);
         $product = $this->product->getById($release->product);
 
+        $this->executeHooks($releaseID);
+
         $this->view->title         = "RELEASE #$release->id $release->name/" . $product->name;
         $this->view->position[]    = $this->lang->release->view;
         $this->view->release       = $release;
@@ -195,6 +201,8 @@ class release extends control
             $release = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq((int)$releaseID)->fetch();
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
             if(empty($build->project)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
+
+            $this->executeHooks($releaseID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)

@@ -49,6 +49,7 @@ js::set('page', 'confirmbug');
           <th><?php echo $lang->bug->mailto;?></th>
           <td colspan='2'><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="form-control chosen" multiple');?></td>
         </tr>
+        <?php $this->printExtendFields($bug, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>

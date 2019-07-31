@@ -29,10 +29,11 @@ $lang->extension->eraseAction      = '清除插件';
 $lang->extension->upgrade          = '升級插件';
 $lang->extension->agreeLicense     = '我同意該授權';
 
-$lang->extension->structure   = '目錄結構';
-$lang->extension->installed   = '已安裝';
-$lang->extension->deactivated = '被禁用';
-$lang->extension->available   = '已下載';
+$lang->extension->structure     = '目錄結構';
+$lang->extension->extstructure  = '目錄結構';
+$lang->extension->installed     = '已安裝';
+$lang->extension->deactivated   = '被禁用';
+$lang->extension->available     = '已下載';
 
 $lang->extension->name        = '插件名稱';
 $lang->extension->code        = '代號';

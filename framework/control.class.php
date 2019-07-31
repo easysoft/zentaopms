@@ -50,9 +50,9 @@ class control extends baseControl
 
         /**
          * 如果没有model文件，尝试加载config配置信息。
-         * If no model file, try load config. 
+         * If no model file, try load config.
          */
-        if(!helper::import($modelFile)) 
+        if(!helper::import($modelFile))
         {
             $this->app->loadModuleConfig($moduleName, $appName);
             $this->app->loadLang($moduleName, $appName);
@@ -193,5 +193,67 @@ class control extends baseControl
          * At the end, chang the dir to the previous.
          */
         chdir($currentPWD);
+    }
+
+    /**
+     * Execute hooks of a method.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function executeHooks($objectID)
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        $flow   = $this->loadModel('workflow')->getByModule($this->moduleName);
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($this->moduleName, $this->methodName);
+        if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
+    }
+
+    /**
+     * Build operate menu of a method.
+     *
+     * @param  object $object product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
+     * @param  string $displayOn view|browse
+     * @access public
+     * @return void
+     */
+    public function buildOperateMenu($object, $displayOn = 'view')
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        $flow = $this->loadModel('workflow')->getByModule($this->moduleName);
+        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $displayOn);
+    }
+
+    /**
+     * Print extend fields.
+     *
+     * @param  object $object
+     * @param  string $type
+     * @param  string $extras
+     * @access public
+     * @return void
+     */
+    public function printExtendFields($object, $type, $extras)
+    {
+        if(!isset($this->config->bizVersion)) return false;
+        $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
+    }
+
+    /**
+     * Process status of an object according to its subStatus.
+     *
+     * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
+     * @param  object $record   a record of above modules.
+     * @access public
+     * @return string
+     */
+    public function processStatus($module, $record)
+    {
+        $moduleName = $this->moduleName;
+
+        return $this->$moduleName->processStatus($module, $record);
     }
 }

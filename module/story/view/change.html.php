@@ -51,6 +51,7 @@
           <th><?php echo $lang->story->comment;?></th>
           <td><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
         </tr>
+        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->attatch;?></th>
           <td><?php echo $this->fetch('file', 'buildform');?></td>

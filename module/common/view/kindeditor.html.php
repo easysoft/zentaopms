@@ -11,8 +11,8 @@ $editorLang   = isset($editorLangs[$app->getClientLang()]) ? $editorLangs[$app->
 /* set uid for upload. */
 $uid = uniqid('');
 ?>
-<script src='<?php echo $jsRoot;?>kindeditor/kindeditor.min.js'></script>
-<script src='<?php echo $jsRoot;?>kindeditor/lang/<?php echo $editorLang;?>.js'></script>
+<?php js::import($jsRoot . 'kindeditor/kindeditor.min.js'); ?>
+<?php js::import($jsRoot . "kindeditor/lang/{$editorLang}.js");?>
 <script>
 (function($) {
     var kuid = '<?php echo $uid;?>';

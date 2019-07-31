@@ -1,6 +1,6 @@
 .checkbox-primary + .checkbox-primary {margin:0px;}
 .checkbox-primary {margin:0px; margin-right:10px !important; width:120px;display:inline-block}
-.checkbox-primary label{white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.checkbox-primary label{white-space:nowrap; overflow:visible; text-overflow:ellipsis;}
 div.chosen-container + select + div.chosen-container > .chosen-choices {border-top:0px;}
 
 .table-bordered thead .checkbox-primary{width:200px;}

@@ -12,7 +12,7 @@ if($this->methodName != 'browse')
     $moduleID   = '';
 }
 if(empty($type)) $type = 'product';
-$sideWidth = common::checkEnLang() ? '270' : '238';
+$sideWidth = common::checkNotCN() ? '270' : '238';
 ?>
 <div class="side-col" style="width:<?php echo $sideWidth;?>px" data-min-width="<?php echo $sideWidth;?>">
   <div class="cell">

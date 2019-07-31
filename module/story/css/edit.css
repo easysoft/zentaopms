@@ -1,1 +1,6 @@
 #product_chosen .chosen-single{border-right-width:1px}
+
+.thWidth{width:100px !important;}
+.linkThWidth{width:110px !important;}
+html[lang^='zh-'] .thWidth{width:80px !important;}
+html[lang^='zh-'] .linkThWidth{width:70px !important;}

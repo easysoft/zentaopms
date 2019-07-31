@@ -22,8 +22,7 @@
     <form method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'> 
         <tr>
-          <?php $colWidth = common::checkEnLang() ? 'w-110px' : 'w-80px';?>
-          <th class='<?php echo $colWidth;?>'><?php echo $lang->todo->date;?></th>
+          <th class='thWidth'><?php echo $lang->todo->date;?></th>
           <td class='w-400px'>
             <div class='input-group'>
               <?php echo html::input('date', $date, "class='form-control form-date'");?>
@@ -76,7 +75,7 @@
               </div>
             </div>
             <?php echo html::hidden('config[type]', 'day')?>
-            <div class='input-group' style='width:<?php echo common::checkEnLang() ? '270px' : '200px';?>; padding-top:5px;'>
+            <div class='input-group inputGroupWidth' style='padding-top:5px;'>
             <?php printf($lang->todo->beforeDays, html::input('config[beforeDays]', 0, "class='form-control'"));?>
             </div>
           </td>

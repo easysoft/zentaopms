@@ -59,7 +59,7 @@
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo $story->estimate;?></td>
-          <td class='story-<?php echo $story->status;?>'><?php echo $lang->story->statusList[$story->status];?></td>
+          <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td><?php echo $lang->story->stageList[$story->stage];?></td>
         </tr>
         <?php endforeach;?>
