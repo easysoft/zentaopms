@@ -21,6 +21,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
+$lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
@@ -178,7 +179,7 @@ $lang->index->menu = new stdclass();
 $lang->index->menu->product = "{$lang->productCommon}|product|browse";
 $lang->index->menu->project = "{$lang->projectCommon}|project|browse";
 
-/* my dashboard menu settings. */
+/* My dashboard menu settings. */
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
