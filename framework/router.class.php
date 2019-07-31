@@ -222,8 +222,7 @@ class router extends baseRouter
     }
 
     /**
-     * 调用父类方法时不传递$appName参数，保证父类方法中$appName值为空。 
-     * The $appName parameter is not passed when calling the parent class method, ensuring that the $appName value in the parent class method is null.
+     * The alias for loadModuleConfig.
      *
      * @param  string $moduleName
      * @param  string $appName
