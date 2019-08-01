@@ -612,7 +612,9 @@ class translateModel extends model
                                 $preFirst = $firstLetter;
                                 $preLast  = $lastLetter;
                             }
-                            if(!$isJoin and strpos("\'|\"", $value{0}) === false) $value = '"' . addslashes($value) . '"';
+                            $firstLetter = $value{0};
+                            $lastLetter  = $value{strlen($value) - 1};
+                            if(!$isJoin and !(strpos("\'|\"", $firstLetter) !== false and $firstLetter == $lastLetter)) $value = '"' . addslashes($value) . '"';
                         }
                     }
                     $content .= $key . " = $value;\n";
