@@ -126,11 +126,12 @@ class SMTP {
         }
 
         // connect to the smtp server
-        $this->smtp_conn = fsockopen($host,    // the host of the server
-            $port,    // the port to use
-            $errno,   // error number if any
-            $errstr,  // error message if any
-            $tval);   // give up after ? secs
+        // Replace fsockopen for don't validate remote hosts
+        $contextOptions['ssl']['verify_host']      = false;
+        $contextOptions['ssl']['verify_peer']      = false;
+        $contextOptions['ssl']['verify_peer_name'] = false;
+        $context         = stream_context_create($contextOptions);
+        $this->smtp_conn = stream_socket_client($host . ':' . $port, $errno, $errstr, $tval, STREAM_CLIENT_CONNECT, $context);
         // verify we connected properly
         if(empty($this->smtp_conn)) {
             $this->error = array("error" => "Failed to connect to server",
