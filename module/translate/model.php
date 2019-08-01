@@ -23,7 +23,7 @@ class translateModel extends model
         $data  = fixer::input('post')->add('createdBy', $this->app->user->account)->get();
         if(empty($data->name)) dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->translate->name);
         if(empty($data->code)) dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->translate->code);
-        if(!baseValidater::checkREG($data->code, '|^[A-Za-z0-9_]+$|')) dao::$errors['code'] = $this->lang->translate->notice->failRuleCode;
+        if(!baseValidater::checkREG($data->code, '|^[a-z0-9_]+$|')) dao::$errors['code'] = $this->lang->translate->notice->failRuleCode;
         if(dao::isError()) return false;
 
         $langs = empty($this->config->global->langs) ? array() : json_decode($this->config->global->langs, true);
