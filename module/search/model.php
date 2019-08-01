@@ -36,8 +36,10 @@ class searchModel extends model
                 /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
                 if($field->field == 'subStatus')
                 {
+                    $field = $this->workflowfield->getByField($module, 'subStatus');
+
                     $searchConfig['fields'][$field->field] = $field->name;
-                    $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $this->workflowfield->getSubStatusList($module));
+                    $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $field->options);
 
                     continue;
                 }
