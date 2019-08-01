@@ -84,7 +84,7 @@
         <td colspan='5' class='form-actions'>
           <?php
           if($preCase)  echo html::a(inlink('runCase', "runID={$preCase['runID']}&caseID={$preCase['caseID']}&version={$preCase['version']}"), $lang->testtask->pre, '', "id='pre' class='btn btn-wide'");
-          echo html::submitButton();
+          if($run->case->status != 'wait') echo html::submitButton();
           if($nextCase)  echo '&nbsp;' . html::a(inlink('runCase', "runID={$nextCase['runID']}&caseID={$nextCase['caseID']}&version={$nextCase['version']}"), $lang->testtask->next, '', "id='next' class='btn btn-wide'");
           echo html::hidden('case',    $run->case->id);
           echo html::hidden('version', $run->case->currentVersion);

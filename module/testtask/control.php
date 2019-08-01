@@ -930,7 +930,6 @@ class testtask extends control
 
         $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($url, 'parent'));
         $caseIDList = array_unique($caseIDList);
-
         /* The case of tasks of qa. */
         if($productID)
         {
@@ -952,6 +951,7 @@ class testtask extends control
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t2.id')->in($caseIDList)
             ->andWhere('t1.version=t2.version')
+            ->andWhere('t2.status')->ne('wait')
             ->fetchGroup('case', 'id');
 
         $this->view->caseIDList = $caseIDList;

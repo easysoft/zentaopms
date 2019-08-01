@@ -992,6 +992,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.case')->in($caseIdList)
             ->andWhere('t1.version=t2.version')
+            ->andWhere('t2.status')->ne('wait')
             ->fetchGroup('case', 'id');
 
         $now = helper::now();
@@ -1157,7 +1158,7 @@ class testtaskModel extends model
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
-
+        if($action == 'runcase')  return $testtask->status != 'wait';
         return true;
     }
 
@@ -1390,4 +1391,5 @@ class testtaskModel extends model
         }
         return array($toList, $ccList);
     }
+
 }
