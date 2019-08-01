@@ -37,6 +37,25 @@ include '../../common/view/chart.html.php';
           <td><?php echo $task->left;?></td>
           <td><div class='progress-pie' title="<?php echo $task->progress?>%" data-value='<?php echo $task->progress;?>'></div></td>
         </tr>
+          <?php if(!empty($task->children)):?>
+          <?php $i = 0;?>
+          <?php foreach($task->children as $key => $child):?>
+          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
+          <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
+        <tr class='text-center<?php echo $class;?> parent-<?php echo $child->parent;?>'>
+          <td><?php echo $child->id;?></td>
+          <td class='text-left' title="<?php echo $child->name?>"><?php echo '<span class="label label-bedge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span>' ?><?php echo $child->name;?></td>
+          <td><span class='<?php echo 'pri' . zget($lang->task->priList, $child->pri, $child->pri)?>'><?php echo $child->pri == '0' ? '' : zget($lang->task->priList, $child->pri, $child->pri);?></span></td>
+          <td><?php echo $this->processStatus('task', $child);?></td>
+          <td><?php echo zget($users, $child->assignedTo, $child->assignedTo);?></td>
+          <td><?php echo $child->estimate;?></td>
+          <td><?php echo $child->consumed;?></td>
+          <td><?php echo $child->left;?></td>
+          <td><div class='progress-pie' title="<?php echo $child->progress?>%" data-value='<?php echo $child->progress;?>'></div></td>
+        </tr>
+          <?php $i ++;?>
+          <?php endforeach;?>
+          <?php endif;?>
         <?php endforeach;?>
       </tbody>
       <tfoot>
