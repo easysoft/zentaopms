@@ -165,7 +165,7 @@ class productplan extends control
         {
             $plan = $this->productplan->getById($planID);
             $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
-
+            $this->productplan->updatePlanParentStatus($plan->parent);
             $this->executeHooks($planID);
 
             /* if ajax request, send result. */
@@ -277,7 +277,6 @@ class productplan extends control
         }
 
         $this->executeHooks($planID);
-
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 

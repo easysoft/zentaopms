@@ -978,6 +978,12 @@ class actionModel extends model
         {
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
         }
+        /* Revert productplan project status */
+        if($action->objectType == 'productplan')
+        {
+           $plan = $this->loadModel('productplan')->getById($action->objectID);
+           $this->loadModel('productplan')->updatePlanParentStatus($plan->parent);
+        }
 
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
