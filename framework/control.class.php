@@ -198,7 +198,7 @@ class control extends baseControl
     /**
      * Execute hooks of a method.
      *
-     * @param  int    $objectID
+     * @param  int    $objectID     The id of an object. The object maybe a bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask.
      * @access public
      * @return void
      */
@@ -214,7 +214,7 @@ class control extends baseControl
     /**
      * Build operate menu of a method.
      *
-     * @param  object $object product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
+     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
      * @param  string $displayOn view|browse
      * @access public
      * @return void
@@ -230,7 +230,7 @@ class control extends baseControl
     /**
      * Print extend fields.
      *
-     * @param  object $object
+     * @param  object $object    bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask
      * @param  string $type
      * @param  string $extras
      * @access public

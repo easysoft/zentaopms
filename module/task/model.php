@@ -1832,12 +1832,48 @@ class taskModel extends model
      */
     public function getStoryTasks($storyID, $projectID = 0)
     {
-        $tasks = $this->dao->select('id, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
+        $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
+
+        $parents = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent == -1) $parents[] = $task->id;
+        }
+        if(!empty($parents))
+        {
+            /* Select children task. */
+            $children = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
+                ->from(TABLE_TASK)
+                ->where('story')->eq((int)$storyID)
+                ->andwhere('parent')->in($parents)
+                ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+                ->fetchAll('id');
+
+            if(!empty($children))
+            {
+                foreach($children as $child)
+                {
+                    $tasks[$child->parent]->children[$child->id] = $child;
+                }
+            }
+        }
+
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0)
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                    unset($tasks[$task->id]);
+                }
+            }
+        }
 
         foreach($tasks as $task)
         {
@@ -1854,8 +1890,27 @@ class taskModel extends model
             {
                 $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             }
-        }
 
+             if(!empty($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    /* Compute child progress. */
+                    if($child->consumed == 0 and $child->left == 0)
+                    {
+                        $child->progress = 0;
+                    }
+                    elseif($child->consumed != 0 and $child->left == 0)
+                    {
+                        $child->progress = 100;
+                    }
+                    else
+                    {
+                        $child->progress = round($child->consumed / ($child->consumed + $child->left), 2) * 100;
+                    }
+                }
+            }
+        }
         return $tasks;
     }
 

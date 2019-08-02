@@ -29,7 +29,7 @@ class translate extends control
         if(!$this->active and $this->app->getMethodName() != 'index')
         {
             $this->app->loadLang('editor');
-            die($this->display('translate', 'deny'));
+//            die($this->display('translate', 'deny'));
         }
     }
 

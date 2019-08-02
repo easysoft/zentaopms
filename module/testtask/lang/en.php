@@ -110,7 +110,7 @@ $lang->testtask->showFail      = 'Failed <span class="text-danger">%s</span> tim
 
 $lang->testtask->confirmDelete     = 'Do you want to delete this build?';
 $lang->testtask->confirmUnlinkCase = 'Do you want to unlink this case?';
-$lang->testtask->noticeNoOther     = 'There are no test requests for this product';
+$lang->testtask->noticeNoOther     = 'No test builds for this product.';
 $lang->testtask->noTesttask        = 'No requests. ';
 $lang->testtask->checkLinked       = "Please check whether the product that the test request is linked to has been linked to a project.";
 
