@@ -231,8 +231,8 @@ class control extends baseControl
      * Print extend fields.
      *
      * @param  object $object    bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask
-     * @param  string $type
-     * @param  string $extras
+     * @param  string $type      table | div
+     * @param  string $extras    columns=1,mode=value,position=right|right|all
      * @access public
      * @return void
      */
