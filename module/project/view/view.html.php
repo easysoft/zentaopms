@@ -295,7 +295,7 @@
                 <?php endif;?>
               </div>
             </div>
-            <?php $this->printExtendFields($project, 'div', "position=right&divCell=false");?>
+            <?php $this->printExtendFields($project, 'div', "position=right&mode=value");?>
           </div>
         </div>
       </div>

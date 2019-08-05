@@ -376,7 +376,7 @@
         </div>
       </div>
     </div>
-    <?php $this->printExtendFields($bug, 'div', "position=right&divCell=true");?>
+    <?php $this->printExtendFields($bug, 'div', "position=right&mode=value");?>
   </div>
 </div>
 

@@ -69,6 +69,10 @@
           <th><?php echo $lang->task->finishedDate;?></th>
           <td><div class='datepicker-wrapper'><?php echo html::input('finishedDate', helper::today(), "class='form-control form-date'");?></div></td><td></td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->task->status;?></th>
+          <td><?php echo html::hidden('status', 'done');?></td>
+        </tr>
         <?php $this->printExtendFields($task, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->files;?></th>

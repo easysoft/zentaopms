@@ -288,7 +288,11 @@ js::set('flow', $config->global->flow);
              <?php endif;?>
           </tr>
           <?php endif;?>
-          <?php $this->printExtendFields('', 'table', 'columns=2');?>
+          <tr class='hide'>
+            <th><?php echo $lang->bug->status;?></th>
+            <td><?php echo html::hidden('status');?></td>
+          </tr>
+          <?php $this->printExtendFields('', 'table', 'columns=1');?>
           <tr>
             <th><?php echo $lang->bug->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform', 'fileCount=1&percent=0.85');?></td>

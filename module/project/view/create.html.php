@@ -86,6 +86,13 @@
           <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control' onchange='showTypeTips()'");?></td>
           <td class='muted' colspan='2'><div class='type-tips'><?php echo $lang->project->typeDesc;?></div></td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->project->status;?></th>
+          <td><?php echo html::hidden('status', 'wait');?></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <?php $this->printExtendFields('', 'table', 'columns=1');?>
         <tr <?php if($config->global->flow == 'onlyTask') echo "class='hidden'";?>>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
@@ -139,7 +146,6 @@
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
           </td>
         </tr>
-        <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
           <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
