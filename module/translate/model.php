@@ -640,7 +640,8 @@ class translateModel extends model
         $result = true;
         $tolowerValue = strtolower($value);
         if($tolowerValue == 'new stdclass()' or $tolowerValue == 'new stdclass') $result = false;
-        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and strpos($value, '.') === false and !preg_match('/[^\$\-\>\w\'\"\[\]]/', $value)) $result = false;
+        /* Check for only php variable. */
+        if(strpos($value, '$') === 0 and $value != '$' and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and strpos($value, '.') === false and !preg_match('/[^\$\-\>\w\'\"\[\]]/', $value)) $result = false;
         if($value == '$lang->productCommon' or $value == '$lang->projectCommon') $result = false;
 
         return $result;

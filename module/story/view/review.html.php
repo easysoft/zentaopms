@@ -89,4 +89,5 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
     <div class='main'><?php include '../../common/view/action.html.php';?></div>
   </div>
 </div>
+<?php js::set('storyID', $story->id);?>
 <?php include '../../common/view/footer.html.php';?>

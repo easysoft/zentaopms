@@ -210,5 +210,6 @@
     </form>
   </div>
 </div>
+<?php js::set('projectID', $projectID);?>
 <?php js::set('storyModule', $lang->story->module);?>
 <?php include '../../common/view/footer.html.php';?>

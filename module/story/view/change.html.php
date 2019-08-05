@@ -78,4 +78,9 @@
     </div>
   </div>
 </div>
+<?php js::set('storyID', $story->id);?>
+<?php js::set('oldStoryTitle', $story->title);?>
+<?php js::set('oldStorySpec', $story->spec);?>
+<?php js::set('oldStoryVerify', $story->verify);?>
+<?php js::set('changed', 0);?>
 <?php include '../../common/view/footer.html.php';?>
