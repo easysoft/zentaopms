@@ -297,6 +297,22 @@ class productplanModel extends model
     }
 
     /**
+     * updatePlanParentStatus,hasChild set parent = -1;noChild set parent = 0; 
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
+    public function updatePlanParentStatus($planID)
+    {
+        if($planID <= 0) return;
+        $childCount = count($this->getChildren($planID));
+        if($childCount == 0) $status = 0;
+        if($childCount > 0)  $status = -1;           
+        return $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq($status)->where('id')->eq((int)$planID)->exec();
+    }
+
+    /**
      * Create a plan.
      *
      * @access public
