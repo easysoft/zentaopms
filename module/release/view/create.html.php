@@ -30,20 +30,25 @@
               </div>
               <?php if($lastRelease) echo '(' . $lang->release->last . ': ' . $lastRelease->name . ')';?>
             </td>
-          </tr> 
+          </tr>
           <tr>
             <th><?php echo $lang->release->build;?></th>
             <td><?php echo html::select('build', $builds, '', "class='form-control chosen'");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->release->date;?></th>
             <td><?php echo html::input('date', helper::today(), "class='form-control form-date' required");?></td><td></td>
-          </tr>  
+          </tr>
+          <tr class='hide'>
+            <th><?php echo $lang->release->status;?></th>
+            <td><?php echo html::hidden('status', 'normal', "disabled");?></td>
+            <td></td>
+          </tr>
+          <?php $this->printExtendFields('', 'table', 'columns=1');?>
           <tr>
             <th><?php echo $lang->release->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
-          <?php $this->printExtendFields('', 'table', 'columns=2');?>
           <tr>
             <th><?php echo $lang->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>

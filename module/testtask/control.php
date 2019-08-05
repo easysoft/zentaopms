@@ -230,7 +230,6 @@ class testtask extends control
         $this->view->build     = $build;
         $this->view->stories   = $stories;
         $this->view->bugs      = $bugs;
-
         $this->display();
     }
 
@@ -499,8 +498,6 @@ class testtask extends control
      */
     public function start($taskID)
     {
-        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
-
         if(!empty($_POST))
         {
             $changes = $this->testtask->start($taskID);
@@ -529,7 +526,8 @@ class testtask extends control
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->start;
-        $this->view->actions    = $actions;
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
+        $this->view->actions    = $this->loadModel('action')->getList('testtask', $taskID);
         $this->display();
     }
 
@@ -542,8 +540,6 @@ class testtask extends control
      */
     public function activate($taskID)
     {
-        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
-
         if(!empty($_POST))
         {
             $changes = $this->testtask->activate($taskID);
@@ -572,7 +568,8 @@ class testtask extends control
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->activate;
-        $this->view->actions    = $actions;
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
+        $this->view->actions    = $this->loadModel('action')->getList('testtask', $taskID);
         $this->display();
     }
 
@@ -585,8 +582,6 @@ class testtask extends control
      */
     public function close($taskID)
     {
-        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
-
         if(!empty($_POST))
         {
             $changes = $this->testtask->close($taskID);
@@ -615,7 +610,7 @@ class testtask extends control
         $this->view->title        = $testtask->name . $this->lang->colon . $this->lang->close;
         $this->view->position[]   = $this->lang->testtask->common;
         $this->view->position[]   = $this->lang->close;
-        $this->view->actions      = $actions;
+        $this->view->actions      = $this->loadModel('action')->getList('testtask', $taskID);
         $this->view->users        = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->display();
@@ -630,8 +625,6 @@ class testtask extends control
      */
     public function block($taskID)
     {
-        $actions  = $this->loadModel('action')->getList('testtask', $taskID);
-
         if(!empty($_POST))
         {
             $changes = $this->testtask->block($taskID);
@@ -660,7 +653,8 @@ class testtask extends control
         $this->view->title      = $testtask->name . $this->lang->colon . $this->lang->testtask->start;
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->block;
-        $this->view->actions    = $actions;
+        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
+        $this->view->actions    = $this->loadModel('action')->getList('testtask', $taskID);
         $this->display();
     }
 

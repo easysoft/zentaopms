@@ -45,11 +45,16 @@ js::set('page', 'confirmbug');
           <td><?php echo html::select('pri', $lang->bug->priList, $bug->pri, "class='form-control chosen'");?></td>
           <td></td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->bug->status;?></th>
+          <td><?php echo html::hidden('status', $bug->status);?></td>
+          <td></td>
+        </tr>
+        <?php $this->printExtendFields($bug, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->bug->mailto;?></th>
           <td colspan='2'><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="form-control chosen" multiple');?></td>
         </tr>
-        <?php $this->printExtendFields($bug, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p94'");?></td>

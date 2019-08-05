@@ -27,14 +27,18 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th class='w-70px'><?php echo $lang->bug->assignedTo;?></th>
+          <th class='w-80px'><?php echo $lang->bug->assignedTo;?></th>
           <td class='w-p25-f'><?php echo html::select('assignedTo', $users, $bug->resolvedBy, "class='form-control chosen'");?></td><td></td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->bug->status;?></th>
+          <td><?php echo html::hidden('status', 'active');?></td>
+        </tr>
+        <?php $this->printExtendFields($bug, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->bug->openedBuild;?></th>
           <td colspan='2'><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control chosen"');?></td>
         </tr>
-        <?php $this->printExtendFields($bug, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control'");?></td>

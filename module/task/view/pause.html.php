@@ -34,6 +34,10 @@
 
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
+        <tr class='hide'>
+          <th><?php echo $lang->task->status;?></th>
+          <td><?php echo html::hidden('status', 'pause');?></td>
+        </tr>
         <?php $this->printExtendFields($task, 'table', 'columns=1');?>
         <tr>
           <th class='w-60px'><?php echo $lang->comment;?></th>

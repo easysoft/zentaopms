@@ -73,6 +73,10 @@ js::set('productID' , $bug->product);
           <th><?php echo $lang->bug->assignedTo;?></th>
           <td><?php echo html::select('assignedTo', $users, $assignedTo, "class='form-control chosen'");?></td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->bug->status;?></th>
+          <td><?php echo html::hidden('status', 'resolved');?></td>
+        </tr>
         <?php $this->printExtendFields($bug, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->bug->files;?></th>

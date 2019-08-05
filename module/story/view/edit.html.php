@@ -171,7 +171,7 @@
             <div class='detail-title'><?php echo $lang->story->legendLifeTime;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-80px'><?php echo $lang->story->openedBy;?></th>
+                <th class='thWidth'><?php echo $lang->story->openedBy;?></th>
                 <td><?php echo zget($users, $story->openedBy);?></td>
               </tr>
               <tr>
