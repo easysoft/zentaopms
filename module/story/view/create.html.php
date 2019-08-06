@@ -173,7 +173,11 @@
             <td colspan="4"><?php echo html::textarea('verify', $verify, "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>
           <?php endif;?>
-          <?php $this->printExtendFields('', 'table', 'columns=4');?>
+          <tr class='hide'>
+            <th><?php echo $lang->story->status;?></th>
+            <td><?php echo html::hidden('status', 'draft');?></td>
+          </tr>
+          <?php $this->printExtendFields('', 'table', 'columns=1');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
             <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>

@@ -64,11 +64,15 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           <th><?php echo $lang->story->assignedTo;?></th>
           <td><?php echo html::select('assignedTo', $users, $story->lastEditedBy ? $story->lastEditedBy : $story->openedBy, "class='form-control chosen'");?></td><td></td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->story->status;?></th>
+          <td><?php echo html::hidden('status', $story->status);?></td>
+        </tr>
+        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->story->reviewedBy;?></th>
           <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td>
         </tr>
-        <?php $this->printExtendFields($story, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

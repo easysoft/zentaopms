@@ -38,7 +38,7 @@
             ?>
           </td>
         </tr>
-        <?php $this->printExtendFields($story, 'table', 'columns=2');?>
+        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', 'rows=5 class="area-1"');?></td>
