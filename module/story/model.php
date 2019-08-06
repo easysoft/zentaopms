@@ -749,7 +749,8 @@ class storyModel extends model
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
-        return true;
+
+        return common::createChanges($oldStory, $story);
     }
 
     /**
@@ -1163,7 +1164,8 @@ class storyModel extends model
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
         $this->setStage($storyID);
-        return true;
+
+        return common::createChanges($oldStory, $story);
     }
 
     /**

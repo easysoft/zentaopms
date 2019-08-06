@@ -653,9 +653,14 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $this->story->activate($storyID);
+            $changes = $this->story->activate($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
+
+            if($changes)
+            {
+                $actionID = $this->action->create('story', $storyID, 'Activated', $this->post->comment);
+                $this->action->logHistory($actionID, $changes);
+            }
 
             $this->executeHooks($storyID);
 
@@ -769,13 +774,15 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $this->story->review($storyID);
+            $changes = $this->story->review($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $result = $this->post->result;
-            $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
-            if($this->post->result == 'reject')
+
+            if($changes)
             {
-                $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
+                $result   = $this->post->result;
+                $actionID = $this->action->create('story', $storyID, 'Reviewed', $this->post->comment, ucfirst($result));
+                if($result == 'reject') $actionID = $this->action->create('story', $storyID, 'Closed', '', ucfirst($this->post->closedReason));
+                $this->action->logHistory($actionID, $changes);
             }
 
             $this->executeHooks($storyID);
@@ -846,8 +853,12 @@ class story extends control
         {
             $changes = $this->story->close($storyID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
-            $this->action->logHistory($actionID, $changes);
+
+            if($changes)
+            {
+                $actionID = $this->action->create('story', $storyID, 'Closed', $this->post->comment, ucfirst($this->post->closedReason) . ($this->post->duplicateStory ? ':' . (int)$this->post->duplicateStory : ''));
+                $this->action->logHistory($actionID, $changes);
+            }
 
             $this->executeHooks($storyID);
 

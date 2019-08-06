@@ -776,10 +776,15 @@ class testcase extends control
     {
         if($_POST)
         {
-            $this->testcase->review($caseID);
+            $changes = $this->testcase->review($caseID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $result = $this->post->result;
-            $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
+
+            if($changes)
+            {
+                $result = $this->post->result;
+                $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
+                $this->action->logHistory($actionID, $changes);
+            }
 
             $this->executeHooks($caseID);
 

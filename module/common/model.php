@@ -1085,23 +1085,32 @@ EOD;
         global $app, $config;
 
         /**
-         * 当主状态改变并且未设置子状态的值时把子状态的值置空并记录日志。
+         * 当主状态改变并且未设置子状态的值时把子状态的值设置为默认值并记录日志。
          * Change sub status when status is changed and sub status is not set, and record the changes.
          */
         if(isset($config->bizVersion))
         {
             $oldID        = zget($old, 'id', '');
             $oldStatus    = zget($old, 'status', '');
-            $oldSubStatus = zget($old, 'subStatus', '');
             $newStatus    = zget($new, 'status', '');
             $newSubStatus = zget($new, 'subStatus', '');
 
-            if($oldID && $oldStatus && $oldSubStatus && $newStatus && !$newSubStatus && $oldStatus != $newStatus)
+            if($oldID && $oldStatus && $newStatus && !$newSubStatus && $oldStatus != $newStatus)
             {
-                $table = zget($config->objectTables, $app->getModuleName());
-                $app->dbh->exec("UPDATE $table SET `subStatus` = '' WHERE `id` = $oldID");
+                $moduleName = $app->getModuleName();
 
-                $new->subStatus = '';
+                $field = $app->dbh->query('SELECT options FROM ' . TABLE_WORKFLOWFIELD . " WHERE `module` = '$moduleName' AND `field` = 'subStatus'")->fetch();
+                if(!empty($field->options)) $field->options = json_decode($field->options, true);
+
+                if(!empty($field->options[$newStatus]['default']))
+                {
+                    $flow    = $app->dbh->query('SELECT `table` FROM ' . TABLE_WORKFLOW . " WHERE `module`='$moduleName'")->fetch();
+                    $default = $field->options[$newStatus]['default'];
+
+                    $app->dbh->exec("UPDATE `$flow->table` SET `subStatus` = '$default' WHERE `id` = '$oldID'");
+
+                    $new->subStatus = $default;
+                }
             }
         }
 
