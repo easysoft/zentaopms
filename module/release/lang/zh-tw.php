@@ -40,6 +40,7 @@ $lang->release->marker        = '里程碑';
 $lang->release->date          = '發佈日期';
 $lang->release->desc          = '描述';
 $lang->release->status        = '狀態';
+$lang->release->subStatus     = '子狀態';
 $lang->release->last          = '上次發佈';
 $lang->release->unlinkStory   = '移除需求';
 $lang->release->unlinkBug     = '移除Bug';
