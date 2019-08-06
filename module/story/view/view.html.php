@@ -387,7 +387,7 @@
         </div>
       </div>
     </div>
-    <?php $this->printExtendFields($story, 'div', "position=right&divCell=true");?>
+    <?php $this->printExtendFields($story, 'div', "position=right&mode=value");?>
   </div>
 </div>
 

@@ -183,9 +183,10 @@ class testcaseModel extends model
      */
     function create($bugID)
     {
-        $now  = helper::now();
-        $case = fixer::input('post')
-            ->add('status', $this->forceNotReview() || $this->post->forceNotReview ? 'normal' : 'wait')
+        $now    = helper::now();
+        $status = $this->getStatus('create');
+        $case   = fixer::input('post')
+            ->add('status', $status)
             ->add('version', 1)
             ->add('fromBug', $bugID)
             ->setDefault('openedBy', $this->app->user->account)
@@ -608,12 +609,13 @@ class testcaseModel extends model
      * Update a case.
      *
      * @param  int    $caseID
+     * @param  bool   $getStatus
      * @access public
      * @return void
      */
-    public function update($caseID)
+    public function update($caseID, $getStatus = false)
     {
-        $oldCase      = $this->getById($caseID);
+        $oldCase = $this->getById($caseID);
         if(!empty($_POST['lastEditedDate']) and $oldCase->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
@@ -659,12 +661,16 @@ class testcaseModel extends model
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->setDefault('story,branch',   0)
+            ->setDefault('story,branch', 0)
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
         if(!$this->forceNotReview() and $stepChanged) $case->status = 'wait';
+
+        /* Get status by ajax. */
+        if($getStatus) return $case->status;
+
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
@@ -721,14 +727,14 @@ class testcaseModel extends model
     {
         if($this->post->result == false)   die(js::alert($this->lang->testcase->mustChooseResult));
 
-        $oldCase = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
-        $now     = helper::now();
-        $case    = fixer::input('post')
+        $now    = helper::now();
+        $status = $this->getStatus('review', $caseID);
+        $case   = fixer::input('post')
             ->remove('result,comment')
             ->setDefault('reviewedDate', substr($now, 0, 10))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->setIF($this->post->result == 'pass',   'status', 'normal')
+            ->setForce('status', $status)
             ->join('reviewedBy', ',')
             ->get();
 
@@ -1570,5 +1576,29 @@ class testcaseModel extends model
         }
 
         return sprintf($this->lang->testcase->summary, count($cases), $executed);
+    }
+
+    /**
+     * Get status for different method.
+     *
+     * @param  string $methodName
+     * @param  int    $caseID
+     * @access public
+     * @return string
+     */
+    public function getStatus($methodName, $caseID = 0)
+    {
+        $status = '';
+
+        if($methodName == 'create') $status = ($this->forceNotReview() || $this->post->forceNotReview) ? 'normal' : 'wait';
+        if($methodName == 'update') $status = $this->update($caseID, $getStatus = true);
+        if($methodName == 'review')
+        {
+            $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
+            if($case) $status = $case->status;
+            if($this->post->result == 'pass') $status = 'normal';
+        }
+
+        return $status;
     }
 }

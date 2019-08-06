@@ -24,7 +24,11 @@
     </div>
     <form class='load-indicator main-form' method='post' id='blockForm'>
       <table class='table table-form'>
-        <?php $this->printExtendFields($task, 'table', 'columns=1');?>
+        <tr class='hide'>
+          <th class='w-45px'><?php echo $lang->testtask->status;?></th>
+          <td><?php echo html::hidden('status', 'blocked');?></td>
+        </tr>
+        <?php $this->printExtendFields($testtask, 'table', 'columns=1');?>
         <tr>
           <th class='w-45px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>

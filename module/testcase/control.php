@@ -1665,4 +1665,19 @@ class testcase extends control
         $moduleID = !empty($story) ? $story->module : 0; 
         die(json_encode(array('moduleID'=> $moduleID)));
     }
+
+    /**
+     * Get status by ajax.
+     *
+     * @param  string $methodName
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStatus($methodName, $caseID = 0)
+    {
+        $status = $this->testcase->getStatus($methodName, $caseID);
+
+        die($status);
+    }
 }

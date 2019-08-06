@@ -3,6 +3,7 @@ $(function()
     $('#needNotReview').on('change', function()
     {
         $('#assignedTo').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
+        getStatus('create', "product=" + $('#product').val() + ",project=" + projectID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
     });
     $('#needNotReview').change();
 

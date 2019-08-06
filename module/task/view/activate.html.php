@@ -40,6 +40,10 @@
             </div>
           </td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->task->status;?></th>
+          <td><?php echo html::hidden('status', 'doing');?></td>
+        </tr>
         <?php $this->printExtendFields($task, 'table', 'columns=2');?>
         <tr>
           <th><?php echo $lang->comment;?></th>

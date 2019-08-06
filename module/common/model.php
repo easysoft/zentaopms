@@ -553,6 +553,13 @@ class commonModel extends model
         $menu           = customModel::getModuleMenu($moduleName);
         $isMobile       = $app->viewType === 'mhtml';
 
+        /* If this is not workflow then use rawModule and rawMethod to judge highlight. */
+        if(!$app->isFlow)
+        {
+            $currentModule  = $app->rawModule;
+            $currentMethod  = $app->rawMethod;
+        }
+
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
 

@@ -26,6 +26,10 @@
     </div>
     <form method='post' target='hiddenwin'>
       <table class='table table-form'>
+        <tr class='hide'>
+          <th class='w-60px'><?php echo $lang->bug->status;?></th>
+          <td><?php echo html::hidden('status', 'closed');?></td>
+        </tr>
         <?php $this->printExtendFields($bug, 'table', 'columns=1');?>
         <tr>
           <th class='w-60px'><?php echo $lang->comment;?></th>

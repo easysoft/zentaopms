@@ -1705,4 +1705,43 @@ class story extends control
         if($id) die(html::select("storys[$id]", $storys, '', 'class="form-control"'));
         die(html::select('story', $storys, '', 'class=form-control'));
     }
+
+    /**
+     * Ajax get story status.
+     * 
+     * @param  string $method 
+     * @param  string $params 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStatus($method, $params = '')
+    {
+        parse_str(str_replace(',', '&', $params), $params);
+        $status = '';
+        if($method == 'create')
+        {
+            $status = 'draft';
+            if(!empty($params['needNotReview'])) $status = 'active';
+            if(!empty($params['project']))       $status = 'active';
+            if($this->story->checkForceReview()) $status = 'draft';
+        }
+        elseif($method == 'change')
+        {
+            $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
+            $status   = $oldStory->status;
+            if($params['changed'] and $oldStory->status == 'active' and empty($params['needNotReview']))  $status = 'changed';
+            if($params['changed'] and $oldStory->status == 'active' and $this->story->checkForceReview()) $status = 'changed';
+            if($params['changed'] and $oldStory->status == 'draft' and $params['needNotReview']) $status = 'active';
+        }
+        elseif($method == 'review')
+        {
+            $oldStory = $this->dao->findById((int)$params['storyID'])->from(TABLE_STORY)->fetch();
+            $status   = $oldStory->status;
+            if($params['result'] == 'pass' and $oldStory->status == 'draft')   $status = 'active';
+            if($params['result'] == 'pass' and $oldStory->status == 'changed') $status = 'active';
+            if($params['result'] == 'revert') $status = 'active';
+            if($params['result'] == 'reject') $status = 'closed';
+        }
+        die($status);
+    }
 }

@@ -39,6 +39,15 @@ class router extends baseRouter
     public $rawMethod;
 
     /**
+     * 标记是否是工作流
+     * Whether the tag is a workflow
+     *
+     * @var bool
+     * @access public
+     */
+    public $isFlow = false;
+
+    /**
      * Merge system and translated langs.
      *
      * @param   string $lang  zh-cn|zh-tw|en
@@ -287,6 +296,10 @@ class router extends baseRouter
      */
     public function setControlFile($exitIfNone = true)
     {
+        /* Set raw module and method name for fetch control. */
+        if(empty($this->rawModule)) $this->rawModule = $this->moduleName;
+        if(empty($this->rawMethod)) $this->rawMethod = $this->methodName;
+
         /* If is not a biz version or is in install mode or in in upgrade mode, call parent method. */
         if(!isset($this->config->bizVersion) or defined('IN_INSTALL') or defined('IN_UPGRADE')) return parent::setControlFile($exitIfNone);
 
@@ -306,6 +319,7 @@ class router extends baseRouter
         {
             $this->rawModule = $this->moduleName;
             $this->rawMethod = 'browse';
+            $this->isFlow    = true;
 
             $moduleName = 'flow';
             $methodName = 'browse';
@@ -319,6 +333,7 @@ class router extends baseRouter
             {
                 $this->rawModule = $this->moduleName;
                 $this->rawMethod = $this->methodName;
+                $this->isFlow    = true;
 
                 $this->loadModuleConfig('workflowaction');
 
@@ -435,8 +450,8 @@ class router extends baseRouter
     }
 
     /**
-     * 如果$this->rawModule和$this->rawMethod的值不为空，说明这个请求需要工作流引擎来处理，则要根据工作流引擎的需要重新设置参数。
-     * If the values of $this->rawModule and $this->rawMethod are not empty, indicating that the request needs to be processed
+     * 如果$this->isFlow的值为true，说明这个请求需要工作流引擎来处理，则要根据工作流引擎的需要重新设置参数。
+     * If the values of $this->isFlow is true, indicating that the request needs to be processed
      * by the workflow engine, the parameters are reset according to the needs of the workflow engine.
      *
      * @param   array $defaultParams     the default params defined by the method.
@@ -446,14 +461,14 @@ class router extends baseRouter
      */
     public function mergeParams($defaultParams, $passedParams)
     {
-        /* If the rawModule and rawMethod is not empty, reset the passed params. */
-        if($this->rawModule && $this->rawMethod)
+        /* If the isFlow is true, reset the passed params. */
+        if($this->isFlow)
         {
             $passedParams = array_reverse($passedParams);
 
             /* 如果请求的方法名不是browse、create、edit、view、delete、export中的任何一个，则需要添加action参数来传递请求的方法名。 */
             /* If the requested method name is not any of browse, create, edit, view, delete, or export, you need to add an action parameter to pass the requested method name. */
-            if(!in_array($this->rawMethod, $this->config->workflowaction->default->actions)) $passedParams['action'] = $this->rawMethod;
+            if(isset($this->config->workflowaction->default->actions) and !in_array($this->rawMethod, $this->config->workflowaction->default->actions)) $passedParams['action'] = $this->rawMethod;
             /* 添加module参数来传递请求的模块名。 */
             /* Add the module parameter to pass the requested module name. */
             $passedParams['module'] = $this->rawModule;

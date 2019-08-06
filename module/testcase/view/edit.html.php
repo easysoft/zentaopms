@@ -15,6 +15,7 @@
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
+<?php js::set('caseID', $case->id);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
