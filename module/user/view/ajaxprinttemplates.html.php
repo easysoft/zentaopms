@@ -102,7 +102,16 @@ function hideXIcon(templateID)
 $(function()
 {
     $('#saveTplModal').on('hide.zui.modal', function(){$(this).find('#title').val('');});
-    $('#saveTplBtn').click(function(){$('#saveTplModal').modal('show');});
+    $('#saveTplBtn').click(function()
+    {
+        var content = editor['<?php echo $link;?>'].html();
+        if(!content)
+        {
+            bootAlert("<?php echo $lang->user->tplContentNotEmpty ?>");
+            return;
+        }
+        $('#saveTplModal').modal('show');
+    });
     $('#saveTplModal #templateSubmit').click(function()
     {
         var $inputGroup = $('#saveTplModal div.input-group');

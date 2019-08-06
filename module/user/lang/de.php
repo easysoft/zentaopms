@@ -81,6 +81,7 @@ $lang->user->setTemplateTitle      = 'Please enter the title of template.';
 $lang->user->applyTemplate         = 'Templates';
 $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
+$lang->user->tplContentNotEmpty    = 'Vorlageninhalt darf nicht leer sein!';
 
 $lang->user->profile     = 'Profil';
 $lang->user->project     = $lang->projectCommon;
