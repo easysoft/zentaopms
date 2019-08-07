@@ -2002,6 +2002,13 @@ class projectModel extends model
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
+
+        $parents = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
+        }
+        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
         
         foreach($tasks as $task)
         {
@@ -2011,6 +2018,11 @@ class projectModel extends model
                 {
                     $tasks[$task->parent]->children[$task->id] = $task;
                     unset($tasks[$task->id]);
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
                 }
             }
         }
