@@ -115,7 +115,7 @@ $lang->project->statusList['closed']    = 'Closed';
 
 $lang->project->aclList['open']    = "Default (Users who can visit {$lang->projectCommon} can access it.)";
 $lang->project->aclList['private'] = 'Private (For team members only.)';
-$lang->project->aclList['custom']  = 'Whitelist (Team members and the whitelist users can access it.)';
+$lang->project->aclList['custom']  = 'Custom (Team members and the whitelist users can access it.)';
 
 /* Method list. */
 $lang->project->index             = "{$lang->projectCommon} Home";
