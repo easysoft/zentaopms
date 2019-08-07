@@ -24,6 +24,9 @@
 #dropMenu.show-right-col .col-right>.list-group{width:250px;max-width:260px;}
 #dropMenu .col-footer{width:230px;}
 
+.main-actions .btn-toolbar .divider {margin-right:8px !important; margin-left: 8px !important;}
+.main-actions .btn-toolbar .btn + .btn {margin-left: 8px !important;}
+
 /* Pager v-align. */
 .pager>li>.pager-label { padding: 2px; line-height: 21px; }
 
