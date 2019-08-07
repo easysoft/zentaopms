@@ -721,11 +721,13 @@ class testcaseModel extends model
      *
      * @param  int    $caseID
      * @access public
-     * @return bool
+     * @return bool | array
      */
     public function review($caseID)
     {
-        if($this->post->result == false)   die(js::alert($this->lang->testcase->mustChooseResult));
+        if($this->post->result == false) die(js::alert($this->lang->testcase->mustChooseResult));
+
+        $oldCase = $this->getById($caseID);
 
         $now    = helper::now();
         $status = $this->getStatus('review', $caseID);
@@ -739,7 +741,10 @@ class testcaseModel extends model
             ->get();
 
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
-        return true;
+
+        if(dao::isError()) return false;
+
+        return common::createChanges($oldCase, $case);
     }
 
     /**

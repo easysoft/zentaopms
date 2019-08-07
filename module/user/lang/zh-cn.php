@@ -82,6 +82,7 @@ $lang->user->setTemplateTitle      = '请输入模板标题';
 $lang->user->applyTemplate         = '应用模板';
 $lang->user->confirmDeleteTemplate = '您确认要删除该模板吗？';
 $lang->user->setPublicTemplate     = '设为公共模板';
+$lang->user->tplContentNotEmpty    = '模板内容不能为空!';
 
 $lang->user->profile     = '档案';
 $lang->user->project     = $lang->projectCommon;

@@ -24,8 +24,8 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
-          <td>
-            <div class="input-group w-p35-f">
+          <td class='w-p35-f'>
+            <div class="input-group">
               <?php echo html::select('assignedTo', $users, $story->reviewedBy, 'class="form-control chosen"');?>
               <?php if(!$this->story->checkForceReview()):?>
               <span class="input-group-addon">
@@ -34,35 +34,40 @@
               <?php endif;?>
             </div>
           </td>
+          <td></td>
         </tr>
-        <tr>
-          <th><?php echo $lang->story->title;?></th>
-          <td><?php echo html::input('title', $story->title, 'class="form-control"');?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->story->spec;?></th>
-          <td><?php echo html::textarea('spec', htmlspecialchars($story->spec), 'rows=8 class="form-control"');?><span class='help-block'><?php echo $lang->story->specTemplate;?></span></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->story->verify;?></th>
-          <td><?php echo html::textarea('verify', htmlspecialchars($story->verify), 'rows=6 class="form-control"');?></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->story->comment;?></th>
-          <td><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
+        <tr class='hide'>
+          <th><?php echo $lang->story->status;?></th>
+          <td><?php echo html::hidden('status', $story->status);?></td>
         </tr>
         <?php $this->printExtendFields($story, 'table', 'columns=1');?>
         <tr>
+          <th><?php echo $lang->story->title;?></th>
+          <td colspan='2'><?php echo html::input('title', $story->title, 'class="form-control"');?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->spec;?></th>
+          <td colspan='2'><?php echo html::textarea('spec', htmlspecialchars($story->spec), 'rows=8 class="form-control"');?><span class='help-block'><?php echo $lang->story->specTemplate;?></span></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->verify;?></th>
+          <td colspan='2'><?php echo html::textarea('verify', htmlspecialchars($story->verify), 'rows=6 class="form-control"');?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->story->comment;?></th>
+          <td colspan='2'><?php echo html::textarea('comment', '', 'rows=5 class="form-control"');?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->attatch;?></th>
-          <td><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
-          <td><?php include './affected.html.php';?></td>
+          <td colspan='2'><?php include './affected.html.php';?></td>
         </tr>
         <tr>
           <td></td>
-          <td class='text-center form-actions'>
+          <td colspan='2' class='text-center form-actions'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
             echo html::submitButton();

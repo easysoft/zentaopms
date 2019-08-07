@@ -12,6 +12,7 @@ $lang->branch->id      = '編號';
 $lang->branch->product = '所屬產品';
 $lang->branch->name    = '名稱';
 $lang->branch->order   = '排序';
+$lang->branch->deleted = '已刪除';
 
 $lang->branch->confirmDelete = '是否刪除該@branch@？';
 $lang->branch->canNotDelete  = '該@branch@下已經有數據，不能刪除！';

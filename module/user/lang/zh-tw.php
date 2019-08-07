@@ -46,8 +46,9 @@ $lang->user->ranzhi           = '然之帳號';
 $lang->user->ditto            = '同上';
 $lang->user->originalPassword = '原密碼';
 $lang->user->newPassword      = '新密碼';
-$lang->user->verifyPassword   = '您的系統登錄密碼';
+$lang->user->verifyPassword   = '您的密碼';
 $lang->user->resetPassword    = '忘記密碼';
+$lang->user->score            = '分數';
 
 $lang->user->legendBasic        = '基本資料';
 $lang->user->legendContribution = '個人貢獻';
@@ -81,6 +82,7 @@ $lang->user->setTemplateTitle      = '請輸入模板標題';
 $lang->user->applyTemplate         = '應用模板';
 $lang->user->confirmDeleteTemplate = '您確認要刪除該模板嗎？';
 $lang->user->setPublicTemplate     = '設為公共模板';
+$lang->user->tplContentNotEmpty    = '模板內容不能為空!';
 
 $lang->user->profile     = '檔案';
 $lang->user->project     = $lang->projectCommon;
