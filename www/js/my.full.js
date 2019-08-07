@@ -108,7 +108,7 @@ function setImageSize(image, maxWidth, maxHeight)
     {
         if($image.width() > maxWidth) $image.attr('width', maxWidth);
         $image.wrap('<a href="' + $image.attr('src') + '" style="display:block;position:relative;overflow:hidden;max-height:' + maxHeight + 'px" target="_blank"></a>');
-        if($image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'><i class='icon-angle-down'></i></a>");
+        if($image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
     }, 50);
 }
 
