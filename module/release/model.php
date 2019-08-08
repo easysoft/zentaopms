@@ -106,6 +106,11 @@ class releaseModel extends model
         $productID = (int)$productID;
         $branch    = (int)$branch;
         $buildID   = 0;
+
+        /* Check date must be not more than today. */
+        if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
+
+        /* Auto create build when release is not link build. */
         if($this->post->build == false && $this->post->name)
         {
             $build = $this->dao->select('*')->from(TABLE_BUILD)
