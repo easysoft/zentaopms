@@ -1490,22 +1490,24 @@ class project extends control
         $stories = $this->loadModel('story')->getProjectStories($projectID, $orderBy);
 
         $kanbanGroup   = $this->project->getKanbanGroupData($stories, $tasks, $bugs, $type);
-        $kanbanSetting = $this->project->getKanbanSetting($projectID);
+        $kanbanSetting = $this->project->getKanbanSetting();
 
-        $this->view->title       = $this->lang->project->kanban;
-        $this->view->position[]  = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
-        $this->view->position[]  = $this->lang->project->kanban;
-        $this->view->stories     = $stories;
-        $this->view->realnames   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->storyOrder  = $orderBy;
-        $this->view->orderBy     = 'id_asc';
-        $this->view->projectID   = $projectID;
-        $this->view->browseType  = '';
-        $this->view->project     = $project;
-        $this->view->type        = $type;
-        $this->view->kanbanGroup = $kanbanGroup;
-        $this->view->allCols     = $kanbanSetting->allCols;
-        $this->view->colorList   = $kanbanSetting->colorList;
+        $this->view->title         = $this->lang->project->kanban;
+        $this->view->position[]    = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[]    = $this->lang->project->kanban;
+        $this->view->stories       = $stories;
+        $this->view->realnames     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyOrder    = $orderBy;
+        $this->view->orderBy       = 'id_asc';
+        $this->view->projectID     = $projectID;
+        $this->view->browseType    = '';
+        $this->view->project       = $project;
+        $this->view->type          = $type;
+        $this->view->kanbanGroup   = $kanbanGroup;
+        $this->view->kanbanColumns = $this->project->getKanbanColumns($kanbanSetting);
+        $this->view->statusMap     = $this->project->getKanbanStatusMap($kanbanSetting);
+        $this->view->statusList    = $this->project->getKanbanStatusList($kanbanSetting);
+        $this->view->colorList     = $this->project->getKanbanColorList($kanbanSetting);
 
         $this->display();
     }
@@ -2339,11 +2341,9 @@ class project extends control
         }
 
         $this->app->loadLang('task');
-        $kanbanSetting = $this->project->getKanbanSetting($projectID);
 
-        $this->view->allCols    = $kanbanSetting->allCols;
-        $this->view->colorList  = $kanbanSetting->colorList;
-        $this->view->projectID  = $projectID;
+        $this->view->setting   = $this->project->getKanbanSetting();
+        $this->view->projectID = $projectID;
         $this->display();
     }
 
@@ -2357,7 +2357,7 @@ class project extends control
      */
     public function ajaxResetKanban($projectID, $confirm = 'no')
     {
-        if($confirm != 'yes')die(js::confirm($this->lang->kanbanSetting->noticeReset, inlink('ajaxResetKanban', "projectID=$projectID&confirm=yes")));
+        if($confirm != 'yes') die(js::confirm($this->lang->kanbanSetting->noticeReset, inlink('ajaxResetKanban', "projectID=$projectID&confirm=yes")));
 
         $this->loadModel('setting');
 
@@ -2387,8 +2387,8 @@ class project extends control
      */
     public function importPlanStories($projectID, $planID)
     {
-        $planStories  = $planProducts = array();
-        $planStory    = $this->loadModel('story')->getPlanStories($planID);
+        $planStories = $planProducts = array();
+        $planStory   = $this->loadModel('story')->getPlanStories($planID);
         $count = 0;
         if(!empty($planStory))
         {
