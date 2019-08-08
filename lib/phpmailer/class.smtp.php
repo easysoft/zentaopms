@@ -617,7 +617,7 @@ class SMTP {
 
     protected function parseHelloFields($type)
     {
-        $this->server_caps = [];
+        $this->server_caps = array();
         $lines = explode("\n", $this->helo_rply);
 
         foreach ($lines as $n => $s) {
@@ -639,7 +639,7 @@ class SMTP {
                         break;
                     case 'AUTH':
                         if (!is_array($fields)) {
-                            $fields = [];
+                            $fields = array();
                         }
                         break;
                     default:

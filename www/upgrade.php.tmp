@@ -12,9 +12,9 @@
 /* Judge my.php exists or not. */
 define('IN_UPGRADE', true);
 $dbConfig = dirname(dirname(__FILE__)) . '/config/db.php';
+$myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
 if(file_exists($dbConfig))
 {
-    $myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
     if(file_exists($myConfig))
     {
         $myContent = trim(file_get_contents($myConfig));
@@ -35,6 +35,7 @@ if(file_exists($dbConfig))
         file_put_contents($myConfig, $myContent);
     }
 }
+if(!file_exists($myConfig)) die(header('location: install.php'));
 
 error_reporting(0);
 

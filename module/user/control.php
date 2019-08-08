@@ -372,14 +372,17 @@ class user extends control
      */
     public function setReferer($referer = '')
     {
-        if(!empty($referer))
-        {
-            $this->referer = helper::safe64Decode($referer);
-        }
-        else
-        {
-            $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
-        }
+        $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
+        if(!empty($referer)) $this->referer = helper::safe64Decode($referer);
+
+        /* Build zentao link regular. */
+        $webRoot = $this->config->webRoot;
+        $linkReg = $webRoot . 'index.php?' . $this->config->moduleVar . '=\w+&' . $this->config->methodVar . '=\w+';
+        if($this->config->requestType == 'PATH_INFO') $linkReg = $webRoot . '\w+' . $this->config->requestFix . '\w+';
+        $linkReg = str_replace(array('/', '.', '?', '-'), array('\/', '\.', '\?', '\-'), $linkReg);
+
+        /* Check zentao link by regular. */
+        $this->referer = preg_match('/^' . $linkReg . '/', $this->referer) ? $this->referer : $webRoot;
     }
 
     /**
