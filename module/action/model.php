@@ -45,8 +45,10 @@ class actionModel extends model
         $action->actor      = $actor;
         $action->action     = $actionType;
         $action->date       = helper::now();
-        $action->comment    = trim(strip_tags($comment, $this->config->allowedTags));
         $action->extra      = $extra;
+
+        $_POST['comment'] = $comment;
+        $action->comment  = fixer::input('post')->stripTags('comment')->get('comment');
 
         /* Process action. */
         $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
