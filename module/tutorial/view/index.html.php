@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::import($jsRoot . 'misc/base64.js'); ?>
-<?php $referer = $referer ? $referer : helper::createLink('my', 'index', '', 'tutorial') ?>
+<?php $referer = $referer ? $referer : helper::createLink('my', 'index', '', 'tutorial');?>
 <div id='pageContainer'>
   <div id='iframeWrapper'>
     <iframe id='iframePage' name='iframePage' src='<?php echo $referer ?>' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0; top: 0'></iframe>
@@ -22,7 +22,7 @@
       <div class='finish-all'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
         <h3><?php echo $lang->tutorial->congratulation ?></h3>
-        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit', 'referer=' . base64_encode($referer)) ?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit ?></a>
+        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit ?></a>
       </div>
       <div class='finish'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
@@ -36,7 +36,7 @@
       <div class='start-icon'><i class='icon icon-certificate icon-back'></i><i class='icon icon-flag icon-front text-secondary'></i></div>
       <h2><?php echo $lang->tutorial->common ?></h2>
       <div class='actions'>
-        <a href='<?php echo helper::createLink('tutorial', 'quit', 'referer=' . base64_encode($referer)) ?>' class='btn btn-danger btn-sm'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
+        <a href='<?php echo helper::createLink('tutorial', 'quit') ?>' class='btn btn-danger btn-sm'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
       </div>
     </header>
     <section id='current'>
