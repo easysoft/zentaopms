@@ -26,17 +26,17 @@ form {padding: 30px 0 40px;}
         <form target='hiddenwin' method='post'>
           <table class='table table-form'>
             <?php if(common::hasPriv('project', 'kanbanHideCols')):?>
-            <tr>
+            <tr class='statusTR'>
               <th class='text-right w-200px'><?php echo $lang->project->kanbanHideCols?></th>
-              <td><?php echo html::radio('allCols', $lang->kanbanSetting->optionList, $allCols)?></td>
+              <td><?php echo html::radio('allCols', $lang->kanbanSetting->optionList, $setting->allCols)?></td>
             </tr>
             <?php endif;?>
             <?php if(common::hasPriv('project', 'kanbanColsColor')):?>
-            <tr>
+            <tr class='statusTR'>
               <th class='text-right'><?php echo $lang->project->kanbanColsColor?></th>
               <td>
                 <div class='row'>
-                  <?php foreach($colorList as $status => $color):?>
+                  <?php foreach($setting->colorList as $status => $color):?>
                   <div class='col-sm-2'>
                     <div class='input-group'>
                       <input type='hidden' id='color<?php echo $status?>' name="colorList[<?php echo $status?>]" data-provide='colorpicker' data-wrapper='input-group-btn' value='<?php echo $color;?>' data-colors='#333,#2B529C,#E48600,#D2323D,#229F24,#777,#D2691E,#008B8B,#2E8B57,#4169E1,#4B0082,#FA8072,#BA55D3,#2E8B57,#6B8E23'>
