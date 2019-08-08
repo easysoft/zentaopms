@@ -24,7 +24,7 @@
         <div class='panel-heading'><strong><?php echo $lang->install->promotion?></strong></div>
         <div class='panel-body row'>
           <?php foreach($lang->install->product as $product):?>
-          <div class='col-md-<?php echo ceil(12 / count($lang->install->product));?>'>
+          <div class='<?php echo $lang->install->{$product}->width;?>'>
             <a class="card ad ad-<?php echo $product;?>" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
               <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . $lang->install->{$product}->logo;?>)"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" alt=""></div>
               <div class="card-reveal">

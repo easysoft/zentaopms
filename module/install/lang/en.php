@@ -172,14 +172,15 @@ $lang->install->joinZentao = <<<EOT
 <p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
-$lang->install->product = array('chanzhi', 'ranzhi');
+$lang->install->product = array('chanzhi', 'ranzhi', 'ydisk', 'meshiot');
 
 $lang->install->promotion     = "Products also from Nature Easy Soft team:";
-$lang->install->chanzhi       = new stdclass();
-$lang->install->chanzhi->name = 'ZSITE Content Management System';
-$lang->install->chanzhi->logo = 'images/main/chanzhi_en.png';
-$lang->install->chanzhi->url  = 'http://www.zsite.net';
-$lang->install->chanzhi->desc = <<<EOD
+$lang->install->chanzhi        = new stdclass();
+$lang->install->chanzhi->name  = 'ZSITE Content Management System';
+$lang->install->chanzhi->width = 'col-md-6';
+$lang->install->chanzhi->logo  = 'images/main/chanzhi_en.png';
+$lang->install->chanzhi->url   = 'http://www.zsite.net';
+$lang->install->chanzhi->desc  = <<<EOD
 <ul>
   <li>Article, Blog, Manual, Member, Shop, Forum, Feedback……</li>
   <li>Customize page freely by theme, effect, widget, css, js and layout</li>
@@ -189,14 +190,43 @@ $lang->install->chanzhi->desc = <<<EOD
 EOD;
 
 $lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name = 'ZDOO Collaborative System';
-$lang->install->ranzhi->logo = 'images/main/zdoo_org.png';
-$lang->install->ranzhi->url  = 'http://www.zdoo.org';
-$lang->install->ranzhi->desc = <<<EOD
+$lang->install->ranzhi->name  = 'ZDOO Collaborative System';
+$lang->install->ranzhi->width = 'col-md-6';
+$lang->install->ranzhi->logo  = 'images/main/zdoo_org.png';
+$lang->install->ranzhi->url   = 'http://www.zdoo.org';
+$lang->install->ranzhi->desc  = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
   <li>OA: Approve, Announce, Trip, Leave and so on. </li>
   <li>Project，Task and Document management </li>
   <li>Money: Income, Expense, Transfer, Invest and Debt</li>
+</ul>
+EOD;
+
+$lang->install->ydisk = new stdclass();
+$lang->install->ydisk->name  = '悦库网盘';
+$lang->install->ydisk->width = 'col-md-6';
+$lang->install->ydisk->logo  = 'images/main/ydisk.png';
+$lang->install->ydisk->url   = 'http://www.ydisk.cn';
+$lang->install->ydisk->desc  = <<<EOD
+<ul>
+  <li>轻松实现不同部门、不同员工的文件共享。</li>
+  <li>支持Word ，Excel，pdf等文档的在线预览。</li>
+  <li>支持多人同时在线编辑，编辑内容即刻生成。</li>
+  <li>灵活设置员工操作权限，简化操作细节。</li>
+</ul>
+EOD;
+
+$lang->install->meshiot = new stdclass();
+$lang->install->meshiot->name  = '易天物联';
+$lang->install->meshiot->width = 'col-md-6';
+$lang->install->meshiot->logo  = 'images/main/meshiot.png';
+$lang->install->meshiot->url   = 'https://www.meshiot.com';
+$lang->install->meshiot->desc  = <<<EOD
+<ul>
+  <li>积木式设计思想</li>
+  <li>多种网络接入</li>
+  <li>工业化设计</li>
+  <li>多种工业通信协议</li>
 </ul>
 EOD;
