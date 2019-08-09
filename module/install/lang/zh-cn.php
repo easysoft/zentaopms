@@ -231,16 +231,16 @@ $lang->install->xuanxuan->desc  = <<<EOD
 EOD;
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = '悦库网盘';
+$lang->install->ydisk->name  = '悦库免费企业网盘';
 $lang->install->ydisk->width = 'col-md-6';
 $lang->install->ydisk->logo  = 'images/main/ydisk.png';
 $lang->install->ydisk->url   = 'http://www.ydisk.cn';
 $lang->install->ydisk->desc  = <<<EOD
 <ul>
-  <li>轻松实现不同部门、不同员工的文件共享。</li>
-  <li>支持Word ，Excel，pdf等文档的在线预览。</li>
-  <li>支持多人同时在线编辑，编辑内容即刻生成。</li>
-  <li>灵活设置员工操作权限，简化操作细节。</li>
+  <li>绝对私有，只部署在自己的机器上。</li>
+  <li>海量存储，只取决于您的硬盘大小。</li>
+  <li>极限传输，只取决于您的网络带宽。</li>
+  <li>极度安全，十二种权限组合。</li>
 </ul>
 EOD;
 
@@ -251,9 +251,9 @@ $lang->install->meshiot->logo  = 'images/main/meshiot.png';
 $lang->install->meshiot->url   = 'https://www.meshiot.com';
 $lang->install->meshiot->desc  = <<<EOD
 <ul>
-  <li>积木式设计思想</li>
-  <li>多种网络接入</li>
-  <li>工业化设计</li>
-  <li>多种工业通信协议</li>
+  <li>超性能网关，一个就可管65536个设备。</li>
+  <li>独创无线电通讯协议，2500米穿墙无障碍。</li>
+  <li>200余款传感器控制器，独创调光系统。</li>
+  <li>可配电池，对既有场地设备无任何要求。</li>
 </ul>
 EOD;
