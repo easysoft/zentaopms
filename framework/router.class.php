@@ -66,8 +66,10 @@ class router extends baseRouter
     }
 
     /**
-     * 加载语言文件，返回全局$lang对象。
-     * Load lang and return it as the global lang object.
+     * 企业版部分功能是从然之合并过来的。然之代码中调用loadLang方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 把appName设置为空来避免这个错误。
+     * Some codes merged from ranzhi called the function loadLang with a non-empty appName which causes an error in zentao.
+     * Set the value of appName to empty to avoid this error.
      *
      * @param   string $moduleName     the module name
      * @param   string $appName     the app name
@@ -176,13 +178,10 @@ class router extends baseRouter
     }
 
     /**
-     * 加载模块的config文件，返回全局$config对象。
-     * 如果该模块是common，加载$configRoot的配置文件，其他模块则加载其模块的配置文件。
-     *
-     * Load config and return it as the global config object.
-     * If the module is common, search in $configRoot, else in $modulePath.
-     *
-     * Extension: set appName as empty.
+     * 企业版部分功能是从然之合并过来的。然之代码中调用loadModuleConfig方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 把appName设置为空来避免这个错误。
+     * Some codes merged from ranzhi called the function loadModuleConfig with a non-empty appName which causes an error in zentao.
+     * Set the value of appName to empty to avoid this error.
      *
      * @param   string $moduleName     module name
      * @param   string $appName        app name
