@@ -3,8 +3,3 @@
 .table-data tr > td{word-break: break-all; word-wrap: break-word;}
 .side-col .cell{padding:0px;}
 .tab-pane table {border: 1px solid #ddd; border-top: none;}
-
-#legendBasicInfo .thWidth{width:110px !important;}
-#legendLife .thWidth{width:100px !important;}
-html[lang^='zh-'] #legendBasicInfo .thWidth{width:70px !important;}
-html[lang^='zh-'] #legendLife .thWidth{width:90px !important;}

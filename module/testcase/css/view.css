@@ -4,8 +4,3 @@
 .outer .col-side .side-handle{right:0px;top:10px;}
 .outer.hide-side .main-side{display:none;}
 .table-fixed td{white-space: unset;}
-
-.thWidth{width:90px !important;}
-.lifeThWidth{width:100px !important;}
-html[lang^='zh-'] .thWidth{width:60px !important;}
-html[lang^='zh-'] .lifeThWidth{width:60px !important;}

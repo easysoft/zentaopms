@@ -3,8 +3,3 @@
 #end_chosen .chosen-single{border-left: none;}
 .cycleConfig .checkbox-primary{float:left; width:100px;}
 .cycleConfig .tab-pane{padding:8px 0px;}
-
-.thWidth{width:110px !important;}
-.inputGroupWidth{width:270px !important;}
-html[lang^='zh-'] .thWidth{width:80px !important;}
-html[lang^='zh-'] .inputGroupWidth{width:200px !important;}

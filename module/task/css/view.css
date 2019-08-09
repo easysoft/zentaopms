@@ -2,8 +2,4 @@
 .side-col #legendProjectAndTask .list-unstyled{padding:10px; border:1px solid #ddd; border-top:0px; margin:0px;}
 .tab-pane table {border: 1px solid #ddd; border-top: none;}
 
-#legendLife .thWidth{width:100px !important;}
-.effortThWidth{width:90px !important;}
-html[lang^='zh-'] #legendLife .thWidth{width:70px !important;}
-html[lang^='zh-'] .effortThWidth{width:70px !important;}
 html[lang^='zh-'] .thWidth{width:80px !important;}
