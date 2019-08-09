@@ -102,13 +102,14 @@ function setImageSize(image, maxWidth, maxHeight)
         bodyWidth = $('body').width();
         maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
     }
-    if(!maxHeight) maxHeight = $(window).height();
+    if(!maxHeight) maxHeight = $(top.window).height();
 
     setTimeout(function()
     {
-        if($image.width() > maxWidth) $image.attr('width', maxWidth);
-        $image.wrap('<a href="' + $image.attr('src') + '" style="display:block;position:relative;overflow:hidden;max-height:' + maxHeight + 'px" target="_blank"></a>');
-        if($image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
+        maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
+        if($image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
+        $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
+        if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
     }, 50);
 }
 
