@@ -150,8 +150,8 @@
               <?php if(isset($branchGroups[$story->product][$story->branch])) echo "<span class='label label-outline label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color'");?>
             </td>
-            <td class='c-user' title='<?php echo $users[$story->openedBy];?>'><?php echo $users[$story->openedBy];?></td>
-            <td class='c-user' title='<?php echo $users[$story->assignedTo];?>'><?php echo $users[$story->assignedTo];?></td>
+            <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
+            <td class='c-user' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>
             <td class='c-estimate'><?php echo $story->estimate;?></td>
             <?php $status = $this->processStatus('story', $story);?>
             <td class='c-status' title='<?php echo $status;?>'>
@@ -233,6 +233,8 @@
             $lang->story->stageList[''] = $lang->null;
             foreach($lang->story->stageList as $key => $stage)
             {
+                if(empty($key)) continue;
+                if(strpos('tested|verified|released|closed', $key) === false) continue;
                 $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                 echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
             }

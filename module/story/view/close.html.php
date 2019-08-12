@@ -36,7 +36,11 @@
           <th><?php echo $lang->story->childStories;?></th>
           <td><?php echo html::input('childStories', '', "class='form-control'");?></td><td></td>
         </tr>
-        <?php $this->printExtendFields($story, 'table', 'columns=2');?>
+        <tr class='hide'>
+          <th><?php echo $lang->story->status;?></th>
+          <td><?php echo html::hidden('status', 'closed');?></td>
+        </tr>
+        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

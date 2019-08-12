@@ -12,6 +12,7 @@ $lang->branch->id      = 'ID';
 $lang->branch->product = 'Product';
 $lang->branch->name    = 'Name';
 $lang->branch->order   = 'Order';
+$lang->branch->deleted = 'Delete';
 
 $lang->branch->confirmDelete = 'Do you want to delete this @branch@?';
 $lang->branch->canNotDelete  = 'There is data in @branch@. It cannot be deleted.';

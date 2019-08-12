@@ -58,11 +58,11 @@
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='form-control'");?></td><td></td>
           </tr>  
+          <?php $this->printExtendFields($product, 'table', 'columns=1');?>
           <tr>
             <th><?php echo $lang->product->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($product->desc), "rows='8' class='form-control'");?></td>
           </tr>  
-          <?php $this->printExtendFields($product, 'table', 'columns=2');?>
           <tr>
             <th><?php echo $lang->product->acl;?></th>
             <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->product->aclList, $product->acl, "onclick='setWhite(this.value);'", 'block'));?></td>

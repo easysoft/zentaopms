@@ -83,7 +83,7 @@
             </div>
           </td>
         </tr>
-        <?php $this->printExtendFields($task, 'table', 'columns=2');?>
+        <?php $this->printExtendFields($task, 'table', 'columns=1');?>
         <tr>
           <td class='text-center form-actions' colspan='3'>
             <?php echo html::submitButton();?>

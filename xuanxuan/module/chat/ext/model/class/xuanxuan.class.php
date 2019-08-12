@@ -92,7 +92,7 @@ class xuanxuanChat extends chatModel
             $position = strrpos($host, ':');
             $port     = $position === false ? '' : substr($host, $position + 1);
             $server   = $this->config->xuanxuan->server;
-            if($port and strpos($server, ":$port") === false)
+            if($port and strpos($server, ":") === false)
             {
                 $server = rtrim($server, '/');
                 $server = "{$server}:{$port}";

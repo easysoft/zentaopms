@@ -12,9 +12,18 @@
 /* 欄位列表。*/
 $lang->project->common        = $lang->projectCommon . '視圖';
 $lang->project->allProjects   = '所有' . $lang->projectCommon;
+$lang->project->id            = $lang->projectCommon . '編號';
 $lang->project->type          = $lang->projectCommon . '類型';
 $lang->project->name          = $lang->projectCommon . '名稱';
 $lang->project->code          = $lang->projectCommon . '代號';
+$lang->project->statge        = '階段';
+$lang->project->pri           = '優先順序';
+$lang->project->openedBy      = '由誰創建';
+$lang->project->openedDate    = '創建日期';
+$lang->project->closedBy      = '由誰關閉';
+$lang->project->closedDate    = '關閉日期';
+$lang->project->canceledBy    = '由誰取消';
+$lang->project->canceledDate  = '取消日期';
 $lang->project->begin         = '開始日期';
 $lang->project->end           = '結束日期';
 $lang->project->dateRange     = '起始日期';
@@ -25,6 +34,7 @@ $lang->project->workHour      = '工時';
 $lang->project->totalHours    = '可用工時';
 $lang->project->totalDays     = '可用工日';
 $lang->project->status        = $lang->projectCommon . '狀態';
+$lang->project->subStatus     = '子狀態';
 $lang->project->desc          = $lang->projectCommon . '描述';
 $lang->project->owner         = '負責人';
 $lang->project->PO            = $lang->productCommon . '負責人';
@@ -328,6 +338,13 @@ $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = '已延期';
 $lang->project->featureBar['task']['needconfirm']  = '需求變更';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
+
+$lang->project->featureBar['all']['all']       = $lang->project->all;
+$lang->project->featureBar['all']['undone']    = $lang->project->undone;
+$lang->project->featureBar['all']['wait']      = $lang->project->statusList['wait'];
+$lang->project->featureBar['all']['doing']     = $lang->project->statusList['doing'];
+$lang->project->featureBar['all']['suspended'] = $lang->project->statusList['suspended'];
+$lang->project->featureBar['all']['closed']    = $lang->project->statusList['closed'];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = '全部展開';

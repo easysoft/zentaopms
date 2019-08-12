@@ -24,7 +24,7 @@
         <?php if(isset($projectID)):?>
         <tr>
           <th class='w-80px'><?php echo $lang->testtask->product;?></th>
-          <td class='w-p35-f'><?php echo html::select('product', $products, $productID, "class='form-control chosen'");?></td><td></td>
+          <td class='w-p35-f'><?php echo html::select('product', $products, $productID, "class='form-control chosen' onchange='loadProductRelated(this.value)'");?></td><td></td>
         </tr>
         <?php else:?>
         <tr class='hide'>
@@ -94,7 +94,7 @@
             </div>
           </td>
         </tr>
-        <?php $this->printExtendFields('', 'table', 'columns=2');?>
+        <?php $this->printExtendFields('', 'table', 'columns=1');?>
         <tr>
           <td class='text-center form-actions' colspan='3'>
             <?php echo html::submitButton();?>

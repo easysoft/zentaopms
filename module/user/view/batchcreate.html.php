@@ -76,6 +76,7 @@
             <div class='input-group'>
             <?php
             echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)'");
+            echo "<span class='input-group-addon passwordStrength'></span>";
             if($i != 0) echo "<span class='input-group-addon'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
             ?>
             </div>
@@ -116,4 +117,5 @@
   </form>
 </div>
 <?php echo html::hidden('verifyRand', $rand);?>
+<?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <?php include '../../common/view/footer.html.php';?>

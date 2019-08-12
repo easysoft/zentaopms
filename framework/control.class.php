@@ -21,10 +21,10 @@ include dirname(__FILE__) . '/base/control.class.php';
 class control extends baseControl
 {
     /**
-     * 加载指定模块的model文件。
-     * Load the model file of one module.
-     *
-     * Extension: set appName as empty.
+     * 企业版部分功能是从然之合并过来的。然之代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 调用父类的loadModel方法来避免这个错误。
+     * Some codes merged from ranzhi called the function loadModel with a non-empty appName which causes an error in zentao.
+     * Call the parent function with empty appName to avoid this error.
      *
      * @param   string  $moduleName 模块名，如果为空，使用当前模块。The module name, if empty, use current module's name.
      * @param   string  $appName    The app name, if empty, use current app's name.
@@ -33,52 +33,7 @@ class control extends baseControl
      */
     public function loadModel($moduleName = '', $appName = '')
     {
-        $appName = '';
-
-        if(empty($moduleName)) $moduleName = $this->moduleName;
-        if(empty($appName))    $appName    = $this->appName;
-
-        global $loadedModels;
-        if(isset($loadedModels[$appName][$moduleName]))
-        {
-            $this->$moduleName = $loadedModels[$appName][$moduleName];
-            $this->dao = $this->$moduleName->dao;
-            return $this->$moduleName;
-        }
-
-        $modelFile = $this->app->setModelFile($moduleName, $appName);
-
-        /**
-         * 如果没有model文件，尝试加载config配置信息。
-         * If no model file, try load config.
-         */
-        if(!helper::import($modelFile))
-        {
-            $this->app->loadModuleConfig($moduleName, $appName);
-            $this->app->loadLang($moduleName, $appName);
-            $this->dao = new dao();
-            return false;
-        }
-
-        /** 
-         * 如果没有扩展文件，model类名是$moduleName + 'model'，如果有扩展，还需要增加ext前缀。
-         * If no extension file, model class name is $moduleName + 'model', else with 'ext' as the prefix.
-         */
-        $modelClass = class_exists('ext' . $appName . $moduleName. 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
-        if(!class_exists($modelClass))
-        {
-            $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
-        }
-
-        /** 
-         * 初始化model对象，在control对象中可以通过$this->$moduleName来引用。同时将dao对象赋为control对象的成员变量，方便引用。
-         * Init the model object thus you can try $this->$moduleName to access it. Also assign the $dao object as a member of control object.
-         */
-        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
-        $this->$moduleName = $loadedModels[$appName][$moduleName];
-        $this->dao = $this->$moduleName->dao;
-        return $this->$moduleName;
+        return parent::loadModel($moduleName);
     }
 
     /**
@@ -198,7 +153,7 @@ class control extends baseControl
     /**
      * Execute hooks of a method.
      *
-     * @param  int    $objectID
+     * @param  int    $objectID     The id of an object. The object maybe a bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask.
      * @access public
      * @return void
      */
@@ -214,7 +169,7 @@ class control extends baseControl
     /**
      * Build operate menu of a method.
      *
-     * @param  object $object product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
+     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
      * @param  string $displayOn view|browse
      * @access public
      * @return void
@@ -230,9 +185,9 @@ class control extends baseControl
     /**
      * Print extend fields.
      *
-     * @param  object $object
-     * @param  string $type
-     * @param  string $extras
+     * @param  object $object    bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask
+     * @param  string $type      table | div
+     * @param  string $extras    columns=1,mode=value,position=right|right|all
      * @access public
      * @return void
      */

@@ -59,8 +59,8 @@
         <td class='text-left' title="<?php echo $story->title?>"><nobr><?php echo html::a($viewLink, $story->title);?></nobr></td>
         <td title="<?php echo $story->planTitle?>"><?php echo $story->planTitle;?></td>
         <td><?php echo $lang->story->sourceList[$story->source];?></td>
-        <td><?php echo $users[$story->openedBy];?></td>
-        <td><?php echo $users[$story->assignedTo];?></td>
+        <td><?php echo zget($users, $story->openedBy);?></td>
+        <td><?php echo zget($users, $story->assignedTo);?></td>
         <td><?php echo $story->estimate;?></td>
         <td><span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>

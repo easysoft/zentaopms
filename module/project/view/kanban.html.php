@@ -9,17 +9,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('statusMap', $statusMap);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-right'>
     <?php echo html::a($this->createLink('project', 'ajaxKanbanSetting', "projectID=$projectID"), "<i class='icon-cog muted'></i> " . $lang->project->kanbanSetting, '', "class='iframe btn btn-link'");?>
     <?php if(common::hasPriv('project', 'printKanban')) echo html::a($this->createLink('project', 'printKanban', "projectID=$projectID"), "<i class='icon-printer muted'></i> " . $lang->project->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->project->printKanban}' data-width='500'");?>
     <?php
     $link = $this->createLink('task', 'export', "project=$projectID&orderBy=$orderBy&type=kanban");
-    if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-import muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe export' data-width='700'");
+    if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-export muted'></i> " . $lang->task->export, '', "class='btn btn-link iframe export' data-width='700'");
     ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'>
-        <i class='icon-export muted'></i> <?php echo $lang->import ?>
+        <i class='icon-import muted'></i> <?php echo $lang->import ?>
         <span class='caret'></span>
       </button>
       <ul class='dropdown-menu' id='importActionMenu'>
@@ -48,11 +49,6 @@
 <?php echo "#kanban .c-board.s-$status{border-color: " . ($color ? $color : '#000') . ";}\n"?>
 <?php endforeach?>
 </style>
-<?php
-$taskCols = array('wait', 'doing', 'pause', 'done');
-if($allCols) $taskCols = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
-$account = $this->app->user->account;
-?>
 <div id="kanban" class="main-table fade auto-fade-in" data-ride="table" data-checkable="false" data-group="true">
   <?php
   $hasTask = false;
@@ -96,8 +92,8 @@ $account = $this->app->user->account;
           </div>
         </th>
         <?php endif;?>
-        <?php foreach($taskCols as $col):?>
-        <th class='c-board s-<?php echo $col?>'><?php echo $lang->task->statusList[$col];?></th>
+        <?php foreach($kanbanColumns as $col):?>
+        <th class='c-board s-<?php echo $col?>'><?php echo zget($statusList, $col);?></th>
         <?php endforeach;?>
       </tr>
     </thead>
@@ -143,10 +139,10 @@ $account = $this->app->user->account;
           <?php endif;?>
         </td>
         <?php endif;?>
-        <td class="c-boards no-padding text-left" colspan="<?php echo count($taskCols);?>">
+        <td class="c-boards no-padding text-left" colspan="<?php echo count($kanbanColumns);?>">
           <div class="boards-wrapper">
             <div class="boards">
-              <?php foreach($taskCols as $col):?>
+              <?php foreach($kanbanColumns as $col):?>
               <div class="board" data-type="<?php echo $col;?>">
                 <?php if(!empty($group->tasks[$col])):?>
                 <?php foreach($group->tasks[$col] as $task):?>

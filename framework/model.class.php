@@ -21,12 +21,10 @@ include dirname(__FILE__) . '/base/model.class.php';
 class model extends baseModel
 {
     /**
-     * 加载一个模块的model。加载完成后，使用$this->$moduleName来访问这个model对象。
-     * 比如：loadModel('user')引入user模块的model实例对象，可以通过$this->user来访问它。
-     *
-     * Load the model of one module. After loaded, can use $this->$moduleName to visit the model object.
-     *
-     * Extension: set appName as empty.
+     * 企业版部分功能是从然之合并过来的。然之代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
+     * 调用父类的loadModel方法来避免这个错误。
+     * Some codes merged from ranzhi called the function loadModel with a non-empty appName which causes an error in zentao.
+     * Call the parent function with empty appName to avoid this error.
      *
      * @param   string  $moduleName
      * @access  public
@@ -34,31 +32,7 @@ class model extends baseModel
      */
     public function loadModel($moduleName, $appName = '')
     {
-        $appName = '';
-
-        if(empty($moduleName)) return false;
-        if(empty($appName)) $appName = $this->appName;
-
-        global $loadedModels;
-        if(isset($loadedModels[$appName][$moduleName]))
-        {
-            $this->$moduleName = $loadedModels[$appName][$moduleName];
-            return $this->$moduleName;
-        }
-
-        $modelFile = $this->app->setModelFile($moduleName, $appName);
-
-        if(!helper::import($modelFile)) return false;
-        $modelClass = class_exists('ext' . $appName . $moduleName. 'model') ? 'ext' . $appName . $moduleName . 'model' : $appName . $moduleName . 'model';
-        if(!class_exists($modelClass))
-        {
-            $modelClass = class_exists('ext' . $moduleName. 'model') ? 'ext' . $moduleName . 'model' : $moduleName . 'model';
-            if(!class_exists($modelClass)) $this->app->triggerError(" The model $modelClass not found", __FILE__, __LINE__, $exit = true);
-        }
-
-        $loadedModels[$appName][$moduleName] = new $modelClass($appName);
-        $this->$moduleName = $loadedModels[$appName][$moduleName];
-        return $this->$moduleName;
+        return parent::loadModel($moduleName);
     }
 
     /**

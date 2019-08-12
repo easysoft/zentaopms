@@ -59,6 +59,11 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
+        <tr class='hide'>
+          <th><?php echo $lang->task->status;?></th>
+          <td><?php echo html::hidden('status', 'wait');?></td>
+        </tr>
+        <?php $this->printExtendFields('', 'table', 'columns=1');?>
         <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
@@ -205,7 +210,6 @@
             <?php echo html::textarea('desc', $task->desc, "rows='10' class='form-control'");?>
           </td>
         </tr>
-        <?php $this->printExtendFields('', 'table', 'columns=3');?>
         <tr>
           <th><?php echo $lang->files;?></th>
           <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>

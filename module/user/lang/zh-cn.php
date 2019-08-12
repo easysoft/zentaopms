@@ -48,6 +48,7 @@ $lang->user->originalPassword = '原密码';
 $lang->user->newPassword      = '新密码';
 $lang->user->verifyPassword   = '您的密码';
 $lang->user->resetPassword    = '忘记密码';
+$lang->user->score            = '分数';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';
@@ -81,6 +82,7 @@ $lang->user->setTemplateTitle      = '请输入模板标题';
 $lang->user->applyTemplate         = '应用模板';
 $lang->user->confirmDeleteTemplate = '您确认要删除该模板吗？';
 $lang->user->setPublicTemplate     = '设为公共模板';
+$lang->user->tplContentNotEmpty    = '模板内容不能为空!';
 
 $lang->user->profile     = '档案';
 $lang->user->project     = $lang->projectCommon;
@@ -111,6 +113,7 @@ $lang->user->loginFailed  = "登录失败，请检查您的用户名或密码是
 $lang->user->lockWarning  = "您还有%s次尝试机会。";
 $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁，或%s分钟后重试。";
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
+$lang->user->errorWeak    = "密码不能使用【%s】这些常用弱口令。";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';
@@ -169,6 +172,8 @@ $lang->user->error->realname      = "【ID %s】的真实姓名必须填写";
 $lang->user->error->password      = "【ID %s】的密码必须为六位以上";
 $lang->user->error->mail          = "【ID %s】的邮箱地址不正确";
 $lang->user->error->reserved      = "【ID %s】的用户名已被系统预留";
+$lang->user->error->weakPassword  = "【ID %s】的密码强度小于系统设定。";
+$lang->user->error->commonWeak    = "【ID %s】的密码不能使用【%s】这些常用若口令。";
 
 $lang->user->error->verifyPassword   = "验证失败，请检查您的系统登录密码是否正确";
 $lang->user->error->originalPassword = "原密码不正确";

@@ -44,7 +44,7 @@
       <caption><?php echo $lang->my->form->lblAccount;?></caption>
       <tr>
         <th class='w-90px'><?php echo $lang->user->account;?></th>
-        <td style=''><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly'");?></td>
+        <td><?php echo html::input('account', $user->account, "class='form-control' readonly='readonly'");?></td>
         <th class='w-140px'><?php echo $lang->user->commiter;?></th>
         <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
       </tr>

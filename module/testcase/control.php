@@ -776,10 +776,15 @@ class testcase extends control
     {
         if($_POST)
         {
-            $this->testcase->review($caseID);
+            $changes = $this->testcase->review($caseID);
             if(dao::isError()) die(js::error(dao::getError()));
-            $result = $this->post->result;
-            $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
+
+            if($changes)
+            {
+                $result = $this->post->result;
+                $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
+                $this->action->logHistory($actionID, $changes);
+            }
 
             $this->executeHooks($caseID);
 
@@ -1240,6 +1245,7 @@ class testcase extends control
                     $case->linkCase = join("; \n", $tmpLinkCases);
                 }
             }
+            if(isset($this->config->bizVersion)) list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $cases);
@@ -1663,5 +1669,20 @@ class testcase extends control
         $story = $this->dao->select('module')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         $moduleID = !empty($story) ? $story->module : 0; 
         die(json_encode(array('moduleID'=> $moduleID)));
+    }
+
+    /**
+     * Get status by ajax.
+     *
+     * @param  string $methodName
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetStatus($methodName, $caseID = 0)
+    {
+        $status = $this->testcase->getStatus($methodName, $caseID);
+
+        die($status);
     }
 }

@@ -33,6 +33,8 @@ function switchShow(result)
         $('#assignedTo').val(assignedTo);
         $('#assignedTo').trigger("chosen:updated");
     }
+
+    getStatus('review', "storyID=" + storyID + ",result=" + result);
 }
 
 function setStory(reason)

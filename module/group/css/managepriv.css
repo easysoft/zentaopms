@@ -6,6 +6,3 @@
 
 #mainMenu #groupName{line-height:33px; float: left}
 .checkbox-right{padding-left:0px !important;}
-
-.thWidth{width:180px !important;}
-html[lang^='zh-'] .thWidth{width:150px !important;}

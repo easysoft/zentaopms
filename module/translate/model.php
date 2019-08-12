@@ -23,7 +23,7 @@ class translateModel extends model
         $data  = fixer::input('post')->add('createdBy', $this->app->user->account)->get();
         if(empty($data->name)) dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->translate->name);
         if(empty($data->code)) dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->translate->code);
-        if(!baseValidater::checkREG($data->code, '|^[A-Za-z0-9_]+$|')) dao::$errors['code'] = $this->lang->translate->notice->failRuleCode;
+        if(!baseValidater::checkREG($data->code, '|^[a-z0-9_]+$|')) dao::$errors['code'] = $this->lang->translate->notice->failRuleCode;
         if(dao::isError()) return false;
 
         $langs = empty($this->config->global->langs) ? array() : json_decode($this->config->global->langs, true);
@@ -612,7 +612,9 @@ class translateModel extends model
                                 $preFirst = $firstLetter;
                                 $preLast  = $lastLetter;
                             }
-                            if(!$isJoin and strpos("\'|\"", $value{0}) === false) $value = '"' . addslashes($value) . '"';
+                            $firstLetter = $value{0};
+                            $lastLetter  = $value{strlen($value) - 1};
+                            if(!$isJoin and !(strpos("\'|\"", $firstLetter) !== false and $firstLetter == $lastLetter)) $value = '"' . addslashes($value) . '"';
                         }
                     }
                     $content .= $key . " = $value;\n";
@@ -638,7 +640,8 @@ class translateModel extends model
         $result = true;
         $tolowerValue = strtolower($value);
         if($tolowerValue == 'new stdclass()' or $tolowerValue == 'new stdclass') $result = false;
-        if(strpos($value, '$') === 0 and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and strpos($value, '.') === false and !preg_match('/[^\$\-\>\w\'\"\[\]]/', $value)) $result = false;
+        /* Check for only php variable. */
+        if(strpos($value, '$') === 0 and $value != '$' and strpos($value, '$lang->productCommon') === false and strpos($value, '$lang->projectCommon') === false and strpos($value, '.') === false and !preg_match('/[^\$\-\>\w\'\"\[\]]/', $value)) $result = false;
         if($value == '$lang->productCommon' or $value == '$lang->projectCommon') $result = false;
 
         return $result;

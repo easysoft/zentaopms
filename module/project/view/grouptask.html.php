@@ -181,7 +181,7 @@
             <?php echo html::a('###', "<i class='icon-caret-down'></i> " . $groupName, '', "class='text-primary' title='$groupName'");?>
             <div class='groupSummary small'>
 
-            <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHoursAB, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
+            <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHoursAB, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
             <?php printf($lang->project->groupSummaryAB, $groupSum, $groupWait, $groupDoing, $groupEstimate, $groupConsumed, $groupLeft);?>
             </div>
           </div>
@@ -221,7 +221,7 @@
         </td>
         <td colspan='13'>
           <div class="table-row segments-list">
-          <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, $users[$task->assignedTo], $members[$task->assignedTo]->totalHours);?>
+          <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->project->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
           <?php printf($lang->project->countSummary, $groupSum, $groupDoing, $groupWait);?>
           <?php printf($lang->project->timeSummary, $groupEstimate, $groupConsumed, $groupLeft);?>
           </div>

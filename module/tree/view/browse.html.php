@@ -242,6 +242,8 @@ $(function()
                 $('#modulesTree').find('li:not(.tree-action-item)').each(function()
                 {
                     var $li = $(this);
+                    if($li.hasClass('tree-item-branch')) return;
+
                     var item = $li.data();
                     orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
                 });

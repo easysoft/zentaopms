@@ -26,7 +26,10 @@ $(document).ready(function()
     {
         var password         = $('input:password').val().trim();
         var passwordStrength = computePasswordStrength(password);
-        $('#submit').after("<input type='hidden' name='passwordStrength' value='" + passwordStrength + "'>");
+
+        if($('#loginPanel #passwordStrength').length == 0) $(this).after("<input type='hidden' name='passwordStrength' id='passwordStrength' value='0' />");
+        $('#loginPanel #passwordStrength').val(passwordStrength);
+
         var rand = $('input#verifyRand').val();
         if(password.length != 32 && typeof(md5) == 'function') $('input:password').val(md5(md5(password) + rand));
     });

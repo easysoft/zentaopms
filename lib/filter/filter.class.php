@@ -34,6 +34,7 @@ class fixer extends baseFixer
     {
         $fields = str_replace(' ', '', trim($fields));
 
+        /* Get extend field by flow. */
         global $config;
         $flowFields = array();
         if(isset($config->bizVersion))
@@ -45,14 +46,27 @@ class fixer extends baseFixer
         }
         foreach($this->data as $field => $value)
         {
-            if(isset($flowFields[$field]) and is_array($value)) $this->data->$field = implode(',', $value);
+            /* Implode array when form has array. */
+            if(isset($flowFields[$field]) and is_array($value))
+            {
+                $canImplode = true;
+                foreach($value as $k => $v)
+                {
+                    if(is_object($v) or is_array($v))
+                    {
+                        $canImplode = false;
+                        break;
+                    }
+                }
+                if($canImplode) $this->data->$field = implode(',', $value);
+            }
             $this->specialChars($field);
         }
-
 
         if(empty($fields)) return $this->data;
         if(strpos($fields, ',') === false) return $this->data->$fields;
 
+        /* Process fields for check by key. */
         $fields = array_flip(explode(',', $fields));
         foreach($this->data as $field => $value)
         {

@@ -19,6 +19,8 @@ $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
 $lang->bug->project          = $lang->projectCommon;
 $lang->bug->story            = 'Story';
+$lang->bug->storyVersion     = 'Story Version';
+$lang->bug->color            = 'Color';
 $lang->bug->task             = 'Task';
 $lang->bug->title            = 'Title';
 $lang->bug->severity         = 'Severity';
@@ -65,6 +67,8 @@ $lang->bug->linkBug          = 'Linked Bugs';
 $lang->bug->linkBugs         = 'Link Bug';
 $lang->bug->unlinkBug        = 'Unlink';
 $lang->bug->case             = 'Cases';
+$lang->bug->caseVersion      = 'Case Version';
+$lang->bug->testtask         = 'Request';
 $lang->bug->files            = 'Files';
 $lang->bug->keywords         = 'Tags';
 $lang->bug->lastEditedByAB   = 'EditedBy';
@@ -74,7 +78,7 @@ $lang->bug->fromCase         = 'From Case';
 $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
 
-/* 方法列表。*/
+/* Method list. */
 $lang->bug->index              = 'Bug Home';
 $lang->bug->create             = 'Report Bug';
 $lang->bug->batchCreate        = 'Batch Report';
@@ -110,7 +114,7 @@ $lang->bug->confirmStoryChange = 'Confirm Story Change';
 $lang->bug->copy               = 'Copy';
 $lang->bug->search             = 'Search';
 
-/* 查询条件列表。*/
+/* Query condition list. */
 $lang->bug->assignToMe         = 'AssignedToMe';
 $lang->bug->openedByMe         = 'ReportedByMe';
 $lang->bug->resolvedByMe       = 'ResolvedByMe';
@@ -143,7 +147,7 @@ $lang->bug->noBug        = 'No bugs yet.';
 $lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
 $lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
 
-/* 页面标签。*/
+/* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';
 $lang->bug->lblMailto     = 'Mailto';
 $lang->bug->lblLastEdited = 'EditedBy';
@@ -152,7 +156,7 @@ $lang->bug->allUsers      = 'Load All Users';
 $lang->bug->allBuilds     = 'All Builds';
 $lang->bug->createBuild   = 'New';
 
-/* legend列表。*/
+/* Legend list。*/
 $lang->bug->legendBasicInfo             = 'Basic Info';
 $lang->bug->legendAttatch               = 'Files';
 $lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/Story/Task';
@@ -164,22 +168,22 @@ $lang->bug->legendLife                  = 'Bug Life';
 $lang->bug->legendMisc                  = 'Misc.';
 $lang->bug->legendRelated               = 'Related Info';
 
-/* 功能按钮。*/
+/* Button. */
 $lang->bug->buttonConfirm = 'Confirm';
 
-/* 交互提示。*/
+/* Interactive prompt. */
 $lang->bug->summary               = "Total <strong>%s</strong> bugs on this page, and <strong>%s</strong> Active.";
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->projectCommon}s, stories and tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
 $lang->bug->skipClose             = 'Bug %s is active. You cannot close it.';
 
-/* 模板。*/
+/* Template. */
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";
 $lang->bug->tplResult = "<p>[Results]</p><br/>";
 $lang->bug->tplExpect = "<p>[Expectations]</p><br/>";
 
-/* 各个字段取值列表。*/
+/* Value list for each field. */
 $lang->bug->severityList[1] = '1';
 $lang->bug->severityList[2] = '2';
 $lang->bug->severityList[3] = '3';
@@ -269,7 +273,7 @@ $lang->bug->resolutionList['postponed']  = 'Postponed';
 $lang->bug->resolutionList['willnotfix'] = "Won't Fix";
 $lang->bug->resolutionList['tostory']    = 'Convert to Story';
 
-/* 统计报表。*/
+/* Statistical statement. */
 $lang->bug->report = new stdclass();
 $lang->bug->report->common = 'Report';
 $lang->bug->report->select = 'Select Report Type';
@@ -365,7 +369,7 @@ $lang->bug->report->bugsPerAssignedTo->graph->xAxisName     = 'AssignTo';
 $lang->bug->report->bugLiveDays->graph->xAxisName           = 'Handling Time';
 $lang->bug->report->bugHistories->graph->xAxisName          = 'Handling Steps';
 
-/* 操作记录。*/
+/* Operating record. */
 $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the resolution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, converted by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');

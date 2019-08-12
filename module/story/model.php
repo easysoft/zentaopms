@@ -749,7 +749,8 @@ class storyModel extends model
             $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->eq($storyID)->andWhere('extra')->eq($oldStory->version)->exec();
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
-        return true;
+
+        return common::createChanges($oldStory, $story);
     }
 
     /**
@@ -1163,7 +1164,8 @@ class storyModel extends model
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
         $this->setStage($storyID);
-        return true;
+
+        return common::createChanges($oldStory, $story);
     }
 
     /**
@@ -2509,9 +2511,7 @@ class storyModel extends model
                 echo substr($story->openedDate, 5, 11);
                 break;
             case 'assignedTo':
-                $assignedToText = zget($users, $story->assignedTo, $story->assignedTo);
-                $btnTextClass = ($story->assignedTo == $this->app->user->account) ? 'text-red' : '';
-                echo "<span style='padding-left:10px;' class='{$btnTextClass}'>{$assignedToText}</span>";
+                $this->printAssignedHtml($story, $users);
                 break;
             case 'assignedDate':
                 echo substr($story->assignedDate, 5, 11);
@@ -2560,6 +2560,34 @@ class storyModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Product module story page add assignment function.
+     *
+     * @param  object    $story
+     * @param  array     $users
+     * @access public
+     * @return void
+     */
+    public function printAssignedHtml($story, $users)
+    {
+        $btnTextClass   = '';
+        $assignedToText = zget($users, $story->assignedTo);
+
+        if(empty($story->assignedTo))
+        {
+            $btnTextClass   = 'text-primary';
+            $assignedToText = $this->lang->task->noAssigned;
+        }
+        if($story->assignedTo == $this->app->user->account) $btnTextClass = 'text-red';
+
+        $btnClass     = $story->assignedTo == 'closed' ? ' disabled' : '';
+        $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
+        $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id", '', true);
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+
+        echo !common::hasPriv('story', 'assignTo', $story) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**

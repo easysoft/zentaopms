@@ -14,6 +14,7 @@
 <?php include '../../common/view/chosen.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('caseID', $case->id);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
@@ -31,11 +32,15 @@
         <th><?php echo $lang->testcase->reviewResultAB;?></th>
         <td><?php echo html::select('result', $lang->testcase->reviewResultList, '', 'class=form-control');?></td><td></td>
       </tr>
+      <tr class='hide'>
+        <th><?php echo $lang->testcase->status;?></th>
+        <td><?php echo html::hidden('status', $case->status);?></td>
+      </tr>
+      <?php $this->printExtendFields($case, 'table', 'columns=1');?> 
       <tr>
         <th><?php echo $lang->testcase->reviewedByAB;?></th>
         <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control chosen' multiple");?></td>
       </tr>
-      <?php $this->printExtendFields($case, 'table', 'columns=2');?> 
       <tr>
         <th><?php echo $lang->comment;?></th>
         <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

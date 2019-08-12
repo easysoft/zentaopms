@@ -47,11 +47,11 @@
             <th><?php echo $lang->release->status;?></th>
             <td><?php echo html::select('status', $lang->release->statusList, $release->status, "class='form-control'");?></td><td></td>
           </tr>  
+          <?php $this->printExtendFields($release, 'table', 'columns=1');?>
           <tr>
             <th><?php echo $lang->release->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>  
-          <?php $this->printExtendFields($release, 'table', 'columns=2');?>
           <tr>
             <th><?php echo $lang->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>

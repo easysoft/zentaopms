@@ -106,7 +106,7 @@
                     </td>
                     <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                     <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='preview'");?></td>
-                    <td><?php echo $users[$story->openedBy];?></td>
+                    <td><?php echo zget($users, $story->openedBy);?></td>
                     <td><?php echo $story->estimate;?></td>
                     <td>
                       <span class='status-story status-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
@@ -181,9 +181,9 @@
                     <td>
                       <span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span>
                     </td>
-                    <td><?php echo $users[$bug->openedBy];?></td>
+                    <td><?php echo zget($users, $bug->openedBy);?></td>
                     <td><?php echo substr($bug->openedDate, 5, 11)?></td>
-                    <td><?php echo $users[$bug->resolvedBy];?></td>
+                    <td><?php echo zget($users, $bug->resolvedBy);?></td>
                     <td><?php echo substr($bug->resolvedDate, 5, 11)?></td>
                     <td class='c-actions'>
                       <?php

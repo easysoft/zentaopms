@@ -50,8 +50,8 @@
       <?php $canEditComment = (end($actions) == $action and $action->comment and $this->methodName == 'view' and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
       <li value='<?php echo $i ++;?>'>
         <?php
-        if(isset($users[$action->actor])) $action->actor = $users[$action->actor];
-        if($action->action == 'assigned' and isset($users[$action->extra]) ) $action->extra = $users[$action->extra];
+        $action->actor = zget($users, $action->actor);
+        if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
         if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
         ?>
         <?php $this->action->printAction($action);?>

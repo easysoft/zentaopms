@@ -14,6 +14,3 @@
 #finishedLangs .item{height:30px;}
 #finishedLangs .item h4{margin:0; height:100%; line-height:30px;}
 #finishedLangs .item .pull-right{color:#999; line-height:30px;}
-
-.thWidth{width:130px !important;}
-html[lang^='zh-'] .thWidth{width:95px !important;}

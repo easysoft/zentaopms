@@ -1,5 +1,2 @@
 #projectModal .modal-dialog, #productModal .modal-dialog {top: auto!important; bottom: 90px;}
 .body-modal #projectModal .modal-dialog, .body-modal #productModal .modal-dialog {top: auto!important; bottom: 55px;}
-
-.thWidth{width:100px !important;}
-html[lang^='zh-'] .thWidth{width:80px !important;}

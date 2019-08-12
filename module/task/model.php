@@ -315,6 +315,7 @@ class taskModel extends model
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         if($parentID > 0 && !empty($taskID))
         {
+            $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
             $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($parentID);
 
@@ -324,7 +325,10 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
 
-            $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
+            $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
+            $changes       = common::createChanges($oldParentTask, $newParentTask);
+            $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
         return $mails;
     }
@@ -408,6 +412,7 @@ class taskModel extends model
         if(empty($parentID)) $parentID = $childTask->parent;
         if($parentID <= 0) return true;
 
+        $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
         $this->computeWorkingHours($parentID);
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
@@ -499,7 +504,8 @@ class taskModel extends model
             {
                 if(!$createAction) return $task;
 
-                $changes = common::createChanges($parentTask, $task);
+                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+                $changes = common::createChanges($oldParentTask, $newParentTask);
                 $action  = '';
                 if($status == 'done') $action = 'Finished';
                 if($status == 'closed') $action = 'Closed';
@@ -511,6 +517,19 @@ class taskModel extends model
                 if($action)
                 {
                     $actionID = $this->loadModel('action')->create('task', $parentID, $action);
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+        }
+        else
+        {
+            if(!dao::isError())
+            {
+                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+                $changes = common::createChanges($oldParentTask, $newParentTask);
+                if($changes)
+                {
+                    $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
             }
@@ -1103,7 +1122,7 @@ class taskModel extends model
             ->setDefault('account', $this->app->user->account)
             ->setDefault('task', $taskID)
             ->setDefault('date', $task->realStarted)
-            ->remove('realStarted,comment')
+            ->remove('realStarted,comment,status')
             ->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
         $this->addTaskEstimate($estimate);
@@ -1329,7 +1348,7 @@ class taskModel extends model
             ->setDefault('date', date(DT_DATE1))
             ->setIF($this->post->finishedDate, 'date', $this->post->finishedDate)
             ->setDefault('left', 0)
-            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,currentConsumed')
+            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,currentConsumed,status')
             ->get();
 
         $estimate->consumed = $consumed;
@@ -1655,41 +1674,9 @@ class taskModel extends model
         $parents = array();
         foreach($tasks as $task)
         {
-            if($task->parent == -1) $parents[] = $task->id;
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        if(!empty($parents))
-        {
-            /* Select children task. */
-            $children = $this->dao->select('DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
-                ->from(TABLE_TASK)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-                ->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')
-                ->where('t1.parent')->in($parents)
-                ->andWhere('t1.deleted')->eq(0)
-                ->beginIF($productID)->andWhere("((t4.root=" . (int)$productID . " and t4.type='story') OR t2.product=" . (int)$productID . ")")->fi()
-                ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
-                ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-                ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
-                ->beginIF($type == 'finishedbyme')
-                ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
-                ->orWhere('t1.finishedList')->like("%,{$this->app->user->account},%")
-                ->markRight(1)
-                ->fi()
-                ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-                ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
-                ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-                ->orderBy("t1.$orderBy")
-                ->fetchAll('id');
-
-            if(!empty($children))
-            {
-                foreach($children as $child)
-                {
-                    $tasks[$child->parent]->children[$child->id] = $child;
-                }
-            }
-        }
+        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
         foreach($tasks as $task)
         {
@@ -1699,6 +1686,11 @@ class taskModel extends model
                 {
                     $tasks[$task->parent]->children[$task->id] = $task;
                     unset($tasks[$task->id]);
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
                 }
             }
         }
@@ -1832,12 +1824,36 @@ class taskModel extends model
      */
     public function getStoryTasks($storyID, $projectID = 0)
     {
-        $tasks = $this->dao->select('id, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
+        $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq((int)$storyID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
+
+        $parents = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
+        }
+        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0)
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                    unset($tasks[$task->id]);
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
+                }
+            }
+        }
 
         foreach($tasks as $task)
         {
@@ -1854,8 +1870,27 @@ class taskModel extends model
             {
                 $task->progress = round($task->consumed / ($task->consumed + $task->left), 2) * 100;
             }
-        }
 
+             if(!empty($task->children))
+            {
+                foreach($task->children as $child)
+                {
+                    /* Compute child progress. */
+                    if($child->consumed == 0 and $child->left == 0)
+                    {
+                        $child->progress = 0;
+                    }
+                    elseif($child->consumed != 0 and $child->left == 0)
+                    {
+                        $child->progress = 100;
+                    }
+                    else
+                    {
+                        $child->progress = round($child->consumed / ($child->consumed + $child->left), 2) * 100;
+                    }
+                }
+            }
+        }
         return $tasks;
     }
 
@@ -2616,6 +2651,7 @@ class taskModel extends model
                 echo "</span>";
                 break;
             case 'name':
+                if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
                 if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 if($task->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';

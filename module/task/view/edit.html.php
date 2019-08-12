@@ -179,7 +179,7 @@
             <table class='table table-form'>
               <tr>
                 <th class='lifeThWidth'><?php echo $lang->task->openedBy;?></th>
-                <td><?php echo $users[$task->openedBy];?></td>
+                <td><?php echo zget($users, $task->openedBy);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->realStarted;?></th>

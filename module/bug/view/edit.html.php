@@ -213,7 +213,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               <tbody>
                 <tr>
                   <th class='thWidth'><?php echo $lang->bug->openedBy;?></th>
-                  <td><?php echo $users[$bug->openedBy];?></td>
+                  <td><?php echo zget($users, $bug->openedBy);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->openedBuild;?></th>

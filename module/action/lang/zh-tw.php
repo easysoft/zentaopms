@@ -19,6 +19,7 @@ $lang->action->actor      = '操作者';
 $lang->action->action     = '動作';
 $lang->action->actionID   = '記錄ID';
 $lang->action->date       = '日期';
+$lang->action->extra      = '附加值';
 
 $lang->action->trash       = '資源回收筒';
 $lang->action->undelete    = '還原';
@@ -129,7 +130,7 @@ $lang->action->desc->diff2          = '修改了 <strong><i>%s</i></strong>，�
 $lang->action->desc->diff3          = '將檔案名 %s 改為 %s 。' . "\n";
 $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 關聯到版本 <strong>$extra</strong>';
 
-/* 子任務修改父任務的歷史操作記錄 */
+/* 用來描述和父子任務相關的操作歷史記錄。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 創建子任務 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 關聯子任務 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 關聯子任務 <strong>$extra</strong>。' . "\n";

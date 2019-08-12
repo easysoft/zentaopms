@@ -21,6 +21,7 @@ $lang->percent   = '%';
 $lang->dash      = '-';
 
 $lang->zentaoPMS      = 'ZenTao';
+$lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";
 $lang->logout         = 'Logout';
 $lang->login          = 'Login';
@@ -178,7 +179,7 @@ $lang->index->menu = new stdclass();
 $lang->index->menu->product = "{$lang->productCommon}|product|browse";
 $lang->index->menu->project = "{$lang->projectCommon}|project|browse";
 
-/* my dashboard menu settings. */
+/* My dashboard menu settings. */
 $lang->my = new stdclass();
 $lang->my->menu = new stdclass();
 
@@ -477,7 +478,7 @@ $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』length error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
 $lang->error->reg             = "『%s』format error. It should be『%s』.";
-$lang->error->unique          = "『%s』『%s』exists. Go to Admin->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->error->unique          = "『%s』『%s』exists. Go to Admin->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->notempty        = "『%s』should not be blank.";

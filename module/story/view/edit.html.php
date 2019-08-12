@@ -122,7 +122,10 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>
-                <td><span class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span></td>
+                <td>
+                  <span class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></span>
+                  <?php echo html::hidden('status', $story->status);?>
+                </td>
               </tr>
               <?php if($story->status != 'draft'):?>
               <tr>
@@ -171,8 +174,8 @@
             <div class='detail-title'><?php echo $lang->story->legendLifeTime;?></div>
             <table class='table table-form'>
               <tr>
-                <th class='w-80px'><?php echo $lang->story->openedBy;?></th>
-                <td><?php echo $users[$story->openedBy];?></td>
+                <th class='thWidth'><?php echo $lang->story->openedBy;?></th>
+                <td><?php echo zget($users, $story->openedBy);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->assignedTo;?></th>

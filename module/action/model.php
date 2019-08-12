@@ -45,8 +45,10 @@ class actionModel extends model
         $action->actor      = $actor;
         $action->action     = $actionType;
         $action->date       = helper::now();
-        $action->comment    = trim(strip_tags($comment, $this->config->allowedTags));
         $action->extra      = $extra;
+
+        $_POST['comment'] = $comment;
+        $action->comment  = fixer::input('post')->stripTags('comment')->get('comment');
 
         /* Process action. */
         $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
@@ -978,6 +980,12 @@ class actionModel extends model
         {
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
         }
+        /* Revert productplan project status */
+        if($action->objectType == 'productplan')
+        {
+           $plan = $this->loadModel('productplan')->getById($action->objectID);
+           $this->loadModel('productplan')->updatePlanParentStatus($plan->parent);
+        }
 
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
@@ -1059,7 +1067,7 @@ class actionModel extends model
 
         if($dateGroup)
         {
-            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere('`date`')->like(substr($action->originalDate, 0, 10) . '%')->orderBy($this->session->actionOrderBy)->fetchAll('id');
+            $lastDateActions = $this->dao->select('*')->from(TABLE_ACTION)->where($this->session->actionQueryCondition)->andWhere("(LEFT(`date`, 10) = '" . substr($action->originalDate, 0, 10) . "')")->orderBy($this->session->actionOrderBy)->fetchAll('id');
             if(count($dateGroup[$date]) < count($lastDateActions))
             {
                 unset($dateGroup[$date]);

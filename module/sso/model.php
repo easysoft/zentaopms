@@ -61,12 +61,6 @@ class ssoModel extends model
             $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
             if($user) die(js::alert($this->lang->sso->bindHasAccount));
 
-            if(isset($this->config->safe->mode) and $this->user->computePasswordStrength($data->password1) < $this->config->safe->mode)
-            {
-                dao::$errors['password1'][] = $this->lang->user->weakPassword;
-                return false;
-            }
-
             $user = new stdclass();
             $user->account    = $data->account;
             $user->password   = md5($data->password1);

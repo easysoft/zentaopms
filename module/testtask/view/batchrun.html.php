@@ -29,6 +29,7 @@
         </tr>
       </thead>
       <?php foreach($caseIDList as $caseID):?>
+      <?php if($cases[$caseID]->status == 'wait') continue;?>
       <?php if(!$productID) $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($cases[$caseID]->product, $viewType = 'case', $startModuleID = 0);?>
       <tr class='text-center'>
         <td><?php echo $caseID . html::hidden("version[$caseID]", $cases[$caseID]->version)?></td>

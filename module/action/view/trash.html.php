@@ -53,7 +53,7 @@
                 $flow   = $config->action->customFlows[$action->objectType];
                 $module = $flow->module;
             }
-            if(strpos(',doclib,module,webhook,workflowdatasource,workflowfield,workflowlabel,workflowlayout,workflowrule,', ",{$module},") !== false)
+            if(strpos(',doclib,module,webhook,', ",{$module},") !== false)
             {
                 echo $action->objectName;
             }
@@ -63,7 +63,7 @@
             }
             ?>
           </td>
-          <td><?php echo $users[$action->actor];?></td>
+          <td><?php echo zget($users, $action->actor);?></td>
           <td><?php echo $action->date;?></td>
           <td>
             <?php

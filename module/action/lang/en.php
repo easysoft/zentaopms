@@ -19,6 +19,7 @@ $lang->action->actor      = 'User';
 $lang->action->action     = 'Action';
 $lang->action->actionID   = 'Action ID';
 $lang->action->date       = 'Date';
+$lang->action->extra      = 'Extra';
 
 $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';
@@ -87,7 +88,7 @@ $lang->action->objectTypes['testreport']  = 'Report';
 $lang->action->objectTypes['entry']       = 'Entry';
 $lang->action->objectTypes['webhook']     = 'Webhook';
 
-/* 用来描述操作历史记录。*/
+/* Used to describe operation history. */
 $lang->action->desc = new stdclass();
 $lang->action->desc->common         = '$date, <strong>$action</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->extra          = '$date, <strong>$action</strong> as <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
@@ -129,7 +130,7 @@ $lang->action->desc->diff2          = '<strong><i>%s</i></strong> is changed. Th
 $lang->action->desc->diff3          = 'File Name %s was changed to %s .' . "\n";
 $lang->action->desc->linked2bug     = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
 
-/* 子任务修改父任务的历史操作记录 */
+/* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a child task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a child task <strong>$extra</strong>。' . "\n";
@@ -137,11 +138,11 @@ $lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> unlink
 $lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked to a parent task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> unlinked a parent task <strong>$extra</strong>。' . "\n";
 
-/* 关联用例和移除用例时的历史操作记录。*/
+/* Historical record of actions when associating and removing cases. */
 $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked a case <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked a case <strong>$extra</strong>.' . "\n";
 
-/* 用来显示动态信息。*/
+/* Used to display dynamic information. */
 $lang->action->label = new stdclass();
 $lang->action->label->created             = 'created ';
 $lang->action->label->opened              = 'opened ';
@@ -209,7 +210,7 @@ $lang->action->label->batchcreate         = "batch created tasks";
 $lang->action->label->createchildren      = "create child tasks";
 $lang->action->label->managed             = "managed";
 
-/* 动态信息按照对象分组 */
+/* Dynamic information is grouped by object. */
 $lang->action->dynamicAction = new stdclass;
 $lang->action->dynamicAction->todo['opened']               = 'Create Todo';
 $lang->action->dynamicAction->todo['edited']               = 'Edit Todo';
@@ -357,7 +358,7 @@ $lang->action->dynamicAction->user['loginxuanxuan']        = 'Login Desktop';
 $lang->action->dynamicAction->entry['created']             = 'Add Application';
 $lang->action->dynamicAction->entry['edited']              = 'Edit Application';
 
-/* 用来生成相应对象的链接。*/
+/* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
@@ -402,7 +403,7 @@ $lang->action->search->objectTypeList['testsuite']   = 'Suite';
 $lang->action->search->objectTypeList['caselib']     = 'Library';
 $lang->action->search->objectTypeList['testreport']  = 'Report';
 
-/* 用来在动态显示中显示动作 */
+/* Used to display actions in dynamic method. */
 $lang->action->search->label['']                    = '';
 $lang->action->search->label['created']             = $lang->action->label->created;
 $lang->action->search->label['opened']              = $lang->action->label->opened;

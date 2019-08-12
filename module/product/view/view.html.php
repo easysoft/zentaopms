@@ -236,7 +236,7 @@
             </div>
           </div>
           <?php endif;?>
-          <?php $this->printExtendFields($product, 'div', "position=right&divCell=false");?>
+          <?php $this->printExtendFields($product, 'div', "position=right&mode=value");?>
         </div>
       </div>
     </div>

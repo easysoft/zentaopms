@@ -25,15 +25,17 @@ $lang->install->seeLatestRelease = 'View latest version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
 $lang->install->license          = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao ALM is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, QA Management, Document Management, Todos Management, Company Management etc. ZenTao is the best choice for software project management.
+ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, QA Management, Document Management, Todo Management, Company Management etc. ZenTao is a perfect choice for software development projects.
 
-ZenTao ALM is built on PHP + MySQL and based on ZenTaoPHP framework, an independent framework developed by our team. Third-party developers/organizations can develop extensions or customize for their requirements.
+ZenTao ALM is built on PHP + MySQL and zentaoPHP, an independent framework developed by Nature Easy Soft. Third-party developers/organizations can develop extensions or customize accordingly.
 EOT;
 $lang->install->links = <<<EOT
 ZenTao ALM is developed by <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
-Official Website : <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
-Technical Support : <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-WhatsApp Group : <a href='https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF' target='_blank'>https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF</a>
+Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
+Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
+WhatsApp Group: <a href='https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF' target='_blank'>https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF</a>
+LinkedIn Group: <a href='https://www.linkedin.com/groups/10330509/' target='_blank'>ZenTao Project Management Software</a>
+Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
 Twitter: <a href='https://twitter.com/cneasysoft' target='_blank'>cneasysoft</a>
 
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
@@ -132,15 +134,15 @@ $lang->install->errorEmptyPassword = 'Password should not be blank.';
 
 $lang->install->groupList['ADMIN']['name']   = 'Admin';
 $lang->install->groupList['ADMIN']['desc']   = 'System Admin';
-$lang->install->groupList['DEV']['name']     = 'Dev.';
+$lang->install->groupList['DEV']['name']     = 'Dev';
 $lang->install->groupList['DEV']['desc']     = 'Developer';
 $lang->install->groupList['QA']['name']      = 'QA';
-$lang->install->groupList['QA']['desc']      = 'tester';
+$lang->install->groupList['QA']['desc']      = 'Tester';
 $lang->install->groupList['PM']['name']      = 'PM';
 $lang->install->groupList['PM']['desc']      = 'Project Manager';
 $lang->install->groupList['PO']['name']      = 'PO';
 $lang->install->groupList['PO']['desc']      = 'Product Owner';
-$lang->install->groupList['TD']['name']      = 'Dev. Manager';
+$lang->install->groupList['TD']['name']      = 'Dev Manager';
 $lang->install->groupList['TD']['desc']      = 'Development Manager';
 $lang->install->groupList['PD']['name']      = 'PD';
 $lang->install->groupList['PD']['desc']      = 'Product Director';
@@ -169,34 +171,64 @@ $lang->install->login    = 'Login ZenTao';
 $lang->install->register = 'Register in ZenTao Community';
 
 $lang->install->joinZentao = <<<EOT
-<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register in ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register on ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
-$lang->install->product = array('chanzhi', 'ranzhi');
+$lang->install->product = array('chanzhi', 'ranzhi', 'ydisk', 'meshiot');
 
-$lang->install->promotion     = "Products also from Nature Easy Soft team:";
-$lang->install->chanzhi       = new stdclass();
-$lang->install->chanzhi->name = 'ZSITE Content Management System';
-$lang->install->chanzhi->logo = 'images/main/chanzhi_en.png';
-$lang->install->chanzhi->url  = 'http://www.zsite.net';
-$lang->install->chanzhi->desc = <<<EOD
+$lang->install->promotion     = "Products also from Nature Easy Soft:";
+$lang->install->chanzhi        = new stdclass();
+$lang->install->chanzhi->name  = 'ZSITE Content Management System';
+$lang->install->chanzhi->width = 'col-md-6';
+$lang->install->chanzhi->logo  = 'images/main/chanzhi_en.png';
+$lang->install->chanzhi->url   = 'http://www.zsite.net';
+$lang->install->chanzhi->desc  = <<<EOD
 <ul>
   <li>Article, Blog, Manual, Member, Shop, Forum, Feedback……</li>
-  <li>Customize page freely by theme, effect, widget, css, js and layout</li>
-  <li>Support desktop and mobile in one system</li>
-  <li>Deeply optimized for search engine</li>
+  <li>Customize page at will by Theme, Effect, Widget, CSS, JS and layout</li>
+  <li>Support both desktop and mobile in one system</li>
+  <li>Highly optimized for search engines</li>
 </ul>
 EOD;
 
 $lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name = 'ZDOO Collaborative System';
-$lang->install->ranzhi->logo = 'images/main/zdoo_org.png';
-$lang->install->ranzhi->url  = 'http://www.zdoo.org';
-$lang->install->ranzhi->desc = <<<EOD
+$lang->install->ranzhi->name  = 'ZDOO Collaborative System';
+$lang->install->ranzhi->width = 'col-md-6';
+$lang->install->ranzhi->logo  = 'images/main/zdoo_org.png';
+$lang->install->ranzhi->url   = 'http://www.zdoo.org';
+$lang->install->ranzhi->desc  = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
   <li>OA: Approve, Announce, Trip, Leave and so on. </li>
-  <li>Project，Task and Document management </li>
+  <li>Projec t，Task and Document management </li>
   <li>Money: Income, Expense, Transfer, Invest and Debt</li>
+</ul>
+EOD;
+
+$lang->install->ydisk = new stdclass();
+$lang->install->ydisk->name  = 'Y Disk-Free NetDisk for Enterprises';
+$lang->install->ydisk->width = 'col-md-6';
+$lang->install->ydisk->logo  = 'images/main/ydisk.png';
+$lang->install->ydisk->url   = 'http://www.ydisk.cn';
+$lang->install->ydisk->desc  = <<<EOD
+<ul>
+  <li>Self-Hosted: deploy on your own machine</li>
+  <li>Storage: depend on your hard drive size</li>
+  <li>Transmission: as fast as your bandwidth allows</li>
+  <li>Secure: 12 permissions for any strict settings</li>
+</ul>
+EOD;
+
+$lang->install->meshiot = new stdclass();
+$lang->install->meshiot->name  = 'MeshIoT';
+$lang->install->meshiot->width = 'col-md-6';
+$lang->install->meshiot->logo  = 'images/main/meshiot.png';
+$lang->install->meshiot->url   = 'https://www.meshiot.com';
+$lang->install->meshiot->desc  = <<<EOD
+<ul>
+  <li>Performance: one gateway can monitor 65,536 equipments</li>
+  <li>Accessibility: unique radio communication protocol covers 2,500m radius</li>
+  <li>Dimming System: 200+ sensors and monitors</li>
+  <li>Battery Available: no requirements to any equipment on your site</li>
 </ul>
 EOD;

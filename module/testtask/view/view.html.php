@@ -124,7 +124,7 @@
         </div>
       </div>
     </div>
-    <?php $this->printExtendFields($task, 'div', "position=right&divCell=true");?>
+    <?php $this->printExtendFields($task, 'div', "position=right&mode=value");?>
   </div>
 </div>
 

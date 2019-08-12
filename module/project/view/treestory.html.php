@@ -153,7 +153,7 @@
           {
               foreach($mailto as $account)
               {
-                  if(empty($account)) continue; echo "<span>" . $users[trim($account)] . '</span> &nbsp;';
+                  if(empty($account)) continue; echo "<span>" . zget($users, trim($account)) . '</span> &nbsp;';
               }
           }
           ?>
@@ -290,11 +290,11 @@
       <tbody>
       <tr>
         <th class='w-100px'><?php echo $lang->story->openedBy;?></th>
-        <td><?php echo $users[$story->openedBy] . $lang->at . $story->openedDate;?></td>
+        <td><?php echo zget($users, $story->openedBy) . $lang->at . $story->openedDate;?></td>
       </tr>
       <tr>
         <th><?php echo $lang->story->assignedTo;?></th>
-        <td><?php echo $story->assignedTo ? $users[$story->assignedTo] . $lang->at . $story->assignedDate : $lang->noData;?></td>
+        <td><?php echo $story->assignedTo ? zget($users, $story->assignedTo) . $lang->at . $story->assignedDate : $lang->noData;?></td>
       </tr>
       <tr>
         <th><?php echo $lang->story->reviewedBy;?></th>
@@ -307,7 +307,7 @@
           }
           else
           {
-              foreach($reviewedBy as $account) echo ' ' . $users[trim($account)];
+              foreach($reviewedBy as $account) echo ' ' . zget($users, trim($account));
           }
           ?>
         </td>
@@ -318,7 +318,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->story->closedBy;?></th>
-        <td><?php echo $story->closedBy ? $users[$story->closedBy] . $lang->at . $story->closedDate : $lang->noData;?></td>
+        <td><?php echo $story->closedBy ? zget($users, $story->closedBy) . $lang->at . $story->closedDate : $lang->noData;?></td>
       </tr>
       <tr>
         <th><?php echo $lang->story->closedReason;?></th>
@@ -334,7 +334,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->story->lastEditedBy;?></th>
-        <td><?php echo $story->lastEditedBy ? $users[$story->lastEditedBy] . $lang->at . $story->lastEditedDate : $lang->noData;?></td>
+        <td><?php echo $story->lastEditedBy ? zget($users, $story->lastEditedBy) . $lang->at . $story->lastEditedDate : $lang->noData;?></td>
       </tr>
       </tbody>
     </table>
