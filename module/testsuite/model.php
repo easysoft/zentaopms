@@ -720,12 +720,13 @@ class testsuiteModel extends model
                 foreach($requiredFields as $requiredField)
                 {
                     $requiredField = trim($requiredField);
-                    if(empty($caseData->$requiredField)) die(js::alert(sprintf($this->lang->testcase->noRequire, $key, $this->lang->testcase->$requiredField)));
+                    if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $key, $this->lang->testcase->$requiredField);
                 }
             }
 
             $cases[$key] = $caseData;
         }
+        if(dao::isError()) die(js::error(dao::getError()));
 
         $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases as $key => $caseData)

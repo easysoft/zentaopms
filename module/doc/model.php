@@ -659,6 +659,8 @@ class docModel extends model
         $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
+            ->setIF(!$this->post->users, 'users', '')
+            ->setIF(!$this->post->groups, 'groups', '')
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
             ->cleanInt('module')
