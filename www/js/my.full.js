@@ -91,17 +91,39 @@ function setFormAction(actionLink, hiddenwin, obj)
  * @access public
  * @return void
  */
-function setImageSize(image, maxWidth)
+function setImageSize(image, maxWidth, maxHeight)
 {
+    var $image = $(image);
+    if($image.parent().prop('tagName').toLowerCase() == 'a') return;
+
     /* If not set maxWidth, set it auto. */
     if(!maxWidth)
     {
         bodyWidth = $('body').width();
         maxWidth  = bodyWidth - 470; // The side bar's width is 336, and add some margins.
     }
+    if(!maxHeight) maxHeight = $(top.window).height();
 
-    if($(image).width() > maxWidth) $(image).attr('width', maxWidth);
-    $(image).wrap('<a href="' + $(image).attr('src') + '" target="_blank"></a>');
+    setTimeout(function()
+    {
+        maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
+        if($image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
+        $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
+        if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
+    }, 50);
+}
+
+/**
+ * Show more image when image is too height.
+ * 
+ * @param  obj $obj 
+ * @access public
+ * @return void
+ */
+function showMoreImage(obj)
+{
+    $(obj).parents('a').css('max-height', 'none');
+    $(obj).remove();
 }
 
 /**
@@ -734,10 +756,10 @@ function convertURL()
 
     $('.article-content, .article>.content').each(function()
     {
-        var aTags = [];
+        var aTags      = [];
         var iframeTags = [];
-        var imgTags = [];
-        var content = $(this).html();
+        var imgTags    = [];
+        var content    = $(this).html();
         $(this).find('a').each(function(i)
         {
             aTags[i] = $(this).prop('outerHTML');

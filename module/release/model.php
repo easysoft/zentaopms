@@ -106,6 +106,11 @@ class releaseModel extends model
         $productID = (int)$productID;
         $branch    = (int)$branch;
         $buildID   = 0;
+
+        /* Check date must be not more than today. */
+        if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
+
+        /* Auto create build when release is not link build. */
         if($this->post->build == false && $this->post->name)
         {
             $build = $this->dao->select('*')->from(TABLE_BUILD)
@@ -125,7 +130,7 @@ class releaseModel extends model
                     ->add('builder', $this->app->user->account)
                     ->add('branch', $branch)
                     ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-                    ->remove('marker,build,files,labels,uid')
+                    ->remove('marker,build,files,labels,uid,subStatus') // There is the subStatus field in the biz version.
                     ->get();
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->dao->insert(TABLE_BUILD)->data($build)

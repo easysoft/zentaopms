@@ -1075,6 +1075,7 @@ EOT;
         $jsLang = new stdclass();
         $jsLang->submitting = isset($lang->loading) ? $lang->loading : '';
         $jsLang->save       = $jsConfig->save;
+        $jsLang->expand     = isset($lang->expand)  ? $lang->expand  : '';
         $jsLang->timeout    = isset($lang->timeout) ? $lang->timeout : '';
 
         $js  = self::start(false);

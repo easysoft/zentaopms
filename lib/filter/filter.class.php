@@ -47,7 +47,19 @@ class fixer extends baseFixer
         foreach($this->data as $field => $value)
         {
             /* Implode array when form has array. */
-            if(isset($flowFields[$field]) and is_array($value)) $this->data->$field = implode(',', $value);
+            if(isset($flowFields[$field]) and is_array($value))
+            {
+                $canImplode = true;
+                foreach($value as $k => $v)
+                {
+                    if(is_object($v) or is_array($v))
+                    {
+                        $canImplode = false;
+                        break;
+                    }
+                }
+                if($canImplode) $this->data->$field = implode(',', $value);
+            }
             $this->specialChars($field);
         }
 

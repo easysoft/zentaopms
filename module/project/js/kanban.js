@@ -38,26 +38,7 @@ $(function()
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
 
-    var statusMap =
-    {
-        task:
-        {
-            wait   : {doing: 'start', done: 'finish', cancel: 'cancel'},
-            doing  : {done: 'finish', pause: 'pause'},
-            pause  : {doing: 'activate', done: 'finish', cancel: 'cancel'},
-            done   : {doing: 'activate', closed: 'close'},
-            cancel : {doing: 'activate', closed: 'close'},
-            closed : {doing: 'activate'}
-        },
-        bug:
-        {
-            wait   : {done: 'resolve', cancel: 'resolve'},
-            doing  : {},
-            done   : {wait: 'activate', closed: 'close'},
-            cancel : {wait: 'activate', closed: 'close'},
-            closed : {wait: 'activate'}
-        }
-    };
+    console.log(statusMap);
 
     // Get scrollbar width
     var getScrollbarWidth = function ()

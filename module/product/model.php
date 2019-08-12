@@ -636,7 +636,7 @@ class productModel extends model
         {
             if(($plan->end != '0000-00-00' and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
             $year = substr($plan->end, 0, 4);
-            $roadmap[$year][$plan->branch][] = $plan;
+            $roadmap[$year][$plan->branch][$plan->end] = $plan;
 
             $total++;
         }
@@ -650,7 +650,7 @@ class productModel extends model
         foreach($releases as $release)
         {
             $year = substr($release->date, 0, 4);
-            $roadmap[$year][$release->branch][] = $release;
+            $roadmap[$year][$release->branch][$release->date] = $release;
 
             $total++;
             if($count > 0 and $total >= $count) break;
@@ -664,6 +664,7 @@ class productModel extends model
         {
             foreach($branchRoadmaps as $branch => $roadmaps)
             {
+                krsort($roadmaps);
                 $totalData = count($roadmaps);
                 $rows      = ceil($totalData / 8);
                 $maxPerRow = ceil($totalData / $rows);

@@ -2002,6 +2002,13 @@ class projectModel extends model
         {
             foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
         }
+
+        $parents = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
+        }
+        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
         
         foreach($tasks as $task)
         {
@@ -2011,6 +2018,11 @@ class projectModel extends model
                 {
                     $tasks[$task->parent]->children[$task->id] = $task;
                     unset($tasks[$task->id]);
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
                 }
             }
         }
@@ -2477,11 +2489,10 @@ class projectModel extends model
     /**
      * Get kanban setting.
      *
-     * @param  int    $projectID
      * @access public
      * @return object
      */
-    public function getKanbanSetting($projectID)
+    public function getKanbanSetting()
     {
         $allCols    = '1';
         $showOption = '0';
@@ -2496,6 +2507,100 @@ class projectModel extends model
         $kanbanSetting->colorList  = $colorList;
 
         return $kanbanSetting;
+    }
+
+    /**
+     * Get kanban columns.
+     *
+     * @param  object $kanbanSetting
+     * @access public
+     * @return array
+     */
+    public function getKanbanColumns($kanbanSetting)
+    {
+        if($kanbanSetting->allCols) return array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
+        return array('wait', 'doing', 'pause', 'done');
+    }
+
+    /**
+     * 获取状态和方法的映射关系，此关系决定了看板内容能否从一个泳道拖动到另一个泳道，以及拖动后执行什么方法。
+     * Get the mapping between state and method. This relationship determines whether kanban content can be dragged from one lane
+     * to another, and what method is executed after dragging.
+     *
+     * 映射关系的基本格式为 map[$mode][$fromStatus][$toStatus] = $methodName。
+     * The basic format of the mapping relationship is map[$mode][$fromStatus][$toStatus] = $methodName.
+     *
+     * @param string $mode          看板内容类型，可选值 task|bug   The content mode of kanban, should be task or bug.
+     * @param string $fromStatus    拖动内容的来源泳道              The origin lane the content draged from.
+     * @param string $toStatus      拖动内容的目标泳道              The destination lane the content draged to.
+     * @param string $methodName    拖动到目标泳道后执行的方法名    The method to execute after draged the content.
+     *
+     * 例如 map['task']['doing']['done'] = 'close' 表示：任务(task)看板从进行中(doing)泳道拖动到已完成(done)泳道时，执行关闭(close)方法。
+     * For example, map['task']['doing']['done'] = 'close' means: when the task kanban is dragged from the doing lane to the done lane,
+     * execute the close method.
+     *
+     * @param  object $kanbanSetting    This param is used in the biz version, don't remove it.
+     * @access public
+     * @return string
+     */
+    public function getKanbanStatusMap($kanbanSetting)
+    {
+        $statusMap = array();
+        $statusMap['task']['wait']['doing']  = 'start';
+        $statusMap['task']['wait']['done']   = 'finish';
+        $statusMap['task']['wait']['cancel'] = 'cancel';
+
+        $statusMap['task']['doing']['done']  = 'finish';
+        $statusMap['task']['doing']['pause'] = 'pause';
+
+        $statusMap['task']['pause']['doing']  = 'activate';
+        $statusMap['task']['pause']['done']   = 'finish';
+        $statusMap['task']['pause']['cancel'] = 'cancel';
+
+        $statusMap['task']['done']['doing']  = 'activate';
+        $statusMap['task']['done']['closed'] = 'close';
+
+        $statusMap['task']['cancel']['doing']  = 'activate';
+        $statusMap['task']['cancel']['closed'] = 'close';
+
+        $statusMap['task']['closed']['doing'] = 'activate';
+
+        $statusMap['bug']['wait']['done']   = 'resolve';
+        $statusMap['bug']['wait']['cancel'] = 'resolve';
+
+        $statusMap['bug']['done']['wait']   = 'activate';
+        $statusMap['bug']['done']['closed'] = 'close';
+
+        $statusMap['bug']['cancel']['wait']   = 'activate';
+        $statusMap['bug']['cancel']['closed'] = 'close';
+
+        $statusMap['bug']['closed']['wait'] = 'activate';
+
+        return $statusMap;
+    }
+
+    /**
+     * Get status list of kanban.
+     *
+     * @param  object $kanbanSetting    This param is used in the biz version, don't remove it.
+     * @access public
+     * @return string
+     */
+    public function getKanbanStatusList($kanbanSetting)
+    {
+        return $this->lang->task->statusList;
+    }
+
+    /**
+     * Get color list of kanban.
+     *
+     * @param  object $kanbanSetting
+     * @access public
+     * @return array
+     */
+    public function getKanbanColorList($kanbanSetting)
+    {
+        return $kanbanSetting->colorList;
     }
 
     /**

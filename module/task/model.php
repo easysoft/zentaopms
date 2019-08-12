@@ -1674,41 +1674,9 @@ class taskModel extends model
         $parents = array();
         foreach($tasks as $task)
         {
-            if($task->parent == -1) $parents[] = $task->id;
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        if(!empty($parents))
-        {
-            /* Select children task. */
-            $children = $this->dao->select('DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
-                ->from(TABLE_TASK)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
-                ->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')
-                ->where('t1.parent')->in($parents)
-                ->andWhere('t1.deleted')->eq(0)
-                ->beginIF($productID)->andWhere("((t4.root=" . (int)$productID . " and t4.type='story') OR t2.product=" . (int)$productID . ")")->fi()
-                ->beginIF($type == 'undone')->andWhere("(t1.status = 'wait' or t1.status ='doing')")->fi()
-                ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-                ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
-                ->beginIF($type == 'finishedbyme')
-                ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
-                ->orWhere('t1.finishedList')->like("%,{$this->app->user->account},%")
-                ->markRight(1)
-                ->fi()
-                ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-                ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
-                ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-                ->orderBy("t1.$orderBy")
-                ->fetchAll('id');
-
-            if(!empty($children))
-            {
-                foreach($children as $child)
-                {
-                    $tasks[$child->parent]->children[$child->id] = $child;
-                }
-            }
-        }
+        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
         foreach($tasks as $task)
         {
@@ -1718,6 +1686,11 @@ class taskModel extends model
                 {
                     $tasks[$task->parent]->children[$task->id] = $task;
                     unset($tasks[$task->id]);
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
                 }
             }
         }
@@ -1861,26 +1834,9 @@ class taskModel extends model
         $parents = array();
         foreach($tasks as $task)
         {
-            if($task->parent == -1) $parents[] = $task->id;
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
-        if(!empty($parents))
-        {
-            /* Select children task. */
-            $children = $this->dao->select('id, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
-                ->from(TABLE_TASK)
-                ->where('story')->eq((int)$storyID)
-                ->andwhere('parent')->in($parents)
-                ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-                ->fetchAll('id');
-
-            if(!empty($children))
-            {
-                foreach($children as $child)
-                {
-                    $tasks[$child->parent]->children[$child->id] = $child;
-                }
-            }
-        }
+        $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
         foreach($tasks as $task)
         {
@@ -1890,6 +1846,11 @@ class taskModel extends model
                 {
                     $tasks[$task->parent]->children[$task->id] = $task;
                     unset($tasks[$task->id]);
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
                 }
             }
         }
@@ -2690,6 +2651,7 @@ class taskModel extends model
                 echo "</span>";
                 break;
             case 'name':
+                if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
                 if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if(empty($task->children) and $task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 if($task->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';

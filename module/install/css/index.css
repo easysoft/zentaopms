@@ -53,7 +53,6 @@ li{line-height: 2em}
 .card>.card-reveal>.card-heading{padding:20px 10px}
 .card:hover>.card-reveal{top:0}
 
-.card.ad{margin-bottom:0px;}
 .card.ad > .img-wrapper {
   background-position: center;
   background-repeat: no-repeat;
