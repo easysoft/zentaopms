@@ -147,7 +147,13 @@ class docModel extends model
         }
         elseif($type == 'all')
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->orderBy('`order`, id desc')->query();
+            /* Associated display Settings -> shows only unclosed projects.*/
+            $stmt = $this->dao->select('distinct t1.*')->from(TABLE_DOCLIB)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = '' || t1.project = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->beginIF(strpos($this->config->doc->custom->showLibs,'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
+                ->orderBy('t1.order,t1.id desc')
+                ->query();
         }
         else
         {
@@ -174,7 +180,7 @@ class docModel extends model
                     if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . '/' . $lib->name;
                 }
 
-                $libPairs[$lib->id] = $lib->name;
+                $libPairs[$lib->id] = '/' . $lib->name;
             }
         }
 
@@ -183,7 +189,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
             while($lib = $stmt->fetch())
             {
-                if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
+                if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = '/' . $lib->name;
             }
         }
 
@@ -1601,6 +1607,33 @@ class docModel extends model
         }
 
         return $title;
+    }
+
+    /**
+     * Set document module index page create document button.
+     *
+     * @access public
+     * @return void
+     */
+    public function setCreateDocMenu()
+    {
+        $libID    = $this->dao->select('id')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->orderBy('id desc')->limit('1')->fetch('id');
+        $actions  = "";
+        if($libID)
+        {
+            $actions .= "<div class='dropdown' id='createDropdown'>";
+            $actions .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . "<span class='caret'></span></button>";
+            $actions .= "<ul class='dropdown-menu' style='left:0px'>";
+            foreach($this->lang->doc->typeList as $typeKey => $typeName)
+            {
+                $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+                $actions .= "<li>";
+                $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class'");
+                $actions .= "</li>";
+            }
+            $actions .="</ul></div>";
+        }
+        return $actions;
     }
 
     public function setFastMenu($fastLib)
