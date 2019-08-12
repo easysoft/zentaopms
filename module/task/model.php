@@ -315,6 +315,7 @@ class taskModel extends model
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         if($parentID > 0 && !empty($taskID))
         {
+            $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
             $this->updateParentStatus($taskID);
             $this->computeBeginAndEnd($parentID);
 
@@ -324,7 +325,10 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
 
-            $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
+            $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
+            $changes       = common::createChanges($oldParentTask, $newParentTask);
+            $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
         return $mails;
     }
@@ -408,6 +412,7 @@ class taskModel extends model
         if(empty($parentID)) $parentID = $childTask->parent;
         if($parentID <= 0) return true;
 
+        $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
         $this->computeWorkingHours($parentID);
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
@@ -499,7 +504,8 @@ class taskModel extends model
             {
                 if(!$createAction) return $task;
 
-                $changes = common::createChanges($parentTask, $task);
+                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+                $changes = common::createChanges($oldParentTask, $newParentTask);
                 $action  = '';
                 if($status == 'done') $action = 'Finished';
                 if($status == 'closed') $action = 'Closed';
@@ -511,6 +517,19 @@ class taskModel extends model
                 if($action)
                 {
                     $actionID = $this->loadModel('action')->create('task', $parentID, $action);
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+        }
+        else
+        {
+            if(!dao::isError())
+            {
+                $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+                $changes = common::createChanges($oldParentTask, $newParentTask);
+                if($changes)
+                {
+                    $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
                 }
             }
@@ -1103,7 +1122,7 @@ class taskModel extends model
             ->setDefault('account', $this->app->user->account)
             ->setDefault('task', $taskID)
             ->setDefault('date', $task->realStarted)
-            ->remove('realStarted,comment')
+            ->remove('realStarted,comment,status')
             ->get();
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
         $this->addTaskEstimate($estimate);
@@ -1329,7 +1348,7 @@ class taskModel extends model
             ->setDefault('date', date(DT_DATE1))
             ->setIF($this->post->finishedDate, 'date', $this->post->finishedDate)
             ->setDefault('left', 0)
-            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,currentConsumed')
+            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,currentConsumed,status')
             ->get();
 
         $estimate->consumed = $consumed;

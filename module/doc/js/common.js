@@ -52,7 +52,6 @@ $(document).ready(function()
         $('#module').trigger('chosen:close');
     });
 
-    $('#pageActions ul.dropdown-menu').css('left', '67px');
     $('.libs-group.sort').sortable(
     {
         trigger:  '.lib',

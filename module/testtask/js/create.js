@@ -1,4 +1,33 @@
 /**
+ * load builds of selected product project.
+ *
+ * @param  productID $productID
+ * @access public
+ * @return void
+ */
+function loadProductRelated(productID)
+{
+    projectID = $('#project').val();
+    loadProductProjectBuilds(productID, projectID);
+}
+
+/**
+ * loadProductProjectBuilds
+ *
+ * @param  productID $productID
+ * @param  projectID $projectID
+ * @access public
+ * @return void
+ */
+function loadProductProjectBuilds(productID, projectID)
+{
+    selectedBuild = $('#build').val();
+    if(!selectedBuild) selectedBuild = 0;
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID  + '&varName=testTaskBuild&build=' + selectedBuild);
+    $('#buildBox').load(link, function(){$('#build').chosen();});
+}
+
+/**
  * Load project related builds
  * 
  * @param  int    $projectID 
@@ -62,4 +91,10 @@ function suitEndDate()
 $(function()
 {
     adjustPriBoxWidth();
+    if($('#project').val())
+    {
+        productID = $('#product').val();
+        projectID = $('#project').val();
+        loadProductProjectBuilds(productID, projectID);
+    }
 });
