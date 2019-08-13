@@ -73,7 +73,7 @@
       <thead>
         <tr class='text-center'>
           <th class='thWidth'><?php echo $lang->group->module;?></th>
-          <th><?php echo $lang->group->method;?></th>
+          <th colspan='2'><?php echo $lang->group->method;?></th>
         </tr>
       </thead>
       <?php foreach($lang->resource as $moduleName => $moduleActions):?>
@@ -102,7 +102,13 @@
             <label class='text-right' for='allChecker<?php echo $moduleName;?>'><?php echo $lang->$moduleName->common;?></label>
           </div>
         </th>
-        <td id='<?php echo $moduleName;?>' class='pv-10px'>
+        <?php if(isset($lang->$moduleName->menus)):?>
+        <td class='menus'>
+          <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+          <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+        </td>
+        <?php endif;?>
+        <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
           <?php $i = 1;?>
           <?php if($moduleName == 'caselib') $moduleName = 'testsuite';?>
           <?php foreach($moduleActions as $action => $actionLabel):?>
@@ -121,7 +127,7 @@
             <label class='text-right' for='allChecker'><?php echo $lang->selectAll;?></label>
           </div>
         </th>
-        <td class='form-actions'>
+        <td class='form-actions' colspan='2'>
           <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
           <?php echo html::backButton();?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
@@ -133,3 +139,19 @@
 <?php endif;?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
+<script>
+$(document).ready(function()
+{
+    $('.menus input[value=browse]').change(function()
+    {
+        $(this).parents('.menus').find('[name^=actions]').prop('checked', $(this).prop('checked'));
+    });
+
+    $('.menus input[name^=actions]:not(input[value=browse])').click(function()
+    {
+        var $parent = $(this).parents('.menus');
+
+        $parent.find('input[value=browse]').prop('checked', $parent.find('input[name^=actions]:not(input[value=browse]):checked').length > 0);
+    })
+});
+</script>

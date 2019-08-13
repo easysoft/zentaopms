@@ -6,3 +6,6 @@
 
 #mainMenu #groupName{line-height:33px; float: left}
 .checkbox-right{padding-left:0px !important;}
+
+td.menus {border-right: 0;padding-right: 0;width: 220px !important;}
+td.menus + td {border-left: 0;}
