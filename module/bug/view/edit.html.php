@@ -62,7 +62,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               <?php echo html::textarea('comment', '', "rows='5' class='form-control kindeditor' hidefocus='true'");?>
             </div>
           </div>
-          <?php $this->printExtendFields($bug, 'div', 'position=left&divCell=false');?>
+          <?php $this->printExtendFields($bug, 'div', 'position=left');?>
           <div class="detail">
             <div class="detail-title"><?php echo $lang->files;?></div>
             <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
@@ -297,7 +297,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
               </tbody>
             </table>
           </div>
-          <?php $this->printExtendFields($bug, 'div', 'position=right&divCell=false');?>
+          <?php $this->printExtendFields($bug, 'div', 'position=right');?>
         </div>
       </div>
     </div>

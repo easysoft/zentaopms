@@ -36,7 +36,7 @@
         <th><?php echo $lang->testcase->status;?></th>
         <td><?php echo html::hidden('status', $case->status);?></td>
       </tr>
-      <?php $this->printExtendFields($case, 'table', 'columns=1');?> 
+      <?php $this->printExtendFields($case, 'table');?>
       <tr>
         <th><?php echo $lang->testcase->reviewedByAB;?></th>
         <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control chosen' multiple");?></td>

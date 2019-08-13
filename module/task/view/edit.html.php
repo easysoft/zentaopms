@@ -69,7 +69,7 @@
             <div class='detail-title'><?php echo $lang->comment;?></div>
             <div class='detail-content'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
           </div>
-          <?php $this->printExtendFields($task, 'div', 'position=left&divCell=false');?>
+          <?php $this->printExtendFields($task, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->files;?></div>
             <div class='detail-content'><?php echo $this->fetch('file', 'buildform');?></div>
@@ -215,7 +215,7 @@
               </tr>
             </table>
           </div>
-          <?php $this->printExtendFields($task, 'div', 'position=right&divCell=false');?>
+          <?php $this->printExtendFields($task, 'div', 'position=right');?>
         </div>
       </div>
     </div>
@@ -274,7 +274,6 @@
             </tfoot>
           </table>
         </div>
-        <?php $this->printExtendFields($task, 'div', 'position=left&divCell=false');?>
       </div>
     </div>
   </form>

@@ -63,7 +63,7 @@
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
-        <?php $this->printExtendFields('', 'table', 'columns=1');?>
+        <?php $this->printExtendFields('', 'table');?>
         <?php if(strpos(",$showFields,", ',story,') !== false and $config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>

@@ -66,7 +66,7 @@
             <td><?php echo html::hidden('status', 'normal');?></td>
             <td></td>
           </tr>
-          <?php $this->printExtendFields('', 'table', 'columns=1');?>
+          <?php $this->printExtendFields('', 'table');?>
           <tr>
             <th><?php echo $lang->product->desc;?></th>
             <td colspan='2'>

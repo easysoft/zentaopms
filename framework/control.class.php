@@ -185,16 +185,21 @@ class control extends baseControl
     /**
      * Print extend fields.
      *
-     * @param  object $object    bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask
-     * @param  string $type      table | div
-     * @param  string $extras    columns=1,mode=value,position=right|right|all
+     * @param  object $object   bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask
+     * @param  string $type     The parent component which fileds displayed in. It should be table or div.
+     * @param  string $extras   The extra params.
+     *                          columns=2|3|5           Number of the columns merged to display the fields. The default is 1.
+     *                          position=left|right     The position which the fields displayed in a page.
+     *                          inForm=0|1              The fields displayed in a form or not. The default is 1.
+     *                          inCell=0|1              The fields displayed in a div with class cell or not. The default is 0.
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras)
+    public function printExtendFields($object, $type, $extras = '')
     {
         if(!isset($this->config->bizVersion)) return false;
-        $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
+
+        echo $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
     }
 
     /**

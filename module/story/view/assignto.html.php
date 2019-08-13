@@ -33,7 +33,7 @@
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', $story->status);?></td>
         </tr>
-        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
+        <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control w-p98'");?></td>

@@ -140,7 +140,7 @@
             </div>
           </div>
         </div>
-        <?php $this->printExtendFields($project, 'div', "position=left&divCell=false");?>
+        <?php $this->printExtendFields($project, 'div', "position=left&inForm=0");?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
           <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
@@ -295,7 +295,7 @@
                 <?php endif;?>
               </div>
             </div>
-            <?php $this->printExtendFields($project, 'div', "position=right&mode=value");?>
+            <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>
           </div>
         </div>
       </div>
