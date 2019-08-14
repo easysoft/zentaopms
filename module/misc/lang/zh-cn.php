@@ -21,6 +21,7 @@ $lang->misc->zentao->labels['about']   = '关于禅道';
 $lang->misc->zentao->labels['support'] = '技术支持';
 $lang->misc->zentao->labels['cowin']   = '帮助我们';
 $lang->misc->zentao->labels['service'] = '服务列表';
+$lang->misc->zentao->labels['others']  = '其他产品';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -49,6 +50,13 @@ $lang->misc->zentao->service['zentaotrain']= '禅道使用培训';
 $lang->misc->zentao->service['idc']        = '禅道在线托管';
 $lang->misc->zentao->service['custom']     = '禅道定制开发';
 $lang->misc->zentao->service['servicemore']= '更多服务...';
+
+global $config;
+$lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> 蝉知";
+$lang->misc->zentao->others['ranzhi']   = "<img src='{$config->webRoot}theme/default/images/main/ranzhi.ico' /> 然之协同";
+$lang->misc->zentao->others['xuanxuan'] = "<img src='{$config->webRoot}theme/default/images/main/xuanxuan.ico' /> 喧喧";
+$lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> 悦库网盘";
+$lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> 易天物联";
 
 $lang->misc->mobile      = "手机访问";
 $lang->misc->noGDLib     = "请用手机浏览器访问：<strong>%s</strong>";
