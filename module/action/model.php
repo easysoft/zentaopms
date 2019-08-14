@@ -975,7 +975,7 @@ class actionModel extends model
         $table = $this->config->objectTables[$action->objectType];
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
-        /* Revert doclib when undelet product or project. */
+        /* Revert doclib when undelete product or project. */
         if($action->objectType == 'project' or $action->objectType == 'product')
         {
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
@@ -984,8 +984,10 @@ class actionModel extends model
         if($action->objectType == 'productplan')
         {
            $plan = $this->loadModel('productplan')->getById($action->objectID);
-           $this->loadModel('productplan')->updatePlanParentStatus($plan->parent);
+           $this->productplan->updatePlanParentStatus($plan->parent);
         }
+        /* Update task status when undelete child task. */
+        if($action->objectType == 'task') $this->loadModel('task')->updateParentStatus($action->objectID);
 
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($actionID)->exec();
