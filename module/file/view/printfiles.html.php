@@ -79,8 +79,8 @@ $sessionString .= session_name() . '=' . session_id();
               }
               echo "<li title='{$uploadDate}'>" . html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
-
-              if(common::hasPriv($file->objectType, 'edit', $file->objectID))
+              $objectType = zget($this->config->file->objectType, $file->objectType); 
+              if(common::hasPriv($objectType, 'edit'))
               {
                   echo "<span class='right-icon'>&nbsp; ";
                   common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
