@@ -68,7 +68,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', $story->status);?></td>
         </tr>
-        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
+        <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->story->reviewedBy;?></th>
           <td colspan='2'><?php echo html::select('reviewedBy[]', $users, $app->user->account, "class='form-control' multiple data-placeholder='{$lang->story->chosen->reviewedBy}'");?></td>

@@ -177,7 +177,7 @@
             <th><?php echo $lang->story->status;?></th>
             <td><?php echo html::hidden('status', 'draft');?></td>
           </tr>
-          <?php $this->printExtendFields('', 'table', 'columns=1');?>
+          <?php $this->printExtendFields('', 'table');?>
           <tr>
             <th><?php echo $lang->story->legendAttatch;?></th>
             <td colspan='4'><?php echo $this->fetch('file', 'buildform');?></td>

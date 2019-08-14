@@ -34,7 +34,7 @@
           <th><?php echo $lang->bug->status;?></th>
           <td><?php echo html::hidden('status', 'active');?></td>
         </tr>
-        <?php $this->printExtendFields($bug, 'table', 'columns=1');?>
+        <?php $this->printExtendFields($bug, 'table');?>
         <tr>
           <th><?php echo $lang->bug->openedBuild;?></th>
           <td colspan='2'><?php echo html::select('openedBuild[]', $builds, $bug->openedBuild, 'size=4 multiple=multiple class="form-control chosen"');?></td>

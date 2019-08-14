@@ -47,7 +47,7 @@
             <th><?php echo $lang->release->status;?></th>
             <td><?php echo html::select('status', $lang->release->statusList, $release->status, "class='form-control'");?></td><td></td>
           </tr>  
-          <?php $this->printExtendFields($release, 'table', 'columns=1');?>
+          <?php $this->printExtendFields($release, 'table');?>
           <tr>
             <th><?php echo $lang->release->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='form-control kindeditor' hidefocus='true'");?></td>

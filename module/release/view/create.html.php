@@ -44,7 +44,7 @@
             <td><?php echo html::hidden('status', 'normal', "disabled");?></td>
             <td></td>
           </tr>
-          <?php $this->printExtendFields('', 'table', 'columns=1');?>
+          <?php $this->printExtendFields('', 'table');?>
           <tr>
             <th><?php echo $lang->release->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', '', "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>

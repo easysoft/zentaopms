@@ -50,7 +50,7 @@ js::set('page', 'confirmbug');
           <td><?php echo html::hidden('status', $bug->status);?></td>
           <td></td>
         </tr>
-        <?php $this->printExtendFields($bug, 'table', 'columns=1');?>
+        <?php $this->printExtendFields($bug, 'table');?>
         <tr>
           <th><?php echo $lang->bug->mailto;?></th>
           <td colspan='2'><?php echo html::select('mailto[]', $users, str_replace(' ' , '', $bug->mailto), 'class="form-control chosen" multiple');?></td>

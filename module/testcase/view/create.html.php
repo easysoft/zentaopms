@@ -210,7 +210,7 @@
           <th><?php echo $lang->testcase->status;?></th>
           <td><?php echo html::hidden('status', 'normal');?></td>
         </tr>
-        <?php $this->printExtendFields('', 'table', 'columns=1');?>
+        <?php $this->printExtendFields('', 'table');?>
         <tr>
           <th><?php echo $lang->testcase->files;?></th>
           <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>

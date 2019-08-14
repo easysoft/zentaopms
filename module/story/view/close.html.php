@@ -40,7 +40,7 @@
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', 'closed');?></td>
         </tr>
-        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
+        <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->story->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='8' class='form-control'");?></td>

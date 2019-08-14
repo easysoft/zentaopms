@@ -114,7 +114,7 @@
               </table>
             </div>
           </div>
-          <?php $this->printExtendFields($case, 'div', 'position=left&divCell=false');?>
+          <?php $this->printExtendFields($case, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->testcase->legendComment;?></div>
             <div class='detail-content'><?php echo html::textarea('comment', '',  "rows='5' class='form-control'");?></div>
@@ -248,7 +248,7 @@
               <?php endif;?>
             </table>
           </div>
-          <?php $this->printExtendFields($case, 'div', 'position=right&divCell=false');?>
+          <?php $this->printExtendFields($case, 'div', 'position=right');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->testcase->legendOpenAndEdit;?></div>
             <table class='table table-form'>
