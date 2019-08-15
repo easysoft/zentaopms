@@ -14,6 +14,7 @@
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
 js::set('type', $type);
+if(isset($pageCSS)) css::internal($pageCSS);
 ?>
 <div class='modal-dialog w-500px'>
   <div class="modal-header">
@@ -66,6 +67,7 @@ js::set('type', $type);
   </div>
 </div>
 <script>
+<?php if(isset($pageJS)) echo $pageJS;?>
 var currentRoot   = <?php echo $module->root;?>;
 var currentParent = <?php echo $module->parent;?>;
 function getProductModules(productID)
