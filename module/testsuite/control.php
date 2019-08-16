@@ -645,7 +645,7 @@ class testsuite extends control
      */
     public function libView($libID)
     {
-        $lib = $this->testsuite->getById($libID);
+        $lib = $this->testsuite->getById($libID, true);
 
         /* Set lib menu. */
         $libraries = $this->testsuite->getLibraries();
