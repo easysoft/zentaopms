@@ -1623,4 +1623,23 @@ class bug extends control
         $bug->assignedTo = $realname ? $realname : ($bug->assignedTo == 'closed' ? 'Closed' : $bug->assignedTo);
         die(json_encode($bug));
     }
+
+    /**
+     * Ajax get bug filed options for auto test.
+     * 
+     * @param  int    $productID 
+     * @param  int    $projectID 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBugFiledOptions($productID, $projectID = 0)
+    {
+        $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
+        $builds   = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID);
+        $type     = $this->lang->bug->typeList;
+        $pri      = $this->lang->bug->priList;
+        $severity = $this->lang->bug->severityList;
+
+        die(json_encode(array('Modules' => $modules, 'Categories' => $type, 'Versions' => $builds, 'Severities' => $severity, 'Priorities' => $pri)));
+    }
 }
