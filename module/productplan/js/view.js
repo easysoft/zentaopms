@@ -16,6 +16,7 @@ function showLink(planID, type, orderBy, param)
 $(function()
 {
     if(link == 'true') showLink(planID, type, orderBy, param);
+    var showedInfo = false;
     $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)
     {
         var href = $(e.target).attr('href');
@@ -23,6 +24,18 @@ $(function()
         if(tabPane.size() == 0) return;
         var formID = tabPane.find('.linkBox').find('form:last');
         if(formID.size() == 0) formID = tabPane.find('form:last');
+        if(href == '#planInfo' && !showedInfo)
+        {
+            $('#planInfo img').each(function()
+            {
+                var $tr = $('#planInfo .detail-content .table-data tbody tr:first');
+                width   = $tr.width() - $tr.find('th').width();
+                if($(this).parent().prop('tagName').toLowerCase() == 'a') $(this).unwrap();
+                setImageSize($(this), width, 0);
+            });
+
+            showedInfo = true;
+        }
     });
 
     $('.dropdown-menu.with-search .menu-search').click(function(e)

@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+li.story-item > .tree-actions .tree-action[data-type=sort]{display:none;}
+li.story-item > .tree-actions .tree-action[data-type=edit]{display:none;}
+li.story-item > .tree-actions .tree-action[data-type=delete]{display:none;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $backLink = $this->session->taskList ? $this->session->taskList : 'javascript:history.go(-1)';?>
