@@ -1,3 +1,4 @@
+<?php if(isset($pageCSS)) css::internal($pageCSS);?>
 <div class="detail">
   <h2 class="detail-title">
     <span class="label-id"><?php echo $task->id?></span>
@@ -80,3 +81,6 @@
 <?php echo $this->fetch('file', 'printFiles', array('files' => $task->files, 'fieldset' => 'true'));?>
 <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=task&objectID=$task->id");?>
 <?php include '../../common/view/action.html.php';?>
+<script>
+<?php if(isset($pageJS)) echo $pageJS;?>
+</script>

@@ -58,7 +58,7 @@
             <th><?php echo $lang->product->status;?></th>
             <td><?php echo html::select('status', $lang->product->statusList, $product->status, "class='form-control'");?></td><td></td>
           </tr>  
-          <?php $this->printExtendFields($product, 'table', 'columns=1');?>
+          <?php $this->printExtendFields($product, 'table');?>
           <tr>
             <th><?php echo $lang->product->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($product->desc), "rows='8' class='form-control'");?></td>

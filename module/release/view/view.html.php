@@ -330,7 +330,7 @@
                       <th><?php echo $lang->release->date;?></th>
                       <td><?php echo $release->date;?></td>
                     </tr>
-                    <?php $this->printExtendFields($release, 'table', "position=all&columns=1");?>
+                    <?php $this->printExtendFields($release, 'table', 'inForm=0');?>
                     <tr>
                       <th><?php echo $lang->release->desc;?></th>
                       <td><?php echo $release->desc;?></td>

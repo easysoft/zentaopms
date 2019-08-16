@@ -28,7 +28,7 @@
         <th class='w-40px'><?php echo $lang->product->status;?></th>
         <td><?php echo html::hidden('status', $product->status);?></td>
       </tr>
-      <?php $this->printExtendFields($product, 'table', 'columns=1');?>
+      <?php $this->printExtendFields($product, 'table');?>
       <tr>
         <th class='w-40px'><?php echo $lang->comment;?></th>
         <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>

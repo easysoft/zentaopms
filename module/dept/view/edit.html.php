@@ -13,6 +13,7 @@
 <?php
 $webRoot = $this->app->getWebRoot();
 $jsRoot  = $webRoot . "js/";
+if(isset($pageCSS)) css::internal($pageCSS);
 ?>
 <div class='modal-dialog w-500px'>
   <div class="modal-header">
@@ -44,5 +45,6 @@ $jsRoot  = $webRoot . "js/";
   </div>
 </div>
 <script>
+<?php if(isset($pageJS)) echo $pageJS;?>
 $('#dataform .chosen').chosen();
 </script>

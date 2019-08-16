@@ -62,7 +62,7 @@
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
     </div>
-    <?php $this->printExtendFields($story, 'div', "position=left&divCell=true");?>
+    <?php $this->printExtendFields($story, 'div', "position=left&inForm=0&inCell=1");?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
@@ -387,7 +387,7 @@
         </div>
       </div>
     </div>
-    <?php $this->printExtendFields($story, 'div', "position=right&mode=value");?>
+    <?php $this->printExtendFields($story, 'div', "position=right&inForm=0&inCell=1");?>
   </div>
 </div>
 

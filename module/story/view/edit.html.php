@@ -43,7 +43,7 @@
             <div class='detail-title'><?php echo $lang->story->verify;?></div>
             <div class='detail-content article-content'><?php echo $story->verify;?></div>
           </div>
-          <?php $this->printExtendFields($story, 'div', 'position=left&divCell=false');?>
+          <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
             <div class='form-group'>
@@ -200,7 +200,7 @@
             </table>
           </div>
     
-          <?php $this->printExtendFields($story, 'div', 'position=right&divCell=false');?>
+          <?php $this->printExtendFields($story, 'div', 'position=right');?>
 
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>

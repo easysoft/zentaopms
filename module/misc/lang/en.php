@@ -21,6 +21,7 @@ $lang->misc->zentao->labels['about']   = 'About';
 $lang->misc->zentao->labels['support'] = 'Technical Support';
 $lang->misc->zentao->labels['cowin']   = 'Help Us';
 $lang->misc->zentao->labels['service'] = 'Service';
+$lang->misc->zentao->labels['others']  = 'Other Products';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -49,6 +50,13 @@ $lang->misc->zentao->service['zentaotrain']= 'Zentao Train';
 $lang->misc->zentao->service['idc']        = 'Zentao Cloud';
 $lang->misc->zentao->service['custom']     = 'Zentao Custom';
 $lang->misc->zentao->service['servicemore']= 'More';
+
+global $config;
+$lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> Zsite";
+$lang->misc->zentao->others['ranzhi']   = "<img src='{$config->webRoot}theme/default/images/main/ranzhi.ico' /> Zdoo";
+
+$lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> Y Disk";
+$lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> MeshioT";
 
 $lang->misc->mobile      = "Mobile Access";
 $lang->misc->noGDLib     = "Please visit <strong>%s</strong> in the browser of your phone.";

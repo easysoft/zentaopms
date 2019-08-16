@@ -40,7 +40,7 @@
           <th><?php echo $lang->story->status;?></th>
           <td><?php echo html::hidden('status', $story->status);?></td>
         </tr>
-        <?php $this->printExtendFields($story, 'table', 'columns=1');?>
+        <?php $this->printExtendFields($story, 'table');?>
         <tr>
           <th><?php echo $lang->story->title;?></th>
           <td colspan='2'><?php echo html::input('title', $story->title, 'class="form-control"');?></td>

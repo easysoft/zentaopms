@@ -1,9 +1,15 @@
-<div class='container mw-800px' id="zentaoLinks">
+<style>
+#zentaoLinks .col-sm-2{width:20%;}
+#zentaoLinks .col-sm-2 .others ul{padding-left: 0px;}
+#zentaoLinks .col-sm-2 .others li{list-style: none; text-align:left;}
+#zentaoLinks .col-sm-2 .others img{height:15px; padding-right:10px;}
+</style>
+<div class='container mw-900px' id="zentaoLinks">
   <div class='row'>
     <?php foreach($lang->misc->zentao as $label => $groupItems):?>
     <?php if(strpos(',labels,icons,version,', ",$label,") !== false) continue; ?>
-    <div class='col-sm-3'>
-      <div class='panel'>
+    <div class='col-sm-2'>
+        <div class='panel <?php echo $label;?>'>
         <div class='panel-heading'>
           <div class="panel-title"><?php echo $lang->misc->zentao->labels[$label];?></div>
         </div>

@@ -148,11 +148,15 @@ class docModel extends model
         elseif($type == 'all')
         {
             /* Associated display Settings -> shows only unclosed projects.*/
-            $stmt = $this->dao->select('distinct t1.*')->from(TABLE_DOCLIB)->alias('t1')
-                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = '' || t1.project = t2.id")
-                ->where('t1.deleted')->eq(0)
-                ->beginIF(strpos($this->config->doc->custom->showLibs,'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
-                ->orderBy('t1.order,t1.id desc')
+            $undoneSql = $this->dao->select('id')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('status')->notin('done,closed')->get();
+            $stmt      = $this->dao->select('*')->from(TABLE_DOCLIB)
+                ->where('deleted')->eq(0)
+                ->beginIF(strpos($extra, 'unclosedProject') !== false)
+                ->andWhere('project', true)->eq('0')
+                ->orWhere("project IN ($undoneSql)")
+                ->markRight(1)
+                ->fi()
+                ->orderBy('`order`,id desc')
                 ->query();
         }
         else

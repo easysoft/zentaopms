@@ -18,6 +18,7 @@ function showLink(releaseID, type, param)
 $(function()
 {
     if(link == 'true') showLink(releaseID, type, param);
+    var showedInfo = false;
     $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)
     {
         var href = $(e.target).attr('href');
@@ -25,5 +26,18 @@ $(function()
         if(tabPane.size() == 0) return;
         var formID = tabPane.find('.linkBox').find('form:last');
         if(formID.size() == 0) formID = tabPane.find('form:last');
+
+        if(href == '#releaseInfo')
+        {
+            var $tr = $('#releaseInfo .detail-content .table-data tbody tr:first');
+            width   = $tr.width() - $tr.find('th').width();
+            $('#releaseInfo img').each(function()
+            {
+                if($(this).parent().prop('tagName').toLowerCase() == 'a') $(this).unwrap();
+                setImageSize($(this), width, 0);
+            });
+
+            showedInfo = true;
+        }
     });
 })

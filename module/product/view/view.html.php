@@ -75,7 +75,7 @@
           </div>
         </div>
       </div>
-      <?php $this->printExtendFields($product, 'div', "position=left&divCell=false");?>
+      <?php $this->printExtendFields($product, 'div', "position=left&inForm=0");?>
       <div class="col-sm-12">
         <?php $blockHistory = true;?>
         <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=product&objectID=$product->id");?>
@@ -236,7 +236,7 @@
             </div>
           </div>
           <?php endif;?>
-          <?php $this->printExtendFields($product, 'div', "position=right&mode=value");?>
+          <?php $this->printExtendFields($product, 'div', "position=right&inForm=0&inCell=1");?>
         </div>
       </div>
     </div>

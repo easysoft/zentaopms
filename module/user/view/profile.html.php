@@ -24,11 +24,13 @@
       </div>
       <div class='row'>
         <div class='col-md-6'>
-          <dl class='dl-horizontal'>
+          <dl class='dl-horizontal info'>
             <dt><?php echo $lang->user->account;?></dt>
             <dd><?php echo $user->account;?></dd>
             <dt><?php echo $lang->user->realname;?></dt>
             <dd><?php echo $user->realname;?></dd>
+            <dt><?php echo $lang->user->gender;?></dt>
+            <dd><?php echo zget($lang->user->genderList, $user->gender);?></dd>
             <dt><?php echo $lang->user->dept;?></dt>
             <dd>
             <?php
@@ -71,7 +73,7 @@
         </div>
         <div class='divider'></div>
         <div class='col-md-6'>
-          <dl class='dl-horizontal'>
+          <dl class='dl-horizontal contact'>
             <dt><?php echo $lang->user->email;?></dt>
             <dd title='<?php echo $user->email;?>'><?php echo $user->email;?></dd>
             <?php if(!empty($config->user->contactField)):?>

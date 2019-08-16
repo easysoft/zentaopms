@@ -30,7 +30,7 @@
           <th class='w-60px'><?php echo $lang->bug->status;?></th>
           <td><?php echo html::hidden('status', 'closed');?></td>
         </tr>
-        <?php $this->printExtendFields($bug, 'table', 'columns=1');?>
+        <?php $this->printExtendFields($bug, 'table');?>
         <tr>
           <th class='w-60px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>

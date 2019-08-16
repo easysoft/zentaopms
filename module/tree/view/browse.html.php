@@ -11,6 +11,13 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($viewType != 'story'):?>
+<style>
+li.tree-item-story > .tree-actions .tree-action[data-type=sort]{display:none;}
+li.tree-item-story > .tree-actions .tree-action[data-type=edit]{display:none;}
+li.tree-item-story > .tree-actions .tree-action[data-type=delete]{display:none;}
+</style>
+<?php endif;?>
 <?php js::set('viewType', $viewType);?>
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
