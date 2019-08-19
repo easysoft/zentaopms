@@ -2568,7 +2568,7 @@ class storyModel extends model
      * @param  object    $story
      * @param  array     $users
      * @access public
-     * @return void
+     * @return string
      */
     public function printAssignedHtml($story, $users)
     {
