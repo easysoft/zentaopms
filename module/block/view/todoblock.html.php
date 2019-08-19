@@ -23,7 +23,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
 .block-todoes .todo-title {padding: 5px 15px 5px 5px;}
 .block-todoes .todo-pri {margin: 0 5px;}
-.block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 75px;}
+.block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 85px;}
 .block-todoes .todo-check {position: absolute; top: 5px; left: 10px; display: block; width: 20px; height: 20px; font-size: 20px; color: transparent; cursor: pointer; background: #fff; border: 2px solid #eee; border-radius: 50%;}
 .block-todoes .todo-check:hover {border-color: #8e939a;}
 .block-todoes .active > .todo-check {color: #00da88; background: transparent;border: none;}
