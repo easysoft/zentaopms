@@ -30,10 +30,12 @@ ZenTao Project Management Software ist eine Open Source Software veröffentlicht
 ZenTao PMS setzt auf PHP + MySQL und das ZenTaoPHP Framework, ein unabhängiges Framework von unserem Team entwickelt. Third party Entwickler/Unternhemen können Erweiterungen entwickeln oder nach Ihren Bedürfnissen anpassen.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao PMS wurde entwickelt von <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
+ZenTao ALM wurde entwickelt von <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
 Offizielle Website : <a href='http://www.zentao.pm' target='_blank'>http://www.zentao.pm</a>
 Technischer Support : <a href='http://www.zentao.pm/forum/' target='_blank'>http://www.zentao.pm/forum/</a>
 WhatsApp Gruppe : <a href='https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF' target='_blank'>https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF</a>
+LinkedIn Group: <a href='https://www.linkedin.com/groups/10330509/' target='_blank'>ZenTao Project Management Software</a>
+Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
 Twitter: <a href='https://twitter.com/cneasysoft' target='_blank'>cneasysoft</a>
 
 Sie Installieren ZenTao <strong class='text-danger'>%s</strong> Version.
@@ -177,6 +179,7 @@ $lang->install->product = array('chanzhi', 'ranzhi');
 $lang->install->promotion     = "Produkte von Nature Easy Soft:";
 $lang->install->chanzhi       = new stdclass();
 $lang->install->chanzhi->name = 'ZSITE Content Management System.';
+$lang->install->chanzhi->width = 'col-md-6';
 $lang->install->chanzhi->logo = 'images/main/chanzhi_en.png';
 $lang->install->chanzhi->url  = 'http://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
@@ -190,6 +193,7 @@ EOD;
 
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name = 'ZDOO Collaborative System';
+$lang->install->ranzhi->width = 'col-md-6';
 $lang->install->ranzhi->logo = 'images/main/zdoo_org.png';
 $lang->install->ranzhi->url  = 'http://www.zdoo.org';
 $lang->install->ranzhi->desc = <<<EOD
@@ -198,5 +202,60 @@ $lang->install->ranzhi->desc = <<<EOD
   <li>OA: Freigaben, Ankündigungen, Reisen, Abwesenheiten und mehr. </li>
   <li>Projekte， Aufgaben und Dokumentenmanagement </li>
   <li>Geld: Einkommen, Ausgaben, Transfer, Investitionen und Kredite</li>
+</ul>
+EOD;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+$lang->install->ydisk = new stdclass();
+$lang->install->ydisk->name  = 'Y Disk-Free NetDisk for Enterprises';
+$lang->install->ydisk->width = 'col-md-6';
+$lang->install->ydisk->logo  = 'images/main/ydisk.png';
+$lang->install->ydisk->url   = 'http://www.ydisk.cn';
+$lang->install->ydisk->desc  = <<<EOD
+<ul>
+  <li>Self-Hosted: deploy on your own machine</li>
+  <li>Storage: depend on your hard drive size</li>
+  <li>Transmission: as fast as your bandwidth allows</li>
+  <li>Secure: 12 permissions for any strict settings</li>
+</ul>
+EOD;
+
+$lang->install->meshiot = new stdclass();
+$lang->install->meshiot->name  = 'MeshIoT';
+$lang->install->meshiot->width = 'col-md-6';
+$lang->install->meshiot->logo  = 'images/main/meshiot.png';
+$lang->install->meshiot->url   = 'https://www.meshiot.com';
+$lang->install->meshiot->desc  = <<<EOD
+<ul>
+  <li>Performance: one gateway can monitor 65,536 equipments</li>
+  <li>Accessibility: unique radio communication protocol covers 2,500m radius</li>
+  <li>Dimming System: 200+ sensors and monitors</li>
+  <li>Battery Available: no requirements to any equipment on your site</li>
 </ul>
 EOD;

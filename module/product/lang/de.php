@@ -91,6 +91,8 @@ $lang->product->plan          = 'Plan';
 $lang->product->iteration     = 'Version Iteration';
 $lang->product->iterationInfo = '%s Iterations';
 $lang->product->iterationView = 'Details';
+$lang->product->createdBy     = 'Created By';
+$lang->product->createdDate   = 'Created Date';
 
 $lang->product->searchStory  = 'Suche';
 $lang->product->assignedToMe = 'Mir zuweisen';

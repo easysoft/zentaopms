@@ -205,6 +205,33 @@ $lang->install->ranzhi->desc  = <<<EOD
 </ul>
 EOD;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 $lang->install->ydisk = new stdclass();
 $lang->install->ydisk->name  = 'Y Disk-Free NetDisk for Enterprises';
 $lang->install->ydisk->width = 'col-md-6';

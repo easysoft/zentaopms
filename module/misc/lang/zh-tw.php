@@ -21,6 +21,7 @@ $lang->misc->zentao->labels['about']   = '關於禪道';
 $lang->misc->zentao->labels['support'] = '技術支持';
 $lang->misc->zentao->labels['cowin']   = '幫助我們';
 $lang->misc->zentao->labels['service'] = '服務列表';
+$lang->misc->zentao->labels['others']  = '其他產品';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -49,6 +50,13 @@ $lang->misc->zentao->service['zentaotrain']= '禪道使用培訓';
 $lang->misc->zentao->service['idc']        = '禪道在綫託管';
 $lang->misc->zentao->service['custom']     = '禪道定製開發';
 $lang->misc->zentao->service['servicemore']= '更多服務...';
+
+global $config;
+$lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> 蟬知";
+$lang->misc->zentao->others['ranzhi']   = "<img src='{$config->webRoot}theme/default/images/main/ranzhi.ico' /> 然之協同";
+$lang->misc->zentao->others['xuanxuan'] = "<img src='{$config->webRoot}theme/default/images/main/xuanxuan.ico' /> 喧喧";
+$lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> 悅庫網盤";
+$lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> 易天物聯";
 
 $lang->misc->mobile      = "手機訪問";
 $lang->misc->noGDLib     = "請用手機瀏覽器訪問：<strong>%s</strong>";

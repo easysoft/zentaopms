@@ -39,6 +39,8 @@ $lang->install->links = <<<EOT
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
+
+
 $lang->install->newReleased= "<strong class='text-danger'>提示</strong>：官网网站已有最新版本<strong class='text-danger'>%s</strong>, 发布日期于 %s。";
 $lang->install->or         = '或者';
 $lang->install->checking   = '系统检查';

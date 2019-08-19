@@ -28,13 +28,17 @@ $lang->testsuite->importAction     = 'Import Case';
 $lang->testsuite->showImport       = 'Imported Data';
 $lang->testsuite->successSaved     = 'Saved';
 
+$lang->testsuite->id             = 'ID';
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
+$lang->testsuite->type           = 'Type';
 $lang->testsuite->desc           = 'Beschreibung';
 $lang->testsuite->author         = 'Zugriffskontrolle';
 $lang->testsuite->addedBy        = 'Ersteller';
 $lang->testsuite->addedDate      = 'Datum';
+$lang->testsuite->lastEditedBy   = 'Last Edited By';
+$lang->testsuite->lastEditedDate = 'Last Edited Date';
 
 $lang->testsuite->legendDesc      = 'Beschreibung';
 $lang->testsuite->legendBasicInfo = 'Basis Info';

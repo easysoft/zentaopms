@@ -20,6 +20,8 @@ $lang->dept->browse      = "Verwalten";
 $lang->dept->manage      = "Pflegen";
 $lang->dept->updateOrder = "Sortieren";
 $lang->dept->add         = "Hinzufügen";
+$lang->dept->grade       = "Grade";
+$lang->dept->order       = "Rank";
 $lang->dept->dragAndSort = "Verschieben und sortieren";
 
 $lang->dept->confirmDelete = " Möchten Sie diese Abteilung löschen?";

@@ -19,6 +19,7 @@ $lang->action->actor      = 'Handler';
 $lang->action->action     = 'Aktion';
 $lang->action->actionID   = 'Aktion ID';
 $lang->action->date       = 'Datum';
+$lang->action->extra      = 'Wertschöpfung';
 
 $lang->action->trash       = 'Aufräumen';
 $lang->action->undelete    = 'Wiederherstellen';

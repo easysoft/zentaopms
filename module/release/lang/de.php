@@ -28,6 +28,7 @@ $lang->release->confirmUnlinkStory = "Möchten Sie diese Story löschen?";
 $lang->release->confirmUnlinkBug   = "Möchten Sie diesen Bug löschen?";
 $lang->release->existBuild         = '『Build』『%s』 existiert bereits. Sie können den 『name』 ändern oder ein anderes 『build』 wählen.';
 $lang->release->noRelease          = 'Keine Releases. ';
+$lang->release->errorDate          = 'The release date should not be greater than today.';
 
 $lang->release->basicInfo = 'Basis Info';
 

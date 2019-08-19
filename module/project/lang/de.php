@@ -12,9 +12,18 @@
 /* Fields. */
 $lang->project->common        = $lang->projectCommon;
 $lang->project->allProjects   = 'Alle';
+$lang->project->id            = $lang->projectCommon . ' ID';
 $lang->project->type          = 'Typ';
 $lang->project->name          = 'Name';
 $lang->project->code          = 'Alias';
+$lang->project->statge        = 'Stage';
+$lang->project->pri           = 'Priorität';
+$lang->project->openedBy      = 'OpenedBy';
+$lang->project->openedDate    = 'OpenedDate';
+$lang->project->closedBy      = 'ClosedBy';
+$lang->project->closedDate    = 'ClosedDate';
+$lang->project->canceledBy    = 'CanceledBy';
+$lang->project->canceledDate  = 'CanceledDate';
 $lang->project->begin         = 'Start';
 $lang->project->end           = 'Ende';
 $lang->project->dateRange     = 'Dauer';
@@ -329,6 +338,13 @@ $lang->project->featureBar['task']['myinvolved']   = $lang->project->myInvolved;
 $lang->project->featureBar['task']['delayed']      = 'Verspätet';
 $lang->project->featureBar['task']['needconfirm']  = 'Story geändert';
 $lang->project->featureBar['task']['status']       = $lang->project->statusSelects[''];
+
+$lang->project->featureBar['all']['all']       = $lang->project->all;
+$lang->project->featureBar['all']['undone']    = $lang->project->undone;
+$lang->project->featureBar['all']['wait']      = $lang->project->statusList['wait'];
+$lang->project->featureBar['all']['doing']     = $lang->project->statusList['doing'];
+$lang->project->featureBar['all']['suspended'] = $lang->project->statusList['suspended'];
+$lang->project->featureBar['all']['closed']    = $lang->project->statusList['closed'];
 
 $lang->project->treeLevel = array();
 $lang->project->treeLevel['all']   = 'Alle aufklappen';

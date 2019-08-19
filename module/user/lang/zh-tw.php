@@ -113,6 +113,7 @@ $lang->user->loginFailed  = "登錄失敗，請檢查您的用戶名或密碼是
 $lang->user->lockWarning  = "您還有%s次嘗試機會。";
 $lang->user->loginLocked  = "密碼嘗試次數太多，請聯繫管理員解鎖，或%s分鐘後重試。";
 $lang->user->weakPassword = "您的密碼強度小於系統設定。";
+$lang->user->errorWeak    = "密碼不能使用【%s】這些常用弱口令。";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研發';
@@ -171,6 +172,8 @@ $lang->user->error->realname      = "【ID %s】的真實姓名必須填寫";
 $lang->user->error->password      = "【ID %s】的密碼必須為六位以上";
 $lang->user->error->mail          = "【ID %s】的郵箱地址不正確";
 $lang->user->error->reserved      = "【ID %s】的用戶名已被系統預留";
+$lang->user->error->weakPassword  = "【ID %s】的密碼強度小於系統設定。";
+$lang->user->error->commonWeak    = "【ID %s】的密碼不能使用【%s】這些常用若口令。";
 
 $lang->user->error->verifyPassword   = "驗證失敗，請檢查您的系統登錄密碼是否正確";
 $lang->user->error->originalPassword = "原密碼不正確";

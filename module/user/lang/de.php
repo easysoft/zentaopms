@@ -48,6 +48,7 @@ $lang->user->originalPassword = 'Altes Passwort';
 $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Ihr Login Passwort';
 $lang->user->resetPassword    = 'Passwort vergessen?';
+$lang->user->score            = 'Score';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -112,6 +113,7 @@ $lang->user->loginFailed  = "Login fehlgeschlagen. Bitte prüfen Sie Ihren Benut
 $lang->user->lockWarning  = "Sie haben %s Versuche.";
 $lang->user->loginLocked  = "Bitte kontaktieren Sie den Administrator um Ihr Konto entsperren zu lassen oder versuchen Sie in %s Minuten noch ein mal.";
 $lang->user->weakPassword = "Ihr Passwort entspricht nicht den Anforderungen.";
+$lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -170,6 +172,8 @@ $lang->user->error->realname      = "ID %s，muss der Realname sein";
 $lang->user->error->password      = "ID %s，passwort muss mindestens 6 Zeichen lang sein.";
 $lang->user->error->mail          = "ID %s，bitte geben Sie eine gültige Emailadresse an.";
 $lang->user->error->reserved      = "ID %s，Konto ist reserviert.";
+$lang->user->error->weakPassword  = "ID %s，the password strength is less than the system setting.";
+$lang->user->error->commonWeak    = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
 
 $lang->user->error->verifyPassword   = "Verifikation fehlgeschlagen. Bitte geben Sie ihr Loginpasswort ein.";
 $lang->user->error->originalPassword = "Altes Passwort ist falsch.";

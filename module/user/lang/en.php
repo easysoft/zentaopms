@@ -113,6 +113,7 @@ $lang->user->loginFailed  = "Login failed. Please check your account and passwor
 $lang->user->lockWarning  = "You can try %s times.";
 $lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
 $lang->user->weakPassword = "Your password does not meet the requirements.";
+$lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -171,6 +172,8 @@ $lang->user->error->realname      = "ID %s，must be real name";
 $lang->user->error->password      = "ID %s，password must be >= 6 characters.";
 $lang->user->error->mail          = "ID %s，please enter valid Email address";
 $lang->user->error->reserved      = "ID %s，account is reserved.";
+$lang->user->error->weakPassword  = "ID %s，the password strength is less than the system setting.";
+$lang->user->error->commonWeak    = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
 
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
