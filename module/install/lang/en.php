@@ -200,7 +200,7 @@ $lang->install->ranzhi->desc  = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
   <li>OA: Approve, Announce, Trip, Leave and so on. </li>
-  <li>Projec t，Task and Document management </li>
+  <li>Project，Task and Document management </li>
   <li>Money: Income, Expense, Transfer, Invest and Debt</li>
 </ul>
 EOD;
