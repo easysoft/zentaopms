@@ -75,7 +75,7 @@ class pager extends basePager
         parent::setParams();
 
         /* If the original module name and method name of the request are set, the module parameter is removed. */
-        if(isset($this->app->rawModule) && isset($this->app->rawMethod)) unset($this->params['module']);
+        if($this->app->isFlow) unset($this->params['module']);
     }
 
     /**
