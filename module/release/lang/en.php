@@ -64,7 +64,7 @@ $lang->release->exportTypeList['bug']     = 'Bug';
 $lang->release->exportTypeList['leftbug'] = 'Active Bug';
 
 $lang->release->statusList['']          = '';
-$lang->release->statusList['normal']    = 'Normal';
+$lang->release->statusList['normal']    = 'Active';
 $lang->release->statusList['terminate'] = 'Terminated';
 
 $lang->release->changeStatusList['normal']    = 'Active';
