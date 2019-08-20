@@ -1027,8 +1027,8 @@ class baseFixer
                 if(!defined('RUN_MODE') or RUN_MODE != 'admin')
                 {
                     /*
-                     * purifier会把&nbsp;替换空格，kindeditor在会吧行首的空格去掉。
-                     * purifier will change &nbsp; to ' ', and edit it will no space in line head use kindeditor. 
+                     * purifier会把&nbsp;替换空格，kindeditor再会把行首的空格去掉。
+                     * purifier will change &nbsp; to ' ', and kindeditor will remove the header space again.
                      **/
                     $this->data->$fieldName = preg_replace('/<[^>]+</', '<', $this->data->$fieldName);
                     $this->data->$fieldName = preg_replace('/>[^<]+>/', '>', $this->data->$fieldName);
