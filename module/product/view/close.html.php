@@ -26,7 +26,7 @@
     <table class='table table-form'>
       <tr class='hide'>
         <th class='w-40px'><?php echo $lang->product->status;?></th>
-        <td><?php echo html::hidden('status', $product->status);?></td>
+        <td><?php echo html::hidden('status', 'closed');?></td>
       </tr>
       <?php $this->printExtendFields($product, 'table');?>
       <tr>
