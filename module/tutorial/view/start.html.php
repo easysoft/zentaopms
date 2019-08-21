@@ -13,8 +13,8 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <div id='start' class='bg-primary'>
   <div class='start-icon'><i class='icon icon-certificate icon-spin icon-back text-primary'></i><i class='icon icon-flag icon-front text-primary'></i></div>
-  <h1><?php echo $lang->tutorial->common ?></h1>
-  <p><?php echo $lang->tutorial->desc ?></p>
+  <h1><?php echo $lang->tutorial->common;?></h1>
+  <p><?php echo $lang->tutorial->desc;?></p>
   <?php echo html::a(inlink('index'), $lang->tutorial->start, '_top', "class='btn btn-primary btn-lg btn-wide btn-info'");;?>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -32,25 +32,6 @@ include '../../common/view/header.lite.html.php';
             $methodName = isset($tmpLang[$method]) ? $tmpLang[$method] : $method;
         }
 
-        /* set moduleName = caselib if method = caselibmethod. */
-        $lowerMethod = strtolower($method);
-        if($module == 'testsuite')
-        {
-            $this->app->loadLang('group');
-            $caselibMethods = array();
-            foreach($lang->resource->caselib as $caselibMethod => $caselibMethodName)
-            {
-                $lowerCaselibMethod = strtolower($caselibMethod);
-                $caselibMethods[$lowerCaselibMethod] = $caselibMethodName;
-            }
-
-            if(isset($caselibMethods[$lowerMethod]) && $lowerMethod != 'edit')
-            {
-                $this->app->loadLang('action');
-                $moduleName = $lang->action->objectTypes['caselib'];
-            }
-        }
-
         printf($lang->user->errorDeny, $moduleName, $methodName);
         ?>
         </div>

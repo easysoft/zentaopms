@@ -273,8 +273,8 @@ class docModel extends model
         $libID  = (int)$libID;
         $oldLib = $this->getLibById($libID);
         $lib = fixer::input('post')
-            ->setIF(!$this->post->users, 'users', '')
-            ->setIF(!$this->post->groups, 'groups', '')
+            ->setDefault('users', '')
+            ->setDefault('groups', '')
             ->join('groups', ',')
             ->join('users', ',')
             ->get();
@@ -663,8 +663,8 @@ class docModel extends model
         $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
-            ->setIF(!$this->post->users, 'users', '')
-            ->setIF(!$this->post->groups, 'groups', '')
+            ->setDefault('users', '')
+            ->setDefault('groups', '')
             ->add('editedBy',   $this->app->user->account)
             ->add('editedDate', $now)
             ->cleanInt('module')

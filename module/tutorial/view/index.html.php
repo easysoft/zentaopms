@@ -11,36 +11,36 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php js::import($jsRoot . 'misc/base64.js'); ?>
+<?php js::import($jsRoot . 'misc/base64.js');?>
 <?php $referer = $referer ? $referer : helper::createLink('my', 'index', '', 'tutorial');?>
 <div id='pageContainer'>
   <div id='iframeWrapper'>
-    <iframe id='iframePage' name='iframePage' src='<?php echo $referer ?>' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0; top: 0'></iframe>
+    <iframe id='iframePage' name='iframePage' src='<?php echo $referer;?>' frameborder='no' allowtransparency='true' scrolling='auto' hidefocus='' style='width: 100%; height: 100%; left: 0; top: 0'></iframe>
     <div id='taskModalBack'></div>
     <div id='taskModal'>
       <button class='close'><i class="icon icon-close"></i></button>
       <div class='finish-all'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
-        <h3><?php echo $lang->tutorial->congratulation ?></h3>
-        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart ?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit ?></a>
+        <h3><?php echo $lang->tutorial->congratulation;?></h3>
+        <button type='button' class='btn btn-success btn-reset-tasks'><i class='icon icon-restart'></i>  <?php echo $lang->tutorial->restart;?></button> &nbsp; <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-success'><i class='icon icon-signout'></i> <?php echo $lang->tutorial->exit;?></a>
       </div>
       <div class='finish'>
         <div class='start-icon'><i class='icon icon-check-circle icon-front'></i></div>
-        <h3><?php echo $lang->tutorial->congratulateTask ?></h3>
-        <button type='button' class='btn btn-success btn-next-task btn-task'><?php echo $lang->tutorial->nextTask ?> <i class='icon icon-angle-right'></i></button>
+        <h3><?php echo $lang->tutorial->congratulateTask;?></h3>
+        <button type='button' class='btn btn-success btn-next-task btn-task'><?php echo $lang->tutorial->nextTask;?> <i class='icon icon-angle-right'></i></button>
       </div>
     </div>
   </div>
   <div id='sidebar'>
     <header class='bg-primary'>
       <div class='start-icon'><i class='icon icon-certificate icon-back'></i><i class='icon icon-flag icon-front text-secondary'></i></div>
-      <h2><?php echo $lang->tutorial->common ?></h2>
+      <h2><?php echo $lang->tutorial->common;?></h2>
       <div class='actions'>
-        <a href='<?php echo helper::createLink('tutorial', 'quit') ?>' class='btn btn-danger btn-sm'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit ?></a>
+        <a href='<?php echo helper::createLink('tutorial', 'quit');?>' class='btn btn-danger btn-sm'><i class="icon icon-signout"></i> <?php echo $lang->tutorial->exit;?></a>
       </div>
     </header>
     <section id='current'>
-      <h4><?php echo $lang->tutorial->currentTask ?></h4>
+      <h4><?php echo $lang->tutorial->currentTask;?></h4>
       <div class='panel' id='task'>
         <div class='panel-heading bg-secondary'>
           <strong><span class='task-id-current'>1</span>. <span class='task-name task-name-current'></span></strong>
@@ -49,20 +49,20 @@
         <div class='panel-body'>
           <div class='task-desc'></div>
           <a href='javascript:;' id='openTaskPage' class='btn-open-target-page hl-primary'>
-            <div class='normal'><i class="icon icon-flag-alt"></i> <?php echo $lang->tutorial->openTargetPage ?></div>
-            <div class='opened'><i class="icon icon-flag"></i> <?php echo $lang->tutorial->atTargetPage ?></div>
-            <div class='reload'><i class="icon icon-restart"></i> <?php echo $lang->tutorial->reloadTargetPage ?></div>
+            <div class='normal'><i class="icon icon-flag-alt"></i> <?php echo $lang->tutorial->openTargetPage;?></div>
+            <div class='opened'><i class="icon icon-flag"></i> <?php echo $lang->tutorial->atTargetPage;?></div>
+            <div class='reload'><i class="icon icon-restart"></i> <?php echo $lang->tutorial->reloadTargetPage;?></div>
           </a>
           <div class='alert-warning' style='padding:5px 10px;margin-bottom:0px'><?php echo $lang->tutorial->dataNotSave?></div>
         </div>
       </div>
       <div class='clearfix actions'>
-        <button type='button' class='btn btn-sm btn-circle btn-prev-task btn-task btn-icon-left'><span class="label label-badge label-icon"><i class="icon icon-arrow-left"></i></span><?php echo $lang->tutorial->previous ?></button>
-        <button type='button' class='btn btn-sm btn-circle btn-primary pull-right btn-task btn-next-task btn-icon-right'><?php echo $lang->tutorial->nextTask ?> <span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span></button>
+        <button type='button' class='btn btn-sm btn-circle btn-prev-task btn-task btn-icon-left'><span class="label label-badge label-icon"><i class="icon icon-arrow-left"></i></span><?php echo $lang->tutorial->previous;?></button>
+        <button type='button' class='btn btn-sm btn-circle btn-primary pull-right btn-task btn-next-task btn-icon-right'><?php echo $lang->tutorial->nextTask;?> <span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span></button>
       </div>
     </section>
     <section id='all'>
-      <h4><?php echo $lang->tutorial->allTasks ?> (<span class='task-num-finish'>2</span>/<span class='tasks-count'><?php echo count($lang->tutorial->tasks) ?></span>)</h4>
+      <h4><?php echo $lang->tutorial->allTasks;?> (<span class='task-num-finish'>2</span>/<span class='tasks-count'><?php echo count($lang->tutorial->tasks);?></span>)</h4>
       <div class='progress' id='tasksProgress'>
         <div class='progress-text'></div>
         <div class='progress-bar' style='width: 0%'>
@@ -81,8 +81,8 @@
         $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
         $tasks[$name] = $task;
         ?>
-        <li data-name='<?php echo $name; ?>'><a class='btn-task' href='javascript:;' data-name='<?php echo $name; ?>'><span><?php echo $idx++; ?></span>. <span class='task-name'><?php echo $task['title'] ?></span><i class='icon icon-check pull-right'></i></a></li>
-        <?php endforeach; ?>
+        <li data-name='<?php echo $name;?>'><a class='btn-task' href='javascript:;' data-name='<?php echo $name;?>'><span><?php echo $idx++;?></span>. <span class='task-name'><?php echo $task['title'];?></span><i class='icon icon-check pull-right'></i></a></li>
+        <?php endforeach;?>
       </ul>
     </section>
   </div>
@@ -104,13 +104,13 @@ $(function()
     };
 
     var tasks        = $.parseJSON('<?php echo helper::jsonEncode4Parse($tasks, JSON_HEX_QUOT | JSON_HEX_APOS);?>');
-    var current      = '<?php echo $current ?>';
-    var setting      = formatSetting('<?php echo $setting ?>');
+    var current      = '<?php echo $current;?>';
+    var setting      = formatSetting('<?php echo $setting;?>');
     var lang         = 
     {
-        tagetPageTip: '<?php echo $lang->tutorial->targetPageTip ?>',
-        target      : '<?php echo $lang->tutorial->target ?>',
-        requiredTip : '<?php echo $lang->tutorial->requiredTip ?>'
+        tagetPageTip: '<?php echo $lang->tutorial->targetPageTip;?>',
+        target      : '<?php echo $lang->tutorial->target;?>',
+        requiredTip : '<?php echo $lang->tutorial->requiredTip;?>'
     };
 
     var $tasks        = $('#tasks'),
@@ -168,7 +168,7 @@ $(function()
             var postData = [];
             $.each(setting, function(name, value) {if(value) postData.push(name);});
 
-            $.post('<?php echo inLink('ajaxSetTasks') ?>', {finish: postData.join(',')}, function(e)
+            $.post('<?php echo inlink('ajaxSetTasks');?>', {finish: postData.join(',')}, function(e)
             {
                 if(e.result === 'success')
                 {
@@ -179,7 +179,7 @@ $(function()
                 else
                 {
                     setting[current] = false;
-                    alert('<?php echo $lang->tutorial->serverErrorTip ?>');
+                    alert('<?php echo $lang->tutorial->serverErrorTip;?>');
                 }
             }, 'json').error(function() {alert(lang.timeout)});
         }
@@ -187,7 +187,7 @@ $(function()
 
     var resetTasks = function()
     {
-        $.post('<?php echo inLink('ajaxSetTasks') ?>', {finish: ''}, function(e)
+        $.post('<?php echo inLink('ajaxSetTasks');?>', {finish: ''}, function(e)
         {
             if(e.result === 'success')
             {
@@ -196,7 +196,7 @@ $(function()
             }
             else
             {
-                alert('<?php echo $lang->tutorial->serverErrorTip ?>');
+                alert('<?php echo $lang->tutorial->serverErrorTip;?>');
             }
         }, 'json').error(function() {alert(lang.timeout)});
     };

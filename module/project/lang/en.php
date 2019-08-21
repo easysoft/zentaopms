@@ -58,7 +58,7 @@ $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "No {$lang->productCommon} yet.";
 $lang->project->createStory   = "Create Story";
 $lang->project->all           = "All {$lang->projectCommon}s";
-$lang->project->undone        = 'Unfinished';
+$lang->project->undone        = 'Unfinished ';
 $lang->project->unclosed      = 'Unclosed';
 $lang->project->typeDesc      = 'No story, bug, build, test, or burndown chart is allowed in OPS';
 $lang->project->mine          = 'My: ';
@@ -269,7 +269,7 @@ $lang->project->createTask            = 'Create Task';
 $lang->project->goback                = "Go Back";
 $lang->project->noweekend             = 'Exclude Weekend';
 $lang->project->withweekend           = 'Include Weekend';
-$lang->project->interval              = 'Intervals';
+$lang->project->interval              = 'Intervals ';
 $lang->project->fixFirstWithLeft      = 'Update hours left too';
 
 $lang->project->action = new stdclass();

@@ -38,8 +38,6 @@ $(function()
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
 
-    console.log(statusMap);
-
     // Get scrollbar width
     var getScrollbarWidth = function ()
     {

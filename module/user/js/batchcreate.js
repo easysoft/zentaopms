@@ -1,3 +1,11 @@
+/**
+ * Change group by role.
+ * 
+ * @param  string $role 
+ * @param  int    $i 
+ * @access public
+ * @return void
+ */
 function changeGroup(role, i)
 {
     if(role && roleGroup[role])
@@ -11,6 +19,14 @@ function changeGroup(role, i)
     $('#group' + i).trigger('chosen:updated');
 }
 
+/**
+ * Toggle checkbox and check password strength.
+ * 
+ * @param  object $obj 
+ * @param  int    $i 
+ * @access public
+ * @return void
+ */
 function toggleCheck(obj, i)
 {
     var $this    = $(obj);
