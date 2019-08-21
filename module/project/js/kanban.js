@@ -108,7 +108,7 @@ $(function()
         if(statusMap[type][from] && statusMap[type][from][to])
         {
             var method = statusMap[type][from][to];
-            if(method == 'changeSubStatus')
+            if(method == 'ajaxChangeSubStatus')
             {
                 $.getJSON($.createLink(type, method, 'id=' + id + '&subStatus=' + to), function(response)
                 {
