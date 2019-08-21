@@ -42,7 +42,6 @@
           <td colspan='2'>
             <h5><?php echo $lang->install->promotion?></h5>
             <div class='row'>
-              <?php $count = count($lang->install->product);?>
               <?php foreach($lang->install->product as $product):?>
               <div class='<?php echo $lang->install->{$product}->width;?>'>
                 <a class="card ad" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
