@@ -16,7 +16,7 @@ function showLink(planID, type, orderBy, param)
 $(function()
 {
     if(link == 'true') showLink(planID, type, orderBy, param);
-    var showedInfo = false;
+    var infoShowed = false;
     $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)
     {
         var href = $(e.target).attr('href');
@@ -24,7 +24,7 @@ $(function()
         if(tabPane.size() == 0) return;
         var formID = tabPane.find('.linkBox').find('form:last');
         if(formID.size() == 0) formID = tabPane.find('form:last');
-        if(href == '#planInfo' && !showedInfo)
+        if(href == '#planInfo' && !infoShowed)
         {
             $('#planInfo img').each(function()
             {
@@ -34,7 +34,7 @@ $(function()
                 setImageSize($(this), width, 0);
             });
 
-            showedInfo = true;
+            infoShowed = true;
         }
     });
 
