@@ -45,7 +45,7 @@ class doc extends control
 
         $this->lang->modulePageActions  = $this->doc->setFastMenu($this->lang->doc->fast);
         $this->lang->modulePageActions .= common::hasPriv('doc', 'createLib') ? html::a(helper::createLink('doc', 'createLib'), "<i class='icon icon-plus'></i> " . $this->lang->doc->createLib, '', "class='btn btn-secondary iframe' data-width='70%'") : '';
-        $this->lang->modulePageActions .= common::hasPriv('doc', 'create') ? $this->doc->setCreateDocMenu() : '';
+        $this->lang->modulePageActions .= common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc() : '';
 
         $actionURL = $this->createLink('doc', 'browse', "lib=0&browseType=bySearch&queryID=myQueryID");
         $this->doc->buildSearchForm(0, array(), 0, $actionURL, 'index');

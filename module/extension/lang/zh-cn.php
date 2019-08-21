@@ -29,9 +29,9 @@ $lang->extension->eraseAction      = '清除插件';
 $lang->extension->upgrade          = '升级插件';
 $lang->extension->agreeLicense     = '我同意该授权';
 
-$lang->extension->structure    = '目录结构';
-$lang->extension->extstructure = '目录结构';
-$lang->extension->installed    = '已安装';
+$lang->extension->structure       = '目录结构';
+$lang->extension->structureAction = '目录结构';
+$lang->extension->installed       = '已安装';
 $lang->extension->deactivated  = '被禁用';
 $lang->extension->available    = '已下载';
 

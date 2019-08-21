@@ -147,7 +147,7 @@ class docModel extends model
         }
         elseif($type == 'all')
         {
-            /* Associated display Settings -> shows only unclosed projects.*/
+            /* Show all undeleted doclibs,if display settings selected shows only unclosed projects then shows only unclosed projects doclibs. */
             $undoneSql = $this->dao->select('id')->from(TABLE_PROJECT)->where('deleted')->eq(0)->andWhere('status')->notin('done,closed')->get();
             $stmt      = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
@@ -1614,30 +1614,30 @@ class docModel extends model
     }
 
     /**
-     * Set document module index page create document button.
+     * Build document module index page create document button.
      *
      * @access public
-     * @return void
+     * @return string
      */
-    public function setCreateDocMenu()
+    public function buildCreateButton4Doc()
     {
         $libID    = $this->dao->select('id')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->orderBy('id desc')->limit('1')->fetch('id');
-        $actions  = "";
+        $html  = "";
         if($libID)
         {
-            $actions .= "<div class='dropdown' id='createDropdown'>";
-            $actions .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . "<span class='caret'></span></button>";
-            $actions .= "<ul class='dropdown-menu' style='left:0px'>";
+            $html .= "<div class='dropdown' id='createDropdown'>";
+            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . "<span class='caret'></span></button>";
+            $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
                 $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-                $actions .= "<li>";
-                $actions .= html::a(helper::createLink('doc', 'create', "libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class'");
-                $actions .= "</li>";
+                $html .= "<li>";
+                $html .= html::a(helper::createLink('doc', 'create', "libID=$libID&moduleID=0&type=$typeKey"), $typeName, '', "class='$class'");
+                $html .= "</li>";
             }
-            $actions .="</ul></div>";
+            $html .="</ul></div>";
         }
-        return $actions;
+        return $html;
     }
 
     public function setFastMenu($fastLib)
