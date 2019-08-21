@@ -166,14 +166,14 @@ $lang->user->placeholder->passwordStrength[1] = 'Buchstaben und Ziffern. Mindest
 $lang->user->placeholder->passwordStrength[2] = 'Buchstaben, Ziffern und Sonderzeichen. Mindestens 10 Zeichen';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，Konto muss Buchstaben, Unterstriche oder Ziffern enthalten. Mindestens 3 Zeichen.";
-$lang->user->error->accountDupl   = "ID %s，Konto wurde genutzt.";
-$lang->user->error->realname      = "ID %s，muss der Realname sein";
-$lang->user->error->password      = "ID %s，passwort muss mindestens 6 Zeichen lang sein.";
-$lang->user->error->mail          = "ID %s，bitte geben Sie eine gültige Emailadresse an.";
-$lang->user->error->reserved      = "ID %s，Konto ist reserviert.";
-$lang->user->error->weakPassword  = "ID %s，the password strength is less than the system setting.";
-$lang->user->error->commonWeak    = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
+$lang->user->error->account        = "ID %s，Konto muss Buchstaben, Unterstriche oder Ziffern enthalten. Mindestens 3 Zeichen.";
+$lang->user->error->accountDupl    = "ID %s，Konto wurde genutzt.";
+$lang->user->error->realname       = "ID %s，muss der Realname sein";
+$lang->user->error->password       = "ID %s，passwort muss mindestens 6 Zeichen lang sein.";
+$lang->user->error->mail           = "ID %s，bitte geben Sie eine gültige Emailadresse an.";
+$lang->user->error->reserved       = "ID %s，Konto ist reserviert.";
+$lang->user->error->weakPassword   = "ID %s，the password strength is less than the system setting.";
+$lang->user->error->dangerPassword = "ID %s，Passwords cannot be used with [%s] these commonly used if-passwords.";
 
 $lang->user->error->verifyPassword   = "Verifikation fehlgeschlagen. Bitte geben Sie ihr Loginpasswort ein.";
 $lang->user->error->originalPassword = "Altes Passwort ist falsch.";
