@@ -1632,7 +1632,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function ajaxGetBugFiledOptions($productID, $projectID = 0)
+    public function ajaxGetBugFieldOptions($productID, $projectID = 0)
     {
         $modules  = $this->loadModel('tree')->getOptionMenu($productID, 'bug');
         $builds   = $this->loadModel('build')->getProjectBuildPairs($projectID, $productID);
@@ -1640,6 +1640,6 @@ class bug extends control
         $pri      = $this->lang->bug->priList;
         $severity = $this->lang->bug->severityList;
 
-        die(json_encode(array('Modules' => $modules, 'Categories' => $type, 'Versions' => $builds, 'Severities' => $severity, 'Priorities' => $pri)));
+        die(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
     }
 }
