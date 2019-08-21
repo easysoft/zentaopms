@@ -107,14 +107,32 @@ $(function()
     {
         if(statusMap[type][from] && statusMap[type][from][to])
         {
-            kanbanModalTrigger.show(
+            var method = statusMap[type][from][to];
+            if(method == 'changeSubStatus')
             {
-                url: $.createLink(type, statusMap[type][from][to], 'id=' + id) + onlybody,
-                shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-                hidden: refresh
-            });
+                $.getJSON($.createLink(type, method, 'id=' + id + '&subStatus=' + to), function(response)
+                {
+                    if(response.result == 'fail' && response.message)
+                    {
+                        bootAlert(response.message);
+                        setTimeout(function(){location.reload();}, 1000);
+                    }
+                });
+            }
+            else
+            {
+                kanbanModalTrigger.show(
+                {
+                    url: $.createLink(type, method, 'id=' + id) + onlybody,
+                    shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
+                    width: 900,
+                    hidden: refresh
+                });
+            }
         }
-        return false;
+        
+        /* Keep the draged element stay in the new place. */
+        return true;
     };
 
     $kanban.droppable(
