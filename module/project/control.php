@@ -900,10 +900,8 @@ class project extends control
         list($dateList, $interval) = $this->project->getDateList($projectInfo->begin, $projectInfo->end, $type, $interval, 'Y-m-d');
         $chartData = $this->project->buildBurnData($projectID, $dateList, $type);
 
-        /* Set a space when assemble the string for english. */
-        $space   = common::checkNotCN() ? ' ' : '';
         $dayList = array_fill(1, floor($project->days / $this->config->project->maxBurnDay) + 5, '');
-        foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . $space . ($key + 1) . $space . $this->lang->day;
+        foreach($dayList as $key => $val) $dayList[$key] = $this->lang->project->interval . ($key + 1) . $this->lang->day;
 
         /* Assign. */
         $this->view->title       = $title;
@@ -914,7 +912,7 @@ class project extends control
         $this->view->type        = $type;
         $this->view->interval    = $interval;
         $this->view->chartData   = $chartData;
-        $this->view->dayList     = array('full' => $this->lang->project->interval . $space . 1 . $space . $this->lang->day) + $dayList;
+        $this->view->dayList     = array('full' => $this->lang->project->interval . '1' . $this->lang->day) + $dayList;
 
         unset($this->lang->modulePageActions);
         $this->display();
