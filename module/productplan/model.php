@@ -297,22 +297,6 @@ class productplanModel extends model
     }
 
     /**
-     * updatePlanParentStatus,hasChild set parent = -1;noChild set parent = 0; 
-     * 
-     * @param  int    $planID 
-     * @access public
-     * @return void
-     */
-    public function updatePlanParentStatus($planID)
-    {
-        if($planID <= 0) return;
-        $childCount = count($this->getChildren($planID));
-        if($childCount == 0) $status = 0;
-        if($childCount > 0)  $status = -1;           
-        return $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq($status)->where('id')->eq((int)$planID)->exec();
-    }
-
-    /**
      * Create a plan.
      *
      * @access public
@@ -439,6 +423,32 @@ class productplanModel extends model
         }
 
         return $changes;
+    }
+
+    /**
+     * Change parent field by planID.
+     * 
+     * @param  int    $planID 
+     * @access public
+     * @return void
+     */
+    public function changeParentField($planID)
+    {
+        $plan = $this->getById($planID);
+        if($plan->parent <= 0) return true;
+
+        $childCount = count($this->getChildren($plan->parent));
+        $parent     = $childCount == 0 ? '0' : '-1';
+
+        $parentPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->eq($plan->parent)->andWhere('deleted')->eq(0)->fetch();
+        if($parentPlan)
+        {
+            $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq($parent)->where('id')->eq((int)$plan->parent)->exec();
+        }
+        else
+        {
+            $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('0')->where('id')->eq((int)$planID)->exec();
+        }
     }
 
     /**

@@ -157,15 +157,17 @@ class productplan extends control
      */
     public function delete($planID, $confirm = 'no')
     {
+        $plan = $this->productplan->getById($planID);
+        if($plan->parent < 0) die(js::alert($this->lang->productplan->cannotDeleteParent));
+
         if($confirm == 'no')
         {
             die(js::confirm($this->lang->productplan->confirmDelete, $this->createLink('productPlan', 'delete', "planID=$planID&confirm=yes")));
         }
         else
         {
-            $plan = $this->productplan->getById($planID);
             $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
-            $this->productplan->updatePlanParentStatus($plan->parent);
+            if($plan->parent > 0) $this->productplan->changeParentField($planID);
             $this->executeHooks($planID);
 
             /* if ajax request, send result. */

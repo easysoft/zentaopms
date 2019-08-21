@@ -126,8 +126,15 @@
 
           if(common::hasPriv('productplan', 'delete', $plan))
           {
-              $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"productplanList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->productplan->delete}'");
+              $deleteURL = '###';
+              $disabled  = 'disabled';
+              if($plan->parent >= 0)
+              {
+                  $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
+                  $deleteURL = "javascript:ajaxDelete(\"$deleteURL\",\"productplanList\",confirmDelete)";
+                  $disabled  = '';
+              }
+              echo html::a($deleteURL, '<i class="icon-trash"></i>', '', "class='btn {$disabled}' title='{$lang->productplan->delete}'");
           }
           ?>
         </td>

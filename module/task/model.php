@@ -416,7 +416,9 @@ class taskModel extends model
         $this->computeWorkingHours($parentID);
 
         $childrenStatus = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
-        $status         = '';
+        if(empty($childrenStatus)) return $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
+
+        $status = '';
         if(count($childrenStatus) == 1)
         {
             $status = current($childrenStatus);
@@ -449,7 +451,9 @@ class taskModel extends model
             }
         }
 
-        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+        $parentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
+        if(empty($parentTask)) return $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($taskID)->exec();
+
         if($status and $parentTask->status != $status)
         {
             $now  = helper::now();
@@ -499,6 +503,7 @@ class taskModel extends model
 
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
+            $task->parent         = '-1';
             $this->dao->update(TABLE_TASK)->data($task)->where('id')->eq($parentID)->exec();
             if(!dao::isError())
             {
@@ -2544,6 +2549,7 @@ class taskModel extends model
         if($action == 'batchcreate'    and !empty($task->team))     return false;
         if($action == 'batchcreate'    and $task->parent > 0)       return false;
         if($action == 'recordestimate' and $task->parent == -1)     return false;
+        if($action == 'delete'         and $task->parent < 0)       return false;
 
         if($action == 'start')    return $task->status == 'wait';
         if($action == 'restart')  return $task->status == 'pause';

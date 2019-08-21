@@ -1159,6 +1159,8 @@ class task extends control
     public function delete($projectID, $taskID, $confirm = 'no')
     {
         $task = $this->task->getById($taskID);
+        if($task->parent < 0) die(js::alert($this->lang->task->cannotDeleteParent));
+
         if($confirm == 'no')
         {
             die(js::confirm($this->lang->task->confirmDelete, inlink('delete', "projectID=$projectID&taskID=$taskID&confirm=yes")));
@@ -1169,14 +1171,6 @@ class task extends control
             if($task->parent > 0) $this->task->updateParentStatus($task->id);
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($task->story) $this->loadModel('story')->setStage($task->story);
-            if(!empty($task->children))
-            {
-                foreach($task->children as $childTask)
-                {
-                    $this->task->delete(TABLE_TASK, $childTask->id);
-                    if($childTask->story) $this->loadModel('story')->setStage($childTask->story);
-                }
-            }
 
             $this->executeHooks($taskID);
 
