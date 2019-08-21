@@ -58,7 +58,7 @@ $lang->project->viewBug       = 'Bugs';
 $lang->project->noProduct     = "Kein {$lang->productCommon}";
 $lang->project->createStory   = "Story erstellen";
 $lang->project->all           = 'Alle';
-$lang->project->undone        = 'Unabgeschlossen';
+$lang->project->undone        = 'Unabgeschlossen ';
 $lang->project->unclosed      = 'Geschlossen';
 $lang->project->typeDesc      = 'Keine Story, Bug, Build, Testaufgabe oder Burndown ist bei OPS erlaubt';
 $lang->project->mine          = 'Meine Zuständigkeit: ';
@@ -269,7 +269,7 @@ $lang->project->createTask            = 'Aufgaben erstellen';
 $lang->project->goback                = "Zurückkehren";
 $lang->project->noweekend             = 'Ohne Wochenende';
 $lang->project->withweekend           = 'Mit Wochenende';
-$lang->project->interval              = 'Intervale';
+$lang->project->interval              = 'Intervale ';
 $lang->project->fixFirstWithLeft      = 'Modify the left';
 
 $lang->project->action = new stdclass();
