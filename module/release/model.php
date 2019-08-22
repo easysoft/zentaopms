@@ -125,13 +125,15 @@ class releaseModel extends model
             }
             else
             {
-                $build = fixer::input('post')
-                    ->add('product', (int)$productID)
-                    ->add('builder', $this->app->user->account)
-                    ->add('branch', $branch)
-                    ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-                    ->remove('marker,build,files,labels,uid,subStatus') // There is the subStatus field in the biz version.
-                    ->get();
+                $build = new stdclass();
+                $build->product = (int)$productID;
+                $build->branch  = (int)$branch;
+                $build->name    = $this->post->name;
+                $build->date    = $this->post->date;
+                $build->builder = $this->app->user->account;
+                $build->desc    = $this->post->desc;
+                $build->project = 0;
+
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->dao->insert(TABLE_BUILD)->data($build)
                     ->autoCheck()

@@ -1125,12 +1125,13 @@ class taskModel extends model
         }
 
         /* Record consumed and left. */
-        $estimate = fixer::input('post')
-            ->setDefault('account', $this->app->user->account)
-            ->setDefault('task', $taskID)
-            ->setDefault('date', $task->realStarted)
-            ->remove('realStarted,comment,status')
-            ->get();
+        $estimate = new stdclass();
+        $estimate->date     = zget($task, 'realStarted', date(DT_DATE1));
+        $estimate->task     = $taskID;
+        $estimate->consumed = zget($task, 'consumed', 0);
+        $estimate->left     = zget($task, 'left', 0);
+        $estimate->work     = zget($task, 'work', '');
+        $estimate->account  = $this->app->user->account;
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
         $this->addTaskEstimate($estimate);
 
@@ -1349,14 +1350,13 @@ class taskModel extends model
             }
         }
 
-        $estimate = fixer::input('post')
-            ->setDefault('account', $this->app->user->account)
-            ->setDefault('task', $taskID)
-            ->setDefault('date', date(DT_DATE1))
-            ->setIF($this->post->finishedDate, 'date', $this->post->finishedDate)
-            ->setDefault('left', 0)
-            ->remove('finishedDate,comment,assignedTo,files,labels,consumed,currentConsumed,status')
-            ->get();
+        $estimate = new stdclass();
+        $estimate->date     = zget($task, 'finishedDate', date(DT_DATE1));
+        $estimate->task     = $taskID;
+        $estimate->consumed = zget($task, 'consumed', 0);
+        $estimate->left     = zget($task, 'left', 0);
+        $estimate->work     = zget($task, 'work', '');
+        $estimate->account  = $this->app->user->account;
 
         $estimate->consumed = $consumed;
         if($estimate->consumed) $this->addTaskEstimate($estimate);
