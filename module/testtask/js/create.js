@@ -1,30 +1,12 @@
 /**
- * load builds of selected product project.
- *
- * @param  productID $productID
+ * Load project related builds
+ * 
  * @access public
  * @return void
  */
-function loadProductRelated(productID)
+function loadProductRelated()
 {
-    projectID = $('#project').val();
-    loadProductProjectBuilds(productID, projectID);
-}
-
-/**
- * loadProductProjectBuilds
- *
- * @param  productID $productID
- * @param  projectID $projectID
- * @access public
- * @return void
- */
-function loadProductProjectBuilds(productID, projectID)
-{
-    selectedBuild = $('#build').val();
-    if(!selectedBuild) selectedBuild = 0;
-    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID  + '&varName=testTaskBuild&build=' + selectedBuild);
-    $('#buildBox').load(link, function(){$('#build').chosen();});
+    loadProjectBuilds(parseInt($('#project').val()));
 }
 
 /**
@@ -91,10 +73,5 @@ function suitEndDate()
 $(function()
 {
     adjustPriBoxWidth();
-    if($('#project').val())
-    {
-        productID = $('#product').val();
-        projectID = $('#project').val();
-        loadProductProjectBuilds(productID, projectID);
-    }
+    if($('#project').val()) loadProjectBuilds($('#project').val());
 });

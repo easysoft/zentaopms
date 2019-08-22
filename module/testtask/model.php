@@ -1391,5 +1391,4 @@ class testtaskModel extends model
         }
         return array($toList, $ccList);
     }
-
 }
