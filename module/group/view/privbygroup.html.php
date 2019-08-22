@@ -143,11 +143,19 @@
 <script>
 $(document).ready(function()
 {
+    /**
+     * 勾选浏览列表标签时，自动勾选下面的所有标签。 
+     * Check all tabs when the Browse list tab is selected.
+     */
     $('.menus input[value=browse]').change(function()
     {
         $(this).parents('.menus').find('[name^=actions]').prop('checked', $(this).prop('checked'));
     });
 
+    /**
+     * 勾选浏览列表标签下面的任意一个标签时，自动勾选浏览列表标签。
+     * Check the browse list tab when any one of the tabs is selected.
+     */
     $('.menus input[name^=actions]:not(input[value=browse])').click(function()
     {
         var $parent = $(this).parents('.menus');
