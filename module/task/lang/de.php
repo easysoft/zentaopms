@@ -194,6 +194,7 @@ $lang->task->commentActions        = '%s. %s, kommentiert von <strong>%s</strong
 $lang->task->deniedNotice          = 'Nur %s kann die Aufgabe %s.';
 $lang->task->noTask                = 'Keine Aufagben. ';
 $lang->task->createDenied          = 'Aufgben erstellen it in diesem Projekt gesperrt';
+$lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Verbraucht" muss eine Zahl sein.';

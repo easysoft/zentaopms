@@ -48,7 +48,7 @@ $lang->user->originalPassword = '原密碼';
 $lang->user->newPassword      = '新密碼';
 $lang->user->verifyPassword   = '您的密碼';
 $lang->user->resetPassword    = '忘記密碼';
-$lang->user->score            = '分數';
+$lang->user->score            = '積分';
 
 $lang->user->legendBasic        = '基本資料';
 $lang->user->legendContribution = '個人貢獻';
@@ -166,14 +166,14 @@ $lang->user->placeholder->passwordStrength[1] = '6位以上，包含大小寫字
 $lang->user->placeholder->passwordStrength[2] = '10位以上，包含大小寫字母，數字，特殊字元。';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "【ID %s】的用戶名應該為：三位以上的英文、數字或下劃線的組合";
-$lang->user->error->accountDupl   = "【ID %s】的用戶名已經存在";
-$lang->user->error->realname      = "【ID %s】的真實姓名必須填寫";
-$lang->user->error->password      = "【ID %s】的密碼必須為六位以上";
-$lang->user->error->mail          = "【ID %s】的郵箱地址不正確";
-$lang->user->error->reserved      = "【ID %s】的用戶名已被系統預留";
-$lang->user->error->weakPassword  = "【ID %s】的密碼強度小於系統設定。";
-$lang->user->error->commonWeak    = "【ID %s】的密碼不能使用【%s】這些常用若口令。";
+$lang->user->error->account        = "【ID %s】的用戶名應該為：三位以上的英文、數字或下劃線的組合";
+$lang->user->error->accountDupl    = "【ID %s】的用戶名已經存在";
+$lang->user->error->realname       = "【ID %s】的真實姓名必須填寫";
+$lang->user->error->password       = "【ID %s】的密碼必須為六位以上";
+$lang->user->error->mail           = "【ID %s】的郵箱地址不正確";
+$lang->user->error->reserved       = "【ID %s】的用戶名已被系統預留";
+$lang->user->error->weakPassword   = "【ID %s】的密碼強度小於系統設定。";
+$lang->user->error->dangerPassword = "【ID %s】的密碼不能使用【%s】這些常用若口令。";
 
 $lang->user->error->verifyPassword   = "驗證失敗，請檢查您的系統登錄密碼是否正確";
 $lang->user->error->originalPassword = "原密碼不正確";

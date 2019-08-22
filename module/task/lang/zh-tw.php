@@ -194,6 +194,7 @@ $lang->task->commentActions        = '%s. %s, 由 <strong>%s</strong> 添加備�
 $lang->task->deniedNotice          = '當前任務只有%s才可以%s。';
 $lang->task->noTask                = '暫時沒有任務。';
 $lang->task->createDenied          = '你不能在該項目添加任務';
+$lang->task->cannotDeleteParent    = '不能刪除父任務。';
 
 $lang->task->error                   = new stdclass();
 $lang->task->error->consumedNumber   = '"本次消耗"必須為數字';

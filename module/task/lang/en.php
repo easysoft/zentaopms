@@ -194,6 +194,7 @@ $lang->task->commentActions        = '%s. %s, commented by <strong>%s</strong>.'
 $lang->task->deniedNotice          = 'Only the %s can %s the task.';
 $lang->task->noTask                = 'No tasks yet. ';
 $lang->task->createDenied          = 'Create Task is denied in this project';
+$lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Current Cost" must be numbers.';

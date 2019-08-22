@@ -42,6 +42,7 @@ $lang->productplan->confirmDelete      = "Do you want to delete this plan?";
 $lang->productplan->confirmUnlinkStory = "Do you want to unlink this story?";
 $lang->productplan->confirmUnlinkBug   = "Do you want to unlink this bug?";
 $lang->productplan->noPlan             = 'No plans yet. ';
+$lang->productplan->cannotDeleteParent = 'Cannot delete parent plan';
 
 $lang->productplan->id       = 'ID';
 $lang->productplan->product  = $lang->productCommon;

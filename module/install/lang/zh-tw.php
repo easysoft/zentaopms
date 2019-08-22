@@ -36,10 +36,10 @@ $lang->install->links = <<<EOT
 新浪微博：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
 
 
+
+
 您現在正在安裝的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
-
-
 
 $lang->install->newReleased= "<strong class='text-danger'>提示</strong>：官網網站已有最新版本<strong class='text-danger'>%s</strong>, 發佈日期于 %s。";
 $lang->install->or         = '或者';
@@ -178,9 +178,8 @@ $lang->install->product = array('chanzhi', 'ranzhi', 'xuanxuan', 'ydisk', 'meshi
 
 $lang->install->promotion      = "為您推薦易軟天創旗下其他產品：";
 $lang->install->chanzhi        = new stdclass();
-$lang->install->chanzhi->name  = '蟬知企業門戶系統';
-$lang->install->chanzhi->width = 'col-md-4';
-$lang->install->chanzhi->logo  = 'images/main/chanzhi.png';
+$lang->install->chanzhi->name  = '蟬知門戶';
+$lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
 $lang->install->chanzhi->url   = 'http://www.chanzhi.org';
 $lang->install->chanzhi->desc  = <<<EOD
 <ul>
@@ -192,9 +191,8 @@ $lang->install->chanzhi->desc  = <<<EOD
 EOD;
 
 $lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name  = '然之協同管理系統';
-$lang->install->ranzhi->width = 'col-md-4';
-$lang->install->ranzhi->logo  = 'images/main/ranzhi.png';
+$lang->install->ranzhi->name  = '然之協同';
+$lang->install->ranzhi->logo  = 'images/main/ranzhi.ico';
 $lang->install->ranzhi->url   = 'http://www.ranzhi.org';
 $lang->install->ranzhi->desc  = <<<EOD
 <ul>
@@ -205,23 +203,9 @@ $lang->install->ranzhi->desc  = <<<EOD
 </ul>
 EOD;
 
-$lang->install->zdoo = new stdclass();
-$lang->install->zdoo->name  = '可深度定製的雲端一體化協作平台';
-$lang->install->zdoo->width = 'col-md-4';
-$lang->install->zdoo->url   = 'http://www.zdoo.com';
-$lang->install->zdoo->desc  = <<<EOD
-<ul>
-  <li>安全、穩定、高效</li>
-  <li>以容器為交付單位</li>
-  <li>租戶隔離，可深度定製</li>
-  <li>提供一體化管理平台</li>
-</ul>
-EOD;
-
 $lang->install->xuanxuan = new stdclass();
-$lang->install->xuanxuan->name  = '喧喧即時聊天軟件';
-$lang->install->xuanxuan->width = 'col-md-4';
-$lang->install->xuanxuan->logo  = 'images/main/xuanxuan.png';
+$lang->install->xuanxuan->name  = '喧喧聊天';
+$lang->install->xuanxuan->logo  = 'images/main/xuanxuan.ico';
 $lang->install->xuanxuan->url   = 'http://www.xuan.im';
 $lang->install->xuanxuan->desc  = <<<EOD
 <ul>
@@ -233,9 +217,8 @@ $lang->install->xuanxuan->desc  = <<<EOD
 EOD;
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = '悅庫免費企業網盤';
-$lang->install->ydisk->width = 'col-md-6';
-$lang->install->ydisk->logo  = 'images/main/ydisk.png';
+$lang->install->ydisk->name  = '悅庫網盤';
+$lang->install->ydisk->logo  = 'images/main/ydisk.ico';
 $lang->install->ydisk->url   = 'http://www.ydisk.cn';
 $lang->install->ydisk->desc  = <<<EOD
 <ul>
@@ -248,8 +231,7 @@ EOD;
 
 $lang->install->meshiot = new stdclass();
 $lang->install->meshiot->name  = '易天物聯';
-$lang->install->meshiot->width = 'col-md-6';
-$lang->install->meshiot->logo  = 'images/main/meshiot.png';
+$lang->install->meshiot->logo  = 'images/main/meshiot.ico';
 $lang->install->meshiot->url   = 'https://www.meshiot.com';
 $lang->install->meshiot->desc  = <<<EOD
 <ul>

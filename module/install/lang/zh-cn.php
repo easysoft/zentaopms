@@ -36,6 +36,8 @@ $lang->install->links = <<<EOT
 新浪微博：<a href='http://weibo.com/easysoft' target='_blank'>http://weibo.com/easysoft</a>
 
 
+
+
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
