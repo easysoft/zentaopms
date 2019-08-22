@@ -1621,12 +1621,13 @@ class docModel extends model
      */
     public function buildCreateButton4Doc()
     {
-        $libID    = $this->dao->select('id')->from(TABLE_DOCLIB)->where('deleted')->eq(0)->orderBy('id desc')->limit('1')->fetch('id');
+        $libs  = $this->getLibs('all');
         $html  = "";
-        if($libID)
+        if($libs)
         {
+            $libID = key($libs);
             $html .= "<div class='dropdown' id='createDropdown'>";
-            $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . "<span class='caret'></span></button>";
+            $html .= "<button class='btn btn-primary color-darkblue' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i>" . $this->lang->doc->create . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu' style='left:0px'>";
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {

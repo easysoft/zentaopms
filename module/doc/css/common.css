@@ -13,8 +13,6 @@
 .row-spliting .col-spliter:before,
 .row-spliting .col-spliter:after {opacity: 1;}
 
-html[lang='en'] #whiteListBox .input-group:last-child .input-group-addon{padding:5px 16px}
-
 @media (max-width: 720px)
 {
   .split-row > .side-col,
@@ -84,3 +82,5 @@ td.c-name a:visited{color: #082999}
 #pageNav .dropdown-menu{max-height:250px; overflow-y:auto;}
 
 #createDropdown ul.dropdown-menu{width:100%;}
+
+.color-darkblue{background:rgb(0,0,139)}
