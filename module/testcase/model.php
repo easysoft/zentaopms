@@ -632,7 +632,7 @@ class testcaseModel extends model
             ->setDefault('story,branch', 0)
             ->join('stage', ',')
             ->join('linkCase', ',')
-            ->setForce('status', $status);
+            ->setForce('status', $status)
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
 
