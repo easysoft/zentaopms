@@ -1,4 +1,4 @@
-.boards {display: table; table-layout: fixed; width: auto; min-height: 50px;}
+.boards {display: table; table-layout: fixed; width: auto; min-height: 50px; min-width: 140px;}
 .boards .board:not(:last-child) {border-right: 1px solid #ddd;}
 .board {display: table-cell; width: 16.666666667%; padding: 10px; border: 1px solid transparent; transition: background-color .2s, opacity .2s; vertical-align: top;}
 .board-item {border: 1px solid #EBEBEB; padding: 5px 10px; cursor: move; border-radius: 2px; background-color: #fff; transition: border .2s, opacity .2s; overflow: hidden;}
@@ -23,13 +23,13 @@
 .board-actions {position: absolute; right: 3px; top: 3px;}
 .board-actions.nav > li > a {padding: 3px 3px;}
 #kanban {overflow-y: auto}
-#kanban > .table {min-width: 1100px;}
+#kanban > .table {min-width: 1100px; table-layout: auto;}
 #kanban.dragging .boards.dragging .board {background: #eee; opacity: .35; border-color: #f1f1f1}
 #kanban thead > tr > th {padding-left: 0; padding-right: 0;}
-#kanban thead .c-side {padding: 5px; max-width: 15%;}
+#kanban thead .c-side {padding: 5px; max-width: 15%; min-width: 200px;}
 #kanban .label-pri {width: 16px; height: 16px; line-height: 12px; min-width: 16px; font-size: 12px; padding: 0;}
 #kanban tbody > tr > td {line-height: 24px;}
-#kanban .c-board {border-bottom: 4px #EAF3FC solid;}
+#kanban .c-board {border-bottom: 4px #EAF3FC solid; min-width: 140px;}
 #kanban .c-board.s-wait {border-color: #7EC5FF;}
 #kanban .c-board.s-doing {border-color: #0991FF;}
 #kanban .c-board.s-pause {border-color: #fdc137;}
@@ -47,3 +47,18 @@
 
 .table-grouped > tbody > tr,
 .table-grouped > tbody > tr:hover {background: #fff!important;}
+
+.fixedSide {position: fixed; background-color: rgb(75, 75, 75, .85); color: #eee; z-index: 999;}
+.fixedSide .dropdown-menu {background-color: rgb(75, 75, 75, .85);}
+.fixedSide .dropdown-menu > li > a {color: #eee;}
+.fixedSide .btn-link, .fixedSide a , .fixedSide .text-muted {color: #eee;}
+.fixedSide .c-board {border-bottom: 4px #EAF3FC solid; min-width: 140px;}
+.fixedSide th.c-board {color: #3c4353; font-weight: bold;}
+.fixedSide td.c-side {border-bottom: 1px solid #eee;}
+.fixedSide thead .c-side {padding: 5px !important; max-width: 15%; min-width: 200px;}
+.fixedSide thead > tr > th {padding-left: 0; padding-right: 0;}
+.fixedSide tbody > tr > td {line-height: 24px;}
+.fixedSide thead > tr > th, .fixedSide tbody > tr > td {min-height: 36px; padding: 2px 8px !important;}
+.fixedSide .group-title {word-break: break-all; line-height: 16px; padding: 3px 0; display: block;}
+.fixedSide .group-info > span + span {display: inline-block; margin-left: 8px;}
+.fixedSide .label-pri {width: 16px; height: 16px; line-height: 12px; min-width: 16px; font-size: 12px; padding: 0;}
