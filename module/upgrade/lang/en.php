@@ -12,7 +12,7 @@
 $lang->upgrade->common  = 'Update';
 $lang->upgrade->result  = 'Result';
 $lang->upgrade->fail    = 'Failed';
-$lang->upgrade->success = 'Updated';
+$lang->upgrade->success = "<p><i class='icon icon-check-circle'></i></p><p>Congratulations!</p><p>Your ZenTao is updated.</p>";
 $lang->upgrade->tohome  = 'Visit ZenTao';
 $lang->upgrade->license = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2.';
 $lang->upgrade->warnning= 'Warning!';

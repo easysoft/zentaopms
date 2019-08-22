@@ -176,11 +176,10 @@ EOT;
 
 $lang->install->product = array('chanzhi', 'ranzhi', 'ydisk', 'meshiot');
 
-$lang->install->promotion     = "Products also from Nature Easy Soft:";
+$lang->install->promotion      = "Products also from Nature Easy Soft:";
 $lang->install->chanzhi        = new stdclass();
-$lang->install->chanzhi->name  = 'ZSITE Content Management System';
-$lang->install->chanzhi->width = 'col-md-6';
-$lang->install->chanzhi->logo  = 'images/main/chanzhi_en.png';
+$lang->install->chanzhi->name  = 'ZSITE';
+$lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
 $lang->install->chanzhi->url   = 'http://www.zsite.net';
 $lang->install->chanzhi->desc  = <<<EOD
 <ul>
@@ -192,9 +191,8 @@ $lang->install->chanzhi->desc  = <<<EOD
 EOD;
 
 $lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name  = 'ZDOO Collaborative System';
-$lang->install->ranzhi->width = 'col-md-6';
-$lang->install->ranzhi->logo  = 'images/main/zdoo_org.png';
+$lang->install->ranzhi->name  = 'ZDOO';
+$lang->install->ranzhi->logo  = 'images/main/ranzhi.ico';
 $lang->install->ranzhi->url   = 'http://www.zdoo.org';
 $lang->install->ranzhi->desc  = <<<EOD
 <ul>
@@ -218,24 +216,9 @@ EOD;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = 'Y Disk-Free NetDisk for Enterprises';
-$lang->install->ydisk->width = 'col-md-6';
-$lang->install->ydisk->logo  = 'images/main/ydisk.png';
+$lang->install->ydisk->name  = 'Y Disk-Free NetDisk';
+$lang->install->ydisk->logo  = 'images/main/ydisk.ico';
 $lang->install->ydisk->url   = 'http://www.ydisk.cn';
 $lang->install->ydisk->desc  = <<<EOD
 <ul>
@@ -248,8 +231,7 @@ EOD;
 
 $lang->install->meshiot = new stdclass();
 $lang->install->meshiot->name  = 'MeshIoT';
-$lang->install->meshiot->width = 'col-md-6';
-$lang->install->meshiot->logo  = 'images/main/meshiot.png';
+$lang->install->meshiot->logo  = 'images/main/meshiot.ico';
 $lang->install->meshiot->url   = 'https://www.meshiot.com';
 $lang->install->meshiot->desc  = <<<EOD
 <ul>
