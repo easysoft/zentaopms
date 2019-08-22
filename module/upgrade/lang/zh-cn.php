@@ -12,7 +12,7 @@
 $lang->upgrade->common  = '升级';
 $lang->upgrade->result  = '升级结果';
 $lang->upgrade->fail    = '升级失败';
-$lang->upgrade->success = '升级成功';
+$lang->upgrade->success = "<p><i class='icon icon-check-circle'></i></p><p>恭喜您！</p><p>您的禅道已经成功升级。</p>";
 $lang->upgrade->tohome  = '访问禅道';
 $lang->upgrade->license = '禅道项目管理软件已更换授权协议至 Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->upgrade->warnning= '警告';

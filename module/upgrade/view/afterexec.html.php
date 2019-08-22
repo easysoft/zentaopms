@@ -16,24 +16,28 @@
       <strong><?php echo $lang->upgrade->result;?></strong>
     </div>
     <div class='modal-body'>
-      <div class='alert alert-success mgb-10'>
-        <strong><?php echo $lang->upgrade->success?></strong>
-        <span class='pull-right'><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-sm' id='tohome'")?></span>
-      </div>
-      <div class='panel adbox'>
-        <div class='panel-heading'><strong><?php echo $lang->install->promotion?></strong></div>
-        <div class='panel-body row'>
-          <?php foreach($lang->install->product as $product):?>
-          <div class='<?php echo $lang->install->{$product}->width;?>'>
-            <a class="card ad ad-<?php echo $product;?>" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
-              <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . $lang->install->{$product}->logo;?>)"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" alt=""></div>
-              <div class="card-reveal">
-                <h5 class="card-heading"><?php echo $lang->install->{$product}->name?></h5>
-                <div class="card-content"><?php echo $lang->install->{$product}->desc?></div>
-              </div>
-            </a>
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='message mgb-10'>
+            <strong><?php echo $lang->upgrade->success?></strong>
+            <div><?php echo html::a('index.php', $lang->upgrade->tohome, '', "class='btn btn-primary btn-wide' id='tohome'")?></div>
           </div>
-          <?php endforeach;?>
+        </div>
+        <div class='divider'></div>
+        <div class='col-md-6'>
+          <div class='panel adbox'>
+            <div class='panel-heading'><strong><?php echo $lang->install->promotion?></strong></div>
+            <div class='panel-body row'>
+              <?php foreach($lang->install->product as $product):?>
+              <a class="card ad ad-<?php echo $product;?>" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
+              <div class="img-wrapper"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" /> <?php echo $lang->install->{$product}->name;?></div>
+                <div class="card-reveal">
+                  <div class="card-content"><?php echo $lang->install->{$product}->desc?></div>
+                </div>
+              </a>
+              <?php endforeach;?>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,8 +49,8 @@ foreach($needProcess as $processKey => $value) echo 'var ' . $processKey . "Fini
 if(isset($needProcess['updateFile'])):?>
 $(function()
 {
-    $('a#tohome').closest('.alert').hide();
-    $('.adbox').before("<div id='resultBox' class='alert alert-info'><p><?php echo $lang->upgrade->updateFile;?></p></div>");
+    $('a#tohome').closest('.message').hide();
+    $('.col-md-6:first').append("<div id='resultBox' class='alert alert-info'><p><?php echo $lang->upgrade->updateFile;?></p></div>");
     updateFile('<?php echo inlink('ajaxUpdateFile')?>');
 })
 function updateFile(link)
@@ -66,7 +70,7 @@ function updateFile(link)
             if(<?php echo $condition?>)
             {
                 $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
-                $('a#tohome').closest('.alert').show();
+                $('a#tohome').closest('.message').show();
             }
         }
         else
