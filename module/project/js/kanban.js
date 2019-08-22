@@ -160,7 +160,7 @@ $(function()
         },
         drag: function(e)
         {
-            var $item = $(e.element);
+            var $item   = $(e.element);
             var $target = $(e.target);
             var $holder = $target.find('.board-drag-holder');
             if (!$holder.length) $holder = $('<div class="board-drag-holder"></div>').appendTo($target);
@@ -194,4 +194,59 @@ $(function()
         });
         return false;
     });
+
+    fixKanbanSide($kanban);
 });
+
+function fixKanbanSide($kanban)
+{
+    if($kanban.length == 0) return false;
+
+    fixSideInit();
+    $kanban.scroll(fixSide);//Fix kanban side when scrolling.
+
+    var tableWidth, kanbanOffset, fixedSide, $fixedSide;
+    function fixSide()
+    {
+        kanbanOffset = $kanban.offset().left;
+        $fixedSide   = $kanban.parent().find('.fixedSide');
+        if($fixedSide.length <= 0 && kanbanOffset < $kanban.scrollLeft())
+        {
+            var $th = $kanban.find('table thead tr th:first');
+
+            tableWidth = $th.width();
+
+            fixedSide  = "<table class='table table-bordered fixedSide'><thead><tr><th class='c-board c-side has-btn'>" + $th.html()+ '</th></tr></thead><tbody>';
+            $kanban.find('table tbody tr').each(function()
+            {
+                var $td = $(this).find('td:first');
+                fixedSide = fixedSide + "<tr><td class='c-side text-left'>" + $td.html() + '</td></tr>';
+            });
+            fixedSide = fixedSide + '</tbody></table>';
+
+            $kanban.before(fixedSide);
+
+            $('.fixedSide').width(tableWidth);
+            $('.fixedSide').css('top', $kanban.offset());
+
+            /* Reset height. */
+            var index = 1;
+            $('.fixedSide tbody tr').each(function()
+            {
+                var $td = $kanban.find('table tbody tr:nth-child(' + index + ') td:first');
+
+                if($(this).find('td:first div:first').length == 0) $(this).find('td:first').html('<div></div>');
+                $(this).find('td:first div:first').height($td.height());
+
+                index++;
+            })
+        }
+        if($fixedSide.length > 0 && kanbanOffset >= $kanban.scrollLeft()) $fixedSide.remove();
+    }
+    function fixSideInit()
+    {
+        $fixedSide = $kanban.parent().find('.fixedSide');
+        if($fixedSide.length > 0) $fixedSide.remove();
+        fixSide();
+    }
+}
