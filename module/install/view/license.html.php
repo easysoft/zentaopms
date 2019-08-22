@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <div class='modal-dialog modal-lg'>
+  <div class='modal-dialog'>
     <div class='modal-header'>
       <h3><?php echo $lang->install->license;?></h3>
     </div>

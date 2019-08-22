@@ -30,7 +30,7 @@
             <div class='panel-body row'>
               <?php foreach($lang->install->product as $product):?>
               <a class="card ad ad-<?php echo $product;?>" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
-              <div class="img-wrapper"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" /> <?php echo $lang->install->{$product}->name;?></div>
+                <div class="img-wrapper"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" /> <?php echo $lang->install->{$product}->name;?></div>
                 <div class="card-reveal">
                   <div class="card-content"><?php echo $lang->install->{$product}->desc?></div>
                 </div>

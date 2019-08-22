@@ -3,15 +3,15 @@ blockquote{padding: 0; border-left: 0;}
 li{line-height: 2em}
 .modal-dialog{position: relative; line-height: 20px}
 .modal-header{position: absolute; right: 15px; top: 10px; border: none;z-index: 999}
-.modal-body{padding: 20px 60px;}
+.modal-body{padding: 20px 50px;}
 
 .dropdown-menu {min-width: 120px; margin-top: 0;}
 
+.col-md-4{width:20%;}
 .card {
   position: relative;
   display: block;
   padding: 0;
-  margin-bottom: 20px;
   overflow: hidden;
   border: 1px solid #ddd;
   border-radius: 0;
@@ -54,13 +54,14 @@ li{line-height: 2em}
 .card:hover>.card-reveal{top:0}
 
 .card.ad > .img-wrapper {
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 115px;
+  height:     110px;
+  line-height:110px;
+  text-align:center;
+  font-size:25px;
   width: 100%;
 }
-.card.ad > .img-wrapper > img{display: none;}
+.card.ad > .img-wrapper > img{width:35px; height:35px}
 .card.ad > .card-heading {text-align: center;}
 .card.ad > .card-reveal > .card-heading { padding: 12px 10px 10px 15px;}
 .card.ad > .card-reveal {color: #333;}
-.card.ad > .card-reveal li{line-height:1.5}
+.card.ad > .card-reveal li{line-height:1.5;font-size:12px;}

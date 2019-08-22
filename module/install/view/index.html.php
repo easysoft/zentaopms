@@ -43,9 +43,9 @@
             <h5><?php echo $lang->install->promotion?></h5>
             <div class='row'>
               <?php foreach($lang->install->product as $product):?>
-              <div class='<?php echo $lang->install->{$product}->width;?>'>
+              <div class='col-md-4'>
                 <a class="card ad" href="<?php echo $lang->install->{$product}->url;?>" target="_blank">
-                  <div class="img-wrapper" style="background-image:url(<?php echo $defaultTheme . $lang->install->{$product}->logo;?>)"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" alt=""></div>
+                  <div class="img-wrapper"><img src="<?php echo $defaultTheme . $lang->install->{$product}->logo;?>" /> <?php echo $lang->install->{$product}->name;?></div>
                   <div class="card-reveal">
                     <h5 class="card-heading"><?php echo $lang->install->{$product}->name?></h5>
                     <div class="card-content"><?php echo $lang->install->{$product}->desc?></div>
