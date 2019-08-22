@@ -108,9 +108,10 @@ $(function()
         if(statusMap[type][from] && statusMap[type][from][to])
         {
             var method = statusMap[type][from][to];
-            if(method == 'changeSubStatus')
+            var link   = $.createLink(type, method, 'id=' + id + '&subStatus=' + to);
+            if(method == 'ajaxChangeSubStatus')
             {
-                $.getJSON($.createLink(type, method, 'id=' + id + '&subStatus=' + to), function(response)
+                $.getJSON(link, function(response)
                 {
                     if(response.result == 'fail' && response.message)
                     {
@@ -123,7 +124,7 @@ $(function()
             {
                 kanbanModalTrigger.show(
                 {
-                    url: $.createLink(type, method, 'id=' + id) + onlybody,
+                    url: link + onlybody,
                     shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
                     width: 900,
                     hidden: refresh

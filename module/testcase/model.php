@@ -609,51 +609,19 @@ class testcaseModel extends model
      * Update a case.
      *
      * @param  int    $caseID
-     * @param  bool   $getStatus
      * @access public
      * @return void
      */
-    public function update($caseID, $getStatus = false)
+    public function update($caseID)
     {
+        $now     = helper::now();
         $oldCase = $this->getById($caseID);
-        if(!empty($_POST['lastEditedDate']) and $oldCase->lastEditedDate != $this->post->lastEditedDate)
-        {
-            dao::$errors[] = $this->lang->error->editedByOther;
-            return false;
-        }
 
-        $now         = helper::now();
-        $stepChanged = false;
-        $steps       = array();
+        $result = $this->getStatus('update', $oldCase);
+        if(!$result or !is_array($result)) return $result;
 
-        //---------------- Judge steps changed or not.-------------------- */
+        list($stepChanged, $status) = $result;
 
-        /* Remove the empty setps in post. */
-        foreach($this->post->steps as $key => $desc)
-        {
-            $desc = trim($desc);
-            if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $this->post->stepType[$key], 'expect' => trim($this->post->expects[$key]));
-        }
-
-        /* If step count changed, case changed. */
-        if(count($oldCase->steps) != count($steps))
-        {
-            $stepChanged = true;
-        }
-        else
-        {
-            /* Compare every step. */
-            $i = 0;
-            foreach($oldCase->steps as $key => $oldStep)
-            {
-                if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect'] or trim($oldStep->type) != $steps[$i]['type'])
-                {
-                    $stepChanged = true;
-                    break;
-                }
-                $i++;
-            }
-        }
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
 
         $case = fixer::input('post')
@@ -664,12 +632,9 @@ class testcaseModel extends model
             ->setDefault('story,branch', 0)
             ->join('stage', ',')
             ->join('linkCase', ',')
+            ->setForce('status', $status);
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
-        if(!$this->forceNotReview() and $stepChanged) $case->status = 'wait';
-
-        /* Get status by ajax. */
-        if($getStatus) return $case->status;
 
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
@@ -730,7 +695,7 @@ class testcaseModel extends model
         $oldCase = $this->getById($caseID);
 
         $now    = helper::now();
-        $status = $this->getStatus('review', $caseID);
+        $status = $this->getStatus('review', $oldCase);
         $case   = fixer::input('post')
             ->remove('result,comment')
             ->setDefault('reviewedDate', substr($now, 0, 10))
@@ -1585,23 +1550,73 @@ class testcaseModel extends model
      * Get status for different method.
      *
      * @param  string $methodName
-     * @param  int    $caseID
+     * @param  object $case
      * @access public
-     * @return string
+     * @return mixed    string | bool | array
      */
-    public function getStatus($methodName, $caseID = 0)
+    public function getStatus($methodName, $case = null)
     {
-        $status = '';
-
-        if($methodName == 'create') $status = ($this->forceNotReview() || $this->post->forceNotReview) ? 'normal' : 'wait';
-        if($methodName == 'update') $status = $this->update($caseID, $getStatus = true);
-        if($methodName == 'review')
+        if($methodName == 'create')
         {
-            $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
-            if($case) $status = $case->status;
-            if($this->post->result == 'pass') $status = 'normal';
+            if($this->forceNotReview() || $this->post->forceNotReview) return 'normal';
+            return 'wait';
         }
 
-        return $status;
+        if($methodName == 'review')
+        {
+            $status = zget($case, 'status', $status);
+
+            if($this->post->result == 'pass') return 'normal';
+
+            return $status;
+        }
+
+        if($methodName == 'update')
+        {
+            if(!empty($_POST['lastEditedDate']) and $case->lastEditedDate != $this->post->lastEditedDate)
+            {
+                dao::$errors[] = $this->lang->error->editedByOther;
+                return false;
+            }
+
+            $status      = $this->post->status;
+            $stepChanged = false;
+            $steps       = array();
+
+            //---------------- Judge steps changed or not.-------------------- */
+
+            /* Remove the empty setps in post. */
+            foreach($this->post->steps as $key => $desc)
+            {
+                $desc = trim($desc);
+                if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $this->post->stepType[$key], 'expect' => trim($this->post->expects[$key]));
+            }
+
+            /* If step count changed, case changed. */
+            if(count($case->steps) != count($steps))
+            {
+                $stepChanged = true;
+            }
+            else
+            {
+                /* Compare every step. */
+                $i = 0;
+                foreach($case->steps as $key => $oldStep)
+                {
+                    if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect'] or trim($oldStep->type) != $steps[$i]['type'])
+                    {
+                        $stepChanged = true;
+                        break;
+                    }
+                    $i++;
+                }
+            }
+
+            if(!$this->forceNotReview() and $stepChanged) $status = 'wait';
+
+            return array($stepChanged, $status);
+        }
+
+        return '';
     }
 }
