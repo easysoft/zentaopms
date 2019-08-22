@@ -47,6 +47,7 @@ class actionModel extends model
         $action->date       = helper::now();
         $action->extra      = $extra;
 
+        /* Use purifier to process comment. Fix bug #2683. */
         $_POST['comment'] = $comment;
         $action->comment  = fixer::input('post')->stripTags('comment')->get('comment');
 
@@ -980,12 +981,10 @@ class actionModel extends model
         {
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where($action->objectType)->eq($action->objectID)->exec();
         }
-        /* Revert productplan project status */
-        if($action->objectType == 'productplan')
-        {
-           $plan = $this->loadModel('productplan')->getById($action->objectID);
-           $this->productplan->updatePlanParentStatus($plan->parent);
-        }
+
+        /* Revert productplan parent status. */
+        if($action->objectType == 'productplan') $this->productplan->changeParentField($action->objectID);
+
         /* Update task status when undelete child task. */
         if($action->objectType == 'task') $this->loadModel('task')->updateParentStatus($action->objectID);
 
