@@ -84,3 +84,5 @@ td.c-name a:visited{color: #082999}
 #createDropdown ul.dropdown-menu{width:100%;}
 
 .color-darkblue{background:rgb(0,0,139)}
+.color-darkblue:hover{background:rgb(0,0,139)}
+.color-darkblue:focus{background:rgb(0,0,139)}
