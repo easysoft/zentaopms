@@ -324,67 +324,46 @@ class SMTP {
         }
 
         return true;
+	}
 
-        // Start authentication
-        fputs($this->smtp_conn,"AUTH LOGIN" . $this->CRLF);
+	/**
+	 * Calculate an MD5 HMAC hash.
+	 * Works like hash_hmac('md5', $data, $key)
+	 * in case that function is not available.
+	 *
+	 * @param string $data The data to hash
+	 * @param string $key  The key to hash with
+	 *
+	 * @return string
+	 */
+	public function hmac($data, $key)
+	{
+		if(function_exists('hash_hmac')) return hash_hmac('md5', $data, $key);
 
-        $rply = $this->get_lines();
-        $code = substr($rply,0,3);
+		// The following borrowed from
+		// http://php.net/manual/en/function.mhash.php#27225
+		// RFC 2104 HMAC implementation for php.
+		// Creates an md5 HMAC.
+		// Eliminates the need to install mhash to compute a HMAC
+		// by Lance Rushing
+		$bytelen = 64; // byte length for md5
+		if(strlen($key) > $bytelen) $key = pack('H*', md5($key));
+		$key = str_pad($key, $bytelen, chr(0x00));
+		$ipad = str_pad('', $bytelen, chr(0x36));
+		$opad = str_pad('', $bytelen, chr(0x5c));
+		$k_ipad = $key ^ $ipad;
+		$k_opad = $key ^ $opad;
 
-        if($code != 334) {
-            $this->error =
-                array("error" => "AUTH not accepted from server",
-                    "smtp_code" => $code,
-                    "smtp_msg" => substr($rply,4));
-            if($this->do_debug >= 1) {
-                echo "SMTP -> ERROR: " . $this->error["error"] . ": " . $rply . $this->CRLF . '<br />';
-            }
-            return false;
-        }
-
-        // Send encoded username
-        fputs($this->smtp_conn, base64_encode($username) . $this->CRLF);
-
-        $rply = $this->get_lines();
-        $code = substr($rply,0,3);
-
-        if($code != 334) {
-            $this->error =
-                array("error" => "Username not accepted from server",
-                    "smtp_code" => $code,
-                    "smtp_msg" => substr($rply,4));
-            if($this->do_debug >= 1) {
-                echo "SMTP -> ERROR: " . $this->error["error"] . ": " . $rply . $this->CRLF . '<br />';
-            }
-            return false;
-        }
-
-        // Send encoded password
-        fputs($this->smtp_conn, base64_encode($password) . $this->CRLF);
-
-        $rply = $this->get_lines();
-        $code = substr($rply,0,3);
-
-        if($code != 235) {
-            $this->error =
-                array("error" => "Password not accepted from server",
-                    "smtp_code" => $code,
-                    "smtp_msg" => substr($rply,4));
-            if($this->do_debug >= 1) {
-                echo "SMTP -> ERROR: " . $this->error["error"] . ": " . $rply . $this->CRLF . '<br />';
-            }
-            return false;
-        }
-
-        return true;
-    }
+		return md5($k_opad . pack('H*', md5($k_ipad . $data)));
+	}
 
     /**
      * Returns true if connected to a server otherwise false
      * @access public
      * @return bool
      */
-    public function Connected() {
+    public function Connected()
+    {
         if(!empty($this->smtp_conn)) {
             $sock_status = socket_get_status($this->smtp_conn);
             if($sock_status["eof"]) {
