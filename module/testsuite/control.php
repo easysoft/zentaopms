@@ -658,9 +658,9 @@ class testsuite extends control
         $this->view->position[] = $this->lang->testsuite->common;
         $this->view->position[] = $this->lang->testsuite->view;
 
-        $this->view->lib      = $lib;
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->actions  = $this->loadModel('action')->getList('caselib', $libID);
+        $this->view->lib     = $lib;
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->actions = $this->loadModel('action')->getList('caselib', $libID);
         $this->display();
     }
 
