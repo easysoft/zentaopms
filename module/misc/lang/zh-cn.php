@@ -82,6 +82,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['11.6.1']      = '2019-08-23';
 $lang->misc->releaseDate['11.6.stable'] = '2019-07-12';
 $lang->misc->releaseDate['11.5.2']      = '2019-06-26';
 $lang->misc->releaseDate['11.5.1']      = '2019-06-24';
@@ -111,6 +112,8 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['11.6.1'][]      = array('title'=>'完善细节，修复Bug', 'desc' => '');
 
 $lang->misc->feature->all['11.6.stable'][] = array('title'=>'改善国际版界面', 'desc' => '');
 $lang->misc->feature->all['11.6.stable'][] = array('title'=>'添加翻译功能', 'desc' => '');
