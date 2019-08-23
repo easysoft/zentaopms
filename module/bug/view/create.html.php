@@ -290,7 +290,7 @@ js::set('flow', $config->global->flow);
           <?php endif;?>
           <tr class='hide'>
             <th><?php echo $lang->bug->status;?></th>
-            <td><?php echo html::hidden('status');?></td>
+            <td><?php echo html::hidden('status', 'active');?></td>
           </tr>
           <?php $this->printExtendFields('', 'table');?>
           <tr>
