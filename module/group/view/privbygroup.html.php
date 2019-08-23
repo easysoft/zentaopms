@@ -105,6 +105,7 @@
         <?php if(isset($lang->$moduleName->menus)):?>
         <td class='menus'>
           <?php echo html::checkbox("actions[$moduleName]", array('browse' => $lang->$moduleName->browse), isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
+          <a href='javascript:;'><i class='icon icon-plus'></i></a>
           <?php echo html::checkbox("actions[$moduleName]", $lang->$moduleName->menus, isset($groupPrivs[$moduleName]) ? $groupPrivs[$moduleName] : '');?>
         </td>
         <?php endif;?>
@@ -143,6 +144,22 @@
 <script>
 $(document).ready(function()
 {
+    /**
+     * 隐藏列表标签。
+     * Hide tabs except the browse list tab.
+     */
+    $('.menus input[name^=actions]:not(input[value=browse])').parent('.checkbox-primary').hide();
+
+    /**
+     * 切换列表标签的显示。
+     * Toggle display of tabs except the browse list tab.
+     */
+    $('.menus .icon-plus').click(function()
+    {
+        $(this).toggleClass('icon-minus', 'icon-plus');
+        $('.menus input[name^=actions]:not(input[value=browse])').parent('.checkbox-primary').toggle();
+    })
+
     /**
      * 勾选浏览列表标签时，自动勾选下面的所有标签。 
      * Check all tabs when the Browse list tab is selected.

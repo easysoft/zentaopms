@@ -9,3 +9,6 @@
 
 td.menus {border-right: 0;padding-right: 0;width: 220px !important;}
 td.menus + td {border-left: 0;}
+.menus .checkbox-primary {float: left; width: 220px;}
+.menus .checkbox-primary:first-child {float: left; width: auto;}
+.menus a {margin-left: 10px;}
