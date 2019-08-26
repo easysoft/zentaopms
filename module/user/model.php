@@ -283,7 +283,11 @@ class userModel extends model
 
                 /* Check weak and common weak password. */
                 if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) die(js::error(sprintf($this->lang->user->error->weakPassword, $i + 1)));
-                if(!empty($this->config->safe->changeWeak) and strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) die(js::error(sprintf($this->lang->user->error->dangerPassword, $i + 1, $this->config->safe->weak)));
+                if(!empty($this->config->safe->changeWeak))
+                {
+                    if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) die(js::error(sprintf($this->lang->user->error->dangerPassword, $i + 1, $this->config->safe->weak)));
+                }
 
                 $data[$i] = new stdclass();
                 $data[$i]->dept     = $users->dept[$i] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $users->dept[$i];
@@ -602,7 +606,11 @@ class userModel extends model
             if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
 
             if(isset($this->config->safe->mode) and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode) dao::$errors['password1'][] = $this->lang->user->weakPassword;
-            if(!empty($this->config->safe->changeWeak) and strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+            if(!empty($this->config->safe->changeWeak))
+            {
+                if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+                if(strpos(",{$this->config->safe->weak},", ",{$this->post->password1},") !== false) dao::$errors['password1'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+            }
         }
         return !dao::isError();
     }
