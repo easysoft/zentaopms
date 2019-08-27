@@ -983,7 +983,7 @@ class actionModel extends model
         }
 
         /* Revert productplan parent status. */
-        if($action->objectType == 'productplan') $this->productplan->changeParentField($action->objectID);
+        if($action->objectType == 'productplan') $this->loadModel('productplan')->changeParentField($action->objectID);
 
         /* Update task status when undelete child task. */
         if($action->objectType == 'task') $this->loadModel('task')->updateParentStatus($action->objectID);
