@@ -66,7 +66,7 @@
           $totalHours  += $memberHours;
           ?>
           </td>
-          <td><?php echo $member->role;?></td>
+          <td title='<?php echo $member->role;?>'><?php echo $member->role;?></td>
           <td><?php echo substr($member->join, 2);?></td>
           <td><?php echo $member->days . $lang->project->day;?></td>
           <td><?php echo $member->hours . $lang->project->workHour;?></td>
