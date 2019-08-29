@@ -98,7 +98,7 @@ class deptModel extends model
             }
         }
 
-        arsort($deptMenu);
+        krsort($deptMenu);
         $topMenu = array_pop($deptMenu);
         $topMenu = explode("\n", trim($topMenu));
         $lastMenu[] = '/';
@@ -148,7 +148,7 @@ class deptModel extends model
             $deptMenu[$dept->parent] .= "</li>\n"; 
         }
 
-        arsort($deptMenu);
+        krsort($deptMenu);
         $deptMenu = array_pop($deptMenu);
         $lastMenu = "<ul class='tree' data-ride='tree' data-name='tree-dept'>{$deptMenu}</ul>\n";
         return $lastMenu; 
