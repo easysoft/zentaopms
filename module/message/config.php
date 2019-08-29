@@ -10,6 +10,7 @@ $config->message->objectTypes['case']        = array('opened', 'edited', 'commen
 $config->message->objectTypes['testtask']    = array('opened', 'edited', 'started', 'blocked', 'closed', 'activated');
 $config->message->objectTypes['todo']        = array('opened', 'edited');
 
+$config->message->available = array();
 $config->message->available['mail']['story']    = $config->message->objectTypes['story'];
 $config->message->available['mail']['task']     = $config->message->objectTypes['task'];
 $config->message->available['mail']['bug']      = $config->message->objectTypes['bug'];
@@ -23,9 +24,15 @@ $config->message->available['message']['task']     = $config->message->objectTyp
 $config->message->available['message']['testtask'] = $config->message->objectTypes['testtask'];
 $config->message->available['message']['todo']     = $config->message->objectTypes['todo'];
 
+$config->message->typeLink = array();
 $config->message->typeLink['mail']    = 'mail|index';
 $config->message->typeLink['webhook'] = 'webhook|browse';
 
+$config->message->setting = array();
 $config->message->setting['message']['setting']  = $config->message->available['message'];
 $config->message->setting['webhook']['setting']  = $config->message->available['webhook'];
 $config->message->setting['mail']['setting']     = $config->message->available['mail'];
+
+$config->message->browser = new stdclass();
+$config->message->browser->turnon   = 1;
+$config->message->browser->pollTime = 5 * 60;
