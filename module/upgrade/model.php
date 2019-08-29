@@ -3128,6 +3128,52 @@ class upgradeModel extends model
     }
 
     /**
+     * Adjust webhook type list when webhook use bearychat.
+     * 
+     * @access public
+     * @return void
+     */
+    public function adjustWebhookType()
+    {
+        $bearychatCount = $this->dao->select('count(*) as count')->from(TABLE_WEBHOOK)->where('type')->eq('bearychat')->fetch('count');
+        if($bearychatCount)
+        {
+            $item = new stdclass();
+            $item->module  = 'webhook';
+            $item->section = 'typeList';
+
+            foreach(array('zh-cn', 'zh-tw', 'en', 'de') as $currentLang)
+            {
+                $langFile = $this->app->getModuleRoot() . 'webhook' . DS . 'lang' . DS . $currentLang . '.php';
+                if(!file_exists($langFile)) continue;
+
+                $lang = new stdclass();
+                $lang->webhook       = new stdclass();
+                $lang->productCommon = $this->config->productCommonList[$currentLang][0];
+                $lang->projectCommon = $this->config->projectCommonList[$currentLang][0];
+
+                include $langFile;
+                if(isset($lang->webhook->typeList)) continue
+
+                $item->lang  = $currentLang;
+                $item->key   = 'bearychat';
+                $item->value = $this->config->upgrade->bearychat[$currentLang];
+                $this->dao->replace(TABLE_LANG)->data($item)->exec();
+
+                foreach($lang->webhook->typeList as $typeKey => $typeName)
+                {
+                    if(empty($typeKey)) continue;
+                    $item->key   = $typeKey;
+                    $item->value = $typeName;
+                    $this->dao->replace(TABLE_LANG)->data($item)->exec();
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Save Logs.
      * 
      * @param  string    $log 
