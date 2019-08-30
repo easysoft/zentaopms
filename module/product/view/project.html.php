@@ -12,7 +12,9 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->product->project;?></span></span>
+    <?php foreach($lang->project->featureBar['all'] as $key => $label):?>
+    <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
+    <?php endforeach;?>
     <span class="label label-info"><?php echo $lang->product->projectInfo;?></span>
   </div>
 </div>

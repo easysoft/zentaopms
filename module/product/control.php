@@ -83,6 +83,7 @@ class product extends control
         $this->view->position[] = $this->products[$productID];
         $this->view->position[] = $this->lang->product->project;
         $this->view->productID  = $productID;
+        $this->view->status     = $status;
         $this->display();
     }
 
