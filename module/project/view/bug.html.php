@@ -13,11 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <span class='btn btn-link btn-active-text'>
-      <span class='text'><?php echo $lang->bug->allBugs;?></span>
-      <span class="label label-light label-badge"><?php echo $pager->recTotal;?></span>
-      <?php if($build) echo ' <span class="label label-danger">Build:' . $build->name . '</span>';?>
-    </span>
+    <?php
+    $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
+    echo html::a($this->inlink('bug', "projectID={$project->id}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
+    ?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
   <div class="btn-toolbar pull-right">
@@ -26,7 +26,7 @@
   </div>
 </div>
 <div id="mainContent">
-  <div class="cell" id="queryBox"></div>
+  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox"></div>
   <?php if(empty($bugs)):?>
   <div class="table-empty-tip">
     <p>

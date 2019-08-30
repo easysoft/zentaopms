@@ -356,7 +356,7 @@ class mail extends control
     public function resend($queueID)
     {
         $queue = $this->mail->getQueueById($queueID);
-        if($queue and $queue->status == 'send')
+        if($queue and $queue->status == 'sended')
         {
             echo js::alert($this->lang->mail->noticeResend);
             die(js::reload('parent'));
@@ -367,7 +367,7 @@ class mail extends control
 
         $data = new stdclass();
         $data->sendTime   = helper::now();
-        $data->status     = 'send';
+        $data->status     = 'sended';
         $data->failReason = '';
         if($this->mail->isError())
         {

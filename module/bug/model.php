@@ -1378,7 +1378,8 @@ class bugModel extends model
      */
     public function getProjectBugs($projectID, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $pager = null)
     {
-        if($type == 'bySearch')
+        $type = strtolower($type);
+        if($type == 'bysearch')
         {
             $queryID  = (int)$param;
             $products = $this->loadModel('project')->getProducts($projectID);
@@ -1414,6 +1415,7 @@ class bugModel extends model
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where('deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('project')->eq($projectID)->fi()
+                ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }

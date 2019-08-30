@@ -763,7 +763,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
@@ -772,7 +772,8 @@ class project extends control
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true));
 
-        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
         $products  = $this->project->getProducts($project->id);
@@ -800,7 +801,7 @@ class project extends control
         }
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->project->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */
