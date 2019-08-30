@@ -14,23 +14,32 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php if($canOrder) include '../../common/view/sortable.html.php';?>
-<?php js::set('moduleID', ($type == 'byModule' ? $param : 0));?>
-<?php js::set('productID', ($type == 'byProduct' ? $param : 0));?>
-<?php js::set('branchID', ($type == 'byBranch' ? (int)$param : ''));?>
+<?php js::set('moduleID', $this->cookie->storyModuleParam);?>
+<?php js::set('productID', $this->cookie->storyProductParam);?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id="mainMenu" class="clearfix">
-  <?php if(!empty($module->name)):?>
+  <?php if(!empty($module->name) or !empty($product->name)):?>
   <div id="sidebarHeader">
-    <div class="title" title='<?php echo $module->name?>'>
-      <?php $removeLink = inlink('story', "projectID=$project->id&orderBy=$orderBy&type=$type&param=0&recTotal=0&recPerPage={$pager->recPerPage}");?>
-      <?php echo $module->name;?>
+    <?php
+    $sidebarName = isset($product) ? $product->name : $module->name;
+    $removeType  = isset($product) ? 'byproduct' : 'bymodule';
+    $removeLink  = inlink('story', "projectID=$project->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
+    ?>
+    <div class="title" title='<?php echo $sidebarName;?>'>
+      <?php echo $sidebarName;?>
       <?php echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
     </div>
   </div>
   <?php endif;?>
   <div class="btn-toolbar pull-left">
-    <?php if(common::hasPriv('project', 'story')) echo html::a($this->createLink('project', 'story', "projectID=$project->id"), "<span class='text'>{$lang->story->allStories}</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '', "class='btn btn-link btn-active-text'");?>
-    <?php if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "projectID=$project->id"), "<span class='text'>{$lang->project->kanban}</span>", '', "class='btn btn-link'");?>
+    <?php
+    if(common::hasPriv('project', 'story'))
+    {
+        echo html::a($this->createLink('project', 'story', "projectID=$project->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->story->allStories}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
+        echo html::a($this->createLink('project', 'story', "projectID=$project->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
+    }
+    if(common::hasPriv('project', 'storykanban')) echo html::a($this->createLink('project', 'storykanban', "projectID=$project->id"), "<span class='text'>{$lang->project->kanban}</span>", '', "class='btn btn-link'");
+    ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
