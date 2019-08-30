@@ -75,9 +75,9 @@
           <td class='text-left'><?php echo $project->code;?></td>
           <td><?php echo zget($users, $project->PM);?></td>
           <td><?php echo $project->end;?></td>
-          <?php $status = $this->processStatus('project', $project);?>
-          <td class='c-status' title='<?php echo $status;?>'>
-            <span class="status-project status-<?php echo $project->status?>"><?php echo $status;?></span>
+          <?php $projectStatus = $this->processStatus('project', $project);?>
+          <td class='c-status' title='<?php echo $projectStatus;?>'>
+            <span class="status-project status-<?php echo $project->status?>"><?php echo $projectStatus;?></span>
           </td>
           <td><?php echo $project->hours->totalEstimate;?></td>
           <td><?php echo $project->hours->totalConsumed;?></td>
