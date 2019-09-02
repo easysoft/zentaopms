@@ -1755,6 +1755,7 @@ class projectModel extends model
 
         $accounts = array_unique($accounts);
         $limited  = array_values($limited);
+        $oldJoin  = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$projectID)->andWhere('type')->eq('project')->exec();
         foreach($accounts as $key => $account)
         {
@@ -1768,7 +1769,7 @@ class projectModel extends model
 
             $member->root    = (int)$projectID;
             $member->account = $account;
-            $member->join    = helper::today();
+            $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
             $member->type    = 'project';
 
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
