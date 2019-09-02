@@ -2194,6 +2194,40 @@ class storyModel extends model
             ->where($this->reportCondition())
             ->groupBy('plan')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
+
+        /* Separate for multi-plan key. */
+        foreach($datas as $planID => $data)
+        {
+            if(strpos($planID, ',') !== false)
+            {
+                $planIdList = explode(',', $planID);
+                foreach($planIdList as $multiPlanID)
+                {
+                    if(empty($datas[$multiPlanID]))
+                    {
+                        $datas[$multiPlanID] = new stdclass();
+                        $datas[$multiPlanID]->name  = $multiPlanID;
+                        $datas[$multiPlanID]->value = 0;
+                    }
+                    $datas[$multiPlanID]->value += $data->value;
+                }
+                unset($datas[$planID]);
+            }
+        }
+
+        /* Fix bug #2697. */
+        if(isset($datas['']))
+        {
+            if(empty($datas[0]))
+            {
+                $datas[0] = new stdclass();
+                $datas[0]->name  = 0;
+                $datas[0]->value = 0;
+            }
+            $datas[0]->value += $datas['']->value;
+            unset($datas['']);
+        }
+
         $plans = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(array_keys($datas))->fetchPairs();
         foreach($datas as $planID => $data) $data->name = isset($plans[$planID]) ? $plans[$planID] : $this->lang->report->undefined;
         return $datas;
