@@ -189,6 +189,7 @@ $lang->project->myInvolved   = 'Involved';
 $lang->project->statusSelects['']             = 'More';
 $lang->project->statusSelects['wait']         = 'Waiting';
 $lang->project->statusSelects['doing']        = 'Doing';
+$lang->project->statusSelects['undone']       = 'Unfinished';
 $lang->project->statusSelects['finishedbyme'] = 'FinishedByMe';
 $lang->project->statusSelects['done']         = 'Done';
 $lang->project->statusSelects['closed']       = 'Closed';
