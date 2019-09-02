@@ -139,7 +139,7 @@ $(function()
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->task->noFinished;?> :</td>
-                      <td class='text-left'><?php echo empty($project->undoneTasks) ? 0 : html::a($this->createLink('project', 'task', "projectID={$project->id}&status=unclosed"), $project->undoneTasks);?></td>
+                      <td class='text-left'><?php echo empty($project->undoneTasks) ? 0 : html::a($this->createLink('project', 'task', "projectID={$project->id}&status=undone"), $project->undoneTasks);?></td>
                     </tr>
                   </table>
                 </div>
