@@ -1101,8 +1101,6 @@ class block extends control
         $total = 0;
         foreach($projects as $project)
         {
-            if(!$this->project->checkPriv($project->id)) continue;
-
             if(!isset($overview[$project->status])) $overview[$project->status] = 0;
             $overview[$project->status]++;
             $total++;
