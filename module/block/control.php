@@ -814,8 +814,7 @@ class block extends control
 
             foreach($productProjects as $project)
             {
-                if($project->status == 'doing') $doing++;
-                if($project->status == 'done' or $project->status == 'closed') $done++;
+                ($project->status == 'done' or $project->status == 'closed') ? $done++ : $doing++;
                 if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended' && $project->end < helper::today()) $delay++;
             }
 

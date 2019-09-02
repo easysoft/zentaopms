@@ -155,11 +155,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->productplan->all;?> :</td>
-                      <td class='text-left'><?php echo $totalPlan;?></td>
+                      <td class='text-left'><?php echo empty($totalPlan) ? 0 : html::a($this->createLink('productplan', 'browse', "productID={$product->id}&branch=0&browseType=all"), $totalPlan);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->productplan->featureBar['browse']['unexpired'];?> :</td>
-                      <td class='text-left'><?php echo $unexpiredPlan;?></td>
+                      <td class='text-left'><?php echo empty($unexpiredPlan) ? 0 : html::a($this->createLink('productplan', 'browse', "productID={$product->id}&branch=0&browseType=unexpired"), $unexpiredPlan);?></td>
                     </tr>
                   </table>
                 </div>
@@ -189,11 +189,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->project->allProjects;?> :</td>
-                      <td class='text-left'><?php echo $totalProject;?></td>
+                      <td class='text-left'><?php echo empty($totalProject) ? 0 : html::a($this->createLink('product', 'project', "type=all&product={$product->id}"), $totalProject);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->project->statusList['doing'];?> :</td>
-                      <td class='text-left'><?php echo $doingProject;?></td>
+                      <td class='text-left'><?php echo empty($doingProject) ? 0 : html::a($this->createLink('product', 'project', "type=undone&product={$product->id}"), $doingProject);?></td>
                     </tr>
                   </table>
                 </div>
@@ -222,11 +222,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->product->allRelease;?> :</td>
-                      <td class='text-left'><?php echo $totalRelease;?></td>
+                      <td class='text-left'><?php echo empty($totalRelease) ? 0 : html::a($this->createLink('release', 'browse', "productID={$product->id}&branch=0&type=all"), $totalRelease);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->product->maintain;?> :</td>
-                      <td class='text-left'><?php echo $normalRelease;?></td>
+                      <td class='text-left'><?php echo empty($normalRelease) ? 0 : html::a($this->createLink('release', 'browse', "productID={$product->id}&branch=0&type=normal"), $normalRelease);?></td>
                     </tr>
                   </table>
                 </div>

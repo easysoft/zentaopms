@@ -625,7 +625,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function story($projectID = 0, $orderBy = 'order_desc', $type = 'byModule', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function story($projectID = 0, $orderBy = 'order_desc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -633,6 +633,33 @@ class project extends control
         $this->app->loadLang('testcase');
 
         $this->project->getLimitedProject();
+
+        $type = strtolower($type);
+        setcookie('storyPreProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot);
+        if($this->cookie->storyPreProjectID != $projectID)
+        {
+            $_COOKIE['storyModuleParam'] = $_COOKIE['storyProductParam'] = 0;
+            setcookie('storyModuleParam',  0, 0, $this->config->webRoot);
+            setcookie('storyProductParam', 0, 0, $this->config->webRoot);
+        }
+        if($type == 'bymodule')
+        {
+            $_COOKIE['storyModuleParam']  = (int)$param;
+            $_COOKIE['storyProductParam'] = 0;
+            setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot);
+            setcookie('storyProductParam', 0, 0, $this->config->webRoot);
+        }
+        elseif($type == 'byproduct')
+        {
+            $_COOKIE['storyModuleParam']  = 0;
+            $_COOKIE['storyProductParam'] = (int)$param;
+            setcookie('storyModuleParam', 0, 0, $this->config->webRoot);
+            setcookie('storyProductParam', (int)$param, 0, $this->config->webRoot);
+        }
+        else
+        {
+            $this->session->set('projectStoryBrowseType', $type);
+        }
 
         /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true));
@@ -696,10 +723,8 @@ class project extends control
             foreach($plans as $productID => $plan) $allPlans += $plan;
         }
 
-        if($type == 'byModule')
-        {
-            $this->view->module = $this->loadModel('tree')->getById($param);
-        }
+        if($this->cookie->storyModuleParam)  $this->view->module  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+        if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
 
         /* Assign. */
         $this->view->title        = $title;
@@ -710,7 +735,7 @@ class project extends control
         $this->view->allPlans     = $allPlans;
         $this->view->summary      = $this->product->summary($stories);
         $this->view->orderBy      = $orderBy;
-        $this->view->type         = $type;
+        $this->view->type         = $this->session->projectStoryBrowseType;
         $this->view->param        = $param;
         $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($projectID, $startModuleID = 0, array('treeModel', 'createProjectStoryLink'));
         $this->view->tabID        = 'story';
@@ -738,7 +763,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
@@ -747,7 +772,8 @@ class project extends control
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true));
 
-        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
+        $type      = strtolower($type);
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
         $products  = $this->project->getProducts($project->id);
@@ -775,7 +801,7 @@ class project extends control
         }
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->project->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */

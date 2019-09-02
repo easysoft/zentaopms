@@ -32,6 +32,36 @@ class message extends control
     }
 
     /**
+     * Browser Setting
+     * 
+     * @access public
+     * @return void
+     */
+    public function browser()
+    {
+        $browserConfig = $this->config->message->browser;
+
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+
+            $browserConfig = new stdclass();
+            $browserConfig->turnon   = $data->turnon;
+            $browserConfig->pollTime = $data->pollTime;
+
+            $this->loadModel('setting')->setItems('system.message.browser', $browserConfig);
+            if(dao::isError()) die(js::error(dao::getError()));
+        }
+
+        $this->view->title      = $this->lang->message->browser;
+        $this->view->position[] = $this->lang->message->common;
+        $this->view->position[] = $this->lang->message->browser;
+
+        $this->view->browserConfig = $browserConfig;
+        $this->display();
+    }
+
+    /**
      * Setting
      *
      * @access public
@@ -71,6 +101,8 @@ class message extends control
      */
     public function ajaxGetMessage($windowBlur = false)
     {
+        if($this->config->message->browser->turnon == 0) die();
+
         $waitMessages = $this->message->getMessages('wait');
         $todos = $this->message->getNoticeTodos();
         if(empty($waitMessages) and empty($todos)) die();

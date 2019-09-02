@@ -15,6 +15,7 @@ class release extends control
      * Common actions.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @access public
      * @return void
      */
@@ -34,17 +35,20 @@ class release extends control
      * Browse releases.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
+     * @param  string $type 
      * @access public
      * @return void
      */
-    public function browse($productID, $branch = 0)
+    public function browse($productID, $branch = 0, $type = 'all')
     {
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true));
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch);
+        $this->view->releases   = $this->release->getList($productID, $branch, $type);
+        $this->view->type       = $type;
         $this->display();
     }
 
@@ -52,6 +56,7 @@ class release extends control
      * Create a release.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @access public
      * @return void
      */
@@ -127,6 +132,10 @@ class release extends control
      * View a release.
      * 
      * @param  int    $releaseID 
+     * @param  string $type 
+     * @param  string $link 
+     * @param  string $param 
+     * @param  string $orderBy 
      * @access public
      * @return void
      */
@@ -228,7 +237,6 @@ class release extends control
     /**
      * Export the stories of release to HTML.
      * 
-     * @param  string $type story | bug
      * @access public
      * @return void
      */
@@ -527,6 +535,7 @@ class release extends control
      * 
      * @param  int    $releaseID
      * @param  int    $bugID 
+     * @param  string $type 
      * @access public
      * @return void
      */
@@ -555,7 +564,8 @@ class release extends control
     /**
      * Batch unlink story. 
      * 
-     * @param  int $releaseID 
+     * @param  int    $releaseID 
+     * @param  string $type 
      * @access public
      * @return void
      */

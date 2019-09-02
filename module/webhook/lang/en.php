@@ -33,7 +33,6 @@ $lang->webhook->data        = 'Data';
 $lang->webhook->result      = 'Result';
 
 $lang->webhook->typeList['']          = '';
-$lang->webhook->typeList['bearychat'] = 'Bearychat';
 $lang->webhook->typeList['dingding']  = 'Dingding';
 $lang->webhook->typeList['default']   = 'Others';
 

@@ -25,7 +25,10 @@ function ajaxIgnoreBrowser(){$.get(createLink('misc', 'ajaxIgnoreBrowser'));}
 $(function(){showBrowserNotice()});
 <?php endif;?>
 
-/* Alert get message. */
+<?php $this->app->loadConfig('message');?>
+<?php if($config->message->browser->turnon):?>
+/* Alert got messages. */
+needPing = false;
 $(function()
 {
     var windowBlur = false;
@@ -52,8 +55,9 @@ $(function()
                 }
             }
         });
-    }, 5 * 60 * 1000);
+    }, <?php echo $config->message->browser->pollTime * 1000;?>);
 })
+<?php endif;?>
 
 <?php if(!empty($config->sso->redirect)):?>
 <?php

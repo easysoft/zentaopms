@@ -44,10 +44,12 @@ class releaseModel extends model
      * Get list of releases.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
+     * @param  string $type 
      * @access public
      * @return array
      */
-    public function getList($productID, $branch = 0)
+    public function getList($productID, $branch = 0, $type = 'all')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -55,6 +57,7 @@ class releaseModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date DESC')
             ->fetchAll();
@@ -64,6 +67,7 @@ class releaseModel extends model
      * Get last release.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @access public
      * @return bool | object 
      */
@@ -81,6 +85,7 @@ class releaseModel extends model
      * Get release builds from product.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @access public
      * @return void
      */
@@ -98,6 +103,7 @@ class releaseModel extends model
      * Create a release.
      * 
      * @param  int    $productID 
+     * @param  int    $branch 
      * @access public
      * @return int
      */
@@ -287,6 +293,7 @@ class releaseModel extends model
      * Link bugs.
      * 
      * @param  int    $releaseID 
+     * @param  string $type 
      * @access public
      * @return void
      */
@@ -308,6 +315,7 @@ class releaseModel extends model
      * 
      * @param  int    $releaseID 
      * @param  int    $bugID 
+     * @param  string $type 
      * @access public
      * @return void
      */
@@ -324,6 +332,7 @@ class releaseModel extends model
      * Batch unlink bug.
      * 
      * @param  int    $releaseID 
+     * @param  string $type 
      * @access public
      * @return void
      */

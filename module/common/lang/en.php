@@ -385,7 +385,8 @@ $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
 $lang->admin->subMenu->message->mail    = array('link' => 'Mail|mail|index', 'subModule' => 'mail');
 $lang->admin->subMenu->message->webhook = array('link' => 'Webhook|webhook|browse', 'subModule' => 'webhook');
-$lang->admin->subMenu->message->setting = array('link' => 'Settings|message|setting', 'subModule' => 'message');
+$lang->admin->subMenu->message->browser = array('link' => 'Browser|message|browser');
+$lang->admin->subMenu->message->setting = array('link' => 'Settings|message|setting');
 
 $lang->admin->subMenu->sso = new stdclass();
 $lang->admin->subMenu->sso->ranzhi = 'Zdoo|admin|sso';
