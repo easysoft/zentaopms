@@ -85,8 +85,8 @@ class productplanModel extends model
             ->where('t1.product')->eq($product)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!empty($branch))->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($browseType == 'unexpired')->andWhere('t1.end')->gt($date)->fi()
-            ->beginIF($browseType == 'overdue')->andWhere('t1.end')->le($date)->fi()
+            ->beginIF($browseType == 'unexpired')->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF($browseType == 'overdue')->andWhere('t1.end')->lt($date)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

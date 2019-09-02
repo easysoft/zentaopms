@@ -73,7 +73,7 @@
       if($plan->parent == '-1')
       {
           $parent   = $plan->id;
-          $children = $plan->children;
+          $children = isset($plan->children) ? $plan->children : 0;
       }
       if($plan->parent == 0) $parent = 0;
       if(!empty($parent) and $plan->parent > 0 and $plan->parent != $parent) $parent = 0;
