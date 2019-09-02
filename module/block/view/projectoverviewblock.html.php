@@ -25,7 +25,7 @@
     <ul class="status-bars">
       <?php foreach($lang->project->statusList as $statusKey => $statusName):?>
       <li>
-        <span class="bar" style="height: <?php echo $overviewPercent[$statusKey];?>"><span class="value"><?php echo html::a($this->createLink('project', 'all', "type=$statusKey"), $overview[$statusKey]);?></span></span>
+        <span class="bar" style="height: <?php echo $overviewPercent[$statusKey];?>"><span class="value"><?php echo empty($overview[$statusKey]) ? 0 :html::a($this->createLink('project', 'all', "type=$statusKey"), $overview[$statusKey]);?></span></span>
         <span class="title"><?php echo $statusName;?></span>
       </li>
       <?php endforeach;?>
