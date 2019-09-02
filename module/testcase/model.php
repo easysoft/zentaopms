@@ -639,7 +639,8 @@ class testcaseModel extends model
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
-            if($stepChanged)
+            /* Ignore steps when post has no steps. */
+            if($stepChanged and $this->post->steps)
             {
                 $parentStepID = 0;
                 $isLibCase = ($oldCase->lib and empty($oldCase->product));
@@ -668,7 +669,7 @@ class testcaseModel extends model
             }
 
             /* Join the steps to diff. */
-            if($stepChanged)
+            if($stepChanged and $this->post->steps)
             {
                 $oldCase->steps = $this->joinStep($oldCase->steps);
                 $case->steps    = $this->joinStep($this->getById($caseID, $version)->steps);
@@ -1586,10 +1587,13 @@ class testcaseModel extends model
             //---------------- Judge steps changed or not.-------------------- */
 
             /* Remove the empty setps in post. */
-            foreach($this->post->steps as $key => $desc)
+            if($this->post->steps)
             {
-                $desc = trim($desc);
-                if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $this->post->stepType[$key], 'expect' => trim($this->post->expects[$key]));
+                foreach($this->post->steps as $key => $desc)
+                {
+                    $desc = trim($desc);
+                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $this->post->stepType[$key], 'expect' => trim($this->post->expects[$key]));
+                }
             }
 
             /* If step count changed, case changed. */
