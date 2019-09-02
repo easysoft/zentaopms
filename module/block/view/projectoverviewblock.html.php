@@ -18,7 +18,7 @@
     <div class="tile">
       <div class="tile-title"><?php echo $lang->project->allProject;?></div>
       <div class="tile-amount"><?php echo $total;?></div>
-      <a class="btn btn-primary btn-circle btn-icon-right btn-sm" href="<?php echo $this->createLink('project', 'all');?>"><?php echo $lang->project->viewAll;?> <span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span></a>
+      <a class="btn btn-primary btn-circle btn-icon-right btn-sm" href="<?php echo $this->createLink('project', 'all', 'type=all');?>"><?php echo $lang->project->viewAll;?> <span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span></a>
     </div>
   </div>
   <div class="col-8 text-middle">
