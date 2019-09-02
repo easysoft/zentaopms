@@ -1337,8 +1337,10 @@ class projectModel extends model
 
             $data->status = $task->consumed > 0 ? 'doing' : 'wait';
             $this->dao->update(TABLE_TASK)->data($data)->where('id')->in($this->post->tasks)->exec();
-            $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('parent')->in($this->post->tasks)->exec();
             $this->loadModel('action')->create('task', $task->id, 'moved', '', $task->project);
+
+            unset($data->status);
+            $this->dao->update(TABLE_TASK)->data($data)->where('parent')->in($this->post->tasks)->exec();
         }
 
         /* Remove empty story. */
