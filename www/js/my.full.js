@@ -115,8 +115,8 @@ function setImageSize(image, maxWidth, maxHeight)
 
 /**
  * Show more image when image is too height.
- * 
- * @param  obj $obj 
+ *
+ * @param  obj $obj
  * @access public
  * @return void
  */
@@ -745,34 +745,35 @@ function getFingerprint()
 
 /**
  * Convert plain text URLs into HTML hyperlinks
- * 
+ *
  * @access public
  * @return void
  */
 function convertURL()
 {
-    if($('.article-content, .article>.content').size() == 0) return;
-    if($('.article-content>.kindeditor').size() != 0) return;
+    if(!$('.article-content, .article>.content').length) return;
+    if($('.article-content>.kindeditor').length) return;
 
     $('.article-content, .article>.content').each(function()
     {
+        var $this      = $(this);
         var aTags      = [];
         var iframeTags = [];
         var imgTags    = [];
-        var content    = $(this).html();
-        $(this).find('a').each(function(i)
+        var content    = $this.html();
+        $this.find('a').each(function(i)
         {
-            aTags[i] = $(this).prop('outerHTML');
+            aTags[i] = $this.prop('outerHTML');
             content  = content.replace(aTags[i], '<REPLACE_' + i + '>');
         });
-        $(this).find('iframe').each(function(i)
+        $this.find('iframe').each(function(i)
         {
-            iframeTags[i] = $(this).prop('outerHTML');
+            iframeTags[i] = $this.prop('outerHTML');
             content = content.replace(iframeTags[i], '<IFRAME_' + i + '>');
         });
-        $(this).find('img').each(function(i)
+        $this.find('img').each(function(i)
         {
-            imgTags[i] = $(this).prop('outerHTML');
+            imgTags[i] = $this.prop('outerHTML');
             content = content.replace(imgTags[i], '<IMG_' + i + '>');
         });
 
@@ -781,14 +782,14 @@ function convertURL()
         for(i in aTags) content = content.replace('<REPLACE_' + i + '>', aTags[i]);
         for(i in iframeTags) content = content.replace('<IFRAME_' + i + '>', iframeTags[i]);
         for(i in imgTags) content = content.replace('<IMG_' + i + '>', imgTags[i]);
-        $(this).html(content);
+        $this.html(content);
     });
 }
 
 /**
  * Alert message with bootbox.
- * 
- * @param  message $message 
+ *
+ * @param  message $message
  * @access public
  * @return bool
  */
@@ -808,7 +809,6 @@ $(document).ready(function()
 
     checkTutorial();
     revertModuleCookie();
-    convertURL();
 
     $(document).on('click', '#helpMenuItem .close-help-tab', function(){$('#helpMenuItem').prev().remove();$('#helpMenuItem').remove();});
 });
