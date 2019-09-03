@@ -639,8 +639,7 @@ class testcaseModel extends model
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
-            /* Ignore steps when post has no steps. */
-            if($stepChanged and $this->post->steps)
+            if($stepChanged)
             {
                 $parentStepID = 0;
                 $isLibCase = ($oldCase->lib and empty($oldCase->product));
@@ -651,20 +650,33 @@ class testcaseModel extends model
                     $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec(); 
                 }
 
-                foreach($this->post->steps as $stepID => $stepDesc)
+                /* Ignore steps when post has no steps. */
+                if($this->post->steps)
                 {
-                    if(empty($stepDesc)) continue;
-                    $stepType = $this->post->stepType;
-                    $step = new stdclass();
-                    $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
-                    $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
-                    $step->case    = $caseID;
-                    $step->version = $version;
-                    $step->desc    = htmlspecialchars($stepDesc);
-                    $step->expect  = $step->type == 'group' ? '' : htmlspecialchars($this->post->expects[$stepID]);
-                    $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
-                    if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                    if($step->type == 'step')  $parentStepID = 0;
+                    foreach($this->post->steps as $stepID => $stepDesc)
+                    {
+                        if(empty($stepDesc)) continue;
+                        $stepType = $this->post->stepType;
+                        $step = new stdclass();
+                        $step->type    = ($stepType[$stepID] == 'item' and $parentStepID == 0) ? 'step' : $stepType[$stepID];
+                        $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
+                        $step->case    = $caseID;
+                        $step->version = $version;
+                        $step->desc    = htmlspecialchars($stepDesc);
+                        $step->expect  = $step->type == 'group' ? '' : htmlspecialchars($this->post->expects[$stepID]);
+                        $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+                        if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                        if($step->type == 'step')  $parentStepID = 0;
+                    }
+                }
+                else
+                {
+                    foreach($oldCase->steps as $step)
+                    {
+                        unset($step->id);
+                        $step->version = $version;
+                        $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
+                    }
                 }
             }
 
@@ -1594,25 +1606,25 @@ class testcaseModel extends model
                     $desc = trim($desc);
                     if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $this->post->stepType[$key], 'expect' => trim($this->post->expects[$key]));
                 }
-            }
 
-            /* If step count changed, case changed. */
-            if(count($case->steps) != count($steps))
-            {
-                $stepChanged = true;
-            }
-            else
-            {
-                /* Compare every step. */
-                $i = 0;
-                foreach($case->steps as $key => $oldStep)
+                /* If step count changed, case changed. */
+                if(count($case->steps) != count($steps))
                 {
-                    if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect'] or trim($oldStep->type) != $steps[$i]['type'])
+                    $stepChanged = true;
+                }
+                else
+                {
+                    /* Compare every step. */
+                    $i = 0;
+                    foreach($case->steps as $key => $oldStep)
                     {
-                        $stepChanged = true;
-                        break;
+                        if(trim($oldStep->desc) != trim($steps[$i]['desc']) or trim($oldStep->expect) != $steps[$i]['expect'] or trim($oldStep->type) != $steps[$i]['type'])
+                        {
+                            $stepChanged = true;
+                            break;
+                        }
+                        $i++;
                     }
-                    $i++;
                 }
             }
 
