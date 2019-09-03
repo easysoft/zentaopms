@@ -130,11 +130,10 @@
               $disabled  = 'disabled';
               if($plan->parent >= 0)
               {
-                  $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=yes");
-                  $deleteURL = "javascript:ajaxDelete(\"$deleteURL\",\"productplanList\",confirmDelete)";
+                  $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=no");
                   $disabled  = '';
               }
-              echo html::a($deleteURL, '<i class="icon-trash"></i>', '', "class='btn {$disabled}' title='{$lang->productplan->delete}'");
+              echo html::a($deleteURL, '<i class="icon-trash"></i>', 'hiddenwin', "class='btn {$disabled}' title='{$lang->productplan->delete}'");
           }
           ?>
         </td>

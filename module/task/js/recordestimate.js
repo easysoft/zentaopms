@@ -16,7 +16,6 @@ $(function()
             var hasRecord = false;
             $('#recordForm').find('input[name^="consumed"], input[name^="left"], textarea[name^="work"]').each(function()
             {
-                console.log($(this).val());
                 if($(this).val() !== '')
                 {
                     hasRecord = true;
