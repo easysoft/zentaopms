@@ -3153,7 +3153,7 @@ class upgradeModel extends model
                 $lang->projectCommon = $this->config->projectCommonList[$currentLang][0];
 
                 include $langFile;
-                if(isset($lang->webhook->typeList)) continue
+                if(isset($lang->webhook->typeList)) continue;
 
                 $item->lang  = $currentLang;
                 $item->key   = 'bearychat';
