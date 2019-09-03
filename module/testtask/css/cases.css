@@ -9,6 +9,7 @@ tbody > tr > td   .icon-bug {margin-left: -8px;}
 .table-footer .table-actions .input-group #assignedTo_chosen .chosen-single{height:28px;padding:3px 6px}
 .table-footer .table-actions .input-group #assignedTo_chosen .chosen-single span{font-size:12px;}
 .table-footer .table-actions .input-group #assignedTo_chosen .chosen-single div{line-height:10px;}
+td.c-story{overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
 
 .fail .result-fail, .blocked .result-blocked{color:#f00;}
 .pass .result-pass{color:green;}
