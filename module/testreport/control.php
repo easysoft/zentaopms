@@ -528,11 +528,10 @@ class testreport extends control
                     if(isset($existDatas[$key]))
                     {
                         $data->value += $existDatas[$key]->value;
-                        $sum += $data->value;
-                        unset($existDatas[$chart][$key]);
+                        unset($existDatas[$key]);
                     }
+                    $sum += $data->value;
                 }
-
                 foreach($existDatas as $key => $data)
                 {
                     $sum += $data->value;
