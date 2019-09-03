@@ -983,7 +983,7 @@ class testcaseModel extends model
 
         if($lblStepPos === false or $lblResultPos === false or $lblExpectPos === false) return $caseSteps;
 
-        $caseSteps  = substr($steps, $lblStepPos + strlen($lblStep), $lblResultPos - strlen($lblStep));
+        $caseSteps  = substr($steps, $lblStepPos + strlen($lblStep), $lblResultPos - strlen($lblStep) - $lblStepPos);
         $caseExpect = substr($steps, $lblExpectPos + strlen($lblExpect));
         $caseSteps  = trim($caseSteps);
         $caseExpect = trim($caseExpect);
