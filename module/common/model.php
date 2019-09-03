@@ -567,9 +567,9 @@ class commonModel extends model
         /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)
         {
-            if(isset($lang->$moduleName->dividerMenu) and strpos($lang->$moduleName->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             if($isMobile and empty($menuItem->link)) continue;
+            if(isset($lang->$moduleName->dividerMenu) and strpos($lang->$moduleName->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
 
             /* Init the these vars. */
             $alias     = isset($menuItem->alias) ? $menuItem->alias : '';
