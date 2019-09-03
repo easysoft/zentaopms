@@ -469,10 +469,9 @@ class commonModel extends model
                 $active = $menuItem->name == $mainMenu ? "class='$activeName'" : '';
                 $link   = commonModel::createMenuLink($menuItem);
                 echo "<li $active data-id='$menuItem->name'><a href='$link' $active>$menuItem->text</a></li>\n";
+
+                if(($lastMenu->name != $menuItem->name) && strpos($lang->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
             }
-
-            if(($lastMenu->name != $menuItem->name) && strpos($lang->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
-
         }
         echo "</ul>\n";
     }
