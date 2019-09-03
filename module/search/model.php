@@ -77,11 +77,14 @@ class searchModel extends model
     public function buildQuery()
     {
         /* Init vars. */
-        $where      = '';
-        $groupItems = $this->config->search->groupItems;
-        $groupAndOr = strtoupper($this->post->groupAndOr);
+        $where       = '';
+        $groupItems  = $this->config->search->groupItems;
+        $groupAndOr  = strtoupper($this->post->groupAndOr);
+        $fieldParams = json_decode($this->session->searchParams['fieldParams']);
+        $scoreNum    = 0;
+
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
-        $scoreNum = 0;
+
         for($i = 1; $i <= $groupItems * 2; $i ++)
         {
             /* The and or between two groups. */
@@ -94,8 +97,11 @@ class searchModel extends model
             $operatorName = "operator$i";
             $valueName    = "value$i";
 
+            /* Fix bug #2704. */
+            $field = $this->post->$fieldName;
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'input' and $this->post->$valueName === '0') $this->post->$valueName = 'ZERO';
+
             /* Skip empty values. */
-            if($this->post->$fieldName == 'activatedCount' and $this->post->$valueName == '0') $this->post->$valueName = 'ZERO';
             if($this->post->$valueName == false) continue;
             if($this->post->$valueName == 'null') $this->post->$valueName = '';  // Null is special, stands to empty.
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
