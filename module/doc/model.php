@@ -987,7 +987,7 @@ class docModel extends model
      *
      * @param  string $appendLibs
      * @access public
-     * @return void
+     * @return array
      */
     public function getAllLibGroups($appendLibs = '')
     {
@@ -1051,9 +1051,11 @@ class docModel extends model
                 if($hasFilesPriv) $productOrderLibs[$productID]['libs']['files'] = $this->lang->doclib->files;
             }
         }
+
         $projects = $this->dao->select('id,name,status')->from(TABLE_PROJECT)
             ->where('id')->in(array_keys($projectLibs))
             ->andWhere('deleted')->eq('0')
+            ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('status')->notin('done,closed')->fi()
             ->orderBy('`order`_desc')
             ->fetchAll();
         $projectOrderLibs = array();
@@ -1623,7 +1625,7 @@ class docModel extends model
      */
     public function buildCreateButton4Doc()
     {
-        $libs  = $this->getLibs('all');
+        $libs  = $this->getLibs('all', strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '');
         $html  = "";
         if($libs)
         {
