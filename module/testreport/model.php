@@ -373,7 +373,8 @@ class testreportModel extends model
             ->andWhere('t1.date')->ge($begin)
             ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
-            ->fetchAll('case');
+            ->fetchAll('id');
+
         $failResults = array();
         $runCasesNum = array();
         foreach($results as $result)
