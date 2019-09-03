@@ -123,6 +123,7 @@ class testsuite extends control
      */
     public function view($suiteID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->app->loadLang('testtask');
         /* Get test suite, and set menu. */
         $suite = $this->testsuite->getById($suiteID, true);
         if(!$suite) die(js::error($this->lang->notFound) . js::locate('back'));
