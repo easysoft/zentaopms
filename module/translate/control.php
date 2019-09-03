@@ -50,7 +50,8 @@ class translate extends control
         $finishedLangs = $translatingLangs = array();
         foreach($this->config->translate->defaultLang as $defaultLang) $finishedLangs[$defaultLang] = $this->config->langs[$defaultLang];
 
-        $addLangs = json_decode($this->config->global->langs, true);
+        $addLangs = array();
+        if(isset($this->config->global->langs)) $addLangs = json_decode($this->config->global->langs, true);
         foreach($this->config->langs as $langKey => $langName)
         {
             if(isset($finishedLangs[$langKey])) continue;
