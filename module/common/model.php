@@ -547,8 +547,8 @@ class commonModel extends model
 
         /* get current module and method. */
         $isTutorialMode = commonModel::isTutorialMode();
-        $currentModule  = ($isTutorialMode and defined('WIZARD_MODULE')) ? WIZARD_MODULE : $app->getModuleName();
-        $currentMethod  = ($isTutorialMode and defined('WIZARD_METHOD')) ? WIZARD_METHOD : $app->getMethodName();
+        $currentModule  = $app->getModuleName();
+        $currentMethod  = $app->getMethodName();
         $menu           = customModel::getModuleMenu($moduleName);
         $isMobile       = $app->viewType === 'mhtml';
 
@@ -558,6 +558,8 @@ class commonModel extends model
             $currentModule  = $app->rawModule;
             $currentMethod  = $app->rawMethod;
         }
+        if($isTutorialMode and defined('WIZARD_MODULE')) $currentModule  = WIZARD_MODULE;
+        if($isTutorialMode and defined('WIZARD_METHOD')) $currentMethod  = WIZARD_METHOD;
 
         /* The beginning of the menu. */
         echo $isMobile ? '' : "<ul class='nav nav-default'>\n";
