@@ -83,7 +83,7 @@ if %requestType% == 'PATH_INFO' (
 echo %syncsvn% > %baseDir%syncsvn.bat
 echo syncsvn.bat ok
 
-:: create syncgit.bat
+:: create syncgit.bat.
 if %requestType% == 'PATH_INFO' (
   SET syncgit= %phpcli% %baseDir%ztcli "%pmsRoot%/git-run"
 )else (
@@ -91,6 +91,42 @@ if %requestType% == 'PATH_INFO' (
 )
 echo %syncgit% > %baseDir%syncgit.bat
 echo syncgit.bat ok
+
+:: async send mail.
+if %requestType% == 'PATH_INFO' (
+  SET sendmail= %phpcli% %baseDir%ztcli "%pmsRoot%/mail-asyncSend"
+)else (
+  SET sendmail= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=mail&f=asyncSend"
+)
+echo %sendmail% > %baseDir%sendmail.bat
+echo sendmail.bat ok
+
+:: async send webhook.
+if %requestType% == 'PATH_INFO' (
+  SET sendwebhook= %phpcli% %baseDir%ztcli "%pmsRoot%/webhook-asyncSend"
+)else (
+  SET sendwebhook= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=webhook&f=asyncSend"
+)
+echo %sendwebhook% > %baseDir%sendwebhook.bat
+echo sendwebhook.bat ok
+
+:: create cycle todo.
+if %requestType% == 'PATH_INFO' (
+  SET createcycle= %phpcli% %baseDir%ztcli "%pmsRoot%/todo-createCycle"
+)else (
+  SET createcycle= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=todo&f=createCycle"
+)
+echo %createcycle% > %baseDir%createcycle.bat
+echo createcycle.bat ok
+
+:: delete log.
+if %requestType% == 'PATH_INFO' (
+  SET deletelog= %phpcli% %baseDir%ztcli "%pmsRoot%/admin-deleteLog"
+)else (
+  SET deletelog= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=admin&f=deleteLog"
+)
+echo %deletelog% > %baseDir%deletelog.bat
+echo deletelog.bat ok
 
 :: create crond.bat
 SET cron= %phpcli% %baseDir%php\crond.php
@@ -106,6 +142,10 @@ echo 1      1    *   *     *     %baseDir%backup.bat        # backup database an
 echo 1      23   *   *     *     %baseDir%computeburn.bat   # compute burndown chart.   >> %sysCron%
 echo 1-59/2 *    *   *     *     %baseDir%syncsvn.bat       # sync subversion.          >> %sysCron%
 echo 1-59/2 *    *   *     *     %baseDir%syncgit.bat       # sync git.                 >> %sysCron%
+echo 1-59/5 *    *   *     *     %baseDir%sendmail.bat      # async send mail.          >> %sysCron%
+echo 1-59/5 *    *   *     *     %baseDir%sendwebhook.bat   # async send webhook.       >> %sysCron%
+echo 1      1    *   *     *     %baseDir%createcycle.bat   # create cycle todo.        >> %sysCron%
+echo 30     1    *   *     *     %baseDir%deletelog.bat     # delete log.               >> %sysCron%
 
 :: return 0 when success.
 exit /b 0

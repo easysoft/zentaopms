@@ -95,6 +95,42 @@ fi
 echo $syncgit > $basePath/syncgit.sh
 echo "syncgit.sh ok"
 
+# async send mail.
+if [ $requestType == 'PATH_INFO' ]; then
+  mailsend="$phpcli $basePath/ztcli '$pmsRoot/mail-asyncSend'";
+else
+  mailsend="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=mail&f=asyncSend'";
+fi
+echo $mailsend > $basePath/sendmail.sh
+echo "sendmail.sh ok"
+
+# async send webhook.
+if [ $requestType == 'PATH_INFO' ]; then
+  sendwebhook="$phpcli $basePath/ztcli '$pmsRoot/webhook-asyncSend'";
+else
+  sendwebhook="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=webhook&f=asyncSend'";
+fi
+echo $sendwebhook > $basePath/sendwebhook.sh
+echo "sendwebhook.sh ok"
+
+# create cycle todo.
+if [ $requestType == 'PATH_INFO' ]; then
+  createcycle="$phpcli $basePath/ztcli '$pmsRoot/todo-createCycle'";
+else
+  createcycle="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=todo&f=createCycle'";
+fi
+echo $createcycle > $basePath/createcycle.sh
+echo "createcycle.sh ok"
+
+# delete log.
+if [ $requestType == 'PATH_INFO' ]; then
+  deletelog="$phpcli $basePath/ztcli '$pmsRoot/admin-deleteLog'";
+else
+  deletelog="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=admin&f=deleteLog'";
+fi
+echo $deletelog > $basePath/deletelog.sh
+echo "deletelog.sh ok"
+
 # cron
 if [ ! -d "$basePath/cron" ]; then 
   mkdir $basePath/cron
@@ -105,7 +141,11 @@ echo "0      1    *   *     *     $basePath/dailyreminder.sh   # dailyreminder."
 echo "1      1    *   *     *     $basePath/backup.sh          # backup database and file." >> $basePath/cron/sys.cron
 echo "1      23   *   *     *     $basePath/computeburn.sh     # compute burndown chart."   >> $basePath/cron/sys.cron
 echo "1-59/2 *    *   *     *     $basePath/syncsvn.sh         # sync subversion."          >> $basePath/cron/sys.cron
-echo "1-59/2 *    *   *     *     $basePath/syncgit.sh         # sync git"                  >> $basePath/cron/sys.cron
+echo "1-59/2 *    *   *     *     $basePath/syncgit.sh         # sync git."                 >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/sendmail.sh        # async send mail."          >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/sendwebhook.sh     # async send webhook."       >> $basePath/cron/sys.cron
+echo "1      1    *   *     *     $basePath/createcycle.sh     # create cycle todo."        >> $basePath/cron/sys.cron
+echo "30     1    *   *     *     $basePath/deletelog.sh       # delete log."               >> $basePath/cron/sys.cron
 cron="$phpcli $basePath/php/crond.php"
 echo $cron > $basePath/cron.sh
 echo "cron.sh ok"
