@@ -236,6 +236,7 @@ class releaseModel extends model
     public function linkStory($releaseID)
     {
         $release = $this->getByID($releaseID);
+        $product = $this->loadModel('product')->getByID($release->product);
 
         $release->stories .= ',' . join(',', $this->post->stories);
         $this->dao->update(TABLE_RELEASE)->set('stories')->eq($release->stories)->where('id')->eq((int)$releaseID)->exec();
@@ -244,7 +245,12 @@ class releaseModel extends model
             $this->loadModel('story');
             foreach($this->post->stories as $storyID)
             {
+                /* Reset story stagedBy field for auto compute stage. */
+                $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
+                if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
+
                 $this->story->setStage($storyID);
+
                 $this->loadModel('action')->create('story', $storyID, 'linked2release', '', $releaseID);
             }
         }
