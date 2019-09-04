@@ -358,6 +358,7 @@ $(function()
             var checkedEstimate = 0;
             var checkedConsumed = 0;
             var checkedLeft     = 0;
+            var taskIdList      = [];
             $checkedRows.each(function()
             {
                 var $row = $(this);
@@ -366,10 +367,31 @@ $(function()
                     $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
                 }
                 var data = $row.data();
+                taskIdList.push(data.id);
+
                 var status = data.status;
                 if(status === 'wait') checkedWait++;
                 if(status === 'doing') checkedDoing++;
+
+                var canStatistics = false;
                 if(!$row.hasClass('table-children'))
+                {
+                    canStatistics = true;
+                }
+                else
+                {
+                    /* Fix bug #2579. When only child task is checked then statistics it. */
+                    var parentID = 0;
+                    var classes  = $row.attr('class').split(' ');
+                    for(i in classes)
+                    {
+                        if(classes[i].indexOf('parent-') >= 0) parentID = classes[i].replace('parent-', '');
+                    }
+
+                    if(parentID && taskIdList.indexOf(parseInt(parentID)) < 0) canStatistics = true;
+                }
+
+                if(canStatistics)
                 {
                     if(status !== 'cancel')
                     {
