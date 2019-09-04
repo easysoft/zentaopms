@@ -81,7 +81,7 @@ class productplanModel extends model
     {
         $date  = date('Y-m-d');
         $plans = $this->dao->select('t1.*,t2.project')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t2.plan = t1.id and t2.product = ' . $product)
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on("t2.plan = t1.id and t2.product = '$product'")
             ->where('t1.product')->eq($product)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!empty($branch))->andWhere('t1.branch')->eq($branch)->fi()
