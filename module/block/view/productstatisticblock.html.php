@@ -117,7 +117,7 @@ $(function()
               <div class="tile-title"><?php echo $lang->story->total;?></div>
               <?php if($product->stories):?>
               <div class="tile-amount"><?php echo array_sum($product->stories);?></div>
-              <?php common::printLink('product', 'browse', "productID={$product->id}", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm"');?>
+              <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm"');?>
               <?php else:?>
               <div class="tile-amount">0</div>
               <?php common::printLink('story', 'create', "productID={$product->id}", '<span class="label label-badge label-icon"><i class="icon icon-plus"></i></span>' . $lang->story->create, '', 'class="btn btn-primary btn-circle btn-icon-left btn-sm"');?>
