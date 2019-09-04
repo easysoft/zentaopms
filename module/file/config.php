@@ -32,3 +32,7 @@ $config->file->ueditor["videoUrlPrefix"]  = "";
 $config->file->ueditor["videoPathFormat"] = "";
 
 $config->file->objectType['stepResult'] = 'testcase';
+
+$config->file->convertURL['common']['view']       = '1';
+$config->file->convertURL['story']['edit']        = '1';
+$config->file->convertURL['testsuite']['libview'] = '1';

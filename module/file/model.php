@@ -793,9 +793,31 @@ class fileModel extends model
         {
             if(empty($field) or empty($data->$field)) continue;
             $data->$field = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $data->$field);
+
+            /* Convert plain text URLs into HTML hyperlinks. */
+            $moduleName = $this->app->getModuleName();
+            $methodName = $this->app->getMethodName();
+            if(isset($this->config->file->convertURL['common'][$methodName]) or isset($this->config->file->convertURL[$moduleName][$methodName]))
+            {
+                $fieldData = $data->$field;
+                preg_match_all('/(<a[^>]*>[^>]*<\/a>)/i', $fieldData, $aTags);
+                preg_match_all('/(<img[^>]*>)/Ui', $fieldData, $imgTags);
+                preg_match_all('/(<iframe[^>]*>[^>]*<\/iframe>)/Ui', $fieldData, $iframeTags);
+
+                foreach($aTags[0] as $i => $aTag) $fieldData = str_replace($aTag, "<A_{$i}>", $fieldData);
+                foreach($imgTags[0] as $i => $imgTag) $fieldData = str_replace($imgTag, "<IMG_{$i}>", $fieldData);
+                foreach($iframeTags[0] as $i => $iframeTag) $fieldData = str_replace($iframeTag, "<IFRAME_{$i}>", $fieldData);
+
+                $fieldData = preg_replace('/(http:\/\/|https:\/\/)((\w|=|\?|\.|\/|\&|-|%|;)+)/i', "<a href='\\0' target='_blank'>\\0</a>", $fieldData);
+
+                foreach($aTags[0] as $i => $aTag) $fieldData = str_replace("<A_{$i}>", $aTag, $fieldData);
+                foreach($imgTags[0] as $i => $imgTag) $fieldData = str_replace("<IMG_{$i}>", $imgTag, $fieldData);
+                foreach($iframeTags[0] as $i => $iframeTag) $fieldData = str_replace("<IFRAME_{$i}>", $iframeTag, $fieldData);
+
+                $data->$field = $fieldData;
+            }
         }
         return $data;
-
     }
 
     /**
