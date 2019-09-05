@@ -74,6 +74,18 @@ $(function()
         e.preventDefault();
     });
 
+    /* Add link in progress. */
+    $nav.on('click', 'a[data-target^=#tabQaProduct]', function()
+    {
+        var productID = $(this).attr('data-target').replace('#tabQaProduct', '');
+        $progressValue = $nav.closest('.block-qa').find('.tab-content').find($(this).attr('data-target')).find('.progress-info .progress-value');
+        setTimeout(function()
+        {
+            $progressValue.html("<a href='" + createLink('bug', 'browse', "productID=" + productID + "&branch=&type=all") + "'>" + $progressValue.text() + "</a>");
+        }, 2000);
+    });
+    $nav.find('li.active a[data-target^=#tabQaProduct]').click();
+
     $('[name^=build]').change(function()
     {
         var $tab = $('#bugBox' + $(this).val());
