@@ -167,9 +167,9 @@ $(function()
             </div>
             <div class="product-info">
               <?php $totalProject = $product->projects ? zget($product->projects, 'all', 0) : 0;?>
-              <?php $doingProject = $product->projects ? zget($product->projects, 'doing', 0) : 0;?>
+              <?php $undoneProject = $product->projects ? zget($product->projects, 'undone', 0) : 0;?>
               <?php $delayProject = $product->projects ? zget($product->projects, 'delay', 0) : 0;?>
-              <?php $doingRate    = $totalProject ? round($doingProject / $totalProject * 100, 2) : 0;?>
+              <?php $undoneRate    = $totalProject ? round($undoneProject / $totalProject * 100, 2) : 0;?>
               <?php if($totalProject):?>
               <div class="progress-info">
                 <?php if($delayProject):?>
@@ -177,7 +177,7 @@ $(function()
                 <?php endif;?>
               </div>
               <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $doingRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $doingRate;?>%"></div>
+                <div class="progress-bar" role="progressbar" aria-valuenow="<?php echo $undoneRate;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $undoneRate;?>%"></div>
               </div>
               <?php else:?>
               <div class="actions">
@@ -193,7 +193,7 @@ $(function()
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->project->statusList['doing'];?> :</td>
-                      <td class='text-left'><?php echo empty($doingProject) ? 0 : html::a($this->createLink('product', 'project', "type=undone&product={$product->id}"), $doingProject);?></td>
+                      <td class='text-left'><?php echo empty($undoneProject) ? 0 : html::a($this->createLink('product', 'project', "type=undone&product={$product->id}"), $undoneProject);?></td>
                     </tr>
                   </table>
                 </div>

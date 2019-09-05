@@ -808,21 +808,21 @@ class block extends control
             ->fetchGroup('product');
         foreach($projects as $product => $productProjects)
         {
-            $doing = 0;
+            $undone= 0;
             $done  = 0;
             $delay = 0;
 
             foreach($productProjects as $project)
             {
-                ($project->status == 'done' or $project->status == 'closed') ? $done++ : $doing++;
+                ($project->status == 'done' or $project->status == 'closed') ? $done++ : $undone++;
                 if($project->status != 'done' && $project->status != 'closed' && $project->status != 'suspended' && $project->end < helper::today()) $delay++;
             }
 
             $project = array();
-            $project['doing'] = $doing;
-            $project['done']  = $done;
-            $project['delay'] = $delay;
-            $project['all']   = count($productProjects);
+            $project['undone'] = $undone;
+            $project['done']   = $done;
+            $project['delay']  = $delay;
+            $project['all']    = count($productProjects);
 
             $projects[$product] = $project;
         }
