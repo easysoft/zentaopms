@@ -13,9 +13,9 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->project->featureBar['all'] as $key => $label):?>
-    <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
+    <?php echo html::a(inlink("project", "status=$key&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? " <span class='label label-light label-badge'>" . count($projectStats) . "</span>" : ''), '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab'");?>
     <?php endforeach;?>
-    <span class="label label-info"><?php echo $lang->product->projectInfo;?></span>
+    <span class="label label-info projectInfo"><?php echo $lang->product->projectInfo;?></span>
   </div>
 </div>
 <div id="mainContent">
