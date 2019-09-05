@@ -638,23 +638,37 @@ class project extends control
         setcookie('storyPreProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot);
         if($this->cookie->storyPreProjectID != $projectID)
         {
-            $_COOKIE['storyModuleParam'] = $_COOKIE['storyProductParam'] = 0;
+            $_COOKIE['storyModuleParam'] = $_COOKIE['storyProductParam'] = $_COOKIE['storyBranchParam'] = 0;
             setcookie('storyModuleParam',  0, 0, $this->config->webRoot);
             setcookie('storyProductParam', 0, 0, $this->config->webRoot);
+            setcookie('storyBranchParam',  0, 0, $this->config->webRoot);
         }
         if($type == 'bymodule')
         {
             $_COOKIE['storyModuleParam']  = (int)$param;
             $_COOKIE['storyProductParam'] = 0;
+            $_COOKIE['storyBranchParam']  = 0;
             setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot);
             setcookie('storyProductParam', 0, 0, $this->config->webRoot);
+            setcookie('storyBranchParam',  0, 0, $this->config->webRoot);
         }
         elseif($type == 'byproduct')
         {
             $_COOKIE['storyModuleParam']  = 0;
             $_COOKIE['storyProductParam'] = (int)$param;
-            setcookie('storyModuleParam', 0, 0, $this->config->webRoot);
+            $_COOKIE['storyBranchParam']  = 0;
+            setcookie('storyModuleParam',  0, 0, $this->config->webRoot);
             setcookie('storyProductParam', (int)$param, 0, $this->config->webRoot);
+            setcookie('storyBranchParam',  0, 0, $this->config->webRoot);
+        }
+        elseif($type == 'bybranch')
+        {
+            $_COOKIE['storyModuleParam']  = 0;
+            $_COOKIE['storyProductParam'] = 0;
+            $_COOKIE['storyBranchParam']  = $param;
+            setcookie('storyModuleParam',  0, 0, $this->config->webRoot);
+            setcookie('storyProductParam', 0, 0, $this->config->webRoot);
+            setcookie('storyBranchParam',  $param, 0, $this->config->webRoot);
         }
         else
         {
@@ -671,7 +685,7 @@ class project extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $queryID   = ($type == 'bySearch') ? (int)$param : 0;
+        $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $project   = $this->commonAction($projectID);
         $projectID = $project->id;
 
@@ -682,11 +696,6 @@ class project extends control
         $stories = $this->story->getProjectStories($projectID, $sort, $type, $param, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $users   = $this->user->getPairs('noletter');
-
-        /* Get project's product. */
-        $productID    = 0;
-        $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
-        if($productPairs) $productID = key($productPairs);
 
         /* Build the search form. */
         $modules  = array();
@@ -725,6 +734,18 @@ class project extends control
 
         if($this->cookie->storyModuleParam)  $this->view->module  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
         if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
+        if($this->cookie->storyBranchParam)
+        {
+            $productID = 0;
+            $branchID  = $this->cookie->storyBranchParam;
+            if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
+            $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
+        }
+
+        /* Get project's product. */
+        $productID    = 0;
+        $productPairs = $this->loadModel('product')->getProductsByProject($projectID);
+        if($productPairs) $productID = key($productPairs);
 
         /* Assign. */
         $this->view->title        = $title;

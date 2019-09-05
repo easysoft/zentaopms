@@ -611,8 +611,8 @@ class treeModel extends model
                 if((isset($treeMenu[0]) and $branch) or isset($projectBranches[$branch]))
                 {
                     $childMenu = isset($treeMenu[0]) ? "<ul>{$treeMenu[0]}</ul>" : '';
-                    $link      = helper::createLink('project', 'story', "project=$rootID&ordery=&status=byBranch&praram=$branch");
-                    if($branchName) $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch$branch'") . "{$childMenu}</li>";
+                    $link      = helper::createLink('project', 'story', "project=$rootID&ordery=&status=byBranch&praram=" . (empty($branch) ? "{$id},0" : $branch));
+                    if($branchName) $treeMenu[0] = "<li>" . html::a($link, $branchName, '_self', "id='branch" . (empty($branch) ? "{$id}_0" : $branch) . "'") . "{$childMenu}</li>";
                 }
                 $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
             }

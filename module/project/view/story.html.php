@@ -16,13 +16,14 @@
 <?php if($canOrder) include '../../common/view/sortable.html.php';?>
 <?php js::set('moduleID', $this->cookie->storyModuleParam);?>
 <?php js::set('productID', $this->cookie->storyProductParam);?>
+<?php js::set('branchID', str_replace(',', '_', $this->cookie->storyBranchParam));?>
 <?php js::set('confirmUnlinkStory', $lang->project->confirmUnlinkStory)?>
 <div id="mainMenu" class="clearfix">
-  <?php if(!empty($module->name) or !empty($product->name)):?>
+  <?php if(!empty($module->name) or !empty($product->name) or !empty($branch)):?>
   <div id="sidebarHeader">
     <?php
-    $sidebarName = isset($product) ? $product->name : $module->name;
-    $removeType  = isset($product) ? 'byproduct' : 'bymodule';
+    $sidebarName = isset($product) ? $product->name : (isset($branch) ? $branch : $module->name);
+    $removeType  = isset($product) ? 'byproduct' : (isset($branch) ? 'bybranch' : 'bymodule');
     $removeLink  = inlink('story', "projectID=$project->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
     ?>
     <div class="title" title='<?php echo $sidebarName;?>'>

@@ -124,6 +124,7 @@ $filter->project->default->cookie['projectMode']     = 'code';
 $filter->project->story->cookie['storyModuleParam']  = 'int';
 $filter->project->story->cookie['storyPreProjectID'] = 'int';
 $filter->project->story->cookie['storyProductParam'] = 'int';
+$filter->project->story->cookie['storyBranchParam']  = 'reg::checked';
 $filter->project->story->cookie['projectStoryOrder'] = 'reg::orderBy';
 $filter->project->task->cookie['moduleBrowseParam']  = 'int';
 $filter->project->task->cookie['preProjectID']       = 'int';
