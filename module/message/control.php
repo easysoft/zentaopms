@@ -43,6 +43,9 @@ class message extends control
 
         if($_POST)
         {
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+
             $data = fixer::input('post')->get();
 
             $browserConfig = new stdclass();
@@ -50,7 +53,15 @@ class message extends control
             $browserConfig->pollTime = $data->pollTime;
 
             $this->loadModel('setting')->setItems('system.message.browser', $browserConfig);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                $this->send($response);
+            }
+
+            $response['locate'] = $this->createLink('message', 'browser');
+            $this->send($response);
         }
 
         $this->view->title      = $this->lang->message->browser;

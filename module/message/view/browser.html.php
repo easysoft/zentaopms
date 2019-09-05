@@ -19,7 +19,7 @@
         <small class='text-muted'> <?php echo $lang->arrow . $lang->message->setting;?></small>
       </h2>
     </div>
-    <form method='post' id='dataform'>
+    <form class="main-form form-ajax" method='post' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th class='rowhead w-130px'><?php echo $lang->message->browserSetting->turnon; ?></th>
@@ -33,10 +33,7 @@
           <td colspan='2'><?php echo $lang->message->browserSetting->pollTimePlaceholder?></td>
         </tr>
         <tr>
-          <td colspan='4' class='text-center'>
-            <?php echo html::submitButton();?>
-            <?php echo html::backButton();?>
-          </td>
+          <td colspan='4' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>
     </form>
