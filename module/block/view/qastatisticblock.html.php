@@ -74,18 +74,6 @@ $(function()
         e.preventDefault();
     });
 
-    /* Add link in progress. */
-    $nav.on('click', 'a[data-target^=#tabQaProduct]', function()
-    {
-        var productID = $(this).attr('data-target').replace('#tabQaProduct', '');
-        $progressValue = $nav.closest('.block-qa').find('.tab-content').find($(this).attr('data-target')).find('.progress-info .progress-value');
-        setTimeout(function()
-        {
-            $progressValue.html("<a href='" + createLink('bug', 'browse', "productID=" + productID + "&branch=&type=all") + "'>" + $progressValue.text() + "</a>");
-        }, 2000);
-    });
-    $nav.find('li.active a[data-target^=#tabQaProduct]').click();
-
     $('[name^=build]').change(function()
     {
         var $tab = $('#bugBox' + $(this).val());
@@ -128,7 +116,7 @@ $(function()
               <canvas width="100" height="100" style="width: 100px; height: 100px;"></canvas>
               <div class="progress-info">
                 <small><?php echo $lang->bug->allBugs;?></small>
-                <strong><span class="progress-value"><?php echo $product->total;?></span></strong>
+                <strong><?php echo empty($product->total) ? 0 : html::a($this->createLink('bug', 'browse', "productID={$product->id}&branch=&type=all"), $product->total);?></strong>
               </div>
             </div>
             <div class="text-center small with-padding">
