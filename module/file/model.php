@@ -800,9 +800,9 @@ class fileModel extends model
             if(isset($this->config->file->convertURL['common'][$methodName]) or isset($this->config->file->convertURL[$moduleName][$methodName]))
             {
                 $fieldData = $data->$field;
-                preg_match_all('/(<a[^>]*>[^>]*<\/a>)/i', $fieldData, $aTags);
-                preg_match_all('/(<img[^>]*>)/Ui', $fieldData, $imgTags);
-                preg_match_all('/(<iframe[^>]*>[^>]*<\/iframe>)/Ui', $fieldData, $iframeTags);
+                preg_match_all('/(<a[^>]*>[^<]*<\/a>)/i', $fieldData, $aTags);
+                preg_match_all('/(<img[^>]*>)/i', $fieldData, $imgTags);
+                preg_match_all('/(<iframe[^>]*>[^<]*<\/iframe>)/i', $fieldData, $iframeTags);
 
                 foreach($aTags[0] as $i => $aTag) $fieldData = str_replace($aTag, "<A_{$i}>", $fieldData);
                 foreach($imgTags[0] as $i => $imgTag) $fieldData = str_replace($imgTag, "<IMG_{$i}>", $fieldData);
