@@ -12,7 +12,7 @@ $lang->message->browserSetting = new stdclass();
 $lang->message->browserSetting->turnon   = '是否打開';
 $lang->message->browserSetting->pollTime = '輪詢時間';
 
-$lang->message->browserSetting->pollTimePlaceholder = '通知查詢的時間間隔，以秒為單位。';
+$lang->message->browserSetting->pollTimePlaceholder = '通知的時間間隔，以秒為單位。';
 
 $lang->message->browserSetting->turnonList[1] = '打開';
 $lang->message->browserSetting->turnonList[0] = '關閉';

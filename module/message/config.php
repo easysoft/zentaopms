@@ -35,4 +35,4 @@ $config->message->setting['mail']['setting']     = $config->message->available['
 
 $config->message->browser = new stdclass();
 $config->message->browser->turnon   = 1;
-$config->message->browser->pollTime = 5 * 60;
+$config->message->browser->pollTime = 300;
