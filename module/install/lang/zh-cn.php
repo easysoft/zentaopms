@@ -95,6 +95,7 @@ $lang->install->defaultLang    = '默认语言';
 $lang->install->dbHost         = '数据库服务器';
 $lang->install->dbHostNote     = '如果127.0.0.1无法访问，尝试使用localhost';
 $lang->install->dbPort         = '服务器端口';
+$lang->install->dbEncoding     = '数据库编码';
 $lang->install->dbUser         = '数据库用户名';
 $lang->install->dbPassword     = '数据库密码';
 $lang->install->dbName         = 'PMS使用的库';

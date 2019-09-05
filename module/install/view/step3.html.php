@@ -23,6 +23,7 @@ if(!isset($error))
 \$config->db->port        = '$dbPort';
 \$config->db->name        = '$dbName';
 \$config->db->user        = '$dbUser';
+\$config->db->encoding    = '$dbEncoding';
 \$config->db->password    = '$dbPassword';
 \$config->db->prefix      = '$dbPrefix';
 \$config->webRoot         = getWebRoot();

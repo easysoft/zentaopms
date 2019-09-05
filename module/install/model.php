@@ -354,10 +354,10 @@ class installModel extends model
         $this->config->db->host     = $this->post->dbHost;
         $this->config->db->name     = $this->post->dbName;
         $this->config->db->user     = $this->post->dbUser;
+        $this->config->db->encoding = $this->post->dbEncoding;
         $this->config->db->password = $this->post->dbPassword;
         $this->config->db->port     = $this->post->dbPort;
         $this->config->db->prefix   = $this->post->dbPrefix;
-
     }
 
     /**

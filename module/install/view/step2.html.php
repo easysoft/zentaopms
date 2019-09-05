@@ -41,6 +41,10 @@
             <td><?php echo html::input('dbPort', '3306', "class='form-control'");?></td><td></td>
           </tr>
           <tr>
+            <th><?php echo $lang->install->dbEncoding;?></th>
+            <td><?php echo html::input('dbEncoding', $this->config->db->encoding, "class='form-control'");?></td><td></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->install->dbUser;?></th>
             <td><?php echo html::input('dbUser', 'root', "class='form-control'");?></td><td></td>
           </tr>
