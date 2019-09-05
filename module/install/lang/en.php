@@ -95,6 +95,7 @@ $lang->install->defaultLang    = 'Default Language';
 $lang->install->dbHost         = 'Database Host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 is not accessible, try localhost.';
 $lang->install->dbPort         = 'Host Port';
+$lang->install->dbEncoding     = 'Database Charset';
 $lang->install->dbUser         = 'Database Username';
 $lang->install->dbPassword     = 'Database Password';
 $lang->install->dbName         = 'Database Name';

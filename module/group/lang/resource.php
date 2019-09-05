@@ -980,10 +980,12 @@ $lang->misc->methodOrder[5] = 'ping';
 
 $lang->resource->message = new stdclass();
 $lang->resource->message->index   = 'index';
+$lang->resource->message->browser = 'browser';
 $lang->resource->message->setting = 'setting';
 
 $lang->message->methodOrder[5]  = 'index';
-$lang->message->methodOrder[10] = 'setting';
+$lang->message->methodOrder[10] = 'browser';
+$lang->message->methodOrder[15] = 'setting';
 
 $lang->resource->action = new stdclass();
 $lang->resource->action->trash    = 'trash';
@@ -1395,6 +1397,8 @@ $lang->changelog['10.1'][] = 'project-treeStory';
 
 $lang->changelog['10.6'][] = 'backup-setting';
 $lang->changelog['10.6'][] = 'backup-rmPHPHeader';
+
+$lang->changelog['11.6.2'][] = 'message-browser';
 
 global $config;
 if($config->global->flow != 'full')

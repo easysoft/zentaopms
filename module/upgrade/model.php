@@ -399,6 +399,9 @@ class upgradeModel extends model
         case '11_6':
             $this->saveLogs('Execute 11_6');
             $this->execSQL($this->getUpgradeFile('11.6'));
+        case '11_6_1':
+            $this->saveLogs('Execute 11_6_1');
+            $this->adjustWebhookType();
         }
 
         $this->deletePatch();

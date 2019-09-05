@@ -95,6 +95,7 @@ $lang->install->defaultLang    = '預設語言';
 $lang->install->dbHost         = '資料庫伺服器';
 $lang->install->dbHostNote     = '如果127.0.0.1無法訪問，嘗試使用localhost';
 $lang->install->dbPort         = '伺服器連接埠';
+$lang->install->dbEncoding     = '資料庫編碼';
 $lang->install->dbUser         = '資料庫用戶名';
 $lang->install->dbPassword     = '資料庫密碼';
 $lang->install->dbName         = 'PMS使用的庫';

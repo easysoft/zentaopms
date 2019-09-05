@@ -189,6 +189,7 @@ $lang->project->myInvolved   = '由我參與';
 $lang->project->statusSelects['']             = '更多';
 $lang->project->statusSelects['wait']         = '未開始';
 $lang->project->statusSelects['doing']        = '進行中';
+$lang->project->statusSelects['undone']       = '未完成';
 $lang->project->statusSelects['finishedbyme'] = '我完成';
 $lang->project->statusSelects['done']         = '已完成';
 $lang->project->statusSelects['closed']       = '已關閉';

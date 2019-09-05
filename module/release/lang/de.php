@@ -54,6 +54,7 @@ $lang->release->resolvedBugs  = 'Gelöste %s Bugs';
 $lang->release->createdBugs   = 'Erstellte %s Bugs';
 $lang->release->export        = 'Export as HTML';
 $lang->release->yesterday     = 'Gestern veröffentlicht';
+$lang->release->all           = 'All';
 
 $lang->release->filePath = 'Download : ';
 $lang->release->scmPath  = 'SCM Pfad : ';

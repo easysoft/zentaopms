@@ -1159,6 +1159,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'mail', 'save'),
 (1, 'mail', 'test'),
 (1, 'message', 'index'),
+(1, 'message', 'browser'),
 (1, 'message', 'setting'),
 (1, 'misc', 'ping'),
 (1, 'my', 'bug'),

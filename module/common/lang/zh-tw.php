@@ -385,7 +385,8 @@ $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
 $lang->admin->subMenu->message->mail    = array('link' => '郵件|mail|index', 'subModule' => 'mail');
 $lang->admin->subMenu->message->webhook = array('link' => 'Webhook|webhook|browse', 'subModule' => 'webhook');
-$lang->admin->subMenu->message->setting = array('link' => '設置|message|setting', 'subModule' => 'message');
+$lang->admin->subMenu->message->browser = array('link' => '瀏覽器|message|browser');
+$lang->admin->subMenu->message->setting = array('link' => '設置|message|setting');
 
 $lang->admin->subMenu->sso = new stdclass();
 $lang->admin->subMenu->sso->ranzhi = '然之協同|admin|sso';
