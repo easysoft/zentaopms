@@ -71,7 +71,7 @@ class fixer extends baseFixer
         foreach($this->data as $field => $value)
         {
             if(!isset($fields[$field])) unset($this->data->$field);
-            if(!in_array($field, $this->stripedFields)) $this->specialChars($field);
+            if(!isset($this->stripedFields[$field])) $this->specialChars($field);
         }
 
         return $this->data;

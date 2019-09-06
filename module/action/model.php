@@ -48,8 +48,7 @@ class actionModel extends model
         $action->extra      = $extra;
 
         /* Use purifier to process comment. Fix bug #2683. */
-        $_POST['comment'] = $comment;
-        $action->comment  = fixer::input('post')->stripTags('comment')->get('comment');
+        $action->comment  = fixer::dataStripTags($comment);
 
         /* Process action. */
         $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);

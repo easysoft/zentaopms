@@ -968,7 +968,7 @@ class baseFixer
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
         {
-            if(empty($this->stripedFields) or !in_array($fieldName, $this->stripedFields)) $this->data->$fieldName = $this->specialArray($this->data->$fieldName);
+            if(empty($this->stripedFields) or !isset($this->stripedFields[$fieldName])) $this->data->$fieldName = $this->specialArray($this->data->$fieldName);
         }
         return $this;
     }
@@ -1000,46 +1000,65 @@ class baseFixer
      */
     public function stripTags($fieldName, $allowedTags = '')
     {
-        global $app, $config;
-        if(empty($allowedTags) and isset($config->allowedTags)) $allowedTags = $config->allowedTags;
-        $usePurifier = isset($config->framework->purifier) ? $config->framework->purifier : false;
-        if($usePurifier)
-        {
-            $app->loadClass('purifier', true);
-            $purifierConfig = HTMLPurifier_Config::createDefault();
-            $purifierConfig->set('Filter.YouTube', 1);
-
-            /* Disable caching. */
-            $purifierConfig->set('Cache.DefinitionImpl', null);
-
-            $purifier = new HTMLPurifier($purifierConfig);
-            $def = $purifierConfig->getHTMLDefinition(true);
-            $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
-        }
-
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
         {
             if(function_exists('get_magic_quotes_gpc') and get_magic_quotes_gpc()) $this->data->$fieldName = stripslashes($this->data->$fieldName);
 
-            if(!in_array($fieldName, $this->stripedFields))
+            if(!isset($this->stripedFields[$fieldName]) and (!defined('RUN_MODE') or RUN_MODE != 'admin'))
             {
-                if(!defined('RUN_MODE') or RUN_MODE != 'admin')
-                {
-                    /*
-                     * purifier会把&nbsp;替换空格，kindeditor再会把行首的空格去掉。
-                     * purifier will change &nbsp; to ' ', and kindeditor will remove the header space again.
-                     **/
-                    $this->data->$fieldName = preg_replace('/<[^>]+</', '<', $this->data->$fieldName);
-                    $this->data->$fieldName = preg_replace('/>[^<]+>/', '>', $this->data->$fieldName);
-                    if($usePurifier) $this->data->$fieldName = str_replace('&nbsp;', '&spnb;', $this->data->$fieldName);
-                    $this->data->$fieldName = $usePurifier ? $purifier->purify($this->data->$fieldName) : strip_tags($this->data->$fieldName, $allowedTags);
-                    if($usePurifier) $this->data->$fieldName = str_replace('&amp;spnb;', '&nbsp;', $this->data->$fieldName);
-                }
+                $this->data->$fieldName = self::dataStripTags($this->data->$fieldName);
             }
-            $this->stripedFields[] = $fieldName;
+            $this->stripedFields[$fieldName] = $fieldName;
         }
         return $this;
+    }
+
+    /**
+     * Strip tags for data
+     * 
+     * @param  string $data 
+     * @param  string $allowedTags 
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function dataStripTags($data, $allowedTags = '')
+    {
+        if(empty($data)) return $data;
+
+        global $app, $config;
+        if(empty($allowedTags) and isset($config->allowedTags)) $allowedTags = $config->allowedTags;
+        $usePurifier = isset($config->framework->purifier) ? $config->framework->purifier : false;
+        if($usePurifier)
+        {
+            static $purifier;
+            if(empty($purifier))
+            {
+                $app->loadClass('purifier', true);
+                $purifierConfig = HTMLPurifier_Config::createDefault();
+                $purifierConfig->set('Filter.YouTube', 1);
+
+                /* Disable caching. */
+                $purifierConfig->set('Cache.DefinitionImpl', null);
+
+                $purifier = new HTMLPurifier($purifierConfig);
+                $def = $purifierConfig->getHTMLDefinition(true);
+                $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+            }
+        }
+
+        /*
+         * purifier会把&nbsp;替换空格，kindeditor再会把行首的空格去掉。
+         * purifier will change &nbsp; to ' ', and kindeditor will remove the header space again.
+         **/
+        $data = preg_replace('/<[^>]+</', '<', $data);
+        $data = preg_replace('/>[^<]+>/', '>', $data);
+        if($usePurifier) $data = str_replace('&nbsp;', '&spnb;', $data);
+        $data = $usePurifier ? $purifier->purify($data) : strip_tags($data, $allowedTags);
+        if($usePurifier) $data = str_replace('&amp;spnb;', '&nbsp;', $data);
+
+        return $data;
     }
 
     /**
@@ -1053,7 +1072,7 @@ class baseFixer
     public function skipSpecial($fieldName)
     {
         $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName) $this->stripedFields[] = $fieldName;
+        foreach($fields as $fieldName) $this->stripedFields[$fieldName] = $fieldName;
         return $this;
     }
 
@@ -1233,7 +1252,7 @@ class baseFixer
         foreach($this->data as $field => $value)
         {
             if(!isset($fields[$field])) unset($this->data->$field);
-            if(!in_array($field, $this->stripedFields)) $this->specialChars($field);
+            if(!isset($this->stripedFields[$field])) $this->specialChars($field);
         }
 
         return $this->data;
