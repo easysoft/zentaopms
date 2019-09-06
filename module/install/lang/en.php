@@ -193,7 +193,7 @@ EOD;
 
 $lang->install->ranzhi = new stdclass();
 $lang->install->ranzhi->name  = 'ZDOO';
-$lang->install->ranzhi->logo  = 'images/main/ranzhi.ico';
+$lang->install->ranzhi->logo  = 'images/main/zdoo.ico';
 $lang->install->ranzhi->url   = 'http://www.zdoo.org';
 $lang->install->ranzhi->desc  = <<<EOD
 <ul>
