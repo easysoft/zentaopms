@@ -402,6 +402,7 @@ class upgradeModel extends model
         case '11_6_1':
             $this->saveLogs('Execute 11_6_1');
             $this->adjustWebhookType();
+            $this->adjustPriv11_6_2();
         }
 
         $this->deletePatch();
@@ -3156,7 +3157,7 @@ class upgradeModel extends model
                 $lang->projectCommon = $this->config->projectCommonList[$currentLang][0];
 
                 include $langFile;
-                if(isset($lang->webhook->typeList)) continue;
+                if(!isset($lang->webhook->typeList)) continue;
 
                 $item->lang  = $currentLang;
                 $item->key   = 'bearychat';
@@ -3173,6 +3174,28 @@ class upgradeModel extends model
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Adjust priv for 11.6.2.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv11_6_2()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('method')->eq('index')->andWhere('module')->in('message')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'message';
+            $groupPriv->method = 'browser';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
         return true;
     }
 
