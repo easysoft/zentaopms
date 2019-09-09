@@ -45,16 +45,16 @@ foreach($rows as $row)
         if(isset($endRowspan[$fieldName]) and $i < $endRowspan[$fieldName]) continue;
         $fieldValue = isset($row->$fieldName) ? $row->$fieldName : '';
         $rowspan = '';
-        if(isset($rowspans[$i]) and strpos($rowspans[$i]['rows'], $fieldName) !== false)
+        if(isset($rowspans[$i]) and isset($rowspans[$i]['rows'][$fieldName]))
         {
-            $rowspan = "rowspan='{$rowspans[$i]['num']}'";
-            $endRowspan[$fieldName] = $i + $rowspans[$i]['num'];
+            $rowspan = "rowspan='{$rowspans[$i]['rows'][$fieldName]}'";
+            $endRowspan[$fieldName] = $i + $rowspans[$i]['rows'][$fieldName];
         }
         $colspan = '';
-        if(isset($colspans[$i]) and strpos($colspans[$i]['cols'], $fieldName) !== false)
+        if(isset($colspans[$i]) and isset($colspans[$i]['cols'][$fieldName]))
         {
-            $colspan = "colspan='{$colspans[$i]['num']}'";
-            $endColspan = $col + $colspans[$i]['num'];
+            $colspan = "colspan='{$colspans[$i]['cols'][$fieldName]}'";
+            $endColspan = $col + $colspans[$i]['cols'][$fieldName];
         }
         echo "<td $rowspan $colspan><nobr>$fieldValue</nobr></td>\n";
 
