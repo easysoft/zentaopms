@@ -346,7 +346,7 @@ class block extends control
             }
             else
             {
-                $html = "<div class='panel-body'><div class='article-content'>" . htmlspecialchars_decode($block->params->html) .'</div></div>';
+                $html = "<div class='panel-body'><div class='article-content'>" . $block->params->html . '</div></div>';
             }
         }
         elseif($block->source != '')
