@@ -96,7 +96,7 @@ class helper extends baseHelper
             if($position !== false) $toEncoding = substr($toEncoding, 0, $position);
 
             /* Check string encoding. */
-            $encoding = strtolower(mb_detect_encoding($string, array('ASCII','UTF-8','GB2312','GBK','BIG5')));
+            $encoding = strtolower(mb_detect_encoding($string, mb_list_encodings()));
             if($encoding == $toEncoding) return $string;
             return mb_convert_encoding($string, $toEncoding, $encoding);
         }
