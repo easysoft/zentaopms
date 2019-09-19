@@ -505,7 +505,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Started', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
