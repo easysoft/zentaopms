@@ -1599,6 +1599,7 @@ class projectModel extends model
         {
             foreach($plans as $planID => $productID)
             {
+                if(empty($planID)) continue;
                 $planStory = $this->loadModel('story')->getPlanStories($planID);
                 if(!empty($planStory))
                 {
