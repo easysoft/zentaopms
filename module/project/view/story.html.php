@@ -90,7 +90,7 @@
     </div>
   </div>
   <div class="main-col">
-    <div id='queryBox' class='cell <?php if($type =='bySearch') echo 'show';?>'></div>
+    <div id='queryBox' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
