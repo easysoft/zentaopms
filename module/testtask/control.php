@@ -547,7 +547,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Activated', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -589,7 +589,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -632,7 +632,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Blocked', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
