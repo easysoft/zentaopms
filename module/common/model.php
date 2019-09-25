@@ -1750,11 +1750,15 @@ EOD;
         /* Change for task #5384. */
         if(isset($queryString['time']))
         {
+            $timestamp = $queryString['time'];
+            if(strlen($timestamp) > 10) $timestamp = substr($timestamp, 0, 10);
+            if(strlen($timestamp) != 10 or $timestamp{0} >= '4') $this->response('ERROR_TIMESTAMP');
+
             $result = $this->get->token == md5($entry->code . $entry->key . $queryString['time']);
             if($result)
             {
-                if($queryString['time'] <= $entry->calledTime) $this->response('CALLED_TIME');
-                $this->loadModel('entry')->updateTime($entry->code, $queryString['time']);
+                if($timestamp <= $entry->calledTime) $this->response('CALLED_TIME');
+                $this->loadModel('entry')->updateTime($entry->code, $timestamp);
                 unset($_GET['time']);
                 return $result;
             }

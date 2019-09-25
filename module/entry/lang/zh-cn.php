@@ -55,3 +55,4 @@ $lang->entry->errmsg['ACCOUNT_UNBOUND']       = '未绑定用户';
 $lang->entry->errmsg['INVALID_ACCOUNT']       = '用户不存在';
 $lang->entry->errmsg['EMPTY_ENTRY']           = '应用不存在';
 $lang->entry->errmsg['CALLED_TIME']           = 'Token已失效';
+$lang->entry->errmsg['ERROR_TIMESTAMP']       = '错误的时间戳。';
