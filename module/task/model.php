@@ -547,10 +547,11 @@ class taskModel extends model
      *
      * @param  object  $oldTask
      * @param  object  $task
+     * @param  bool    $autoStatus
      * @access public
      * @return object|bool
      */
-    public function computeHours4Multiple($oldTask, $task = null, $team = array())
+    public function computeHours4Multiple($oldTask, $task = null, $team = array(), $autoStatus = true)
     {
         if(!$oldTask) return false;
 
@@ -603,6 +604,8 @@ class taskModel extends model
 
             if(!empty($task))
             {
+                if(!$autoStatus) return $currentTask;
+
                 if($currentTask->consumed == 0)
                 {
                     if(!isset($task->status)) $currentTask->status = 'wait';
@@ -747,7 +750,7 @@ class taskModel extends model
         if(!empty($teams))
         {
             foreach($teams as $member) $this->dao->insert(TABLE_TEAM)->data($member)->autoCheck()->exec();
-            $task = $this->computeHours4Multiple($oldTask, $task);
+            $task = $this->computeHours4Multiple($oldTask, $task, array(), $autoStatus = false);
             if($task->status == 'wait')
             {
                 reset($teams);
