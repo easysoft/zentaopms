@@ -272,6 +272,12 @@ class taskModel extends model
         /* check data. */
         foreach($data as $i => $task)
         {
+
+            if($task->deadline != '0000-00-00' and $task->deadline <= $task->estStarted)
+            {
+                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
             if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
