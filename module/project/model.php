@@ -1566,6 +1566,8 @@ class projectModel extends model
         $lastOrder     = reset($linkedStories);
         foreach($stories as $key => $storyID)
         {
+            $status = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('status');
+            if($status == 'draft') continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $productID = (int)$products[$storyID];
