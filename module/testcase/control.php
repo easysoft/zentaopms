@@ -1681,8 +1681,9 @@ class testcase extends control
      */
     public function ajaxGetStatus($methodName, $caseID = 0)
     {
-        $status = $this->testcase->getStatus($methodName, $caseID);
-
+        $case   = $this->testcase->getByID($caseID);
+        $status = $this->testcase->getStatus($methodName, $case);
+        if($methodName == 'update') $status = zget($status, 1, '');
         die($status);
     }
 }
