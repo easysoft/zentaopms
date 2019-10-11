@@ -2767,7 +2767,7 @@ class taskModel extends model
             case 'actions':
                 if($storyChanged)
                 {
-                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
+                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
                     break;
                 }
 
