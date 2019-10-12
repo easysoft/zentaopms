@@ -1719,6 +1719,7 @@ class projectModel extends model
             ->where('t1.account')->eq($account)
             ->andWhere('t1.root')->ne($currentProject)
             ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
             ->groupBy('t1.root')
             ->orderBy('t1.root DESC')
             ->fetchPairs();
