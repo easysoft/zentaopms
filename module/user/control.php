@@ -846,8 +846,25 @@ class user extends control
         $this->view->refererBeforeDeny = $refererBeforeDeny;    // The referer of the denied page.
         $this->app->loadLang($module);
         $this->app->loadLang('my');
-        $this->display();
-        exit;
+
+        /* Check deny type. */
+        $rights  = $this->app->user->rights['rights'];
+        $acls    = $this->app->user->rights['acls'];
+        $module  = strtolower($module);
+        $method  = strtolower($method);
+
+        $denyType = 'nopriv';
+        if(isset($rights[$module][$method]))
+        {
+            $menu = isset($this->lang->menugroup->$module) ? $this->lang->menugroup->$module : $module;
+            $menu = strtolower($menu);
+
+            if(!isset($acls['views'][$menu])) $denyType = 'noview';
+            $this->view->menu = $menu;
+        }
+        $this->view->denyType = $denyType;
+
+        die($this->display());
     }
 
     /**
