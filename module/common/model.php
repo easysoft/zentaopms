@@ -596,10 +596,10 @@ class commonModel extends model
                 /* Avoid user thinking the page is shaking when the menu toggle class 'active' */
                 if($config->global->flow == 'onlyTest')
                 {
-                    if($currentModule == 'bug'       && $currentMethod == 'browse')  $active = '';
-                    if($currentModule == 'testcase'  && $currentMethod == 'browse')  $active = '';
-                    if($currentModule == 'testtask'  && $currentMethod == 'browse')  $active = '';
-                    if($currentModule == 'testsuite' && $currentMethod == 'library') $active = '';
+                    if($currentModule == 'bug'       && $currentMethod == 'browse') $active = '';
+                    if($currentModule == 'testcase'  && $currentMethod == 'browse') $active = '';
+                    if($currentModule == 'testtask'  && $currentMethod == 'browse') $active = '';
+                    if($currentModule == 'caselib'   && $currentMethod == 'browse') $active = '';
                 }
 
                 $label   = $menuItem->text;
