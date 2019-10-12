@@ -83,16 +83,16 @@ function getProductModules(productID)
 }
 $(function()
 {
-    if(type == 'doc') return;
     $('#root').change(function()
     {
         if($(this).val() == currentRoot) return true;
-        if(!confirm('<?php echo $lang->tree->confirmRoot?>'))
+        var confirmRoot = <?php echo json_encode($type == 'doc' ? $lang->tree->confirmRoot4Doc : $lang->tree->confirmRoot);?>;
+        if(!confirm(confirmRoot))
         {
             $('#root').val(currentRoot);
             $('#root').trigger('chosen:updated');
         }
-        getProductModules($(this).val());
+        if(type != 'doc') getProductModules($(this).val());
     })
 })
 function loadDocModule(libID)
