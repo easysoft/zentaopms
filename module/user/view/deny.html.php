@@ -18,21 +18,28 @@ include '../../common/view/header.lite.html.php';
         <i class='icon-exclamation-sign'></i>
         <div class='content'>
         <?php
-        $moduleName = isset($lang->$module->common)  ? $lang->$module->common:  $module;
-        $methodName = isset($lang->$module->$method) ? $lang->$module->$method: $method;
-
-        /* find method name if method is lowercase letter. */
-        if(!isset($lang->$module->$method))
+        if($denyType == 'nopriv')
         {
-            $tmpLang = array();
-            foreach($lang->$module as $key => $value)
+            $moduleName = isset($lang->$module->common)  ? $lang->$module->common  : $module;
+            $methodName = isset($lang->$module->$method) ? $lang->$module->$method : $method;
+
+            /* find method name if method is lowercase letter. */
+            if(!isset($lang->$module->$method))
             {
-                $tmpLang[strtolower($key)] = $value;
-            }    
-            $methodName = isset($tmpLang[$method]) ? $tmpLang[$method] : $method;
+                $tmpLang = array();
+                foreach($lang->$module as $key => $value) $tmpLang[strtolower($key)] = $value;
+                $methodName = isset($tmpLang[$method]) ? $tmpLang[$method] : $method;
+            }
+
+            printf($lang->user->errorDeny, $moduleName, $methodName);
         }
 
-        printf($lang->user->errorDeny, $moduleName, $methodName);
+        if($denyType == 'noview')
+        {
+            $menuName = $menu;
+            if(isset($lang->menu->$menu))list($menuName) = explode('|', $lang->menu->$menu);
+            printf($lang->user->errorView, $menuName);
+        }
         ?>
         </div>
       </div>
