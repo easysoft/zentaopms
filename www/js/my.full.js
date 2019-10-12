@@ -322,6 +322,7 @@ function ajaxDelete(url, replaceID, notice)
                         if(typeof sortTable == 'function') sortTable();
                         $('#' + replaceID).find('[data-toggle=modal], a.iframe').modalTrigger();
                         if($('#' + replaceID).find('table.datatable').length) $('#' + replaceID).find('table.datatable').datatable();
+                        $('.table-footer [data-ride=pager]').pager();
                     });
                 }
                 else if(data.result == 'fail' && typeof(data.message) == 'string')
