@@ -1538,7 +1538,11 @@ class taskModel extends model
             ->exec();
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-        if($oldTask->parent == '-1') $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
+        if($oldTask->parent == '-1') 
+        {
+            unset($task->left);
+            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
+        }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
