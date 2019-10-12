@@ -66,7 +66,8 @@
               <i class="icon icon-flag text-primary"></i>
               <?php endif;?>
               <div class="block">
-                <span class="title"><?php echo isset($roadmap->build) ? $roadmap->name : $roadmap->title;?></span>
+                <?php $roadmapTitle = isset($roadmap->build) ? $roadmap->name : $roadmap->title;?>
+                <span class="title" title='<?php echo $roadmapTitle;?>'><?php echo $roadmapTitle;?></span>
                 <span class="date"><?php echo isset($roadmap->build) ? $roadmap->date : ($roadmap->end == '2030-01-01' ? $lang->productplan->future : $roadmap->begin . '~' . $roadmap->end);?></span>
               </div>
             </a>

@@ -1716,6 +1716,8 @@ EOD;
         $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
         $this->session->set('user', $user);
         $this->app->user = $user;
+        $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
 
         if($isFreepasswd) die(js::locate($this->config->webRoot));
 

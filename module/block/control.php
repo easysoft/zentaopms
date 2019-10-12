@@ -713,8 +713,20 @@ class block extends control
         $pager = pager::init(0, $num , 1);
 
         $productStats  = $this->loadModel('product')->getStats('order_desc', $this->viewType != 'json' ? $pager : '', $type);
+        $projects      = $this->loadModel('project')->getPairs();
         $productIdList = array();
-        foreach($productStats as $product) $productIdList[] = $product->id;
+        $this->loadModel('action');
+        foreach($productStats as $product)
+        {
+            $currentProjectID = $this->dao->select('objectID')->from(TABLE_ACTION)
+                ->where('objectType')->eq('project')
+                ->andWhere('action')->eq('managed')
+                ->andWhere("CONCAT(extra, ',,')")->like("%$product->id,,")
+                ->orderBy('id_desc')
+                ->fetch('objectID');
+            $product->currentProject = zget($projects, $currentProjectID, '');
+            $productIdList[] = $product->id;
+        }
 
         $this->view->projects = $this->dao->select('t1.product,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')

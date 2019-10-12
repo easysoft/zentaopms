@@ -1592,7 +1592,7 @@ class testcaseModel extends model
                 return false;
             }
 
-            $status      = $this->post->status;
+            $status      = $this->post->status ? $this->post->status : $case->status;
             $stepChanged = false;
             $steps       = array();
 

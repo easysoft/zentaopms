@@ -272,6 +272,12 @@ class taskModel extends model
         /* check data. */
         foreach($data as $i => $task)
         {
+
+            if($task->deadline != '0000-00-00' and $task->deadline <= $task->estStarted)
+            {
+                dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
+                return false;
+            }
             if($task->estimate and !preg_match("/^[0-9]+(.[0-9]{1,3})?$/", $task->estimate))
             {
                 dao::$errors['message'][] = $this->lang->task->error->estimateNumber;
@@ -413,6 +419,7 @@ class taskModel extends model
         if($parentID <= 0) return true;
 
         $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
+        if($oldParentTask->parent != '-1') $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec(); 
         $this->computeWorkingHours($parentID);
 
         $childrenStatus       = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
@@ -2760,7 +2767,7 @@ class taskModel extends model
             case 'actions':
                 if($storyChanged)
                 {
-                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin', 'btn-wide');
+                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", '', 'list', '', 'hiddenwin');
                     break;
                 }
 
