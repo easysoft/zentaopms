@@ -34,7 +34,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php if($type == 'doc'):?>
         <tr>
           <th class='thWidth'><?php echo $lang->doc->lib;?></th>
-          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen' onchange=loadDocModule(this.value)");?></td>
+          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <?php if($module->type != 'line'):?>
@@ -81,6 +81,15 @@ function getProductModules(productID)
         $('#parent').trigger('chosen:updated')
     }, 'json');
 }
+
+function loadDocModule(libID)
+{
+    var link = createLink('doc', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
+    $.post(link, function(data)
+    {
+        $('#parent').empty().append($(data).children()).trigger('chosen:updated');
+    });
+}
 $(function()
 {
     $('#root').change(function()
@@ -92,19 +101,13 @@ $(function()
             $('#root').val(currentRoot);
             $('#root').trigger('chosen:updated');
         }
-        if(type != 'doc') getProductModules($(this).val());
+        else
+        {
+            if(type != 'doc') getProductModules($(this).val());
+            if(type == 'doc') loadDocModule($(this).val());
+        }
     })
-})
-function loadDocModule(libID)
-{
-    var link = createLink('doc', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
-    $.post(link, function(data)
-    {
-        $('#parent').empty().append($(data).children()).trigger('chosen:updated');
-    });
-}
-$(function()
-{
+
     $('#dataform .chosen').chosen();
 
     // hide #parent chosen dropdown on root dropdown show
