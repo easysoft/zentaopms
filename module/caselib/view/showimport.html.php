@@ -7,7 +7,7 @@
 <?php else:?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->testsuite->import;?></h2>
+    <h2><?php echo $lang->caselib->import;?></h2>
   </div>
   <form target='hiddenwin' method='post'>
   <table class='table active-disabled table-form table-striped'>

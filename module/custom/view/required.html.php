@@ -42,8 +42,7 @@
 
           if($moduleName == 'doc'       and $method == 'createlib')  $method = 'createLib';
           if($moduleName == 'doc'       and $method == 'editlib')    $method = 'editLib';
-          if($moduleName == 'testsuite' and $method == 'createlib')  $method = 'createLib';
-          if($moduleName == 'testsuite' and $method == 'createcase')
+          if($moduleName == 'caselib' and $method == 'createcase')
           {
               $this->app->loadLang('testcase');
               $fields = $this->custom->getFormFields('testcase', $method);

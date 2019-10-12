@@ -869,7 +869,6 @@ class storyModel extends model
             ->setDefault('assignedDate',   $now)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
-            ->setIF($this->post->closedReason != 'done', 'plan', 0)
             ->remove('comment')
             ->get();
 

@@ -111,7 +111,6 @@
         <?php endif;?>
         <td id='<?php echo $moduleName;?>' class='pv-10px' colspan='<?php echo !empty($lang->$moduleName->menus) ? 1 : 2?>'>
           <?php $i = 1;?>
-          <?php if($moduleName == 'caselib') $moduleName = 'testsuite';?>
           <?php foreach($moduleActions as $action => $actionLabel):?>
           <?php if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;;?>
           <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
