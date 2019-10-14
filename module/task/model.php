@@ -24,7 +24,7 @@ class taskModel extends model
     {
         if($this->post->estimate < 0)
         {    
-            dao::$errors[] = $this->lang->task->error->estimateMinus;
+            dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
         $taskIdList = array();
@@ -675,6 +675,11 @@ class taskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$taskID)->fetch();
+        if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
+        {    
+            dao::$errors[] = $this->lang->task->error->recordMinus;
+            return false;
+        }
         if(!empty($_POST['lastEditedDate']) and $oldTask->lastEditedDate != $this->post->lastEditedDate)
         {
             dao::$errors[] = $this->lang->error->editedByOther;
