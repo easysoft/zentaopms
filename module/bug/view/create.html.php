@@ -38,7 +38,7 @@ js::set('flow', $config->global->flow);
             <td class='w-600px'>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-                <?php if($this->session->currentProductType != 'normal'):?>
+                <?php if($this->session->currentProductType != 'normal' and isset($products[$productID])):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>
