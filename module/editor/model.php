@@ -365,6 +365,11 @@ class editorModel extends model
      */
     public function save($filePath)
     {
+        $statusFile = $this->loadModel('upgrade')->checkSafeFile();
+        if($statusFile) die(js::alert(sprintf($this->lang->editor->noticeOkFile, str_replace('\\', '/', $statusFile))));
+
+        if(strpos(strtolower($filePath), strtolower($this->app->getBasePath())) !== 0) die(js::alert($this->lang->editor->editFileError));
+
         $fileContent = $this->post->fileContent;
         $evils       = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert');
         $gibbedEvils = array('e v a l', 'e x e c', ' p a s s t h r u', ' p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
