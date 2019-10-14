@@ -574,8 +574,8 @@ class testtaskModel extends model
     {
         $datas = $this->dao->select('lastRunner AS name, COUNT(*) AS value')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-
-        foreach($datas as $result => $data) $data->name = $result ? $result : $this->lang->testtask->unexecuted;
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
+        foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
 
         return $datas;
     }
