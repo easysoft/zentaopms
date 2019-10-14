@@ -22,6 +22,11 @@ class taskModel extends model
      */
     public function create($projectID)
     {
+        if($this->post->estimate < 0)
+        {    
+            dao::$errors[] = $this->lang->task->error->estimateMinus;
+            return false;
+        }
         $taskIdList = array();
         $taskFiles  = array();
         $this->loadModel('file');
