@@ -1502,6 +1502,7 @@ class taskModel extends model
         }
 
         $oldTask = $this->getById($taskID);
+        if($oldTask->parent == '-1') $this->config->task->activate->requiredFields = '';
         $task = fixer::input('post')
             ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
             ->setDefault('left', 0)
@@ -1538,7 +1539,12 @@ class taskModel extends model
             ->exec();
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-        if($oldTask->parent == '-1') $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
+        if($oldTask->parent == '-1') 
+        {
+            unset($task->left);
+            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
+            $this->computeWorkingHours($taskID);
+        }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

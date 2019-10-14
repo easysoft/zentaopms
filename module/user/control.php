@@ -1069,7 +1069,9 @@ class user extends control
      */
     public function ajaxDeleteTemplate($templateID)
     {
-        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
+        $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)
+            ->beginIF(!$this->app->user->admin)->andWhere('account')->eq($this->app->user->account)->fi()
+            ->exec();
         die();
     }
 }
