@@ -217,7 +217,7 @@ class testcase extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
 
             $caseResult = $this->testcase->create($bugID);
             if(!$caseResult or dao::isError())

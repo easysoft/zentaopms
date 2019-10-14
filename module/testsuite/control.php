@@ -79,7 +79,7 @@ class testsuite extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->testsuite->successSaved;
             $suiteID = $this->testsuite->create($productID);
             if(dao::isError())
             {
@@ -92,7 +92,6 @@ class testsuite extends control
             $this->executeHooks($suiteID);
 
             $response['locate']  = $this->createLink('testsuite', 'browse', "productID=$productID");
-            $response['message'] = $this->lang->testsuite->successSaved;
             $this->send($response);
         }
 
@@ -176,7 +175,7 @@ class testsuite extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->testsuite->successSaved;
             $changes = $this->testsuite->update($suiteID);
             if(dao::isError())
             {
@@ -193,7 +192,6 @@ class testsuite extends control
             $this->executeHooks($suiteID);
 
             $response['locate']  = inlink('view', "suiteID=$suiteID");
-            $response['message'] = $this->lang->testsuite->successSaved;
             $this->send($response);
         }
 

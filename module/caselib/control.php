@@ -35,7 +35,7 @@ class caselib extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
             $libID = $this->caselib->create();
             if(dao::isError())
             {
@@ -45,7 +45,6 @@ class caselib extends control
             }
             $this->loadModel('action')->create('caselib', $libID, 'opened');
             $response['locate']  = $this->createLink('caselib', 'browse', "libID=$libID");
-            $response['message'] = $this->lang->saveSuccess;
             $this->send($response);
         }
 
@@ -73,7 +72,7 @@ class caselib extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
             $changes = $this->caselib->update($libID);
             if(dao::isError())
             {
@@ -90,7 +89,6 @@ class caselib extends control
             $this->executeHooks($libID);
 
             $response['locate']  = inlink('view', "libID=$libID");
-            $response['message'] = $this->lang->saveSuccess;
             $this->send($response);
         }
 
