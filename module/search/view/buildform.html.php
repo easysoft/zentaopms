@@ -339,31 +339,31 @@ $(function()
     var setDateField = function(query, fieldNO)
     {
         var $period = $('#selectPeriod');
-        if(!$period.length)
-        {
-            $period = $("<ul id='selectPeriod' class='dropdown-menu'><li class='dropdown-header'><?php echo $lang->datepicker->dpText->TEXT_OR . ' ' . $lang->datepicker->dpText->TEXT_DATE;?></li><li><a href='#lastWeek'><?php echo $lang->datepicker->dpText->TEXT_PREV_WEEK;?></a></li><li><a href='#thisWeek'><?php echo $lang->datepicker->dpText->TEXT_THIS_WEEK;?></a></li><li><a href='#yesterday'><?php echo $lang->datepicker->dpText->TEXT_YESTERDAY;?></a></li><li><a href='#today'><?php echo $lang->datepicker->dpText->TEXT_TODAY;?></a></li><li><a href='#lastMonth'><?php echo $lang->datepicker->dpText->TEXT_PREV_MONTH;?></a></li><li><a href='#thisMonth'><?php echo $lang->datepicker->dpText->TEXT_THIS_MONTH;?></a></li></ul>").appendTo('body');
-            $period.find('li > a').click(function(event)
-            {
-                var target = $(query).closest('form').find('#' + $period.data('target'));
-                if(target.length)
-                {
-                    if(target.next('input[type=hidden]').length)
-                    {
-                        target.next('input[type=hidden]').val($(this).attr('href').replace('#', '$'));
-                        target.attr('placeholder', $(this).attr('href').replace('#', '$'));
-                    }
-                    else
-                    {
-                        target.val($(this).attr('href').replace('#', '$'));
-                    }
+        if($period.length) $period.remove();
 
-                    $(query).closest('form').find('#operator' + $period.data('fieldNO')).val('between');
-                    $period.hide();
+        $period = $("<ul id='selectPeriod' class='dropdown-menu'><li class='dropdown-header'><?php echo $lang->datepicker->dpText->TEXT_OR . ' ' . $lang->datepicker->dpText->TEXT_DATE;?></li><li><a href='#lastWeek'><?php echo $lang->datepicker->dpText->TEXT_PREV_WEEK;?></a></li><li><a href='#thisWeek'><?php echo $lang->datepicker->dpText->TEXT_THIS_WEEK;?></a></li><li><a href='#yesterday'><?php echo $lang->datepicker->dpText->TEXT_YESTERDAY;?></a></li><li><a href='#today'><?php echo $lang->datepicker->dpText->TEXT_TODAY;?></a></li><li><a href='#lastMonth'><?php echo $lang->datepicker->dpText->TEXT_PREV_MONTH;?></a></li><li><a href='#thisMonth'><?php echo $lang->datepicker->dpText->TEXT_THIS_MONTH;?></a></li></ul>").appendTo('body');
+        $period.find('li > a').click(function(event)
+        {
+            var target = $(query).closest('form').find('#' + $period.data('target'));
+            if(target.length)
+            {
+                if(target.next('input[type=hidden]').length)
+                {
+                    target.next('input[type=hidden]').val($(this).attr('href').replace('#', '$'));
+                    target.attr('placeholder', $(this).attr('href').replace('#', '$'));
                 }
-                event.stopPropagation();
-                return false;
-            });
-        }
+                else
+                {
+                    target.val($(this).attr('href').replace('#', '$'));
+                }
+
+                $(query).closest('form').find('#operator' + $period.data('fieldNO')).val('between');
+                $period.hide();
+            }
+            event.stopPropagation();
+            return false;
+        });
+
         $(query).datetimepicker('remove').datepicker(dtOptions).on('show', function(e)
         {
             var $e = $(e.target);
@@ -412,6 +412,7 @@ $(function()
 
         if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
         {
+            console.log($searchForm.find("#value" + fieldNO));
             setDateField($searchForm.find("#value" + fieldNO), fieldNO);
             $searchForm.find("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others.
             var maxNO      = 2 * groupItems;
