@@ -54,8 +54,8 @@ class tree extends control
         }
         elseif(strpos($viewType, 'caselib') !== false)
         {
-            $this->loadModel('testsuite');
-            $lib = $this->testsuite->getById($rootID);
+            $this->loadModel('caselib');
+            $lib = $this->caselib->getById($rootID);
             $this->view->root = $lib;
         }
 
@@ -116,13 +116,13 @@ class tree extends control
         }
         elseif($viewType == 'caselib')
         {
-            $this->testsuite->setLibMenu($this->testsuite->getLibraries(), $rootID);
-            $this->lang->tree->menu      = $this->lang->testsuite->menu;
-            $this->lang->tree->menuOrder = $this->lang->testsuite->menuOrder;
+            $this->caselib->setLibMenu($this->caselib->getLibraries(), $rootID);
+            $this->lang->tree->menu      = $this->lang->caselib->menu;
+            $this->lang->tree->menuOrder = $this->lang->caselib->menuOrder;
             $this->lang->set('menugroup.tree', 'qa');
 
             $title      = $this->lang->tree->manageCaseLib;
-            $position[] = html::a($this->createLink('testsuite', 'library', "libID=$rootID"), $lib->name);
+            $position[] = html::a($this->createLink('caselib', 'browse', "libID=$rootID"), $lib->name);
             $position[] = $this->lang->tree->manageCaseLib;
         }
         elseif(strpos($viewType, 'doc') !== false)
@@ -438,9 +438,9 @@ class tree extends control
         $this->view->method    = $method;
         $this->view->extra     = $extra;
 
+        $viewType = $module;
         if($module == 'bug') $viewType = 'bug';
         if($module == 'testcase')  $viewType = 'case';
-        if($module == 'testsuite') $viewType = 'caselib';
 
         $modules = $this->tree->getOptionMenu($rootID, $viewType);
         $modulesPinyin = common::convert2Pinyin($modules);

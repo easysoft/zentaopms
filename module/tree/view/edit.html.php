@@ -34,7 +34,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php if($type == 'doc'):?>
         <tr>
           <th class='thWidth'><?php echo $lang->doc->lib;?></th>
-          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen' onchange=loadDocModule(this.value)");?></td>
+          <td><?php echo html::select('root', $libs, $module->root, "class='form-control chosen'");?></td>
         </tr>
         <?php endif;?>
         <?php if($module->type != 'line'):?>
@@ -81,20 +81,7 @@ function getProductModules(productID)
         $('#parent').trigger('chosen:updated')
     }, 'json');
 }
-$(function()
-{
-    if(type == 'doc') return;
-    $('#root').change(function()
-    {
-        if($(this).val() == currentRoot) return true;
-        if(!confirm('<?php echo $lang->tree->confirmRoot?>'))
-        {
-            $('#root').val(currentRoot);
-            $('#root').trigger('chosen:updated');
-        }
-        getProductModules($(this).val());
-    })
-})
+
 function loadDocModule(libID)
 {
     var link = createLink('doc', 'ajaxGetChild', 'libID=' + libID + '&type=parent');
@@ -105,6 +92,22 @@ function loadDocModule(libID)
 }
 $(function()
 {
+    $('#root').change(function()
+    {
+        if($(this).val() == currentRoot) return true;
+        var confirmRoot = <?php echo json_encode($type == 'doc' ? $lang->tree->confirmRoot4Doc : $lang->tree->confirmRoot);?>;
+        if(!confirm(confirmRoot))
+        {
+            $('#root').val(currentRoot);
+            $('#root').trigger('chosen:updated');
+        }
+        else
+        {
+            if(type != 'doc') getProductModules($(this).val());
+            if(type == 'doc') loadDocModule($(this).val());
+        }
+    })
+
     $('#dataform .chosen').chosen();
 
     // hide #parent chosen dropdown on root dropdown show

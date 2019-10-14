@@ -54,3 +54,5 @@ $lang->entry->errmsg['IP_DENIED']             = 'IP ist unzulässig.';
 $lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Account is not bound.';
 $lang->entry->errmsg['INVALID_ACCOUNT']       = 'Account is not exists';
 $lang->entry->errmsg['EMPTY_ENTRY']           = 'Key des Eintrags fehlt.';
+$lang->entry->errmsg['CALLED_TIME']           = 'Token has expired';
+$lang->entry->errmsg['ERROR_TIMESTAMP']       = 'Timestamp Error';

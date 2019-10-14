@@ -258,7 +258,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
 
             /* Set from param if there is a object to transfer bug. */
             $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
@@ -408,7 +408,7 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->create;
 
-        $this->view->products         =  $products;
+        $this->view->products         = $products;
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $moduleOptionMenu;

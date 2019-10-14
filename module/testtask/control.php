@@ -289,6 +289,7 @@ class testtask extends control
         $this->config->testcase->search['module']                      = 'testtask';
         $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID], 'all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testtask->statusList;
 
         $this->config->testcase->search['queryID']              = $queryID;
         $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
@@ -505,7 +506,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Started', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -547,7 +548,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Activated', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -589,7 +590,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Closed', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
@@ -632,7 +633,7 @@ class testtask extends control
 
             if($this->post->comment != '' or !empty($changes))
             {
-                $actionID = $this->action->create('testtask', $taskID, 'Blocked', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 

@@ -869,7 +869,6 @@ class storyModel extends model
             ->setDefault('assignedDate',   $now)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
-            ->setIF($this->post->closedReason != 'done', 'plan', 0)
             ->remove('comment')
             ->get();
 
@@ -1709,7 +1708,8 @@ class storyModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStories();
 
-        if($type == 'bySearch')
+        $type = strtolower($type);
+        if($type == 'bysearch')
         {
             $queryID  = (int)$param;
             $products = $this->loadModel('project')->getProducts($projectID);

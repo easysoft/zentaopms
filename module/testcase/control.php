@@ -217,7 +217,7 @@ class testcase extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
 
             $caseResult = $this->testcase->create($bugID);
             if(!$caseResult or dao::isError())
@@ -320,6 +320,7 @@ class testcase extends control
 
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
+        unset($storyStatus['closed']);
         $modules = array();
         if($currentModuleID)
         {
@@ -482,7 +483,15 @@ class testcase extends control
     {
         $case = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
-        if($from == 'testtask') $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
+        if($from == 'testtask')
+        {
+            $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
+            $case->assignedTo    = $run->assignedTo;
+            $case->lastRunner    = $run->lastRunner;
+            $case->lastRunDate   = $run->lastRunDate;
+            $case->lastRunResult = $run->lastRunResult;
+            $case->status        = $run->status;
+        }
 
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);
         $isLibCase = ($case->lib and empty($case->product));
@@ -1077,6 +1086,7 @@ class testcase extends control
         if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
         if($_POST)
         {
+            $this->app->loadLang('testtask');
             $caseLang   = $this->lang->testcase;
             $caseConfig = $this->config->testcase;
 
@@ -1122,6 +1132,7 @@ class testcase extends control
                     $row->id        = $caseID;
                 }
             }
+            if($taskID) $caseLang->statusList = $this->lang->testtask->statusList;
 
             $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
@@ -1173,7 +1184,7 @@ class testcase extends control
                 $case->stepExpect = '';
                 $case->real       = '';
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
-                $case->real = $result[0]['real'];
+                $case->real = empty($result) ? '' : $result[0]['real'];
                 if(isset($relatedSteps[$case->id]))
                 {
                     $i = $childId = 0;
@@ -1681,8 +1692,9 @@ class testcase extends control
      */
     public function ajaxGetStatus($methodName, $caseID = 0)
     {
-        $status = $this->testcase->getStatus($methodName, $caseID);
-
+        $case   = $this->testcase->getByID($caseID);
+        $status = $this->testcase->getStatus($methodName, $case);
+        if($methodName == 'update') $status = zget($status, 1, '');
         die($status);
     }
 }

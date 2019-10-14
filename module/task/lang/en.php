@@ -199,6 +199,7 @@ $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Current Cost" must be numbers.';
 $lang->task->error->estimateNumber   = '"Estimates" must be numbers.';
+$lang->task->error->recordMinus      = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall    = '"Hours Cost" must be > the last number.';
 $lang->task->error->consumedThisTime = 'Please enter "Hours Cost"';
 $lang->task->error->left             = 'Please enter "Hours Left"';
@@ -207,6 +208,7 @@ $lang->task->error->skipClose        = 'Task: %s is not "Finished” or “Cance
 $lang->task->error->consumed         = 'Task: %s hour must be < 0. Ignore changes to this task.';
 $lang->task->error->assignedTo       = 'Multi-user task in the current status cannot be assigned to a member who is not in the task team.';
 $lang->task->error->consumedEmpty    = '"Current Cost" should not be empty.';
+$lang->task->error->deadlineSmall    = '"Deadline" must be greater than "StartDate".';
 
 /* Report. */
 $lang->task->report = new stdclass();

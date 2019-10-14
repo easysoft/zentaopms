@@ -596,10 +596,10 @@ class commonModel extends model
                 /* Avoid user thinking the page is shaking when the menu toggle class 'active' */
                 if($config->global->flow == 'onlyTest')
                 {
-                    if($currentModule == 'bug'       && $currentMethod == 'browse')  $active = '';
-                    if($currentModule == 'testcase'  && $currentMethod == 'browse')  $active = '';
-                    if($currentModule == 'testtask'  && $currentMethod == 'browse')  $active = '';
-                    if($currentModule == 'testsuite' && $currentMethod == 'library') $active = '';
+                    if($currentModule == 'bug'       && $currentMethod == 'browse') $active = '';
+                    if($currentModule == 'testcase'  && $currentMethod == 'browse') $active = '';
+                    if($currentModule == 'testtask'  && $currentMethod == 'browse') $active = '';
+                    if($currentModule == 'caselib'   && $currentMethod == 'browse') $active = '';
                 }
 
                 $label   = $menuItem->text;
@@ -1716,6 +1716,8 @@ EOD;
         $user->admin  = strpos($this->app->company->admins, ",{$user->account},") !== false;
         $this->session->set('user', $user);
         $this->app->user = $user;
+        $this->loadModel('action')->create('user', $user->id, 'login');
+        $this->loadModel('score')->create('user', 'login');
 
         if($isFreepasswd) die(js::locate($this->config->webRoot));
 
@@ -1750,11 +1752,15 @@ EOD;
         /* Change for task #5384. */
         if(isset($queryString['time']))
         {
+            $timestamp = $queryString['time'];
+            if(strlen($timestamp) > 10) $timestamp = substr($timestamp, 0, 10);
+            if(strlen($timestamp) != 10 or $timestamp{0} >= '4') $this->response('ERROR_TIMESTAMP');
+
             $result = $this->get->token == md5($entry->code . $entry->key . $queryString['time']);
             if($result)
             {
-                if($queryString['time'] <= $entry->calledTime) $this->response('CALLED_TIME');
-                $this->loadModel('entry')->updateTime($entry->code, $queryString['time']);
+                if($timestamp <= $entry->calledTime) $this->response('CALLED_TIME');
+                $this->loadModel('entry')->updateTime($entry->code, $timestamp);
                 unset($_GET['time']);
                 return $result;
             }

@@ -90,7 +90,7 @@ class task extends control
         if(!empty($_POST))
         {
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
 
             if($this->post->project) $projectID = $this->post->project;
             $tasksID = $this->task->create($projectID);
@@ -173,10 +173,17 @@ class task extends control
         }
 
         $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $moduleIdList     = $this->tree->getAllChildID($moduleID);
-        $stories          = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
+
+        /* Fix bug #2737. When moduleID is not story module. */
+        $moduleIdList = array();
+        if($moduleID)
+        {
+            $moduleID     = $this->tree->getStoryModule($moduleID);
+            $moduleIdList = $this->tree->getAllChildID($moduleID);
+        }
+        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
 
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);
@@ -1168,7 +1175,11 @@ class task extends control
         else
         {
             $this->task->delete(TABLE_TASK, $taskID);
-            if($task->parent > 0) $this->task->updateParentStatus($task->id);
+            if($task->parent > 0) 
+            {
+                $this->task->updateParentStatus($task->id);
+                $this->loadModel('action')->create('task', $task->parent, 'deleteChildrenTask', '', $taskID);
+            }
             if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
             if($task->story) $this->loadModel('story')->setStage($task->story);
 

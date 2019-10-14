@@ -1,11 +1,11 @@
 <?php
 /**
- * The create case view of testsuite module of ZenTaoPMS.
+ * The create case view of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     testsuite
+ * @package     caselib
  * @version     $Id: createcase.html.php 4904 2013-06-26 05:37:45Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -19,7 +19,7 @@
     <div class='main-header'>
       <h2><?php echo $lang->testcase->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=testsuite&section=custom&key=createFields');?>
+        <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=caselib&section=custom&key=createFields');?>
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>

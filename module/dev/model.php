@@ -41,7 +41,7 @@ class devModel extends model
         {
             if(isset($this->config->dev->tableMap[$module])) $aliasModule = $this->config->dev->tableMap[$module];
             if(strpos($aliasModule, '-') !== false) list($aliasModule, $subLang) = explode('-', $aliasModule);
-            $this->app->loadLang($aliasModule ? $aliasModule : $module);
+            if(strpos($module, 'im_') === false) $this->app->loadLang($aliasModule ? $aliasModule : $module);
         }
         catch(PDOException $e)
         {

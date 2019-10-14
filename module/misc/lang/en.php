@@ -46,7 +46,7 @@ $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
 $lang->misc->zentao->cowin['recommend']    = "More";
 
-$lang->misc->zentao->service['zentaotrain']= 'Zentao Train';
+$lang->misc->zentao->service['zentaotrain']= 'Zentao Training';
 $lang->misc->zentao->service['idc']        = 'Zentao Cloud';
 $lang->misc->zentao->service['custom']     = 'Zentao Custom';
 $lang->misc->zentao->service['servicemore']= 'More';
@@ -82,6 +82,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Detail';
 
+$lang->misc->releaseDate['11.6.3']      = '2019-09-24';
 $lang->misc->releaseDate['11.6.2']      = '2019-09-06';
 $lang->misc->releaseDate['11.6.1']      = '2019-08-23';
 $lang->misc->releaseDate['11.6.stable'] = '2019-07-12';
@@ -114,16 +115,15 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['11.6.2'][]      = array('title'=>'Optimize details and fix bug.', 'desc' => '');
-
-$lang->misc->feature->all['11.6.1'][]      = array('title'=>'Optimize details and fix bug.', 'desc' => '');
+$lang->misc->feature->all['11.6.3'][] = array('title'=>'Fix bug.', 'desc' => '');
+$lang->misc->feature->all['11.6.2'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
+$lang->misc->feature->all['11.6.1'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
 
 $lang->misc->feature->all['11.6.stable'][] = array('title'=>'Improving the International Edition Interface', 'desc' => '');
 $lang->misc->feature->all['11.6.stable'][] = array('title'=>'Add translate function', 'desc' => '');
 
-$lang->misc->feature->all['11.5.2'][]      = array('title'=>'Increase the security of ZenTao and increase the login password for weak password check', 'desc' => '');
-
-$lang->misc->feature->all['11.5.1'][]      = array('title'=>'Add a third-party authentication and fix bugs.', 'desc' => '');
+$lang->misc->feature->all['11.5.2'][] = array('title'=>'Increase the security of ZenTao and increase the login password for weak password check', 'desc' => '');
+$lang->misc->feature->all['11.5.1'][] = array('title'=>'Add a third-party authentication and fix bugs.', 'desc' => '');
 
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'Added filters to Dynamics', 'desc' => '');

@@ -31,6 +31,7 @@
           <td class='w-p25-f'><?php echo html::select('assignedTo', $members, $task->finishedBy, "class='form-control chosen'");?></td>
           <td></td>
         </tr>
+        <?php if($task->parent != '-1'):?>
         <tr>
           <th><?php echo $lang->task->left;?></th>
           <td>
@@ -40,6 +41,7 @@
             </div>
           </td>
         </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'doing');?></td>

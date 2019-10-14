@@ -132,7 +132,7 @@ js::set('suiteID',        $suiteID);
 
               $actionLink = $this->createLink('testcase', 'batchDelete', "productID=$productID");
               $misc = common::hasPriv('testcase', 'batchDelete') ? "onclick=\"confirmBatchDelete('$actionLink')\"" : $class;
-              echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
+              if(common::hasPriv('testcase', 'batchDelete')) echo "<li>" . html::a('#', $lang->delete, '', $misc) . "</li>";
 
               if(common::hasPriv('testcase', 'batchCaseTypeChange'))
               {

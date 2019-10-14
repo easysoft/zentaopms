@@ -199,6 +199,7 @@ $lang->task->cannotDeleteParent    = '不能删除父任务。';
 $lang->task->error                   = new stdclass();
 $lang->task->error->consumedNumber   = '"本次消耗"必须为数字';
 $lang->task->error->estimateNumber   = '"预计剩余"必须为数字';
+$lang->task->error->recordMinus      = '工时不能为负数';
 $lang->task->error->consumedSmall    = '"已经消耗"必须大于之前消耗';
 $lang->task->error->consumedThisTime = '请填写"工时"';
 $lang->task->error->left             = '请填写"剩余"';
@@ -207,6 +208,7 @@ $lang->task->error->skipClose        = '任务：%s 不是“已完成”或“�
 $lang->task->error->consumed         = '任务：%s工时不能小于0，忽略该任务工时的改动';
 $lang->task->error->assignedTo       = '当前状态的多人任务不能指派给任务团队外的成员。';
 $lang->task->error->consumedEmpty    = '"本次消耗"不能为空';
+$lang->task->error->deadlineSmall    = '"截止日期"必须大于"预计开始"';
 
 /* Report. */
 $lang->task->report         = new stdclass();

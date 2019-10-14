@@ -20,7 +20,7 @@
   <div class="modal-header">
     <h4 class='modal-title pull-left'><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), "TODO #{$todo->id} {$todo->name}");?></h4>
   </div>
-  <form class='modal-body form-horizontal' method='post' target='hiddenwin' id='dataform'>
+  <form class='modal-body form-horizontal' method='post' id='dataform'>
     <div class="row form-group">
       <label class="col-sm-1"><?php echo $lang->todo->date;?></label>
       <div class="col-sm-10">

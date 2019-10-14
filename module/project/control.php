@@ -1101,7 +1101,11 @@ class project extends control
 
             $this->executeHooks($projectID);
 
-            $planID = reset($_POST['plans']);
+            $planID = '';
+            foreach($_POST['plans'] as $planID)
+            {
+                if(!empty($planID)) break;
+            }
             if(!empty($planID))
             {
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&copyProjectID=&planID=$planID&confirm=no")));

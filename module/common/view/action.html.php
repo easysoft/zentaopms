@@ -64,9 +64,10 @@
         <?php if(!empty($action->comment)):?>
         <?php if($canEditComment):?>
         <?php echo html::commonButton('<i class="icon icon-pencil"></i>', "title='{$lang->action->editComment}'", 'btn btn-link btn-icon btn-sm btn-edit-comment');?>
+        <style>.comment .comment-content{width: 98%}</style>
         <?php endif;?>
         <div class='article-content comment'>
-          <?php echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;?>
+          <div class='comment-content'><?php echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;?></div>
         </div>
         <?php if($canEditComment):?>
         <form method='post' class='comment-edit-form' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>

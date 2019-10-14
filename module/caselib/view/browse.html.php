@@ -1,11 +1,11 @@
 <?php
 /**
- * The library view file of testsuite module of ZenTaoPMS.
+ * The library view file of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     testsuite
+ * @package     caselib
  * @version     $Id: library.html.php 5108 2013-07-12 01:59:04Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -15,7 +15,7 @@ include '../../common/view/header.html.php';
 include '../../common/view/datatable.fix.html.php';
 js::set('browseType',    $browseType);
 js::set('moduleID',      $moduleID);
-js::set('confirmDelete', $lang->testsuite->confirmDelete);
+js::set('confirmDelete', $lang->testcase->confirmDelete);
 js::set('batchDelete',   $lang->testcase->confirmBatchDelete);
 js::set('flow',          $config->global->flow);
 ?>
@@ -36,29 +36,29 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-left'>
     <?php
-    if(common::hasPriv('testsuite', 'library'))
+    if(common::hasPriv('caselib', 'browse'))
     {
-        echo html::a($this->inlink('library', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span>", '', "id='allTab' class='btn btn-link'");
+        echo html::a($this->inlink('browse', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span>", '', "id='allTab' class='btn btn-link'");
         if($config->testcase->needReview or !empty($config->testcase->forceReview)) echo html::a($this->inlink('library', "libID=$libID&browseType=wait"), "<span class='text'>" . $lang->testcase->statusList['wait'] . "</span>", '', "id='waitTab' class='btn btn-link'");
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
     <?php
-    if(common::hasPriv('testsuite', 'libView'))
+    if(common::hasPriv('caselib', 'view'))
     {
-        $link = helper::createLink('testsuite', 'libView', "libID=$libID");
-        echo html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->testsuite->libView, '', "class='btn btn-link'");
+        $link = helper::createLink('caselib', 'view', "libID=$libID");
+        echo html::a($link, "<i class='icon icon-list-alt muted'> </i>" . $this->lang->caselib->view, '', "class='btn btn-link'");
     }
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
-     <?php common::printLink('testsuite', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->testsuite->exportTemplet, '', "class='btn btn-link export' data-width='35%'");?>
-     <?php common::printLink('testsuite', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->importFile, '', "class='btn btn-link export'");?>
+     <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i>" . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='35%'");?>
+     <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i>" . $lang->testcase->importFile, '', "class='btn btn-link export'");?>
     </div>
     <?php $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);?>
-    <?php common::printLink('testsuite', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
-    <?php common::printLink('testsuite', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
+    <?php common::printLink('caselib', 'batchCreateCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");?>
+    <?php common::printLink('caselib', 'createCase', $params, "<i class='icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php endif;?>
@@ -69,7 +69,7 @@ js::set('flow',          $config->global->flow);
       <?php if(!$moduleTree):?>
       <hr class="space">
       <div class="text-center text-muted">
-        <?php echo $lang->testsuite->noModule;?>
+        <?php echo $lang->caselib->noModule;?>
       </div>
       <hr class="space">
       <?php endif;?>
@@ -86,8 +86,8 @@ js::set('flow',          $config->global->flow);
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
-        <?php if(common::hasPriv('testsuite', 'createCase')):?>
-        <?php echo html::a($this->createLink('testsuite', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
+        <?php if(common::hasPriv('caselib', 'createCase')):?>
+        <?php echo html::a($this->createLink('caselib', 'createCase', "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0)), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>

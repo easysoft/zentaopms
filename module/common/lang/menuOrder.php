@@ -73,6 +73,7 @@ $lang->bug->menuOrder        = $lang->qa->menuOrder;
 $lang->testcase->menuOrder   = $lang->bug->menuOrder;
 $lang->testtask->menuOrder   = $lang->testcase->menuOrder;
 $lang->testsuite->menuOrder  = $lang->testcase->menuOrder;
+$lang->caselib->menuOrder    = $lang->testcase->menuOrder;
 $lang->testreport->menuOrder = $lang->testcase->menuOrder;
 
 /* doc menu order. */

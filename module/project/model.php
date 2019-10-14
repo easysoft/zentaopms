@@ -1566,6 +1566,8 @@ class projectModel extends model
         $lastOrder     = reset($linkedStories);
         foreach($stories as $key => $storyID)
         {
+            $status = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('status');
+            if($status == 'draft') continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $productID = (int)$products[$storyID];
@@ -1599,6 +1601,7 @@ class projectModel extends model
         {
             foreach($plans as $planID => $productID)
             {
+                if(empty($planID)) continue;
                 $planStory = $this->loadModel('story')->getPlanStories($planID);
                 if(!empty($planStory))
                 {
@@ -1716,6 +1719,7 @@ class projectModel extends model
             ->where('t1.account')->eq($account)
             ->andWhere('t1.root')->ne($currentProject)
             ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
             ->groupBy('t1.root')
             ->orderBy('t1.root DESC')
             ->fetchPairs();

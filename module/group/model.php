@@ -420,7 +420,6 @@ class groupModel extends model
     public function checkMenuModule($menu, $moduleName)
     {
         if(empty($menu)) return true;
-        if($menu == 'caselib' and $moduleName == 'testsuite') return true;
         if($menu == 'other' and (isset($this->lang->menugroup->$moduleName) or isset($this->lang->menu->$moduleName))) return false;
         if($menu != 'other' and !($moduleName == $menu or (isset($this->lang->menugroup->$moduleName) and $this->lang->menugroup->$moduleName == $menu))) return false;
         return true;
