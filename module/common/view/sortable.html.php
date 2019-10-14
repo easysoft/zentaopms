@@ -25,7 +25,8 @@ $(document).ready(function()
             finish: function(e)
             {
                 var orders = {};
-                e.list.each(function(){
+                e.list.each(function()
+                {
                     orders[$(this.item).data('id')] = this.order;
                 });
                 e.orders = orders;
