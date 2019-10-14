@@ -199,6 +199,7 @@ $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Current Cost" must be numbers.';
 $lang->task->error->estimateNumber   = '"Estimates" must be numbers.';
+$lang->task->error->estimateMinus    = '"Estimates" should not be negative number.';
 $lang->task->error->consumedSmall    = '"Hours Cost" must be > the last number.';
 $lang->task->error->consumedThisTime = 'Please enter "Hours Cost"';
 $lang->task->error->left             = 'Please enter "Hours Left"';
