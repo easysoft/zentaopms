@@ -99,7 +99,7 @@ class ztclient
             $controlAPI = $this->zentao->root . $module . $this->zentao->requestFix . $method . $this->zentao->requestFix;
             if($vars)
             {
-                $vars = parse_str($vars);
+                parse_str($vars, $vars);
                 foreach($vars as $var) $controlAPI .= $var . $this->zentao->requestFix;
             }
             $controlAPI = rtrim($controlAPI, $this->zentao->requestFix) . '.json';

@@ -173,10 +173,17 @@ class task extends control
         }
 
         $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $moduleIdList     = $this->tree->getAllChildID($moduleID);
-        $stories          = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
+
+        /* Fix bug #2737. When moduleID is not story module. */
+        $moduleIdList = array();
+        if($moduleID)
+        {
+            $moduleID     = $this->tree->getStoryModule($moduleID);
+            $moduleIdList = $this->tree->getAllChildID($moduleID);
+        }
+        $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
 
         $title      = $project->name . $this->lang->colon . $this->lang->task->create;
         $position[] = html::a($taskLink, $project->name);
