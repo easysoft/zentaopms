@@ -24,10 +24,10 @@
         <th><?php echo $lang->translate->group;?></th>
         <th class='text-left'><?php echo $lang->dev->moduleList;?></th>
         <th class='w-80px'><?php echo $lang->translate->allTotal;?></th>
-        <th class='w-100px'><?php echo $lang->translate->translatedTotal;?></th>
-        <th class='w-100px'><?php echo $lang->translate->changedTotal;?></th>
+        <th class='w-110px'><?php echo $lang->translate->translatedTotal;?></th>
+        <th class='w-110px'><?php echo $lang->translate->changedTotal;?></th>
         <?php if($config->translate->needReview):?>
-        <th class='w-100px'><?php echo $lang->translate->reviewedTotal;?></th>
+        <th class='w-110px'><?php echo $lang->translate->reviewedTotal;?></th>
         <?php endif;?>
         <th class='w-110px'><?php echo $lang->translate->translatedProgress;?></th>
         <?php if($config->translate->needReview):?>

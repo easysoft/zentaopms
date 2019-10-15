@@ -81,7 +81,7 @@
             $function = $hasNL ? 'textarea' : 'input';
             $value    = $translation;
             if(is_object($translation)) $value = $translation->value;
-            echo html::$function('values[]', ($value != $item) ? htmlspecialchars($value) : '', "class='form-control'");
+            echo html::$function('values[]', ($translation->status != 'waiting') ? htmlspecialchars($value) : '', "class='form-control'");
             ?>
             </td>
             <td>
@@ -122,7 +122,7 @@
             $function = $hasNL ? 'textarea' : 'input';
             $value    = $translation;
             if(is_object($translation)) $value = $translation->value;
-            echo html::$function('values[]', ($value != $item) ? htmlspecialchars($value) : '', "class='form-control'");
+            echo html::$function('values[]', ($translation->status != 'waiting') ? htmlspecialchars($value) : '', "class='form-control'");
             ?>
             </td>
           </tr>
