@@ -11,6 +11,15 @@
  */
 class editor extends control
 {
+    /**
+     * Construct 
+     * 
+     * @param  string $moduleName 
+     * @param  string $methodName 
+     * @param  string $appName 
+     * @access public
+     * @return void
+     */
     public function __construct($moduleName = '', $methodName = '', $appName = '')
     {
         parent::__construct($moduleName, $methodName, $appName);

@@ -19,8 +19,8 @@
               oldBoxID = newBoxID;
               if($(this).html() != $(this).next().html()) $(this).closest('.history-changes').before(diffButton);
           }
-      })
-  })
+      });
+  });
   </script>
   <?php if(!empty($blockHistory)):?>
   <div class="panel-heading"><div class="panel-title">

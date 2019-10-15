@@ -11,7 +11,7 @@ $(document).ready(function()
         {
             var index    = id.substring(5);
             var moduleID = $('#module' + index).val();
-            var branch   = $('#branch' + index).val();
+            var branch   = $('#branch' + index).length > 0 ? $('#branch' + index).val() : 0;
             if(moduleID == 'ditto')
             {
                 for(var i = index - 1; i >=0; i--)
