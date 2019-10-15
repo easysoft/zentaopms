@@ -44,6 +44,7 @@ $lang->misc->zentao->support['qqgroup']    = "官方QQ群";
 
 $lang->misc->zentao->cowin['reportbug']    = "汇报Bug";
 $lang->misc->zentao->cowin['feedback']     = "反馈需求";
+$lang->misc->zentao->cowin['translate']    = "参与翻译";
 $lang->misc->zentao->cowin['recommend']    = "推荐给朋友";
 
 $lang->misc->zentao->service['zentaotrain']= '禅道使用培训';

@@ -18,7 +18,7 @@ $lang->misc->enApi  = 'http://api.zentao.pm';
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
 $lang->misc->zentao->labels['about']   = 'About';
-$lang->misc->zentao->labels['support'] = 'Technical Support';
+$lang->misc->zentao->labels['support'] = 'Support';
 $lang->misc->zentao->labels['cowin']   = 'Help Us';
 $lang->misc->zentao->labels['service'] = 'Service';
 $lang->misc->zentao->labels['others']  = 'Other Products';
@@ -44,6 +44,7 @@ $lang->misc->zentao->support['manual']     = "User Manual";
 
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
+$lang->misc->zentao->cowin['translate']    = "Translate";
 $lang->misc->zentao->cowin['recommend']    = "More";
 
 $lang->misc->zentao->service['zentaotrain']= 'Zentao Training';
