@@ -236,9 +236,9 @@ $lang->install->meshiot->logo  = 'images/main/meshiot.ico';
 $lang->install->meshiot->url   = 'https://www.meshiot.com';
 $lang->install->meshiot->desc  = <<<EOD
 <ul>
-  <li>超性能网关，一个就可管65536个设备</li>
-  <li>独创无线电通讯协议，2500米穿墙无障碍</li>
-  <li>200余款传感器控制器，独创调光系统</li>
-  <li>可配电池，对既有场地设备无任何要求</li>
+  <li>超性能网关，一个可管6万个设备</li>
+  <li>自研通讯协议，2.5公里穿墙无障碍</li>
+  <li>上百款传感器控制器，独创调光系统</li>
+  <li>可配电池，对既有场地无任何要求</li>
 </ul>
 EOD;
