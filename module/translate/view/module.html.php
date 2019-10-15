@@ -72,7 +72,7 @@
               <?php
               $specialItem = htmlspecialchars($item);
               echo $hasNL ? nl2br($specialItem) : $specialItem;
-              echo html::hidden('refers[]', $specialItem);
+              echo "<input type='hidden' name='refers[]' id='refers[]' value=\"" . addslashes($specialItem) . "\" />";
               ?>
             </td>
             <?php $translation = zget($translations, $key, '');?>
@@ -103,7 +103,7 @@
               <?php
               $specialItem = htmlspecialchars($item);
               echo $hasNL ? nl2br($specialItem) : (!empty($specialItem) ? $specialItem : '&nbsp;');
-              echo html::hidden('refers[]', $specialItem);
+              echo "<input type='hidden' name='refers[]' id='refers[]' value=\"" . addslashes($specialItem) . "\" />";
               ?>
             </td>
             <td rowspan='2'>
