@@ -223,10 +223,10 @@ $lang->install->ydisk->logo  = 'images/main/ydisk.ico';
 $lang->install->ydisk->url   = 'http://www.ydisk.cn';
 $lang->install->ydisk->desc  = <<<EOD
 <ul>
-  <li>绝对私有，只部署在自己的机器上。</li>
-  <li>海量存储，只取决于您的硬盘大小。</li>
-  <li>极限传输，只取决于您的网络带宽。</li>
-  <li>极度安全，十二种权限组合。</li>
+  <li>绝对私有：只部署在自己的机器上</li>
+  <li>海量存储：只取决于您的硬盘大小</li>
+  <li>极限传输：只取决于您的网络带宽</li>
+  <li>极度安全：十二种权限组合</li>
 </ul>
 EOD;
 
@@ -236,9 +236,9 @@ $lang->install->meshiot->logo  = 'images/main/meshiot.ico';
 $lang->install->meshiot->url   = 'https://www.meshiot.com';
 $lang->install->meshiot->desc  = <<<EOD
 <ul>
-  <li>超性能网关，一个就可管65536个设备。</li>
-  <li>独创无线电通讯协议，2500米穿墙无障碍。</li>
-  <li>200余款传感器控制器，独创调光系统。</li>
-  <li>可配电池，对既有场地设备无任何要求。</li>
+  <li>超性能网关，一个就可管65536个设备</li>
+  <li>独创无线电通讯协议，2500米穿墙无障碍</li>
+  <li>200余款传感器控制器，独创调光系统</li>
+  <li>可配电池，对既有场地设备无任何要求</li>
 </ul>
 EOD;
