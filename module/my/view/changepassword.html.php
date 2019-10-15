@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::import($jsRoot . 'md5.js');?>
 <?php if(!isonlybody()):?>
 <style>
 .main-content{width: 500px; margin: 0 auto;}
@@ -55,6 +56,7 @@
     </div>
     <?php endif;?>
   </form>
+  <?php echo html::hidden('verifyRand', $rand);?>
 </div>
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <script>

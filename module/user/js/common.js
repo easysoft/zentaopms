@@ -8,11 +8,14 @@
  */
 $(document).ready(function()
 {
+    var verifyEncrypted = false;
+    $('#verifyPassword').change(function(){verifyEncrypted = false})
     $('#verifyPassword').closest('form').find('#submit').click(function()
     {
         var password = $('input#verifyPassword').val().trim();
         var rand = $('input#verifyRand').val();
-        $('input#verifyPassword').val(md5(md5(password) + rand));
+        if(!verifyEncrypted && password) $('input#verifyPassword').val(md5(md5(password) + rand));
+        verifyEncrypted = true;
     });
 });
 

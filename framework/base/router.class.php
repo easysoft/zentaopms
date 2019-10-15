@@ -594,6 +594,11 @@ class baseRouter
         unset($GLOBALS);
         unset($_REQUEST);
 
+        /* Change for CSRF. */
+        $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+        $httpHost = $_SERVER['HTTP_HOST'];
+        if(strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
+
         $_FILES  = validater::filterFiles();
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
