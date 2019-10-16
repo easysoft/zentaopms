@@ -40,6 +40,10 @@ $config->productCommonList['de'][0]    = 'Produkt';
 $config->productCommonList['de'][1]    = 'Projekt';
 $config->projectCommonList['de'][0]    = 'Projekt';
 $config->projectCommonList['de'][1]    = 'Iteration';
+$config->productCommonList['fr'][0]    = 'Product';
+$config->productCommonList['fr'][1]    = 'Projet';
+$config->projectCommonList['fr'][0]    = 'Projet';
+$config->projectCommonList['fr'][1]    = 'Sprint';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
@@ -50,6 +54,8 @@ $config->charsets['en']['utf-8']    = 'UTF-8';
 $config->charsets['en']['GBK']      = 'GBK';
 $config->charsets['de']['utf-8']    = 'UTF-8';
 $config->charsets['de']['GBK']      = 'GBK';
+$config->charsets['fr']['utf-8']    = 'UTF-8';
+$config->charsets['fr']['GBK']      = 'GBK';
 
 /* IP white list settings.*/
 $config->ipWhiteList = '*';
