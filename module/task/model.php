@@ -1490,7 +1490,12 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
-        if($oldTask->parent == '-1') $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
+        if($oldTask->parent == '-1') 
+        {
+            unset($task->assignedTo);
+            $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
+            $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
+        }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
