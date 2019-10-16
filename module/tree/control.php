@@ -265,10 +265,10 @@ class tree extends control
         {
             $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $branch);
         }
+        if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
 
         $this->view->module = $module;
         $this->view->type   = $type;
-        $this->view->libs   = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
         $this->view->branch = $branch;
         $this->view->users  = $this->loadModel('user')->getPairs('noclosed|nodeleted', $module->owner);
 

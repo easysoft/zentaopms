@@ -412,7 +412,6 @@ $(function()
 
         if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
         {
-            console.log($searchForm.find("#value" + fieldNO));
             setDateField($searchForm.find("#value" + fieldNO), fieldNO);
             $searchForm.find("#value" + fieldNO).addClass('date');   // Shortcut the width of the datepicker to make sure align with others.
             var maxNO      = 2 * groupItems;

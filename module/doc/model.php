@@ -364,7 +364,11 @@ class docModel extends model
         elseif($browseType == "bymodule")
         {
             $modules = 0;
-            if($moduleID) $modules = (strpos($this->config->doc->custom->showLibs, 'children') === false) ? array($moduleID => $moduleID) : $this->loadModel('tree')->getAllChildId($moduleID);
+            if($moduleID)
+            {
+                $modules = array($moduleID => $moduleID);
+                if(strpos($this->config->doc->custom->showLibs, 'children') === false) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
+            }
             $docs = $this->getDocs($libID, $modules, $sort, $pager);
         }
         elseif($browseType == "bygrid")
