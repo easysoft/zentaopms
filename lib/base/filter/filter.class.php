@@ -643,7 +643,7 @@ class baseValidater
 
         $var      = (string) $var;
         $evils    = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert');
-        $replaces = array('e v a l', 'e x e c', ' p a s s t h r u', ' p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
+        $replaces = array("e\177v\177a\177l", "e\177x\177e\177c", "p\177a\177s\177s\177t\177h\177r\177u", "p\177r\177o\177c\177_\177o\177p\177e\177n", "s\177h\177e\177l\177l\177_\177e\177x\177e\177c", "s\177y\177s\177t\177e\177m", "\$\177\$", "i\177n\177c\177l\177u\177d\177e", "r\177e\177q\177u\177i\177r\177e", "a\177s\177s\177e\177r\177t");
         $var      = str_ireplace($evils, $replaces, $var);
 
         return $var;
@@ -666,12 +666,12 @@ class baseValidater
         {
             $var      = (string) $var;
             $evils    = array('appendchild(', 'createElement(', 'xss.re', 'onfocus', 'onclick', 'innerHTML', 'replaceChild(', 'html(', 'append(', 'appendTo(', 'prepend(', 'prependTo(', 'after(', 'insertBefore', 'before(', 'replaceWith(');
-            $replaces = array('a p p e n d c h i l d (', 'c r e a t e E l e  m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e(', 'b e f o r e (', 'r e p l a c e W i t h (');
+            $replaces = array('a p p e n d c h i l d (', 'c r e a t e E l e  m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e (', 'b e f o r e (', 'r e p l a c e W i t h (');
             $var      = str_ireplace($evils, $replaces, $var);
         }
 
         /* Process like 'javascript:' */
-        $var = preg_replace('/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/Ui', 'j a v a s c r i p t :', $var);
+        $var = preg_replace('/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/Ui', "j a v a s c r i p t :", $var);
 
         return $var;
     }
