@@ -39,7 +39,7 @@
       <tr class='text-center' data-url='<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink); ?>' <?php echo $appid?>>
         <td class='c-name text-left' title='<?php echo $product->name?>'><?php echo $product->name?></td>
         <?php if($longBlock):?>
-        <?php $projectName = $product->currentProject ? $product->currentProject : zget($projects, $product->id, '');?>
+        <?php $projectName = zget($projects, $product->id, '');?>
         <td class='c-name c-project text-left' title='<?php echo $projectName;?>'><?php echo $projectName;?></td>
         <?php endif;?>
         <td class="c-num"><?php echo $product->plans?></td>
