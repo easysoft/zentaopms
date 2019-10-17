@@ -212,8 +212,9 @@ foreach(array($moduleRoot, '../xuanxuan/module/') as $subModuleRoot)
                     {
                         $key = trim($key);
                         $lineNO = $lineNO + 1;
+                        $referLang = $langKey != 'en' ? 'en' : 'zh-cn';
                         echo "module $moduleName need checking, command is:";
-                        echo " vim -O +$lineNO ../module/$moduleName/lang/zh-cn.php +$lineNO ../module/$moduleName/lang/$langKey.php \n";
+                        echo " vim -O +$lineNO ../module/$moduleName/lang/$referLang.php +$lineNO ../module/$moduleName/lang/$langKey.php \n";
                         break;
                     }
                 }

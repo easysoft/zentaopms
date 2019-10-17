@@ -39,6 +39,7 @@ $lang->tree->addChild           = "Ajout Sous-Module";
 $lang->tree->confirmDelete      = 'Voulez-vous supprimer ce module et tous ses sous-modules ?';
 $lang->tree->confirmDeleteLine  = 'Voulez-vous supprimer cette ligne de produit ?';
 $lang->tree->confirmRoot        = "Les changements du {$lang->productCommon} vont impacter les stories, bugs, casTests du {$lang->productCommon} auquel ils appartiennent, ainsi que les associations de {$lang->projectCommon} et {$lang->productCommon}, ce qui est dangereux. Voulez-vous malgré tout effectuer le changement ?";
+$lang->tree->confirmRoot4Doc    = "Any changes to the library will change the document of library it belongs to, which is dangerous. Do you want to change it?";
 $lang->tree->successSave        = 'Sauvé.';
 $lang->tree->successFixed       = 'Corrigé.';
 $lang->tree->repeatName         = 'Le nom "%s" existe déjà !';

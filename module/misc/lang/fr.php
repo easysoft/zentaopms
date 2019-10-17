@@ -21,6 +21,7 @@ $lang->misc->zentao->labels['about']   = 'A Propos';
 $lang->misc->zentao->labels['support'] = 'Support Technique';
 $lang->misc->zentao->labels['cowin']   = 'Aider ZenTao';
 $lang->misc->zentao->labels['service'] = 'Services';
+$lang->misc->zentao->labels['others']  = 'Other Products';
 
 $lang->misc->zentao->icons['about']   = 'group';
 $lang->misc->zentao->icons['support'] = 'question-sign';
@@ -43,12 +44,20 @@ $lang->misc->zentao->support['manual']     = "English User Manual";
 
 $lang->misc->zentao->cowin['reportbug']    = "Signaler un Bug";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
+$lang->misc->zentao->cowin['translate']    = "Translate";
 $lang->misc->zentao->cowin['recommend']    = "Plus...";
 
 $lang->misc->zentao->service['zentaotrain']= 'Zentao Train';
 $lang->misc->zentao->service['idc']        = 'Zentao Cloud';
 $lang->misc->zentao->service['custom']     = 'Zentao Custom';
 $lang->misc->zentao->service['servicemore']= 'Plus...';
+
+global $config;
+$lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> Zsite";
+$lang->misc->zentao->others['ranzhi']   = "<img src='{$config->webRoot}theme/default/images/main/ranzhi.ico' /> Zdoo";
+
+$lang->misc->zentao->others['ydisk']    = "<img src='{$config->webRoot}theme/default/images/main/ydisk.ico' /> Y Disk";
+$lang->misc->zentao->others['meshiot' ] = "<img src='{$config->webRoot}theme/default/images/main/meshiot.ico' /> MeshioT";
 
 $lang->misc->mobile      = "Accès Mobile";
 $lang->misc->noGDLib     = "SVP visitez <strong>%s</strong> via le navigateur de votre smartphone.";
@@ -67,14 +76,17 @@ $lang->misc->noticeRepair = "<h5>Si vous n'êtes pas l'administrateur, contactez
     <p>Note :</p>
     <ol>
     <li>Laissez surtout le fichier vide.</li>
-    <li>Si le fichier existe déjà, supprimez-le et créez un nouveau fichier.</li>
-    <li>Il y a bon espoir d'y arriver.</li>
+    <li>Si le fichier existe déjà, supprimez-le et créez un nouveau fichier.</li><li>Il y a bon espoir d'y arriver.</li>
     </ol>";
 
 $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Dernière Version';
 $lang->misc->feature->detailed = 'Détail';
 
+$lang->misc->releaseDate['11.6.4']      = '2019-10-17';
+$lang->misc->releaseDate['11.6.3']      = '2019-09-24';
+$lang->misc->releaseDate['11.6.2']      = '2019-09-06';
+$lang->misc->releaseDate['11.6.1']      = '2019-08-23';
 $lang->misc->releaseDate['11.6.stable'] = '2019-07-12';
 $lang->misc->releaseDate['11.5.2']      = '2019-06-26';
 $lang->misc->releaseDate['11.5.1']      = '2019-06-24';
@@ -105,11 +117,15 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['11.6.4'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
+$lang->misc->feature->all['11.6.3'][] = array('title'=>'Fix bug.', 'desc' => '');
+$lang->misc->feature->all['11.6.2'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
+$lang->misc->feature->all['11.6.1'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
+
 $lang->misc->feature->all['11.6.stable'][] = array('title'=>'Improving the International Edition Interface', 'desc' => '');
 $lang->misc->feature->all['11.6.stable'][] = array('title'=>'Add translate function', 'desc' => '');
 
 $lang->misc->feature->all['11.5.2'][]      = array('title'=>'Increase the security of ZenTao and increase the login password for weak password check', 'desc' => '');
-
 $lang->misc->feature->all['11.5.1'][]      = array('title'=>'Add a third-party authentication and fix bugs.', 'desc' => '');
 
 $lang->misc->feature->all['11.5.stable'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');

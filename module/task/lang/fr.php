@@ -50,10 +50,7 @@ $lang->task->progress            = 'Progression';
 $lang->task->progressAB          = '%';
 $lang->task->progressTips        = 'Coût/(Coût+Reste)';
 $lang->task->copy                = 'Copier Tâche';
-$lang->task->wait                = 'A Faire';
-$lang->task->waitAction          = 'Tâche à faire';
-$lang->task->reflex              = 'Reflexion';
-$lang->task->reflexAction        = "Mûrissement Tâche";
+$lang->task->waitTask            = 'Waiting Task';
 
 $lang->task->common            = 'Tâche';
 $lang->task->id                = 'ID';
@@ -64,6 +61,8 @@ $lang->task->story             = 'Story';
 $lang->task->storyAB           = 'Story';
 $lang->task->storySpec         = 'Description Story';
 $lang->task->storyVerify       = "Critères d'Acceptance";
+$lang->task->storyVersion      = 'Story Version';
+$lang->task->color             = 'Color';
 $lang->task->name              = 'Nom';
 $lang->task->type              = 'Type';
 $lang->task->pri               = 'Priorité';
@@ -86,6 +85,7 @@ $lang->task->date              = 'Date';
 $lang->task->deadline          = 'Date Butoir';
 $lang->task->deadlineAB        = 'Date Butoir';
 $lang->task->status            = 'Statut';
+$lang->task->subStatus         = 'Sub Status';
 $lang->task->desc              = 'Description';
 $lang->task->assign            = 'Assigner';
 $lang->task->assignAction      = 'Assigner Tâche';
@@ -141,7 +141,6 @@ $lang->task->yesterdayFinished = 'Tâche Terminée Hier';
 $lang->task->allTasks          = 'Tâche';
 
 $lang->task->statusList['']        = '';
-$lang->task->statusList['reflex']  = 'En réflexion';
 $lang->task->statusList['wait']    = 'A Faire';
 $lang->task->statusList['doing']   = 'En Cours';
 $lang->task->statusList['done']    = 'Faite';
@@ -195,10 +194,12 @@ $lang->task->commentActions        = '%s. %s, commenté par <strong>%s</strong>.
 $lang->task->deniedNotice          = 'Seulement le %s peut %s la tâche.';
 $lang->task->noTask                = "Pas de tâche pour l'instant. ";
 $lang->task->createDenied          = 'La création de tâches est interdite dans ce projet';
+$lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Coût" doit être numérique.';
 $lang->task->error->estimateNumber   = '"Estimé" doit être numérique.';
+$lang->task->error->recordMinus      = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall    = '"Coût en heures" doit être > au dernier chiffre.';
 $lang->task->error->consumedThisTime = 'Entrez le "Coût en Heures"';
 $lang->task->error->left             = 'Entrez les "Heures Restantes"';
@@ -207,6 +208,7 @@ $lang->task->error->skipClose        = 'Tâche: %s non “Finie” ou “Annulé
 $lang->task->error->consumed         = 'Tâche: %s heures doivent être < 0. Ignorer changements de cette tâche.';
 $lang->task->error->assignedTo       = "Tâche Multi-user dans le statut courant ne peut pas être assignée à un membre qui ne fait pas partie de l'équipe.";
 $lang->task->error->consumedEmpty    = '"Coût Actuel" ne devrait pas être vide.';
+$lang->task->error->deadlineSmall    = '"Deadline" must be greater than "StartDate".';
 
 /* Report. */
 $lang->task->report = new stdclass();

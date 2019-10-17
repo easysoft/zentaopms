@@ -34,6 +34,8 @@ ZenTao ALM is developed by <strong><a href='http://easysoft.ltd' target='_blank'
 Official Website : <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Technical Support : <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
 WhatsApp Group : <a href='https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF' target='_blank'>https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF</a>
+LinkedIn Group: <a href='https://www.linkedin.com/groups/10330509/' target='_blank'>ZenTao Project Management Software</a>
+Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
 Twitter: <a href='https://twitter.com/cneasysoft' target='_blank'>cneasysoft</a>
 
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
@@ -93,6 +95,7 @@ $lang->install->defaultLang    = 'Default Language';
 $lang->install->dbHost         = 'Database Host';
 $lang->install->dbHostNote     = 'If 127.0.0.1 is not accessible, try localhost.';
 $lang->install->dbPort         = 'Host Port';
+$lang->install->dbEncoding     = 'Database Charset';
 $lang->install->dbUser         = 'Database Username';
 $lang->install->dbPassword     = 'Database Password';
 $lang->install->dbName         = 'Database Name';
@@ -176,8 +179,8 @@ $lang->install->product = array('chanzhi', 'ranzhi');
 
 $lang->install->promotion     = "Products also from Nature Easy Soft team:";
 $lang->install->chanzhi       = new stdclass();
-$lang->install->chanzhi->name = 'ZSITE Content Management System';
-$lang->install->chanzhi->logo = 'images/main/chanzhi_en.png';
+$lang->install->chanzhi->name = 'ZSITE';
+$lang->install->chanzhi->logo = 'images/main/chanzhi.ico';
 $lang->install->chanzhi->url  = 'http://www.zsite.net';
 $lang->install->chanzhi->desc = <<<EOD
 <ul>
@@ -189,8 +192,8 @@ $lang->install->chanzhi->desc = <<<EOD
 EOD;
 
 $lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name = 'ZDOO Collaborative System';
-$lang->install->ranzhi->logo = 'images/main/zdoo_org.png';
+$lang->install->ranzhi->name = 'ZDOO';
+$lang->install->ranzhi->logo = 'images/main/ranzhi.ico';
 $lang->install->ranzhi->url  = 'http://www.zdoo.org';
 $lang->install->ranzhi->desc = <<<EOD
 <ul>

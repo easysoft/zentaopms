@@ -19,6 +19,7 @@ $lang->action->actor      = 'User';
 $lang->action->action     = 'Action';
 $lang->action->actionID   = 'Action ID';
 $lang->action->date       = 'Date';
+$lang->action->extra      = 'Extra';
 
 $lang->action->trash       = 'Corbeille';
 $lang->action->undelete    = 'Restaurer';
@@ -98,8 +99,6 @@ $lang->action->desc->edited         = '$date, édité par <strong>$actor</strong
 $lang->action->desc->assigned       = '$date, <strong>$actor</strong> affecté à <strong>$extra</strong>.' . "\n";
 $lang->action->desc->closed         = '$date, fermé par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->deleted        = '$date, supprimé par <strong>$actor</strong> .' . "\n";
-$lang->action->desc->reflexed       = '$date, mis en réflexion par <strong>$actor</strong> .' . "\n";
-$lang->action->desc->waiting        = '$date, mis en attente de réalisation par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->deletedfile    = '$date, <strong>$actor</strong> a supprimé <strong><i>$extra</i></strong>.' . "\n";
 $lang->action->desc->editfile       = '$date, <strong>$actor</strong> a édité <strong><i>$extra</i></strong>.' . "\n";
 $lang->action->desc->erased         = '$date, supprimé par <strong>$actor</strong> .' . "\n";
@@ -138,6 +137,7 @@ $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> a racc
 $lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> a décroché une sous-tâche <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> a accroché une tâche parent <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> a décroché une tâche parent <strong>$extra</strong>。' . "\n";
+$lang->action->desc->deletechildrentask = '$date, <strong>$actor</strong> deleted a child task <strong>$extra</strong>。' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
 $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> a fait le lien avec un CasTest <strong>$extra</strong>.' . "\n";
@@ -210,9 +210,7 @@ $lang->action->label->unlinkparenttask    = "a décroché de la tâche parent";
 $lang->action->label->batchcreate         = "a créé tâches par lot";
 $lang->action->label->createchildren      = "a créé sous-tâches par lot";
 $lang->action->label->managed             = "a managé";
-$lang->action->label->reflexed            = "a mis en réflexion";
-$lang->action->label->wait                = "a mis à faire";
-$lang->action->label->waiting             = "a mis à faire";
+$lang->action->label->deletechildrentask  = "delete children task";
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction = new stdclass;
@@ -282,11 +280,10 @@ $lang->action->dynamicAction->task['deleteestimate']       = 'RAZ Estimation';
 $lang->action->dynamicAction->task['paused']               = 'Stopper Tâche';
 $lang->action->dynamicAction->task['closed']               = 'Fermer Tâche';
 $lang->action->dynamicAction->task['canceled']             = 'Supprimer Tâche';
-$lang->action->dynamicAction->task['reflexed']             = 'Mûrir Tâche';
-$lang->action->dynamicAction->task['waiting']              = 'A Faire Tâche';
 $lang->action->dynamicAction->task['activated']            = 'Activer Tâche';
 $lang->action->dynamicAction->task['createchildren']       = 'Créer Sous-Tâche';
 $lang->action->dynamicAction->task['unlinkparenttask']     = 'Délier Tâche Parent';
+$lang->action->dynamicAction->task['deletechildrentask']   = 'Delete children task';
 $lang->action->dynamicAction->task['linkparenttask']       = 'Lier Tâche Parent';
 $lang->action->dynamicAction->task['linkchildtask']        = 'Lier sous-tâche';
 $lang->action->dynamicAction->task['undeleted']            = 'Restaurer Tâche';

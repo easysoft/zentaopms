@@ -137,6 +137,7 @@ $lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->unlinkchildrentask = '$date, 由 <strong>$actor</strong> 移除子任務 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkparenttask     = '$date, 由 <strong>$actor</strong> 關聯到父任務 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparenttask   = '$date, 由 <strong>$actor</strong> 從父任務<strong>$extra</strong>取消關聯。' . "\n";
+$lang->action->desc->deletechildrentask = '$date, 由 <strong>$actor</strong> 刪除子任務<strong>$extra</strong>。' . "\n";
 
 /* 關聯用例和移除用例時的歷史操作記錄。*/
 $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 關聯相關用例 <strong>$extra</strong>。' . "\n";
@@ -209,6 +210,7 @@ $lang->action->label->unlinkparenttask    = "從父任務取消關聯";
 $lang->action->label->batchcreate         = "批量創建任務";
 $lang->action->label->createchildren      = "創建子任務";
 $lang->action->label->managed             = "維護";
+$lang->action->label->deletechildrentask  = "刪除子任務";
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction = new stdclass();
@@ -281,6 +283,7 @@ $lang->action->dynamicAction->task['canceled']             = '取消任務';
 $lang->action->dynamicAction->task['activated']            = '激活任務';
 $lang->action->dynamicAction->task['createchildren']       = '創建子任務';
 $lang->action->dynamicAction->task['unlinkparenttask']     = '從父任務取消關聯';
+$lang->action->dynamicAction->task['deletechildrentask']   = '刪除子任務';
 $lang->action->dynamicAction->task['linkparenttask']       = '關聯到父任務';
 $lang->action->dynamicAction->task['linkchildtask']        = '關聯子任務';
 $lang->action->dynamicAction->task['undeleted']            = '還原任務';

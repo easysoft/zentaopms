@@ -41,13 +41,13 @@ $lang->mail->license     = 'ZenTao CloudMail Notice';
 $lang->mail->selectMTA = 'Sélect Type';
 $lang->mail->smtp      = 'SMTP';
 
-$lang->mail->syncedUser = 'Synchronisé';
-$lang->mail->unsyncUser = 'Non Synchronisé';
+$lang->mail->syncedUser = 'Synchronis';
+$lang->mail->unsyncUser = 'Non Synchronis';
 $lang->mail->sync       = 'Synchronisation';
 $lang->mail->remove     = 'Retirer';
 
 $lang->mail->toList      = 'Destinataire';
-$lang->mail->ccList      = 'Copie à';
+$lang->mail->ccList      = 'Copie ';
 $lang->mail->subject     = 'Sujet';
 $lang->mail->createdBy   = 'Expéditeur';
 $lang->mail->createdDate = 'Création';
@@ -55,7 +55,8 @@ $lang->mail->sendTime    = 'Envoi';
 $lang->mail->status      = 'Statut';
 $lang->mail->failReason  = 'Raison';
 
-$lang->mail->statusList['sended'] = 'Envoyé';
+$lang->mail->statusList['wait']   = 'Wait';
+$lang->mail->statusList['sended'] = 'Envoy';
 $lang->mail->statusList['fail']   = 'Echec';
 
 $lang->mail->turnonList[1]  = 'On';
@@ -97,7 +98,7 @@ $lang->mail->sendCloudHelp  = <<<EOD
 
 
 EOD;
-$lang->mail->sendCloudSuccess = 'Envoyé';
+$lang->mail->sendCloudSuccess = 'Envoy';
 $lang->mail->closeSendCloud   = 'Fermer SendCloud';
 $lang->mail->addressWhiteList = "Ajoutez le à la liste blanche de votre serveur de mail pour éviter d'être bloqué.";
 $lang->mail->ztCloudNotice    = <<<EOD

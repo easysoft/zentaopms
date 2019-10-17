@@ -198,6 +198,7 @@ $lang->bug->priList[4] = '4';
 $lang->bug->osList['']        = '';
 $lang->bug->osList['all']     = 'All';
 $lang->bug->osList['windows'] = 'Windows';
+$lang->bug->osList['win10']   = 'Windows 10';
 $lang->bug->osList['win8']    = 'Windows 8';
 $lang->bug->osList['win7']    = 'Windows 7';
 $lang->bug->osList['vista']   = 'Windows Vista';

@@ -1,11 +1,6 @@
 <?php
 $lang->my->common = 'Tableau de Bord';
 
-$config->productCommonList['en'][0]    = 'Product';
-$config->productCommonList['en'][1]    = 'Projet';
-$config->projectCommonList['en'][0]    = 'Projet';
-$config->projectCommonList['en'][1]    = 'Sprint';
-
 /* Method List。*/
 $lang->my->index          = 'Accueil';
 $lang->my->todo           = 'Mon Agenda';

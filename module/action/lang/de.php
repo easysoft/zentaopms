@@ -137,6 +137,7 @@ $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked
 $lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> unlinked a child task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked to a parent task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> unlinked a parent task <strong>$extra</strong>。' . "\n";
+$lang->action->desc->deletechildrentask = '$date, <strong>$actor</strong> deleted a child task <strong>$extra</strong>。' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
 $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> hat einen Fall verknüpft <strong>$extra</strong>.' . "\n";
@@ -209,6 +210,7 @@ $lang->action->label->unlinkparenttask    = "unlink from parent task";
 $lang->action->label->batchcreate         = "batch created tasks";
 $lang->action->label->createchildren      = "create child tasks";
 $lang->action->label->managed             = "managed";
+$lang->action->label->deletechildrentask  = "delete children task";
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction = new stdclass;
@@ -281,6 +283,7 @@ $lang->action->dynamicAction->task['canceled']             = 'Cancel Task';
 $lang->action->dynamicAction->task['activated']            = 'Activate Task';
 $lang->action->dynamicAction->task['createchildren']       = 'Create Child Task';
 $lang->action->dynamicAction->task['unlinkparenttask']     = 'Unlink Parent Task';
+$lang->action->dynamicAction->task['deletechildrentask']   = 'Delete children task';
 $lang->action->dynamicAction->task['linkparenttask']       = 'Link Parent Task';
 $lang->action->dynamicAction->task['linkchildtask']        = 'Link Child Task';
 $lang->action->dynamicAction->task['undeleted']            = 'Restore Task';

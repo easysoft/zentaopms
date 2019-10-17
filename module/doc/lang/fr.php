@@ -78,6 +78,8 @@ $lang->doc->editType         = 'Editer';
 $lang->doc->deleteType       = 'Supprimer';
 $lang->doc->addType          = 'Ajouter';
 $lang->doc->childType        = 'Catégories';
+$lang->doc->editType         = 'Manage Category';
+$lang->doc->deleteType       = 'Delete Category';
 $lang->doc->collect          = 'Ajouter aux Favoris';
 $lang->doc->cancelCollection = 'Retirer des Favoris';
 $lang->doc->deleteFile       = 'Supprimer Fichier';
@@ -122,16 +124,11 @@ $lang->doc->aclList['custom']  = 'Person.';
 $lang->doc->aclList['private'] = 'Privé';
 
 $lang->doc->typeList['html']     = 'Html';
-$lang->doc->typeList['xls']      = 'xls';
-$lang->doc->typeList['doc']      = 'doc';
 $lang->doc->typeList['markdown'] = 'Markdown';
 $lang->doc->typeList['url']      = 'URL';
 $lang->doc->typeList['word']     = 'Word';
 $lang->doc->typeList['ppt']      = 'PPT';
 $lang->doc->typeList['excel']    = 'Excel';
-$lang->doc->typeList['pdf']      = 'pdf';
-$lang->doc->typeList['jpg']      = 'image';
-$lang->doc->typeList['zip']      = 'archive';
 
 $lang->doc->types['text'] = 'Text';
 $lang->doc->types['url']  = 'URL';

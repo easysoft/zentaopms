@@ -4,7 +4,7 @@ $lang->webhook->list     = 'Liste de Flux';
 $lang->webhook->api      = 'API';
 $lang->webhook->entry    = 'Entrée';
 $lang->webhook->log      = 'Log';
-$lang->webhook->assigned = 'Assigné à';
+$lang->webhook->assigned = 'Assign';
 $lang->webhook->setting  = 'Paramétrages';
 
 $lang->webhook->browse = 'Consulter';
@@ -33,7 +33,6 @@ $lang->webhook->data        = 'Donnée';
 $lang->webhook->result      = 'Résultat';
 
 $lang->webhook->typeList['']          = '';
-$lang->webhook->typeList['bearychat'] = 'Bearychat';
 $lang->webhook->typeList['dingding']  = 'Dingding';
 $lang->webhook->typeList['default']   = 'Autre';
 
