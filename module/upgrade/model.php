@@ -523,6 +523,10 @@ class upgradeModel extends model
         case '11_6_2':
             $this->saveLogs('Execute 11_6_2');
             $this->appendExec('11_6_2');
+        case '11_6_3':
+            $this->saveLogs('Execute 11_6_3');
+            $this->adjustPriv11_6_4();
+            $this->appendExec('11_6_3');
         }
 
         $this->deletePatch();
@@ -670,6 +674,7 @@ class upgradeModel extends model
             case '11_6'   : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6'));
             case '11_6_1' :
             case '11_6_2' :
+            case '11_6_3' :
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
