@@ -658,25 +658,29 @@ $lang->testsuite->methodOrder[35] = 'unlinkCase';
 $lang->testsuite->methodOrder[40] = 'batchUnlinkCases';
 
 $lang->resource->caselib = new stdclass();
+$lang->resource->caselib->index            = 'index';
 $lang->resource->caselib->browse           = 'browse';
 $lang->resource->caselib->create           = 'create';
 $lang->resource->caselib->edit             = 'edit';
-$lang->resource->caselib->createCase       = 'createCase';
+$lang->resource->caselib->delete           = 'delete';
 $lang->resource->caselib->view             = 'view';
+$lang->resource->caselib->createCase       = 'createCase';
 $lang->resource->caselib->batchCreateCase  = 'batchCreateCase';
 $lang->resource->caselib->exportTemplet    = 'exportTemplet';
 $lang->resource->caselib->import           = 'importAction';
 $lang->resource->caselib->showImport       = 'showImport';
 
-$lang->caselib->methodOrder[0]  = 'browse';
-$lang->caselib->methodOrder[5]  = 'create';
-$lang->caselib->methodOrder[10] = 'edit';
-$lang->caselib->methodOrder[15] = 'createCase';
-$lang->caselib->methodOrder[20] = 'batchCreateCase';
+$lang->caselib->methodOrder[0]  = 'index';
+$lang->caselib->methodOrder[5]  = 'browse';
+$lang->caselib->methodOrder[10] = 'create';
+$lang->caselib->methodOrder[15] = 'edit';
+$lang->caselib->methodOrder[20] = 'delete';
 $lang->caselib->methodOrder[25] = 'view';
-$lang->caselib->methodOrder[30] = 'exportTemplet';
-$lang->caselib->methodOrder[35] = 'import';
-$lang->caselib->methodOrder[40] = 'showImport';
+$lang->caselib->methodOrder[30] = 'createCase';
+$lang->caselib->methodOrder[35] = 'batchCreateCase';
+$lang->caselib->methodOrder[40] = 'exportTemplet';
+$lang->caselib->methodOrder[45] = 'import';
+$lang->caselib->methodOrder[50] = 'showImport';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
