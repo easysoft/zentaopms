@@ -1564,10 +1564,10 @@ class projectModel extends model
         $versions      = $this->loadModel('story')->getVersions($stories);
         $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
+        $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
         foreach($stories as $key => $storyID)
         {
-            $status = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('status');
-            if($status == 'draft') continue;
+            if($statusPairs[$storyID] == 'draft') continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $productID = (int)$products[$storyID];
