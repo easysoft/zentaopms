@@ -58,7 +58,7 @@ class settingModel extends model
             $path    = preg_replace("/^{$account}/", 'account', $path);
         }
 
-        $level    = substr_count($path, '.');
+        $level   = substr_count($path, '.');
         $section = '';
 
         if($level <= 1) return false;

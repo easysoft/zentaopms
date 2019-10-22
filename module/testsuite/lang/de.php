@@ -21,11 +21,6 @@ $lang->testsuite->unlinkCase       = "Verknüpfung aufheben";
 $lang->testsuite->unlinkCaseAction = "Unlink Case";
 $lang->testsuite->batchUnlinkCases = "Mehrere Verknüpfungen aufheben";
 $lang->testsuite->deleted          = 'gelöscht';
-$lang->testsuite->exportTemplet    = 'Exportiere Vorlage';
-$lang->testsuite->batchCreateCase  = 'Mehere Fälle erstellen';
-$lang->testsuite->import           = 'Importieren';
-$lang->testsuite->importAction     = 'Import Case';
-$lang->testsuite->showImport       = 'Imported Data';
 $lang->testsuite->successSaved     = 'Saved';
 
 $lang->testsuite->id             = 'ID';
@@ -46,7 +41,6 @@ $lang->testsuite->legendBasicInfo = 'Basis Info';
 $lang->testsuite->unlinkedCases = 'Unverknüpfte Fälle';
 
 $lang->testsuite->confirmDelete     = 'Möchten Sie diese Suite löschen?';
-$lang->testsuite->libraryDelete     = 'Möchten Sie diese Bibliothek löschen？';
 $lang->testsuite->confirmUnlinkCase = 'Möchten Sie diese Verknüpfung aufheben?';
 $lang->testsuite->noticeNone        = 'Sie haben noch keine Suite erstellt.';
 $lang->testsuite->noModule          = '<div>Sie haben keine Module</div><div>Jetzt verwalten</div>';
@@ -57,12 +51,3 @@ $lang->testsuite->lblUnlinkCase = 'Unverknüpfte Fälle';
 
 $lang->testsuite->authorList['private'] = 'Privat';
 $lang->testsuite->authorList['public']  = 'Öffentlich';
-
-$lang->caselib->common = 'Fall Bibliothek';
-$lang->caselib->all    = 'Alle';
-
-$lang->testsuite->createLib  = 'Bibliothek erstellen';
-$lang->testsuite->editLib    = 'Bearbeiten';
-$lang->testsuite->library    = 'Fall in Bibliothek durchsuchen';
-$lang->testsuite->createCase = 'Fall erstellen';
-$lang->testsuite->libView    = 'Übersicht';

@@ -55,6 +55,7 @@ $lang->mail->sendTime    = '发送时间';
 $lang->mail->status      = '状态';
 $lang->mail->failReason  = '失败原因';
 
+$lang->mail->statusList['wait']   = '待发送';
 $lang->mail->statusList['sended'] = '成功';
 $lang->mail->statusList['fail']   = '失败';
 

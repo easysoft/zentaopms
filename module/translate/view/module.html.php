@@ -72,7 +72,7 @@
               <?php
               $specialItem = htmlspecialchars($item);
               echo $hasNL ? nl2br($specialItem) : $specialItem;
-              echo html::hidden('refers[]', $specialItem);
+              echo "<input type='hidden' name='refers[]' id='refers[]' value=\"" . addslashes($specialItem) . "\" />";
               ?>
             </td>
             <?php $translation = zget($translations, $key, '');?>
@@ -81,7 +81,7 @@
             $function = $hasNL ? 'textarea' : 'input';
             $value    = $translation;
             if(is_object($translation)) $value = $translation->value;
-            echo html::$function('values[]', ($value != $item) ? htmlspecialchars($value) : '', "class='form-control'");
+            echo html::$function('values[]', ($translation->status != 'waiting') ? htmlspecialchars($value) : '', "class='form-control'");
             ?>
             </td>
             <td>
@@ -103,7 +103,7 @@
               <?php
               $specialItem = htmlspecialchars($item);
               echo $hasNL ? nl2br($specialItem) : (!empty($specialItem) ? $specialItem : '&nbsp;');
-              echo html::hidden('refers[]', $specialItem);
+              echo "<input type='hidden' name='refers[]' id='refers[]' value=\"" . addslashes($specialItem) . "\" />";
               ?>
             </td>
             <td rowspan='2'>
@@ -122,7 +122,7 @@
             $function = $hasNL ? 'textarea' : 'input';
             $value    = $translation;
             if(is_object($translation)) $value = $translation->value;
-            echo html::$function('values[]', ($value != $item) ? htmlspecialchars($value) : '', "class='form-control'");
+            echo html::$function('values[]', ($translation->status != 'waiting') ? htmlspecialchars($value) : '', "class='form-control'");
             ?>
             </td>
           </tr>

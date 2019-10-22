@@ -21,11 +21,6 @@ $lang->testsuite->unlinkCase       = "移除";
 $lang->testsuite->unlinkCaseAction = "移除用例";
 $lang->testsuite->batchUnlinkCases = "批量移除用例";
 $lang->testsuite->deleted          = '已刪除';
-$lang->testsuite->exportTemplet    = '導出模板';
-$lang->testsuite->batchCreateCase  = '批量創建用例';
-$lang->testsuite->import           = '導入';
-$lang->testsuite->importAction     = '導入用例';
-$lang->testsuite->showImport       = '顯示導入數據';
 $lang->testsuite->successSaved     = '保存成功';
 
 $lang->testsuite->id             = '編號';
@@ -46,7 +41,6 @@ $lang->testsuite->legendBasicInfo = '基本信息';
 $lang->testsuite->unlinkedCases = '未關聯';
 
 $lang->testsuite->confirmDelete     = '您確認要刪除該套件嗎？';
-$lang->testsuite->libraryDelete     = '您確認要刪除該用例庫嗎？';
 $lang->testsuite->confirmUnlinkCase = '您確認要移除該用例嗎？';
 $lang->testsuite->noticeNone        = '您還沒有創建套件';
 $lang->testsuite->noModule          = '<div>您現在還沒有模組信息</div><div>請維護用例庫模組</div>';
@@ -57,12 +51,3 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公開';
-
-$lang->caselib->common = '公共用例庫';
-$lang->caselib->all    = '所有用例庫';
-
-$lang->testsuite->createLib  = '創建用例庫';
-$lang->testsuite->editLib    = '編輯用例庫';
-$lang->testsuite->library    = '瀏覽庫用例';
-$lang->testsuite->createCase = '創建用例';
-$lang->testsuite->libView    = '查看庫概況';

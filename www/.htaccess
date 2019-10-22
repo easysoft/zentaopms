@@ -1,5 +1,7 @@
 Options +FollowSymLinks +SymLinksIfOwnerMatch
 
+#Prohibit directory browsing
+Options -Indexes
 # framework router settings.
 <IfModule mod_rewrite.c>
   RewriteEngine On

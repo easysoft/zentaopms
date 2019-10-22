@@ -9,5 +9,12 @@ $html .= '<li>' . $this->lang->client->checkUpgrade . '</li>';
 $(function()
 {
     $('#footer .breadcrumb').append(<?php echo json_encode($html);?>);
-})
+    for(i in serverVersions[0].xxcDownload)
+    {
+        var url = serverVersions[0].xxcDownload[i].url;
+        url = url.replace('xuanxuan.' + serverVersions[0].xxcVersion, 'zentaoclient');
+        url = url.replace('xuanxuan', 'zentaoclient');
+        serverVersions[0].xxcDownload[i].url = url;
+    }
+});
 </script>

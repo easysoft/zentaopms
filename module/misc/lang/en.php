@@ -18,7 +18,7 @@ $lang->misc->enApi  = 'http://api.zentao.pm';
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
 $lang->misc->zentao->labels['about']   = 'About';
-$lang->misc->zentao->labels['support'] = 'Technical Support';
+$lang->misc->zentao->labels['support'] = 'Support';
 $lang->misc->zentao->labels['cowin']   = 'Help Us';
 $lang->misc->zentao->labels['service'] = 'Service';
 $lang->misc->zentao->labels['others']  = 'Other Products';
@@ -44,6 +44,7 @@ $lang->misc->zentao->support['manual']     = "User Manual";
 
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
+$lang->misc->zentao->cowin['translate']    = "Translate";
 $lang->misc->zentao->cowin['recommend']    = "More";
 
 $lang->misc->zentao->service['zentaotrain']= 'Zentao Training';
@@ -82,6 +83,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Detail';
 
+$lang->misc->releaseDate['11.6.4']      = '2019-10-17';
 $lang->misc->releaseDate['11.6.3']      = '2019-09-24';
 $lang->misc->releaseDate['11.6.2']      = '2019-09-06';
 $lang->misc->releaseDate['11.6.1']      = '2019-08-23';
@@ -115,6 +117,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['11.6.4'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
 $lang->misc->feature->all['11.6.3'][] = array('title'=>'Fix bug.', 'desc' => '');
 $lang->misc->feature->all['11.6.2'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');
 $lang->misc->feature->all['11.6.1'][] = array('title'=>'Optimize details and fix bug.', 'desc' => '');

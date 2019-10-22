@@ -214,7 +214,7 @@ class userModel extends model
 
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00' )
-            ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
+            ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->remove('group, password1, password2, verifyPassword')
@@ -374,7 +374,7 @@ class userModel extends model
         $userID = $oldUser->id;
         $user = fixer::input('post')
             ->setDefault('join', '0000-00-00')
-            ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
+            ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->remove('password1, password2, groups,verifyPassword')
             ->get();
@@ -552,15 +552,16 @@ class userModel extends model
         if(!$this->checkPassword()) return;
 
         $user = fixer::input('post')
-            ->setIF($this->post->password1 != false, 'password', md5($this->post->password1))
+            ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->remove('account, password1, password2, originalPassword')
             ->get();
 
-        if(empty($_POST['originalPassword']) or md5($this->post->originalPassword) != $this->app->user->password)
+        if(empty($_POST['originalPassword']) or $this->post->originalPassword != md5($this->app->user->password . $this->session->rand))
         {
             dao::$errors['originalPassword'][] = $this->lang->user->error->originalPassword;
             return false;
         }
+
         $this->dao->update(TABLE_USER)->data($user)->autoCheck()->where('id')->eq((int)$userID)->exec();
         $this->app->user->password       = $user->password;
         $this->app->user->modifyPassword = false;
@@ -672,7 +673,8 @@ class userModel extends model
                 if($user->modifyPassword) $user->modifyPasswordReason = 'weak';
             }
 
-            $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
+            /* code for bug #2729. */
+            if(!defined('RUN_MODE') or RUN_MODE != 'xuanxuan') $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($ip)->set('last')->eq($last)->where('account')->eq($account)->exec();
 
             /* Create cycle todo in login. */
             $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('account')->eq($user->account)->fetchAll('id');

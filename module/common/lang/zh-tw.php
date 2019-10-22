@@ -142,7 +142,7 @@ $lang->searchObjects['release']     = '發佈';
 $lang->searchObjects['productplan'] = $lang->productCommon . '計劃';
 $lang->searchObjects['testtask']    = '測試單';
 $lang->searchObjects['doc']         = '文檔';
-$lang->searchObjects['testsuite']   = '用例庫';
+$lang->searchObjects['caselib']     = '用例庫';
 $lang->searchObjects['testreport']  = '測試報告';
 $lang->searchTips                   = '編號(ctrl+g)';
 
@@ -273,7 +273,7 @@ $lang->qa->menu->testcase  = array('link' => '用例|testcase|browse|productID=%
 $lang->qa->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
 $lang->qa->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->qa->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
-$lang->qa->menu->caselib   = array('link' => '用例庫|testsuite|library');
+$lang->qa->menu->caselib   = array('link' => '用例庫|caselib|browse');
 
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
@@ -283,7 +283,7 @@ $lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=
 $lang->bug->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->bug->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
-$lang->bug->menu->caselib   = array('link' => '用例庫|testsuite|library');
+$lang->bug->menu->caselib   = array('link' => '用例庫|caselib|browse');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
@@ -292,7 +292,7 @@ $lang->testcase->menu->testcase  = array('link' => '用例|testcase|browse|produ
 $lang->testcase->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
 $lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testcase->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
-$lang->testcase->menu->caselib   = array('link' => '用例庫|testsuite|library');
+$lang->testcase->menu->caselib   = array('link' => '用例庫|caselib|browse');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = new stdclass();
@@ -301,7 +301,7 @@ $lang->testtask->menu->testcase  = array('link' => '用例|testcase|browse|produ
 $lang->testtask->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
 $lang->testtask->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testtask->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
-$lang->testtask->menu->caselib   = array('link' => '用例庫|testsuite|library');
+$lang->testtask->menu->caselib   = array('link' => '用例庫|caselib|browse');
 
 $lang->testsuite = new stdclass();
 $lang->testsuite->menu = new stdclass();
@@ -310,7 +310,7 @@ $lang->testsuite->menu->testcase  = array('link' => '用例|testcase|browse|prod
 $lang->testsuite->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
 $lang->testsuite->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->testsuite->menu->report    = array('link' => '報告|testreport|browse|productID=%s');
-$lang->testsuite->menu->caselib   = array('link' => '用例庫|testsuite|library');
+$lang->testsuite->menu->caselib   = array('link' => '用例庫|caselib|browse');
 
 $lang->testreport = new stdclass();
 $lang->testreport->menu = new stdclass();
@@ -319,7 +319,7 @@ $lang->testreport->menu->testcase  = array('link' => '用例|testcase|browse|pro
 $lang->testreport->menu->testtask  = array('link' => '測試單|testtask|browse|productID=%s');
 $lang->testreport->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testreport->menu->report    = array('link' => '報告|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
-$lang->testreport->menu->caselib   = array('link' => '用例庫|testsuite|library');
+$lang->testreport->menu->caselib   = array('link' => '用例庫|caselib|browse');
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
@@ -328,7 +328,7 @@ $lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => '測試單|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '報告|testreport|browse|');
-$lang->caselib->menu->caselib   = array('link' => '用例庫|testsuite|library', 'alias' => 'createlib,createcase,libview,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib   = array('link' => '用例庫|caselib|browse', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
 /* 文檔視圖菜單設置。*/
 $lang->doc = new stdclass();
@@ -451,7 +451,6 @@ $lang->menugroup->group       = 'company';
 $lang->menugroup->bug         = 'qa';
 $lang->menugroup->testcase    = 'qa';
 $lang->menugroup->case        = 'qa';
-$lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
@@ -691,6 +690,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
     unset($lang->searchObjects['build']);
     unset($lang->searchObjects['testtask']);
     unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['caselib']);
     unset($lang->searchObjects['testreport']);
 }
 
@@ -727,6 +727,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
     unset($lang->searchObjects['release']);
     unset($lang->searchObjects['productplan']);
     unset($lang->searchObjects['testsuite']);
+    unset($lang->searchObjects['caselib']);
     unset($lang->searchObjects['testreport']);
 }
 
@@ -760,7 +761,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menu->testcase  = '用例|testcase|index';
     $lang->menu->testsuite = '套件|testsuite|index';
     $lang->menu->testtask  = '測試單|testtask|index';
-    $lang->menu->caselib   = '用例庫|testsuite|library';
+    $lang->menu->caselib   = '用例庫|caselib|browse';
 
     $lang->menuOrder[6]  = 'bug';
     $lang->menuOrder[7]  = 'testcase';
@@ -847,9 +848,9 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Adjust sub menu of caselib module. */
     $lang->caselib->menu = new stdclass();
-    $lang->caselib->menu->all  = '所有|testsuite|library|libID=%s&browseType=all';
-    $lang->caselib->menu->wait = '待評審|testsuite|library|libID=%s&browseType=wait';
-    $lang->caselib->menu->view = '概況|testsuite|libview|libID=%s';
+    $lang->caselib->menu->all  = '所有|caselib|browse|libID=%s&browseType=all';
+    $lang->caselib->menu->wait = '待評審|caselib|browse|libID=%s&browseType=wait';
+    $lang->caselib->menu->view = '概況|caselib|view|libID=%s';
 
     $lang->caselib->menuOrder[5]  = 'lib';
     $lang->caselib->menuOrder[10] = 'all';
@@ -882,6 +883,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->menugroup->case       = 'testcase';
     $lang->menugroup->testtask   = 'testtask';
     $lang->menugroup->testsuite  = 'testsuite';
+    $lang->menugroup->caselib    = 'caselib';
     $lang->menugroup->testreport = 'testtask';
     $lang->menugroup->build      = 'product';
 

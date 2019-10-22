@@ -39,6 +39,7 @@ $lang->tree->addChild           = "Add Child Module";
 $lang->tree->confirmDelete      = 'Do you want to delete this module and its child modules?';
 $lang->tree->confirmDeleteLine  = "Do you want to delete this {$lang->productCommon} line?";
 $lang->tree->confirmRoot        = "Any changes to the {$lang->productCommon} will change the stories, bugs, cases of {$lang->productCommon} it belongs to, as well as the linkage of {$lang->projectCommon} and {$lang->productCommon}, which is dangerous. Do you want to change it?";
+$lang->tree->confirmRoot4Doc    = "Any changes to the library will change the document of library it belongs to, which is dangerous. Do you want to change it?";
 $lang->tree->successSave        = 'Saved.';
 $lang->tree->successFixed       = 'Fixed.';
 $lang->tree->repeatName         = 'The name "%s" exists!';

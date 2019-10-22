@@ -643,7 +643,7 @@ class baseValidater
 
         $var      = (string) $var;
         $evils    = array('eval', 'exec', 'passthru', 'proc_open', 'shell_exec', 'system', '$$', 'include', 'require', 'assert');
-        $replaces = array('e v a l', 'e x e c', ' p a s s t h r u', ' p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
+        $replaces = array('e v a l', 'e x e c', 'p a s s t h r u', 'p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
         $var      = str_ireplace($evils, $replaces, $var);
 
         return $var;
@@ -666,12 +666,12 @@ class baseValidater
         {
             $var      = (string) $var;
             $evils    = array('appendchild(', 'createElement(', 'xss.re', 'onfocus', 'onclick', 'innerHTML', 'replaceChild(', 'html(', 'append(', 'appendTo(', 'prepend(', 'prependTo(', 'after(', 'insertBefore', 'before(', 'replaceWith(');
-            $replaces = array('a p p e n d c h i l d (', 'c r e a t e E l e  m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e(', 'b e f o r e (', 'r e p l a c e W i t h (');
+            $replaces = array('a p p e n d c h i l d (', 'c r e a t e E l e m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e (', 'b e f o r e (', 'r e p l a c e W i t h (');
             $var      = str_ireplace($evils, $replaces, $var);
         }
 
         /* Process like 'javascript:' */
-        $var = preg_replace('/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/Ui', 'j a v a s c r i p t :', $var);
+        $var = preg_replace('/j\s*a\s*v\s*a\s*s\s*c\s*r\s*i\s*p\s*t\s*:/Ui', "j a v a s c r i p t :", $var);
 
         return $var;
     }
@@ -718,6 +718,27 @@ class baseValidater
 
             if(!self::checkByRule($value, $rules)) unset($var[$key]);
         }
+        return $var;
+    }
+
+    /**
+     * Replace space to i tag.
+     * 
+     * @param  string    $var 
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function replaceSpace2Tag($var)
+    {
+        $replacedTrojan = array('e v a l', 'e x e c', 'p a s s t h r u', 'p r o c _ o p e n', 's h e l l _ e x e c', 's y s t e m', '$ $', 'i n c l u d e', 'r e q u i r e', 'a s s e r t');
+        $replacedXSS    = array('a p p e n d c h i l d (', 'c r e a t e E l e m e n t (', 'x s s . r e', 'o n f o c u s', 'o n c l i c k', 'i n n e r H T M L', 'r e p l a c e C h i l d (', 'h t m l (', 'a p p e n d (', 'a p p e n d T o (', 'p r e p e n d (', 'p r e p e n d T o (', 'a f t e r (', 'i n s e r t B e f o r e (', 'b e f o r e (', 'r e p l a c e W i t h (');
+
+        $replacsTrojan = array('e<i></i>v<i></i>a<i></i>l', 'e<i></i>x<i></i>e<i></i>c', 'p<i></i>a<i></i>s<i></i>s<i></i>t<i></i>h<i></i>r<i></i>u', 'p<i></i>r<i></i>o<i></i>c<i></i>_<i></i>o<i></i>p<i></i>e<i></i>n', 's<i></i>h<i></i>e<i></i>l<i></i>l<i></i>_<i></i>e<i></i>x<i></i>e<i></i>c', 's<i></i>y<i></i>s<i></i>t<i></i>e<i></i>m', '$<i></i>$', 'i<i></i>n<i></i>c<i></i>l<i></i>u<i></i>d<i></i>e', 'r<i></i>e<i></i>q<i></i>u<i></i>i<i></i>r<i></i>e', 'a<i></i>s<i></i>s<i></i>e<i></i>r<i></i>t');
+        $replacsXSS    = array('a<i></i>p<i></i>p<i></i>e<i></i>n<i></i>d<i></i>c<i></i>h<i></i>i<i></i>l<i></i>d<i></i>(', 'c<i></i>r<i></i>e<i></i>a<i></i>t<i></i>e<i></i>E<i></i>l<i></i>e<i></i>m<i></i>e<i></i>n<i></i>t<i></i>(', 'x<i></i>s<i></i>s<i></i>.<i></i>r<i></i>e', 'o<i></i>n<i></i>f<i></i>o<i></i>c<i></i>u<i></i>s', 'o<i></i>n<i></i>c<i></i>l<i></i>i<i></i>c<i></i>k', 'i<i></i>n<i></i>n<i></i>e<i></i>r<i></i>H<i></i>T<i></i>M<i></i>L', 'r<i></i>e<i></i>p<i></i>l<i></i>a<i></i>c<i></i>e<i></i>C<i></i>h<i></i>i<i></i>l<i></i>d<i></i>(', 'h<i></i>t<i></i>m<i></i>l<i></i>(', 'a<i></i>p<i></i>p<i></i>e<i></i>n<i></i>d<i></i>(', 'a<i></i>p<i></i>p<i></i>e<i></i>n<i></i>d<i></i>T<i></i>o<i></i>(', 'p<i></i>r<i></i>e<i></i>p<i></i>e<i></i>n<i></i>d<i></i>(', 'p<i></i>r<i></i>e<i></i>p<i></i>e<i></i>n<i></i>d<i></i>T<i></i>o<i></i>(', 'a<i></i>f<i></i>t<i></i>e<i></i>r<i></i>(', 'i<i></i>n<i></i>s<i></i>e<i></i>r<i></i>t<i></i>B<i></i>e<i></i>f<i></i>o<i></i>r<i></i>e<i></i>(', 'b<i></i>e<i></i>f<i></i>o<i></i>r<i></i>e<i></i>(', 'r<i></i>e<i></i>p<i></i>l<i></i>a<i></i>c<i></i>e<i></i>W<i></i>i<i></i>t<i></i>h<i></i>(', 'j<i></i>a<i></i>v<i></i>a<i></i>s<i></i>c<i></i>r<i></i>i<i></i>p<i></i>t<i></i>:');
+
+        $var = str_ireplace($replacedTrojan, $replacsTrojan, $var);
+        $var = str_ireplace($replacedXSS, $replacsXSS, $var);
         return $var;
     }
 
@@ -1008,6 +1029,9 @@ class baseFixer
             if(!isset($this->stripedFields[$fieldName]) and (!defined('RUN_MODE') or RUN_MODE != 'admin'))
             {
                 $this->data->$fieldName = self::dataStripTags($this->data->$fieldName);
+
+                /* Code for bug #2721. */
+                $this->data->$fieldName = baseValidater::replaceSpace2Tag($this->data->$fieldName);
             }
             $this->stripedFields[$fieldName] = $fieldName;
         }

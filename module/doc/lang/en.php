@@ -52,7 +52,7 @@ $lang->doc->retrack        = 'Retrack';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
-$lang->doc->fast           = 'Qucik Entry';
+$lang->doc->fast           = 'Quick Entry';
 $lang->doc->allDoc         = 'All Documents';
 $lang->doc->openedByMe     = 'My';
 $lang->doc->orderByOpen    = 'Recent Added';
@@ -78,6 +78,8 @@ $lang->doc->editType         = 'Edit';
 $lang->doc->deleteType       = 'Delete';
 $lang->doc->addType          = 'Add';
 $lang->doc->childType        = 'Categories';
+$lang->doc->editType         = 'Manage Category';
+$lang->doc->deleteType       = 'Delete Category';
 $lang->doc->collect          = 'Add Favorite';
 $lang->doc->cancelCollection = 'Remove Favorite';
 $lang->doc->deleteFile       = 'Delete File';

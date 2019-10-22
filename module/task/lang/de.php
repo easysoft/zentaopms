@@ -199,6 +199,7 @@ $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 $lang->task->error = new stdclass();
 $lang->task->error->consumedNumber   = '"Verbraucht" muss eine Zahl sein.';
 $lang->task->error->estimateNumber   = '"Stunden" müss eine Zahl sein.';
+$lang->task->error->recordMinus      = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall    = '"Verbraucht" muss larger than before.';
 $lang->task->error->consumedThisTime = 'Bitte geben Sie die Stunden an';
 $lang->task->error->left             = 'Bitte geben Sie die verbleibenden Stunden an"';
@@ -207,6 +208,7 @@ $lang->task->error->skipClose        = 'Aufgabe: %s ist nicht “Erledigt” ode
 $lang->task->error->consumed         = 'Aufgabe: %s Hour must be more than 0. Ignore changes to this Task.';
 $lang->task->error->assignedTo       = 'Mehere Tasks können nicht zugewisen werden, da die Benutzer nicht teil des Teams sind.';
 $lang->task->error->consumedEmpty    = '"Current Cost" should not be empty.';
+$lang->task->error->deadlineSmall    = '"Deadline" must be greater than "StartDate".';
 
 /* Report. */
 $lang->task->report = new stdclass();
