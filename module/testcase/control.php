@@ -1433,7 +1433,7 @@ class testcase extends control
 
         $this->testcase->setMenu($this->products, $productID, $branch);
 
-        $libraries = $this->loadModel('testsuite')->getLibraries();
+        $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries))
         {
             echo js::alert($this->lang->testcase->noLibrary);
@@ -1466,7 +1466,7 @@ class testcase extends control
         $this->view->libID      = $libID;
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
-        $this->view->cases      = $this->testsuite->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
+        $this->view->cases      = $this->loadModel('testsuite')->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
         $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
