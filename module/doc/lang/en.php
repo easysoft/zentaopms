@@ -52,7 +52,7 @@ $lang->doc->retrack        = 'Retrack';
 
 $lang->doc->moduleDoc      = 'By Module';
 $lang->doc->searchDoc      = 'Search';
-$lang->doc->fast           = 'Qucik Entry';
+$lang->doc->fast           = 'Quick Entry';
 $lang->doc->allDoc         = 'All Documents';
 $lang->doc->openedByMe     = 'My';
 $lang->doc->orderByOpen    = 'Recent Added';

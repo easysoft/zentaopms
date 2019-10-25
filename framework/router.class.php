@@ -39,6 +39,15 @@ class router extends baseRouter
     public $rawMethod;
 
     /**
+     * 请求的原始方法名。
+     * The requested params parsed from a URL.
+     *
+     * @var array
+     * @access public
+     */
+    public $rawParams;
+
+    /**
      * 标记是否是工作流
      * Whether the tag is a workflow
      *
@@ -337,11 +346,16 @@ class router extends baseRouter
                 $this->loadModuleConfig('workflowaction');
 
                 $moduleName = 'flow';
+                $methodName = $this->methodName;
                 /*
-                 * 工作流中除了browse、create、edit、view、delete、export外其他的方法都调用operate方法来执行。
-                 * In addition to browse, create, edit, view, delete and export, all methods in the workflow call the operate method to execute.
+                 * 工作流中除了内置方法外的方法，如果是批量操作调用batchOperate方法，其它操作调用operate方法来执行。
+                 * In addition to the built-in methods in the workflow, if the batch operation calls the batchOperate method, other operations call the operate method to execute.
                  */
-                $methodName = in_array($this->methodName, $this->config->workflowaction->default->actions) ? $this->methodName : 'operate';
+                if(!in_array($this->methodName, $this->config->workflowaction->default->actions))
+                {
+                    if($action->type == 'single') $methodName = 'operate';
+                    if($action->type == 'batch')  $methodName = 'batchOperate';
+                }
 
                 $this->setFlowURI($moduleName, $methodName);
             }
@@ -388,12 +402,13 @@ class router extends baseRouter
             $params = array_slice($params, 2); // $params = array(1);
 
             /* Prepend other params. */
-            if($methodName == 'operate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
-            array_unshift($params, $this->rawModule);                              // $params = array($module, 'close', 1);
-            array_unshift($params, $methodName);                                   // $params = array('operate', $module, 'close', 1);
-            array_unshift($params, $moduleName);                                   // $params = array('flow', 'operate', $module, 'close', 1);
+            if($methodName == 'operate')      array_unshift($params, $this->rawMethod); // $params = array('close', 1);
+            if($methodName == 'batchOperate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
+            array_unshift($params, $this->rawModule);                                   // $params = array($module, 'close', 1);
+            array_unshift($params, $methodName);                                        // $params = array('operate', $module, 'close', 1);
+            array_unshift($params, $moduleName);                                        // $params = array('flow', 'operate', $module, 'close', 1);
 
-            $this->URI = implode($this->config->requestFix, $params);              // $this->URI = flow-operate-$module-close-1.html;
+            $this->URI = implode($this->config->requestFix, $params);                   // $this->URI = flow-operate-$module-close-1.html;
         }
         else
         {
@@ -479,6 +494,7 @@ class router extends baseRouter
         /* The display parameter is used to mark whether the request comes from the card display page of the ZenTao client. It should be deleted here to avoid affecting the method call. */
         unset($passedParams['display']);
 
-        return parent::mergeParams($defaultParams, $passedParams);
+        $this->rawParams = parent::mergeParams($defaultParams, $passedParams);
+        return $this->rawParams;
     }
 }
