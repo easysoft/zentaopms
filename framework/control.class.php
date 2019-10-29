@@ -21,6 +21,37 @@ include dirname(__FILE__) . '/base/control.class.php';
 class control extends baseControl
 {
     /**
+     * Set requiredFields for workflow. 
+     * 
+     * @param  string $moduleName 
+     * @param  string $methodName 
+     * @param  string $appName 
+     * @access public
+     * @return void
+     */
+    public function __construct($moduleName = '', $methodName = '', $appName = '')
+    {
+        parent::__construct($moduleName, $methodName, $appName);
+
+        if(!isset($this->config->bizVersion)) return false;
+        /* Code for task #9224. Set requiredFields for workflow. */
+        $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+        foreach($fields as $field)
+        {
+            if($field->buildin or !$field->show or !isset($layouts[$field->field])) continue;
+            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false)
+            {
+                if(!isset($this->config->{$this->moduleName})) $this->config->{$this->moduleName} = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->{$this->methodName})) $this->config->{$this->moduleName}->{$this->methodName} = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $this->config->{$this->moduleName}->{$this->methodName}->requiredFields = '';
+                $this->config->{$this->moduleName}->{$this->methodName}->requiredFields .= ",{$field->field}";
+            }
+        }
+    }
+
+    /**
      * 企业版部分功能是从然之合并过来的。然之代码中调用loadModel方法时传递了一个非空的appName，在禅道中会导致错误。
      * 调用父类的loadModel方法来避免这个错误。
      * Some codes merged from ranzhi called the function loadModel with a non-empty appName which causes an error in zentao.
