@@ -951,7 +951,7 @@ class treeModel extends model
      */
     public function createCaseLibLink($type, $module)
     {
-        return html::a(helper::createLink('testsuite', 'library', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('caselib', 'browse', "root={$module->root}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**

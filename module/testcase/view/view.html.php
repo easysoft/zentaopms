@@ -136,7 +136,7 @@
             <?php if($isLibCase):?>
             <tr>
               <th class='thWidth'><?php echo $lang->testcase->lib;?></th>
-              <td><?php if(!common::printLink('testsuite', 'library', "libID=$case->lib", $libName)) echo $libName;?></td>
+              <td><?php if(!common::printLink('caselib', 'browse', "libID=$case->lib", $libName)) echo $libName;?></td>
             </tr>
             <?php else:?>
             <tr>
