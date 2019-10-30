@@ -43,12 +43,12 @@ $useGuest = $this->app->user->account == 'guest';
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
-                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh . $lang->block->nbsp . $lang->block->common;?></a></li>
+                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh;?></a></li>
                 <?php if(!$useGuest):?>
-                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module");?>" class='edit-block' data-title='<?php echo $block->title;?>' ><?php echo $lang->edit . $lang->block->nbsp . $lang->block->common;?></a></li>                
-                <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='hidden-panel'><?php echo $lang->block->hidden . $lang->block->nbsp . $lang->block->common;?></a></li>
+                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module");?>" class='edit-block' data-title='<?php echo $block->title;?>' ><?php echo $lang->edit;?></a></li>
+                <li><a href='javascript:deleteBlock(<?php echo $index;?>);' class='hidden-panel'><?php echo $lang->block->hidden;?></a></li>
                 <li><?php if($this->app->user->admin):?>
-                <?php echo html::a($this->createLink('block','close',"blockID={$block->id}"),$lang->block->closeForever,'hiddenwin',"class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
+                <?php echo html::a($this->createLink('block','close',"blockID={$block->id}"), $lang->block->closeForever, 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                 <?php endif;?></li>
                 <?php endif;?>
                 <li class="divider"></li>
@@ -79,10 +79,10 @@ $useGuest = $this->app->user->account == 'guest';
             <li class='dropdown'>
               <a href='javascript:;' data-toggle='dropdown' class='panel-action'><i class='icon icon-ellipsis-v'></i></a>
               <ul class='dropdown-menu pull-right'>
-                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh . $lang->block->nbsp . $lang->block->common ?></a></li>
+                <li><a href='javascript:;' class='refresh-panel'><i class='icon-repeat'></i> <?php echo $lang->block->refresh;?></a></li>
                 <?php if(!$useGuest):?>
-                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' ><?php echo $lang->edit . $lang->block->nbsp . $lang->block->common; ?></a></li>
-                <li><a href='javascript:deleteBlock(<?php echo $index?>);' class='hidden-panel'><?php echo $lang->block->hidden . $lang->block->nbsp . $lang->block->common; ?></a></li>
+                <li><a data-toggle='modal' href="<?php echo $this->createLink("block", "admin", "id=$block->id&module=$module"); ?>" class='edit-block' data-title='<?php echo $block->title; ?>' ><?php echo $lang->edit; ?></a></li>
+                <li><a href='javascript:deleteBlock(<?php echo $index?>);' class='hidden-panel'><?php echo $lang->block->hidden; ?></a></li>
                 <?php if($this->app->user->admin):?>
                 <li><?php echo html::a($this->createLink('block', 'close', "blockID={$block->id}"), $lang->block->closeForever, 'hiddenwin', "class='close-block' onclick=\"return confirm('{$lang->block->confirmClose}')\"")?>
                 <?php endif;?>
