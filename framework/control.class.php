@@ -36,15 +36,11 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
         /* Code for task #9224. Set requiredFields for workflow. */
         $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
-        $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
         $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
         foreach($fields as $field)
         {
-            if(isset($exportFields[$field->field]) and isset($this->config->{$this->moduleName}) and isset($this->config->{$this->moduleName}->exportFields))
-            {
-                $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
-            }
 
             if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false)
             {
@@ -53,6 +49,12 @@ class control extends baseControl
                 if(!isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $this->config->{$this->moduleName}->{$this->methodName}->requiredFields = '';
                 $this->config->{$this->moduleName}->{$this->methodName}->requiredFields .= ",{$field->field}";
             }
+        }
+
+        if(isset($this->config->{$this->moduleName}) and isset($this->config->{$this->moduleName}->exportFields))
+        {
+            $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
+            foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
         }
     }
 
