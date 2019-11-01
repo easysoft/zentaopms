@@ -21,7 +21,7 @@
       <table class='table table-form'>
         <tr>
           <th class='thWidth'><?php echo $lang->webhook->type;?></th>
-          <td><?php echo html::select('type', $lang->webhook->typeList, $webhook->type, "class='form-control'");?></td>
+          <td><?php echo zget($lang->webhook->typeList, $webhook->type);?></td>
           <td></td>
         </tr>
         <tr>
@@ -34,6 +34,12 @@
           <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
           <td><?php echo zget($lang->webhook->note->typeList, $webhook->type);?></td>
         </tr>
+        <?php if($webhook->type == 'dingding'):?>
+        <tr id='secretTR'>
+          <th><?php echo $lang->webhook->secret;?></th>
+          <td><?php echo html::input('secret', $webhook->secret, "class='form-control'");?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>
           <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>

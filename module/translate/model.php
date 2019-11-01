@@ -521,7 +521,22 @@ class translateModel extends model
                     $value       = $translation->value;
                     if($this->checkNeedTranslate($value) and strpos($value, 'array(') === false)
                     {
-                        if(strpos($value, '.') === false)
+                        if(strpos($value, '<<<') === 0)
+                        {
+                            if(strpos($value, "\n") !== false)
+                            {
+                                $value = str_replace("\r", "", $value);
+                            }
+                            elseif(strpos($value, "\r") !== false)
+                            {
+                                $value = str_replace("\r", "\n", $value);
+                            }
+                            else
+                            {
+                                $value = "'" . addslashes($value) . "'";
+                            }
+                        }
+                        elseif(strpos($value, '.') === false)
                         {
                             if(strpos($value, '$lang->projectCommon') !== false or strpos($value, '$lang->productCommon') !== false)
                             {
@@ -534,7 +549,14 @@ class translateModel extends model
                         }
                         elseif(strpos($value, "'") === false and strpos($value, '"') === false)
                         {
-                            $value = "'" . addslashes($value) . "'";
+                            if(strpos($value, '$lang->projectCommon') !== false or strpos($value, '$lang->productCommon') !== false)
+                            {
+                                $value = addslashes($value);
+                            }
+                            else
+                            {
+                                $value = "'" . addslashes($value) . "'";
+                            }
                         }
                         else
                         {

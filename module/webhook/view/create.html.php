@@ -35,6 +35,10 @@
           <td><?php echo html::input('url', '', "class='form-control'");?></td>
           <td id='urlNote'><?php echo $lang->webhook->note->typeList['default'];?></td>
         </tr>
+        <tr id='secretTR'>
+          <th><?php echo $lang->webhook->secret;?></th>
+          <td><?php echo html::input('secret', '', "class='form-control'");?></td>
+        </tr>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>
           <td><?php echo html::input('domain', common::getSysURL(), "class='form-control'");?></td>

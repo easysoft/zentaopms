@@ -95,11 +95,17 @@ class datatableModel extends model
         {
             foreach($setting as $key => $set)
             {
+                if(!isset($fieldList[$set->id]))
+                {
+                    unset($setting[$key]);
+                    continue;
+                }
                 if($this->session->currentProductType === 'normal' and $set->id === 'branch')
                 {
                     unset($setting[$key]);
                     continue;
                 }
+
                 if($set->id == 'actions') $set->width = $fieldList[$set->id]['width'];
                 $set->title = $fieldList[$set->id]['title'];
                 $set->sort  = isset($fieldList[$set->id]['sort']) ? $fieldList[$set->id]['sort'] : 'yes';

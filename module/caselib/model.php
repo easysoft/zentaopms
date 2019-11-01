@@ -416,6 +416,7 @@ class caselibModel extends model
         }
 
         $cases = array();
+        $line  = 1;
         foreach($data->lib as $key => $lib)
         {
             $caseData = new stdclass();
@@ -437,11 +438,12 @@ class caselibModel extends model
                 foreach($requiredFields as $requiredField)
                 {
                     $requiredField = trim($requiredField);
-                    if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $key, $this->lang->testcase->$requiredField);
+                    if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $line, $this->lang->testcase->$requiredField);
                 }
             }
 
             $cases[$key] = $caseData;
+            $line++;
         }
         if(dao::isError()) die(js::error(dao::getError()));
 
