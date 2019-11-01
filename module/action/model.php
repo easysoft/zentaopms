@@ -303,6 +303,17 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
+            /* Code for cmmi. */
+            elseif($actionName == 'createrequirements')
+            {    
+                $names = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($action->extra)->fetchPairs('id', 'title');
+                $action->extra = '';
+                if($names)
+                {    
+                    foreach($names as $id => $name) $action->extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id " . $name) . ', ' : "#$id " . $name . ', ';
+                }    
+                $action->extra = trim(trim($action->extra), ',');
+            }
             elseif($actionName == 'totask' or $actionName == 'linkchildtask' or $actionName == 'unlinkchildrentask' or $actionName == 'linkparenttask' or $actionName == 'unlinkparenttask' or $actionName == 'deletechildrentask')
             {
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
