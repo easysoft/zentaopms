@@ -271,9 +271,9 @@ class basePager
      * @access public
      * @return void
      */
-    public function setParams()
+    public function setParams($params = array())
     {
-        $this->params = $this->app->getParams();
+        $this->params = $params ? $params : $this->app->getParams();
         foreach($this->params as $key => $value)
         {
             if(strtolower($key) == 'rectotal')   $this->params[$key] = $this->recTotal;

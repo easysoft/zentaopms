@@ -4,6 +4,7 @@ $(function()
     {
         var type = $(this).val();
         $('#sendTypeTR').toggle(type != 'dingding');
+        $('#secretTR').toggle(type == 'dingding');
         $('#paramsTR').toggle(type != 'bearychat' && type != 'dingding');
         $('#urlNote').html(urlNote[type]);
     });
@@ -33,5 +34,6 @@ $(function()
     });
 
     $('#name').focus();
+    $('#type').change();
     $('#paramstext').attr('disabled', 'disabled');
 });

@@ -347,7 +347,7 @@ $(function()
         scaleFontColor: '#838A9D',
         tooltipXPadding: 10,
         tooltipYPadding: 10,
-        multiTooltipTitleTemplate: '<%= label %> 工时 /h',
+        multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->project->workHour;?> /h',
         multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
     });
 });

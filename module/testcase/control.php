@@ -497,12 +497,12 @@ class testcase extends control
         $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
-            $libraries = $this->loadModel('testsuite')->getLibraries();
-            $this->testsuite->setLibMenu($libraries, $case->lib);
+            $libraries = $this->loadModel('caselib')->getLibraries();
+            $this->caselib->setLibMenu($libraries, $case->lib);
             $this->lang->testcase->menu = $this->lang->testsuite->menu;
 
             $this->view->title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
-            $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$case->lib"), $libraries[$case->lib]);
+            $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
 
             $this->view->libName = $libraries[$case->lib];
         }
@@ -596,13 +596,13 @@ class testcase extends control
         $isLibCase = ($case->lib and empty($case->product));
         if($isLibCase)
         {
-            $libraries = $this->loadModel('testsuite')->getLibraries();
-            $this->testsuite->setLibMenu($libraries, $case->lib);
+            $libraries = $this->loadModel('caselib')->getLibraries();
+            $this->caselib->setLibMenu($libraries, $case->lib);
             $this->lang->testcase->menu = $this->lang->testsuite->menu;
             if($this->config->global->flow == 'onlyTest') $this->lang->menugroup->testcase = 'caselib';
 
             $title      = "CASE #$case->id $case->title - " . $libraries[$case->lib];
-            $position[] = html::a($this->createLink('testsuite', 'library', "libID=$case->lib"), $libraries[$case->lib]);
+            $position[] = html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libraries[$case->lib]);
 
             $this->view->libID     = $case->lib;
             $this->view->libName   = $libraries[$case->lib];
@@ -690,8 +690,8 @@ class testcase extends control
             if($type == 'lib')
             {
                 $libID     = $productID;
-                $libraries = $this->loadModel('testsuite')->getLibraries();
-                $this->testsuite->setLibMenu($libraries, $libID);
+                $libraries = $this->loadModel('caselib')->getLibraries();
+                $this->caselib->setLibMenu($libraries, $libID);
                 $this->lang->testcase->menu = $this->lang->testsuite->menu;
 
                 /* Set modules. */
@@ -700,7 +700,7 @@ class testcase extends control
 
                 $this->view->modules    = $modules;
                 $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
-                $this->view->position[] = html::a($this->createLink('testsuite', 'library', "libID=$libID"), $libraries[$libID]);
+                $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
             }
             else
             {
@@ -1433,7 +1433,7 @@ class testcase extends control
 
         $this->testcase->setMenu($this->products, $productID, $branch);
 
-        $libraries = $this->loadModel('testsuite')->getLibraries();
+        $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries))
         {
             echo js::alert($this->lang->testcase->noLibrary);
@@ -1466,7 +1466,7 @@ class testcase extends control
         $this->view->libID      = $libID;
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
-        $this->view->cases      = $this->testsuite->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
+        $this->view->cases      = $this->loadModel('testsuite')->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
         $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
@@ -1622,6 +1622,7 @@ class testcase extends control
                 }
             }
 
+            if(empty($case->title)) continue;
             $caseData[$row] = $case;
             unset($case);
         }

@@ -1046,6 +1046,7 @@ class testcaseModel extends model
         $storyVersionPairs = $this->story->getVersions($data->story);
 
         $cases = array();
+        $line  = 1;
         foreach($data->product as $key => $product)
         {
             $caseData = new stdclass();
@@ -1068,11 +1069,12 @@ class testcaseModel extends model
                 foreach($requiredFields as $requiredField)
                 {
                     $requiredField = trim($requiredField);
-                    if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $key, $this->lang->testcase->$requiredField);
+                    if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $line, $this->lang->testcase->$requiredField);
                 }
             }
 
             $cases[$key] = $caseData;
+            $line++;
         }
         if(dao::isError()) die(js::error(dao::getError()));
 

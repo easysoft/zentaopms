@@ -39,6 +39,15 @@ class router extends baseRouter
     public $rawMethod;
 
     /**
+     * 请求的原始方法名。
+     * The requested params parsed from a URL.
+     *
+     * @var array
+     * @access public
+     */
+    public $rawParams;
+
+    /**
      * 标记是否是工作流
      * Whether the tag is a workflow
      *
@@ -485,6 +494,7 @@ class router extends baseRouter
         /* The display parameter is used to mark whether the request comes from the card display page of the ZenTao client. It should be deleted here to avoid affecting the method call. */
         unset($passedParams['display']);
 
-        return parent::mergeParams($defaultParams, $passedParams);
+        $this->rawParams = parent::mergeParams($defaultParams, $passedParams);
+        return $this->rawParams;
     }
 }

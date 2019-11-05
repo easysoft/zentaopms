@@ -70,9 +70,16 @@ class pager extends basePager
      * @access public
      * @return void
      */
-    public function setParams()
+    public function setParams($params = array())
     {
-        parent::setParams();
+        if(isset($this->app->rawParams))
+        {
+            parent::setParams($this->app->rawParams);
+        }
+        else
+        {
+            parent::setParams();
+        }
 
         /* If the original module name and method name of the request are set, the module parameter is removed. */
         if($this->app->isFlow) unset($this->params['module']);

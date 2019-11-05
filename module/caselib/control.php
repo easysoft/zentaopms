@@ -707,6 +707,7 @@ class caselib extends control
                 }
             }
 
+            if(empty($case->title)) continue;
             $caseData[$row] = $case;
             unset($case);
         }

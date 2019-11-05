@@ -397,8 +397,8 @@ $lang->block->gridOptions[8] = 'Links';
 $lang->block->gridOptions[4] = 'Rechts';
 
 $lang->block->flowchart   = array();
-$lang->block->flowchart[] = array('Administrator', 'Abteilung erstellen', 'Benutzer erstellen', 'Rechte pflegen');
-$lang->block->flowchart[] = array($lang->productCommon . ' Besitzer', $lang->productCommon . ' erstellen', 'Module pflegen', 'Pläne pflegen', 'Storys pflegen', 'Release erstellen');
-$lang->block->flowchart[] = array('Scrum Master', $lang->projectCommon  . ' erstellen', 'Teams pflegen', $lang->productCommon . ' verknüpfen', 'Storys verknüpfen', 'Aufgaben aufteilen');
-$lang->block->flowchart[] = array('Entwickler', 'Aufgabe/Bugs anfordern', 'Update Status', 'Aufgaben/Bugs abschließen');
-$lang->block->flowchart[] = array('QS Team', 'Fälle erstellen', 'Fälle ausführen', 'Bug Berichte', 'Bugs überprüfen', 'Bugs schließen');
+$lang->block->flowchart['admin']   = array('Administrator', 'Abteilung erstellen', 'Benutzer erstellen', 'Rechte pflegen');
+$lang->block->flowchart['product'] = array($lang->productCommon . ' Besitzer', $lang->productCommon . ' erstellen', 'Module pflegen', 'Pläne pflegen', 'Storys pflegen', 'Release erstellen');
+$lang->block->flowchart['project'] = array('Scrum Master', $lang->projectCommon  . ' erstellen', 'Teams pflegen', $lang->productCommon . ' verknüpfen', 'Storys verknüpfen', 'Aufgaben aufteilen');
+$lang->block->flowchart['dev']     = array('Entwickler', 'Aufgabe/Bugs anfordern', 'Update Status', 'Aufgaben/Bugs abschließen');
+$lang->block->flowchart['tester']  = array('QS Team', 'Fälle erstellen', 'Fälle ausführen', 'Bug Berichte', 'Bugs überprüfen', 'Bugs schließen');

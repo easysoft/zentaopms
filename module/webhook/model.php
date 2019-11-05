@@ -379,10 +379,21 @@ class webhookModel extends model
     {
         if(!extension_loaded('curl')) die(helper::jsonEncode($this->lang->webhook->error->curl));
 
-        $header[] = "Content-Type: {$webhook->contentType};charset=utf-8";
+        $contentType = "Content-Type: {$webhook->contentType};charset=utf-8";
+        if($webhook->type == 'dingding') $contentType = "Content-Type: application/json";
+        $header[] = $contentType;
+
+        $url = $webhook->url;
+        if($webhook->type == 'dingding' and $webhook->secret)
+        {
+            $timestamp = time() * 1000;
+            $sign = $timestamp . "\n" . $webhook->secret;
+            $sign = urlencode(base64_encode(hash_hmac('sha256', $sign, $webhook->secret, true)));
+            $url .= "&timestamp={$timestamp}&sign={$sign}";
+        }
 
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $webhook->url);
+        curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_POST, 1);
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
