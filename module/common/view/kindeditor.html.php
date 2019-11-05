@@ -5,7 +5,7 @@ $method = $this->methodName;
 if(!isset($config->$module->editor->$method)) return;
 $editor = $config->$module->editor->$method;
 $editor['id'] = explode(',', $editor['id']);
-$editorLangs  = array('en' => 'en', 'zh-cn' => 'zh_CN', 'zh-tw' => 'zh_TW');
+$editorLangs  = array('en' => 'en', 'zh-cn' => 'zh_CN', 'zh-tw' => 'zh_TW', 'ja' => 'ja');
 $editorLang   = isset($editorLangs[$app->getClientLang()]) ? $editorLangs[$app->getClientLang()] : 'en';
 
 /* set uid for upload. */
