@@ -373,7 +373,7 @@ $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = '用例|testcase|view|caseID=%s';
 $lang->action->label->testtask    = '测试单|testtask|view|caseID=%s';
 $lang->action->label->testsuite   = '测试套件|testsuite|view|suiteID=%s';
-$lang->action->label->caselib     = '用例库|testsuite|libview|libID=%s';
+$lang->action->label->caselib     = '用例库|caselib|view|libID=%s';
 $lang->action->label->todo        = '待办|todo|view|todoID=%s';
 $lang->action->label->doclib      = '文档库|doc|browse|libID=%s';
 $lang->action->label->doc         = '文档|doc|view|docID=%s';

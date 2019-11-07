@@ -621,7 +621,7 @@ class testcase extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
             if($case->lib and $case->fromCaseID)
             {
-                $libName    = $this->loadModel('testsuite')->getById($case->lib)->name;
+                $libName    = $this->loadModel('caselib')->getById($case->lib)->name;
                 $libModules = $this->tree->getOptionMenu($case->lib, 'caselib');
                 foreach($libModules as $moduleID => $moduleName)
                 {

@@ -373,7 +373,7 @@ $lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
 $lang->action->label->case        = 'Case|testcase|view|caseID=%s';
 $lang->action->label->testtask    = 'Request|testtask|view|caseID=%s';
 $lang->action->label->testsuite   = 'Test Suite|testsuite|view|suiteID=%s';
-$lang->action->label->caselib     = 'Case Library|testsuite|libview|libID=%s';
+$lang->action->label->caselib     = 'Case Library|caselib|view|libID=%s';
 $lang->action->label->todo        = 'Todo|todo|view|todoID=%s';
 $lang->action->label->doclib      = 'Doc Library|doc|browse|libID=%s';
 $lang->action->label->doc         = 'Doc|doc|view|docID=%s';
