@@ -451,7 +451,7 @@ class product extends control
         $this->session->set('productPlanList', $this->app->getURI(true));
 
         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
-        if(empty($product)) $this->locate($this->createLink('product', 'index'));
+        if(empty($product)) $this->locate($this->createLink('product', 'showErrorNone', 'fromModule=product'));
 
         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->roadmap;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
