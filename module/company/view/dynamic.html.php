@@ -56,7 +56,8 @@
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
-              <?php echo zget($users, $action->actor) . ' ' . $action->actionLabel;?>
+              <?php echo zget($users, $action->actor);?>
+              <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <?php echo html::a($action->objectLink, $action->objectName);?>
