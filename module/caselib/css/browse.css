@@ -1,4 +1,5 @@
 .w-220px{width:220px}
+#caseList tr th, #caseList tr td {white-space:nowrap; text-overflow:ellipsis; overflow: hidden;}
 
 #createActionMenu .dropdown-menu {width: 100%;}
 

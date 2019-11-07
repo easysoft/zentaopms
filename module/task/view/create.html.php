@@ -196,7 +196,7 @@
               <div class='table-col w-120px'>
                 <div class="input-group">
                   <span class="input-group-addon fix-border br-0"><?php echo $lang->task->estimateAB;?></span>
-                  <input type="text" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off"></td>
+                  <input type="text" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off">
                 </div>
               </div>
               <?php endif;?>

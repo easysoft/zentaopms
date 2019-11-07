@@ -20,7 +20,7 @@
     <table class='table table-form'>
       <tr>
         <th class='w-300px'><?php echo $lang->custom->scoreTitle;?></th>
-        <td class='w-120px text-center'>
+        <td class='w-150px text-center'>
           <?php $checkedKey = isset($config->global->scoreStatus) ? $config->global->scoreStatus : 0;?>
           <?php foreach($lang->custom->scoreStatus as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="score" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="score<?php echo $key;?>"><?php echo $value;?></label>
