@@ -155,6 +155,9 @@ $lang->user->tpl->title   = '模板名';
 $lang->user->tpl->content = '内容';
 $lang->user->tpl->public  = '是否公开';
 
+$lang->usertpl = new stdclass();
+$lang->usertpl->title = '模板名称';
+
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account     = '英文、数字和下划线的组合，三位以上';
 $lang->user->placeholder->password1   = '六位以上';
