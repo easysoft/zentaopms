@@ -834,6 +834,21 @@ class treeModel extends model
     }
 
     /**
+     * Create link of requirement for cmmi.
+     *
+     * @param  string $type
+     * @param  object $module
+     * @param  array  $extra
+     * @access public
+     * @return string
+     */
+    public function createRequirementLink($type, $module, $extra)
+    {    
+        $projectID = $extra['projectID'];
+        return html::a(helper::createLink('project', 'requirement', "projectID={$projectID}&orderBy=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+    }
+
+    /**
      * Create link of a doc.
      *
      * @param  object   $module
