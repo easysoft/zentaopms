@@ -155,6 +155,9 @@ $lang->user->tpl->title   = 'TPL Titre';
 $lang->user->tpl->content = 'Contenu';
 $lang->user->tpl->public  = 'Public';
 
+$lang->usertpl = new stdclass();
+$lang->usertpl->title = 'Template Name';
+
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account   = '>= 3 lettres, souligné et chiffres';
 $lang->user->placeholder->password1 = '>= 6 caractères';

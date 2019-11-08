@@ -397,8 +397,8 @@ $lang->block->gridOptions[8] = 'Left';
 $lang->block->gridOptions[4] = 'Right';
 
 $lang->block->flowchart   = array();
-$lang->block->flowchart[] = array('Administrateur', 'Ajoute Compartiment', 'Ajoute Utilisateurs', 'Administre Privilèges');
-$lang->block->flowchart[] = array($lang->productCommon . ' Owner', 'Ajoute ' . $lang->productCommon . '/Modules', 'Ajoute ' . $lang->projectCommon . 's', 'Ajoute Stories', 'Maintient Plans', 'Crée Releases');
-$lang->block->flowchart[] = array('Scrum Master', 'Ajoute ' . $lang->projectCommon . 's', 'Constitue Equipes', 'Associe ' . $lang->productCommon . 's', 'Rattache Stories', 'Crée/Affecte Tâches');
-$lang->block->flowchart[] = array('Développeurs', 'Réclament Tâches/Bugs', 'Effectuent Tâches', 'Corrigent Bugs', 'MàJ Statuts', 'Terminent Tâches/Bugs');
-$lang->block->flowchart[] = array('Testeurs', 'Rédigent CasTests', 'Jouent CasTests', 'Détectent Bugs', 'Vérifient Corrections', 'Ferment Bugs');
+$lang->block->flowchart['admin']   = array('Administrateur', 'Ajoute Compartiment', 'Ajoute Utilisateurs', 'Administre Privilèges');
+$lang->block->flowchart['product'] = array($lang->productCommon . ' Owner', 'Ajoute ' . $lang->productCommon . '/Modules', 'Ajoute ' . $lang->projectCommon . 's', 'Ajoute Stories', 'Maintient Plans', 'Crée Releases');
+$lang->block->flowchart['project'] = array('Scrum Master', 'Ajoute ' . $lang->projectCommon . 's', 'Constitue Equipes', 'Associe ' . $lang->productCommon . 's', 'Rattache Stories', 'Crée/Affecte Tâches');
+$lang->block->flowchart['dev']     = array('Développeurs', 'Réclament Tâches/Bugs', 'Effectuent Tâches', 'Corrigent Bugs', 'MàJ Statuts', 'Terminent Tâches/Bugs');
+$lang->block->flowchart['tester']  = array('Testeurs', 'Rédigent CasTests', 'Jouent CasTests', 'Détectent Bugs', 'Vérifient Corrections', 'Ferment Bugs');

@@ -19,6 +19,7 @@ $lang->webhook->url         = 'Hook地址';
 $lang->webhook->domain      = '禪道域名';
 $lang->webhook->contentType = '內容類型';
 $lang->webhook->sendType    = '發送方式';
+$lang->webhook->secret      = '密鑰';
 $lang->webhook->product     = "關聯{$lang->productCommon}";
 $lang->webhook->project     = "關聯{$lang->projectCommon}";
 $lang->webhook->params      = '參數';

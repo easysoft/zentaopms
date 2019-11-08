@@ -943,6 +943,7 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
   `name` varchar(50) NOT NULL,
   `url` varchar(255) NOT NULL,
   `domain` varchar(255) NOT NULL,
+  `secret` varchar(255) NOT NULL,
   `contentType` varchar(30) NOT NULL DEFAULT 'application/json',
   `sendType` enum('sync','async') NOT NULL DEFAULT 'sync',
   `products` text NOT NULL,
