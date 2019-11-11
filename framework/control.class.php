@@ -35,7 +35,7 @@ class control extends baseControl
 
         if(!isset($this->config->bizVersion)) return false;
         /* Code for task #9224. Set requiredFields for workflow. */
-        if($this->dbh)
+        if($this->dbh and $this->moduleName != 'upgrade' and $this->moduleName != 'install')
         {
             $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
             $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
