@@ -39,7 +39,7 @@ class router extends baseRouter
     public $rawMethod;
 
     /**
-     * 请求的原始方法名。
+     * 请求的原始参数。
      * The requested params parsed from a URL.
      *
      * @var array

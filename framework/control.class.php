@@ -21,7 +21,7 @@ include dirname(__FILE__) . '/base/control.class.php';
 class control extends baseControl
 {
     /**
-     * Set requiredFields for workflow. 
+     * Check requiredFields and set exportFields for workflow. 
      * 
      * @param  string $moduleName 
      * @param  string $methodName 
@@ -37,23 +37,9 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and $this->moduleName != 'upgrade' and $this->moduleName != 'install')
         {
-            $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
-            $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
-            $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+            $this->checkRequireFlowField();
 
-            foreach($fields as $field)
-            {
-
-                if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false)
-                {
-                    if(!isset($this->config->{$this->moduleName})) $this->config->{$this->moduleName} = new stdclass();
-                    if(!isset($this->config->{$this->moduleName}->{$this->methodName})) $this->config->{$this->moduleName}->{$this->methodName} = new stdclass();
-                    if(!isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $this->config->{$this->moduleName}->{$this->methodName}->requiredFields = '';
-                    $this->config->{$this->moduleName}->{$this->methodName}->requiredFields .= ",{$field->field}";
-                }
-            }
-
-            if(isset($this->config->{$this->moduleName}) and isset($this->config->{$this->moduleName}->exportFields))
+            if(isset($this->config->{$this->moduleName}) and isset($this->config->{$this->moduleName}->exportFields) and strpos($this->methodName, 'export') !== false)
             {
                 $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
                 foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
@@ -256,5 +242,40 @@ class control extends baseControl
         $moduleName = $this->moduleName;
 
         return $this->$moduleName->processStatus($module, $record);
+    }
+
+    /**
+     * Check require with flow field when post data.
+     * 
+     * @access public
+     * @return void
+     */
+    public function checkRequireFlowField()
+    {
+        if(!isset($this->config->bizVersion)) return false;
+        if(empty($_POST)) return false;
+
+        $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
+        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+        $requiredFields = '';
+        foreach($fields as $field)
+        {
+            if($field->buildin or !$field->show or !isset($layouts[$field->field])) continue;
+            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false) $requiredFields .= ",{$field->field}";
+        }
+
+        if($requiredFields)
+        {
+            if(isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $requiredFields .= ',' . $this->config->{$this->moduleName}->{$this->methodName}->requiredFields;
+
+            $message = array();
+            foreach(explode(',', $requiredFields) as $requiredField)
+            {
+                if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')$message[$requiredField] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+            }
+            if($message) $this->send(array('result' => 'fail', 'message' => $message));
+        }
     }
 }
