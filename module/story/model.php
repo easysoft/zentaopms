@@ -554,7 +554,6 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            $this->setStage($storyID);
             if($story->product != $oldStory->product)
             {
                 $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();

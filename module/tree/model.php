@@ -26,6 +26,30 @@ class treeModel extends model
     }
 
     /**
+     * Get module path by ID.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return object
+     */
+    public function getModulePathByID($moduleID)
+    {
+        $module  = $this->dao->findById((int)$moduleID)->from(TABLE_MODULE)->fetch();
+        if($module->parent == '0') return '/' . $module->name;
+
+        $path    = substr($module->path, 1, -1);
+        $modules =  $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in($path)->orderBy('grade')->fetchPairs();
+
+        $modulePath = '';
+        foreach($modules as $moduleName)
+        {
+            $modulePath .= '/' . $moduleName; 
+        }
+        
+        return $modulePath;
+    }
+
+    /**
      * Build the sql query.
      *
      * @param  int    $rootID

@@ -183,7 +183,7 @@
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+                    if(common::hasPriv('testcase', 'confirmStoryChange')) echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
                     echo ")";
                 }
                 ?>
@@ -223,14 +223,14 @@
                 if($case->version > $case->currentVersion and $from == 'testtask')
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromTesttask}>{$lang->testcase->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'confirmchange')) echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask')
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
-                    echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'confirmLibcaseChange')) echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'ignoreLibcaseChange')) echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 ?>
