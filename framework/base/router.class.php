@@ -597,7 +597,7 @@ class baseRouter
         /* Change for CSRF. */
         $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
         $httpHost = $_SERVER['HTTP_HOST'];
-        if(strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
+        if((!defined('RUN_MODE') or RUN_MODE != 'api') and strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
 
         $_FILES  = validater::filterFiles();
         $_POST   = validater::filterSuper($_POST);

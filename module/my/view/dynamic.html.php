@@ -53,7 +53,8 @@
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
-              <?php echo $app->user->realname . ' ' . $action->actionLabel;?>
+              <?php echo $app->user->realname;?>
+              <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text-muted"><?php echo $action->objectLabel;?></span>
               <?php echo html::a($action->objectLink, $action->objectName);?>

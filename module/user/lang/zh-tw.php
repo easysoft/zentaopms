@@ -89,7 +89,7 @@ $lang->user->project     = $lang->projectCommon;
 $lang->user->task        = '任務';
 $lang->user->bug         = 'Bug';
 $lang->user->test        = '測試';
-$lang->user->testTask    = '測試任務';
+$lang->user->testTask    = '測試單';
 $lang->user->testCase    = '測試用例';
 $lang->user->schedule    = '日程';
 $lang->user->todo        = '待辦';
@@ -154,6 +154,9 @@ $lang->user->tpl->type    = '類型';
 $lang->user->tpl->title   = '模板名';
 $lang->user->tpl->content = '內容';
 $lang->user->tpl->public  = '是否公開';
+
+$lang->usertpl = new stdclass();
+$lang->usertpl->title = '模板名稱';
 
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account     = '英文、數字和下劃線的組合，三位以上';
