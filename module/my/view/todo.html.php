@@ -56,7 +56,7 @@
       <?php $vars = "type=$type&account=$account&status=$status&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <thead>
         <tr>
-          <th class="c-id">
+          <th class="w-100px">
             <?php if($type != 'cycle' and (common::hasPriv('todo', 'batchEdit') or (common::hasPriv('todo', 'import2Today') and $importFuture))):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
               <label></label>
