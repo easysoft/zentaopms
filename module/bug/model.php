@@ -792,6 +792,7 @@ class bugModel extends model
             $activateBugs[$bugID]['openedBuild'] = $data->openedBuildList[$bugID];
             $activateBugs[$bugID]['comment']     = $data->commentList[$bugID];
 
+            $activateBugs[$bugID]['activatedDate']  = $now;
             $activateBugs[$bugID]['assignedDate']   = $now;
             $activateBugs[$bugID]['resolution']     = '';
             $activateBugs[$bugID]['status']         = 'active';
