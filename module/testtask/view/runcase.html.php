@@ -24,7 +24,7 @@
     <table class='table table-bordered' style='word-break:break-all' id='steps'>
       <thead>
         <tr>
-          <td colspan='5' style='word-break: break-all;'><strong><?php echo $lang->testcase->precondition;?></strong> <?php echo $run->case->precondition;?></td>
+          <td colspan='5' style='word-break: break-all;'><strong><?php echo $lang->testcase->precondition;?></strong><br/><?php echo nl2br($run->case->precondition);?></td>
         </tr>
         <tr>
           <th class='w-50px'><?php echo $lang->testcase->stepID;?></th>
