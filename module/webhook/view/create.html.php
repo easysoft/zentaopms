@@ -30,7 +30,7 @@
           <td><?php echo html::input('name', '', "class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr>
+        <tr id='urlTR'>
           <th><?php echo $lang->webhook->url;?></th>
           <td><?php echo html::input('url', '', "class='form-control'");?></td>
           <td id='urlNote'><?php echo $lang->webhook->note->typeList['default'];?></td>
@@ -39,10 +39,13 @@
           <th><?php echo $lang->webhook->secret;?></th>
           <td><?php echo html::input('secret', '', "class='form-control'");?></td>
         </tr>
-        <tr>
-          <th><?php echo $lang->webhook->domain;?></th>
-          <td><?php echo html::input('domain', common::getSysURL(), "class='form-control'");?></td>
-          <td></td>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAppKey;?></th>
+          <td><?php echo html::input('appKey', '', "class='form-control'");?></td>
+        </tr>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAppSecret;?></th>
+          <td><?php echo html::input('appSecret', '', "class='form-control'");?></td>
         </tr>
         <tr id='sendTypeTR'>
           <th><?php echo $lang->webhook->sendType;?></th>

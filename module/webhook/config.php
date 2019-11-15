@@ -5,6 +5,8 @@ $config->webhook->create->requiredFields = 'name, url';
 $config->webhook->edit = new stdclass();
 $config->webhook->edit->requiredFields = 'name, url';
 
+$config->webhook->dingapiUrl = 'https://oapi.dingtalk.com/';
+
 /* Unset entry to hide actions. */
 $config->webhook->objectTypes = array();
 $config->webhook->objectTypes['product']     = array('opened', 'edited', 'closed', 'undeleted'); 
