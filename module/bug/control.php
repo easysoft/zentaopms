@@ -1448,7 +1448,6 @@ class bug extends control
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();
-            $relatedModuleIdList  = array();
             $relatedStoryIdList   = array();
             $relatedTaskIdList    = array();
             $relatedBugIdList     = array();
@@ -1459,7 +1458,6 @@ class bug extends control
             foreach($bugs as $bug)
             {
                 $relatedProductIdList[$bug->product]  = $bug->product;
-                $relatedModuleIdList[$bug->module]    = $bug->module;
                 $relatedStoryIdList[$bug->story]      = $bug->story;
                 $relatedTaskIdList[$bug->task]        = $bug->task;
                 $relatedCaseIdList[$bug->case]        = $bug->case;
@@ -1483,7 +1481,6 @@ class bug extends control
             }
 
             /* Get related objects title or names. */
-            $relatedModules = array();
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedTasks   = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($relatedTaskIdList)->fetchPairs();
@@ -1492,8 +1489,8 @@ class bug extends control
             $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedBuilds  = array('trunk' => $this->lang->trunk) + $this->dao->select('id, name')->from(TABLE_BUILD)->where('id')->in($relatedBuildIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('bug')->andWhere('objectID')->in(@array_keys($bugs))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-            foreach($relatedProductIdList as $relatedProductId) $relatedModules += $this->loadModel('tree')->getOptionMenu($relatedProductId, 'bug'); 
             
+            $this->loadModel('tree');
             foreach($bugs as $bug)
             {
                 if($this->post->fileType == 'csv')
@@ -1512,10 +1509,10 @@ class bug extends control
                 $bug->task    = !isset($relatedTasks[$bug->task])    ? '' : $relatedTasks[$bug->task] . "($bug->task)";
                 $bug->case    = !isset($relatedCases[$bug->case])    ? '' : $relatedCases[$bug->case] . "($bug->case)";
 
-                if(isset($relatedModules[$bug->module]))       $bug->module        = $relatedModules[$bug->module] . "(#$bug->module)";
                 if(isset($relatedBugs[$bug->duplicateBug]))    $bug->duplicateBug  = $relatedBugs[$bug->duplicateBug] . "($bug->duplicateBug)";
                 if(isset($relatedBuilds[$bug->resolvedBuild])) $bug->resolvedBuild = $relatedBuilds[$bug->resolvedBuild] . "(#$bug->resolvedBuild)";
                 if(isset($relatedBranch[$bug->branch]))        $bug->branch        = $relatedBranch[$bug->branch] . "(#$bug->branch)";
+                $bugh->module = $bug->module ? $this->tree->getModulePathByID($bug->module) . "(#$bug->module)" : '';
 
                 if(isset($bugLang->priList[$bug->pri]))               $bug->pri        = $bugLang->priList[$bug->pri];
                 if(isset($bugLang->typeList[$bug->type]))             $bug->type       = $bugLang->typeList[$bug->type];
