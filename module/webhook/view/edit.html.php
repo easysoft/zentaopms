@@ -29,15 +29,26 @@
           <td><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr>
+        <tr id='urlTR' class='hidden'>
           <th><?php echo $lang->webhook->url;?></th>
           <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
-          <td><?php echo zget($lang->webhook->note->typeList, $webhook->type);?></td>
+          <td><?php echo zget($lang->webhook->note->typeList, $webhook->type, '');?></td>
         </tr>
         <?php if($webhook->type == 'dingding'):?>
         <tr id='secretTR'>
           <th><?php echo $lang->webhook->secret;?></th>
           <td><?php echo html::input('secret', $webhook->secret, "class='form-control'");?></td>
+        </tr>
+        <?php endif;?>
+        <?php if($webhook->type == 'dingapi'):?>
+        <?php $secret = json_decode($webhook->secret);?>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAppKey;?></th>
+          <td><?php echo html::input('appKey', $secret->appKey, "class='form-control'");?></td>
+        </tr>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAppSecret;?></th>
+          <td><?php echo html::input('appSecret', $secret->appSecret, "class='form-control'");?></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -62,7 +73,7 @@
           <td><?php echo html::select('projects[]', $projects, $webhook->projects, "class='form-control chosen' multiple");?></td>
           <td><?php echo $lang->webhook->note->project;?></td>
         </tr>
-        <?php if(strpos(',bearychat,dingding,', ",$webhook->type,") === false):?>
+        <?php if(strpos(',bearychat,dingding,dingapi,', ",$webhook->type,") === false):?>
         <tr id='paramsTR'>
           <th>
             <div class='checkbox-primary'>

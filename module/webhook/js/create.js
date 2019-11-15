@@ -5,7 +5,9 @@ $(function()
         var type = $(this).val();
         $('#sendTypeTR').toggle(type != 'dingding');
         $('#secretTR').toggle(type == 'dingding');
-        $('#paramsTR').toggle(type != 'bearychat' && type != 'dingding');
+        $('#urlTR').toggle(type != 'dingapi');
+        $('.dingapiTR').toggle(type == 'dingapi');
+        $('#paramsTR').toggle(type != 'bearychat' && type != 'dingding' && type != 'dingapi');
         $('#urlNote').html(urlNote[type]);
     });
 

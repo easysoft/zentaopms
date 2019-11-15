@@ -34,11 +34,15 @@ $lang->webhook->data        = '数据';
 $lang->webhook->result      = '结果';
 
 $lang->webhook->typeList['']          = '';
-$lang->webhook->typeList['dingding']  = '钉钉';
+$lang->webhook->typeList['dingding']  = '钉钉群通知机器人';
+$lang->webhook->typeList['dingapi']   = '钉钉工作消息通知';
 $lang->webhook->typeList['default']   = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '异步';
+
+$lang->webhook->dingAppKey    = '钉钉AppKey';
+$lang->webhook->dingAppSecret = '钉钉AppSecret';
 
 $lang->webhook->paramsList['objectType'] = '对象类型';
 $lang->webhook->paramsList['objectID']   = '对象ID';

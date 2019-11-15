@@ -130,8 +130,17 @@ class webhookModel extends model
             ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
+        if($webhook->type == 'dingapi')
+        {
+            $webhook->secret = array();
+            $webhook->secret['appKey']    = $webhook->appKey;
+            $webhook->secret['appSecret'] = $webhook->appSecret;
+
+            $webhook->secret = json_encode($webhook->secret);
+            $webhook->url    = $this->config->webhook->dingapiUrl;
+        }
         
-        $this->dao->insert(TABLE_WEBHOOK)->data($webhook)
+        $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'appKey,appSecret')
             ->batchCheck($this->config->webhook->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -158,8 +167,16 @@ class webhookModel extends model
             ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
+        if($webhook->type == 'dingapi')
+        {
+            $webhook->secret = array();
+            $webhook->secret['appKey']    = $webhook->appKey;
+            $webhook->secret['appSecret'] = $webhook->appSecret;
 
-        $this->dao->update(TABLE_WEBHOOK)->data($webhook)
+            $webhook->secret = json_encode($webhook->secret);
+        }
+
+        $this->dao->update(TABLE_WEBHOOK)->data($webhook, 'appKey,appSecret')
             ->batchCheck($this->config->webhook->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
