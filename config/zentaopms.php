@@ -77,6 +77,22 @@ $config->storyCommonList['de'][1] = 'story';
 $config->storyCommonList['fr'][0] = 'story';
 $config->storyCommonList['fr'][1] = 'story';
 
+/* Story common list. */
+$config->hourPointCommonList['zh-cn'][0] = '工时';
+$config->hourPointCommonList['zh-cn'][1] = '故事点';
+
+$config->hourPointCommonList['zh-tw'][0] = '工时';
+$config->hourPointCommonList['zh-tw'][1] = '故事点';
+
+$config->hourPointCommonList['en'][0] = 'hour';
+$config->hourPointCommonList['en'][1] = 'story point';
+
+$config->hourPointCommonList['de'][0] = 'hour';
+$config->hourPointCommonList['de'][1] = 'story point';
+
+$config->hourPointCommonList['fr'][0] = 'hour';
+$config->hourPointCommonList['fr'][1] = 'story point';
+
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
 $config->charsets['zh-cn']['gbk']   = 'GBK';

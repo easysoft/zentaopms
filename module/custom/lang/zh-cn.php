@@ -159,6 +159,6 @@ $lang->custom->conceptOptions->story = array();
 $lang->custom->conceptOptions->story['0'] = '需求';
 $lang->custom->conceptOptions->story['1'] = '故事';
 
-$lang->custom->conceptOptions->storypoint = array();
-$lang->custom->conceptOptions->storypoint['hour']       = '工时';
-$lang->custom->conceptOptions->storypoint['storypoint'] = '故事点';
+$lang->custom->conceptOptions->hourPoint = array();
+$lang->custom->conceptOptions->hourPoint['0'] = '工时';
+$lang->custom->conceptOptions->hourPoint['1'] = '故事点';

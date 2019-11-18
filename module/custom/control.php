@@ -256,7 +256,11 @@ class custom extends control
         {
             $this->custom->setFlow();
             $this->custom->setStoryRequirement();
+            $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
             $this->loadModel('setting')->setItem('system.common.conceptSetted', 1);
+            $this->app->loadLang('common');
+            $message = sprintf($this->lang->custom->notice->conceptResult, $this->lang->productCommon, $this->lang->projectCommon, $this->lang->storyCommon, $this->lang->hourCommon);
+            $this->send(array('result' => 'success', 'message' => $message));
         }
 
         $this->view->title = $this->lang->custom->concept;

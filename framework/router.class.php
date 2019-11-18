@@ -107,6 +107,7 @@ class router extends baseRouter
                 {
                     $productProject   = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
                     $storyRequirement = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='storyRequirement'")->fetch();
+                    $hourPoint        = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='hourPoint'")->fetch();
                 }
                 catch (PDOException $exception) 
                 {
@@ -138,6 +139,12 @@ class router extends baseRouter
             {
                 $storyCommon = $storyRequirement->value;
                 $lang->storyCommon = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon]) ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon] : $this->config->storyCommonList['en'][(int)$storyCommon];
+            }
+
+            if($hourPoint)
+            {
+                $hourCommon = $hourPoint->value;
+                $lang->hourCommon = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon] : $this->config->hourPointCommonList['en'][(int)$hourCommon];
             }
 
             /* Set productCommon and projectCommon. Default english lang. */

@@ -533,4 +533,8 @@ class customModel extends model
         }
     }
 
+    public function setHourPoint()
+    {
+        $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+    }
 }
