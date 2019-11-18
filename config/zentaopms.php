@@ -24,26 +24,58 @@ $config->wideSize      = 1400;
 $config->timeout       = 30000;
 $config->duplicateTime = 60;
 
-$config->productCommonList['en'][0]    = 'Product';
-$config->productCommonList['en'][1]    = 'Project';
-$config->projectCommonList['en'][0]    = 'Project';
-$config->projectCommonList['en'][1]    = 'Sprint';
+/* Product common list. */
 $config->productCommonList['zh-cn'][0] = '产品';
 $config->productCommonList['zh-cn'][1] = '项目';
-$config->projectCommonList['zh-cn'][0] = '项目';
-$config->projectCommonList['zh-cn'][1] = '迭代';
+
 $config->productCommonList['zh-tw'][0] = '產品';
 $config->productCommonList['zh-tw'][1] = '項目';
+
+$config->productCommonList['en'][0] = 'Product';
+$config->productCommonList['en'][1] = 'Project';
+
+$config->productCommonList['de'][0] = 'Produkt';
+$config->productCommonList['de'][1] = 'Projekt';
+
+$config->productCommonList['fr'][0] = 'Product';
+$config->productCommonList['fr'][1] = 'Projet';
+
+/* Project common list. */
+$config->projectCommonList['zh-cn'][0] = '项目';
+$config->projectCommonList['zh-cn'][1] = '迭代';
+$config->projectCommonList['zh-cn'][2] = '冲刺';
+
 $config->projectCommonList['zh-tw'][0] = '項目';
 $config->projectCommonList['zh-tw'][1] = '迭代';
-$config->productCommonList['de'][0]    = 'Produkt';
-$config->productCommonList['de'][1]    = 'Projekt';
-$config->projectCommonList['de'][0]    = 'Projekt';
-$config->projectCommonList['de'][1]    = 'Iteration';
-$config->productCommonList['fr'][0]    = 'Product';
-$config->productCommonList['fr'][1]    = 'Projet';
-$config->projectCommonList['fr'][0]    = 'Projet';
-$config->projectCommonList['fr'][1]    = 'Sprint';
+$config->projectCommonList['zh-tw'][2] = '冲刺';
+
+$config->projectCommonList['en'][0] = 'Project';
+$config->projectCommonList['en'][1] = 'Iteration';
+$config->projectCommonList['en'][2] = 'Sprint';
+
+$config->projectCommonList['de'][0] = 'Projekt';
+$config->projectCommonList['de'][1] = 'Iteration';
+$config->projectCommonList['de'][2] = 'Sprint';
+
+$config->projectCommonList['fr'][0] = 'Projet';
+$config->projectCommonList['fr'][1] = 'Iteration';
+$config->projectCommonList['fr'][2] = 'Sprint';
+
+/* Story common list. */
+$config->storyCommonList['zh-cn'][0] = '需求';
+$config->storyCommonList['zh-cn'][1] = '故事';
+
+$config->storyCommonList['zh-tw'][0] = '需求';
+$config->storyCommonList['zh-tw'][1] = '故事';
+
+$config->storyCommonList['en'][0] = 'story';
+$config->storyCommonList['en'][1] = 'story';
+
+$config->storyCommonList['de'][0] = 'story';
+$config->storyCommonList['de'][1] = 'story';
+
+$config->storyCommonList['fr'][0] = 'story';
+$config->storyCommonList['fr'][1] = 'story';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
