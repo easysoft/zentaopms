@@ -1670,6 +1670,7 @@ class projectModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('account');
     }
 
