@@ -11,7 +11,7 @@
  */
 $lang->product->common       = $lang->productCommon . '视图';
 $lang->product->index        = $lang->productCommon . '主页';
-$lang->product->browse       = '需求列表';
+$lang->product->browse       = "{$lang->storyCommon}列表";
 $lang->product->dynamic      = '产品动态';
 $lang->product->view         = "{$lang->productCommon}概况";
 $lang->product->edit         = "编辑{$lang->productCommon}";
@@ -48,14 +48,14 @@ $lang->product->build       = '版本列表';
 $lang->product->projectInfo = "所有与此产品关联的{$lang->projectCommon}";
 
 $lang->product->currentProject        = '当前' . $lang->projectCommon;
-$lang->product->activeStories         = '激活需求';
-$lang->product->activeStoriesTitle    = '激活需求';
-$lang->product->changedStories        = '已变更需求';
-$lang->product->changedStoriesTitle   = '已变更需求';
-$lang->product->draftStories          = '草稿需求';
-$lang->product->draftStoriesTitle     = '草稿需求';
-$lang->product->closedStories         = '已关闭需求';
-$lang->product->closedStoriesTitle    = '已关闭需求';
+$lang->product->activeStories         = "激活{$lang->storyCommon}";
+$lang->product->activeStoriesTitle    = "激活{$lang->storyCommon}";
+$lang->product->changedStories        = "已变更{$lang->storyCommon}";
+$lang->product->changedStoriesTitle   = "已变更{$lang->storyCommon}";
+$lang->product->draftStories          = "草稿{$lang->storyCommon}";
+$lang->product->draftStoriesTitle     = "草稿{$lang->storyCommon}";
+$lang->product->closedStories         = "已关闭{$lang->storyCommon}";
+$lang->product->closedStoriesTitle    = "已关闭{$lang->storyCommon}";
 $lang->product->unResolvedBugs        = '未解决Bug';
 $lang->product->unResolvedBugsTitle   = '未解决Bug';
 $lang->product->assignToNullBugs      = '未指派Bug';
@@ -133,8 +133,8 @@ $lang->product->aclList['open']    = "默认设置(有{$lang->productCommon}视�
 $lang->product->aclList['private'] = "私有{$lang->productCommon}(只有{$lang->productCommon}相关负责人和{$lang->projectCommon}团队成员才能访问)";
 $lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
 
-$lang->product->storySummary   = "本页共 <strong>%s</strong> 个需求，预计 <strong>%s</strong> 个工时，用例覆盖率 <strong>%s</strong>。";
-$lang->product->checkedSummary = "选中 <strong>%total%</strong> 个需求，预计 <strong>%estimate%</strong> 个工时，用例覆盖率 <strong>%rate%</strong>。";
+$lang->product->storySummary   = "本页共 <strong>%s</strong> 个{$lang->storyCommon}，预计 <strong>%s</strong> 个工时，用例覆盖率 <strong>%s</strong>。";
+$lang->product->checkedSummary = "选中 <strong>%total%</strong> 个{$lang->storyCommon}，预计 <strong>%estimate%</strong> 个工时，用例覆盖率 <strong>%rate%</strong>。";
 $lang->product->noModule       = "<div>您现在还没有模块信息</div><div>请维护{$lang->productCommon}模块</div>";
 $lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
