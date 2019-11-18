@@ -6,6 +6,7 @@ $lang->custom->restore    = '恢复默认';
 $lang->custom->key        = '键';
 $lang->custom->value      = '值';
 $lang->custom->flow       = '流程';
+$lang->custom->concept    = '使用偏好设置';
 $lang->custom->working    = '工作方式';
 $lang->custom->select     = '请选择流程：';
 $lang->custom->branch     = '多分支';
@@ -98,6 +99,7 @@ $lang->custom->notice->invalidStringKey            = '键值应当为小写英�
 $lang->custom->notice->cannotSetTimezone           = 'date_default_timezone_set方法不存在或禁用，不能设置时区。';
 $lang->custom->notice->noClosedBlock               = '没有永久关闭的区块';
 $lang->custom->notice->required                    = '页面提交时，选中的字段必填';
+$lang->custom->notice->conceptResult               = '我们已经根据您的选择为您设置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
 
 $lang->custom->notice->indexPage['product']        = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project']        = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
@@ -126,6 +128,8 @@ $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = '产品 - 项目';
 $lang->custom->productProject->relation['0_1'] = '产品 - 迭代';
 $lang->custom->productProject->relation['1_1'] = '项目 - 迭代';
+$lang->custom->productProject->relation['0_2'] = '产品 - 冲刺';
+$lang->custom->productProject->relation['1_2'] = '项目 - 冲刺';
 
 $lang->custom->productProject->notice = '请根据实际情况选择适合自己团队的概念。';
 
@@ -144,3 +148,17 @@ $lang->custom->scoreStatus[0] = '关闭';
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
 $lang->custom->moduleName['project']     = $lang->projectCommon;
+
+$lang->custom->conceptQuestions['overview']   = "1. 下述哪种组合方式更适合您公司的管理现状？";
+$lang->custom->conceptQuestions['story']      = "2. 您公司是在使用需求概念还是用户故事概念？";
+$lang->custom->conceptQuestions['storypoint'] = "3. 您公司是在使用工时还是故事点来做规模估算？";
+
+$lang->custom->conceptOptions = new stdclass;
+
+$lang->custom->conceptOptions->story = array();
+$lang->custom->conceptOptions->story['0'] = '需求';
+$lang->custom->conceptOptions->story['1'] = '故事';
+
+$lang->custom->conceptOptions->storypoint = array();
+$lang->custom->conceptOptions->storypoint['hour']       = '工时';
+$lang->custom->conceptOptions->storypoint['storypoint'] = '故事点';
