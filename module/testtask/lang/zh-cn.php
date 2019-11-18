@@ -99,7 +99,7 @@ $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未关联';
 $lang->testtask->linkByBuild   = '复制版本';
-$lang->testtask->linkByStory   = '按需求关联';
+$lang->testtask->linkByStory   = "按{$lang->storyCommon}关联";
 $lang->testtask->linkByBug     = '按Bug关联';
 $lang->testtask->linkBySuite   = '按套件关联';
 $lang->testtask->passAll       = '全部通过';

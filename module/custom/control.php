@@ -235,30 +235,36 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
-
-            /* Change block title. */
-            $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
-            $newConfig = $this->post->productProject;
-
-            list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
-            list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);
-
-            foreach($this->config->productCommonList as $clientLang => $productCommonList)
-            {
-                $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$productCommonList[$oldProductIndex]}', '{$productCommonList[$newProductIndex]}')")->where('source')->eq('product')->exec();
-            }
-
-            foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
-            {
-                $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
-            }
-
+            $this->custom->setFlow();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->title      = $this->lang->custom->flow;
         $this->view->position[] = $this->lang->custom->flow;
+        $this->display();
+    }
+
+    /**
+     * Set concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function concept()
+    {
+        if($_POST)
+        {
+            $this->custom->setFlow();
+            $this->custom->setStoryRequirement();
+            $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+            $this->loadModel('setting')->setItem('system.common.conceptSetted', 1);
+            $this->app->loadLang('common');
+            $message = sprintf($this->lang->custom->notice->conceptResult, $this->lang->productCommon, $this->lang->projectCommon, $this->lang->storyCommon, $this->lang->hourCommon);
+            $this->send(array('result' => 'success', 'notice' => $message, 'locate' => inlink('concept')));
+        }
+
+        $this->view->title = $this->lang->custom->concept;
+        $this->view->position[] = $this->lang->custom->concept;
         $this->display();
     }
 

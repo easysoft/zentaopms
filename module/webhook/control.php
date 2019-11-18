@@ -138,6 +138,73 @@ class webhook extends control
     }
 
     /**
+     * Bind dingtalk userid.
+     * 
+     * @param  int    $id 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
+     * @access public
+     * @return void
+     */
+    public function bind($id, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $this->webhook->bind($id);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            die(js::reload('parent'));
+        }
+
+        $webhook = $this->webhook->getById($id);
+        if($webhook->type != 'dingapi')
+        {
+            echo js::alert($this->lang->webhook->note->bind);
+            die(js::locate($this->createLink('webhook', 'browse')));
+        }
+        $webhook->secret = json_decode($webhook->secret);
+
+        $this->app->loadClass('dingapi', true);
+        $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+        $response = $dingapi->getAllUsers();
+        if($response['result'] == 'fail')
+        {
+            echo js::error($response->message);
+            die(js::locate($this->createLink('webhook', 'browse')));
+        }
+
+        $dingUsers   = $response['data'];
+        $bindedPairs = $this->webhook->getBindUsers($id);
+        $useridPairs = array('' => '');
+        foreach($dingUsers as $name => $userid) $useridPairs[$userid] = $name;
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $users = $this->loadModel('user')->getByQuery($query = '', $pager);
+
+        $unbindUsers = array();
+        $bindedUsers = array();
+        foreach($users as $user)
+        {
+            if(isset($bindedPairs[$user->account])) $bindedUsers[$user->account] = $user;
+            if(!isset($bindedPairs[$user->account])) $unbindUsers[$user->account] = $user;
+        }
+        $users = $unbindUsers + $bindedUsers;
+
+        $this->view->title      = $this->lang->webhook->bind;
+        $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->webhook->common);
+        $this->view->position[] = $this->lang->webhook->bind;
+
+        $this->view->dingUsers   = $dingUsers;
+        $this->view->useridPairs = $useridPairs;
+        $this->view->users       = $users;
+        $this->view->pager       = $pager;
+        $this->view->bindedUsers = $bindedPairs;
+        $this->display();
+    }
+
+    /**
      * Send data by async. 
      * 
      * @access public
