@@ -328,7 +328,7 @@ class userModel extends model
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;
-                $prev['password'] = $this->post->password[$i];
+                $prev['password'] = $users->password[$i];
             }
         }
 
