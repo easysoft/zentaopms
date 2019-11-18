@@ -237,7 +237,7 @@ class webhook extends control
                 if($diff < 29)
                 {
                     $time = time();
-                    $result = $this->webhook->fetchHook($webhook, $data->data);
+                    $result = $this->webhook->fetchHook($webhook, $data->data, $data->action);
                     $diff = time() - $time;
                 }
                 $this->webhook->saveLog($webhook, $data->action, $data->data, $result);

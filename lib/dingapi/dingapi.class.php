@@ -83,7 +83,7 @@ class dingapi
         $response = curl_exec($curl);
         curl_close($curl);
 
-        $response = json_encode($response);
+        $response = json_decode($response);
         if(isset($response->errcode) and $response->errcode == 0) return array('result' => 'success');
 
         $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
