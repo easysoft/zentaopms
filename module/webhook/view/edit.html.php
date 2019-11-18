@@ -22,7 +22,7 @@
         <tr>
           <th class='thWidth'><?php echo $lang->webhook->type;?></th>
           <td><?php echo zget($lang->webhook->typeList, $webhook->type);?></td>
-          <td></td>
+          <td><?php echo html::hidden('type', $webhook->type);?></td>
         </tr>
         <tr>
           <th><?php echo $lang->webhook->name;?></th>
@@ -42,6 +42,10 @@
         <?php endif;?>
         <?php if($webhook->type == 'dingapi'):?>
         <?php $secret = json_decode($webhook->secret);?>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAgentId;?></th>
+          <td><?php echo html::input('agentId', $secret->agentId, "class='form-control'");?></td>
+        </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAppKey;?></th>
           <td><?php echo html::input('appKey', $secret->appKey, "class='form-control'");?></td>

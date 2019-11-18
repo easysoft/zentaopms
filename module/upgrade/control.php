@@ -201,6 +201,8 @@ class upgrade extends control
         if(empty($extensions)) $this->locate(inlink('selectVersion'));
 
         /* Check network. */
+        if(!extension_loaded('curl')) $this->locate(inlink('selectVersion'));
+
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10); 
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
