@@ -330,7 +330,7 @@ class baseValidater
      */
     public static function checkNotEmpty($var)
     {
-        return !empty($var);
+        return strlen(trim($var)) != 0;
     }
 
     /**
@@ -344,7 +344,7 @@ class baseValidater
      */
     public static function checkEmpty($var)
     {
-        return empty($var);
+        return strlen(trim($var)) == 0;
     }
 
     /**

@@ -1465,7 +1465,7 @@ class task extends control
                 if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];
                 if(isset($taskLang->statusList[$task->status]))       $task->status       = $this->processStatus('task', $task);
                 if(isset($taskLang->reasonList[$task->closedReason])) $task->closedReason = $taskLang->reasonList[$task->closedReason];
-                $task->module = $task->module ? $this->tree->getModulePathByID($task->module) : '';
+                $task->module = $task->module ? $this->tree->getModulePathByID($task->module) . "(#$task->module)" : '';
 
                 if(isset($users[$task->openedBy]))     $task->openedBy     = $users[$task->openedBy];
                 if(isset($users[$task->assignedTo]))   $task->assignedTo   = $users[$task->assignedTo];

@@ -370,8 +370,6 @@ class testreportModel extends model
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
             ->where('t2.task')->in(array_keys($tasks))
             ->andWhere('t1.`case`')->in(array_keys($cases))
-            ->andWhere('t1.date')->ge($begin)
-            ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
             ->fetchAll('id');
 
