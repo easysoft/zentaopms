@@ -133,8 +133,8 @@ $lang->product->aclList['open']    = "默认设置(有{$lang->productCommon}视�
 $lang->product->aclList['private'] = "私有{$lang->productCommon}(只有{$lang->productCommon}相关负责人和{$lang->projectCommon}团队成员才能访问)";
 $lang->product->aclList['custom']  = '自定义白名单(团队成员和白名单的成员可以访问)';
 
-$lang->product->storySummary   = "本页共 <strong>%s</strong> 个{$lang->storyCommon}，预计 <strong>%s</strong> 个工时，用例覆盖率 <strong>%s</strong>。";
-$lang->product->checkedSummary = "选中 <strong>%total%</strong> 个{$lang->storyCommon}，预计 <strong>%estimate%</strong> 个工时，用例覆盖率 <strong>%rate%</strong>。";
+$lang->product->storySummary   = "本页共 <strong>%s</strong> 个{$lang->storyCommon}，预计 <strong>%s</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%s</strong>。";
+$lang->product->checkedSummary = "选中 <strong>%total%</strong> 个{$lang->storyCommon}，预计 <strong>%estimate%</strong> 个{$lang->hourCommon}，用例覆盖率 <strong>%rate%</strong>。";
 $lang->product->noModule       = "<div>您现在还没有模块信息</div><div>请维护{$lang->productCommon}模块</div>";
 $lang->product->noProduct      = "暂时没有{$lang->productCommon}。";
 $lang->product->noMatched      = '找不到包含"%s"的' . $lang->productCommon;
