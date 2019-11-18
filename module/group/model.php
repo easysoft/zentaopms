@@ -290,6 +290,10 @@ class groupModel extends model
         }
         $actions['actions'] = $dynamic;
 
+        /* If not select any projects or products, set it empty. */
+        if(isset($actions['products'][0]) && !$actions['products'][0]) $actions['products'] = array();
+        if(isset($actions['projects'][0]) && !$actions['projects'][0]) $actions['projects'] = array();
+
         $actions = empty($actions) ? '' : json_encode($actions);
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();
         return dao::isError() ? false : true;

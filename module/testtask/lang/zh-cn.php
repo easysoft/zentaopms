@@ -108,7 +108,7 @@ $lang->testtask->fail          = '失败';
 $lang->testtask->showResult    = '共执行<span class="text-info">%s</span>次';
 $lang->testtask->showFail      = '失败<span class="text-danger">%s</span>次';
 
-$lang->testtask->confirmDelete     = '您确认要删除该版本吗？';
+$lang->testtask->confirmDelete     = '您确认要删除该测试单吗？';
 $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 $lang->testtask->noticeNoOther     = '该产品还没有其他测试版本';
 $lang->testtask->noTesttask        = '暂时没有测试版本。';
