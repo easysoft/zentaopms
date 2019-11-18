@@ -4,6 +4,7 @@ $lang->webhook->list     = 'Webhook列表';
 $lang->webhook->api      = '接口';
 $lang->webhook->entry    = '应用';
 $lang->webhook->log      = '日志';
+$lang->webhook->bind     = '绑定用户';
 $lang->webhook->assigned = '指派给';
 $lang->webhook->setting  = '设置';
 
@@ -41,8 +42,14 @@ $lang->webhook->typeList['default']   = '其他';
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '异步';
 
-$lang->webhook->dingAppKey    = '钉钉AppKey';
-$lang->webhook->dingAppSecret = '钉钉AppSecret';
+$lang->webhook->dingAgentId    = '钉钉AgentId';
+$lang->webhook->dingAppKey     = '钉钉AppKey';
+$lang->webhook->dingAppSecret  = '钉钉AppSecret';
+$lang->webhook->dingUserid     = '钉钉Userid';
+$lang->webhook->dingBindStatus = '钉钉绑定状态';
+
+$lang->webhook->dingBindStatusList['0'] = '未绑定';
+$lang->webhook->dingBindStatusList['1'] = '已绑定';
 
 $lang->webhook->paramsList['objectType'] = '对象类型';
 $lang->webhook->paramsList['objectID']   = '对象ID';
@@ -60,6 +67,7 @@ $lang->webhook->trimWords = '了';
 
 $lang->webhook->note = new stdClass();
 $lang->webhook->note->async   = '异步需要打开计划任务';
+$lang->webhook->note->bind    = '只有钉钉工作通知类型才需要绑定用户。';
 $lang->webhook->note->product = "此项为空时所有{$lang->productCommon}的动作都会触发钩子，否则只有关联{$lang->productCommon}的动作才会触发。";
 $lang->webhook->note->project = "此项为空时所有{$lang->projectCommon}的动作都会触发钩子，否则只有关联{$lang->projectCommon}的动作才会触发。";
 

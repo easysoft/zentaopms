@@ -114,6 +114,19 @@ class webhookModel extends model
     }
 
     /**
+     * Get bind users.
+     * 
+     * @param  int    $webhookID 
+     * @access public
+     * @return array
+     */
+    public function getBindUsers($webhookID)
+    {
+        return $this->dao->select('*')->from(TABLE_DINGUSERID)->where('webhook')->eq($webhookID)
+            ->fetchPairs('account', 'userid');
+    }
+
+    /**
      * Create a webhook. 
      * 
      * @access public
@@ -133,14 +146,20 @@ class webhookModel extends model
         if($webhook->type == 'dingapi')
         {
             $webhook->secret = array();
+            $webhook->secret['agentId']   = $webhook->agentId;
             $webhook->secret['appKey']    = $webhook->appKey;
             $webhook->secret['appSecret'] = $webhook->appSecret;
+
+            if(empty($webhook->agentId))   dao::$errors['agentId']   = sprintf($this->lang->error->notempty, $this->lang->webhook->dingAgentId);
+            if(empty($webhook->appKey))    dao::$errors['appKey']    = sprintf($this->lang->error->notempty, $this->lang->webhook->dingAppKey);
+            if(empty($webhook->appSecret)) dao::$errors['appSecret'] = sprintf($this->lang->error->notempty, $this->lang->webhook->dingAppSecret);
+            if(dao::isError()) return false;
 
             $webhook->secret = json_encode($webhook->secret);
             $webhook->url    = $this->config->webhook->dingapiUrl;
         }
         
-        $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'appKey,appSecret')
+        $this->dao->insert(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret')
             ->batchCheck($this->config->webhook->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -170,17 +189,46 @@ class webhookModel extends model
         if($webhook->type == 'dingapi')
         {
             $webhook->secret = array();
+            $webhook->secret['agentId']   = $webhook->agentId;
             $webhook->secret['appKey']    = $webhook->appKey;
             $webhook->secret['appSecret'] = $webhook->appSecret;
+
+            if(empty($webhook->agentId))   dao::$errors['agentId']   = sprintf($this->lang->error->notempty, $this->lang->webhook->dingAgentId);
+            if(empty($webhook->appKey))    dao::$errors['appKey']    = sprintf($this->lang->error->notempty, $this->lang->webhook->dingAppKey);
+            if(empty($webhook->appSecret)) dao::$errors['appSecret'] = sprintf($this->lang->error->notempty, $this->lang->webhook->dingAppSecret);
+            if(dao::isError()) return false;
 
             $webhook->secret = json_encode($webhook->secret);
         }
 
-        $this->dao->update(TABLE_WEBHOOK)->data($webhook, 'appKey,appSecret')
+        $this->dao->update(TABLE_WEBHOOK)->data($webhook, 'agentId,appKey,appSecret')
             ->batchCheck($this->config->webhook->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Bind ding userid.
+     * 
+     * @param  int    $webhookID 
+     * @access public
+     * @return bool
+     */
+    public function bind($webhookID)
+    {
+        $data = fixer::input('post')->get();
+        foreach($data->userid as $account => $userid)
+        {
+            if(empty($userid)) continue;
+
+            $dingUser = new stdclass();
+            $dingUser->webhook = $webhookID;
+            $dingUser->account = $account;
+            $dingUser->userid  = $userid;
+            $this->dao->replace(TABLE_DINGUSERID)->data($dingUser)->exec();
+        }
         return !dao::isError();
     }
 
@@ -288,7 +336,7 @@ class webhookModel extends model
             foreach(explode(',', $webhook->params) as $param) $data->$param = $action->$param;
         }
 
-        return helper::jsonEncode($data);
+        return json_encode($data);
     }
 
     /**
