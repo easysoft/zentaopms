@@ -23,7 +23,7 @@ include '../../common/view/header.lite.html.php';
     </div>
   </div>
 <?php else:?>
-  <form class="load-indicator main-form form-ajax" id='dataform' method='post'>
+  <form id='ajaxForm' method='post'>
     <div class='modal-dialog'>
       <div class='modal-header'><strong><?php echo $lang->custom->concept;?></strong></div>
           <div class='modal-body'>
