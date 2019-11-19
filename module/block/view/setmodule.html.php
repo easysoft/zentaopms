@@ -23,7 +23,7 @@ $themeRoot = $webRoot . "theme/";
     <?php
     $control = $param['control'];
     $attr    = empty($param['attr']) ? '' : $param['attr'];
-    $default = $block ? (isset($block->params->$key) ? $block->params->$key : '') : (isset($param['default']) ? $param['default'] : '');
+    $default = $block ? (isset($block->params->type) ? $block->params->type : '') : (isset($param['default']) ? $param['default'] : '');
     $options = isset($param['options']) ? $param['options'] : array();
     echo html::$control("params[type]", $options, $default, "class='form-control chosen' $attr");
     ?>
