@@ -342,7 +342,7 @@ class projectModel extends model
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
             if(isset($_POST['products']))
             {
                 foreach($this->post->products as $productID)
@@ -413,7 +413,7 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != 'open' or $project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }
