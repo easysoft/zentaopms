@@ -1278,7 +1278,7 @@ class testtaskModel extends model
             case 'actions':
                 if($caseChanged)
                 {
-                    common::printIcon('testcase', 'confirmChange', "id=$run->case&from=list", $run, 'list', 'search', 'hiddenwin');
+                    common::printIcon('testcase', 'confirmChange', "id=$run->case&taskID=$run->task&from=list", $run, 'list', 'search', 'hiddenwin');
                     break;
                 }
 
