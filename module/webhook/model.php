@@ -257,6 +257,7 @@ class webhookModel extends model
 
             if($webhook->sendType == 'async')
             {
+                if($webhook->type == 'dingapi' and empty($this->getUseridList($webhook->id, $actionID))) continue;
                 $this->saveData($id, $actionID, $postData);
                 continue;
             }
@@ -331,6 +332,10 @@ class webhookModel extends model
         elseif($webhook->type == 'bearychat')
         {
             $data = $this->getBearychatData($text, $mobile, $email, $objectType, $objectID);
+        }
+        elseif($webhook->type == 'weixin')
+        {
+            $data = $this->getWeixinData($title, $text, $mobile);
         }
         else
         {
@@ -434,6 +439,29 @@ class webhookModel extends model
         return $data;
     }
 
+    /**
+     * Get weixin data.
+     * 
+     * @param  string $title 
+     * @param  string $text 
+     * @param  string $mobile 
+     * @access public
+     * @return object
+     */
+    public function getWeixinData($title, $text, $mobile)
+    {
+        $data = new stdclass();
+        $data->msgtype = 'markdown';
+
+        $markdown = new stdclass();
+        $markdown->content = $text;
+
+        if($mobile) $markdown->mentioned_mobile_list = array($mobile);
+
+        $data->markdown = $markdown;
+
+        return $data;
+    }
 
     /**
      * Get userid list.
@@ -442,7 +470,7 @@ class webhookModel extends model
      * @access public
      * @return string
      */
-    public function getUseridList($actionID)
+    public function getUseridList($webhookID, $actionID)
     {
         if(empty($actionID)) return false;
 
@@ -455,7 +483,7 @@ class webhookModel extends model
         if(!empty($object->mailto)) $toList .= ',' . $object->mailto;
         if(empty($toList)) return false;
 
-        $useridList = $this->getBindUsers($webhook->id, $toList);
+        $useridList = $this->getBindUsers($webhookID, $toList);
         $useridList = join(',', $useridList);
         return $useridList;
     }
@@ -477,16 +505,17 @@ class webhookModel extends model
         {
             $webhook->secret = json_decode($webhook->secret);
 
-            $useridList = $this->getUseridList($actionID);
+            $useridList = $this->getUseridList($webhook->id, $actionID);
             if(empty($useridList)) return false;
 
             $this->app->loadClass('dingapi', true);
             $dingapi = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            return $dingapi->send($useridList, $sendData);
+            $result  = $dingapi->send($useridList, $sendData);
+            return json_encode($result);
         }
 
         $contentType = "Content-Type: {$webhook->contentType};charset=utf-8";
-        if($webhook->type == 'dingding') $contentType = "Content-Type: application/json";
+        if($webhook->type == 'dingding' or $webhook->type == 'weixin') $contentType = "Content-Type: application/json";
         $header[] = $contentType;
 
         $url = $webhook->url;

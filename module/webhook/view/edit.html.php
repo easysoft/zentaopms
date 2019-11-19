@@ -29,7 +29,7 @@
           <td><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr id='urlTR' class='hidden'>
+        <tr id='urlTR' class='<?php echo $webhook->type == 'dingapi' ? 'hidden' : '';?>'>
           <th><?php echo $lang->webhook->url;?></th>
           <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
           <td><?php echo zget($lang->webhook->note->typeList, $webhook->type, '');?></td>
@@ -60,7 +60,7 @@
           <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <?php if($webhook->type != 'dingding'):?>
+        <?php if($webhook->type != 'dingding' and $webhook->type != 'dingapi'):?>
         <tr>
           <th><?php echo $lang->webhook->sendType;?></th>
           <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, $webhook->sendType, "class='form-control'");?></td>
@@ -77,7 +77,7 @@
           <td><?php echo html::select('projects[]', $projects, $webhook->projects, "class='form-control chosen' multiple");?></td>
           <td><?php echo $lang->webhook->note->project;?></td>
         </tr>
-        <?php if(strpos(',bearychat,dingding,dingapi,', ",$webhook->type,") === false):?>
+        <?php if(strpos(',bearychat,dingding,dingapi,weixin,', ",$webhook->type,") === false):?>
         <tr id='paramsTR'>
           <th>
             <div class='checkbox-primary'>
