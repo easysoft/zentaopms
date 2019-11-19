@@ -116,13 +116,15 @@ class webhookModel extends model
     /**
      * Get bind users.
      * 
-     * @param  int    $webhookID 
+     * @param  int    $webhookID
+     * @param  array  $users
      * @access public
      * @return array
      */
-    public function getBindUsers($webhookID)
+    public function getBindUsers($webhookID, $users = array())
     {
         return $this->dao->select('*')->from(TABLE_DINGUSERID)->where('webhook')->eq($webhookID)
+            ->beginIF($users)->andWhere('account')->in($users)->fi()
             ->fetchPairs('account', 'userid');
     }
 
@@ -259,7 +261,7 @@ class webhookModel extends model
                 continue;
             }
             
-            $result = $this->fetchHook($webhook, $postData);
+            $result = $this->fetchHook($webhook, $postData, $actionID);
             $this->saveLog($webhook, $actionID, $postData, $result);
         }
         return !dao::isError();
@@ -322,7 +324,7 @@ class webhookModel extends model
         }
         $action->text = $text;
 
-        if($webhook->type == 'dingding')
+        if($webhook->type == 'dingding' or $webhook->type == 'dingapi')
         {
             $data = $this->getDingdingData($title, $text, $mobile);
         }
@@ -432,17 +434,56 @@ class webhookModel extends model
         return $data;
     }
 
+
+    /**
+     * Get userid list.
+     * 
+     * @param  int    $actionID 
+     * @access public
+     * @return string
+     */
+    public function getUseridList($actionID)
+    {
+        if(empty($actionID)) return false;
+
+        $action = $this->dao->select('*')->from(TABLE_ACTION)->where('id')->eq($actionID)->fetch();
+        $table  = zget($this->config->objectTables, $action->objectType, '');
+        if(empty($table)) return false;
+
+        $object = $this->dao->select('*')->from($table)->where('id')->eq($action->objectID)->fetch();
+        $toList = $this->loadModel('message')->getToList($object, $action->objectType);
+        if(!empty($object->mailto)) $toList .= ',' . $object->mailto;
+        if(empty($toList)) return false;
+
+        $useridList = $this->getBindUsers($webhook->id, $toList);
+        $useridList = join(',', $useridList);
+        return $useridList;
+    }
+
     /**
      * Post hook data. 
      * 
      * @param  object $webhook 
      * @param  string $sendData 
+     * @param  int    $actionID 
      * @access public
      * @return int 
      */
-    public function fetchHook($webhook, $sendData)
+    public function fetchHook($webhook, $sendData, $actionID = 0)
     {
         if(!extension_loaded('curl')) die(helper::jsonEncode($this->lang->webhook->error->curl));
+
+        if($webhook->type == 'dingapi')
+        {
+            $webhook->secret = json_decode($webhook->secret);
+
+            $useridList = $this->getUseridList($actionID);
+            if(empty($useridList)) return false;
+
+            $this->app->loadClass('dingapi', true);
+            $dingapi = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            return $dingapi->send($useridList, $sendData);
+        }
 
         $contentType = "Content-Type: {$webhook->contentType};charset=utf-8";
         if($webhook->type == 'dingding') $contentType = "Content-Type: application/json";
