@@ -1172,8 +1172,6 @@ class projectModel extends model
         {
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
             $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
-            unset($this->config->product->search['fields']['stage']);
-            unset($this->config->product->search['params']['stage']);
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
