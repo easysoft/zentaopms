@@ -37,6 +37,7 @@ $lang->webhook->result      = '结果';
 $lang->webhook->typeList['']          = '';
 $lang->webhook->typeList['dingding']  = '钉钉群通知机器人';
 $lang->webhook->typeList['dingapi']   = '钉钉工作消息通知';
+$lang->webhook->typeList['weixin']    = '企业微信';
 $lang->webhook->typeList['default']   = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
