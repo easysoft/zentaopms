@@ -398,7 +398,7 @@ $lang->block->gridOptions[4] = '右侧';
 
 $lang->block->flowchart   = array();
 $lang->block->flowchart['admin']   = array('管理员', '维护公司', '添加用户', '维护权限');
-$lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', '维护计划', '维护{$lang->storyCommon}', '创建发布');
-$lang->block->flowchart['project'] = array($lang->projectCommon . '经理', '创建' . $lang->projectCommon, '维护团队', '关联' . $lang->productCommon, '关联{$lang->storyCommon}', '分解任务');
+$lang->block->flowchart['product'] = array($lang->productCommon . '经理', '创建' . $lang->productCommon, '维护模块', '维护计划', "维护{$lang->storyCommon}", '创建发布');
+$lang->block->flowchart['project'] = array($lang->projectCommon . '经理', '创建' . $lang->projectCommon, '维护团队', '关联' . $lang->productCommon, "关联{$lang->storyCommon}", '分解任务');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '更新状态', '完成任务和Bug');
-$lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
+$lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug')
