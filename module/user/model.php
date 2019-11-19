@@ -1313,6 +1313,7 @@ class userModel extends model
             }
             $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
         }
+
         return $userView;
     }
 
@@ -1355,6 +1356,16 @@ class userModel extends model
 
         $userView->products = trim($userView->products, ',');
         $userView->projects = trim($userView->projects, ',');
+
+        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->fetchAll('id');
+
+        $openedProducts = join(',', array_keys($openedProducts));
+        $openedProjects = join(',', array_keys($openedProjects));
+
+        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
+        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
+
         return $userView;
     }
 
@@ -1374,7 +1385,9 @@ class userModel extends model
         if($objectType == 'project') $table = TABLE_PROJECT;
         if(empty($table)) return false;
 
-        $object     = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        if($object->acl == 'open') return true;
+
         $allGroups  = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
         $userGroups = array();
         foreach($allGroups as $group)
@@ -1401,6 +1414,8 @@ class userModel extends model
         $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)
             ->beginIF($users)->where('account')->in($users)->fi()
             ->query();
+
+        $userObjects = array();
         while($userView = $stmt->fetch())
         {
             $account = $userView->account;
@@ -1409,15 +1424,20 @@ class userModel extends model
                 $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $teams);
                 if($hasPriv and strpos(",{$userView->products},", ",{$objectID},") === false) $userView->products .= ",{$objectID}";
                 if(!$hasPriv and strpos(",{$userView->products},", ",{$objectID},") !== false) $userView->products = trim(str_replace(",{$objectID},", ',', ",{$userView->products},"), ',');
-                $this->dao->update(TABLE_USERVIEW)->set('products')->eq($userView->products)->where('account')->eq($account)->exec();
+                $userObjects[$account]['products'] = $userView->products;
             }
             elseif($objectType == 'project')
             {
                 $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
                 if($hasPriv and strpos(",{$userView->projects},", ",{$objectID},") === false) $userView->projects .= ",{$objectID}";
                 if(!$hasPriv and strpos(",{$userView->projects},", ",{$objectID},") !== false) $userView->projects = trim(str_replace(",{$objectID},", ',', ",{$userView->projects},"), ',');
-                $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($userView->projects)->where('account')->eq($account)->exec();
+                $userObjects[$account]['projects'] = $userView->projects;
             }
+        }
+
+        foreach($userObjects as $account => $data)
+        {
+            $this->dao->update(TABLE_USERVIEW)->data($data)->where('account')->eq($account)->exec();
         }
     }
 

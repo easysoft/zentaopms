@@ -351,6 +351,7 @@ class productModel extends model
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
+
         $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
@@ -372,7 +373,7 @@ class productModel extends model
         $lib->main    = '1';
         $lib->acl     = 'default';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
-        $this->loadModel('user')->updateUserView($productID, 'product');
+        if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
 
         return $productID;
     }
@@ -405,7 +406,7 @@ class productModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
-            if($product->acl != 'open' or $product->acl != $oldProduct->acl or $product->whitelist != $oldProduct->whitelist) $this->loadModel('user')->updateUserView($productID, 'product');
+            if($product->acl != 'open' and ($product->acl != $oldProduct->acl or $product->whitelist != $oldProduct->whitelist)) $this->loadModel('user')->updateUserView($productID, 'product');
             return common::createChanges($oldProduct, $product);
         }
     }
