@@ -993,11 +993,11 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function confirmChange($caseID, $from = 'view')
+    public function confirmChange($caseID, $taskID = 0, $from = 'view')
     {
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
-        if($from == 'view') die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
+        if($from == 'view') die(js::locate(inlink('view', "caseID=$caseID&version=$case->version&from=testtask&taskID=$taskID"), 'parent'));
         die(js::reload('parent'));
     }
 
