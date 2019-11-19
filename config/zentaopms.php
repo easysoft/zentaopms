@@ -13,6 +13,7 @@
 /* Framework settings. */
 $config->framework->autoRepairTable = true;
 $config->framework->autoLang        = false;
+$config->framework->filterCSRF      = false;
 
 /* Upload settings. */
 $config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';

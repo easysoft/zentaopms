@@ -531,6 +531,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_6_4');
             $this->execSQL($this->getUpgradeFile('11.6.4'));
             $this->appendExec('11_6_4');
+        case '11_6_5':
+            $this->saveLogs('Execute 11_6_5');
+            $this->execSQL($this->getUpgradeFile('11.6.5'));
+            $this->fixGroupAcl();
+            $this->appendExec('11_6_5');
         }
 
         $this->deletePatch();
@@ -3367,6 +3372,47 @@ class upgradeModel extends model
             $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
             $this->saveLogs($this->dao->get());
         }
+        return true;
+    }
+
+    /**
+     * Fix group acl.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixGroupAcl()
+    {
+        $groups = $this->dao->select('*')->from(TABLE_GROUP)->fetchAll();
+        foreach($groups as $group)
+        {
+            if(empty($group->acl)) continue;
+
+            $acl = json_decode($group->acl, true);
+            if(isset($acl['products']))
+            {
+                $isEmpty = true;
+                foreach($acl['products'] as $productID)
+                {
+                    if(!empty($productID)) $isEmpty = false;
+                }
+                if($isEmpty) unset($acl['products']);
+            }
+
+            if(isset($acl['projects']))
+            {
+                $isEmpty = true;
+                foreach($acl['projects'] as $projectID)
+                {
+                    if(!empty($projectID)) $isEmpty = false;
+                }
+                if($isEmpty) unset($acl['projects']);
+            }
+
+            $acl = json_encode($acl);
+            $this->dao->update(TABLE_GROUP)->set('acl')->eq($acl)->where('id')->eq($group->id)->exec();
+        }
+
         return true;
     }
 
