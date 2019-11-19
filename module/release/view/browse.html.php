@@ -60,7 +60,7 @@
           echo html::a(inlink('view', "release=$release->id"), $release->name) . $flagIcon;
           ?>
         </td>
-        <td title='<?php echo $release->buildName?>'><?php echo html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
+        <td title='<?php echo $release->buildName?>'><?php echo empty($release->project) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
         <td class='text-center'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
