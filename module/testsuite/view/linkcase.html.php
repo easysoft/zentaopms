@@ -40,7 +40,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='w-70px text-center'><nobr><?php echo $lang->testsuite->linkVersion;?></nobr></th>
-          <th class='w-pri text-center'><?php echo $lang->priAB;?></th>
+          <th class='w-70px text-center'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->title;?></th>
           <th class='w-type'><?php echo $lang->testcase->type;?></th>
           <th class='c-user text-center'><?php echo $lang->openedByAB;?></th>
