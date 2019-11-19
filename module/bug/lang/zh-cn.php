@@ -159,7 +159,7 @@ $lang->bug->createBuild   = '新建';
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
 $lang->bug->legendAttatch               = '附件';
-$lang->bug->legendPrjStoryTask          = $lang->projectCommon . '/{$lang->storyCommon}/任务';
+$lang->bug->legendPrjStoryTask          = $lang->projectCommon . "/{$lang->storyCommon}/任务";
 $lang->bug->lblTypeAndSeverity          = '类型/严重程度';
 $lang->bug->lblSystemBrowserAndHardware = '系统/浏览器';
 $lang->bug->legendSteps                 = '重现步骤';
