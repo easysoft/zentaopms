@@ -719,6 +719,7 @@ class productModel extends model
                     $i++;
                     if($i >= $count) break;
                 }
+                krsort($newRoadmap[$year][$branch]);
             }
         }
         return $newRoadmap;
