@@ -955,7 +955,7 @@ class testtask extends control
                 {
                     unset($cases[$caseID]);
                     $key = array_search($caseID, $caseIDList);
-                    if($key) array_splice($caseIDList, $key, 1);
+                    if($key !== false) array_splice($caseIDList, $key, 1);
                 }
             }
         }

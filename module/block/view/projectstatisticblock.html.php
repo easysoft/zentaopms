@@ -73,6 +73,10 @@ $(function()
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
         e.preventDefault();
     });
+
+    var $projectLi = $('#activeProject');
+    var projectLi  = $projectLi[0];
+    $(".col ul.nav").animate({scrollTop: projectLi.offsetTop}, "slow");
 });
 </script>
 <div class="panel-body">
@@ -86,7 +90,7 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($projects as $project):?>
-        <li <?php if($project == reset($projects)) echo "class='active'";?> projectID='<?php echo $project->id;?>'>
+        <li <?php if($project->id == $this->session->project) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
           <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>
           <?php echo html::a(helper::createLink('project', 'task', "projectID=$project->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->project->task}");?>
         </li>
