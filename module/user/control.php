@@ -692,16 +692,19 @@ class user extends control
                 die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
             }
 
+            $response['result']  = 'success';
             if(strpos($this->referer, $loginLink) === false and
                strpos($this->referer, $denyLink)  === false and
                strpos($this->referer, 'block')  === false and $this->referer
             )
             {
-                die(js::locate($this->referer, 'parent'));
+                $response['locate']  = $this->referer;
+                $this->send($response);
             }
             else
             {
-                die(js::locate($this->createLink($this->config->default->module), 'parent'));
+                $response['locate']  = $this->config->default->module;
+                $this->send($response);
             }
         }
 
@@ -718,9 +721,10 @@ class user extends control
             $account = trim($account);
             if($this->user->checkLocked($account))
             {
-                $failReason = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
+                $response['result']  = 'fail';
+                $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
                 if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
-                die(js::error($failReason));
+                $this->send($response);
             }
 
             $user = $this->user->identify($account, $password);
@@ -768,13 +772,16 @@ class user extends control
                         $method = str_replace('f=', '', $method);
                     }
 
+                    $response['result']  = 'success';
                     if(common::hasPriv($module, $method))
                     {
-                        die(js::locate($this->post->referer, 'parent'));
+                        $response['locate']  = $this->post->referer;
+                        $this->send($response);
                     }
                     else
                     {
-                        die(js::locate($this->createLink($this->config->default->module), 'parent'));
+                        $response['locate']  = $this->config->default->module;
+                        $this->send($response);
                     }
                 }
                 else
@@ -784,26 +791,31 @@ class user extends control
                         $data = $this->user->getDataInJSON($user);
                         die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
-                    die(js::locate($this->createLink($this->config->default->module), 'parent'));
+
+                    $response['locate']  = $this->config->default->module;
+                    $response['result']  = 'success';
+                    $this->send($response);
                 }
             }
             else
             {
+                $response['result']  = 'fail';
                 $fails = $this->user->failPlus($account);
                 if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed))));
                 $remainTimes = $this->config->user->failTimes - $fails;
                 if($remainTimes <= 0)
                 {
-                    die(js::error(sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes)));
+                    $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
+                    $this->send($response);
                 }
                 else if($remainTimes <= 3)
                 {
-                    die(js::error(sprintf($this->lang->user->lockWarning, $remainTimes)));
+                    $response['message'] = sprintf($this->lang->user->lockWarning, $remainTimes);
+                    $this->send($response);
                 }
 
-                $errorScript = js::error($this->lang->user->loginFailed);
-                if($this->post->verifyRand and !isset($_SESSION['rand'])) $errorScript .= js::reload('parent'); // Finish task #4851.
-                die($errorScript);
+                $response['message'] = $this->lang->user->loginFailed;
+                $this->send($response);
             }
         }
         else
