@@ -41,13 +41,6 @@ class custom extends control
         $this->app->loadLang($module);
         $fieldList = zget($this->lang->$module, $field, '');
 
-        if($module == 'bug' and $field == 'typeList')
-        {
-            unset($fieldList['interface']);
-            unset($fieldList['designchange']);
-            unset($fieldList['newfeature']);
-            unset($fieldList['trackthings']);
-        }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
