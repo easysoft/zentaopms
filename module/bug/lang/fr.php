@@ -252,11 +252,6 @@ $lang->bug->typeList['automation']   = 'Script automatisation';
 $lang->bug->typeList['designdefect'] = 'Erreur de Design';
 $lang->bug->typeList['others']       = 'Autres';
 
-$lang->bug->discardedTypeList['interface']    = 'Interface';
-$lang->bug->discardedTypeList['designchange'] = 'Design Change';
-$lang->bug->discardedTypeList['newfeature']   = 'Nouvelle fonctionnalité';
-$lang->bug->discardedTypeList['trackthings']  = 'Tracking';
-
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Actif';
 $lang->bug->statusList['resolved'] = 'Résolu';
