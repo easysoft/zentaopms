@@ -72,6 +72,7 @@ $lang->project->effort        = 'Effort';
 $lang->project->relatedMember = 'Team';
 $lang->project->watermark     = 'Exported by ZenTao';
 $lang->project->viewByUser    = 'By User';
+$lang->project->showAllModule = "Show {$lang->productCommon} modules";
 
 $lang->project->start    = 'Start';
 $lang->project->activate = 'Activate';

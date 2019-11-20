@@ -166,6 +166,7 @@ js::set('browseType', $browseType);
       <div class="text-center">
         <?php common::printLink('tree', 'browsetask', "rootID=$projectID&productID=0", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
+        <?php echo html::a('#showAllModuleModal', $lang->project->showAllModule, '', "data-toggle='modal' class='text-secondary small'");?><br/>
       </div>
     </div>
   </div>
@@ -338,6 +339,24 @@ js::set('browseType', $browseType);
     <?php endif;?>
   </div>
 </div>
+<div class="modal fade" id="showAllModuleModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog w-600px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->project->showAllModule;?></h4>
+      </div>
+      <div class="modal-body">
+        <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
+          <p> 
+            <span><?php echo html::radio('showAllModule', $lang->project->showAllModuleList, isset($config->project->task->allModule) ? $config->project->task->allModule : 0);?></span>
+            <button type='button' id='setShowAllModule' class='btn btn-primary'><?php echo $lang->save?></button>
+          </p>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 <?php js::set('replaceID', 'taskList')?>
 <script>
 $(function()
@@ -408,6 +427,22 @@ $(function()
               .replace('%left%', checkedLeft.toFixed(1));
         }
     })
+
+    $('#setShowAllModule').click(function()
+    {
+        var name  = 'allModule';
+        var value = $('#showAllModuleModal input[name="showAllModule"]:checked').val();
+
+        $.ajax(
+        {
+            type: "POST",
+            dataType: 'json',
+            data: {name: name, value: value},
+            success:function(){window.location.reload();},
+            url: '<?php echo $this->createLink('datatable', 'ajaxSave', 'type=allModule')?>'
+        });
+    });
+
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
