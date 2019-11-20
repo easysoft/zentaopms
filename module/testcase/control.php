@@ -1,4 +1,4 @@
-<?php
+ ? <?php
 /**
  * The control file of case currentModule of ZenTaoPMS.
  *
@@ -490,6 +490,7 @@ class testcase extends control
             $case->lastRunner    = $run->lastRunner;
             $case->lastRunDate   = $run->lastRunDate;
             $case->lastRunResult = $run->lastRunResult;
+            $case->caseStatus    = $case->status;
             $case->status        = $run->status;
         }
 
