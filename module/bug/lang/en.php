@@ -243,18 +243,19 @@ $lang->bug->browserList['other']    = 'Others';
 
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'CodeError';
-$lang->bug->typeList['interface']    = 'Interface';
 $lang->bug->typeList['config']       = 'Configuration';
 $lang->bug->typeList['install']      = 'Installation';
 $lang->bug->typeList['security']     = 'Security';
 $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'CodingConventions';
 $lang->bug->typeList['automation']   = 'TestScript';
-$lang->bug->typeList['designchange'] = 'DesignChange';
-$lang->bug->typeList['newfeature']   = 'NewFeature';
 $lang->bug->typeList['designdefect'] = 'DesignDefect';
-$lang->bug->typeList['trackthings']  = 'Tracking';
 $lang->bug->typeList['others']       = 'Others';
+
+$lang->bug->discardedTypeList['interface']    = 'Interface';
+$lang->bug->discardedTypeList['designchange'] = 'DesignChange';
+$lang->bug->discardedTypeList['newfeature']   = 'NewFeature';
+$lang->bug->discardedTypeList['trackthings']  = 'Tracking';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Active';
