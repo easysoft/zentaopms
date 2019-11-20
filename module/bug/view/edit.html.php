@@ -122,19 +122,7 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->bug->type;?></th>
-                  <td>
-                    <?php
-                    /**
-                     * Remove designchange, newfeature, trackings from the typeList, because should be tracked in story or task.
-                     * These thress types if upgrade from bugfree2.x.
-                     */
-                    if($bug->type != 'interface')    unset($lang->bug->typeList['interface']);
-                    if($bug->type != 'designchange') unset($lang->bug->typeList['designchange']);
-                    if($bug->type != 'newfeature')   unset($lang->bug->typeList['newfeature']);
-                    if($bug->type != 'trackthings')  unset($lang->bug->typeList['trackthings']);
-                    echo html::select('type', $lang->bug->typeList, $bug->type, "class='form-control chosen'");
-                    ?>
-                  </td>
+                  <td><?php echo html::select('type', $lang->bug->typeList, $bug->type, "class='form-control chosen'"); ?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->severity;?></th>
