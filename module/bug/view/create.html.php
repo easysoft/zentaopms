@@ -69,14 +69,7 @@ js::set('flow', $config->global->flow);
             <?php $showBrowser = strpos(",$showFields,", ',browser,') !== false;?>
             <td>
               <div class='input-group' id='bugTypeInputGroup'>
-                <?php
-                /* Remove the unused types. */
-                unset($lang->bug->typeList['interface']);
-                unset($lang->bug->typeList['designchange']);
-                unset($lang->bug->typeList['newfeature']);
-                unset($lang->bug->typeList['trackthings']);
-                echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");
-                ?>
+                <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control'");?>
                 <?php if($showOS):?>
                 <span class='input-group-addon fix-border'><?php echo $lang->bug->os?></span>
                 <?php echo html::select('os', $lang->bug->osList, $os, "class='form-control'");?>
@@ -126,14 +119,7 @@ js::set('flow', $config->global->flow);
             <td>
               <div class='table-row'>
                 <div class='table-col' id='typeBox'>
-                  <?php
-                  /* Remove the unused types. */
-                  unset($lang->bug->typeList['interface']);
-                  unset($lang->bug->typeList['designchange']);
-                  unset($lang->bug->typeList['newfeature']);
-                  unset($lang->bug->typeList['trackthings']);
-                  echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");
-                  ?>
+                  <?php echo html::select('type', $lang->bug->typeList, $type, "class='form-control chosen'");?>
                 </div>
                 <?php if($showOS):?>
                 <div class='table-col' id='osBox'>
