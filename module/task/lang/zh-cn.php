@@ -51,6 +51,7 @@ $lang->task->progressAB          = '%';
 $lang->task->progressTips        = '已消耗/(已消耗+剩余)';
 $lang->task->copy                = '复制任务';
 $lang->task->waitTask            = '未开始的任务';
+$lang->task->allModule           = '所有模块';
 
 $lang->task->common           = '任务';
 $lang->task->id               = '编号';

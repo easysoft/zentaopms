@@ -96,7 +96,16 @@
               <?php endif;?>
               <tr>
                 <th class='thWidth'><?php echo $lang->task->module;?></th>
-                <td id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></td>
+                <td>
+                  <div class='table-row'>
+                    <span class='table-col' id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></span>
+                    <span class='table-col w-100px text-middle pl-10px'>
+                      <div class="checkbox-primary">
+                        <input type="checkbox" id="showAllModule"><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
+                      </div>
+                    </span>
+                  </div>
+                </td>
               </tr>
               <?php if($config->global->flow != 'onlyTask' and $project->type != 'ops'):?>
               <tr>
@@ -278,4 +287,5 @@
     </div>
   </form>
 </div>
+<?php js::set('projectID', $project->id);?>
 <?php include '../../common/view/footer.html.php';?>

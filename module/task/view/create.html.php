@@ -41,7 +41,13 @@
         </tr>
         <tr>
           <th><?php echo $lang->task->module;?></th>
-          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value,$project->id)'");?></td><td></td><td></td>
+          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $project->id)'");?></td>
+          <td>
+            <div class="checkbox-primary">
+              <input type="checkbox" id="showAllModule"><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
+            </div>
+          </td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->assignedTo;?></th>
@@ -298,4 +304,5 @@
   </div>
 </div>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
+<?php js::set('projectID', $project->id);?>
 <?php include '../../common/view/footer.html.php';?>

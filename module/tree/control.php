@@ -371,11 +371,11 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false)
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '')
     {
         if($viewType == 'task')
         {
-            $optionMenu = $this->tree->getTaskOptionMenu($rootID); 
+            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra); 
         }
         else
         {

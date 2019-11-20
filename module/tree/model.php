@@ -219,7 +219,7 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0)
+    public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0, $extra = '')
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
         $products       = $this->loadModel('product')->getProductsByProject($rootID);
@@ -286,7 +286,7 @@ class treeModel extends model
                 {
                     if(!strpos($menu, '|')) continue;
                     list($label, $moduleID) = explode('|', $menu);
-                    if(isset($projectModules[$moduleID])) $lastMenu[$moduleID] = $label;
+                    if(isset($projectModules[$moduleID]) or strpos($extra, 'allModule') !== false) $lastMenu[$moduleID] = $label;
                 }
                 foreach($topMenu as $moduleID => $moduleName)
                 {
@@ -421,7 +421,7 @@ class treeModel extends model
      */
     public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
     {
-        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
+        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $products      = $this->loadModel('product')->getProductsByProject($rootID);
@@ -478,7 +478,7 @@ class treeModel extends model
                 $stmt = $this->dbh->query($query);
                 while($module = $stmt->fetch()) 
                 {
-                    if(!$manage and !isset($projectModules[$module->id])) continue;
+                    if(!$manage and !isset($projectModules[$module->id]) and strpos($extra['extra'], 'allModule') === false) continue;
                     $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
                 }
                 if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
