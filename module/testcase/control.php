@@ -1,4 +1,4 @@
- ? <?php
+ <?php
 /**
  * The control file of case currentModule of ZenTaoPMS.
  *
