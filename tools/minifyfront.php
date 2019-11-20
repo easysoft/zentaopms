@@ -21,7 +21,7 @@ $jsFiles[] = $jsRoot     . 'my.full.js';
 /* Combine these js files. */
 $allJSFile  = $jsRoot . 'all.js';
 $jsCode = '';
-foreach($jsFiles as $jsFile) $jsCode .= "\n". file_get_contents($jsFile);
+foreach($jsFiles as $jsFile) $jsCode .= "\n". str_replace('/*!', '/*', file_get_contents($jsFile));
 file_put_contents($allJSFile, $jsCode);
 
 /* Compress it. */
@@ -33,16 +33,19 @@ file_put_contents($allJSFile, $jsCode);
 $themeRoot  = $baseDir . '/www/theme/';
 
 /* Iinclude config and lang file to get langs and themes. */
+$config = new stdclass();
 include $baseDir . '/config/config.php';
+
 $lang = new stdclass();
 $lang->productCommon = '';
 $lang->projectCommon = '';
+$lang->storyCommon   = '';
 include $baseDir . '/module/common/lang/zh-cn.php';
 $langs  = array_keys($config->langs);
 $themes = array_keys($lang->themes);
 
 /* Create css files for every them and every lang. */
-$zuiCode  = str_replace('../fonts', '../zui/fonts', file_get_contents($themeRoot . 'zui/css/min.css'));
+$zuiCode  = str_replace(array('/*!', '../fonts'), array('/*', '../zui/fonts'), file_get_contents($themeRoot . 'zui/css/min.css'));
 foreach($langs as $lang)
 {
     foreach($themes as $theme)
