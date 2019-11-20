@@ -941,7 +941,25 @@ class testtask extends control
             $this->view->title = $this->lang->testtask->batchRun;
         }
 
-        $this->view->cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+        $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+        /* If case has changed and not confirmed, remove it. */
+        if($from == 'testtask')
+        {    
+            $runs = $this->dao->select('`case`, version')->from(TABLE_TESTRUN)
+                ->where('`case`')->in($caseIDList)
+                ->andWhere('task')->eq($taskID)
+                ->fetchPairs();
+            foreach($cases as $caseID => $case)
+            {
+                if(isset($runs[$caseID]) && $runs[$caseID] < $case->version) 
+                {
+                    unset($cases[$caseID]);
+                    $key = array_search($caseID, $caseIDList);
+                    if($key) array_splice($caseIDList, $key, 1);
+                }
+            }
+        }
+        $this->view->cases = $cases;
         $this->view->steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t2.id')->in($caseIDList)
