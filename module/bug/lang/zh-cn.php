@@ -252,11 +252,6 @@ $lang->bug->typeList['automation']   = '测试脚本';
 $lang->bug->typeList['designdefect'] = '设计缺陷';
 $lang->bug->typeList['others']       = '其他';
 
-$lang->bug->discardedTypeList['interface']    = '界面优化';
-$lang->bug->discardedTypeList['designchange'] = '设计变更';
-$lang->bug->discardedTypeList['newfeature']   = "新增{$lang->storyCommon}";
-$lang->bug->discardedTypeList['trackthings']  = '事务跟踪';
-
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = '激活';
 $lang->bug->statusList['resolved'] = '已解决';
