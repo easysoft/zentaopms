@@ -41,15 +41,15 @@
         </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAgentId;?></th>
-          <td><?php echo html::input('agentId', '', "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('agentId', '', "class='form-control'");?></td>
         </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAppKey;?></th>
-          <td><?php echo html::input('appKey', '', "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('appKey', '', "class='form-control'");?></td>
         </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAppSecret;?></th>
-          <td><?php echo html::input('appSecret', '', "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('appSecret', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>

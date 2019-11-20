@@ -44,15 +44,15 @@
         <?php $secret = json_decode($webhook->secret);?>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAgentId;?></th>
-          <td><?php echo html::input('agentId', $secret->agentId, "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('agentId', $secret->agentId, "class='form-control'");?></td>
         </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAppKey;?></th>
-          <td><?php echo html::input('appKey', $secret->appKey, "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('appKey', $secret->appKey, "class='form-control'");?></td>
         </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAppSecret;?></th>
-          <td><?php echo html::input('appSecret', $secret->appSecret, "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('appSecret', $secret->appSecret, "class='form-control'");?></td>
         </tr>
         <?php endif;?>
         <tr>
