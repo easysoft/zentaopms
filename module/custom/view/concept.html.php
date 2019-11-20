@@ -9,12 +9,12 @@
  * @version     $Id: deny.html.php 4129 2013-01-18 01:58:14Z wwccss $
  */
 ?>
-<?php if($this->config->conceptSetted):?>
+<?php if(isset($this->config->conceptSetted)):?>
 <?php include 'header.html.php';?>
 <?php else:?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php endif;?>
-<?php if($this->config->conceptSetted):?>
+<?php if(isset($this->config->conceptSetted)):?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <div class='heading'>
@@ -24,10 +24,9 @@
 <?php else:?>
 <div class='container'>
   <div class='modal-dialog'>
-    <div class='alert alert-success'>
-    <?php printf($lang->custom->notice->conceptResult, $lang->productCommon, $lang->projectCommon, $lang->storyCommon, $lang->hourCommon);?>
+    <div class='modal-header'>
+      <strong><?php echo $lang->custom->concept?></strong>
     </div>
-  </div>
 <?php endif;?>
   <form id='ajaxForm' method='post'>
     <div class='modal-body'>
@@ -51,9 +50,10 @@
       </div>
     </div>
   </form>
-<?php if($this->config->conceptSetted):?>
+<?php if(isset($this->config->conceptSetted)):?>
 <?php include '../../common/view/footer.html.php';?>
 <?php else:?>
+</div>
 </div>
 </body>
 </html>
