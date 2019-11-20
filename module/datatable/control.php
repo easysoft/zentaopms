@@ -28,14 +28,14 @@ class datatable extends control
      * @access public
      * @return void
      */
-    public function ajaxSave()
+    public function ajaxSave($type = '')
     {
         if(!empty($_POST))
         {
             $account = $this->app->user->account;
             if($account == 'guest') $this->send(array('result' => 'fail', 'target' => $target, 'message' => 'guest.'));
 
-            $name = 'datatable.' . $this->post->target . '.' . $this->post->name;
+            $name = $type == 'allModule' ? 'project.task.allModule' : 'datatable.' . $this->post->target . '.' . $this->post->name;
             $this->loadModel('setting')->setItem($account . '.' . $name, $this->post->value);
             if($this->post->global) $this->setting->setItem('system.' . $name, $this->post->value);
 
