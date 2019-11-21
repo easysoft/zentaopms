@@ -32,6 +32,9 @@ common:
 	mv zentaopms/www/install.php.tmp zentaopms/www/install.php
 	mv zentaopms/www/upgrade.php.tmp zentaopms/www/upgrade.php
 	cp VERSION zentaopms/
+	# create index.html of each folder.
+	for path in `find zentaopms/ -type d`; do touch "$$path/index.html"; done
+	rm zentaopms/www/index.html
 	# combine js and css files.
 	cp -fr tools zentaopms/tools && cd zentaopms/tools/ && php ./minifyfront.php
 	rm -fr zentaopms/tools
