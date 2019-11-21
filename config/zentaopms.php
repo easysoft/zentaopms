@@ -168,7 +168,6 @@ define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
 define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
-define('TABLE_TRANSLATION',   '`' . $config->db->prefix . 'translation`');
 define('TABLE_DINGUSERID',    '`' . $config->db->prefix . 'dinguserid`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
