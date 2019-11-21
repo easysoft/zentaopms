@@ -77,15 +77,15 @@ class bug extends control
         /* Set productID, moduleID, queryID and branch. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch == '') ? (int)$this->cookie->preBranch  : (int)$branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['bugModule'] = 0;
-            setcookie('bugModule', 0, 0, $this->config->webRoot);
+            setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, true);
         }
-        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot);
+        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, true);
         if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
 
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
@@ -97,7 +97,7 @@ class bug extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->qaBugOrder ? $this->cookie->qaBugOrder : 'id_desc';
-        setcookie('qaBugOrder', $orderBy, 0, $this->config->webRoot);
+        setcookie('qaBugOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -299,7 +299,7 @@ class bug extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
-            setcookie('bugModule', (int)$this->post->module, 0, $this->config->webRoot);
+            setcookie('bugModule', (int)$this->post->module, 0, $this->config->webRoot, '', false, true);
             $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc");
             if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID");
             $response['locate'] = $location;

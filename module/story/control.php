@@ -126,7 +126,7 @@ class story extends control
             $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID&orderBy=&browseType=byModule&moduleID=$moduleID");
             if($projectID == 0)
             {
-                setcookie('storyModule', (int)$moduleID, 0, $this->config->webRoot);
+                setcookie('storyModule', (int)$moduleID, 0, $this->config->webRoot, '', false, true);
                 $productID = $this->post->product ? $this->post->product : $productID;
                 $branchID  = $this->post->branch ? $this->post->branch : $branch;
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&orderBy=id_desc");
