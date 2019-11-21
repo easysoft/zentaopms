@@ -595,9 +595,12 @@ class baseRouter
         unset($_REQUEST);
 
         /* Change for CSRF. */
-        $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
-        $httpHost = $_SERVER['HTTP_HOST'];
-        if(strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
+        if($this->config->framework->filterCSRF)
+        {
+            $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+            $httpHost = $_SERVER['HTTP_HOST'];
+            if((!defined('RUN_MODE') or RUN_MODE != 'api') and strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $_FILES = $_POST = array();
+        }
 
         $_FILES  = validater::filterFiles();
         $_POST   = validater::filterSuper($_POST);
@@ -864,7 +867,7 @@ class baseRouter
             $this->clientLang = $this->config->default->lang;
         }
 
-        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if(!isset($_COOKIE['lang'])) $_COOKIE['lang'] = $this->clientLang;
 
         return true;
@@ -918,7 +921,7 @@ class baseRouter
             $this->clientTheme = $this->config->default->theme;
         }
 
-        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if(!isset($_COOKIE['theme'])) $_COOKIE['theme'] = $this->clientTheme;
 
         return true;
@@ -944,7 +947,7 @@ class baseRouter
             $this->clientDevice = ($mobile->isMobile() and !$mobile->isTablet()) ? 'mobile' : 'desktop';
         }
 
-        setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('device', $this->clientDevice, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if(!isset($_COOKIE['device'])) $_COOKIE['device'] = $this->clientDevice;
 
         return $this->clientDevice;

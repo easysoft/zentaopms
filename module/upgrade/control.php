@@ -201,7 +201,18 @@ class upgrade extends control
         if(empty($extensions)) $this->locate(inlink('selectVersion'));
 
         /* Check network. */
-        $check = @fopen(dirname($this->config->extension->apiRoot), "r");
+        if(!extension_loaded('curl')) $this->locate(inlink('selectVersion'));
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 10); 
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($curl, CURLOPT_URL, dirname($this->config->extension->apiRoot));
+
+        $check = curl_exec($curl);
+        curl_close($curl);
+
         if(!$check) $this->locate(inlink('selectVersion'));
 
         $versions = array();

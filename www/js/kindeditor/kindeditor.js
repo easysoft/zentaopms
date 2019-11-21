@@ -10124,6 +10124,12 @@ KindEditor.plugin('pasteimage', function(K) {
             placeholder: 'You can paste images in the editor.',
             failMsg: 'Pasting image failed. Try again later.',
             uploadingHint: 'Uploading...',
+        },
+        ja: {
+            notSupportMsg: '使用されているブラウザは画像の貼り付けがサポートされていません！',
+            placeholder: 'エディターを使用して画像を貼り付けます。',
+            failMsg: '画像を貼り付けませんでした、後でやり直してください。',
+            uploadingHint: '画像をアップロード中、しばらくお待ちください...',
         }
     };
 
@@ -10170,6 +10176,9 @@ KindEditor.plugin('pasteimage', function(K) {
             }
             var imageLoadingEle = '<div class="image-loading-ele small" style="padding: 5px; background: #FFF3E0; width: 300px; border-radius: 2px; border: 1px solid #FF9800; color: #ff5d5d; margin: 10px 0;"><i class="icon icon-spin icon-spinner-indicator muted"></i> ' + lang.uploadingHint + '</div>';
             self.readonly(true);
+            if ($.fn.enableForm) {
+                $(self.edit.div[0]).closest('form').enableForm(false);
+            }
             self.cmd.inserthtml(imageLoadingEle);
         };
 
@@ -10196,6 +10205,9 @@ KindEditor.plugin('pasteimage', function(K) {
             // $(doc.body).find('.image-loading-ele').remove();
 
             self.readonly(false);
+            if ($.fn.enableForm) {
+                $(self.edit.div[0]).closest('form').enableForm(true);
+            }
         };
 
         var pasteUrl = options.postUrl;
@@ -10362,7 +10374,6 @@ KindEditor.plugin('table', function (K) {
             forecolor: '文字颜色',
             backcolor: '背景颜色',
             invalidBoderWidth: '边框大小必须为数字。'
-
         },
         zh_tw: {
             name: '表格',
@@ -10407,6 +10418,28 @@ KindEditor.plugin('table', function (K) {
             forecolor: 'Text Color',
             backcolor: 'Back Color',
             invalidBoderWidth: 'Border width value must be number'
+        },
+        ja: {
+            name: 'テーブル',
+            xRxC: '{0}行 × {1}列',
+            headerRow: '見出し行',
+            headerCol: '見出し列',
+            tableStyle: 'テーブルスタイル',
+            addHeaderRow: '見出し行を追加',
+            stripedRows: 'ストライブ 行',
+            hoverRows: 'ホバー行',
+            autoChangeTableWidth: '自動変更幅',
+            tableWidthFixed: 'テーブル文字に適応',
+            tableWidthFull: 'ページ幅で適応',
+            tableBorder: 'テーブル枠線',
+            tableHead: '見出し',
+            tableContent: 'コンテンツ',
+            mergeCells: 'セルを結合',
+            defaultColor: 'デフォルト色',
+            color: '色',
+            forecolor: 'フォントの色',
+            backcolor: '塗りつぶしの色',
+            invalidBoderWidth: '外枠のサイズは必ず数値です。'
         }
     };
     var $elements = [];

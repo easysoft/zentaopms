@@ -217,7 +217,7 @@ class userModel extends model
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->remove('group, password1, password2, verifyPassword')
+            ->remove('group, password1, password2, verifyPassword, passwordStrength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -328,7 +328,7 @@ class userModel extends model
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;
-                $prev['password'] = $this->post->password[$i];
+                $prev['password'] = $users->password[$i];
             }
         }
 
@@ -376,7 +376,7 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
-            ->remove('password1, password2, groups,verifyPassword')
+            ->remove('password1, password2, groups,verifyPassword, passwordStrength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -553,7 +553,7 @@ class userModel extends model
 
         $user = fixer::input('post')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
-            ->remove('account, password1, password2, originalPassword')
+            ->remove('account, password1, password2, originalPassword, passwordStrength')
             ->get();
 
         if(empty($_POST['originalPassword']) or $this->post->originalPassword != md5($this->app->user->password . $this->session->rand))
@@ -606,7 +606,7 @@ class userModel extends model
             if($this->post->password1 != $this->post->password2) dao::$errors['password'][] = $this->lang->error->passwordsame;
             if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
 
-            if(isset($this->config->safe->mode) and $this->computePasswordStrength($this->post->password1) < $this->config->safe->mode) dao::$errors['password1'][] = $this->lang->user->weakPassword;
+            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = $this->lang->user->weakPassword;
             if(!empty($this->config->safe->changeWeak))
             {
                 if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
@@ -819,9 +819,9 @@ class userModel extends model
      */
     public function keepLogin($user)
     {
-        setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot);
-        setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot);
-        setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot);
+        setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot, '', false, true);
     }
 
     /**
@@ -1313,6 +1313,7 @@ class userModel extends model
             }
             $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
         }
+
         return $userView;
     }
 
@@ -1355,6 +1356,16 @@ class userModel extends model
 
         $userView->products = trim($userView->products, ',');
         $userView->projects = trim($userView->projects, ',');
+
+        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->fetchAll('id');
+
+        $openedProducts = join(',', array_keys($openedProducts));
+        $openedProjects = join(',', array_keys($openedProjects));
+
+        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
+        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
+
         return $userView;
     }
 
@@ -1374,7 +1385,9 @@ class userModel extends model
         if($objectType == 'project') $table = TABLE_PROJECT;
         if(empty($table)) return false;
 
-        $object     = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+        if($object->acl == 'open') return true;
+
         $allGroups  = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
         $userGroups = array();
         foreach($allGroups as $group)
@@ -1401,6 +1414,8 @@ class userModel extends model
         $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)
             ->beginIF($users)->where('account')->in($users)->fi()
             ->query();
+
+        $userObjects = array();
         while($userView = $stmt->fetch())
         {
             $account = $userView->account;
@@ -1409,15 +1424,20 @@ class userModel extends model
                 $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $teams);
                 if($hasPriv and strpos(",{$userView->products},", ",{$objectID},") === false) $userView->products .= ",{$objectID}";
                 if(!$hasPriv and strpos(",{$userView->products},", ",{$objectID},") !== false) $userView->products = trim(str_replace(",{$objectID},", ',', ",{$userView->products},"), ',');
-                $this->dao->update(TABLE_USERVIEW)->set('products')->eq($userView->products)->where('account')->eq($account)->exec();
+                $userObjects[$account]['products'] = $userView->products;
             }
             elseif($objectType == 'project')
             {
                 $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
                 if($hasPriv and strpos(",{$userView->projects},", ",{$objectID},") === false) $userView->projects .= ",{$objectID}";
                 if(!$hasPriv and strpos(",{$userView->projects},", ",{$objectID},") !== false) $userView->projects = trim(str_replace(",{$objectID},", ',', ",{$userView->projects},"), ',');
-                $this->dao->update(TABLE_USERVIEW)->set('projects')->eq($userView->projects)->where('account')->eq($account)->exec();
+                $userObjects[$account]['projects'] = $userView->projects;
             }
+        }
+
+        foreach($userObjects as $account => $data)
+        {
+            $this->dao->update(TABLE_USERVIEW)->data($data)->where('account')->eq($account)->exec();
         }
     }
 

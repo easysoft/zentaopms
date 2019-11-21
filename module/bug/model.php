@@ -792,6 +792,7 @@ class bugModel extends model
             $activateBugs[$bugID]['openedBuild'] = $data->openedBuildList[$bugID];
             $activateBugs[$bugID]['comment']     = $data->commentList[$bugID];
 
+            $activateBugs[$bugID]['activatedDate']  = $now;
             $activateBugs[$bugID]['assignedDate']   = $now;
             $activateBugs[$bugID]['resolution']     = '';
             $activateBugs[$bugID]['status']         = 'active';
@@ -911,10 +912,16 @@ class bugModel extends model
      */
     public function resolve($bugID)
     {
-        if(strpos($this->config->bug->resolve->requiredFields, 'comment') !== false and !$this->post->comment)
+        /* Check required fields before create build. */
+        $requiredFields = explode(',', trim($this->config->bug->resolve->requiredFields, ','));
+        foreach($requiredFields as $requiredField)
         {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
-            return false;
+            if(!$this->post->$requiredField)
+            {
+                $tip = $requiredField == 'comment' ? $this->lang->comment : $this->lang->bug->$requiredField;
+                dao::$errors[] = sprintf($this->lang->error->notempty, $tip);
+                return false;
+            } 
         }
 
         $now    = helper::now();

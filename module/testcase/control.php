@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * The control file of case currentModule of ZenTaoPMS.
  *
@@ -490,6 +490,7 @@ class testcase extends control
             $case->lastRunner    = $run->lastRunner;
             $case->lastRunDate   = $run->lastRunDate;
             $case->lastRunResult = $run->lastRunResult;
+            $case->caseStatus    = $case->status;
             $case->status        = $run->status;
         }
 
@@ -621,7 +622,7 @@ class testcase extends control
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
             if($case->lib and $case->fromCaseID)
             {
-                $libName    = $this->loadModel('testsuite')->getById($case->lib)->name;
+                $libName    = $this->loadModel('caselib')->getById($case->lib)->name;
                 $libModules = $this->tree->getOptionMenu($case->lib, 'caselib');
                 foreach($libModules as $moduleID => $moduleName)
                 {
@@ -993,11 +994,12 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function confirmChange($caseID)
+    public function confirmChange($caseID, $taskID = 0, $from = 'view')
     {
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
-        die(js::locate(inLink('view', "caseID=$caseID"), 'parent'));
+        if($from == 'view') die(js::locate(inlink('view', "caseID=$caseID&version=$case->version&from=testtask&taskID=$taskID"), 'parent'));
+        die(js::reload('parent'));
     }
 
     /**
@@ -1152,13 +1154,11 @@ class testcase extends control
             $branches = $this->loadModel('branch')->getPairs($productID);
 
             /* Get related objects id lists. */
-            $relatedModuleIdList = array();
             $relatedStoryIdList  = array();
             $relatedCaseIdList   = array();
 
             foreach($cases as $case)
             {
-                $relatedModuleIdList[$case->module] = $case->module;
                 $relatedStoryIdList[$case->story]   = $case->story;
                 $relatedCaseIdList[$case->linkCase] = $case->linkCase;
 
@@ -1171,12 +1171,11 @@ class testcase extends control
             }
 
             /* Get related objects title or names. */
-            $relatedModules = $this->loadModel('tree')->getOptionMenu($productID, 'case');
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
             $relatedSteps   = $this->dao->select('id,parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case', 'id');
-            $relatedModules = array('0' => '/') + $relatedModules;
 
+            $this->loadModel('tree');
             $cases = $this->testcase->appendData($cases);
             foreach($cases as $case)
             {
@@ -1222,8 +1221,8 @@ class testcase extends control
                 /* fill some field with useful value. */
                 $case->product = !isset($products[$case->product])     ? '' : $products[$case->product] . "(#$case->product)";
                 $case->branch  = !isset($branches[$case->branch])      ? '' : $branches[$case->branch] . "(#$case->branch)";
-                $case->module  = !isset($relatedModules[$case->module])? '' : $relatedModules[$case->module] . "(#$case->module)";
                 $case->story   = !isset($relatedStories[$case->story]) ? '' : $relatedStories[$case->story] . "(#$case->story)";
+                $case->module  = $case->module ? $this->tree->getModulePathByID($case->module) . "(#$case->module)" : '';
 
                 if(isset($caseLang->priList[$case->pri]))              $case->pri           = $caseLang->priList[$case->pri];
                 if(isset($caseLang->typeList[$case->type]))            $case->type          = $caseLang->typeList[$case->type];

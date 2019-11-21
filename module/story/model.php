@@ -504,6 +504,7 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF($this->post->plan[0] and ($oldStory->stage == 'wait'), 'stage', 'planned')
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
             ->join('linkStories', ',')
@@ -554,7 +555,6 @@ class storyModel extends model
 
         if(!dao::isError())
         {
-            $this->setStage($storyID);
             if($story->product != $oldStory->product)
             {
                 $this->dao->update(TABLE_PROJECTSTORY)->set('product')->eq($story->product)->where('story')->eq($storyID)->exec();

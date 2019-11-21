@@ -375,8 +375,8 @@ $lang->admin->menu->message   = array('link' => 'Notification|message|index', 's
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
 
-$lang->admin->menu->dev       = array('link' => 'Entwicklung|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
-$lang->admin->menu->translate = array('link' => 'Translate|translate|index', 'subModule' => 'translate');
+$lang->admin->menu->dev       = array('link' => 'Entwicklung|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+$lang->admin->menu->translate = array('link' => 'Translate|dev|translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => 'Sicherheit|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => 'System|cron|index', 'subModule' => 'cron');
@@ -394,7 +394,7 @@ $lang->admin->subMenu->sso->ranzhi = 'Zdoo|admin|sso';
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => 'Database|dev|db');
-$lang->admin->subMenu->dev->editor = array('link' => 'Editor|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->editor = array('link' => 'Editor|dev|editor');
 $lang->admin->subMenu->dev->entry  = array('link' => 'Application|entry|browse', 'subModule' => 'entry');
 
 $lang->admin->subMenu->data = new stdclass();
@@ -418,8 +418,6 @@ $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
-$lang->translate = new stdclass();
-$lang->editor    = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -433,8 +431,6 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
-$lang->translate->menu = $lang->admin->menu;
-$lang->editor->menu    = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -470,8 +466,6 @@ $lang->menugroup->dev         = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
-$lang->menugroup->translate   = 'admin';
-$lang->menugroup->editor      = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

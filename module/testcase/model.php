@@ -1011,7 +1011,7 @@ class testcaseModel extends model
         $action = strtolower($action);
 
         if($action == 'createbug') return $case->caseFails > 0;
-        if($action == 'review') return $case->status == 'wait';
+        if($action == 'review') return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
 
         return true;
     }

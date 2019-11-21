@@ -8,9 +8,15 @@ $(document).ready(function()
     $('#password1').change(function(){password1Encrypted = false});
     $('#password2').change(function(){password2Encrypted = false});
 
-    $('#dataform').submit(function()
+    $('#submit').click(function()
     {
-        var password = $('input#verifyPassword').val();
+        var password         = $('input#verifyPassword').val();
+        var password1        = $('input#password1').val();
+        var passwordStrength = computePasswordStrength(password1);
+
+        if($("form input[name=passwordStrength]").length == 0) $('#submit').after("<input type='hidden' name='passwordStrength' value='0' />");
+        $("form input[name=passwordStrength]").val(passwordStrength);
+
         var rand = $('input#verifyRand').val();
         if(!verifyEncrypted && password) $('input#verifyPassword').val(md5(md5(password) + rand));
         verifyEncrypted = true;

@@ -342,7 +342,7 @@ class projectModel extends model
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
             if(isset($_POST['products']))
             {
                 foreach($this->post->products as $productID)
@@ -413,7 +413,7 @@ class projectModel extends model
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
-            if($project->acl != 'open' or $project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist) $this->loadModel('user')->updateUserView($projectID, 'project');
+            if($project->acl != 'open' and ($project->acl != $oldProject->acl or $project->whitelist != $oldProject->whitelist)) $this->loadModel('user')->updateUserView($projectID, 'project');
             return common::createChanges($oldProject, $project);
         }
     }
@@ -1172,8 +1172,6 @@ class projectModel extends model
         {
             $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productType]);
             $this->config->product->search['params']['branch']['values'] = array('' => '') + $branchPairs;
-            unset($this->config->product->search['fields']['stage']);
-            unset($this->config->product->search['params']['stage']);
         }
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
@@ -1670,6 +1668,7 @@ class projectModel extends model
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('account');
     }
 
@@ -2379,7 +2378,7 @@ class projectModel extends model
         $this->config->project->search['actionURL'] = $actionURL;
         $this->config->project->search['queryID']   = $queryID;
         $this->config->project->search['params']['project']['values'] = array(''=>'', $projectID => $projects[$projectID], 'all' => $this->lang->project->allProject);
-        $this->config->project->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($projectID, $startModuleID = 0);
+        $this->config->project->search['params']['module']['values']  = $this->loadModel('tree')->getTaskOptionMenu($projectID, 0, 0, 'allModule');
 
         $this->loadModel('search')->setSearchParams($this->config->project->search);
     }

@@ -1369,9 +1369,9 @@ class task extends control
             }
 
             /* Get related objects title or names. */
+            $this->loadModel('tree');
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(@array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-            $relatedModules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
 
             if($tasks)
             {
@@ -1465,7 +1465,7 @@ class task extends control
                 if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];
                 if(isset($taskLang->statusList[$task->status]))       $task->status       = $this->processStatus('task', $task);
                 if(isset($taskLang->reasonList[$task->closedReason])) $task->closedReason = $taskLang->reasonList[$task->closedReason];
-                if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module] . "(#$task->module)";
+                $task->module = $task->module ? $this->tree->getModulePathByID($task->module) . "(#$task->module)" : '';
 
                 if(isset($users[$task->openedBy]))     $task->openedBy     = $users[$task->openedBy];
                 if(isset($users[$task->assignedTo]))   $task->assignedTo   = $users[$task->assignedTo];

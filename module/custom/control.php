@@ -41,13 +41,6 @@ class custom extends control
         $this->app->loadLang($module);
         $fieldList = zget($this->lang->$module, $field, '');
 
-        if($module == 'bug' and $field == 'typeList')
-        {
-            unset($fieldList['interface']);
-            unset($fieldList['designchange']);
-            unset($fieldList['newfeature']);
-            unset($fieldList['trackthings']);
-        }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
@@ -131,7 +124,7 @@ class custom extends control
                     {
                         if(!is_numeric($key) or $key > 255) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
                     }
-                    if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
+                    if(!empty($key) and !empty($oldCustoms) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_0-9]+$/')) $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
 
                     /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
                     if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
@@ -235,30 +228,36 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
-
-            /* Change block title. */
-            $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
-            $newConfig = $this->post->productProject;
-
-            list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
-            list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);
-
-            foreach($this->config->productCommonList as $clientLang => $productCommonList)
-            {
-                $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$productCommonList[$oldProductIndex]}', '{$productCommonList[$newProductIndex]}')")->where('source')->eq('product')->exec();
-            }
-
-            foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
-            {
-                $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
-            }
-
+            $this->custom->setFlow();
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
         $this->view->title      = $this->lang->custom->flow;
         $this->view->position[] = $this->lang->custom->flow;
+        $this->display();
+    }
+
+    /**
+     * Set concept.
+     * 
+     * @access public
+     * @return void
+     */
+    public function concept()
+    {
+        if($_POST)
+        {
+            $this->custom->setFlow();
+            $this->custom->setStoryRequirement();
+            $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+            $this->loadModel('setting')->setItem('system.common.conceptSetted', 1);
+            $this->app->loadLang('common');
+            $message = sprintf($this->lang->custom->notice->conceptResult, $this->lang->productCommon, $this->lang->projectCommon, $this->lang->storyCommon, $this->lang->hourCommon);
+            $this->send(array('result' => 'success', 'notice' => $message, 'locate' => inlink('concept')));
+        }
+
+        $this->view->title = $this->lang->custom->concept;
+        $this->view->position[] = $this->lang->custom->concept;
         $this->display();
     }
 

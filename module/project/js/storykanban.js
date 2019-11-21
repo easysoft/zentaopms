@@ -1,10 +1,8 @@
 $(function()
 {
-    var boardID  = '';
-    var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
+    var isFirefox = $.zui.browser.firefox;
     $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
     var $kanban = $('#kanban');
-    var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
 
     var stageMap =
     {
@@ -18,47 +16,25 @@ $(function()
         }
     };
 
-    // Get scrollbar width
-    var getScrollbarWidth = function ()
-    {
-        var outer = document.createElement("div");
-        outer.style.visibility = "hidden";
-        outer.style.width = "100px";
-        outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
-    
-        document.body.appendChild(outer);
-    
-        var widthNoScroll = outer.offsetWidth;
-        // force scrollbars
-        outer.style.overflow = "scroll";
-    
-        // add innerdiv
-        var inner = document.createElement("div");
-        inner.style.width = "100%";
-        outer.appendChild(inner);        
-    
-        var widthWithScroll = inner.offsetWidth;
-
-        // remove divs
-        outer.parentNode.removeChild(outer);
-    
-        return widthNoScroll - widthWithScroll;
-    };
-
-    var scrollbarWidth = getScrollbarWidth();
     var fixBoardWidth = function()
     {
         var $table = $kanban.find('.table');
         var kanbanWidth = $table.width();
         var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
         var boardCount = $cBoards.length;
+        if (boardCount <= 1) {
+            return;
+        }
         var $cSide = $table.find('thead>tr>th.c-board.c-side');
-        var totalWidth = kanbanWidth - scrollbarWidth;
+        var totalWidth = kanbanWidth;
         if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
-        var cBoardWidth = Math.floor(totalWidth/boardCount) - 16;
-        $cBoards.not(':last').width(cBoardWidth);
-        $cBoards.first().width(cBoardWidth + 5);
-        $kanban.find('.boards > .board').width(cBoardWidth + 16 - 22);
+        var cBoardWidth = Math.floor(totalWidth/boardCount);
+
+        $cBoards.not(':last').css('width', cBoardWidth);
+        $cBoards.last().css('width', totalWidth - cBoardWidth * (boardCount - 1));
+        var $boards = $kanban.find('.boards > .board');
+        $boards.not(':last').css('width', cBoardWidth);
+        $boards.last().css('width', totalWidth - cBoardWidth * (boardCount - 1));
     };
     fixBoardWidth();
     $(window).on('resize', fixBoardWidth);
@@ -70,12 +46,10 @@ $(function()
         if(selfClose == 1) $kanban.load(location.href + ' #kanban', fixBoardWidth);
     };
 
-    var lastOperation;
     var dropTo = function(id, from, to, type)
     {
         if(stageMap[type][from] && stageMap[type][from][to])
         {
-            lastOperation = {id: id, from: from, to: to};
             $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIDList[]':[id]}, function()
             {
                 refresh();

@@ -39,7 +39,7 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
-          <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
+          <th class='w-150px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->project->code);?></th>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <th class='w-90px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
           <th class='w-90px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
@@ -72,7 +72,7 @@
             echo html::a($this->createLink('project', 'view', 'project=' . $project->id), $project->name);
             ?>
           </td>
-          <td class='text-left'><?php echo $project->code;?></td>
+          <td class='text-left' title="<?php echo $project->code;?>"><?php echo $project->code;?></td>
           <td><?php echo zget($users, $project->PM);?></td>
           <td><?php echo $project->end;?></td>
           <?php $projectStatus = $this->processStatus('project', $project);?>

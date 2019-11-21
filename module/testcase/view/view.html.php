@@ -107,8 +107,8 @@
         if(!$isLibCase)
         {
             if(!isonlybody()) echo "<div class='divider'></div>";
-            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', '', '', 'runCase', false, "data-width='95%'");
-            common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'results', false, "data-width='95%'");
+            common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', '', '', 'showinonlybody iframe', false, "data-width='95%'");
+            common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'showinonlybody iframe', false, "data-width='95%'");
 
             if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe', '', "data-width='90%'");
         }
@@ -118,10 +118,10 @@
         <?php echo $this->buildOperateMenu($case, 'view');?>
 
         <?php
-        common::printIcon('testcase', 'edit',"caseID=$case->id", $case);
+        common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
         if(!$isLibCase) common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
-        if($isLibCase and common::hasPriv('testsuite', 'createCase')) echo html::a($this->createLink('testsuite', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
-        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin');
+        if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
+        common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', 'showinonlybody');
         ?>
         <?php endif;?>
       </div>
@@ -183,7 +183,7 @@
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
+                    if(common::hasPriv('testcase', 'confirmStoryChange')) echo html::a($this->createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
                     echo ")";
                 }
                 ?>
@@ -219,18 +219,18 @@
               <th><?php echo $lang->testcase->status;?></th>
               <td>
                 <?php
-                echo $this->processStatus('testcase', $case);
+                echo $this->processStatus($from != 'testtask' ? 'testcase' : 'testtask', $case);
                 if($case->version > $case->currentVersion and $from == 'testtask')
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromTesttask}>{$lang->testcase->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'confirmchange')) echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask')
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
-                    echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
-                    echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'confirmLibcaseChange')) echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
+                    if(common::hasPriv('testcase', 'ignoreLibcaseChange')) echo html::a($this->createLink('testcase', 'ignoreLibcaseChange', "caseID=$case->id"), $lang->testcase->ignore, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
                 ?>

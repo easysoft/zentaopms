@@ -527,6 +527,17 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_6_3');
             $this->adjustPriv11_6_4();
             $this->appendExec('11_6_3');
+        case '11_6_4':
+            $this->saveLogs('Execute 11_6_4');
+            $this->execSQL($this->getUpgradeFile('11.6.4'));
+            $this->appendExec('11_6_4');
+        case '11_6_5':
+            $this->saveLogs('Execute 11_6_5');
+            $this->execSQL($this->getUpgradeFile('11.6.5'));
+            $this->fixGroupAcl();
+            $this->appendExec('11_6_5');
+        case '11_6_6':
+            $this->fixBugTypeList();
         }
 
         $this->deletePatch();
@@ -675,6 +686,7 @@ class upgradeModel extends model
             case '11_6_1' :
             case '11_6_2' :
             case '11_6_3' :
+            case '11_6_4' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.4'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3366,6 +3378,87 @@ class upgradeModel extends model
     }
 
     /**
+     * Fix group acl.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixGroupAcl()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUP)->fetchAll();
+        foreach($groups as $group)
+        {
+            if(empty($group->acl)) continue;
+
+            $acl = json_decode($group->acl, true);
+            if(isset($acl['products']))
+            {
+                $isEmpty = true;
+                foreach($acl['products'] as $productID)
+                {
+                    if(!empty($productID)) $isEmpty = false;
+                }
+                if($isEmpty) unset($acl['products']);
+            }
+
+            if(isset($acl['projects']))
+            {
+                $isEmpty = true;
+                foreach($acl['projects'] as $projectID)
+                {
+                    if(!empty($projectID)) $isEmpty = false;
+                }
+                if($isEmpty) unset($acl['projects']);
+            }
+
+            $acl = json_encode($acl);
+            $this->dao->update(TABLE_GROUP)->set('acl')->eq($acl)->where('id')->eq($group->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust 11.6.6 priv.
+     * 
+     * @access public
+     * @return void
+     */
+    public function adjustPriv11_6_6()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('editor')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'dev';
+            $groupPriv->method = 'editor';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('translate')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'dev';
+            $groupPriv->method = 'translate';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('translate')->exec();
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('editor')->exec();
+
+        return true;
+    }
+
+    /**
      * Save Logs.
      * 
      * @param  string    $log 
@@ -3392,5 +3485,49 @@ class upgradeModel extends model
      */
     public function appendExec($zentaoVersion)
     {
+    }
+
+    /**
+     * Fix bug typeList.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixBugTypeList()
+    {
+        foreach($this->config->upgrade->discardedBugTypes as $langCode => $types)
+        {
+            $bugs = $this->dao->select('type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
+            if(empty($bugs)) return true;
+
+            $usedTypes        = array_keys($bugs);
+            $customedTypeList = $this->dao->select('*')->from(TABLE_LANG)
+                ->where('lang')->in("$langCode,all")
+                ->andWhere('module')->eq('bug')
+                ->andWhere('section')->eq('typeList')
+                ->fetchPairs('`key`');
+
+            $typesToSave = array_diff($usedTypes, $customedTypeList);
+
+            if(empty($typesToSave)) continue;
+
+            $langs = array();
+            foreach($typesToSave as $type) $langs[$type] = $types[$type];
+
+            if(empty($customedTypeList))
+            {
+                $lang = new stdclass;
+                $lang->bug = new stdclass;
+                $lang->productCommon = '';
+                $lang->projectCommon = '';
+                $lang->more          = '';
+                $langFile  = $this->app->getModuleRoot() . DS . 'bug' . DS . 'lang' . DS . $langCode . '.php';
+                if(is_file($langFile)) include $langFile;
+                $langs = array_merge($lang->bug->typeList, $langs);
+            }
+
+            foreach($langs as $type => $typeName) $this->loadModel('custom')->setItem("{$langCode}.bug.typeList.{$type}.1", $typeName);
+        }
+        return true;
     }
 }

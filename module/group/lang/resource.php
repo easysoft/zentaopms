@@ -43,7 +43,6 @@ $lang->moduleOrder[110] = 'user';
 $lang->moduleOrder[115] = 'admin';
 $lang->moduleOrder[120] = 'extension';
 $lang->moduleOrder[125] = 'custom';
-$lang->moduleOrder[130] = 'editor';
 $lang->moduleOrder[140] = 'action';
 
 $lang->moduleOrder[145] = 'mail';
@@ -1039,48 +1038,16 @@ $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
-$lang->resource->translate = new stdclass();
-$lang->resource->translate->index        = 'index';
-$lang->resource->translate->addLang      = 'addLang';
-$lang->resource->translate->chooseModule = 'chooseModule';
-$lang->resource->translate->module       = 'module';
-$lang->resource->translate->review       = 'reviewAction';
-$lang->resource->translate->result       = 'result';
-$lang->resource->translate->batchPass    = 'batchPass';
-$lang->resource->translate->setting      = 'setting';
-$lang->resource->translate->export       = 'export';
-
-$lang->translate->methodOrder[5]  = 'index';
-$lang->translate->methodOrder[10] = 'addLang';
-$lang->translate->methodOrder[15] = 'chooseModule';
-$lang->translate->methodOrder[20] = 'module';
-$lang->translate->methodOrder[25] = 'review';
-$lang->translate->methodOrder[30] = 'result';
-$lang->translate->methodOrder[35] = 'batchPass';
-$lang->translate->methodOrder[40] = 'setting';
-$lang->translate->methodOrder[45] = 'export';
-
 $lang->resource->dev = new stdclass();
-$lang->resource->dev->api = 'api';
-$lang->resource->dev->db  = 'db';
+$lang->resource->dev->api       = 'api';
+$lang->resource->dev->db        = 'db';
+$lang->resource->dev->editor    = 'editor';
+$lang->resource->dev->translate = 'translate';
 
 $lang->dev->methodOrder[5]  = 'api';
 $lang->dev->methodOrder[10] = 'db';
-
-$lang->resource->editor = new stdclass();
-$lang->resource->editor->index   = 'index';
-$lang->resource->editor->extend  = 'extend';
-$lang->resource->editor->edit    = 'edit';
-$lang->resource->editor->newPage = 'newPage';
-$lang->resource->editor->save    = 'save';
-$lang->resource->editor->delete  = 'delete';
-
-$lang->editor->methodOrder[5]  = 'index';
-$lang->editor->methodOrder[10] = 'extend';
-$lang->editor->methodOrder[15] = 'edit';
-$lang->editor->methodOrder[20] = 'newPage';
-$lang->editor->methodOrder[25] = 'save';
-$lang->editor->methodOrder[30] = 'delete';
+$lang->dev->methodOrder[15] = 'editor';
+$lang->dev->methodOrder[20] = 'translate';
 
 /* Every version of new privilege. */
 $lang->changelog['1.0.1'][] = 'project-computeBurn';

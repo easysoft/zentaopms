@@ -226,7 +226,7 @@ class tree extends control
         $this->view->newModule       = $newModule;
         $this->view->currentProject  = $currentProject;
         $this->view->projectModules  = $this->tree->getTaskOptionMenu($currentProject, $productID);
-        $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'));
+        $this->view->modules         = $this->tree->getTaskTreeMenu($rootID, $productID, $rooteModuleID = 0, array('treeModel', 'createTaskManageLink'), 'allModule');
         $this->view->sons            = $this->tree->getTaskSons($rootID, $productID, $currentModuleID);
         $this->view->parentModules   = $parentModules;
         $this->view->currentModuleID = $currentModuleID;
@@ -371,11 +371,11 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false)
+    public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '')
     {
         if($viewType == 'task')
         {
-            $optionMenu = $this->tree->getTaskOptionMenu($rootID); 
+            $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra); 
         }
         else
         {

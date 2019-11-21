@@ -243,17 +243,13 @@ $lang->bug->browserList['other']    = 'Autres';
 
 $lang->bug->typeList['']             = '';
 $lang->bug->typeList['codeerror']    = 'Code Erreur';
-$lang->bug->typeList['interface']    = 'Interface';
 $lang->bug->typeList['config']       = 'Configuration';
 $lang->bug->typeList['install']      = 'Installation';
 $lang->bug->typeList['security']     = 'Faille Sécurité';
 $lang->bug->typeList['performance']  = 'Performance';
 $lang->bug->typeList['standard']     = 'Convention de Code';
 $lang->bug->typeList['automation']   = 'Script automatisation';
-$lang->bug->typeList['designchange'] = 'Design Change';
-$lang->bug->typeList['newfeature']   = 'Nouvelle fonctionnalité';
 $lang->bug->typeList['designdefect'] = 'Erreur de Design';
-$lang->bug->typeList['trackthings']  = 'Tracking';
 $lang->bug->typeList['others']       = 'Autres';
 
 $lang->bug->statusList['']         = '';

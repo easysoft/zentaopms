@@ -132,7 +132,7 @@ $config->task->datatable->fieldList['realStarted']['required'] = 'no';
 
 $config->task->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
 $config->task->datatable->fieldList['assignedTo']['fixed']    = 'no';
-$config->task->datatable->fieldList['assignedTo']['width']    = '120';
+$config->task->datatable->fieldList['assignedTo']['width']    = '100';
 $config->task->datatable->fieldList['assignedTo']['required'] = 'no';
 
 $config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
@@ -142,7 +142,7 @@ $config->task->datatable->fieldList['assignedDate']['required'] = 'no';
 
 $config->task->datatable->fieldList['finishedBy']['title']    = 'finishedByAB';
 $config->task->datatable->fieldList['finishedBy']['fixed']    = 'no';
-$config->task->datatable->fieldList['finishedBy']['width']    = '100';
+$config->task->datatable->fieldList['finishedBy']['width']    = '80';
 $config->task->datatable->fieldList['finishedBy']['required'] = 'no';
 
 $config->task->datatable->fieldList['finishedDate']['title']    = 'finishedDateAB';

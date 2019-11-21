@@ -19,6 +19,7 @@ $lang->webhook->url         = 'Webhook URL';
 $lang->webhook->domain      = 'ZenTao Domain';
 $lang->webhook->contentType = 'Type de contenu';
 $lang->webhook->sendType    = "Type d'envoi";
+$lang->webhook->secret      = 'Secret';
 $lang->webhook->product     = "{$lang->productCommon}";
 $lang->webhook->project     = "{$lang->projectCommon}";
 $lang->webhook->params      = 'Paramètres';

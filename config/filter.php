@@ -45,7 +45,6 @@ $filter->mail       = new stdclass();
 $filter->user       = new stdclass();
 $filter->block      = new stdclass();
 $filter->file       = new stdclass();
-$filter->translate  = new stdclass();
 
 $filter->block->default          = new stdclass();
 $filter->block->main             = new stdclass();
@@ -62,7 +61,6 @@ $filter->mail->ztcloud           = new stdclass();
 $filter->mail->batchdelete       = new stdclass();
 $filter->misc->checkupdate       = new stdclass();
 $filter->file->download          = new stdclass();
-$filter->file->ajaxueditorupload = new stdclass();
 $filter->product->browse         = new stdclass();
 $filter->product->default        = new stdclass();
 $filter->product->index          = new stdclass();
@@ -184,7 +182,6 @@ $filter->doc->showfiles->get['recPerPage'] = 'int';
 $filter->doc->showfiles->get['recTotal']   = 'int';
 $filter->doc->showfiles->get['title']      = 'reg::any';
 
-$filter->file->ajaxueditorupload->get['action'] = 'equal::config';
 $filter->file->download->get['charset']         = 'reg::lang';
 
 $filter->mail->batchdelete->get['idList'] = 'reg::idList';
@@ -215,5 +212,3 @@ $filter->git->cat->get['repoUrl']  = 'reg::base64';
 $filter->git->diff->get['repoUrl'] = 'reg::base64';
 $filter->svn->cat->get['repoUrl']  = 'reg::base64';
 $filter->svn->diff->get['repoUrl'] = 'reg::base64';
-
-$filter->translate->module->cookie['translateView'] = 'equal::split';

@@ -110,7 +110,7 @@ class baseHTML
     {
         global $config;
 
-        if(empty($title)) $title = $href;
+        if(strlen(trim($title)) == 0) $title = $href;
         $newline = $newline ? "\n" : '';
 
         return "<a href='$href' $misc>$title</a>$newline";

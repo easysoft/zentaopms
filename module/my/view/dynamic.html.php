@@ -43,7 +43,7 @@
         <span class="date-label"><?php echo $lang->action->dynamic->today;?></span>
         <?php endif;?>
         <span class="date-text"><?php echo $date;?></span>
-        <button type="button" class="btn btn-info btn-icon btn-sm dynamic-btn"><i class="icon icon-caret-up"></i></button>
+        <button type="button" class="btn btn-info btn-icon btn-sm dynamic-btn"><i class="icon icon-caret-down"></i></button>
       </div>
       <ul class="timeline timeline-tag-left">
         <?php if($direction == 'next') $actions = array_reverse($actions);?>
@@ -53,7 +53,8 @@
           <div>
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
-              <?php echo $app->user->realname . ' ' . $action->actionLabel;?>
+              <?php echo $app->user->realname;?>
+              <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text-muted"><?php echo $action->objectLabel;?></span>
               <?php echo html::a($action->objectLink, $action->objectName);?>

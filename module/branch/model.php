@@ -52,6 +52,37 @@ class branchModel extends model
     }
 
     /**
+     * Get all pairs.
+     * 
+     * @param  string $params 
+     * @access public
+     * @return array
+     */
+    public function getAllPairs($params = '')
+    {
+        $branchGroups = $this->dao->select('*')->from(TABLE_BRANCH)->where('deleted')->eq(0)->orderBy('product,`order`')->fetchGroup('product', 'id');
+        $products     = $this->loadModel('product')->getByIdList(array_keys($branchGroups));
+
+        $branchPairs = array();
+        foreach($branchGroups as $productID => $branches)
+        {
+            if(empty($products[$productID])) continue;
+
+            $product = $products[$productID];
+            foreach($branches as $branch)
+            {
+                $branchPairs[$branch->id] = $product->name . '/' . $branch->name;
+            }
+        }
+
+        if(strpos($params, 'noempty') === false)
+        {
+            $branchPairs = array('0' => $this->lang->branch->all . $this->lang->product->branchName['branch']) + $branchPairs;
+        }
+        return $branchPairs;
+    }
+
+    /**
      * Manage branch 
      * 
      * @param  int    $productID 

@@ -12,17 +12,17 @@
 $lang->build->common           = "版本";
 $lang->build->create           = "创建版本";
 $lang->build->edit             = "编辑版本";
-$lang->build->linkStory        = "关联需求";
+$lang->build->linkStory        = "关联{$lang->storyCommon}";
 $lang->build->linkBug          = "关联Bug";
 $lang->build->delete           = "删除版本";
 $lang->build->deleted          = "已删除";
 $lang->build->view             = "版本详情";
 $lang->build->batchUnlink      = '批量移除';
-$lang->build->batchUnlinkStory = '批量移除需求';
+$lang->build->batchUnlinkStory = "批量移除{$lang->storyCommon}";
 $lang->build->batchUnlinkBug   = '批量移除Bug';
 
 $lang->build->confirmDelete      = "您确认删除该版本吗？";
-$lang->build->confirmUnlinkStory = "您确认移除该需求吗？";
+$lang->build->confirmUnlinkStory = "您确认移除该{$lang->storyCommon}吗？";
 $lang->build->confirmUnlinkBug   = "您确认移除该Bug吗？";
 
 $lang->build->basicInfo = '基本信息';
@@ -40,15 +40,15 @@ $lang->build->desc          = '描述';
 $lang->build->files         = '上传发行包';
 $lang->build->last          = '上个版本';
 $lang->build->packageType   = '包类型';
-$lang->build->unlinkStory   = '移除需求';
+$lang->build->unlinkStory   = "移除{$lang->storyCommon}";
 $lang->build->unlinkBug     = '移除Bug';
-$lang->build->stories       = '完成的需求';
+$lang->build->stories       = "完成的{$lang->storyCommon}";
 $lang->build->bugs          = '解决的Bug';
 $lang->build->generatedBugs = '产生的Bug';
 $lang->build->noProduct     = " <span style='color:red'>该{$lang->projectCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a href='%s'>关联{$lang->productCommon}</a></span>";
 $lang->build->noBuild       = '暂时没有版本。';
 
-$lang->build->finishStories = ' 本次共完成 %s 个需求';
+$lang->build->finishStories = " 本次共完成 %s 个{$lang->storyCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
 $lang->build->createdBugs   = ' 本次共产生 %s 个Bug';
 

@@ -28,9 +28,9 @@ class commonModel extends model
             $this->setUser();
             $this->loadConfigFromDB();
             $this->app->setTimezone();
-            if((strpos($this->config->global->version, 'pro') !== false && version_compare($this->config->global->version, 'pro2.3.beta', '>'))
-                || (strpos($this->config->global->version, 'biz') !== false)
-                || version_compare($this->config->global->version, '4.3.beta', '>'))
+            if((strpos($this->config->version, 'pro') !== false && version_compare($this->config->version, 'pro2.3.beta', '>'))
+                || (strpos($this->config->version, 'biz') !== false)
+                || version_compare($this->config->version, '4.3.beta', '>'))
             {
                 $this->loadCustomFromDB();
             }
@@ -254,7 +254,7 @@ class commonModel extends model
             if(!$isGuest)
             {
                 echo '<li class="user-profile-item">';
-                echo "<a href='". helper::createLink('my', 'profile') . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
+                echo "<a href='" . helper::createLink('my', 'profile') . "'" .  "class='" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
                 echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';

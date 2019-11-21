@@ -87,7 +87,15 @@ $(function()
         if ($next.length) $next.find('a').trigger('click');
         else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
         e.preventDefault();
+
     });
+
+    var $productLi = $('#activeProduct');
+    if($productLi.length)
+    {
+        var productLi  = $productLi[0];
+        $(".col ul.nav").animate({scrollTop: productLi.offsetTop}, "slow");
+    }
 });
 </script>
 <div class="panel-body">
@@ -101,7 +109,7 @@ $(function()
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
         <?php foreach($products as $product):?>
-        <li <?php if($product == reset($products)) echo "class='active'";?> productID='<?php echo $product->id;?>'>
+        <li <?php if($product->id == $this->session->product) echo "class='active' id='activeProduct'";?> productID='<?php echo $product->id;?>'>
           <a href="javascript:;" data-target="#tabProduct<?php echo $product->id;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>
           <?php echo html::a(helper::createLink('product', 'browse', "productID=$product->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->product->browse}");?></li>
         <?php endforeach;?>

@@ -89,11 +89,11 @@ $lang->user->project     = $lang->projectCommon;
 $lang->user->task        = '任务';
 $lang->user->bug         = 'Bug';
 $lang->user->test        = '测试';
-$lang->user->testTask    = '测试任务';
+$lang->user->testTask    = '测试单';
 $lang->user->testCase    = '测试用例';
 $lang->user->schedule    = '日程';
 $lang->user->todo        = '待办';
-$lang->user->story       = '需求';
+$lang->user->story       = $lang->storyCommon;
 $lang->user->dynamic     = '动态';
 
 $lang->user->openedBy    = '由%s创建';
@@ -141,7 +141,7 @@ $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '删除';
 
 $lang->user->personalData['createdTodo']  = '创建的待办数';
-$lang->user->personalData['createdStory'] = '创建的需求数';
+$lang->user->personalData['createdStory'] = "创建的{$lang->storyCommon}数";
 $lang->user->personalData['finishedTask'] = '完成的任务数';
 $lang->user->personalData['resolvedBug']  = '解决的Bug数';
 $lang->user->personalData['createdCase']  = '创建的用例数';
@@ -154,6 +154,9 @@ $lang->user->tpl->type    = '类型';
 $lang->user->tpl->title   = '模板名';
 $lang->user->tpl->content = '内容';
 $lang->user->tpl->public  = '是否公开';
+
+$lang->usertpl = new stdclass();
+$lang->usertpl->title = '模板名称';
 
 $lang->user->placeholder = new stdclass();
 $lang->user->placeholder->account     = '英文、数字和下划线的组合，三位以上';

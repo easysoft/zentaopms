@@ -1498,7 +1498,6 @@ class story extends control
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();
-            $relatedModuleIdList  = array();
             $relatedStoryIdList   = array();
             $relatedPlanIdList    = array();
             $relatedBranchIdList  = array();
@@ -1507,7 +1506,6 @@ class story extends control
             foreach($stories as $story)
             {
                 $relatedProductIdList[$story->product] = $story->product;
-                $relatedModuleIdList[$story->module]   = $story->module;
                 $relatedPlanIdList[$story->plan]       = $story->plan;
                 $relatedBranchIdList[$story->branch]   = $story->branch;
                 $relatedStoryIDs[$story->id]           = $story->id;
@@ -1533,10 +1531,7 @@ class story extends control
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
             $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
 
-            $relatedModules = array();
             $this->loadModel('tree');
-            foreach($relatedProductIdList as $relatedProductId) $relatedModules += $this->tree->getOptionMenu($relatedProductId);
-
             foreach($stories as $story)
             {
                 $story->spec   = '';
@@ -1565,6 +1560,7 @@ class story extends control
                 if(isset($products[$story->product]))      $story->product = $this->post->fileType == 'word' ? $products[$story->product] : $products[$story->product] . "(#$story->product)";
                 if(isset($relatedModules[$story->module])) $story->module  = $this->post->fileType == 'word' ? $relatedModules[$story->module] : $relatedModules[$story->module] . "(#$story->module)";
                 if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
+                $story->module = $story->module ? (($this->post->fileType == 'word') ? $this->tree->getModulePathByID($story->module) : $this->tree->getModulePathByID($story->module) . "(#$story->module)") : '';
                 if(isset($story->plan))
                 {
                     $plans = '';

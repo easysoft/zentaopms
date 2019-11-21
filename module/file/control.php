@@ -103,47 +103,6 @@ class file extends control
     }
 
     /**
-     * AJAX: get upload request from the web editor.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxUeditorUpload($uid = '')
-    {
-        if($this->get->action == 'config')
-        {
-            die(json_encode($this->config->file->ueditor));
-        }
-
-        $file = $this->file->getUpload('upfile');
-        $file = $file[0];
-        if($file)
-        {
-            if($file['size'] == 0) die(json_encode(array('state' => $this->lang->file->errorFileUpload)));
-            if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
-            {
-                /* Compress image for jpg and bmp. */
-                $file = $this->file->compressImage($file);
-
-                $file['addedBy']    = $this->app->user->account;
-                $file['addedDate']  = helper::today();
-                unset($file['tmpname']);
-                $this->dao->insert(TABLE_FILE)->data($file)->exec();
-
-                $fileID = $this->dao->lastInsertID();
-                $url    = $this->createLink('file', 'read', "fileID=$fileID", $file['extension']);
-                if($uid) $_SESSION['album'][$uid][] = $fileID;
-                die(json_encode(array('state' => 'SUCCESS', 'url' => $url)));
-            }
-            else
-            {
-                $error = strip_tags(sprintf($this->lang->file->errorCanNotWrite, $this->file->savePath, $this->file->savePath));
-                die(json_encode(array('state' => $error)));
-            }
-        }
-    }
-
-    /**
      * Down a file.
      *
      * @param  int    $fileID
@@ -395,7 +354,7 @@ class file extends control
             $imageFiles  = $this->session->$sessionName;
             $this->session->set($module . 'ImagesFile', $imageFiles);
             unset($_SESSION[$sessionName]);
-            die(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent.parent'));
+            die(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent'));
         }
 
         if($_FILES)

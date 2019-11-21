@@ -490,4 +490,51 @@ class customModel extends model
         $this->setting->deleteItems("owner=system&module={$moduleName}");
         $this->setting->setItems("system.{$moduleName}", $requiredFields);
     }
+
+    /**
+     * Set flow function.
+     * 
+     * @param  string $type productProject | storyRequirement
+     * @access public
+     * @return void
+     */
+    public function setFlow()
+    {
+        $this->loadModel('setting')->setItem('system.custom.productProject', $this->post->productProject);
+
+        /* Change block title. */
+        $oldConfig = isset($this->config->custom->productProject) ? $this->config->custom->productProject : '0_0';
+        $newConfig = $this->post->productProject;
+
+        list($oldProductIndex, $oldProjectIndex) = explode('_', $oldConfig);
+        list($newProductIndex, $newProjectIndex) = explode('_', $newConfig);
+
+        foreach($this->config->productCommonList as $clientLang => $productCommonList)
+        {
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$productCommonList[$oldProductIndex]}', '{$productCommonList[$newProductIndex]}')")->where('source')->eq('product')->exec();
+        }
+
+        foreach($this->config->projectCommonList as $clientLang => $projectCommonList)
+        {
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$projectCommonList[$oldProjectIndex]}', '{$projectCommonList[$newProjectIndex]}')")->where('source')->eq('project')->exec();
+        }
+    }
+
+    public function setStoryRequirement()
+    {
+        $this->loadModel('setting')->setItem('system.custom.storyRequirement', $this->post->storyRequirement);
+
+        $oldIndex = isset($this->config->custom->storyRequirement) ? $this->config->custom->storyRequirement : '0';
+        $newIndex = $this->post->storyRequirement;
+
+        foreach($this->config->storyCommonList as $clientLang => $commonList)
+        {
+            $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
+        }
+    }
+
+    public function setHourPoint()
+    {
+        $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+    }
 }

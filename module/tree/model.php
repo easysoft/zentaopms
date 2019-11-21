@@ -26,6 +26,30 @@ class treeModel extends model
     }
 
     /**
+     * Get module path by ID.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return object
+     */
+    public function getModulePathByID($moduleID)
+    {
+        $module  = $this->dao->findById((int)$moduleID)->from(TABLE_MODULE)->fetch();
+        if($module->parent == '0') return '/' . $module->name;
+
+        $path    = substr($module->path, 1, -1);
+        $modules =  $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in($path)->orderBy('grade')->fetchPairs();
+
+        $modulePath = '';
+        foreach($modules as $moduleName)
+        {
+            $modulePath .= '/' . $moduleName; 
+        }
+        
+        return $modulePath;
+    }
+
+    /**
      * Build the sql query.
      *
      * @param  int    $rootID
@@ -195,7 +219,7 @@ class treeModel extends model
      * @access public
      * @return void
      */
-    public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0)
+    public function getTaskOptionMenu($rootID, $productID = 0, $startModule = 0, $extra = '')
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
         $products       = $this->loadModel('product')->getProductsByProject($rootID);
@@ -262,7 +286,7 @@ class treeModel extends model
                 {
                     if(!strpos($menu, '|')) continue;
                     list($label, $moduleID) = explode('|', $menu);
-                    if(isset($projectModules[$moduleID])) $lastMenu[$moduleID] = $label;
+                    if(isset($projectModules[$moduleID]) or strpos($extra, 'allModule') !== false) $lastMenu[$moduleID] = $label;
                 }
                 foreach($topMenu as $moduleID => $moduleName)
                 {
@@ -397,7 +421,7 @@ class treeModel extends model
      */
     public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
     {
-        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true);
+        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
         $products      = $this->loadModel('product')->getProductsByProject($rootID);
@@ -454,7 +478,7 @@ class treeModel extends model
                 $stmt = $this->dbh->query($query);
                 while($module = $stmt->fetch()) 
                 {
-                    if(!$manage and !isset($projectModules[$module->id])) continue;
+                    if(!$manage and !isset($projectModules[$module->id]) and strpos($extra['extra'], 'allModule') === false) continue;
                     $this->buildTree($treeMenu, $module, 'task', $userFunc, $extra);
                 }
                 if(isset($treeMenu[0]) and $branch) $treeMenu[0] = "<li><a>$branchName</a><ul>{$treeMenu[0]}</ul></li>";
@@ -1682,7 +1706,8 @@ class treeModel extends model
         while($module = $stmt->fetch())
         {
             /* Ignore useless module for task. */
-            if($keepModules and !isset($keepModules[$module->id])) continue;
+            $allModule = (isset($this->config->project->task->allModule) and ($this->config->project->task->allModule == 1));
+            if($keepModules and !isset($keepModules[$module->id]) and !$allModule) continue;
             if(isset($parent[$module->id]))
             {
                 $module->children = $parent[$module->id]->children;

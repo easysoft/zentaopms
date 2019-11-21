@@ -143,8 +143,23 @@ class reportModel extends model
             ->fetchAll('id');
         $plans    = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->in(array_keys($products))
             ->beginIF(strpos($conditions, 'overduePlan') === false)->andWhere('end')->gt(date('Y-m-d'))->fi()
+            ->orderBy('product,parent_desc,begin')
             ->fetchAll('id');
-        foreach($plans as $plan) $products[$plan->product]->plans[$plan->id] = $plan;
+        foreach($plans as $plan)
+        {
+            if($plan->parent > 0)
+            {
+                $parentPlan = zget($plans, $plan->parent, null);
+                if($parentPlan)
+                {
+                    $parentPlan->title = "[" . $this->lang->productplan->parentAB . '] ' . $parentPlan->title;
+                    $products[$plan->product]->plans[$parentPlan->id] = $parentPlan;
+                    unset($plans[$parentPlan->id]);
+                }
+                $plan->title = "[" . $this->lang->productplan->childrenAB . '] ' . $plan->title;
+            }
+            $products[$plan->product]->plans[$plan->id] = $plan;
+        }
 
         $planStories      = array();
         $unplannedStories = array();

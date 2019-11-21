@@ -30,7 +30,7 @@
           <td><?php echo html::input('name', '', "class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr>
+        <tr id='urlTR'>
           <th><?php echo $lang->webhook->url;?></th>
           <td><?php echo html::input('url', '', "class='form-control'");?></td>
           <td id='urlNote'><?php echo $lang->webhook->note->typeList['default'];?></td>
@@ -38,6 +38,18 @@
         <tr id='secretTR'>
           <th><?php echo $lang->webhook->secret;?></th>
           <td><?php echo html::input('secret', '', "class='form-control'");?></td>
+        </tr>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAgentId;?></th>
+          <td class='required'><?php echo html::input('agentId', '', "class='form-control'");?></td>
+        </tr>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAppKey;?></th>
+          <td class='required'><?php echo html::input('appKey', '', "class='form-control'");?></td>
+        </tr>
+        <tr class='dingapiTR'>
+          <th><?php echo $lang->webhook->dingAppSecret;?></th>
+          <td class='required'><?php echo html::input('appSecret', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>

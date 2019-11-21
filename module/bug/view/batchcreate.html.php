@@ -64,12 +64,6 @@
         </thead>
         <tbody>
           <?php
-          /* Remove the unused types. */
-          unset($lang->bug->typeList['interface']);
-          unset($lang->bug->typeList['designchange']);
-          unset($lang->bug->typeList['newfeature']);
-          unset($lang->bug->typeList['trackthings']);
-    
           $moduleOptionMenu       += array('ditto' => $lang->bug->ditto);
           $projects               += array('ditto' => $lang->bug->ditto);
           $lang->bug->typeList    += array('ditto' => $lang->bug->ditto);
