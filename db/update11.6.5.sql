@@ -5,3 +5,4 @@ CREATE TABLE `zt_dinguserid` (
   `userid` varchar(255) NOT NULL,
   UNIQUE KEY `webhook_account_userid` (`webhook`,`account`,`userid`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS `zt_translation`;
