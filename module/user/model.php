@@ -819,9 +819,9 @@ class userModel extends model
      */
     public function keepLogin($user)
     {
-        setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot);
-        setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot);
-        setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot);
+        setcookie('keepLogin', 'on', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('za', $user->account, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('zp', sha1($user->account . $user->password . $this->server->request_time), $this->config->cookieLife, $this->config->webRoot, '', false, true);
     }
 
     /**

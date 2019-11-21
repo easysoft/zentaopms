@@ -22,13 +22,19 @@ $(function()
         var kanbanWidth = $table.width();
         var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
         var boardCount = $cBoards.length;
+        if (boardCount <= 1) {
+            return;
+        }
         var $cSide = $table.find('thead>tr>th.c-board.c-side');
         var totalWidth = kanbanWidth;
         if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
-        var cBoardWidth = Math.floor(totalWidth/boardCount) - 16;
+        var cBoardWidth = Math.floor(totalWidth/boardCount);
 
-        $cBoards.width(cBoardWidth);
-        $kanban.find('.boards > .board').width(cBoardWidth);
+        $cBoards.not(':last').css('width', cBoardWidth);
+        $cBoards.last().css('width', totalWidth - cBoardWidth * (boardCount - 1));
+        var $boards = $kanban.find('.boards > .board');
+        $boards.not(':last').css('width', cBoardWidth);
+        $boards.last().css('width', totalWidth - cBoardWidth * (boardCount - 1));
     };
     fixBoardWidth();
     $(window).on('resize', fixBoardWidth);
