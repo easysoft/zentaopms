@@ -75,8 +75,11 @@ $(function()
     });
 
     var $projectLi = $('#activeProject');
-    var projectLi  = $projectLi[0];
-    $(".col ul.nav").animate({scrollTop: projectLi.offsetTop}, "slow");
+    if($projectLi.length)
+    {
+        var projectLi  = $projectLi[0];
+        $(".col ul.nav").animate({scrollTop: projectLi.offsetTop}, "slow");
+    }
 });
 </script>
 <div class="panel-body">

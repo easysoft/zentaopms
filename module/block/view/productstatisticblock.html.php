@@ -91,8 +91,11 @@ $(function()
     });
 
     var $productLi = $('#activeProduct');
-    var productLi  = $productLi[0];
-    $(".col ul.nav").animate({scrollTop: productLi.offsetTop}, "slow");
+    if($productLi.length)
+    {
+        var productLi  = $productLi[0];
+        $(".col ul.nav").animate({scrollTop: productLi.offsetTop}, "slow");
+    }
 });
 </script>
 <div class="panel-body">
