@@ -141,4 +141,3 @@ $lang->mail->menuOrder      = $lang->admin->menuOrder;
 $lang->dev->menuOrder       = $lang->admin->menuOrder;
 $lang->entry->menuOrder     = $lang->admin->menuOrder;
 $lang->webhook->menuOrder   = $lang->admin->menuOrder;
-$lang->editor->menuOrder    = $lang->admin->menuOrder;

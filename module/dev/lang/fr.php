@@ -106,7 +106,6 @@ $lang->dev->tableList['notify']           = 'Notification';
 $lang->dev->tableList['userview']         = 'Droits Utilisateur';
 $lang->dev->tableList['im_chatuser']      = 'Utilisateurs Client';
 $lang->dev->tableList['im_message']       = 'Messages Client';
-$lang->dev->tableList['translation']      = 'Traduction';
 $lang->dev->tableList['im_messagestatus'] = 'Statut Messages Client';
 
 $lang->dev->groupList['my']      = 'Dashboard';
