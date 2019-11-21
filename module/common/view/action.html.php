@@ -61,7 +61,7 @@
           <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
         <?php endif;?>
-        <?php if(!empty($action->comment)):?>
+        <?php if(strlen(trim(($action->comment))) != 0):?>
         <?php if($canEditComment):?>
         <?php echo html::commonButton('<i class="icon icon-pencil"></i>', "title='{$lang->action->editComment}'", 'btn btn-link btn-icon btn-sm btn-edit-comment');?>
         <style>.comment .comment-content{width: 98%}</style>
