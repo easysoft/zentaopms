@@ -1,23 +1,17 @@
 <?php
 /**
- * The deny view file of editor module of ZenTaoPMS.
+ * The editor view file of dev module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     editor
+ * @package     dev
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
-<style>
-html{height:100%}
-body{height:100%;padding-bottom:0px;}
-#mainContent{height:100%}
-</style>
+<?php include 'header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='alert alert-warning'><?php echo $this->lang->editor->onlyLocalVisit;?></div>
+    <div class='alert alert-danger'><?php echo $lang->dev->noteEditor;?></div>
 </div>
-<?php include '../../common/view/footer.lite.html.php';?>
-
+<?php include '../../common/view/footer.html.php';?>

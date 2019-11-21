@@ -3383,6 +3383,8 @@ class upgradeModel extends model
      */
     public function fixGroupAcl()
     {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
         $groups = $this->dao->select('*')->from(TABLE_GROUP)->fetchAll();
         foreach($groups as $group)
         {
@@ -3412,6 +3414,44 @@ class upgradeModel extends model
             $acl = json_encode($acl);
             $this->dao->update(TABLE_GROUP)->set('acl')->eq($acl)->where('id')->eq($group->id)->exec();
         }
+
+        return true;
+    }
+
+    /**
+     * Adjust 11.6.6 priv.
+     * 
+     * @access public
+     * @return void
+     */
+    public function adjustPriv11_6_6()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('editor')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'dev';
+            $groupPriv->method = 'editor';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('translate')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'dev';
+            $groupPriv->method = 'translate';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
+        }
+
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('translate')->exec();
+        $this->dao->delete()->from(TABLE_GROUPPRIV)->where('module')->eq('editor')->exec();
 
         return true;
     }
