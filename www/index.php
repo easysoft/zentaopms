@@ -17,6 +17,9 @@ error_reporting(0);
 /* Start output buffer. */
 ob_start();
 
+/* Set cookie_httponly. */
+ini_set("session.cookie_httponly", 1);
+
 /* Load the framework. */
 include '../framework/router.class.php';
 include '../framework/control.class.php';

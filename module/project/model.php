@@ -160,7 +160,7 @@ class projectModel extends model
 
         $isMobile = $this->app->viewType == 'mhtml';
 
-        setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot);
+        setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $currentProject = $this->getById($projectID);
 
         $dropMenuLink = helper::createLink('project', 'ajaxGetDropMenu', "objectID=$projectID&module=$currentModule&method=$currentMethod&extra=$extra");

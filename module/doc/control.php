@@ -78,7 +78,7 @@ class doc extends control
     public function browse($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $from = 'doc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->from = $from;
-        setcookie('from',  $from, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('from',  $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->loadModel('search');
 
@@ -656,7 +656,7 @@ class doc extends control
      */
     public function allLibs($type, $product = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        setcookie('product', $product, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('product', $product, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $libName = $this->lang->doc->libTypeList[$type];
         $crumb   = html::a(inlink('allLibs', "type=$type&product=$product"), $libName);
@@ -707,7 +707,7 @@ class doc extends control
         $this->app->session->set('docList',   $uri);
 
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'card';
-        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();
@@ -798,7 +798,7 @@ class doc extends control
     public function objectLibs($type, $objectID, $from = 'doc')
     {
         $this->from = $from;
-        setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $table  = $type == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
         $object = $this->dao->select('id,name')->from($table)->where('id')->eq($objectID)->fetch();

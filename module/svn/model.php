@@ -603,7 +603,7 @@ class svnModel extends model
         $diff = '';
 
         $oldSelf = $this->server->PHP_SELF;
-        $this->server->set('PHP_SELF', $this->config->webRoot);
+        $this->server->set('PHP_SELF', $this->config->webRoot, '', false, true);
 
         if(!$repoRoot) $repoRoot = $this->repoRoot;
 

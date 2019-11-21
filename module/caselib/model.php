@@ -59,7 +59,7 @@ class caselibModel extends model
             }
         }
 
-        setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot);
+        setCookie("lastCaseLib", $libID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $pageNav     = '';
         $pageActions = '';

@@ -63,16 +63,16 @@ class testcase extends control
         /* Set browseType, productID, moduleID and queryID. */
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
-        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot);
-        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('preBranch', (int)$branch, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['caseModule'] = 0;
-            setcookie('caseModule', 0, 0, $this->config->webRoot);
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, true);
         }
-        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, 0, $this->config->webRoot);
-        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, 0, $this->config->webRoot);
+        if($browseType == 'bymodule') setcookie('caseModule', (int)$param, 0, $this->config->webRoot, '', false, true);
+        if($browseType == 'bysuite')  setcookie('caseSuite', (int)$param, 0, $this->config->webRoot, '', false, true);
         if($browseType != 'bymodule') $this->session->set('caseBrowseType', $browseType);
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
@@ -243,7 +243,7 @@ class testcase extends control
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
-            setcookie('caseModule', (int)$this->post->module, 0, $this->config->webRoot);
+            setcookie('caseModule', (int)$this->post->module, 0, $this->config->webRoot, '', false, true);
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
             $this->send($response);
         }
