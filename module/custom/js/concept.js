@@ -1,5 +1,6 @@
 $(document).ready(function()
-{
+{ 
+    $('#mainMenu #conceptTab').addClass('btn-active-text');
     $('#ajaxForm').ajaxForm(
     {
         finish:function(response)

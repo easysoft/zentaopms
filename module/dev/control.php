@@ -51,4 +51,34 @@ class dev extends control
         $this->view->fields        = $table ? $this->dev->getFields($table) : array();
         $this->display();
     }
+
+    /**
+     * Editor.
+     * 
+     * @access public
+     * @return void
+     */
+    public function editor()
+    {
+        $this->view->title      = $this->lang->dev->editor;
+        $this->view->position[] = html::a(inlink('api'), $this->lang->dev->common);
+        $this->view->position[] = $this->lang->dev->editor;
+
+        $this->view->tab = 'editor';
+        $this->display();
+    }
+
+    /**
+     * Translate.
+     * 
+     * @access public
+     * @return void
+     */
+    public function translate()
+    {
+        $this->view->title      = $this->lang->dev->translate;
+        $this->view->position[] = $this->lang->dev->translate;
+
+        $this->display();
+    }
 }

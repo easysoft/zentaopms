@@ -79,7 +79,7 @@ $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
-$lang->custom->system = array('flow', 'working', 'required', 'score');
+$lang->custom->system = array('concept', 'flow', 'working', 'required', 'score');
 
 $lang->custom->block->fields['closed'] = '关闭的区块';
 
