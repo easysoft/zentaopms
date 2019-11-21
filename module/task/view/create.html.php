@@ -265,38 +265,40 @@
         </tr>
       </table>
 
-      <div class='modal fade modal-team' id='modalTeam'>
+      <div class='modal fade modal-team' id='modalTeam' data-scroll-inside='false'>
         <div class='modal-dialog'>
-          <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal'>
-              <i class="icon icon-close"></i>
-            </button>
-            <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
-          </div>
           <div class='modal-content with-padding'>
-            <table class="table table-form" id='taskTeamEditor'>
-              <tbody class='sortable'>
-                <tr class='template'>
-                  <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
-                  <td>
-                    <div class='input-group'>
-                      <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
-                      <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
-                    </div>
-                  </td>
-                  <td class='w-130px sort-handler'>
-                    <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
-                    <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
-                    <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
-                  </td>
-                </tr>
-              </tbody>
-              <tfoot>
-                <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td>
-                </tr>
-              </tfoot>
-            </table>
+            <div class='modal-header'>
+              <button type='button' class='close' data-dismiss='modal'>
+                <i class="icon icon-close"></i>
+              </button>
+              <h4 class='modal-title'><?php echo $lang->task->team;?></h4>
+            </div>
+            <div class='modal-body'>
+              <table class="table table-form" id='taskTeamEditor'>
+                <tbody class='sortable'>
+                  <tr class='template'>
+                    <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
+                    <td>
+                      <div class='input-group'>
+                        <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
+                        <span class='input-group-addon'><?php echo $lang->task->hour;?></span>
+                      </div>
+                    </td>
+                    <td class='w-130px sort-handler'>
+                      <button type="button" class="btn btn-link btn-sm btn-icon btn-add"><i class="icon icon-plus"></i></button>
+                      <button type='button' class='btn btn-link btn-sm btn-icon btn-move'><i class='icon-move'></i></button>
+                      <button type="button" class="btn btn-link btn-sm btn-icon btn-delete"><i class="icon icon-close"></i></button>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
           </div>
         </div>
       </div>
