@@ -126,23 +126,23 @@ class project extends control
         $project   = $this->commonAction($projectID, $status);
         $projectID = $project->id;
         $products  = $this->config->global->flow == 'onlyTask' ? array() : $this->loadModel('product')->getProductsByProject($projectID);
-        setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if($this->cookie->preProjectID != $projectID)
         {
             $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot);
-            setcookie('productBrowseParam', 0, 0, $this->config->webRoot);
+            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, true);
+            setcookie('productBrowseParam', 0, 0, $this->config->webRoot, '', false, true);
         }
         if($browseType == 'bymodule')
         {
-            setcookie('moduleBrowseParam',  (int)$param, 0, $this->config->webRoot);
-            setcookie('productBrowseParam', 0, 0, $this->config->webRoot);
+            setcookie('moduleBrowseParam',  (int)$param, 0, $this->config->webRoot, '', false, true);
+            setcookie('productBrowseParam', 0, 0, $this->config->webRoot, '', false, true);
         }
         elseif($browseType == 'byproduct')
         {
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot);
-            setcookie('productBrowseParam', (int)$param, 0, $this->config->webRoot);
+            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, true);
+            setcookie('productBrowseParam', (int)$param, 0, $this->config->webRoot, '', false, true);
         }
         else
         {
@@ -162,7 +162,7 @@ class project extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->projectTaskOrder ? $this->cookie->projectTaskOrder : 'status,id_desc';
-        setcookie('projectTaskOrder', $orderBy, 0, $this->config->webRoot);
+        setcookie('projectTaskOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
@@ -636,40 +636,40 @@ class project extends control
         $this->project->getLimitedProject();
 
         $type = strtolower($type);
-        setcookie('storyPreProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('storyPreProjectID', $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if($this->cookie->storyPreProjectID != $projectID)
         {
             $_COOKIE['storyModuleParam'] = $_COOKIE['storyProductParam'] = $_COOKIE['storyBranchParam'] = 0;
-            setcookie('storyModuleParam',  0, 0, $this->config->webRoot);
-            setcookie('storyProductParam', 0, 0, $this->config->webRoot);
-            setcookie('storyBranchParam',  0, 0, $this->config->webRoot);
+            setcookie('storyModuleParam',  0, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyProductParam', 0, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
         }
         if($type == 'bymodule')
         {
             $_COOKIE['storyModuleParam']  = (int)$param;
             $_COOKIE['storyProductParam'] = 0;
             $_COOKIE['storyBranchParam']  = 0;
-            setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot);
-            setcookie('storyProductParam', 0, 0, $this->config->webRoot);
-            setcookie('storyBranchParam',  0, 0, $this->config->webRoot);
+            setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyProductParam', 0, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
         }
         elseif($type == 'byproduct')
         {
             $_COOKIE['storyModuleParam']  = 0;
             $_COOKIE['storyProductParam'] = (int)$param;
             $_COOKIE['storyBranchParam']  = 0;
-            setcookie('storyModuleParam',  0, 0, $this->config->webRoot);
-            setcookie('storyProductParam', (int)$param, 0, $this->config->webRoot);
-            setcookie('storyBranchParam',  0, 0, $this->config->webRoot);
+            setcookie('storyModuleParam',  0, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyProductParam', (int)$param, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyBranchParam',  0, 0, $this->config->webRoot, '', false, true);
         }
         elseif($type == 'bybranch')
         {
             $_COOKIE['storyModuleParam']  = 0;
             $_COOKIE['storyProductParam'] = 0;
             $_COOKIE['storyBranchParam']  = $param;
-            setcookie('storyModuleParam',  0, 0, $this->config->webRoot);
-            setcookie('storyProductParam', 0, 0, $this->config->webRoot);
-            setcookie('storyBranchParam',  $param, 0, $this->config->webRoot);
+            setcookie('storyModuleParam',  0, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyProductParam', 0, 0, $this->config->webRoot, '', false, true);
+            setcookie('storyBranchParam',  $param, 0, $this->config->webRoot, '', false, true);
         }
         else
         {
@@ -681,7 +681,7 @@ class project extends control
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->projectStoryOrder ? $this->cookie->projectStoryOrder : 'pri';
-        setcookie('projectStoryOrder', $orderBy, 0, $this->config->webRoot);
+        setcookie('projectStoryOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);

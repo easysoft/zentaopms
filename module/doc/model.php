@@ -1500,7 +1500,7 @@ class docModel extends model
             $projectProduct = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->andWhere('project')->eq($projectID)->fetch();
             if(empty($projectProduct))
             {
-                setcookie('product', 0, $this->config->cookieLife, $this->config->webRoot);
+                setcookie('product', 0, $this->config->cookieLife, $this->config->webRoot, '', false, true);
                 return html::a(helper::createLink('doc', 'allLibs', "type=project"), $this->lang->projectCommon) . $this->lang->doc->separator;
             }
         }

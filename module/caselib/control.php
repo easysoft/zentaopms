@@ -171,14 +171,14 @@ class caselib extends control
 
         /* Set menu. */
         $libID = $this->caselib->saveLibState($libID, $libraries);
-        setcookie('preCaseLibID', $libID, $this->config->cookieLife, $this->config->webRoot);
+        setcookie('preCaseLibID', $libID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         if($this->cookie->preCaseLibID != $libID)
         {
             $_COOKIE['libCaseModule'] = 0;
-            setcookie('libCaseModule', 0, 0, $this->config->webRoot);
+            setcookie('libCaseModule', 0, 0, $this->config->webRoot, '', false, true);
         }
 
-        if($browseType == 'bymodule') setcookie('libCaseModule', (int)$param, 0, $this->config->webRoot);
+        if($browseType == 'bymodule') setcookie('libCaseModule', (int)$param, 0, $this->config->webRoot, '', false, true);
         if($browseType != 'bymodule') $this->session->set('libBrowseType', $browseType);
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->libCaseModule ? $this->cookie->libCaseModule : 0));
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;

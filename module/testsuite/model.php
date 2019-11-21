@@ -81,7 +81,7 @@ class testsuiteModel extends model
             return;
         }
 
-        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot);
+        setCookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
         $currentProduct = $this->product->getById($productID);
 
         $dropMenuLink = helper::createLink('product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");

@@ -829,7 +829,7 @@ class user extends control
             }
 
             $this->app->loadLang('misc');
-            $this->view->noGDLib   = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot);
+            $this->view->noGDLib   = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
             $this->view->title     = $this->lang->user->login;
             $this->view->referer   = $this->referer;
             $this->view->s         = zget($this->config->global, 'sn', '');
