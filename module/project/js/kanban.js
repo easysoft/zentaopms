@@ -102,7 +102,7 @@ $(function()
     };
     window.refreshKanban = refresh;
 
-    var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width:800});
+    var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: 800});
     var dropTo = function(id, from, to, type)
     {
         if(statusMap[type][from] && statusMap[type][from][to])
@@ -131,7 +131,7 @@ $(function()
                 });
             }
         }
-        
+
         /* Keep the draged element stay in the new place. */
         return true;
     };
@@ -190,7 +190,8 @@ $(function()
         {
             url: $link.attr('href'),
             shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-            hidden: refresh
+            hidden: refresh,
+            width: $(this).is('.task-assignedTo,.bug-assignedTo') ? 800 : 1100
         });
         return false;
     });
