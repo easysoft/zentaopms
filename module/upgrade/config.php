@@ -23,5 +23,30 @@ $config->upgrade->bearychat['zh-tw'] = '倍洽';
 $config->upgrade->bearychat['en']    = 'Bearychat';
 $config->upgrade->bearychat['de']    = 'Bearychat';
 
+$config->upgrade->discardedBugTypes['de']['interface']    = 'UI Optimierung';
+$config->upgrade->discardedBugTypes['de']['newfeature']   = 'Neues Feature';
+$config->upgrade->discardedBugTypes['de']['designchange'] = 'Design Änderung';
+$config->upgrade->discardedBugTypes['de']['trackthings']  = 'Arbeit Verfolgen';
+
+$config->upgrade->discardedBugTypes['en']['interface']    = 'Interface';
+$config->upgrade->discardedBugTypes['en']['designchange'] = 'DesignChange';
+$config->upgrade->discardedBugTypes['en']['newfeature']   = 'NewFeature';
+$config->upgrade->discardedBugTypes['en']['trackthings']  = 'Tracking';
+
+$config->upgrade->discardedBugTypes['fr']['interface']    = 'Interface';
+$config->upgrade->discardedBugTypes['fr']['designchange'] = 'Design Change';
+$config->upgrade->discardedBugTypes['fr']['newfeature']   = 'Nouvelle fonctionnalité';
+$config->upgrade->discardedBugTypes['fr']['trackthings']  = 'Tracking';
+
+$config->upgrade->discardedBugTypes['zh-cn']['interface']    = '界面优化';
+$config->upgrade->discardedBugTypes['zh-cn']['designchange'] = '设计变更';
+$config->upgrade->discardedBugTypes['zh-cn']['newfeature']   = "新增需求";
+$config->upgrade->discardedBugTypes['zh-cn']['trackthings']  = '事务跟踪';
+
+$config->upgrade->discardedBugTypes['zh-tw']['interface']    = '界面優化';
+$config->upgrade->discardedBugTypes['zh-tw']['designchange'] = '設計變更';
+$config->upgrade->discardedBugTypes['zh-tw']['newfeature']   = "新增需求";
+$config->upgrade->discardedBugTypes['zh-tw']['trackthings']  = '事務跟蹤';
+
 $config->delete['10.6'][] = 'module/chat/ext/control/extensions.php';
 $config->delete['10.6'][] = 'module/common/ext/model/xuanxuan.php';

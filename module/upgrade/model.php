@@ -536,6 +536,8 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('11.6.5'));
             $this->fixGroupAcl();
             $this->appendExec('11_6_5');
+        case '11_6_6':
+            $this->fixBugTypeList();
         }
 
         $this->deletePatch();
@@ -3443,5 +3445,49 @@ class upgradeModel extends model
      */
     public function appendExec($zentaoVersion)
     {
+    }
+
+    /**
+     * Fix bug typeList.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function fixBugTypeList()
+    {
+        foreach($this->config->upgrade->discardedBugTypes as $langCode => $types)
+        {
+            $bugs = $this->dao->select('type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
+            if(empty($bugs)) return true;
+
+            $usedTypes        = array_keys($bugs);
+            $customedTypeList = $this->dao->select('*')->from(TABLE_LANG)
+                ->where('lang')->in("$langCode,all")
+                ->andWhere('module')->eq('bug')
+                ->andWhere('section')->eq('typeList')
+                ->fetchPairs('`key`');
+
+            $typesToSave = array_diff($usedTypes, $customedTypeList);
+
+            if(empty($typesToSave)) continue;
+
+            $langs = array();
+            foreach($typesToSave as $type) $langs[$type] = $types[$type];
+
+            if(empty($customedTypeList))
+            {
+                $lang = new stdclass;
+                $lang->bug = new stdclass;
+                $lang->productCommon = '';
+                $lang->projectCommon = '';
+                $lang->more          = '';
+                $langFile  = $this->app->getModuleRoot() . DS . 'bug' . DS . 'lang' . DS . $langCode . '.php';
+                if(is_file($langFile)) include $langFile;
+                $langs = array_merge($lang->bug->typeList, $langs);
+            }
+
+            foreach($langs as $type => $typeName) $this->loadModel('custom')->setItem("{$langCode}.bug.typeList.{$type}.1", $typeName);
+        }
+        return true;
     }
 }
