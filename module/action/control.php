@@ -134,7 +134,7 @@ class action extends control
      */
     public function editComment($actionID)
     {
-        if(trim(strip_tags($this->post->lastComment, '<img>')))
+        if(strlen(trim(strip_tags($this->post->lastComment, '<img>'))) != 0)
         {
             $this->action->updateComment($actionID);
         }

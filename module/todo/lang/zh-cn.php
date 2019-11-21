@@ -89,7 +89,7 @@ $lang->todo->typeList['custom']   = '自定义';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = $lang->projectCommon . '任务';
-$lang->todo->typeList['story']    = $lang->projectCommon . '{$lang->storyCommon}';
+$lang->todo->typeList['story']    = $lang->projectCommon . $lang->storyCommon;
 
 global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);

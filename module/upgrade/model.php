@@ -536,6 +536,8 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('11.6.5'));
             $this->fixGroupAcl();
             $this->appendExec('11_6_5');
+        case '11_6_6':
+            $this->fixBugTypeList();
         }
 
         $this->deletePatch();

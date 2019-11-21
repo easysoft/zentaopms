@@ -47,7 +47,7 @@
     <ol class='histories-list'>
       <?php $i = 1; ?>
       <?php foreach($actions as $action):?>
-      <?php $canEditComment = (end($actions) == $action and $action->comment and $this->methodName == 'view' and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
+      <?php $canEditComment = (end($actions) == $action and strlen(trim(($action->comment))) != 0 and $this->methodName == 'view' and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
       <li value='<?php echo $i ++;?>'>
         <?php
         $action->actor = zget($users, $action->actor);
@@ -61,7 +61,7 @@
           <?php echo $this->action->printChanges($action->objectType, $action->history);?>
         </div>
         <?php endif;?>
-        <?php if(!empty($action->comment)):?>
+        <?php if(strlen(trim(($action->comment))) != 0):?>
         <?php if($canEditComment):?>
         <?php echo html::commonButton('<i class="icon icon-pencil"></i>', "title='{$lang->action->editComment}'", 'btn btn-link btn-icon btn-sm btn-edit-comment');?>
         <style>.comment .comment-content{width: 98%}</style>
