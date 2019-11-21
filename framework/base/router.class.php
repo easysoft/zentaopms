@@ -867,7 +867,7 @@ class baseRouter
             $this->clientLang = $this->config->default->lang;
         }
 
-        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('lang', $this->clientLang, $this->config->cookieLife, $this->config->webRoot, '', false, false);
         if(!isset($_COOKIE['lang'])) $_COOKIE['lang'] = $this->clientLang;
 
         return true;
@@ -921,7 +921,7 @@ class baseRouter
             $this->clientTheme = $this->config->default->theme;
         }
 
-        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('theme', $this->clientTheme, $this->config->cookieLife, $this->config->webRoot, '', false, false);
         if(!isset($_COOKIE['theme'])) $_COOKIE['theme'] = $this->clientTheme;
 
         return true;
