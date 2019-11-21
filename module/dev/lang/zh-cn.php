@@ -16,8 +16,8 @@ $lang->dev->paramRange    = '取值范围：%s';
 $lang->dev->paramDate     = '日期格式：YY-mm-dd，如：2019-01-01';
 $lang->dev->paramColor    = '颜色格式：#RGB，如：#3da7f5';
 $lang->dev->paramMailto   = "填写帐号，多个账号用','分隔。";
-$lang->dev->noteEditor    = "编辑器功能因为安全原因被禁用。如果想用该功能，请到官网下载安装 扩展编辑器 插件。";
-$lang->dev->noteTranslate = "翻译功能因为安全原因被禁用。如果想用该功能，请到官网下载安装 翻译 插件。";
+$lang->dev->noteEditor    = "编辑器功能因为安全原因被禁用。使用该功能，请到官网下载安装 扩展编辑器 插件。";
+$lang->dev->noteTranslate = "翻译功能因为安全原因被禁用。使用该功能，请到官网下载安装 翻译 插件。";
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = '序号';
