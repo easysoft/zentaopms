@@ -1416,8 +1416,10 @@ class projectModel extends model
         $this->loadModel('task');
         $this->loadModel('story');
 
-        $now     = helper::now();
-        $modules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
+        $now = helper::now();
+
+        $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
+        $modules       = $this->loadModel('tree')->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
 
         $bugToTasks = fixer::input('post')->get();
         $bugs       = $this->bug->getByList(array_keys($bugToTasks->import));

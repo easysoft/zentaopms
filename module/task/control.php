@@ -174,7 +174,8 @@ class task extends control
 
         $users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-        $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID);
+        $showAllModule    = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
+        $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
 
         /* Fix bug #2737. When moduleID is not story module. */
         $moduleIdList = array();
@@ -194,8 +195,9 @@ class task extends control
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($project->type == 'ops') unset($customFields['story']);
 
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->task->custom->createFields;
+        $this->view->customFields  = $customFields;
+        $this->view->showFields    = $this->config->task->custom->createFields;
+        $this->view->showAllModule = $showAllModule;
 
         $this->view->title            = $title;
         $this->view->position         = $position;
@@ -253,9 +255,13 @@ class task extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
+
         $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, 0, 'short');
         $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
-        $modules = $this->loadModel('tree')->getTaskOptionMenu($projectID);
+
+        $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
+        $modules       = $this->loadModel('tree')->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+
         $title      = $project->name . $this->lang->colon . $this->lang->task->batchCreate;
         $position[] = html::a($taskLink, $project->name);
         $position[] = $this->lang->task->common;
@@ -359,13 +365,14 @@ class task extends control
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
-        $this->view->title      = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
-        $this->view->position[] = $this->lang->task->common;
-        $this->view->position[] = $this->lang->task->edit;
-        $this->view->stories    = $this->story->getProjectStoryPairs($this->view->project->id);
-        $this->view->tasks      = $tasks;
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
-        $this->view->modules    = $this->tree->getTaskOptionMenu($this->view->task->project);
+        $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
+        $this->view->position[]    = $this->lang->task->common;
+        $this->view->position[]    = $this->lang->task->edit;
+        $this->view->stories       = $this->story->getProjectStoryPairs($this->view->project->id);
+        $this->view->tasks         = $tasks;
+        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
+        $this->view->showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
+        $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->project, 0, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->display();
     }
 
@@ -420,8 +427,10 @@ class task extends control
             $this->project->setMenu($this->project->getPairs(), $project->id);
 
             /* Set modules and members. */
-            $modules = $this->tree->getTaskOptionMenu($projectID);
-            $modules = array('ditto' => $this->lang->task->ditto) + $modules;
+            $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
+            $modules       = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+            $modules       = array('ditto' => $this->lang->task->ditto) + $modules;
+
             $members = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
             $members = array('' => '', 'ditto' => $this->lang->task->ditto) + $members;
             $members['closed'] = 'Closed';

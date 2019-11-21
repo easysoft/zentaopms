@@ -44,7 +44,7 @@
           <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $project->id)'");?></td>
           <td>
             <div class="checkbox-primary">
-              <input type="checkbox" id="showAllModule"><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
+              <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
             </div>
           </td>
           <td></td>
