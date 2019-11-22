@@ -189,8 +189,9 @@ class project extends control
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
-        $extra      = (isset($this->config->project->task->allModule) && $this->config->project->task->allModule == 1) ? 'allModule' : '';
-        $showModule = !empty($this->config->datatable->projectTask->showModule) ? $this->config->datatable->projectTask->showModule : '';
+        $showAllModule = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
+        $extra         = (isset($this->config->project->task->allModule) && $this->config->project->task->allModule == 1) ? 'allModule' : '';
+        $showModule    = !empty($this->config->datatable->projectTask->showModule) ? $this->config->datatable->projectTask->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($projectID, 'task', $showModule) : array();
 
         /* Assign. */
@@ -208,7 +209,7 @@ class project extends control
         $this->view->projectID     = $projectID;
         $this->view->project       = $project;
         $this->view->productID     = $productID;
-        $this->view->modules       = $this->tree->getTaskOptionMenu($projectID);
+        $this->view->modules       = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
         $this->view->moduleID      = $moduleID;
         $this->view->moduleTree    = $this->tree->getTaskTreeMenu($projectID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs   = $memberPairs;
