@@ -538,6 +538,7 @@ class upgradeModel extends model
             $this->fixBugTypeList();
             $this->adjustPriv11_6_6();
             $this->rmEditorAndTranslateDir();
+            $this->setConceptSetted();
             $this->appendExec('11_6_5');
         }
 
@@ -3524,6 +3525,38 @@ class upgradeModel extends model
 
         $translateDir = $moduleRoot . 'translate';
         if(is_dir($translateDir)) $zfile->removeDir($translateDir);
+
+        return true;
+    }
+
+    /**
+     * Set concept setted.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function setConceptSetted()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $conceptSetted = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('`key`')->eq('conceptSetted')->fetchAll();
+        if(empty($conceptSetted))
+        {
+            $setting = new stdclass();
+            $setting->owner  = 'system';
+            $setting->module = 'custom';
+            $setting->key    = 'storyRequirement';
+            $setting->value  = '0';
+            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+
+            $setting->key    = 'hourPoint';
+            $setting->value  = '0';
+            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+
+            $setting->module = 'common';
+            $setting->key    = 'conceptSetted';
+            $setting->value  = '1';
+            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+        }
 
         return true;
     }

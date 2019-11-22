@@ -127,7 +127,7 @@ class router extends baseRouter
                 }
             }
 
-            $productCommon = $projectCommon = $storyCommon = 0;
+            $productCommon = $projectCommon = $storyCommon = $hourCommon = 0;
             if(!empty($this->config->isINT)) $projectCommon = 1;
             if($productProject)
             {
@@ -135,21 +135,14 @@ class router extends baseRouter
                 list($productCommon, $projectCommon) = explode('_', $productProject);
             }
 
-            if($storyRequirement)
-            {
-                $storyCommon = $storyRequirement->value;
-                $lang->storyCommon = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon]) ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon] : $this->config->storyCommonList['en'][(int)$storyCommon];
-            }
-
-            if($hourPoint)
-            {
-                $hourCommon = $hourPoint->value;
-                $lang->hourCommon = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]) ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon] : $this->config->hourPointCommonList['en'][(int)$hourCommon];
-            }
+            if($storyRequirement) $storyCommon = $storyRequirement->value;
+            if($hourPoint)        $hourCommon  = $hourPoint->value;
 
             /* Set productCommon and projectCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][(int)$projectCommon];
+            $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon]     : $this->config->storyCommonList['en'][(int)$storyCommon];
+            $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]  : $this->config->hourPointCommonList['en'][(int)$hourCommon];
         }
 
         parent::loadLang($moduleName, $appName);
