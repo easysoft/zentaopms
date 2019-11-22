@@ -2,11 +2,15 @@ $(function()
 {
     var blockTitle = '';
     var preValue   = '';
+    var $title;
     $(document).on('change', '#blockParams #paramstype', function()
     {
         $title = $('#blockParams').find('#title');
-        var value = $(this).find('option:selected').html();
-        if($title.val().indexOf(blockTitle + ' - ' + preValue) >= 0) $title.val(blockTitle + ' - ' + value);
+        var title = $title.val();
+        var value = $(this).find('option:selected').text();
+        if (title.indexOf(' - ' + preValue) >= 0) {
+            $title.val(blockTitle + ' - ' + value);
+        }
         preValue = value;
     });
 
@@ -27,11 +31,15 @@ $(function()
         $blockParams.find('input:first').focus();
         if($blockParams.find('#actionLink').size() > 0) $form.attr('action', $blockParams.find('#actionLink').val());
 
-        blockTitle = $blockParams.find('#title').val();
-        if($('#blockParams #paramstype').length > 0)
+        $title = $blockParams.find('#title');
+        if($title.length && $('#blockParams #paramstype').length)
         {
-            preValue = $('#blockParams #paramstype').find('option:selected').html();
-            $blockParams.find('#title').val(blockTitle + ' - ' + preValue);
+            blockTitle = $title.val();
+            preValue = $('#blockParams #paramstype').find('option:selected').text();
+            var preIndex = blockTitle.indexOf(' - ' + preValue);
+            if (preIndex > -1) {
+                blockTitle = blockTitle.substring(0, preIndex);
+            }
         }
     };
 

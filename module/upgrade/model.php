@@ -535,9 +535,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 11_6_5');
             $this->execSQL($this->getUpgradeFile('11.6.5'));
             $this->fixGroupAcl();
-            $this->appendExec('11_6_5');
-        case '11_6_6':
             $this->fixBugTypeList();
+            $this->adjustPriv11_6_6();
+            $this->rmEditorAndTranslateDir();
+            $this->setConceptSetted();
+            $this->appendExec('11_6_5');
         }
 
         $this->deletePatch();
@@ -687,6 +689,7 @@ class upgradeModel extends model
             case '11_6_2' :
             case '11_6_3' :
             case '11_6_4' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.4'));
+            case '11_6_5' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.5'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3459,35 +3462,6 @@ class upgradeModel extends model
     }
 
     /**
-     * Save Logs.
-     * 
-     * @param  string    $log 
-     * @access public
-     * @return void
-     */
-    public function saveLogs($log)
-    {
-        $logFile = $this->app->getTmpRoot() . 'log/upgrade.' . date('Ymd') . '.log.php';
-        $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
-        if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
-
-        static $fh;
-        if(empty($fh)) $fh = fopen($logFile, 'a');
-        fwrite($fh, $log);
-    }
-
-    /**
-     * Append execute for pro and biz.
-     * 
-     * @param  string $fromVersion 
-     * @access public
-     * @return void
-     */
-    public function appendExec($zentaoVersion)
-    {
-    }
-
-    /**
      * Fix bug typeList.
      * 
      * @access public
@@ -3495,6 +3469,8 @@ class upgradeModel extends model
      */
     public function fixBugTypeList()
     {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
         foreach($this->config->upgrade->discardedBugTypes as $langCode => $types)
         {
             $bugs = $this->dao->select('type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
@@ -3529,5 +3505,88 @@ class upgradeModel extends model
             foreach($langs as $type => $typeName) $this->loadModel('custom')->setItem("{$langCode}.bug.typeList.{$type}.1", $typeName);
         }
         return true;
+    }
+
+    /**
+     * Remove editor and translate.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function rmEditorAndTranslateDir()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $zfile      = $this->app->loadClass('zfile');
+        $moduleRoot = $this->app->getModuleRoot();
+
+        $editorDir = $moduleRoot . 'editor';
+        if(is_dir($editor)) $zfile->removeDir($editorDir);
+
+        $translateDir = $moduleRoot . 'translate';
+        if(is_dir($translateDir)) $zfile->removeDir($translateDir);
+
+        return true;
+    }
+
+    /**
+     * Set concept setted.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function setConceptSetted()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+        $conceptSetted = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('`key`')->eq('conceptSetted')->fetchAll();
+        if(empty($conceptSetted))
+        {
+            $setting = new stdclass();
+            $setting->owner  = 'system';
+            $setting->module = 'custom';
+            $setting->key    = 'storyRequirement';
+            $setting->value  = '0';
+            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+
+            $setting->key    = 'hourPoint';
+            $setting->value  = '0';
+            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+
+            $setting->module = 'common';
+            $setting->key    = 'conceptSetted';
+            $setting->value  = '1';
+            $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Save Logs.
+     * 
+     * @param  string    $log 
+     * @access public
+     * @return void
+     */
+    public function saveLogs($log)
+    {
+        $logFile = $this->app->getTmpRoot() . 'log/upgrade.' . date('Ymd') . '.log.php';
+        $log     = date('Y-m-d H:i:s') . ' ' . trim($log) . "\n";
+        if(!file_exists($logFile)) $log = "<?php\ndie();\n?" . ">\n" . $log;
+
+        static $fh;
+        if(empty($fh)) $fh = fopen($logFile, 'a');
+        fwrite($fh, $log);
+    }
+
+    /**
+     * Append execute for pro and biz.
+     * 
+     * @param  string $fromVersion 
+     * @access public
+     * @return void
+     */
+    public function appendExec($zentaoVersion)
+    {
     }
 }
