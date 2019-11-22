@@ -33,6 +33,8 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
+        $this->setConcept();
+
         if(!isset($this->config->bizVersion)) return false;
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and $this->moduleName != 'upgrade' and $this->moduleName != 'install')
@@ -44,6 +46,24 @@ class control extends baseControl
                 $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
                 foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
             }
+        }
+    }
+
+    /**
+     * Go to concept setting page if concept not setted.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setConcept()
+    {
+        if(isset($this->app->user) and $this->app->user->admin != 'super') return true;
+        if($this->app->getModuleName() == 'user' and strpos("login,logout", $this->app->getMethodName()) !== false) return true;
+
+        if($this->app->getModuleName() == 'custom' and $this->app->getMethodName() == 'setConcept') return true;
+        if(!isset($this->config->conceptSetted) and $this->app->getMethodName() != 'concept') 
+        {
+            $this->locate(helper::createLink('custom', 'concept'));
         }
     }
 
