@@ -1419,6 +1419,9 @@ EOD;
 
         if(isset($this->app->user))
         {
+            if(!defined('IN_UPGRADE')) $this->session->user->view = $this->loadModel('user')->grantUserView();
+            $this->app->user = $this->session->user;
+
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
         else

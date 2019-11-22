@@ -170,7 +170,7 @@ class webhook extends control
         $response = $dingapi->getAllUsers();
         if($response['result'] == 'fail')
         {
-            echo js::error($response->message);
+            echo js::error($response['message']);
             die(js::locate($this->createLink('webhook', 'browse')));
         }
 
