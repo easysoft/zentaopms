@@ -520,6 +520,12 @@ class customModel extends model
         }
     }
 
+    /**
+     * Set story or requirement.
+     * 
+     * @access public
+     * @return void
+     */
     public function setStoryRequirement()
     {
         $this->loadModel('setting')->setItem('system.custom.storyRequirement', $this->post->storyRequirement);
@@ -533,6 +539,12 @@ class customModel extends model
         }
     }
 
+    /**
+     * Set hour or story point.
+     * 
+     * @access public
+     * @return void
+     */
     public function setHourPoint()
     {
         $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);

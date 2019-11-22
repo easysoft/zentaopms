@@ -246,7 +246,7 @@ $lang->story->report->select = '请选择报表类型';
 $lang->story->report->create = '生成报表';
 $lang->story->report->value  = "{$lang->storyCommon}数";
 
-$lang->story->report->charts['storysPerProduct']        = $lang->productCommon . '{$lang->storyCommon}数量';
+$lang->story->report->charts['storysPerProduct']        = $lang->productCommon . "{$lang->storyCommon}数量";
 $lang->story->report->charts['storysPerModule']         = "模块{$lang->storyCommon}数量";
 $lang->story->report->charts['storysPerSource']         = "按{$lang->storyCommon}来源统计";
 $lang->story->report->charts['storysPerPlan']           = '按计划进行统计';
