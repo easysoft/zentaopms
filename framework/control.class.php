@@ -33,7 +33,7 @@ class control extends baseControl
     {
         parent::__construct($moduleName, $methodName, $appName);
 
-        $this->setConcept();
+        if(!defined('IN_INSTALL') and !defined('IN_UPGRADE')) $this->setConcept();
 
         if(!isset($this->config->bizVersion)) return false;
         /* Code for task #9224. Set requiredFields for workflow. */
@@ -57,8 +57,9 @@ class control extends baseControl
      */
     public function setConcept()
     {
-        if(isset($this->app->user) and $this->app->user->admin != 'super') return true;
+        if(empty($this->app->user->admin)) return true;
         if($this->app->getModuleName() == 'user' and strpos("login,logout", $this->app->getMethodName()) !== false) return true;
+        if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
 
         if($this->app->getModuleName() == 'custom' and $this->app->getMethodName() == 'setConcept') return true;
         if(!isset($this->config->conceptSetted) and $this->app->getMethodName() != 'concept') 
