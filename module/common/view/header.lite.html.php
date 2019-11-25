@@ -22,14 +22,14 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
   if($config->debug)
   {
       $timestamp = time();
-
+      
       css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       css::import($defaultTheme . 'style.css?t=' . $timestamp);
 
       css::import($langTheme);
       if(strpos($clientTheme, 'default') === false) css::import($clientTheme . 'style.css?t=' . $timestamp);
 
-      js::import($jsRoot . 'jquery/jquery.lib.debug.js');
+      js::import($jsRoot . 'jquery/lib.js');
       js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
 
