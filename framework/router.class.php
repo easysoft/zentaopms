@@ -95,7 +95,7 @@ class router extends baseRouter
         /* Set productCommon and projectCommon for flow. */
         if($moduleName == 'common')
         {
-            $productProject = false;
+            $productProject = $storyRequirement = $hourPoint = false;
             if($this->dbh and !empty($this->config->db->name))
             {
                 global $config;

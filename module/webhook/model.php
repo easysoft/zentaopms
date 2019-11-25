@@ -221,6 +221,8 @@ class webhookModel extends model
     public function bind($webhookID)
     {
         $data = fixer::input('post')->get();
+
+        $this->dao->delete()->from(TABLE_DINGUSERID)->where('account')->in(array_keys($data->userid))->exec();
         foreach($data->userid as $account => $userid)
         {
             if(empty($userid)) continue;
@@ -229,7 +231,7 @@ class webhookModel extends model
             $dingUser->webhook = $webhookID;
             $dingUser->account = $account;
             $dingUser->userid  = $userid;
-            $this->dao->replace(TABLE_DINGUSERID)->data($dingUser)->exec();
+            $this->dao->insert(TABLE_DINGUSERID)->data($dingUser)->exec();
         }
         return !dao::isError();
     }

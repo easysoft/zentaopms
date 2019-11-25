@@ -60,10 +60,12 @@
             </div>
           </td>
         </tr>
+        <?php if(!$isSprint):?>
         <tr>
           <th><?php echo $lang->project->type;?></th>
           <td><?php echo html::select('type', $lang->project->typeList, $project->type, "class='form-control'");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>
           <td><?php echo html::input('team', $project->team, "class='form-control'");?></td>

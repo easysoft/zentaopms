@@ -77,11 +77,13 @@
           <th><?php echo $lang->project->teamname;?></th>
           <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
         </tr>
+        <?php if(!$isSprint):?>
         <tr>
           <th><?php echo $lang->project->type;?></th>
           <td><?php echo html::select('type', $lang->project->typeList, '', "class='form-control' onchange='showTypeTips()'");?></td>
           <td class='muted' colspan='2'><div class='type-tips'><?php echo $lang->project->typeDesc;?></div></td>
         </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
@@ -154,6 +156,7 @@
           <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
+            <?php if($isSprint) echo html::hidden('type', 'sprint');?>
           </td>
         </tr>
       </table>
