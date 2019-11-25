@@ -536,7 +536,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('11.6.5'));
             $this->fixGroupAcl();
             $this->fixBugTypeList();
-            $this->adjustPriv11_6_6();
+            $this->adjustPriv11_7();
             $this->rmEditorAndTranslateDir();
             $this->setConceptSetted();
             $this->appendExec('11_6_5');
@@ -3424,12 +3424,12 @@ class upgradeModel extends model
     }
 
     /**
-     * Adjust 11.6.6 priv.
+     * Adjust 11.7 priv.
      * 
      * @access public
      * @return void
      */
-    public function adjustPriv11_6_6()
+    public function adjustPriv11_7()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
