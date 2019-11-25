@@ -1118,6 +1118,18 @@ class project extends control
             }
         }
 
+        if(strpos($this->config->custom->productProject, '_2')) 
+        {
+            $this->view->isSprint = true;
+            unset($this->lang->project->typeList['waterfall']);
+            unset($this->lang->project->typeList['ops']);
+
+            unset($this->lang->project->endList[62]);
+            unset($this->lang->project->endList[93]);
+            unset($this->lang->project->endList[186]);
+            unset($this->lang->project->endList[365]);
+        }
+
         $projectID = key($this->projects);
         if($this->session->project) $projectID = $this->session->project;
         $this->project->setMenu($this->projects, $projectID);
@@ -1205,6 +1217,19 @@ class project extends control
         foreach($linkedProducts as $product)
         {
             $productPlans[$product->id] = $this->productplan->getPairs($product->id);
+        }
+
+        if(strpos($this->config->custom->productProject, '_2')) 
+        {
+            $this->view->isSprint = true;
+
+            unset($this->lang->project->typeList['waterfall']);
+            unset($this->lang->project->typeList['ops']);
+
+            unset($this->lang->project->endList[62]);
+            unset($this->lang->project->endList[93]);
+            unset($this->lang->project->endList[186]);
+            unset($this->lang->project->endList[365]);
         }
 
         $this->view->title          = $title;
