@@ -494,7 +494,6 @@ class customModel extends model
     /**
      * Set flow function.
      * 
-     * @param  string $type productProject | storyRequirement
      * @access public
      * @return void
      */
@@ -537,16 +536,5 @@ class customModel extends model
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
-    }
-
-    /**
-     * Set hour or story point.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setHourPoint()
-    {
-        $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
     }
 }
