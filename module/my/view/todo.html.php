@@ -118,7 +118,7 @@
             if(common::hasPriv('todo', 'delete'))
             {
                 $deleteURL = $this->createLink('todo', 'delete', "todoID=$todo->id&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"todoList\",confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->todo->delete}'");
+                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"todoList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->todo->delete}'");
             }
             ?>
           </td>
@@ -141,12 +141,12 @@
       if(common::hasPriv('todo', 'batchFinish'))
       {
           $actionLink = $this->createLink('todo', 'batchFinish');
-          echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+          echo html::commonButton($lang->todo->finish, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
       }
       if(common::hasPriv('todo', 'batchClose'))
       {
           $actionLink = $this->createLink('todo', 'batchClose');
-          echo html::commonButton($lang->todo->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+          echo html::commonButton($lang->todo->close, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
       }
       if(common::hasPriv('todo', 'import2Today') and $importFuture)
       {

@@ -66,7 +66,7 @@
           if(common::hasPriv('testtask', 'delete', $task))
           {
               $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-              echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
+              echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
           }
           ?>
         </td>

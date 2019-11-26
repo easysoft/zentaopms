@@ -124,7 +124,7 @@
       if($canBatchClose)
       {
           $actionLink = $this->createLink('task', 'batchClose');
-          echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+          echo html::commonButton($lang->close, "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
       }
       ?>
       </div>
