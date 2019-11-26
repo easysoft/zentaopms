@@ -145,7 +145,7 @@ js::set('flow',          $config->global->flow);
                 if(common::hasPriv('testcase', 'delete'))
                 {
                     $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"caseList\",confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
+                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
                 }
                 ?>
               </td>
@@ -181,7 +181,7 @@ js::set('flow',          $config->global->flow);
                   foreach($lang->testcase->reviewResultList as $key => $result)
                   {
                       $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
@@ -196,7 +196,7 @@ js::set('flow',          $config->global->flow);
                   foreach($modules as $moduleId => $module)
                   {
                       $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                      echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                      echo "<li class='option' data-key='$moduleID'>" . html::a('#', $module, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
                   }
                   echo '</ul>';
                   if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";

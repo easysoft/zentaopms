@@ -210,7 +210,7 @@
               if(common::hasPriv('project', 'unlinkStory', $project))
               {
                   $unlinkURL = $this->createLink('project', 'unlinkStory', "projectID=$project->id&storyID=$story->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->project->unlinkStory}'");
+                  echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->project->unlinkStory}'");
               }
               ?>
             </td>
@@ -246,7 +246,7 @@
                 if(empty($key)) continue;
                 if(strpos('tested|verified|released|closed', $key) === false) continue;
                 $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
             }
             echo '</ul>';
             ?>
