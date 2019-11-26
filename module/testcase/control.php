@@ -991,6 +991,8 @@ class testcase extends control
      * Confirm testcase changed.
      *
      * @param  int    $caseID
+     * @param  int    $taskID
+     * @param  string $from
      * @access public
      * @return void
      */
