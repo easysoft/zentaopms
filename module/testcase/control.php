@@ -1171,11 +1171,11 @@ class testcase extends control
             }
 
             /* Get related objects title or names. */
+            $relatedModules = $this->loadModel('tree')->getAllModulePairs('case');
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedCases   = $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
             $relatedSteps   = $this->dao->select('id,parent,`case`,version,type,`desc`,expect')->from(TABLE_CASESTEP)->where('`case`')->in(@array_keys($cases))->orderBy('version desc,id')->fetchGroup('case', 'id');
 
-            $this->loadModel('tree');
             $cases = $this->testcase->appendData($cases);
             foreach($cases as $case)
             {
@@ -1221,8 +1221,8 @@ class testcase extends control
                 /* fill some field with useful value. */
                 $case->product = !isset($products[$case->product])     ? '' : $products[$case->product] . "(#$case->product)";
                 $case->branch  = !isset($branches[$case->branch])      ? '' : $branches[$case->branch] . "(#$case->branch)";
+                $case->module  = !isset($relatedModules[$case->module])? '' : $relatedModules[$case->module] . "(#$case->module)";
                 $case->story   = !isset($relatedStories[$case->story]) ? '' : $relatedStories[$case->story] . "(#$case->story)";
-                $case->module  = $case->module ? $this->tree->getModulePathByID($case->module) . "(#$case->module)" : '';
 
                 if(isset($caseLang->priList[$case->pri]))              $case->pri           = $caseLang->priList[$case->pri];
                 if(isset($caseLang->typeList[$case->type]))            $case->type          = $caseLang->typeList[$case->type];
