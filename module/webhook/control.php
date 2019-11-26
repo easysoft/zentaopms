@@ -183,7 +183,7 @@ class webhook extends control
         }
 
         $dingUsers   = $response['data'];
-        $bindedPairs = $this->webhook->getBindUsers($id);
+        $bindedPairs = $this->webhook->getBoundUsers($id);
         $useridPairs = array('' => '');
         foreach($dingUsers as $name => $userid) $useridPairs[$userid] = $name;
 

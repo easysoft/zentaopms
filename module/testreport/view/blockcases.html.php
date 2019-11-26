@@ -25,7 +25,7 @@
       <td><?php echo zget($users, $case->lastRunner);?></td>
       <td><?php echo substr($case->lastRunDate, 2);?></td>
       <td><?php echo zget($lang->testcase->resultList, $case->lastRunResult);?></td>
-      <?php $status = zget($lang->testtask->statusList, $case->status);?>
+      <?php $status = $this->processStatus('testtask', $case);?>
       <td title='<?php echo $status;?>'>
         <span class="status-case status-<?php echo $case->status?>"><?php echo $status;?></span>
       </td>

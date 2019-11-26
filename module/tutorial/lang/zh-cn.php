@@ -54,8 +54,8 @@ $lang->tutorial->tasks['manageTeam']         = array('title' => '管理团队');
 $lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'project', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => '团队管理');
 $lang->tutorial->tasks['manageTeam']['desc'] = "<p>管理{$lang->projectCommon}团队成员：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> 团队 <i class='icon icon-angle-right'></i> 团队管理</span> 页面；</li><li data-target='form'>选择要加入团队的成员；</li><li data-target='submit'>保存团队成员信息。</li></ul>";
 
-$lang->tutorial->tasks['linkStory']         = array('title' => '关联{$lang->storyCommon}');
-$lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => '关联{$lang->storyCommon}');
+$lang->tutorial->tasks['linkStory']         = array('title' => "关联{$lang->storyCommon}");
+$lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'project', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "关联{$lang->storyCommon}");
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>将{$lang->storyCommon}关联到{$lang->projectCommon}：</p><ul><li data-target='nav'>打开 <span class='task-nav'> {$lang->projectCommon} <i class='icon icon-angle-right'></i> {$lang->storyCommon} <i class='icon icon-angle-right'></i> 关联{$lang->storyCommon}</span> 页面；</li><li data-target='form'>在{$lang->storyCommon}列表中勾选要关联的{$lang->storyCommon}；</li><li data-target='submit'>保存关联的{$lang->storyCommon}信息。</li></ul>";
 
 $lang->tutorial->tasks['createTask']         = array('title' => '分解任务');

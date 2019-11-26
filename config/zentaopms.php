@@ -168,7 +168,7 @@ define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
 define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
-define('TABLE_DINGUSERID',    '`' . $config->db->prefix . 'dinguserid`');
+define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
 if(!defined('TABLE_LANG')) define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 
 $config->objectTables['product']     = TABLE_PRODUCT;

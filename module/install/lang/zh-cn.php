@@ -109,7 +109,7 @@ $lang->install->requestTypes['PATH_INFO'] = '静态友好方式';
 
 $lang->install->workingList['full']      = '完整研发管理工具';
 $lang->install->workingList['onlyTest']  = '测试管理工具';
-$lang->install->workingList['onlyStory'] = "{$lang->storyCommon}管理工具";
+$lang->install->workingList['onlyStory'] = "需求管理工具";
 $lang->install->workingList['onlyTask']  = '任务管理工具';
 
 $lang->install->errorConnectDB      = '数据库连接失败 ';
