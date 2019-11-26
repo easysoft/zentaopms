@@ -863,7 +863,7 @@ class fileModel extends model
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
         /* Set the downloading cookie, thus the export form page can use it to judge whether to close the window or not. */
-        setcookie('downloading', 1, 0, $this->config->webRoot, '', false, false)
+        setcookie('downloading', 1, 0, $this->config->webRoot, '', false, false);
 
         /* Append the extension name auto. */
         $extension = '.' . $fileType;
