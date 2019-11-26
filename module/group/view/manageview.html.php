@@ -50,21 +50,27 @@
       <tr id='productBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->productList?></th>
         <td>
+          <?php if($products):?>
           <div class='input-group'>
-            <?php if(empty($products)) $products = array('' => '');?>
             <?php echo html::select("actions[products][]", $products, isset($group->acl['products']) ? join(',', $group->acl['products']) : '', "class='form-control chosen' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
+          <?php else:?>
+          <?php echo $lang->group->noneProduct;?>
+          <?php endif;?>
         </td>
       </tr>
       <tr id='projectBox' style='display:none'>
         <th class='text-right'><?php echo $lang->group->projectList?></th>
         <td>
+          <?php if($products):?>
           <div class='input-group'>
-            <?php if(empty($projects)) $projects = array('' => '');?>
             <?php echo html::select("actions[projects][]", $projects, isset($group->acl['projects']) ? join(',', $group->acl['projects']) : '', "class='form-control chosen' multiple")?>
             <span class='input-group-addon strong'><?php echo $lang->group->noticeVisit?></span>
           </div>
+          <?php else:?>
+          <?php echo $lang->group->noneProject;?>
+          <?php endif;?>
         </td>
       </tr>
      <tr>

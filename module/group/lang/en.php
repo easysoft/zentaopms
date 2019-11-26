@@ -29,6 +29,8 @@ $lang->group->productList        = 'Access Product';
 $lang->group->projectList        = 'Access Project';
 $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Blank means no access limit.';
+$lang->group->noneProduct        = "No {$lang->productCommon}";
+$lang->group->noneProject        = "No {$lang->projectCommon}";
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Group';
