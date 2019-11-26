@@ -5,3 +5,5 @@ CREATE TABLE `zt_dinguserid` (
   `userid` varchar(255) NOT NULL,
   UNIQUE KEY `webhook_account` (`webhook`,`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ALTER TABLE `zt_product` ADD INDEX acl (`acl`); 
+ALTER TABLE `zt_project` ADD INDEX acl (`acl`); 
