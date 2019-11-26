@@ -121,7 +121,7 @@ class webhookModel extends model
      * @access public
      * @return array
      */
-    public function getBindUsers($webhookID, $users = array())
+    public function getBoundUsers($webhookID, $users = array())
     {
         return $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq('webhook')
             ->andWhere('providerID')->eq($webhookID)
@@ -492,7 +492,7 @@ class webhookModel extends model
         if(!empty($object->mailto)) $toList .= ',' . $object->mailto;
         if(empty($toList)) return false;
 
-        $openIdList = $this->getBindUsers($webhookID, $toList);
+        $openIdList = $this->getBoundUsers($webhookID, $toList);
         $openIdList = join(',', $openIdList);
         return $openIdList;
     }
