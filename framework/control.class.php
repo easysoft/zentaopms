@@ -61,10 +61,10 @@ class control extends baseControl
         if($this->app->getModuleName() == 'user' and strpos("login,logout", $this->app->getMethodName()) !== false) return true;
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
 
-        if($this->app->getModuleName() == 'custom' and $this->app->getMethodName() == 'setConcept') return true;
-        if(!isset($this->config->conceptSetted) and $this->app->getMethodName() != 'concept') 
+        if($this->app->getModuleName() == 'custom' and $this->app->getMethodName() == 'flow') return true;
+        if(!isset($this->config->conceptSetted)) 
         {
-            $this->locate(helper::createLink('custom', 'concept'));
+            $this->locate(helper::createLink('custom', 'flow'));
         }
     }
 
