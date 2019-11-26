@@ -278,7 +278,7 @@ class taskModel extends model
         foreach($data as $i => $task)
         {
 
-            if($task->deadline != '0000-00-00' and $task->deadline <= $task->estStarted)
+            if($task->deadline != '0000-00-00' and $task->deadline < $task->estStarted)
             {
                 dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
                 return false;
