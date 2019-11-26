@@ -1,7 +1,10 @@
 ALTER TABLE `zt_dept` CHANGE `order` `order` smallint(4) unsigned NOT NULL DEFAULT '0' AFTER `grade`;
-CREATE TABLE `zt_dinguserid` (
-  `webhook` mediumint(8) unsigned NOT NULL,
+CREATE TABLE IF NOT EXISTS `zt_oauth` (
   `account` varchar(30) NOT NULL,
-  `userid` varchar(255) NOT NULL,
-  UNIQUE KEY `webhook_account` (`webhook`,`account`)
+  `openID` varchar(255) NOT NULL,
+  `providerType` varchar(30) NOT NULL,
+  `providerID` mediumint(8) unsigned NOT NULL,
+  KEY `account` (`account`),
+  KEY `providerType` (`providerType`),
+  KEY `providerID` (`providerID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
