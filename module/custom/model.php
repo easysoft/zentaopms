@@ -527,6 +527,7 @@ class customModel extends model
      */
     public function setStoryRequirement()
     {
+        if(!$this->post->storyRequirement) return true;
         $this->loadModel('setting')->setItem('system.custom.storyRequirement', $this->post->storyRequirement);
 
         $oldIndex = isset($this->config->custom->storyRequirement) ? $this->config->custom->storyRequirement : '0';
@@ -536,5 +537,6 @@ class customModel extends model
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
+        exit;
     }
 }

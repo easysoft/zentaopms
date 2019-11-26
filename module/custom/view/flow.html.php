@@ -1,46 +1,61 @@
 <?php
 /**
- * The set view file of custom module of ZenTaoPMS.
+ * The html template file of deny method of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Congzhi Chen <congzhi@cnezsoft.com>
- * @package     custom
- * @version     $Id$
- * @link        http://www.zentao.net
+ * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+ * @package     ZenTaoPMS
+ * @version     $Id: deny.html.php 4129 2013-01-18 01:58:14Z wwccss $
  */
 ?>
+<?php if(isset($this->config->conceptSetted)):?>
 <?php include 'header.html.php';?>
+<?php else:?>
+<?php include '../../common/view/header.lite.html.php';?>
+<?php endif;?>
+<?php if(isset($this->config->conceptSetted)):?>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" method='post'>
-    <div class='main-header'>
-      <div class='heading'>
-        <strong><?php echo $lang->custom->flow?></strong>
+  <div class='main-header'>
+    <div class='heading'>
+      <strong><?php echo $lang->custom->flow?></strong>
+    </div>
+  </div>
+<?php else:?>
+<div class='container'>
+  <div class='modal-dialog'>
+    <div class='modal-header'>
+      <strong><?php echo $lang->custom->flow?></strong>
+    </div>
+<?php endif;?>
+  <form id='ajaxForm' method='post'>
+    <div class='modal-body'>
+      <div class="form-group">
+        <label><?php echo $lang->custom->conceptQuestions['overview']?></label>
+        <div class="checkbox"> <?php echo html::radio('productProject', $lang->custom->productProject->relation, zget($this->config->custom, 'productProject', '0_0'))?> </div>
+      </div>
+      <?php if(!common::checkNotCN()):?>
+      <div class="form-group">
+        <label><?php echo $lang->custom->conceptQuestions['story']?></label>
+        <div class="checkbox"> <?php echo html::radio('storyRequirement', $lang->custom->conceptOptions->story, zget($this->config->custom, 'storyRequirement', '0'));?></div>
+      </div>
+      <?php endif;?>
+      <div class="form-group">
+        <label><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
+        <div class="checkbox"> <?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, zget($this->config->custom, 'hourPoint'))?> </div>
+      </div>
+      <div class="form-group">
+        <label></label>
+        <div><?php echo html::submitButton();?></div>
       </div>
     </div>
-    <table class='table table-form'>
-      <tr>
-        <th class='w-120px text-top'><?php echo $lang->custom->select;?></th>
-        <?php $checkedKey = isset($config->custom->productProject) ? $config->custom->productProject : (empty($config->isINT) ? '0_0' : '0_1');?>
-        <td>
-          <?php foreach($lang->custom->productProject->relation as $key => $value):?>
-          <p><label class="radio-inline"><input type="radio" name="productProject" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="productProject<?php echo $key;?>"><?php echo $value;?></label></p>
-          <?php endforeach;?>
-        </td>
-      </tr>
-      <tr><td></td><td><?php echo html::submitButton()?></td></tr>
-      <tr>
-        <td colspan='2' class='pd-0'>
-          <div class='alert alert-info alert-block'><strong><?php echo $lang->custom->productProject->notice?></strong></div>
-        </td>
-      </tr>
-    </table>
   </form>
-</div>
-<script>
-$(function()
-{
-    $('#mainMenu #flowTab').addClass('btn-active-text');
-})
-</script>
+<?php if(isset($this->config->conceptSetted)):?>
 <?php include '../../common/view/footer.html.php';?>
+<?php else:?>
+<?php echo js::execute($pageJS);?>
+</div>
+</div>
+</body>
+</html>
+<?php endif;?>

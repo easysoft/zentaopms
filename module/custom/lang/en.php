@@ -88,16 +88,17 @@ $lang->custom->allLang     = 'All Languages';
 $lang->custom->confirmRestore = 'Do you want to reset?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userFieldNotice      = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
-$lang->custom->notice->canNotAdd            = 'It will be calculated, so customization is not enabled.';
-$lang->custom->notice->forceReview          = '%s review is required for committers selected.';
-$lang->custom->notice->forceNotReview       = "%s review is not required for committers selected.";
-$lang->custom->notice->longlife             = 'Define stalled bugs.';
-$lang->custom->notice->invalidNumberKey     = 'The key should be =< 255.';
-$lang->custom->notice->invalidStringKey     = 'The key should be lowercase letters, numbers or underlines.';
-$lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
-$lang->custom->notice->noClosedBlock        = 'You have no blocks that are closed permanently.';
-$lang->custom->notice->required             = 'The selected field is required.';
+$lang->custom->notice->userFieldNotice   = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
+$lang->custom->notice->canNotAdd         = 'It will be calculated, so customization is not enabled.';
+$lang->custom->notice->forceReview       = '%s review is required for committers selected.';
+$lang->custom->notice->forceNotReview    = "%s review is not required for committers selected.";
+$lang->custom->notice->longlife          = 'Define stalled bugs.';
+$lang->custom->notice->invalidNumberKey  = 'The key should be =< 255.';
+$lang->custom->notice->invalidStringKey  = 'The key should be lowercase letters, numbers or underlines.';
+$lang->custom->notice->cannotSetTimezone = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
+$lang->custom->notice->noClosedBlock     = 'You have no blocks that are closed permanently.';
+$lang->custom->notice->required          = 'The selected field is required.';
+$lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>。. Go to Admin -> Custom -> Concept to set it.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
@@ -124,8 +125,10 @@ $lang->custom->weekendList[1] = '1-Day Off';
 
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = 'Product - Project';
-$lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
-$lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
+$lang->custom->productProject->relation['0_1'] = 'Product - Iteration';
+$lang->custom->productProject->relation['1_1'] = 'Project - Iteration';
+$lang->custom->productProject->relation['0_2'] = 'Product - Sprint';
+$lang->custom->productProject->relation['1_2'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Select a concept that fits your team.';
 
@@ -144,3 +147,17 @@ $lang->custom->scoreStatus[0] = 'Off';
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';
 $lang->custom->moduleName['project']     = $lang->projectCommon;
+
+$lang->custom->conceptQuestions['overview']   = "1. Which combination of management fits your company?";
+$lang->custom->conceptQuestions['story']      = "2. Do you use the concept of requirement or user story in your company?";
+$lang->custom->conceptQuestions['storypoint'] = "2. Do you use hours or story points to make estimations in your company?";
+
+$lang->custom->conceptOptions = new stdclass;
+
+$lang->custom->conceptOptions->story = array();
+$lang->custom->conceptOptions->story['0'] = 'Requiremenet';
+$lang->custom->conceptOptions->story['1'] = 'Story';
+
+$lang->custom->conceptOptions->hourPoint = array();
+$lang->custom->conceptOptions->hourPoint['0'] = 'Hour';
+$lang->custom->conceptOptions->hourPoint['1'] = 'Story Point';
