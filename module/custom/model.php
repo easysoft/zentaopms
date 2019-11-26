@@ -538,7 +538,7 @@ class customModel extends model
      */
     public function setStoryRequirement()
     {
-        if(!$this->post->storyRequirement) return true;
+        if(!isset($_POST['storyRequirement'])) return true;
         $this->loadModel('setting')->setItem('system.custom.storyRequirement', $this->post->storyRequirement);
 
         $oldIndex = isset($this->config->custom->storyRequirement) ? $this->config->custom->storyRequirement : '0';
