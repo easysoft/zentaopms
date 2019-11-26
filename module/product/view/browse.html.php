@@ -235,14 +235,14 @@
                           {
                               $actionLink = $this->createLink('story', 'batchReview', "result=reject&reason=$key");
                               echo "<li>";
-                              echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+                              echo html::a('#', $reason, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                               echo "</li>";
                           }
                           echo '</ul></li>';
                       }
                       else
                       {
-                        echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                        echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
                       }
                   }
                   echo '</ul></li>';
@@ -279,7 +279,7 @@
                       if(empty($key)) continue;
                       if(strpos('tested|verified|released|closed', $key) === false) continue;
                       $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                      echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . "</li>";
+                      echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . "</li>";
                   }
                   echo '</ul></li>';
               }

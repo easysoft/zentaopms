@@ -105,9 +105,7 @@ class router extends baseRouter
 
                 try
                 {
-                    $productProject   = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='productProject'")->fetch();
-                    $storyRequirement = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='storyRequirement'")->fetch();
-                    $hourPoint        = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' AND `key`='hourPoint'")->fetch();
+                    $commonSettins = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','storyRequirement','hourPoint')")->fetchAll();
                 }
                 catch (PDOException $exception) 
                 {
@@ -127,18 +125,17 @@ class router extends baseRouter
                 }
             }
 
-            $productCommon = $projectCommon = $storyCommon = $hourCommon = 0;
-            if(!empty($this->config->isINT)) $projectCommon = 1;
-            if($productProject)
+            $productCommon = $storyCommon = $hourCommon = 0;
+            $projectCommon = empty($this->config->isINT) ? 0 : 1;
+
+            foreach($commonSettins as $setting)
             {
-                $productProject = $productProject->value;
-                list($productCommon, $projectCommon) = explode('_', $productProject);
+                if($setting->key == 'productProject') list($productCommon, $projectCommon) = explode('_',  $setting->value);
+                if($setting->key == 'storyRequirement') $storyCommon = $setting->value;
+                if($setting->key == 'hourPoint') $hourCommon = $setting->value;
             }
 
-            if($storyRequirement) $storyCommon = $storyRequirement->value;
-            if($hourPoint)        $hourCommon  = $hourPoint->value;
-
-            /* Set productCommon and projectCommon. Default english lang. */
+            /* Set productCommon, projectCommon, storyCommon and hourCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][(int)$projectCommon];
             $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon]     : $this->config->storyCommonList['en'][(int)$storyCommon];

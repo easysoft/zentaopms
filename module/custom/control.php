@@ -229,7 +229,14 @@ class custom extends control
         if($_POST)
         {
             $this->custom->setFlow();
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            $this->custom->setStoryRequirement();
+
+            $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+            $this->loadModel('setting')->setItem('system.common.conceptSetted', 1);
+
+            $this->app->loadLang('common');
+            $message = sprintf($this->lang->custom->notice->conceptResult, $this->lang->productCommon, $this->lang->projectCommon, $this->lang->storyCommon, $this->lang->hourCommon);
+            $this->send(array('result' => 'success', 'notice' => $message, 'locate' => inlink('flow')));
         }
 
         $this->view->title      = $this->lang->custom->flow;
@@ -238,29 +245,11 @@ class custom extends control
     }
 
     /**
-     * Set concept.
+     * Set working mode function.
      * 
      * @access public
      * @return void
      */
-    public function concept()
-    {
-        if($_POST)
-        {
-            $this->custom->setFlow();
-            $this->custom->setStoryRequirement();
-            $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
-            $this->loadModel('setting')->setItem('system.common.conceptSetted', 1);
-            $this->app->loadLang('common');
-            $message = sprintf($this->lang->custom->notice->conceptResult, $this->lang->productCommon, $this->lang->projectCommon, $this->lang->storyCommon, $this->lang->hourCommon);
-            $this->send(array('result' => 'success', 'notice' => $message, 'locate' => inlink('concept')));
-        }
-
-        $this->view->title = $this->lang->custom->concept;
-        $this->view->position[] = $this->lang->custom->concept;
-        $this->display();
-    }
-
     public function working()
     {
         if($_POST)

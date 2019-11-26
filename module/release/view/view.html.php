@@ -68,7 +68,7 @@
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
-            <form class='main-table table-story' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkStory', "release=$release->id");?>" id='linkedStoriesForm' data-ride="table">
+            <form class='main-table table-story' method='post' id='linkedStoriesForm' data-ride="table">
               <table class='table has-sort-head' id='storyList'>
                 <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkStory');?>
                 <?php $vars = "releaseID={$release->id}&type=story&link=$link&param=$param&orderBy=%s";?>
@@ -98,7 +98,7 @@
                     <td class='c-id text-left'>
                       <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <input type='checkbox' name='unlinkStories[]'  value='<?php echo $story->id;?>'/>
+                        <input type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/>
                         <label></label>
                       </div>
                       <?php endif;?>
@@ -117,7 +117,7 @@
                       if(common::hasPriv('release', 'unlinkStory'))
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkStory', "releaseID=$release->id&story=$story->id");
-                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"storyList\",confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkStory}'");
+                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"storyList\", confirmUnlinkStory)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkStory}'");
                       }
                       ?>
                     </td>
@@ -129,7 +129,19 @@
               <div class='table-footer'>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
+                  <?php
+                  if(common::hasPriv('release', 'batchUnlinkStory'))
+                  {
+                      $unlinkURL = inlink('batchUnlinkStory', "release=$release->id");
+                      echo html::a('###', $lang->release->batchUnlink, '', "onclick='setFormAction(\"$unlinkURL\", \"hiddenwin\", this)' class='btn'");
+                  }
+
+                  if(common::hasPriv('story', 'batchClose'))
+                  {
+                      $closeURL = $this->createLink('story', 'batchClose', "productID=$release->product");
+                      echo html::a("###", $lang->story->batchClose, '', "onclick='setFormAction(\"$closeURL\", \"\", this)' class='btn'");
+                  }
+                  ?>
                 </div>
                 <div class='text'><?php echo sprintf($lang->release->finishStories, $countStories);?></div>
               </div>
@@ -190,7 +202,7 @@
                       if(common::hasPriv('release', 'unlinkBug'))
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id");
-                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"bugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
+                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
                       }
                       ?>
                     </td>
@@ -276,7 +288,7 @@
                       if(common::hasPriv('release', 'unlinkBug'))
                       {
                           $unlinkURL = $this->createLink('release', 'unlinkBug', "releaseID=$release->id&bug=$bug->id&type=leftBug");
-                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\",\"leftBugList\",confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
+                          echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"leftBugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->release->unlinkBug}'");
                       }
                       ?>
                     </td>

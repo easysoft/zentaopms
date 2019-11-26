@@ -3539,11 +3539,13 @@ class upgradeModel extends model
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $conceptSetted = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('common')->andWhere('`key`')->eq('conceptSetted')->fetchAll();
+
         if(empty($conceptSetted))
         {
             $setting = new stdclass();
             $setting->owner  = 'system';
             $setting->module = 'custom';
+
             $setting->key    = 'storyRequirement';
             $setting->value  = '0';
             $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();

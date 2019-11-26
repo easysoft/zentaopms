@@ -125,7 +125,7 @@ js::set('suiteID',        $suiteID);
                   foreach($lang->testcase->reviewResultList as $key => $result)
                   {
                       $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
@@ -143,7 +143,7 @@ js::set('suiteID',        $suiteID);
                   foreach($lang->testcase->typeList as $key => $result)
                   {
                       $actionLink = $this->createLink('testcase', 'batchCaseTypeChange', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink','hiddenwin')\"") . '</li>';
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
@@ -206,7 +206,7 @@ js::set('suiteID',        $suiteID);
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink','hiddenwin')\"");
+                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                 }
                 ?>
               </div>

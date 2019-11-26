@@ -19,9 +19,21 @@ class customModel extends model
      */
     public function getAllLang()
     {
-        $allCustomLang = $this->dao->select('*')->from(TABLE_LANG)->orderBy('lang,id')->fetchAll('id');
-
         $currentLang = $this->app->getClientLang();
+
+        try
+        {
+            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->orderBy('lang,id')->get();
+            $stmt = $this->dbh->query($sql);
+
+            $allCustomLang = array();
+            while($row = $stmt->fetch()) $allCustomLang[$row->id] = $row;
+        }
+        catch(PDOException $e)
+        {
+            return false;
+        }
+
         $sectionLang = array();
         foreach($allCustomLang as $customLang)
         {
@@ -31,7 +43,6 @@ class customModel extends model
         $processedLang = array();
         foreach($allCustomLang as $id => $customLang)
         {
-            if($customLang->lang != $currentLang and $customLang->lang != 'all') continue;
             if(isset($sectionLang[$customLang->module][$customLang->section]['all']) && isset($sectionLang[$customLang->module][$customLang->section][$currentLang]) && $customLang->lang == 'all') continue;
             $processedLang[$customLang->module][$customLang->section][$customLang->key] = $customLang->value;
         }
@@ -527,6 +538,7 @@ class customModel extends model
      */
     public function setStoryRequirement()
     {
+        if(!$this->post->storyRequirement) return true;
         $this->loadModel('setting')->setItem('system.custom.storyRequirement', $this->post->storyRequirement);
 
         $oldIndex = isset($this->config->custom->storyRequirement) ? $this->config->custom->storyRequirement : '0';
@@ -536,5 +548,6 @@ class customModel extends model
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
+        exit;
     }
 }
