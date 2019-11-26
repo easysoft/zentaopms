@@ -912,16 +912,10 @@ class bugModel extends model
      */
     public function resolve($bugID)
     {
-        /* Check required fields before create build. */
-        $requiredFields = explode(',', trim($this->config->bug->resolve->requiredFields, ','));
-        foreach($requiredFields as $requiredField)
+        if(strpos($this->config->bug->resolve->requiredFields, 'comment') !== false and !$this->post->comment)
         {
-            if(!$this->post->$requiredField)
-            {
-                $tip = $requiredField == 'comment' ? $this->lang->comment : $this->lang->bug->$requiredField;
-                dao::$errors[] = sprintf($this->lang->error->notempty, $tip);
-                return false;
-            } 
+            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            return false;
         }
 
         $now    = helper::now();
@@ -940,7 +934,7 @@ class bugModel extends model
             ->get();
 
         /* Can create build when resolve bug. */
-        if(isset($bug->createBuild))
+        if(isset($bug->createBuild) and $bug->resolution)
         {
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
             if(empty($bug->buildProject)) dao::$errors['buildProject'][] = sprintf($this->lang->error->notempty, $this->lang->bug->project);
