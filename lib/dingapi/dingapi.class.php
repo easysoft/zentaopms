@@ -8,6 +8,16 @@ class dingapi
     private $expires;
     private $errors = array();
 
+    /**
+     * Construct 
+     * 
+     * @param  string $appKey 
+     * @param  string $appSecret 
+     * @param  string $agentId 
+     * @param  string $apiUrl 
+     * @access public
+     * @return void
+     */
     public function __construct($appKey, $appSecret, $agentId, $apiUrl = '')
     {
         $this->appKey    = $appKey;
@@ -18,6 +28,12 @@ class dingapi
         if(!$this->getToken()) return array('result' => 'fail', 'message' => $this->errors);
     }
 
+    /**
+     * Get token.
+     * 
+     * @access public
+     * @return string
+     */
     public function getToken()
     {
         if($this->token and (time() - $this->expires) >= 0) return $this->token;
@@ -30,6 +46,12 @@ class dingapi
         return $this->token;
     }
 
+    /**
+     * Get all users.
+     * 
+     * @access public
+     * @return array
+     */
     public function getAllUsers()
     {
         $depts = $this->getAllDepts();
@@ -47,6 +69,12 @@ class dingapi
         return array('result' => 'success', 'data' => $users);
     }
 
+    /**
+     * Get all depts.
+     * 
+     * @access public
+     * @return array
+     */
     public function getAllDepts()
     {
         $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
@@ -57,6 +85,14 @@ class dingapi
         return $deptPairs;
     }
 
+    /**
+     * Send message 
+     * 
+     * @param  string $userList 
+     * @param  string $message 
+     * @access public
+     * @return array
+     */
     public function send($userList, $message)
     {
         $curl = curl_init();
@@ -90,6 +126,13 @@ class dingapi
         return array('result' => 'fail', 'message' => $this->errors);
     }
 
+    /**
+     * Query API.
+     * 
+     * @param  string $url 
+     * @access public
+     * @return string
+     */
     public function queryAPI($url)
     {
         $response = json_decode(file_get_contents($url));
@@ -99,11 +142,23 @@ class dingapi
         return false;
     }
 
+    /**
+     * Check for errors.
+     * 
+     * @access public
+     * @return bool
+     */
     public function isError()
     {
         return !empty($this->errors);
     }
 
+    /**
+     * Get errors.
+     * 
+     * @access public
+     * @return array
+     */
     public function getErrors()
     {
         $errors = $this->errors;
