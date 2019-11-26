@@ -1530,8 +1530,8 @@ class story extends control
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in(@array_keys($stories))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in(@array_keys($stories))->orderBy('version desc')->fetchGroup('story');
             $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
+            $relatedModules = $this->loadModel('tree')->getAllModulePairs();
 
-            $this->loadModel('tree');
             foreach($stories as $story)
             {
                 $story->spec   = '';
@@ -1560,7 +1560,6 @@ class story extends control
                 if(isset($products[$story->product]))      $story->product = $this->post->fileType == 'word' ? $products[$story->product] : $products[$story->product] . "(#$story->product)";
                 if(isset($relatedModules[$story->module])) $story->module  = $this->post->fileType == 'word' ? $relatedModules[$story->module] : $relatedModules[$story->module] . "(#$story->module)";
                 if(isset($relatedBranch[$story->branch]))  $story->branch  = $relatedBranch[$story->branch] . "(#$story->branch)";
-                $story->module = $story->module ? (($this->post->fileType == 'word') ? $this->tree->getModulePathByID($story->module) : $this->tree->getModulePathByID($story->module) . "(#$story->module)") : '';
                 if(isset($story->plan))
                 {
                     $plans = '';

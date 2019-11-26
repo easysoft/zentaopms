@@ -26,27 +26,39 @@ class treeModel extends model
     }
 
     /**
-     * Get module path by ID.
+     * Get all module pairs with path.
      *
-     * @param  int    $moduleID
      * @access public
      * @return object
      */
-    public function getModulePathByID($moduleID)
+    public function getAllModulePairs($type = 'task')
     {
-        $module  = $this->dao->findById((int)$moduleID)->from(TABLE_MODULE)->fetch();
-        if($module->parent == '0') return '/' . $module->name;
+        $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            ->where('type')->eq('story')
+            ->beginIF($type == 'task')->orWhere('type')->eq('task')->fi()
+            ->beginIF($type == 'bug')->orWhere('type')->eq('bug')->fi()
+            ->beginIF($type == 'case')->orWhere('type')->eq('case')->fi()
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll();
 
-        $path    = substr($module->path, 1, -1);
-        $modules =  $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in($path)->orderBy('grade')->fetchPairs();
-
-        $modulePath = '';
-        foreach($modules as $moduleName)
+        $pairs = array();
+        foreach($modules as $module)
         {
-            $modulePath .= '/' . $moduleName; 
+            if($module->parent == '0') 
+            {
+                $pairs[$module->id] = '/' . $module->name;
+                continue;
+            }
+
+            $path           = substr($module->path, 1, -1);
+            $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($path)->orderBy('grade')->fetchPairs();
+            $modulePath     = '';
+
+            foreach($relatedModules as $moduleName) $modulePath .= '/' . $moduleName; 
+            $pairs[$module->id] = $modulePath;
         }
-        
-        return $modulePath;
+
+        return $pairs;
     }
 
     /**
