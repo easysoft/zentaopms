@@ -3473,7 +3473,7 @@ class upgradeModel extends model
 
         foreach($this->config->upgrade->discardedBugTypes as $langCode => $types)
         {
-            $bugs = $this->dao->select('type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
+            $bugs = $this->dao->select('distinct type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
             if(empty($bugs)) return true;
 
             $usedTypes        = array_keys($bugs);
