@@ -361,6 +361,8 @@ class testreportModel extends model
      * 
      * @param  array    $tasks 
      * @param  array    $cases 
+     * @param  string   $begin
+     * @param  string   $end
      * @access public
      * @return string
      */
@@ -370,6 +372,8 @@ class testreportModel extends model
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
             ->where('t2.task')->in(array_keys($tasks))
             ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.date')->ge($begin)
+            ->andWhere('t1.date')->le($end . " 23:59:59")
             ->orderBy('date')
             ->fetchAll('id');
 
@@ -381,6 +385,68 @@ class testreportModel extends model
             if($result->caseResult == 'fail') $failResults[$result->case] = $result->case;
         }
         return sprintf($this->lang->testreport->caseSummary, count($cases), count($runCasesNum), count($results), count($failResults));
+    }
+
+    /**
+     * Get per run result for testreport.
+     * 
+     * @param  array    $tasks 
+     * @param  array    $cases 
+     * @param  string   $begin
+     * @param  string   $end
+     * @access public
+     * @return string
+     */
+    public function getPerCaseResult4Report($tasks, $cases, $begin, $end)
+    {
+        $datas = $this->dao->select("t1.caseResult AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')
+            ->on('t1.run= t2.id')
+            ->where('t2.task')->in(array_keys($tasks))
+            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.date')->ge($begin)
+            ->andWhere('t1.date')->le($end . " 23:59:59")
+            ->groupBy('name')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+
+        if(!$datas) return array();
+
+        $this->app->loadLang('testcase');
+        foreach($datas as $result => $data) $data->name = isset($this->lang->testcase->resultList[$result])? $this->lang->testcase->resultList[$result] : $this->lang->testtask->unexecuted;
+
+        return $datas; 
+    }
+
+    /**
+     * Get per case runner for testreport.
+     * 
+     * @param  array    $tasks 
+     * @param  array    $cases 
+     * @param  string   $begin
+     * @param  string   $end
+     * @access public
+     * @return string
+     */
+    public function getPerCaseRunner4Report($tasks, $cases, $begin, $end)
+    {
+        $datas = $this->dao->select("t1.lastRunner AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_TESTRUN)->alias('t2')
+            ->on('t1.run= t2.id')
+            ->where('t2.task')->in(array_keys($tasks))
+            ->andWhere('t1.`case`')->in(array_keys($cases))
+            ->andWhere('t1.date')->ge($begin)
+            ->andWhere('t1.date')->le($end . " 23:59:59")
+            ->groupBy('name')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+
+        if(!$datas) return array();
+
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
+        foreach($datas as $result => $data) $data->name = $result ? zget($users, $result, $result) : $this->lang->testtask->unexecuted;
+
+        return $datas; 
     }
 
     /**

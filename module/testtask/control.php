@@ -942,6 +942,7 @@ class testtask extends control
         }
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
+
         /* If case has changed and not confirmed, remove it. */
         if($from == 'testtask')
         {    
@@ -951,18 +952,14 @@ class testtask extends control
                 ->fetchPairs();
             foreach($cases as $caseID => $case)
             {
-                if(isset($runs[$caseID]) && $runs[$caseID] < $case->version) 
-                {
-                    unset($cases[$caseID]);
-                    $key = array_search($caseID, $caseIDList);
-                    if($key !== false) array_splice($caseIDList, $key, 1);
-                }
+                if(isset($runs[$caseID]) && $runs[$caseID] < $case->version) unset($cases[$caseID]);
             }
         }
+
         $this->view->cases = $cases;
         $this->view->steps = $this->dao->select('t1.*')->from(TABLE_CASESTEP)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-            ->where('t2.id')->in($caseIDList)
+            ->where('t2.id')->in(array_keys($cases))
             ->andWhere('t1.version=t2.version')
             ->andWhere('t2.status')->ne('wait')
             ->fetchGroup('case', 'id');

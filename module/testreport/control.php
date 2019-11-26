@@ -238,7 +238,6 @@ class testreport extends control
         }
         $cases   = $this->testreport->getTaskCases($tasks, $begin, $end);
         $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
-
         $this->view->begin   = $begin;
         $this->view->end     = $end;
         $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
@@ -256,6 +255,9 @@ class testreport extends control
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
+
+        $this->view->datas['testTaskPerRunResult'] = $this->testreport->getPerCaseResult4Report($tasks, $cases, $begin, $end);
+        $this->view->datas['testTaskPerRunner']    = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $begin, $end);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
@@ -363,6 +365,9 @@ class testreport extends control
 
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
+        
+        $this->view->datas['testTaskPerRunResult'] = $this->testreport->getPerCaseResult4Report($tasks, $cases, $report->begin, $report->end);
+        $this->view->datas['testTaskPerRunner']    = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $report->begin, $report->end);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
@@ -441,6 +446,9 @@ class testreport extends control
 
         $this->view->storySummary = $this->product->summary($stories);
         $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
+
+        $this->view->datas['testTaskPerRunResult'] = $this->testreport->getPerCaseResult4Report($tasks, $cases, $report->begin, $report->end);
+        $this->view->datas['testTaskPerRunner']    = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $report->begin, $report->end);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
