@@ -548,6 +548,5 @@ class customModel extends model
         {
             $this->dao->update(TABLE_BLOCK)->set("`title` = REPLACE(`title`, '{$commonList[$oldIndex]}', '{$commonList[$newIndex]}')")->where('source')->eq('product')->exec();
         }
-        exit;
     }
 }
