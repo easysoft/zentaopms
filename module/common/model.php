@@ -28,13 +28,7 @@ class commonModel extends model
             $this->setUser();
             $this->loadConfigFromDB();
             $this->app->setTimezone();
-            if((strpos($this->config->version, 'pro') !== false && version_compare($this->config->version, 'pro2.3.beta', '>'))
-                || (strpos($this->config->version, 'biz') !== false)
-                || version_compare($this->config->version, '4.3.beta', '>'))
-            {
-                $this->loadCustomFromDB();
-            }
-
+            $this->loadCustomFromDB();
             if(!$this->checkIP()) die($this->lang->ipLimited);
             $this->app->loadLang('company');
         }
@@ -133,10 +127,14 @@ class commonModel extends model
      */
     public function loadCustomFromDB()
     {
+        $this->loadModel('custom');
+
         if(defined('IN_UPGRADE')) return;
         if(!$this->config->db->name) return;
-        $records = $this->loadModel('custom')->getAllLang();
+
+        $records = $this->custom->getAllLang();
         if(!$records) return;
+
         $this->lang->db = new stdclass();
         $this->lang->db->custom = $records;
     }
