@@ -29,6 +29,8 @@ $lang->group->productList        = 'Produkte sind zugänglich.';
 $lang->group->projectList        = 'Projekte sind zugänglich.';
 $lang->group->dynamic            = 'Access Dynamics';
 $lang->group->noticeVisit        = 'Leer bedeutet Zugriff verweigert.';
+$lang->group->noneProduct        = "No {$lang->productCommon}";
+$lang->group->noneProject        = "No {$lang->projectCommon}";
 
 $lang->group->id       = 'ID';
 $lang->group->name     = 'Name';
