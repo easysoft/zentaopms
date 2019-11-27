@@ -41,7 +41,8 @@ class treeModel extends model
             ->andWhere('deleted')->eq('0')
             ->fetchAll();
 
-        $pairs = array();
+        $pairs    = array();
+        $pairs[0] = '/';
         foreach($modules as $module)
         {
             if($module->parent == '0') 
