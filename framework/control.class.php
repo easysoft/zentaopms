@@ -41,10 +41,22 @@ class control extends baseControl
         {
             $this->checkRequireFlowField();
 
-            if(isset($this->config->{$this->moduleName}) and isset($this->config->{$this->moduleName}->exportFields) and strpos($this->methodName, 'export') !== false)
+            if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
             {
-                $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
-                foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
+                if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
+                {
+                    $exportFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('canExport')->eq('1')->andWhere('buildin')->eq('0')->fetchAll('field');
+
+                    if(isset($this->config->{$this->moduleName}->exportFields))
+                    {
+                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->exportFields .= ",{$field->field}";
+                    }
+
+                    if(isset($this->config->{$this->moduleName}->list->exportFields))
+                    {
+                        foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
+                    }
+                }
             }
         }
     }
