@@ -9,7 +9,7 @@ $(document).ready(function()
             {
                 bootbox.alert(response.notice, function()
                 {
-                    location.reload();
+                    location.href = response.locate;
                 });
             }
             return false;

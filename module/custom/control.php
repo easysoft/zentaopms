@@ -235,8 +235,11 @@ class custom extends control
             $this->loadModel('setting')->setItem('system.common.conceptSetted', 1);
 
             $this->app->loadLang('common');
+            $locate = inlink('flow');
+            if(!isset($this->config->conceptSetted)) $this->lang->custom->notice->conceptResult .= $this->lang->custom->notice->conceptPath;
+            if(!isset($this->config->conceptSetted)) $locate = helper::createLink('my', 'index');
             $message = sprintf($this->lang->custom->notice->conceptResult, $this->lang->productCommon, $this->lang->projectCommon, $this->lang->storyCommon, $this->lang->hourCommon);
-            $this->send(array('result' => 'success', 'notice' => $message, 'locate' => inlink('flow')));
+            $this->send(array('result' => 'success', 'notice' => $message, 'locate' => $locate));
         }
 
         $this->view->title      = $this->lang->custom->flow;

@@ -71,6 +71,7 @@ $lang->webhook->note->async   = 'If it is asynchronous, you have to go to Admin-
 $lang->webhook->note->bind    = 'Bind User is only required for Dingding Notifier.';
 $lang->webhook->note->product = "All actions will trigger the hook if {$lang->productCommon} is empty, or only actions of selected {$lang->productCommon} will trigger it.";
 $lang->webhook->note->project = "All actions will trigger the hook if {$lang->projectCommon} is empty, or only actions of selected {$lang->projectCommon} will trigger it.";
+$lang->webhook->note->dingKey = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
 
 $lang->webhook->note->typeList['bearychat'] = 'Add a ZenTao bot in bearychat and get the webhook url.';
 $lang->webhook->note->typeList['dingding']  = 'Add a customized bot in dingding and get the webhook url.';

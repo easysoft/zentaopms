@@ -131,17 +131,17 @@ class project extends control
         if($this->cookie->preProjectID != $projectID)
         {
             $_COOKIE['moduleBrowseParam'] = $_COOKIE['productBrowseParam'] = 0;
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, true);
+            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
             setcookie('productBrowseParam', 0, 0, $this->config->webRoot, '', false, true);
         }
         if($browseType == 'bymodule')
         {
-            setcookie('moduleBrowseParam',  (int)$param, 0, $this->config->webRoot, '', false, true);
+            setcookie('moduleBrowseParam',  (int)$param, 0, $this->config->webRoot, '', false, false);
             setcookie('productBrowseParam', 0, 0, $this->config->webRoot, '', false, true);
         }
         elseif($browseType == 'byproduct')
         {
-            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, true);
+            setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
             setcookie('productBrowseParam', (int)$param, 0, $this->config->webRoot, '', false, true);
         }
         else

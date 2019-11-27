@@ -70,7 +70,7 @@ class projectModel extends model
 
         if($this->cookie->projectMode == 'noclosed' and ($project->status == 'done' or $project->status == 'closed'))
         {
-            setcookie('projectMode', 'all');
+            setcookie('projectMode', 'all', 0, $this->config->webRoot, '', false, false);
             $this->cookie->projectMode = 'all';
         }
 
