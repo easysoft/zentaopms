@@ -193,4 +193,17 @@ class misc extends control
         $this->view->detailed = $detailed;
         $this->display();
     }
+
+    /**
+     * Check net connect.
+     * 
+     * @access public
+     * @return void
+     */
+    public function checkNetConnect()
+    {
+        $this->app->loadConfig('extension');
+        $check = @fopen(dirname($this->config->extension->apiRoot), "r");
+        die($check ? 'success' : 'fail');
+    }
 }
