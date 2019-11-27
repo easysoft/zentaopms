@@ -166,7 +166,7 @@ class bug extends control
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories       = $storyList;
         $this->view->tasks         = $taskList;
-        $this->view->setShowModule = true;
+        $this->view->setModule     = true;
 
         $this->display();
     }

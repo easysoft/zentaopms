@@ -136,7 +136,7 @@ class testcase extends control
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
         $this->view->suiteID       = $suiteID;
-        $this->view->setShowModule = true;
+        $this->view->setModule     = true;
 
         $this->display();
     }
