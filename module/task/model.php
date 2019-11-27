@@ -534,7 +534,7 @@ class taskModel extends model
                 if($status == 'doing' and $parentTask->status != 'wait' and $parentTask->status != 'pause') $action = 'Activated';
                 if($action)
                 {
-                    $actionID = $this->loadModel('action')->create('task', $parentID, $action);
+                    $actionID = $this->loadModel('action')->create('task', $parentID, $action, '', '', '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
             }
@@ -547,7 +547,7 @@ class taskModel extends model
                 $changes = common::createChanges($oldParentTask, $newParentTask);
                 if($changes)
                 {
-                    $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited');
+                    $actionID = $this->loadModel('action')->create('task', $parentID, 'Edited', '', '', '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
             }
@@ -814,9 +814,9 @@ class taskModel extends model
                     $oldChildCount = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('parent')->eq($oldTask->parent)->fetch('count');
                     if(!$oldChildCount) $this->dao->update(TABLE_TASK)->set('parent')->eq(0)->where('id')->eq($oldTask->parent)->exec();
                     $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldTask->parent)->exec();
-                    $this->action->create('task', $taskID, 'unlinkParentTask', '', $oldTask->parent);
+                    $this->action->create('task', $taskID, 'unlinkParentTask', '', $oldTask->parent, '', false);
 
-                    $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $taskID);
+                    $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $taskID, '', false);
 
                     $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($oldTask->parent)->fetch();
 
@@ -835,8 +835,8 @@ class taskModel extends model
                 if($changed)
                 {
                     $this->dao->update(TABLE_TASK)->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($task->parent)->exec();
-                    $this->action->create('task', $taskID, 'linkParentTask', '', $task->parent);
-                    $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $taskID);
+                    $this->action->create('task', $taskID, 'linkParentTask', '', $task->parent, '', false);
+                    $actionID = $this->action->create('task', $task->parent, 'linkChildTask', '', $taskID, '', false);
                     $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
                     $changes = common::createChanges($parentTask, $newParentTask);
                     if(!empty($changes)) $this->action->logHistory($actionID, $changes);
