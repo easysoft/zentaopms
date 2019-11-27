@@ -42,6 +42,7 @@
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAgentId;?></th>
           <td class='required'><?php echo html::input('agentId', '', "class='form-control'");?></td>
+          <td><?php echo $lang->webhook->note->dingKey;?></td>
         </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAppKey;?></th>
