@@ -11,10 +11,12 @@ $lang->dev->desc       = 'Description';
 $lang->dev->noParams   = 'Pas de Paramètres';
 $lang->dev->post       = 'Paramètre POST';
 
-$lang->dev->paramRange  = 'Rang Paramètre : %s';
-$lang->dev->paramDate   = 'Format Date : YY-mm-dd, e.g 2019-01-01';
-$lang->dev->paramColor  = 'Format Couleur : #RGB, e.g. #3da7f5';
-$lang->dev->paramMailto = "Comptes utilisateurs. Séparé par des ','.";
+$lang->dev->paramRange    = 'Rang Paramètre : %s';
+$lang->dev->paramDate     = 'Format Date : YY-mm-dd, e.g 2019-01-01';
+$lang->dev->paramColor    = 'Format Couleur : #RGB, e.g. #3da7f5';
+$lang->dev->paramMailto   = "Comptes utilisateurs. Séparé par des ','.";
+$lang->dev->noteEditor    = "The editor is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of the <a href='https://www.zentao.net/extension-viewExt-150.html' target='_blank'>editor</a>.";
+$lang->dev->noteTranslate = "The translation is disabled for security reasons. To use this feature, please go to the official website to download and install the plugin of <a href='https://www.zentao.net/extension-viewExt-151.html' target='_blank'>translation</a>.";
 
 $lang->dev->fields = array();
 $lang->dev->fields['id']     = 'ID';
