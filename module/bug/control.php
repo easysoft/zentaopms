@@ -83,9 +83,9 @@ class bug extends control
         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch)
         {
             $_COOKIE['bugModule'] = 0;
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, true);
+            setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, false);
         }
-        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, true);
+        if($browseType == 'bymodule') setcookie('bugModule', (int)$param, 0, $this->config->webRoot, '', false, false);
         if($browseType != 'bymodule') $this->session->set('bugBrowseType', $browseType);
 
         $moduleID  = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->bugModule ? $this->cookie->bugModule : 0));
@@ -299,7 +299,7 @@ class bug extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
-            setcookie('bugModule', (int)$this->post->module, 0, $this->config->webRoot, '', false, true);
+            setcookie('bugModule', (int)$this->post->module, 0, $this->config->webRoot, '', false, false);
             $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc");
             if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID");
             $response['locate'] = $location;

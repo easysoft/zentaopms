@@ -856,7 +856,7 @@ class testtask extends control
             else
             {
                 /* set cookie for ajax load caselist when close colorbox. */
-                setcookie('selfClose', 1);
+                setcookie('selfClose', 1, 0, $this->config->webRoot, '', false, false);
 
                 if($preAndNext->next)
                 {
