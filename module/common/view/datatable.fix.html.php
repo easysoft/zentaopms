@@ -5,8 +5,8 @@
 <script>
 $(function()
 {
-    <?php if(!empty($setShowModule)):?>
-    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='text-secondary small'><?php echo $lang->datatable->showModuleAB?></a><hr class='space-sm' />");
+    <?php if(!empty($setModule)):?>
+    $('#sidebar .cell .text-center:last').append("<a href='#showModuleModal' data-toggle='modal' class='btn btn-info btn-wide'><?php echo $lang->datatable->moduleSetting?></a><hr class='space-sm' />");
     <?php endif;?>
 
     var $btnToolbar = $('#main .table-header .btn-toolbar:first');
@@ -22,13 +22,31 @@ $(function()
 
     $('#setShowModule').click(function()
     {
-        saveDatatableConfig('showModule', $('#showModuleModal input[name="showModule"]:checked').val(), true)
+        if('<?php echo $this->app->user->account?>' == 'guest') return;
+        datatableId   = '<?php echo $datatableId?>';
+        var value     = $('#showModuleModal input[name="showModule"]:checked').val();
+        var allModule = $('#showModuleModal input[name="showAllModule"]:checked').val();
+        if(typeof allModule === 'undefined') allModule = false;
+        $.ajax(
+        {
+            type: "POST",
+            dataType: 'json',
+            data: 
+            {
+                target: datatableId, 
+                name: 'showModule', 
+                value: value, 
+                allModule: allModule, 
+            },
+            success:function(){window.location.reload();},
+            url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
+        });
     });
 
     window.saveDatatableConfig = function(name, value, reload, global)
     {
         if('<?php echo $this->app->user->account?>' == 'guest') return;
-        datatableId = '<?php echo $datatableId?>';
+        var datatableId = '<?php echo $datatableId;?>';
         if(typeof value === 'object') value = JSON.stringify(value);
         if(typeof global === 'undefined') global = 0;
         $.ajax(
@@ -36,7 +54,7 @@ $(function()
             type: "POST",
             dataType: 'json',
             data: {target: datatableId, name: name, value: value, global: global},
-            success:function(){if(reload) window.location.reload();},
+            success:function(e){if(reload) window.location.reload();},
             url: '<?php echo $this->createLink('datatable', 'ajaxSave')?>'
         });
         $.get(createLink('score', 'ajax', "method=switchToDataTable"));
@@ -49,14 +67,25 @@ $(function()
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->datatable->showModule?></h4>
+        <h4 class="modal-title"><i class="icon-cog"></i> <?php echo $lang->datatable->moduleSetting;?></h4>
       </div>
       <div class="modal-body">
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
-          <p>
-            <span><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></span>
-            <button type='button' id='setShowModule' class='btn btn-primary'><?php echo $lang->save?></button>
-          </p>
+          <table class='table table-form'>
+            <tr> 
+              <td class='w-150px'><?php echo $lang->datatable->showModule;?></td>
+              <td><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></td>
+            </tr>
+            <?php if($app->moduleName == 'project' && $app->methodName == 'task'):?>
+            <tr> 
+              <td><?php echo $lang->datatable->showAllModule;?></td>
+              <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->project->task->allModule) ? $config->project->task->allModule : 0);?></td>
+            </tr>
+            <?php endif;?>
+            <tr>
+              <td colspan='2' class='text-center'><button type='button' id='setShowModule' class='btn btn-primary'><?php echo $lang->save?></button></td>
+            </tr>
+          </table>
         </form>
       </div>
     </div>

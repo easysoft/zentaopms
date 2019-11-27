@@ -188,7 +188,7 @@ class product extends control
         $this->view->branch        = $branch;
         $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
         $this->view->storyStages   = $this->product->batchGetStoryStage($stories);
-        $this->view->setShowModule = true;
+        $this->view->setModule     = true;
         $this->view->storyTasks    = $storyTasks;
         $this->view->storyBugs     = $storyBugs;
         $this->view->storyCases    = $storyCases;

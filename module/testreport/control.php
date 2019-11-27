@@ -256,8 +256,10 @@ class testreport extends control
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $begin, $end);
 
-        $this->view->datas['testTaskPerRunResult'] = $this->testreport->getPerCaseResult4Report($tasks, $cases, $begin, $end);
-        $this->view->datas['testTaskPerRunner']    = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $begin, $end);
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $begin, $end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $begin, $end);
+        $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
+        $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
@@ -366,8 +368,10 @@ class testreport extends control
         $this->view->cases       = $cases;
         $this->view->caseSummary = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
         
-        $this->view->datas['testTaskPerRunResult'] = $this->testreport->getPerCaseResult4Report($tasks, $cases, $report->begin, $report->end);
-        $this->view->datas['testTaskPerRunner']    = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $report->begin, $report->end);
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $report->begin, $report->end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $report->begin, $report->end);
+        $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
+        $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
@@ -447,8 +451,10 @@ class testreport extends control
         $this->view->storySummary = $this->product->summary($stories);
         $this->view->caseSummary  = $this->testreport->getResultSummary($tasks, $cases, $report->begin, $report->end);
 
-        $this->view->datas['testTaskPerRunResult'] = $this->testreport->getPerCaseResult4Report($tasks, $cases, $report->begin, $report->end);
-        $this->view->datas['testTaskPerRunner']    = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $report->begin, $report->end);
+        $perCaseResult = $this->testreport->getPerCaseResult4Report($tasks, $cases, $report->begin, $report->end);
+        $perCaseRunner = $this->testreport->getPerCaseRunner4Report($tasks, $cases, $report->begin, $report->end);
+        $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
+        $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
         $this->view->legacyBugs = $bugInfo['legacyBugs'];
         unset($bugInfo['legacyBugs']);
