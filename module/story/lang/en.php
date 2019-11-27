@@ -76,7 +76,7 @@ $lang->story->assign         = 'Assign';
 $lang->story->verify         = 'Acceptance';
 $lang->story->pri            = 'Priority';
 $lang->story->estimate       = "Estimates {$lang->hourCommon}";
-$lang->story->estimateAB     = 'Est.' . $lang->hourCommon == 'hour' ? '(h)' : '(sp)';
+$lang->story->estimateAB     = 'Est.' . $lang->hourCommon == 'hour' ? '(h)' : '(SP)';
 $lang->story->hour           = $lang->hourCommon;
 $lang->story->status         = 'Status';
 $lang->story->subStatus      = 'Sub Status';
