@@ -964,7 +964,7 @@ class testtask extends control
             ->andWhere('t2.status')->ne('wait')
             ->fetchGroup('case', 'id');
 
-        $this->view->caseIDList = $caseIDList;
+        $this->view->caseIDList = array_keys($cases);
         $this->view->productID  = $productID;
         $this->view->title      = $this->lang->testtask->batchRun;
         $this->view->position[] = $this->lang->testtask->common;
