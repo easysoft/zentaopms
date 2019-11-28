@@ -35,7 +35,7 @@ js::set('flow', $config->global->flow);
         <tbody>
           <tr>
             <th class='w-110px'><?php echo $lang->bug->product;?></th>
-            <td class='w-600px'>
+            <td>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
                 <?php if($this->session->currentProductType != 'normal' and isset($products[$productID])):?>
