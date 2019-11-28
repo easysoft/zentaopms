@@ -492,11 +492,11 @@ class story extends control
             die(js::locate($this->session->storyList, 'parent'));
         }
 
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
-        $storyIDList = array_unique($storyIDList);
+        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = array_unique($storyIdList);
 
         /* Get edited stories. */
-        $stories = $this->story->getByList($storyIDList);
+        $stories = $this->story->getByList($storyIdList);
 
         /* The stories of a product. */
         if($productID)
@@ -591,7 +591,7 @@ class story extends control
         $this->view->stageList         = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
         $this->view->productID         = $productID;
         $this->view->branchProduct     = $branchProduct;
-        $this->view->storyIDList       = $storyIDList;
+        $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
         $this->view->stories           = $stories;
         $this->view->productName       = isset($product) ? $product->name : '';
@@ -831,9 +831,9 @@ class story extends control
      */
     public function batchReview($result, $reason = '')
     {
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
-        $storyIDList = array_unique($storyIDList);
-        $actions     = $this->story->batchReview($storyIDList, $result, $reason);
+        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = array_unique($storyIdList);
+        $actions     = $this->story->batchReview($storyIdList, $result, $reason);
 
         if(dao::isError()) die(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
@@ -921,11 +921,11 @@ class story extends control
             die(js::locate($this->session->storyList, 'parent'));
         }
 
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
-        $storyIDList = array_unique($storyIDList);
+        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = array_unique($storyIdList);
 
         /* Get edited stories. */
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIDList)->fetchAll('id');
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchAll('id');
         foreach($stories as $story)
         {
             if($story->status == 'closed') unset($stories[$story->id]);
@@ -973,7 +973,7 @@ class story extends control
         $this->view->plans            = $this->loadModel('productplan')->getPairs($productID);
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
-        $this->view->storyIDList      = $storyIDList;
+        $this->view->storyIdList      = $storyIdList;
 
         $this->display();
     }
@@ -987,9 +987,9 @@ class story extends control
      */
     public function batchChangeModule($moduleID)
     {
-        $storyIDList = !empty($_POST['storyIDList']) ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
-        $storyIDList = array_unique($storyIDList);
-        $allChanges  = $this->story->batchChangeModule($storyIDList, $moduleID);
+        $storyIdList = !empty($_POST['storyIdList']) ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = array_unique($storyIdList);
+        $allChanges  = $this->story->batchChangeModule($storyIdList, $moduleID);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
@@ -1009,9 +1009,9 @@ class story extends control
      */
     public function batchChangePlan($planID, $oldPlanID = 0)
     {
-        $storyIDList = !empty($_POST['storyIDList']) ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
-        $storyIDList = array_unique($storyIDList);
-        $allChanges  = $this->story->batchChangePlan($storyIDList, $planID, $oldPlanID);
+        $storyIdList = !empty($_POST['storyIdList']) ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = array_unique($storyIdList);
+        $allChanges  = $this->story->batchChangePlan($storyIdList, $planID, $oldPlanID);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
@@ -1031,9 +1031,9 @@ class story extends control
      */
     public function batchChangeBranch($branchID)
     {
-        $storyIDList = !empty($_POST['storyIDList']) ? $this->post->storyIDList : die(js::locate($this->session->storyList, 'parent'));
-        $storyIDList = array_unique($storyIDList);
-        $allChanges  = $this->story->batchChangeBranch($storyIDList, $branchID);
+        $storyIdList = !empty($_POST['storyIdList']) ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = array_unique($storyIdList);
+        $allChanges  = $this->story->batchChangeBranch($storyIdList, $branchID);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
@@ -1053,11 +1053,11 @@ class story extends control
      */
     public function batchChangeStage($stage)
     {
-        $storyIDList = $this->post->storyIDList;
-        if(empty($storyIDList)) die(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = $this->post->storyIdList;
+        if(empty($storyIdList)) die(js::locate($this->session->storyList, 'parent'));
 
-        $storyIDList = array_unique($storyIDList);
-        $allChanges  = $this->story->batchChangeStage($storyIDList, $stage);
+        $storyIdList = array_unique($storyIdList);
+        $allChanges  = $this->story->batchChangeStage($storyIdList, $stage);
         if(dao::isError()) die(js::error(dao::getError()));
 
         $action = $stage == 'verified' ? 'Verified' : 'Edited';
@@ -1118,7 +1118,7 @@ class story extends control
      */
     public function batchAssignTo()
     {
-        if(!empty($_POST) && isset($_POST['storyIDList']))
+        if(!empty($_POST) && isset($_POST['storyIdList']))
         {
             $allChanges  = $this->story->batchAssignTo();
             if(dao::isError()) die(js::error(dao::getError()));

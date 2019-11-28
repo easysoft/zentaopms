@@ -38,7 +38,7 @@ function showCheckedSummary()
     var checkedTotal    = 0;
     var checkedEstimate = 0;
     var checkedCase     = 0;
-    $('[name^="storyIDList"]').each(function()
+    $('[name^="storyIdList"]').each(function()
     {
         if($(this).prop('checked'))
         {

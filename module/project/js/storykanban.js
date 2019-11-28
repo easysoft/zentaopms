@@ -50,7 +50,7 @@ $(function()
     {
         if(stageMap[type][from] && stageMap[type][from][to])
         {
-            $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIDList[]':[id]}, function()
+            $.post(createLink(type, stageMap[type][from][to], 'stage=' + to), {'storyIdList[]':[id]}, function()
             {
                 refresh();
             });

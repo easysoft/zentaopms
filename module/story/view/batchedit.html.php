@@ -78,7 +78,7 @@ foreach(explode(',', $showFields) as $field)
         }
         ?>
         <tr>
-          <td><?php echo $storyID . html::hidden("storyIDList[$storyID]", $storyID);?></td>
+          <td><?php echo $storyID . html::hidden("storyIdList[$storyID]", $storyID);?></td>
           <?php if($branchProduct):?>
           <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>'>
             <?php $branchProductID = $productID ? $productID : $product->id;?>

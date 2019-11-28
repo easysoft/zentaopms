@@ -68,17 +68,17 @@ class storyModel extends model
     /**
      * Get stories by idList.
      *
-     * @param  int|array|string    $storyIDList
+     * @param  int|array|string    $storyIdList
      * @access public
      * @return array
      */
-    public function getByList($storyIDList = 0)
+    public function getByList($storyIdList = 0)
     {
         return $this->dao->select('t1.*, t2.spec, t2.verify')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.version=t2.version')
-            ->beginIF($storyIDList)->andWhere('t1.id')->in($storyIDList)->fi()
+            ->beginIF($storyIdList)->andWhere('t1.id')->in($storyIdList)->fi()
             ->fetchAll('id');
     }
 
@@ -587,15 +587,15 @@ class storyModel extends model
         $allChanges  = array();
         $now         = helper::now();
         $data        = fixer::input('post')->get();
-        $storyIDList = $this->post->storyIDList ? $this->post->storyIDList : array();
+        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : array();
 
         /* Init $stories. */
-        if(!empty($storyIDList))
+        if(!empty($storyIdList))
         {
-            $oldStories = $this->getByList($storyIDList);
+            $oldStories = $this->getByList($storyIdList);
 
             /* Process the data if the value is 'ditto'. */
-            foreach($storyIDList as $storyID)
+            foreach($storyIdList as $storyID)
             {
                 if($data->pris[$storyID]     == 'ditto') $data->pris[$storyID]     = isset($prev['pri'])    ? $prev['pri']    : 0;
                 if(isset($data->branches) and $data->branches[$storyID] == 'ditto') $data->branches[$storyID] = isset($prev['branch']) ? $prev['branch'] : 0;
@@ -616,7 +616,7 @@ class storyModel extends model
                 if(isset($data->closedReasons[$storyID])) $prev['closedReason'] = $data->closedReasons[$storyID];
             }
 
-            foreach($storyIDList as $storyID)
+            foreach($storyIdList as $storyID)
             {
                 $oldStory = $oldStories[$storyID];
 
@@ -757,19 +757,19 @@ class storyModel extends model
     /**
      * Batch review stories.
      *
-     * @param  array   $storyIDList
+     * @param  array   $storyIdList
      * @access public
      * @return array
      */
-    function batchReview($storyIDList, $result, $reason)
+    function batchReview($storyIdList, $result, $reason)
     {
         $now     = helper::now();
         $date    = helper::today();
         $actions = array();
         $this->loadModel('action');
 
-        $oldStories = $this->getByList($storyIDList);
-        foreach($storyIDList as $storyID)
+        $oldStories = $this->getByList($storyIdList);
+        foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
@@ -894,10 +894,10 @@ class storyModel extends model
         $allChanges  = array();
         $now         = helper::now();
         $data        = fixer::input('post')->get();
-        $storyIDList = $data->storyIDList ? $data->storyIDList : array();
+        $storyIdList = $data->storyIdList ? $data->storyIdList : array();
 
-        $oldStories = $this->getByList($storyIDList);
-        foreach($storyIDList as $storyID)
+        $oldStories = $this->getByList($storyIdList);
+        foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($oldStory->status == 'closed') continue;
@@ -950,17 +950,17 @@ class storyModel extends model
     /**
      * Batch change the module of story.
      *
-     * @param  array  $storyIDList
+     * @param  array  $storyIdList
      * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function batchChangeModule($storyIDList, $moduleID)
+    public function batchChangeModule($storyIdList, $moduleID)
     {
         $now        = helper::now();
         $allChanges = array();
-        $oldStories = $this->getByList($storyIDList);
-        foreach($storyIDList as $storyID)
+        $oldStories = $this->getByList($storyIdList);
+        foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($moduleID == $oldStory->module) continue;
@@ -979,18 +979,18 @@ class storyModel extends model
     /**
      * Batch change the plan of story.
      *
-     * @param  array  $storyIDList
+     * @param  array  $storyIdList
      * @param  int    $planID
      * @access public
      * @return array
      */
-    public function batchChangePlan($storyIDList, $planID, $oldPlanID = 0)
+    public function batchChangePlan($storyIdList, $planID, $oldPlanID = 0)
     {
         $now         = helper::now();
         $allChanges  = array();
-        $oldStories  = $this->getByList($storyIDList);
+        $oldStories  = $this->getByList($storyIdList);
         $plan        = $this->loadModel('productplan')->getById($planID);
-        foreach($storyIDList as $storyID)
+        foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
 
@@ -1019,17 +1019,17 @@ class storyModel extends model
     /**
      * Batch change branch.
      *
-     * @param  array  $storyIDList
+     * @param  array  $storyIdList
      * @param  int    $branchID
      * @access public
      * @return void
      */
-    public function batchChangeBranch($storyIDList, $branchID)
+    public function batchChangeBranch($storyIdList, $branchID)
     {
         $now        = helper::now();
         $allChanges = array();
-        $oldStories = $this->getByList($storyIDList);
-        foreach($storyIDList as $storyID)
+        $oldStories = $this->getByList($storyIdList);
+        foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
 
@@ -1047,20 +1047,20 @@ class storyModel extends model
     /**
      * Batch change the stage of story.
      *
-     * @param $storyIDList
+     * @param $storyIdList
      * @param $stage
      *
      * @access public
      * @return array
      */
-    public function batchChangeStage($storyIDList, $stage)
+    public function batchChangeStage($storyIdList, $stage)
     {
         $now           = helper::now();
         $allChanges    = array();
         $account       = $this->app->user->account;
-        $oldStories    = $this->getByList($storyIDList);
+        $oldStories    = $this->getByList($storyIdList);
         $ignoreStories = '';
-        foreach($storyIDList as $storyID)
+        foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($oldStory->status == 'draft')
@@ -1118,10 +1118,10 @@ class storyModel extends model
     {
         $now         = helper::now();
         $allChanges  = array();
-        $storyIDList = $this->post->storyIDList;
+        $storyIdList = $this->post->storyIdList;
         $assignedTo  = $this->post->assignedTo;
-        $oldStories  = $this->getByList($storyIDList);
-        foreach($storyIDList as $storyID)
+        $oldStories  = $this->getByList($storyIdList);
+        foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
             if($assignedTo == $oldStory->assignedTo) continue;
@@ -1776,9 +1776,9 @@ class storyModel extends model
         {
             if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
         }
-        foreach($branches as $branchID => $storyIDList)
+        foreach($branches as $branchID => $storyIdList)
         {
-            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIDList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
+            $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
             foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
         }
 
@@ -1993,20 +1993,20 @@ class storyModel extends model
      */
     public function checkNeedConfirm($dataList)
     {
-        $storyIDList      = array();
+        $storyIdList      = array();
         $storyVersionList = array();
         foreach($dataList as $key => $data)
         {
             $data->needconfirm = false;
             if($data->story)
             {
-                $storyIDList[$key]      = $data->story;
+                $storyIdList[$key]      = $data->story;
                 $storyVersionList[$key] = $data->storyVersion;
             }
         }
 
-        $stories = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIDList)->andWhere('status')->eq('active')->fetchPairs('id', 'version');
-        foreach($storyIDList as $key => $storyID)
+        $stories = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('status')->eq('active')->fetchPairs('id', 'version');
+        foreach($storyIdList as $key => $storyID)
         {
             if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $dataList[$key]->needconfirm = true;
         }
@@ -2482,7 +2482,7 @@ class storyModel extends model
             switch($id)
             {
             case 'id':
-                echo html::checkbox('storyIDList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
+                echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id"), sprintf('%03d', $story->id));
                 break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";

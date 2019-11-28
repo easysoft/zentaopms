@@ -98,7 +98,7 @@
                     <td class='c-id text-left'>
                       <?php if($canBatchUnlink):?>
                       <div class="checkbox-primary">
-                        <input type='checkbox' name='storyIDList[]'  value='<?php echo $story->id;?>'/>
+                        <input type='checkbox' name='storyIdList[]'  value='<?php echo $story->id;?>'/>
                         <label></label>
                       </div>
                       <?php endif;?>

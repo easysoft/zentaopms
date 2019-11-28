@@ -137,7 +137,7 @@
               <tr data-id='<?php echo $story->id;?>'>
                 <td class='c-id text-left'>
                   <?php if($canBatchAction):?>
-                  <?php echo html::checkbox('storyIDList', array($story->id => sprintf('%03d', $story->id)));?>
+                  <?php echo html::checkbox('storyIdList', array($story->id => sprintf('%03d', $story->id)));?>
                   <?php else:?>
                   <?php printf('%03d', $story->id);?>
                   <?php endif;?>

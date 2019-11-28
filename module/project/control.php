@@ -2086,11 +2086,11 @@ class project extends control
      */
     public function batchUnlinkStory($projectID)
     {
-        if(isset($_POST['storyIDList']))
+        if(isset($_POST['storyIdList']))
         {
-            $storyIDList = $this->post->storyIDList;
+            $storyIdList = $this->post->storyIdList;
             $_POST       = array();
-            foreach($storyIDList as $storyID)
+            foreach($storyIdList as $storyID)
             {
                 $this->project->unlinkStory($projectID, $storyID);
             }
