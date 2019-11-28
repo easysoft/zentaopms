@@ -4,6 +4,7 @@ $lang->webhook->list     = 'Hook Liste';
 $lang->webhook->api      = 'API';
 $lang->webhook->entry    = 'Eintrag';
 $lang->webhook->log      = 'Log';
+$lang->webhook->bind     = 'Bind User';
 $lang->webhook->assigned = 'Augeordnet an';
 $lang->webhook->setting  = 'Einstellungen';
 
@@ -34,11 +35,22 @@ $lang->webhook->data        = 'Daten';
 $lang->webhook->result      = 'Ergebnis';
 
 $lang->webhook->typeList['']          = '';
-$lang->webhook->typeList['dingding']  = 'Dingding';
+$lang->webhook->typeList['dingding']  = 'Dingding Robot';
+$lang->webhook->typeList['dingapi']   = 'Dingding Notifier';
+$lang->webhook->typeList['weixin']    = 'Enterprise WeChat';
 $lang->webhook->typeList['default']   = 'SDtandard';
 
 $lang->webhook->sendTypeList['sync']  = 'Synchron';
 $lang->webhook->sendTypeList['async'] = 'Asynchron';
+
+$lang->webhook->dingAgentId    = 'AgentID';
+$lang->webhook->dingAppKey     = 'AppKey';
+$lang->webhook->dingAppSecret  = 'AppSecret';
+$lang->webhook->dingUserid     = 'UserID';
+$lang->webhook->dingBindStatus = 'Bind Status';
+
+$lang->webhook->dingBindStatusList['0'] = 'No';
+$lang->webhook->dingBindStatusList['1'] = 'Yes';
 
 $lang->webhook->paramsList['objectType'] = 'Objekt Typ';
 $lang->webhook->paramsList['objectID']   = 'Objekt ID';
@@ -56,8 +68,10 @@ $lang->webhook->trimWords = '';
 
 $lang->webhook->note = new stdClass();
 $lang->webhook->note->async   = 'Wenn der Sendungstyp asynchron ist, wird Cron benötigt.';
+$lang->webhook->note->bind    = 'Bind User is only required for Dingding Notifier.';
 $lang->webhook->note->product = "Alle Aktionen triggern den Hook wenn das {$lang->productCommon} leer ist, andernsfalls werden nur Aktionen des {$lang->productCommon} ausgelöst.";
 $lang->webhook->note->project = "Alle Aktionen triggern den Hook wenn das {$lang->projectCommon} leer ist, andernsfalls werden nur Aktionen des {$lang->projectCommon} ausgelöst.";
+$lang->webhook->note->dingKey = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
 
 $lang->webhook->note->typeList['bearychat'] = 'Fügen Sie einen ZenTao bot in bearychat ein um die Adresse des Webhooks zu erhalten.';
 $lang->webhook->note->typeList['dingding']  = 'Fügen Sie einen eigenen bot in dingding ein um die Adresse des Webhooks zu erhalten.';

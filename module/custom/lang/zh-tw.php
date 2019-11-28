@@ -20,7 +20,7 @@ $lang->custom->timezone   = '時區';
 $lang->custom->scoreReset = '重置積分';
 $lang->custom->scoreTitle = '積分功能';
 
-$lang->custom->object['story']    = '需求';
+$lang->custom->object['story']    = $lang->storyCommon;
 $lang->custom->object['task']     = '任務';
 $lang->custom->object['bug']      = 'Bug';
 $lang->custom->object['testcase'] = '用例';
@@ -98,6 +98,8 @@ $lang->custom->notice->invalidStringKey            = '鍵值應當為小寫英�
 $lang->custom->notice->cannotSetTimezone           = 'date_default_timezone_set方法不存在或禁用，不能設置時區。';
 $lang->custom->notice->noClosedBlock               = '沒有永久關閉的區塊';
 $lang->custom->notice->required                    = '頁面提交時，選中的欄位必填';
+$lang->custom->notice->conceptResult               = '我們已經根據您的選擇為您設置了<b> %s-%s </b>模式，使用<b>%s</b> + <b> %s</b>。';
+$lang->custom->notice->conceptPath                 = '您可以在：後台 -> 自定義 -> 流程頁面修改。';
 
 $lang->custom->notice->indexPage['product']        = "從8.2版本起增加了產品主頁視圖，是否預設進入產品主頁？";
 $lang->custom->notice->indexPage['project']        = "從8.2版本起增加了項目主頁視圖，是否預設進入項目主頁？";
@@ -126,12 +128,14 @@ $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = '產品 - 項目';
 $lang->custom->productProject->relation['0_1'] = '產品 - 迭代';
 $lang->custom->productProject->relation['1_1'] = '項目 - 迭代';
+$lang->custom->productProject->relation['0_2'] = '產品 - 衝刺';
+$lang->custom->productProject->relation['1_2'] = '項目 - 衝刺';
 
 $lang->custom->productProject->notice = '請根據實際情況選擇適合自己團隊的概念。';
 
 $lang->custom->workingList['full']      = '完整研發管理工具';
 $lang->custom->workingList['onlyTest']  = '測試管理工具';
-$lang->custom->workingList['onlyStory'] = '需求管理工具';
+$lang->custom->workingList['onlyStory'] = "{$lang->storyCommon}管理工具";
 $lang->custom->workingList['onlyTask']  = '任務管理工具';
 
 $lang->custom->menuTip  = '點擊顯示或隱藏導航條目，拖拽來更改顯示順序。';
@@ -144,3 +148,17 @@ $lang->custom->scoreStatus[0] = '關閉';
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '計劃';
 $lang->custom->moduleName['project']     = $lang->projectCommon;
+
+$lang->custom->conceptQuestions['overview']   = "1. 下述哪種組合方式更適合您公司的管理現狀？";
+$lang->custom->conceptQuestions['story']      = "2. 您公司是在使用需求概念還是用戶故事概念？";
+$lang->custom->conceptQuestions['storypoint'] = "3. 您公司是在使用工時還是故事點來做規模估算？";
+
+$lang->custom->conceptOptions = new stdclass;
+
+$lang->custom->conceptOptions->story = array();
+$lang->custom->conceptOptions->story['0'] = '需求';
+$lang->custom->conceptOptions->story['1'] = '故事';
+
+$lang->custom->conceptOptions->hourPoint = array();
+$lang->custom->conceptOptions->hourPoint['0'] = '工時';
+$lang->custom->conceptOptions->hourPoint['1'] = '故事點';

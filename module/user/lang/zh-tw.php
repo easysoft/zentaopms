@@ -93,7 +93,7 @@ $lang->user->testTask    = '測試單';
 $lang->user->testCase    = '測試用例';
 $lang->user->schedule    = '日程';
 $lang->user->todo        = '待辦';
-$lang->user->story       = '需求';
+$lang->user->story       = $lang->storyCommon;
 $lang->user->dynamic     = '動態';
 
 $lang->user->openedBy    = '由%s創建';
@@ -141,7 +141,7 @@ $lang->user->statusList['active'] = '正常';
 $lang->user->statusList['delete'] = '刪除';
 
 $lang->user->personalData['createdTodo']  = '創建的待辦數';
-$lang->user->personalData['createdStory'] = '創建的需求數';
+$lang->user->personalData['createdStory'] = "創建的{$lang->storyCommon}數";
 $lang->user->personalData['finishedTask'] = '完成的任務數';
 $lang->user->personalData['resolvedBug']  = '解決的Bug數';
 $lang->user->personalData['createdCase']  = '創建的用例數';

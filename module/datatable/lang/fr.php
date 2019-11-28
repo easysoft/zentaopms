@@ -18,8 +18,9 @@ $lang->datatable->resetGlobal        = 'Globale Réinit.';
 $lang->datatable->branch   = 'Branche';
 $lang->datatable->platform = 'Plateforme';
 
+$lang->datatable->moduleSetting          = 'Set Module';
 $lang->datatable->showModule             = 'Montrer les noms des modules dans la page de listes';
-$lang->datatable->showModuleAB           = 'Montrer Nom Modules';
+$lang->datatable->showAllModule          = 'Show product modules';
 $lang->datatable->showModuleList[]       = 'N/A';
 $lang->datatable->showModuleList['base'] = 'Base Node';
 $lang->datatable->showModuleList['end']  = 'End Node';

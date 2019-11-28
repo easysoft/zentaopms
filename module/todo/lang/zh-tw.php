@@ -33,7 +33,7 @@ $lang->todo->legendBasic  = "基本信息";
 $lang->todo->cycle        = "周期";
 $lang->todo->cycleConfig  = "周期設置";
 
-$lang->todo->reasonList['story'] = "轉需求";
+$lang->todo->reasonList['story'] = "轉{$lang->storyCommon}";
 $lang->todo->reasonList['task']  = "轉任務";
 $lang->todo->reasonList['bug']   = "轉Bug";
 $lang->todo->reasonList['done']  = "完成";
@@ -89,7 +89,7 @@ $lang->todo->typeList['custom']   = '自定義';
 $lang->todo->typeList['cycle']    = '周期';
 $lang->todo->typeList['bug']      = 'Bug';
 $lang->todo->typeList['task']     = $lang->projectCommon . '任務';
-$lang->todo->typeList['story']    = $lang->projectCommon . '需求';
+$lang->todo->typeList['story']    = $lang->projectCommon . $lang->storyCommon;
 
 global $config;
 if($config->global->flow == 'onlyTest' or $config->global->flow == 'onlyStory') unset($lang->todo->typeList['task']);

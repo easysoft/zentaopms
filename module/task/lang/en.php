@@ -51,6 +51,7 @@ $lang->task->progressAB          = '%';
 $lang->task->progressTips        = 'Cost/(Cost+Left)';
 $lang->task->copy                = 'Copy Task';
 $lang->task->waitTask            = 'Waiting Task';
+$lang->task->allModule           = 'All Module';
 
 $lang->task->common            = 'Task';
 $lang->task->id                = 'ID';

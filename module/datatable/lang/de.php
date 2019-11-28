@@ -18,8 +18,9 @@ $lang->datatable->resetGlobal        = 'Globalen Standard zurücksetzen';
 $lang->datatable->branch   = 'Branch';
 $lang->datatable->platform = 'Platform';
 
+$lang->datatable->moduleSetting          = 'Set Module';
 $lang->datatable->showModule             = 'Anzeigen/Verstecken des Modul Names';
-$lang->datatable->showModuleAB           = 'Show Module Names';
+$lang->datatable->showAllModule          = 'Show product modules';
 $lang->datatable->showModuleList[]       = 'N/A';
 $lang->datatable->showModuleList['base'] = 'Basisknoten';
 $lang->datatable->showModuleList['end']  = 'Endknoten';

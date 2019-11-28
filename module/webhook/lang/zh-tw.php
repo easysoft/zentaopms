@@ -4,6 +4,7 @@ $lang->webhook->list     = 'Webhook列表';
 $lang->webhook->api      = '介面';
 $lang->webhook->entry    = '應用';
 $lang->webhook->log      = '日誌';
+$lang->webhook->bind     = '綁定用戶';
 $lang->webhook->assigned = '指派給';
 $lang->webhook->setting  = '設置';
 
@@ -34,11 +35,22 @@ $lang->webhook->data        = '數據';
 $lang->webhook->result      = '結果';
 
 $lang->webhook->typeList['']          = '';
-$lang->webhook->typeList['dingding']  = '釘釘';
+$lang->webhook->typeList['dingding']  = '釘釘群通知機器人';
+$lang->webhook->typeList['dingapi']   = '釘釘工作消息通知';
+$lang->webhook->typeList['weixin']    = '企業微信';
 $lang->webhook->typeList['default']   = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '非同步';
+
+$lang->webhook->dingAgentId    = '釘釘AgentId';
+$lang->webhook->dingAppKey     = '釘釘AppKey';
+$lang->webhook->dingAppSecret  = '釘釘AppSecret';
+$lang->webhook->dingUserid     = '釘釘Userid';
+$lang->webhook->dingBindStatus = '釘釘綁定狀態';
+
+$lang->webhook->dingBindStatusList['0'] = '未綁定';
+$lang->webhook->dingBindStatusList['1'] = '已綁定';
 
 $lang->webhook->paramsList['objectType'] = '對象類型';
 $lang->webhook->paramsList['objectID']   = '對象ID';
@@ -56,8 +68,10 @@ $lang->webhook->trimWords = '了';
 
 $lang->webhook->note = new stdClass();
 $lang->webhook->note->async   = '非同步需要打開計劃任務';
+$lang->webhook->note->bind    = '只有釘釘工作通知類型才需要綁定用戶。';
 $lang->webhook->note->product = "此項為空時所有{$lang->productCommon}的動作都會觸發鈎子，否則只有關聯{$lang->productCommon}的動作才會觸發。";
 $lang->webhook->note->project = "此項為空時所有{$lang->projectCommon}的動作都會觸發鈎子，否則只有關聯{$lang->projectCommon}的動作才會觸發。";
+$lang->webhook->note->dingKey = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
 
 $lang->webhook->note->typeList['bearychat'] = '請在倍洽中添加一個禪道機器人，並將其webhook填寫到此處。';
 $lang->webhook->note->typeList['dingding']  = '請在釘釘中添加一個自定義機器人，並將其webhook填寫到此處。';

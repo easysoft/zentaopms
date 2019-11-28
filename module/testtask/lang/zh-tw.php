@@ -99,7 +99,7 @@ $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未關聯';
 $lang->testtask->linkByBuild   = '複製版本';
-$lang->testtask->linkByStory   = '按需求關聯';
+$lang->testtask->linkByStory   = "按{$lang->storyCommon}關聯";
 $lang->testtask->linkByBug     = '按Bug關聯';
 $lang->testtask->linkBySuite   = '按套件關聯';
 $lang->testtask->passAll       = '全部通過';
@@ -108,7 +108,7 @@ $lang->testtask->fail          = '失敗';
 $lang->testtask->showResult    = '共執行<span class="text-info">%s</span>次';
 $lang->testtask->showFail      = '失敗<span class="text-danger">%s</span>次';
 
-$lang->testtask->confirmDelete     = '您確認要刪除該版本嗎？';
+$lang->testtask->confirmDelete     = '您確認要刪除該測試單嗎？';
 $lang->testtask->confirmUnlinkCase = '您確認要移除該用例嗎？';
 $lang->testtask->noticeNoOther     = '該產品還沒有其他測試版本';
 $lang->testtask->noTesttask        = '暫時沒有測試版本。';

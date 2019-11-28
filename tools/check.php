@@ -16,6 +16,7 @@ foreach(glob('../xuanxuan/module/group/ext/lang/zh-cn/*.php') as $resourceFile) 
 
 $lang->productCommon = '';
 $lang->projectCommon = '';
+$lang->storyCommon   = '';
 
 $whiteList[] = 'api-getsessionid';
 $whiteList[] = 'admin-setflow';
@@ -108,6 +109,7 @@ $whiteList[] = 'testsuite-showimport';
 $whiteList[] = 'webhook-browse';
 $whiteList[] = 'webhook-create';
 $whiteList[] = 'webhook-edit';
+$whiteList[] = 'webhook-bind';
 $whiteList[] = 'webhook-delete';
 $whiteList[] = 'webhook-log';
 $whiteList[] = 'webhook-asyncsend';

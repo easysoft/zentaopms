@@ -131,7 +131,7 @@ $lang->dividerMenu = ',qa,report,';
 
 /* 查詢條中可以選擇的對象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
-$lang->searchObjects['story']       = '需求';
+$lang->searchObjects['story']       = "{$lang->storyCommon}";
 $lang->searchObjects['task']        = '任務';
 $lang->searchObjects['testcase']    = '用例';
 $lang->searchObjects['project']     = $lang->projectCommon;
@@ -188,7 +188,7 @@ $lang->my->menu->calendar       = array('link' => '日程|my|calendar|', 'subMod
 $lang->my->menu->task           = array('link' => '任務|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => '測試|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
-$lang->my->menu->story          = array('link' => '需求|my|story|', 'subModule' => 'story');
+$lang->my->menu->story          = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '動態|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '檔案|my|profile', 'alias' => 'editprofile');
@@ -208,7 +208,7 @@ $lang->score->menu = $lang->my->menu;
 $lang->product = new stdclass();
 $lang->product->menu = new stdclass();
 
-$lang->product->menu->story   = array('link' => '需求|product|browse|productID=%s', 'alias' => 'batchedit', 'subModule' => 'story');
+$lang->product->menu->story   = array('link' => "{$lang->storyCommon}|product|browse|productID=%s", 'alias' => 'batchedit', 'subModule' => 'story');
 $lang->product->menu->plan    = array('link' => '計劃|productplan|browse|productID=%s', 'subModule' => 'productplan');
 $lang->product->menu->release = array('link' => '發佈|release|browse|productID=%s',     'subModule' => 'release');
 $lang->product->menu->roadmap = '路線圖|product|roadmap|productID=%s';
@@ -239,7 +239,7 @@ $lang->project->menu->task    = array('link' => '任務|project|task|projectID=%
 $lang->project->menu->kanban  = array('link' => '看板|project|kanban|projectID=%s');
 $lang->project->menu->burn    = array('link' => '燃盡圖|project|burn|projectID=%s');
 $lang->project->menu->list    = array('link' => '更多|project|grouptask|projectID=%s', 'alias' => 'grouptask,tree', 'class' => 'dropdown dropdown-hover');
-$lang->project->menu->story   = array('link' => '需求|project|story|projectID=%s', 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
+$lang->project->menu->story   = array('link' => "{$lang->storyCommon}|project|story|projectID=%s", 'subModule' => 'story', 'alias' => 'linkstory,storykanban');
 $lang->project->menu->qa      = array('link' => '測試|project|bug|projectID=%s', 'subModule' => 'bug,build,testtask', 'alias' => 'build,testtask', 'class' => 'dropdown dropdown-hover');
 $lang->project->menu->doc     = array('link' => '文檔|doc|objectLibs|type=project&objectID=%s&from=project', 'subModule' => 'doc');
 $lang->project->menu->action  = array('link' => '動態|project|dynamic|projectID=%s', 'subModule' => 'dynamic', 'class' => 'dropdown dropdown-hover');
@@ -375,8 +375,8 @@ $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModu
 $lang->admin->menu->custom    = array('link' => '自定義|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => '整合|admin|sso');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
-$lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,editor,entry');
-$lang->admin->menu->translate = array('link' => '翻譯|translate|index', 'subModule' => 'translate');
+$lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
+$lang->admin->menu->translate = array('link' => '翻譯|dev|translate');
 $lang->admin->menu->data      = array('link' => '數據|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => '系統|cron|index', 'subModule' => 'cron');
@@ -394,7 +394,7 @@ $lang->admin->subMenu->sso->ranzhi = '然之協同|admin|sso';
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => '資料庫|dev|db');
-$lang->admin->subMenu->dev->editor = array('link' => '編輯器|editor|index', 'subModule' => 'editor');
+$lang->admin->subMenu->dev->editor = array('link' => '編輯器|dev|editor');
 $lang->admin->subMenu->dev->entry  = array('link' => '應用|entry|browse', 'subModule' => 'entry');
 
 $lang->admin->subMenu->data = new stdclass();
@@ -418,8 +418,6 @@ $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
-$lang->translate = new stdclass();
-$lang->editor    = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -433,8 +431,6 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
-$lang->translate->menu = $lang->admin->menu;
-$lang->editor->menu    = $lang->admin->menu;
 
 /* 菜單分組。*/
 $lang->menugroup = new stdclass();
@@ -470,8 +466,6 @@ $lang->menugroup->dev         = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
-$lang->menugroup->translate   = 'admin';
-$lang->menugroup->editor      = 'admin';
 
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
@@ -788,7 +782,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     $lang->bug->subMenu->more->longlifebugs  = '久未處理|bug|browse|productID=%s&branch=%s&browseType=longlifebugs&param=%s';
     $lang->bug->subMenu->more->postponedbugs = '被延期|bug|browse|productID=%s&branch=%s&browseType=postponedbugs&param=%s';
     $lang->bug->subMenu->more->overduebugs   = '過期Bug|bug|browse|productID=%s&branch=%s&browseType=overduebugs&param=%s';
-    $lang->bug->subMenu->more->needconfirm   = '需求變動|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s';
+    $lang->bug->subMenu->more->needconfirm   = "{$lang->storyCommon}變動|bug|browse|productID=%s&branch=%s&browseType=needconfirm&param=%s";
 
     $lang->bug->menuOrder[5]  = 'product';
     $lang->bug->menuOrder[10] = 'all';

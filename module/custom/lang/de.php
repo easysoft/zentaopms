@@ -88,16 +88,18 @@ $lang->custom->allLang     = 'All Language';
 $lang->custom->confirmRestore = 'Do you want to reset to Default?';
 
 $lang->custom->notice = new stdclass();
-$lang->custom->notice->userFieldNotice      = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
-$lang->custom->notice->canNotAdd            = 'These items are parameters of calculation, so customized creation is not enabled.';
-$lang->custom->notice->forceReview          = '%s Review is required for certain submitters.';
-$lang->custom->notice->forceNotReview       = "%s Review is NOT required for certain submitters.";
-$lang->custom->notice->longlife             = 'Define shelved bugs.';
-$lang->custom->notice->invalidNumberKey     = 'Priority list key should be a natural and not greater than 255.';
-$lang->custom->notice->invalidStringKey     = 'The key should be a combination of lowercase English letters, numbers or underscores';
-$lang->custom->notice->cannotSetTimezone    = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
-$lang->custom->notice->noClosedBlock        = 'You have no blocks that are closed permanently.';
-$lang->custom->notice->required             = 'The selected field is required.';
+$lang->custom->notice->userFieldNotice   = 'Control whether the above fields are displayed on the user-related page. Leave it blank to display all.';
+$lang->custom->notice->canNotAdd         = 'These items are parameters of calculation, so customized creation is not enabled.';
+$lang->custom->notice->forceReview       = '%s Review is required for certain submitters.';
+$lang->custom->notice->forceNotReview    = "%s Review is NOT required for certain submitters.";
+$lang->custom->notice->longlife          = 'Define shelved bugs.';
+$lang->custom->notice->invalidNumberKey  = 'Priority list key should be a natural and not greater than 255.';
+$lang->custom->notice->invalidStringKey  = 'The key should be a combination of lowercase English letters, numbers or underscores';
+$lang->custom->notice->cannotSetTimezone = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
+$lang->custom->notice->noClosedBlock     = 'You have no blocks that are closed permanently.';
+$lang->custom->notice->required          = 'The selected field is required.';
+$lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>。';
+$lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to set it.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";
@@ -124,8 +126,10 @@ $lang->custom->weekendList[1] = '1-Day Off';
 
 $lang->custom->productProject = new stdclass();
 $lang->custom->productProject->relation['0_0'] = 'Product - Project';
-$lang->custom->productProject->relation['0_1'] = 'Product - Sprint';
-$lang->custom->productProject->relation['1_1'] = 'Project - Sprint';
+$lang->custom->productProject->relation['0_1'] = 'Product - Iteration';
+$lang->custom->productProject->relation['1_1'] = 'Project - Iteration';
+$lang->custom->productProject->relation['0_2'] = 'Product - Sprint';
+$lang->custom->productProject->relation['1_2'] = 'Project - Sprint';
 
 $lang->custom->productProject->notice = 'Please select a concept according to your team.';
 

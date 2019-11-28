@@ -176,8 +176,8 @@ $lang->doc->noCollectedDoc     = '您還沒有收藏任何文檔。';
 
 $lang->doc->noticeAcl['lib']['product']['default'] = '有所選產品訪問權限的用戶可以訪問。';
 $lang->doc->noticeAcl['lib']['product']['custom']  = '有所選產品訪問權限或白名單裡的用戶可以訪問。';
-$lang->doc->noticeAcl['lib']['project']['default'] = '有所選項目訪問權限的用戶可以訪問。';
-$lang->doc->noticeAcl['lib']['project']['custom']  = '有所選項目訪問權限或白名單裡的用戶可以訪問。';
+$lang->doc->noticeAcl['lib']['project']['default'] = "有所選{$lang->projectCommon}訪問權限的用戶可以訪問。";
+$lang->doc->noticeAcl['lib']['project']['custom']  = "有所選{$lang->projectCommon}訪問權限或白名單裡的用戶可以訪問。";
 $lang->doc->noticeAcl['lib']['custom']['open']     = '所有人都可以訪問。';
 $lang->doc->noticeAcl['lib']['custom']['custom']   = '白名單的用戶可以訪問。';
 $lang->doc->noticeAcl['lib']['custom']['private']  = '只有創建者自己可以訪問。';
