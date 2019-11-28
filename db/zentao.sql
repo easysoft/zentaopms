@@ -254,7 +254,7 @@ CREATE TABLE IF NOT EXISTS `zt_dept` (
   `parent` mediumint(8) unsigned NOT NULL default '0',
   `path` char(255) NOT NULL default '',
   `grade` tinyint(3) unsigned NOT NULL default '0',
-  `order` tinyint(3) unsigned NOT NULL default '0',
+  `order` smallint(4) unsigned NOT NULL default '0',
   `position` char(30) NOT NULL default '',
   `function` char(255) NOT NULL default '',
   `manager` char(30) NOT NULL default '',
@@ -438,6 +438,16 @@ CREATE TABLE IF NOT EXISTS `zt_notify` (
   `status` varchar(10) NOT NULL DEFAULT 'wait',
   `failReason` text NOT NULL
 ) ENGINE='MyISAM' COLLATE 'utf8_general_ci';
+-- DROP TABLE IF EXISTS `zt_oauth`;
+CREATE TABLE IF NOT EXISTS `zt_oauth` (
+  `account` varchar(30) NOT NULL,
+  `openID` varchar(255) NOT NULL,
+  `providerType` varchar(30) NOT NULL,
+  `providerID` mediumint(8) unsigned NOT NULL,
+  KEY `account` (`account`),
+  KEY `providerType` (`providerType`),
+  KEY `providerID` (`providerID`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_product`;
 CREATE TABLE IF NOT EXISTS `zt_product` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -459,6 +469,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `order` mediumint(8) unsigned NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
+  KEY `acl` (`acl`),
   KEY `order` (`order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_productplan`;
@@ -515,6 +526,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   KEY `begin` (`begin`),
   KEY `end` (`end`),
   KEY `status` (`status`),
+  KEY `acl` (`acl`),
   KEY `order` (`order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectproduct`;
