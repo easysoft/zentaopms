@@ -9,7 +9,7 @@ class admin extends control
      */
     public function xuanxuan()
     {
-        $this->loadModel('chat');
+        $this->loadModel('im');
 
         $block = new stdclass();
         $block->title = $this->lang->admin->blockStatus;
@@ -38,8 +38,8 @@ class admin extends control
             if(isset($block->params)) $query['param'] = base64_encode(json_encode($block->params));
         }
 
-        $this->view->title      = $this->lang->chat->common;
-        $this->view->position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->chat->common);
+        $this->view->title      = $this->lang->im->common;
+        $this->view->position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->im->common);
 
         $this->view->blocks = $blocks;
         $this->display();

@@ -9,8 +9,8 @@
  * @version     $Id$
  * @link        http://xuan.im
  */
-$this->app->loadLang('chat');
-$position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->chat->common);
+$this->app->loadLang('im');
+$position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->im->common);
 $position[] = $this->lang->client->browse;
 ?>
 <?php include '../../../common/view/header.html.php';?>

@@ -1,5 +1,5 @@
 <?php
-class xuanxuanChat extends chatModel
+class xuanxuanIm extends imModel
 {
     public function getExtensionList($userID)
     {
@@ -26,14 +26,14 @@ class xuanxuanChat extends chatModel
         $libID     = isset($libIdList[0]) ? $libIdList[0] : 1;
 
         $actions = new stdclass();
-        if(common::hasPriv('bug',   'create') and !empty($products)) $actions->createBug   = array('title' => $this->lang->chat->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('doc',   'create') and !empty($libIdList))$actions->createDoc   = array('title' => $this->lang->chat->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "libID=$libID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('story', 'create') and !empty($products)) $actions->createStory = array('title' => $this->lang->chat->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('task',  'create') and !empty($projects)) $actions->createTask  = array('title' => $this->lang->chat->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "project=$projectID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('todo',  'create')) $actions->createTodo = array('title' => $this->lang->chat->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('bug',   'create') and !empty($products)) $actions->createBug   = array('title' => $this->lang->im->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('doc',   'create') and !empty($libIdList))$actions->createDoc   = array('title' => $this->lang->im->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "libID=$libID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('story', 'create') and !empty($products)) $actions->createStory = array('title' => $this->lang->im->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('task',  'create') and !empty($projects)) $actions->createTask  = array('title' => $this->lang->im->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "project=$projectID", 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('todo',  'create')) $actions->createTodo = array('title' => $this->lang->im->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "800px");
 
         $urls = array();
-        foreach($this->config->chat->cards as $moduleName => $methods)
+        foreach($this->config->im->cards as $moduleName => $methods)
         {
             foreach($methods as $methodName => $size)
             {
@@ -52,7 +52,7 @@ class xuanxuanChat extends chatModel
         $data = new stdClass();
         $data->entryID     = 1;
         $data->name        = 'zentao-integrated';
-        $data->displayName = $this->lang->chat->zentaoIntegrate;
+        $data->displayName = $this->lang->im->zentaoIntegrate;
         $data->webViewUrl  = trim($baseURL . $this->config->webRoot, '/');
         $data->download    = $baseURL . $this->config->webRoot . 'data/xuanxuan/zentao-integrated.zip';
         $data->md5         = md5_file($this->app->getDataRoot() . 'xuanxuan/zentao-integrated.zip');
@@ -71,7 +71,7 @@ class xuanxuanChat extends chatModel
         if(empty($user->id)) return null;
 
         $data = array();
-        foreach($this->config->chat->user->canEditFields as $field)
+        foreach($this->config->im->user->canEditFields as $field)
         {
             if(!empty($user->$field)) $data[$field] = $user->$field;
         }

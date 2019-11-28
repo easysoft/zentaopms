@@ -16,7 +16,7 @@ class xuanxuanMessage extends messageModel
                 $title  = $this->app->user->realname . ' ' . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
                 $text   = $title . ' ' . "[#{$objectID}::{$object->$field}]";
 
-                $server   = $this->loadModel('chat')->getServer('zentao');
+                $server   = $this->loadModel('im')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
                 unset($_GET['onlybody']);
                 $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');
@@ -28,7 +28,7 @@ class xuanxuanMessage extends messageModel
                 $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->fetchAll('id');
                 $target = array_keys($target);
 
-                if($target) $this->loadModel('chat')->createNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+                if($target) $this->loadModel('im')->createNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
                 if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }

@@ -1,7 +1,7 @@
 <?php
-$this->app->loadLang('chat');
+$this->app->loadLang('im');
 $html  = '';
-$html .= '<li>' . html::a($this->createLink('admin', 'xuanxuan'), $this->lang->chat->common) . '</li>';
+$html .= '<li>' . html::a($this->createLink('admin', 'xuanxuan'), $this->lang->im->common) . '</li>';
 $html .= '<li>' . html::a($this->createLink('client', 'browse'), $this->lang->client->browse) . '</li>';
 $html .= '<li>' . $this->lang->client->checkUpgrade . '</li>';
 ?>

@@ -9,10 +9,10 @@ $lang->resource->setting->downloadxxd = 'downloadXXD';
 $lang->setting->methodOrder[26] = 'xuanxuan';
 $lang->setting->methodOrder[31] = 'downloadxxd';
 
-$lang->resource->chat = new stdclass();
-$lang->resource->chat->getChatUsers  = 'getChatUsers';
-$lang->resource->chat->getChatGroups = 'getChatGroups';
-$lang->resource->chat->notifyMSG     = 'notifyMSG';
+$lang->resource->im = new stdclass();
+$lang->resource->im->getChatUsers  = 'getChatUsers';
+$lang->resource->im->getChatGroups = 'getChatGroups';
+$lang->resource->im->notifyMSG     = 'notifyMSG';
 
 $lang->resource->client = new stdclass();
 $lang->resource->client->browse       = 'browse';

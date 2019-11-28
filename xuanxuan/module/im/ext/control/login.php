@@ -1,7 +1,7 @@
 <?php
 include '../../control.php';
 
-class myChat extends chat 
+class myIm extends im 
 {
     public function login($account = '', $password = '', $status = '', $userID = 0, $version = '', $device = 'desktop')
     {
