@@ -98,7 +98,7 @@ $lang->custom->notice->invalidStringKey  = 'The key should be lowercase letters,
 $lang->custom->notice->cannotSetTimezone = 'date_default_timezone_set does not exist or is disabled. Timezone cannot be set.';
 $lang->custom->notice->noClosedBlock     = 'You have no blocks that are closed permanently.';
 $lang->custom->notice->required          = 'The selected field is required.';
-$lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>。';
+$lang->custom->notice->conceptResult     = 'According to your preference, <b> %s-%s </b> is set for you. Use <b>%s</b> + <b> %s</b>.';
 $lang->custom->notice->conceptPath       = 'Go to Admin -> Custom -> Concept to set it.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";

@@ -39,24 +39,21 @@ class treeModel extends model
             ->beginIF($type == 'bug')->orWhere('type')->eq('bug')->fi()
             ->beginIF($type == 'case')->orWhere('type')->eq('case')->fi()
             ->andWhere('deleted')->eq('0')
+            ->orderBy('grade asc')
             ->fetchAll();
 
         $pairs    = array();
         $pairs[0] = '/';
         foreach($modules as $module)
         {
-            if($module->parent == '0') 
+            if($module->grade == 1) 
             {
                 $pairs[$module->id] = '/' . $module->name;
                 continue;
             }
 
-            $path           = substr($module->path, 1, -1);
-            $relatedModules = $this->dao->select('id, name')->from(TABLE_MODULE)->where('id')->in($path)->orderBy('grade')->fetchPairs();
-            $modulePath     = '';
-
-            foreach($relatedModules as $moduleName) $modulePath .= '/' . $moduleName; 
-            $pairs[$module->id] = $modulePath;
+            $moduleName = '/' . $module->name;
+            $pairs[$module->id] = isset($pairs[$module->parent]) ? $pairs[$module->parent] . $moduleName : $moduleName;
         }
 
         return $pairs;
