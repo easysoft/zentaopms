@@ -93,6 +93,7 @@ zentaoxx:
 	sed -i 's/site,//' zentaoxx/module/im/model/user.php
 	sed -i 's/admin, g/g/' zentaoxx/module/im/model/user.php
 	sed -i '/password = md5/d' zentaoxx/module/im/model/user.php
+	sed -i 's/md5(\$$user->password.*$$/\$$user->password;/g' zentaoxx/module/im/model/user.php
 	sed -i '/getSignedTime/d' zentaoxx/module/im/control.php
 	sed -i "/loadModel('push')/d" zentaoxx/module/im/control.php
 	sed -i "/this->push/d" zentaoxx/module/im/control.php

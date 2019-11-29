@@ -66,23 +66,6 @@ class xuanxuanIm extends imModel
         return $entries;
     }
 
-    public function editUser($user = null)
-    {
-        if(empty($user->id)) return null;
-
-        $data = array();
-        foreach($this->config->im->user->canEditFields as $field)
-        {
-            if(!empty($user->$field)) $data[$field] = $user->$field;
-        }
-        if(!empty($user->account) && !empty($user->password)) $data['password'] = $user->password;
-        if(!$data) return null;
-
-        $data['clientLang'] = $this->app->getClientLang();
-        $this->dao->update(TABLE_USER)->data($data)->where('id')->eq($user->id)->exec();
-        return $this->userGetByID($user->id);
-    }
-
     public function getServer($backend = 'xxb')
     {
         $server = commonModel::getSysURL();
