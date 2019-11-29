@@ -118,6 +118,7 @@ zentaoxx:
 	sed -i 's/footer.html.php/footer.lite.html.php/g' zentaoxx/module/common/view/footer.modal.html.php
 	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/footer.modal.html.php
 	sed -i 's/v\.//g' zentaoxx/module/im/js/debug.js
+	sed -i 's/helper::jsonEncode(/json_encode(/g' zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/im/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
