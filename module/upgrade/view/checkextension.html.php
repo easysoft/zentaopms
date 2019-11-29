@@ -20,7 +20,7 @@
       <div class='modal-body'>
       <?php echo $data;?>
       </div>
-      <div class='modal-footer'><?php echo html::a(inlink('selectVersion'), $this->lang->upgrade->continue, '', "class='btn'");?></div>
+      <div class='modal-footer'><?php echo html::a(inlink('selectVersion'), $this->lang->upgrade->continue, '', "class='btn btn-wide'");?></div>
     </div>
   </form>
 </div>

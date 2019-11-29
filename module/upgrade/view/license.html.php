@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class='modal-footer'>
-      <?php echo html::a(inlink('license', 'agree=true'), $lang->confirm, '', "class='btn btn-primary btn-install'");?>
+      <?php echo html::a(inlink('license', 'agree=true'), $lang->confirm, '', "class='btn btn-wide btn-primary btn-install'");?>
     </div>
   </div>
 </div>

@@ -60,7 +60,7 @@
     </div>
     <div class='modal-footer'>
       <div class='form-group'>
-        <?php echo html::a(inlink('license'), $lang->install->start, '', "class='btn btn-primary'");?>
+        <?php echo html::a(inlink('license'), $lang->install->start, '', "class='btn btn-wide btn-primary'");?>
       </div>
     </div>
   </div>

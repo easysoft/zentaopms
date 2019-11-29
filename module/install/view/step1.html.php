@@ -160,11 +160,11 @@
          $filterResult   == 'ok' and
          $iconvResult    == 'ok')
       {
-          echo html::a($this->createLink('install', 'step2'), $lang->install->next, '', "class='btn btn-primary'");
+          echo html::a($this->createLink('install', 'step2'), $lang->install->next, '', "class='btn btn-wide btn-primary'");
       }
       else
       {
-          echo html::a($this->createLink('install', 'step1'), $lang->install->reload, '', "class='btn btn-primary mgb-20'");
+          echo html::a($this->createLink('install', 'step1'), $lang->install->reload, '', "class='btn btn-wide btn-primary mgb-20'");
           if($pdoResult == 'fail' or $pdoMySQLResult == 'fail')
           {
             echo '<div class="panel panel-sm text-left"><div class="panel-heading strong">' . $lang->install->phpINI . '</div><div class="panel-body">' . nl2br($this->install->getIniInfo()) . '</div></div>';
