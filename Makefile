@@ -1,7 +1,7 @@
 VERSION     = $(shell head -n 1 VERSION)
 XUANPATH    = $(shell head -n 1 XUANPATH)
 XUANVERSION = $(shell head -n 1 XUANVERSION)
-XVERSION    = $(strip $(subst v,, $(XUANVERSION)))
+XVERSION    = $(shell head -n 1 XVERSION)
 
 all: pms
 clean:

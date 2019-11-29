@@ -8,9 +8,8 @@
 .table-col, .table-row>.col, .table-row>[class*=col-], .table-row>[class*="-col"]{
 display: table-cell;float: none;vertical-align: top;}
 .statusBlock .col{height:200px;text-align:center;padding-top:60px;}
-.statusBlock .col h2{font-size:30px;font-weight:500;}
+.statusBlock .col h2{font-size:18px;font-weight:500;}
 .statusBlock .date h2{font-size:18px;font-weight:500;}
 .statusBlock .server a{padding-top:3px;padding-bottom:3px; background: linear-gradient(#ffffff, #ecf4ff);color:#477cf9;}
 .statisticsBlock .col{height:100px;text-align:center;padding-top:20px;}
 .statisticsBlock .col h2{font-size:30px;font-weight:500;}
-
