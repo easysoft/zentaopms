@@ -93,6 +93,8 @@ zentaoxx:
 	sed -i 's/admin, g/g/' zentaoxx/module/im/model/user.php
 	sed -i '/password = md5/d' zentaoxx/module/im/model/user.php
 	sed -i '/getSignedTime/d' zentaoxx/module/im/control.php
+	sed -i "/loadModel('push')/d" zentaoxx/module/im/control.php
+	sed -i "/this->push/d" zentaoxx/module/im/control.php
 	sed -i "s/'yahoo', //g" zentaoxx/module/im/config.php
 	sed -i "s/'gtalk', //g" zentaoxx/module/im/config.php
 	sed -i "s/'wangwang', //g" zentaoxx/module/im/config.php
@@ -104,6 +106,8 @@ zentaoxx:
 	sed -i 's/xxb_user/zt_user/g' zentaoxx/db/*.sql
 	sed -i 's/xxb_file/zt_file/g' zentaoxx/db/*.sql
 	sed -i '/xxb_entry/d' zentaoxx/db/*.sql
+	sed -i '/deviceToken/d' zentaoxx/db/*.sql
+	sed -i '/deviceType/d' zentaoxx/db/*.sql
 	sed -i "s/marked\.html\.php';?>/marked\.html\.php';?>\n<div id='mainMenu' class='clearfix'><div class='btn-toolbar pull-left'><?php common::printAdminSubMenu('xuanxuan');?><\/div><\/div>/g" zentaoxx/module/client/view/checkupgrade.html.php
 	sed -i '/var serverVersions/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
