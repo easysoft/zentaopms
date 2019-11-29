@@ -88,7 +88,7 @@ class productplanModel extends model
             ->beginIF($browseType == 'unexpired')->andWhere('t1.end')->ge($date)->fi()
             ->beginIF($browseType == 'overdue')->andWhere('t1.end')->lt($date)->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         if(!empty($plans))
