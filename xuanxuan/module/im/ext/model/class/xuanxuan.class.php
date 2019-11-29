@@ -80,7 +80,7 @@ class xuanxuanIm extends imModel
 
         $data['clientLang'] = $this->app->getClientLang();
         $this->dao->update(TABLE_USER)->data($data)->where('id')->eq($user->id)->exec();
-        return $this->getUserByUserID($user->id);
+        return $this->userGetByID($user->id);
     }
 
     public function getServer($backend = 'xxb')
@@ -105,7 +105,7 @@ class xuanxuanIm extends imModel
 
     public function uploadFile($fileName, $path, $size, $time, $userID, $users, $chat)
     {
-        $user      = $this->getUserByUserID($userID);
+        $user      = $this->userGetByID($userID);
         $extension = $this->loadModel('file')->getExtension($fileName);
 
         $file = new stdclass();
