@@ -28,7 +28,7 @@ class xuanxuanMessage extends messageModel
                 $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->fetchAll('id');
                 $target = array_keys($target);
 
-                if($target) $this->loadModel('im')->createNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+                if($target) $this->loadModel('im')->messageCreateNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
                 if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }
