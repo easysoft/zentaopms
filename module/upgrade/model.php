@@ -539,6 +539,20 @@ class upgradeModel extends model
             $this->adjustPriv11_7();
             $this->rmEditorAndTranslateDir();
             $this->setConceptSetted();
+
+            if(!isset($this->config->isINT) or !($this->config->isINT))
+            {
+                if(!$executeXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0.0-beta.1.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0-beta3.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+            }
+
             $this->appendExec('11_6_5');
         }
 
@@ -689,7 +703,17 @@ class upgradeModel extends model
             case '11_6_2' :
             case '11_6_3' :
             case '11_6_4' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.4'));
-            case '11_6_5' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.5'));
+            case '11_6_5' :
+                $confirmContent .= file_get_contents($this->getUpgradeFile('11.6.5'));
+                if(!isset($this->config->isINT) or !($this->config->isINT))
+                {
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0.0-beta.1.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0-beta3.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                }
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
