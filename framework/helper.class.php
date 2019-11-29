@@ -133,6 +133,101 @@ class helper extends baseHelper
         $end    = $begin > $end ? $end + 5 : $end;
         return $double * 5 + $end - $begin;
     }
+
+    /**
+     * Unify string to standard chars.
+     *
+     * @param  string    $string
+     * @param  string    $to
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function unify($string, $to = ',')
+    {
+        $labels = array('_', '、', ' ', '-', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '，', '。');
+        $string = str_replace($labels, $to, $string);
+        return preg_replace("/[{$to}]+/", $to, trim($string, $to));
+    }
+
+    /**
+     * Format version to semver formate.
+     *
+     * @param  string    $version
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function formatVersion($version)
+    {
+        return preg_replace_callback(
+            '/([0-9]+)((?:\.[0-9]+)?)((?:\.[0-9]+)?)(?:[\s\-\+]?)((?:[a-z]+)?)((?:\.?[0-9]+)?)/i',
+            function($matches)
+            {
+                $major      = $matches[1];
+                $minor      = $matches[2];
+                $patch      = $matches[3];
+                $preRelease = $matches[4];
+                $build      = $matches[5];
+
+                $versionStrs = array(
+                    $major,
+                    $minor ?: ".0",
+                    $patch ?: ".0",
+                );
+
+                if($preRelease ?: $build) array_push($versionStrs, "-");
+                if($preRelease) array_push($versionStrs, $preRelease);
+                if($build)
+                {
+                    if(!$preRelease) array_push($versionStrs, "build");
+                    if(mb_substr($build, 0, 1) !== ".") array_push($versionStrs, ".");
+
+                    array_push($versionStrs, $build);
+                }
+                return join("", $versionStrs);
+            },
+            $version
+        );
+    }
+
+	/**
+	 * Trim version to xuanxuan version format.
+	 *
+	 * @param  string    $version
+	 * @access public
+	 * @return string
+	 */
+	public function trimVersion($version)
+	{
+		return preg_replace_callback(
+			'/([0-9]+)((?:\.[0-9]+)?)((?:\.[0-9]+)?)(?:[\s\-\+]?)((?:[a-z]+)?)((?:\.?[0-9]+)?)/i',
+			function($matches)
+			{
+				$major      = $matches[1];
+				$minor      = $matches[2];
+				$patch      = $matches[3];
+				$preRelease = $matches[4];
+				$build      = $matches[5];
+
+				$versionStrs = array(
+					$major,
+					$minor ?: ".0",
+				);
+
+				if($patch && $patch !== ".0" && $patch !== "0") array_push($versionStrs, $patch);
+				if($preRelease ?: $build) array_push($versionStrs, " ");
+				if($preRelease) array_push($versionStrs, $preRelease);
+				if($build)
+				{
+					if(!$preRelease) array_push($versionStrs, "build");
+					array_push($versionStrs, mb_substr($build, 0, 1) === "." ? substr($build, 1) : $build);
+				}
+				return join("", $versionStrs);
+			},
+			$version
+		);
+	}
 }
 
 /**

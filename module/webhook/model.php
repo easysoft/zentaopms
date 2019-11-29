@@ -266,7 +266,12 @@ class webhookModel extends model
 
             if($webhook->sendType == 'async')
             {
-                if($webhook->type == 'dingapi' and empty($this->getOpenIdList($webhook->id, $actionID))) continue;
+                if($webhook->type == 'dingapi')
+                {
+                    $openIdList = $this->getOpenIdList($webhook->id, $actionID);
+                    if(empty($openIdList)) continue;
+                }
+
                 $this->saveData($id, $actionID, $postData);
                 continue;
             }

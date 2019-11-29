@@ -61,18 +61,23 @@ zentaoxx:
 	cp -r xuan/xxb/lib/phpaes zentaoxx/lib/
 	cp -r xuan/xxb/framework/xuanxuan.class.php zentaoxx/framework/
 	cp -r xuan/xxb/db/*.sql zentaoxx/db/
-	cp -r xuan/xxb/module/chat zentaoxx/module/
+	cp -r xuan/xxb/module/im zentaoxx/module/
 	cp -r xuan/xxb/module/client zentaoxx/module/
 	cp -r xuan/xxb/module/common/ext/model/hook zentaoxx/module/common/ext/model/
 	mkdir -p zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/footer.modal.html.php zentaoxx/module/common/view
+	cp -r xuan/xxb/module/common/view/version.html.php zentaoxx/module/common/view
 	mkdir -p zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/markedjs zentaoxx/www/js/
+	cp -r xuan/xxb/www/js/version.js zentaoxx/www/js/
 	cp -r xuan/xxb/www/x.php zentaoxx/www/
 	mkdir zentaoxx/module/action
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
+	cp -r xuan/xxb/config/ext/xxb.php zentaoxx/config/ext/
+	cp -r xuan/xxb/config/ext/maps.php zentaoxx/config/ext/
+	cp -r xuan/xxb/apischeme.json zentaoxx/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
@@ -82,16 +87,17 @@ zentaoxx:
 	rm -rf zentaoxx/db_bak/
 	sed -i 's/XXBVERSION/$(XVERSION)/g' zentaoxx/config/ext/xuanxuan.php
 	sed -i "/\$$config->xuanxuan->backend /c\\\$$config->xuanxuan->backend     = 'zentao';" zentaoxx/config/ext/xuanxuan.php
-	sed -i 's/site,//' zentaoxx/module/chat/model.php
-	sed -i 's/admin, g/g/' zentaoxx/module/chat/model.php
-	sed -i '/password = md5/d' zentaoxx/module/chat/control.php
-	sed -i '/getSignedTime/d' zentaoxx/module/chat/control.php
-	sed -i "s/'yahoo', //g" zentaoxx/module/chat/config.php
-	sed -i "s/'gtalk', //g" zentaoxx/module/chat/config.php
-	sed -i "s/'wangwang', //g" zentaoxx/module/chat/config.php
-	sed -i "s/'site', //g" zentaoxx/module/chat/config.php
+	sed -i 's/site,//' zentaoxx/module/im/model/user.php
+	sed -i 's/admin, g/g/' zentaoxx/module/im/model/user.php
+	sed -i '/password = md5/d' zentaoxx/module/im/model/user.php
+	sed -i '/getSignedTime/d' zentaoxx/module/im/control.php
+	sed -i "s/'yahoo', //g" zentaoxx/module/im/config.php
+	sed -i "s/'gtalk', //g" zentaoxx/module/im/config.php
+	sed -i "s/'wangwang', //g" zentaoxx/module/im/config.php
+	sed -i "s/'site', //g" zentaoxx/module/im/config.php
 	sed -i "s/'reload'/inlink('browse')/g" zentaoxx/module/client/control.php
-	sed -i 's/tree/dept/' zentaoxx/module/chat/model.php
+	sed -i 's/tree/dept/' zentaoxx/module/im/model.php
+	sed -i 's/tree/dept/' zentaoxx/module/im/control.php
 	sed -i 's/im_/zt_im_/g' zentaoxx/db/*.sql
 	sed -i 's/xxb_user/zt_user/g' zentaoxx/db/*.sql
 	sed -i 's/xxb_file/zt_file/g' zentaoxx/db/*.sql
@@ -104,8 +110,8 @@ zentaoxx:
 	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/header.modal.html.php
 	sed -i 's/footer.html.php/footer.lite.html.php/g' zentaoxx/module/common/view/footer.modal.html.php
 	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/footer.modal.html.php
-	sed -i 's/v\.//g' zentaoxx/module/chat/js/debug.js
-	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/chat/view/debug.html.php
+	sed -i 's/v\.//g' zentaoxx/module/im/js/debug.js
+	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/im/view/debug.html.php
 	sed -i 's/v\.//g' zentaoxx/module/client/js/checkupgrade.js
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
