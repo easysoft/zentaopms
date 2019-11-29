@@ -77,6 +77,6 @@ class entry extends control
             $this->app->user = $this->session->user;
         }
 
-        die($this->app->encrypt($output));
+        $this->loadModel('im')->sendOutput($output, 'entry/visitResponse');
     }
 }
