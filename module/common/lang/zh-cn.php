@@ -99,8 +99,9 @@ $lang->selectAll     = '全选';
 $lang->selectReverse = '反选';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您访问的对象并不存在！';
-$lang->notPage      =  '抱歉，您访问的功能正在开发中！';
+$lang->notPage       =  '抱歉，您访问的功能正在开发中！';
 $lang->showAll       = '[[全部显示]]';
+$lang->selectedItems = '已选择 <strong>{0}</strong> 项';
 
 $lang->future      = '未来';
 $lang->year        = '年';
