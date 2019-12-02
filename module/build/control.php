@@ -149,6 +149,9 @@ class build extends control
                 $project->name = '';
             }
 
+            $projects = $this->loadModel('product')->getProjectPairs($build->product, $build->branch, 'nodeleted');
+            if(!isset($projects[$build->project])) $projects[$build->project] = $project->name;
+
             $productGroups = $this->project->getProducts($build->project);
 
             $products      = array();
@@ -164,6 +167,7 @@ class build extends control
             $this->view->position[] = $this->lang->build->edit;
             $this->view->product    = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
             $this->view->branches   = (isset($productGroups[$build->product]) and $productGroups[$build->product]->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($build->product);
+            $this->view->projects   = $projects;
             $this->view->orderBy    = $orderBy;
         }
 
@@ -173,7 +177,7 @@ class build extends control
         $this->view->build         = $build;
         $this->display();
     }
-                                                          
+
     /**
      * View a build.
      * 

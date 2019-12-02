@@ -26,18 +26,29 @@
         <tr>
           <th><?php echo $lang->build->product;?></th>
           <td>
+            <?php
+            $disabled = '';
+            if($build->stories or $build->bugs) $disabled = 'disabled';
+            ?>
             <div class='input-group'>
-              <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' required");?>
+              <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' $disabled required");?>
               <?php
               if($build->productType != 'normal' and isset($branches[$product->branch]))
               {
                   if($product->branch) $branches = array($product->branch => $branches[$product->branch]);
-                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $build->branch, "class='form-control chosen'");
+                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $build->branch, "class='form-control chosen' $disabled");
               }
               ?>
             </div>
-          </td><td></td>
+          </td>
+          <td><?php if($disabled) echo $lang->build->notice->changeProduct;?></td>
         </tr>
+        <?php if($this->config->global->flow != 'onlyTest'):?>
+        <tr>
+          <th><?php echo $lang->build->project;?></th>
+          <td id='projectsBox'><?php echo html::select('project', $projects, $build->project, "class='form-control chosen' required");?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->build->name;?></th>
           <td><?php echo html::input('name', $build->name, "class='form-control' required");?></td>
@@ -71,7 +82,6 @@
           <td colspan="3" class="text-center form-actions">
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
-            <?php echo $config->global->flow != 'onlyTest' ? html::hidden('project', $build->project) : '';?>
           </td>
         </tr>
       </table>
