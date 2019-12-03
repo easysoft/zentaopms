@@ -912,12 +912,6 @@ class bugModel extends model
      */
     public function resolve($bugID)
     {
-        if(strpos($this->config->bug->resolve->requiredFields, 'comment') !== false and !$this->post->comment)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
-            return false;
-        }
-
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
@@ -928,14 +922,31 @@ class bugModel extends model
             ->setDefault('resolvedBy',     $this->app->user->account)
             ->setDefault('assignedDate',   $now)
             ->setDefault('resolvedDate',   $now)
-            ->setDefault('duplicateBug',   0)
             ->setDefault('assignedTo',     $oldBug->openedBy)
-            ->remove('comment,files,labels')
+            ->setIF($_POST['resolution'] != 'duplicate', 'duplicateBug', 0)
+            ->remove('files,labels')
             ->get();
 
+        /* Set comment lang for alert error. */
+        $this->lang->bug->comment = $this->lang->comment;
+
         /* Can create build when resolve bug. */
-        if(isset($bug->createBuild) and $bug->resolution)
+        if(isset($bug->createBuild))
         {
+            /* Check required fields. */
+            foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
+            {
+                if(!isset($_POST[$requiredField]) or strlen(trim($_POST[$requiredField])) == 0)
+                {
+                    $fieldName = $requiredField;
+                    if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $fieldName);
+                }
+            }
+
+            if($bug->resolution == 'duplicate' and !$this->post->duplicateBug) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
+            if($bug->resolution == 'fixed' and !$this->post->resolvedBuild)    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->resolvedBuild);
+
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
             if(empty($bug->buildProject)) dao::$errors['buildProject'][] = sprintf($this->lang->error->notempty, $this->lang->bug->project);
             if(dao::isError()) return false;
@@ -955,13 +966,10 @@ class bugModel extends model
             $this->loadModel('action')->create('build', $buildID, 'opened');
             $bug->resolvedBuild = $buildID;
         }
-        unset($bug->buildName);
-        unset($bug->createBuild);
-        unset($bug->buildProject);
 
         if($bug->resolvedBuild != 'trunk') $bug->testtask = (int) $this->dao->select('id')->from(TABLE_TESTTASK)->where('build')->eq($bug->resolvedBuild)->orderBy('id_desc')->limit(1)->fetch('id');
 
-        $this->dao->update(TABLE_BUG)->data($bug)
+        $this->dao->update(TABLE_BUG)->data($bug, 'buildName,createBuild,buildProject,comment')
             ->autoCheck()
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
