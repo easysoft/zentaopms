@@ -331,6 +331,6 @@
   </div>
 </div>
 <div id="mainActions" class='main-actions'>
-  <?php common::printPreAndNext($preAndNext, $this->createLink('testcase', 'view', "caseID=%s&version={$case->currentVersion}&from=$from&taskID=$taskID"));?>
+  <?php common::printPreAndNext($preAndNext, $this->createLink('testcase', 'view', "caseID=%s&version=&from=$from&taskID=$taskID"));?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
