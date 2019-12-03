@@ -923,7 +923,7 @@ class bugModel extends model
             ->setDefault('assignedDate',   $now)
             ->setDefault('resolvedDate',   $now)
             ->setDefault('assignedTo',     $oldBug->openedBy)
-            ->setIF($_POST['resolution'] != 'duplicate', 'duplicateBug', 0)
+            ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
             ->remove('files,labels')
             ->get();
 
