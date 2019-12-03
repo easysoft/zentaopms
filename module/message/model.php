@@ -124,10 +124,13 @@ class messageModel extends model
         if(empty($toList)) return false;
         if($toList == $actor) return false;
 
+        $this->app->loadConfig('mail');
+        $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
+
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         $space = common::checkNotCN() ? ' ' : '';
         $data  = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
-        $data .= ' ' . html::a(helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
+        $data .= ' ' . html::a($sysURL . helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
 
         $notify = new stdclass();
         $notify->objectType  = 'message';
