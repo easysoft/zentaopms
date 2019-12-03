@@ -348,7 +348,7 @@ class projectModel extends model
                 foreach($this->post->products as $productID)
                 {
                     if(empty($productID)) continue;
-                    $this->user->updateUserView($productID, 'product');
+                    $this->loadModel('user')->updateUserView($productID, 'product');
                 }
             }
 
