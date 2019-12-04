@@ -677,7 +677,7 @@ class docModel extends model
             ->join('users', ',')
             ->remove('comment,files,labels,uid')
             ->get();
-        if($doc->contentType == 'markdown') $doc->content = strip_tags($this->post->content, $this->config->allowedTags);
+        if($doc->contentType == 'markdown') $doc->content = $this->post->content;
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
