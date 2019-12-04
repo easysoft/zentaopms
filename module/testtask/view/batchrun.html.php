@@ -55,7 +55,7 @@
               <td class='text-left w-p30' <?php if($step->type == 'group') echo "colspan='2'"?>><?php echo "<span title='$step->desc' class='$stepClass'>" . $ID . "、" . $step->desc . '</span>'?></td>
               <?php if($step->type != 'group'):?>
               <td class='text-left w-p30'><?php echo "<span title='$step->expect'>" . $lang->testcase->stepExpect . "：" . $step->expect . '</span>'?></td>
-              <td class='w-80px hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass', "class='form-control'")?></td>
+              <td class='w-90px hidden action<?php echo $caseID?>'><?php echo html::select("steps[$caseID][$stepID]", $lang->testcase->resultList, 'pass', "class='form-control'")?></td>
               <td class='hidden action<?php echo $caseID?>'><?php echo html::input("reals[$caseID][$stepID]", '', "class='form-control'");?></td>
               <?php endif;?>
             </tr>
@@ -78,6 +78,7 @@ function showAction(value, obj)
     if(value == 'pass')
     {
         $(obj).addClass('hidden');
+        $(obj).find('select[id^=steps]').val(value);
         if($(obj).parent().prop('tagName') == 'TR')
         {
             $(obj).closest('tbody').children('tr').each(function(){
@@ -89,6 +90,7 @@ function showAction(value, obj)
     else
     {
         $(obj).removeClass('hidden');
+        $(obj).find('select[id^=steps]').eq(-1).val(value);
         if($(obj).parent().prop('tagName') == 'TR')
         {
             $(obj).closest('tbody').children('tr').each(function(){
