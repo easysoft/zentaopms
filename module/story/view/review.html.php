@@ -36,7 +36,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
         </tr>
         <tr id='rejectedReasonBox' class='hide'>
           <th><?php echo $lang->story->rejectedReason;?></th>
-          <td><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=form-control onchange="setStory(this.value)"');?></td><td></td>
+          <td class='required'><?php echo html::select('closedReason', $lang->story->reasonList, '', 'class=form-control onchange="setStory(this.value)"');?></td><td></td>
         </tr>
         <tr id='priBox' class='hide'>
           <th><?php echo $lang->story->pri;?></th>
@@ -48,7 +48,7 @@ var assignedTo = '<?php $story->lastEditedBy ? print($story->lastEditedBy) : pri
         </tr>
         <tr id='duplicateStoryBox' class='hide'>
           <th><?php echo $lang->story->duplicateStory;?></th>
-          <td><?php echo html::input('duplicateStory', '', "class='form-control'");?></td><td></td>
+          <td class='required'><?php echo html::input('duplicateStory', '', "class='form-control'");?></td><td></td>
         </tr>
         <tr id='childStoriesBox' class='hide'>
           <th><?php echo $lang->story->childStories;?></th>
