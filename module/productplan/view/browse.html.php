@@ -103,7 +103,7 @@
           ?>
         </td>
         <?php if($this->session->currentProductType != 'normal'):?>
-        <td><?php echo $branches[$plan->branch];?></td>
+        <td class='c-branch'><?php echo $branches[$plan->branch];?></td>
         <?php endif;?>
         <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
         <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
