@@ -438,6 +438,7 @@ class caselibModel extends model
                 foreach($requiredFields as $requiredField)
                 {
                     $requiredField = trim($requiredField);
+                    if(!isset($caseData->$requiredField)) continue;
                     if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $line, $this->lang->testcase->$requiredField);
                 }
             }
