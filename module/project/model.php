@@ -1388,7 +1388,7 @@ class projectModel extends model
     {
         $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
-            ->where('project')->eq($projectID)
+            ->where('t2.project')->eq($projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
