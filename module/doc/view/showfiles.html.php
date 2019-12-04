@@ -121,7 +121,7 @@
                     if(strpos('zip,tar,gz,bz2,rar', $file->extension) !== false) $iconClass = 'icon-file-archive';
                     else if(strpos('csv,xls,xlsx', $file->extension) !== false) $iconClass = 'icon-file-excel';
                     else if(strpos('doc,docx', $file->extension) !== false) $iconClass = 'icon-file-word';
-                    else if(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint-o';
+                    else if(strpos('ppt,pptx', $file->extension) !== false) $iconClass = 'icon-file-powerpoint';
                     else if(strpos('pdf', $file->extension) !== false) $iconClass = 'icon-file-pdf';
                     else if(strpos('mp3,ogg,wav', $file->extension) !== false) $iconClass = 'icon-file-audio';
                     else if(strpos('avi,mp4,mov', $file->extension) !== false) $iconClass = 'icon-file-video';
