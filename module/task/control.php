@@ -1070,6 +1070,9 @@ class task extends control
                     continue;
                 }
 
+                /* Skip parent task when batch close task. */
+                if($task->parent == '-1') continue;
+                /* Skip closed task when batch close task. */
                 if($task->status == 'closed') continue;
 
                 $changes = $this->task->close($taskID);

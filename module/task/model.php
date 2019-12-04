@@ -525,12 +525,12 @@ class taskModel extends model
                 $newParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch();
                 $changes = common::createChanges($oldParentTask, $newParentTask);
                 $action  = '';
-                if($status == 'done') $action = 'Finished';
-                if($status == 'closed') $action = 'Closed';
-                if($status == 'pause') $action = 'Paused';
-                if($status == 'cancel') $action = 'Canceled';
-                if($status == 'doing' and $parentTask->status == 'wait') $action = 'Started';
-                if($status == 'doing' and $parentTask->status == 'pause') $action = 'Restarted';
+                if($status == 'done' and $parentTask->status != 'done')     $action = 'Finished';
+                if($status == 'closed' and $parentTask->status != 'closed') $action = 'Closed';
+                if($status == 'pause' and $parentTask->status != 'paused')  $action = 'Paused';
+                if($status == 'cancel' and $parentTask->status != 'cancel') $action = 'Canceled';
+                if($status == 'doing' and $parentTask->status == 'wait')    $action = 'Started';
+                if($status == 'doing' and $parentTask->status == 'pause')   $action = 'Restarted';
                 if($status == 'doing' and $parentTask->status != 'wait' and $parentTask->status != 'pause') $action = 'Activated';
                 if($action)
                 {
