@@ -1717,7 +1717,7 @@ class treeModel extends model
         {
             /* Ignore useless module for task. */
             $allModule = (isset($this->config->project->task->allModule) and ($this->config->project->task->allModule == 1));
-            if($keepModules and !isset($keepModules[$module->id]) and !$allModule) continue;
+            if((empty($keepModules) or !isset($keepModules[$module->id])) and !$allModule) continue;
             if(isset($parent[$module->id]))
             {
                 $module->children = $parent[$module->id]->children;
