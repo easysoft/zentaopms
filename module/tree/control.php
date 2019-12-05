@@ -274,7 +274,13 @@ class tree extends control
 
         $showProduct = strpos('story|bug|case', $type) !== false ? true : false;
         $this->view->showProduct = $showProduct;
-        if($showProduct) $this->view->products = $this->loadModel('product')->getPairs();
+        if($showProduct)
+        {
+            $product = $this->loadModel('product')->getById($module->root);
+            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root);
+            $this->view->product  = $product;
+            $this->view->products = $this->product->getPairs();
+        }
 
         /* Remove self and childs from the $optionMenu. Because it's parent can't be self or childs. */
         $childs = $this->tree->getAllChildId($moduleID);
