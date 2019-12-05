@@ -37,27 +37,9 @@ class backupModel extends model
         $return->result = true;
         $return->error  = '';
 
-        $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
-        if(!$nozip)
-        {
-            $oldDir = getcwd();
-            chdir($this->app->getTmpRoot());
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($backupFile);
-            $zip->create($this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_REMOVE_PATH, $this->app->getAppRoot() . 'www/data/', PCLZIP_OPT_TEMP_FILE_ON);
-            if($zip->errorCode() != 0)
-            {
-                $return->result = false;
-                $return->error  = $zip->errorInfo();
-            }
-            chdir($oldDir);
-        }
-        else
-        {
-            if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
-            $zfile = $this->app->loadClass('zfile');
-            $zfile->copyDir($this->app->getAppRoot() . 'www/data/', $backupFile);
-        }
+        if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
+        $zfile = $this->app->loadClass('zfile');
+        $zfile->copyDir($this->app->getAppRoot() . 'www/data/', $backupFile);
 
         return $return;
     }
@@ -88,39 +70,21 @@ class backupModel extends model
 
         $fileList = array_merge($fileList, $wwwFileList);
 
-        $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
-        if(!$nozip)
+        if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
+        $zfile = $this->app->loadClass('zfile');
+        foreach($fileList as $codeFile)
         {
-            $oldDir = getcwd();
-            chdir($this->app->getTmpRoot());
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($backupFile);
-            $zip->create($fileList, PCLZIP_OPT_REMOVE_PATH, $appRoot, PCLZIP_OPT_TEMP_FILE_ON);
-            if($zip->errorCode() != 0)
+            $file = trim(str_replace($appRoot, '', $codeFile), DS);
+            if(is_dir($codeFile))
             {
-                $return->result = false;
-                $return->error  = $zip->errorInfo();
+                if(!is_dir($backupFile . DS . $flle)) mkdir($backupFile . DS . $flle, 0777, true);
+                $zfile->copyDir($codeFile, $backupFile . DS . $file);
             }
-            chdir($oldDir);
-        }
-        else
-        {
-            if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
-            $zfile = $this->app->loadClass('zfile');
-            foreach($fileList as $codeFile)
+            else
             {
-                $file = trim(str_replace($appRoot, '', $codeFile), DS);
-                if(is_dir($codeFile))
-                {
-                    if(!is_dir($backupFile . DS . $flle)) mkdir($backupFile . DS . $flle, 0777, true);
-                    $zfile->copyDir($codeFile, $backupFile . DS . $file);
-                }
-                else
-                {
-                    $dirName = dirname($file);
-                    if(!is_dir($backupFile . DS . $dirName)) mkdir($backupFile . DS . $dirName, 0777, true);
-                    $zfile->copyFile($codeFile, $backupFile . DS . $file);
-                }
+                $dirName = dirname($file);
+                if(!is_dir($backupFile . DS . $dirName)) mkdir($backupFile . DS . $dirName, 0777, true);
+                $zfile->copyFile($codeFile, $backupFile . DS . $file);
             }
         }
 
@@ -153,8 +117,7 @@ class backupModel extends model
         $return->result = true;
         $return->error  = '';
 
-        $nozip = strpos($this->config->backup->setting, 'nozip') !== false;
-        if(!$nozip)
+        if(is_file($backupFile))
         {
             $oldDir = getcwd();
             chdir($this->app->getTmpRoot());
@@ -167,7 +130,7 @@ class backupModel extends model
             }
             chdir($oldDir);
         }
-        else
+        elseif(is_dir($backupFile))
         {
             $zfile = $this->app->loadClass('zfile');
             $zfile->copyDir($backupFile, $this->app->getAppRoot() . 'www/data/');
