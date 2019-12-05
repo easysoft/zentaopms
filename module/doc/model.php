@@ -69,8 +69,13 @@ class docModel extends model
 
                 if($currentLib)
                 {
-                    $allLibGroups   = $this->getAllLibGroups($currentLib);
-                    $currentGroups  = $allLibGroups[$type];
+                    $allLibGroups  = $this->getAllLibGroups($libID);
+                    $currentGroups = $allLibGroups[$type];
+                    if(!isset($currentGroups[$currentLib]) and $type == 'project')
+                    {
+                        $project = $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('id')->eq($currentLib)->fetch();
+                        $currentGroups[$currentLib] = (array)$project;
+                    }
                     $currentLibName = is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib];
 
                     $selectHtml .= "<div class='btn-group angle-btn'>";
