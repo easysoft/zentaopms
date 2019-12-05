@@ -41,7 +41,7 @@ class dept extends control
         $this->view->depts       = $this->dept->getTreeMenu($rootDeptID = 0, array('deptmodel', 'createManageLink'));
         $this->view->parentDepts = $parentDepts;
         $this->view->sons        = $this->dept->getSons($deptID);
-        $this->view->tree        = $this->dept->getDataStructure(0);
+        $this->view->tree        = $this->dept->getDataStructure();
         $this->display();
     }
 
