@@ -29,6 +29,7 @@ class testtaskModel extends model
         if($testtask and $this->app->viewType != 'mhtml')
         {
             $testtasks = $this->getProductTasks($productID, 0, 'id_desc', null, array('local', 'totalStatus'));
+            if(!isset($testtasks[$testtask])) $testtasks[$testtask] = $this->getById($testtask);
 
             $selectHtml .= "<div class='btn-group angle-btn'>";
             $selectHtml .= "<div class='btn-group'>";

@@ -78,6 +78,7 @@ $lang->testtask->stepResults    = 'Step Result';
 $lang->testtask->lastRunner     = 'RunBy';
 $lang->testtask->lastRunDate    = 'Last Run';
 $lang->testtask->date           = 'Tested on';;
+$lang->testtask->deleted        = "Deleted";
 
 $lang->testtask->beginAndEnd    = 'Duration';
 $lang->testtask->to             = 'To';
