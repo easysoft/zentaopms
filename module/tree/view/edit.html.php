@@ -144,7 +144,7 @@ function loadBranches(obj)
         if(data)
         {
             $inputGroup.append(data);
-            $inputGroup.find('#branch').css('width', '100px').removeAttr('onchange');
+            $inputGroup.find('#branch').removeAttr('onchange');
             $inputGroup.find('#branch').chosen();
         }
     })
