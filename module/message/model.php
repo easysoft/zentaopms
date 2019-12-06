@@ -65,7 +65,7 @@ class messageModel extends model
      * @access public
      * @return void
      */
-    public function send($objectType, $objectID, $actionType, $actionID)
+    public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
@@ -86,7 +86,7 @@ class messageModel extends model
             $actions = $messageSetting['webhook']['setting'];
             if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
             {
-                $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID);
+                $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);
             }
         }
 
@@ -95,7 +95,7 @@ class messageModel extends model
             $actions = $messageSetting['message']['setting'];
             if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
             {
-                $this->loadModel('message')->saveNotice($objectType, $objectID, $actionType, $actionID);
+                $this->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
             }
         }
     }
@@ -110,22 +110,27 @@ class messageModel extends model
      * @access public
      * @return void
      */
-    public function saveNotice($objectType, $objectID, $actionType, $actionID)
+    public function saveNotice($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
-        if(empty($this->app->user->account)) return false;
+        if(empty($actor)) $actor = $this->app->user->account;
+        if(empty($actor)) return false;
 
         $this->loadModel('action');
+        $user   = $this->loadModel('user')->getById($actor);
         $table  = $this->config->objectTables[$objectType];
         $field  = $this->config->action->objectNameFields[$objectType];
         $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
         $toList = $this->getToList($object, $objectType);
         if(empty($toList)) return false;
-        if($toList == $this->app->user->account) return false;
+        if($toList == $actor) return false;
+
+        $this->app->loadConfig('mail');
+        $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
         $space = common::checkNotCN() ? ' ' : '';
-        $data  = $this->app->user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
-        $data .= ' ' . html::a(helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
+        $data  = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
+        $data .= ' ' . html::a($sysURL . helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
 
         $notify = new stdclass();
         $notify->objectType  = 'message';
@@ -133,7 +138,7 @@ class messageModel extends model
         $notify->toList      = $toList;
         $notify->data        = $data;
         $notify->status      = 'wait';
-        $notify->createdBy   = $this->app->user->account;
+        $notify->createdBy   = $actor;
         $notify->createdDate = helper::now();
 
         $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();

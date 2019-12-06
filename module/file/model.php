@@ -422,10 +422,16 @@ class fileModel extends model
     {
         if(empty($content)) return $content;
 
+        $isonlybody = isonlybody();
+        unset($_GET['onlybody']);
+
         $readLinkReg = str_replace(array('%fileID%', '/', '.', '?'), array('[0-9]+', '\/', '\.', '\?'), helper::createLink('file', 'read', 'fileID=(%fileID%)', '\w+'));
 
         $content = preg_replace('/ src="(' . $readLinkReg . ')" /', ' onload="setImageSize(this,' . $maxSize . ')" src="$1" ', $content);
         $content = preg_replace('/ src="{([0-9]+)(\.(\w+))?}" /', ' onload="setImageSize(this,' . $maxSize . ')" src="' . helper::createLink('file', 'read', "fileID=$1", "$3") . '" ', $content);
+
+        if($isonlybody) $_GET['onlybody'] = 'yes';
+
         return str_replace(' src="data/upload', ' onload="setImageSize(this,' . $maxSize . ')" src="data/upload', $content);
     }
 
@@ -792,6 +798,10 @@ class fileModel extends model
     public function replaceImgURL($data, $fields)
     {
         if(is_string($fields)) $fields = explode(',', str_replace(' ', '', $fields));
+
+        $isonlybody = isonlybody();
+        unset($_GET['onlybody']);
+
         foreach($fields as $field)
         {
             if(empty($field) or empty($data->$field)) continue;
@@ -820,6 +830,8 @@ class fileModel extends model
                 $data->$field = $fieldData;
             }
         }
+
+        if($isonlybody) $_GET['onlybody'] = 'yes';
         return $data;
     }
 

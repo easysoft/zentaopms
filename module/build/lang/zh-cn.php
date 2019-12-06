@@ -48,6 +48,9 @@ $lang->build->generatedBugs = '产生的Bug';
 $lang->build->noProduct     = " <span style='color:red'>该{$lang->projectCommon}没有关联{$lang->productCommon}，无法创建版本，请先<a href='%s'>关联{$lang->productCommon}</a></span>";
 $lang->build->noBuild       = '暂时没有版本。';
 
+$lang->build->notice = new stdclass();
+$lang->build->notice->changeProduct = "已经关联{$lang->storyCommon}或Bug的版本，不能修改其所属产品";
+
 $lang->build->finishStories = " 本次共完成 %s 个{$lang->storyCommon}";
 $lang->build->resolvedBugs  = ' 本次共解决 %s 个Bug';
 $lang->build->createdBugs   = ' 本次共产生 %s 个Bug';

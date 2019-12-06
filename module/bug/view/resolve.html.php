@@ -38,7 +38,7 @@ js::set('productID' , $bug->product);
         </tr>
         <tr id='duplicateBugBox' class='hide'>
           <th><?php echo $lang->bug->duplicateBug;?></th>
-          <td><?php echo html::input('duplicateBug', '', "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('duplicateBug', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->bug->resolvedBuild;?></th>

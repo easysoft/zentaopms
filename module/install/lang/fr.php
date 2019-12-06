@@ -27,16 +27,15 @@ $lang->install->license          = 'ZenTao est sous Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
 ZenTao ALM is an Open Source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, QA Management, Document Management, Todos Management, Company Management etc. ZenTao is the best choice for software project management.
 
-ZenTao ALM is built on PHP + MySQL and based on ZenTaoPHP framework, an independent framework developed by our team. Third-party developers/organizations can develop extensions or customize for their requirements.
+ZenTao ALM is built on PHP + MySQL and based on ZentaoPHP framework, an independent framework developed by our team. Third-party developers/organizations can develop extensions or customize for their requirements.
 EOT;
 $lang->install->links = <<<EOT
 ZenTao ALM is developed by <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
-Official Website : <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
-Technical Support : <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-WhatsApp Group : <a href='https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF' target='_blank'>https://chat.whatsapp.com/B6pi6b3gv0S7x7jqMxwhbF</a>
+Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
+Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
 LinkedIn Group: <a href='https://www.linkedin.com/groups/10330509/' target='_blank'>ZenTao Project Management Software</a>
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
-Twitter: <a href='https://twitter.com/cneasysoft' target='_blank'>cneasysoft</a>
+Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;

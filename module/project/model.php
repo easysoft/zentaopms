@@ -348,7 +348,7 @@ class projectModel extends model
                 foreach($this->post->products as $productID)
                 {
                     if(empty($productID)) continue;
-                    $this->user->updateUserView($productID, 'product');
+                    $this->loadModel('user')->updateUserView($productID, 'product');
                 }
             }
 
@@ -1388,7 +1388,7 @@ class projectModel extends model
     {
         $storyCount = $this->dao->select('count(t2.story) as storyCount')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id = t2.story')
-            ->where('project')->eq($projectID)
+            ->where('t2.project')->eq($projectID)
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
@@ -2555,35 +2555,48 @@ class projectModel extends model
     public function getKanbanStatusMap($kanbanSetting)
     {
         $statusMap = array();
-        $statusMap['task']['wait']['doing']  = 'start';
-        $statusMap['task']['wait']['done']   = 'finish';
-        $statusMap['task']['wait']['cancel'] = 'cancel';
+        if(common::hasPriv('task', 'start')) $statusMap['task']['wait']['doing']  = 'start';
+        if(common::hasPriv('task', 'pause')) $statusMap['task']['doing']['pause'] = 'pause';
+        if(common::hasPriv('task', 'finish'))
+        {
+            $statusMap['task']['wait']['done']  = 'finish';
+            $statusMap['task']['doing']['done'] = 'finish';
+            $statusMap['task']['pause']['done'] = 'finish';
+        }
+        if(common::hasPriv('task', 'cancel'))
+        {
+            $statusMap['task']['wait']['cancel']  = 'cancel';
+            $statusMap['task']['pause']['cancel'] = 'cancel';
+        }
+        if(common::hasPriv('task', 'activate'))
+        {
+            $statusMap['task']['pause']['doing']  = 'activate';
+            $statusMap['task']['done']['doing']   = 'activate';
+            $statusMap['task']['cancel']['doing'] = 'activate';
+            $statusMap['task']['closed']['doing'] = 'activate';
+        }
+        if(common::hasPriv('task', 'close'))
+        {
+            $statusMap['task']['done']['closed']   = 'close';
+            $statusMap['task']['cancel']['closed'] = 'close';
+        }
 
-        $statusMap['task']['doing']['done']  = 'finish';
-        $statusMap['task']['doing']['pause'] = 'pause';
-
-        $statusMap['task']['pause']['doing']  = 'activate';
-        $statusMap['task']['pause']['done']   = 'finish';
-        $statusMap['task']['pause']['cancel'] = 'cancel';
-
-        $statusMap['task']['done']['doing']  = 'activate';
-        $statusMap['task']['done']['closed'] = 'close';
-
-        $statusMap['task']['cancel']['doing']  = 'activate';
-        $statusMap['task']['cancel']['closed'] = 'close';
-
-        $statusMap['task']['closed']['doing'] = 'activate';
-
-        $statusMap['bug']['wait']['done']   = 'resolve';
-        $statusMap['bug']['wait']['cancel'] = 'resolve';
-
-        $statusMap['bug']['done']['wait']   = 'activate';
-        $statusMap['bug']['done']['closed'] = 'close';
-
-        $statusMap['bug']['cancel']['wait']   = 'activate';
-        $statusMap['bug']['cancel']['closed'] = 'close';
-
-        $statusMap['bug']['closed']['wait'] = 'activate';
+        if(common::hasPriv('bug', 'resolve'))
+        {
+            $statusMap['bug']['wait']['done']   = 'resolve';
+            $statusMap['bug']['wait']['cancel'] = 'resolve';
+        }
+        if(common::hasPriv('bug', 'close'))
+        {
+            $statusMap['bug']['done']['closed'] = 'close';
+            $statusMap['bug']['cancel']['closed'] = 'close';
+        }
+        if(common::hasPriv('bug', 'activate'))
+        {
+            $statusMap['bug']['done']['wait']   = 'activate';
+            $statusMap['bug']['cancel']['wait']   = 'activate';
+            $statusMap['bug']['closed']['wait'] = 'activate';
+        }
 
         return $statusMap;
     }

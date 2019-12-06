@@ -1503,15 +1503,16 @@ EOD;
         }
         if(empty($app->user->rights['rights']['my']['limited']) && !$limitedProject) return true;
 
-        if(!is_null($method) && strpos($method, 'batch')  === 0) return false;
-        if(!is_null($method) && strpos($method, 'link')   === 0) return false;
-        if(!is_null($method) && strpos($method, 'create') === 0) return false;
-        if(!is_null($method) && strpos($method, 'import') === 0) return false;
+        if(!empty($method) && strpos($method, 'batch')  === 0) return false;
+        if(!empty($method) && strpos($method, 'link')   === 0) return false;
+        if(!empty($method) && strpos($method, 'create') === 0) return false;
+        if(!empty($method) && strpos($method, 'import') === 0) return false;
 
-        if(is_null($object)) return true;
+        if(empty($object)) return true;
 
-        if(!empty($object->openedBy)     && $object->openedBy     == $app->user->account or
+        if(!empty($object->openedBy)      && $object->openedBy     == $app->user->account or
             !empty($object->addedBy)      && $object->addedBy      == $app->user->account or
+            !empty($object->account)      && $object->account      == $app->user->account or
             !empty($object->assignedTo)   && $object->assignedTo   == $app->user->account or
             !empty($object->finishedBy)   && $object->finishedBy   == $app->user->account or
             !empty($object->canceledBy)   && $object->canceledBy   == $app->user->account or

@@ -850,12 +850,6 @@ class storyModel extends model
      */
     public function close($storyID)
     {
-        if(strpos($this->config->story->close->requiredFields, 'comment') !== false and !$this->post->comment)
-        {
-            dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
-            return false;
-        }
-
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
         $story = fixer::input('post')
@@ -869,13 +863,13 @@ class storyModel extends model
             ->setDefault('assignedDate',   $now)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
-            ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_STORY)->data($story)
+        $this->lang->story->comment = $this->lang->comment;
+        $this->dao->update(TABLE_STORY)->data($story, 'comment')
             ->autoCheck()
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
-            ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
         if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
@@ -2476,6 +2470,15 @@ class storyModel extends model
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';
             }
+            else if($id == 'reviewedBy')
+            {
+                $reviewedBy = '';
+                foreach(explode(',', $story->reviewedBy) as $user) $reviewedBy .= zget($users, $user) . ' ';
+                $story->reviewedBy = $reviewedBy;
+
+                $title  = $reviewedBy;
+                $class .= ' text-ellipsis';
+            }
 
             echo "<td class='" . $class . "' title='$title'>";
             if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('story', $story, $id);
@@ -2561,7 +2564,7 @@ class storyModel extends model
                 echo substr($story->assignedDate, 5, 11);
                 break;
             case 'reviewedBy':
-                foreach(explode(',', $story->reviewedBy) as $user) echo zget($users, $user) . ' ';
+                echo $story->reviewedBy;
                 break;
             case 'reviewedDate':
                 echo substr($story->reviewedDate, 5, 11);

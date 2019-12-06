@@ -253,7 +253,7 @@ class webhookModel extends model
      * @access public
      * @return bool 
      */
-    public function send($objectType, $objectID, $actionType, $actionID)
+    public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
         static $webhooks = array();
         if(!$webhooks) $webhooks = $this->getList();
@@ -272,7 +272,7 @@ class webhookModel extends model
                     if(empty($openIdList)) continue;
                 }
 
-                $this->saveData($id, $actionID, $postData);
+                $this->saveData($id, $actionID, $postData, $actor);
                 continue;
             }
             
@@ -517,7 +517,7 @@ class webhookModel extends model
 
         if($webhook->type == 'dingapi')
         {
-            $webhook->secret = json_decode($webhook->secret);
+            if(is_string($webhook->secret)) $webhook->secret = json_decode($webhook->secret);
 
             $openIdList = $this->getOpenIdList($webhook->id, $actionID);
             if(empty($openIdList)) return false;
@@ -571,14 +571,16 @@ class webhookModel extends model
      * @access public
      * @return bool
      */
-    public function saveData($webhookID, $actionID, $data)
+    public function saveData($webhookID, $actionID, $data, $actor = '')
     {
+        if(empty($actor)) $actor = $this->app->user->account;
+
         $webhookData = new stdclass();
         $webhookData->objectType  = 'webhook';
         $webhookData->objectID    = $webhookID;
         $webhookData->action      = $actionID;
         $webhookData->data        = $data;
-        $webhookData->createdBy   = $this->app->user->account;
+        $webhookData->createdBy   = $actor;
         $webhookData->createdDate = helper::now();
 
         $this->dao->insert(TABLE_NOTIFY)->data($webhookData)->exec();

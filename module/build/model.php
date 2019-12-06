@@ -236,10 +236,11 @@ class buildModel extends model
         $buildID  = (int)$buildID;
         $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+            ->setDefault('product', $oldBuild->product)
+            ->setDefault('branch', $oldBuild->branch)
             ->cleanInt('product,branch')
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
-        if(!isset($build->branch)) $build->branch = $oldBuild->branch;
 
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)

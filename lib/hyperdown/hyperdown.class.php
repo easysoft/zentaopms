@@ -19,9 +19,9 @@ class hyperdown
      * _specialWhiteList
      *
      * @var mixed
-     * @access private
+     * @access public
      */
-    private $_specialWhiteList = array(
+    public $_specialWhiteList = array(
         'table'  =>  'table|tbody|thead|tfoot|tr|td|th'
     );
 
@@ -37,21 +37,21 @@ class hyperdown
      *
      * @var array
      */
-    private $_blocks;
+    public $_blocks;
 
     /**
      * _current
      *
      * @var string
      */
-    private $_current;
+    public $_current;
 
     /**
      * _pos
      *
      * @var int
      */
-    private $_pos;
+    public $_pos;
 
     /**
      * _definitions
@@ -63,22 +63,22 @@ class hyperdown
     /**
      * @var array
      */
-    private $_hooks = array();
+    public $_hooks = array();
 
     /**
      * @var array
      */
-    private $_holders;
+    public $_holders;
 
     /**
      * @var string
      */
-    private $_uniqid;
+    public $_uniqid;
 
     /**
      * @var int
      */
-    private $_id;
+    public $_id;
 
     /**
      * makeHtml
@@ -127,7 +127,7 @@ class hyperdown
      * @param $text
      * @return mixed
      */
-    private function initText($text)
+    public function initText($text)
     {
         $text = str_replace(array("\t", "\r"),  array('    ', ''),  $text);
         return $text;
@@ -137,7 +137,7 @@ class hyperdown
      * @param $html
      * @return string
      */
-    private function makeFootnotes($html)
+    public function makeFootnotes($html)
     {
         if (count($this->_footnotes) > 0) {
             $html .= '<div class="footnotes"><hr><ol>';
@@ -167,7 +167,7 @@ class hyperdown
      * @param string $text
      * @return string
      */
-    private function parse($text)
+    public function parse($text)
     {
         $blocks = $this->parseBlock($text, $lines);
         $html = '';
@@ -192,7 +192,7 @@ class hyperdown
      * @param $value
      * @return mixed
      */
-    private function call($type, $value)
+    public function call($type, $value)
     {
         if (empty($this->_hooks[$type])) {
             return $value;
@@ -214,7 +214,7 @@ class hyperdown
      * @param $clearHolders
      * @return string
      */
-    private function releaseHolder($text, $clearHolders = true)
+    public function releaseHolder($text, $clearHolders = true)
     {
         $deep = 0;
         while (strpos($text, "\r") !== false && $deep < 10) {
@@ -487,7 +487,7 @@ class hyperdown
      * @param array $lines
      * @return array
      */
-    private function parseBlock($text, &$lines)
+    public function parseBlock($text, &$lines)
     {
         $lines = explode("\n", $text);
         $this->_blocks = array();
@@ -752,7 +752,7 @@ class hyperdown
      * @param array $lines
      * @return array
      */
-    private function optimizeBlocks(array $blocks, array $lines)
+    public function optimizeBlocks(array $blocks, array $lines)
     {
         $blocks = $this->call('beforeOptimizeBlocks', $blocks, $lines);
 
@@ -810,7 +810,7 @@ class hyperdown
      * @param array $parts
      * @return string
      */
-    private function parseCode(array $lines, array $parts)
+    public function parseCode(array $lines, array $parts)
     {
         list ($blank, $lang) = $parts;
         $lang = trim($lang);
@@ -844,7 +844,7 @@ class hyperdown
      * @param array $lines
      * @return string
      */
-    private function parsePre(array $lines)
+    public function parsePre(array $lines)
     {
         foreach ($lines as &$line) {
             $line = htmlspecialchars(substr($line, 4));
@@ -861,7 +861,7 @@ class hyperdown
      * @param int $num
      * @return string
      */
-    private function parseSh(array $lines, $num)
+    public function parseSh(array $lines, $num)
     {
         $line = $this->parseInline(trim($lines[0], '# '));
         return preg_match("/^\s*$/", $line) ? '' : "<h{$num}>{$line}</h{$num}>";
@@ -874,7 +874,7 @@ class hyperdown
      * @param int $num
      * @return string
      */
-    private function parseMh(array $lines, $num)
+    public function parseMh(array $lines, $num)
     {
         return $this->parseSh($lines, $num);
     }
@@ -885,7 +885,7 @@ class hyperdown
      * @param array $lines
      * @return string
      */
-    private function parseQuote(array $lines)
+    public function parseQuote(array $lines)
     {
         foreach ($lines as &$line) {
             $line = preg_replace("/^\s*> ?/", '', $line);
@@ -901,7 +901,7 @@ class hyperdown
      * @param array $lines
      * @return string
      */
-    private function parseList(array $lines)
+    public function parseList(array $lines)
     {
         $html = '';
         $minSpace = 99999;
@@ -972,7 +972,7 @@ class hyperdown
      * @param array $value
      * @return string
      */
-    private function parseTable(array $lines, array $value)
+    public function parseTable(array $lines, array $value)
     {
         list ($ignores, $aligns) = $value;
         $head = count($ignores) > 0 && array_sum($ignores) > 0;
@@ -1071,7 +1071,7 @@ class hyperdown
      *
      * @return string
      */
-    private function parseHr()
+    public function parseHr()
     {
         return '<hr>';
     }
@@ -1082,7 +1082,7 @@ class hyperdown
      * @param array $lines
      * @return string
      */
-    private function parseNormal(array $lines)
+    public function parseNormal(array $lines)
     {
         foreach ($lines as &$line) {
             $line = $this->parseInline($line);
@@ -1102,7 +1102,7 @@ class hyperdown
      * @param array $value
      * @return string
      */
-    private function parseFootnote(array $lines, array $value)
+    public function parseFootnote(array $lines, array $value)
     {
         list($space, $note) = $value;
         $index = array_search($note, $this->_footnotes);
@@ -1120,7 +1120,7 @@ class hyperdown
      *
      * @return string
      */
-    private function parseDefinition()
+    public function parseDefinition()
     {
         return '';
     }
@@ -1132,7 +1132,7 @@ class hyperdown
      * @param string $type
      * @return string
      */
-    private function parseHtml(array $lines, $type)
+    public function parseHtml(array $lines, $type)
     {
         foreach ($lines as &$line) {
             $line = $this->parseInline($line,
@@ -1177,7 +1177,7 @@ class hyperdown
      * @param mixed $value
      * @return $this
      */
-    private function startBlock($type, $start, $value = NULL)
+    public function startBlock($type, $start, $value = NULL)
     {
         $this->_pos ++;
         $this->_current = $type;
@@ -1192,7 +1192,7 @@ class hyperdown
      *
      * @return $this
      */
-    private function endBlock()
+    public function endBlock()
     {
         $this->_current = 'normal';
         return $this;
@@ -1205,7 +1205,7 @@ class hyperdown
      * @param mixed $value
      * @return bool
      */
-    private function isBlock($type, $value = NULL)
+    public function isBlock($type, $value = NULL)
     {
         return $this->_current == $type
             && (NULL === $value ? true : $this->_blocks[$this->_pos][3] == $value);
@@ -1216,7 +1216,7 @@ class hyperdown
      *
      * @return array
      */
-    private function getBlock()
+    public function getBlock()
     {
         return isset($this->_blocks[$this->_pos]) ? $this->_blocks[$this->_pos] : NULL;
     }
@@ -1228,7 +1228,7 @@ class hyperdown
      * @param mixed $value
      * @return $this
      */
-    private function setBlock($to = NULL, $value = NULL)
+    public function setBlock($to = NULL, $value = NULL)
     {
         if (NULL !== $to) {
             $this->_blocks[$this->_pos][2] = $to;
@@ -1249,7 +1249,7 @@ class hyperdown
      * @param mixed $value
      * @return $this
      */
-    private function backBlock($step, $type, $value = NULL)
+    public function backBlock($step, $type, $value = NULL)
     {
         if ($this->_pos < 0) {
             return $this->startBlock($type, 0, $value);
@@ -1273,7 +1273,7 @@ class hyperdown
     /**
      * @return $this
      */
-    private function combineBlock()
+    public function combineBlock()
     {
         if ($this->_pos < 1) {
             return $this;

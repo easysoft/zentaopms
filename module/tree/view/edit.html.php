@@ -27,7 +27,16 @@ if(isset($pageCSS)) css::internal($pageCSS);
         <?php if($showProduct):?>
         <tr>
           <th class='thWidth'><?php echo $lang->tree->product;?></th>
-          <td><?php echo html::select('root', $products, $module->root, "class='form-control chosen'");?></td>
+          <td>
+            <div class='input-group'>
+              <?php echo html::select('root', $products, $module->root, "class='form-control chosen' onchange='loadBranches(this)'");?>
+              <?php if($product->type != 'normal'):?>
+              <span class='input-group-addon fix-border fix-padding'></span>
+              <?php echo html::select('branch', $branches, $module->branch, "class='form-control chosen control-branch'");?>
+              </div>
+              <?php endif;?>
+            </div>
+          </td>
         </tr>
         <?php endif;?>
         <?php $hidden = ($type != 'story' and $module->type == 'story');?>
@@ -116,4 +125,28 @@ $(function()
         $('#parent').trigger('chosen:close');
     });
 })
+
+/**
+ * Load branches by product.
+ * 
+ * @param  object $obj 
+ * @access public
+ * @return void
+ */
+function loadBranches(obj)
+{
+    var productID   = $(obj).val();
+    var $inputGroup = $(obj).closest('.input-group');
+    $inputGroup.find('#branch').remove();
+    $inputGroup.find('#branch_chosen').remove();
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
+    {
+        if(data)
+        {
+            $inputGroup.append(data);
+            $inputGroup.find('#branch').removeAttr('onchange');
+            $inputGroup.find('#branch').chosen();
+        }
+    })
+}
 </script>
