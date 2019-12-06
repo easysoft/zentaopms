@@ -177,6 +177,7 @@ $lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应
 $lang->bug->confirmDelete         = '您确认要删除该Bug吗？';
 $lang->bug->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
 $lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭。';
+$lang->bug->projectAccessDenied   = "您无权访问该Bug所属的{$lang->projectCommon}！";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p><br/>";
