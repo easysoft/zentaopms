@@ -1680,7 +1680,8 @@ class bugModel extends model
         $maxLength = 12;
         foreach($datas as $projectID => $data)
         {
-            $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+            $data->name  = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+            $data->title = $data->name;
             if(mb_strlen($data->name) > $maxLength) $data->name = mb_substr($data->name, 0, $maxLength) . '...';
         }
         return $datas;

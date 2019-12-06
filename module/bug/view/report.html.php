@@ -68,7 +68,7 @@
               <?php foreach($datas[$chartType] as $key => $data):?>
               <tr>
                 <td class='chart-color'><i class='chart-color-dot'></i></td>
-                <td class='chart-label text-left'><?php echo $data->name;?></td>
+                <td class='chart-label text-left' title='<?php echo isset($data->title) ? $data->title : $data->name;?>'><?php echo $data->name;?></td>
                 <td class='chart-value text-right'><?php echo $data->value;?></td>
                 <td class='text-right'><?php echo ($data->percent * 100) . '%';?></td>
               </tr>
