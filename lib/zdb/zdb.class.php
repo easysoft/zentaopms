@@ -32,6 +32,28 @@ class zdb
     }
 
     /**
+     * Get all tables.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getAllTables()
+    {
+        global $config;
+
+        $allTables = array();
+        $stmt      = $this->dbh->query("show full tables");
+        while($table = $stmt->fetch(PDO::FETCH_ASSOC)) 
+        {
+            $tableName = $table["Tables_in_{$config->db->name}"];
+            $tableType = strtolower($table['Table_type']);
+            $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;
+        }
+
+        return $allTables;
+    }
+
+    /**
      * Dump db. 
      * 
      * @param  string $fileName 
@@ -41,21 +63,13 @@ class zdb
      */
     public function dump($fileName, $tables = array())
     {
-        global $config;
         /* Init the return. */
         $return = new stdclass();
         $return->result = true;
         $return->error  = '';
 
         /* Get all tables in database. */
-        $allTables = array();
-        $stmt      = $this->dbh->query("show full tables");
-        while($table = $stmt->fetch(PDO::FETCH_ASSOC)) 
-        {
-            $tableName = $table["Tables_in_{$config->db->name}"];
-            $tableType = strtolower($table['Table_type']);
-            $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;
-        }
+        $allTables = $this->getAllTables();
 
         /* Dump all tables when tables is empty. */
         if(empty($tables))

@@ -100,7 +100,27 @@ class backupModel extends model
      */
     public function restoreSQL($backupFile)
     {
-        $zdb = $this->app->loadClass('zdb');
+        $zdb    = $this->app->loadClass('zdb');
+        $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
+
+        $backupDir    = dirname($backupFile);
+        $fileName     = date('YmdHis') . mt_rand(0, 9); 
+        $backFileName = "{$backupDir}/{$fileName}.sql";
+        if(!$nosafe) $backFileName .= '.php';
+
+        $result = $this->backSQL($backFileName);
+        if($result->result and !$nosafe) $this->addFileHeader($backFileName);
+
+        $allTables = $zdb->getAllTables();
+        foreach($allTables as $tableName => $tableType)
+        {
+            try
+            {
+                $this->dbh->query("DROP $tableType IF EXISTS `$tableName`");
+            }
+            catch(PDOException $e){}
+        }
+
         return $zdb->import($backupFile);
     }
 
