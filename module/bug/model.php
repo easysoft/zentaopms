@@ -1668,7 +1668,13 @@ class bugModel extends model
         $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('project')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $projects = $this->loadModel('project')->getPairs();
-        foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+
+        $maxLength = 12;
+        foreach($datas as $projectID => $data)
+        {
+            $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+            if(mb_strlen($data->name) > $maxLength) $data->name = mb_substr($data->name, 0, $maxLength) . '...';
+        }
         return $datas;
     }
 
