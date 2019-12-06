@@ -1408,8 +1408,9 @@ class treeModel extends model
     {
         $module = fixer::input('post')->get();
         $self   = $this->getById($moduleID);
+        if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
-        $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $self->branch));
+        $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
         if($repeatName) die(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
 
         $parent = $this->getById($this->post->parent);
@@ -1718,6 +1719,7 @@ class treeModel extends model
             /* Ignore useless module for task. */
             $allModule = (isset($this->config->project->task->allModule) and ($this->config->project->task->allModule == 1));
             if($keepModules and !isset($keepModules[$module->id]) and !$allModule) continue;
+            if($viewType == 'task' and empty($keepModules) and !$allModule) continue;
             if(isset($parent[$module->id]))
             {
                 $module->children = $parent[$module->id]->children;

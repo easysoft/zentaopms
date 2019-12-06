@@ -105,12 +105,9 @@ class backup extends control
         }
         if(!$nosafe) $this->backup->addFileHeader($backFileName);
 
-        if((extension_loaded('zlib') or $nozip) and !$nofile)
+        if(!$nofile)
         {
-
             $backFileName = "{$this->backupPath}{$fileName}.file";
-            if(!$nozip)  $backFileName .= '.zip';
-            if(!$nozip and !$nosafe) $backFileName .= '.php';
 
             $result = $this->backup->backFile($backFileName);
             if(!$result->result)
@@ -125,11 +122,8 @@ class backup extends control
                     printf($this->lang->backup->error->backupFile, $result->error);
                 }
             }
-            if(!$nozip and !$nosafe) $this->backup->addFileHeader($backFileName);
 
             $backFileName = "{$this->backupPath}{$fileName}.code";
-            if(!$nozip)  $backFileName .= '.zip';
-            if(!$nozip and !$nosafe) $backFileName .= '.php';
 
             $result = $this->backup->backCode($backFileName);
             if(!$result->result)
@@ -144,7 +138,6 @@ class backup extends control
                     printf($this->lang->backup->error->backupCode, $result->error);
                 }
             }
-            if(!$nozip and !$nosafe) $this->backup->addFileHeader($backFileName);
         }
 
         /* Delete expired backup. */

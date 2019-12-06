@@ -78,6 +78,7 @@ $lang->testtask->stepResults    = 'Etape Résultat';
 $lang->testtask->lastRunner     = 'Joué par';
 $lang->testtask->lastRunDate    = 'Dernier Run';
 $lang->testtask->date           = 'Testé sur';;
+$lang->testtask->deleted        = "Deleted";
 
 $lang->testtask->beginAndEnd    = 'Durée';
 $lang->testtask->to             = 'à';

@@ -22,7 +22,9 @@
 .datatable .flexarea tbody>tr.checked>td:first-child:before,
 .datatable .fixed-right tbody>tr.checked>td:first-child:before {display: none}
 .datatable>.scroll-wrapper {z-index: 10;}
-.has-fixed-footer .scroll-wrapper {bottom: 95px; position: fixed;}
+.has-fixed-footer .scroll-wrapper {bottom: 89px; position: fixed;}
+.has-fixed-footer .scroll-wrapper .scroll-slide.scroll-pos-out{height:8px;bottom: -8px;}
+.has-fixed-footer .scroll-wrapper .scroll-slide.scroll-pos-out .bar{height:8px;}
 .datatable .flexarea thead>tr>th:first-child,
 .datatable .flexarea tbody>tr>td:first-child,
 .datatable .fixed-right thead>tr>th:first-child,

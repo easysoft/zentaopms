@@ -2470,6 +2470,15 @@ class storyModel extends model
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';
             }
+            else if($id == 'reviewedBy')
+            {
+                $reviewedBy = '';
+                foreach(explode(',', $story->reviewedBy) as $user) $reviewedBy .= zget($users, $user) . ' ';
+                $story->reviewedBy = $reviewedBy;
+
+                $title  = $reviewedBy;
+                $class .= ' text-ellipsis';
+            }
 
             echo "<td class='" . $class . "' title='$title'>";
             if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('story', $story, $id);
@@ -2555,7 +2564,7 @@ class storyModel extends model
                 echo substr($story->assignedDate, 5, 11);
                 break;
             case 'reviewedBy':
-                foreach(explode(',', $story->reviewedBy) as $user) echo zget($users, $user) . ' ';
+                echo $story->reviewedBy;
                 break;
             case 'reviewedDate':
                 echo substr($story->reviewedDate, 5, 11);

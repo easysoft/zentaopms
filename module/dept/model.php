@@ -432,27 +432,30 @@ class deptModel extends model
 
     /**
      * Get data structure
-     * @param  integer $rootDeptID
      * @access public
-     * @return object
+     * @return array
      */
-    public function getDataStructure($rootDeptID = 0) 
+    public function getDataStructure()
     {
-        $tree = array_values($this->getSons($rootDeptID));
-        $users = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all');
-        if(count($tree))
+        $users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted|all');
+        $treeGroups = $this->dao->select('*')->from(TABLE_DEPT)->orderBy('grade_desc,`order`')->fetchGroup('parent', 'id');
+        $tree       = array();
+        foreach($treeGroups as $parent => $groups)
         {
-            foreach ($tree as $node)
+            foreach($groups as $deptID => $node)
             {
-                $node->managerName = $users[$node->manager];
-                $children = $this->getDataStructure($node->id);
-                if(count($children))
+                $node->managerName = zget($users, $node->manager);
+                if(isset($tree[$deptID]))
                 {
-                    $node->children = $children;
+                    $node->children = $tree[$deptID];
                     $node->actions = array('delete' => false);
+                    unset($tree[$deptID]);
                 }
+                $tree[$node->parent][] = $node;
             }
         }
-        return $tree; 
+
+        krsort($tree);
+        return array_pop($tree);
     }
 }

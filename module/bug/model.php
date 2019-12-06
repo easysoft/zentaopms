@@ -464,6 +464,14 @@ class bugModel extends model
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
 
+        if($bug->project and !$this->loadModel('project')->checkPriv($bug->project))
+        {
+            echo(js::alert($this->lang->bug->projectAccessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
+            die(js::locate('back'));
+        }
+
         $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
         foreach($bug as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $bug->$key = '';
@@ -1668,7 +1676,14 @@ class bugModel extends model
         $datas = $this->dao->select('project as name, count(project) as value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('project')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
         $projects = $this->loadModel('project')->getPairs();
-        foreach($datas as $projectID => $data) $data->name = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+
+        $maxLength = 12;
+        foreach($datas as $projectID => $data)
+        {
+            $data->name  = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
+            $data->title = $data->name;
+            if(mb_strlen($data->name) > $maxLength) $data->name = mb_substr($data->name, 0, $maxLength) . '...';
+        }
         return $datas;
     }
 
@@ -2291,6 +2306,7 @@ class bugModel extends model
         if(strpos($bugQuery, '`closedDate`') !== false)   $bugQuery .= " AND `closedDate` != '0000-00-00 00:00:00'";
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
+            ->andWhere('project')->in($this->app->user->view->projects)
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;

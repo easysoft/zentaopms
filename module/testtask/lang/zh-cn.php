@@ -78,6 +78,7 @@ $lang->testtask->stepResults    = '步骤结果';
 $lang->testtask->lastRunner     = '最后执行人';
 $lang->testtask->lastRunDate    = '最后执行时间';
 $lang->testtask->date           = '测试时间';
+$lang->testtask->deleted        = "已删除";
 
 $lang->testtask->beginAndEnd    = '起止时间';
 $lang->testtask->to             = '至';

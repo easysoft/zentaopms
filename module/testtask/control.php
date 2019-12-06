@@ -348,7 +348,7 @@ class testtask extends control
         {
             $this->app->loadLang('testcase');
             $task    = $this->testtask->getById($taskID);
-            $bugInfo = $this->loadModel('testreport')->getBugInfo(array($taskID => $taskID), array($productID => $productID), $task->begin, $task->end, array($task->build => $task->build));
+            $bugInfo = $this->testtask->getBugInfo($taskID, $productID);
             foreach($this->post->charts as $chart)
             {
                 $chartFunc   = 'getDataOf' . $chart;

@@ -69,8 +69,13 @@ class docModel extends model
 
                 if($currentLib)
                 {
-                    $allLibGroups   = $this->getAllLibGroups($currentLib);
-                    $currentGroups  = $allLibGroups[$type];
+                    $allLibGroups  = $this->getAllLibGroups($libID);
+                    $currentGroups = $allLibGroups[$type];
+                    if(!isset($currentGroups[$currentLib]) and $type == 'project')
+                    {
+                        $project = $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('id')->eq($currentLib)->fetch();
+                        $currentGroups[$currentLib] = (array)$project;
+                    }
                     $currentLibName = is_array($currentGroups[$currentLib]) ? $currentGroups[$currentLib]['name'] : $currentGroups[$currentLib];
 
                     $selectHtml .= "<div class='btn-group angle-btn'>";
@@ -677,7 +682,7 @@ class docModel extends model
             ->join('users', ',')
             ->remove('comment,files,labels,uid')
             ->get();
-        if($doc->contentType == 'markdown') $doc->content = strip_tags($this->post->content, $this->config->allowedTags);
+        if($doc->contentType == 'markdown') $doc->content = $this->post->content;
         if($doc->acl == 'private') $doc->users = $oldDoc->addedBy;
 
         $oldDocContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($docID)->andWhere('version')->eq($oldDoc->version)->fetch();
