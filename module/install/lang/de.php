@@ -33,7 +33,7 @@ $lang->install->links = <<<EOT
 ZenTao ALM wurde entwickelt von <strong><a href='http://easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
 Offizielle Website : <a href='http://www.zentao.pm' target='_blank'>http://www.zentao.pm</a>
 Technischer Support : <a href='http://www.zentao.pm/forum/' target='_blank'>http://www.zentao.pm/forum/</a>
-LinkedIn Group: <a href='https://www.linkedin.com/groups/10330509/' target='_blank'>ZenTao Project Management Software</a>
+LinkedIn:e<a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a>
 Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
