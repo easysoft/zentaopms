@@ -1118,6 +1118,7 @@ class project extends control
             }
         }
 
+        $this->view->isSprint = false;
         if(strpos($this->config->custom->productProject, '_2')) 
         {
             $this->view->isSprint = true;
@@ -1219,6 +1220,7 @@ class project extends control
             $productPlans[$product->id] = $this->productplan->getPairs($product->id);
         }
 
+        $this->view->isSprint = false;
         if(strpos($this->config->custom->productProject, '_2')) 
         {
             $this->view->isSprint = true;

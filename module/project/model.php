@@ -1779,13 +1779,20 @@ class projectModel extends model
 
             $this->dao->insert(TABLE_TEAM)->data($member)->exec();
         }
-        $this->loadModel('user')->updateUserView($projectID, 'project', $accounts);
+
+        /* Only changed account update userview. */
+        $oldAccounts     = array_keys($oldJoin);
+        $changedAccounts = array_diff($accounts, $oldAccounts);
+        $changedAccounts = array_merge($changedAccounts, array_diff($oldAccounts, $accounts));
+        $changedAccounts = array_unique($changedAccounts);
+
+        $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
 
         $products = $this->getProducts($projectID, false);
         foreach($products as $productID => $productName)
         {
             if(empty($productID)) continue;
-            $this->user->updateUserView($productID, 'product', $accounts);
+            $this->user->updateUserView($productID, 'product', $changedAccounts);
         }
     }
 

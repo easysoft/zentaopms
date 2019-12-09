@@ -25,8 +25,8 @@
           <div class="panel-body">
             <div class="release-path">
               <ul class="release-line">
-                <?php foreach($roadmaps as $year => $branches):?>
-                <?php foreach($branches as $plans):?>
+                <?php foreach($roadmaps as $year => $mapBranches):?>
+                <?php foreach($mapBranches as $plans):?>
                 <?php foreach($plans as $plan):?>
                 <?php if(isset($plan->begin)):?>
                 <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
