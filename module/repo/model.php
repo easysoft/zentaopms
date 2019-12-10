@@ -129,24 +129,6 @@ class repoModel extends model
     }
 
     /**
-     * Get all repos.
-     * 
-     * @access public
-     * @return array
-     */
-    public function getAllRepos()
-    {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll();
-        foreach($repos as $i => $repo)
-        {
-            $repo->acl = json_decode($repo->acl);
-            if(!$this->checkPriv($repo)) unset($repos[$i]);
-        }
-
-        return $repos;
-    }
-
-    /**
      * Get repo pairs.
      * 
      * @access public
@@ -289,102 +271,6 @@ class repoModel extends model
         }
 
         return $lastComment;
-    }
-
-    /**
-     * Get revisions from db. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $limit 
-     * @param  string $maxRevision 
-     * @param  string $minRevision 
-     * @access public
-     * @return array
-     */
-    public function getRevisionsFromDB($repoID, $limit = '', $maxRevision = '', $minRevision = '')
-    {
-        $revisions = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->beginIF(!empty($maxRevision))->andWhere('t1.revision')->le($maxRevision)->fi()
-            ->beginIF(!empty($minRevision))->andWhere('t1.revision')->ge($minRevision)->fi()
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->orderBy('t1.revision desc')
-            ->beginIF(!empty($limit))->limit($limit)->fi()
-            ->fetchAll('revision');
-        $commiters = $this->loadModel('user')->getCommiters();
-        foreach($revisions as $revision)
-        {
-            $revision->comment   = $this->replaceCommentLink($revision->comment);
-            $revision->committer = isset($commiters[$revision->committer]) ? $commiters[$revision->committer] : $revision->committer;
-        }
-        return $revisions;
-    }
-
-    /**
-     * Get history.
-     * 
-     * @param  int    $repoID 
-     * @param  array  $revisions 
-     * @access public
-     * @return array
-     */
-    public function getHistory($repoID, $revisions)
-    {
-        return $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.revision')->in($revisions)
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->fetchAll('revision');
-    }
-
-    /**
-     * Get review.
-     * 
-     * @param  int    $repoID 
-     * @param  string $entry 
-     * @param  string $revision 
-     * @access public
-     * @return array
-     */
-    public function getReview($repoID, $entry, $revision)
-    {
-        $reviews = array();
-        $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.openedBy = t2.account')
-            ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.entry')->eq($entry)
-            ->andWhere('t1.v2')->eq($revision)
-            ->andWhere('t1.deleted')->eq(0)
-            ->fetchAll('id');
-        $comments = $this->dao->select('t1.*, t2.realname')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.actor = t2.account')
-            ->where('t1.objectType')->eq('bug')
-            ->andWhere('t1.objectID')->in(array_keys($bugs))
-            ->andWhere('t1.action')->eq('commented')
-            ->fetchGroup('objectID', 'id');
-        foreach($bugs as $bug)
-        {
-            if(common::hasPriv('bug', 'edit'))   $bug->edit   = true;
-            if(common::hasPriv('bug', 'delete')) $bug->delete = true;
-            $lines = explode(',', trim($bug->lines, ','));
-            $line  = $lines[0];
-            $reviews[$line]['bugs'][$bug->id] = $bug;
-
-            if(isset($comments[$bug->id]))
-            {
-                foreach($comments[$bug->id] as $key => $comment)
-                {
-                    if($comment->actor == $this->app->user->account) $comment->edit = true; 
-                }
-                $reviews[$line]['comments'] = $comments;
-            }
-        }
-
-        return $reviews;
     }
 
     /**
@@ -586,32 +472,6 @@ class repoModel extends model
             $this->updateCommitCount($repoID, $commitCount);
         }
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
-    }
-
-    /**
-     * Update comment.
-     * 
-     * @param  int    $commentID 
-     * @param  string $comment 
-     * @access public
-     * @return string
-     */
-    public function updateComment($commentID, $comment)
-    {
-        $this->dao->update(TABLE_ACTION)->set('comment')->eq($comment)->where('id')->eq($commentID)->exec();
-        return $comment;
-    }
-
-    /**
-     * Delete comment.
-     * 
-     * @param  int    $commentID 
-     * @access public
-     * @return void
-     */
-    public function deleteComment($commentID)
-    {
-        return $this->dao->delete()->from(TABLE_ACTION)->where('id')->eq($commentID)->exec();
     }
 
     /**
