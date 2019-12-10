@@ -108,6 +108,10 @@ $lang->dev->tableList['userview']         = '可访问权限';
 $lang->dev->tableList['im_chatuser']      = '客户端用户';
 $lang->dev->tableList['im_message']       = '客户端消息';
 $lang->dev->tableList['im_messagestatus'] = '客户端状态';
+$lang->dev->tableList['repo']             = '代码';
+$lang->dev->tableList['repohistory']      = '版本历史';
+$lang->dev->tableList['repofiles']        = '代码文件';
+$lang->dev->tableList['repobranch']       = '代码分支';
 
 $lang->dev->groupList['my']      = '我的地盘';
 $lang->dev->groupList['product'] = $lang->productCommon;
@@ -119,6 +123,7 @@ $lang->dev->groupList['company'] = '组织';
 $lang->dev->groupList['repo']    = '代码';
 $lang->dev->groupList['api']     = 'API';
 $lang->dev->groupList['message'] = '消息';
+$lang->dev->groupList['repo']    = '代码';
 
 $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';

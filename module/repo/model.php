@@ -129,6 +129,24 @@ class repoModel extends model
     }
 
     /**
+     * Get all repos.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getAllRepos()
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll();
+        foreach($repos as $i => $repo)
+        {
+            $repo->acl = json_decode($repo->acl);
+            if(!$this->checkPriv($repo)) unset($repos[$i]);
+        }
+
+        return $repos;
+    }
+
+    /**
      * Get repo pairs.
      * 
      * @access public

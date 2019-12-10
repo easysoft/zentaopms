@@ -77,7 +77,7 @@ $lang->testsuite->menuOrder  = $lang->testcase->menuOrder;
 $lang->caselib->menuOrder    = $lang->testcase->menuOrder;
 $lang->testreport->menuOrder = $lang->testcase->menuOrder;
 
-$lang->repo->menuOrder[5]  = 'log';
+$lang->repo->menuOrder[5]  = 'browse';
 $lang->repo->menuOrder[15] = 'settings';
 $lang->repo->menuOrder[20] = 'delete';
 

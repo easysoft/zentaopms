@@ -33,12 +33,27 @@ class svn extends control
     public function diff($url, $revision)
     {
         if(isset($_GET['repoUrl'])) $url = $this->get->repoUrl;
+
         $url = helper::safe64Decode($url);
+        if(common::hasPriv('repo', 'diff'))
+        {
+            $repos = $this->loadModel('repo')->getAllRepos();
+            foreach($repos as $repo)
+            {
+                if($repo->SCM != 'Subversion') continue;
+                if(strpos(strtolower($url), strtolower($repo->path)) === 0) 
+                {
+                    $entry = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
+                    $oldRevision = $revision - 1;
+                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=&oldRevision=$oldRevision&revision=$revision", "entry=$entry", 'html', true));
+                }
+            }
+        }
 
         $this->view->url      = $url;
         $this->view->revision = $revision;
         $this->view->diff     = $this->svn->diff($url, $revision);
-        
+
         $this->display();
     }
 
@@ -53,13 +68,27 @@ class svn extends control
     public function cat($url, $revision)
     {
         if(isset($_GET['repoUrl'])) $url = $this->get->repoUrl;
+
         $url = helper::safe64Decode($url);
+        if(common::hasPriv('repo', 'view'))
+        {
+            $repos = $this->loadModel('repo')->getAllRepos();
+            foreach($repos as $repo)
+            {
+                if($repo->SCM != 'Subversion') continue;
+                if(strpos(strtolower($url), strtolower($repo->path)) === 0)
+                {
+                    $entry = $this->repo->encodePath(str_ireplace(strtolower($repo->path), '', $url));
+                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=&revision=$revision", "entry=$entry", 'html', true));
+                }
+            }
+        }
 
         $this->view->url      = $url;
         $this->view->revision = $revision;
         $this->view->code     = $this->svn->cat($url, $revision);
-        
-       $this->display(); 
+
+        $this->display(); 
     }
 
     /**

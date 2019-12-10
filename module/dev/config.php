@@ -74,6 +74,11 @@ $config->dev->group['message']        = 'message';
 $config->dev->group['mail']           = 'message';
 $config->dev->group['webhook']        = 'message';
 $config->dev->group['notify']         = 'message';
+$config->dev->group['repo']           = 'repo';
+$config->dev->group['repofiles']      = 'repo';
+$config->dev->group['repohistory']    = 'repo';
+$config->dev->group['repobranch']     = 'repo';
+
 
 $config->dev->tableMap['storyspec']      = 'story';
 $config->dev->tableMap['storystage']     = 'story';
@@ -98,6 +103,9 @@ $config->dev->tableMap['lang']           = 'custom';
 $config->dev->tableMap['config']         = 'custom';
 $config->dev->tableMap['module']         = 'tree';
 $config->dev->tableMap['suitecase']      = 'testcase';
+$config->dev->tableMap['repofiles']      = 'repo';
+$config->dev->tableMap['repohistory']    = 'repo';
+$config->dev->tableMap['repobranch']     = 'repo';
 
 $config->dev->postParams['story']['create']['product']     = 'int';
 $config->dev->postParams['story']['create']['title']       = 'string';

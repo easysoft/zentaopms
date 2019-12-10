@@ -33,7 +33,22 @@ class git extends control
     public function diff($path, $revision)
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
+
         $path = helper::safe64Decode($path);
+        if(common::hasPriv('repo', 'diff'))
+        {
+            $repos   = $this->loadModel('repo')->getAllRepos();
+            foreach($repos as $repo)
+            {
+                if($repo->SCM != 'Git') continue;
+                if(strpos($path, $repo->path) === 0)
+                {
+                    $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
+                    $oldRevision = "$revision^";
+                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&entry=&oldRevision=$oldRevision&revision=$revision", "entry=$entry", 'html', 'true'));
+                }
+            }
+        }
 
         $this->view->path     = $path;
         $this->view->revision = $revision;
@@ -53,7 +68,21 @@ class git extends control
     public function cat($path, $revision)
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
+
         $path = helper::safe64Decode($path);
+        if(common::hasPriv('repo', 'view'))
+        {
+            $repos = $this->loadModel('repo')->getAllRepos();
+            foreach($repos as $repo)
+            {
+                if($repo->SCM != 'Git') continue;
+                if(strpos($path, $repo->path) === 0)
+                {
+                    $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
+                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&entry=&revision=$revision", "entry=$entry", 'html', true));
+                }
+            }
+        }
 
         $this->view->path     = $path;
         $this->view->revision = $revision;

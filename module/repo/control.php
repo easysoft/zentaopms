@@ -209,7 +209,7 @@ class repo extends control
     public function browse($repoID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         if($this->get->path) $path = $this->get->path;
-        $this->locate($this->repo->createLink('log', "repoID=$repoID&entry=&revision=$revision", "entry=$path"));
+        $this->locate($this->repo->createLink('log', "repoID=$repoID&entry=&revision=$revision", empty($path) ? '' : "entry=$path"));
     }
 
     /**
