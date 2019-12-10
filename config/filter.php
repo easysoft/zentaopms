@@ -45,6 +45,7 @@ $filter->mail       = new stdclass();
 $filter->user       = new stdclass();
 $filter->block      = new stdclass();
 $filter->file       = new stdclass();
+$filter->repo       = new stdclass();
 
 $filter->block->default          = new stdclass();
 $filter->block->main             = new stdclass();
@@ -212,3 +213,16 @@ $filter->git->cat->get['repoUrl']  = 'reg::base64';
 $filter->git->diff->get['repoUrl'] = 'reg::base64';
 $filter->svn->cat->get['repoUrl']  = 'reg::base64';
 $filter->svn->diff->get['repoUrl'] = 'reg::base64';
+
+$filter->repo->default = new stdclass();
+$filter->repo->diff    = new stdclass();
+$filter->repo->view    = new stdclass();
+
+$filter->repo->default->get['path']  = 'reg::base64';
+$filter->repo->default->get['entry'] = 'reg::base64';
+
+$filter->repo->default->cookie['repoBranch'] = 'reg::any';
+$filter->repo->diff->cookie['arrange']       = 'reg::word';
+$filter->repo->diff->cookie['repoPairs']     = 'array';
+$filter->repo->view->cookie['repoPairs']     = 'array';
+$filter->repo->ajaxsynccomment->cookie['syncBranch'] = 'reg::any';

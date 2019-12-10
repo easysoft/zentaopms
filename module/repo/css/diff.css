@@ -1,0 +1,22 @@
+body{padding-bottom:0px;}
+.w-code{ width:48%; word-break: break-all;}
+td.code { color:#484848; padding:0px 3px; white-space: pre-wrap}
+.none  {background:#EAF2F5;}
+table.diff {margin-bottom:0px;}
+.diff caption{ border: 1px solid #e4e4e4; background: #edf3fe; margin: 0; padding: 6px 2px 6px 10px; text-align: left; font-weight: bold; font-size: 13px;}
+.diff th, .diff td{ border:none;}
+.diff th{ padding-top:2px; padding-bottom:2px;}
+.diff .line-new, .diff .line-new { background:#CFC;}
+.diff .line-old, .diff .line-old { background:#FCC;}
+.diff .line-all, .diff .line-all { background:#FFF;}
+.diff .w-num { width:25px; border-right:1px solid #E4E4E4; color:#999; border-left:1px solid #E4E4E4; color:#999; font-weight:normal;}
+
+.repoCode .diff tr .comment-btn .icon-wrapper {left: -23px;}
+.repoCode .diff tr.over td.line-all, .repoCode .diff tr.over td.line-all {background: #f8eec7}
+.repoCode .diff tr.over td.line-new, .repoCode .diff tr.over td.line-new {background: #8eff8e}
+.repoCode .diff tr.over td.line-old, .repoCode .diff tr.over td.line-old {background: #f6b2b2}
+
+.repoCode form > .btn {margin-right: 10px;}
+.label-exchange {background-color: #566F7C;cursor: pointer}
+.label-exchange i{padding:0;}
+.btn-download{border-right: none;}

@@ -2273,7 +2273,7 @@ class baseRouter
          * 为了安全起见，对公网环境隐藏脚本路径。
          * If the ip is pulic, hidden the full path of scripts.
          */
-        $remoteIP = helper::getRemoteIp();
+        $remoteIP = zget($_SERVER, "REMOTE_ADDR", '');
         if(!defined('IN_SHELL') and !($remoteIP == '127.0.0.1' or filter_var($remoteIP, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
         {
             $errorLog  = str_replace($this->getBasePath(), '', $errorLog);

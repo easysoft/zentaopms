@@ -4,10 +4,11 @@ $lang->menuOrder[5]  = 'my';
 $lang->menuOrder[10] = 'product';
 $lang->menuOrder[15] = 'project';
 $lang->menuOrder[20] = 'qa';
-$lang->menuOrder[25] = 'doc';
-$lang->menuOrder[30] = 'report';
-$lang->menuOrder[35] = 'company';
-$lang->menuOrder[40] = 'admin';
+$lang->menuOrder[25] = 'repo';
+$lang->menuOrder[30] = 'doc';
+$lang->menuOrder[35] = 'report';
+$lang->menuOrder[40] = 'company';
+$lang->menuOrder[45] = 'admin';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';
@@ -75,6 +76,10 @@ $lang->testtask->menuOrder   = $lang->testcase->menuOrder;
 $lang->testsuite->menuOrder  = $lang->testcase->menuOrder;
 $lang->caselib->menuOrder    = $lang->testcase->menuOrder;
 $lang->testreport->menuOrder = $lang->testcase->menuOrder;
+
+$lang->repo->menuOrder[5]  = 'log';
+$lang->repo->menuOrder[15] = 'settings';
+$lang->repo->menuOrder[20] = 'delete';
 
 /* doc menu order. */
 $lang->doc->menuOrder[5]  = 'list';

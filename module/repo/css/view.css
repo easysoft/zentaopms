@@ -1,0 +1,14 @@
+.code {position:relative; padding:3px; border-radius:3px;}
+.code .content {border:1px solid #CCC; padding:0;}
+.repoCode pre {margin:0;padding:0;background:white; border:none;}
+tr,th,td {border-bottom:none;}
+.repoCode pre > table > tbody > tr > th {border: none; background-color:#ECECEC; width: 40px; text-align:right; vertical-align: top;}
+.repoCode pre > table > tbody > tr > th, .repoCode pre > table > tbody > tr > td {padding:1px 3px;}
+.repoCode pre .commentContent{line-height:1.4;}
+.repoCode pre > table{border:0px; width:100%;}
+.repoCode .binary {text-align:center;}
+.repoCode .binary a {display:block; margin:100px 0px;}
+.repoCode .binary a .icon-download {font-size:50px;}
+.repoCode .image {text-align:center; padding-top:10px;}
+.panel .panel-heading .action .input-group {margin-top:-6px; margin-right:-10px;}
+.body-modal .panel-actions {right:30px;}
