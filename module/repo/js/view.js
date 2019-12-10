@@ -1,6 +1,8 @@
 $(document).ready(function()
 {
     var $pre = $('.repoCode .content pre');
+    var rowTip = '';
+    if($('#rowTip').length > 0) rowTip = $('#rowTip').html();
 
     if($pre.length)
     {
@@ -11,7 +13,7 @@ $(document).ready(function()
         for(var i = 0 ; i < arr.length ; i++)
         {
             line = i + 1;
-            code += "<tr data-line='" + line +"'><th id='L" + line + "'><div class='comment-btn view'><span class='icon-wrapper'><i class='icon-plus'></i></span></div>" + line + "</th><td>" + (arr[i] || '&nbsp;') + "</td></tr>";
+            code += "<tr data-line='" + line +"'><th id='L" + line + "'><div class='comment-btn view'><span class='icon-wrapper'><i class='icon-plus'></i></span></div>" + line + "</th><td>" + (arr[i] || '&nbsp;') + rowTip +  "</td></tr>";
         }
         $pre.html("<table><tbody>" + code + "</tbody></table>");
     }
