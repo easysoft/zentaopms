@@ -170,7 +170,7 @@ function initSteps(selector)
     var updateStepType = function($step, type)
     {
         var targetIsGroup = type =='group';
-        $step.attr('data-type', type).find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null);
+        $step.attr('data-type', type).find('.step-steps').addClass('autosize').attr('placeholder', targetIsGroup ? groupNameText : null);
     };
     var getStepsElements = function()
     {
