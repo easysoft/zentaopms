@@ -132,11 +132,11 @@ class ciModel extends model
         $jenkins = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-//            ->remove('')
             ->get();
 
         $this->dao->insert(TABLE_JENKINS)->data($jenkins)
             ->batchCheck($this->config->jenkins->create->requiredFields, 'notempty')
+            ->batchCheck("serviceUrl", 'URL')
             ->autoCheck()
             ->exec();
         return !dao::isError();
@@ -158,6 +158,7 @@ class ciModel extends model
 
         $this->dao->update(TABLE_JENKINS)->data($jenkins)
             ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')
+            ->batchCheck("serviceUrl", 'URL')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();

@@ -26,6 +26,7 @@
                     <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->jenkins->id); ?></th>
                     <th class='w-120px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->jenkins->type); ?></th>
                     <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->jenkins->name); ?></th>
+                    <th class='w-200px text-left'><?php common::printOrderLink('serviceUrl', $orderBy, $vars, $lang->jenkins->serviceUrl); ?></th>
                     <th class='c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
                 </thead>
@@ -35,6 +36,8 @@
                         <td class='text-center'><?php echo $id; ?></td>
                         <td class='text'><?php echo zget($lang->jenkins->typeList, $jenkins->type); ?></td>
                         <td class='text' title='<?php echo $jenkins->name; ?>'><?php echo $jenkins->name; ?></td>
+                        <td class='text' title='<?php echo $jenkins->serviceUrl; ?>'><?php echo $jenkins->serviceUrl; ?></td>
+
                         <td class='c-actions text-right'>
                             <?php
                             common::printIcon('ci', 'editJenkins', "jenkinsID=$id", '', 'list',  'edit');

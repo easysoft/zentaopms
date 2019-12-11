@@ -37,6 +37,7 @@ $lang->jenkins->confirmDelete           = '确认删除该Jenkins吗？';
 
 $lang->jenkins->id                      = 'ID';
 $lang->jenkins->name                    = '名称';
+$lang->jenkins->serviceUrl              = '服务地址';
 $lang->jenkins->type                    = '类型';
 $lang->jenkins->username                = '用户名';
 $lang->jenkins->password                = '密码';
