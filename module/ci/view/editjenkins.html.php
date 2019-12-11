@@ -41,7 +41,6 @@
                         <td class='required'><?php echo html::input('serviceUrl', $jenkins->serviceUrl, "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
-
                     <tr>
                         <th><?php echo $lang->jenkins->username; ?></th>
                         <td><?php echo html::input('username', $jenkins->username, "rows='3' class='form-control'"); ?></td>
