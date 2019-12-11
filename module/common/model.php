@@ -404,8 +404,8 @@ class commonModel extends model
     public static function printAdminSubMenu($subMenu)
     {
         global $app, $lang;
-        $moduleName  = $app->getModuleName();
-        $methodName  = $app->getMethodName();
+        $currentModule = $app->getModuleName();
+        $currentMethod = $app->getMethodName();
         if(isset($lang->admin->subMenuOrder->$subMenu))
         {
             ksort($lang->admin->subMenuOrder->$subMenu);
@@ -424,13 +424,13 @@ class commonModel extends model
                         if(isset($subMenuType['link']))      $link      = $subMenuType['link'];
                     }
 
-                    list($text, $currentModule, $currentMethod)= explode('|', $link);
-                    if(!common::hasPriv($currentModule, $currentMethod)) continue;
+                    list($text, $moduleName, $methodName)= explode('|', $link);
+                    if(!common::hasPriv($moduleName, $methodName)) continue;
 
-                    $active = ($moduleName == $currentModule and $methodName == $currentMethod) ? 'btn-active-text' : '';
-                    if($subModule and strpos(",{$subModule}," , ",{$moduleName},") !== false) $active = 'btn-active-text';
-                    if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'btn-active-text';
-                    echo html::a(helper::createLink($currentModule, $currentMethod), "<span class='text'>$text</span>", '', "class='btn btn-link {$active}' id='{$type}Tab'");
+                    $active = ($currentModule == $moduleName and $currentMethod == $methodName) ? 'btn-active-text' : '';
+                    if($subModule and strpos(",{$subModule}," , ",{$currentModule},") !== false) $active = 'btn-active-text';
+                    if($alias and $currentModule == $moduleName and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'btn-active-text';
+                    echo html::a(helper::createLink($moduleName, $methodName), "<span class='text'>$text</span>", '', "class='btn btn-link {$active}' id='{$type}Tab'");
                 }
             }
         }
