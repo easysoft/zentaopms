@@ -117,7 +117,7 @@ js::set('sysurl', common::getSysUrl());
               <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
             </a>
             <span class='right-icon'>
-              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>" . ' ' . $lang->doc->deleteFile, '', "class='btn-icon' onclick='deleteFile($file->id)'");?>
+              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
             </span>
           </div>
           <?php unset($doc->files[$file->id]);?>
