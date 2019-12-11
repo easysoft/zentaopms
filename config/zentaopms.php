@@ -163,12 +163,14 @@ define('TABLE_TESTSUITE',     '`' . $config->db->prefix . 'testsuite`');
 define('TABLE_SUITECASE',     '`' . $config->db->prefix . 'suitecase`');
 define('TABLE_TESTREPORT',    '`' . $config->db->prefix . 'testreport`');
 
-define('TABLE_ENTRY',   '`' . $config->db->prefix . 'entry`');
-define('TABLE_WEBHOOK', '`' . $config->db->prefix . 'webhook`');
-define('TABLE_LOG',     '`' . $config->db->prefix . 'log`');
-define('TABLE_SCORE',   '`' . $config->db->prefix . 'score`');
-define('TABLE_NOTIFY',  '`' . $config->db->prefix . 'notify`');
-define('TABLE_OAUTH',   '`' . $config->db->prefix . 'oauth`');
+define('TABLE_ENTRY',         '`' . $config->db->prefix . 'entry`');
+define('TABLE_WEBHOOK',       '`' . $config->db->prefix . 'webhook`');
+define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
+define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
+define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
+define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
+define('TABLE_CREDENTIAL',    '`' . $config->db->prefix . 'credential`');
+define('TABLE_JENKINS',       '`' . $config->db->prefix . 'jenkins`');
 
 define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');
 define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');

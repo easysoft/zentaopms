@@ -28,9 +28,9 @@ $itemRow = <<<EOT
   </tr>
 EOT;
 ?>
-<?php js::set('itemRow', $itemRow)?>
+
 <?php js::set('module',  $module)?>
-<?php js::set('field',   $field)?>
+
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
     <div class='cell'>

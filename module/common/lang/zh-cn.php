@@ -381,7 +381,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => '集成|admin|sso');
+$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => 'ci');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 $lang->admin->menu->translate = array('link' => '翻译|dev|translate');
@@ -398,6 +398,12 @@ $lang->admin->subMenu->message->setting = array('link' => '设置|message|settin
 
 $lang->admin->subMenu->sso = new stdclass();
 $lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
+$lang->admin->subMenu->sso->ci     = array('link' => '持续集成|ci|index',
+                                          'alias' => 'browsecredential,createcredential,editcredential,browsejenkins,createjenkins,editjenkins');
+
+$lang->admin->ci = new stdClass();
+$lang->admin->ci->fields['credential']  = '凭证';
+$lang->admin->ci->fields['jenkins']  = 'Jenkins';
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
@@ -426,6 +432,7 @@ $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
+$lang->ci = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -439,6 +446,7 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
+$lang->ci->menu   = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -474,6 +482,7 @@ $lang->menugroup->dev         = 'admin';
 $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
+$lang->menugroup->ci          = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
