@@ -19,7 +19,16 @@ if(isset($pageCSS)) css::internal($pageCSS);
 <div class='modal-dialog w-500px'>
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal"><i class="icon icon-close"></i></button>
-    <h4 class="modal-title"><strong><?php echo $type == 'doc' ? $lang->doc->editType : $lang->tree->edit;?></strong></h4>
+    <h4 class="modal-title">
+      <strong>
+        <?php
+        $lblEditTree = $lang->tree->edit;
+        if($type == 'doc') $lblEditTree = $lang->doc->editType;
+        if($type == 'line') $lblEditTree = $lang->tree->manageLine;
+        echo $lblEditTree;
+        ?>
+      </strong>
+    </h4>
   </div>
   <div class='modal-body'>
     <form action="<?php echo inlink('edit', 'module=' . $module->id .'&type=' .$type);?>" target='hiddenwin' method='post' class='mt-10px' id='dataform'>
@@ -53,7 +62,14 @@ if(isset($pageCSS)) css::internal($pageCSS);
         </tr>
         <?php endif;?>
         <tr <?php if($hidden) echo "style='display:none'";?>>
-          <th class='thWidth'><?php echo ($type == 'doc' || $type == 'feedback') ? $lang->tree->cate : $lang->tree->name;?></th>
+          <th class='thWidth'>
+            <?php
+            $lblTreeName = $lang->tree->name;
+            if($type == 'doc' || $type == 'feedback') $lblTreeName = $lang->tree->cate;
+            if($type == 'line') $lblTreeName = $lang->tree->line;
+            echo $lblTreeName;
+            ?>
+          </th>
           <td><?php echo html::input('name', $module->name, "class='form-control'");?></td>
         </tr>
         <?php if($type == 'bug'):?>
