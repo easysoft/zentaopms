@@ -328,7 +328,7 @@ $lang->caselib->menu->testcase  = array('link' => 'CasTest|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => 'Recette|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => 'Cahier Recette|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Rapport|testreport|browse|');
-$lang->caselib->menu->caselib   = array('link' => 'Library Recette|caselib|browse', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib   = array('link' => 'Library Recette|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
 /* Doc menu settings. */
 $lang->doc = new stdclass();

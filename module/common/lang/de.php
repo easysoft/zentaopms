@@ -328,7 +328,7 @@ $lang->caselib->menu->testcase  = array('link' => 'Fälle|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => 'Build|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Berichte|testreport|browse|');
-$lang->caselib->menu->caselib   = array('link' => 'Bibliothek|caselib|browse', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib   = array('link' => 'Bibliothek|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
