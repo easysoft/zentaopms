@@ -1788,6 +1788,7 @@ class project extends control
         {
             $this->project->delete(TABLE_PROJECT, $projectID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('project')->eq($projectID)->exec();
+            $this->project->updateUserView($projectID);
             $this->session->set('project', '');
             $this->executeHooks($projectID);
             die(js::locate(inlink('index'), 'parent'));

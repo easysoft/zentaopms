@@ -2953,4 +2953,21 @@ class projectModel extends model
         }
         return $html;
     }
+
+    /**
+     * Update user view of project and it's product.
+     * 
+     * @param  int    $project 
+     * @access public
+     * @return void
+     */
+    public function updateUserView($project)
+    {
+        $this->loadModel('user')->updateUserView($projectID, 'project');
+        $products = $this->getProducts($project, $withBranch = false);
+        if(!empty($products))
+        {
+            foreach($products as $productID => $productName) $this->loadModel('user')->updateUserView($productID, 'product');
+        }
+    }
 }
