@@ -2957,14 +2957,14 @@ class projectModel extends model
     /**
      * Update user view of project and it's product.
      * 
-     * @param  int    $project 
+     * @param  int    $projectID 
      * @access public
      * @return void
      */
-    public function updateUserView($project)
+    public function updateUserView($projectID)
     {
         $this->loadModel('user')->updateUserView($projectID, 'project');
-        $products = $this->getProducts($project, $withBranch = false);
+        $products = $this->getProducts($projectID, $withBranch = false);
         if(!empty($products))
         {
             foreach($products as $productID => $productName) $this->loadModel('user')->updateUserView($productID, 'product');

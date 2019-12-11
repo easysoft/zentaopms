@@ -1404,7 +1404,11 @@ class userModel extends model
         }
 
         $teams = array();
-        $stmt  = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('project')
+        $stmt  = $this->dao->select('root,account')->from(TABLE_TEAM)->alias('team')
+            ->leftJoin(TABLE_PROJECT)->alias('project')
+            ->on('team.root=project.id')
+            ->where('team.type')->eq('project')
+            ->andWhere('project.deleted')->eq(0)
             ->beginIF($objectType == 'product')->andWhere('root')->in($linkedProjects)->fi()
             ->beginIF($objectType == 'project')->andWhere('root')->eq($objectID)->fi()
             ->query();
@@ -1439,6 +1443,7 @@ class userModel extends model
         {
             $this->dao->update(TABLE_USERVIEW)->data($data)->where('account')->eq($account)->exec();
         }
+        exit;
     }
 
     /**
