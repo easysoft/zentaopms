@@ -1604,10 +1604,11 @@ class testcaseModel extends model
             /* Remove the empty setps in post. */
             if($this->post->steps)
             {
-                foreach($this->post->steps as $key => $desc)
+                $data = fixer::input('post')->get();
+                foreach($data->steps as $key => $desc)
                 {
                     $desc = trim($desc);
-                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $this->post->stepType[$key], 'expect' => trim($this->post->expects[$key]));
+                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $data->stepType[$key], 'expect' => trim($data->expects[$key]));
                 }
 
                 /* If step count changed, case changed. */
