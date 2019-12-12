@@ -171,7 +171,6 @@ define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
 define('TABLE_CREDENTIAL',    '`' . $config->db->prefix . 'credential`');
 define('TABLE_JENKINS',       '`' . $config->db->prefix . 'jenkins`');
-define('TABLE_REPO_CI',        '`' . $config->db->prefix . 'repo_ci`');
 
 define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');
 define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');

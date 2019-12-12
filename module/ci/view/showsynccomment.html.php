@@ -33,7 +33,7 @@ $(function(){
             if(data == 'finish')
             {
                 $('#caption').text('<?php echo $lang->repo->notice->syncComplete?>');
-                return self.location = createLink('ci', 'browserepo', "repoID=<?php echo $repoID?>");
+                return self.location = createLink('ci', 'browserepo');
             }
             $('#commits').html(parseInt($('#commits').html()) + parseInt(data));
             setTimeout(syncComments, 10);

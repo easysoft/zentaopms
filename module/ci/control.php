@@ -250,9 +250,6 @@ class ci extends control
      */
     public function browseRepo($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        a('browseRepo');
-        die('browseRepo');
-
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -308,18 +305,18 @@ class ci extends control
      * @access public
      * @return void
      */
-    public function editRepo($id)
+    public function editRepo($repoID)
     {
-        $repo = $this->ci->getRepoByID($id);
+        $repo = $this->ci->getRepoByID($repoID);
         if($_POST)
         {
-            $needSync = $this->ci->updateRepo($id);
+            $needSync = $this->ci->updateRepo($repoID);
             if(dao::isError()) die(js::error(dao::getError()));
             if(!$needSync)
             {
                 die(js::locate($this->ci->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
             }
-            die(js::locate($this->ci->createLink('log', "repoID=$repoID"), 'parent'));
+            die(js::locate($this->ci->createLink('browseRepo'), 'parent'));
         }
 
         $this->app->loadLang('action');
@@ -385,7 +382,7 @@ class ci extends control
     public function ajaxSyncComment($repoID = 0, $type = 'batch')
     {
         set_time_limit(0);
-        $repo = $this->repo->getRepoByID($repoID);
+        $repo = $this->ci->getRepoByID($repoID);
         if(empty($repo)) die();
         if($repo->synced) die('finish');
 
@@ -408,7 +405,7 @@ class ci extends control
                     unset($branches[$branch]);
                     if($branch == $branchID)
                     {
-                        $this->repo->setRepoBranch($branchID);
+                        $this->ci->setRepoBranch($branchID);
                         setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
                         break;
                     }
@@ -436,24 +433,24 @@ class ci extends control
             $logs = $this->scm->getCommits($revision, 0, $branchID);
         }
 
-        $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
+        $commitCount = $this->ci->saveCommit($repoID, $logs, $version, $branchID);
         if(empty($commitCount))
         {
             if(!$repo->synced)
             {
                 if($repo->SCM == 'Git')
                 {
-                    if($branchID) $this->repo->saveExistsLogBranch($repo->id, $branchID);
+                    if($branchID) $this->ci->saveExistsLogBranch($repo->id, $branchID);
 
                     $branchID = reset($branches);
                     setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
 
-                    if($branchID) $this->repo->fixCommit($repoID);
+                    if($branchID) $this->ci->fixCommit($repoID);
                 }
 
                 if(empty($branchID))
                 {
-                    $this->repo->markSynced($repoID);
+                    $this->ci->markSynced($repoID);
                     die('finish');
                 }
             }
