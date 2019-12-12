@@ -40,7 +40,7 @@ $lang->block->leftToday = '今天剩余工作总计';
 $lang->block->myTask    = '我的任务';
 $lang->block->myStory   = "我的{$lang->storyCommon}";
 $lang->block->myBug     = '我的BUG';
-$lang->block->myProject = '进行中的' . $lang->projectCommon;
+$lang->block->myProject = '未关闭的' . $lang->projectCommon;
 $lang->block->myProduct = '未关闭的' . $lang->productCommon;
 $lang->block->delayed   = '已延期';
 $lang->block->noData    = '当前统计类型下暂无数据';
@@ -101,7 +101,7 @@ $lang->block->default['project']['2']['title'] = $lang->projectCommon . '总览'
 $lang->block->default['project']['2']['block'] = 'overview';
 $lang->block->default['project']['2']['grid']  = 4;
 
-$lang->block->default['project']['3']['title'] = '进行中的' . $lang->projectCommon;
+$lang->block->default['project']['3']['title'] = '未关闭的' . $lang->projectCommon;
 $lang->block->default['project']['3']['block'] = 'list';
 $lang->block->default['project']['3']['grid']  = 8;
 
