@@ -771,7 +771,7 @@ class doc extends control
     }
 
     /**
-     * Show libs for product or project
+     * Show accessDenied response.
      *
      * @access private
      * @return void
@@ -780,10 +780,12 @@ class doc extends control
     {
         echo(js::alert($this->lang->doc->accessDenied));
 
-        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(!$this->server->http_referer) die(js::locate(inlink('index')));
 
-       if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-       die(js::locate('back'));
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
+
+        die(js::locate('back'));
     }
 
     /**
