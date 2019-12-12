@@ -639,10 +639,13 @@ class testcaseModel extends model
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
+            $isLibCase    = ($oldCase->lib and empty($oldCase->product));
+            $titleChanged = ($case->title != $oldCase->title);
+            if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
+
             if($stepChanged)
             {
                 $parentStepID = 0;
-                $isLibCase = ($oldCase->lib and empty($oldCase->product));
                 if($isLibCase) 
                 {
                     $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');

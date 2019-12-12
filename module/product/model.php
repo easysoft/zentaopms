@@ -30,13 +30,7 @@ class productModel extends model
     public function setMenu($products, $productID, $branch = 0, $module = 0, $moduleType = '', $extra = '')
     {
         /* Has access privilege?. */
-        if($products and !isset($products[$productID]) and !$this->checkPriv($productID))
-        {
-            echo(js::alert($this->lang->product->accessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-            die(js::locate('back'));
-        }
+        if($products and !isset($products[$productID]) and !$this->checkPriv($productID)) $this->accessDenied();
 
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
@@ -190,13 +184,7 @@ class productModel extends model
         if(!isset($products[$this->session->product]))
         {
             $this->session->set('product', key($products));
-            if($productID > 0)
-            {
-                echo(js::alert($this->lang->product->accessDenied));
-                $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-                if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-                die(js::locate('back'));
-            }
+            if($productID) $this->accessDenied();
         }
         if($this->cookie->preProductID != $productID)
         {
@@ -221,6 +209,24 @@ class productModel extends model
         /* Is admin? */
         if($this->app->user->admin) return true;
         return (strpos(",{$this->app->user->view->products},", ",{$productID},") !== false);
+    }
+
+    /**
+     * Show accessDenied response.
+     *
+     * @access private
+     * @return void
+     */
+    public function accessDenied()
+    {
+        echo(js::alert($this->lang->product->accessDenied));
+
+        if(!$this->server->http_referer) die(js::locate(helper::createLink('product', 'index')));
+
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('product', 'index')));
+
+        die(js::locate('back'));
     }
 
     /**
