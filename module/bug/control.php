@@ -1296,7 +1296,17 @@ class bug extends control
         else
         {
             $this->bug->delete(TABLE_BUG, $bugID);
-            if($bug->toTask != 0) echo js::alert($this->lang->bug->remindTask . $bug->toTask);
+            if($bug->toTask != 0)
+            {
+                $task = $this->task->getById($bug->toTask);
+                if($task->deleted != '1')
+                {
+                    $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
+                    unset($_GET['onlybody']);
+                    $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
+                    die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                }
+            }
 
             $this->executeHooks($bugID);
 
