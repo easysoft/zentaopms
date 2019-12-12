@@ -88,7 +88,8 @@ $uid = uniqid('');
         $.extend(options,
         {
             items: editorTool,
-            placeholder: $editor.attr('placeholder') || options.placeholder || ''
+            placeholder: $editor.attr('placeholder') || options.placeholder || '',
+            pasteImage: {postUrl: createLink('file', 'ajaxPasteImage', 'uid=' + kuid), placeholder: $editor.attr('placeholder') || <?php echo json_encode($lang->noticePasteImg);?>},
         });
 
         try

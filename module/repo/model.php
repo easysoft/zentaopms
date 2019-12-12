@@ -229,8 +229,12 @@ class repoModel extends model
         {
             $historyIdList = $this->dao->select('DISTINCT t2.id')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('1=1')
                 ->andWhere('t1.repo')->eq($repo->id)
+                ->andWhere('t2.`time`')->le($revisionTime)
+                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->beginIF($this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
                 ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
                 ->orWhere('t1.parent')->eq(rtrim($entry, '/'))
@@ -238,7 +242,7 @@ class repoModel extends model
                 ->fi()
                 ->beginIF($type == 'file')->andWhere('t1.path')->eq("$entry")->fi()
                 ->orderBy('t2.`time` desc')
-                ->page($pager)
+                ->page($pager, 't2.id')
                 ->fetchPairs('id', 'id');
         }
 
