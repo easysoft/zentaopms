@@ -59,6 +59,7 @@ class todoModel extends model
                 $todo->config['month'] = join(',', $todo->config['month']);
             }
             $todo->config = json_encode($todo->config);
+            $todo->type   = 'cycle';
         }
 
         $todo = $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->create['id'], $this->post->uid);
