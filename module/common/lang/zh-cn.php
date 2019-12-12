@@ -401,10 +401,6 @@ $lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
 $lang->admin->subMenu->sso->ci     = array('link' => '持续集成|ci|index',
                                           'alias' => 'browsecredential,createcredential,editcredential,browsejenkins,createjenkins,editjenkins');
 
-$lang->admin->ci = new stdClass();
-$lang->admin->ci->fields['credential']  = '凭证';
-$lang->admin->ci->fields['jenkins']  = 'Jenkins';
-
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
 $lang->admin->subMenu->dev->db     = array('link' => '数据库|dev|db');

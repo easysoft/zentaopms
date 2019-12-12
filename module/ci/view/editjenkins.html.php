@@ -13,8 +13,6 @@
 <?php include 'header.html.php'; ?>
 <?php include '../../common/view/form.html.php'; ?>
 
-<?php js::set('type',  $jenkins->type)?>
-
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
         <?php include 'menu.html.php'; ?>
@@ -27,11 +25,6 @@
             <form id='jenkinsForm' method='post' class='form-ajax'>
                 <table class='table table-form'>
                     <tr>
-                        <th class='thWidth'><?php echo $lang->jenkins->type; ?></th>
-                        <td style="width:550px"><?php echo html::select('type', $lang->jenkins->typeList, $jenkins->type, "class='form-control'"); ?></td>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <th><?php echo $lang->jenkins->name; ?></th>
                         <td class='required'><?php echo html::input('name', $jenkins->name, "class='form-control'"); ?></td>
                         <td></td>
@@ -41,19 +34,9 @@
                         <td class='required'><?php echo html::input('serviceUrl', $jenkins->serviceUrl, "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
-                    <tr>
-                        <th><?php echo $lang->jenkins->username; ?></th>
-                        <td><?php echo html::input('username', $jenkins->username, "rows='3' class='form-control'"); ?></td>
-                        <td></td>
-                    </tr>
-                    <tr id="password-field">
-                        <th><?php echo $lang->jenkins->password; ?></th>
-                        <td><?php echo html::input('password', $jenkins->password, "rows='3' class='form-control'"); ?></td>
-                        <td></td>
-                    </tr>
-                    <tr id="token-field">
-                        <th><?php echo $lang->jenkins->token; ?></th>
-                        <td><?php echo html::input('token', $jenkins->token, "rows='3' class='form-control'"); ?></td>
+                    <tr id="credential-field">
+                        <th class='thWidth'><?php echo $lang->credential->common; ?></th>
+                        <td style="width:550px"><?php echo html::select('credential', $credentialList, $jenkins->credential, "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
 

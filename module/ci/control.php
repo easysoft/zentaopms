@@ -24,6 +24,8 @@ class ci extends control
         /* Load need modules. */
         $this->loadModel('credential');
         $this->loadModel('user');
+
+        $this->scm = $this->app->loadClass('scm');
     }
 
     /**
@@ -183,7 +185,9 @@ class ci extends control
         $this->view->position[]    = html::a(inlink('browseJenkins'), $this->lang->jenkins->common);
         $this->view->position[]    = $this->lang->jenkins->create;
 
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token' or type='account'");
         $this->view->module      = 'jenkins';
+
         $this->display();
     }
 
@@ -212,6 +216,7 @@ class ci extends control
         $this->view->position[]    = $this->lang->jenkins->edit;
 
         $this->view->jenkins    = $jenkins;
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token' or type='account'");
 
         $this->view->module      = 'jenkins';
         $this->display();
@@ -230,5 +235,231 @@ class ci extends control
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
+    }
+
+
+    /**
+     * Browse repo.
+     *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseRepo($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        a('browseRepo');
+        die('browseRepo');
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->list;
+        $this->view->repoList   = $this->ci->listRepo($orderBy, $pager);
+
+        $this->view->position[]    = $this->lang->ci->common;
+        $this->view->position[]    = $this->lang->repo->common;
+
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->module      = 'repo';
+        $this->display();
+    }
+
+    /**
+     * Create a repo.
+     *
+     * @access public
+     * @return void
+     */
+    public function createRepo()
+    {
+        if($_POST)
+        {
+            $repoID = $this->ci->createRepo();
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $link = $this->ci->createLink('showSyncComment', "repoID=$repoID");
+            die(js::locate($link, 'parent'));
+        }
+
+        $this->app->loadLang('action');
+        $this->view->title         = $this->lang->repo->create . $this->lang->colon . $this->lang->repo->common;
+        $this->view->position[]    = $this->lang->ci->common;
+        $this->view->position[]    = html::a(inlink('browseRepo'), $this->lang->repo->common);
+        $this->view->position[]    = $this->lang->repo->create;
+
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='sshKey' or type='account'");
+        $this->view->module      = 'repo';
+
+        $this->display();
+    }
+
+    /**
+     * Edit a repo.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function editRepo($id)
+    {
+        $repo = $this->ci->getRepoByID($id);
+        if($_POST)
+        {
+            $needSync = $this->ci->updateRepo($id);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if(!$needSync)
+            {
+                die(js::locate($this->ci->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
+            }
+            die(js::locate($this->ci->createLink('log', "repoID=$repoID"), 'parent'));
+        }
+
+        $this->app->loadLang('action');
+        $this->view->title         = $this->lang->repo->edit . $this->lang->colon . $repo->name;
+
+        $this->view->position[]    = $this->lang->ci->common;
+        $this->view->position[]    = html::a(inlink('browseRepo'), $this->lang->repo->common);
+        $this->view->position[]    = $this->lang->repo->edit;
+
+        $this->view->repo    = $repo;
+
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='sshKey' or type='account'");
+        $this->view->module      = 'repo';
+        $this->display();
+    }
+
+    /**
+     * Delete a repo.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function deleteRepo($id)
+    {
+        $this->ci->delete(TABLE_JENKINS, $id);
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Show sync comment.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function showSyncComment($repoID = 0)
+    {
+        if($repoID == 0) $repoID = $this->session->repoID;
+
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncComment;
+        $this->view->position[] = $this->lang->repo->showSyncComment;
+
+        $latestInDB = $this->ci->getLatestComment($repoID);
+        $this->view->version = $latestInDB ? (int)$latestInDB->commit : 1;
+        $this->view->repoID  = $repoID;
+        $this->display();
+    }
+
+    /**
+     * Ajax sync comment.
+     *
+     * @param  int    $repoID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxSyncComment($repoID = 0, $type = 'batch')
+    {
+        set_time_limit(0);
+        $repo = $this->repo->getRepoByID($repoID);
+        if(empty($repo)) die();
+        if($repo->synced) die('finish');
+
+        $this->scm->setEngine($repo);
+
+        $branchID = '';
+        if($repo->SCM == 'Git' and empty($branchID))
+        {
+            $branches = $this->scm->branch();
+            if($branches)
+            {
+                /* Init branchID. */
+                if($this->cookie->syncBranch) $branchID = $this->cookie->syncBranch;
+                if(!isset($branches[$branchID])) $branchID = '';
+                if(empty($branchID)) $branchID = reset($branches);
+
+                /* Get unsynced branches. */
+                foreach($branches as $branch)
+                {
+                    unset($branches[$branch]);
+                    if($branch == $branchID)
+                    {
+                        $this->repo->setRepoBranch($branchID);
+                        setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
+                        break;
+                    }
+                }
+            }
+        }
+
+        $latestInDB = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->where('t1.repo')->eq($repoID)
+            ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->orderBy('t1.time')
+            ->limit(1)
+            ->fetch();
+
+        $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
+        $logs     = array();
+        $revision = $version == 1 ? 'HEAD' : ($repo->SCM == 'Git' ? $latestInDB->commit : $latestInDB->revision);
+        if($type == 'batch')
+        {
+            $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branchID);
+        }
+        else
+        {
+            $logs = $this->scm->getCommits($revision, 0, $branchID);
+        }
+
+        $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
+        if(empty($commitCount))
+        {
+            if(!$repo->synced)
+            {
+                if($repo->SCM == 'Git')
+                {
+                    if($branchID) $this->repo->saveExistsLogBranch($repo->id, $branchID);
+
+                    $branchID = reset($branches);
+                    setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
+
+                    if($branchID) $this->repo->fixCommit($repoID);
+                }
+
+                if(empty($branchID))
+                {
+                    $this->repo->markSynced($repoID);
+                    die('finish');
+                }
+            }
+        }
+
+        $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
+        echo $type == 'batch' ?  $commitCount : 'finish';
     }
 }

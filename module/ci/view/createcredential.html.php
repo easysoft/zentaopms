@@ -39,12 +39,12 @@
 
                     <tr>
                         <th><?php echo $lang->credential->username; ?></th>
-                        <td><?php echo html::input('username', '', "rows='3' class='form-control'"); ?></td>
+                        <td><?php echo html::input('username', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
                     <tr id="password-field">
                         <th><?php echo $lang->credential->password; ?></th>
-                        <td><?php echo html::input('password', '', "rows='3' class='form-control'"); ?></td>
+                        <td><?php echo html::input('password', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
                     <tr id="privateKey-field">
@@ -54,7 +54,12 @@
                     </tr>
                     <tr id="passphrase-field">
                         <th><?php echo $lang->credential->passphrase; ?></th>
-                        <td><?php echo html::password('passphrase', '', "rows='3' class='form-control'"); ?></td>
+                        <td><?php echo html::password('passphrase', '', "class='form-control'"); ?></td>
+                        <td></td>
+                    </tr>
+                    <tr id="token-field">
+                        <th><?php echo $lang->credential->token; ?></th>
+                        <td><?php echo html::input('token', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
 
