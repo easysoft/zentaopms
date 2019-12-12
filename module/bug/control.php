@@ -392,6 +392,11 @@ class bug extends control
         $projectMembers = array();
         if(!empty($latestProject)) $projectMembers = $this->loadModel('project')->getTeamMemberPairs($latestProject->id, 'nodeleted');
         if(empty($projectMembers)) $projectMembers = $this->view->users;
+        if($assignedTo and !isset($projectMembers[$assignedTo]))
+        {
+            $user = $this->loadModel('user')->getById($assignedTo);
+            if($user) $projectMembers[$assignedTo] = $user->realname;
+        }
 
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
