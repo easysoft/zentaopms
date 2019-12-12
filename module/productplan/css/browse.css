@@ -1,4 +1,6 @@
-.table td.content { overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.table td.content { position: relative;}
+.table td.content .more{height:25px; position:absolute; right:-5px; top:5px;}
+.table td.content div{height:25px;overflow:hidden; text-overflow:ellipsis; white-space:nowrap; padding-right:5px;}
 td.c-branch{ overflow:hidden; text-align:left!important; text-overflow:ellipsis; white-space:nowrap;}
 
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
