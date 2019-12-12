@@ -280,7 +280,7 @@ class ci extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             $link = $this->ci->createLink('showSyncComment', "repoID=$repoID");
-            die(js::locate($link, 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $this->app->loadLang('action');
@@ -316,7 +316,7 @@ class ci extends control
             {
                 die(js::locate($this->ci->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
             }
-            die(js::locate($this->ci->createLink('browseRepo'), 'parent'));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseRepo')));
         }
 
         $this->app->loadLang('action');
