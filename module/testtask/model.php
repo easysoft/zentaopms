@@ -286,6 +286,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.owner')->eq($account)
+            ->andWhere('t2.id')->in($this->app->user->view->projects)
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
