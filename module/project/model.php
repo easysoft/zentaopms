@@ -33,6 +33,24 @@ class projectModel extends model
     }
 
     /**
+     * Show accessDenied response.
+     *
+     * @access private
+     * @return void
+     */
+    public function accessDenied()
+    {
+        echo(js::alert($this->lang->project->accessDenied));
+
+        if(!$this->server->http_referer) die(js::locate(helper::createLink('project', 'index')));
+
+        $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('project', 'index')));
+
+        die(js::locate('back'));
+    }
+
+    /**
      * Set menu.
      *
      * @param  array  $projects
@@ -57,13 +75,7 @@ class projectModel extends model
             unset($this->lang->project->subMenu->qa->testtask);
         }
 
-        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($projectID))
-        {
-            echo(js::alert($this->lang->project->accessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-            die(js::locate('back'));
-        }
+        if($projects and !isset($projects[$projectID]) and !$this->checkPriv($projectID)) $this->accessDenied();
 
         $moduleName = $this->app->getModuleName();
         $methodName = $this->app->getMethodName();
@@ -246,13 +258,7 @@ class projectModel extends model
         if(!isset($projects[$this->session->project]))
         {
             $this->session->set('project', key($projects));
-            if($projectID > 0)
-            {
-                echo(js::alert($this->lang->project->accessDenied));
-                $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-                if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-                die(js::locate('back'));
-            }
+            if($projectID) $this->accessDenied();
         }
         return $this->session->project;
     }
