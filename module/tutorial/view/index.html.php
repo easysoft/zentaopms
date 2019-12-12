@@ -500,9 +500,6 @@ $(function()
     $(document).on('click', '.btn-task', function()
     {
         showTask($(this).data('name'));
-    }).on('click', '.btn-open-target-page', function()
-    {
-        openIframePage();
     }).on('click', '.btn-reset-tasks', function()
     {
         hideModal();
