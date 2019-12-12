@@ -294,7 +294,7 @@ class buildModel extends model
             $bug->lastEditedBy   = $this->app->user->account;
             $bug->lastEditedDate = $now;
             $bug->resolution     = 'fixed';
-            $bug->resolvedBuild  = $build->name;
+            $bug->resolvedBuild  = $build->id;
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bug->id)->exec();
             $this->action->create('bug', $bug->id, 'Resolved', '', 'fixed', $bug->resolvedBy);
         }
