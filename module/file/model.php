@@ -781,9 +781,9 @@ class fileModel extends model
         $data->objectID   = $objectID;
         $data->objectType = $objectType;
         $data->extra      = 'editor';
-        if(isset($_SESSION['album'][$uid]) and $_SESSION['album'][$uid])
+        if(isset($_SESSION['album']['used'][$uid]) and $_SESSION['album']['used'][$uid])
         {
-            $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album'][$uid])->exec();
+            $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$uid])->exec();
             return !dao::isError();
         }
     }
