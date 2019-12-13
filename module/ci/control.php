@@ -425,8 +425,6 @@ class ci extends control
                     unset($branches[$branch]);
                     if($branch == $branchID)
                     {
-//                        $this->ci->setRepoBranch($branchID);
-//                        setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
                         break;
                     }
                 }
