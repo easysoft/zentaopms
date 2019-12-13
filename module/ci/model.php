@@ -402,13 +402,13 @@ class ciModel extends model
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+//            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->fetch('count');
 
         $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+//            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('t1.time desc')
             ->limit(1)
             ->fetch();
@@ -431,11 +431,11 @@ class ciModel extends model
      * @access public
      * @return void
      */
-    public function setRepoBranch($branch)
-    {
-        setcookie("repoBranch", $branch, 0, $this->config->webRoot);
-        $_COOKIE['repoBranch'] = $branch;
-    }
+//    public function setRepoBranch($branch)
+//    {
+//        setcookie("repoBranch", $branch, 0, $this->config->webRoot);
+//        $_COOKIE['repoBranch'] = $branch;
+//    }
 
     /**
      * Save commit.
@@ -526,7 +526,7 @@ class ciModel extends model
         $stmt = $this->dao->select('DISTINCT t1.id')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+//            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('time')
             ->query();
 

@@ -314,7 +314,8 @@ class ci extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if(!$needSync)
             {
-                die(js::locate($this->ci->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
+                $link = $this->ci->createLink('showSyncComment', "repoID=$repoID");
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
             }
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseRepo')));
         }
@@ -405,8 +406,8 @@ class ci extends control
                     unset($branches[$branch]);
                     if($branch == $branchID)
                     {
-                        $this->ci->setRepoBranch($branchID);
-                        setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
+//                        $this->ci->setRepoBranch($branchID);
+//                        setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
                         break;
                     }
                 }
@@ -416,7 +417,7 @@ class ci extends control
         $latestInDB = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+//            ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('t1.time')
             ->limit(1)
             ->fetch();
