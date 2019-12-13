@@ -12,7 +12,6 @@
 ?>
 <?php $canOrder = common::hasPriv('project', 'storySort');?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <?php if($canOrder) include '../../common/view/sortable.html.php';?>
 <?php js::set('moduleID', $this->cookie->storyModuleParam);?>
 <?php js::set('productID', $this->cookie->storyProductParam);?>
