@@ -407,7 +407,6 @@ class ci extends control
         if($repo->synced) die('finish');
 
         $this->scm->setEngine($repo);
-
         $branchID = '';
         if($repo->SCM == 'Git' and empty($branchID))
         {
