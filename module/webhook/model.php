@@ -341,7 +341,7 @@ class webhookModel extends model
 
         if($webhook->type == 'dingding' or $webhook->type == 'dingapi')
         {
-            $data = $this->getDingdingData($title, $text, $mobile);
+            $data = $this->getDingdingData($title, $text, $webhook->type == 'dingapi' ? '' : $mobile);
         }
         elseif($webhook->type == 'bearychat')
         {
