@@ -29,12 +29,13 @@
                 </thead>
                 <tbody>
                 <?php $index = 0;
-                    foreach ($branches as $id => $branch): ?>
+                    foreach ($branches as $branch): ?>
                     <tr>
                         <td class='text'><?php echo ++$index; ?></td>
-                        <td class='text' title='<?php echo $branch; ?>'><?php echo $id; ?></td>
+                        <td class='text' title='<?php echo $branch->branch; ?>'><?php echo $branch->branch; ?></td>
                         <td>
-                            <input type='checkbox' id='future' name='future' value='1' />
+                            <?php echo html::checkbox('watch', $lang->repo->watchList, $branch->watch,
+                                "data-branch='" . $branch->branch . "' data-repo='" . $branch->repo . "' onclick='watch(this)'");?>
                         </td>
                         <td class='c-actions text-right'>
                             <?php

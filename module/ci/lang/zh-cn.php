@@ -111,3 +111,5 @@ $lang->repo->error->encoding      = "编码可能错误，请更换编码重试�
 
 $lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Git']        = 'Git';
+
+$lang->repo->watchList['1'] = '';

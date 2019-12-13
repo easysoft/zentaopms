@@ -362,13 +362,30 @@ class ci extends control
     public function browseBranch($repoID = 0)
     {
         $repo  = $this->ci->getRepoByID($repoID);
-        $branches = $this->ci->getBranches($repo);
+        $branches = $this->ci->getBranchesFromDb($repoID);
 
         $this->view->repo       = $repo;
         $this->view->branches   = $branches;
 
         $this->view->module     = 'repo';
         $this->display();
+    }
+
+    /**
+     * watch branche.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function watchBranch($repoID = 0, $branch=0, $status=0)
+    {
+        $this->dao->update(TABLE_REPOBRANCH)
+            ->set('watch=' . $status)
+            ->where('repo')->eq($repoID)
+            ->andWhere('branch')->eq($branch)
+            ->exec();
+        echo true;
     }
 
     /**

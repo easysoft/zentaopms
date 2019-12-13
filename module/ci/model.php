@@ -296,7 +296,7 @@ class ciModel extends model
     }
 
     /**
-     * Get git branches.
+     * Get git branches from scm.
      *
      * @param  object    $repo
      * @access public
@@ -307,6 +307,21 @@ class ciModel extends model
         $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
         return $this->scm->branch();
+    }
+
+    /**
+     * Get git branches from db.
+     *
+     * @param  object    $repo
+     * @access public
+     * @return array
+     */
+    public function getBranchesFromDb($repoID)
+    {
+        $branches = $this->dao->select('*')->from(TABLE_REPOBRANCH)
+            ->where('repo')->eq($repoID)
+            ->fetchAll('repo');
+        return $branches;
     }
 
     /**
