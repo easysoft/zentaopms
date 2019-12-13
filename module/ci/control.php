@@ -412,7 +412,6 @@ class ci extends control
         if($repo->SCM == 'Git' and empty($branchID))
         {
             $branches = $this->scm->branch();
-
             if($branches)
             {
                 /* Init branchID. */
