@@ -42,6 +42,7 @@
                         <td><?php echo html::input('username', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
+
                     <tr id="password-field">
                         <th><?php echo $lang->credential->password; ?></th>
                         <td><?php echo html::input('password', '', "class='form-control'"); ?></td>
