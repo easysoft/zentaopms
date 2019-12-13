@@ -372,6 +372,7 @@ class repoModel extends model
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
             $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
+            $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
             return false;
         }
         return true;
