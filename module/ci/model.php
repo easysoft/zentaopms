@@ -296,6 +296,20 @@ class ciModel extends model
     }
 
     /**
+     * Get git branches.
+     *
+     * @param  object    $repo
+     * @access public
+     * @return array
+     */
+    public function getBranches($repo)
+    {
+        $this->scm = $this->app->loadClass('scm');
+        $this->scm->setEngine($repo);
+        return $this->scm->branch();
+    }
+
+    /**
      * Check repo connection
      *
      * @access public
@@ -397,18 +411,18 @@ class ciModel extends model
      * @access public
      * @return object
      */
-    public function getLatestComment($repoID)
+    public function getLatestComment($repoID, $branchID='')
     {
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-//            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->fetch('count');
 
         $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-//            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->orderBy('t1.time desc')
             ->limit(1)
             ->fetch();
@@ -423,19 +437,6 @@ class ciModel extends model
 
         return $lastComment;
     }
-
-    /**
-     * Set repo branch.
-     *
-     * @param  string $branch
-     * @access public
-     * @return void
-     */
-//    public function setRepoBranch($branch)
-//    {
-//        setcookie("repoBranch", $branch, 0, $this->config->webRoot);
-//        $_COOKIE['repoBranch'] = $branch;
-//    }
 
     /**
      * Save commit.

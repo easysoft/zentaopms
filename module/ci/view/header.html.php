@@ -17,11 +17,14 @@
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
         <?php
-            if(strpos($this->methodName,'browse') > -1  && (true || common::hasPriv($module, 'create'))) {
+            if($this->methodName !== 'browsebranch'  && strpos($this->methodName,'browse') > -1  && common::hasPriv($module, 'create')) {
                 echo html::a(inlink('create' . $module),
                     "<i class='icon-plus'></i> {$lang->ci->create}{$lang->ci->subModules[$module]}",
                     '', "class='btn btn-primary'");
-            }?>
+            } else if($this->methodName == 'browsebranch') {
+                echo html::backButton();
+            }
+            ?>
       </div>
     </div>
   </div>

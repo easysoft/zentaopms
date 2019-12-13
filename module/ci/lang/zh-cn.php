@@ -2,6 +2,8 @@
 $lang->ci->common                       = '持续集成';
 $lang->ci->list                         = '列表';
 $lang->ci->create                       = '添加';
+$lang->ci->numb                         = '序号';
+$lang->ci->name                         = '名称';
 
 $lang->ci->subModules['credential']     = '凭证';
 $lang->ci->subModules['jenkins']        = 'Jenkins';
@@ -75,6 +77,7 @@ $lang->repo->example->encoding = "填写版本库中文件的编码";
 $lang->repo->svnCredentialLimt = "Subversion版本库的凭证必须为用户名密码类型";
 
 $lang->repo->showSyncComment   = '显示同步进度';
+$lang->repo->watch             = '监听';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';

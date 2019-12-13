@@ -353,6 +353,25 @@ class ci extends control
     }
 
     /**
+     * browse branches.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function browseBranch($repoID = 0)
+    {
+        $repo  = $this->ci->getRepoByID($repoID);
+        $branches = $this->ci->getBranches($repo);
+
+        $this->view->repo       = $repo;
+        $this->view->branches   = $branches;
+
+        $this->view->module     = 'repo';
+        $this->display();
+    }
+
+    /**
      * Show sync comment.
      *
      * @param  int    $repoID
@@ -366,7 +385,7 @@ class ci extends control
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncComment;
         $this->view->position[] = $this->lang->repo->showSyncComment;
 
-        $latestInDB = $this->ci->getLatestComment($repoID);
+        $latestInDB = $this->ci->getLatestComment($repoID, );
         $this->view->version = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID  = $repoID;
         $this->display();
