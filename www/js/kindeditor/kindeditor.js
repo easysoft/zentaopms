@@ -692,6 +692,9 @@
     }
 
     function _formatUrl(url, mode, host, pathname) {
+        if (url[0] === '#') {
+            return url;
+        }
         mode = _undef(mode, '').toLowerCase();
         if(url.substr(0, 5) != 'data:') {
             url = url.replace(/([^:])\/\//g, '$1/');
@@ -10247,9 +10250,10 @@ KindEditor.plugin('pasteimage', function(K) {
                         self.undo();
                         self._redoStack.pop();
                         if (data) {
-                            edit.cmd.inserthtml(data);
+                            var $img = $(data);
+                            edit.cmd.insertimage($img.attr('src'), $img.attr('title'), $img.attr('width'), $img.attr('height'));
                         } else {
-                            edit.cmd.inserthtml(html);
+                            edit.cmd.insertimage(result);
                         }
                         pasteEnd();
                     }).error(function()
