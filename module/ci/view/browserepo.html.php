@@ -39,6 +39,7 @@
                         <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
                         <td class='c-actions text-right'>
                             <?php
+                            common::printIcon('ci', 'viewRepo', "repoID=$id", '', 'list', 'file-text');
                             common::printIcon('ci', 'editRepo', "repoID=$id", '', 'list',  'edit');
                             if (common::hasPriv('ci', 'deleteRepo')) {
                                 $deleteURL = $this->createLink('ci', 'deleteRepo', "repoID=$id&confirm=yes");
