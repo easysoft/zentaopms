@@ -333,7 +333,7 @@
                     <?php
                     foreach($bugs as $bug)
                     {
-                        echo "<li title='[B]$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "[B]$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='[B]$bug->id $bug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$bug->id", '', true), "[B] #$bug->id $bug->title", '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
@@ -346,7 +346,7 @@
                     <?php
                     foreach($cases as $case)
                     {
-                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C]$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
+                        echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title", '', "class='iframe' data-width='80%'") . '</li>';
                     }
                     ?>
                     </ul>
@@ -361,7 +361,7 @@
                       $linkStories = explode(',', $story->linkStories) ;
                       foreach($linkStories as $linkStoryID)
                       {
-                          if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "[S]$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
+                          if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "[S] #$linkStoryID " . $story->extraStories[$linkStoryID], '', "class='iframe' data-width='80%'") . '</li>';
                       }
                       ?>
                     </ul>
