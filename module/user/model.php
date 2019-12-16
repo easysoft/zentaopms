@@ -1444,7 +1444,6 @@ class userModel extends model
         {
             $this->dao->update(TABLE_USERVIEW)->data($data)->where('account')->eq($account)->exec();
         }
-        exit;
     }
 
     /**
