@@ -3495,6 +3495,11 @@ class upgradeModel extends model
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
+        $customedTypeList4All = $this->dao->select('*')->from(TABLE_LANG)
+            ->where('lang')->eq("all")
+            ->andWhere('module')->eq('bug')
+            ->andWhere('section')->eq('typeList')
+            ->fetchPairs('`key`', 'value');
         foreach($this->config->upgrade->discardedBugTypes as $langCode => $types)
         {
             $bugs = $this->dao->select('distinct type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
@@ -3502,19 +3507,19 @@ class upgradeModel extends model
 
             $usedTypes        = array_keys($bugs);
             $customedTypeList = $this->dao->select('*')->from(TABLE_LANG)
-                ->where('lang')->in("$langCode,all")
+                ->where('lang')->eq($langCode)
                 ->andWhere('module')->eq('bug')
                 ->andWhere('section')->eq('typeList')
-                ->fetchPairs('`key`');
+                ->fetchPairs('`key`', 'value');
 
-            $typesToSave = array_diff($usedTypes, $customedTypeList);
+            $typesToSave = array_diff($usedTypes, empty($customedTypeList) ? $customedTypeList4All : $customedTypeList);
 
             if(empty($typesToSave)) continue;
 
             $langs = array();
             foreach($typesToSave as $type) $langs[$type] = $types[$type];
 
-            if(empty($customedTypeList))
+            if(empty($customedTypeList) and empty($customedTypeList4All))
             {
                 $lang = new stdclass;
                 $lang->bug = new stdclass;
@@ -3525,8 +3530,13 @@ class upgradeModel extends model
                 if(is_file($langFile)) include $langFile;
                 $langs = array_merge($lang->bug->typeList, $langs);
             }
+            elseif(empty($customedTypeList))
+            {
+                $langs = array_merge($customedTypeList4All, $langs);
+            }
 
-            foreach($langs as $type => $typeName) $this->loadModel('custom')->setItem("{$langCode}.bug.typeList.{$type}.1", $typeName);
+            $this->loadModel('custom');
+            foreach($langs as $type => $typeName) $this->custom->setItem("{$langCode}.bug.typeList.{$type}.1", $typeName);
         }
         return true;
     }
