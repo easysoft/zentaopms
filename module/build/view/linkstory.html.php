@@ -70,7 +70,7 @@
       <div class="btn-toolbar">
         <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
       </div>
-      <div class='text'></div>
+      <div class='table-statistic'></div>
     </div>
     <?php endif;?>
   </form>

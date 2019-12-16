@@ -78,7 +78,7 @@
       <div class='table-actions btn-toolbar show-always'>
         <?php echo html::submitButton('', '', 'btn btn-secondary');?>
       </div>
-      <div class="text"></div>
+      <div class="table-statistic"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

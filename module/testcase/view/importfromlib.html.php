@@ -80,7 +80,7 @@
       <div class="btn-toolbar">
         <?php echo html::linkButton($lang->goback, $this->session->caseList);?>
       </div>
-      <div class='text'></div>
+      <div class='table-statistic'></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
