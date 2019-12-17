@@ -65,7 +65,7 @@ class entry extends control
             $last = time();
             $user->last     = date(DT_DATETIME1, $last);
             $user->lastTime = $last;
-            $user->ip       = $this->session->clientIP->IP;
+            $user->ip       = helper::getRemoteIp();
 
             $xxInstalled = $user->account . 'installed';
             $this->loadModel('setting');

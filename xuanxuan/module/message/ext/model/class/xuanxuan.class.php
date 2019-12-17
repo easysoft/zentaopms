@@ -1,7 +1,7 @@
 <?php
 class xuanxuanMessage extends messageModel
 {
-    public function send($objectType, $objectID, $actionType, $actionID)
+    public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
