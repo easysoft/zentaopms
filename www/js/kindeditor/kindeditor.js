@@ -6577,6 +6577,18 @@ KindEditor.lang({
     }
 }, 'zh_CN');
 
+if (window.$ && $.zui && $.zui.getLangData) {
+    var langData = $.zui.getLangData('kindeditor');
+    if (langData) {
+        $.each(langData, function(langName) {
+            var data = langData[langName];
+            if (langName === 'zh_cn') langName = 'zh_CN';
+            else if (langName === 'zh_tw') langName = 'zh_TW';
+            KindEditor.lang(data, langName);
+        });
+    }
+}
+
 /*******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2011 kindsoft.net
@@ -10127,12 +10139,6 @@ KindEditor.plugin('pasteimage', function(K) {
             placeholder: 'You can paste images in the editor.',
             failMsg: 'Pasting image failed. Try again later.',
             uploadingHint: 'Uploading...',
-        },
-        ja: {
-            notSupportMsg: '使用されているブラウザは画像の貼り付けがサポートされていません！',
-            placeholder: 'エディターを使用して画像を貼り付けます。',
-            failMsg: '画像を貼り付けませんでした、後でやり直してください。',
-            uploadingHint: '画像をアップロード中、しばらくお待ちください...',
         }
     };
 
@@ -10147,7 +10153,8 @@ KindEditor.plugin('pasteimage', function(K) {
         if (typeof options === 'string') {
             options = {postUrl: options};
         }
-        var lang = $.extend({}, allLangs.en, allLangs[($.clientLang || $.zui.clientLang)()], options.lang);
+        var langName = $.clientLang ? $.clientLang() : ($.zui && $.zui.clientLang) ? $.zui.clientLang() : 'en';
+        var lang = $.extend({}, ($.zui && $.zui.getLangData) ? $.zui.getLangData('kindeditor.advanceTable', langName, allLangs) : $.extend({}, allLangs.en, self.lang('table.'), allLangs[langName]), options.lang);
 
         if(!K.WEBKIT && !K.GECKO)
         {
@@ -10422,32 +10429,11 @@ KindEditor.plugin('table', function (K) {
             forecolor: 'Text Color',
             backcolor: 'Back Color',
             invalidBoderWidth: 'Border width value must be number'
-        },
-        ja: {
-            name: 'テーブル',
-            xRxC: '{0}行 × {1}列',
-            headerRow: '見出し行',
-            headerCol: '見出し列',
-            tableStyle: 'テーブルスタイル',
-            addHeaderRow: '見出し行を追加',
-            stripedRows: 'ストライブ 行',
-            hoverRows: 'ホバー行',
-            autoChangeTableWidth: '自動変更幅',
-            tableWidthFixed: 'テーブル文字に適応',
-            tableWidthFull: 'ページ幅で適応',
-            tableBorder: 'テーブル枠線',
-            tableHead: '見出し',
-            tableContent: 'コンテンツ',
-            mergeCells: 'セルを結合',
-            defaultColor: 'デフォルト色',
-            color: '色',
-            forecolor: 'フォントの色',
-            backcolor: '塗りつぶしの色',
-            invalidBoderWidth: '外枠のサイズは必ず数値です。'
         }
     };
     var $elements = [];
-    var lang = $.extend({}, allLangs.en, self.lang('table.'), allLangs[($.clientLang || $.zui.clientLang)()]);
+    var langName = $.clientLang ? $.clientLang() : ($.zui && $.zui.clientLang) ? $.zui.clientLang() : 'en';
+    var lang = ($.zui && $.zui.getLangData) ? $.zui.getLangData('kindeditor.advanceTable', langName, allLangs) : $.extend({}, allLangs.en, self.lang('table.'), allLangs[langName]);
     var defaultTableBorderColor = self.options.tableBorderColor || '#ddd';
 
     self.tableIdIndex = 0;
