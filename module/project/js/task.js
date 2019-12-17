@@ -4,6 +4,7 @@ $(function()
     $('#taskList td.has-child .task-toggle').each(function()
     {
         $td = $(this).closest('td');
+        if($td.find('.label').length == 0) return false;
         $td.find('a').eq(0).css('max-width', $td.width() - $td.find('.label').width() - 40);
     });
 });
