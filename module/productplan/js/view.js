@@ -38,22 +38,6 @@ $(function()
         }
     });
 
-    $('.dropdown-menu.with-search .menu-search').click(function(e)
-    {
-        e.stopPropagation();
-        return false;
-    }).on('keyup change paste', 'input', function()
-    {
-        var val = $(this).val().toLowerCase();
-        var $options = $(this).closest('.dropdown-menu.with-search').find('.option');
-        if(val == '') return $options.removeClass('hide');
-        $options.each(function()
-        {
-            var $option = $(this);
-            $option.toggleClass('hide', $option.text().toString().toLowerCase().indexOf(val) < 0 && $option.data('key').toString().toLowerCase().indexOf(val) < 0);
-        });
-    });
-
     $('#storyList').on('sort.sortable', function(e, data)
     {
         var list = '';
