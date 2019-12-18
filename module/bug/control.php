@@ -299,8 +299,15 @@ class bug extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') $this->send(array('status' => 'success', 'data' => $bugID));
 
-            setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, false);
-            $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc");
+            if(isset($output['projectID']))
+            {
+                $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
+            }
+            else
+            {
+                setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, false);
+                $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc");
+            }
             if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID");
             $response['locate'] = $location;
             $this->send($response);
@@ -462,7 +469,9 @@ class bug extends control
         if(!empty($_POST))
         {
             $actions = $this->bug->batchCreate($productID, $branch);
-            die(js::locate($this->session->bugList, 'parent'));
+
+            setcookie('bugModule', 0, 0, $this->config->webRoot, '', false, false);
+            die(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));
         }
 
         /* Get product, then set menu. */
