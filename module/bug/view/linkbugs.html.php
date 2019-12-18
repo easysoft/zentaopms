@@ -20,7 +20,7 @@
       <small class='text-muted'> <?php echo $lang->arrow . $lang->bug->linkBugs;?></small>
     </h2>
   </div>
-  <div id='queryBox' class='show divider'></div>
+  <div id='queryBox' data-module='bug' class='show divider'></div>
   <?php if($bugs2Link):?>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='linkBugsForm'>
     <table class='table tablesorter' id='bugList'>

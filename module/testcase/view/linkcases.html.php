@@ -20,7 +20,7 @@
       <small class='text-muted'> <?php echo $lang->arrow . $lang->testcase->linkCases;?></small>
     </h2>
   </div>
-  <div id='queryBox' class='show divider'></div>
+  <div id='queryBox' data-module='testcase' class='show divider'></div>
   <?php if($cases2Link):?>
   <form class='main-table' method='post' target='hiddenwin' id='linkCasesForm' data-ride='table'>
     <table class='table tablesorter' id='caseList'>

@@ -181,7 +181,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     </div>
   </div>
   <div class="main-col">
-    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='bug'></div>
     <?php if(empty($bugs)):?>
     <div class="table-empty-tip">
       <p>

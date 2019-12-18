@@ -54,8 +54,8 @@
         echo "<i class='icon-plus'></i> {$lang->story->create} <span class='caret'></span>";
         echo '</button>';
         echo "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
-        if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id"), $lang->story->create) . '</li>';
-        if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id"), $lang->story->batchCreate) . '</li>';
+        if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$this->cookie->storyModuleParam}&story=0&project=$project->id"), $lang->story->create) . '</li>';
+        if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$this->cookie->storyModuleParam}&story=0&project=$project->id"), $lang->story->batchCreate) . '</li>';
         echo '</ul>';
         echo '</div>';
     }
@@ -89,7 +89,7 @@
     </div>
   </div>
   <div class="main-col">
-    <div id='queryBox' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
+    <div id='queryBox' data-module='story' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>

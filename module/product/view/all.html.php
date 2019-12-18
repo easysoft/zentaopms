@@ -53,7 +53,6 @@
     </div>
   </div>
   <div class="main-col">
-    <div class="cell" id="queryBox"></div>
     <form class="main-table table-product" data-ride="table" method="post" id='productsForm' action='<?php echo inLink('batchEdit', "productID=$productID");?>'>
       <?php $canOrder = (common::hasPriv('product', 'updateOrder'))?>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>

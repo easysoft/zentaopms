@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='queryBox' class='show'></div>
+<div id='queryBox' data-module='bug' class='show'></div>
 <?php
 $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
 $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';

@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-<div class="cell show" id="queryBox"></div>
+<div class="cell show" id="queryBox" data-module='testcase'></div>
 <div id='mainContent'>
   <form class='main-table table-testcase' data-ride='table' method='post'>
     <div class="table-header">

@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='queryBox' class='show'></div>
+<div id='queryBox' data-module='bug' class='show'></div>
 <div id='unlinkBugList'>
   <form class='main-table table-bug' data-ride='table' method='post' id='unlinkedBugsForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkBug', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
     <div class='table-header hl-primary text-primary strong'>

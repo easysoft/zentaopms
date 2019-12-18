@@ -23,7 +23,7 @@
       <?php endif;?>
     </h2>
   </div>
-  <div id='queryBox' class='show divider'></div>
+  <div id='queryBox' data-module='story' class='show divider'></div>
   <form method='post' target='hiddenwin' id='linkStoryForm' class='main-table table-story'>
     <?php if($stories2Link):?>
     <table class='table tablesorter table-bordered' id='storyList'>

@@ -23,9 +23,9 @@ class searchModel extends model
      */
     public function setSearchParams($searchConfig)
     {
+        $module = $searchConfig['module'];
         if(isset($this->config->bizVersion))
         {
-            $module = $searchConfig['module'];
             if($module == 'projectStory') $module = 'story';
             if($module == 'projectBug')   $module = 'bug';
 
@@ -65,7 +65,7 @@ class searchModel extends model
         $searchParams['onMenuBar']    = zget($searchConfig, 'onMenuBar', 'no');
         $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
 
-        $this->session->set('searchParams', $searchParams);
+        $this->session->set($module . 'searchParams', $searchParams);
     }
 
     /**
@@ -77,11 +77,13 @@ class searchModel extends model
     public function buildQuery()
     {
         /* Init vars. */
-        $where       = '';
-        $groupItems  = $this->config->search->groupItems;
-        $groupAndOr  = strtoupper($this->post->groupAndOr);
-        $fieldParams = json_decode($this->session->searchParams['fieldParams']);
-        $scoreNum    = 0;
+        $where        = '';
+        $groupItems   = $this->config->search->groupItems;
+        $groupAndOr   = strtoupper($this->post->groupAndOr);
+        $module       = $this->session->searchParams['module'];
+        $searchParams = $module . 'searchParams';
+        $fieldParams  = json_decode($this->session->$searchParams['fieldParams']);
+        $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
 
@@ -222,7 +224,7 @@ class searchModel extends model
         $hasProject = false;
         $hasUser    = false;
 
-        $fields     = array_keys($fields);
+        $fields = array_keys($fields);
         foreach($fields as $fieldName)
         {
             if(empty($params[$fieldName])) continue;
@@ -233,7 +235,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users        = $this->loadModel('user')->getPairs('realname|noclosed');
+            $users = $this->loadModel('user')->getPairs('realname|noclosed');
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();
