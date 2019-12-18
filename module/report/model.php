@@ -152,11 +152,11 @@ class reportModel extends model
                 $parentPlan = zget($plans, $plan->parent, null);
                 if($parentPlan)
                 {
-                    $parentPlan->title = "[" . $this->lang->productplan->parentAB . '] ' . $parentPlan->title;
+                    $parentPlan->title = $parentPlan->title;
                     $products[$plan->product]->plans[$parentPlan->id] = $parentPlan;
                     unset($plans[$parentPlan->id]);
                 }
-                $plan->title = "[" . $this->lang->productplan->childrenAB . '] ' . $plan->title;
+                $plan->title = '>>' . $plan->title;
             }
             $products[$plan->product]->plans[$plan->id] = $plan;
         }
