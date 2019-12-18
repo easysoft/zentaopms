@@ -51,9 +51,10 @@ function loadModuleMenu(projectID)
  * @access public
  * @return void
  */
-function loadProjectStories(projectID)
+function loadProjectStories(projectID, moduleID)
 {
-    var link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=0&storyID=' + oldStoryID);
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+    var link = createLink('story', 'ajaxGetProjectStories', 'projectID=' + projectID + '&productID=0&branch=0&moduleID=' + moduleID + '&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
 }
 
@@ -68,6 +69,19 @@ function loadProjectMembers(projectID)
 {
     var link = createLink('project', 'ajaxGetMembers', 'projectID=' + projectID + '&assignedTo=' + oldAssignedTo);
     $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen()});
+}
+
+/**
+ * Load module related
+ * 
+ * @access public
+ * @return void
+ */
+function loadModuleRelated()
+{
+    moduleID  = $('#module').val();
+    projectID = $('#project').val();
+    loadProjectStories(projectID, moduleID)
 }
 
 /* empty function. */
