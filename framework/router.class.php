@@ -103,9 +103,10 @@ class router extends baseRouter
                 $flow = $this->dbh->query('SELECT value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='common' AND `key`='flow'")->fetch();
                 $config->global->flow = $flow ? $flow->value : 'full';
 
+                $commonSettings = array();
                 try
                 {
-                    $commonSettins = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','storyRequirement','hourPoint')")->fetchAll();
+                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','storyRequirement','hourPoint')")->fetchAll();
                 }
                 catch (PDOException $exception) 
                 {
@@ -128,7 +129,7 @@ class router extends baseRouter
             $productCommon = $storyCommon = $hourCommon = 0;
             $projectCommon = empty($this->config->isINT) ? 0 : 1;
 
-            foreach($commonSettins as $setting)
+            foreach($commonSettings as $setting)
             {
                 if($setting->key == 'productProject') list($productCommon, $projectCommon) = explode('_',  $setting->value);
                 if($setting->key == 'storyRequirement') $storyCommon = $setting->value;
