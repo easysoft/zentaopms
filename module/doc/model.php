@@ -372,7 +372,7 @@ class docModel extends model
             if($moduleID)
             {
                 $modules = array($moduleID => $moduleID);
-                if(strpos($this->config->doc->custom->showLibs, 'children') === false) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
+                if(strpos($this->config->doc->custom->showLibs, 'children') !== false) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
             }
             $docs = $this->getDocs($libID, $modules, $sort, $pager);
         }
@@ -514,7 +514,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
-            ->beginIF(!empty($module) or strpos($this->config->doc->custom->showLibs, 'children') === false)->andWhere('module')->in($module)->fi()
+            ->beginIF(!empty($module) or strpos($this->config->doc->custom->showLibs, 'children') !== false)->andWhere('module')->in($module)->fi()
             ->query();
 
         $docIdList = array();
