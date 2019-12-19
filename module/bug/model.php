@@ -401,6 +401,24 @@ class bugModel extends model
     }
 
     /**
+     * Check bug project priv.
+     * 
+     * @param  object    $bug 
+     * @access public
+     * @return void
+     */
+    public function checkBugProjectPriv($bug)
+    {
+        if($bug->project and !$this->loadModel('project')->checkPriv($bug->project))
+        {
+            echo(js::alert($this->lang->bug->projectAccessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('bug', 'index')));
+            die(js::locate('back'));
+        }
+    }
+
+    /**
      * Get bugs of a module.
      *
      * @param  int             $productID
@@ -463,14 +481,6 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t5')->on('t1.plan = t5.id')
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
-
-        if($bug->project and !$this->loadModel('project')->checkPriv($bug->project))
-        {
-            echo(js::alert($this->lang->bug->projectAccessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-            die(js::locate('back'));
-        }
 
         $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
