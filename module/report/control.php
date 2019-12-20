@@ -237,4 +237,15 @@ class report extends control
             echo "ok\n";
         }
     }
+
+    /**
+     * Show personal annual data
+     *
+     * @access public
+     * @return void
+     */
+    public function annualData()
+    {
+        die($this->display());
+    }
 }
