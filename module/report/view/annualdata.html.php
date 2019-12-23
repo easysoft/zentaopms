@@ -2,91 +2,68 @@
 <div id='container' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_bg.png'?>)'>
   <main id="main" style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_layout.png'?>)'>
     <header id='header'>
-      <h1>2019年工作内容统计一览表 ── <span class='text-holder' data-id='username'>XXX</span></h1>
+      <h1 class='text-holder' data-id='title'></h1>
     </header>
-    <section id='basic'>
-      <header>基本数据信息</header>
-      <ul>
-        <li>累计登录次数 <strong class='text-holder' data-id='totalLoginTimes'>344</strong></li>
-        <li>累计动态数 <strong class='text-holder' data-id='totalDynamicCount'>1543</strong></li>
-        <li>累计日志数 <strong class='text-holder' data-id='totalLogCount'>629</strong></li>
-        <li>累计工时数 <strong class='text-holder' data-id='totalWrokHours'>772</strong></li>
-      </ul>
+    <section id='block1'>
+      <header><h2 class='text-holder' data-id='block1.title'></h2></header>
+      <div><ul id='block1List'></ul></div>
     </section>
-    <section id='projectsSummary'>
-      <header>参与项目概览</header>
-      <div id='projectsSummaryChart' class='progress-pie inline-block space progress-pie-200' data-value='0' data-doughnut-size='70' data-color='#186bb1' data-back-color='#84cff0' data-labels='已完成的项目,正在进行的项目,已挂起的项目' data-show-tip='true' data-tooltip-template= "<%=value%>">
+    <section id='block2'>
+      <header><h2 class='text-holder' data-id='block2.title'></h2></header>
+      <div id='block2Chart' class='progress-pie inline-block space progress-pie-200' data-value='0' data-doughnut-size='70' data-color='#186bb1' data-back-color='#84cff0' data-show-tip='true'>
         <canvas width='180' height='180' style='width: 180px; height: 180px;'></canvas>
         <div class='progress-info'>
-          <strong><span class='text-holder' data-id='totalProjectsCount'></span><small>个</small></strong>
+          <strong><span class='text-holder' data-id='block2.dataTotal'></span><small class='text-holder' data-id='block2.unit'></small></strong>
         </div>
       </div>
-      <ul>
-        <li><span class='dot'></span> 已完成的项目 <div><span><span class='text-holder' data-id='finishProjects'>20</span><small>个</small></span><span><span class='text-holder' data-id='finishProjectsPercent'>71.4</span><small>%</small></span></div></li>
-        <li><span class='dot'></span> 正在进行的项目 <div><span><span class='text-holder' data-id='activateProjects'>7</span><small>个</small></span><span><span class='text-holder' data-id='activateProjectsPercent'>25</span><small>%</small></span></div></li>
-        <li><span class='dot'></span> 已挂起的项目 <div><span><span class='text-holder' data-id='suspendProjects'>1</span><small>个</small></span><span><span class='text-holder' data-id='suspendProjectsPercent'>3.5</span><small>%</small></span></div></li>
-      </ul>
+      <div id='block2ListWrapper'><ul id='block2List'></ul></div>
     </section>
-    <section id='projectsList'>
-      <table class='table' id='projectsTableHeader'>
+    <section id='block3'>
+      <table class='table' id='block3TableHeader'>
         <thead>
-          <tr>
-            <th class='col-name'>项目名称</th>
-            <th class='col-storyCount'>完成需求数</th>
-            <th class='col-taskCount'>完成任务数</th>
-            <th class='col-bugCount'>解决bug数</th>
-          </tr>
+          <tr></tr>
         </thead>
       </table>
       <div class='table-wrapper'>
-        <table class='table' id='projectsTable'>
+        <table class='table' id='block3Table'>
         </table>
       </div>
     </section>
-    <section id='tasksBugs'>
+    <section id='block4'>
       <header>
-        完成任务与解决bug数据
-        <div>优先级：<span class='pri pri-1'>1</span><span class='pri pri-2'>2</span><span class='pri pri-3'>3</span><span class='pri pri-4'>4</span></div>
+        <h2 class='text-holder' data-id='block4.title'></h2>
       </header>
       <div class='row'>
         <div class='col-xs-6'>
-          <div id='tasksChart' class='progress-pie inline-block space progress-pie-200' data-value='0' data-doughnut-size='80' data-color='#186bb1'>
+          <div id='block4chart1' class='progress-pie inline-block space progress-pie-200' data-value='0' data-doughnut-size='80' data-color='#186bb1'>
             <canvas width='160' height='160' style='width: 160px; height: 160px;'></canvas>
             <div class='progress-info'>
-              <p>累计完成任务数</p>
-              <strong><span class='text-holder' data-id='finishTaskTotalCount'>512</span><small>个</small></strong>
+              <p class='text-holder' data-id='block4.chart1.title'></p>
+              <strong><span class='text-holder' data-id='block4.chart1.total'></span><small class='text-holder' data-id='block4.chart1.unit'></small></strong>
             </div>
           </div>
-          <ul class='clearfix'>
-            <li><span class='pri pri-1'></span> <span class='text-holder' data-id='finishTaskCountPri1'>7</span> 个</li>
-            <li><span class='pri pri-2'></span> <span class='text-holder' data-id='finishTaskCountPri2'>7</span> 个</li>
-            <li><span class='pri pri-3'></span> <span class='text-holder' data-id='finishTaskCountPri3'>7</span> 个</li>
-            <li><span class='pri pri-4'></span> <span class='text-holder' data-id='finishTaskCountPri4'>7</span> 个</li>
+          <ul class='clearfix' id='block4chart1Info'>
           </ul>
         </div>
         <div class='col-xs-6'>
-          <div id='bugsChart' class='progress-pie inline-block space progress-pie-160' data-value='0' data-doughnut-size='80' data-color='#186bb1'>
+          <div id='block4chart2' class='progress-pie inline-block space progress-pie-160' data-value='0' data-doughnut-size='80' data-color='#186bb1'>
             <canvas width='160' height='160' style='width: 160px; height: 160px;'></canvas>
             <div class='progress-info'>
-              <p>累计修复bug数</p>
-              <strong><span class='text-holder' data-id='finishBugTotalCount'>512</span><small>个</small></strong>
+              <p class='text-holder' data-id='block4.chart2.title'></p>
+              <strong><span class='text-holder' data-id='block4.chart2.total'></span><small class='text-holder' data-id='block4.chart2.unit'></small></strong>
             </div>
           </div>
-          <ul class='clearfix'>
-            <li><span class='pri pri-1'></span> <span class='text-holder' data-id='finishBugCountPri1'>7</span> 个</li>
-            <li><span class='pri pri-2'></span> <span class='text-holder' data-id='finishBugCountPri2'>7</span> 个</li>
-            <li><span class='pri pri-3'></span> <span class='text-holder' data-id='finishBugCountPri3'>7</span> 个</li>
-            <li><span class='pri pri-4'></span> <span class='text-holder' data-id='finishBugCountPri4'>7</span> 个</li>
+          <ul class='clearfix' id='block4chart2Info'>
           </ul>
         </div>
       </div>
     </section>
-    <section id='tasksBugsHours'>
+    <section id='block5'>
       <header>
-        完成任务与解决bug工时统计
-        <div><span class='dot dot-1'></span> 完成任务累计工时 <span class='dot dot-2'></span> 解决bug累计工时</div>
+        <h2 class='text-holder' data-id='block5.title'></h2>
+        <div id='block5Legend'></div>
       </header>
-      <canvas id='hoursChart' width='520' height='240'></canvas>
+      <canvas id='block5Chart' width='520' height='240'></canvas>
     </section>
   </main>
 </div>
@@ -94,83 +71,109 @@
 // 年度数据示例
 var annualData =
 {
-    // 用户名
-    username: 'XXX',
+    // 大标题
+    title: '2019年工作内容统计一览表 ── XXX',
 
-    // 累计动态数
-    totalLoginTimes: 344,
-    // 累计日志数
-    totalDynamicCount: 1543,
-    // 累计工时数
-    totalWrokHours: 772,
+    // 区块1
+    block1:
+    {
+        title: '基本数据信息',
+        data:
+        [
+            {title: '累计登录次数', value: 344},
+            {title: '累计动态数', value: 1543},
+            {title: '累计日志数', value: 629},
+            {title: '累计工时数', value: 772}
+        ]
+    },
 
-    // 参与总项目数
-    totalProjectsCount: 29,
-    // 已完成的项目
-    finishProjects: 20,
-    // 正在进行的项目
-    activateProjects: 7,
-    // 已挂起的项目
-    suspendProjects: 1,
-    // 已完成的项目占比
-    finishProjectsPercent: 71.4,
-    // 正在进行的项目占比
-    activateProjectsPercent: 25,
-    // 已挂起的项目占比
-    suspendProjectsPercent: 3.5,
+    // 区块2
+    block2:
+    {
+        title: '参与项目概览',
+        data:
+        [
+            {title: '已完成的项目', value: 20, percent: '71.4%'},
+            {title: '正在进行的项目', value: 7, percent: '25%'},
+            {title: '已挂起的项目', value: 1, percent: '3.5%'}
+        ],
+        unit: '个'
+    },
 
-    // 项目列表
-    projectsList:
-    [
-        {name: '项目名称一', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称二', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称三', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称四', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称五', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称六', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称七', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称八', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称九', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十一', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十二', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十三', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十四', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十五', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十六', storyCount: 22, taskCount: 2, bugCount: '0%'},
-        {name: '项目名称十七', storyCount: 22, taskCount: 2, bugCount: '0%'}
-    ],
+    // 区块3
+    block3:
+    {
+        cols:
+        [
+            {title: '项目名称', width: 'auto', align: 'left'},
+            {title: '完成需求数', width: 80, align: 'center'},
+            {title: '完成任务数', width: 80, align: 'center'},
+            {title: '解决bug数', width: 72, align: 'center'}
+        ],
+        rows:
+        [
+            ['项目名称一', 22, 2, '0%'],
+            ['项目名称二', 22, 2, '0%'],
+            ['项目名称三', 22, 2, '0%'],
+            ['项目名称四', 22, 2, '0%'],
+            ['项目名称五', 22, 2, '0%'],
+            ['项目名称六', 22, 2, '0%'],
+            ['项目名称七', 22, 2, '0%'],
+            ['项目名称八', 22, 2, '0%'],
+            ['项目名称九', 22, 2, '0%'],
+            ['项目名称十', 22, 2, '0%'],
+            ['项目名称十一', 22, 2, '0%'],
+            ['项目名称十二', 22, 2, '0%']
+        ]
+    },
 
-    // 总完成任务数
-    finishTaskTotalCount: 512,
-    // 完成任务数 - 优先级1
-    finishTaskCountPri1: 42,
-    // 完成任务数 - 优先级2
-    finishTaskCountPri2: 172,
-    // 完成任务数 - 优先级3
-    finishTaskCountPri3: 212,
-    // 完成任务数 - 优先级4
-    finishTaskCountPri4: 86,
+    // 区块4
+    block4:
+    {
+        title: '完成任务与解决bug数据',
+        chart1:
+        {
+            title: '累计完成任务数',
+            unit: '个',
+            data:
+            [
+                // legend 属性可选，如果留空，则不再下方的图例上显示标题
+                {value: 42, title: '优先级1', legend: 'P1'},
+                {value: 172, title: '优先级2', legend: 'P2'},
+                {value: 212, title: '优先级3', legend: 'P3'},
+                {value: 86, title: '优先级4', legend: 'P4'}
+            ],
+        },
+        chart2:
+        {
+            title: '累计修复bug数',
+            unit: '个',
+            data:
+            [
+                {value: 42, title: '优先级1'},
+                {value: 32, title: '优先级2'},
+                {value: 20, title: '优先级3'},
+                {value: 34, title: '优先级4'}
+            ],
+        }
+    },
 
-    // 总完成bug数
-    finishBugTotalCount: 128,
-    // 完成bug数 - 优先级1
-    finishBugCountPri1: 42,
-    // 完成bug数 - 优先级2
-    finishBugCountPri2: 32,
-    // 完成bug数 - 优先级3
-    finishBugCountPri3: 20,
-    // 完成bug数 - 优先级4
-    finishBugCountPri4: 34,
-
-    // 年度解决任务累计工时
-    yearlyTask: '完成任务累计工时',
-    yearlyTaskHours: [110, 154, 184, 220, 212, 250, 130, 146, 201, 89, 140, 59],
-    // 年度解决bug累计工时,
-    yearlyBug: '解决bug累计工时',
-    yearlyBugHours: [10, 5, 11, 20, 30, 14, 3, 20, 50, 27, 13, 3],
-    // 年度工时统计标标签
-    yearlyLabels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']
+    block5:
+    {
+        title: '完成任务与解决bug工时统计',
+        labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+        datasets:
+        [
+            {
+                label: '完成任务累计工时',
+                data: [110, 154, 184, 220, 212, 250, 130, 146, 201, 89, 140, 59],
+            },
+            {
+                label: '解决bug累计工时',
+                data: [10, 5, 11, 20, 30, 14, 3, 20, 50, 27, 13, 3],
+            }
+        ]
+    },
 };
 
 // 显示年度数据
