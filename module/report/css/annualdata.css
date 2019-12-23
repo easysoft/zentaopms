@@ -1,13 +1,8 @@
 
-#main,
-#tasksBugs
-{
-    border: 1px solid rgb(255,0,139, .5);
-}
 body {height: 100vh; padding: 0;}
 #container {position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; justify-content: center; align-items: center; background-color: #010417; color: #fff; background-size: cover;}
 #container:before {content: ' '; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; opacity: 0.9; background: #010419;}
-#main {border: 1px solid rgba(255,255,255,.15); min-width: 1280px; min-height: 800px; position: absolute; z-index: 10; padding: 0;}
+#main {min-width: 1280px; min-height: 800px; position: absolute; z-index: 10; padding: 0;}
 #main > section {position: absolute; }
 
 #header > h1 {width: 500px; margin: 40px auto 0; height: 58px; font-weight: normal; text-align: center; font-size: 20px; display: block; line-height: 58px; position: relative; left: -30px;}
@@ -16,13 +11,14 @@ body {height: 100vh; padding: 0;}
 #basic > header {margin-top: 7px; line-height: 24px; font-size: 14px; padding: 0 8px;}
 #basic > ul {margin: 16px 36px 0 32px; padding: 0;}
 #basic > ul > li {line-height: 40px; height: 46px; padding-left: 23px; position: relative; margin-bottom: 10px;}
-#basic > ul > li > strong {position: absolute; right: 18px; top: 2px; font-size: 20px;}
+#basic > ul > li > strong {position: absolute; right: 18px; top: 2px; font-size: 20px; color: #B5E8FF;}
 
 #projectsSummary {left: 405px; top: 132px; width: 400px; height: 280px;}
 #projectsSummary > header {margin-top: 23px; margin-left: 12px; line-height: 24px; font-size: 14px; padding: 0 8px;}
 #projectsSummary > .progress-pie {margin: 18px 0 0 18px;}
-#projectsSummary > .progress-pie .progress-info {padding: 70px 0;}
+#projectsSummary > .progress-pie .progress-info {padding: 70px 0; pointer-events: none;}
 #projectsSummary > .progress-pie .progress-info > strong {font-size: 30px; font-weight: normal;}
+#projectsSummary > .progress-pie .progress-info > strong > small {font-size: 12px; color: #A0A0A0;}
 #projectsSummary > ul {position: absolute; left: 240px; top: 80px; padding: 0; font-size: 14px;}
 #projectsSummary > ul > li {padding-left: 25px; line-height: 20px; position: relative; color: #A0A0A0; margin-bottom: 15px;}
 #projectsSummary > ul > li > .dot {position: absolute; width: 16px; height: 16px; left: 0; top: 2px; background: #00A0E9; border-radius: 2px;}
@@ -30,6 +26,7 @@ body {height: 100vh; padding: 0;}
 #projectsSummary > ul > li:last-child > .dot {background: #7ECEF4;}
 #projectsSummary > ul > li > div {margin-top: 5px; color: #fff; max-width: 80px;}
 #projectsSummary > ul > li > div > span:last-child {float: right;}
+#projectsSummary > ul > li > div > span small {color: #A0A0A0;}
 
 #projectsList {left: 825px; top: 129px; width: 421px; height: 284px; padding: 8px 0 8px 8px;}
 #projectsTableHeader {position: absolute; top: 8px; left: 8px; right: 10px; background: #0075A9; width: 401px;}
@@ -41,3 +38,28 @@ body {height: 100vh; padding: 0;}
 #projectsList .col-storyCount {width: 80px; text-align: center;}
 #projectsList .col-taskCount {width: 80px; text-align: center;}
 #projectsList .col-bugCount {text-align: center;}
+
+#tasksBugs {left: 25px; top: 434px; width: 631px; height: 322px; padding: 0 30px 10px 10px}
+#tasksBugs .pri {display: inline-block; color: #C9C9C9;}
+#tasksBugs .pri:before {content: ' '; display: inline-block; width: 13px; height: 8px; background: #2B4D6D; border-radius: 4px; margin-right: 9px;}
+#tasksBugs .pri-1:before {background: #CAAC32;}
+#tasksBugs .pri-2:before {background: #0075A9;}
+#tasksBugs .pri-3:before {background: #22AC38;}
+#tasksBugs > header {margin-top: 12px; margin-left: 7px; line-height: 24px; font-size: 14px; padding: 0 8px;}
+#tasksBugs > header > div {position: absolute; right: 30px; color: #C9C9C9; top: 12px}
+#tasksBugs > header > div > .pri {margin: 0 10px;}
+#tasksBugs > .row {margin-top: 25px;}
+#tasksBugs > .row > .col-xs-6 + .col-xs-6:before {content: ' '; display: block; position: absolute; left: 0; top: 10px; bottom: 26px; background: #1A2835; width: 1px;}
+#tasksBugs > .row > .col-xs-6 {text-align: center;}
+#tasksBugs .progress-info > p {color: #A0A0A0; margin-bottom: 0; margin-top: 25px;}
+#tasksBugs .progress-info > strong {font-size: 30px; font-weight: normal;}
+#tasksBugs .progress-info > strong > small {font-size: 12px; color: #A0A0A0;}
+#tasksBugs > .row > .col-xs-6 > ul {margin: 0 auto; width: 200px;}
+#tasksBugs > .row > .col-xs-6 > ul > li {float: left; width: 50%; text-align: left; color: #C9C9C9; margin-bottom: 10px;}
+#tasksBugs canvas {transform: rotate(150deg);}
+
+#tasksBugsHours {left: 672px; top: 434px; width: 574px; height: 322px;}
+#tasksBugsHours > header {margin-top: 12px; line-height: 24px; font-size: 14px; padding: 0 8px;}
+#tasksBugsHours > header > div {position: absolute; right: 25px; top: 40px; color: #A0A0A0; font-size: 12px;}
+#tasksBugsHours > header > div .dot {display: inline-block; border: 1px solid #fff; border-radius: 50px; width: 10px; height: 10px; background: #22AC38; margin-right: 8px;}
+#tasksBugsHours canvas {margin: 25px auto 0; display: block;}

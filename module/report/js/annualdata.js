@@ -32,12 +32,59 @@ function showAnnualData(data)
     var $projectsSummaryChart = $('#projectsSummaryChart');
     var pieChart = $projectsSummaryChart.data('pieChart');
     while(pieChart.segments.length) pieChart.removeData();
+    pieChart.options.tooltipTemplate = "<%=label%>: <%=value%>";
     var pieChartLabels = $projectsSummaryChart.data('labels').split(',');
     var pieChartColors = ['#0068B7', '#1aa1e6', '#81cef2'];
     $.each(['finishProjects', 'activateProjects', 'suspendProjects'], function(index, name)
     {
-        pieChart.addData({color: pieChartColors[index], name: pieChartLabels[index], value: data[name]});
+        pieChart.addData({color: pieChartColors[index], label: pieChartLabels[index], value: data[name]});
     });
+
+    var priColors = ['#CAAC32', '#0075A9', '#22AC38', '#2B4D6D'];
+    var $bugsChart = $('#bugsChart');
+    var bugsChart = $bugsChart.data('pieChart');
+    while(bugsChart.segments.length) bugsChart.removeData();
+    var $tasksChart = $('#tasksChart');
+    var tasksChart = $tasksChart.data('pieChart');
+    while(tasksChart.segments.length) tasksChart.removeData();
+    for(var i = 0; i < 5; ++i)
+    {
+        if(i === 0)
+        {
+            tasksChart.addData({color: 'transparent', value: data.finishTaskTotalCount / 5, label: 'P0'});
+            bugsChart.addData({color: 'transparent', value: data.finishBugTotalCount / 5, label: 'P0'});
+        }
+        else
+        {
+            tasksChart.addData({color: priColors[i - 1], value: data['finishTaskCountPri' + i], label: 'P' + i, circleBeginEnd: true});
+            bugsChart.addData({color: priColors[i - 1], value: data['finishBugCountPri' + i], label: 'P' + i, circleBeginEnd: true});
+        }
+    }
+
+    var $hoursChart = $('#hoursChart');
+    var hoursChart = $hoursChart.data('hoursChart');
+    if(!hoursChart)
+    {
+        hoursChart = $hoursChart.lineChart(
+        {
+            labels: data.yearlyLabels,
+            datasets: [{
+                label: data.yearlyTask,
+                color: 'rgba(50,255,50,.5)',
+                data: data.yearlyTaskHours
+            }, {
+                label: data.yearlyBug,
+                color: 'rgba(0, 117, 255,.5)',
+                data: data.yearlyBugHours
+            }]
+        }, {
+            scaleFontColor: '#A0A0A0',
+            datasetStrokeWidth: 1,
+            pointDotRadius: 3,
+            scaleShowVerticalLines: false,
+            scaleGridLineColor: 'rgba(255,255,255,.3)'
+        });
+    }
 }
 
 $(function()
@@ -54,7 +101,4 @@ $(function()
     };
     ajustPosition();
     $(window).on('resize', ajustPosition);
-    // setTimeout(() => {
-    //     window.location.reload();
-    // }, 5000);
 });
