@@ -15,8 +15,8 @@
     </section>
     <section id='projectsSummary'>
       <header>参与项目概览</header>
-      <div class='progress-pie inline-block space progress-pie-200' data-value='88' data-doughnut-size='70'>
-        <canvas width='200' height='200' style='width: 200px; height: 200px;'></canvas>
+      <div id='projectsSummaryChart' class='progress-pie inline-block space progress-pie-200' data-value='100' data-doughnut-size='70' data-color='#186bb1' data-back-color='#84cff0' data-labels='已完成的项目,正在进行的项目,已挂起的项目' data-show-tip='true'>
+        <canvas width='180' height='180' style='width: 180px; height: 180px;'></canvas>
         <div class='progress-info'>
           <strong class='text-holder' data-id='totalProjectsCount'>28</strong>
         </div>
@@ -126,7 +126,7 @@ var annualData =
     finishBugCountPri4: 34,
 
     // 年度解决任务累计工时
-    yearlyBugHours: [110, 154, 184, 220, 212, 250, 130, 146, 201, 89, 140, 59]
+    yearlyBugHours: [110, 154, 184, 220, 212, 250, 130, 146, 201, 89, 140, 59],
     // 年度解决bug累计工时
     yearlyBugHours: [10, 5, 11, 20, 30, 14, 3, 20, 50, 27, 13, 3]
 };
@@ -134,7 +134,6 @@ var annualData =
 // 显示年度数据
 $(function()
 {
-    //
     showAnnualData(annualData);
 });
 </script>

@@ -28,6 +28,16 @@ function showAnnualData(data)
         ].join(''));
     });
     $('#projectsTable').empty().append($projectsTableRows);
+
+    var $projectsSummaryChart = $('#projectsSummaryChart');
+    var pieChart = $projectsSummaryChart.data('pieChart');
+    while(pieChart.segments.length) pieChart.removeData();
+    var pieChartLabels = $projectsSummaryChart.data('labels').split(',');
+    var pieChartColors = ['#0068B7', '#1aa1e6', '#81cef2'];
+    $.each(['finishProjects', 'activateProjects', 'suspendProjects'], function(index, name)
+    {
+        pieChart.addData({color: pieChartColors[index], name: pieChartLabels[index], value: data[name]});
+    });
 }
 
 $(function()
