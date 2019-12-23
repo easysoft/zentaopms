@@ -1,7 +1,7 @@
 
 body {height: 100vh; padding: 0;}
 #container {position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; justify-content: center; align-items: center; background-color: #010417; color: #fff; background-size: cover; overflow: auto;}
-#container:before {content: ' '; display: block; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; opacity: 0.9; background: #010419;}
+#container:before {content: ' '; display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; opacity: 0.9; background: #010419;}
 #main {min-width: 1280px; min-height: 800px; position: absolute; z-index: 10; padding: 0;}
 #main > section {position: absolute; }
 #main > section > header {height: 24px;}
