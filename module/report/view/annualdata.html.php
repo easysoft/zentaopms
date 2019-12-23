@@ -1,6 +1,8 @@
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::import($jsRoot . 'html2canvas/min.js'); ?>
 <div id='container' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_bg.png'?>)'>
-  <main id="main" style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_layout.png'?>)'>
+  <main id='main'>
+    <div id='mainBg' style='background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/annual_data_layout.png'?>)'></div>
     <header id='header'>
       <h1 class='text-holder' data-id='title'></h1>
     </header>
@@ -65,7 +67,12 @@
       </header>
       <canvas id='block5Chart' width='520' height='240'></canvas>
     </section>
+    <div id='toolbar'>
+      <button type='button' class='btn btn-primary' id='exportBtn'><i class='icon icon-export'></i></button>
+      <a id='imageDownloadBtn' class='hidden' download='annual_data.png'></a>
+    </div>
   </main>
+  <div id='loadIndicator' class='load-indicator'></div>
 </div>
 <script>
 // 年度数据示例
