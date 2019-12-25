@@ -116,6 +116,7 @@ $lang->report->annualData->createdPlans     = "累计创建计划数";
 $lang->report->annualData->createdStories   = "累计创建需求数";
 
 $lang->report->annualData->productOverview = "产品创建的需求数及占比";
+$lang->report->annualData->qaOverview      = "产品创建的Bug数及占比";
 $lang->report->annualData->projectOverview = "参与项目概览";
 $lang->report->annualData->doneProject     = "已完成的项目";
 $lang->report->annualData->doingProject    = "正在进行的项目";
@@ -142,7 +143,7 @@ $lang->report->annualData->poData          = "所创建的需求数对应的优�
 $lang->report->annualData->totalStoryPri   = "创建需求优先级分布";
 $lang->report->annualData->totalStoryStage = "创建需求阶段分布";
 
-$lang->report->annualData->qaStatistics  = "完成任务与解决bug工时统计";
+$lang->report->annualData->qaStatistics  = "完成任务与解决Bug工时统计";
 $lang->report->annualData->poStatistics  = "月创建需求数";
 $lang->report->annualData->devStatistics = "月完成任务累计工时";
 

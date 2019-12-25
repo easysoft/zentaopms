@@ -647,29 +647,31 @@ class reportModel extends model
         return $products;
     }
 
-    public function getPlansByProducts($products, $year)
+    public function getPlansByProducts($products, $account, $year)
     {
         return $this->dao->select('t1.product, count(DISTINCT t1.id) as plans')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.product')->in(array_keys($products))
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
+            ->andWhere('t2.actor')->eq($account)
             ->andWhere('t2.action')->eq('opened')
             ->groupBy('t1.product')
             ->fetchPairs('product', 'plans');
     }
 
-    public function getStoriesByProducts($products, $year)
+    public function getStoriesByProducts($products, $account, $year)
     {
         return $this->dao->select('product, count(*) as stories')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in(array_keys($products))
             ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->andWhere('openedBy')->eq($account)
             ->groupBy('product')
             ->fetchPairs('product', 'stories');
     }
 
-    public function getUserYearProjects($account, $year, $role = 'dev')
+    public function getUserYearProjects($account, $year)
     {
         $projects = $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('deleted')->eq(0)
             ->andWhere('LEFT(begin, 4)', true)->eq($year)
@@ -682,32 +684,26 @@ class reportModel extends model
             ->orWhere('RD')->eq($account)
             ->markRight(1)
             ->fetchAll('id');
+
         $teamProjects = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($account)->andWhere('LEFT(`join`, 4)')->eq($year)->fetchPairs('root', 'root');
-        $taskProjects = array();
-        if($role == 'dev') $taskProjects = $this->dao->select('project')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('LEFT(finishedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchPairs('project', 'project');
+        $taskProjects = $this->dao->select('project')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('LEFT(finishedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchPairs('project', 'project');
+
         $projects += $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('deleted')->eq(0)
             ->andWhere('id')->in($teamProjects + $taskProjects)
             ->fetchAll('id');
         return $projects;
     }
 
-    public function getCreatedBugByProjects($projects, $year)
-    {
-        return $this->dao->select('project, count(*) as bugs')->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andWhere('project')->in(array_keys($projects))
-            ->andWhere('LEFT(openedDate, 4)')->eq($year)
-            ->groupBy('project')
-            ->fetchPairs('project', 'bugs');
-    }
-
-    public function getFinishedStoryByProjects($projects, $year)
+    public function getFinishedStoryByProjects($projects, $account, $year)
     {
         return $this->dao->select('t1.project, count(DISTINCT t1.story) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->leftJoin(TABLE_TASK)->alias('t3')->on('t1.story=t3.story')
             ->where('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t1.project')->in(array_keys($projects))
-            ->andWhere('LEFT(t2.closedDate, 4)')->eq($year)
+            ->andWhere('LEFT(t3.finishedDate, 4)')->eq($year)
+            ->andWhere('t3.finishedBy')->eq($account)
             ->groupBy('t1.project')
             ->fetchPairs('project', 'stories');
     }
@@ -790,6 +786,54 @@ class reportModel extends model
             $months[$month] += $effort->consumed;
         }
         return $months;
+    }
+
+    public function getUserYearProducts4QA($account, $year)
+    {
+        $bugProducts  = $this->dao->select('product')->from(TABLE_BUG)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchPairs('product', 'product');
+        $caseProducts = $this->dao->select('product')->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchPairs('product', 'product');
+
+        $products = $this->dao->select('id,name,status')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in($bugProducts + $caseProducts)
+            ->fetchAll('id');
+        return $products;
+    }
+
+    public function getBugStatByProducts($products, $account, $year)
+    {
+        $allBugs = $this->dao->select('product, count(*) as count')->from(TABLE_BUG)->where('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->groupBy('product')
+            ->fetchPairs('product', 'count');
+        $mineBugs = $this->dao->select('product, count(*) as count')->from(TABLE_BUG)->where('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('openedBy')->eq($account)
+            ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->groupBy('product')
+            ->fetchPairs('product', 'count');
+
+        $productStat = array();
+        foreach($products as $productID => $product)
+        {
+            $productStat[$productID]['name']  = $product->name;
+            $productStat[$productID]['count'] = zget($allBugs, $productID, 0);
+            $productStat[$productID]['mine']  = zget($mineBugs, $productID, 0);
+        }
+
+        return $productStat;
+    }
+
+    public function getCreatedBugByProducts($products, $account, $year)
+    {
+        return $this->dao->select('product, count(*) as bugs')->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->andWhere('openedBy')->eq($account)
+            ->groupBy('product')
+            ->fetchPairs('product', 'bugs');
     }
 }
 

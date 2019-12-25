@@ -69,7 +69,7 @@
     </section>
     <div id='toolbar'>
       <?php echo html::select('year', $years, $year, "class='form-control'");?>
-      <button type='button' class='btn btn-primary' id='exportBtn'><i class='icon icon-export'></i></button>
+      <button type='button' class='btn btn-primary' id='exportBtn' title='<?php echo $lang->export;?>'><i class='icon icon-share'></i></button>
       <a id='imageDownloadBtn' class='hidden' download='annual_data.png'></a>
     </div>
   </main>
@@ -96,7 +96,7 @@ var annualData =
         elseif($blockKey == 'block2')
         {
             echo "unit: '" . $lang->report->annualData->unit . "',";
-            if($role == 'qa' or $role == 'dev')
+            if($role == 'dev')
             {
                 $count = $data['projectStat']['count'];
                 $blockData[] = array('title' => $lang->report->annualData->doneProject, 'value' => $data['projectStat']['done'], 'percent' => (empty($count) ? 0 : round($data['projectStat']['done'] / $count, 4) * 100 . '%'));
@@ -105,6 +105,15 @@ var annualData =
                 echo "data: " . json_encode($blockData);
             }
             elseif($role == 'po')
+            {
+                foreach($data['productStat'] as $productStat)
+                {
+                    $count = $productStat['count'];
+                    $blockData[] = array('title' => $productStat['name'], 'value' => (int)$productStat['mine'], 'percent' => (empty($count) ? '0' : round($productStat['mine'] / $count, 3) * 100 . '%'));
+                }
+                echo "data: " . json_encode($blockData);
+            }
+            elseif($role == 'qa')
             {
                 foreach($data['productStat'] as $productStat)
                 {
@@ -137,10 +146,10 @@ var annualData =
             }
             elseif($role == 'qa')
             {
-                $cols[] = array('title' => $lang->report->annualData->projectName, 'width' => 'auto', 'align' => 'left');
+                $cols[] = array('title' => $lang->report->annualData->productName, 'width' => 'auto', 'align' => 'left');
                 $cols[] = array('title' => $lang->report->annualData->foundBug, 'width' => '80', 'align' => 'center');
 
-                foreach($data['projects'] as $project) $rows[] = array($project->name, $project->bugs);
+                foreach($data['products'] as $product) $rows[] = array($product->name, $product->bugs);
             }
 
             echo "cols: " . json_encode($cols) . ',';

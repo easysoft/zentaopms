@@ -20,7 +20,7 @@ $config->report->annualData['dev']['block4'] = array('title' => 'devData', 'data
 $config->report->annualData['dev']['block5'] = array('title' => 'devStatistics', 'data' => array('effortMonth'));
 
 $config->report->annualData['qa']['block1'] = array('title' => 'baseInfo', 'data' => array('logins', 'actions', 'foundBugs', 'createdCases'));
-$config->report->annualData['qa']['block2'] = array('title' => 'projectOverview', 'data' => array('doneProject', 'doingProject', 'suspendProject'));
+$config->report->annualData['qa']['block2'] = array('title' => 'qaOverview', 'data' => array());
 $config->report->annualData['qa']['block3'] = array('title' => '', 'data' => array('projects'));
 $config->report->annualData['qa']['block4'] = array('title' => 'qaData', 'data' => array('bugPri', 'casePri'));
 $config->report->annualData['qa']['block5'] = array('title' => 'qaStatistics', 'data' => array('bugMonth', 'caseMonth'));

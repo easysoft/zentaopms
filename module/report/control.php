@@ -260,7 +260,7 @@ class report extends control
             $products = $this->report->getUserYearProducts($account, $year);
             $data['involvedProducts'] = count($products);
 
-            $planGroups = $this->report->getPlansByProducts($products, $year);
+            $planGroups = $this->report->getPlansByProducts($products, $account, $year);
             $planCount  = 0;
             foreach($planGroups as $plans) $planCount += $plans;
             $data['createdPlans'] = $planCount;
@@ -272,7 +272,7 @@ class report extends control
             $data['storyStage']     = $storyInfo['stage'];
             $data['storyMonth']     = $storyInfo['month'];
 
-            $storyGroups = $this->report->getStoriesByProducts($products, $year);
+            $storyGroups = $this->report->getStoriesByProducts($products, $account, $year);
             foreach($products as $productID => $product)
             {
                 $product->plans   = zget($planGroups, $productID, 0);
@@ -288,7 +288,7 @@ class report extends control
             $data['efforts']  = $efforts->count;
             $data['consumed'] = $efforts->consumed;
 
-            $projects    = $this->report->getUserYearProjects($account, $year, $role);
+            $projects    = $this->report->getUserYearProjects($account, $year);
             $projectStat = $this->report->getStatByProjects($projects);
 
             $tasks = $this->report->getUserYearFinishedTasks($account, $year);
@@ -297,7 +297,7 @@ class report extends control
             $data['resolvedBugPri']  = $bugs['pri'];
             $data['effortMonth']     = $this->report->getEffort4Month($account, $year);;
 
-            $stories = $this->report->getFinishedStoryByProjects($projects, $year);
+            $stories = $this->report->getFinishedStoryByProjects($projects, $account, $year);
             $tasks   = $this->report->getFinishedTaskByProjects($projects, $account, $year);
             $bugs    = $this->report->getResolvedBugByProjects($projects, $account, $year);
             foreach($projects as $projectID => $project)
@@ -323,14 +323,14 @@ class report extends control
             $data['casePri']      = $caseInfo['pri'];
             $data['caseMonth']    = $caseInfo['month'];
 
-            $projects    = $this->report->getUserYearProjects($account, $year, $role);
-            $projectStat = $this->report->getStatByProjects($projects);
+            $products    = $this->report->getUserYearProducts4QA($account, $year);
+            $productStat = $this->report->getBugStatByProducts($products, $account, $year);
 
-            $bugs = $this->report->getCreatedBugByProjects($projects, $year);
-            foreach($projects as $projectID => $project) $project->bugs = zget($bugs, $projectID, 0);
+            $bugs = $this->report->getCreatedBugByProducts($products, $account, $year);
+            foreach($products as $productID => $product) $product->bugs = zget($bugs, $productID, 0);
 
-            $data['projects']    = $projects;
-            $data['projectStat'] = $projectStat;
+            $data['products']    = $products;
+            $data['productStat'] = $productStat;
         }
 
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
