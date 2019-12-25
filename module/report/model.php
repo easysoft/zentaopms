@@ -536,7 +536,7 @@ class reportModel extends model
      * @param  string $account 
      * @param  int    $year 
      * @access public
-     * @return int
+     * @return object
      */
     public function getUserYearEfforts($account, $year)
     {

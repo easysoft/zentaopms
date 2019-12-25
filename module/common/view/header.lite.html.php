@@ -10,7 +10,7 @@ $clientTheme  = $this->app->getClientTheme();
 $onlybody     = zget($_GET, 'onlybody', 'no');
 ?>
 <!DOCTYPE html>
-<html lang='<?php echo $clientLang?>'>
+<html lang='<?php echo $clientLang;?>'>
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -32,7 +32,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
 
       js::import($jsRoot . 'jquery/lib.js');
       js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
-      if($clientLang === 'ja') js::import($jsRoot . 'zui/lang.' .$clientLang . '.min.js?t=' . $timestamp);
+      if($clientLang === 'ja') js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
 
   }
@@ -42,6 +42,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
       if(!file_exists($this->app->getThemeRoot() . 'default/' . $this->cookie->lang . '.' . $this->cookie->theme . '.css')) $minCssFile = $defaultTheme . 'en.' . $this->cookie->theme . '.css';
       css::import($minCssFile);
       js::import($jsRoot . 'all.js');
+      if($clientLang === 'ja') js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js');
   }
   if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');
 
