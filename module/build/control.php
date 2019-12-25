@@ -154,9 +154,15 @@ class build extends control
 
             $productGroups = $this->project->getProducts($build->project);
 
-            $products = array();
             $this->loadModel('product');
-            if(!isset($productGroups[$build->product])) $productGroups[$build->product] = $this->product->getById($build->product);
+            if(!isset($productGroups[$build->product]))
+            {
+                $product = $this->product->getById($build->product);
+                $product->branch = $build->branch;
+                $productGroups[$build->product] = $product;
+            }
+
+            $products = array();
             foreach($productGroups as $product) $products[$product->id] = $product->name;
 
             $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->edit;
