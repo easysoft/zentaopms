@@ -131,7 +131,7 @@ $lang->report->annualData->productName   = "{$lang->productCommon}名称";
 $lang->report->annualData->planCount     = '计划数';
 $lang->report->annualData->storyCount    = "{$lang->storyCommon}数";
 
-$lang->report->annualData->qaData           = "完成任务与解决Bug数据";
+$lang->report->annualData->qaData           = "累计发现的Bug数和创建的用例数";
 $lang->report->annualData->totalCreatedBug  = '累计发现的Bug数';
 $lang->report->annualData->totalCreatedCase = '累计创建的用例数';
 
@@ -143,7 +143,7 @@ $lang->report->annualData->poData          = "所创建的{$lang->storyCommon}�
 $lang->report->annualData->totalStoryPri   = "创建{$lang->storyCommon}优先级分布";
 $lang->report->annualData->totalStoryStage = "创建{$lang->storyCommon}阶段分布";
 
-$lang->report->annualData->qaStatistics  = "完成任务与解决Bug工时统计";
+$lang->report->annualData->qaStatistics  = "月发现的Bug数和创建的用例数";
 $lang->report->annualData->poStatistics  = "月创建{$lang->storyCommon}数";
 $lang->report->annualData->devStatistics = "月完成任务累计工时";
 
