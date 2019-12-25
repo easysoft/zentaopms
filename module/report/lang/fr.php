@@ -17,6 +17,7 @@ $lang->report->value      = 'Valeur';
 $lang->report->percent    = '%';
 $lang->report->undefined  = 'N/D';
 $lang->report->query      = 'Query';
+$lang->report->annual     = 'Annual Summary';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';

@@ -108,6 +108,10 @@ $lang->dev->tableList['userview']         = 'User Privilege';
 $lang->dev->tableList['im_chatuser']      = 'Client Users';
 $lang->dev->tableList['im_message']       = 'Client Messages';
 $lang->dev->tableList['im_messagestatus'] = 'Client Messages Status';
+$lang->dev->tableList['repo']             = 'Code';
+$lang->dev->tableList['repohistory']      = 'Repo History';
+$lang->dev->tableList['repofiles']        = 'Repo Files';
+$lang->dev->tableList['repobranch']       = 'Repo Branch';
 
 $lang->dev->groupList['my']      = 'Dashboard';
 $lang->dev->groupList['product'] = $lang->productCommon;
