@@ -96,6 +96,8 @@ class doc extends control
             $type      = $lib->type;
             $productID = $lib->product;
             $projectID = $lib->project;
+
+            if(($from == 'product' or $from == 'project') and $type != $from) $from = 'doc';
         }
 
         $this->libs = $this->doc->getLibs($type, '', $libID);
