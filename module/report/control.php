@@ -252,7 +252,6 @@ class report extends control
         $role = 'po';
         if($this->app->user->role == 'dev' or $this->app->user->role == 'td' or $this->app->user->role == 'pm') $role = 'dev';
         if($this->app->user->role == 'qd' or $this->app->user->role == 'qa') $role = 'qa';
-        $role = 'qa';
 
         $data = array();
         $data['logins'] = $this->report->getUserYearLogins($account, $year);

@@ -17,6 +17,7 @@ $lang->report->value      = '值';
 $lang->report->percent    = '百分比';
 $lang->report->undefined  = '未设定';
 $lang->report->query      = '查询';
+$lang->report->annual     = '年度总结';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';
