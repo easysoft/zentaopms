@@ -559,7 +559,7 @@ class reportModel extends model
         $storyInfo = array();
         $storyInfo['count'] = 0;
         $storyInfo['pri']   = array();
-        $storyInfo['stage'] = array('wait' => 0, 'projected' => 0, 'developing' => 0, 'developed' => 0, 'released' => 0, 'closed' => 0);
+        $storyInfo['stage'] = array();
         $storyInfo['month'] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         foreach($stories as $story)
         {
@@ -568,7 +568,8 @@ class reportModel extends model
             if(!isset($storyInfo['pri'][$story->pri])) $storyInfo['pri'][$story->pri] = 0;
             $storyInfo['pri'][$story->pri] ++;
 
-            if(isset($storyInfo['stage'][$story->stage])) $storyInfo['stage'][$story->stage] ++;
+            if(!isset($storyInfo['stage'][$story->stage])) $storyInfo['stage'][$story->stage] = 0;
+            $storyInfo['stage'][$story->stage] ++;
 
             $month = (int)substr($story->openedDate, 5, 2) - 1;
             $storyInfo['month'][$month] ++;

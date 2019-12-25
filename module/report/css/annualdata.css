@@ -61,7 +61,7 @@ body {height: 100vh; padding: 0;}
 #block4 .pri {display: inline-block; width: 13px; height: 8px; background: #2B4D6D; border-radius: 4px; margin-right: 8px;}
 #block4 > header {margin-top: 12px; margin-left: -10px;}
 #block4 > header > div > .pri {margin: 0 10px;}
-#block4 > .row {margin-top: 20px;}
+#block4 > .row {margin-top: 20px; height:260px; overflow:auto;}
 #block4 > .row > .col-xs-6 + .col-xs-6:before {content: ' '; display: block; position: absolute; left: 0; top: 10px; bottom: 26px; background: #1A2835; width: 1px;}
 #block4 > .row > .col-xs-6 {text-align: center;}
 #block4 .progress-info {pointer-events: 'none';}
