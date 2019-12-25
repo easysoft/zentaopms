@@ -2316,7 +2316,7 @@ class bugModel extends model
         if(strpos($bugQuery, '`closedDate`') !== false)   $bugQuery .= " AND `closedDate` != '0000-00-00 00:00:00'";
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
-            ->andWhere('project')->in($this->app->user->view->projects)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;
