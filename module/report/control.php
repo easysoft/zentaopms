@@ -266,7 +266,7 @@ class report extends control
             $data['createdPlans'] = $planCount;
             $data['productStat']  = $this->report->getStatByProducts($products, $account, $year);
 
-            $storyInfo = $this->report->getUserYearStory($account, $year);
+            $storyInfo = $this->report->getUserYearStory($products, $account, $year);
             $data['createdStories'] = $storyInfo['count'];
             $data['storyPri']       = $storyInfo['pri'];
             $data['storyStage']     = $storyInfo['stage'];

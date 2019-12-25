@@ -504,24 +504,57 @@ class reportModel extends model
             ->fetchGroup('user');
     }
 
+    /**
+     * Get user year logins.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return int
+     */
     public function getUserYearLogins($account, $year)
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->eq($account)->andWhere('LEFT(date, 4)')->eq($year)->andWhere('action')->eq('login')->fetch('count');
     }
 
+    /**
+     * Get user year actions.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return int
+     */
     public function getUserYearActions($account, $year)
     {
         return $this->dao->select('count(*) as count')->from(TABLE_ACTION)->where('actor')->eq($account)->andWhere('LEFT(date, 4)')->eq($year)->fetch('count');
     }
 
+    /**
+     * Get user year efforts.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return int
+     */
     public function getUserYearEfforts($account, $year)
     {
         return $this->dao->select('count(*) as count, sum(consumed) as consumed')->from(TABLE_TASKESTIMATE)->where('account')->eq($account)->andWhere('LEFT(date, 4)')->eq($year)->fetch();
     }
 
-    public function getUserYearStory($account, $year)
+    /**
+     * Get user year story.
+     * 
+     * @param  array  $products 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
+    public function getUserYearStory($products, $account, $year)
     {
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
+        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('product')->in(array_keys($products))->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
 
         $storyInfo = array();
         $storyInfo['count'] = 0;
@@ -544,6 +577,14 @@ class reportModel extends model
         return $storyInfo;
     }
 
+    /**
+     * Get user year created bugs.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getUserYearCreatedBugs($account, $year)
     {
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
@@ -565,6 +606,14 @@ class reportModel extends model
         return $bugInfo;
     }
 
+    /**
+     * Get user year resolved bugs.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getUserYearResolvedBugs($account, $year)
     {
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('LEFT(resolvedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
@@ -582,6 +631,14 @@ class reportModel extends model
         return $bugInfo;
     }
 
+    /**
+     * Get user year finished tasks.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getUserYearFinishedTasks($account, $year)
     {
         $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('LEFT(finishedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
@@ -599,6 +656,14 @@ class reportModel extends model
         return $taskInfo;
     }
 
+    /**
+     * Get user year created cases.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getUserYearCreatedCases($account, $year)
     {
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
@@ -620,6 +685,14 @@ class reportModel extends model
         return $caseInfo;
     }
 
+    /**
+     * Get user year products.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getUserYearProducts($account, $year)
     {
         $products = $this->dao->select('id,name,status')->from(TABLE_PRODUCT)
@@ -632,11 +705,12 @@ class reportModel extends model
             ->markRight(1)
             ->fetchAll('id');
 
-        $storyProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->fetchPairs('product', 'product');
+        $storyProducts = $this->dao->select('DISTINCT product')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchPairs('product', 'product');
         $planProducts  = $this->dao->select('DISTINCT t1.product')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
+            ->andWhere('t2.actor')->eq($account)
             ->andWhere('t2.action')->eq('opened')
             ->groupBy('t1.product')
             ->fetchPairs('product', 'product');
@@ -647,6 +721,15 @@ class reportModel extends model
         return $products;
     }
 
+    /**
+     * Get plans by products.
+     * 
+     * @param  array  $products 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getPlansByProducts($products, $account, $year)
     {
         return $this->dao->select('t1.product, count(DISTINCT t1.id) as plans')->from(TABLE_PRODUCTPLAN)->alias('t1')
@@ -660,6 +743,15 @@ class reportModel extends model
             ->fetchPairs('product', 'plans');
     }
 
+    /**
+     * Get stories by products.
+     * 
+     * @param  array  $products 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getStoriesByProducts($products, $account, $year)
     {
         return $this->dao->select('product, count(*) as stories')->from(TABLE_STORY)
@@ -671,6 +763,14 @@ class reportModel extends model
             ->fetchPairs('product', 'stories');
     }
 
+    /**
+     * Get user year projects.
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getUserYearProjects($account, $year)
     {
         $projects = $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('deleted')->eq(0)
@@ -694,6 +794,15 @@ class reportModel extends model
         return $projects;
     }
 
+    /**
+     * Get finished story by projects 
+     * 
+     * @param  array  $projects 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getFinishedStoryByProjects($projects, $account, $year)
     {
         return $this->dao->select('t1.project, count(DISTINCT t1.story) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -708,6 +817,15 @@ class reportModel extends model
             ->fetchPairs('project', 'stories');
     }
 
+    /**
+     * Get finished task by projects.
+     * 
+     * @param  array  $projects 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getFinishedTaskByProjects($projects, $account, $year)
     {
         return $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
@@ -719,6 +837,15 @@ class reportModel extends model
             ->fetchPairs('project', 'tasks');
     }
 
+    /**
+     * Get resolved bug by projects.
+     * 
+     * @param  array  $projects 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getResolvedBugByProjects($projects, $account, $year)
     {
         return $this->dao->select('project, count(*) as bugs')->from(TABLE_BUG)
@@ -730,6 +857,13 @@ class reportModel extends model
             ->fetchPairs('project', 'bugs');
     }
 
+    /**
+     * Get stat by projects.
+     * 
+     * @param  array $projects 
+     * @access public
+     * @return array
+     */
     public function getStatByProjects($projects)
     {
         $projectStat = array();
@@ -747,6 +881,15 @@ class reportModel extends model
         return $projectStat;
     }
 
+    /**
+     * Get stat by products.
+     * 
+     * @param  array  $products 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getStatByProducts($products, $account, $year)
     {
         $allStories = $this->dao->select('product, count(*) as count')->from(TABLE_STORY)->where('deleted')->eq(0)
@@ -772,6 +915,14 @@ class reportModel extends model
         return $productStat;
     }
 
+    /**
+     * Get effort for month 
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getEffort4Month($account, $year)
     {
         $efforts = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('account')->eq($account)
@@ -788,6 +939,14 @@ class reportModel extends model
         return $months;
     }
 
+    /**
+     * Get user year products for qa 
+     * 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getUserYearProducts4QA($account, $year)
     {
         $bugProducts  = $this->dao->select('product')->from(TABLE_BUG)->where('openedBy')->eq($account)->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchPairs('product', 'product');
@@ -800,6 +959,15 @@ class reportModel extends model
         return $products;
     }
 
+    /**
+     * Get bug stat by products.
+     * 
+     * @param  array  $products 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getBugStatByProducts($products, $account, $year)
     {
         $allBugs = $this->dao->select('product, count(*) as count')->from(TABLE_BUG)->where('deleted')->eq(0)
@@ -825,6 +993,15 @@ class reportModel extends model
         return $productStat;
     }
 
+    /**
+     * Get created bug by products.
+     * 
+     * @param  array  $products 
+     * @param  string $account 
+     * @param  int    $year 
+     * @access public
+     * @return array
+     */
     public function getCreatedBugByProducts($products, $account, $year)
     {
         return $this->dao->select('product, count(*) as bugs')->from(TABLE_BUG)
