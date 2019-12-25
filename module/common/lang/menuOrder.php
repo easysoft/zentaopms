@@ -94,6 +94,7 @@ $lang->report->menuOrder[5]  = 'product';
 $lang->report->menuOrder[10] = 'prj';
 $lang->report->menuOrder[15] = 'test';
 $lang->report->menuOrder[20] = 'staff';
+$lang->report->menuOrder[25] = 'annual';
 
 /* company menu order. */
 $lang->company->menuOrder[5]  = 'browseUser';

@@ -244,8 +244,108 @@ class report extends control
      * @access public
      * @return void
      */
-    public function annualData()
+    public function annualData($year = '')
     {
+        if(empty($year)) $year = date('Y');
+        $account = $this->app->user->account;
+
+        $role = 'po';
+        if($this->app->user->role == 'dev' or $this->app->user->role == 'td' or $this->app->user->role == 'pm') $role = 'dev';
+        if($this->app->user->role == 'qd' or $this->app->user->role == 'qa') $role = 'qa';
+        $role = 'qa';
+
+        $data = array();
+        $data['logins'] = $this->report->getUserYearLogins($account, $year);
+        if($role == 'po')
+        {
+            $products = $this->report->getUserYearProducts($account, $year);
+            $data['involvedProducts'] = count($products);
+
+            $planGroups = $this->report->getPlansByProducts($products, $year);
+            $planCount  = 0;
+            foreach($planGroups as $plans) $planCount += $plans;
+            $data['createdPlans'] = $planCount;
+            $data['productStat']  = $this->report->getStatByProducts($products, $account, $year);
+
+            $storyInfo = $this->report->getUserYearStory($account, $year);
+            $data['createdStories'] = $storyInfo['count'];
+            $data['storyPri']       = $storyInfo['pri'];
+            $data['storyStage']     = $storyInfo['stage'];
+            $data['storyMonth']     = $storyInfo['month'];
+
+            $storyGroups = $this->report->getStoriesByProducts($products, $year);
+            foreach($products as $productID => $product)
+            {
+                $product->plans   = zget($planGroups, $productID, 0);
+                $product->stories = zget($storyGroups, $productID, 0);
+            }
+            $data['products'] = $products;
+        }
+        elseif($role == 'dev')
+        {
+            $data['actions'] = $this->report->getUserYearActions($account, $year);
+
+            $efforts = $this->report->getUserYearEfforts($account, $year);
+            $data['efforts']  = $efforts->count;
+            $data['consumed'] = $efforts->consumed;
+
+            $projects    = $this->report->getUserYearProjects($account, $year, $role);
+            $projectStat = $this->report->getStatByProjects($projects);
+
+            $tasks = $this->report->getUserYearFinishedTasks($account, $year);
+            $bugs  = $this->report->getUserYearResolvedBugs($account, $year);
+            $data['finishedTaskPri'] = $tasks['pri'];
+            $data['resolvedBugPri']  = $bugs['pri'];
+            $data['effortMonth']     = $this->report->getEffort4Month($account, $year);;
+
+            $stories = $this->report->getFinishedStoryByProjects($projects, $year);
+            $tasks   = $this->report->getFinishedTaskByProjects($projects, $account, $year);
+            $bugs    = $this->report->getResolvedBugByProjects($projects, $account, $year);
+            foreach($projects as $projectID => $project)
+            {
+                $project->stories = zget($stories, $projectID, 0);
+                $project->tasks   = zget($tasks, $projectID, 0);
+                $project->bugs    = zget($bugs, $projectID, 0);
+            }
+
+            $data['projects']    = $projects;
+            $data['projectStat'] = $projectStat;
+        }
+        elseif($role == 'qa')
+        {
+            $data['actions'] = $this->report->getUserYearActions($account, $year);
+            $bugInfo = $this->report->getUserYearCreatedBugs($account, $year);
+            $data['foundBugs'] = $bugInfo['count'];
+            $data['bugPri']    = $bugInfo['pri'];
+            $data['bugMonth']  = $bugInfo['month'];
+
+            $caseInfo = $this->report->getUserYearCreatedCases($account, $year);
+            $data['createdCases'] = $caseInfo['count'];
+            $data['casePri']      = $caseInfo['pri'];
+            $data['caseMonth']    = $caseInfo['month'];
+
+            $projects    = $this->report->getUserYearProjects($account, $year, $role);
+            $projectStat = $this->report->getStatByProjects($projects);
+
+            $bugs = $this->report->getCreatedBugByProjects($projects, $year);
+            foreach($projects as $projectID => $project) $project->bugs = zget($bugs, $projectID, 0);
+
+            $data['projects']    = $projects;
+            $data['projectStat'] = $projectStat;
+        }
+
+        $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
+        $firstYear   = substr($firstAction->date, 0, 4);
+        $currentYear = date('Y');
+
+        $years       = array();
+        for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = $thisYear;
+
+        $this->view->title = sprintf($this->lang->report->annualData->title, $year, $this->app->user->realname);
+        $this->view->data  = $data;
+        $this->view->role  = $role;
+        $this->view->year  = $year;
+        $this->view->years = $years;
         die($this->display());
     }
 }

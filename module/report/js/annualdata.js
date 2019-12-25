@@ -194,4 +194,9 @@ $(function()
     {
         exportAnnualImage();
     });
+
+    $('#toolbar #year').change(function()
+    {
+        location.href = createLink('report', 'annualData', 'year=' + $(this).val());
+    });
 });
