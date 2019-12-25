@@ -266,6 +266,10 @@ if (window.$ && $.zui && $.zui.lang) {
             placeholder: 'エディターを使用して画像を貼り付けます。',
             failMsg: '画像を貼り付けませんでした、後でやり直してください。',
             uploadingHint: '画像をアップロード中、しばらくお待ちください...',
+		},
+		'zui.table': {
+			selectedItems: '<strong>{0}</strong> 選択',
+			attrTotal: '{0} 合計 <strong>{1}</strong>'
 		}
 	});
 }
