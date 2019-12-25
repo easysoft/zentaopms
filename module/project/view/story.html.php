@@ -89,7 +89,7 @@
     </div>
   </div>
   <div class="main-col">
-    <div id='queryBox' data-module='story' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
+    <div id='queryBox' data-module='projectStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
