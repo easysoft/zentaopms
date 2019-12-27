@@ -295,6 +295,8 @@ class report extends control
             $bugs  = $this->report->getUserYearResolvedBugs($account, $year);
             $data['finishedTaskPri'] = $tasks['pri'];
             $data['resolvedBugPri']  = $bugs['pri'];
+            $data['taskMonth']       = $tasks['month'];
+            $data['bugMonth']        = $bugs['month'];
             $data['effortMonth']     = $this->report->getEffort4Month($account, $year);;
 
             $stories = $this->report->getFinishedStoryByProjects($projects, $account, $year);
@@ -337,7 +339,7 @@ class report extends control
         $firstYear   = substr($firstAction->date, 0, 4);
         $currentYear = date('Y');
 
-        $years       = array();
+        $years = array();
         for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = $thisYear;
 
         $this->view->title = sprintf($this->lang->report->annualData->title, $year, $this->app->user->realname);

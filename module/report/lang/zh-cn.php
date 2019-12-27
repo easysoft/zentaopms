@@ -138,6 +138,7 @@ $lang->report->annualData->totalCreatedCase = '累计创建的用例数';
 $lang->report->annualData->devData           = "完成的任务数和解决的Bug数";
 $lang->report->annualData->totalFinishedTask = '完成的任务数';
 $lang->report->annualData->totalResolvedBug  = '解决的Bug数';
+$lang->report->annualData->totalConsumed     = '累计工时';
 
 $lang->report->annualData->poData          = "所创建的{$lang->storyCommon}数对应的优先级及状态";
 $lang->report->annualData->totalStoryPri   = "创建{$lang->storyCommon}优先级分布";
@@ -145,6 +146,6 @@ $lang->report->annualData->totalStoryStage = "创建{$lang->storyCommon}阶段�
 
 $lang->report->annualData->qaStatistics  = "月发现的Bug数和创建的用例数";
 $lang->report->annualData->poStatistics  = "月创建{$lang->storyCommon}数";
-$lang->report->annualData->devStatistics = "月完成任务累计工时";
+$lang->report->annualData->devStatistics = "月完成任务数及累计工时和解决的Bug数";
 
 $lang->report->annualData->unit = "个";

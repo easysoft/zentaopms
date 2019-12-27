@@ -622,12 +622,16 @@ class reportModel extends model
         $bugInfo = array();
         $bugInfo['count'] = 0;
         $bugInfo['pri']   = array();
+        $bugInfo['month'] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         foreach($bugs as $bug)
         {
             $bugInfo['count'] ++;
 
             if(!isset($bugInfo['pri'][$bug->pri])) $bugInfo['pri'][$bug->pri] = 0;
             $bugInfo['pri'][$bug->pri] ++;
+
+            $month = (int)substr($bug->resolvedDate, 5, 2) - 1;
+            $bugInfo['month'][$month] ++;
         }
         return $bugInfo;
     }
@@ -642,17 +646,27 @@ class reportModel extends model
      */
     public function getUserYearFinishedTasks($account, $year)
     {
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('LEFT(finishedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
+        $tasks = $this->dao->select('DISTINCT t1.*, t2.date as finishedDate')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and objectType='task'")
+            ->where('t2.actor')->eq($account)
+            ->andWhere('LEFT(t2.date, 4)')->eq($year)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.action')->eq('finished')
+            ->fetchAll();
 
         $taskInfo = array();
         $taskInfo['count'] = 0;
         $taskInfo['pri']   = array();
+        $taskInfo['month'] = array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
         foreach($tasks as $task)
         {
             $taskInfo['count'] ++;
 
             if(!isset($taskInfo['pri'][$task->pri])) $taskInfo['pri'][$task->pri] = 0;
             $taskInfo['pri'][$task->pri] ++;
+
+            $month = (int)substr($task->finishedDate, 5, 2) - 1;
+            $taskInfo['month'][$month] ++;
         }
         return $taskInfo;
     }
@@ -787,7 +801,13 @@ class reportModel extends model
             ->fetchAll('id');
 
         $teamProjects = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($account)->andWhere('LEFT(`join`, 4)')->eq($year)->fetchPairs('root', 'root');
-        $taskProjects = $this->dao->select('project')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('LEFT(finishedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchPairs('project', 'project');
+        $taskProjects = $this->dao->select('DISTINCT t1.project')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and objectType='task'")
+            ->where('t2.actor')->eq($account)
+            ->andWhere('LEFT(t2.date, 4)')->eq($year)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.action')->eq('finished')
+            ->fetchPairs('project', 'project');
 
         $projects += $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('deleted')->eq(0)
             ->andWhere('id')->in($teamProjects + $taskProjects)
@@ -809,11 +829,13 @@ class reportModel extends model
         return $this->dao->select('t1.project, count(DISTINCT t1.story) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_TASK)->alias('t3')->on('t1.story=t3.story')
+            ->leftJoin(TABLE_ACTION)->alias('t4')->on("t3.id=t4.objectID and t4.objectType='task'")
             ->where('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t1.project')->in(array_keys($projects))
-            ->andWhere('LEFT(t3.finishedDate, 4)')->eq($year)
-            ->andWhere('t3.finishedBy')->eq($account)
+            ->andWhere('LEFT(t4.date, 4)')->eq($year)
+            ->andWhere('t4.actor')->eq($account)
+            ->andWhere('t4.action')->eq('finished')
             ->groupBy('t1.project')
             ->fetchPairs('project', 'stories');
     }
@@ -829,12 +851,14 @@ class reportModel extends model
      */
     public function getFinishedTaskByProjects($projects, $account, $year)
     {
-        return $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->andWhere('project')->in(array_keys($projects))
-            ->andWhere('LEFT(finishedDate, 4)')->eq($year)
-            ->andWhere('finishedBy')->eq($account)
-            ->groupBy('project')
+        return $this->dao->select('t1.project, count(DISTINCT t1.id) as tasks')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and objectType='task'")
+            ->where('t2.actor')->eq($account)
+            ->andWhere('LEFT(t2.date, 4)')->eq($year)
+            ->andWhere('t2.action')->eq('finished')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.project')->in(array_keys($projects))
+            ->groupBy('t1.project')
             ->fetchPairs('project', 'tasks');
     }
 

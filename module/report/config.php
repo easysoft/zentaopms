@@ -17,7 +17,7 @@ $config->report->annualData['dev']['block1'] = array('title' => 'baseInfo', 'dat
 $config->report->annualData['dev']['block2'] = array('title' => 'projectOverview', 'data' => array('doneProject', 'doingProject', 'suspendProject'));
 $config->report->annualData['dev']['block3'] = array('title' => '', 'data' => array('projects'));
 $config->report->annualData['dev']['block4'] = array('title' => 'devData', 'data' => array('finishedTaskPri', 'resolvedBugPri'));
-$config->report->annualData['dev']['block5'] = array('title' => 'devStatistics', 'data' => array('effortMonth'));
+$config->report->annualData['dev']['block5'] = array('title' => 'devStatistics', 'data' => array('taskMonth', 'effortMonth', 'bugMonth'));
 
 $config->report->annualData['qa']['block1'] = array('title' => 'baseInfo', 'data' => array('logins', 'actions', 'foundBugs', 'createdCases'));
 $config->report->annualData['qa']['block2'] = array('title' => 'qaOverview', 'data' => array());

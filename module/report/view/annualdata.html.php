@@ -229,7 +229,9 @@ var annualData =
                 $datasets = array();
                 foreach($blockConfig['data'] as $i => $name)
                 {
-                    if($name == 'effortMonth')  $label = $lang->report->annualData->devStatistics;
+                    if($name == 'effortMonth')  $label = $lang->report->annualData->totalConsumed;
+                    if($name == 'bugMonth')     $label = $lang->report->annualData->totalResolvedBug;
+                    if($name == 'taskMonth')    $label = $lang->report->annualData->totalFinishedTask;
                     $datasets[] = array('label' => $label, 'data' => $data[$name]);
                 }
             }
