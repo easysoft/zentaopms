@@ -103,49 +103,49 @@ $lang->report->proVersion   = '<a href="https://api.zentao.net/goto.php?item=pro
 $lang->report->proVersionEn = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
 
 $lang->report->annualData = new stdclass();
-$lang->report->annualData->title            = "%s年工作内容统计一览表 —— %s";
-$lang->report->annualData->baseInfo         = "基本数据信息";
-$lang->report->annualData->logins           = "累计登录次数";
-$lang->report->annualData->actions          = "累计动态数";
-$lang->report->annualData->efforts          = "累计日志数";
-$lang->report->annualData->consumed         = "累计工时数";
-$lang->report->annualData->foundBugs        = "累计创建Bug数";
-$lang->report->annualData->createdCases     = "累计创建用例数";
-$lang->report->annualData->involvedProducts = "累计参与{$lang->productCommon}数";
-$lang->report->annualData->createdPlans     = "累计创建计划数";
-$lang->report->annualData->createdStories   = "累计创建{$lang->storyCommon}数";
+$lang->report->annualData->title            = "%s Work Summary —— %s";
+$lang->report->annualData->baseInfo         = "Basic Information";
+$lang->report->annualData->logins           = "Login";
+$lang->report->annualData->actions          = "Action";
+$lang->report->annualData->efforts          = "Effort";
+$lang->report->annualData->consumed         = "Hour Cost";
+$lang->report->annualData->foundBugs        = "Bug Reported";
+$lang->report->annualData->createdCases     = "Case Created";
+$lang->report->annualData->involvedProducts = "{$lang->productCommon} Involved";
+$lang->report->annualData->createdPlans     = "Plan Created";
+$lang->report->annualData->createdStories   = "{$lang->storyCommon} Created";
 
-$lang->report->annualData->productOverview = "{$lang->productCommon}创建{$lang->storyCommon}数及占比";
-$lang->report->annualData->qaOverview      = "{$lang->productCommon}创建Bug数及占比";
-$lang->report->annualData->projectOverview = "参与{$lang->projectCommon}概览";
-$lang->report->annualData->doneProject     = "已完成的{$lang->projectCommon}";
-$lang->report->annualData->doingProject    = "正在进行的{$lang->projectCommon}";
-$lang->report->annualData->suspendProject  = "已挂起的{$lang->projectCommon}";
+$lang->report->annualData->productOverview = "{$lang->productCommon} {$lang->storyCommon} Count and Percent";
+$lang->report->annualData->qaOverview      = "{$lang->productCommon} Bug Count and Percent";
+$lang->report->annualData->projectOverview = "{$lang->projectCommon} Overview";
+$lang->report->annualData->doneProject     = "Done {$lang->projectCommon}";
+$lang->report->annualData->doingProject    = "Ongoing {$lang->projectCommon}";
+$lang->report->annualData->suspendProject  = "Suspended {$lang->projectCommon}";
 
-$lang->report->annualData->projectName   = "{$lang->projectCommon}名称";
-$lang->report->annualData->finishedStory = "完成{$lang->storyCommon}数";
-$lang->report->annualData->finishedTask  = '完成任务数';
-$lang->report->annualData->foundBug      = '创建Bug数';
-$lang->report->annualData->resolvedBug   = '解决Bug数';
-$lang->report->annualData->productName   = "{$lang->productCommon}名称";
-$lang->report->annualData->planCount     = '计划数';
-$lang->report->annualData->storyCount    = "{$lang->storyCommon}数";
+$lang->report->annualData->projectName   = "{$lang->projectCommon}";
+$lang->report->annualData->finishedStory = "{$lang->storyCommon} Finished";
+$lang->report->annualData->finishedTask  = 'Task Finished';
+$lang->report->annualData->foundBug      = 'Bug Reported';
+$lang->report->annualData->resolvedBug   = 'Bug Resolved';
+$lang->report->annualData->productName   = "{$lang->productCommon}";
+$lang->report->annualData->planCount     = 'Plan';
+$lang->report->annualData->storyCount    = "{$lang->storyCommon}";
 
-$lang->report->annualData->qaData           = "累计创建Bug数和创建用例数";
-$lang->report->annualData->totalCreatedBug  = '累计创建Bug数';
-$lang->report->annualData->totalCreatedCase = '累计创建用例数';
+$lang->report->annualData->qaData           = "Bug Reported and Case Created";
+$lang->report->annualData->totalCreatedBug  = 'Bug Reported';
+$lang->report->annualData->totalCreatedCase = 'Case Created';
 
-$lang->report->annualData->devData           = "完成任务数和解决Bug数";
-$lang->report->annualData->totalFinishedTask = '完成任务数';
-$lang->report->annualData->totalResolvedBug  = '解决Bug数';
-$lang->report->annualData->totalConsumed     = '累计工时';
+$lang->report->annualData->devData           = "Task Finished and Bug Resolved";
+$lang->report->annualData->totalFinishedTask = 'Task Finished';
+$lang->report->annualData->totalResolvedBug  = 'Bug Resolved';
+$lang->report->annualData->totalConsumed     = 'Hour Cost';
 
-$lang->report->annualData->poData          = "所创建{$lang->storyCommon}数和对应的优先级及状态";
-$lang->report->annualData->totalStoryPri   = "创建{$lang->storyCommon}优先级分布";
-$lang->report->annualData->totalStoryStage = "创建{$lang->storyCommon}阶段分布";
+$lang->report->annualData->poData          = "{$lang->storyCommon} Created, Priority and Status";
+$lang->report->annualData->totalStoryPri   = "{$lang->storyCommon} Priority";
+$lang->report->annualData->totalStoryStage = "{$lang->storyCommon} Stage";
 
-$lang->report->annualData->qaStatistics  = "月创建Bug数和创建用例数";
-$lang->report->annualData->poStatistics  = "月创建{$lang->storyCommon}数";
-$lang->report->annualData->devStatistics = "月完成任务数及累计工时和解决Bug数";
+$lang->report->annualData->qaStatistics  = "Monthly Created Bug and Case";
+$lang->report->annualData->poStatistics  = "Monthly Created {$lang->storyCommon}";
+$lang->report->annualData->devStatistics = "Monthly Finished Task, Hour, and Resolved Bug";
 
-$lang->report->annualData->unit = "个";
+$lang->report->annualData->unit = " ";
