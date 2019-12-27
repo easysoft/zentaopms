@@ -53,10 +53,11 @@ function loadProductPlans(productID, branch)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
     planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true');
-    var $planIDBox = $('#planIdBox');
-    $planIDBox.load(planLink, function(){
-        $planIDBox.find('#plan').chosen();
-        $planIDBox.fixInputGroup();
+    var $planIdBox = $('#planIdBox');
+    $planIdBox.load(planLink, function()
+    {
+        $planIdBox.find('#plan').chosen();
+        $planIdBox.fixInputGroup();
     });
 }
 

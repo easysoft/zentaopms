@@ -286,7 +286,7 @@ class report extends control
 
             $efforts = $this->report->getUserYearEfforts($account, $year);
             $data['efforts']  = $efforts->count;
-            $data['consumed'] = $efforts->consumed;
+            $data['consumed'] = round($efforts->consumed, 2);
 
             $projects    = $this->report->getUserYearProjects($account, $year);
             $projectStat = $this->report->getStatByProjects($projects);

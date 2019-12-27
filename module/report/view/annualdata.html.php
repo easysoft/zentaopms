@@ -178,7 +178,13 @@ var annualData =
                     $totalData = array();
                     foreach($data[$name] as $key => $value)
                     {
-                        $totalData[] = array('title' => $key, 'value' => $value, 'legend' => ($name == 'storyPri' ? ('P' . $key) : $lang->story->stageList[$key]));
+                        $legend = 'P' . $key;
+                        if($name == 'storyStage')
+                        {
+                            $legend = zget($lang->story->stageList, $key);
+                            if(empty($legend)) $legend = 'NULL';
+                        }
+                        $totalData[] = array('title' => $key, 'value' => $value, 'legend' => $legend);
                     }
 
                     if($name == 'storyPri')   $title = $lang->report->annualData->totalStoryPri;

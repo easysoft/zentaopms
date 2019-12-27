@@ -132,5 +132,4 @@
     <?php endif;?>
   </form>
 </div>
-<?php js::set('selectedItems', $lang->selectedItems);?>
 <?php include '../../common/view/footer.html.php';?>
