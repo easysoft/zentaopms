@@ -646,14 +646,17 @@ class reportModel extends model
      */
     public function getUserYearFinishedTasks($account, $year)
     {
-        $tasks = $this->dao->select('t1.id,t1.pri,t2.date as finishedDate')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and objectType='task'")
+        $tasks = $this->dao->select('id,pri,finishedDate')->from(TABLE_TASK)
+            ->where('LEFT(finishedDate, 4)')->eq($year)
+            ->andWhere('finishedBy')->eq($account)
+            ->fetchAll('id');
+        $tasks += $this->dao->select('t1.id,t1.pri,t2.date as finishedDate')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='task'")
+            ->leftJoin(TABLE_TEAM)->alias('t3')->on("t1.id=t3.root and t3.type='task'")
             ->where('t2.actor')->eq($account)
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t2.action')->eq('finished')
-            ->andWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t1.finishedList')->like("%,{$account},%")
-            ->markRight(1)
+            ->andWhere('t3.account')->eq($account)
             ->fetchAll('id');
 
         $taskInfo = array();
@@ -801,13 +804,10 @@ class reportModel extends model
 
         $teamProjects = $this->dao->select('*')->from(TABLE_TEAM)->where('type')->eq('project')->andWhere('account')->eq($account)->andWhere('LEFT(`join`, 4)')->eq($year)->fetchPairs('root', 'root');
         $taskProjects = $this->dao->select('DISTINCT t1.project')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and objectType='task'")
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='task'")
             ->where('t2.actor')->eq($account)
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t2.action')->eq('finished')
-            ->andWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t1.finishedList')->like("%,{$account},%")
-            ->markRight(1)
             ->fetchPairs('project', 'project');
 
         $projects += $this->dao->select('id,name,status')->from(TABLE_PROJECT)
@@ -835,9 +835,6 @@ class reportModel extends model
             ->andWhere('LEFT(t4.date, 4)')->eq($year)
             ->andWhere('t4.actor')->eq($account)
             ->andWhere('t4.action')->eq('finished')
-            ->andWhere('t3.finishedby', 1)->eq($account)
-            ->orWhere('t3.finishedList')->like("%,{$account},%")
-            ->markRight(1)
             ->fetchGroup('project', 'story');
 
         foreach($storyGroups as $projectID => $stories) $storyGroups[$projectID] = count($stories);
@@ -855,17 +852,23 @@ class reportModel extends model
      */
     public function getFinishedTaskByProjects($projects, $account, $year)
     {
-        $taskGroups = $this->dao->select('t1.*')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and objectType='task'")
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('LEFT(finishedDate, 4)')->eq($year)
+            ->andWhere('finishedBy')->eq($account)
+            ->andWhere('project')->in(array_keys($projects))
+            ->fetchAll('id');
+        $tasks += $this->dao->select('t1.*')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='task'")
+            ->leftJoin(TABLE_TEAM)->alias('t3')->on("t1.id=t3.root and t3.type='task'")
             ->where('t2.actor')->eq($account)
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t2.action')->eq('finished')
+            ->andWhere('t3.account')->eq($account)
             ->andWhere('t1.project')->in(array_keys($projects))
-            ->andWhere('t1.finishedby', 1)->eq($account)
-            ->orWhere('t1.finishedList')->like("%,{$account},%")
-            ->markRight(1)
-            ->fetchGroup('project', 'id');
+            ->fetchAll('id');
 
+        $taskGroups = array();
+        foreach($tasks as $taskID => $task) $taskGroups[$task->project][$taskID] = $task;
         foreach($taskGroups as $projectID => $tasks) $taskGroups[$projectID] = count($tasks);
         return $taskGroups;
     }
