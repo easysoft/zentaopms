@@ -152,7 +152,6 @@ class reportModel extends model
                 $parentPlan = zget($plans, $plan->parent, null);
                 if($parentPlan)
                 {
-                    $parentPlan->title = $parentPlan->title;
                     $products[$plan->product]->plans[$parentPlan->id] = $parentPlan;
                     unset($plans[$parentPlan->id]);
                 }
