@@ -149,9 +149,9 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = '', $groupBy = 'stroy')
+    public function groupCase($productID = 0, $branch = '', $groupBy = 'story')
     {
-        $groupBy   = empty($groupBy) ? 'stroy' : $groupBy;
+        $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
