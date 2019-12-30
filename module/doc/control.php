@@ -37,6 +37,9 @@ class doc extends control
      */
     public function index()
     {
+        $this->from = 'doc';
+        setcookie('from', 'doc', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         $this->doc->setMenu();
 
         $this->session->set('docList', $this->app->getURI(true));
@@ -78,7 +81,7 @@ class doc extends control
     public function browse($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $from = 'doc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->from = $from;
-        setcookie('from',  $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->loadModel('search');
 
