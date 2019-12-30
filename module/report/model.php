@@ -651,6 +651,9 @@ class reportModel extends model
             ->where('t2.actor')->eq($account)
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t2.action')->eq('finished')
+            ->andWhere('t1.finishedby', 1)->eq($account)
+            ->orWhere('t1.finishedList')->like("%,{$account},%")
+            ->markRight(1)
             ->fetchAll('id');
 
         $taskInfo = array();
@@ -802,6 +805,9 @@ class reportModel extends model
             ->where('t2.actor')->eq($account)
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t2.action')->eq('finished')
+            ->andWhere('t1.finishedby', 1)->eq($account)
+            ->orWhere('t1.finishedList')->like("%,{$account},%")
+            ->markRight(1)
             ->fetchPairs('project', 'project');
 
         $projects += $this->dao->select('id,name,status')->from(TABLE_PROJECT)
@@ -829,6 +835,9 @@ class reportModel extends model
             ->andWhere('LEFT(t4.date, 4)')->eq($year)
             ->andWhere('t4.actor')->eq($account)
             ->andWhere('t4.action')->eq('finished')
+            ->andWhere('t3.finishedby', 1)->eq($account)
+            ->orWhere('t3.finishedList')->like("%,{$account},%")
+            ->markRight(1)
             ->fetchGroup('project', 'story');
 
         foreach($storyGroups as $projectID => $stories) $storyGroups[$projectID] = count($stories);
@@ -852,6 +861,9 @@ class reportModel extends model
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
             ->andWhere('t2.action')->eq('finished')
             ->andWhere('t1.project')->in(array_keys($projects))
+            ->andWhere('t1.finishedby', 1)->eq($account)
+            ->orWhere('t1.finishedList')->like("%,{$account},%")
+            ->markRight(1)
             ->fetchGroup('project', 'id');
 
         foreach($taskGroups as $projectID => $tasks) $taskGroups[$projectID] = count($tasks);
