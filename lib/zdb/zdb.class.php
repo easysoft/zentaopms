@@ -45,9 +45,11 @@ class zdb
         $stmt      = $this->dbh->query("show full tables");
         while($table = $stmt->fetch(PDO::FETCH_ASSOC)) 
         {
-            $tableName = $table["Tables_in_{$config->db->name}"];
             $tableType = strtolower($table['Table_type']);
-            $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;
+            if($tableType != 'base table') continue;
+
+            $tableName = $table["Tables_in_{$config->db->name}"];
+            $allTables[$tableName] = 'table';
         }
 
         return $allTables;
