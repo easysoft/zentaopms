@@ -16,7 +16,6 @@ $lang->backup->size  = 'Taille';
 $lang->backup->setting    = 'Paramétrage';
 $lang->backup->settingDir = 'Répertoire Backup';
 $lang->backup->settingList['nofile'] = 'Ne pas archiver fichiers et codes.';
-$lang->backup->settingList['nozip']  = 'Copier seulement les fichiers sans les compresser.';
 $lang->backup->settingList['nosafe'] = 'Ne pas prévenir du téléchargement par PHP file header.';
 
 $lang->backup->waitting       = '<span id="backupType"></span> est en cours. Patientez s´il vous plait...';

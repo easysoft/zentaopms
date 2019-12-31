@@ -83,7 +83,6 @@ class backup extends control
     {
         if($reload == 'yes') session_write_close();
         set_time_limit(0);
-        $nozip  = strpos($this->config->backup->setting, 'nozip') !== false;
         $nofile = strpos($this->config->backup->setting, 'nofile') !== false;
         $nosafe = strpos($this->config->backup->setting, 'nosafe') !== false;
 

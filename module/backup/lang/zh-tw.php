@@ -16,7 +16,6 @@ $lang->backup->size  = '大小';
 $lang->backup->setting    = '設置';
 $lang->backup->settingDir = '備份目錄';
 $lang->backup->settingList['nofile'] = '不備份附件和代碼';
-$lang->backup->settingList['nozip']  = '只拷貝檔案，不壓縮';
 $lang->backup->settingList['nosafe'] = '不需要防下載PHP檔案頭';
 
 $lang->backup->waitting        = '<span id="backupType"></span>正在進行中，請稍候...';
