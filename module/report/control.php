@@ -246,8 +246,24 @@ class report extends control
      */
     public function annualData($year = '')
     {
-        if(empty($year)) $year = date('Y');
-        $account = $this->app->user->account;
+        $account     = $this->app->user->account;
+        $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
+        $firstYear   = substr($firstAction->date, 0, 4);
+        $currentYear = date('Y');
+
+        $years = array();
+        for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = $thisYear;
+
+        if(empty($year))
+        {
+            $year  = date('Y');
+            $month = date('n');
+            if($month <= $this->config->report->annualData['minMonth'])
+            {
+                $year -= 1;
+                if(!isset($years[$year])) $year += 1;
+            }
+        }
 
         $role = 'po';
         if($this->app->user->role == 'dev' or $this->app->user->role == 'td' or $this->app->user->role == 'pm') $role = 'dev';
@@ -334,13 +350,6 @@ class report extends control
             $data['products']    = $products;
             $data['productStat'] = $productStat;
         }
-
-        $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
-        $firstYear   = substr($firstAction->date, 0, 4);
-        $currentYear = date('Y');
-
-        $years = array();
-        for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = $thisYear;
 
         $this->view->title = sprintf($this->lang->report->annualData->title, $year, $this->app->user->realname);
         $this->view->data  = $data;

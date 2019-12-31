@@ -7,6 +7,8 @@ $config->report->dailyreminder->task     = true;
 $config->report->dailyreminder->todo     = true;
 $config->report->dailyreminder->testTask = true;
 
+$config->report->annualData['minMonth'] = 2;
+
 $config->report->annualData['po']['block1'] = array('title' => 'baseInfo', 'data' => array('logins', 'involvedProducts', 'createdPlans', 'createdStories'));
 $config->report->annualData['po']['block2'] = array('title' => 'productOverview', 'data' => array());
 $config->report->annualData['po']['block3'] = array('title' => '', 'data' => array('products'));
