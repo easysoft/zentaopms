@@ -121,7 +121,7 @@ $lang->menu = new stdclass();
 $lang->menu->my      = '<span>Dashboard</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = 'QS|qa|index';
+$lang->menu->qa      = 'Test|qa|index';
 $lang->menu->repo    = 'Code|repo|log';
 $lang->menu->doc     = 'Dokumente|doc|index';
 $lang->menu->report  = 'Berichte|report|index';
