@@ -340,6 +340,58 @@ class productModel extends model
     }
 
     /**
+     * Get ordered products 
+     * 
+     * @param  string $status 
+     * @param  int    $num 
+     * @access public
+     * @return array
+     */
+    public function getOrderedProducts($status, $num = 0)
+    {
+        $products = $this->getList($status);
+        if(empty($products)) return $products;
+
+        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
+        $productList = array();
+        foreach($lines as $id => $name)
+        {
+            foreach($products as $key => $product)
+            {
+                if($product->line == $id)
+                {
+                    $product->name = $name . '/' . $product->name;
+                    $productList[] = $product;
+                    unset($products[$key]);
+                }
+            }
+        }
+        $productList = array_merge($productList, $products);
+
+        $products = $mineProducts = $otherProducts = $closedProducts = array();
+        foreach($productList as $product)
+        {
+            if(!$this->app->user->admin and !$this->checkPriv($product->id)) continue;
+            if($product->status == 'normal' and $product->PO == $this->app->user->account) 
+            {
+                $mineProducts[$product->id] = $product;
+            }
+            elseif($product->status == 'normal' and $product->PO != $this->app->user->account) 
+            {
+                $otherProducts[$product->id] = $product;
+            }
+            elseif($product->status == 'closed')
+            {
+                $closedProducts[$product->id] = $product;
+            }
+        }
+        $products = $mineProducts + $otherProducts + $closedProducts;
+
+        if(empty($num)) return $products;
+        return array_slice($products, 0, $num, true);
+    }
+
+    /**
      * Create a product.
      *
      * @access public

@@ -91,6 +91,12 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `case` mediumint(8) unsigned NOT NULL,
   `caseVersion` smallint(6) NOT NULL default '1',
   `result` mediumint(8) unsigned NOT NULL,
+  `repo` mediumint(8) unsigned NOT NULL,
+  `entry` varchar(255) unsigned NOT NULL,
+  `lines` varchar(10) unsigned NOT NULL,
+  `v1` varchar(40) unsigned NOT NULL,
+  `v2` varchar(40) unsigned NOT NULL,
+  `repoType` varchar(30) unsigned NOT NULL DEFAULT '',
   `testtask` mediumint(8) unsigned NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
@@ -565,6 +571,61 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
   KEY `build` (`build`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_repo`;
+CREATE TABLE IF NOT EXISTS `zt_repo` (
+  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `prefix` varchar(100) NOT NULL,
+  `encoding` varchar(20) NOT NULL,
+  `SCM` varchar(10) NOT NULL,
+  `client` varchar(100) NOT NULL,
+  `commits` mediumint(8) unsigned NOT NULL,
+  `account` varchar(30) NOT NULL,
+  `password` varchar(30) NOT NULL,
+  `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
+  `acl` text NOT NULL,
+  `synced` tinyint(1) NOT NULL DEFAULT '0',
+  `lastSync` datetime NOT NULL,
+  `deleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_repobranch`;
+CREATE TABLE IF NOT EXISTS `zt_repobranch` (
+  `repo` mediumint(8) unsigned NOT NULL,
+  `revision` mediumint(8) unsigned NOT NULL,
+  `branch` varchar(255) NOT NULL,
+  UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
+  KEY `branch` (`branch`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_repofiles`;
+CREATE TABLE IF NOT EXISTS `zt_repofiles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `repo` mediumint(8) unsigned NOT NULL,
+  `revision` mediumint(8) unsigned NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `parent` varchar(255) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `action` char(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `path` (`path`),
+  KEY `parent` (`parent`),
+  KEY `repo` (`repo`),
+  KEY `revision` (`revision`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_repohistory`;
+CREATE TABLE IF NOT EXISTS `zt_repohistory` (
+  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `repo` mediumint(9) NOT NULL,
+  `revision` varchar(40) NOT NULL,
+  `commit` mediumint(8) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `committer` varchar(100) NOT NULL,
+  `time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `repo` (`repo`),
+  KEY `revision` (`revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
@@ -1102,6 +1163,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1, 'doc', 'createLib'),
 (1, 'doc', 'delete'),
 (1, 'doc', 'deleteLib'),
+(1, 'doc', 'deleteFile'),
 (1, 'doc', 'edit'),
 (1, 'doc', 'editLib'),
 (1, 'doc', 'index'),
@@ -1878,6 +1940,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (4, 'doc', 'createLib'),
 (4, 'doc', 'delete'),
 (4, 'doc', 'deleteLib'),
+(4, 'doc', 'deleteFile'),
 (4, 'doc', 'edit'),
 (4, 'doc', 'editLib'),
 (4, 'doc', 'index'),
@@ -2106,6 +2169,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (5, 'doc', 'createLib'),
 (5, 'doc', 'delete'),
 (5, 'doc', 'deleteLib'),
+(5, 'doc', 'deleteFile'),
 (5, 'doc', 'edit'),
 (5, 'doc', 'editLib'),
 (5, 'doc', 'index'),
@@ -2380,6 +2444,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (6, 'doc', 'createLib'),
 (6, 'doc', 'delete'),
 (6, 'doc', 'deleteLib'),
+(6, 'doc', 'deleteFile'),
 (6, 'doc', 'edit'),
 (6, 'doc', 'editLib'),
 (6, 'doc', 'index'),
@@ -2606,6 +2671,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (7, 'doc', 'createLib'),
 (7, 'doc', 'delete'),
 (7, 'doc', 'deleteLib'),
+(7, 'doc', 'deleteFile'),
 (7, 'doc', 'edit'),
 (7, 'doc', 'editLib'),
 (7, 'doc', 'index'),
@@ -2859,6 +2925,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (8, 'doc', 'createLib'),
 (8, 'doc', 'delete'),
 (8, 'doc', 'deleteLib'),
+(8, 'doc', 'deleteFile'),
 (8, 'doc', 'edit'),
 (8, 'doc', 'editLib'),
 (8, 'doc', 'index'),
@@ -3099,6 +3166,7 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (9, 'doc', 'createLib'),
 (9, 'doc', 'delete'),
 (9, 'doc', 'deleteLib'),
+(9, 'doc', 'deleteFile'),
 (9, 'doc', 'edit'),
 (9, 'doc', 'editLib'),
 (9, 'doc', 'index'),

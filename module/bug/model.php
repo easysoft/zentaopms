@@ -1688,6 +1688,7 @@ class bugModel extends model
         $projects = $this->loadModel('project')->getPairs();
 
         $maxLength = 12;
+        if(common::checkNotCN()) $maxLength = 22;
         foreach($datas as $projectID => $data)
         {
             $data->name  = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
@@ -2311,7 +2312,7 @@ class bugModel extends model
         if($branch and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
-        /* Fix bug #2877. */
+        /* Fix bug #2878. */
         if(strpos($bugQuery, '`resolvedDate`') !== false) $bugQuery .= " AND `resolvedDate` != '0000-00-00 00:00:00'";
         if(strpos($bugQuery, '`closedDate`') !== false)   $bugQuery .= " AND `closedDate` != '0000-00-00 00:00:00'";
 

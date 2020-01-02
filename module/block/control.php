@@ -752,7 +752,7 @@ class block extends control
         $status = isset($this->params->type) ? $this->params->type : '';
         $num    = isset($this->params->num) ? $this->params->num : '';
 
-        $products      = $this->block->getProducts($status, $num);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $num);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -883,7 +883,7 @@ class block extends control
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get projects. */
-        $projects = $this->block->getProjects($status, $num);
+        $projects = $this->loadModel('project')->getOrderedProjects($status, $num);
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -992,7 +992,7 @@ class block extends control
         $status  = isset($this->params->type) ? $this->params->type : '';
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
-        $products      = $this->block->getProducts($status, $num);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $num);
         $productIdList = array_keys($products);
 
         if(empty($products))

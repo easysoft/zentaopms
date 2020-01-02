@@ -1072,6 +1072,7 @@ class task extends control
 
                 /* Skip parent task when batch close task. */
                 if($task->parent == '-1') continue;
+
                 /* Skip closed task when batch close task. */
                 if($task->status == 'closed') continue;
 

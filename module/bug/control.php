@@ -408,7 +408,7 @@ class bug extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
-        $productList = $this->loadModel('block')->getProducts('noclosed', ''); 
+        $productList = $this->product->getOrderedProducts('all'); 
         foreach($productList as $product) $products[$product->id] = $product->name;
 
         /* Set custom. */
@@ -1322,7 +1322,7 @@ class bug extends control
             if($bug->toTask != 0)
             {
                 $task = $this->task->getById($bug->toTask);
-                if($task->deleted != '1')
+                if(!$task->deleted)
                 {
                     $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                     unset($_GET['onlybody']);

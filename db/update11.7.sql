@@ -64,3 +64,5 @@ ALTER TABLE `zt_bug` ADD `v1` varchar(40) COLLATE 'utf8_general_ci' NOT NULL AFT
 ALTER TABLE `zt_bug` ADD `v2` varchar(40) COLLATE 'utf8_general_ci' NOT NULL AFTER `v1`;
 ALTER TABLE `zt_bug` ADD `repoType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `v2`;
 ALTER TABLE `zt_bug` ADD `entry` varchar(255) COLLATE 'utf8_general_ci' NOT NULL AFTER `repo`;
+
+DELETE FROM `zt_grouppriv` WHERE `module` = 'api' AND `method` = 'sql';

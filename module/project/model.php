@@ -850,6 +850,7 @@ class projectModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
         $stats       = array();
@@ -1118,6 +1119,42 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq(0);
         if(!$withBranch) return $query->fetchPairs('id', 'name');
         return $query->fetchAll('id');
+    }
+
+    /**
+     * Get ordered projects.
+     * 
+     * @param  string $status 
+     * @param  int    $num 
+     * @access public
+     * @return array
+     */
+    public function getOrderedProjects($status, $num = 0)
+    {
+        $projectList = $this->getList($status);
+        if(empty($projectList)) return $projectList;
+
+        $projects = $mineProjects = $otherProjects = $closedProjects = array();
+        foreach($projectList as $project)
+        {
+            if(!$this->app->user->admin and !$this->checkPriv($project->id)) continue;
+            if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+            {
+                $mineProjects[$project->id] = $project;
+            }
+            elseif($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+            {
+                $otherProjects[$project->id] = $project;
+            }
+            elseif($project->status == 'done' or $project->status == 'closed')
+            {
+                $closedProjects[$project->id] = $project;
+            }
+        }
+        $projects = $mineProjects + $otherProjects + $closedProjects;
+
+        if(empty($num)) return $projects;
+        return array_slice($projects, 0, $num, true);
     }
 
     /**

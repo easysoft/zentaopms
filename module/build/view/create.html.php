@@ -44,7 +44,7 @@
           <td><?php echo html::input('name', '', "class='form-control' required");?></td>
           <td class='text-muted'>
             <?php if($lastBuild):?>
-            <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <a class="code label label-badge label-light" id="lastBuildBtn" href="javascript:;">' . $lastBuild->name . '</a>';?></div>
+            <div class='help-block'> &nbsp; <?php echo $lang->build->last . ': <a class="code label label-badge label-light" id="lastBuildBtn">' . $lastBuild->name . '</a>';?></div>
             <?php endif;?>
           </td>
         </tr>
