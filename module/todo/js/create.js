@@ -21,7 +21,7 @@ $(function()
         {
             $('.cycleConfig').addClass('hidden');
             $('#switchDate').closest('.input-group-addon').removeClass('hidden');
-            $('#type').find('option').removeClass('hidden');
+            $('#type').closest('tr').removeClass('hidden');
         }
     });
     $('ul.nav-tabs a').click(function()
