@@ -24,7 +24,6 @@
           echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID", "entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
       }
       echo '/' . ' ' . $fileName;
-      echo $repo->SCM == 'Git' ? " @ " . substr($revision, 0, 10) : " @ r" . $revision;;
       ?>
       </strong>
     </div>
@@ -44,9 +43,12 @@
       <thead>
         <tr>
           <th class='w-40px'></th>
-          <th width='w-110px'><?php echo $lang->repo->revision?></th>
-          <th width='w-150px'><?php echo $lang->repo->date?></th>
-          <th width='w-80px'><?php echo $lang->repo->committer?></th>
+          <th class='w-110px'><?php echo $lang->repo->revision?></th>
+          <?php if($repo->SCM == 'Git'):?>
+          <th class='w-90px'><?php echo $lang->repo->commit?></th>
+          <?php endif;?>
+          <th class='w-150px'><?php echo $lang->repo->date?></th>
+          <th class='w-100px'><?php echo $lang->repo->committer?></th>
           <th><?php echo $lang->repo->comment?></th>
         </tr>
       </thead>
@@ -60,6 +62,9 @@
             </div>
           </td>
           <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&revision=" . $log->revision), substr($log->revision, 0, 10));?></td>
+          <?php if($repo->SCM == 'Git'):?>
+          <td><?php echo $log->commit?></td>
+          <?php endif;?>
           <td><?php echo $log->time;?></td>
           <td><?php echo $log->committer;?></td>
           <td class='comment'><?php echo $log->comment;?></td>

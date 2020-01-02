@@ -29,7 +29,7 @@ class repo extends control
 
         $this->scm = $this->app->loadClass('scm');
         $this->repos = $this->repo->getRepoPairs();
-        if(common::hasPriv('repo', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->repo->create, '', "class='btn'");
+        if(common::hasPriv('repo', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create')));
 
         /* Unlock session for wait to get data of repo. */
