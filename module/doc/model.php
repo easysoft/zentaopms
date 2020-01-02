@@ -71,6 +71,7 @@ class docModel extends model
                 {
                     $allLibGroups  = $this->getAllLibGroups($libID);
                     $currentGroups = $allLibGroups[$type];
+                    /* Append closed project. */
                     if(!isset($currentGroups[$currentLib]) and $type == 'project')
                     {
                         $project = $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('id')->eq($currentLib)->fetch();

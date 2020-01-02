@@ -18,6 +18,7 @@
 js::set('fullscreen', $lang->doc->fullscreen);
 js::set('retrack', $lang->doc->retrack);
 js::set('sysurl', common::getSysUrl());
+js::set('docID', $doc->id);
 ?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -34,12 +35,12 @@ js::set('sysurl', common::getSysUrl());
       $i = 1;
       foreach($actions as $action)
       {
-          if($action->action == 'created')
+          if($action->action == 'created' or $action->action == 'deletedfile' or $action->action == 'commented')
           {
               $versions[$i] =  "#$i " . zget($users, $action->actor) . ' ' . substr($action->date, 2, 14);
               $i++;
           }
-          if($action->action == 'edited')
+          elseif($action->action == 'edited')
           {
               foreach($action->history as $history)
               {
