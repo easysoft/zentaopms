@@ -554,6 +554,10 @@ class upgradeModel extends model
             }
 
             $this->appendExec('11_6_5');
+        case '11_7':
+            $this->saveLogs('Execute 11_7');
+            $this->execSQL($this->getUpgradeFile('11.7'));
+            $this->adjustPriv12_0();
         }
 
         $this->deletePatch();
@@ -714,6 +718,7 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0-beta3.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '11_7' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.7'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3592,6 +3597,30 @@ class upgradeModel extends model
             $setting->key    = 'conceptSetted';
             $setting->value  = '1';
             $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust priv 12.0.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv12_0()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('file')->andWhere('method')->eq('delete')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'doc';
+            $groupPriv->method = 'deleteFile';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
         }
 
         return true;
