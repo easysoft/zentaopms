@@ -625,5 +625,6 @@ class repo extends control
             $commits = $this->repo->updateLatestCommit($repo);
             if($commits > 0) die('finished');
         }
+            die('finished');
     }
 }
