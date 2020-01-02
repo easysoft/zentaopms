@@ -597,7 +597,8 @@ CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `revision` mediumint(8) unsigned NOT NULL,
   `branch` varchar(255) NOT NULL,
   UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
-  KEY `branch` (`branch`)
+  KEY `branch` (`branch`),
+  KEY `revision` (`revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_repofiles`;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (

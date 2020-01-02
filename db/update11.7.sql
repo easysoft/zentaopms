@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   `revision` mediumint(8) unsigned NOT NULL,
   `branch` varchar(255) NOT NULL,
   UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
-  KEY `branch` (`branch`)
+  KEY `branch` (`branch`),
+  KEY `revision` (`revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_repohistory`;
@@ -64,5 +65,6 @@ ALTER TABLE `zt_bug` ADD `v1` varchar(40) COLLATE 'utf8_general_ci' NOT NULL AFT
 ALTER TABLE `zt_bug` ADD `v2` varchar(40) COLLATE 'utf8_general_ci' NOT NULL AFTER `v1`;
 ALTER TABLE `zt_bug` ADD `repoType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `v2`;
 ALTER TABLE `zt_bug` ADD `entry` varchar(255) COLLATE 'utf8_general_ci' NOT NULL AFTER `repo`;
+ALTER TABLE `zt_repobranch` ADD INDEX `revision` (`revision`);
 
 DELETE FROM `zt_grouppriv` WHERE `module` = 'api' AND `method` = 'sql';
