@@ -251,9 +251,11 @@ class report extends control
         $firstYear   = substr($firstAction->date, 0, 4);
         $currentYear = date('Y');
 
+        /* Get years for use zentao. */
         $years = array();
         for($thisYear = $firstYear; $thisYear <= $currentYear; $thisYear ++) $years[$thisYear] = $thisYear;
 
+        /* Init year when year is empty. */
         if(empty($year))
         {
             $year  = date('Y');
@@ -265,12 +267,16 @@ class report extends control
             }
         }
 
+        /* Get common annual data. */
+        $data = array();
+        $data['logins'] = $this->report->getUserYearLogins($account, $year);
+
+        /* Set role. */
         $role = 'po';
         if($this->app->user->role == 'dev' or $this->app->user->role == 'td' or $this->app->user->role == 'pm') $role = 'dev';
         if($this->app->user->role == 'qd' or $this->app->user->role == 'qa') $role = 'qa';
 
-        $data = array();
-        $data['logins'] = $this->report->getUserYearLogins($account, $year);
+        /* Get annual data by role. */
         if($role == 'po')
         {
             $products = $this->report->getUserYearProducts($account, $year);
