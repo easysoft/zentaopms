@@ -69,14 +69,14 @@ $config->storyCommonList['zh-cn'][1] = '故事';
 $config->storyCommonList['zh-tw'][0] = '需求';
 $config->storyCommonList['zh-tw'][1] = '故事';
 
-$config->storyCommonList['en'][0] = 'story';
-$config->storyCommonList['en'][1] = 'story';
+$config->storyCommonList['en'][0] = 'Story';
+$config->storyCommonList['en'][1] = 'Story';
 
-$config->storyCommonList['de'][0] = 'story';
-$config->storyCommonList['de'][1] = 'story';
+$config->storyCommonList['de'][0] = 'Story';
+$config->storyCommonList['de'][1] = 'Story';
 
-$config->storyCommonList['fr'][0] = 'story';
-$config->storyCommonList['fr'][1] = 'story';
+$config->storyCommonList['fr'][0] = 'Story';
+$config->storyCommonList['fr'][1] = 'Story';
 
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '工时';
