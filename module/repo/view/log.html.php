@@ -9,6 +9,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('repoID', $repoID);?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolbar pull-left">
     <div class="page-title">

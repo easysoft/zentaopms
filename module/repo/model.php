@@ -212,7 +212,6 @@ class repoModel extends model
     {
         $entry = ltrim($entry, '/');
         $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
-        if((time() - strtotime($repo->lastSync)) / 60 >= $this->config->repo->syncTime) $this->updateLatestCommit($repo);
 
         $repoID       = $repo->id;
         $revisionTime = $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')
@@ -480,6 +479,7 @@ class repoModel extends model
         $repoID     = $repo->id;
         $latestInDB = $this->getLatestComment($repoID);
         $version    = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
+        $commits    = 0;
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -490,11 +490,13 @@ class repoModel extends model
             $logs = $scm->getCommits($revision, $commitCount - $version + 1, $this->cookie->repoBranch);
             $logs['commits'] = array_reverse($logs['commits'], true);
 
-            $commitCount = $this->saveCommit($repoID, $logs, $version, $this->cookie->repoBranch);
+            $commits = $this->saveCommit($repoID, $logs, $version, $this->cookie->repoBranch);
             if($repo->SCM == 'Git' and empty($latestInDB)) $this->fixCommit($repo->id);
-            $this->updateCommitCount($repoID, $commitCount);
+            $this->updateCommitCount($repoID, $commits);
         }
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
+
+        return $commits;
     }
 
     /**
