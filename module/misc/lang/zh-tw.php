@@ -70,8 +70,8 @@ $lang->misc->connectFail = "連接資料庫失敗，錯誤：%s，<br/> 請檢�
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "狀態";
 $lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";
-$lang->misc->showAnnual  = '新增年度報表功能';
-$lang->misc->annualDesc  = '12.0版本後，新增年度報表功能，可以到『統計->年度報表』頁面查看。 是否現在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
+$lang->misc->showAnnual  = '新增年度總結功能';
+$lang->misc->annualDesc  = '12.0版本後，新增年度總結功能，可以到『統計->年度總結』頁面查看。 是否現在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
 
 $lang->misc->noticeRepair = "<h5>普通用戶請聯繫管理員進行修復</h5>
     <h5>管理員請登錄禪道所在的伺服器，創建<span>%s</span>檔案。</h5>

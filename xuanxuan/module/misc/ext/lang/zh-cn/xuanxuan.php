@@ -12,7 +12,7 @@ $lang->misc->client->osList['win64']   = 'Windows 64位';
 $lang->misc->client->osList['win32']   = 'Windows 32位';
 $lang->misc->client->osList['linux64'] = 'Linux 64位';
 $lang->misc->client->osList['linux32'] = 'Linux 32位';
-$lang->misc->client->osList['mac']     = 'Mac版';
+$lang->misc->client->osList['mac64']   = 'Mac版';
 
 $lang->misc->client->errorInfo = new stdclass();
 $lang->misc->client->errorInfo->downloadError  = '获取安装包失败';
