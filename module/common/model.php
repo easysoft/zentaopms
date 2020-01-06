@@ -172,7 +172,7 @@ class commonModel extends model
             if($module == 'tutorial') return true;
             if($module == 'block') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
-            if($module == 'report' and $method == 'annualData') return true;
+            if($module == 'report' and $method == 'annualdata') return true;
         }
         return false;
     }
