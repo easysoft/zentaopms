@@ -1451,6 +1451,8 @@ EOD;
         $module  = strtolower($module);
         $method  = strtolower($method);
 
+        if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
+
         if(isset($rights[$module][$method]))
         {
             if(!commonModel::hasDBPriv($object, $module, $method)) return false;
