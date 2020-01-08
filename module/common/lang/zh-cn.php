@@ -398,8 +398,7 @@ $lang->admin->subMenu->message->setting = array('link' => '设置|message|settin
 
 $lang->admin->subMenu->sso = new stdclass();
 $lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
-$lang->admin->subMenu->sso->ci     = array('link' => '持续集成|ci|index',
-                                          'alias' => 'browsecredential,createcredential,editcredential,browsejenkins,createjenkins,editjenkins,browserepo,editrepo,browsebranch');
+$lang->admin->subMenu->sso->ci     = array('link' => '持续集成|ci|index', 'alias' => 'browsecredential,createcredential,editcredential,browsejenkins,createjenkins,editjenkins,browserepo,editrepo,browsebranch');
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
@@ -428,7 +427,7 @@ $lang->entry     = new stdclass();
 $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
-$lang->ci = new stdclass();
+$lang->ci        = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -442,7 +441,7 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
-$lang->ci->menu   = $lang->admin->menu;
+$lang->ci->menu        = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();

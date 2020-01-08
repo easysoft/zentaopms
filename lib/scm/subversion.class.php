@@ -262,14 +262,11 @@ class Subversion
         $entry   = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($entry)) . '"';
         $svnInfo = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'info', "-r $revision --xml")));
 
-        a($svnInfo);
-
         $svninfo = execCmd($svnInfo, 'string', $result);
         if($result)
         {
             $entry   = '"' . $this->root . '/' . $resourcePath . '"';
             $svnInfo = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'info', "-r $revision --xml")));
-            echo $svnInfo;
 
             $svninfo = execCmd($svnInfo, 'string', $result);
             if($result) $svninfo = '';
@@ -463,8 +460,6 @@ class Subversion
         {
             $cmd = str_replace("\\", "/", "$this->client $action $param --no-auth-cache $path");
         }
-
-        a($cmd);
 
         return $cmd;
     }

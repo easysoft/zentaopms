@@ -1,16 +1,15 @@
 <?php
 /**
- * The control file of ci module of ZenTaoPMS.
+ * The model file of ci module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
- * @version     $Id: control.php 5144 2019-12-11 06:37:03Z chenqi@cnezsoft.com $
+ * @version     $Id: $
  * @link        http://www.zentao.net
  */
-?>
-<?php
+
 class ciModel extends model
 {
     /**
@@ -167,6 +166,12 @@ class ciModel extends model
         return !dao::isError();
     }
 
+    /**
+     * list credential for repo and jenkins edit page
+     *
+     * @param $whr
+     * @return mixed
+     */
     public function listCredentialForSelection($whr)
     {
         $credentials = $this->dao->select('id, name')->from(TABLE_CREDENTIAL)

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The control file of ci module of ZenTaoPMS.
  *
@@ -6,25 +7,19 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
- * @version     $Id: control.php 5144 2019-12-11 06:37:03Z chenqi@cnezsoft.com $
+ * @version     $Id: ${FILE_NAME} 5144 2020/1/8 8:10 下午 chenqi@cnezsoft.com $
  * @link        http://www.zentao.net
  */
 class ci extends control
 {
     /**
-     * Construct function.
-     *
-     * @access public
-     * @return void
+     * ci constructor.
+     * @param string $moduleName
+     * @param string $methodName
      */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-
-        /* Load need modules. */
-        $this->loadModel('credential');
-        $this->loadModel('user');
-
         $this->scm = $this->app->loadClass('scm');
     }
 
@@ -40,14 +35,12 @@ class ci extends control
     }
 
     /**
-     * Browse credentials.
+     * Browse credentials
      *
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
-     * @access public
-     * @return void
+     * @param string $orderBy
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
      */
     public function browseCredential($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
@@ -135,7 +128,6 @@ class ci extends control
 
         $this->send(array('result' => 'success'));
     }
-
 
     /**
      * Browse jenkinss.
@@ -254,14 +246,14 @@ class ci extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->list;
-        $this->view->repoList   = $this->ci->listRepo($orderBy, $pager);
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = $this->lang->repo->common;
 
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = $this->lang->repo->common;
+        $this->view->repoList   = $this->ci->listRepo($orderBy, $pager);
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->module      = 'repo';
+        $this->view->module     = 'repo';
         $this->display();
     }
 
@@ -301,7 +293,7 @@ class ci extends control
     /**
      * Edit a repo.
      *
-     * @param  int    $id
+     * @param  int $repoID
      * @access public
      * @return void
      */
@@ -322,7 +314,6 @@ class ci extends control
 
         $this->app->loadLang('action');
         $this->view->title         = $this->lang->repo->edit . $this->lang->colon . $repo->name;
-
         $this->view->position[]    = $this->lang->ci->common;
         $this->view->position[]    = html::a(inlink('browseRepo'), $this->lang->repo->common);
         $this->view->position[]    = $this->lang->repo->edit;
@@ -340,7 +331,7 @@ class ci extends control
     /**
      * Delete a repo.
      *
-     * @param  int    $id
+     * @param  int $id
      * @access public
      * @return void
      */
@@ -355,7 +346,7 @@ class ci extends control
     /**
      * browse branches.
      *
-     * @param  int    $repoID
+     * @param  int $repoID
      * @access public
      * @return void
      */
@@ -372,26 +363,25 @@ class ci extends control
     }
 
     /**
-     * watch branche.
+     * watch branch.
      *
-     * @param  int    $repoID
-     * @access public
-     * @return void
+     * @param int $repoID
+     * @param int $branch
+     * @param int $status
      */
-    public function watchBranch($repoID = 0, $branch=0, $status=0)
+    public function watchBranch($repoID = 0, $branch = 0, $status = 0)
     {
         $this->dao->update(TABLE_REPOBRANCH)
             ->set('watch=' . $status)
             ->where('repo')->eq($repoID)
             ->andWhere('branch')->eq($branch)
             ->exec();
-        echo true;
     }
 
     /**
      * Show sync comment.
      *
-     * @param  int    $repoID
+     * @param  int $repoID
      * @access public
      * @return void
      */

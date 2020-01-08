@@ -52,22 +52,28 @@ $lang->jenkins->desc                    = '描述';
 $lang->jenkins->typeList['token']       = 'Token';
 $lang->jenkins->typeList['credential']  = '凭证';
 
-
 // repo
-$lang->repo->id                      = 'ID';
-$lang->repo->name                    = '名称';
-$lang->repo->path                    = '地址';
-$lang->repo->type                    = '类型';
-$lang->repo->client                  = '客户端';
-$lang->repo->credential              = '凭证';
-$lang->repo->encoding                = '编码';
-$lang->repo->account                 = '用户名';
-$lang->repo->password                = '密码';
-$lang->repo->token                   = 'Token';
-$lang->repo->acl                     = '权限';
-$lang->repo->group                   = '分组';
-$lang->repo->user                    = '用户';
-$lang->repo->desc                    = '描述';
+$lang->repo->common        = '代码库';
+$lang->repo->browse        = '浏览代码库';
+$lang->repo->create        = '添加代码库';
+$lang->repo->edit          = '编辑代码库';
+$lang->repo->delete        = '删除代码库';
+$lang->repo->confirmDelete = '确认删除该代码库吗？';
+
+$lang->repo->id         = 'ID';
+$lang->repo->name       = '名称';
+$lang->repo->path       = '地址';
+$lang->repo->type       = '类型';
+$lang->repo->client     = '客户端';
+$lang->repo->credential = '凭证';
+$lang->repo->encoding   = '编码';
+$lang->repo->account    = '用户名';
+$lang->repo->password   = '密码';
+$lang->repo->token      = 'Token';
+$lang->repo->acl        = '权限';
+$lang->repo->group      = '分组';
+$lang->repo->user       = '用户';
+$lang->repo->desc       = '描述';
 
 $lang->repo->example           = new stdclass();
 $lang->repo->example->client   = "例如：/usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
