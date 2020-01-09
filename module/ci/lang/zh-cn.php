@@ -72,16 +72,17 @@ $lang->citask->scheduleType            = '时间计划';
 $lang->citask->cornExpression          = 'Corn表达式';
 $lang->citask->custom                  = '自定义';
 
-$lang->citask->scheduleInterval        = '间隔';
 $lang->citask->tagKeywords             = '标签关键字';
 $lang->citask->commentKeywords         = '注释关键字';
 
-$lang->citask->everyDay                = '每天';
-$lang->citask->workDay                 = '工作日';
 $lang->citask->at                      = '在';
-$lang->citask->de                      = '的';
+$lang->citask->time                    = '时间';
+$lang->citask->exe                     = '执行';
+$lang->citask->scheduleInterval        = '每隔';
+$lang->citask->day                     = '天';
 $lang->citask->lastExe                 = '最后执行';
 
+$lang->citask->dayTypeList             = array(workDay=>'工作日', everyDay=>'每天');
 $lang->citask->buildTypeList           = array(build=>'仅构建', buildAndDeploy=>'构建部署', buildAndTest=>'构建测试');
 $lang->citask->triggerTypeList         = array(tag=>'打标签', commit=>'代码提交注释', schedule=>'定时计划');
 $lang->citask->scheduleTypeList        = array(corn=>'Corn表达式', custom=>'自定义');

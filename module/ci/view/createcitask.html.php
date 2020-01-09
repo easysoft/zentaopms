@@ -69,7 +69,33 @@
                     </tr>
                     <tr class="custom-fields">
                         <th><?php echo $lang->citask->custom; ?></th>
-                        <td colspan="3"></td>
+                        <td colspan="3">
+                            <div class="row text-with-input">
+                                <div class="col w-50px">
+                                    <?php echo $lang->citask->scheduleInterval; ?>
+                                </div>
+                                <div class="col w-100px">
+                                    <?php echo html::number('scheduleInterval', '1', "class='form-control'"); ?>
+                                </div>
+                                <div class="col w-30px">
+                                    <?php echo $lang->citask->day; ?>，
+                                </div>
+
+                                <div class="col w-40px">
+                                    <?php echo $lang->citask->at; ?>
+                                </div>
+                                <div class="col w-120px">
+                                    <?php echo html::select('scheduleDay', $lang->citask->dayTypeList, '',"class='form-control chosen'"); ?>
+                                </div>
+                                <div class="col w-100px">
+                                    <?php echo html::input('scheduleTime', '2:00',
+                                        "class='form-control form-time time-only' min='1'"); ?>
+                                </div>
+                                 <div class="col w-60px">
+                                    <?php echo $lang->citask->exe; ?>。
+                                 </div>
+                            </div>
+                        </td>
                     </tr>
 
                     <tr>
