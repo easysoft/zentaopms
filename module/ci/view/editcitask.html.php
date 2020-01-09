@@ -13,6 +13,8 @@
 <?php include 'header.html.php'; ?>
 <?php include '../../common/view/form.html.php'; ?>
 
+<?php js::set('triggerType',  $citask->triggerType)?>
+
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
         <?php include 'menu.html.php'; ?>
@@ -20,37 +22,93 @@
     <div class='main-col main-content'>
         <div class='center-block'>
             <div class='main-header'>
-                <h2><?php echo $lang->jenkins->edit; ?></h2>
+                <h2><?php echo $lang->citask->edit; ?></h2>
             </div>
-            <form id='jenkinsForm' method='post' class='form-ajax'>
+            <form id='citaskForm' method='post' class='form-ajax'>
                 <table class='table table-form'>
                     <tr>
-                        <th><?php echo $lang->jenkins->name; ?></th>
-                        <td class='required'><?php echo html::input('name', $jenkins->name, "class='form-control'"); ?></td>
-                        <td></td>
+                        <th><?php echo $lang->citask->name; ?></th>
+                        <td colspan="3" class='required'><?php echo html::input('name', $citask->name, "class='form-control'"); ?></td>
                     </tr>
                     <tr>
-                        <th><?php echo $lang->jenkins->serviceUrl; ?></th>
-                        <td class='required'><?php echo html::input('serviceUrl', $jenkins->serviceUrl, "class='form-control'"); ?></td>
-                        <td></td>
+                        <th><?php echo $lang->citask->repo; ?></th>
+                        <td><?php echo html::select('repo', $repoList, $citask->repo, "class='form-control chosen'"); ?></td>
+
+                        <th><?php echo $lang->citask->buildType; ?></th>
+                        <td><?php echo html::select('buildType', $lang->citask->buildTypeList, 'buildAndDeploy', "class='form-control chosen'"); ?></td>
                     </tr>
-                    <tr id="credential-field">
-                        <th class='thWidth'><?php echo $lang->credential->common; ?></th>
-                        <td style="width:550px"><?php echo html::select('credential', $credentialList, $jenkins->credential, "class='form-control'"); ?></td>
-                        <td></td>
+                    <tr>
+                        <th><?php echo $lang->citask->jenkins; ?></th>
+                        <td><?php echo html::select('jenkins', $jenkinsList, $citask->jenkins, "class='form-control chosen'"); ?></td>
+
+                        <th><?php echo $lang->citask->jenkinsTask; ?></th>
+                        <td><?php echo html::input('jenkinsTask', $citask->jenkinsTask, "class='form-control'"); ?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $lang->citask->triggerType; ?></th>
+                        <td><?php echo html::select('triggerType', $lang->citask->triggerTypeList, $citask->triggerType,
+                                "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
+
+                        <th class="schedule-fields"><?php echo $lang->citask->scheduleType; ?></th>
+                        <td class="schedule-fields"><?php echo html::radio('scheduleType', $lang->citask->scheduleTypeList, $citask->scheduleType,
+                                "onclick='scheduleTypeChanged(this.value)'");?></td>
+                    </tr>
+                    <tr class="tag-fields">
+                        <th><?php echo $lang->citask->tagKeywords; ?></th>
+                        <td><?php echo html::input('tagKeywords', $citask->tagKeywords, "class='form-control'"); ?></td>
+                        <td colspan="2"><span style="font-style: italic">*build_*</span></td>
+                    </tr>
+                    <tr class="comment-fields">
+                        <th><?php echo $lang->citask->commentKeywords; ?></th>
+                        <td><?php echo html::input('commentKeywords', $citask->commentKeywords, "class='form-control'"); ?></td>
+                        <td colspan="2"><span style="font-style: italic">build_now</span></td>
+                    </tr>
+
+                    <tr class="corn-fields">
+                        <th><?php echo $lang->citask->cornExpression; ?></th>
+                        <td><?php echo html::input('cornExpression', $citask->cornExpression, "class='form-control'"); ?></td>
+                        <td colspan="2"><span style="font-style: italic">0 0 2 * * ?</span></td>
+                    </tr>
+                    <tr class="custom-fields">
+                        <th><?php echo $lang->citask->custom; ?></th>
+                        <td colspan="3">
+                            <div class="row text-with-input">
+                                <div class="col w-50px">
+                                    <?php echo $lang->citask->scheduleInterval; ?>
+                                </div>
+                                <div class="col w-100px">
+                                    <?php echo html::number('scheduleInterval', $citask->scheduleInterval, "class='form-control'"); ?>
+                                </div>
+                                <div class="col w-30px">
+                                    <?php echo $lang->citask->day; ?>，
+                                </div>
+
+                                <div class="col w-40px">
+                                    <?php echo $lang->citask->at; ?>
+                                </div>
+                                <div class="col w-120px">
+                                    <?php echo html::select('scheduleDay', $lang->citask->dayTypeList, $citask->scheduleDay,"class='form-control chosen'"); ?>
+                                </div>
+                                <div class="col w-100px">
+                                    <?php echo html::input('scheduleTime', $citask->scheduleTime,
+                                        "class='form-control form-time time-only' min='1'"); ?>
+                                </div>
+                                <div class="col w-60px">
+                                    <?php echo $lang->citask->exe; ?>。
+                                </div>
+                            </div>
+                        </td>
                     </tr>
 
                     <tr>
-                        <th><?php echo $lang->jenkins->desc; ?></th>
-                        <td><?php echo html::textarea('desc', $jenkins->desc, "rows='3' class='form-control'"); ?></td>
-                        <td></td>
+                        <th><?php echo $lang->citask->desc; ?></th>
+                        <td colspan="3"><?php echo html::textarea('desc', '', "rows='3' class='form-control'"); ?></td>
                     </tr>
-
                     <tr>
                         <th></th>
                         <td class='text-center form-actions'>
                             <?php echo html::submitButton(); ?>
-                            <?php echo html::backButton() ?>
+                            <?php echo html::backButton(); ?>
                         </td>
                     </tr>
                 </table>

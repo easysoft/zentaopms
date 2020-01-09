@@ -1,17 +1,17 @@
 <?php
 /**
- * The browse view file of jenkins module of ZenTaoPMS.
+ * The browse view file of citask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     jenkins
+ * @package     citask
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
 <?php include 'header.html.php'; ?>
-<?php js::set('confirmDelete', $lang->jenkins->confirmDelete); ?>
+<?php js::set('confirmDelete', $lang->citask->confirmDelete); ?>
 
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
@@ -37,11 +37,11 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach (citaskList as $id => $task): ?>
+                <?php foreach ($citaskList as $id => $task): ?>
                     <tr>
                         <td class='text-center'><?php echo $id; ?></td>
                         <td class='text' title='<?php echo $task->name; ?>'><?php echo $task->name; ?></td>
-                        <td class='text' title='<?php echo $task->jenkinsServer; ?>'><?php echo $task->jenkinsServer; ?></td>
+                        <td class='text' title='<?php echo $task->citaskServer; ?>'><?php echo $task->jenkinsServer; ?></td>
                         <td class='text' title='<?php echo $task->jenkinsTask; ?>'><?php echo $task->jenkinsTask; ?></td>
                         <td class='text' title='<?php echo $lang->citask->buildTypeList[$task->buildType]; ?>'>
                             <?php echo $lang->citask->buildTypeList[$task->buildType]; ?></td>
@@ -51,10 +51,10 @@
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('ci', 'editJenkins', "jenkinsID=$id", '', 'list',  'edit');
-                            if (common::hasPriv('ci', 'deleteJenkins')) {
-                                $deleteURL = $this->createLink('ci', 'deleteJenkins', "jenkinsID=$id&confirm=yes");
-                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"jenkinsList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->jenkins->delete}' class='btn'");
+                            common::printIcon('ci', 'editCitask', "citaskID=$id", '', 'list',  'edit');
+                            if (common::hasPriv('ci', 'deleteCitask')) {
+                                $deleteURL = $this->createLink('ci', 'deleteCitask', "citaskID=$id&confirm=yes");
+                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"citaskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->citask->delete}' class='btn'");
                             }
                             ?>
                         </td>
@@ -62,7 +62,7 @@
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php if ($jenkinss): ?>
+            <?php if ($citaskList): ?>
                 <div class='table-footer'><?php $pager->show('rignt', 'pagerjs'); ?></div>
             <?php endif; ?>
         </form>

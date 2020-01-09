@@ -99,7 +99,7 @@
                     </tr>
 
                     <tr>
-                        <th><?php echo $lang->jenkins->desc; ?></th>
+                        <th><?php echo $lang->citask->desc; ?></th>
                         <td colspan="3"><?php echo html::textarea('desc', '', "rows='3' class='form-control'"); ?></td>
                     </tr>
                     <tr>

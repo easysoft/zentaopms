@@ -278,6 +278,7 @@ class ci extends control
         $this->view->position[]    = $this->lang->citask->create;
 
         $this->view->repoList      = $this->ci->listRepoForSelection("true");
+        $this->view->jenkinsList   = $this->ci->listJenkinsForSelection("true");
         $this->view->module        = 'citask';
 
         $this->display();
@@ -292,7 +293,7 @@ class ci extends control
      */
     public function editCitask($id)
     {
-        $citask = $this->ci->getJenkinsByID($id);
+        $citask = $this->ci->getCitaskByID($id);
         if($_POST)
         {
             $this->ci->updateCitask($id);
@@ -307,9 +308,11 @@ class ci extends control
         $this->view->position[]    = html::a(inlink('browseCitask'), $this->lang->citask->common);
         $this->view->position[]    = $this->lang->citask->edit;
 
-        $this->view->citask    = $citask;
+        $this->view->citask        = $citask;
 
-        $this->view->module      = 'jenkins';
+        $this->view->repoList      = $this->ci->listRepoForSelection("true");
+        $this->view->jenkinsList   = $this->ci->listJenkinsForSelection("true");
+        $this->view->module        = 'citask';
         $this->display();
     }
 
