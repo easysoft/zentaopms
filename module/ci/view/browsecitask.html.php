@@ -24,11 +24,13 @@
                 <tr>
                     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
                     <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->citask->id); ?></th>
-                    <th class='w-200px text-left'>
-                        <?php common::printOrderLink('name', $orderBy, $vars, $lang->citask->name); ?></th>
                     <th class='w-150px text-left'>
-                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->citask->jenkins); ?></th>
-                    <th class='w-120px text-left'><?php echo $lang->citask->jenkinsTask; ?></th>
+                        <?php common::printOrderLink('name', $orderBy, $vars, $lang->citask->name); ?></th>
+                    <th class='w-100px text-left'>
+                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->citask->repo); ?></th>
+                    <th class='w-100px text-left'>
+                        <?php common::printOrderLink('jenkins', $orderBy, $vars, $lang->citask->jenkins); ?></th>
+                    <th class='w-100px text-left'><?php echo $lang->citask->jenkinsTask; ?></th>
                     <th class='w-100px text-left'><?php echo $lang->citask->buildType; ?></th>
                     <th class='w-100px text-left'><?php echo $lang->citask->triggerType; ?></th>
                     <th class='w-200px text-left'><?php echo $lang->citask->lastExe; ?></th>
@@ -41,7 +43,8 @@
                     <tr>
                         <td class='text-center'><?php echo $id; ?></td>
                         <td class='text' title='<?php echo $task->name; ?>'><?php echo $task->name; ?></td>
-                        <td class='text' title='<?php echo $task->citaskServer; ?>'><?php echo $task->jenkinsServer; ?></td>
+                        <td class='text' title='<?php echo $task->repoName; ?>'><?php echo $task->repoName; ?></td>
+                        <td class='text' title='<?php echo $task->jenkinsName; ?>'><?php echo $task->jenkinsName; ?></td>
                         <td class='text' title='<?php echo $task->jenkinsTask; ?>'><?php echo $task->jenkinsTask; ?></td>
                         <td class='text' title='<?php echo $lang->citask->buildTypeList[$task->buildType]; ?>'>
                             <?php echo $lang->citask->buildTypeList[$task->buildType]; ?></td>

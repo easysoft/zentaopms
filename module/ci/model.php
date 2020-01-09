@@ -190,12 +190,15 @@ class ciModel extends model
      */
     public function listCitask($orderBy = 'id_desc', $pager = null, $decode = true)
     {
-        $jenkinsList = $this->dao->select('*')->from(TABLE_CI_TASK)
-            ->where('deleted')->eq('0')
+        $list = $this->dao->
+            select('t1.*, t2.name repoName, t3.name as jenkinsName')->from(TABLE_CI_TASK)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t1.jenkins=t3.id')
+            ->where('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $jenkinsList;
+        return $list;
     }
 
     /**
