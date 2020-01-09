@@ -78,9 +78,11 @@ $lang->citask->commentKeywords         = '注释关键字';
 $lang->citask->at                      = '在';
 $lang->citask->time                    = '时间';
 $lang->citask->exe                     = '执行';
-$lang->citask->scheduleInterval        = '每隔';
+$lang->citask->scheduleInterval        = '间隔';
+$lang->citask->scheduleDay             = '天数';
 $lang->citask->day                     = '天';
 $lang->citask->lastExe                 = '最后执行';
+$lang->citask->scheduleTime            = '时间';
 
 $lang->citask->dayTypeList             = array(workDay=>'工作日', everyDay=>'每天');
 $lang->citask->buildTypeList           = array(build=>'仅构建', buildAndDeploy=>'构建部署', buildAndTest=>'构建测试');

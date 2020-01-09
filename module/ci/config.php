@@ -12,3 +12,5 @@ $config->repo->syncTime  = 10;
 $config->repo->batchNum  = 100;
 $config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary    = '|pdf|';
+
+$config->repo->requiredFields = 'name,repo,buildType,jenkins,jenkinsTask,triggerType';

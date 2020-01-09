@@ -209,15 +209,19 @@ class ciModel extends model
      */
     public function createCitask()
     {
-        $jenkins = fixer::input('post')
+        $task = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
 
-        $this->dao->insert(TABLE_CI_TASK)->data($jenkins)
-            ->batchCheck($this->config->jenkins->create->requiredFields, 'notempty')
-            ->batchCheck("serviceUrl", 'URL')
-            ->batchCheckIF($jenkins->type === 'credential', "credential", 'notempty')
+        $this->dao->insert(TABLE_CI_TASK)->data($task)
+            ->batchCheck($this->config->citask->requiredFields, 'notempty')
+            ->batchCheckIF($task->triggerType === 'tag', "tagKeywords", 'notempty')
+            ->batchCheckIF($task->triggerType === 'commit', "commentKeywords", 'notempty')
+
+            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'corn', "cornExpression", 'notempty')
+            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+
             ->autoCheck()
             ->exec();
         return !dao::isError();
@@ -232,15 +236,19 @@ class ciModel extends model
      */
     public function updateCitask($id)
     {
-        $jenkins = fixer::input('post')
+        $task = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->get();
 
-        $this->dao->update(TABLE_CI_TASK)->data($jenkins)
-            ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')
-            ->batchCheck("serviceUrl", 'URL')
-            ->batchCheckIF($jenkins->type === 'credential', "credential", 'notempty')
+        $this->dao->update(TABLE_CI_TASK)->data($task)
+            ->batchCheck($this->config->citask->requiredFields, 'notempty')
+            ->batchCheckIF($task->triggerType === 'tag', "tagKeywords", 'notempty')
+            ->batchCheckIF($task->triggerType === 'commit', "commentKeywords", 'notempty')
+
+            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'corn', "cornExpression", 'notempty')
+            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
