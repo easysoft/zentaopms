@@ -167,20 +167,81 @@ class ciModel extends model
     }
 
     /**
-     * list credential for repo and jenkins edit page
+     * Get a ci task by id.
      *
-     * @param $whr
-     * @return mixed
+     * @param  int    $id
+     * @access public
+     * @return object
      */
-    public function listCredentialForSelection($whr)
+    public function getCitaskByID($id)
     {
-        $credentials = $this->dao->select('id, name')->from(TABLE_CREDENTIAL)
+        $jenkins = $this->dao->select('*')->from(TABLE_CI_TASK)->where('id')->eq($id)->fetch();
+        return $jenkins;
+    }
+
+    /**
+     * Get ci task list.
+     *
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  bool   $decode
+     * @access public
+     * @return array
+     */
+    public function listCitask($orderBy = 'id_desc', $pager = null, $decode = true)
+    {
+        $jenkinsList = $this->dao->select('*')->from(TABLE_CI_TASK)
             ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere($whr)->fi()
-            ->orderBy(id)
-            ->fetchPairs();
-        $credentials[''] = '';
-        return $credentials;
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+        return $jenkinsList;
+    }
+
+    /**
+     * Create a ci task.
+     *
+     * @access public
+     * @return bool
+     */
+    public function createCitask()
+    {
+        $jenkins = fixer::input('post')
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
+            ->get();
+
+        $this->dao->insert(TABLE_CI_TASK)->data($jenkins)
+            ->batchCheck($this->config->jenkins->create->requiredFields, 'notempty')
+            ->batchCheck("serviceUrl", 'URL')
+            ->batchCheckIF($jenkins->type === 'credential', "credential", 'notempty')
+            ->autoCheck()
+            ->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Update a ci task.
+     *
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function updateCitask($id)
+    {
+        $jenkins = fixer::input('post')
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', helper::now())
+            ->get();
+
+        $this->dao->update(TABLE_CI_TASK)->data($jenkins)
+            ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')
+            ->batchCheck("serviceUrl", 'URL')
+            ->batchCheckIF($jenkins->type === 'credential', "credential", 'notempty')
+            ->autoCheck()
+            ->where('id')->eq($id)
+            ->exec();
+        return !dao::isError();
     }
 
     /**
@@ -592,4 +653,38 @@ class ciModel extends model
         $link .= $pathParams;
         return $link;
     }
+
+    /**
+     * list credential for repo and jenkins edit page
+     *
+     * @param $whr
+     * @return mixed
+     */
+    public function listCredentialForSelection($whr)
+    {
+        $credentials = $this->dao->select('id, name')->from(TABLE_CREDENTIAL)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty(whr))->andWhere($whr)->fi()
+            ->orderBy(id)
+            ->fetchPairs();
+        $credentials[''] = '';
+        return $credentials;
+    }
+
+    /**
+     * list repos for jenkins task edit
+     *
+     * @return mixed
+     */
+    public function listRepoForSelection($whr)
+    {
+        $repos = $this->dao->select('id, name')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty(whr))->andWhere($whr)->fi()
+            ->orderBy(id)
+            ->fetchPairs();
+        $repos[''] = '';
+        return $repos;
+    }
+
 }

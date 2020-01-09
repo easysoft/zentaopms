@@ -47,7 +47,7 @@ class ci extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->credential->common . $this->lang->colon . $this->lang->credential->list;
+        $this->view->title      = $this->lang->credential->common . $this->lang->colon . $this->lang->ci->list;
         $this->view->credentialList   = $this->ci->listCredential($orderBy, $pager);
 
         $this->view->position[]    = $this->lang->ci->common;
@@ -144,7 +144,7 @@ class ci extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->list;
+        $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->ci->list;
         $this->view->jenkinsList   = $this->ci->listJenkins($orderBy, $pager);
 
         $this->view->position[]    = $this->lang->ci->common;
@@ -229,6 +229,104 @@ class ci extends control
         $this->send(array('result' => 'success'));
     }
 
+    /**
+     * Browse ci task.
+     *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseCitask($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->citask->common . $this->lang->colon . $this->lang->ci->list;
+        $this->view->citaskList   = $this->ci->listCitask($orderBy, $pager);
+
+        $this->view->position[]    = $this->lang->ci->common;
+        $this->view->position[]    = $this->lang->citask->common;
+
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->module      = 'citask';
+        $this->display();
+    }
+
+    /**
+     * Create a ci task.
+     *
+     * @access public
+     * @return void
+     */
+    public function createCitask()
+    {
+        if($_POST)
+        {
+            $this->ci->createCitask();
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseCitask')));
+        }
+
+        $this->app->loadLang('action');
+        $this->view->title         = $this->lang->citask->create . $this->lang->colon . $this->lang->citask->common;
+        $this->view->position[]    = $this->lang->ci->common;
+        $this->view->position[]    = html::a(inlink('browseCitask'), $this->lang->citask->common);
+        $this->view->position[]    = $this->lang->citask->create;
+
+        $this->view->repoList      = $this->ci->listRepoForSelection("true");
+        $this->view->module        = 'citask';
+
+        $this->display();
+    }
+
+    /**
+     * Edit a ci task.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function editCitask($id)
+    {
+        $citask = $this->ci->getJenkinsByID($id);
+        if($_POST)
+        {
+            $this->ci->updateCitask($id);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseCitask')));
+        }
+
+        $this->app->loadLang('action');
+        $this->view->title         = $this->lang->citask->edit . $this->lang->colon . $citask->name;
+
+        $this->view->position[]    = $this->lang->ci->common;
+        $this->view->position[]    = html::a(inlink('browseCitask'), $this->lang->citask->common);
+        $this->view->position[]    = $this->lang->citask->edit;
+
+        $this->view->citask    = $citask;
+
+        $this->view->module      = 'jenkins';
+        $this->display();
+    }
+
+    /**
+     * Delete a ci task.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function deleteCitask($id)
+    {
+        $this->ci->delete(TABLE_CI_TASK, $id);
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->send(array('result' => 'success'));
+    }
 
     /**
      * Browse repo.
@@ -245,7 +343,7 @@ class ci extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->list;
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->ci->list;
         $this->view->position[] = $this->lang->ci->common;
         $this->view->position[] = $this->lang->repo->common;
 

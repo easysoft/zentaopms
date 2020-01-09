@@ -8,6 +8,7 @@ $lang->ci->name                         = '名称';
 $lang->ci->subModules['credential']     = '凭证';
 $lang->ci->subModules['jenkins']        = 'Jenkins';
 $lang->ci->subModules['repo']           = '代码库';
+$lang->ci->subModules['citask']         = '构建任务';
 
 // credential
 $lang->credential->common               = '凭证';
@@ -51,6 +52,39 @@ $lang->jenkins->desc                    = '描述';
 
 $lang->jenkins->typeList['token']       = 'Token';
 $lang->jenkins->typeList['credential']  = '凭证';
+
+// ci task
+$lang->citask->common                  = '构建任务';
+$lang->citask->browse                  = '浏览构建任务';
+$lang->citask->create                  = '添加构建任务';
+$lang->citask->edit                    = '编辑构建任务';
+$lang->citask->delete                  = '删除构建任务';
+$lang->citask->confirmDelete           = '确认删除该构建任务吗？';
+
+$lang->citask->id                      = 'ID';
+$lang->citask->name                    = '名称';
+$lang->citask->repo                    = '代码库';
+$lang->citask->jenkins                 = 'Jenkins服务';
+$lang->citask->jenkinsTask             = 'Jenkins任务名';
+$lang->citask->buildType               = '构建类型';
+$lang->citask->triggerType             = '触发方式';
+$lang->citask->scheduleType            = '时间计划';
+$lang->citask->cornExpression          = 'Corn表达式';
+$lang->citask->custom                  = '自定义';
+
+$lang->citask->scheduleInterval        = '间隔';
+$lang->citask->tagKeywords             = '标签关键字';
+$lang->citask->commentKeywords         = '注释关键字';
+
+$lang->citask->everyDay                = '每天';
+$lang->citask->workDay                 = '工作日';
+$lang->citask->at                      = '在';
+$lang->citask->de                      = '的';
+$lang->citask->lastExe                 = '最后执行';
+
+$lang->citask->buildTypeList           = array(build=>'仅构建', buildAndDeploy=>'构建部署', buildAndTest=>'构建测试');
+$lang->citask->triggerTypeList         = array(tag=>'打标签', commit=>'代码提交注释', schedule=>'定时计划');
+$lang->citask->scheduleTypeList        = array(corn=>'Corn表达式', custom=>'自定义');
 
 // repo
 $lang->repo->common        = '代码库';
