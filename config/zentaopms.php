@@ -169,7 +169,7 @@ define('TABLE_LOG',           '`' . $config->db->prefix . 'log`');
 define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
-define('TABLE_CREDENTIAL',    '`' . $config->db->prefix . 'credential`');
+define('TABLE_CREDENTIALS',    '`' . $config->db->prefix . 'credentials`');
 define('TABLE_JENKINS',       '`' . $config->db->prefix . 'jenkins`');
 define('TABLE_CI_TASK',       '`' . $config->db->prefix . 'citask`');
 define('TABLE_CI_BUILD',      '`' . $config->db->prefix . 'cibuild`');

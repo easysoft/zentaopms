@@ -21,7 +21,7 @@ class ciModel extends model
      */
     public function getCredentialByID($id)
     {
-        $credential = $this->dao->select('*')->from(TABLE_CREDENTIAL)->where('id')->eq($id)->fetch();
+        $credential = $this->dao->select('*')->from(TABLE_CREDENTIALS)->where('id')->eq($id)->fetch();
         return $credential;
     }
 
@@ -36,7 +36,7 @@ class ciModel extends model
      */
     public function listCredential($orderBy = 'id_desc', $pager = null, $decode = true)
     {
-        $credentials = $this->dao->select('*')->from(TABLE_CREDENTIAL)
+        $credentials = $this->dao->select('*')->from(TABLE_CREDENTIALS)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -58,7 +58,7 @@ class ciModel extends model
 //            ->remove('')
             ->get();
 
-        $this->dao->insert(TABLE_CREDENTIAL)->data($credential)
+        $this->dao->insert(TABLE_CREDENTIALS)->data($credential)
             ->batchCheck($this->config->credential->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
@@ -79,7 +79,7 @@ class ciModel extends model
             ->add('editedDate', helper::now())
             ->get();
 
-        $this->dao->update(TABLE_CREDENTIAL)->data($credential)
+        $this->dao->update(TABLE_CREDENTIALS)->data($credential)
             ->batchCheck($this->config->credential->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
@@ -673,7 +673,7 @@ class ciModel extends model
      */
     public function listCredentialForSelection($whr)
     {
-        $credentials = $this->dao->select('id, name')->from(TABLE_CREDENTIAL)
+        $credentials = $this->dao->select('id, name')->from(TABLE_CREDENTIALS)
             ->where('deleted')->eq('0')
             ->beginIF(!empty(whr))->andWhere($whr)->fi()
             ->orderBy(id)
