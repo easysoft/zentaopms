@@ -15,10 +15,10 @@
  */
 $config->git = new stdClass();
 $config->git->encodings = 'utf-8';  
-$config->git->client    = '';
+$config->git->client    = '/usr/bin/git';
 
 $i = 1;
-$config->git->repos[$i]['path']     = '';
+$config->git->repos[$i]['path']     = '/Users/aaron/devops/project/devops_test';
 $config->git->repos[$i]['encoding'] = 'utf-8';
 
 /*

@@ -699,6 +699,22 @@ class ciModel extends model
     }
 
     /**
+     * list repos for jenkins task edit
+     *
+     * @return mixed
+     */
+    public function listRepoForSync($whr)
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty(whr))->andWhere($whr)->fi()
+            ->orderBy(id)
+            ->fetchAll();
+        $repos[''] = '';
+        return $repos;
+    }
+
+    /**
      * list jenkins for ci task edit
      *
      * @return mixed

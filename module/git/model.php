@@ -94,6 +94,8 @@ class gitModel extends model
             $repo->name = $name;
             if(!$this->setRepo($repo)) return false;
 
+            $this->pull();
+
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
@@ -133,6 +135,23 @@ class gitModel extends model
             $this->deleteRestartFile();
             $this->printLog("\n\nrepo $name finished");
         }
+    }
+
+    /**
+     * Pull codes from remote repo.
+     *
+     * @access public
+     * @return void
+     */
+    public function pull()
+    {
+        chdir($this->repoRoot);
+
+//        exec('sudo -u aaron whoami', $output, $return);
+
+        $cmd = "{$this->client} pull 2>&1";
+        exec($cmd, $output, $return);
+        $this->printLog("{$cmd}, {$output}, {$return}");
     }
 
     /**
@@ -177,13 +196,33 @@ class gitModel extends model
      */
     public function setRepos()
     {
-        if(!$this->config->git->repos)
+        $ci = $this->loadModel('ci');
+        $repoObjs = $ci->listRepoForSync("true");
+
+        $gitRepos = [];
+        $paths = [];
+        foreach($repoObjs as $repoInDb)
+        {
+            if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
+                $gitRepos[] = array(path => $repoInDb->path, encoding => 'utf-8');
+                $paths[] = $repoInDb->path;
+            }
+        }
+
+        foreach($this->config->git->repos as $repoInConfig)
+        {
+            if(!empty($repoInConfig['path']) && !in_array($repoInConfig['path'], $paths)) {
+                $gitRepos[] = $repoInConfig;
+            }
+        }
+
+        if(!$gitRepos)
         {
             echo "You must set one git repo.\n";
             return false;
         }
 
-        $this->repos = $this->config->git->repos;
+        $this->repos = $gitRepos;
         return true;
     }
 

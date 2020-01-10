@@ -438,7 +438,7 @@ class ci extends control
      */
     public function deleteRepo($id)
     {
-        $this->ci->delete(TABLE_JENKINS, $id);
+        $this->ci->delete(TABLE_REPO, $id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
