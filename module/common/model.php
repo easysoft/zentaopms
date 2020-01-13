@@ -749,8 +749,8 @@ class commonModel extends model
     public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
     {
         global $lang, $app;
-        if(empty($module)) $module = $app->getModuleName();
-        if(empty($method)) $method = $app->getMethodName();
+        if(empty($module)) $module = isset($app->rawModule) ? $app->rawModule : $app->getModuleName();
+        if(empty($method)) $method = isset($app->rawMethod) ? $app->rawMethod : $app->getMethodName();
         $className = 'header';
         $isMobile  = $app->viewType === 'mhtml';
 
