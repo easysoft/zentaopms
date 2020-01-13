@@ -89,7 +89,7 @@ foreach($fieldParams as $fieldName => $param)
           <tbody>
             <?php
             $formSessionName = $module . 'Form';
-            $formSession     = $this->session->$formSessionName;
+            $formSession     = $_SESSION[$formSessionName];
 
             $fieldNO = 1;
             for($i = 1; $i <= $groupItems; $i ++)

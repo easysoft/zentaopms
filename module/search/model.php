@@ -82,7 +82,7 @@ class searchModel extends model
         $groupAndOr   = strtoupper($this->post->groupAndOr);
         $module       = $this->session->searchParams['module'];
         $searchParams = $module . 'searchParams';
-        $fieldParams  = json_decode($this->session->$searchParams['fieldParams']);
+        $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
         $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
@@ -186,7 +186,7 @@ class searchModel extends model
     public function initSession($module, $fields, $fieldParams)
     {
         $formSessionName  = $module . 'Form';
-        if($this->session->$formSessionName != false) return;
+        if(isset($_SESSION[$formSessionName]) and $_SESSION[$formSessionName] != false) return;
 
         for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
         {
@@ -287,7 +287,7 @@ class searchModel extends model
             $_POST = $query->form;
             $this->buildQuery();
             $querySessionName = $query->form['module'] . 'Query';
-            $query->sql = $this->session->$querySessionName;
+            $query->sql = $_SESSION[$querySessionName];
         }
         return $query;
     }
@@ -302,12 +302,12 @@ class searchModel extends model
     {
         $sqlVar  = $this->post->module  . 'Query';
         $formVar = $this->post->module  . 'Form';
-        $sql     = $this->session->$sqlVar;
+        $sql     = $_SESSION[$sqlVar];
         if(!$sql) $sql = ' 1 = 1 ';
 
         $query = fixer::input('post')
             ->add('account', $this->app->user->account)
-            ->add('form', serialize($this->session->$formVar))
+            ->add('form', serialize($_SESSION[$formVar]))
             ->add('sql',  $sql)
             ->skipSpecial('sql,form')
             ->remove('onMenuBar')
