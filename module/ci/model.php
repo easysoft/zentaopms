@@ -256,6 +256,35 @@ class ciModel extends model
     }
 
     /**
+     * Execute ci task.
+     *
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function exeCitask($taskID)
+    {
+        $po = $this->dao->select('task.id taskId, task.repo, task.jenkinsTask, jenkins.name,jenkins.serviceUrl,jenkins.credential')
+            ->from(TABLE_CI_TASK)->alias('task')
+            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('task.jenkins=jenkins.id')
+            ->where('task.id')->eq($taskID)
+            ->fetch();
+
+        $credential = $this->getCredentialByID($po->credential); // jenkins must use a token credential
+        $jenkinsToken = $credential->token;
+        $jenkinsUser = $credential->username;
+        $jenkinsServer = $po->serviceUrl;
+
+        $r = '://' . $jenkinsUser . ':' . $jenkinsToken . '@';
+        $jenkinsServer = str_replace('://', $r, $jenkinsServer); // add token
+        $buildUrl = sprintf('%s/job/%s/build/api/json', $jenkinsServer, $po->jenkinsTask);
+
+        $response = $this->post($buildUrl, new stdClass());
+
+        return !dao::isError();
+    }
+
+    /**
      * Get a repo by id.
      *
      * @param  int    $id
@@ -730,4 +759,40 @@ class ciModel extends model
         return $repos;
     }
 
+    /**
+     * Make a http post request.
+     *
+     * @param  string    $url
+     * @param  string    $data
+     * @access public
+     * @return void
+     */
+    public function post($url, $data)
+    {
+        if(!function_exists('curl_init')) die('I can\'t do post action without curl extension.');
+
+        $curl = curl_init();
+
+        if(PHP_VERSION_ID >= 50500 && class_exists('CURLFile'))
+        {
+            $curlFile = true;
+        }
+        else
+        {
+            $curlFile = false;
+            if(defined('CURLOPT_SAFE_UPLOAD')) curl_setopt($curl, CURLOPT_SAFE_UPLOAD, false);
+        }
+
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+
+        $response = curl_exec($curl);
+        $errors   = curl_error($curl);
+        curl_close($curl);
+
+        return $response;
+    }
 }

@@ -177,7 +177,7 @@ class ci extends control
         $this->view->position[]    = html::a(inlink('browseJenkins'), $this->lang->jenkins->common);
         $this->view->position[]    = $this->lang->jenkins->create;
 
-        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token' or type='account'");
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token'");
         $this->view->module      = 'jenkins';
 
         $this->display();
@@ -208,7 +208,7 @@ class ci extends control
         $this->view->position[]    = $this->lang->jenkins->edit;
 
         $this->view->jenkins    = $jenkins;
-        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token' or type='account'");
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token'");
 
         $this->view->module      = 'jenkins';
         $this->display();
@@ -326,6 +326,21 @@ class ci extends control
     public function deleteCitask($id)
     {
         $this->ci->delete(TABLE_CI_TASK, $id);
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Exec a ci task.
+     *
+     * @param  int    $id
+     * @access public
+     * @return void
+     */
+    public function exeCitask($id)
+    {
+        $this->ci->exeCitask($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));

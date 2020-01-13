@@ -26,14 +26,11 @@
 <script language='Javascript'>
 $(function(){
     var link = createLink('ci', 'ajaxSyncComment', "repoID=<?php echo $repoID?>&type=batch&needPull=<?php echo $needPull?>");
-    alert(link);
 
     function syncComments()
     {
         $.get(link, function(data)
         {
-            console.log(data);
-
             if(data == 'finish')
             {
                 $('#caption').text('<?php echo $lang->repo->notice->syncComplete?>');

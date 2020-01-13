@@ -54,7 +54,9 @@
 
                         <td class='c-actions text-right'>
                             <?php
+                            common::printIcon('ci', 'exeCitask', "citaskID=$id", '', 'list',  'play');
                             common::printIcon('ci', 'editCitask', "citaskID=$id", '', 'list',  'edit');
+
                             if (common::hasPriv('ci', 'deleteCitask')) {
                                 $deleteURL = $this->createLink('ci', 'deleteCitask', "citaskID=$id&confirm=yes");
                                 echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"citaskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->citask->delete}' class='btn'");
