@@ -403,9 +403,9 @@ class ci extends control
         $repo = $this->ci->getRepoByID($repoID);
         if($_POST)
         {
-            $needSync = $this->ci->updateRepo($repoID);
+            $noNeedSync = $this->ci->updateRepo($repoID);
             if(dao::isError()) die(js::error(dao::getError()));
-            if(!$needSync)
+            if(!$noNeedSync)
             {
                 $link = $this->ci->createLink('showSyncComment', "repoID=$repoID");
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
@@ -464,6 +464,21 @@ class ci extends control
     }
 
     /**
+     * sync repo from remote.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function syncRepo($repoID = 0)
+    {
+        $this->dao->update(TABLE_REPO)->set('synced')->eq(0)->where('id')->eq($repoID)->exec();
+
+        $link = $this->ci->createLink('showSyncComment', "repoID=$repoID&needPull=true");
+        $this->send(array('result' => 'success', 'locate' => $link));
+    }
+
+    /**
      * watch branch.
      *
      * @param int $repoID
@@ -486,7 +501,7 @@ class ci extends control
      * @access public
      * @return void
      */
-    public function showSyncComment($repoID = 0)
+    public function showSyncComment($repoID = 0, $needPull = false)
     {
         if($repoID == 0) $repoID = $this->session->repoID;
 
@@ -496,6 +511,7 @@ class ci extends control
         $latestInDB = $this->ci->getLatestComment($repoID, );
         $this->view->version = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID  = $repoID;
+        $this->view->needPull  = $needPull;
         $this->display();
     }
 
@@ -507,10 +523,15 @@ class ci extends control
      * @access public
      * @return void
      */
-    public function ajaxSyncComment($repoID = 0, $type = 'batch')
+    public function ajaxSyncComment($repoID = 0, $type = 'batch', $needPull = false)
     {
         set_time_limit(0);
         $repo = $this->ci->getRepoByID($repoID);
+
+        if ($needPull) {
+            $this->loadModel('git')->pull($repo);
+        }
+
         if(empty($repo)) die();
         if($repo->synced) die('finish');
 

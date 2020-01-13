@@ -140,18 +140,22 @@ class gitModel extends model
     /**
      * Pull codes from remote repo.
      *
-     * @access public
-     * @return void
+     * @param $repoRoot
      */
-    public function pull()
+    public function pull($repo)
     {
-        chdir($this->repoRoot);
+        if (!empty($repo)) {
+            $repoRoot = $repo->path;
+            $this->setClient($repo);
+        } else {
+            $repoRoot = $this->repoRoot;
+        }
 
+        chdir($repoRoot);
 //        exec('sudo -u aaron whoami', $output, $return);
 
         $cmd = "{$this->client} pull 2>&1";
         exec($cmd, $output, $return);
-        $this->printLog("{$cmd}, {$output}, {$return}");
     }
 
     /**
