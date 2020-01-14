@@ -264,7 +264,7 @@ class ciModel extends model
      */
     public function exeCitask($taskID)
     {
-        $po = $this->dao->select('task.id taskId, task.repo, task.jenkinsTask, jenkins.name,jenkins.serviceUrl,jenkins.credential')
+        $po = $this->dao->select('task.id taskId, task.name taskName, task.repo, task.jenkinsTask, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credential')
             ->from(TABLE_CI_TASK)->alias('task')
             ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('task.jenkins=jenkins.id')
             ->where('task.id')->eq($taskID)
@@ -285,7 +285,27 @@ class ciModel extends model
 
         $response = common::http($buildUrl, new stdClass());
 
+        $this->saveCibuild($po);
+
         return !dao::isError();
+    }
+    /**
+     * Save build to db.
+     *
+     * @param  object $task
+     * @access public
+     * @return bool
+     */
+    public function saveCibuild($task)
+    {
+        $build = new stdClass();
+        $build->citask = $task->taskId;
+        $build->name = $task->taskName . ' ' . helper::now();
+        $build->status = 'start';
+        $build->createdBy = $this->app->user->account;
+        $build->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_CI_BUILD)->data($build)->exec();
     }
 
     /**
