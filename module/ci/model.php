@@ -309,6 +309,18 @@ class ciModel extends model
     }
 
     /**
+     * Update ci build status.
+     *
+     * @param  object $task
+     * @access public
+     * @return bool
+     */
+    public function updateCibuildStatus($buildId, $status)
+    {
+        $this->dao->update(TABLE_CI_BUILD)->set('status')->eq($status)->where('id')->eq($buildId)->exec();
+    }
+
+    /**
      * Send a request to jenkins to check build status.
      *
      * @param  int $buildID
@@ -317,11 +329,12 @@ class ciModel extends model
      */
     public function checkCibuild()
     {
-        $pos = $this->dao->select('build.*, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credential')
+        $pos = $this->dao->select('build.*, task.jenkinsTask, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credential')
             ->from(TABLE_CI_BUILD)->alias('build')
-            ->leftJoin(TABLE_TASK)->alias('task')->on('build.citask=task.id')
+            ->leftJoin(TABLE_CI_TASK)->alias('task')->on('build.citask=task.id')
             ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('task.jenkins=jenkins.id')
-            ->where('build.status')->ne('completed')
+            ->where('build.status')->ne('success')
+            ->andWhere('build.status')->ne('fail')
             ->fetchAll();
 
         foreach($pos as $po) {
@@ -336,10 +349,47 @@ class ciModel extends model
 
             $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
             $jenkinsServer = str_replace('://', $r, $jenkinsServer);
-            $buildUrl = sprintf('%s/queue/item/%/api/json', $jenkinsServer, $po->queueItem);
+            $queueUrl = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $po->queueItem);
 
-            $response = common::http($buildUrl, new stdClass());
-            $buildNumb = 0;
+            $response = common::http($queueUrl);
+            if (strripos($response,"404") > -1) { // queue已过期
+                $infoUrl = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $po->jenkinsTask, $po->queueItem);
+                $response = common::http($infoUrl);
+                $buildInfo = json_decode($response);
+                $result = strtolower($buildInfo->result);
+                $this->updateCibuildStatus($po->id, $result);
+
+                $logUrl = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $po->jenkinsTask, $po->queueItem);
+                $response = common::http($logUrl);
+                $logs = json_decode($response);
+
+                $this->dao->update(TABLE_CI_BUILD)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
+            } else {
+                $queueInfo = json_decode($response);
+
+                if (!empty($queueInfo->executable)) {
+                    $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
+                    $buildUrl = str_replace('://', $r, $buildUrl);
+
+                    $response = common::http($buildUrl);
+                    $buildInfo = json_decode($response);
+
+                    if ($buildInfo->building) {
+                        $this->updateCibuildStatus($po->id, 'building');
+                    } else {
+                        $result = strtolower($buildInfo->result);
+                        $this->updateCibuildStatus($po->id, $result);
+
+                        $logUrl = $buildInfo->url . 'logText/progressiveText/api/json';
+                        $logUrl = str_replace('://', $r, $logUrl);
+
+                        $response = common::http($logUrl);
+                        $logs = json_decode($response);
+
+                        $this->dao->update(TABLE_CI_BUILD)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
+                    }
+                }
+            }
         }
     }
 
