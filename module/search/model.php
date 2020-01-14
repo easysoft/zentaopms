@@ -26,17 +26,18 @@ class searchModel extends model
         $module = $searchConfig['module'];
         if(isset($this->config->bizVersion))
         {
-            if($module == 'projectStory') $module = 'story';
-            if($module == 'projectBug')   $module = 'bug';
+            $flowModule = $module;
+            if($module == 'projectStory') $flowModule = 'story';
+            if($module == 'projectBug')   $flowModule = 'bug';
 
-            $fields = $this->loadModel('workflowfield')->getList($module);
+            $fields = $this->loadModel('workflowfield')->getList($flowModule);
 
             foreach($fields as $field)
             {
                 /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
                 if($field->field == 'subStatus')
                 {
-                    $field = $this->workflowfield->getByField($module, 'subStatus');
+                    $field = $this->workflowfield->getByField($flowModule, 'subStatus');
 
                     $searchConfig['fields'][$field->field] = $field->name;
                     $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $field->options);

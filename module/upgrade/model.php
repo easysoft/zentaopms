@@ -559,6 +559,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('11.7'));
             $this->adjustPriv12_0();
             $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
+            $this->appendExec('11_7');
         }
 
         $this->deletePatch();

@@ -81,6 +81,8 @@ class repoModel extends model
                 $repoIndex .= "<div class='list-group'>";
                 foreach($branches as $branch)
                 {
+                    if(empty($branch)) continue;
+
                     $class = $branchID == $branch ? "class='active'" : '';
                     $repoIndex .= html::a("javascript:switchBranch(\"$branch\")", $branch, '', $class);
                 }
@@ -121,7 +123,7 @@ class repoModel extends model
         foreach($repos as $id => $name)
         {
             $class = $repoID == $id ? "class='active'" : '';
-            $selectHtml .= html::a(helper::createLink('repo', 'log', "repoID={$id}"), $name, '', $class);
+            $selectHtml .= html::a(helper::createLink('repo', 'browse', "repoID={$id}"), $name, '', $class);
         }
         $selectHtml .= "</div></div>";
 
