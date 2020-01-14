@@ -708,7 +708,7 @@ class ciModel extends model
     {
         $credentials = $this->dao->select('id, name')->from(TABLE_CREDENTIALS)
             ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere($whr)->fi()
+            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)
             ->fetchPairs();
         $credentials[''] = '';
@@ -724,7 +724,7 @@ class ciModel extends model
     {
         $repos = $this->dao->select('id, name')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere($whr)->fi()
+            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)
             ->fetchPairs();
         $repos[''] = '';
@@ -740,7 +740,7 @@ class ciModel extends model
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere($whr)->fi()
+            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)
             ->fetchAll();
         $repos[''] = '';
@@ -756,7 +756,7 @@ class ciModel extends model
     {
         $repos = $this->dao->select('id, name')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere($whr)->fi()
+            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)
             ->fetchPairs();
         $repos[''] = '';

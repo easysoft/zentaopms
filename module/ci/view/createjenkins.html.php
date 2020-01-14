@@ -37,7 +37,7 @@
                     <tr id="credential-field">
                         <th class='thWidth'><?php echo $lang->credential->common; ?></th>
                         <td style="width:550px"><?php echo html::select('credential', $credentialList, '', "class='form-control chosen'"); ?></td>
-                        <td></td>
+                        <td><?php echo $lang->jenkins->tips; ?></td>
                     </tr>
 
                     <tr>
