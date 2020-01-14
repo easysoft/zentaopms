@@ -283,8 +283,8 @@ class ciModel extends model
         $jenkinsServer = str_replace('://', $r, $jenkinsServer);
         $buildUrl = sprintf('%s/job/%s/build/api/json', $jenkinsServer, $po->jenkinsTask);
 
-        $response = common::http($buildUrl, new stdClass());
-
+        $queueItem = $this->sendBuildRequest($buildUrl);
+        $po->queueItem = $queueItem;
         $this->saveCibuild($po);
 
         return !dao::isError();
@@ -301,11 +301,47 @@ class ciModel extends model
         $build = new stdClass();
         $build->citask = $task->taskId;
         $build->name = $task->taskName . ' ' . helper::now();
-        $build->status = 'start';
+        $build->queueItem = $task->queueItem;
+        $build->status = 'created';
         $build->createdBy = $this->app->user->account;
         $build->createdDate = helper::now();
 
         $this->dao->insert(TABLE_CI_BUILD)->data($build)->exec();
+    }
+
+    /**
+     * Send a request to jenkins to check build status.
+     *
+     * @param  int $buildID
+     * @access public
+     * @return bool
+     */
+    public function checkCibuild()
+    {
+        $pos = $this->dao->select('build.*, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credential')
+            ->from(TABLE_CI_BUILD)->alias('build')
+            ->leftJoin(TABLE_TASK)->alias('task')->on('build.citask=task.id')
+            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('task.jenkins=jenkins.id')
+            ->where('build.status')->ne('completed')
+            ->fetchAll();
+
+        foreach($pos as $po) {
+            $credential = $this->getCredentialByID($po->credential); // jenkins must use a token or account credential
+            if ($credential->type === 'token') {
+                $jenkinsTokenOrPassword = $credential->token;
+            } else if ($credential->type === 'account') {
+                $jenkinsTokenOrPassword = $credential->password;
+            }
+            $jenkinsUser = $credential->username;
+            $jenkinsServer = $po->serviceUrl;
+
+            $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
+            $jenkinsServer = str_replace('://', $r, $jenkinsServer);
+            $buildUrl = sprintf('%s/queue/item/%/api/json', $jenkinsServer, $po->queueItem);
+
+            $response = common::http($buildUrl, new stdClass());
+            $buildNumb = 0;
+        }
     }
 
     /**
@@ -781,5 +817,42 @@ class ciModel extends model
             ->fetchPairs();
         $repos[''] = '';
         return $repos;
+    }
+
+    public static function sendBuildRequest($url)
+    {
+        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_ENCODING, "");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($curl, CURLOPT_HEADER, FALSE);
+
+        $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+//
+        curl_setopt ($curl , CURLOPT_HEADER, 1 );
+
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, new stdClass());
+
+        $response = curl_exec($curl);
+        $errors   = curl_error($curl);
+        curl_close($curl);
+
+        if ( preg_match ( "!Location: .*item/(.*)/!", $response , $matches ) ) {
+            return $matches[1];
+        }
+
+        return '';
     }
 }

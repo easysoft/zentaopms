@@ -347,6 +347,21 @@ class ci extends control
     }
 
     /**
+     * Send a request to jenkins to check build status.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
+    public function checkCibuild($buildID)
+    {
+        $this->ci->checkCibuild($buildID);
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->send(array('result' => 'success'));
+    }
+
+    /**
      * Browse repo.
      *
      * @param  string $orderBy
