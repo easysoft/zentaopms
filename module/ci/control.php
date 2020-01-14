@@ -123,7 +123,7 @@ class ci extends control
      */
     public function deleteCredential($id)
     {
-        $this->ci->delete(TABLE_CREDENTIAL, $id);
+        $this->ci->delete(TABLE_CREDENTIALS, $id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
@@ -177,7 +177,7 @@ class ci extends control
         $this->view->position[]    = html::a(inlink('browseJenkins'), $this->lang->jenkins->common);
         $this->view->position[]    = $this->lang->jenkins->create;
 
-        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token'");
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token' or type='account'");
         $this->view->module      = 'jenkins';
 
         $this->display();
@@ -208,7 +208,7 @@ class ci extends control
         $this->view->position[]    = $this->lang->jenkins->edit;
 
         $this->view->jenkins    = $jenkins;
-        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token'");
+        $this->view->credentialList  = $this->ci->listCredentialForSelection("type='token' or type='account'");
 
         $this->view->module      = 'jenkins';
         $this->display();
