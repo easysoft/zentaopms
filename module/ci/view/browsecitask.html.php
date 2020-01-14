@@ -54,7 +54,6 @@
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('ci', 'exeCitask', "citaskID=$id", '', 'list',  'play');
                             common::printIcon('ci', 'editCitask', "citaskID=$id", '', 'list',  'edit');
 
                             if (common::hasPriv('ci', 'deleteCitask')) {

@@ -59,6 +59,7 @@ $lang->citask->common                  = '构建任务';
 $lang->citask->browse                  = '浏览构建任务';
 $lang->citask->create                  = '添加构建任务';
 $lang->citask->edit                    = '编辑构建任务';
+$lang->citask->exeNow                  = '立即执行';
 $lang->citask->delete                  = '删除构建任务';
 $lang->citask->confirmDelete           = '确认删除该构建任务吗？';
 

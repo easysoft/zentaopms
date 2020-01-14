@@ -3,6 +3,20 @@ $(function()
     triggerTypeChanged(triggerType);
 });
 
+function exeCitask(id) {
+    var link = createLink('ci', 'exeCitask', 'id=' + id);
+    console.log(link);
+    $.ajax({
+        type:"POST",
+        url: link,
+        data: {},
+        datatype: "json",
+        success:function(str){
+            $('.exe-citask-button').tooltip('show', '发送执行请求成功！');
+        }
+    });
+}
+
 function triggerTypeChanged(type) {
     if(type == 'tag') {
         $('.tag-fields').removeClass('hidden');

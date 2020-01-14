@@ -106,9 +106,11 @@
                     </tr>
                     <tr>
                         <th></th>
-                        <td class='text-center form-actions'>
+                        <td colspan="2" class='text-center form-actions'>
                             <?php echo html::submitButton(); ?>
                             <?php echo html::backButton(); ?>
+                            &nbsp;
+                            <?php echo html::commonButton($lang->citask->exeNow, "onclick=exeCitask($citask->id)  data-tip-class='tooltip-success'", "btn btn-info exe-citask-button"); ?>
                         </td>
                     </tr>
                 </table>
