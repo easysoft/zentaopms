@@ -158,6 +158,6 @@ $lang->repo->error->encoding      = "编码可能错误，请更换编码重试�
 
 //$lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Git']        = 'Git';
-$lang->repo->tips                  = '请使用系统用户<strong class="text-blue">{user}</strong>签出代码，以便于获取后续的操作权限。如：<strong class="text-blue">sudo -u {user} git clone git_rep_address</strong>';
+$lang->repo->tips                 = '请使用系统用户<strong class="text-blue">{user}</strong>签出代码，以便于获取后续的操作权限。如：<strong class="text-blue">sudo -u {user} git clone git_rep_address</strong>';
 
 $lang->repo->watchList['1'] = '';
