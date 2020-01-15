@@ -187,6 +187,11 @@ class cron extends control
 
                 if($now > $cron['time'])
                 {
+                    // TODO: debug cron dow = 2-6/1
+                    if ($id == 16) {
+                        $id = 16;
+                    }
+
                     $this->cron->changeStatus($id, 'running');
                     $parsedCrons[$id]['time'] = $cron['cron']->getNextRunDate();
 
