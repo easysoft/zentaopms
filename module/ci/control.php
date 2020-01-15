@@ -328,6 +328,9 @@ class ci extends control
         $this->ci->delete(TABLE_CI_TASK, $id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+        $command = 'moduleName=ci&methodName=exeCitask&id=' . $id;
+        $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();
+
         $this->send(array('result' => 'success'));
     }
 
@@ -355,6 +358,8 @@ class ci extends control
      */
     public function checkCibuild()
     {
+        error_log("checkCibuild...");
+
         $this->ci->checkCibuild();
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

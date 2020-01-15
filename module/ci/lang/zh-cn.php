@@ -76,11 +76,12 @@ $lang->citask->custom                  = '自定义';
 
 $lang->citask->tagKeywords             = '标签关键字';
 $lang->citask->commentKeywords         = '注释关键字';
+$lang->citask->extTask                 = '执行任务';
 
 $lang->citask->at                      = '在';
 $lang->citask->time                    = '时间';
 $lang->citask->exe                     = '执行';
-$lang->citask->scheduleInterval        = '间隔';
+$lang->citask->scheduleInterval        = '每隔';
 $lang->citask->scheduleDay             = '天数';
 $lang->citask->day                     = '天';
 $lang->citask->lastExe                 = '最后执行';

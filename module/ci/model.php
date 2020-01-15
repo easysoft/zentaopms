@@ -210,6 +210,7 @@ class ciModel extends model
     public function createCitask()
     {
         $task = fixer::input('post')
+            ->add('scheduleType', 'custom')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
@@ -219,11 +220,30 @@ class ciModel extends model
             ->batchCheckIF($task->triggerType === 'tag', "tagKeywords", 'notempty')
             ->batchCheckIF($task->triggerType === 'commit', "commentKeywords", 'notempty')
 
-            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'corn', "cornExpression", 'notempty')
             ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
 
             ->autoCheck()
             ->exec();
+
+        if ($task->triggerType === 'schedule' && $task->scheduleType == 'custom') {
+            $arr = explode(":", $task->scheduleTime);
+            $hour = $arr[0];
+            $min = $arr[1];
+
+            $taskId = $this->dao->lastInsertID();
+            if ($task->scheduleDay == 'everyDay') {
+                $days = '1-7';
+            } else if ($task->scheduleDay == 'workDay') {
+                $days = '1-5';
+            }
+
+            $cron = (object) array('m'=>$min, 'h'=>$hour, 'dom'=>'*', 'mon'=>'*',
+                'dow'=> $days . '/' . $task->scheduleInterval, 'command'=>'moduleName=ci&methodName=exeCitask&id=' . $taskId,
+                'remark'=>($this->lang->citask->extTask . $taskId), 'type'=>'zentao',
+                'buildin'=>'-1', 'status'=>'normal', 'lastTime'=>'0000-00-00 00:00:00');
+            $this->dao->insert(TABLE_CRON)->data($cron)->exec();
+        }
+
         return !dao::isError();
     }
 
@@ -237,6 +257,7 @@ class ciModel extends model
     public function updateCitask($id)
     {
         $task = fixer::input('post')
+            ->add('scheduleType', 'custom')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->get();
@@ -246,12 +267,33 @@ class ciModel extends model
             ->batchCheckIF($task->triggerType === 'tag', "tagKeywords", 'notempty')
             ->batchCheckIF($task->triggerType === 'commit', "commentKeywords", 'notempty')
 
-            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'corn', "cornExpression", 'notempty')
             ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
 
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
+
+        if ($task->triggerType === 'schedule' && $task->scheduleType == 'custom') {
+            $arr = explode(":", $task->scheduleTime);
+            $hour = $arr[0];
+            $min = $arr[1];
+
+            $taskId = $this->dao->lastInsertID();
+            if ($task->scheduleDay == 'everyDay') {
+                $days = '1-7';
+            } else if ($task->scheduleDay == 'workDay') {
+                $days = '1-5';
+            }
+            $command = 'moduleName=ci&methodName=exeCitask&id=' . $id;
+
+            $this->dao->update(TABLE_CRON)
+                ->set('m')->eq($min)
+                ->set('h')->eq($hour)
+                ->set('dow')->eq($days . '/' . $task->scheduleInterval)
+                ->set('lastTime')->eq('0000-00-00 00:00:00')
+                ->where('command')->eq($command)->exec();
+        }
+
         return !dao::isError();
     }
 

@@ -48,10 +48,6 @@
                         <th><?php echo $lang->citask->triggerType; ?></th>
                         <td><?php echo html::select('triggerType', $lang->citask->triggerTypeList, $citask->triggerType,
                                 "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
-
-                        <th class="schedule-fields"><?php echo $lang->citask->scheduleType; ?></th>
-                        <td class="schedule-fields"><?php echo html::radio('scheduleType', $lang->citask->scheduleTypeList, $citask->scheduleType,
-                                "onclick='scheduleTypeChanged(this.value)'");?></td>
                     </tr>
                     <tr class="tag-fields">
                         <th><?php echo $lang->citask->tagKeywords; ?></th>
@@ -64,11 +60,6 @@
                         <td colspan="2"><span style="font-style: italic">build_now</span></td>
                     </tr>
 
-                    <tr class="corn-fields">
-                        <th><?php echo $lang->citask->cornExpression; ?></th>
-                        <td><?php echo html::input('cornExpression', $citask->cornExpression, "class='form-control'"); ?></td>
-                        <td colspan="2"><span style="font-style: italic">0 0 2 * * ?</span></td>
-                    </tr>
                     <tr class="custom-fields">
                         <th><?php echo $lang->citask->custom; ?></th>
                         <td colspan="3">
