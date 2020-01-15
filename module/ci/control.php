@@ -293,10 +293,6 @@ class ci extends control
      */
     public function editCitask($id)
     {
-//        $pattern = $this->config->repo->commitCommands['entity'];
-//        $matches = array();
-//        preg_match($pattern, 'fix bug #123',$matches);
-
         $citask = $this->ci->getCitaskByID($id);
         if($_POST)
         {
@@ -427,7 +423,8 @@ class ci extends control
         $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
 
         $this->view->credentialList  = $this->ci->listCredentialForSelection("type='sshKey' or type='account'");
-        $this->view->module      = 'repo';
+        $this->view->tips            = str_replace("{user}",exec('whoami'), $this->lang->repo->tips);
+        $this->view->module          = 'repo';
 
         $this->display();
     }
@@ -466,7 +463,8 @@ class ci extends control
         $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
 
         $this->view->credentialList  = $this->ci->listCredentialForSelection("type='sshKey' or type='account'");
-        $this->view->module      = 'repo';
+        $this->view->tips            = str_replace("{user}", exec('whoami'), $this->lang->repo->tips);
+        $this->view->module          = 'repo';
         $this->display();
     }
 

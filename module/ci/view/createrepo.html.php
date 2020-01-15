@@ -27,6 +27,10 @@
             <form id='repoForm' method='post' class='form-ajax'>
                 <table class='table table-form'>
                     <tr>
+                        <th class='thWidth'></th>
+                        <td colspan="2"><?php echo $tips; ?></td>
+                    </tr>
+                    <tr>
                         <th class='thWidth'><?php echo $lang->repo->type; ?></th>
                         <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'git', "class='form-control'"); ?></td>
                         <td></td>
