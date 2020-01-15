@@ -14,3 +14,5 @@ $config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary    = '|pdf|';
 
 $config->repo->requiredFields = 'name,repo,buildType,jenkins,jenkinsTask,triggerType';
+
+$config->repo->commitCommands = array(build=>'Build #12345', entity=>'/(.*)\s(?:(?:requirement)|(?:task)|(?:Bug))\s?#(.*)/Ui');

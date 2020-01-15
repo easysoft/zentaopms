@@ -293,6 +293,10 @@ class ci extends control
      */
     public function editCitask($id)
     {
+//        $pattern = $this->config->repo->commitCommands['entity'];
+//        $matches = array();
+//        preg_match($pattern, 'fix bug #123',$matches);
+
         $citask = $this->ci->getCitaskByID($id);
         if($_POST)
         {
