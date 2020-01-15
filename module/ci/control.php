@@ -475,6 +475,21 @@ class ci extends control
     }
 
     /**
+     * sync repo from remote.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function syncRepo($repoID = 0)
+    {
+        $this->dao->update(TABLE_REPO)->set('synced')->eq(0)->where('id')->eq($repoID)->exec();
+
+        $link = $this->ci->createLink('showSyncComment', "repoID=$repoID&needPull=true");
+        $this->send(array('result' => 'success', 'locate' => $link));
+    }
+
+    /**
      * browse branches.
      *
      * @param  int $repoID
@@ -491,21 +506,6 @@ class ci extends control
 
         $this->view->module     = 'repo';
         $this->display();
-    }
-
-    /**
-     * sync repo from remote.
-     *
-     * @param  int $repoID
-     * @access public
-     * @return void
-     */
-    public function syncRepo($repoID = 0)
-    {
-        $this->dao->update(TABLE_REPO)->set('synced')->eq(0)->where('id')->eq($repoID)->exec();
-
-        $link = $this->ci->createLink('showSyncComment', "repoID=$repoID&needPull=true");
-        $this->send(array('result' => 'success', 'locate' => $link));
     }
 
     /**

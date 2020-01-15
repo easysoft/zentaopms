@@ -131,17 +131,8 @@ fi
 echo $deletelog > $basePath/deletelog.sh
 echo "deletelog.sh ok"
 
-# check jenkins task status.
-if [ $requestType == 'PATH_INFO' ]; then
-  checkCibuild="$phpcli $basePath/ztcli '$pmsRoot/ci-checkCibuild'";
-else
-  checkCibuild="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=ci&f=checkCibuild'";
-fi
-echo $checkCibuild > $basePath/checkcibuild.sh
-echo "checkcibuild.sh ok"
-
 # cron
-if [ ! -d "$basePath/cron" ]; then 
+if [ ! -d "$basePath/cron" ]; then
   mkdir $basePath/cron
 fi
 echo "# system cron." > $basePath/cron/sys.cron
@@ -155,7 +146,6 @@ echo "1-59/5 *    *   *     *     $basePath/sendmail.sh        # async send mail
 echo "1-59/5 *    *   *     *     $basePath/sendwebhook.sh     # async send webhook."       >> $basePath/cron/sys.cron
 echo "1      1    *   *     *     $basePath/createcycle.sh     # create cycle todo."        >> $basePath/cron/sys.cron
 echo "30     1    *   *     *     $basePath/deletelog.sh       # delete log."               >> $basePath/cron/sys.cron
-echo "1-59/3 *    *   *     *     $basePath/checkcibuild.sh    # check ci build status."    >> $basePath/cron/sys.cron
 cron="$phpcli $basePath/php/crond.php"
 echo $cron > $basePath/cron.sh
 echo "cron.sh ok"
