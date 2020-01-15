@@ -33,7 +33,7 @@ class cronModel extends model
     public function getCrons($params = '')
     {
         return $this->dao->select('*')->from(TABLE_CRON)
-            ->where('1=1')
+            ->where('id=16')
             ->beginIF(strpos($params, 'nostop') !== false)->andWhere('status')->ne('stop')->fi()
             ->fetchAll('id');
     }

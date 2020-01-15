@@ -201,7 +201,8 @@ class cron extends control
                             if(isset($params['moduleName']) and isset($params['methodName']))
                             {
                                 $this->app->loadConfig($params['moduleName']);
-                                $output = $this->fetch($params['moduleName'], $params['methodName']);
+                                $paramArr = explode(",", $params['parm']);
+                                $output = $this->fetch($params['moduleName'], $params['methodName'], $paramArr);
                             }
                         }
                         elseif(isset($crons[$id]) and $crons[$id]->type == 'system')

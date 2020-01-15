@@ -238,7 +238,7 @@ class ciModel extends model
             }
 
             $cron = (object) array('m'=>$min, 'h'=>$hour, 'dom'=>'*', 'mon'=>'*',
-                'dow'=> $days . '/' . $task->scheduleInterval, 'command'=>'moduleName=ci&methodName=exeCitask&id=' . $taskId,
+                'dow'=> $days . '/' . $task->scheduleInterval, 'command'=>'moduleName=ci&methodName=exeCitask&params=' . $taskId,
                 'remark'=>($this->lang->citask->extTask . $taskId), 'type'=>'zentao',
                 'buildin'=>'-1', 'status'=>'normal', 'lastTime'=>'0000-00-00 00:00:00');
             $this->dao->insert(TABLE_CRON)->data($cron)->exec();
@@ -282,9 +282,9 @@ class ciModel extends model
             if ($task->scheduleDay == 'everyDay') {
                 $days = '1-7';
             } else if ($task->scheduleDay == 'workDay') {
-                $days = '1-5';
+                $days = '2-6';
             }
-            $command = 'moduleName=ci&methodName=exeCitask&id=' . $id;
+            $command = 'moduleName=ci&methodName=exeCitask&params=' . $id;
 
             $this->dao->update(TABLE_CRON)
                 ->set('m')->eq($min)

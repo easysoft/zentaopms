@@ -347,6 +347,8 @@ class ci extends control
      */
     public function exeCitask($id)
     {
+        error_log("===exeCitask " . $id);
+
         $this->ci->exeCitask($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -362,7 +364,7 @@ class ci extends control
      */
     public function checkCibuild()
     {
-        error_log("checkCibuild...");
+        error_log("===checkCibuild");
 
         $this->ci->checkCibuild();
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
