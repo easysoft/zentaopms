@@ -87,11 +87,9 @@ class gitModel extends model
         $this->setLogRoot();
         $this->setRestartFile();
 
-        foreach($this->repos as $name => $repo)
+        foreach($this->repos as $repo)
         {
-            $this->printLog("begin repo $name");
-            $repo = (object)$repo;
-            $repo->name = $name;
+            $this->printLog("begin repo $repo->id");
             if(!$this->setRepo($repo)) return false;
 
             $this->pull();
@@ -140,9 +138,9 @@ class gitModel extends model
     /**
      * Pull codes from remote repo.
      *
-     * @param $repoRoot
+     * @param $repo
      */
-    public function pull($repo)
+    public function pull($repo = '')
     {
         if (!empty($repo)) {
             $repoRoot = $repo->path;
@@ -205,18 +203,12 @@ class gitModel extends model
 
         $gitRepos = [];
         $paths = [];
+        //        有了库管理，忽略配置里的库
         foreach($repoObjs as $repoInDb)
         {
             if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
-                $gitRepos[] = array(path => $repoInDb->path, encoding => 'utf-8');
+                $gitRepos[] = array(id=>$repoInDb->id, path => $repoInDb->path, encoding => 'utf-8');
                 $paths[] = $repoInDb->path;
-            }
-        }
-
-        foreach($this->config->git->repos as $repoInConfig)
-        {
-            if(!empty($repoInConfig['path']) && !in_array($repoInConfig['path'], $paths)) {
-                $gitRepos[] = $repoInConfig;
             }
         }
 
@@ -261,7 +253,7 @@ class gitModel extends model
         $this->setClient($repo);
         if(empty($this->client)) return false;
 
-        $this->setLogFile($repo->name);
+        $this->setLogFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }

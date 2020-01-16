@@ -890,7 +890,6 @@ class ciModel extends model
             ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)
             ->fetchAll();
-        $repos[''] = '';
         return $repos;
     }
 

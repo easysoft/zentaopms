@@ -177,6 +177,12 @@ class cron extends control
             $this->common->loadConfigFromDB();
             foreach($parsedCrons as $id => $cron)
             {
+                // TODO: debug cron dow = 2-6/1
+                $temp = $now > $cron['time'];
+                if ($id == 5 && $temp) {
+                    error_log($temp . ' = ' . date_format($now, "Y/m/d H:i:s") . ' > ' . date_format($cron['time'], "Y/m/d H:i:s"));
+                }
+
                 $cronInfo = $this->cron->getById($id);
                 /* Skip empty and stop cron.*/
                 if(empty($cronInfo) or $cronInfo->status == 'stop') continue;
@@ -187,11 +193,6 @@ class cron extends control
 
                 if($now > $cron['time'])
                 {
-                    // TODO: debug cron dow = 2-6/1
-                    if ($id == 16) {
-                        $id = 16;
-                    }
-
                     $this->cron->changeStatus($id, 'running');
                     $parsedCrons[$id]['time'] = $cron['cron']->getNextRunDate();
 
