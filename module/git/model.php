@@ -392,17 +392,24 @@ class gitModel extends model
     {
         $pattern = $this->config->repo->commitCommands['entity'];
         $matches = array();
-        preg_match($pattern, $comment,$matches);
-        if(count($matches) > 1)
+        preg_match_all($pattern, $comment,$matches);
+
+        if(count($matches) > 1 && count($matches[1]) > 0)
         {
-            $action = $matches[1];
-            $entityType = $matches[2];
-            $entityIds = $matches[3];
+            $i = 0;
+            foreach($matches[1] as $action)
+            {
+                $action = $matches[1][$i];
+                $entityType = $matches[2][$i];
+                $entityIds = $matches[3][$i];
 
-            $currArr = $allCommands[$entityType][$action];
-            $newArr = explode(",", $entityIds);
+                $currArr = $allCommands[$entityType][$action];
+                $newArr = explode(",", $entityIds);
 
-            $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
+                $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
+
+                $i++;
+            }
         }
     }
 
