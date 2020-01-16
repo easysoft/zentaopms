@@ -15,4 +15,4 @@ $config->repo->binary    = '|pdf|';
 
 $config->repo->requiredFields = 'name,repo,buildType,jenkins,jenkinsTask,triggerType';
 
-$config->repo->commitCommands = array(entity=>'/(.*)\s(?:(?:requirement)|(?:task)|(?:Bug))\s?#(.*)/Ui');
+$config->repo->commitCommands = array( entity => '/\s*([a-z]+)\s+((?:story)|(?:task)|(?:bug))\s+#((\d|,)+)\s*/i' );

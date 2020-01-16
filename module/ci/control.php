@@ -293,6 +293,9 @@ class ci extends control
      */
     public function editCitask($id)
     {
+        $pattern = '/\s*([a-z]+)\s+((?:story)|(?:task)|(?:bug))\s+#((?\d|,)+)\s*/i';
+        preg_match($pattern, ' update README. fix bug #123,456',$matches);
+
         $citask = $this->ci->getCitaskByID($id);
         if($_POST)
         {

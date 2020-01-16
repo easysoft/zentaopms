@@ -132,6 +132,12 @@ class gitModel extends model
             $this->printLog("save revision $latestRevision");
             $this->deleteRestartFile();
             $this->printLog("\n\nrepo $name finished");
+
+            // check ci commands in logs
+            $pattern = $this->config->repo->commitCommands['entity'];
+            $matches = array();
+            preg_match($pattern, 'fix bug #123',$matches);
+
         }
     }
 
@@ -207,7 +213,7 @@ class gitModel extends model
         foreach($repoObjs as $repoInDb)
         {
             if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
-                $gitRepos[] = array(id=>$repoInDb->id, path => $repoInDb->path, encoding => 'utf-8');
+                $gitRepos[] = (object)array(id=>$repoInDb->id, path => $repoInDb->path, encoding => 'utf-8');
                 $paths[] = $repoInDb->path;
             }
         }
@@ -398,27 +404,21 @@ class gitModel extends model
      */
     public function parseComment($comment)
     {
-        $stories = array(); 
-        $tasks   = array();
-        $bugs    = array();
+        $ret = array();
 
-        // bug|story|task(case insensitive) + some space + #|:|：(Chinese) + id lists(maybe join with space or ,)
-        // $comment = "bug # 1,2,3,4 Bug:1 2 3 4 5 story:9999,1234566 story:456,1234566";
-        $commonReg = "(?:\s){0,}(?:#|:|：){0,}([0-9, ]{1,})";
-        $taskReg  = '/task' .  $commonReg . '/i';
-        $storyReg = '/story' . $commonReg . '/i';
-        $bugReg   = '/bug'   . $commonReg . '/i';
+        $pattern = $this->config->repo->commitCommands['entity'];
+        $matches = array();
+        preg_match($pattern, $comment,$matches);
+        if(count($matches) > 1)
+        {
+            $action = $matches[1];
+            $entityType = $matches[2];
+            $entityIds = $matches[3];
 
-        if(preg_match_all($storyReg, $comment, $result)) $stories = join(' ', $result[1]);
-        if(preg_match_all($taskReg, $comment, $result))  $tasks   = join(' ', $result[1]);
-        if(preg_match_all($bugReg, $comment, $result))   $bugs    = join(' ', $result[1]);
+            $ret[$entityType] = array(action=>$action, entities=> explode(",", $entityIds));
+        }
 
-        if($stories) $stories = array_unique(explode(' ', str_replace(',', ' ', $stories)));
-        if($tasks)   $tasks   = array_unique(explode(' ', str_replace(',', ' ', $tasks)));
-        if($bugs)    $bugs    = array_unique(explode(' ', str_replace(',', ' ', $bugs)));
-
-        if(!$stories and !$tasks and !$bugs) return array();
-        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs);
+        return $ret;
     }
 
     /**
@@ -773,7 +773,7 @@ class gitModel extends model
      */
     public function saveLastRevision($revision)
     {
-        file_put_contents($this->logFile, $revision);
+        $ret = file_put_contents($this->logFile, $revision);
     }
 
     /**
@@ -787,6 +787,7 @@ class gitModel extends model
     {
         echo helper::now() . " $log\n";
     }
+
 
     /**
      * Build URL.
