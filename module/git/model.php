@@ -103,7 +103,7 @@ class gitModel extends model
             $this->printLog('begin parsing logs');
             $latestRevision = $logs[0]->revision;
 
-            $allCommands = new stdClass();
+            $allCommands = [];
             foreach($logs as $log)
             {
                 $this->printLog("parsing log {$log->revision}");
@@ -404,6 +404,9 @@ class gitModel extends model
                 $entityIds = $matches[3][$i];
 
                 $currArr = $allCommands[$entityType][$action];
+                if (empty($currArr)) {
+                    $currArr = [];
+                }
                 $newArr = explode(",", $entityIds);
 
                 $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
