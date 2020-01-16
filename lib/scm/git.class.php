@@ -85,6 +85,7 @@ class Git
             if($localBranch{0} == '*') $localBranch = substr($localBranch, 1);
 
             $localBranch = trim($localBranch);
+            if(empty($localBranch))continue;
             $branches[$localBranch] = $localBranch;
         }
         asort($branches);
