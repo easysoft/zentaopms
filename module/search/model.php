@@ -256,6 +256,10 @@ class searchModel extends model
                     $params[$fieldName]['values'] = array('ZERO' => $params[$fieldName]['values'][0]) + $params[$fieldName]['values'];
                     unset($params[$fieldName]['values'][0]);
                 }
+                elseif(empty($params[$fieldName]['values']))
+                {
+                    $params[$fieldName]['values'] = array('' => '', 'null' => $this->lang->search->null);
+                }
                 else
                 {
                     $params[$fieldName]['values'] = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
