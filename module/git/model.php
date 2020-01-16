@@ -102,6 +102,8 @@ class gitModel extends model
             $this->printLog("get " . count($logs) . " logs");
             $this->printLog('begin parsing logs');
             $latestRevision = $logs[0]->revision;
+
+            $allCommands = new stdClass();
             foreach($logs as $log)
             {
                 $this->printLog("parsing log {$log->revision}");
@@ -112,10 +114,7 @@ class gitModel extends model
                 }
 
                 $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                $objects = $this->parseComment($log->msg);
-                if($objects) {
-                    $this->printLog('extract ' . json_encode($objects));
-                }
+                $this->parseComment($log->msg, $allCommands);
             }
 
             $this->saveLastRevision($latestRevision);
@@ -123,11 +122,7 @@ class gitModel extends model
             $this->deleteRestartFile();
             $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
 
-            // check ci commands in logs
-            $pattern = $this->config->repo->commitCommands['entity'];
-            $matches = array();
-            preg_match($pattern, 'fix bug #123',$matches);
-
+            $this->printLog('extract ' . json_encode($allCommands));
         }
     }
 
@@ -388,14 +383,13 @@ class gitModel extends model
     /**
      * Parse the comment of git, extract object id list from it.
      * 
-     * @param  string    $comment 
+     * @param  string    $comment
+     * @param  array     $allCommands
      * @access public
      * @return array
      */
-    public function parseComment($comment)
+    public function parseComment($comment, &$allCommands)
     {
-        $ret = array();
-
         $pattern = $this->config->repo->commitCommands['entity'];
         $matches = array();
         preg_match($pattern, $comment,$matches);
@@ -405,10 +399,11 @@ class gitModel extends model
             $entityType = $matches[2];
             $entityIds = $matches[3];
 
-            $ret[$entityType] = array('action'=>$action, 'entities'=> explode(",", $entityIds));
-        }
+            $currArr = $allCommands[$entityType][$action];
+            $newArr = explode(",", $entityIds);
 
-        return $ret;
+            $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
+        }
     }
 
     /**

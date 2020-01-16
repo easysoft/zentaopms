@@ -222,9 +222,9 @@ class cron extends control
                         $log  = '';
                         $time = $now->format('G:i:s');
                         if (empty($output)) {
-                            $output = '\n';
+                            $output = "\n";
                         }
-                        if (count($output) > 100) { // return if output a lot of info
+                        if (strlen($output) > 100) { // return if output a lot of info
                             $output = "\n" . $output;
                         }
                         $log  = "$time task " .  $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
