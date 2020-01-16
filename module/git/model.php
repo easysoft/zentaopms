@@ -113,25 +113,15 @@ class gitModel extends model
 
                 $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
                 $objects = $this->parseComment($log->msg);
-                if($objects)
-                {
-                    $this->printLog('extract' . 
-                        ' story:' . join(' ', $objects['stories']) . 
-                        ' task:' . join(' ', $objects['tasks']) . 
-                        ' bug:'  . join(',', $objects['bugs']));
-
-                    $this->saveAction2PMS($objects, $log);
-                }
-                else
-                {
-                    $this->printLog('no objects found' . "\n");
+                if($objects) {
+                    $this->printLog('extract ' . json_encode($objects));
                 }
             }
 
             $this->saveLastRevision($latestRevision);
             $this->printLog("save revision $latestRevision");
             $this->deleteRestartFile();
-            $this->printLog("\n\nrepo $name finished");
+            $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
 
             // check ci commands in logs
             $pattern = $this->config->repo->commitCommands['entity'];
@@ -213,7 +203,7 @@ class gitModel extends model
         foreach($repoObjs as $repoInDb)
         {
             if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
-                $gitRepos[] = (object)array(id=>$repoInDb->id, path => $repoInDb->path, encoding => 'utf-8');
+                $gitRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path, 'encoding' => 'utf-8');
                 $paths[] = $repoInDb->path;
             }
         }
@@ -415,7 +405,7 @@ class gitModel extends model
             $entityType = $matches[2];
             $entityIds = $matches[3];
 
-            $ret[$entityType] = array(action=>$action, entities=> explode(",", $entityIds));
+            $ret[$entityType] = array('action'=>$action, 'entities'=> explode(",", $entityIds));
         }
 
         return $ret;

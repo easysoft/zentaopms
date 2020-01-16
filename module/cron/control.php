@@ -221,6 +221,12 @@ class cron extends control
                         /* Save log. */
                         $log  = '';
                         $time = $now->format('G:i:s');
+                        if (empty($output)) {
+                            $output = '\n';
+                        }
+                        if (count($output) > 100) { // return if output a lot of info
+                            $output = "\n" . $output;
+                        }
                         $log  = "$time task " .  $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
                         $this->cron->logCron($log);
                         unset($log);
