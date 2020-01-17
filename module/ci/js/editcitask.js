@@ -35,14 +35,26 @@ function triggerTypeChanged(type) {
         $('.tag-fields').addClass('hidden');
         $('.comment-fields').addClass('hidden');
 
-        scheduleTypeChanged('custom');
+        var val = $("input[name='scheduleType']:checked").val();
+        scheduleTypeChanged(val? val: 'cron');
     }
 }
 
 function scheduleTypeChanged(type) {
-    if(type == 'custom') {
+    if(type == 'cron') {
+        $('.schedule-fields').removeClass('hidden');
+
+        $('.cron-fields').removeClass('hidden');
+        $('.custom-fields').addClass('hidden');
+    } else if(type == 'custom') {
+        $('.schedule-fields').removeClass('hidden');
+
+        $('.cron-fields').addClass('hidden');
         $('.custom-fields').removeClass('hidden');
     } else {
+        $('.schedule-fields').addClass('hidden');
+
+        $('.cron-fields').addClass('hidden');
         $('.custom-fields').addClass('hidden');
     }
 }

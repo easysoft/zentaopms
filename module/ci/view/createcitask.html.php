@@ -46,6 +46,10 @@
                         <th><?php echo $lang->citask->triggerType; ?></th>
                         <td><?php echo html::select('triggerType', $lang->citask->triggerTypeList, '',
                                 "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
+
+                        <th class="schedule-fields"><?php echo $lang->citask->scheduleType; ?></th>
+                        <td class="schedule-fields"><?php echo html::radio('scheduleType', $lang->citask->scheduleTypeList, 'cron',
+                                "onclick='scheduleTypeChanged(this.value)'");?></td>
                     </tr>
                     <tr class="tag-fields">
                         <th><?php echo $lang->citask->tagKeywords; ?></th>
@@ -58,6 +62,11 @@
                         <td colspan="2"><span style="font-style: italic">build_now</span></td>
                     </tr>
 
+                    <tr class="cron-fields">
+                        <th><?php echo $lang->citask->cronExpression; ?></th>
+                        <td><?php echo html::input('cronExpression', '', "class='form-control'"); ?></td>
+                        <td colspan="2"><span style="font-style: italic"><?php echo $lang->citask->cronSample; ?></span></td>
+                    </tr>
                     <tr class="custom-fields">
                         <th><?php echo $lang->citask->custom; ?></th>
                         <td colspan="3">

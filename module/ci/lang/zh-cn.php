@@ -87,10 +87,12 @@ $lang->citask->day                     = '天';
 $lang->citask->lastExe                 = '最后执行';
 $lang->citask->scheduleTime            = '时间';
 
+$lang->citask->cronSample              = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
+
 $lang->citask->dayTypeList             = array('workDay'=>'工作日', 'everyDay'=>'每天');
 $lang->citask->buildTypeList           = array('build'=>'仅构建', 'buildAndDeploy'=>'构建部署', 'buildAndTest'=>'构建测试');
 $lang->citask->triggerTypeList         = array('tag'=>'打标签', 'commit'=>'代码提交注释', 'schedule'=>'定时计划');
-$lang->citask->scheduleTypeList        = array('corn'=>'Corn表达式', 'custom'=>'自定义');
+$lang->citask->scheduleTypeList        = array('cron'=>'Cron表达式', 'custom'=>'自定义');
 
 // repo
 $lang->repo->common        = '代码库';

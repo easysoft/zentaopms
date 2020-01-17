@@ -48,7 +48,7 @@ CREATE TABLE `zt_citask` (
   `buildType` varchar(255) NOT NULL,
   `triggerType` varchar(255) NOT NULL,
   `scheduleType` varchar(255) NOT NULL,
-  `cornExpression` varchar(255) DEFAULT NULL,
+  `cronExpression` varchar(255) DEFAULT NULL,
   `scheduleDay` varchar(255) DEFAULT NULL,
   `scheduleTime` varchar(255) DEFAULT NULL,
   `scheduleInterval` mediumint(8) DEFAULT NULL,
