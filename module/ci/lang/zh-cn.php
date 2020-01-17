@@ -87,6 +87,9 @@ $lang->citask->day                     = '天';
 $lang->citask->lastExe                 = '最后执行';
 $lang->citask->scheduleTime            = '时间';
 
+$lang->citask->example                 = '举例';
+$lang->citask->tagEx                   = 'build_#15，其中15为Jenkins任务编号';
+$lang->citask->commitEx                = 'start build #15，其中15为Jenkins任务编号';
 $lang->citask->cronSample              = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
 
 $lang->citask->dayTypeList             = array('workDay'=>'工作日', 'everyDay'=>'每天');

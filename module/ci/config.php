@@ -15,4 +15,5 @@ $config->repo->binary    = '|pdf|';
 
 $config->repo->requiredFields = 'name,repo,buildType,jenkins,jenkinsTask,triggerType';
 
-$config->repo->commitCommands = array( entity => '/\s*([a-z]+)\s+((?:build)|(?:story)|(?:task)|(?:bug))\s+#((?:\d|,)+)\s*/i' );
+$config->ci->commitCommandRegx = '/\s*([a-z]+)\s+((?:build)|(?:story)|(?:task)|(?:bug))\s+#((?:\d|,)+)\s*/i';
+$config->ci->tagCommandRegx = '/build[\-_]#((?:\d|,)+)/i';

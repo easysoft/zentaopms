@@ -122,7 +122,46 @@ class gitModel extends model
             $this->deleteRestartFile();
             $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
 
-            $this->printLog('extract ' . json_encode($allCommands));
+            $this->printLog('extract commands from logs' . json_encode($allCommands));
+
+            // exe ci task from logs
+            $citaskIDs = $allCommands['build']['start'];
+            foreach($citaskIDs as $id)
+            {
+                $this->loadModel('ci')->exeCitask($id);
+            }
+
+            // dealwith tag commands
+            $this->printLog("dealwith tag commands");
+            $savedTag = $this->getSavedTag();
+
+            $tags = $this->getRepoTags($repo);
+            if(empty($tags)) continue;
+
+            $arriveLastTag = false;
+            $taskToBuild = [];
+            foreach($tags as $tag)
+            {
+                if (!empty($savedTag) && $tag === $savedTag) {
+                    $arriveLastTag = true;
+                    continue;
+                }
+
+                if (!empty($savedTag) && !$arriveLastTag) {
+                    continue;
+                }
+
+                $this->parseTag($tag, $taskToBuild);
+            }
+
+            $this->saveLastTag($tags[count($tags) - 1]);
+
+            $this->printLog('extract tasks to build: ' . json_encode($taskToBuild));
+
+            foreach($taskToBuild as $id)
+            {
+                $this->loadModel('ci')->exeCitask($id);
+            }
         }
     }
 
@@ -245,6 +284,7 @@ class gitModel extends model
         if(empty($this->client)) return false;
 
         $this->setLogFile($repo->id);
+        $this->setTagFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
@@ -270,14 +310,26 @@ class gitModel extends model
 
     /**
      * Set the log file of a repo.
-     * 
-     * @param  string    $repoName 
+     *
+     * @param  string    $repoId
      * @access public
      * @return void
      */
-    public function setLogFile($repoName)
+    public function setLogFile($repoId)
     {
-        $this->logFile = $this->logRoot . $repoName;
+        $this->logFile = $this->logRoot . $repoId . 'log';
+    }
+
+    /**
+     * Set the tag file of a repo.
+     *
+     * @param  string    $repoId
+     * @access public
+     * @return void
+     */
+    public function setTagFile($repoId)
+    {
+        $this->tagFile = $this->logRoot . $repoId . 'tag';
     }
 
     /**
@@ -290,6 +342,32 @@ class gitModel extends model
     public function setRepoRoot($repo)
     {
         $this->repoRoot = $repo->path;
+    }
+
+    /**
+     * get tags histories for repo.
+     *
+     * @param  object    $repo
+     * @access public
+     * @return void
+     */
+    public function getRepoTags($repo)
+    {
+        $parsedTags = array();
+
+        /* The git tag command. */
+        chdir($this->repoRoot);
+        exec("{$this->client} config core.quotepath false");
+
+        $cmd = "$this->client for-each-ref --sort=taggerdate | grep refs/tags | grep -v commit";
+        exec($cmd, $list, $return);
+        foreach($list as $line)
+        {
+            $arr = explode('refs/tags/', $line);
+            $parsedTags[] = $arr[count($arr) - 1];
+        }
+
+        return $parsedTags;
     }
 
     /**
@@ -382,6 +460,32 @@ class gitModel extends model
 
     /**
      * Parse the comment of git, extract object id list from it.
+     *
+     * @param  string    $comment
+     * @param  array     $allCommands
+     * @access public
+     * @return array
+     */
+    public function parseTag($comment, &$taskToBuild)
+    {
+        $pattern = $this->config->ci->tagCommandRegx;
+        $matches = array();
+        preg_match($pattern, $comment,$matches);
+
+        if(count($matches) > 0)
+        {
+            $entityIds = $matches[1];
+
+            if (empty($taskToBuild)) {
+                $taskToBuild = [];
+            }
+            $newArr = explode(",", $entityIds);
+            $taskToBuild = array_keys(array_flip($taskToBuild) + array_flip($newArr));
+        }
+    }
+
+    /**
+     * Parse the comment of git, extract object id list from it.
      * 
      * @param  string    $comment
      * @param  array     $allCommands
@@ -390,7 +494,7 @@ class gitModel extends model
      */
     public function parseComment($comment, &$allCommands)
     {
-        $pattern = $this->config->repo->commitCommands['entity'];
+        $pattern = $this->config->ci->commitCommandRegx;
         $matches = array();
         preg_match_all($pattern, $comment,$matches);
 
@@ -769,6 +873,31 @@ class gitModel extends model
     public function saveLastRevision($revision)
     {
         $ret = file_put_contents($this->logFile, $revision);
+    }
+
+    /**
+     * Get the saved tag.
+     *
+     * @access public
+     * @return int
+     */
+    public function getSavedTag()
+    {
+        if(!file_exists($this->tagFile)) return 0;
+        if(file_exists($this->restartFile)) return 0;
+        return trim(file_get_contents($this->tagFile));
+    }
+
+    /**
+     * Save the last revision.
+     *
+     * @param  int    $tag
+     * @access public
+     * @return void
+     */
+    public function saveLastTag($tag)
+    {
+        $ret = file_put_contents($this->tagFile, $tag);
     }
 
     /**

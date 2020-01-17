@@ -52,14 +52,12 @@
                                 "onclick='scheduleTypeChanged(this.value)'");?></td>
                     </tr>
                     <tr class="tag-fields">
-                        <th><?php echo $lang->citask->tagKeywords; ?></th>
-                        <td><?php echo html::input('tagKeywords', '', "class='form-control'"); ?></td>
-                        <td colspan="2"><span style="font-style: italic">*build_*</span></td>
+                        <th><?php echo $lang->citask->example; ?></th>
+                        <td colspan="3"><?php echo $lang->citask->tagEx; ?></td>
                     </tr>
                     <tr class="comment-fields">
-                        <th><?php echo $lang->citask->commentKeywords; ?></th>
-                        <td><?php echo html::input('commentKeywords', '', "class='form-control'"); ?></td>
-                        <td colspan="2"><span style="font-style: italic">build_now</span></td>
+                        <th><?php echo $lang->citask->example; ?></th>
+                        <td colspan="3"><?php echo $lang->citask->commitEx; ?></td>
                     </tr>
 
                     <tr class="cron-fields">
