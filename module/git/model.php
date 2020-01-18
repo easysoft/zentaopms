@@ -97,32 +97,31 @@ class gitModel extends model
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
-            if(empty($logs)) continue;
+            if(!empty($logs)) {
 
-            $this->printLog("get " . count($logs) . " logs");
-            $this->printLog('begin parsing logs');
-            $latestRevision = $logs[0]->revision;
+                $this->printLog("get " . count($logs) . " logs");
+                $this->printLog('begin parsing logs');
+                $latestRevision = $logs[0]->revision;
 
-            $allCommands = [];
-            foreach($logs as $log)
-            {
-                $this->printLog("parsing log {$log->revision}");
-                if($log->revision == $savedRevision)
-                {
-                    $this->printLog("{$log->revision} alread parsed, commit it");
-                    continue;
+                $allCommands = [];
+                foreach ($logs as $log) {
+                    $this->printLog("parsing log {$log->revision}");
+                    if ($log->revision == $savedRevision) {
+                        $this->printLog("{$log->revision} alread parsed, commit it");
+                        continue;
+                    }
+
+                    $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+                    $this->parseComment($log->msg, $allCommands);
                 }
 
-                $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                $this->parseComment($log->msg, $allCommands);
+                $this->saveLastRevision($latestRevision);
+                $this->printLog("save revision $latestRevision");
+                $this->deleteRestartFile();
+                $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
+
+                $this->printLog('extract commands from logs' . json_encode($allCommands));
             }
-
-            $this->saveLastRevision($latestRevision);
-            $this->printLog("save revision $latestRevision");
-            $this->deleteRestartFile();
-            $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
-
-            $this->printLog('extract commands from logs' . json_encode($allCommands));
 
             // exe ci task from logs
             $citaskIDs = $allCommands['build']['start'];
@@ -136,31 +135,29 @@ class gitModel extends model
             $savedTag = $this->getSavedTag();
 
             $tags = $this->getRepoTags($repo);
-            if(empty($tags)) continue;
+            if(!empty($tags)) {
+                $arriveLastTag = false;
+                $taskToBuild = [];
+                foreach ($tags as $tag) {
+                    if (!empty($savedTag) && $tag === $savedTag) { // get the last build tag position
+                        $arriveLastTag = true;
+                        continue;
+                    }
 
-            $arriveLastTag = false;
-            $taskToBuild = [];
-            foreach($tags as $tag)
-            {
-                if (!empty($savedTag) && $tag === $savedTag) {
-                    $arriveLastTag = true;
-                    continue;
+                    if (!empty($savedTag) && !$arriveLastTag) { // not get
+                        continue;
+                    }
+
+                    $this->parseTag($tag, $taskToBuild);
                 }
 
-                if (!empty($savedTag) && !$arriveLastTag) {
-                    continue;
+                $this->saveLastTag($tags[count($tags) - 1]);
+
+                $this->printLog('extract tasks to build: ' . json_encode($taskToBuild));
+
+                foreach ($taskToBuild as $id) {
+                    $this->loadModel('ci')->exeCitask($id);
                 }
-
-                $this->parseTag($tag, $taskToBuild);
-            }
-
-            $this->saveLastTag($tags[count($tags) - 1]);
-
-            $this->printLog('extract tasks to build: ' . json_encode($taskToBuild));
-
-            foreach($taskToBuild as $id)
-            {
-                $this->loadModel('ci')->exeCitask($id);
             }
         }
     }
