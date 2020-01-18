@@ -317,7 +317,7 @@ class gitModel extends model
      */
     public function setLogFile($repoId)
     {
-        $this->logFile = $this->logRoot . $repoId . 'log';
+        $this->logFile = $this->logRoot . $repoId . '.log';
     }
 
     /**
@@ -329,7 +329,7 @@ class gitModel extends model
      */
     public function setTagFile($repoId)
     {
-        $this->tagFile = $this->logRoot . $repoId . 'tag';
+        $this->tagFile = $this->logRoot . $repoId . '.tag';
     }
 
     /**
