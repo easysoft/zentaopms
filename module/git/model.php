@@ -127,7 +127,7 @@ class gitModel extends model
             $citaskIDs = $allCommands['build']['start'];
             foreach($citaskIDs as $id)
             {
-                $this->loadModel('ci')->exeCitask($id);
+                $this->loadModel('citask')->exe($id);
             }
 
             // dealwith tag commands
@@ -156,7 +156,7 @@ class gitModel extends model
                 $this->printLog('extract tasks to build: ' . json_encode($taskToBuild));
 
                 foreach ($taskToBuild as $id) {
-                    $this->loadModel('ci')->exeCitask($id);
+                    $this->loadModel('citask')->exe($id);
                 }
             }
         }
@@ -225,8 +225,8 @@ class gitModel extends model
      */
     public function setRepos()
     {
-        $ci = $this->loadModel('ci');
-        $repoObjs = $ci->listForSync("true");
+        $cirepo = $this->loadModel('cirepo');
+        $repoObjs = $cirepo->listForSync("true");
 
         $gitRepos = [];
         $paths = [];
