@@ -335,8 +335,8 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 $lang->repo = new stdclass();
 $lang->repo->menu = new stdclass();
 $lang->repo->menu->browse   = array('link' =>'浏览|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
-$lang->repo->menu->settings = '设置|repo|settings|repoID=%s';
-$lang->repo->menu->delete   = array('link' => '删除|repo|delete|repoID=%s', 'target' => 'hiddenwin');
+//$lang->repo->menu->settings = '设置|repo|settings|repoID=%s';
+//$lang->repo->menu->delete   = array('link' => '删除|repo|delete|repoID=%s', 'target' => 'hiddenwin');
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
