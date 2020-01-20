@@ -183,13 +183,13 @@ class citaskModel extends model
             ->where('task.id')->eq($taskID)
             ->fetch();
 
-        $credential = $this->loadModel('cicredentials')->getByID($po->credentials); // jenkins must use a token or account credential
-        if ($credential->type === 'token') {
-            $jenkinsTokenOrPassword = $credential->token;
-        } else if ($credential->type === 'account') {
-            $jenkinsTokenOrPassword = $credential->password;
+        $credentials = $this->loadModel('cicredentials')->getByID($po->credentials); // jenkins must use a token or account credentials
+        if ($credentials->type === 'token') {
+            $jenkinsTokenOrPassword = $credentials->token;
+        } else if ($credentials->type === 'account') {
+            $jenkinsTokenOrPassword = $credentials->password;
         }
-        $jenkinsUser = $credential->username;
+        $jenkinsUser = $credentials->username;
         $jenkinsServer = $po->serviceUrl;
 
         $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
@@ -251,13 +251,13 @@ class citaskModel extends model
             ->fetchAll();
 
         foreach($pos as $po) {
-            $credential = $this->loadModel('cicredentials')->getByID($po->credentials); // jenkins must use a token or account credential
-            if ($credential->type === 'token') {
-                $jenkinsTokenOrPassword = $credential->token;
-            } else if ($credential->type === 'account') {
-                $jenkinsTokenOrPassword = $credential->password;
+            $credentials = $this->loadModel('cicredentials')->getByID($po->credentials); // jenkins must use a token or account credentials
+            if ($credentials->type === 'token') {
+                $jenkinsTokenOrPassword = $credentials->token;
+            } else if ($credentials->type === 'account') {
+                $jenkinsTokenOrPassword = $credentials->password;
             }
-            $jenkinsUser = $credential->username;
+            $jenkinsUser = $credentials->username;
             $jenkinsServer = $po->serviceUrl;
 
             $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';

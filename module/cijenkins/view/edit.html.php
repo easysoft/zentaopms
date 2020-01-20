@@ -35,7 +35,7 @@
                         <td class='required'><?php echo html::input('serviceUrl', $jenkins->serviceUrl, "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
-                    <tr id="credential-field">
+                    <tr id="credentials-field">
                         <th class='thWidth'><?php echo $lang->credentials->common; ?></th>
                         <td style="width:550px"><?php echo html::select('credentials', $credentialsList, $jenkins->credentials, "class='form-control'"); ?></td>
                         <td><?php echo $lang->jenkins->tips; ?></td>

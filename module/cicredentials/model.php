@@ -21,8 +21,8 @@ class cicredentialsModel extends model
      */
     public function getByID($id)
     {
-        $credential = $this->dao->select('*')->from(TABLE_CREDENTIALS)->where('id')->eq($id)->fetch();
-        return $credential;
+        $credentials = $this->dao->select('*')->from(TABLE_CREDENTIALS)->where('id')->eq($id)->fetch();
+        return $credentials;
     }
 
     /**
@@ -52,14 +52,14 @@ class cicredentialsModel extends model
      */
     public function create()
     {
-        $credential = fixer::input('post')
+        $credentials = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
 //            ->remove('')
             ->get();
 
-        $this->dao->insert(TABLE_CREDENTIALS)->data($credential)
-            ->batchCheck($this->config->credential->create->requiredFields, 'notempty')
+        $this->dao->insert(TABLE_CREDENTIALS)->data($credentials)
+            ->batchCheck($this->config->credentials->create->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
         return !dao::isError();
@@ -74,13 +74,13 @@ class cicredentialsModel extends model
      */
     public function update($id)
     {
-        $credential = fixer::input('post')
+        $credentials = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->get();
 
-        $this->dao->update(TABLE_CREDENTIALS)->data($credential)
-            ->batchCheck($this->config->credential->edit->requiredFields, 'notempty')
+        $this->dao->update(TABLE_CREDENTIALS)->data($credentials)
+            ->batchCheck($this->config->credentials->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();

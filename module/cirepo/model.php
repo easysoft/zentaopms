@@ -54,9 +54,9 @@ class cirepoModel extends model
     {
         $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
         if ($data->SCM === 'Subversion') {
-            $credential = $this->loadModel('cicredentials')->getByID($data->credentials);
-            if ($credential->type != 'account') {
-                dao::$errors['credential'][] = $this->repo->svnCredentialLimt;
+            $credentials = $this->loadModel('cicredentials')->getByID($data->credentials);
+            if ($credentials->type != 'account') {
+                dao::$errors['credentials'][] = $this->repo->svnCredentialsLimt;
 
                 return;
             }
@@ -178,16 +178,16 @@ class cirepoModel extends model
         $privateKey = "";
         $passphrase = "";
 
-        $credential = $this->loadModel('cicredentials')->getByID($this->post->credentials);
-        if ($credential->type === 'account') {
-            $account = $credential->username;
-            $password = $credential->password;
+        $credentials = $this->loadModel('cicredentials')->getByID($this->post->credentials);
+        if ($credentials->type === 'account') {
+            $account = $credentials->username;
+            $password = $credentials->password;
 
             $_POST['account'] = $account;
             $_POST['password'] = $password;
         } else {
-            $privateKey = $credential->privateKey;
-            $passphrase = $credential->passphrase;
+            $privateKey = $credentials->privateKey;
+            $passphrase = $credentials->passphrase;
 
             $_POST['privateKey'] = $privateKey;
             $_POST['passphrase'] = $passphrase;

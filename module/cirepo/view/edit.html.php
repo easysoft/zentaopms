@@ -56,7 +56,7 @@
                         <td class='required'><?php echo html::input('client',  $repo->client, "class='form-control'")?></td>
                         <td class='muted'><?php echo $lang->repo->example->client;?></td>
                     </tr>
-                    <tr id="credential-field">
+                    <tr id="credentials-field">
                         <th class='thWidth'><?php echo $lang->credentials->common; ?></th>
                         <td class='required' style="width:550px"><?php echo html::select('credentials', $credentialsList, $repo->credentials, "class='form-control'"); ?></td>
                         <td></td>

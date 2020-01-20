@@ -1,6 +1,6 @@
 
 ALTER TABLE `zt_repo`
-ADD COLUMN `credential` MEDIUMINT(8) NULL AFTER `password`;
+ADD COLUMN `credentials` MEDIUMINT(8) NULL AFTER `password`;
 ALTER TABLE `zt_repo`
 ADD COLUMN `desc` TEXT NULL AFTER `lastSync`;
 
@@ -35,7 +35,7 @@ CREATE TABLE `zt_jenkins` (
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
-  `credential` mediumint(8) DEFAULT NULL,
+  `credentials` mediumint(8) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 

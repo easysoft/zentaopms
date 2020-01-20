@@ -1,11 +1,11 @@
 <?php
 /**
- * The create view file of credential module of ZenTaoPMS.
+ * The create view file of credentials module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
- * @package     credential
+ * @package     credentials
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -25,7 +25,7 @@
             <div class='main-header'>
                 <h2><?php echo $lang->credentials->create; ?></h2>
             </div>
-            <form id='credentialForm' method='post' class='form-ajax'>
+            <form id='credentialsForm' method='post' class='form-ajax'>
                 <table class='table table-form'>
                     <tr>
                         <th class='thWidth'><?php echo $lang->credentials->type; ?></th>

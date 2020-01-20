@@ -82,7 +82,6 @@ class cijenkinsModel extends model
         $this->dao->update(TABLE_JENKINS)->data($jenkins)
             ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')
             ->batchCheck("serviceUrl", 'URL')
-            ->batchCheckIF($jenkins->type === 'credential', "credential", 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();

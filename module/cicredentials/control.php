@@ -35,7 +35,7 @@ class cicredentials extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->credential->common . $this->lang->colon . $this->lang->ci->list;
+        $this->view->title      = $this->lang->credentials->common . $this->lang->colon . $this->lang->ci->list;
         $this->view->credentialsList   = $this->cicredentials->listAll($orderBy, $pager);
 
         $this->view->position[]    = $this->lang->ci->common;
@@ -63,7 +63,7 @@ class cicredentials extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title         = $this->lang->credentials->create . $this->lang->colon . $this->lang->credential->common;
+        $this->view->title         = $this->lang->credentials->create . $this->lang->colon . $this->lang->credentials->common;
         $this->view->position[]    = $this->lang->ci->common;
         $this->view->position[]    = html::a(inlink('browse'), $this->lang->credentials->common);
         $this->view->position[]    = $this->lang->credentials->create;
