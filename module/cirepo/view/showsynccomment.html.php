@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php include '../../ci/lang/zh-cn.php'; ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainContent" class="main-content">
   <div class='cell'>
@@ -25,7 +26,7 @@
 </div>
 <script language='Javascript'>
 $(function(){
-    var link = createLink('ci', 'ajaxSyncComment', "repoID=<?php echo $repoID?>&type=batch&needPull=<?php echo $needPull?>");
+    var link = createLink('cirepo', 'ajaxSyncComment', "repoID=<?php echo $repoID?>&type=batch&needPull=<?php echo $needPull?>");
 
     function syncComments()
     {
@@ -34,7 +35,7 @@ $(function(){
             if(data == 'finish')
             {
                 $('#caption').text('<?php echo $lang->repo->notice->syncComplete?>');
-                return self.location = createLink('ci', 'browserepo');
+                return self.location = createLink('cirepo', 'browse');
             }
             $('#commits').html(parseInt($('#commits').html()) + parseInt(data));
             setTimeout(syncComments, 10);

@@ -10,16 +10,17 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php'; ?>
+<?php include '../../ci/lang/zh-cn.php'; ?>
+<?php include '../../ci/view/header.html.php'; ?>
 <?php js::set('confirmDelete', $lang->citask->confirmDelete); ?>
 
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
-        <?php include 'menu.html.php'; ?>
+        <?php include '../../ci/view/menu.html.php'; ?>
     </div>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
-            <table id='jenkinsList' class='table has-sort-head table-fixed'>
+            <table id='taskList' class='table has-sort-head table-fixed'>
                 <thead>
                 <tr>
                     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
@@ -39,7 +40,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($citaskList as $id => $task): ?>
+                <?php foreach ($taskList as $id => $task): ?>
                     <tr>
                         <td class='text-center'><?php echo $id; ?></td>
                         <td class='text' title='<?php echo $task->name; ?>'><?php echo $task->name; ?></td>
@@ -54,11 +55,11 @@
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('ci', 'editCitask', "citaskID=$id", '', 'list',  'edit');
+                            common::printIcon('citask', 'edit', "citaskID=$id", '', 'list',  'edit');
 
-                            if (common::hasPriv('ci', 'deleteCitask')) {
-                                $deleteURL = $this->createLink('ci', 'deleteCitask', "citaskID=$id&confirm=yes");
-                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"citaskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->citask->delete}' class='btn'");
+                            if (common::hasPriv('citask', 'delete')) {
+                                $deleteURL = $this->createLink('citask', 'delete', "citaskID=$id&confirm=yes");
+                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->citask->delete}' class='btn'");
                             }
                             ?>
                         </td>
@@ -66,7 +67,7 @@
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php if ($citaskList): ?>
+            <?php if ($taskList): ?>
                 <div class='table-footer'><?php $pager->show('rignt', 'pagerjs'); ?></div>
             <?php endif; ?>
         </form>

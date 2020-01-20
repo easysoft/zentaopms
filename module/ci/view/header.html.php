@@ -18,8 +18,7 @@
       <div class='btn-group' id='createActionMenu'>
         <?php
             if($this->methodName !== 'browsebranch'  && strpos($this->methodName,'browse') > -1  && common::hasPriv($module, 'create')) {
-                echo html::a(inlink('create' . $module),
-                    "<i class='icon-plus'></i> {$lang->ci->create}{$lang->ci->subModules[$module]}",
+                echo html::a(inlink('create'), "<i class='icon-plus'></i> {$lang->ci->create}",
                     '', "class='btn btn-primary'");
             } else if($this->methodName == 'browsebranch') {
                 echo html::backButton();

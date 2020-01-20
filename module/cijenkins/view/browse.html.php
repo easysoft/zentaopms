@@ -10,12 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php'; ?>
+<?php include '../../ci/lang/zh-cn.php'; ?>
+<?php include '../../ci/view/header.html.php'; ?>
 <?php js::set('confirmDelete', $lang->jenkins->confirmDelete); ?>
 
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
-        <?php include 'menu.html.php'; ?>
+        <?php include '../../ci/view/menu.html.php'; ?>
     </div>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
@@ -38,9 +39,9 @@
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('ci', 'editJenkins', "jenkinsID=$id", '', 'list',  'edit');
-                            if (common::hasPriv('ci', 'deleteJenkins')) {
-                                $deleteURL = $this->createLink('ci', 'deleteJenkins', "jenkinsID=$id&confirm=yes");
+                            common::printIcon('cijenkins', 'edit', "jenkinsID=$id", '', 'list',  'edit');
+                            if (common::hasPriv('cijenkins', 'delete')) {
+                                $deleteURL = $this->createLink('cijenkins', 'delete', "jenkinsID=$id&confirm=yes");
                                 echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"jenkinsList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->jenkins->delete}' class='btn'");
                             }
                             ?>
@@ -49,7 +50,7 @@
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php if ($jenkinss): ?>
+            <?php if ($jenkinsList): ?>
                 <div class='table-footer'><?php $pager->show('rignt', 'pagerjs'); ?></div>
             <?php endif; ?>
         </form>

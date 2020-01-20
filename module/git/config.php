@@ -21,6 +21,9 @@ $i = 1;
 $config->git->repos[$i]['path']     = '/Users/aaron/devops/project/devops_test';
 $config->git->repos[$i]['encoding'] = 'utf-8';
 
+$config->ci->commitCommandRegx = '/\s*([a-z]+)\s+((?:build)|(?:story)|(?:task)|(?:bug))\s+#((?:\d|,)+)\s*/i';
+$config->ci->tagCommandRegx = '/build[\-_]#((?:\d|,)+)/i';
+
 /*
 $i ++;
 $config->git->repos[$i]['path'] = '';

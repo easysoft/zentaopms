@@ -381,7 +381,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => 'ci');
+$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => 'ci,cicredentials');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 $lang->admin->menu->translate = array('link' => '翻译|dev|translate');
@@ -397,8 +397,9 @@ $lang->admin->subMenu->message->browser = array('link' => '浏览器|message|bro
 $lang->admin->subMenu->message->setting = array('link' => '设置|message|setting');
 
 $lang->admin->subMenu->sso = new stdclass();
-$lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
-$lang->admin->subMenu->sso->ci     = array('link' => '持续集成|ci|index', 'alias' => 'browsecredential,createcredential,editcredential,browsejenkins,createjenkins,editjenkins,browserepo,editrepo,browsebranch');
+$lang->admin->subMenu->sso->ranzhi        = '然之协同|admin|sso';
+$lang->admin->subMenu->sso->ci            = array('link' => '持续集成|ci|index', 'subModule' => 'cicredentials');
+$lang->admin->subMenu->sso->cicredentials = array('link' => '凭证|cicredentials|browse', 'alias' => 'create');
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');

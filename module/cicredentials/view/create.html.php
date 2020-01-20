@@ -10,62 +10,63 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php'; ?>
+<?php include '../../ci/lang/zh-cn.php'; ?>
+<?php include '../../ci/view/header.html.php'; ?>
 <?php include '../../common/view/form.html.php'; ?>
 
 <?php js::set('type',  'account')?>
 
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
-        <?php include 'menu.html.php'; ?>
+        <?php include '../../ci/view/menu.html.php'; ?>
     </div>
     <div class='main-col main-content'>
         <div class='center-block'>
             <div class='main-header'>
-                <h2><?php echo $lang->credential->create; ?></h2>
+                <h2><?php echo $lang->credentials->create; ?></h2>
             </div>
             <form id='credentialForm' method='post' class='form-ajax'>
                 <table class='table table-form'>
                     <tr>
-                        <th class='thWidth'><?php echo $lang->credential->type; ?></th>
-                        <td style="width:550px"><?php echo html::select('type', $lang->credential->typeList, 'account', "class='form-control'"); ?></td>
+                        <th class='thWidth'><?php echo $lang->credentials->type; ?></th>
+                        <td style="width:550px"><?php echo html::select('type', $lang->credentials->typeList, 'account', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
                     <tr>
-                        <th><?php echo $lang->credential->name; ?></th>
+                        <th><?php echo $lang->credentials->name; ?></th>
                         <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
 
                     <tr>
-                        <th><?php echo $lang->credential->username; ?></th>
+                        <th><?php echo $lang->credentials->username; ?></th>
                         <td><?php echo html::input('username', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
 
                     <tr id="password-field">
-                        <th><?php echo $lang->credential->password; ?></th>
+                        <th><?php echo $lang->credentials->password; ?></th>
                         <td><?php echo html::input('password', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
                     <tr id="privateKey-field">
-                        <th><?php echo $lang->credential->privateKey; ?></th>
+                        <th><?php echo $lang->credentials->privateKey; ?></th>
                         <td><?php echo html::textarea('privateKey', '', "rows='3' class='form-control'"); ?></td>
                         <td></td>
                     </tr>
                     <tr id="passphrase-field">
-                        <th><?php echo $lang->credential->passphrase; ?></th>
+                        <th><?php echo $lang->credentials->passphrase; ?></th>
                         <td><?php echo html::password('passphrase', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
                     <tr id="token-field">
-                        <th><?php echo $lang->credential->token; ?></th>
+                        <th><?php echo $lang->credentials->token; ?></th>
                         <td><?php echo html::input('token', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
 
                     <tr>
-                        <th><?php echo $lang->credential->desc; ?></th>
+                        <th><?php echo $lang->credentials->desc; ?></th>
                         <td><?php echo html::textarea('desc', '', "rows='3' class='form-control'"); ?></td>
                         <td></td>
                     </tr>

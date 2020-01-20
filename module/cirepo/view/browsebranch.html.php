@@ -10,11 +10,12 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php'; ?>
+<?php include '../../ci/lang/zh-cn.php'; ?>
+<?php include '../../ci/view/header.html.php'; ?>
 
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
-        <?php include 'menu.html.php'; ?>
+        <?php include '../../ci/view/menu.html.php'; ?>
     </div>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
@@ -37,15 +38,7 @@
                             <?php echo html::checkbox('watch', $lang->repo->watchList, $branch->watch,
                                 "data-branch='" . $branch->branch . "' data-repo='" . $branch->repo . "' onclick='watch(this)'");?>
                         </td>
-                        <td class='c-actions text-right'>
-                            <?php
-                            common::printIcon('ci', 'editRepo', "branchID=$id", '', 'list',  'edit');
-                            if (common::hasPriv('ci', 'deleteRepo')) {
-                                $deleteURL = $this->createLink('ci', 'deleteRepo', "branchID=$id&confirm=yes");
-                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"branchList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->branch->delete}' class='btn'");
-                            }
-                            ?>
-                        </td>
+                        <td class='c-actions text-right'></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

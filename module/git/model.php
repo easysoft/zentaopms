@@ -226,7 +226,7 @@ class gitModel extends model
     public function setRepos()
     {
         $ci = $this->loadModel('ci');
-        $repoObjs = $ci->listRepoForSync("true");
+        $repoObjs = $ci->listForSync("true");
 
         $gitRepos = [];
         $paths = [];

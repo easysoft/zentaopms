@@ -10,12 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php'; ?>
+<?php include '../../ci/lang/zh-cn.php'; ?>
+<?php include '../../ci/view/header.html.php'; ?>
 <?php js::set('confirmDelete', $lang->repo->confirmDelete); ?>
 
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
-        <?php include 'menu.html.php'; ?>
+        <?php include '../../ci/view/menu.html.php'; ?>
     </div>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
@@ -39,12 +40,12 @@
                         <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('ci', 'browseBranch', "repoID=$id", '', 'list', 'file-text');
-                            common::printIcon('ci', 'syncRepo', "repoID=$id", '', 'list',  'refresh');
+                            common::printIcon('cirepo', 'browseBranch', "repoID=$id", '', 'list', 'file-text');
+                            common::printIcon('cirepo', 'sync', "repoID=$id", '', 'list',  'refresh');
                             echo '&nbsp;';
-                            common::printIcon('ci', 'editRepo', "repoID=$id", '', 'list',  'edit');
-                            if (common::hasPriv('ci', 'deleteRepo')) {
-                                $deleteURL = $this->createLink('ci', 'deleteRepo', "repoID=$id&confirm=yes");
+                            common::printIcon('cirepo', 'edit', "repoID=$id", '', 'list',  'edit');
+                            if (common::hasPriv('cirepo', 'delete')) {
+                                $deleteURL = $this->createLink('cirepo', 'delete', "repoID=$id&confirm=yes");
                                 echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"repoList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->repo->delete}' class='btn'");
                             }
                             ?>
@@ -53,7 +54,7 @@
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php if ($repos): ?>
+            <?php if ($repoList): ?>
                 <div class='table-footer'><?php $pager->show('rignt', 'pagerjs'); ?></div>
             <?php endif; ?>
         </form>

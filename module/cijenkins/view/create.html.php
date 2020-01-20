@@ -10,12 +10,13 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include 'header.html.php'; ?>
+<?php include '../../ci/lang/zh-cn.php'; ?>
+<?php include '../../ci/view/header.html.php'; ?>
 <?php include '../../common/view/form.html.php'; ?>
 
 <div id='mainContent' class='main-row'>
     <div class='side-col' id='sidebar'>
-        <?php include 'menu.html.php'; ?>
+        <?php include '../../ci/view/menu.html.php'; ?>
     </div>
     <div class='main-col main-content'>
         <div class='center-block'>
@@ -35,8 +36,8 @@
                         <td></td>
                     </tr>
                     <tr id="credential-field">
-                        <th class='thWidth'><?php echo $lang->credential->common; ?></th>
-                        <td style="width:550px"><?php echo html::select('credential', $credentialList, '', "class='form-control chosen'"); ?></td>
+                        <th class='thWidth'><?php echo $lang->credentials->common; ?></th>
+                        <td style="width:550px"><?php echo html::select('credentials', $credentialsList, '', "class='form-control chosen'"); ?></td>
                         <td><?php echo $lang->jenkins->tips; ?></td>
                     </tr>
 

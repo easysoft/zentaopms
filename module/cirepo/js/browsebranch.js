@@ -10,7 +10,7 @@ function watch(ths){
     var repoID = elem.attr('data-repo');
     var branch = elem.attr('data-branch');
 
-    var link = createLink('ci', 'watchBranch', "repoID=" + repoID + "&branch=" + branch + "&status=" + newVal);
+    var link = createLink('cirepo', 'watchBranch', "repoID=" + repoID + "&branch=" + branch + "&status=" + newVal);
     console.log(link);
     $.get(link, function(data)
     {
