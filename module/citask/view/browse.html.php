@@ -1,10 +1,10 @@
 <?php
 /**
- * The browse view file of citask module of ZenTaoPMS.
+ * The browse view file of ci task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Gang Liu <liugang@cnezsoft.com>
+ * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     citask
  * @version     $Id$
  * @link        http://www.zentao.net

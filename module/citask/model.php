@@ -100,7 +100,7 @@ class citaskModel extends model
             }
         }
 
-        return !dao::isError();
+        return true;
     }
 
     /**
@@ -165,7 +165,7 @@ class citaskModel extends model
             }
         }
 
-        return !dao::isError();
+        return true;
     }
 
     /**

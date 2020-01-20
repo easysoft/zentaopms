@@ -139,7 +139,7 @@ class citask extends control
     {
         error_log("===exeCitask " . $id);
 
-        $this->citask->exeCitask($id);
+        $this->citask->exe($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
@@ -148,7 +148,6 @@ class citask extends control
     /**
      * Send a request to jenkins to check build status.
      *
-     * @param  int    $buildID
      * @access public
      * @return void
      */

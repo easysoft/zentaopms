@@ -5,7 +5,7 @@ $(function()
 });
 
 function exeCitask(id) {
-    var link = createLink('ci', 'exeCitask', 'id=' + id);
+    var link = createLink('citask', 'exe', 'id=' + id);
     console.log(link);
     $.ajax({
         type:"POST",
