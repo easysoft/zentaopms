@@ -43,6 +43,7 @@ $lang->citask->tagEx                   = 'build_#15，其中15为Jenkins任务�
 $lang->citask->commitEx                = 'start build #15，其中15为Jenkins任务编号';
 $lang->citask->cronSample              = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
 
+$lang->citask->buildStatus             = array('success'=>'成功', 'fail'=>'失败', 'created'=>'新建', 'building'=>'构建中');
 $lang->citask->dayTypeList             = array('workDay'=>'工作日', 'everyDay'=>'每天');
 $lang->citask->buildTypeList           = array('build'=>'仅构建', 'buildAndDeploy'=>'构建部署', 'buildAndTest'=>'构建测试');
 $lang->citask->triggerTypeList         = array('tag'=>'打标签', 'commit'=>'代码提交注释', 'schedule'=>'定时计划');

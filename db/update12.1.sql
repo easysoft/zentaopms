@@ -55,6 +55,8 @@ CREATE TABLE `zt_citask` (
   `tagKeywords` varchar(255) DEFAULT NULL,
   `commentKeywords` varchar(255) DEFAULT NULL,
   `desc` text,
+  `lastExec` DATETIME DEFAULT NULL,
+  `lastStatus` VARCHAR(255) DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,

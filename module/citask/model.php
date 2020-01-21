@@ -248,7 +248,7 @@ class citaskModel extends model
     {
         $build = new stdClass();
         $build->citask = $task->taskId;
-        $build->name = $task->taskName . ' ' . helper::now();
+        $build->name = $task->taskName;
         $build->queueItem = $task->queueItem;
         $build->status = 'created';
         $build->createdBy = $this->app->user->account;
@@ -264,9 +264,14 @@ class citaskModel extends model
      * @access public
      * @return bool
      */
-    public function updateCibuildStatus($buildId, $status)
+    public function updateCibuildStatus($build, $status)
     {
-        $this->dao->update(TABLE_CI_BUILD)->set('status')->eq($status)->where('id')->eq($buildId)->exec();
+        $this->dao->update(TABLE_CI_BUILD)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
+
+        $this->dao->update(TABLE_CI_TASK)
+            ->set('lastExec')->eq(helper::now())
+            ->set('lastStatus')->eq($status)
+            ->where('id')->eq($build->citask)->exec();
     }
 
     /**
@@ -305,7 +310,7 @@ class citaskModel extends model
                 $response = common::http($infoUrl);
                 $buildInfo = json_decode($response);
                 $result = strtolower($buildInfo->result);
-                $this->updateCibuildStatus($po->id, $result);
+                $this->updateCibuildStatus($po, $result);
 
                 $logUrl = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $po->jenkinsTask, $po->queueItem);
                 $response = common::http($logUrl);
@@ -323,10 +328,10 @@ class citaskModel extends model
                     $buildInfo = json_decode($response);
 
                     if ($buildInfo->building) {
-                        $this->updateCibuildStatus($po->id, 'building');
+                        $this->updateCibuildStatus($po, 'building');
                     } else {
                         $result = strtolower($buildInfo->result);
-                        $this->updateCibuildStatus($po->id, $result);
+                        $this->updateCibuildStatus($po, $result);
 
                         $logUrl = $buildInfo->url . 'logText/progressiveText/api/json';
                         $logUrl = str_replace('://', $r, $logUrl);

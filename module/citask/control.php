@@ -205,8 +205,6 @@ class citask extends control
      */
     public function checkBuildStatus()
     {
-        error_log("===checkBuildStatus");
-
         $this->citask->checkBuildStatus();
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

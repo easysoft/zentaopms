@@ -51,7 +51,9 @@
                             <?php echo $lang->citask->buildTypeList[$task->buildType]; ?></td>
                         <td class='text' title='<?php echo $lang->citask->triggerTypeList[$task->triggerType]; ?>'>
                             <?php echo $lang->citask->triggerTypeList[$task->triggerType]; ?></td>
-                        <td class='text' title='<?php echo $lang->citask->lastBuild; ?>'><?php echo $task->lastBuild; ?></td>
+                        <td class='text' title='<?php echo $lang->citask->lastBuild; ?>'>
+                            <?php echo $lang->citask->buildStatus[$task->lastStatus] . ' ' . $task->lastExec; ?>
+                        </td>
 
                         <td class='c-actions text-right'>
                             <?php
