@@ -236,11 +236,10 @@ class citaskModel extends model
     /**
      * Send a request to jenkins to check build status.
      *
-     * @param  int $buildID
      * @access public
      * @return bool
      */
-    public function checkCibuild()
+    public function checkBuildStatus()
     {
         $pos = $this->dao->select('build.*, task.jenkinsTask, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credentials')
             ->from(TABLE_CI_BUILD)->alias('build')

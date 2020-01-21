@@ -151,11 +151,11 @@ class citask extends control
      * @access public
      * @return void
      */
-    public function checkCibuild()
+    public function checkBuildStatus()
     {
-        error_log("===checkCibuild");
+        error_log("===checkBuildStatus");
 
-        $this->citask->checkCibuild();
+        $this->citask->checkBuildStatus();
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));

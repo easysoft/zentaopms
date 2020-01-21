@@ -77,4 +77,4 @@ CREATE TABLE `zt_cibuild` (
 ) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkCibuild', '同步Jenkins任务状态', 'zentao', -1, 'normal',   '0000-00-00 00:00:00');
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=citask&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', -1, 'normal',   '0000-00-00 00:00:00');

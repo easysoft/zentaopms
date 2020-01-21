@@ -397,8 +397,8 @@ $lang->admin->subMenu->message->browser = array('link' => '浏览器|message|bro
 $lang->admin->subMenu->message->setting = array('link' => '设置|message|setting');
 
 $lang->admin->subMenu->sso = new stdclass();
-$lang->admin->subMenu->sso->ranzhi        = '然之协同|admin|sso';
-$lang->admin->subMenu->sso->ci            = array('link' => '持续集成|ci|index', 'subModule' => 'cicredentials,cijenkins,cirepo,citask');
+$lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
+$lang->admin->subMenu->sso->ci     = array('link' => '持续集成|ci|index', 'subModule' => 'cicredentials,cijenkins,cirepo,citask');
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
