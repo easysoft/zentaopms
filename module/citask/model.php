@@ -231,11 +231,10 @@ class citaskModel extends model
      * @access public
      * @return array
      */
-    public function viewBuildLogs($buildID)
+    public function getBuild($buildID)
     {
-        $logs = $this->dao->
-        select('logs')->from(TABLE_CI_BUILD)->where('id')->eq($buildID)->fetch('logs');
-        return $logs;
+        $build = $this->dao->select('*')->from(TABLE_CI_BUILD)->where('id')->eq($buildID)->fetch();
+        return $build;
     }
 
     /**

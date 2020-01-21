@@ -1,15 +1,16 @@
 <?php
-$this->ci->common                      = '持续集成';
+$lang->ci->common                      = '持续集成';
 $lang->citask->common                  = '构建任务';
-$lang->citask->browse                  = '浏览构建任务';
-$lang->citask->create                  = '创建构建任务';
-$lang->citask->edit                    = '编辑构建任务';
+$lang->citask->browse                  = '浏览';
+$lang->citask->create                  = '创建';
+$lang->citask->edit                    = '编辑';
+$lang->citask->browseBuild             = '构建历史';
+$lang->citask->viewLogs                = '构建日志';
+
 $lang->citask->exeNow                  = '立即执行';
 $lang->citask->delete                  = '删除构建任务';
 $lang->citask->confirmDelete           = '确认删除该构建任务吗？';
 
-$lang->citask->browseBuild             = '查看构建历史';
-$lang->citask->viewLogs                = '查看构建日志';
 $lang->citask->buildStatus             = '构建状态';
 $lang->citask->buildTime               = '构建时间';
 
