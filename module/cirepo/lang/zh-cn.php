@@ -1,11 +1,13 @@
 <?php
+$lang->ci->common          = '持续集成';
 $lang->repo->common        = '代码库';
-$lang->repo->browse        = '浏览代码库';
-$lang->repo->create        = '添加代码库';
-$lang->repo->edit          = '编辑代码库';
+$lang->repo->browse        = '浏览';
+$lang->repo->create        = '创建';
+$lang->repo->edit          = '编辑';
+$lang->repo->browseBranch  = '查看分支';
+
 $lang->repo->delete        = '删除代码库';
 $lang->repo->confirmDelete = '确认删除该代码库吗？';
-$lang->repo->browseBranch  = '查看分支';
 
 $lang->repo->id          = 'ID';
 $lang->repo->name        = '名称';

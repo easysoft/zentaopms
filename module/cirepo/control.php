@@ -38,11 +38,12 @@ class cirepo extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->ci->list;
+        $this->view->repoList   = $this->cirepo->listAll($orderBy, $pager);
+
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->ci->common;
         $this->view->position[] = $this->lang->repo->common;
-
-        $this->view->repoList   = $this->cirepo->listAll($orderBy, $pager);
+        $this->view->position[] = $this->lang->repo->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -69,17 +70,18 @@ class cirepo extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title         = $this->lang->repo->create . $this->lang->colon . $this->lang->repo->common;
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->repo->common);
-        $this->view->position[]    = $this->lang->repo->create;
 
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
 
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='sshKey' or type='account'");
         $this->view->tips            = str_replace("{user}",exec('whoami'), $this->lang->repo->tips);
-        $this->view->module          = 'cirepo';
+
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->repo->common);
+        $this->view->position[] = $this->lang->repo->create;
+        $this->view->module     = 'cirepo';
 
         $this->display();
     }
@@ -107,19 +109,20 @@ class cirepo extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title         = $this->lang->repo->edit . $this->lang->colon . $repo->name;
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->repo->common);
-        $this->view->position[]    = $this->lang->repo->edit;
 
         $this->view->repo    = $repo;
-
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
 
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='sshKey' or type='account'");
         $this->view->tips            = str_replace("{user}", exec('whoami'), $this->lang->repo->tips);
-        $this->view->module          = 'cirepo';
+
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->repo->common);
+        $this->view->position[] = $this->lang->repo->edit;
+        $this->view->module     = 'cirepo';
+
         $this->display();
     }
 
@@ -168,7 +171,12 @@ class cirepo extends control
         $this->view->repo       = $repo;
         $this->view->branches   = $branches;
 
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browseBranch;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->repo->common);
+        $this->view->position[] = $this->lang->repo->browseBranch;
         $this->view->module     = 'cirepo';
+
         $this->display();
     }
 

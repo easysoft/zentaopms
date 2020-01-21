@@ -1,8 +1,10 @@
 <?php
+$lang->ci->common                       = '持续集成';
 $lang->jenkins->common                  = 'Jenkins';
-$lang->jenkins->browse                  = '浏览Jenkins';
-$lang->jenkins->create                  = '添加Jenkins';
-$lang->jenkins->edit                    = '编辑Jenkins';
+$lang->jenkins->browse                  = '浏览';
+$lang->jenkins->create                  = '创建';
+$lang->jenkins->edit                    = '编辑';
+
 $lang->jenkins->delete                  = '删除Jenkins';
 $lang->jenkins->confirmDelete           = '确认删除该Jenkins吗？';
 

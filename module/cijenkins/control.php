@@ -37,11 +37,13 @@ class cijenkins extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->ci->list;
         $this->view->jenkinsList   = $this->cijenkins->listAll($orderBy, $pager);
 
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = $this->lang->jenkins->common;
+        $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->ci->list;
+
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = $this->lang->jenkins->common;
+        $this->view->position[] = $this->lang->jenkins->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -65,10 +67,11 @@ class cijenkins extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title         = $this->lang->jenkins->create . $this->lang->colon . $this->lang->jenkins->common;
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->jenkins->common);
-        $this->view->position[]    = $this->lang->jenkins->create;
+
+        $this->view->title      = $this->lang->jenkins->create . $this->lang->colon . $this->lang->jenkins->create;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);
+        $this->view->position[] = $this->lang->jenkins->create;
 
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='token' or type='account'");
         $this->view->module      = 'cijenkins';
@@ -94,11 +97,11 @@ class cijenkins extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title         = $this->lang->jenkins->edit . $this->lang->colon . $jenkins->name;
 
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->jenkins->common);
-        $this->view->position[]    = $this->lang->jenkins->edit;
+        $this->view->title      = $this->lang->jenkins->create . $this->lang->colon . $this->lang->jenkins->edit;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);
+        $this->view->position[] = $this->lang->jenkins->edit;
 
         $this->view->jenkins    = $jenkins;
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='token' or type='account'");
