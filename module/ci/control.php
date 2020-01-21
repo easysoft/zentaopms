@@ -30,6 +30,8 @@ class ci extends control
      */
     public function index()
     {
+        $this->view->position[] = $this->lang->ci->common;
+
         $this->display();
     }
 

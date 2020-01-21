@@ -17,10 +17,11 @@
     <div class='btn-group'>
       <div class='btn-group' id='createActionMenu'>
         <?php
-            if($this->methodName !== 'browsebranch'  && strpos($this->methodName,'browse') > -1  && common::hasPriv($module, 'create')) {
+            if($this->methodName !== 'browsebranch' && $this->methodName !== 'browsebuild' &&
+                    strpos($this->methodName,'browse') > -1  && common::hasPriv($module, 'create')) {
                 echo html::a(inlink('create'), "<i class='icon-plus'></i> {$lang->ci->create}",
                     '', "class='btn btn-primary'");
-            } else if($this->methodName == 'browsebranch') {
+            } else if($this->methodName == 'browsebranch' || $this->methodName == 'browsebuild' || $this->methodName == 'viewbuildlogs') {
                 echo html::backButton();
             }
             ?>

@@ -201,6 +201,43 @@ class citaskModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * Get jenkins build list.
+     *
+     * @param  int $taskID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  bool   $decode
+     * @access public
+     * @return array
+     */
+    public function listBuild($taskID, $orderBy = 'id_desc', $pager = null, $decode = true)
+    {
+        $list = $this->dao->
+        select('id, name, status, createdDate')->from(TABLE_CI_BUILD)
+            ->where('deleted')->eq('0')
+            ->andWhere('citask')->eq($taskID)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+        return $list;
+    }
+
+    /**
+     * Get jenkins build logs.
+     *
+     * @param  int $buildID
+     * @access public
+     * @return array
+     */
+    public function viewBuildLogs($buildID)
+    {
+        $logs = $this->dao->
+        select('logs')->from(TABLE_CI_BUILD)->where('id')->eq($buildID)->fetch('logs');
+        return $logs;
+    }
+
     /**
      * Save build to db.
      *

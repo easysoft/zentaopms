@@ -55,6 +55,7 @@
 
                         <td class='c-actions text-right'>
                             <?php
+                            common::printIcon('citask', 'browseBuild', "citaskID=$id", '', 'list', 'file-text');
                             common::printIcon('citask', 'edit', "citaskID=$id", '', 'list',  'edit');
 
                             if (common::hasPriv('citask', 'delete')) {

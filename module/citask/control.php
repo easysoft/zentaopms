@@ -37,11 +37,12 @@ class citask extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->citask->common . $this->lang->colon . $this->lang->ci->list;
+        $this->view->title      = $this->lang->citask->common . $this->lang->colon . $this->lang->citask->browse;
         $this->view->taskList   = $this->citask->listAll($orderBy, $pager);
 
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = $this->lang->citask->common;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->citask->common);
+        $this->view->position[] = $this->lang->citask->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -65,10 +66,10 @@ class citask extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title         = $this->lang->citask->create . $this->lang->colon . $this->lang->citask->common;
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browseCitask'), $this->lang->citask->common);
-        $this->view->position[]    = $this->lang->citask->create;
+        $this->view->title         = $this->lang->citask->create . $this->lang->colon . $this->lang->citask->create;
+
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->citask->common);
+        $this->view->position[] = $this->lang->citask->create;
 
         $this->view->repoList      = $this->loadModel('cirepo')->listForSelection("true");
         $this->view->jenkinsList   = $this->loadModel('cijenkins')->listForSelection("true");
@@ -97,8 +98,8 @@ class citask extends control
         $this->app->loadLang('action');
         $this->view->title         = $this->lang->citask->edit . $this->lang->colon . $citask->name;
 
-        $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browseCitask'), $this->lang->citask->common);
+        $this->view->position[]    = $this->lang->citask->common;
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->citask->common);
         $this->view->position[]    = $this->lang->citask->edit;
 
         $this->view->citask        = $citask;
@@ -143,6 +144,57 @@ class citask extends control
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
+    }
+
+    /**
+     * Browse jenkins build.
+     *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseBuild($taskID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->citask->common . $this->lang->colon . $this->lang->citask->browseBuild;
+        $this->view->buildList  = $this->citask->listBuild($taskID, $orderBy, $pager);
+
+        $this->view->position[]    = $this->lang->citask->common;
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->citask->common);
+        $this->view->position[]    = $this->lang->citask->browseBuild;
+
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->module      = 'citask';
+        $this->display();
+    }
+
+    /**
+     * View jenkins build logs.
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return void
+     */
+    public function viewBuildLogs($buildID)
+    {
+        $this->view->title = $this->lang->citask->common . $this->lang->colon . $this->lang->citask->viewLogs;
+
+        $logs = $this->citask->viewBuildLogs($buildID);
+        $this->view->logs  = str_replace("\r\n","<br />", $logs);
+
+        $this->view->position[]    = $this->lang->citask->common;
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->citask->common);
+        $this->view->position[]    = html::a(inlink('browseBuild'), $this->lang->citask->browseBuild);
+        $this->view->position[]    = $this->lang->citask->viewLogs;
+
+        $this->view->module      = 'citask';
+        $this->display();
     }
 
     /**

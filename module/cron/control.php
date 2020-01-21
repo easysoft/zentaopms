@@ -179,7 +179,7 @@ class cron extends control
             {
                 // TODO: debug cron dow = 2-6/1
                 $temp = $now > $cron['time'];
-                if ($id == 5 && $temp) {
+                if ($id == 13 && $temp) {
                     error_log($temp . ' = ' . date_format($now, "Y/m/d H:i:s") . ' > ' . date_format($cron['time'], "Y/m/d H:i:s"));
                 }
 
