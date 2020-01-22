@@ -1,10 +1,4 @@
 <?php
-$lang->ci->common                 = '持续集成';
-$lang->credentials->common        = '凭证';
-$lang->credentials->browse        = '浏览';
-$lang->credentials->create        = '新建';
-$lang->credentials->edit          = '编辑';
-
 $lang->credentials->delete        = '删除凭证';
 $lang->credentials->confirmDelete = '确认删除该凭证吗？';
 

@@ -1,9 +1,4 @@
 <?php
-$lang->ci->common          = '持续集成';
-$lang->repo->common        = '代码库';
-$lang->repo->browse        = '浏览';
-$lang->repo->create        = '创建';
-$lang->repo->edit          = '编辑';
 $lang->repo->browseBranch  = '查看分支';
 
 $lang->repo->delete        = '删除代码库';

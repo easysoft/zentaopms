@@ -21,6 +21,8 @@ class cirepo extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->scm = $this->app->loadClass('scm');
+
+        $this->app->loadLang('ci');
     }
 
     /**
@@ -40,10 +42,10 @@ class cirepo extends control
 
         $this->view->repoList   = $this->cirepo->listAll($orderBy, $pager);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
+        $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->browse;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = $this->lang->repo->common;
-        $this->view->position[] = $this->lang->repo->browse;
+        $this->view->position[] = $this->lang->ci->repo;
+        $this->view->position[] = $this->lang->ci->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -77,10 +79,10 @@ class cirepo extends control
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='sshKey' or type='account'");
         $this->view->tips            = str_replace("{user}",exec('whoami'), $this->lang->repo->tips);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
+        $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->create;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->repo->common);
-        $this->view->position[] = $this->lang->repo->create;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->repo);
+        $this->view->position[] = $this->lang->ci->create;
         $this->view->module     = 'cirepo';
 
         $this->display();
@@ -117,10 +119,10 @@ class cirepo extends control
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='sshKey' or type='account'");
         $this->view->tips            = str_replace("{user}", exec('whoami'), $this->lang->repo->tips);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->edit;
+        $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->edit;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->repo->common);
-        $this->view->position[] = $this->lang->repo->edit;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->repo);
+        $this->view->position[] = $this->lang->ci->edit;
         $this->view->module     = 'cirepo';
 
         $this->display();
@@ -171,29 +173,14 @@ class cirepo extends control
         $this->view->repo       = $repo;
         $this->view->branches   = $branches;
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browseBranch;
+        $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->repo->browseBranch;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->repo->common);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->repo);
         $this->view->position[] = $this->lang->repo->browseBranch;
+
         $this->view->module     = 'cirepo';
 
         $this->display();
-    }
-
-    /**
-     * watch branch.
-     *
-     * @param int $repoID
-     * @param int $branch
-     * @param int $status
-     */
-    public function watchBranch($repoID = 0, $branch = 0, $status = 0)
-    {
-        $this->dao->update(TABLE_REPOBRANCH)
-            ->set('watch=' . $status)
-            ->where('repo')->eq($repoID)
-            ->andWhere('branch')->eq($branch)
-            ->exec();
     }
 
     /**

@@ -1,9 +1,5 @@
 <?php
-$lang->ci->common                      = '持续集成';
 $lang->citask->common                  = '构建任务';
-$lang->citask->browse                  = '浏览';
-$lang->citask->create                  = '创建';
-$lang->citask->edit                    = '编辑';
 $lang->citask->browseBuild             = '构建历史';
 $lang->citask->viewLogs                = '构建日志';
 

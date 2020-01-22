@@ -20,6 +20,7 @@ class cicredentials extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+        $this->app->loadLang('ci');
     }
 
     /**
@@ -37,10 +38,10 @@ class cicredentials extends control
 
         $this->view->credentialsList   = $this->cicredentials->listAll($orderBy, $pager);
 
-        $this->view->title      = $this->lang->credentials->common . $this->lang->colon . $this->lang->ci->list;
+        $this->view->title      = $this->lang->credentials . $this->lang->colon . $this->lang->browse;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = $this->lang->credentials->common;
-        $this->view->position[] = $this->lang->credentials->browse;
+        $this->view->position[] = $this->lang->ci->credentials;
+        $this->view->position[] = $this->lang->ci->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -65,10 +66,10 @@ class cicredentials extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title         = $this->lang->credentials->common . $this->lang->colon . $this->lang->ci->create;
+        $this->view->title         = $this->lang->ci->credentials . $this->lang->colon . $this->lang->ci->create;
         $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->credentials->common);
-        $this->view->position[]    = $this->lang->credentials->create;
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->ci->credentials);
+        $this->view->position[]    = $this->lang->ci->create;
 
         $this->view->module      = 'cicredentials';
         $this->display();
@@ -93,10 +94,10 @@ class cicredentials extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title         = $this->lang->credentials->common . $this->lang->colon . $this->lang->ci->edit;
+        $this->view->title         = $this->lang->ci->credentials . $this->lang->colon . $this->lang->ci->edit;
         $this->view->position[]    = $this->lang->ci->common;
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->credentials->common);
-        $this->view->position[]    = $this->lang->credentials->edit;
+        $this->view->position[]    = html::a(inlink('browse'), $this->lang->ci->credentials);
+        $this->view->position[]    = $this->lang->ci->edit;
 
         $this->view->credentials    = $credentials;
 

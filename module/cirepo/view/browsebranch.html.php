@@ -24,7 +24,6 @@
                 <tr>
                     <th class='w-60px'><?php echo $lang->ci->numb; ?></th>
                     <th class='w-120px'><?php echo $lang->ci->name; ?></th>
-                    <!--<th class='w-60px'><?php /*echo $lang->repo->watch; */?></th>-->
                     <th class='c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
                 </thead>
@@ -34,10 +33,6 @@
                     <tr>
                         <td class='text'><?php echo ++$index; ?></td>
                         <td class='text' title='<?php echo $branch->branch; ?>'><?php echo $branch->branch; ?></td>
-                        <!--<td>
-                            <?php /*echo html::checkbox('watch', $lang->repo->watchList, $branch->watch,
-                                "data-branch='" . $branch->branch . "' data-repo='" . $branch->repo . "' onclick='watch(this)'");*/?>
-                        </td>-->
                         <td class='c-actions text-right'></td>
                     </tr>
                 <?php endforeach; ?>
