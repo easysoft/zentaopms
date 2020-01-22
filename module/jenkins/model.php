@@ -1,6 +1,6 @@
 <?php
 /**
- * The model file of ci module of ZenTaoPMS.
+ * The model file of cijenkins module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -10,10 +10,10 @@
  * @link        http://www.zentao.net
  */
 
-class cicredentialsModel extends model
+class jenkinsModel extends model
 {
     /**
-     * Get a credentials by id.
+     * Get a jenkins by id.
      *
      * @param  int    $id
      * @access public
@@ -21,12 +21,12 @@ class cicredentialsModel extends model
      */
     public function getByID($id)
     {
-        $credentials = $this->dao->select('*')->from(TABLE_CREDENTIALS)->where('id')->eq($id)->fetch();
-        return $credentials;
+        $jenkins = $this->dao->select('*')->from(TABLE_JENKINS)->where('id')->eq($id)->fetch();
+        return $jenkins;
     }
 
     /**
-     * Get credentials list.
+     * Get jenkins list.
      *
      * @param  string $orderBy
      * @param  object $pager
@@ -36,37 +36,37 @@ class cicredentialsModel extends model
      */
     public function listAll($orderBy = 'id_desc', $pager = null, $decode = true)
     {
-        $credentials = $this->dao->select('*')->from(TABLE_CREDENTIALS)
+        $jenkinsList = $this->dao->select('*')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $credentials;
+        return $jenkinsList;
     }
 
     /**
-     * Create a credentials.
+     * Create a jenkins.
      *
      * @access public
      * @return bool
      */
     public function create()
     {
-        $credentials = fixer::input('post')
+        $jenkins = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-//            ->remove('')
             ->get();
 
-        $this->dao->insert(TABLE_CREDENTIALS)->data($credentials)
-            ->batchCheck($this->config->credentials->create->requiredFields, 'notempty')
+        $this->dao->insert(TABLE_JENKINS)->data($jenkins)
+            ->batchCheck($this->config->jenkins->create->requiredFields, 'notempty')
+            ->batchCheck("serviceUrl", 'URL')
             ->autoCheck()
             ->exec();
         return !dao::isError();
     }
 
     /**
-     * Update a credentials.
+     * Update a jenkins.
      *
      * @param  int    $id
      * @access public
@@ -74,13 +74,14 @@ class cicredentialsModel extends model
      */
     public function update($id)
     {
-        $credentials = fixer::input('post')
+        $jenkins = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->get();
 
-        $this->dao->update(TABLE_CREDENTIALS)->data($credentials)
-            ->batchCheck($this->config->credentials->edit->requiredFields, 'notempty')
+        $this->dao->update(TABLE_JENKINS)->data($jenkins)
+            ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')
+            ->batchCheck("serviceUrl", 'URL')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
@@ -88,19 +89,18 @@ class cicredentialsModel extends model
     }
 
     /**
-     * list credentials for repo and jenkins edit page
+     * list jenkins for ci task edit
      *
-     * @param $whr
      * @return mixed
      */
     public function listForSelection($whr)
     {
-        $credentials = $this->dao->select('id, name')->from(TABLE_CREDENTIALS)
+        $repos = $this->dao->select('id, name')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
             ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)
             ->fetchPairs();
-        $credentials[''] = '';
-        return $credentials;
+        $repos[''] = '';
+        return $repos;
     }
 }

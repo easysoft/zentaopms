@@ -400,10 +400,7 @@ $lang->admin->subMenu->sso = new stdclass();
 $lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
 
 $lang->admin->subMenu->sso->ci            = array('link' => '持续集成|ci|index', 'subModule' => 'ci');
-$lang->admin->subMenu->sso->cicredentials = array('link' => '凭证|cicredentials|browse', 'subModule' => 'cicredentials');
-$lang->admin->subMenu->sso->cijenkins     = array('link' => 'Jenkins|cijenkins|browse', 'subModule' => 'cijenkins');
-$lang->admin->subMenu->sso->cirepo        = array('link' => '代码库|cirepo|browse', 'subModule' => 'cirepo');
-$lang->admin->subMenu->sso->citask        = array('link' => '构建任务|citask|browse', 'subModule' => 'citask');
+$lang->admin->subMenu->sso->jenkins     = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
@@ -434,10 +431,7 @@ $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
 $lang->ci            = new stdclass();
-$lang->cicredentials = new stdclass();
-$lang->cijenkins     = new stdclass();
-$lang->cirepo        = new stdclass();
-$lang->citask        = new stdclass();
+$lang->jenkins     = new stdclass();
 
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
@@ -453,10 +447,7 @@ $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
 
 $lang->ci->menu             = $lang->admin->menu;
-$lang->cicredentials->menu  = $lang->admin->menu;
-$lang->cijenkins->menu      = $lang->admin->menu;
-$lang->cirepo->menu         = $lang->admin->menu;
-$lang->citask->menu         = $lang->admin->menu;
+$lang->jenkins->menu      = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -494,10 +485,7 @@ $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
 $lang->menugroup->ci            = 'admin';
-$lang->menugroup->cicredentials = 'admin';
-$lang->menugroup->cijenkins     = 'admin';
-$lang->menugroup->cirepo        = 'admin';
-$lang->menugroup->citask        = 'admin';
+$lang->menugroup->jenkins       = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
