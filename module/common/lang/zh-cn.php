@@ -123,7 +123,7 @@ $lang->menu->my      = '<span> 我的地盘</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
-$lang->menu->repo    = '持续集成|repo|log';
+$lang->menu->devops  = array('link' => '持续集成|repo|browse', 'subModule' => 'repo,ci');
 $lang->menu->doc     = '文档|doc|index';
 $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
@@ -335,10 +335,13 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 $lang->repo = new stdclass();
 $lang->repo->menu = new stdclass();
 $lang->repo->menu->browse   = array('link' =>'浏览|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,showsynccomment');
-$lang->repo->menu->review   = '评审|repo|review|repoID=%s';
-$lang->repo->menu->maintain  = '代码库|repo|maintain';
-$lang->repo->menu->job      = '构建|ci|job';
-$lang->repo->menu->jenkins  = 'Jenkins|jenkins|jenkins';
+$lang->repo->menu->review   = array('link' =>'评审|repo|review|repoID=%s', 'alias' => 'create,edit');
+$lang->repo->menu->maintain = array('link' =>'代码库|repo|maintain', 'alias' => 'create,edit');
+$lang->repo->menu->job      = array('link' =>'构建|ci|browseJob', 'alias' => 'createJob,editJob,browseBuild,viewBuildLogs');
+$lang->repo->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
+
+$lang->ci = new stdclass();
+$lang->ci->menu = $lang->repo->menu;
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -383,7 +386,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => 'ci,cicredentials,cijenkins,cirepo,citask');
+$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 $lang->admin->menu->translate = array('link' => '翻译|dev|translate');
@@ -400,9 +403,6 @@ $lang->admin->subMenu->message->setting = array('link' => '设置|message|settin
 
 $lang->admin->subMenu->sso = new stdclass();
 $lang->admin->subMenu->sso->ranzhi = '然之协同|admin|sso';
-
-$lang->admin->subMenu->sso->ci            = array('link' => '持续集成|ci|index', 'subModule' => 'ci');
-$lang->admin->subMenu->sso->jenkins     = array('link' => 'Jenkins|jenkins|browse', 'subModule' => 'jenkins');
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
@@ -432,9 +432,6 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-$lang->ci            = new stdclass();
-$lang->jenkins     = new stdclass();
-
 $lang->convert->menu   = $lang->admin->menu;
 $lang->upgrade->menu   = $lang->admin->menu;
 $lang->action->menu    = $lang->admin->menu;
@@ -447,9 +444,6 @@ $lang->dev->menu       = $lang->admin->menu;
 $lang->entry->menu     = $lang->admin->menu;
 $lang->webhook->menu   = $lang->admin->menu;
 $lang->message->menu   = $lang->admin->menu;
-
-$lang->ci->menu             = $lang->admin->menu;
-$lang->jenkins->menu      = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -486,8 +480,8 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
-$lang->menugroup->ci            = 'admin';
-$lang->menugroup->jenkins       = 'admin';
+$lang->menugroup->repo        = 'devops';
+$lang->menugroup->ci          = 'devops';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

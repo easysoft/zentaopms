@@ -29,7 +29,9 @@ class repo extends control
 
         $this->scm = $this->app->loadClass('scm');
         $this->repos = $this->repo->getRepoPairs();
-//        if(common::hasPriv('repo', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->repo->create, '', "class='btn'");
+        if(common::hasPriv('repo', 'create') and strpos(',maintain,', $this->methodName) > -1) {
+            $this->lang->modulePageActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->repo->create, '', "class='btn'");
+        }
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create')));
 
         /* Unlock session for wait to get data of repo. */
@@ -139,6 +141,100 @@ class repo extends control
         $this->view->pager      = $pager;
 
         $this->display();
+    }
+
+    /**
+     * Create a repo.
+     *
+     * @access public
+     * @return void
+     */
+    public function create()
+    {
+        $repoID = $this->session->repoID;
+        $this->repo->setMenu($this->repos, '', false);
+
+        if($_POST)
+        {
+            $repoID = $this->repo->create();
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $link = $this->repo->createLink('showSyncComment', "repoID=$repoID");
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+        }
+
+        $this->app->loadLang('action');
+
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+
+        $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='sshKey' or type='account'");
+        $this->view->tips            = str_replace("{user}",exec('whoami'), $this->lang->repo->tips);
+
+        $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->create;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->repo);
+        $this->view->position[] = $this->lang->ci->create;
+
+        $this->display();
+    }
+
+    /**
+     * Edit a repo.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function edit($repoID)
+    {
+        $repoID = $this->session->repoID;
+        $this->repo->setMenu($this->repos, $repoID, false);
+
+        $repo = $this->repo->getByID($repoID);
+        if($_POST)
+        {
+            $noNeedSync = $this->repo->update($repoID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            if(!$noNeedSync)
+            {
+                $link = $this->repo->createLink('showSyncComment', "repoID=$repoID");
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            }
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->app->loadLang('action');
+
+        $this->view->repo    = $repo;
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+
+        $this->view->tips            = str_replace("{user}", exec('whoami'), $this->lang->repo->tips);
+
+        $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->edit;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->repo);
+        $this->view->position[] = $this->lang->ci->edit;
+        $this->view->repoID     = $repoID;
+
+        $this->display();
+    }
+
+    /**
+     * Delete a repo.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function delete($id)
+    {
+        $this->repo->delete(TABLE_REPO, $id);
+        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->send(array('result' => 'success'));
     }
 
     /**

@@ -4,7 +4,7 @@ $lang->menuOrder[5]  = 'my';
 $lang->menuOrder[10] = 'product';
 $lang->menuOrder[15] = 'project';
 $lang->menuOrder[20] = 'qa';
-$lang->menuOrder[25] = 'repo';
+$lang->menuOrder[25] = 'devops';
 $lang->menuOrder[30] = 'doc';
 $lang->menuOrder[35] = 'report';
 $lang->menuOrder[40] = 'company';
@@ -82,6 +82,8 @@ $lang->repo->menuOrder[10] = 'review';
 $lang->repo->menuOrder[15] = 'maintain';
 $lang->repo->menuOrder[20] = 'job';
 $lang->repo->menuOrder[25] = 'jenkins';
+
+$lang->ci->menuOrder       = $lang->repo->menuOrder;
 
 /* doc menu order. */
 $lang->doc->menuOrder[5]  = 'list';

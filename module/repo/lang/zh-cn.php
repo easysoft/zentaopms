@@ -1,7 +1,7 @@
 <?php
 $lang->repo->common          = '代码';
-$lang->repo->create          = '创建版本库';
-$lang->repo->settings        = '版本库设置';
+$lang->repo->create          = '创建代码库';
+$lang->repo->edit            = '编辑代码库';
 $lang->repo->browse          = '浏览';
 $lang->repo->delete          = '删除版本库';
 $lang->repo->showSyncComment = '显示同步进度';
@@ -104,7 +104,7 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Subversion'] = 'Subversion';
+//$lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Git']        = 'Git';
 
 $lang->repo->notice                 = new stdclass();

@@ -20,6 +20,10 @@ class ci extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
+
+        if(common::hasPriv('ci', 'createJob') and strpos(',browsejob,', $this->methodName) > -1) {
+            $this->lang->modulePageActions = html::a(helper::createLink('ci', 'createJob'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->ci->create, '', "class='btn'");
+        }
     }
 
     /**
@@ -47,19 +51,25 @@ class ci extends control
      */
     public function browseJob($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $repoID = $this->session->repoID;
+        foreach($this->lang->repo->menu as $key => $menu)
+        {
+            common::setMenuVars($this->lang->ci->menu, $key, $repoID);
+        }
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->taskList   = $this->citask->listAll($orderBy, $pager);
+        $this->view->jobList    = $this->ci->listJob($orderBy, $pager);
 
-        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->citask->browse;
+        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->job->browse;
         $this->view->position[] = $this->lang->ci->common;
         $this->view->position[] = $this->lang->ci->task;
         $this->view->position[] = $this->lang->ci->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->module      = 'citask';
+//        $this->view->module      = 'ci';
         $this->display();
     }
 
@@ -73,7 +83,7 @@ class ci extends control
     {
         if($_POST)
         {
-            $this->citask->create();
+            $this->ci->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -87,7 +97,7 @@ class ci extends control
 
         $this->view->repoList      = $this->loadModel('cirepo')->listForSelection("true");
         $this->view->jenkinsList   = $this->loadModel('cijenkins')->listForSelection("true");
-        $this->view->module        = 'citask';
+        $this->view->module        = 'ci';
 
         $this->display();
     }
@@ -101,21 +111,21 @@ class ci extends control
      */
     public function editJob($id)
     {
-        $citask = $this->citask->getByID($id);
+        $job = $this->ci->getByID($id);
         if($_POST)
         {
-            $this->citask->update($id);
+            $this->ci->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->app->loadLang('action');
 
-        $this->view->citask        = $citask;
+        $this->view->job         = $job;
 
-        $this->view->repoList      = $this->loadModel('cirepo')->listForSelection("true");
-        $this->view->jenkinsList   = $this->loadModel('cijenkins')->listForSelection("true");
-        $this->view->module        = 'citask';
+        $this->view->repoList    = $this->loadModel('cirepo')->listForSelection("true");
+        $this->view->jenkinsList = $this->loadModel('cijenkins')->listForSelection("true");
+        $this->view->module      = 'ci';
 
         $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->ci->edit;
         $this->view->position[] = $this->lang->ci->common;
@@ -134,9 +144,9 @@ class ci extends control
      */
     public function deleteJob($id)
     {
-        $this->citask->delete(TABLE_CI_TASK, $id);
+        $this->ci->delete(TABLE_CI_TASK, $id);
 
-        $command = 'moduleName=citask&methodName=exe&parm=' . $id;
+        $command = 'moduleName=ci&methodName=exe&parm=' . $id;
         $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();
 
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -153,9 +163,9 @@ class ci extends control
      */
     public function exeJob($id)
     {
-        error_log("===exeCitask " . $id);
+        error_log("===exeJob " . $id);
 
-        $this->citask->exe($id);
+        $this->ci->exe($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));
@@ -176,16 +186,16 @@ class ci extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->buildList  = $this->citask->listBuild($taskID, $orderBy, $pager);
+        $this->view->buildList  = $this->ci->listBuild($taskID, $orderBy, $pager);
 
-        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->citask->browseBuild;
+        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->job->browseBuild;
         $this->view->position[] = $this->lang->ci->common;
         $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->task);
-        $this->view->position[]    = $this->lang->citask->browseBuild;
+        $this->view->position[]    = $this->lang->job->browseBuild;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->module      = 'citask';
+        $this->view->module     = 'ci';
         $this->display();
     }
 
@@ -198,16 +208,16 @@ class ci extends control
      */
     public function viewBuildLogs($buildID)
     {
-        $build = $this->citask->getBuild($buildID);
+        $build = $this->ci->getBuild($buildID);
         $this->view->logs  = str_replace("\r\n","<br />", $build->logs);
 
-        $this->view->title = $this->lang->ci->task . $this->lang->colon . $this->lang->citask->viewLogs;
+        $this->view->title = $this->lang->ci->task . $this->lang->colon . $this->lang->job->viewLogs;
         $this->view->position[] = $this->lang->ci->common;
         $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->task);
-        $this->view->position[] = html::a(inlink('browseBuild', "taskID=" . $build->citask), $this->lang->citask->browseBuild);
-        $this->view->position[] = $this->lang->citask->viewLogs;
+        $this->view->position[] = html::a(inlink('browseBuild', "taskID=" . $build->job), $this->lang->job->browseBuild);
+        $this->view->position[] = $this->lang->job->viewLogs;
 
-        $this->view->module      = 'citask';
+        $this->view->module     = 'ci';
         $this->display();
     }
 
@@ -219,7 +229,7 @@ class ci extends control
      */
     public function checkBuildStatus()
     {
-        $this->citask->checkBuildStatus();
+        $this->ci->checkBuildStatus();
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));

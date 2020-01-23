@@ -10,59 +10,55 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../ci/lang/zh-cn.php'; ?>
-<?php include '../../ci/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->citask->confirmDelete); ?>
 
 <div id='mainContent' class='main-row'>
-    <div class='side-col' id='sidebar'>
-        <?php include '../../ci/view/menu.html.php'; ?>
-    </div>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
-            <table id='taskList' class='table has-sort-head table-fixed'>
+            <table id='jobList' class='table has-sort-head table-fixed'>
                 <thead>
                 <tr>
                     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
-                    <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->citask->id); ?></th>
+                    <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id); ?></th>
                     <th class='w-150px text-left'>
-                        <?php common::printOrderLink('name', $orderBy, $vars, $lang->citask->name); ?></th>
+                        <?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name); ?></th>
                     <th class='w-100px text-left'>
-                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->citask->repo); ?></th>
+                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo); ?></th>
                     <th class='w-100px text-left'>
-                        <?php common::printOrderLink('jenkins', $orderBy, $vars, $lang->citask->jenkins); ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->citask->jenkinsTask; ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->citask->buildType; ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->citask->triggerType; ?></th>
-                    <th class='w-200px text-left'><?php echo $lang->citask->lastExe; ?></th>
+                        <?php common::printOrderLink('jenkins', $orderBy, $vars, $lang->job->jenkins); ?></th>
+                    <th class='w-100px text-left'><?php echo $lang->job->jenkinsTask; ?></th>
+                    <th class='w-100px text-left'><?php echo $lang->job->buildType; ?></th>
+                    <th class='w-100px text-left'><?php echo $lang->job->triggerType; ?></th>
+                    <th class='w-200px text-left'><?php echo $lang->job->lastExe; ?></th>
 
                     <th class='c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($taskList as $id => $task): ?>
+                <?php foreach ($jobList as $id => $job): ?>
                     <tr>
                         <td class='text-center'><?php echo $id; ?></td>
-                        <td class='text' title='<?php echo $task->name; ?>'><?php echo $task->name; ?></td>
-                        <td class='text' title='<?php echo $task->repoName; ?>'><?php echo $task->repoName; ?></td>
-                        <td class='text' title='<?php echo $task->jenkinsName; ?>'><?php echo $task->jenkinsName; ?></td>
-                        <td class='text' title='<?php echo $task->jenkinsTask; ?>'><?php echo $task->jenkinsTask; ?></td>
-                        <td class='text' title='<?php echo $lang->citask->buildTypeList[$task->buildType]; ?>'>
-                            <?php echo $lang->citask->buildTypeList[$task->buildType]; ?></td>
-                        <td class='text' title='<?php echo $lang->citask->triggerTypeList[$task->triggerType]; ?>'>
-                            <?php echo $lang->citask->triggerTypeList[$task->triggerType]; ?></td>
-                        <td class='text' title='<?php echo $lang->citask->lastBuild; ?>'>
-                            <?php echo $lang->citask->buildStatus[$task->lastStatus] . ' ' . $task->lastExec; ?>
+                        <td class='text' title='<?php echo $job->name; ?>'><?php echo $job->name; ?></td>
+                        <td class='text' title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
+                        <td class='text' title='<?php echo $job->jenkinsName; ?>'><?php echo $job->jenkinsName; ?></td>
+                        <td class='text' title='<?php echo $job->jenkinsTask; ?>'><?php echo $job->jenkinsTask; ?></td>
+                        <td class='text' title='<?php echo $lang->job->buildTypeList[$job->buildType]; ?>'>
+                            <?php echo $lang->job->buildTypeList[$job->buildType]; ?></td>
+                        <td class='text' title='<?php echo $lang->job->triggerTypeList[$job->triggerType]; ?>'>
+                            <?php echo $lang->job->triggerTypeList[$job->triggerType]; ?></td>
+                        <td class='text' title='<?php echo $lang->job->lastBuild; ?>'>
+                            <?php echo $lang->job->buildStatus[$job->lastStatus] . ' ' . $job->lastExec; ?>
                         </td>
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('citask', 'browseBuild', "citaskID=$id", '', 'list', 'file-text');
-                            common::printIcon('citask', 'edit', "citaskID=$id", '', 'list',  'edit');
+                            common::printIcon('job', 'browseBuild', "jobID=$id", '', 'list', 'file-text');
+                            common::printIcon('job', 'editJob', "jobID=$id", '', 'list',  'edit');
 
-                            if (common::hasPriv('citask', 'delete')) {
-                                $deleteURL = $this->createLink('citask', 'delete', "citaskID=$id&confirm=yes");
-                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->citask->delete}' class='btn'");
+                            if (common::hasPriv('job', 'delete')) {
+                                $deleteURL = $this->createLink('job', 'delete', "jobID=$id&confirm=yes");
+                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->job->delete}' class='btn'");
                             }
                             ?>
                         </td>
@@ -70,7 +66,7 @@
                 <?php endforeach; ?>
                 </tbody>
             </table>
-            <?php if ($taskList): ?>
+            <?php if ($jobList): ?>
                 <div class='table-footer'><?php $pager->show('rignt', 'pagerjs'); ?></div>
             <?php endif; ?>
         </form>

@@ -36,12 +36,9 @@
                         <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('cirepo', 'browseBranch', "repoID=$id", '', 'list', 'file-text');
-                            common::printIcon('cirepo', 'sync', "repoID=$id", '', 'list',  'refresh');
-                            echo '&nbsp;';
-                            common::printIcon('cirepo', 'edit', "repoID=$id", '', 'list',  'edit');
-                            if (common::hasPriv('cirepo', 'delete')) {
-                                $deleteURL = $this->createLink('cirepo', 'delete', "repoID=$id&confirm=yes");
+                            common::printIcon('repo', 'edit', "repoID=$id", '', 'list',  'edit');
+                            if (common::hasPriv('repo', 'delete')) {
+                                $deleteURL = $this->createLink('repo', 'delete', "repoID=$id&confirm=yes");
                                 echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"repoList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->repo->delete}' class='btn'");
                             }
                             ?>
