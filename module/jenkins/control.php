@@ -21,6 +21,12 @@ class jenkins extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        $repoID = $this->session->repoID;
+        foreach($this->lang->repo->menu as $key => $menu)
+        {
+            common::setMenuVars($this->lang->ci->menu, $key, $repoID);
+        }
+
         if(common::hasPriv('jenkins', 'create') and strpos(',browsejob,', $this->methodName) > -1) {
             $this->lang->modulePageActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->jenkins->create, '', "class='btn'");
         }

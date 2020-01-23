@@ -21,6 +21,12 @@ class ci extends control
     {
         parent::__construct($moduleName, $methodName);
 
+        $repoID = $this->session->repoID;
+        foreach($this->lang->repo->menu as $key => $menu)
+        {
+            common::setMenuVars($this->lang->ci->menu, $key, $repoID);
+        }
+
         if(common::hasPriv('ci', 'createJob') and strpos(',browsejob,', $this->methodName) > -1) {
             $this->lang->modulePageActions = html::a(helper::createLink('ci', 'createJob'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->ci->create, '', "class='btn'");
         }
@@ -51,12 +57,6 @@ class ci extends control
      */
     public function browseJob($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $repoID = $this->session->repoID;
-        foreach($this->lang->repo->menu as $key => $menu)
-        {
-            common::setMenuVars($this->lang->ci->menu, $key, $repoID);
-        }
-
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
