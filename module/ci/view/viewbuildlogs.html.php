@@ -10,13 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../ci/lang/zh-cn.php'; ?>
-<?php include '../../ci/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php'; ?>
 
 <div id='mainContent' class='main-row'>
-    <div class='side-col' id='sidebar'>
-        <?php include '../../ci/view/menu.html.php'; ?>
-    </div>
     <div class='main-col main-content'>
         <?php echo $logs; ?>
     </div>

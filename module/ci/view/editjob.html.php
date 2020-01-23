@@ -10,16 +10,11 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../ci/lang/zh-cn.php'; ?>
-<?php include '../../ci/view/header.html.php'; ?>
-<?php include '../../common/view/form.html.php'; ?>
+<?php include '../../common/view/header.html.php'; ?>
 
 <?php js::set('triggerType',  $citask->triggerType)?>
 
 <div id='mainContent' class='main-row'>
-    <div class='side-col' id='sidebar'>
-        <?php include '../../ci/view/menu.html.php'; ?>
-    </div>
     <div class='main-col main-content'>
         <div class='center-block'>
             <div class='main-header'>

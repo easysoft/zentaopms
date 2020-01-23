@@ -123,7 +123,7 @@ $lang->menu->my      = '<span> 我的地盘</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
-$lang->menu->devops  = array('link' => '持续集成|repo|browse', 'subModule' => 'repo,ci');
+$lang->menu->devops  = array('link' => '持续集成|repo|browse', 'subModule' => 'repo,ci,jenkins');
 $lang->menu->doc     = '文档|doc|index';
 $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
@@ -340,8 +340,9 @@ $lang->repo->menu->maintain = array('link' =>'代码库|repo|maintain', 'alias' 
 $lang->repo->menu->job      = array('link' =>'构建|ci|browsejob', 'alias' => 'createjob,editjob,browsebuild,viewbuildlogs');
 $lang->repo->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
 
-$lang->ci = new stdclass();
-$lang->ci->menu = $lang->repo->menu;
+$lang->ci            = new stdclass();
+$lang->ci->menu      = $lang->repo->menu;
+$lang->jenkins->menu = $lang->repo->menu;
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();

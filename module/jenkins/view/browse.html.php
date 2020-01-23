@@ -10,14 +10,10 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../ci/lang/zh-cn.php'; ?>
-<?php include '../../ci/view/header.html.php'; ?>
+<?php include '../../common/view/header.html.php'; ?>
 <?php js::set('confirmDelete', $lang->jenkins->confirmDelete); ?>
 
 <div id='mainContent' class='main-row'>
-    <div class='side-col' id='sidebar'>
-        <?php include '../../ci/view/menu.html.php'; ?>
-    </div>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
             <table id='jenkinsList' class='table has-sort-head table-fixed'>

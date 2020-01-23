@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The control file of cijenkins module of ZenTaoPMS.
+ * The control file of jenkins module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -13,14 +13,17 @@
 class jenkins extends control
 {
     /**
-     * cijenkins constructor.
+     * jenkins constructor.
      * @param string $moduleName
      * @param string $methodName
      */
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->app->loadLang('ci');
+
+        if(common::hasPriv('jenkins', 'create') and strpos(',browsejob,', $this->methodName) > -1) {
+            $this->lang->modulePageActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->jenkins->create, '', "class='btn'");
+        }
     }
 
     /**
@@ -38,7 +41,7 @@ class jenkins extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->jenkinsList   = $this->cijenkins->listAll($orderBy, $pager);
+        $this->view->jenkinsList   = $this->jenkins->listAll($orderBy, $pager);
 
         $this->view->title      = $this->lang->ci->jenkins . $this->lang->colon . $this->lang->ci->browse;
 
@@ -48,7 +51,7 @@ class jenkins extends control
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->module      = 'cijenkins';
+        $this->view->module      = 'jenkins';
         $this->display();
     }
 
@@ -62,7 +65,7 @@ class jenkins extends control
     {
         if($_POST)
         {
-            $this->cijenkins->create();
+            $this->jenkins->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -75,7 +78,7 @@ class jenkins extends control
         $this->view->position[] = $this->lang->ci->create;
 
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='token' or type='account'");
-        $this->view->module      = 'cijenkins';
+        $this->view->module      = 'jenkins';
 
         $this->display();
     }
@@ -89,10 +92,10 @@ class jenkins extends control
      */
     public function edit($id)
     {
-        $jenkins = $this->cijenkins->getByID($id);
+        $jenkins = $this->jenkins->getByID($id);
         if($_POST)
         {
-            $this->cijenkins->update($id);
+            $this->jenkins->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -107,7 +110,7 @@ class jenkins extends control
         $this->view->jenkins    = $jenkins;
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='token' or type='account'");
 
-        $this->view->module      = 'cijenkins';
+        $this->view->module      = 'jenkins';
         $this->display();
     }
 
@@ -120,7 +123,7 @@ class jenkins extends control
      */
     public function delete($id)
     {
-        $this->cijenkins->delete(TABLE_JENKINS, $id);
+        $this->jenkins->delete(TABLE_JENKINS, $id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));

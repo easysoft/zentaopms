@@ -1,4 +1,5 @@
 <?php
+$lang->jenkins->create                  = '创建Jenkins';
 $lang->jenkins->delete                  = '删除Jenkins';
 $lang->jenkins->confirmDelete           = '确认删除该Jenkins吗？';
 
