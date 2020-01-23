@@ -30,10 +30,19 @@
                         <td class='required'><?php echo html::input('serviceUrl', '', "class='form-control'"); ?></td>
                         <td></td>
                     </tr>
-                    <tr id="credentials-field">
-                        <th class='thWidth'><?php echo $lang->credentials->common; ?></th>
-                        <td style="width:550px"><?php echo html::select('credentials', $credentialsList, '', "class='form-control chosen'"); ?></td>
-                        <td><?php echo $lang->jenkins->tips; ?></td>
+                    <tr>
+                        <th><?php echo $lang->repo->account;?></th>
+                        <td><?php echo html::input('account', '', "class='form-control'");?></td>
+                    </tr>
+                    <tr>
+                        <th><?php echo $lang->repo->password;?></th>
+                        <td>
+                            <div class='input-group'>
+                                <?php echo html::password('password', '', "class='form-control'");?>
+                                <span class='input-group-addon fix-border fix-padding'></span>
+                                <?php echo html::select('encrypt', $lang->repo->encryptList, 'base64', "class='form-control'");?>
+                            </div>
+                        </td>
                     </tr>
 
                     <tr>

@@ -152,7 +152,7 @@ class repo extends control
     public function create()
     {
         $repoID = $this->session->repoID;
-        $this->repo->setMenu($this->repos, '', false);
+        $this->repo->setMenu($this->repos, $repoID, false);
 
         if($_POST)
         {

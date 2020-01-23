@@ -53,12 +53,12 @@
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('job', 'browseBuild', "jobID=$id", '', 'list', 'file-text');
-                            common::printIcon('job', 'editJob', "jobID=$id", '', 'list',  'edit');
+                            common::printIcon('ci', 'browseBuild', "jobID=$id", '', 'list', 'file-text');
+                            common::printIcon('ci', 'editJob', "jobID=$id", '', 'list',  'edit');
 
-                            if (common::hasPriv('job', 'delete')) {
-                                $deleteURL = $this->createLink('job', 'delete', "jobID=$id&confirm=yes");
-                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"taskList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->job->delete}' class='btn'");
+                            if (common::hasPriv('ci', 'deleteJob')) {
+                                $deleteURL = $this->createLink('ci', 'deleteJob', "jobID=$id&confirm=yes");
+                                echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"jobList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->job->delete}' class='btn'");
                             }
                             ?>
                         </td>

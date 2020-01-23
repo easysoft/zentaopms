@@ -35,9 +35,9 @@
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('cijenkins', 'edit', "jenkinsID=$id", '', 'list',  'edit');
-                            if (common::hasPriv('cijenkins', 'delete')) {
-                                $deleteURL = $this->createLink('cijenkins', 'delete', "jenkinsID=$id&confirm=yes");
+                            common::printIcon('jenkins', 'edit', "jenkinsID=$id", '', 'list',  'edit');
+                            if (common::hasPriv('jenkins', 'delete')) {
+                                $deleteURL = $this->createLink('jenkins', 'delete', "jenkinsID=$id&confirm=yes");
                                 echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"jenkinsList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->jenkins->delete}' class='btn'");
                             }
                             ?>

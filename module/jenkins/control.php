@@ -116,7 +116,7 @@ class jenkins extends control
         $this->view->jenkins    = $jenkins;
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='token' or type='account'");
 
-        $this->view->module      = 'jenkins';
+//        $this->view->module      = 'jenkins';
         $this->display();
     }
 

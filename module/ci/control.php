@@ -83,7 +83,7 @@ class ci extends control
     {
         if($_POST)
         {
-            $this->ci->create();
+            $this->ci->createJob();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -111,10 +111,10 @@ class ci extends control
      */
     public function editJob($id)
     {
-        $job = $this->ci->getByID($id);
+        $job = $this->ci->getJobByID($id);
         if($_POST)
         {
-            $this->ci->update($id);
+            $this->ci->updateJob($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
