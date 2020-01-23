@@ -32,7 +32,7 @@ class repoModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($repos, $repoID = '')
+    public function setMenu($repos, $repoID = '', $showRepoSeletion = true)
     {
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
@@ -54,7 +54,7 @@ class repoModel extends model
             }
         }
 
-        if(!empty($repos))
+        if($showRepoSeletion && !empty($repos))
         {
             $repoIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
             $repoIndex .= $this->select($repos, $repoID);
@@ -126,6 +126,25 @@ class repoModel extends model
         $selectHtml .= "</div></div>";
 
         return $selectHtml;
+    }
+
+    /**
+     * Get repo list.
+     *
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  bool   $decode
+     * @access public
+     * @return array
+     */
+    public function listAll($orderBy = 'id_desc', $pager = null, $decode = true)
+    {
+        $repoList = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+        return $repoList;
     }
 
     /**

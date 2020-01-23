@@ -334,11 +334,11 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 
 $lang->repo = new stdclass();
 $lang->repo->menu = new stdclass();
-$lang->repo->menu->log   = array('link' =>'浏览|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
+$lang->repo->menu->browse   = array('link' =>'浏览|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,showsynccomment');
 $lang->repo->menu->review   = '评审|repo|review|repoID=%s';
-$lang->repo->menu->browse   = '代码库|repo|browse';
-$lang->repo->menu->job = '构建|repo|job|repoID=%s';
-$lang->repo->menu->jenkins = 'Jenkins|repo|job|repoID=%s';
+$lang->repo->menu->maintain  = '代码库|repo|maintain';
+$lang->repo->menu->job      = '构建|ci|job';
+$lang->repo->menu->jenkins  = 'Jenkins|jenkins|jenkins';
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();

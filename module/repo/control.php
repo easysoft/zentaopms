@@ -29,88 +29,120 @@ class repo extends control
 
         $this->scm = $this->app->loadClass('scm');
         $this->repos = $this->repo->getRepoPairs();
-        if(common::hasPriv('repo', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->repo->create, '', "class='btn'");
+//        if(common::hasPriv('repo', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->repo->create, '', "class='btn'");
         if(empty($this->repos) and $this->methodName != 'create') die(js::locate($this->repo->createLink('create')));
 
         /* Unlock session for wait to get data of repo. */
         session_write_close();
     }
 
+//    /**
+//     * Create repo.
+//     *
+//     * @access public
+//     * @return void
+//     */
+//    public function create()
+//    {
+//        $this->repo->setMenu($this->repos);
+//        if(!empty($_POST))
+//        {
+//            $repoID = $this->repo->create();
+//            if(dao::isError()) die(js::error(dao::getError()));
+//            die(js::locate($this->repo->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
+//        }
+//
+//        $this->view->title  = $this->lang->repo->create;
+//        $this->view->groups = $this->loadModel('group')->getPairs();
+//        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+//        $this->display();
+//    }
+//
+//    /**
+//     * Set repo.
+//     *
+//     * @param  int    $repoID
+//     * @access public
+//     * @return void
+//     */
+//    public function settings($repoID = 0)
+//    {
+//        $this->repo->setMenu($this->repos, $repoID);
+//        if($repoID == 0) $repoID = $this->session->repoID;
+//        if(!empty($_POST))
+//        {
+//            $needSync = $this->repo->saveSettings($repoID);
+//            if(dao::isError()) die(js::error(dao::getError()));
+//            if(!$needSync)
+//            {
+//                die(js::locate($this->repo->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
+//            }
+//            die(js::locate($this->repo->createLink('browse', "repoID=$repoID"), 'parent'));
+//        }
+//
+//        $this->view->title  = $this->lang->repo->settings;
+//        $this->view->repo   = $this->repo->getRepoByID($repoID);
+//        $this->view->groups = $this->loadModel('group')->getPairs();
+//        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted', !empty($repo->acl->users) ? $repo->acl->users : '');
+//        $this->display();
+//    }
+//
+//    /**
+//     * Delete repo.
+//     *
+//     * @param  int    $repoID
+//     * @param  string $confirm
+//     * @access public
+//     * @return void
+//     */
+//    public function delete($repoID, $confirm = 'no')
+//    {
+//        if($confirm == 'no')
+//        {
+//            die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&confirm=yes")));
+//        }
+//        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
+//        $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
+//        $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
+//        $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
+//        echo js::alert($this->lang->repo->notice->successDelete);
+//        die(js::locate($this->repo->createLink('browse'), 'parent'));
+//    }
+
     /**
-     * Create repo. 
-     * 
+     * List all repo.
+     *
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function create()
+    public function maintain($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->repo->setMenu($this->repos);
-        if(!empty($_POST))
-        {
-            $repoID = $this->repo->create();
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->repo->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
-        }
+        $repoID = $this->session->repoID;
+        $this->repo->setMenu($this->repos, $repoID, false);
 
-        $this->view->title  = $this->lang->repo->create;
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->repoList   = $this->repo->listAll($orderBy, $pager);
+
+        $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->browse;
+        $this->view->position[] = $this->lang->ci->common;
+        $this->view->position[] = $this->lang->ci->repo;
+        $this->view->position[] = $this->lang->ci->browse;
+
+        $this->view->repoID    = $repoID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+
         $this->display();
     }
 
     /**
-     * Set repo. 
-     * 
-     * @param  int    $repoID 
-     * @access public
-     * @return void
-     */
-    public function settings($repoID = 0)
-    {
-        $this->repo->setMenu($this->repos, $repoID);
-        if($repoID == 0) $repoID = $this->session->repoID;
-        if(!empty($_POST))
-        {
-            $needSync = $this->repo->saveSettings($repoID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(!$needSync)
-            {
-                die(js::locate($this->repo->createLink('showSyncComment', "repoID=$repoID"), 'parent'));
-            }
-            die(js::locate($this->repo->createLink('browse', "repoID=$repoID"), 'parent'));
-        }
-
-        $this->view->title  = $this->lang->repo->settings;
-        $this->view->repo   = $this->repo->getRepoByID($repoID);
-        $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted', !empty($repo->acl->users) ? $repo->acl->users : '');
-        $this->display(); 
-    }
-
-    /**
-     * Delete repo. 
-     * 
-     * @param  int    $repoID 
-     * @param  string $confirm 
-     * @access public
-     * @return void
-     */
-    public function delete($repoID, $confirm = 'no')
-    {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&confirm=yes")));
-        }
-        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
-        echo js::alert($this->lang->repo->notice->successDelete);
-        die(js::locate($this->repo->createLink('browse'), 'parent'));
-    }
-
-    /**
-     * Browse repo. 
+     * View repo content.
      * 
      * @param  int    $repoID 
      * @param  string $path 
