@@ -12,14 +12,14 @@
 session_start();
 $_SESSION['repoList'] = $this->app->getURI(true);
 session_write_close();
-$pathInfo = empty($path) ? '' : '&path=' . $this->repo->encodePath($path);
+$pathInfo = empty($path) ? '' : '&root=' . $this->repo->encodePath($path);
 $preDir   = empty($parentDir) ? $pathInfo : '&path=' . $this->repo->encodePath($parentDir);
 $typeInfo = $type == 'file' ? '&type=file' : '';
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID", $preDir), "<i class='icon icon-back'></i>" . $lang->goback, '', "class='btn btn-link'");?>
+    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID" . $preDir), "<i class='icon icon-back'></i>" . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
     <div class="page-title">
       <?php echo $lang->repo->revisionA . ' ' . ($repo->SCM == 'Git' ? $this->repo->getGitRevisionName($revision, $log->commit) : $revision);?>

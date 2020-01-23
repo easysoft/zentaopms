@@ -5,23 +5,25 @@
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @author      Wang Yidong, Zhu Jinyong 
  * @package     repo
- * @version     $Id: log.html.php $
+ * @version     $Id: browse.html.php $
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolbar pull-left">
+    <?php echo html::backButton("<i class='icon icon-back icon-sm'></i>" . $lang->goback, '', 'btn btn-link');?>
+    <div class="divider"></div>
     <div class="page-title">
       <strong>
       <?php
-      echo html::a($this->repo->createLink('log', "repoID=$repoID"), $repo->name);
+      echo html::a($this->repo->createLink('browse', "repoID=$repoID"), $repo->name);
       $paths= explode('/', $entry);
       $fileName = array_pop($paths);
       $postPath = '';
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';
-          echo '/' . ' ' . html::a($this->repo->createLink('log', "repoID=$repoID", "entry=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
+          echo '/' . ' ' . html::a($this->repo->createLink('browse', "repoID=$repoID", "path=" . $this->repo->encodePath($postPath)), trim($pathName, '/'));
       }
       echo '/' . ' ' . $fileName;
       echo $repo->SCM == 'Git' ? " @ " . substr($revision, 0, 10) : " @ r" . $revision;;
@@ -36,6 +38,8 @@
     <ul class="nav nav-default">
       <?php $encodeEntry = $this->repo->encodePath($entry);?>
       <li><a><?php echo $lang->repo->log;?></a></li>
+      <li><?php  echo html::a($this->repo->createLink('view', "repoID=$repoID&entry=&revision=$revision", "entry=$encodeEntry"), $lang->repo->view);?></li>
+      <?php if($info->kind == 'file') echo '<li>' . html::a($this->repo->createLink('blame', "repoID=$repoID&entry=&revision=$revision", "entry=$encodeEntry"), $lang->repo->blame) . '</li>';?>
       <?php if($info->kind == 'file') echo '<li>' . html::a($this->repo->createLink('download', "repoID=$repoID&path=&fromRevision=$revision", "path=$encodeEntry"), $lang->repo->download, 'hiddenwin') . '</li>';?>
     </ul>
   </nav>

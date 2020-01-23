@@ -1,0 +1,11 @@
+.panel.code > .content{border: 1px solid #ccc;}
+.blame{font-size:13px;}
+.blame thead{font-weight:bold; background:#ddd;}
+.blame td{border-left:1px solid #ccc;}
+.blame tr.topLine > td:first-child{border-left:none;}
+.blame .info{ background-color:#f7f7f7; vertical-align:top; padding:0px 4px}
+.topLine{border-top: 1px solid #ccc;}
+.topLine td.info{padding:8px 4px;}
+pre {margin-bottom:0px;display:block; white-space: pre-wrap; padding:0px 3px; border:0px; background:none;}
+.line{ font-weight: bold; border: 1px solid #E4E4E4; background-color: #ECECEC; text-align: right;}
+.panel-actions.pull-right{margin-top:-5px; }

@@ -11,6 +11,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/form.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php include 'header.review.html.php';?>
 <?php if(!isonlybody()):?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

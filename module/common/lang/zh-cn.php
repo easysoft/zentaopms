@@ -123,7 +123,7 @@ $lang->menu->my      = '<span> 我的地盘</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
-$lang->menu->repo    = '代码|repo|log';
+$lang->menu->repo    = '持续集成|repo|log';
 $lang->menu->doc     = '文档|doc|index';
 $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
@@ -334,9 +334,11 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 
 $lang->repo = new stdclass();
 $lang->repo->menu = new stdclass();
-$lang->repo->menu->browse   = array('link' =>'浏览|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
-//$lang->repo->menu->settings = '设置|repo|settings|repoID=%s';
-//$lang->repo->menu->delete   = array('link' => '删除|repo|delete|repoID=%s', 'target' => 'hiddenwin');
+$lang->repo->menu->log   = array('link' =>'浏览|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
+$lang->repo->menu->review   = '评审|repo|review|repoID=%s';
+$lang->repo->menu->browse   = '代码库|repo|browse';
+$lang->repo->menu->job = '构建|repo|job|repoID=%s';
+$lang->repo->menu->jenkins = 'Jenkins|repo|job|repoID=%s';
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();

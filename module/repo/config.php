@@ -26,3 +26,7 @@ $config->repo->syncTime  = 10;
 $config->repo->batchNum  = 100;
 $config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary    = '|pdf|';
+
+$config->repo->editor = new stdclass();
+$config->repo->editor->view = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');

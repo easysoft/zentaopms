@@ -12,6 +12,7 @@
 include '../../common/view/header.html.php';
 include '../../common/view/form.html.php';
 include '../../common/view/kindeditor.html.php';
+include 'header.review.html.php';
 js::import($jsRoot  . 'misc/highlight/highlight.pack.js');
 css::import($jsRoot . 'misc/highlight/styles/github.css');
 $encodePath = $this->repo->encodePath($entry);
@@ -56,6 +57,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
         <div class='panel-actions'>
           <?php if($suffix != 'binary' and strpos($config->repo->images, "|$suffix|") === false):?>
           <?php 
+          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&entry=&revision=$revision&encoding=$encoding", "entry=$encodePath"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary'");
           if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=&fromRevision=$revision", "path=$encodePath"), html::icon('download-alt') . $lang->repo->download, 'hiddenwin', "class='btn btn-sm btn-primary'");
           ?>
           <?php endif;?>
