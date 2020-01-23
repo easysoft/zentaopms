@@ -337,7 +337,7 @@ $lang->repo->menu = new stdclass();
 $lang->repo->menu->browse   = array('link' =>'浏览|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,showsynccomment');
 $lang->repo->menu->review   = array('link' =>'评审|repo|review|repoID=%s', 'alias' => 'create,edit');
 $lang->repo->menu->maintain = array('link' =>'代码库|repo|maintain', 'alias' => 'create,edit');
-$lang->repo->menu->job      = array('link' =>'构建|ci|browseJob', 'alias' => 'createJob,editJob,browseBuild,viewBuildLogs');
+$lang->repo->menu->job      = array('link' =>'构建|ci|browsejob', 'alias' => 'createjob,editjob,browsebuild,viewbuildlogs');
 $lang->repo->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
 
 $lang->ci = new stdclass();
