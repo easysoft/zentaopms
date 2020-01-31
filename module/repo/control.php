@@ -170,7 +170,6 @@ class repo extends control
         $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
 
         $this->view->credentialsList  = $this->loadModel('cicredentials')->listForSelection("type='sshKey' or type='account'");
-        $this->view->tips            = str_replace("{user}",exec('whoami'), $this->lang->repo->tips);
 
         $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->create;
         $this->view->position[] = $this->lang->ci->common;
@@ -210,8 +209,6 @@ class repo extends control
         $this->view->repo    = $repo;
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-
-        $this->view->tips            = str_replace("{user}", exec('whoami'), $this->lang->repo->tips);
 
         $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->edit;
         $this->view->position[] = $this->lang->ci->common;
