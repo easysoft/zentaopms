@@ -92,7 +92,7 @@ class gitModel extends model
             $this->printLog("begin repo $repo->id");
             if(!$this->setRepo($repo)) return false;
 
-            $this->pull();
+//            $this->pull();
 
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
@@ -162,26 +162,26 @@ class gitModel extends model
         }
     }
 
-    /**
-     * Pull codes from remote repo.
-     *
-     * @param $repo
-     */
-    public function pull($repo = '')
-    {
-        if (!empty($repo)) {
-            $repoRoot = $repo->path;
-            $this->setClient($repo);
-        } else {
-            $repoRoot = $this->repoRoot;
-        }
-
-        chdir($repoRoot);
-//        exec('sudo -u aaron whoami', $output, $return);
-
-        $cmd = "{$this->client} pull 2>&1";
-        exec($cmd, $output, $return);
-    }
+//    /**
+//     * Pull codes from remote repo.
+//     *
+//     * @param $repo
+//     */
+//    public function pull($repo = '')
+//    {
+//        if (!empty($repo)) {
+//            $repoRoot = $repo->path;
+//            $this->setClient($repo);
+//        } else {
+//            $repoRoot = $this->repoRoot;
+//        }
+//
+//        chdir($repoRoot);
+////        exec('sudo -u aaron whoami', $output, $return);
+//
+//        $cmd = "{$this->client} pull 2>&1";
+//        exec($cmd, $output, $return);
+//    }
 
     /**
      * Set the log root.
