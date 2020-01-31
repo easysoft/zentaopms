@@ -31,11 +31,11 @@
                         <td></td>
                     </tr>
                     <tr>
-                        <th><?php echo $lang->repo->account;?></th>
+                        <th><?php echo $lang->jenkins->account;?></th>
                         <td><?php echo html::input('account', '', "class='form-control'");?></td>
                     </tr>
                     <tr>
-                        <th><?php echo $lang->repo->password;?></th>
+                        <th><?php echo $lang->jenkins->password;?></th>
                         <td>
                             <div class='input-group'>
                                 <?php echo html::password('password', '', "class='form-control'");?>
