@@ -104,7 +104,7 @@
                             <?php echo html::submitButton(); ?>
                             <?php echo html::backButton(); ?>
                             &nbsp;
-                            <?php echo html::commonButton($lang->job->exeNow, "onclick=exeCijob($job->id)  data-tip-class='tooltip-success'", "btn btn-info exe-job-button"); ?>
+                            <?php echo html::commonButton($lang->job->exeNow, "onclick=exeJob($job->id)  data-tip-class='tooltip-success'", "btn btn-info exe-job-button"); ?>
                         </td>
                     </tr>
                 </table>

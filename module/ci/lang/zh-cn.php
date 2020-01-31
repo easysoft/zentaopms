@@ -1,6 +1,7 @@
 <?php
 $lang->ci->common         = '持续集成';
 $lang->ci->de             = '的';
+$lang->ci->at             = '于';
 
 $lang->ci->jenkins        = 'Jenkins';
 $lang->ci->repo           = '代码库';

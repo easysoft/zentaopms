@@ -49,7 +49,7 @@
                         <td class='text' title='<?php echo $lang->job->triggerTypeList[$job->triggerType]; ?>'>
                             <?php echo $lang->job->triggerTypeList[$job->triggerType]; ?></td>
                         <td class='text' title='<?php echo $lang->job->lastBuild; ?>'>
-                            <?php echo $lang->job->buildStatusList[$job->lastStatus] . ' ' . $job->lastExec; ?>
+                            <?php if ($job->lastStatus) echo $lang->job->buildStatusList[$job->lastStatus] . $lang->ci->at . $job->lastExec; ?>
                         </td>
 
                         <td class='c-actions text-right'>

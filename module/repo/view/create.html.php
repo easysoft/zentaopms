@@ -49,20 +49,20 @@
                         <td class='required'><?php echo html::input('client', '', "class='form-control'")?></td>
                         <td class='muted'><?php echo $lang->repo->example->client;?></td>
                     </tr>
-                    <tr>
-                        <th><?php echo $lang->repo->account;?></th>
-                        <td><?php echo html::input('account', '', "class='form-control'");?></td>
+                    <!--<tr>
+                        <th><?php /*echo $lang->repo->account;*/?></th>
+                        <td><?php /*echo html::input('account', '', "class='form-control'");*/?></td>
                     </tr>
                     <tr>
-                        <th><?php echo $lang->repo->password;?></th>
+                        <th><?php /*echo $lang->repo->password;*/?></th>
                         <td>
                             <div class='input-group'>
-                                <?php echo html::password('password', '', "class='form-control'");?>
+                                <?php /*echo html::password('password', '', "class='form-control'");*/?>
                                 <span class='input-group-addon fix-border fix-padding'></span>
-                                <?php echo html::select('encrypt', $lang->repo->encryptList, 'base64', "class='form-control'");?>
+                                <?php /*echo html::select('encrypt', $lang->repo->encryptList, 'base64', "class='form-control'");*/?>
                             </div>
                         </td>
-                    </tr>
+                    </tr>-->
 
                     <tr>
                         <th><?php echo $lang->repo->acl;?></th>

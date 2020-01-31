@@ -3,8 +3,8 @@ $(function()
     triggerTypeChanged(triggerType);
 });
 
-function exeCijob(id) {
-    var link = createLink('cijob', 'exe', 'id=' + id);
+function exeJob(id) {
+    var link = createLink('ci', 'exeJob', 'id=' + id);
     console.log(link);
     $.ajax({
         type:"POST",
@@ -12,7 +12,7 @@ function exeCijob(id) {
         data: {},
         datatype: "json",
         success:function(str){
-            $('.exe-cijob-button').tooltip('show', '发送执行请求成功！');
+            $('.exe-job-button').tooltip('show', '发送执行请求成功！');
         }
     });
 }

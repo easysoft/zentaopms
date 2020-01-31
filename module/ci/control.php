@@ -165,7 +165,7 @@ class ci extends control
     {
         error_log("===exeJob " . $id);
 
-        $this->ci->exe($id);
+        $this->ci->exeJob($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->send(array('result' => 'success'));

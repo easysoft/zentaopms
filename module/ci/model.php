@@ -193,7 +193,7 @@ class ciModel extends model
         $buildUrl = sprintf('%s/job/%s/build/api/json', $jenkinsServer, $po->jenkinsJob);
 
         $po->queueItem = $this->sendBuildRequest($buildUrl);
-        $this->saveCibuild($po);
+        $this->saveBuild($po);
 
         return !dao::isError();
     }
