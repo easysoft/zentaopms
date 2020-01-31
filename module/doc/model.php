@@ -447,13 +447,20 @@ class docModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', false);
         if(!$docs) return array();
 
+        $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
         foreach($docs as $index => $doc)
         {
             $docs[$index]->fileSize = 0;
             if(isset($files[$index]))
             {
-                $fileSize = 0;
-                foreach($files[$index] as $file) $fileSize += $file->size;
+                $docContent = $docContents[$index];
+                $fileSize   = 0;
+                foreach($files[$index] as $file)
+                {
+                    if(strpos(",{$docContent->files},", ",{$file->id},") === false) continue;
+                    $fileSize += $file->size;
+                }
+
                 if($fileSize < 1024)
                 {
                     $fileSize .= 'B';
