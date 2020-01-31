@@ -20,6 +20,7 @@
                 <thead>
                 <tr>
                     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
+
                     <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id); ?></th>
                     <th class='w-150px text-left'>
                         <?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name); ?></th>
@@ -48,7 +49,7 @@
                         <td class='text' title='<?php echo $lang->job->triggerTypeList[$job->triggerType]; ?>'>
                             <?php echo $lang->job->triggerTypeList[$job->triggerType]; ?></td>
                         <td class='text' title='<?php echo $lang->job->lastBuild; ?>'>
-                            <?php echo $lang->job->buildStatus[$job->lastStatus] . ' ' . $job->lastExec; ?>
+                            <?php echo $lang->job->buildStatusList[$job->lastStatus] . ' ' . $job->lastExec; ?>
                         </td>
 
                         <td class='c-actions text-right'>

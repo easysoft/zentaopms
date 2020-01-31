@@ -12,6 +12,19 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 
+<div id='mainMenu' class='clearfix'>
+    <div class='btn-toolbar pull-left'>
+        <div class="page-title">
+            <strong>
+                <?php echo $lang->job->browseBuild; ?>
+            </strong>
+        </div>
+    </div>
+    <div class="btn-toolbar pull-right">
+        <?php echo html::a(helper::createLink('ci', "browseJob", ""), "<i class='icon icon-back icon-sm'></i> ". $lang->goback, '', "class='btn btn-secondary'");?>
+    </div>
+</div>
+
 <div id='mainContent' class='main-row'>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
@@ -19,10 +32,10 @@
                 <thead>
                 <tr>
                     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
-                    <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->citask->id); ?></th>
-                    <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->citask->name); ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->citask->buildStatus; ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->citask->buildTime; ?></th>
+                    <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id); ?></th>
+                    <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name); ?></th>
+                    <th class='w-100px text-left'><?php echo $lang->job->buildStatus; ?></th>
+                    <th class='w-100px text-left'><?php echo $lang->job->buildTime; ?></th>
 
                     <th class='c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
@@ -32,13 +45,15 @@
                     <tr>
                         <td class='text-center'><?php echo $id; ?></td>
                         <td class='text' title='<?php echo $build->name; ?>'><?php echo $build->name; ?></td>
-                        <td class='text' title='<?php echo $build->status; ?>'><?php echo $build->status; ?></td>
+                        <td class='text' title='<?php echo $lang->job->buildStatusList[$build->status]; ?>'>
+                            <?php echo $lang->job->buildStatusList[$build->status]; ?>
+                        </td>
                         <td class='text' title='<?php echo $build->createDate; ?>'><?php echo $build->createdDate; ?></td>
 
                         <td class='c-actions text-right'>
                             <?php
-                            common::printIcon('citask', 'viewBuildLogs', "buildID=$id", '', 'list', 'file-text',
-                                '', '', '', '', $lang->citask->viewLogs);
+                            common::printIcon('ci', 'viewBuildLogs', "buildID=$id", '', 'list', 'file-text',
+                                '', '', '', '', $lang->job->viewLogs);
                             ?>
                         </td>
                     </tr>

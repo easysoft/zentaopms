@@ -187,6 +187,7 @@ class ci extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->buildList  = $this->ci->listBuild($taskID, $orderBy, $pager);
+        $this->view->job        = $this->ci->getJobByID($taskID);
 
         $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->job->browseBuild;
         $this->view->position[] = $this->lang->ci->common;
@@ -208,8 +209,9 @@ class ci extends control
      */
     public function viewBuildLogs($buildID)
     {
-        $build = $this->ci->getBuild($buildID);
-        $this->view->logs  = str_replace("\r\n","<br />", $build->logs);
+        $build = $this->ci->getBuildByID($buildID);
+        $this->view->logs   = str_replace("\r\n","<br />", $build->logs);
+        $this->view->build  = $build;
 
         $this->view->title = $this->lang->ci->task . $this->lang->colon . $this->lang->job->viewLogs;
         $this->view->position[] = $this->lang->ci->common;

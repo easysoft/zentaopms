@@ -34,6 +34,7 @@
     <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&path=&revision=$revision&refresh=1", "path=" . $this->repo->encodePath($path)), "<i class='icon icon-refresh'></i> ". $lang->refresh, '', "class='btn btn-primary'");?>
   </div>
 </div>
+
 <div id="mainContent" class="main-row fade">
   <div class="main-col main-table">
     <table class='table table-fixed'>

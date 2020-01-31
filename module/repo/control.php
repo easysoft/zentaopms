@@ -174,7 +174,7 @@ class repo extends control
 
         $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->create;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->repo);
+        $this->view->position[] = html::a(inlink('maintain'), $this->lang->ci->repo);
         $this->view->position[] = $this->lang->ci->create;
 
         $this->display();
@@ -202,7 +202,7 @@ class repo extends control
                 $link = $this->repo->createLink('showSyncComment', "repoID=$repoID");
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
             }
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
         }
 
         $this->app->loadLang('action');
@@ -215,7 +215,7 @@ class repo extends control
 
         $this->view->title      = $this->lang->ci->repo . $this->lang->colon . $this->lang->ci->edit;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->repo);
+        $this->view->position[] = html::a(inlink('maintain'), $this->lang->ci->repo);
         $this->view->position[] = $this->lang->ci->edit;
         $this->view->repoID     = $repoID;
 

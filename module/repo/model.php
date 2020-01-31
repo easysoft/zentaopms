@@ -185,7 +185,7 @@ class repoModel extends model
             }
         }
 
-        $this->checkRepoConnection();
+        $this->checkConnection();
         $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
@@ -217,7 +217,7 @@ class repoModel extends model
      */
     public function update($id)
     {
-        $this->checkRepoConnection();
+        $this->checkConnection();
         $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
