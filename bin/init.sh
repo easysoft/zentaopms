@@ -140,8 +140,8 @@ echo "#min   hour day month week  command." >> $basePath/cron/sys.cron
 echo "0      1    *   *     *     $basePath/dailyreminder.sh   # dailyreminder."            >> $basePath/cron/sys.cron
 echo "1      1    *   *     *     $basePath/backup.sh          # backup database and file." >> $basePath/cron/sys.cron
 echo "1      23   *   *     *     $basePath/computeburn.sh     # compute burndown chart."   >> $basePath/cron/sys.cron
-echo "1-59/2 *    *   *     *     $basePath/syncsvn.sh         # sync subversion."          >> $basePath/cron/sys.cron
-#echo "1-59/2 *    *   *     *     $basePath/syncgit.sh         # sync git."                 >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/syncsvn.sh         # sync subversion."          >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/syncgit.sh         # sync git."                 >> $basePath/cron/sys.cron
 echo "1-59/5 *    *   *     *     $basePath/sendmail.sh        # async send mail."          >> $basePath/cron/sys.cron
 echo "1-59/5 *    *   *     *     $basePath/sendwebhook.sh     # async send webhook."       >> $basePath/cron/sys.cron
 echo "1      1    *   *     *     $basePath/createcycle.sh     # create cycle todo."        >> $basePath/cron/sys.cron

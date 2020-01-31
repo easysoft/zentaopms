@@ -22,7 +22,7 @@
                 <table class='table table-form'>
                     <tr>
                         <th class='thWidth'></th>
-                        <td colspan="2"><?php echo $tips; ?></td>
+                        <td colspan="2"><?php echo $lang->repo->tips; ?></td>
                     </tr>
                     <tr>
                         <th class='thWidth'><?php echo $lang->repo->type; ?></th>
