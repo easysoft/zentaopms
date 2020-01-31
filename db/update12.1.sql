@@ -5,20 +5,20 @@ ADD COLUMN `desc` TEXT NULL AFTER `lastSync`;
 CREATE TABLE `zt_jenkins` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `username` varchar(255) DEFAULT NULL,
+  `account` varchar(255) DEFAULT NULL,
   `serviceUrl` varchar(255) DEFAULT NULL,
-  `account` varchar(30) NOT NULL,
   `token` varchar(255) DEFAULT NULL,
-  `password` varchar(30) NOT NULL,
-  `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `password` varchar(30) NOT NULL,
+  `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
+  `acl` text NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 CREATE TABLE `zt_cijob` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
