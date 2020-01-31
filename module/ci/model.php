@@ -14,7 +14,7 @@ class ciModel extends model
 {
 
     /**
-     * Get ci task list.
+     * Get ci job list.
      *
      * @param  string $orderBy
      * @param  object $pager
@@ -25,7 +25,7 @@ class ciModel extends model
     public function listJob($orderBy = 'id_desc', $pager = null, $decode = true)
     {
         $list = $this->dao->
-        select('t1.*, t2.name repoName, t3.name as jenkinsName')->from(TABLE_CI_TASK)->alias('t1')
+        select('t1.*, t2.name repoName, t3.name as jenkinsName')->from(TABLE_CI_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
             ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t1.jenkins=t3.id')
             ->where('t1.deleted')->eq('0')
@@ -36,7 +36,7 @@ class ciModel extends model
     }
 
     /**
-     * Get a ci task by id.
+     * Get a ci job by id.
      *
      * @param  int    $id
      * @access public
@@ -44,57 +44,57 @@ class ciModel extends model
      */
     public function getJobByID($id)
     {
-        $jenkins = $this->dao->select('*')->from(TABLE_CI_TASK)->where('id')->eq($id)->fetch();
+        $jenkins = $this->dao->select('*')->from(TABLE_CI_JOB)->where('id')->eq($id)->fetch();
         return $jenkins;
     }
 
     /**
-     * Create a ci task.
+     * Create a ci job.
      *
      * @access public
      * @return bool
      */
     public function createJob()
     {
-        $task = fixer::input('post')
+        $job = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
 
-        $this->dao->insert(TABLE_CI_TASK)->data($task)
-            ->batchCheck($this->config->citask->requiredFields, 'notempty')
+        $this->dao->insert(TABLE_CI_JOB)->data($job)
+            ->batchCheck($this->config->cijob->requiredFields, 'notempty')
 
-            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'cron', "cronExpression", 'notempty')
-            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
+            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
 
             ->autoCheck()
             ->exec();
 
-        if ($task->triggerType === 'schedule') {
-            $taskId = $this->dao->lastInsertID();
+        if ($job->triggerType === 'schedule') {
+            $jobId = $this->dao->lastInsertID();
 
-            if ($task->scheduleType == 'custom') {
-                $arr = explode(":", $task->scheduleTime);
+            if ($job->scheduleType == 'custom') {
+                $arr = explode(":", $job->scheduleTime);
                 $hour = $arr[0];
                 $min = $arr[1];
 
-                if ($task->scheduleDay == 'everyDay') {
+                if ($job->scheduleDay == 'everyDay') {
                     $days = '1-7';
-                } else if ($task->scheduleDay == 'workDay') {
+                } else if ($job->scheduleDay == 'workDay') {
                     $days = '1-5';
                 }
 
                 $cron = (object)array('m' => $min, 'h' => $hour, 'dom' => '*', 'mon' => '*',
-                    'dow' => $days . '/' . $task->scheduleInterval, 'command' => 'moduleName=citask&methodName=exe&parm=' . $taskId,
-                    'remark' => ($this->lang->citask->extTask . $taskId), 'type' => 'zentao',
+                    'dow' => $days . '/' . $job->scheduleInterval, 'command' => 'moduleName=ci&methodName=exeCijob&parm=' . $jobId,
+                    'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
                     'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
                 $this->dao->insert(TABLE_CRON)->data($cron)->exec();
-            } else if ($task->scheduleType == 'cron') {
-                $arr = explode(' ', $task->cronExpression);
+            } else if ($job->scheduleType == 'cron') {
+                $arr = explode(' ', $job->cronExpression);
                 if (count($arr) >= 6) {
                     $cron = (object)array('m' => $arr[1], 'h' => $arr[2], 'dom' => $arr[3], 'mon' => $arr[4],
-                        'dow' => $arr[5], 'command' => 'moduleName=citask&methodName=exe&parm=' . $taskId,
-                        'remark' => ($this->lang->citask->extTask . $taskId), 'type' => 'zentao',
+                        'dow' => $arr[5], 'command' => 'moduleName=ci&methodName=exeCijob&parm=' . $jobId,
+                        'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
                         'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
                     $this->dao->insert(TABLE_CRON)->data($cron)->exec();
                 }
@@ -105,7 +105,7 @@ class ciModel extends model
     }
 
     /**
-     * Update a ci task.
+     * Update a ci job.
      *
      * @param  int    $id
      * @access public
@@ -113,33 +113,33 @@ class ciModel extends model
      */
     public function updateJob($id)
     {
-        $task = fixer::input('post')
+        $job = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->get();
 
-        $this->dao->update(TABLE_CI_TASK)->data($task)
-            ->batchCheck($this->config->citask->requiredFields, 'notempty')
+        $this->dao->update(TABLE_CI_JOB)->data($job)
+            ->batchCheck($this->config->cijob->requiredFields, 'notempty')
 
-            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'cron', "cronExpression", 'notempty')
-            ->batchCheckIF($task->triggerType === 'schedule' && $task->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
+            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
 
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
 
-        if ($task->triggerType === 'schedule') {
-            $command = 'moduleName=citask&methodName=exe&parm=' . $id;
+        if ($job->triggerType === 'schedule') {
+            $command = 'moduleName=ci&methodName=exeCijob&parm=' . $id;
 
-            if ($task->scheduleType == 'custom') {
-                $arr = explode(":", $task->scheduleTime);
+            if ($job->scheduleType == 'custom') {
+                $arr = explode(":", $job->scheduleTime);
                 $hour = $arr[0];
                 $min = $arr[1];
 
-                $taskId = $this->dao->lastInsertID();
-                if ($task->scheduleDay == 'everyDay') {
+                $jobId = $this->dao->lastInsertID();
+                if ($job->scheduleDay == 'everyDay') {
                     $days = '1-7';
-                } else if ($task->scheduleDay == 'workDay') {
+                } else if ($job->scheduleDay == 'workDay') {
                     $days = '2-6';
                 }
 
@@ -148,11 +148,11 @@ class ciModel extends model
                     ->set('h')->eq($hour)
                     ->set('dom')->eq('*')
                     ->set('mon')->eq('*')
-                    ->set('dow')->eq($days . '/' . $task->scheduleInterval)
+                    ->set('dow')->eq($days . '/' . $job->scheduleInterval)
                     ->set('lastTime')->eq('0000-00-00 00:00:00')
                     ->where('command')->eq($command)->exec();
-            } else if ($task->scheduleType == 'cron') {
-                $arr = explode(' ', $task->cronExpression);
+            } else if ($job->scheduleType == 'cron') {
+                $arr = explode(' ', $job->cronExpression);
                 if (count($arr) >= 6) {
                     $this->dao->update(TABLE_CRON)
                         ->set('m')->eq($arr[1])
@@ -170,32 +170,27 @@ class ciModel extends model
     }
 
     /**
-     * Execute ci task.
+     * Execute ci job.
      *
      * @param  int    $id
      * @access public
      * @return bool
      */
-    public function exeJob($taskID)
+    public function exeJob($jobID)
     {
-        $po = $this->dao->select('task.id taskId, task.name taskName, task.repo, task.jenkinsTask, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credentials')
-            ->from(TABLE_CI_TASK)->alias('task')
-            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('task.jenkins=jenkins.id')
-            ->where('task.id')->eq($taskID)
+        $po = $this->dao->select('job.id jobId, job.name jobName, job.repo, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
+            ->from(TABLE_CI_JOB)->alias('job')
+            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
+            ->where('job.id')->eq($jobID)
             ->fetch();
 
-        $credentials = $this->loadModel('cicredentials')->getByID($po->credentials); // jenkins must use a token or account credentials
-        if ($credentials->type === 'token') {
-            $jenkinsTokenOrPassword = $credentials->token;
-        } else if ($credentials->type === 'account') {
-            $jenkinsTokenOrPassword = $credentials->password;
-        }
-        $jenkinsUser = $credentials->username;
         $jenkinsServer = $po->serviceUrl;
+        $jenkinsUser = $po->account;
+        $jenkinsTokenOrPassword = $po->token ? $po->token : $po->password;
 
         $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
         $jenkinsServer = str_replace('://', $r, $jenkinsServer);
-        $buildUrl = sprintf('%s/job/%s/build/api/json', $jenkinsServer, $po->jenkinsTask);
+        $buildUrl = sprintf('%s/job/%s/build/api/json', $jenkinsServer, $po->jenkinsJob);
 
         $po->queueItem = $this->sendBuildRequest($buildUrl);
         $this->saveCibuild($po);
@@ -206,19 +201,19 @@ class ciModel extends model
     /**
      * Get jenkins build list.
      *
-     * @param  int $taskID
+     * @param  int $jobID
      * @param  string $orderBy
      * @param  object $pager
      * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function listBuild($taskID, $orderBy = 'id_desc', $pager = null, $decode = true)
+    public function listBuild($jobID, $orderBy = 'id_desc', $pager = null, $decode = true)
     {
         $list = $this->dao->
         select('id, name, status, createdDate')->from(TABLE_CI_BUILD)
             ->where('deleted')->eq('0')
-            ->andWhere('citask')->eq($taskID)
+            ->andWhere('cijob')->eq($jobID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -241,16 +236,16 @@ class ciModel extends model
     /**
      * Save build to db.
      *
-     * @param  object $task
+     * @param  object $job
      * @access public
      * @return bool
      */
-    public function saveBuild($task)
+    public function saveBuild($job)
     {
         $build = new stdClass();
-        $build->citask = $task->taskId;
-        $build->name = $task->taskName;
-        $build->queueItem = $task->queueItem;
+        $build->cijob = $job->jobId;
+        $build->name = $job->jobName;
+        $build->queueItem = $job->queueItem;
         $build->status = 'created';
         $build->createdBy = $this->app->user->account;
         $build->createdDate = helper::now();
@@ -261,7 +256,8 @@ class ciModel extends model
     /**
      * Update ci build status.
      *
-     * @param  object $task
+     * @param  object $build
+     * @param  string $status
      * @access public
      * @return bool
      */
@@ -269,10 +265,10 @@ class ciModel extends model
     {
         $this->dao->update(TABLE_CI_BUILD)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
 
-        $this->dao->update(TABLE_CI_TASK)
+        $this->dao->update(TABLE_CI_JOB)
             ->set('lastExec')->eq(helper::now())
             ->set('lastStatus')->eq($status)
-            ->where('id')->eq($build->citask)->exec();
+            ->where('id')->eq($build->cijob)->exec();
     }
 
     /**
@@ -283,10 +279,10 @@ class ciModel extends model
      */
     public function checkBuildStatus()
     {
-        $pos = $this->dao->select('build.*, task.jenkinsTask, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credentials')
+        $pos = $this->dao->select('build.*, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credentials')
             ->from(TABLE_CI_BUILD)->alias('build')
-            ->leftJoin(TABLE_CI_TASK)->alias('task')->on('build.citask=task.id')
-            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('task.jenkins=jenkins.id')
+            ->leftJoin(TABLE_CI_JOB)->alias('job')->on('build.cijob=job.id')
+            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
             ->where('build.status')->ne('success')
             ->andWhere('build.status')->ne('fail')
             ->fetchAll();
@@ -307,13 +303,13 @@ class ciModel extends model
 
             $response = common::http($queueUrl);
             if (strripos($response,"404") > -1) { // queue已过期
-                $infoUrl = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $po->jenkinsTask, $po->queueItem);
+                $infoUrl = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $po->jenkinsJob, $po->queueItem);
                 $response = common::http($infoUrl);
                 $buildInfo = json_decode($response);
                 $result = strtolower($buildInfo->result);
                 $this->updateCibuildStatus($po, $result);
 
-                $logUrl = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $po->jenkinsTask, $po->queueItem);
+                $logUrl = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $po->jenkinsJob, $po->queueItem);
                 $response = common::http($logUrl);
                 $logs = json_decode($response);
 

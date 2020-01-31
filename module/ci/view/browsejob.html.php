@@ -1,11 +1,11 @@
 <?php
 /**
- * The browse view file of ci task module of ZenTaoPMS.
+ * The browse view file of ci job module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     citask
+ * @package     ci
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -28,7 +28,7 @@
                         <?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo); ?></th>
                     <th class='w-100px text-left'>
                         <?php common::printOrderLink('jenkins', $orderBy, $vars, $lang->job->jenkins); ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->job->jenkinsTask; ?></th>
+                    <th class='w-100px text-left'><?php echo $lang->job->jenkinsJob; ?></th>
                     <th class='w-100px text-left'><?php echo $lang->job->buildType; ?></th>
                     <th class='w-100px text-left'><?php echo $lang->job->triggerType; ?></th>
                     <th class='w-200px text-left'><?php echo $lang->job->lastExe; ?></th>
@@ -43,7 +43,7 @@
                         <td class='text' title='<?php echo $job->name; ?>'><?php echo $job->name; ?></td>
                         <td class='text' title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
                         <td class='text' title='<?php echo $job->jenkinsName; ?>'><?php echo $job->jenkinsName; ?></td>
-                        <td class='text' title='<?php echo $job->jenkinsTask; ?>'><?php echo $job->jenkinsTask; ?></td>
+                        <td class='text' title='<?php echo $job->jenkinsJob; ?>'><?php echo $job->jenkinsJob; ?></td>
                         <td class='text' title='<?php echo $lang->job->buildTypeList[$job->buildType]; ?>'>
                             <?php echo $lang->job->buildTypeList[$job->buildType]; ?></td>
                         <td class='text' title='<?php echo $lang->job->triggerTypeList[$job->triggerType]; ?>'>

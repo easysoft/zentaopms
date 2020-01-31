@@ -16,7 +16,6 @@ CREATE TABLE `zt_jenkins` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `password` varchar(30) NOT NULL,
   `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
-  `acl` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
@@ -25,7 +24,7 @@ CREATE TABLE `zt_cijob` (
   `name` varchar(50) NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `jenkins` mediumint(8) unsigned NOT NULL,
-  `jenkinsTask` varchar(500) NOT NULL,
+  `jenkinsJob` varchar(500) NOT NULL,
   `buildType` varchar(255) NOT NULL,
   `triggerType` varchar(255) NOT NULL,
   `scheduleType` varchar(255) NOT NULL,

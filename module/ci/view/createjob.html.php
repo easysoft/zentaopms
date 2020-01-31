@@ -1,6 +1,6 @@
 <?php
 /**
- * The create view file of ci task module of ZenTaoPMS.
+ * The create view file of ci job module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -35,8 +35,8 @@
                         <th><?php echo $lang->job->jenkins; ?></th>
                         <td><?php echo html::select('jenkins', $jenkinsList, '', "class='form-control chosen'"); ?></td>
 
-                        <th><?php echo $lang->job->jenkinsTask; ?></th>
-                        <td><?php echo html::input('jenkinsTask', '', "class='form-control'"); ?></td>
+                        <th><?php echo $lang->job->jenkinsJob; ?></th>
+                        <td><?php echo html::input('jenkinsJob', '', "class='form-control'"); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->triggerType; ?></th>

@@ -46,7 +46,7 @@ class ci extends control
     }
 
     /**
-     * Browse ci task.
+     * Browse ci job.
      *
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -62,9 +62,9 @@ class ci extends control
 
         $this->view->jobList    = $this->ci->listJob($orderBy, $pager);
 
-        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->job->browse;
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = $this->lang->ci->task;
+        $this->view->position[] = $this->lang->ci->job;
         $this->view->position[] = $this->lang->ci->browse;
 
         $this->view->orderBy    = $orderBy;
@@ -74,7 +74,7 @@ class ci extends control
     }
 
     /**
-     * Create a ci task.
+     * Create a ci job.
      *
      * @access public
      * @return void
@@ -90,7 +90,7 @@ class ci extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->ci->create;
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->create;
         $this->view->position[] = $this->lang->ci->common;
         $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->common);
         $this->view->position[] = $this->lang->ci->create;
@@ -103,7 +103,7 @@ class ci extends control
     }
 
     /**
-     * Edit a ci task.
+     * Edit a ci job.
      *
      * @param  int    $id
      * @access public
@@ -127,16 +127,16 @@ class ci extends control
         $this->view->jenkinsList = $this->loadModel('cijenkins')->listForSelection("true");
         $this->view->module      = 'ci';
 
-        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->ci->edit;
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->edit;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->task);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
         $this->view->position[]    = $this->lang->ci->edit;
 
         $this->display();
     }
 
     /**
-     * Delete a ci task.
+     * Delete a ci job.
      *
      * @param  int    $id
      * @access public
@@ -144,7 +144,7 @@ class ci extends control
      */
     public function deleteJob($id)
     {
-        $this->ci->delete(TABLE_CI_TASK, $id);
+        $this->ci->delete(TABLE_CI_JOB, $id);
 
         $command = 'moduleName=ci&methodName=exe&parm=' . $id;
         $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();
@@ -155,7 +155,7 @@ class ci extends control
     }
 
     /**
-     * Exec a ci task.
+     * Exec a ci job.
      *
      * @param  int    $id
      * @access public
@@ -181,17 +181,17 @@ class ci extends control
      * @access public
      * @return void
      */
-    public function browseBuild($taskID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseBuild($jobID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->buildList  = $this->ci->listBuild($taskID, $orderBy, $pager);
-        $this->view->job        = $this->ci->getJobByID($taskID);
+        $this->view->buildList  = $this->ci->listBuild($jobID, $orderBy, $pager);
+        $this->view->job        = $this->ci->getJobByID($jobID);
 
-        $this->view->title      = $this->lang->ci->task . $this->lang->colon . $this->lang->job->browseBuild;
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browseBuild;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->task);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
         $this->view->position[]    = $this->lang->job->browseBuild;
 
         $this->view->orderBy    = $orderBy;
@@ -213,10 +213,10 @@ class ci extends control
         $this->view->logs   = str_replace("\r\n","<br />", $build->logs);
         $this->view->build  = $build;
 
-        $this->view->title = $this->lang->ci->task . $this->lang->colon . $this->lang->job->viewLogs;
+        $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->job->viewLogs;
         $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->task);
-        $this->view->position[] = html::a(inlink('browseBuild', "taskID=" . $build->job), $this->lang->job->browseBuild);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = html::a(inlink('browseBuild', "jobID=" . $build->job), $this->lang->job->browseBuild);
         $this->view->position[] = $this->lang->job->viewLogs;
 
         $this->view->module     = 'ci';

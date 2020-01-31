@@ -35,12 +35,16 @@
                         <td><?php echo html::input('account', '', "class='form-control'");?></td>
                     </tr>
                     <tr>
+                        <th><?php echo $lang->jenkins->token;?></th>
+                        <td><?php echo html::input('token', '', "class='form-control'");?></td>
+                    </tr>
+                    <tr>
                         <th><?php echo $lang->jenkins->password;?></th>
                         <td>
                             <div class='input-group'>
                                 <?php echo html::password('password', '', "class='form-control'");?>
                                 <span class='input-group-addon fix-border fix-padding'></span>
-                                <?php echo html::select('encrypt', $lang->repo->encryptList, 'base64', "class='form-control'");?>
+                                <?php echo html::select('encrypt', $lang->jenkins->encryptList, 'base64', "class='form-control'");?>
                             </div>
                         </td>
                     </tr>

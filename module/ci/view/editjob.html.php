@@ -1,6 +1,6 @@
 <?php
 /**
- * The edit view file of ci task module of ZenTaoPMS.
+ * The edit view file of ci job module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -37,8 +37,8 @@
                         <th><?php echo $lang->job->jenkins; ?></th>
                         <td><?php echo html::select('jenkins', $jenkinsList, $job->jenkins, "class='form-control chosen'"); ?></td>
 
-                        <th><?php echo $lang->job->jenkinsTask; ?></th>
-                        <td><?php echo html::input('jenkinsTask', $job->jenkinsTask, "class='form-control'"); ?></td>
+                        <th><?php echo $lang->job->jenkinsJob; ?></th>
+                        <td><?php echo html::input('jenkinsJob', $job->jenkinsJob, "class='form-control'"); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->triggerType; ?></th>
@@ -104,7 +104,7 @@
                             <?php echo html::submitButton(); ?>
                             <?php echo html::backButton(); ?>
                             &nbsp;
-                            <?php echo html::commonButton($lang->job->exeNow, "onclick=exeCitask($job->id)  data-tip-class='tooltip-success'", "btn btn-info exe-job-button"); ?>
+                            <?php echo html::commonButton($lang->job->exeNow, "onclick=exeCijob($job->id)  data-tip-class='tooltip-success'", "btn btn-info exe-job-button"); ?>
                         </td>
                     </tr>
                 </table>
