@@ -1,8 +1,9 @@
 <?php
-$lang->repo->common          = '代码';
-$lang->repo->create          = '创建版本库';
-$lang->repo->edit            = '编辑版本库';
+$lang->repo->common          = '版本库';
 $lang->repo->browse          = '浏览';
+$lang->repo->viewRevision    = '查看修订';
+$lang->repo->create          = '创建';
+$lang->repo->edit            = '编辑';
 $lang->repo->delete          = '删除版本库';
 $lang->repo->confirmDelete   = '确认删除该版本库吗？';
 $lang->repo->showSyncComment = '显示同步进度';
@@ -138,7 +139,7 @@ $lang->repo->error->output        = "执行命令：%s\n错误结果(%s)： %s\n
 $lang->repo->error->clientVersion = "客户端版本过低，请升级或更换SVN客户端";
 $lang->repo->error->encoding      = "编码可能错误，请更换编码重试。";
 
-$lang->repo->tips              = '<strong>请参照<a href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。</strong>';
+$lang->repo->tips              = '<strong>请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。</strong>';
 $lang->repo->example           = new stdclass();
 $lang->repo->example->client   = "例如：/usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
 $lang->repo->example->path     = "例如：SVN: http://example.googlecode.com/svn/,  GIT: /homt/test";

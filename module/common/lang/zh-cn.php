@@ -123,7 +123,7 @@ $lang->menu->my      = '<span> 我的地盘</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
-$lang->menu->devops  = array('link' => '持续集成|repo|browse', 'subModule' => 'repo,ci,jenkins');
+$lang->menu->devops  = '持续集成|repo|browse';
 $lang->menu->doc     = '文档|doc|index';
 $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
@@ -334,9 +334,9 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 
 $lang->repo = new stdclass();
 $lang->repo->menu = new stdclass();
-$lang->repo->menu->browse   = array('link' =>'浏览|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,showsynccomment');
+$lang->repo->menu->browse   = array('link' =>'浏览|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->repo->menu->review   = array('link' =>'评审|repo|review|repoID=%s', 'alias' => '');
-$lang->repo->menu->maintain = array('link' =>'代码库|repo|maintain', 'alias' => 'create,edit');
+$lang->repo->menu->maintain = array('link' =>'版本库|repo|maintain', 'alias' => 'create,edit');
 $lang->repo->menu->job      = array('link' =>'构建|ci|browsejob', 'alias' => 'createjob,editjob,browsebuild,viewbuildlogs');
 $lang->repo->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
 

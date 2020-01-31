@@ -62,14 +62,13 @@ class ci extends control
 
         $this->view->jobList    = $this->ci->listJob($orderBy, $pager);
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
-        $this->view->position[] = $this->lang->ci->common;
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->browse;
         $this->view->position[] = $this->lang->ci->job;
         $this->view->position[] = $this->lang->ci->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-//        $this->view->module      = 'ci';
+
         $this->display();
     }
 
@@ -91,13 +90,11 @@ class ci extends control
         $this->app->loadLang('action');
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->create;
-        $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->common);
+        $this->view->position[] = html::a(inlink('browseJob'), $this->lang->ci->job);
         $this->view->position[] = $this->lang->ci->create;
 
         $this->view->repoList      = $this->loadModel('cirepo')->listForSelection("true");
         $this->view->jenkinsList   = $this->loadModel('cijenkins')->listForSelection("true");
-        $this->view->module        = 'ci';
 
         $this->display();
     }
@@ -125,11 +122,9 @@ class ci extends control
 
         $this->view->repoList    = $this->loadModel('cirepo')->listForSelection("true");
         $this->view->jenkinsList = $this->loadModel('cijenkins')->listForSelection("true");
-        $this->view->module      = 'ci';
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->edit;
-        $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = html::a(inlink('browseJob'), $this->lang->ci->job);
         $this->view->position[]    = $this->lang->ci->edit;
 
         $this->display();
@@ -190,8 +185,7 @@ class ci extends control
         $this->view->job        = $this->ci->getJobByID($jobID);
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browseBuild;
-        $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = html::a(inlink('browseJob'), $this->lang->ci->job);
         $this->view->position[]    = $this->lang->job->browseBuild;
 
         $this->view->orderBy    = $orderBy;
@@ -214,9 +208,8 @@ class ci extends control
         $this->view->build  = $build;
 
         $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->job->viewLogs;
-        $this->view->position[] = $this->lang->ci->common;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[] = html::a(inlink('browseBuild', "jobID=" . $build->job), $this->lang->job->browseBuild);
+        $this->view->position[] = html::a(inlink('browseJob'), $this->lang->ci->job);
+        $this->view->position[] = html::a(inlink('browseBuild', "jobID=" . $build->cijob), $this->lang->job->browseBuild);
         $this->view->position[] = $this->lang->job->viewLogs;
 
         $this->view->module     = 'ci';
