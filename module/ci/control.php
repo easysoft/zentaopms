@@ -85,7 +85,7 @@ class ci extends control
         {
             $this->ci->createJob();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseJob')));
         }
 
         $this->app->loadLang('action');
@@ -116,7 +116,7 @@ class ci extends control
         {
             $this->ci->updateJob($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseJob')));
         }
 
         $this->app->loadLang('action');

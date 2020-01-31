@@ -15,6 +15,7 @@ $lang->ci->create         = '新增构建';
 $lang->job->browseBuild   = '构建历史';
 $lang->job->viewLogs      = '构建日志';
 
+$lang->job->edit          = '编辑构建任务';
 $lang->job->exeNow        = '立即执行';
 $lang->job->delete        = '删除构建任务';
 $lang->job->confirmDelete = '确认删除该构建任务吗？';

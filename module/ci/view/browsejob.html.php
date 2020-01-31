@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('confirmDelete', $lang->citask->confirmDelete); ?>
+<?php js::set('confirmDelete', $lang->job->confirmDelete); ?>
 
 <div id='mainContent' class='main-row'>
     <div class='main-col main-content'>
