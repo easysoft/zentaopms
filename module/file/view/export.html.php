@@ -84,8 +84,16 @@ function setTemplate(templateID)
     var exportFields = $template.size() > 0 ? $template.html() : defaultExportFields;
     exportFields = exportFields.split(',');
     $('#exportFields').val('');
-    for(i in exportFields) $('#exportFields').find('option[value="' + exportFields[i] + '"]').attr('selected', 'selected');
-    $('#exportFields').trigger("chosen:updated");
+
+    var optionHtml = '';
+    for(i in exportFields)
+    {
+        $selectedOption = $('#exportFields').find('option[value="' + exportFields[i] + '"]');
+        optionHtml += $selectedOption.attr('selected', 'selected').prop('outerHTML');
+        $selectedOption.remove();
+    }
+    $('#exportFields option').each(function(){optionHtml += $(this).removeAttr('selected').prop('outerHTML')});
+    $('#exportFields').html(optionHtml).trigger("chosen:updated");
 }
 
 /* Delete template. */
@@ -124,6 +132,30 @@ $(document).ready(function()
         $('#exportType').val('selected').trigger('chosen:updated');
     }, 150);
     <?php endif;?>
+
+    if($('#customFields #exportFields').length > 0)
+    {
+        $('#customFields #exportFields').change(function()
+        {
+            setTimeout(function()
+            {
+                var optionHtml = '';
+                var selected   = ',';
+                $('#customFields #exportFields_chosen .chosen-choices li.search-choice').each(function(i)
+                {
+                    index = $(this).find('.search-choice-close').data('option-array-index');
+                    optionHtml += $('#exportFields option').eq(index).attr('selected', 'selected').prop("outerHTML");
+                    $(this).find('.search-choice-close').attr('data-option-array-index', i);
+                    selected += index + ',';
+                })
+                $('#exportFields option').each(function(i)
+                {
+                    if(selected.indexOf(',' + i + ',') < 0) optionHtml += $(this).removeAttr('selected').prop("outerHTML");
+                })
+                $('#exportFields').html(optionHtml).trigger('chosen:updated');
+            }, 100);
+        })
+    }
 });
 </script>
 <?php
