@@ -109,7 +109,23 @@ class gitModel extends model
                     }
 
                     $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                    $this->app->loadClass('scmUtils')->parseComment($log->msg, $allCommands);
+
+                    $scm = $this->app->loadClass('scm');
+                    $objects = $scm->parseComment($log->msg, $allCommands);
+
+                    if($objects)
+                    {
+                        $this->printLog('extract' .
+                            ' story:' . join(' ', $objects['stories']) .
+                            ' task:' . join(' ', $objects['tasks']) .
+                            ' bug:'  . join(',', $objects['bugs']));
+
+                        $this->saveAction2PMS($objects, $log);
+                    }
+                    else
+                    {
+                        $this->printLog('no objects found' . "\n");
+                    }
                 }
 
                 $this->saveLastRevision($latestRevision);
@@ -134,7 +150,7 @@ class gitModel extends model
             $tags = $this->getRepoTags($repo);
             if(!empty($tags)) {
                 $arriveLastTag = false;
-                $taskToBuild = [];
+                $jobToBuild = [];
                 foreach ($tags as $tag) {
                     if (!empty($savedTag) && $tag === $savedTag) { // get the last build tag position
                         $arriveLastTag = true;
@@ -145,14 +161,15 @@ class gitModel extends model
                         continue;
                     }
 
-                    $this->app->loadClass('scmUtils')->parseTag($tag, $taskToBuild);
+                    $scm = $this->app->loadClass('scm');
+                    $scm->parseTag($tag, $jobToBuild);
                 }
 
                 $this->saveLastTag($tags[count($tags) - 1]);
 
-                $this->printLog('extract tasks to build: ' . json_encode($taskToBuild));
+                $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
 
-                foreach ($taskToBuild as $id) {
+                foreach ($jobToBuild as $id) {
                     $this->loadModel('ci')->exeJob($id);
                 }
             }
@@ -210,7 +227,8 @@ class gitModel extends model
         foreach($repoObjs as $repoInDb)
         {
             if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
-                $gitRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path, 'encoding' => 'utf-8');
+                $gitRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path,
+                    'encoding' => $repoInDb->encoding, 'client' => $repoInDb->client);
                 $paths[] = $repoInDb->path;
             }
         }
@@ -264,20 +282,15 @@ class gitModel extends model
 
     /**
      * Set the git binary client of a repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return bool
      */
+
     public function setClient($repo)
     {
-        if($this->config->git->client == '')
-        {
-            echo "You must set the git client file.\n";
-            return false;
-        }
-
-        $this->client = $this->config->git->client;
+        $this->client = $repo->client;
         return true;
     }
 

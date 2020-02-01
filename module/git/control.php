@@ -123,7 +123,10 @@ class git extends control
             $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
             foreach($parsedLogs as $log)
             {
-                $objects = $this->git->parseComment($log->msg);
+                $allCommands = [];
+                $scm = $this->app->loadClass('scm');
+                $objects = $scm->parseComment($log->msg, $allCommands);
+
                 if($objects)
                 {
                     $this->git->saveAction2PMS($objects, $log, $repoRoot);
@@ -181,7 +184,10 @@ class git extends control
             $parsedFiles[$action][] = ltrim($path, '/');
         }
 
-        $objects = $this->git->parseComment($message);
+        $allCommands = [];
+        $scm = $this->app->loadClass('scm');
+        $objects = $scm->parseComment($message, $allCommands);
+
         if($objects)
         {
             $log = new stdclass();

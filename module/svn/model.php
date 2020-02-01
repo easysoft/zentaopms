@@ -99,7 +99,6 @@ class svnModel extends model
             if(!empty($logs)) {
                 $this->printLog("get " . count($logs) . " logs");
                 $this->printLog('begin parsing logs');
-                $latestRevision = $logs[0]->revision;
 
                 $allCommands = [];
                 foreach ($logs as $log) {
@@ -110,10 +109,28 @@ class svnModel extends model
                     }
 
                     $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                    $this->app->loadClass('scmUtils')->parseComment($log->msg, $allCommands);
+
+                    $scm = $this->app->loadClass('scm');
+                    $objects = $scm->parseComment($log->msg, $allCommands);
+                    $objects = $this->parseComment($log->msg);
+                    if($objects)
+                    {
+                        $this->printLog('extract' .
+                            'story:' . join(' ', $objects['stories']) .
+                            ' task:' . join(' ', $objects['tasks']) .
+                            ' bug:'  . join(',', $objects['bugs']));
+
+                        $this->saveAction2PMS($objects, $log);
+                    }
+                    else
+                    {
+                        $this->printLog('no objects found' . "\n");
+                    }
+
+                    if($log->revision > $savedRevision) $savedRevision = $log->revision;
                 }
 
-                $this->saveLastRevision($latestRevision);
+                $this->saveLastRevision(savedRevision);
                 $this->printLog("save revision $latestRevision");
                 $this->deleteRestartFile();
                 $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
@@ -121,7 +138,7 @@ class svnModel extends model
                 $this->printLog('extract commands from logs' . json_encode($allCommands));
             }
 
-            // exe ci task from logs
+            // exe ci jobs in log
             $cijobIDs = $allCommands['build']['start'];
             foreach($cijobIDs as $id)
             {
@@ -135,7 +152,7 @@ class svnModel extends model
             $tags = $this->getRepoTags($repo);
             if(!empty($tags)) {
                 $arriveLastTag = false;
-                $taskToBuild = [];
+                $jobToBuild = [];
                 foreach ($tags as $tag) {
                     if (!empty($savedTag) && $tag === $savedTag) { // get the last build tag position
                         $arriveLastTag = true;
@@ -146,14 +163,15 @@ class svnModel extends model
                         continue;
                     }
 
-                    $this->app->loadClass('scmUtils')->parseTag($tag, $taskToBuild);
+                    $scm = $this->app->loadClass('scm');
+                    $scm->parseTag($tag, $jobToBuild);
                 }
 
                 $this->saveLastTag($tags[count($tags) - 1]);
+                $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
 
-                $this->printLog('extract tasks to build: ' . json_encode($taskToBuild));
-
-                foreach ($taskToBuild as $id) {
+                // exe ci jobs in tag
+                foreach ($jobToBuild as $id) {
                     $this->loadModel('ci')->exeJob($id);
                 }
             }
@@ -211,14 +229,14 @@ class svnModel extends model
         foreach($repoObjs as $repoInDb)
         {
             if(strtolower($repoInDb->SCM) === 'subversion' && !in_array($repoInDb->path, $svnRepos)) {
-                $gitRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path, 'encoding' => 'utf-8');
+                $svnRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path, 'encoding' => 'utf-8');
                 $paths[] = $repoInDb->path;
             }
         }
 
         if(!$svnRepos)
         {
-            echo "You must set one git repo.\n";
+            echo "You must set one svn repo.\n";
             return false;
         }
 
@@ -271,11 +289,7 @@ class svnModel extends model
      */
     public function setClient($repo)
     {
-        if($this->config->svn->client == '') 
-        {
-            echo "You must set the svn client file.\n";
-            return false;
-        }
+        $this->client = $repo->client;
 
         $this->client = $this->config->svn->client . " --non-interactive";
         if(stripos($repo->path, 'https') === 0 or stripos($repo->path, 'svn') === 0)
@@ -330,7 +344,7 @@ class svnModel extends model
     {
         $parsedTags = array();
 
-        /* The git tag command. */
+        /* The svn tag command. */
         chdir($this->repoRoot);
         exec("{$this->client} config core.quotepath false");
 

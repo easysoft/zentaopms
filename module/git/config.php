@@ -13,6 +13,8 @@
  * $config->git->repos['pms']['path'] = '/home/user/repo/pms';  // c:\repo\pms
  *
  */
+
+/* will use the config of repo records in db
 $config->git = new stdClass();
 $config->git->encodings = 'utf-8';  
 $config->git->client    = '/usr/bin/git';
@@ -21,7 +23,6 @@ $i = 1;
 $config->git->repos[$i]['path']     = '/Users/aaron/devops/project/devops_test';
 $config->git->repos[$i]['encoding'] = 'utf-8';
 
-/*
 $i ++;
 $config->git->repos[$i]['path'] = '';
 */
