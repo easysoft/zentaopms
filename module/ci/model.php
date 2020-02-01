@@ -62,7 +62,7 @@ class ciModel extends model
             ->get();
 
         $this->dao->insert(TABLE_CI_JOB)->data($job)
-            ->batchCheck($this->config->cijob->requiredFields, 'notempty')
+            ->batchCheck($this->config->job->create->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
@@ -85,7 +85,7 @@ class ciModel extends model
                 }
 
                 $cron = (object)array('m' => $min, 'h' => $hour, 'dom' => '*', 'mon' => '*',
-                    'dow' => $days . '/' . $job->scheduleInterval, 'command' => 'moduleName=ci&methodName=exeCijob&parm=' . $jobId,
+                    'dow' => $days . '/' . $job->scheduleInterval, 'command' => 'moduleName=ci&methodName=exeJob&parm=' . $jobId,
                     'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
                     'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
                 $this->dao->insert(TABLE_CRON)->data($cron)->exec();
@@ -93,7 +93,7 @@ class ciModel extends model
                 $arr = explode(' ', $job->cronExpression);
                 if (count($arr) >= 6) {
                     $cron = (object)array('m' => $arr[1], 'h' => $arr[2], 'dom' => $arr[3], 'mon' => $arr[4],
-                        'dow' => $arr[5], 'command' => 'moduleName=ci&methodName=exeCijob&parm=' . $jobId,
+                        'dow' => $arr[5], 'command' => 'moduleName=ci&methodName=exeJob&parm=' . $jobId,
                         'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
                         'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
                     $this->dao->insert(TABLE_CRON)->data($cron)->exec();
@@ -119,7 +119,7 @@ class ciModel extends model
             ->get();
 
         $this->dao->update(TABLE_CI_JOB)->data($job)
-            ->batchCheck($this->config->cijob->requiredFields, 'notempty')
+            ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
@@ -129,7 +129,7 @@ class ciModel extends model
             ->exec();
 
         if ($job->triggerType === 'schedule') {
-            $command = 'moduleName=ci&methodName=exeCijob&parm=' . $id;
+            $command = 'moduleName=ci&methodName=exeJob&parm=' . $id;
 
             if ($job->scheduleType == 'custom') {
                 $arr = explode(":", $job->scheduleTime);
