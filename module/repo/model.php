@@ -1138,6 +1138,12 @@ class repoModel extends model
             ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)
             ->fetchAll();
+
+        foreach($repos as $repo)
+        {
+            $repo->password = base64_decode($repo->password);
+        }
+
         return $repos;
     }
 }

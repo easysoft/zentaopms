@@ -228,7 +228,8 @@ class svnModel extends model
         foreach($repoObjs as $repoInDb)
         {
             if(strtolower($repoInDb->SCM) === 'subversion' && !in_array($repoInDb->path, $svnRepos)) {
-                $svnRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path, 'encoding' => 'utf-8');
+                $svnRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path,
+                    'encoding' => 'utf-8', 'client' => $repoInDb->client, 'account' => $repoInDb->account, 'password' => $repoInDb->password);
                 $paths[] = $repoInDb->path;
             }
         }
@@ -274,7 +275,8 @@ class svnModel extends model
         $this->setClient($repo);
         if(empty($this->client)) return false;
 
-        $this->setLogFile($repo->name);
+        $this->setLogFile($repo->id);
+        $this->setTagFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
@@ -288,19 +290,17 @@ class svnModel extends model
      */
     public function setClient($repo)
     {
-        $this->client = $repo->client;
-
-        $this->client = $this->config->svn->client . " --non-interactive";
+        $this->client = $repo->client . " --non-interactive";
         if(stripos($repo->path, 'https') === 0 or stripos($repo->path, 'svn') === 0)
         {
-            $cmd = $this->config->svn->client . ' --version --quiet';
+            $cmd = $repo->client . ' --version --quiet';
             $version = `$cmd`;
             if(version_compare($version, '1.6.0', '>'))
             {
                 $this->client .= ' --trust-server-cert'; 
             }
         }
-        if(isset($repo->username)) $this->client .= " --username $repo->username --password $repo->password --no-auth-cache";
+        if(isset($repo->account)) $this->client .= " --username $repo->account --password $repo->password --no-auth-cache";
         return true;
     }
 
@@ -311,9 +311,21 @@ class svnModel extends model
      * @access public
      * @return void
      */
-    public function setLogFile($repoName)
+    public function setLogFile($repoId)
     {
-        $this->logFile = $this->logRoot . $repoName;
+        $this->logFile = $this->logRoot . $repoId . '.log';
+    }
+
+    /**
+     * Set the tag file of a repo.
+     *
+     * @param  string    $repoId
+     * @access public
+     * @return void
+     */
+    public function setTagFile($repoId)
+    {
+        $this->tagFile = $this->logRoot . $repoId . '.tag';
     }
 
     /**

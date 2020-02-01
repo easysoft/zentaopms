@@ -72,7 +72,7 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->getAllRepos();
+            $repos = $this->loadModel('repo')->listAll();
             foreach($repos as $repo)
             {
                 if($repo->SCM != 'Subversion') continue;
