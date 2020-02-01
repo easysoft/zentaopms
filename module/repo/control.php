@@ -77,8 +77,6 @@ class repo extends control
      */
     public function create()
     {
-        $repoID = $this->session->repoID;
-        $this->repo->setMenu($this->repos, $repoID, false);
 
         if($_POST)
         {
@@ -111,9 +109,6 @@ class repo extends control
      */
     public function edit($repoID)
     {
-        $repoID = $this->session->repoID;
-        $this->repo->setMenu($this->repos, $repoID, false);
-
         $repo = $this->repo->getRepoByID($repoID);
         if($_POST)
         {
