@@ -92,13 +92,10 @@ class gitModel extends model
             $this->printLog("begin repo $repo->id");
             if(!$this->setRepo($repo)) return false;
 
-//            $this->pull();
-
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
             if(!empty($logs)) {
-
                 $this->printLog("get " . count($logs) . " logs");
                 $this->printLog('begin parsing logs');
                 $latestRevision = $logs[0]->revision;
@@ -112,7 +109,7 @@ class gitModel extends model
                     }
 
                     $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                    $this->parseComment($log->msg, $allCommands);
+                    $this->app->loadClass('scmUtils')->parseComment($log->msg, $allCommands);
                 }
 
                 $this->saveLastRevision($latestRevision);
@@ -124,10 +121,10 @@ class gitModel extends model
             }
 
             // exe ci task from logs
-            $citaskIDs = $allCommands['build']['start'];
-            foreach($citaskIDs as $id)
+            $cijobIDs = $allCommands['build']['start'];
+            foreach($cijobIDs as $id)
             {
-                $this->loadModel('citask')->exe($id);
+                $this->loadModel('ci')->exeJob($id);
             }
 
             // dealwith tag commands
@@ -148,7 +145,7 @@ class gitModel extends model
                         continue;
                     }
 
-                    $this->parseTag($tag, $taskToBuild);
+                    $this->app->loadClass('scmUtils')->parseTag($tag, $taskToBuild);
                 }
 
                 $this->saveLastTag($tags[count($tags) - 1]);
@@ -156,32 +153,11 @@ class gitModel extends model
                 $this->printLog('extract tasks to build: ' . json_encode($taskToBuild));
 
                 foreach ($taskToBuild as $id) {
-                    $this->loadModel('citask')->exe($id);
+                    $this->loadModel('ci')->exeJob($id);
                 }
             }
         }
     }
-
-//    /**
-//     * Pull codes from remote repo.
-//     *
-//     * @param $repo
-//     */
-//    public function pull($repo = '')
-//    {
-//        if (!empty($repo)) {
-//            $repoRoot = $repo->path;
-//            $this->setClient($repo);
-//        } else {
-//            $repoRoot = $this->repoRoot;
-//        }
-//
-//        chdir($repoRoot);
-////        exec('sudo -u aaron whoami', $output, $return);
-//
-//        $cmd = "{$this->client} pull 2>&1";
-//        exec($cmd, $output, $return);
-//    }
 
     /**
      * Set the log root.
@@ -230,7 +206,7 @@ class gitModel extends model
 
         $gitRepos = [];
         $paths = [];
-        //        有了库管理，忽略配置里的库
+        // ignore same repo in config.php
         foreach($repoObjs as $repoInDb)
         {
             if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
@@ -453,68 +429,6 @@ class gitModel extends model
         $parsedLog->files     = $files;
 
         return $parsedLog;
-    }
-
-    /**
-     * Parse the comment of git, extract object id list from it.
-     *
-     * @param  string    $comment
-     * @param  array     $allCommands
-     * @access public
-     * @return array
-     */
-    public function parseTag($comment, &$taskToBuild)
-    {
-        $pattern = $this->config->ci->tagCommandRegx;
-        $matches = array();
-        preg_match($pattern, $comment,$matches);
-
-        if(count($matches) > 0)
-        {
-            $entityIds = $matches[1];
-
-            if (empty($taskToBuild)) {
-                $taskToBuild = [];
-            }
-            $newArr = explode(",", $entityIds);
-            $taskToBuild = array_keys(array_flip($taskToBuild) + array_flip($newArr));
-        }
-    }
-
-    /**
-     * Parse the comment of git, extract object id list from it.
-     * 
-     * @param  string    $comment
-     * @param  array     $allCommands
-     * @access public
-     * @return array
-     */
-    public function parseComment($comment, &$allCommands)
-    {
-        $pattern = $this->config->ci->commitCommandRegx;
-        $matches = array();
-        preg_match_all($pattern, $comment,$matches);
-
-        if(count($matches) > 1 && count($matches[1]) > 0)
-        {
-            $i = 0;
-            foreach($matches[1] as $action)
-            {
-                $action = $matches[1][$i];
-                $entityType = $matches[2][$i];
-                $entityIds = $matches[3][$i];
-
-                $currArr = $allCommands[$entityType][$action];
-                if (empty($currArr)) {
-                    $currArr = [];
-                }
-                $newArr = explode(",", $entityIds);
-
-                $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
-
-                $i++;
-            }
-        }
     }
 
     /**
