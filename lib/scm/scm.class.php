@@ -82,12 +82,17 @@ class scm
      * @param  string    $comment
      * @param  array     $allCommands
      * @access public
+     * @return array
      */
     public function parseComment($comment, &$allCommands)
     {
         $pattern = $this->commitCommandRegx;
         $matches = array();
         preg_match_all($pattern, $comment,$matches);
+
+        $stories = array();
+        $tasks   = array();
+        $bugs    = array();
 
         if(count($matches) > 1 && count($matches[1]) > 0)
         {
@@ -103,12 +108,23 @@ class scm
                     $currArr = [];
                 }
                 $newArr = explode(",", $entityIds);
-
                 $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
+
+                if ($action === 'story') {
+                    $stories = array_merge($stories, $newArr);
+                }
+                if ($action === 'task') {
+                    $tasks = array_merge($tasks, $newArr);
+                }
+                if ($action === 'bug') {
+                    $bugs = array_merge($bugs, $newArr);
+                }
 
                 $i++;
             }
         }
+
+        return array('stories' => join(',', $stories), 'tasks' => join(',', $tasks), 'bugs' => join(',', $bugs));
     }
 
     /**
@@ -134,33 +150,6 @@ class scm
             $newArr = explode(",", $entityIds);
             $jobToBuild = array_keys(array_flip($taskToBuild) + array_flip($newArr));
         }
-    }
-
-    /**
-     * Parse the actions from comment.
-     *
-     * @param  array     $allCommands
-     * @access public
-     *
-     * @return array
-     */
-    public function parseAction($allCommands)
-    {
-        $stories = array();
-        $tasks   = array();
-        $bugs    = array();
-
-        foreach ($allCommands['story'] as $action => $idArr) {
-            $stories = array_merge($stories, $idArr);
-        }
-        foreach ($allCommands['task'] as $action => $idArr) {
-            $tasks = array_merge($tasks, $idArr);
-        }
-        foreach ($allCommands['bug'] as $action => $idArr) {
-            $bugs = array_merge($bugs, $idArr);
-        }
-
-        return array('stories' => join(',', $stories), 'tasks' => join(',', $tasks), 'bugs' => join(',', $bugs));
     }
 }
 

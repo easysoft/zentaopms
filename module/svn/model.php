@@ -112,7 +112,6 @@ class svnModel extends model
 
                     $scm = $this->app->loadClass('scm');
                     $objects = $scm->parseComment($log->msg, $allCommands);
-                    $objects = $this->parseComment($log->msg);
                     if($objects)
                     {
                         $this->printLog('extract' .
