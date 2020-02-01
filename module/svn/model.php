@@ -176,6 +176,9 @@ class svnModel extends model
      */
     public function setRepos()
     {
+        $repo = $this->loadModel('repo');
+        $repoObjs = $repo->listForSync("SCM='Subversion'");
+
         if(!$this->config->svn->repos)
         {
             echo "You must set one svn repo.\n";
