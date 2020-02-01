@@ -22,6 +22,8 @@ class jenkinsModel extends model
     public function getByID($id)
     {
         $jenkins = $this->dao->select('*')->from(TABLE_JENKINS)->where('id')->eq($id)->fetch();
+        $jenkins->password = base64_decode($jenkins->password);
+
         return $jenkins;
     }
 
@@ -55,7 +57,10 @@ class jenkinsModel extends model
         $jenkins = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
+            ->skipSpecial('serviceUrl,token,account,password')
             ->get();
+
+        $jenkins->password = base64_encode($jenkins->password);
 
         $this->dao->insert(TABLE_JENKINS)->data($jenkins)
             ->batchCheck($this->config->jenkins->create->requiredFields, 'notempty')
@@ -77,7 +82,10 @@ class jenkinsModel extends model
         $jenkins = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
+            ->skipSpecial('serviceUrl,token,account,password')
             ->get();
+
+        $jenkins->password = base64_encode($jenkins->password);
 
         $this->dao->update(TABLE_JENKINS)->data($jenkins)
             ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')

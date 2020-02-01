@@ -21,6 +21,11 @@
             <form id='jenkinsForm' method='post' class='form-ajax'>
                 <table class='table table-form'>
                     <tr>
+                        <th class='thWidth'></th>
+                        <td colspan="2"><?php echo $lang->jenkins->tips; ?></td>
+                    </tr>
+
+                    <tr>
                         <th><?php echo $lang->jenkins->name; ?></th>
                         <td class='required'><?php echo html::input('name', $jenkins->name, "class='form-control'"); ?></td>
                         <td></td>
@@ -37,16 +42,12 @@
                     <tr>
                         <th><?php echo $lang->jenkins->token;?></th>
                         <td><?php echo html::input('token', $jenkins->token, "class='form-control'");?></td>
+                        <td><?php echo $lang->jenkins->tokenFirst;?></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->jenkins->password;?></th>
-                        <td>
-                            <div class='input-group'>
-                                <?php echo html::password('password', $jenkins->password, "class='form-control'");?>
-                                <span class='input-group-addon fix-border fix-padding'></span>
-                                <?php echo html::select('encrypt', $lang->jenkins->encryptList, 'base64', "class='form-control'");?>
-                            </div>
-                        </td>
+                        <td><?php echo html::password('password', $jenkins->password, "class='form-control'");?></td>
+                        <td><?php echo $lang->jenkins->tips;?></td>
                     </tr>
 
                     <tr>

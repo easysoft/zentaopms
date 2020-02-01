@@ -18,7 +18,8 @@ $lang->jenkins->encryptList['plain']    = '不加密';
 $lang->jenkins->encryptList['base64']   = 'BASE64';
 
 $lang->jenkins->desc                    = '描述';
-$lang->jenkins->tips                    = '选择用户名密码类型凭证时，请在Jenkins全局安全设置中禁用"防止跨站点请求伪造"选项。';
+$lang->jenkins->tips                    = '使用密码时，请在Jenkins全局安全设置中禁用"防止跨站点请求伪造"选项。';
+$lang->jenkins->tokenFirst              = 'Token不为空时，优先使用Token。';
 
 $lang->jenkins->typeList['token']       = 'Token';
 $lang->jenkins->typeList['credentials'] = '凭证';
