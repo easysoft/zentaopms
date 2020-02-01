@@ -72,7 +72,7 @@ class git extends control
         $path = helper::safe64Decode($path);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->getAllRepos();
+            $repos = $this->loadModel('repo')->listAll();
             foreach($repos as $repo)
             {
                 if($repo->SCM != 'Git') continue;

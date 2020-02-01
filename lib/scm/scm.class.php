@@ -110,13 +110,13 @@ class scm
                 $newArr = explode(",", $entityIds);
                 $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
 
-                if ($action === 'story') {
+                if ($entityType === 'story') {
                     $stories = array_merge($stories, $newArr);
                 }
-                if ($action === 'task') {
+                if ($entityType === 'task') {
                     $tasks = array_merge($tasks, $newArr);
                 }
-                if ($action === 'bug') {
+                if ($entityType === 'bug') {
                     $bugs = array_merge($bugs, $newArr);
                 }
 
@@ -124,7 +124,7 @@ class scm
             }
         }
 
-        return array('stories' => join(',', $stories), 'tasks' => join(',', $tasks), 'bugs' => join(',', $bugs));
+        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs);
     }
 
     /**
