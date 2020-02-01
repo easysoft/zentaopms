@@ -30,3 +30,7 @@ $config->repo->binary    = '|pdf|';
 $config->repo->editor = new stdclass();
 $config->repo->editor->view = array('id' => 'commentText', 'tools' => 'simpleTools');
 $config->repo->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');
+
+$config->repo->create->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->edit->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->svn->requiredFields = 'account,password';

@@ -114,7 +114,7 @@ class repo extends control
         $repoID = $this->session->repoID;
         $this->repo->setMenu($this->repos, $repoID, false);
 
-        $repo = $this->repo->getByID($repoID);
+        $repo = $this->repo->getRepoByID($repoID);
         if($_POST)
         {
             $noNeedSync = $this->repo->update($repoID);

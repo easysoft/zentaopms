@@ -155,19 +155,6 @@ class repoModel extends model
     }
 
     /**
-     * Get a repo by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getByID($id)
-    {
-        $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($id)->fetch();
-        return $repo;
-    }
-
-    /**
      * Create a repo.
      *
      * @access public
@@ -175,19 +162,8 @@ class repoModel extends model
      */
     public function create()
     {
-        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
-        if ($data->SCM === 'Subversion') {
-            $credentials = $this->loadModel('cicredentials')->getByID($data->credentials);
-            if ($credentials->type != 'account') {
-                dao::$errors['credentials'][] = $this->repo->svnCredentialsLimt;
-
-                return;
-            }
-        }
-
         $this->checkConnection();
         $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
-
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
         if(empty($data->client)) $data->client = 'svn';
 
@@ -200,9 +176,10 @@ class repoModel extends model
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
 
-        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
+        $data->password = base64_encode($data->password);
         $this->dao->insert(TABLE_REPO)->data($data)
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
         return $this->dao->lastInsertID();
@@ -222,7 +199,7 @@ class repoModel extends model
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
         if(empty($data->client)) $data->client = 'svn';
-        $repo = $this->getByID($id);
+        $repo = $this->getRepoByID($id);
         $data->prefix = $repo->prefix;
         if($data->SCM == 'Subversion' and $data->path != $repo->path)
         {
@@ -238,11 +215,14 @@ class repoModel extends model
         }
 
         if($data->path != $repo->path) $data->synced = 0;
-        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
+
+        $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data)
-            ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+            ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)->exec();
+
         if($repo->path != $data->path)
         {
             $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
@@ -285,7 +265,7 @@ class repoModel extends model
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
-        if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+        $repo->password = base64_decode($repo->password);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -550,74 +530,6 @@ class repoModel extends model
         if(empty($commit)) return substr($revision, 0, 10);
         return substr($revision, 0, 10) . '<span title="' . sprintf($this->lang->repo->commitTitle, $commit) . '"> (' . $commit . ') </span>';
     }
-
-//    /**
-//     * create
-//     *
-//     * @access public
-//     * @return int
-//     */
-//    public function create()
-//    {
-//        $this->checkConnection();
-//        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
-//        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-//        if(empty($data->client)) $data->client = 'svn';
-//
-//        if($data->SCM == 'Subversion')
-//        {
-//            $scm = $this->app->loadClass('scm');
-//            $scm->setEngine($data);
-//            $info = $scm->info('');
-//            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
-//            if($data->prefix) $data->prefix = '/' . $data->prefix;
-//        }
-//
-//        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-//        $this->dao->insert(TABLE_REPO)->data($data)->exec();
-//        return $this->dao->lastInsertID();
-//    }
-//
-//    /**
-//     * Save settings.
-//     *
-//     * @param  int    $repoID
-//     * @access public
-//     * @return bool
-//     */
-//    public function saveSettings($repoID)
-//    {
-//        $this->checkConnection();
-//        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
-//        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-//
-//        if(empty($data->client)) $data->client = 'svn';
-//        $repo = $this->getRepoByID($repoID);
-//        $data->prefix = $repo->prefix;
-//        if($data->SCM == 'Subversion' and $data->path != $repo->path)
-//        {
-//            $scm = $this->app->loadClass('scm');
-//            $scm->setEngine($data);
-//            $info = $scm->info('');
-//            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
-//            if($data->prefix) $data->prefix = '/' . $data->prefix;
-//        }
-//        elseif($data->SCM != $repo->SCM and $data->SCM == 'Git')
-//        {
-//            $data->prefix = '';
-//        }
-//
-//        if($data->path != $repo->path) $data->synced = 0;
-//        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-//        $this->dao->update(TABLE_REPO)->data($data)->where('id')->eq($repoID)->exec();
-//        if($repo->path != $data->path)
-//        {
-//            $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
-//            $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
-//            return false;
-//        }
-//        return true;
-//    }
 
     /**
      * Save commit.

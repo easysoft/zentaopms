@@ -106,8 +106,8 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-//$lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Git']        = 'Git';
+$lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';
@@ -119,6 +119,7 @@ $lang->repo->notice->commentContent = '输入回复内容';
 $lang->repo->notice->deleteBug      = '确认删除该Bug？';
 $lang->repo->notice->deleteComment  = '确认删除该回复？';
 $lang->repo->notice->lastSyncTime   = '最后更新于：';
+$lang->repo->notice->passwordTips   = '密码已加密存储，需修改请重新输入。';
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = '你的服务器禁用了exec,shell_exec方法，无法使用该功能';
