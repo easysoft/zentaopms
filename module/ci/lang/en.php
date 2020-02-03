@@ -14,7 +14,7 @@ $lang->job->viewLogs      = 'Build Logs';
 
 $lang->job->exeNow        = 'Execute now';
 $lang->job->delete        = 'Delete';
-$lang->job->confirmDelete = 'Do you want to delete this Jenkins server?';
+$lang->job->confirmDelete = 'Do you want to delete this Build?';
 
 $lang->job->buildStatus   = 'Build Status';
 $lang->job->buildTime     = 'Build Time';
