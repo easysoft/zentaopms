@@ -1,9 +1,11 @@
 <?php
 $lang->repo->common          = 'Repo';
-$lang->repo->create          = 'Create Repo';
-$lang->repo->settings        = 'Settings';
-$lang->repo->browse          = 'View Repo';
+$lang->repo->browse          = 'View';
+$lang->repo->viewRevision    = 'View Revision';
+$lang->repo->create          = 'Create';
+$lang->repo->edit            = 'Edit';
 $lang->repo->delete          = 'Delete Repo';
+$lang->repo->confirmDelete   = 'Do you want to delete this repo?';
 $lang->repo->showSyncComment = 'Display Synchronization';
 $lang->repo->ajaxSyncComment = 'Interface: Ajax Sync Note';
 $lang->repo->download        = 'Download File';
@@ -137,6 +139,7 @@ $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n"
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
 $lang->repo->error->encoding      = "The encoding maybe wrong. Please change the encoding and try again.";
 
+$lang->repo->tips              = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">here</a>.</strong>';
 $lang->repo->example           = new stdclass();
 $lang->repo->example->client   = "For example, /usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
 $lang->repo->example->path     = "For example, SVN: http://example.googlecode.com/svn/, GIT: /home/test";

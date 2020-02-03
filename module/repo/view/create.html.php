@@ -24,7 +24,7 @@
                 <table class='table table-form'>
                     <tr>
                         <th class='thWidth'></th>
-                        <td colspan="2"><?php echo $lang->jenkins->tips; ?></td>
+                        <td colspan="2"><?php echo $lang->repo->tips; ?></td>
                     </tr>
                     <tr>
                         <th class='thWidth'><?php echo $lang->repo->type; ?></th>
@@ -58,9 +58,7 @@
                     </tr>
                     <tr class="account-fields">
                         <th><?php echo $lang->repo->password;?></th>
-                        <td>
-                            <?php echo html::password('password', '', "class='form-control'");?>
-                        </td>
+                        <td><?php echo html::password('password', '', "class='form-control'");?></td>
                     </tr>
 
                     <tr>
