@@ -28,10 +28,7 @@
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->repo; ?></th>
-                        <td><?php echo html::select('repo', $repoList, $job->repo, "class='form-control chosen'"); ?></td>
-
-                        <th><?php echo $lang->job->buildType; ?></th>
-                        <td><?php echo html::select('buildType', $lang->job->buildTypeList, 'buildAndDeploy', "class='form-control chosen'"); ?></td>
+                        <td colspan="3"><?php echo html::select('repo', $repoList, $job->repo, "class='form-control chosen'"); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->jenkins; ?></th>
@@ -73,22 +70,22 @@
                                 <div class="col w-100px">
                                     <?php echo html::number('scheduleInterval', $job->scheduleInterval, "class='form-control'"); ?>
                                 </div>
-                                <div class="col w-30px">
-                                    <?php echo $lang->job->day; ?>，
+                                <div class="col w-40px">
+                                    <?php echo $lang->job->day; ?>,&nbsp;&nbsp;
                                 </div>
 
-                                <div class="col w-40px">
+                                <div class="col <?php echo $this->app->getClientLang() == 'en' ? 'w-100px' : '2-30px'; ?>">
                                     <?php echo $lang->job->at; ?>
                                 </div>
-                                <div class="col w-120px">
+                                <div class="col w-150px">
                                     <?php echo html::select('scheduleDay', $lang->job->dayTypeList, $job->scheduleDay,"class='form-control chosen'"); ?>
                                 </div>
                                 <div class="col w-100px">
                                     <?php echo html::input('scheduleTime', $job->scheduleTime,
                                         "class='form-control form-time time-only' min='1'"); ?>
                                 </div>
-                                <div class="col w-60px">
-                                    <?php echo $lang->job->exe; ?>。
+                                <div class="col w-120px">
+                                    <?php echo $lang->job->exe; ?>.
                                 </div>
                             </div>
                         </td>

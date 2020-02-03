@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 
+<?php js::set('triggerType',  'tag')?>
+
 <div id='mainContent' class='main-row'>
     <div class='main-col main-content'>
         <div class='center-block'>
@@ -26,10 +28,7 @@
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->repo; ?></th>
-                        <td><?php echo html::select('repo', $repoList, '', "class='form-control chosen'"); ?></td>
-
-                        <th><?php echo $lang->job->buildType; ?></th>
-                        <td><?php echo html::select('buildType', $lang->job->buildTypeList, 'buildAndDeploy', "class='form-control chosen'"); ?></td>
+                        <td colspan="3"><?php echo html::select('repo', $repoList, '', "class='form-control chosen'"); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->jenkins; ?></th>
@@ -47,16 +46,16 @@
                         <td class="schedule-fields"><?php echo html::radio('scheduleType', $lang->job->scheduleTypeList, 'cron',
                                 "onclick='scheduleTypeChanged(this.value)'");?></td>
                     </tr>
-                    <tr class="tag-fields">
+                    <tr class="tag-fields" class="tag-fields">
                         <th><?php echo $lang->job->example; ?></th>
                         <td colspan="3"><?php echo $lang->job->tagEx; ?></td>
                     </tr>
-                    <tr class="comment-fields">
+                    <tr class="comment-fields" class="comment-fields">
                         <th><?php echo $lang->job->example; ?></th>
                         <td colspan="3"><?php echo $lang->job->commitEx; ?></td>
                     </tr>
 
-                    <tr class="cron-fields">
+                    <tr class="cron-fields" class="cron-fields">
                         <th><?php echo $lang->job->cronExpression; ?></th>
                         <td><?php echo html::input('cronExpression', '', "class='form-control'"); ?></td>
                         <td colspan="2"><span style="font-style: italic"><?php echo $lang->job->cronSample; ?></span></td>
@@ -71,21 +70,21 @@
                                 <div class="col w-100px">
                                     <?php echo html::number('scheduleInterval', '1', "class='form-control'"); ?>
                                 </div>
-                                <div class="col w-30px">
+                                <div class="col w-40px">
                                     <?php echo $lang->job->day; ?>，
                                 </div>
 
-                                <div class="col w-40px">
+                                <div class="col <?php echo $this->app->getClientLang() == 'en' ? 'w-100px' : '2-30px'; ?>">
                                     <?php echo $lang->job->at; ?>
                                 </div>
-                                <div class="col w-120px">
+                                <div class="col w-150px">
                                     <?php echo html::select('scheduleDay', $lang->job->dayTypeList, '',"class='form-control chosen'"); ?>
                                 </div>
                                 <div class="col w-100px">
                                     <?php echo html::input('scheduleTime', '2:00',
                                         "class='form-control form-time time-only' min='1'"); ?>
                                 </div>
-                                 <div class="col w-60px">
+                                 <div class="col w-120px">
                                     <?php echo $lang->job->exe; ?>。
                                  </div>
                             </div>

@@ -32,7 +32,6 @@ CREATE TABLE `zt_cijob` (
   `repo` mediumint(8) unsigned NOT NULL,
   `jenkins` mediumint(8) unsigned NOT NULL,
   `jenkinsJob` varchar(500) NOT NULL,
-  `buildType` varchar(255) NOT NULL,
   `triggerType` varchar(255) NOT NULL,
   `scheduleType` varchar(255) NOT NULL,
   `cronExpression` varchar(255) DEFAULT NULL,

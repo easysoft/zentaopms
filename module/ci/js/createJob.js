@@ -1,6 +1,6 @@
 $(function()
 {
-    triggerTypeChanged('tag');
+    triggerTypeChanged(triggerType);
 });
 
 function triggerTypeChanged(type) {
@@ -22,7 +22,6 @@ function triggerTypeChanged(type) {
         $('.comment-fields').addClass('hidden');
 
         var val = $("input[name='scheduleType']:checked").val();
-        console.log(val);
         scheduleTypeChanged(val? val: 'cron');
     }
 }

@@ -27,7 +27,7 @@ function triggerTypeChanged(type) {
         $('.tag-fields').addClass('hidden');
         $('.comment-fields').removeClass('hidden');
 
-        $('.corn-fields').addClass('hidden');
+        $('.cron-fields').addClass('hidden');
         $('.custom-fields').addClass('hidden');
 
         scheduleTypeChanged();

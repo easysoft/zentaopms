@@ -1,6 +1,5 @@
 <?php
 $lang->ci->common         = '持续集成';
-$lang->ci->de             = '的';
 $lang->ci->at             = '于';
 
 $lang->ci->jenkins        = 'Jenkins';
@@ -9,9 +8,6 @@ $lang->ci->job            = '构建';
 $lang->ci->browse         = '浏览';
 $lang->ci->create         = '新建';
 $lang->ci->edit           = '编辑';
-
-$lang->ci->list           = '列表';
-$lang->ci->create         = '新增构建';
 
 $lang->job->browseBuild   = '构建历史';
 $lang->job->viewLogs      = '构建日志';
@@ -29,21 +25,15 @@ $lang->job->name           = '名称';
 $lang->job->repo           = '代码库';
 $lang->job->jenkins        = 'Jenkins服务';
 $lang->job->jenkinsJob     = 'Jenkins任务名';
-$lang->job->buildType      = '构建类型';
 $lang->job->triggerType    = '触发方式';
 $lang->job->scheduleType   = '时间计划';
-$lang->job->cornExpression = 'Corn表达式';
+$lang->job->cronExpression = 'Cron表达式';
 $lang->job->custom         = '自定义';
-
-$lang->job->tagKeywords     = '标签关键字';
-$lang->job->commentKeywords = '注释关键字';
-$lang->job->extJob          = '执行任务';
 
 $lang->job->at               = '在';
 $lang->job->time             = '时间';
 $lang->job->exe              = '执行';
 $lang->job->scheduleInterval = '每隔';
-$lang->job->scheduleDay      = '天数';
 $lang->job->day              = '天';
 $lang->job->lastExe          = '最后执行';
 $lang->job->scheduleTime     = '时间';
