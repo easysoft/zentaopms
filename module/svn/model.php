@@ -119,7 +119,7 @@ class svnModel extends model
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
 
-                        $this->saveAction2PMS($objects, $log);
+                        $this->saveAction2PMS($objects, $log, $repo->encoding);
                     }
                     else
                     {
@@ -223,7 +223,7 @@ class svnModel extends model
         {
             if(strtolower($repoInDb->SCM) === 'subversion' && !in_array($repoInDb->path, $svnRepos)) {
                 $svnRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path,
-                    'encoding' => 'utf-8', 'client' => $repoInDb->client, 'account' => $repoInDb->account, 'password' => $repoInDb->password);
+                    'encoding' => $repoInDb->encoding, 'client' => $repoInDb->client, 'account' => $repoInDb->account, 'password' => $repoInDb->password);
                 $paths[] = $repoInDb->path;
             }
         }
@@ -430,31 +430,6 @@ class svnModel extends model
     }
 
     /**
-     * Convert the comment to uft-8.
-     * 
-     * @param  string    $comment 
-     * @access public
-     * @return string
-     */
-    public function iconvComment($comment)
-    {
-        /* Get encodings. */
-        $encodings = str_replace(' ', '', isset($this->config->svn->encodings) ? $this->config->svn->encodings : '');
-        if($encodings == '') return $comment;
-        $encodings = explode(',', $encodings);
-
-        /* Try convert. */
-        foreach($encodings as $encoding)
-        {
-            if($encoding == 'utf-8') continue;
-            $result = helper::convertEncoding($comment, $encoding);
-            if($result) return $result;
-        }
-
-        return $comment;
-    }
-
-    /**
      * Diff a url.
      * 
      * @param  string $url 
@@ -541,13 +516,15 @@ class svnModel extends model
      * @access public
      * @return void
      */
-    public function saveAction2PMS($objects, $log, $repoRoot = '')
+    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8')
     {
         $action = new stdclass();
         $action->actor   = $log->author;
         $action->action  = 'svncommited';
         $action->date    = $log->date;
-        $action->comment = htmlspecialchars($this->iconvComment($log->msg));
+
+        $scm = $this->app->loadClass('scm');
+        $action->comment = htmlspecialchars($scm->iconvComment($log->msg, $encodings));
         $action->extra   = $log->revision;
 
         $changes = $this->createActionChanges($log, $repoRoot);

@@ -151,6 +151,23 @@ class scm
             $jobToBuild = array_keys(array_flip($taskToBuild) + array_flip($newArr));
         }
     }
+
+    public function iconvComment($comment, $encodings)
+    {
+        /* Get encodings. */
+        if($encodings == '') return $comment;
+        $encodings = explode(',', $encodings);
+
+        /* Try convert. */
+        foreach($encodings as $encoding)
+        {
+            if($encoding == 'utf-8') continue;
+            $result = helper::convertEncoding($comment, $encoding);
+            if($result) return $result;
+        }
+
+        return $comment;
+    }
 }
 
 function escapeCmd($cmd)

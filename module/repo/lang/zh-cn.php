@@ -140,6 +140,7 @@ $lang->repo->error->clientVersion = "客户端版本过低，请升级或更换S
 $lang->repo->error->encoding      = "编码可能错误，请更换编码重试。";
 
 $lang->repo->tips              = '<strong>请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。</strong>';
+$lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
 $lang->repo->example           = new stdclass();
 $lang->repo->example->client   = "例如：/usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
 $lang->repo->example->path     = "例如：SVN: http://example.googlecode.com/svn/,  GIT: /homt/test";

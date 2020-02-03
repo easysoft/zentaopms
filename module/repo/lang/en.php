@@ -140,6 +140,7 @@ $lang->repo->error->clientVersion = "Client version is too low, please upgrade o
 $lang->repo->error->encoding      = "The encoding maybe wrong. Please change the encoding and try again.";
 
 $lang->repo->tips              = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">here</a>.</strong>';
+$lang->repo->encodingsTips     = "The encodings of commit comments, can be comma separated values，e.g. utf-8";
 $lang->repo->example           = new stdclass();
 $lang->repo->example->client   = "For example, /usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
 $lang->repo->example->path     = "For example, SVN: http://example.googlecode.com/svn/, GIT: /home/test";

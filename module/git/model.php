@@ -120,7 +120,7 @@ class gitModel extends model
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
 
-                        $this->saveAction2PMS($objects, $log);
+                        $this->saveAction2PMS($objects, $log, $repo->encoding);
                     }
                     else
                     {
@@ -445,31 +445,6 @@ class gitModel extends model
     }
 
     /**
-     * Convert the comment to uft-8.
-     * 
-     * @param  string    $comment 
-     * @access public
-     * @return string
-     */
-    public function iconvComment($comment)
-    {
-        /* Get encodings. */
-        $encodings = str_replace(' ', '', isset($this->config->git->encodings) ? $this->config->git->encodings : '');
-        if($encodings == '') return $comment;
-        $encodings = explode(',', $encodings);
-
-        /* Try convert. */
-        foreach($encodings as $encoding)
-        {
-            if($encoding == 'utf-8') continue;
-            $result = helper::convertEncoding($comment, $encoding, 'utf-8');
-            if($result) return $result;
-        }
-
-        return $comment;
-    }
-
-    /**
      * Diff a url.
      * 
      * @param  string $path
@@ -578,13 +553,15 @@ class gitModel extends model
      * @access public
      * @return void
      */
-    public function saveAction2PMS($objects, $log, $repoRoot = '')
+    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8')
     {
         $action = new stdclass();
         $action->actor   = $log->author;
         $action->action  = 'gitcommited';
         $action->date    = $log->date;
-        $action->comment = htmlspecialchars($this->iconvComment($log->msg));
+
+        $scm = $this->app->loadClass('scm');
+        $action->comment = htmlspecialchars($scm->iconvComment($log->msg, $encodings));
         $action->extra   = substr($log->revision, 0, 10);
 
         $changes = $this->createActionChanges($log, $repoRoot);

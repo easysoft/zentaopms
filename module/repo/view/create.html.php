@@ -45,7 +45,7 @@
                     <tr>
                         <th><?php echo $lang->repo->encoding; ?></th>
                         <td class='required'><?php echo html::input('encoding', 'utf-8', "class='form-control'"); ?></td>
-                        <td></td>
+                        <td class='muted'><?php echo $lang->repo->encodingsTips; ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->repo->client;?></th>
