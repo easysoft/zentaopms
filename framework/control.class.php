@@ -293,10 +293,15 @@ class control extends baseControl
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
         $requiredFields = '';
+        $mustPostValue  = '';
         foreach($fields as $field)
         {
             if($field->buildin or !$field->show or !isset($layouts[$field->field])) continue;
-            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false) $requiredFields .= ",{$field->field}";
+            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false)
+            {
+                $requiredFields .= ",{$field->field}";
+                if($field->control == 'radio' or $field->control == 'checkbox') $mustPostValue .= ",{$field->field}";
+            }
         }
 
         if($requiredFields)
@@ -306,7 +311,15 @@ class control extends baseControl
             $message = array();
             foreach(explode(',', $requiredFields) as $requiredField)
             {
-                if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')$message[$requiredField] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+                if(empty($requiredField)) continue;
+                if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')
+                {
+                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+                }
+                elseif(strpos(",{$mustPostValue},", ",{$requiredField},") !== false and !isset($_POST[$requiredField]))
+                {
+                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+                }
             }
             if($message) $this->send(array('result' => 'fail', 'message' => $message));
         }

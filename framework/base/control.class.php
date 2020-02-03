@@ -909,8 +909,7 @@ class baseControl
             {
                 $message = json_decode(json_encode((array)$data['message']));
                 foreach((array)$message as $item => $errors) $message->$item = implode(',', $errors);
-                echo js::alert(strip_tags(implode(" ", (array) $message)));
-                die(js::locate('back'));
+                die(js::alert(strip_tags(implode('\n', (array) $message))));
             }
             die('fail');
         }
