@@ -129,8 +129,8 @@ class svnModel extends model
                     if($log->revision > $savedRevision) $savedRevision = $log->revision;
                 }
 
-                $this->saveLastRevision(savedRevision);
-                $this->printLog("save revision $latestRevision");
+                $this->saveLastRevision($savedRevision);
+                $this->printLog("save revision $savedRevision");
                 $this->deleteRestartFile();
                 $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
 
@@ -146,27 +146,21 @@ class svnModel extends model
 
             // dealwith tag commands
             $this->printLog("dealwith tag commands");
-            $savedTag = $this->getSavedTag();
+            $savedTags = $this->getSavedTags($repo->id);
 
             $tags = $this->getRepoTags($repo);
             if(!empty($tags)) {
-                $arriveLastTag = false;
                 $jobToBuild = [];
                 foreach ($tags as $tag) {
-                    if (!empty($savedTag) && $tag === $savedTag) { // get the last build tag position
-                        $arriveLastTag = true;
-                        continue;
-                    }
-
-                    if (!empty($savedTag) && !$arriveLastTag) { // not get
+                    if ($savedTags[$tag]) { // old
                         continue;
                     }
 
                     $scm = $this->app->loadClass('scm');
                     $scm->parseTag($tag, $jobToBuild);
-                }
 
-                $this->saveLastTag($tags[count($tags) - 1]);
+                    $this->saveLastTag($tag, $repo->id);
+                }
                 $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
 
                 // exe ci jobs in tag
@@ -353,18 +347,24 @@ class svnModel extends model
      */
     public function getRepoTags($repo)
     {
+        $path = $repo->path;
+        if (substr($path, -1) != '/') {
+            $path .= '/';
+        }
+        $path = str_replace("/trunk/","/tags/", $path);
+
         $parsedTags = array();
 
-        /* The svn tag command. */
         chdir($this->repoRoot);
-        exec("{$this->client} config core.quotepath false");
-
-        $cmd = "$this->client for-each-ref --sort=taggerdate | grep refs/tags | grep -v commit";
+        $cmd = "$this->client ls $path";
         exec($cmd, $list, $return);
         foreach($list as $line)
         {
-            $arr = explode('refs/tags/', $line);
-            $parsedTags[] = $arr[count($arr) - 1];
+            if (substr($path, -1) == '/') {
+                $line = substr($line, 0, strlen($line) - 1);
+            }
+
+            $parsedTags[] = $line;
         }
 
         return $parsedTags;
@@ -798,11 +798,10 @@ class svnModel extends model
      * @access public
      * @return int
      */
-    public function getSavedTag()
+    public function getSavedTags($repoId)
     {
-        if(!file_exists($this->tagFile)) return 0;
-        if(file_exists($this->restartFile)) return 0;
-        return trim(file_get_contents($this->tagFile));
+        $tags = $this->dao->select('name, id')->from(TABLE_TAG)->where('repo')->eq($repoId)->fetchPairs();
+        return $tags;
     }
 
     /**
@@ -812,8 +811,12 @@ class svnModel extends model
      * @access public
      * @return void
      */
-    public function saveLastTag($tag)
+    public function saveLastTag($tag, $repoId)
     {
-        $ret = file_put_contents($this->tagFile, $tag);
+        $data = (object) array('name'=>$tag, 'repo'=>$repoId);
+
+        $ret = $this->dao->insert(TABLE_TAG)->data($data)
+            ->batchCheck($this->config->svn->tagRequiredFields, 'notempty')
+            ->autoCheck()->exec();
     }
 }

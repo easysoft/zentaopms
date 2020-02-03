@@ -173,6 +173,7 @@ define('TABLE_CREDENTIALS',   '`' . $config->db->prefix . 'credentials`');
 define('TABLE_JENKINS',       '`' . $config->db->prefix . 'jenkins`');
 define('TABLE_CI_JOB',        '`' . $config->db->prefix . 'cijob`');
 define('TABLE_CI_BUILD',      '`' . $config->db->prefix . 'cibuild`');
+define('TABLE_TAG',           '`' . $config->db->prefix . 'tag`');
 
 define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');
 define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');
