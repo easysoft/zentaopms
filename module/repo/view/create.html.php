@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 
+<?php js::set('scm',  'Git')?>
+
 <div id='mainContent' class='main-row'>
     <div class='main-col main-content'>
         <div class='center-block'>
@@ -26,7 +28,8 @@
                     </tr>
                     <tr>
                         <th class='thWidth'><?php echo $lang->repo->type; ?></th>
-                        <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'git', "class='form-control'"); ?></td>
+                        <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Git',
+                                "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
                         <td></td>
                     </tr>
                     <tr>
@@ -49,11 +52,11 @@
                         <td class='required'><?php echo html::input('client', '', "class='form-control'")?></td>
                         <td class='muted'><?php echo $lang->repo->example->client;?></td>
                     </tr>
-                    <tr>
+                    <tr class="account-fields">
                         <th><?php echo $lang->repo->account;?></th>
                         <td><?php echo html::input('account', '', "class='form-control'");?></td>
                     </tr>
-                    <tr>
+                    <tr class="account-fields">
                         <th><?php echo $lang->repo->password;?></th>
                         <td>
                             <?php echo html::password('password', '', "class='form-control'");?>
