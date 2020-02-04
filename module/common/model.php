@@ -1411,6 +1411,12 @@ EOD;
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
+        if($this->app->isFlow)
+        {
+            $module = $this->app->rawModule;
+            $method = $this->app->rawMethod;
+        }
+
         if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword')));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
