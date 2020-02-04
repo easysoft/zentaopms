@@ -254,24 +254,6 @@ class ciModel extends model
     }
 
     /**
-     * Update ci build status.
-     *
-     * @param  object $build
-     * @param  string $status
-     * @access public
-     * @return bool
-     */
-    public function updateBuildStatus($build, $status)
-    {
-        $this->dao->update(TABLE_CI_BUILD)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
-
-        $this->dao->update(TABLE_CI_JOB)
-            ->set('lastExec')->eq(helper::now())
-            ->set('lastStatus')->eq($status)
-            ->where('id')->eq($build->cijob)->exec();
-    }
-
-    /**
      * Send a request to jenkins to check build status.
      *
      * @access public
@@ -299,7 +281,7 @@ class ciModel extends model
             $queueUrl = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $po->queueItem);
 
             $response = common::http($queueUrl);
-            if (strripos($response,"404") > -1) { // queue已过期
+            if (strripos($response,"404") > -1) { // queue expired, use another api
                 $infoUrl = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $po->jenkinsJob, $po->queueItem);
                 $response = common::http($infoUrl);
                 $buildInfo = json_decode($response);
@@ -338,6 +320,24 @@ class ciModel extends model
                 }
             }
         }
+    }
+
+    /**
+     * Update ci build status.
+     *
+     * @param  object $build
+     * @param  string $status
+     * @access public
+     * @return bool
+     */
+    public function updateBuildStatus($build, $status)
+    {
+        $this->dao->update(TABLE_CI_BUILD)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
+
+        $this->dao->update(TABLE_CI_JOB)
+            ->set('lastExec')->eq(helper::now())
+            ->set('lastStatus')->eq($status)
+            ->where('id')->eq($build->cijob)->exec();
     }
 
     /**
