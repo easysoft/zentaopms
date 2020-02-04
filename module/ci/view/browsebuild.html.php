@@ -31,11 +31,12 @@
             <table id='buildList' class='table has-sort-head table-fixed'>
                 <thead>
                 <tr>
-                    <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
+                    <?php $vars = "jobID={$job->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
+
                     <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id); ?></th>
                     <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name); ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->job->buildStatus; ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->job->buildTime; ?></th>
+                    <th class='w-100px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->job->buildStatus); ?></th>
+                    <th class='w-100px text-left'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->job->buildTime); ?></th>
 
                     <th class='c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
