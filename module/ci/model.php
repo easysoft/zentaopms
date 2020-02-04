@@ -184,6 +184,10 @@ class ciModel extends model
             ->where('job.id')->eq($jobID)
             ->fetch();
 
+        if (!$po) {
+            return false;
+        }
+
         $jenkinsServer = $po->serviceUrl;
         $jenkinsUser = $po->account;
         $jenkinsTokenOrPassword = $po->token ? $po->token : base64_decode($po->password);

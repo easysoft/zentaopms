@@ -158,8 +158,9 @@ class ci extends control
      */
     public function exeJob($id)
     {
-        $this->ci->exeJob($id);
+        $result = $this->ci->exeJob($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(!$result) $this->send(array('result' => 'fail', 'message' => 'not found'));
 
         $this->send(array('result' => 'success'));
     }
