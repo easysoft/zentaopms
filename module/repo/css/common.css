@@ -84,7 +84,6 @@ h3 {font-size:16px;}
 .repoCode tr.selected.commented .comment-btn .icon-wrapper > i:before {font-size: 14px;}
 .repoCode tr.over.commented .comment-btn .icon-wrapper:before, .repoCode tr.selected.commented .comment-btn .icon-wrapper:before {display: block;}
 
-
 /* repo action form */
 .repoCode .comment-list, .repoCode .comment-actions {max-width: 900px}
 .repoCode .bugFormContainer {border: 1px solid #bbb; margin: 0 0 0 15px; padding: 10px 20px 10px 10px; max-width: 880px; background: #fff}
