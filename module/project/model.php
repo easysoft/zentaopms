@@ -2774,6 +2774,9 @@ class projectModel extends model
         if(!isset($node->id))$node->id = 0;
         if($node->type == 'story')
         {
+            static $users;
+            if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
             $node->type = 'module';
             $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
             foreach($stories as $story)
@@ -2785,8 +2788,8 @@ class projectModel extends model
                 $storyItem->color         = $story->color;
                 $storyItem->pri           = $story->pri;
                 $storyItem->storyId       = $story->id;
-                $storyItem->openedBy      = $story->openedBy;
-                $storyItem->assignedTo    = $story->assignedTo;
+                $storyItem->openedBy      = $users[$story->openedBy];
+                $storyItem->assignedTo    = zget($users, $story->assignedTo);
                 $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
                 $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
 

@@ -84,7 +84,10 @@
           <td class='c-hours'><?php echo $task->consumed;?></td>
           <td class='c-hours'><?php echo $task->left;?></td>
           <td class='c-date <?php if(isset($task->delay)) echo 'text-red';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-          <td class='c-status'><span class="status-task status-<?php echo $task->status;?>"><?php echo $this->processStatus('task', $task);?></span></td>
+          <td class='c-status'>
+            <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);?>
+            <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
+          </td>
           <td class='c-actions'>
             <?php
             if($task->needConfirm)
