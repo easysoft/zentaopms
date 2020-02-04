@@ -58,6 +58,19 @@ class control extends baseControl
                     }
                 }
             }
+
+            $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('textarea')->andWhere('buildin')->eq('0')->fetchAll('field');
+            if($textareaFields)
+            {
+                $editorIdList = array();
+                foreach($textareaFields as $textareaField) $editorIdList[] = $textareaField->field;
+
+                if(!isset($this->config->{$this->moduleName})) $this->config->{$this->moduleName} = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->editor)) $this->config->{$this->moduleName}->editor = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->editor->{$this->methodName})) $this->config->{$this->moduleName}->editor->{$this->methodName} = array('id' => '', 'tools' => 'simpleTools');
+                $this->config->{$this->moduleName}->editor->{$this->methodName}['id'] .= ',' . join(',', $editorIdList);
+                trim($this->config->{$this->moduleName}->editor->{$this->methodName}['id'], ',');
+            }
         }
     }
 
