@@ -184,11 +184,9 @@ class ciModel extends model
             ->where('job.id')->eq($jobID)
             ->fetch();
 
-        $po->password = base64_decode($po->password);
-
         $jenkinsServer = $po->serviceUrl;
         $jenkinsUser = $po->account;
-        $jenkinsTokenOrPassword = $po->token ? $po->token : $po->password;
+        $jenkinsTokenOrPassword = $po->token ? $po->token : base64_decode($po->password);
 
         $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
         $jenkinsServer = str_replace('://', $r, $jenkinsServer);
@@ -248,7 +246,7 @@ class ciModel extends model
         $build->cijob = $job->jobId;
         $build->name = $job->jobName;
         $build->queueItem = $job->queueItem;
-        $build->status = 'created';
+        $build->status = $job->queueItem ? 'created' : 'create_fail';
         $build->createdBy = $this->app->user->account;
         $build->createdDate = helper::now();
 
@@ -281,23 +279,20 @@ class ciModel extends model
      */
     public function checkBuildStatus()
     {
-        $pos = $this->dao->select('build.*, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.credentials')
+        $pos = $this->dao->select('build.*, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
             ->from(TABLE_CI_BUILD)->alias('build')
             ->leftJoin(TABLE_CI_JOB)->alias('job')->on('build.cijob=job.id')
             ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
             ->where('build.status')->ne('success')
             ->andWhere('build.status')->ne('fail')
+            ->andWhere('build.status')->ne('timeout')
+            ->andWhere('build.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
         foreach($pos as $po) {
-            $credentials = $this->loadModel('cicredentials')->getByID($po->credentials); // jenkins must use a token or account credentials
-            if ($credentials->type === 'token') {
-                $jenkinsTokenOrPassword = $credentials->token;
-            } else if ($credentials->type === 'account') {
-                $jenkinsTokenOrPassword = $credentials->password;
-            }
-            $jenkinsUser = $credentials->username;
             $jenkinsServer = $po->serviceUrl;
+            $jenkinsUser = $po->account;
+            $jenkinsTokenOrPassword = $po->token ? $po->token : base64_decode($po->password);
 
             $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
             $jenkinsServer = str_replace('://', $r, $jenkinsServer);
@@ -309,7 +304,7 @@ class ciModel extends model
                 $response = common::http($infoUrl);
                 $buildInfo = json_decode($response);
                 $result = strtolower($buildInfo->result);
-                $this->updateCibuildStatus($po, $result);
+                $this->updateBuildStatus($po, $result);
 
                 $logUrl = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $po->jenkinsJob, $po->queueItem);
                 $response = common::http($logUrl);
@@ -327,10 +322,10 @@ class ciModel extends model
                     $buildInfo = json_decode($response);
 
                     if ($buildInfo->building) {
-                        $this->updateCibuildStatus($po, 'building');
+                        $this->updateBuildStatus($po, 'building');
                     } else {
                         $result = strtolower($buildInfo->result);
-                        $this->updateCibuildStatus($po, $result);
+                        $this->updateBuildStatus($po, $result);
 
                         $logUrl = $buildInfo->url . 'logText/progressiveText/api/json';
                         $logUrl = str_replace('://', $r, $logUrl);
@@ -345,9 +340,13 @@ class ciModel extends model
         }
     }
 
-    public function sendBuildRequest($url)
+    /**
+     * @param $url
+     * @return false|mixed|string
+     */
+    public function sendBuildRequest($url) // not to use common http
     {
-        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $this->lang->error->noCurlExt));
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
@@ -365,7 +364,7 @@ class ciModel extends model
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
-//
+
         curl_setopt ($curl , CURLOPT_HEADER, 1 );
 
         curl_setopt($curl, CURLOPT_POST, true);

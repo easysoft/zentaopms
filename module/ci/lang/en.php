@@ -41,7 +41,7 @@ $lang->job->tagEx      = 'build_#15, to build Jenkins job that id is 15.';
 $lang->job->commitEx   = 'start build #15, to build Jenkins job that id is 15.';
 $lang->job->cronSample = 'e.g. 0 0 2 * * 2-6/1 means 2:00 a.m. every weekday.';
 
-$lang->job->buildStatusList  = array('success' => 'Success', 'fail' => 'Fail', 'created' => 'Created', 'building' => 'Building');
+$lang->job->buildStatusList  = array('success' => 'Success', 'fail' => 'Fail', 'created' => 'Created', 'building' => 'Building', 'create_fail' => 'Fail to create', 'timeout' => 'Exec Timeout');
 $lang->job->dayTypeList      = array('workDay' => 'Weekdays', 'everyDay' => 'Every Day');
 $lang->job->triggerTypeList  = array('tag' => 'Tag', 'commit' => 'Code Commit', 'schedule' => 'Schedule');
 $lang->job->scheduleTypeList = array('cron' => 'Cron', 'custom' => 'Custom');

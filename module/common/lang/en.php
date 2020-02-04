@@ -510,6 +510,7 @@ $lang->error->pasteImg        = 'Images are not allowed to be pasted in your bro
 $lang->error->noData          = 'No data.';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please quit tutorial first!';
+$lang->error->noCurlExt       = 'No Curl module installed';
 
 /* Page info. */
 $lang->pager = new stdclass();
