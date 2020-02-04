@@ -76,7 +76,7 @@ h3 {font-size:16px;}
 .repoCode tr.commented .comment-btn {display: block;}
 .repoCode tr.commented .comment-btn .icon-wrapper {background: none; border: none; width: 24px; line-height: 18px; height: 18px; left: -6px; color: #4183c4}
 .repoCode tr.commented .comment-btn .icon-wrapper:hover {border-color: #169; color: #169}
-.repoCode tr.commented .comment-btn .icon-wrapper > i:before {content: '\e750'; font-size: 18px; transform: scale(-1, 1); display: inline-block;}
+.repoCode tr.commented .comment-btn .icon-wrapper > i:before {content: '\e925'; font-size: 18px; transform: scale(-1, 1); display: inline-block;}
 .repoCode tr.commented .comment-btn .icon-wrapper:before {display: none}
 
 .repoCode tr.over.commented .comment-btn .icon-wrapper, .repoCode tr.selected.commented .comment-btn .icon-wrapper {line-height: 20px; height: 20px; background: #4183C4; color: #fff; left: -6px}
