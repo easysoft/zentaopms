@@ -65,7 +65,7 @@ class taskModel extends model
             /* Check duplicate task. */
             if($task->type != 'affair')
             {
-                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID and story=$task->story");
+                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID and story=" . (int)$task->story);
                 if($result['stop'])
                 {
                     $taskIdList[$assignedTo] = array('status' => 'exists', 'id' => $result['duplicate']);

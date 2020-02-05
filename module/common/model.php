@@ -662,7 +662,11 @@ class commonModel extends model
         echo '<li>' . html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . '</li>';
         if($moduleName != 'index')
         {
-            if(!isset($lang->menu->$mainMenu)) return;
+            if(!isset($lang->menu->$mainMenu))
+            {
+                echo "</ul>";
+                return;
+            }
             $menuLink = $lang->menu->$mainMenu;
             list($menuLabel, $module, $method) = explode('|', $menuLink);
             echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
