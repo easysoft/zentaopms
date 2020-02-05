@@ -149,6 +149,7 @@ class searchModel extends model
             }
             else
             {
+                if($operator == 'between' and !isset($this->config->search->dynamic[$value])) $operator = '=';
                 $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
             }
 
