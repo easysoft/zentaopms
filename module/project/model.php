@@ -1044,20 +1044,18 @@ class projectModel extends model
             $delay = helper::diffDate(helper::today(), $project->end);
             if($delay > 0) $project->delay = $delay;
         }
-
+        /* Fix bug #2943. */
         $total = $this->dao->select('
             SUM(estimate) AS totalEstimate,
             SUM(consumed) AS totalConsumed,
             SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
-            ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
         $closedTotalLeft= (int)$this->dao->select('SUM(`left`) AS totalLeft')->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
-            ->andWhere('status')->eq('closed')
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch('totalLeft');
