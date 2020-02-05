@@ -261,6 +261,7 @@ class bug extends control
             $response['message'] = $this->lang->saveSuccess;
 
             /* Set from param if there is a object to transfer bug. */
+            setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$bugResult or dao::isError())
             {
@@ -427,7 +428,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->builds           = $builds;
-        $this->view->moduleID         = $moduleID;
+        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastBugModule;
         $this->view->projectID        = $projectID;
         $this->view->taskID           = $taskID;
         $this->view->storyID          = $storyID;

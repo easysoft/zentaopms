@@ -1044,7 +1044,7 @@ class docModel extends model
         }
         else
         {
-            $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->in($productIdList)
                 ->andWhere('t2.deleted')->eq(0)
@@ -1167,7 +1167,7 @@ class docModel extends model
             }
             else
             {
-                $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->in($idList)
                     ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
@@ -1210,7 +1210,7 @@ class docModel extends model
             }
             else
             {
-                $hasProject  = $this->dao->select('DISTINCT product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject  = $this->dao->select('DISTINCT t1.product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($objectID)
                     ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()

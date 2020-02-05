@@ -65,6 +65,15 @@ if %requestType% == 'PATH_INFO' (
 echo %computeburn% > %baseDir%computeburn.bat
 echo computeburn.bat ok
 
+:: create computetaskeffort.bat
+if %requestType% == 'PATH_INFO' (
+  SET computetaskeffort= %phpcli% %baseDir%ztcli "%pmsRoot%/project-computetaskeffort"
+)else (
+  SET computetaskeffort= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=project&f=computetaskeffort"
+)
+echo %computetaskeffort% > %baseDir%computetaskeffort.bat
+echo computetaskeffort.bat ok
+
 :: create checkdb.bat
 if %requestType% == 'PATH_INFO' (
   SET checkdb= %phpcli% %baseDir%ztcli "%pmsRoot%/admin-checkdb"

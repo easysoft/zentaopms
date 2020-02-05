@@ -74,6 +74,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
+            setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $storyResult = $this->story->create($projectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$storyResult or dao::isError())
             {
@@ -252,7 +253,7 @@ class story extends control
         $this->view->position[]       = $this->lang->story->create;
         $this->view->products         = $products;
         $this->view->users            = $users;
-        $this->view->moduleID         = $moduleID;
+        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch);
         $this->view->planID           = $planID;
