@@ -893,7 +893,7 @@ class block extends control
         $projectIdList = array_keys($projects);
 
 
-        /* Get tasks. */
+        /* Get tasks. Fix bug #2918.*/
         $yesterday = date('Y-m-d', strtotime('-1 day'));
         $tasks     = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)
             ->where('project')->in($projectIdList)

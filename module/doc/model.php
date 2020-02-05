@@ -618,7 +618,9 @@ class docModel extends model
             ->join('users', ',')
             ->remove('files,labels,uid')
             ->get();
-        $doc->contentMarkdown = strip_tags($this->post->contentMarkdown, $this->config->allowedTags);
+
+        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
+        $doc->contentMarkdown = $this->post->contentMarkdown;
         if($doc->acl == 'private') $doc->users = $this->app->user->account;
         $condition = "lib = '$doc->lib' AND module = $doc->module";
 
