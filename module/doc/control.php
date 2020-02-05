@@ -308,6 +308,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            setcookie('lastDocModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $docResult = $this->doc->create();
             if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -366,7 +367,7 @@ class doc extends control
         $this->view->libs             = $this->doc->getLibs($type = 'all', $extra = "withObject,$unclosed", $libID);
         $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        $this->view->moduleID         = $moduleID;
+        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->post->lastDocModule;
         $this->view->type             = $type;
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();

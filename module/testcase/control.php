@@ -219,6 +219,7 @@ class testcase extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
+            setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $caseResult = $this->testcase->create($bugID);
             if(!$caseResult or dao::isError())
             {
@@ -340,7 +341,7 @@ class testcase extends control
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (int)$this->post->lastCaseModule;
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;
         $this->view->color            = $color;
