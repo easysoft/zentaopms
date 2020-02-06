@@ -457,7 +457,7 @@ class todo extends control
                 $todo = $this->todo->getById($todoID);
                 ($todo->status != 'done' && $todo->status != 'closed') ? $waitID[] = $todoID : $todoIDList[] = $todoID;
             }
-            if(!empty($waitID)) die(js::execute('alert("ID: ' .implode(',', $waitID). '的待办处于未完成状态");'));
+            if(!empty($waitID)) die(js::execute('alert("ID: ' .implode(',', $waitID). '的待办处于未完成状态。");'));
 
             foreach($todoIDList as $todoID) $this->todo->close($todoID);
             die(js::reload('parent'));

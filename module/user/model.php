@@ -344,6 +344,11 @@ class userModel extends model
             }
             unset($user->group);
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
+
+            /* Fix bug #2941 */
+            $userID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('user', $userID, 'Created');
+
             if(dao::isError())
             {
                 echo js::error(dao::getError());
