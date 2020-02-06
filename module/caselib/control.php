@@ -241,6 +241,7 @@ class caselib extends control
         {
             $this->loadModel('testcase');
             $this->config->testcase->create->requiredFields = $this->config->caselib->createcase->requiredFields;
+            setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $caseResult = $this->testcase->create($bugID = 0);
             if(!$caseResult or dao::isError()) die(js::error(dao::getError()));
 
@@ -304,7 +305,7 @@ class caselib extends control
         $this->view->customFields     = $customFields;
         $this->view->libraries        = $libraries;
         $this->view->libID            = $libID;
-        $this->view->currentModuleID  = (int)$moduleID;
+        $this->view->currentModuleID  = $moduleID ? (int)$moduleID : $this->cookie->lastLibCaseModule;
         $this->view->caseTitle        = $caseTitle;
         $this->view->type             = $type;
         $this->view->stage            = $stage;

@@ -27,6 +27,7 @@ $filter->default->cookie['theme']       = 'reg::word';
 $filter->default->cookie['fingerprint'] = 'reg::word';
 
 $filter->bug        = new stdclass();
+$filter->caselib    = new stdclass();
 $filter->doc        = new stdclass();
 $filter->product    = new stdclass();
 $filter->qa         = new stdclass();
@@ -54,6 +55,7 @@ $filter->bug->browse             = new stdclass();
 $filter->bug->default            = new stdclass();
 $filter->bug->create             = new stdclass();
 $filter->bug->export             = new stdclass();
+$filter->caselib->create         = new stdclass();
 $filter->doc->create             = new stdclass();
 $filter->doc->browse             = new stdclass();
 $filter->doc->showfiles          = new stdclass();
@@ -102,6 +104,8 @@ $filter->bug->default->cookie['preProductID']  = 'int';
 $filter->bug->create->cookie['preBranch']      = 'int';
 $filter->bug->create->cookie['lastBugModule']  = 'int';
 $filter->bug->export->cookie['checkedItem']    = 'reg::checked';
+
+$filter->caselib->create->cookie['lastLibCaseModule']       = 'int';
 
 $filter->doc->create->cookie['lastDocModule']       = 'int';
 $filter->doc->browse->cookie['browseType']          = 'reg::browseType';
