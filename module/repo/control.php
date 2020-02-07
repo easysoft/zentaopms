@@ -245,6 +245,7 @@ class repo extends control
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->view;
         $this->view->position[] = $this->lang->repo->common;
         $this->view->position[] = $this->lang->repo->view;
+        $this->display();
     }
 
     /**
