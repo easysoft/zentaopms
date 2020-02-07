@@ -1,5 +1,5 @@
 <?php
-$lang->repo->common          = '版本库';
+$lang->repo->common          = '代码';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
 $lang->repo->create          = '创建';
@@ -42,6 +42,7 @@ $lang->repo->name      = '名称';
 $lang->repo->path      = '地址';
 $lang->repo->prefix    = '地址扩展';
 $lang->repo->config    = '配置目录';
+$lang->repo->desc      = '描述';
 $lang->repo->account   = '用户名';
 $lang->repo->password  = '密码';
 $lang->repo->encoding  = '编码';
@@ -106,8 +107,8 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
+$lang->repo->scmList['Git']        = 'Git';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';

@@ -81,6 +81,8 @@ class repoModel extends model
                 $repoIndex .= "<div class='list-group'>";
                 foreach($branches as $branch)
                 {
+                    if(empty($branch)) continue;
+
                     $class = $branchID == $branch ? "class='active'" : '';
                     $repoIndex .= html::a("javascript:switchBranch(\"$branch\")", $branch, '', $class);
                 }
@@ -176,13 +178,31 @@ class repoModel extends model
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
 
-        $data->password = base64_encode($data->password);
+        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->insert(TABLE_REPO)->data($data)
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
         return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Get all repos.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getAllRepos()
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll();
+        foreach($repos as $i => $repo)
+        {
+            $repo->acl = json_decode($repo->acl);
+            if(!$this->checkPriv($repo)) unset($repos[$i]);
+        }
+
+        return $repos;
     }
 
     /**
@@ -232,7 +252,6 @@ class repoModel extends model
         return true;
     }
 
-
     /**
      * Get repo pairs.
      * 
@@ -265,7 +284,7 @@ class repoModel extends model
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
-        $repo->password = base64_decode($repo->password);
+        if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -299,7 +318,6 @@ class repoModel extends model
     {
         $entry = ltrim($entry, '/');
         $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
-        if((time() - strtotime($repo->lastSync)) / 60 >= $this->config->repo->syncTime) $this->updateLatestCommit($repo);
 
         $repoID       = $repo->id;
         $revisionTime = $this->dao->select('time')->from(TABLE_REPOHISTORY)->alias('t1')
@@ -316,8 +334,12 @@ class repoModel extends model
         {
             $historyIdList = $this->dao->select('DISTINCT t2.id')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
+                ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('1=1')
                 ->andWhere('t1.repo')->eq($repo->id)
+                ->andWhere('t2.`time`')->le($revisionTime)
+                ->andWhere('left(t2.comment, 12)')->ne('Merge branch')
+                ->beginIF($this->cookie->repoBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
                 ->beginIF($type == 'dir')
                 ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
                 ->orWhere('t1.parent')->eq(rtrim($entry, '/'))
@@ -325,7 +347,7 @@ class repoModel extends model
                 ->fi()
                 ->beginIF($type == 'file')->andWhere('t1.path')->eq("$entry")->fi()
                 ->orderBy('t2.`time` desc')
-                ->page($pager)
+                ->page($pager, 't2.id')
                 ->fetchPairs('id', 'id');
         }
 
@@ -409,115 +431,6 @@ class repoModel extends model
     }
 
     /**
-     * Get history.
-     * 
-     * @param  int    $repoID 
-     * @param  array  $revisions 
-     * @access public
-     * @return array
-     */
-    public function getHistory($repoID, $revisions)
-    {
-        return $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
-            ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.revision')->in($revisions)
-            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->fetchAll('revision');
-    }
-
-    /**
-     * Get review.
-     * 
-     * @param  int    $repoID 
-     * @param  string $entry 
-     * @param  string $revision 
-     * @access public
-     * @return array
-     */
-    public function getReview($repoID, $entry, $revision)
-    {
-        $reviews = array();
-        $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.openedBy = t2.account')
-            ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.entry')->eq($entry)
-            ->andWhere('t1.v2')->eq($revision)
-            ->andWhere('t1.deleted')->eq(0)
-            ->fetchAll('id');
-        $comments = $this->dao->select('t1.*, t2.realname')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.actor = t2.account')
-            ->where('t1.objectType')->eq('bug')
-            ->andWhere('t1.objectID')->in(array_keys($bugs))
-            ->andWhere('t1.action')->eq('commented')
-            ->fetchGroup('objectID', 'id');
-        foreach($bugs as $bug)
-        {
-            if(common::hasPriv('bug', 'edit'))   $bug->edit   = true;
-            if(common::hasPriv('bug', 'delete')) $bug->delete = true;
-            $lines = explode(',', trim($bug->lines, ','));
-            $line  = $lines[0];
-            $reviews[$line]['bugs'][$bug->id] = $bug;
-
-            if(isset($comments[$bug->id]))
-            {
-                foreach($comments[$bug->id] as $key => $comment)
-                {
-                    if($comment->actor == $this->app->user->account) $comment->edit = true; 
-                }
-                $reviews[$line]['comments'] = $comments;
-            }
-        }
-
-        return $reviews;
-    }
-
-    /**
-     * Get bugs by repo.
-     * 
-     * @param  int    $repoID 
-     * @param  string $browseType 
-     * @param  string $orderBy 
-     * @param  object $pager 
-     * @access public
-     * @return array
-     */
-    public function getBugsByRepo($repoID, $browseType, $orderBy, $pager)
-    {
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)
-            ->where('repo')->eq($repoID)
-            ->andWhere('deleted')->eq('0')
-            ->beginIF($browseType == 'assigntome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'resolvedbyme')->andWhere('resolvedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($browseType == 'assigntonull')->andWhere('assignedTo')->eq('')->fi()
-            ->beginIF($browseType == 'unresolved')->andWhere('resolvedBy')->eq('')->fi()
-            ->beginIF($browseType == 'unclosed')->andWhere('status')->ne('closed')->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll(); 
-        return $bugs;
-    }
-
-    /**
-     * Get project pairs.
-     * 
-     * @param  int    $product 
-     * @param  int    $branch 
-     * @access public
-     * @return array
-     */
-    public function getProjectPairs($product, $branch = 0)
-    {
-        $pairs    = array();
-        $projects = $this->loadModel('project')->getList('undone', 0, $product, $branch);
-        foreach($projects as $project) $pairs[$project->id] = $project->name;
-        return $pairs;
-    }
-
-    /**
      * Get git revisionName.
      * 
      * @param  string $revision 
@@ -585,49 +498,6 @@ class repoModel extends model
     }
 
     /**
-     * Save bug.
-     * 
-     * @param  int    $repoID 
-     * @param  string $file 
-     * @param  int    $v1 
-     * @param  int    $v2 
-     * @access public
-     * @return array
-     */
-    public function saveBug($repoID, $file, $v1, $v2)
-    {
-        $now  = helper::now();
-        $data = fixer::input('post')
-            ->add('severity', 3)
-            ->add('openedBy', $this->app->user->account) 
-            ->add('openedDate', $now)
-            ->add('openedBuild', 'trunk')
-            ->add('assignedDate', $now)
-            ->add('type', 'codeimprovement')
-            ->add('repo', $repoID)
-            ->add('entry', $file)
-            ->add('lines', $this->post->begin . ',' . $this->post->end)
-            ->add('v1', $v1)
-            ->add('v2', $v2)
-            ->remove('commentText,begin,end,uid')
-            ->get();
-
-        $data->steps = $this->loadModel('file')->pasteImage($this->post->commentText, $this->post->uid);
-        $this->dao->insert(TABLE_BUG)->data($data)->exec();
-
-        if(!dao::isError())
-        {
-            $bugID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
-            setcookie("repoPairs[$repoID]", $data->product);
-
-            return array('result' => 'success', 'id' => $bugID, 'realname' => $this->app->user->realname, 'openedDate' => substr($now, 5, 11), 'edit' => true, 'delete' => true, 'lines' => $data->lines, 'line' => $this->post->begin, 'steps' => $data->steps, 'title' => $data->title);
-        }
-
-        return array('result' => 'fail', 'message' => join("\n", dao::getError()));
-    }
-
-    /**
      * Save exists log branch.
      * 
      * @param  int    $repoID 
@@ -676,6 +546,7 @@ class repoModel extends model
         $repoID     = $repo->id;
         $latestInDB = $this->getLatestComment($repoID);
         $version    = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
+        $commits    = 0;
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
@@ -686,80 +557,13 @@ class repoModel extends model
             $logs = $scm->getCommits($revision, $commitCount - $version + 1, $this->cookie->repoBranch);
             $logs['commits'] = array_reverse($logs['commits'], true);
 
-            $commitCount = $this->saveCommit($repoID, $logs, $version, $this->cookie->repoBranch);
+            $commits = $this->saveCommit($repoID, $logs, $version, $this->cookie->repoBranch);
             if($repo->SCM == 'Git' and empty($latestInDB)) $this->fixCommit($repo->id);
-            $this->updateCommitCount($repoID, $commitCount);
+            $this->updateCommitCount($repoID, $commits);
         }
         $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
-    }
 
-    /**
-     * Update bug.
-     * 
-     * @param  int    $bugID 
-     * @param  string $title 
-     * @access public
-     * @return string
-     */
-    public function updateBug($bugID, $title)
-    {
-        $this->dao->update(TABLE_BUG)->set('title')->eq($title)->where('id')->eq($bugID)->exec();
-        return $title;
-    }
-
-    /**
-     * Update comment.
-     * 
-     * @param  int    $commentID 
-     * @param  string $comment 
-     * @access public
-     * @return string
-     */
-    public function updateComment($commentID, $comment)
-    {
-        $this->dao->update(TABLE_ACTION)->set('comment')->eq($comment)->where('id')->eq($commentID)->exec();
-        return $comment;
-    }
-
-    /**
-     * Delete comment.
-     * 
-     * @param  int    $commentID 
-     * @access public
-     * @return void
-     */
-    public function deleteComment($commentID)
-    {
-        return $this->dao->delete()->from(TABLE_ACTION)->where('id')->eq($commentID)->exec();
-    }
-
-    /**
-     * Get cache file.
-     * 
-     * @param  int    $repoID 
-     * @param  string $path 
-     * @param  int    $revision 
-     * @access public
-     * @return string
-     */
-    public function getCacheFile($repoID, $path, $revision)
-    {
-        $cachePath = $this->app->getCacheRoot() . '/' . 'repo';
-        if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
-        if(!is_writable($cachePath)) return false;
-        return $cachePath . '/' . $repoID . '-' . md5("{$this->cookie->repoBranch}-$path-$revision");
-    }
-
-    /**
-     * Get last review info. 
-     * 
-     * @param  string $entry 
-     * @access public
-     * @return object
-     */
-    public function getLastReviewInfo($entry)
-    {
-        return $this->dao->select('*')->from(TABLE_BUG)->where('entry')->eq($entry)->orderby('id_desc')->fetch();
+        return $commits;
     }
 
     /**
@@ -1062,7 +866,7 @@ class repoModel extends model
         $stories = array();
         $tasks   = array();
         $bugs    = array();
-        $commonReg = "(?:\s){0,}((?:#|:|ï¼š){0,})([0-9, ]{1,})";
+        $commonReg = "(?:\s){0,}((?:#|:|£º){0,})([0-9, ]{1,})";
         $taskReg  = '/task' .  $commonReg . '/i';
         $storyReg = '/story' . $commonReg . '/i';
         $bugReg   = '/bug'   . $commonReg . '/i';
