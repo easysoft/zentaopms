@@ -342,6 +342,7 @@ $lang->repo->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' =
 
 $lang->ci            = new stdclass();
 $lang->ci->menu      = $lang->repo->menu;
+$lang->jenkins       = new stdclass();
 $lang->jenkins->menu = $lang->repo->menu;
 
 /* 文档视图菜单设置。*/

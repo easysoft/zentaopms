@@ -31,6 +31,9 @@ $config->repo->editor = new stdclass();
 $config->repo->editor->view = array('id' => 'commentText', 'tools' => 'simpleTools');
 $config->repo->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');
 
+$config->repo->create = new stdclass();
 $config->repo->create->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->edit = new stdclass();
 $config->repo->edit->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->svn = new stdclass();
 $config->repo->svn->requiredFields = 'account,password';

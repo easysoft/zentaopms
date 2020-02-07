@@ -9,6 +9,7 @@ $lang->ci->browse         = '浏览';
 $lang->ci->create         = '新建';
 $lang->ci->edit           = '编辑';
 
+$lang->job = new stdclass();
 $lang->job->browseBuild   = '构建历史';
 $lang->job->viewLogs      = '构建日志';
 
@@ -24,6 +25,7 @@ $lang->job->id             = 'ID';
 $lang->job->name           = '名称';
 $lang->job->repo           = '代码库';
 $lang->job->jenkins        = 'Jenkins服务';
+$lang->job->buildType      = '构建类型';
 $lang->job->jenkinsJob     = 'Jenkins任务名';
 $lang->job->triggerType    = '触发方式';
 $lang->job->scheduleType   = '时间计划';
