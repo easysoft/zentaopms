@@ -122,8 +122,9 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $this->view->repo    = $repo;
-        $this->view->repoID     = $repoID;
+        $repo->repoType     = $repo->id . '-' . $repo->SCM;
+        $this->view->repo   = $repo;
+        $this->view->repoID = $repoID;
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
 

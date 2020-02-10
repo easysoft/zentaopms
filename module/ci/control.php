@@ -93,7 +93,7 @@ class ci extends control
         $this->view->position[] = html::a(inlink('browseJob'), $this->lang->ci->job);
         $this->view->position[] = $this->lang->ci->create;
 
-        $this->view->repoList      = $this->loadModel('repo')->listForSelection("true");
+        $this->view->repoList      = $this->loadModel('repo')->listForSelectionWithType("true");
         $this->view->jenkinsList   = $this->loadModel('jenkins')->listForSelection("true");
 
         $this->display();
@@ -118,14 +118,16 @@ class ci extends control
 
         $this->app->loadLang('action');
 
+        $repo        = $this->loadModel('repo')->getRepoByID($job->repo);
+        $job->repoType           = $repo->id . '-' . $repo->SCM;
         $this->view->job         = $job;
 
-        $this->view->repoList    = $this->loadModel('repo')->listForSelection("true");
+        $this->view->repoList    = $this->loadModel('repo')->listForSelectionWithType("true");
         $this->view->jenkinsList = $this->loadModel('jenkins')->listForSelection("true");
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->edit;
-        $this->view->position[] = html::a(inlink('browseJob'), $this->lang->ci->job);
-        $this->view->position[]    = $this->lang->ci->edit;
+        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->edit;
+        $this->view->position[]  = html::a(inlink('browseJob'), $this->lang->ci->job);
+        $this->view->position[]  = $this->lang->ci->edit;
 
         $this->display();
     }

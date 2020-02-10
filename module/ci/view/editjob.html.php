@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 
+<?php js::set('repoType',  $job->repoType)?>
 <?php js::set('triggerType',  $job->triggerType)?>
 
 <div id='mainContent' class='main-row'>
@@ -24,11 +25,16 @@
                 <table class='table table-form'>
                     <tr>
                         <th><?php echo $lang->job->name; ?></th>
-                        <td colspan="3" class='required'><?php echo html::input('name', $job->name, "class='form-control'"); ?></td>
+                        <td class='required'><?php echo html::input('name', $job->name, "class='form-control'"); ?></td>
+                        <td colspan="2" ></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->repo; ?></th>
-                        <td colspan="3"><?php echo html::select('repo', $repoList, $job->repo, "class='form-control chosen'"); ?></td>
+                        <td><?php echo html::select('repo', $repoList, $job->repoType,
+                                "onchange='repoTypeChanged(this.value)' class='form-control chosen'"); ?></td>
+
+                        <th class="svn-fields"><?php echo $lang->job->svnFolder; ?></th>
+                        <td class="svn-fields"><?php echo html::input('svnFolder', $job->svnFolder, "class='form-control'"); ?></td>
                     </tr>
                     <tr>
                         <th><?php echo $lang->job->jenkins; ?></th>
@@ -41,10 +47,7 @@
                         <th><?php echo $lang->job->triggerType; ?></th>
                         <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, $job->triggerType,
                                 "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
-
-                        <th class="schedule-fields"><?php echo $lang->job->scheduleType; ?></th>
-                        <td class="schedule-fields"><?php echo html::radio('scheduleType', $lang->job->scheduleTypeList, $job->scheduleType,
-                                "onclick='scheduleTypeChanged(this.value)'");?></td>
+                        <td colspan="2"></td>
                     </tr>
                     <tr class="tag-fields">
                         <th><?php echo $lang->job->example; ?></th>
@@ -55,11 +58,6 @@
                         <td colspan="3"><?php echo $lang->job->commitEx; ?></td>
                     </tr>
 
-                    <tr class="cron-fields">
-                        <th><?php echo $lang->job->cronExpression; ?></th>
-                        <td><?php echo html::input('cronExpression', $job->cronExpression, "class='form-control'"); ?></td>
-                        <td colspan="2"><span style="font-style: italic"><?php echo $lang->job->cronSample; ?></span></td>
-                    </tr>
                     <tr class="custom-fields">
                         <th><?php echo $lang->job->custom; ?></th>
                         <td colspan="3">
@@ -89,11 +87,6 @@
                                 </div>
                             </div>
                         </td>
-                    </tr>
-
-                    <tr>
-                        <th><?php echo $lang->job->desc; ?></th>
-                        <td colspan="3"><?php echo html::textarea('desc', '', "rows='3' class='form-control'"); ?></td>
                     </tr>
                     <tr>
                         <th></th>

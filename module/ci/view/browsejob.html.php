@@ -29,7 +29,6 @@
                     <th class='w-100px text-left'>
                         <?php common::printOrderLink('jenkins', $orderBy, $vars, $lang->job->jenkins); ?></th>
                     <th class='w-100px text-left'><?php echo $lang->job->jenkinsJob; ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->job->buildType; ?></th>
                     <th class='w-100px text-left'><?php echo $lang->job->triggerType; ?></th>
                     <th class='w-200px text-left'><?php echo $lang->job->lastExe; ?></th>
 
@@ -44,8 +43,6 @@
                         <td class='text' title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
                         <td class='text' title='<?php echo $job->jenkinsName; ?>'><?php echo $job->jenkinsName; ?></td>
                         <td class='text' title='<?php echo $job->jenkinsJob; ?>'><?php echo $job->jenkinsJob; ?></td>
-                        <td class='text' title='<?php echo $lang->job->buildTypeList[$job->buildType]; ?>'>
-                            <?php echo $lang->job->buildTypeList[$job->buildType]; ?></td>
                         <td class='text' title='<?php echo $lang->job->triggerTypeList[$job->triggerType]; ?>'>
                             <?php echo $lang->job->triggerTypeList[$job->triggerType]; ?></td>
                         <td class='text' title='<?php echo $lang->job->lastBuild; ?>'>

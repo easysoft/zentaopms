@@ -27,13 +27,11 @@
       <form id='repoForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th class='thWidth'></th>
-            <td colspan="2"><?php echo $lang->repo->tips; ?></td>
-          </tr>
-          <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, $repo->SCM, "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
-            <td></td>
+            <td>
+                <span class="tips-git"><?php echo $lang->repo->synTips; ?></span>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->repo->name; ?></th>
@@ -43,7 +41,10 @@
           <tr>
             <th><?php echo $lang->repo->path; ?></th>
             <td class='required'><?php echo html::input('path', $repo->path, "class='form-control'"); ?></td>
-            <td class='muted'><?php echo $lang->repo->example->path;?></td>
+            <td class='muted'>
+                <span class="tips-git"><?php echo $lang->repo->example->path->git;?></span>
+                <span class="tips-svn"><?php echo $lang->repo->example->path->svn;?></span>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->repo->encoding; ?></th>
@@ -53,7 +54,10 @@
           <tr>
             <th><?php echo $lang->repo->client;?></th>
             <td class='required'><?php echo html::input('client',  $repo->client, "class='form-control'")?></td>
-            <td class='muted'><?php echo $lang->repo->example->client;?></td>
+            <td class='muted'>
+                <span class="tips-git"><?php echo $lang->repo->example->client->git;?></span>
+                <span class="tips-svn"><?php echo $lang->repo->example->client->svn;?></span>
+            </td>
           </tr>
           <tr class="account-fields">
             <th><?php echo $lang->repo->account;?></th>
@@ -62,11 +66,7 @@
           <tr class="account-fields">
             <th><?php echo $lang->repo->password;?></th>
             <td>
-              <div class='input-group'>
                 <?php echo html::password('password', $repo->password, "class='form-control'");?>
-                <span class='input-group-addon fix-border fix-padding'></span>
-                <?php echo html::select('encrypt', $lang->repo->encryptList, $repo->encrypt, "class='form-control'");?>
-              </div>
             </td>
             <td></td>
           </tr>

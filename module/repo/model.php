@@ -178,7 +178,7 @@ class repoModel extends model
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
 
-        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
+        $data->password = base64_encode($data->password);
         $this->dao->insert(TABLE_REPO)->data($data)
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
@@ -284,7 +284,7 @@ class repoModel extends model
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
-        if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+        $repo->password = base64_decode($repo->password);
         $repo->acl = json_decode($repo->acl);
         return $repo;
     }
@@ -922,6 +922,21 @@ class repoModel extends model
     public function listForSelection($whr)
     {
         $repos = $this->dao->select('id, name')->from(TABLE_REPO)
+            ->where('deleted')->eq('0')
+            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
+            ->orderBy(id)
+            ->fetchPairs();
+        $repos[''] = '';
+        return $repos;
+    }
+    /**
+     * list repos for jenkins job edit， key will be 12-git
+     *
+     * @return mixed
+     */
+    public function listForSelectionWithType($whr)
+    {
+        $repos = $this->dao->select("concat(id, '-', SCM), name")->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
             ->orderBy(id)

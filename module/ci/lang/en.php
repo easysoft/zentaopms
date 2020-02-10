@@ -22,6 +22,7 @@ $lang->job->buildTime     = 'Build Time';
 $lang->job->id             = 'ID';
 $lang->job->name           = 'Name';
 $lang->job->repo           = 'Repo';
+$lang->job->svnFolder      = 'SVN tag parent URL';
 $lang->job->jenkins        = 'Jenkins Server';
 $lang->job->jenkinsJob     = 'Jenkins Task';
 $lang->job->triggerType    = 'Trigger';

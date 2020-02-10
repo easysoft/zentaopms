@@ -60,12 +60,16 @@ class ciModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
+        $arr = explode("-", $job->repo);
+        $job->repo = $arr[0];
+        $repoType = $arr[1];
 
         $this->dao->insert(TABLE_CI_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+            ->batchCheckIF($repoType == 'Subversion', "svnFolder", 'notempty')
 
             ->autoCheck()
             ->exec();
@@ -73,32 +77,21 @@ class ciModel extends model
         if ($job->triggerType === 'schedule') {
             $jobId = $this->dao->lastInsertID();
 
-            if ($job->scheduleType == 'custom') {
-                $arr = explode(":", $job->scheduleTime);
-                $hour = $arr[0];
-                $min = $arr[1];
+            $arr = explode(":", $job->scheduleTime);
+            $hour = $arr[0];
+            $min = $arr[1];
 
-                if ($job->scheduleDay == 'everyDay') {
-                    $days = '1-7';
-                } else if ($job->scheduleDay == 'workDay') {
-                    $days = '1-5';
-                }
-
-                $cron = (object)array('m' => $min, 'h' => $hour, 'dom' => '*', 'mon' => '*',
-                    'dow' => $days . '/' . $job->scheduleInterval, 'command' => 'moduleName=ci&methodName=exeJob&parm=' . $jobId,
-                    'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
-                    'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
-                $this->dao->insert(TABLE_CRON)->data($cron)->exec();
-            } else if ($job->scheduleType == 'cron') {
-                $arr = explode(' ', $job->cronExpression);
-                if (count($arr) >= 6) {
-                    $cron = (object)array('m' => $arr[1], 'h' => $arr[2], 'dom' => $arr[3], 'mon' => $arr[4],
-                        'dow' => $arr[5], 'command' => 'moduleName=ci&methodName=exeJob&parm=' . $jobId,
-                        'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
-                        'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
-                    $this->dao->insert(TABLE_CRON)->data($cron)->exec();
-                }
+            if ($job->scheduleDay == 'everyDay') {
+                $days = '1-7';
+            } else if ($job->scheduleDay == 'workDay') {
+                $days = '1-5';
             }
+
+            $cron = (object)array('m' => $min, 'h' => $hour, 'dom' => '*', 'mon' => '*',
+                'dow' => $days . '/' . $job->scheduleInterval, 'command' => 'moduleName=ci&methodName=exeJob&parm=' . $jobId,
+                'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
+                'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
+            $this->dao->insert(TABLE_CRON)->data($cron)->exec();
         }
 
         return true;
@@ -117,12 +110,16 @@ class ciModel extends model
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->get();
+        $arr = explode("-", $job->repo);
+        $job->repo = $arr[0];
+        $repoType = $arr[1];
 
         $this->dao->update(TABLE_CI_JOB)->data($job)
             ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+            ->batchCheckIF($repoType == 'Subversion', "svnFolder", 'notempty')
 
             ->autoCheck()
             ->where('id')->eq($id)
@@ -131,39 +128,25 @@ class ciModel extends model
         if ($job->triggerType === 'schedule') {
             $command = 'moduleName=ci&methodName=exeJob&parm=' . $id;
 
-            if ($job->scheduleType == 'custom') {
-                $arr = explode(":", $job->scheduleTime);
-                $hour = $arr[0];
-                $min = $arr[1];
+            $arr = explode(":", $job->scheduleTime);
+            $hour = $arr[0];
+            $min = $arr[1];
 
-                $jobId = $this->dao->lastInsertID();
-                if ($job->scheduleDay == 'everyDay') {
-                    $days = '1-7';
-                } else if ($job->scheduleDay == 'workDay') {
-                    $days = '2-6';
-                }
-
-                $this->dao->update(TABLE_CRON)
-                    ->set('m')->eq($min)
-                    ->set('h')->eq($hour)
-                    ->set('dom')->eq('*')
-                    ->set('mon')->eq('*')
-                    ->set('dow')->eq($days . '/' . $job->scheduleInterval)
-                    ->set('lastTime')->eq('0000-00-00 00:00:00')
-                    ->where('command')->eq($command)->exec();
-            } else if ($job->scheduleType == 'cron') {
-                $arr = explode(' ', $job->cronExpression);
-                if (count($arr) >= 6) {
-                    $this->dao->update(TABLE_CRON)
-                        ->set('m')->eq($arr[1])
-                        ->set('h')->eq($arr[2])
-                        ->set('dom')->eq($arr[3])
-                        ->set('mon')->eq($arr[4])
-                        ->set('dow')->eq($arr[5])
-                        ->set('lastTime')->eq('0000-00-00 00:00:00')
-                        ->where('command')->eq($command)->exec();
-                }
+            $jobId = $this->dao->lastInsertID();
+            if ($job->scheduleDay == 'everyDay') {
+                $days = '1-7';
+            } else if ($job->scheduleDay == 'workDay') {
+                $days = '2-6';
             }
+
+            $this->dao->update(TABLE_CRON)
+                ->set('m')->eq($min)
+                ->set('h')->eq($hour)
+                ->set('dom')->eq('*')
+                ->set('mon')->eq('*')
+                ->set('dow')->eq($days . '/' . $job->scheduleInterval)
+                ->set('lastTime')->eq('0000-00-00 00:00:00')
+                ->where('command')->eq($command)->exec();
         }
 
         return true;
@@ -215,12 +198,18 @@ class ciModel extends model
     public function listBuild($jobID, $orderBy = 'id_desc', $pager = null, $decode = true)
     {
         $list = $this->dao->
-        select('id, name, status, createdDate')->from(TABLE_CI_BUILD)
-            ->where('deleted')->eq('0')
-            ->andWhere('cijob')->eq($jobID)
+        select('build.id, build.name, build.status, build.createdDate, job.triggerType, repo.name repoName, jenkins.name as jenkinsName')
+            ->from(TABLE_CI_BUILD)->alias('build')
+            ->leftJoin(TABLE_CI_JOB)->alias('job')->on('build.cijob=job.id')
+            ->leftJoin(TABLE_REPO)->alias('repo')->on('job.repo=repo.id')
+            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
+
+            ->where('build.deleted')->eq('0')
+            ->andWhere('build.cijob')->eq($jobID)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+
         return $list;
     }
 

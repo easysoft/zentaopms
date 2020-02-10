@@ -107,8 +107,8 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Git']        = 'Git';
+$lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';
@@ -140,13 +140,15 @@ $lang->repo->error->output        = "执行命令：%s\n错误结果(%s)： %s\n
 $lang->repo->error->clientVersion = "客户端版本过低，请升级或更换SVN客户端";
 $lang->repo->error->encoding      = "编码可能错误，请更换编码重试。";
 
-$lang->repo->tips              = '<strong>请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。</strong>';
-$lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
-$lang->repo->example           = new stdclass();
-$lang->repo->example->client   = "例如：/usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
-$lang->repo->example->path     = "例如：SVN: http://example.googlecode.com/svn/,  GIT: /homt/test";
-$lang->repo->example->config   = "https需要填写配置目录的位置，通过config-dir选项生成配置目录";
-$lang->repo->example->encoding = "填写版本库中文件的编码";
+$lang->repo->synTips              = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
+$lang->repo->encodingsTips        = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
+$lang->repo->example              = new stdclass();
+$lang->repo->example->client->git = "例如：/usr/bin/git";
+$lang->repo->example->client->svn = "例如：/usr/bin/svn";
+$lang->repo->example->path->git   = "例如：/homt/user/myproject";
+$lang->repo->example->path->svn   = "例如：http://example.googlecode.com/svn/trunk/myproject";
+$lang->repo->example->config      = "https需要填写配置目录的位置，通过config-dir选项生成配置目录";
+$lang->repo->example->encoding    = "填写版本库中文件的编码";
 
 $lang->repo->typeList['standard']    = '规范';
 $lang->repo->typeList['performance'] = '性能';
