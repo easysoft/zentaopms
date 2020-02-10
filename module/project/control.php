@@ -1104,9 +1104,12 @@ class project extends control
             $this->executeHooks($projectID);
 
             $planID = '';
-            foreach($_POST['plans'] as $planID)
+            if(isset($_POST['plans']))
             {
-                if(!empty($planID)) break;
+                foreach($_POST['plans'] as $planID)
+                {
+                    if(!empty($planID)) break;
+                }
             }
             if(!empty($planID))
             {

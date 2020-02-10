@@ -24,7 +24,7 @@
     </div>
   </div>
 </div>
-<div class="cell show" id="queryBox"></div>
+<div class="cell show" id="queryBox" data-module='testsuite'></div>
 <div id='mainContent'>
   <form class='main-table table-testcase' data-ride='table' method='post'>
     <div class="table-header">
@@ -78,7 +78,7 @@
       <div class='table-actions btn-toolbar show-always'>
         <?php echo html::submitButton('', '', 'btn btn-secondary');?>
       </div>
-      <div class="text"></div>
+      <div class="table-statistic"></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

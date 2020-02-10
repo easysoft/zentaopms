@@ -16,7 +16,6 @@ $lang->backup->size  = 'Größe';
 $lang->backup->setting    = 'Settings';
 $lang->backup->settingDir = 'Backup Directory';
 $lang->backup->settingList['nofile'] = 'Do not back up files or codes.';
-$lang->backup->settingList['nozip']  = 'Only copy files and do not no zip it.';
 $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file header.';
 
 $lang->backup->waitting       = '<span id="backupType"></span> In Arbeit. Bitte warten...';

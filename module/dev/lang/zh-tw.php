@@ -108,6 +108,10 @@ $lang->dev->tableList['userview']         = '可訪問權限';
 $lang->dev->tableList['im_chatuser']      = '客戶端用戶';
 $lang->dev->tableList['im_message']       = '客戶端消息';
 $lang->dev->tableList['im_messagestatus'] = '客戶端狀態';
+$lang->dev->tableList['repo']             = '代碼';
+$lang->dev->tableList['repohistory']      = '版本歷史';
+$lang->dev->tableList['repofiles']        = '代碼檔案';
+$lang->dev->tableList['repobranch']       = '代碼分支';
 
 $lang->dev->groupList['my']      = '我的地盤';
 $lang->dev->groupList['product'] = $lang->productCommon;

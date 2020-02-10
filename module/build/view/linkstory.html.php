@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='queryBox' class='show'></div>
+<div id='queryBox' data-module='story' class='show'></div>
 <div id='unlinkStoryList'>
   <form class='main-table table-story' data-ride='table' method='post' id='unlinkedStoriesForm' target='hiddenwin' action='<?php echo $this->createLink('build', 'linkStory', "buildID={$build->id}&browseType=$browseType&param=$param");?>'>
     <div class='table-header hl-primary text-primary strong'>
@@ -70,7 +70,7 @@
       <div class="btn-toolbar">
         <?php echo html::a(inlink('view', "buildID={$build->id}&type=story"), $lang->goback, '', "class='btn'");?>
       </div>
-      <div class='text'></div>
+      <div class='table-statistic'></div>
     </div>
     <?php endif;?>
   </form>

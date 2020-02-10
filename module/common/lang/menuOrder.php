@@ -94,10 +94,11 @@ $lang->doc->menuOrder[25] = 'index';
 $lang->doc->menuOrder[30] = 'create';
 
 /* report menu order. */
-$lang->report->menuOrder[5]  = 'product';
-$lang->report->menuOrder[10] = 'prj';
-$lang->report->menuOrder[15] = 'test';
-$lang->report->menuOrder[20] = 'staff';
+$lang->report->menuOrder[5]  = 'annual';
+$lang->report->menuOrder[10] = 'product';
+$lang->report->menuOrder[15] = 'prj';
+$lang->report->menuOrder[20] = 'test';
+$lang->report->menuOrder[25] = 'staff';
 
 /* company menu order. */
 $lang->company->menuOrder[5]  = 'browseUser';

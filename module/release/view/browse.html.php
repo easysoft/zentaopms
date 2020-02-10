@@ -62,7 +62,7 @@
         </td>
         <td title='<?php echo $release->buildName?>'><?php echo empty($release->project) ? $release->buildName : html::a($this->createLink('build', 'view', "buildID=$release->buildID"), $release->buildName);?></td>
         <?php if($product->type != 'normal'):?>
-        <td class='text-center'><?php echo $branches[$release->branch];?></td>
+        <td class='text-center' title='<?php echo zget($branches, $release->branch, '');?>'><?php echo $branches[$release->branch];?></td>
         <?php endif;?>
         <td class='text-center'><?php echo $release->date;?></td>
         <?php $status = $this->processStatus('release', $release);?>

@@ -75,6 +75,7 @@ $lang->webhook->note->dingKey = " <a href='http://www.zentao.net/book/zentaopmsh
 
 $lang->webhook->note->typeList['bearychat'] = '請在倍洽中添加一個禪道機器人，並將其webhook填寫到此處。';
 $lang->webhook->note->typeList['dingding']  = '請在釘釘中添加一個自定義機器人，並將其webhook填寫到此處。';
+$lang->webhook->note->typeList['weixin']    = '請在企業微信中添加一個自定義機器人，並將其webhook填寫到此處。';
 $lang->webhook->note->typeList['default']   = '從第三方系統獲取webhook並填寫到此處。';
 
 $lang->webhook->error = new stdclass();

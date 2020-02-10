@@ -866,7 +866,7 @@ class repoModel extends model
         $stories = array();
         $tasks   = array();
         $bugs    = array();
-        $commonReg = "(?:\s){0,}((?:#|:|£º){0,})([0-9, ]{1,})";
+        $commonReg = "(?:\s){0,}((?:#|:|ï¿½ï¿½){0,})([0-9, ]{1,})";
         $taskReg  = '/task' .  $commonReg . '/i';
         $storyReg = '/story' . $commonReg . '/i';
         $bugReg   = '/bug'   . $commonReg . '/i';

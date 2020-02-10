@@ -89,7 +89,7 @@ foreach($fieldParams as $fieldName => $param)
           <tbody>
             <?php
             $formSessionName = $module . 'Form';
-            $formSession     = $this->session->$formSessionName;
+            $formSession     = $_SESSION[$formSessionName];
 
             $fieldNO = 1;
             for($i = 1; $i <= $groupItems; $i ++)
@@ -270,7 +270,14 @@ function executeQuery(queryID)
 $(function()
 {
     var $searchForm = $('#<?php echo $formId;?>');
-    $searchForm.find('select.chosen').chosen();
+    $searchForm.find('select.chosen').chosen().on('chosen:showing_dropdown', function()
+    {
+        var $this = $(this);
+        var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
+        var $drop = $chosen.find('.chosen-drop');
+        $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+    });
+
     /* Toggle user queries action. */
     $('#toggle-queries').click(function()
     {
@@ -341,7 +348,17 @@ $(function()
         var $period = $('#selectPeriod');
         if($period.length) $period.remove();
 
-        $period = $("<ul id='selectPeriod' class='dropdown-menu'><li class='dropdown-header'><?php echo $lang->datepicker->dpText->TEXT_OR . ' ' . $lang->datepicker->dpText->TEXT_DATE;?></li><li><a href='#lastWeek'><?php echo $lang->datepicker->dpText->TEXT_PREV_WEEK;?></a></li><li><a href='#thisWeek'><?php echo $lang->datepicker->dpText->TEXT_THIS_WEEK;?></a></li><li><a href='#yesterday'><?php echo $lang->datepicker->dpText->TEXT_YESTERDAY;?></a></li><li><a href='#today'><?php echo $lang->datepicker->dpText->TEXT_TODAY;?></a></li><li><a href='#lastMonth'><?php echo $lang->datepicker->dpText->TEXT_PREV_MONTH;?></a></li><li><a href='#thisMonth'><?php echo $lang->datepicker->dpText->TEXT_THIS_MONTH;?></a></li></ul>").appendTo('body');
+        <?php
+        $selectPeriod  = "<ul id='selectPeriod' class='dropdown-menu'>";
+        $selectPeriod .= "<li class='dropdown-header'>{$lang->datepicker->dpText->TEXT_OR} {$lang->datepicker->dpText->TEXT_DATE}</li>";
+        $selectPeriod .= "<li><a href='#lastWeek'>{$lang->datepicker->dpText->TEXT_PREV_WEEK}</a></li>";
+        $selectPeriod .= "<li><a href='#thisWeek'>{$lang->datepicker->dpText->TEXT_THIS_WEEK}</a></li>";
+        $selectPeriod .= "<li><a href='#yesterday'>{$lang->datepicker->dpText->TEXT_YESTERDAY}</a></li>";
+        $selectPeriod .= "<li><a href='#today'>{$lang->datepicker->dpText->TEXT_TODAY}</a></li>";
+        $selectPeriod .= "<li><a href='#lastMonth'>{$lang->datepicker->dpText->TEXT_PREV_MONTH}</a></li>";
+        $selectPeriod .= "<li><a href='#thisMonth'>{$lang->datepicker->dpText->TEXT_THIS_MONTH}</a></li></ul>";
+        ?>
+        $period = $(<?php echo json_encode($selectPeriod);?>).appendTo('body');
         $period.find('li > a').click(function(event)
         {
             var target = $(query).closest('form').find('#' + $period.data('target'));

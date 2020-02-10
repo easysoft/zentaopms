@@ -101,7 +101,6 @@ $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您访问的对象并不存在！';
 $lang->notPage       =  '抱歉，您访问的功能正在开发中！';
 $lang->showAll       = '[[全部显示]]';
-$lang->selectedItems = '已选择 <strong>{0}</strong> 项';
 
 $lang->future      = '未来';
 $lang->year        = '年';
@@ -356,6 +355,7 @@ $lang->git = new stdclass();
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
+$lang->report->menu->annual  = array('link' => '年度总结|report|annualData', 'target' => '_blank');
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
 $lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
 $lang->report->menu->test    = array('link' => '测试|report|bugcreate', 'alias' => 'bugassign');

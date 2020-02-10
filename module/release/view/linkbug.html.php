@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<div id='queryBox' class='show'></div>
+<div id='queryBox' data-module='bug' class='show'></div>
 <?php
 $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
 $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
@@ -68,7 +68,7 @@ $formID      = $type == 'leftBug' ? 'unlinkedLeftBugsForm' : 'unlinkedBugsForm';
       <div class="btn-toolbar">
         <?php echo html::a(inlink('view', "releaseID=$release->id&type=$type"), $lang->goback, '', "class='btn'");?>
       </div>
-      <div class='text'></div>
+      <div class='table-statistic'></div>
     </div>
   </form>
 </div>

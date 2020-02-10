@@ -92,6 +92,7 @@ class task extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
+            setcookie('lastTaskModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             if($this->post->project) $projectID = $this->post->project;
             $tasksID = $this->task->create($projectID);
             if(dao::isError())
@@ -155,7 +156,7 @@ class task extends control
             }
             elseif($this->post->after == 'toTaskList')
             {
-                setcookie('moduleBrowseParam',  (int)$this->post->module, 0, $this->config->webRoot, '', false, false);
+                setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', false, false);
                 $taskLink  = $this->createLink('project', 'task', "projectID=$projectID&status=unclosed&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 $this->send($response);
@@ -176,12 +177,13 @@ class task extends control
         $members          = $this->project->getTeamMemberPairs($projectID, 'nodeleted');
         $showAllModule    = isset($this->config->project->task->allModule) ? $this->config->project->task->allModule : '';
         $moduleOptionMenu = $this->tree->getTaskOptionMenu($projectID, 0, 0, $showAllModule ? 'allModule' : '');
+        $task->module     = $task->module ? $task->module : (int)$this->cookie->lastTaskModule;
 
         /* Fix bug #2737. When moduleID is not story module. */
         $moduleIdList = array();
-        if($moduleID)
+        if($task->module)
         {
-            $moduleID     = $this->tree->getStoryModule($moduleID);
+            $moduleID     = $this->tree->getStoryModule($task->module);
             $moduleIdList = $this->tree->getAllChildID($moduleID);
         }
         $stories = $this->story->getProjectStoryPairs($projectID, 0, 0, $moduleIdList);
@@ -1072,6 +1074,7 @@ class task extends control
 
                 /* Skip parent task when batch close task. */
                 if($task->parent == '-1') continue;
+
                 /* Skip closed task when batch close task. */
                 if($task->status == 'closed') continue;
 

@@ -24,7 +24,7 @@ var browseType = '<?php echo $browseType;?>';
 </div>
 <div id='mainContent'>
   <div class='cell space-sm'>
-    <div id='queryBox' class='show'></div>
+    <div id='queryBox' data-module='importBug' class='show'></div>
   </div>
   <form class='main-table' method='post' target='hiddenwin' id='importBugForm' data-ride='table'>
     <table class='table has-sort-head table-fixed'>

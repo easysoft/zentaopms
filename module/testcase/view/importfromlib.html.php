@@ -20,7 +20,7 @@
     </div>
   </div>
 </div>
-<div id='queryBox' class='show cell'></div>
+<div id='queryBox' data-module='testsuite' class='show cell'></div>
 <div id='mainContent'>
   <form class='main-table' method='post' target='hiddenwin' id='importFromLib' data-ride='table'>
     <table class='table has-sort-head table-fixed'>
@@ -80,7 +80,7 @@
       <div class="btn-toolbar">
         <?php echo html::linkButton($lang->goback, $this->session->caseList);?>
       </div>
-      <div class='text'></div>
+      <div class='table-statistic'></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

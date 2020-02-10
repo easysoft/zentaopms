@@ -103,7 +103,7 @@ $(function()
     </div>
     <div class="col tab-content">
       <?php foreach($projects as $project):?>
-      <div class="tab-pane fade<?php if($project == reset($projects)) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
+      <div class="tab-pane fade<?php if($project->id == $this->session->project) echo ' active in';?>" id="tab3Content<?php echo $project->id;?>">
         <div class="table-row">
           <div class="col-5 text-middle text-center">
             <div class="progress-pie inline-block space" data-value="<?php echo $project->progress;?>" data-doughnut-size="84">

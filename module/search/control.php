@@ -24,13 +24,16 @@ class search extends control
      */
     public function buildForm($module = '', $searchFields = '', $fieldParams = '', $actionURL = '', $queryID = 0)
     {
-        $queryID      = (empty($module) and empty($queryID)) ? $this->session->searchParams['queryID'] : $queryID;
-        $module       = empty($module) ?       $this->session->searchParams['module'] : $module;
-        $searchFields = empty($searchFields) ? json_decode($this->session->searchParams['searchFields'], true) : $searchFields;
-        $fieldParams  = empty($fieldParams) ?  json_decode($this->session->searchParams['fieldParams'], true)  : $fieldParams;
-        $actionURL    = empty($actionURL) ?    $this->session->searchParams['actionURL'] : $actionURL;
-        $style        = isset($_SESSION['searchParams']['style']) ? $this->session->searchParams['style'] : '';
-        $onMenuBar    = isset($_SESSION['searchParams']['onMenuBar']) ? $this->session->searchParams['onMenuBar'] : '';
+        $module       = empty($module) ? $this->session->searchParams['module'] : $module;
+        $searchParams = $module . 'searchParams';
+        $queryID      = (empty($module) and empty($queryID)) ? $_SESSION[$searchParams]['queryID'] : $queryID;
+        $searchFields = empty($searchFields) ? json_decode($_SESSION[$searchParams]['searchFields'], true) : $searchFields;
+        $fieldParams  = empty($fieldParams) ?  json_decode($_SESSION[$searchParams]['fieldParams'], true)  : $fieldParams;
+        $actionURL    = empty($actionURL) ?    $_SESSION[$searchParams]['actionURL'] : $actionURL;
+        $style        = isset($_SESSION[$searchParams]['style']) ? $_SESSION[$searchParams]['style'] : '';
+        $onMenuBar    = isset($_SESSION[$searchParams]['onMenuBar']) ? $_SESSION[$searchParams]['onMenuBar'] : '';
+
+        $_SESSION['searchParams']['module'] = $module;
         $this->search->initSession($module, $searchFields, $fieldParams);
 
         $this->view->module       = $module;

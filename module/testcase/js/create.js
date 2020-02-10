@@ -33,7 +33,7 @@ $(function()
     };
     $(document).on('change', '#story', function()
     {
-       if($(this).val() === 'showmore') showSearchModal();
+        if($(this).val() === 'showmore') showSearchModal();
     });
 
     $(document).on('click', '#story_chosen .chosen-results > li.no-results', showSearchModal);

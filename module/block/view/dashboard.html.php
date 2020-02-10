@@ -122,6 +122,15 @@ $(function()
 })
 <?php endif;?>
 <?php endif;?>
+<?php $showedModal = false;?>
+<?php if(!empty($config->global->showAnnual) and empty($config->global->annualShowed)):?>
+<?php $this->app->loadLang('misc');?>
+var myModalTrigger = new $.zui.ModalTrigger({title:'<?php echo $lang->misc->showAnnual;?>', custom: function(){return <?php echo json_encode(sprintf($lang->misc->annualDesc, $this->createLink('report', 'annualData')));?>}});
+var result = myModalTrigger.show();
+$('#showAnnual').click(function(){myModalTrigger.close()});
+<?php $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.annualShowed", 1);?>
+<?php $showedModal = true;?>
+<?php endif;?>
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php if(isset($pageJS)) js::execute($pageJS);?>

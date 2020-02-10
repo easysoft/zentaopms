@@ -71,6 +71,7 @@ class docModel extends model
                 {
                     $allLibGroups  = $this->getAllLibGroups($libID);
                     $currentGroups = $allLibGroups[$type];
+                    /* Append closed project. */
                     if(!isset($currentGroups[$currentLib]) and $type == 'project')
                     {
                         $project = $this->dao->select('id,name,status')->from(TABLE_PROJECT)->where('id')->eq($currentLib)->fetch();
@@ -372,7 +373,7 @@ class docModel extends model
             if($moduleID)
             {
                 $modules = array($moduleID => $moduleID);
-                if(strpos($this->config->doc->custom->showLibs, 'children') === false) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
+                if(strpos($this->config->doc->custom->showLibs, 'children') !== false) $modules = $this->loadModel('tree')->getAllChildId($moduleID);
             }
             $docs = $this->getDocs($libID, $modules, $sort, $pager);
         }
@@ -446,13 +447,20 @@ class docModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', false);
         if(!$docs) return array();
 
+        $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
         foreach($docs as $index => $doc)
         {
             $docs[$index]->fileSize = 0;
             if(isset($files[$index]))
             {
-                $fileSize = 0;
-                foreach($files[$index] as $file) $fileSize += $file->size;
+                $docContent = $docContents[$index];
+                $fileSize   = 0;
+                foreach($files[$index] as $file)
+                {
+                    if(strpos(",{$docContent->files},", ",{$file->id},") === false) continue;
+                    $fileSize += $file->size;
+                }
+
                 if($fileSize < 1024)
                 {
                     $fileSize .= 'B';
@@ -514,7 +522,8 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF($libID)->andWhere('lib')->in($libID)->fi()
-            ->beginIF(!empty($module) or strpos($this->config->doc->custom->showLibs, 'children') === false)->andWhere('module')->in($module)->fi()
+            ->beginIF(strpos($this->config->doc->custom->showLibs, 'children') === false)->andWhere('module')->in($module)->fi()
+            ->beginIF(!empty($module) and strpos($this->config->doc->custom->showLibs, 'children') !== false)->andWhere('module')->in($module)->fi()
             ->query();
 
         $docIdList = array();
@@ -609,7 +618,9 @@ class docModel extends model
             ->join('users', ',')
             ->remove('files,labels,uid')
             ->get();
-        $doc->contentMarkdown = strip_tags($this->post->contentMarkdown, $this->config->allowedTags);
+
+        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
+        $doc->contentMarkdown = $this->post->contentMarkdown;
         if($doc->acl == 'private') $doc->users = $this->app->user->account;
         $condition = "lib = '$doc->lib' AND module = $doc->module";
 
@@ -1035,7 +1046,7 @@ class docModel extends model
         }
         else
         {
-            $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->in($productIdList)
                 ->andWhere('t2.deleted')->eq(0)
@@ -1158,7 +1169,7 @@ class docModel extends model
             }
             else
             {
-                $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->in($idList)
                     ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
@@ -1201,7 +1212,7 @@ class docModel extends model
             }
             else
             {
-                $hasProject  = $this->dao->select('DISTINCT product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject  = $this->dao->select('DISTINCT t1.product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($objectID)
                     ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()

@@ -1,0 +1,79 @@
+
+body {height: 100vh; padding: 0;}
+#container {position: fixed; top: 0; right: 0; bottom: 0; left: 0; display: flex; justify-content: center; align-items: center; background-color: #010417; color: #fff; background-size: cover; overflow: auto;}
+#container:before {content: ' '; display: block; position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 0; opacity: 0.9; background: #010419;}
+#main {min-width: 1280px; min-height: 800px; position: absolute; z-index: 10; padding: 0; background-size: cover;}
+#main > section {position: absolute; }
+#main > section > header {height: 24px;}
+#main > section > header > h2 {line-height: 24px; font-size: 14px; padding: 0 8px; float: left; margin: 0; position: relative; background: #1a77a5; position: relative; font-weight: normal;}
+#main > section > header > h2:after {content: ' '; display: block; position: absolute; top: 0; right: -40px; bottom: 0; width: 40px; background: linear-gradient(to right, #1a77a5 0%, transparent 100%);}
+#mainBg {position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+.exporting #mainBg {background-color: rgb(1, 4, 25, .9);}
+#loadIndicator {position: fixed; left: 0; right: 0; bottom: 0; top: 0; z-index: 1000; visibility: hidden;}
+#loadIndicator.loading {visibility: visible;}
+#loadIndicator:before {background-color: rgba(50,50,50,.65);}
+#loadIndicator:after {font-size: 30px}
+
+#header > h1 {width: 500px; margin: 40px auto 0; height: 58px; font-weight: normal; text-align: center; font-size: 20px; display: block; line-height: 58px; position: relative; left: -30px;}
+#toolbar {position: absolute; right: 33px; top: 80px; text-align: center;}
+#toolbar #year{width:70px; display:inline-block; margin-right:5px; padding-top:2px; border-color: #1a77a5; background-color: transparent; color:#fff;}
+#toolbar #year option{background: #141414;}
+.exporting #toolbar {display: none;}
+#toolbar .btn-primary {border-color: #1a77a5; background-color: transparent; padding: 6px 7px;}
+#toolbar .btn-primary:hover,
+#toolbar .btn-primary:focus {border-color: #B5E8FF; background-color: #1a77a5;}
+
+#block1 {left: 25px; top: 128px; width: 366px; height: 283px;}
+#block1 > header {margin-top: 7px;}
+#block1 > div {overflow: auto; max-height: 250px;}
+#block1List {margin: 16px 36px 0 32px; padding: 0;}
+#block1List > li {line-height: 40px; width: 294px; height: 46px; padding-left: 23px; position: relative; margin-bottom: 10px; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASYAAAAuCAMAAACyPkQxAAAAilBMVEW16P8AAAAAdakAdakAdakAdalBn8gBdqoAdam16P8AdqoEd6sAdakAdakAdakAdakqi7oAdakAdakCdqoNfK4AdakBdqoAdakAdakAdqoAdam16P+Pwtlkq8sJeqy62uiv1OSeyt6Au9RztNBWpMZLncI/l78zkbspi7chh7QZg7IRfq+mz+H1+vzlZNDsAAAAGnRSTlMNAH80IxAg1kR/1Yf26HRhF9/ItlOjmz8vBYfBgpwAAAFCSURBVGje7dZHcoNAEIXhbpSwUZachiBylO9/PReYUpUWAyxmqAK9/whf9+KR3SZeNc/zqqosiyLPsyxNkySOXdeNojB0HCcI7r5/u/0+mAjJu4EJTMryCURgUtUdTEMKwDSMSRDqzQETmMA0biGYwKSsCExgUpYLJjCBadxiMIFJWQmYwKSsFExgUlYGpoFMa0J95bQ/LQj1MvFhZxLqriBmc3cl1MvEi92BUFclGcy8PFmEOplE7XQ8fxKSV5FonFaXy5FQF1Pj9PNxxoCS5tG+dWJLTLHNGMdde8T/TlPNGMFpvbGI+QCnHiWDiZmvWyEss24h6Xsp6biSxNKm5lQrNUxsboXW+KlpOTVKb8R1X09OE2PS6dQq2cQzyHhvnXQpjcNk60nipEFpHt/UOulSmg9T7aRLaU5MbAj1PZTsP0LdcHztAh8bAAAAAElFTkSuQmCC);}
+#block1List > li > strong {position: absolute; right: 18px; top: 2px; font-size: 20px; color: #B5E8FF;}
+
+#block2 {left: 405px; top: 132px; width: 400px; height: 280px;}
+#block2 > header {margin-top: 23px;}
+#block2 > .progress-pie {margin: 18px 0 0 18px;}
+#block2 > .progress-pie .progress-info {padding: 70px 0; pointer-events: none;}
+#block2 > .progress-pie .progress-info > strong {font-size: 30px; font-weight: normal;}
+#block2 > .progress-pie .progress-info > strong > small {font-size: 12px; color: #A0A0A0;}
+#block2ListWrapper {position: absolute; left: 235px; top: 60px; padding-top: 20px; font-size: 14px; overflow: auto; max-height: 184px;}
+#block2List {padding: 0;}
+#block2List > li {padding-left: 25px; line-height: 20px; position: relative; color: #A0A0A0; margin-bottom: 15px;}
+#block2List > li > .dot {position: absolute; width: 16px; height: 16px; left: 0; top: 2px; background: #00A0E9; border-radius: 2px;}
+#block2List > li:first-child > .dot {background: #0068B7;}
+#block2List > li:last-child > .dot {background: #7ECEF4;}
+#block2List > li > div {margin-top: 5px; color: #fff; max-width: 80px;}
+#block2List > li > div > span:last-child {float: right;}
+#block2List > li > div > span small {color: #A0A0A0;}
+
+#block3 {left: 825px; top: 129px; width: 421px; height: 284px; padding: 8px 0 8px 8px;}
+#block3TableHeader {position: absolute; top: 8px; left: 8px; right: 10px; background: #0075A9; width: 401px;}
+#block3TableHeader > thead > tr > th {color: #fff; font-weight: normal; line-height: 20px; padding: 2px 4px; border: none}
+#block3 > .table-wrapper {overflow: auto; margin-top: 26px; max-height: 247px;}
+#block3Table {color: #A0A0A0;}
+#block3Table > tbody > tr > td {border-bottom: 1px #0075A9 dashed; line-height: 20px; padding: 5px 4px;}
+#block3 .col-name {width: 170px;}
+#block3 .col-storyCount {width: 80px; text-align: center;}
+#block3 .col-taskCount {width: 80px; text-align: center;}
+#block3 .col-bugCount {text-align: center;}
+
+#block4 {left: 25px; top: 434px; width: 631px; height: 322px; padding: 0 30px 10px 10px}
+#block4 .pri {display: inline-block; width: 13px; height: 8px; background: #2B4D6D; border-radius: 4px; margin-right: 8px;}
+#block4 > header {margin-top: 12px; margin-left: -10px;}
+#block4 > header > div > .pri {margin: 0 10px;}
+#block4 > .row {margin-top: 20px; height:260px; overflow:auto;}
+#block4 > .row > .col-xs-6 + .col-xs-6:before {content: ' '; display: block; position: absolute; left: 0; top: 10px; bottom: 26px; background: #1A2835; width: 1px;}
+#block4 > .row > .col-xs-6 {text-align: center;}
+#block4 .progress-info {pointer-events: 'none';}
+#block4 .progress-info > p {color: #A0A0A0; margin-bottom: 0; margin-top: 25px;}
+#block4 .progress-info > strong {font-size: 30px; font-weight: normal;}
+#block4 .progress-info > strong > small {font-size: 12px; color: #A0A0A0;}
+#block4 > .row > .col-xs-6 > ul {margin: 0 auto; width: 250px;}
+#block4 > .row > .col-xs-6 > ul > li {float: left; width: 50%; text-align: left; color: #C9C9C9; margin-bottom: 8px;}
+#block4 canvas {transform: rotate(150deg);}
+
+#block5 {left: 672px; top: 434px; width: 574px; height: 322px;}
+#block5 > header {margin-top: 12px; margin-left: 0;}
+#block5Legend {position: absolute; right: 25px; top: 40px; color: #A0A0A0; font-size: 12px;}
+#block5Legend .dot {display: inline-block; border: 1px solid #fff; border-radius: 50px; width: 10px; height: 10px; background: #22AC38; margin-right: 6px; margin-left: 12px;}
+#block5 canvas {margin: 25px auto 0; display: block;}

@@ -25,7 +25,7 @@
   <form method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr>
-        <th class='w-80px'><?php echo $lang->testcase->reviewedDateAB;?></th>
+        <th class='w-100px'><?php echo $lang->testcase->reviewedDateAB;?></th>
         <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), "class='form-control form-date'");?></td><td></td>
       </tr>
       <tr>

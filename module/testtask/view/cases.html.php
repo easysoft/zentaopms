@@ -23,7 +23,7 @@
     <div class='cell'><?php echo $moduleTree;?></div>
   </div>
   <div class='main-col'>
-    <div class="cell" id="queryBox"></div>
+    <div class="cell" id="queryBox" data-module='testtask'></div>
     <?php
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');

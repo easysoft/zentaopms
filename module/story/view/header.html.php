@@ -22,12 +22,15 @@ function loadProductBranches(productID)
     $('#branch_chosen').remove();
     $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
     {
+        var $product = $('#product');
+        var $inputGroup = $product.closest('.input-group');
+        $inputGroup.find('.input-group-addon').toggleClass('hidden', !data);
         if(data)
         {
-            $('#product').closest('.input-group').append(data);
-            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px');
-            $('#branch').chosen();
+            $inputGroup.append(data);
+            $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px').chosen();
         }
+        $inputGroup.fixInputGroup();
     })
 }
 
@@ -35,11 +38,13 @@ function loadProductModules(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
-    $('#moduleIdBox').load(moduleLink, function()
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    var $moduleIDBox = $('#moduleIdBox');
+    $moduleIDBox.load(moduleLink, function()
     {
-        $('#moduleIdBox #module').chosen();
-        if(typeof(storyModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + storyModule + "</span>")
+        $moduleIDBox.find('#module').chosen();
+        if(typeof(storyModule) == 'string') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
+        $moduleIDBox.fixInputGroup();
     });
 }
 
@@ -48,10 +53,15 @@ function loadProductPlans(productID, branch)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
     planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branch + '&planID=' + $('#plan').val() + '&fieldID=&needCreate=true');
-    $('#planIdBox').load(planLink, function(){$('#planIdBox #plan').chosen();});
+    var $planIdBox = $('#planIdBox');
+    $planIdBox.load(planLink, function()
+    {
+        $planIdBox.find('#plan').chosen();
+        $planIdBox.fixInputGroup();
+    });
 }
 
-$(function() 
+$(function()
 {
     $("#reviewedBy").chosen();
     $("#mailto").chosen();

@@ -68,7 +68,8 @@
                 <?php foreach($product->plans as $plan):?>
                   <?php $class = $color ? 'rowcolor' : '';?>
                   <?php if($id != 1) echo "<tr class='text-center'>"?>
-                    <td align='left' class="<?php echo $class;?>"><?php echo $plan->title;?></td>
+                    <?php $child = (isset($plan->parent) and $plan->parent > 0 and isset($product->plans[$plan->parent])) ? ' child' : '';?>
+                    <td align='left' class="text-left <?php echo $class . $child;?>"><?php echo $plan->title;?></td>
                     <td class="<?php echo $class;?>"><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
                     <td class="<?php echo $class;?>"><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
                     <?php

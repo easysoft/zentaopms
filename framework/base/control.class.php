@@ -885,7 +885,11 @@ class baseControl
         if($type != 'json') die();
 
         $data = (array) $data;
-        if(helper::isAjaxRequest() or $this->viewType == 'json') print(json_encode($data)) and die(helper::removeUTF8Bom(ob_get_clean()));
+        if(helper::isAjaxRequest() or $this->viewType == 'json')
+        {
+            print(json_encode($data));
+            die(helper::removeUTF8Bom(ob_get_clean()));
+        }
 
         /**
          * 响应非ajax的请求。
@@ -905,8 +909,7 @@ class baseControl
             {
                 $message = json_decode(json_encode((array)$data['message']));
                 foreach((array)$message as $item => $errors) $message->$item = implode(',', $errors);
-                echo js::alert(strip_tags(implode(" ", (array) $message)));
-                die(js::locate('back'));
+                die(js::alert(strip_tags(implode('\n', (array) $message))));
             }
             die('fail');
         }

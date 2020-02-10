@@ -141,7 +141,7 @@
       </div>
     </div>
   </div>
-  <div id='queryBox' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
+  <div id='queryBox' data-module='task' class='<?php if($browseType =='bysearch') echo 'show';?>'></div>
 </div>
 <?php
 $headerHooks = glob(dirname(dirname(__FILE__)) . "/ext/view/featurebar.*.html.hook.php");

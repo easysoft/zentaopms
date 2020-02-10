@@ -554,6 +554,12 @@ class upgradeModel extends model
             }
 
             $this->appendExec('11_6_5');
+        case '11_7':
+            $this->saveLogs('Execute 11_7');
+            $this->execSQL($this->getUpgradeFile('11.7'));
+            $this->adjustPriv12_0();
+            $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
+            $this->appendExec('11_7');
         }
 
         $this->deletePatch();
@@ -714,6 +720,7 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.0-beta3.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '11_7' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.7'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3495,6 +3502,11 @@ class upgradeModel extends model
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
 
+        $customedTypeList4All = $this->dao->select('*')->from(TABLE_LANG)
+            ->where('lang')->eq("all")
+            ->andWhere('module')->eq('bug')
+            ->andWhere('section')->eq('typeList')
+            ->fetchPairs('`key`', 'value');
         foreach($this->config->upgrade->discardedBugTypes as $langCode => $types)
         {
             $bugs = $this->dao->select('distinct type')->from(TABLE_BUG)->where('type')->in(array_keys($types))->fetchAll('type');
@@ -3502,19 +3514,19 @@ class upgradeModel extends model
 
             $usedTypes        = array_keys($bugs);
             $customedTypeList = $this->dao->select('*')->from(TABLE_LANG)
-                ->where('lang')->in("$langCode,all")
+                ->where('lang')->eq($langCode)
                 ->andWhere('module')->eq('bug')
                 ->andWhere('section')->eq('typeList')
-                ->fetchPairs('`key`');
+                ->fetchPairs('`key`', 'value');
 
-            $typesToSave = array_diff($usedTypes, $customedTypeList);
+            $typesToSave = array_diff($usedTypes, empty($customedTypeList) ? $customedTypeList4All : $customedTypeList);
 
             if(empty($typesToSave)) continue;
 
             $langs = array();
             foreach($typesToSave as $type) $langs[$type] = $types[$type];
 
-            if(empty($customedTypeList))
+            if(empty($customedTypeList) and empty($customedTypeList4All))
             {
                 $lang = new stdclass;
                 $lang->bug = new stdclass;
@@ -3525,8 +3537,13 @@ class upgradeModel extends model
                 if(is_file($langFile)) include $langFile;
                 $langs = array_merge($lang->bug->typeList, $langs);
             }
+            elseif(empty($customedTypeList))
+            {
+                $langs = array_merge($customedTypeList4All, $langs);
+            }
 
-            foreach($langs as $type => $typeName) $this->loadModel('custom')->setItem("{$langCode}.bug.typeList.{$type}.1", $typeName);
+            $this->loadModel('custom');
+            foreach($langs as $type => $typeName) $this->custom->setItem("{$langCode}.bug.typeList.{$type}.1", $typeName);
         }
         return true;
     }
@@ -3582,6 +3599,30 @@ class upgradeModel extends model
             $setting->key    = 'conceptSetted';
             $setting->value  = '1';
             $this->dao->replace(TABLE_CONFIG)->data($setting)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Adjust priv 12.0.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv12_0()
+    {
+        $this->saveLogs('Run Method ' . __FUNCTION__);
+
+        $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('file')->andWhere('method')->eq('delete')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'doc';
+            $groupPriv->method = 'deleteFile';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+            $this->saveLogs($this->dao->get());
         }
 
         return true;

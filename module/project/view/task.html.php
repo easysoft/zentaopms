@@ -170,7 +170,7 @@ js::set('browseType', $browseType);
     </div>
   </div>
   <div class="main-col">
-    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='task'></div>
     <?php if(empty($tasks)):?>
     <div class="table-empty-tip">
       <p>

@@ -74,6 +74,7 @@ class story extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
+            setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $storyResult = $this->story->create($projectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$storyResult or dao::isError())
             {
@@ -123,13 +124,17 @@ class story extends control
             }
 
             $moduleID = $this->post->module ? $this->post->module : 0;
-            $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID&orderBy=&browseType=byModule&moduleID=$moduleID");
             if($projectID == 0)
             {
-                setcookie('storyModule', (int)$moduleID, 0, $this->config->webRoot, '', false, false);
+                setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
                 $productID = $this->post->product ? $this->post->product : $productID;
                 $branchID  = $this->post->branch ? $this->post->branch : $branch;
                 $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&orderBy=id_desc");
+            }
+            else
+            {
+                setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, true);
+                $response['locate'] = $this->createLink('project', 'story', "projectID=$projectID&orderBy=id_desc&browseType=unclosed");
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
             $this->send($response);
@@ -144,7 +149,7 @@ class story extends control
         else
         {
             $products = array();
-            $productList = $this->loadModel('block')->getProducts('noclosed', '');
+            $productList = $this->product->getOrderedProducts('noclosed');
             foreach($productList as $product) $products[$product->id] = $product->name;
             $product  = $this->product->getById($productID ? $productID : key($products));
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
@@ -248,7 +253,7 @@ class story extends control
         $this->view->position[]       = $this->lang->story->create;
         $this->view->products         = $products;
         $this->view->users            = $users;
-        $this->view->moduleID         = $moduleID;
+        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch);
         $this->view->planID           = $planID;
@@ -307,7 +312,16 @@ class story extends control
                 die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
 
-            die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch"), 'parent'));
+            if($project)
+            {
+                setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', false, false);
+                die(js::locate($this->createLink('project', 'story', "projectID=$project&orderBy=id_desc&browseType=unclosed"), 'parent'));
+            }
+            else
+            {
+                setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
+                die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch"), 'parent'));
+            }
         }
 
         /* Set products and module. */

@@ -1,5 +1,5 @@
 <div class="main-col" data-min-width="400">
-<div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+<div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='doc'></div>
   <div class="panel block-files block-sm no-margin">
     <div class="panel-heading">
       <div class="panel-title font-normal">

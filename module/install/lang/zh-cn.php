@@ -37,7 +37,6 @@ $lang->install->links = <<<EOT
 
 
 
-
 您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 

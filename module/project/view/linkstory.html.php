@@ -25,7 +25,7 @@
 </div>
 <div id="mainContent">
   <div class="cell space-sm">
-    <div id='queryBox' class='show no-margin'></div>
+    <div id='queryBox' data-module='story' class='show no-margin'></div>
   </div>
   <form class='main-table table-story' method='post' data-ride='table' id='linkStoryForm'>
     <table class='table table-fixed tablesorter' id='linkStoryList'> 

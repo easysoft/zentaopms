@@ -401,6 +401,24 @@ class bugModel extends model
     }
 
     /**
+     * Check bug project priv.
+     * 
+     * @param  object    $bug 
+     * @access public
+     * @return void
+     */
+    public function checkBugProjectPriv($bug)
+    {
+        if($bug->project and !$this->loadModel('project')->checkPriv($bug->project))
+        {
+            echo(js::alert($this->lang->bug->projectAccessDenied));
+            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('bug', 'index')));
+            die(js::locate('back'));
+        }
+    }
+
+    /**
      * Get bugs of a module.
      *
      * @param  int             $productID
@@ -463,14 +481,6 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t5')->on('t1.plan = t5.id')
             ->where('t1.id')->eq((int)$bugID)->fetch();
         if(!$bug) return false;
-
-        if($bug->project and !$this->loadModel('project')->checkPriv($bug->project))
-        {
-            echo(js::alert($this->lang->bug->projectAccessDenied));
-            $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-            die(js::locate('back'));
-        }
 
         $bug = $this->loadModel('file')->replaceImgURL($bug, 'steps');
         if($setImgSize) $bug->steps = $this->file->setImgSize($bug->steps);
@@ -1678,6 +1688,7 @@ class bugModel extends model
         $projects = $this->loadModel('project')->getPairs();
 
         $maxLength = 12;
+        if(common::checkNotCN()) $maxLength = 22;
         foreach($datas as $projectID => $data)
         {
             $data->name  = isset($projects[$projectID]) ? $projects[$projectID] : $this->lang->report->undefined;
@@ -2301,12 +2312,12 @@ class bugModel extends model
         if($branch and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
-        /* Fix bug #2877. */
+        /* Fix bug #2878. */
         if(strpos($bugQuery, '`resolvedDate`') !== false) $bugQuery .= " AND `resolvedDate` != '0000-00-00 00:00:00'";
         if(strpos($bugQuery, '`closedDate`') !== false)   $bugQuery .= " AND `closedDate` != '0000-00-00 00:00:00'";
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
-            ->andWhere('project')->in($this->app->user->view->projects)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;

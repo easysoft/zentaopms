@@ -84,6 +84,13 @@ class messageModel extends model
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
+            if($this->app->isFlow)
+            {
+                $rawModule = $this->app->rawModule;
+                $rawMethod = $this->app->rawMethod;
+                $actions[$rawModule][] = $rawMethod;
+            }
+
             if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
             {
                 $this->loadModel('webhook')->send($objectType, $objectID, $actionType, $actionID, $actor);

@@ -154,13 +154,16 @@ class build extends control
 
             $productGroups = $this->project->getProducts($build->project);
 
-            $products      = array();
-            foreach($productGroups as $product) $products[$product->id] = $product->name;
-            if(empty($productGroups) and $build->product)
+            $this->loadModel('product');
+            if(!isset($productGroups[$build->product]))
             {
-                $product = $this->loadModel('product')->getById($build->product);
-                $products[$product->id] = $product->name;
+                $product = $this->product->getById($build->product);
+                $product->branch = $build->branch;
+                $productGroups[$build->product] = $product;
             }
+
+            $products = array();
+            foreach($productGroups as $product) $products[$product->id] = $product->name;
 
             $this->view->title      = $project->name . $this->lang->colon . $this->lang->build->edit;
             $this->view->position[] = html::a($this->createLink('project', 'task', "projectID=$build->project"), $project->name);

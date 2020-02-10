@@ -181,7 +181,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     </div>
   </div>
   <div class="main-col">
-    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox"></div>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='bug'></div>
     <?php if(empty($bugs)):?>
     <div class="table-empty-tip">
       <p>
@@ -388,7 +388,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           </div>
           <?php endif;?>
         </div>
-        <div class="text"><?php echo $summary;?></div>
+        <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

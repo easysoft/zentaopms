@@ -37,11 +37,11 @@ $lang->block->welcome      = 'Willkommen';
 $lang->block->lblTesttask  = 'Test Request Detail';
 
 $lang->block->leftToday = 'Arbeit für Heute';
-$lang->block->myTask    = 'Meine Aufgaben';
-$lang->block->myStory   = 'Meine Story';
-$lang->block->myBug     = 'Meine Bugs';
-$lang->block->myProject = 'Meine ' . $lang->projectCommon;
-$lang->block->myProduct = 'Meine ' . $lang->productCommon;
+$lang->block->myTask    = 'Aufgaben';
+$lang->block->myStory   = 'Story';
+$lang->block->myBug     = 'Bugs';
+$lang->block->myProject = '' . $lang->projectCommon;
+$lang->block->myProduct = '' . $lang->productCommon;
 $lang->block->delayed   = 'Verspätet';
 $lang->block->noData    = 'Keine Daten für diesen Bericht.';
 $lang->block->emptyTip  = 'Keine Information';

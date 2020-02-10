@@ -59,6 +59,15 @@ fi
 echo $computeburn > $basePath/computeburn.sh
 echo "computeburn.sh ok"
 
+# compute task effort.
+if [ $requestType == 'PATH_INFO' ]; then
+  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/project-computetaskeffort'";
+else
+  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=project&f=computetaskeffort'";
+fi
+echo $computetaskeffort > $basePath/computetaskeffort.sh
+echo "computetaskeffort.sh ok"
+
 # daily remind
 if [ $requestType == 'PATH_INFO' ]; then
   checkdb="$phpcli $basePath/ztcli '$pmsRoot/report-remind'";

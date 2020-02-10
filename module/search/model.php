@@ -23,20 +23,21 @@ class searchModel extends model
      */
     public function setSearchParams($searchConfig)
     {
+        $module = $searchConfig['module'];
         if(isset($this->config->bizVersion))
         {
-            $module = $searchConfig['module'];
-            if($module == 'projectStory') $module = 'story';
-            if($module == 'projectBug')   $module = 'bug';
+            $flowModule = $module;
+            if($module == 'projectStory') $flowModule = 'story';
+            if($module == 'projectBug')   $flowModule = 'bug';
 
-            $fields = $this->loadModel('workflowfield')->getList($module);
+            $fields = $this->loadModel('workflowfield')->getList($flowModule);
 
             foreach($fields as $field)
             {
                 /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
                 if($field->field == 'subStatus')
                 {
-                    $field = $this->workflowfield->getByField($module, 'subStatus');
+                    $field = $this->workflowfield->getByField($flowModule, 'subStatus');
 
                     $searchConfig['fields'][$field->field] = $field->name;
                     $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $field->options);
@@ -65,7 +66,7 @@ class searchModel extends model
         $searchParams['onMenuBar']    = zget($searchConfig, 'onMenuBar', 'no');
         $searchParams['queryID']      = isset($searchConfig['queryID']) ? $searchConfig['queryID'] : 0;
 
-        $this->session->set('searchParams', $searchParams);
+        $this->session->set($module . 'searchParams', $searchParams);
     }
 
     /**
@@ -77,11 +78,13 @@ class searchModel extends model
     public function buildQuery()
     {
         /* Init vars. */
-        $where       = '';
-        $groupItems  = $this->config->search->groupItems;
-        $groupAndOr  = strtoupper($this->post->groupAndOr);
-        $fieldParams = json_decode($this->session->searchParams['fieldParams']);
-        $scoreNum    = 0;
+        $where        = '';
+        $groupItems   = $this->config->search->groupItems;
+        $groupAndOr   = strtoupper($this->post->groupAndOr);
+        $module       = $this->session->searchParams['module'];
+        $searchParams = $module . 'searchParams';
+        $fieldParams  = json_decode($_SESSION[$searchParams]['fieldParams']);
+        $scoreNum     = 0;
 
         if($groupAndOr != 'AND' and $groupAndOr != 'OR') $groupAndOr = 'AND';
 
@@ -146,6 +149,7 @@ class searchModel extends model
             }
             else
             {
+                if($operator == 'between' and !isset($this->config->search->dynamic[$value])) $operator = '=';
                 $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
             }
 
@@ -154,6 +158,11 @@ class searchModel extends model
             {
                 $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 23:59:59'";
                 $where     .= " $andOr ($condition)";
+            }
+            elseif ($operator == '<=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            {
+                /* Fix bug #2896. */
+                $where .= " $andOr " . '`' . $this->post->$fieldName . "` <= '$value 23:59:59'";
             }
             elseif($condition)
             {
@@ -184,7 +193,7 @@ class searchModel extends model
     public function initSession($module, $fields, $fieldParams)
     {
         $formSessionName  = $module . 'Form';
-        if($this->session->$formSessionName != false) return;
+        if(isset($_SESSION[$formSessionName]) and $_SESSION[$formSessionName] != false) return;
 
         for($i = 1; $i <= $this->config->search->groupItems * 2; $i ++)
         {
@@ -222,7 +231,7 @@ class searchModel extends model
         $hasProject = false;
         $hasUser    = false;
 
-        $fields     = array_keys($fields);
+        $fields = array_keys($fields);
         foreach($fields as $fieldName)
         {
             if(empty($params[$fieldName])) continue;
@@ -233,7 +242,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users        = $this->loadModel('user')->getPairs('realname|noclosed');
+            $users = $this->loadModel('user')->getPairs('realname|noclosed');
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs();
@@ -252,6 +261,10 @@ class searchModel extends model
                 {
                     $params[$fieldName]['values'] = array('ZERO' => $params[$fieldName]['values'][0]) + $params[$fieldName]['values'];
                     unset($params[$fieldName]['values'][0]);
+                }
+                elseif(empty($params[$fieldName]['values']))
+                {
+                    $params[$fieldName]['values'] = array('' => '', 'null' => $this->lang->search->null);
                 }
                 else
                 {
@@ -285,7 +298,7 @@ class searchModel extends model
             $_POST = $query->form;
             $this->buildQuery();
             $querySessionName = $query->form['module'] . 'Query';
-            $query->sql = $this->session->$querySessionName;
+            $query->sql = $_SESSION[$querySessionName];
         }
         return $query;
     }
@@ -300,12 +313,12 @@ class searchModel extends model
     {
         $sqlVar  = $this->post->module  . 'Query';
         $formVar = $this->post->module  . 'Form';
-        $sql     = $this->session->$sqlVar;
+        $sql     = $_SESSION[$sqlVar];
         if(!$sql) $sql = ' 1 = 1 ';
 
         $query = fixer::input('post')
             ->add('account', $this->app->user->account)
-            ->add('form', serialize($this->session->$formVar))
+            ->add('form', serialize($_SESSION[$formVar]))
             ->add('sql',  $sql)
             ->skipSpecial('sql,form')
             ->remove('onMenuBar')

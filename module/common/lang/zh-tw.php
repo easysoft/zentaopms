@@ -99,7 +99,7 @@ $lang->selectAll     = '全選';
 $lang->selectReverse = '反選';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您訪問的對象並不存在！';
-$lang->notPage      =  '抱歉，您訪問的功能正在開發中！';
+$lang->notPage       =  '抱歉，您訪問的功能正在開發中！';
 $lang->showAll       = '[[全部顯示]]';
 
 $lang->future      = '未來';
@@ -122,6 +122,7 @@ $lang->menu->my      = '<span> 我的地盤</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '測試|qa|index';
+$lang->menu->repo    = '代碼|repo|log';
 $lang->menu->doc     = '文檔|doc|index';
 $lang->menu->report  = '統計|report|index';
 $lang->menu->company = '組織|company|index';
@@ -328,7 +329,13 @@ $lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => '測試單|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '報告|testreport|browse|');
-$lang->caselib->menu->caselib   = array('link' => '用例庫|caselib|browse', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+$lang->caselib->menu->caselib   = array('link' => '用例庫|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
+
+$lang->repo = new stdclass();
+$lang->repo->menu = new stdclass();
+$lang->repo->menu->browse   = array('link' =>'瀏覽|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
+$lang->repo->menu->settings = '設置|repo|settings|repoID=%s';
+$lang->repo->menu->delete   = array('link' => '刪除|repo|delete|repoID=%s', 'target' => 'hiddenwin');
 
 /* 文檔視圖菜單設置。*/
 $lang->doc = new stdclass();
@@ -342,6 +349,7 @@ $lang->git = new stdclass();
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
+$lang->report->menu->annual  = array('link' => '年度總結|report|annualData', 'target' => '_blank');
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
 $lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
 $lang->report->menu->test    = array('link' => '測試|report|bugcreate', 'alias' => 'bugassign');

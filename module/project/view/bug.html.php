@@ -26,7 +26,7 @@
   </div>
 </div>
 <div id="mainContent">
-  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox"></div>
+  <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='projectBug'></div>
   <?php if(empty($bugs)):?>
   <div class="table-empty-tip">
     <p>

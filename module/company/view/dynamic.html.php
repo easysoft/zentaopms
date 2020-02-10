@@ -34,7 +34,7 @@
   </div>
 </div>
 
-<div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
+<div id='queryBox' data-module='action' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
 <div id='mainContent' class='main-content'>
   <div id='dynamics'>
     <?php $firstAction = '';?>

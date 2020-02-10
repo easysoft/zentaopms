@@ -30,11 +30,11 @@ ZenTao ALM is an open source software released under <a href='http://zpl.pub/pag
 ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by Nature Easy Soft. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM is developed by <strong><a href='http://en.easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
+ZenTao ALM is developed by <strong><a href='http://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
 Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a>
-Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
+LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>EasyCorp</a>
+Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>EasyCorp</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
 You are installing ZenTao <strong class='text-danger'>%s</strong>.

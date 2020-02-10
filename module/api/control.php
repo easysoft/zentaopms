@@ -105,9 +105,8 @@ class api extends control
      */
     public function sql($keyField = '')
     {
-        die();
-        //$sql = isset($_POST['sql']) ? $this->post->sql : '';
-        //$this->view->results = $this->api->sql($sql, $keyField);
-        //die($this->display());
+        $sql = isset($_POST['sql']) ? $this->post->sql : '';
+        $this->view->results = $this->api->sql($sql, $keyField);
+        die($this->display());
     }
 }

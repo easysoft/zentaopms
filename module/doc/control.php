@@ -37,6 +37,9 @@ class doc extends control
      */
     public function index()
     {
+        $this->from = 'doc';
+        setcookie('from', 'doc', $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         $this->doc->setMenu();
 
         $this->session->set('docList', $this->app->getURI(true));
@@ -78,7 +81,7 @@ class doc extends control
     public function browse($libID = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $from = 'doc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->from = $from;
-        setcookie('from',  $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+        setcookie('from', $from, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         $this->loadModel('search');
 
@@ -96,6 +99,8 @@ class doc extends control
             $type      = $lib->type;
             $productID = $lib->product;
             $projectID = $lib->project;
+
+            if($type != 'product' and $type != 'project') $from = 'doc';
         }
 
         $this->libs = $this->doc->getLibs($type, '', $libID);
@@ -303,6 +308,7 @@ class doc extends control
     {
         if(!empty($_POST))
         {
+            setcookie('lastDocModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $docResult = $this->doc->create();
             if(!$docResult or dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -318,7 +324,7 @@ class doc extends control
             if(!empty($files)) $fileAction = $this->lang->addFiles . join(',', $files) . "\n" ;
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
-            $vars = "libID=$libID&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
+            $vars = "libID={$this->post->lib}&browseType=byModule&moduleID={$this->post->module}&orderBy=id_desc&from=$this->from";
             $link = $this->createLink('doc', 'browse', $vars);
             if($this->app->getViewType() == 'xhtml') $link = $this->createLink('doc', 'view', "docID=$docID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
@@ -361,7 +367,7 @@ class doc extends control
         $this->view->libs             = $this->doc->getLibs($type = 'all', $extra = "withObject,$unclosed", $libID);
         $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        $this->view->moduleID         = $moduleID;
+        $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         $this->view->type             = $type;
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
@@ -499,6 +505,40 @@ class doc extends control
                 $this->send($response);
             }
             die(js::locate($this->session->docList, 'parent'));
+        }
+    }
+
+    /**
+     * Delete file for doc.
+     * 
+     * @param  int    $docID 
+     * @param  int    $fileID 
+     * @param  string $confirm 
+     * @access public
+     * @return void
+     */
+    public function deleteFile($docID, $fileID, $confirm = 'no')
+    {
+        $this->loadModel('file');
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->file->confirmDelete, inlink('deleteFile', "docID=$docID&fileID=$fileID&confirm=yes")));
+        }
+        else
+        {
+            $docContent = $this->dao->select('t1.*')->from(TABLE_DOCCONTENT)->alias('t1')
+                ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id and t1.version=t2.version')
+                ->where('t2.id')->eq($docID)
+                ->fetch();
+            unset($docContent->id);
+            $docContent->files    = trim(str_replace(",{$fileID},", ',', ",{$docContent->files},"), ',');
+            $docContent->version += 1;
+            $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
+            $this->dao->update(TABLE_DOC)->set('version')->eq($docContent->version)->where('id')->eq($docID)->exec();
+
+            $file = $this->file->getById($fileID);
+            $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+            die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
     }
 

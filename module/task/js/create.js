@@ -83,7 +83,7 @@ function copyStoryTitle()
     $('.pri-text span:first').removeClass().addClass('pri' + $('#storyPri').val()).text($('#storyPri').val());
     $('select#pri').val($('#storyPri').val());
 
-    $(window.editor.desc.edit.doc).find('span.kindeditor-ph').remove();
+    $('#desc').closest('td').find('.ke-container .ke-edit .kindeditor-ph').toggle($('#storyDesc').val() == '');
     window.editor.desc.html($('#storyDesc').val());
 }
 

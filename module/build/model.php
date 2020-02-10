@@ -242,6 +242,7 @@ class buildModel extends model
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();
 
+        if($this->config->global->flow == 'onlyTest') $this->config->build->edit->requiredFields = str_replace('project,', '', $this->config->build->edit->requiredFields);
         $build = $this->loadModel('file')->processImgURL($build, $this->config->build->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_BUILD)->data($build)
             ->autoCheck()

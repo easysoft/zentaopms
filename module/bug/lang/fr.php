@@ -177,6 +177,7 @@ $lang->bug->confirmChangeProduct  = "Tout changement aux {$lang->productCommon} 
 $lang->bug->confirmDelete         = 'Voulez-vous supprimer ce bug ?';
 $lang->bug->remindTask            = 'Ce bug a été converti en tâche. Voulez-vous mettre à jour le statut de la Tâche(ID %s) ?';
 $lang->bug->skipClose             = 'Bug %s est actif. Vous ne pouvez pas le fermer.';
+$lang->bug->projectAccessDenied   = "You access to the {$lang->projectCommon} to which this bug belongs is denied!";
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[Etape]</p><br/>";

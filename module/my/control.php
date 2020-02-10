@@ -184,7 +184,8 @@ class my extends control
 
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
-
+        $this->loadModel('product');
+        
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[] = $this->lang->my->task;

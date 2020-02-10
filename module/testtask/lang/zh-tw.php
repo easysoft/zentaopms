@@ -9,16 +9,16 @@
  * @version     $Id: zh-tw.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->testtask->index            = "版本首頁";
+$lang->testtask->index            = "測試單首頁";
 $lang->testtask->create           = "提交測試";
 $lang->testtask->reportChart      = '報表統計';
 $lang->testtask->reportAction     = '用例報表統計';
-$lang->testtask->delete           = "刪除版本";
+$lang->testtask->delete           = "刪除測試單";
 $lang->testtask->view             = "概況";
 $lang->testtask->edit             = "編輯測試單";
-$lang->testtask->browse           = "版本列表";
+$lang->testtask->browse           = "測試單列表";
 $lang->testtask->linkCase         = "關聯用例";
-$lang->testtask->selectVersion    = "選擇版本";
+$lang->testtask->selectVersion    = "選擇測試單";
 $lang->testtask->unlinkCase       = "移除";
 $lang->testtask->batchUnlinkCases = "批量移除用例";
 $lang->testtask->batchAssign      = "批量指派";
@@ -33,17 +33,17 @@ $lang->testtask->groupCase        = "分組瀏覽用例";
 $lang->testtask->pre              = '上一個';
 $lang->testtask->next             = '下一個';
 $lang->testtask->start            = "開始";
-$lang->testtask->startAction      = "開始版本";
+$lang->testtask->startAction      = "開始測試單";
 $lang->testtask->close            = "關閉";
-$lang->testtask->closeAction      = "關閉版本";
-$lang->testtask->wait             = "待測版本";
+$lang->testtask->closeAction      = "關閉測試單";
+$lang->testtask->wait             = "待測測試單";
 $lang->testtask->block            = "阻塞";
-$lang->testtask->blockAction      = "阻塞版本";
+$lang->testtask->blockAction      = "阻塞測試單";
 $lang->testtask->activate         = "激活";
-$lang->testtask->activateAction   = "激活版本";
-$lang->testtask->testing          = "測試中版本";
-$lang->testtask->blocked          = "被阻塞版本";
-$lang->testtask->done             = "已測版本";
+$lang->testtask->activateAction   = "激活測試單";
+$lang->testtask->testing          = "測試中測試單";
+$lang->testtask->blocked          = "被阻塞測試單";
+$lang->testtask->done             = "已測測試單";
 $lang->testtask->totalStatus      = "全部";
 $lang->testtask->all              = "全部" . $lang->productCommon;
 $lang->testtask->allTasks         = '所有測試';
@@ -78,11 +78,12 @@ $lang->testtask->stepResults    = '步驟結果';
 $lang->testtask->lastRunner     = '最後執行人';
 $lang->testtask->lastRunDate    = '最後執行時間';
 $lang->testtask->date           = '測試時間';
+$lang->testtask->deleted        = "已刪除";
 
 $lang->testtask->beginAndEnd    = '起止時間';
 $lang->testtask->to             = '至';
 
-$lang->testtask->legendDesc      = '版本描述';
+$lang->testtask->legendDesc      = '測試單描述';
 $lang->testtask->legendReport    = '測試總結';
 $lang->testtask->legendBasicInfo = '基本信息';
 
@@ -98,7 +99,7 @@ $lang->testtask->priList[2] = '2';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未關聯';
-$lang->testtask->linkByBuild   = '複製版本';
+$lang->testtask->linkByBuild   = '複製測試單';
 $lang->testtask->linkByStory   = "按{$lang->storyCommon}關聯";
 $lang->testtask->linkByBug     = '按Bug關聯';
 $lang->testtask->linkBySuite   = '按套件關聯';
@@ -110,8 +111,8 @@ $lang->testtask->showFail      = '失敗<span class="text-danger">%s</span>次';
 
 $lang->testtask->confirmDelete     = '您確認要刪除該測試單嗎？';
 $lang->testtask->confirmUnlinkCase = '您確認要移除該用例嗎？';
-$lang->testtask->noticeNoOther     = '該產品還沒有其他測試版本';
-$lang->testtask->noTesttask        = '暫時沒有測試版本。';
+$lang->testtask->noticeNoOther     = '該產品還沒有其他測試單';
+$lang->testtask->noTesttask        = '暫時沒有測試單';
 $lang->testtask->checkLinked       = '請檢查測試單的產品是否與項目相關聯';
 
 $lang->testtask->assignedToMe  = '指派給我';
@@ -130,14 +131,14 @@ $lang->testtask->mail = new stdclass();
 $lang->testtask->mail->create = new stdclass();
 $lang->testtask->mail->edit   = new stdclass();
 $lang->testtask->mail->close  = new stdclass();
-$lang->testtask->mail->create->title = "%s創建了版本 #%s:%s";
-$lang->testtask->mail->edit->title   = "%s編輯了版本 #%s:%s";
-$lang->testtask->mail->close->title  = "%s關閉了版本 #%s:%s";
+$lang->testtask->mail->create->title = "%s創建了測試單 #%s:%s";
+$lang->testtask->mail->edit->title   = "%s編輯了測試單 #%s:%s";
+$lang->testtask->mail->close->title  = "%s關閉了測試單 #%s:%s";
 
 $lang->testtask->action = new stdclass();
-$lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 創建版本 <strong>$extra</strong>。' . "\n";
-$lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 啟動版本 <strong>$extra</strong>。' . "\n";
-$lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成版本 <strong>$extra</strong>。' . "\n";
+$lang->testtask->action->testtaskopened  = '$date, 由 <strong>$actor</strong> 創建測試單 <strong>$extra</strong>。' . "\n";
+$lang->testtask->action->testtaskstarted = '$date, 由 <strong>$actor</strong> 啟動測試單 <strong>$extra</strong>。' . "\n";
+$lang->testtask->action->testtaskclosed  = '$date, 由 <strong>$actor</strong> 完成測試單 <strong>$extra</strong>。' . "\n";
 
 $lang->testtask->unexecuted = '未執行';
 

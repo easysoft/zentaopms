@@ -53,7 +53,7 @@ class myMisc extends misc
             $agentOS = helper::getOS();
             if(strpos($agentOS, 'Windows') !== false) $os = 'win64';
             if(strpos($agentOS, 'Linux') !== false)   $os = 'linux64';
-            if(strpos($agentOS, 'Mac') !== false)     $os = 'mac';
+            if(strpos($agentOS, 'Mac') !== false)     $os = 'mac64';
 
             $this->view->os = $os;
         }

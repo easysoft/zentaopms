@@ -14,7 +14,7 @@
 <div class='main-row split-row fade' id='mainRow'>
   <?php include './side.html.php';?>
   <div class="main-col" data-min-width="400">
-  <div class="cell" id="queryBox"></div>
+  <div class="cell" id="queryBox" data-module='doc'></div>
     <div class="row">
       <div class="col-sm-7">
         <div class="panel block-files block-sm" style="height: 290px;">

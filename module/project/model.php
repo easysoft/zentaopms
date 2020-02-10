@@ -850,6 +850,7 @@ class projectModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
         $stats       = array();
@@ -1043,20 +1044,18 @@ class projectModel extends model
             $delay = helper::diffDate(helper::today(), $project->end);
             if($delay > 0) $project->delay = $delay;
         }
-
+        /* Fix bug #2943. */
         $total = $this->dao->select('
             SUM(estimate) AS totalEstimate,
             SUM(consumed) AS totalConsumed,
             SUM(`left`) AS totalLeft')
             ->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
-            ->andWhere('status')->ne('cancel')
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch();
         $closedTotalLeft= (int)$this->dao->select('SUM(`left`) AS totalLeft')->from(TABLE_TASK)
             ->where('project')->eq((int)$projectID)
-            ->andWhere('status')->eq('closed')
             ->andWhere('deleted')->eq(0)
             ->andWhere('parent')->lt(1)
             ->fetch('totalLeft');
@@ -1118,6 +1117,42 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq(0);
         if(!$withBranch) return $query->fetchPairs('id', 'name');
         return $query->fetchAll('id');
+    }
+
+    /**
+     * Get ordered projects.
+     * 
+     * @param  string $status 
+     * @param  int    $num 
+     * @access public
+     * @return array
+     */
+    public function getOrderedProjects($status, $num = 0)
+    {
+        $projectList = $this->getList($status);
+        if(empty($projectList)) return $projectList;
+
+        $projects = $mineProjects = $otherProjects = $closedProjects = array();
+        foreach($projectList as $project)
+        {
+            if(!$this->app->user->admin and !$this->checkPriv($project->id)) continue;
+            if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
+            {
+                $mineProjects[$project->id] = $project;
+            }
+            elseif($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
+            {
+                $otherProjects[$project->id] = $project;
+            }
+            elseif($project->status == 'done' or $project->status == 'closed')
+            {
+                $closedProjects[$project->id] = $project;
+            }
+        }
+        $projects = $mineProjects + $otherProjects + $closedProjects;
+
+        if(empty($num)) return $projects;
+        return array_slice($projects, 0, $num, true);
     }
 
     /**
@@ -2663,7 +2698,7 @@ class projectModel extends model
         foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * $rate, 1) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
-        $chartData['labels']   = $this->report->convertFormat($dateList, 'j/n');
+        $chartData['labels']   = $this->report->convertFormat($dateList, 'n/j');
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baselineJSON;
 
@@ -2737,6 +2772,9 @@ class projectModel extends model
         if(!isset($node->id))$node->id = 0;
         if($node->type == 'story')
         {
+            static $users;
+            if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
             $node->type = 'module';
             $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
             foreach($stories as $story)
@@ -2748,8 +2786,8 @@ class projectModel extends model
                 $storyItem->color         = $story->color;
                 $storyItem->pri           = $story->pri;
                 $storyItem->storyId       = $story->id;
-                $storyItem->openedBy      = $story->openedBy;
-                $storyItem->assignedTo    = $story->assignedTo;
+                $storyItem->openedBy      = $users[$story->openedBy];
+                $storyItem->assignedTo    = zget($users, $story->assignedTo);
                 $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=project&param=$projectID");
                 $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "projectID={$projectID}&story={$story->id}");
 

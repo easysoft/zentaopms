@@ -358,7 +358,9 @@ class baseHTML
      */
     static public function textarea($name, $value = "", $attrib = "")
     {
-        return "<textarea name='$name' id='$name' $attrib>$value</textarea>\n";
+        $id = "id='$name'";
+        if(strpos($attrib, 'id=') !== false) $id = '';
+        return "<textarea name='$name' $id $attrib>$value</textarea>\n";
     }
 
     /**

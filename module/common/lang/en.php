@@ -121,8 +121,8 @@ $lang->menu = new stdclass();
 $lang->menu->my      = '<span>Dashboard</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = 'QA|qa|index';
-$lang->menu->devops  = 'CI|repo|browse';
+$lang->menu->qa      = 'Test|qa|index';
+$lang->menu->repo    = 'CI|repo|browse';
 $lang->menu->doc     = 'Doc|doc|index';
 $lang->menu->report  = 'Report|report|index';
 $lang->menu->company = 'Company|company|index';
@@ -334,7 +334,6 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|caselib|browse|l
 $lang->repo = new stdclass();
 $lang->repo->menu = new stdclass();
 $lang->repo->menu->browse   = array('link' =>'Browse|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
-$lang->repo->menu->review   = array('link' =>'Review|repo|review|repoID=%s', 'alias' => '');
 $lang->repo->menu->maintain = array('link' =>'Repo|repo|maintain', 'alias' => 'create,edit');
 $lang->repo->menu->job      = array('link' =>'Build|ci|browsejob', 'alias' => 'createjob,editjob,browsebuild,viewbuildlogs');
 $lang->repo->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
@@ -355,6 +354,7 @@ $lang->git = new stdclass();
 $lang->report = new stdclass();
 $lang->report->menu = new stdclass();
 
+$lang->report->menu->annual  = array('link' => 'Annual Summary|report|annualData', 'target' => '_blank');
 $lang->report->menu->product = array('link' => $lang->productCommon . '|report|productsummary');
 $lang->report->menu->prj     = array('link' => $lang->projectCommon . '|report|projectdeviation');
 $lang->report->menu->test    = array('link' => 'Request|report|bugcreate', 'alias' => 'bugassign');
@@ -892,6 +892,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust menu group. */
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
+    $lang->menugroup->case       = 'testcase';
     $lang->menugroup->testtask   = 'testtask';
     $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->caselib    = 'caselib';

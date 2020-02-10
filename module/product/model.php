@@ -39,7 +39,7 @@ class productModel extends model
         if($currentModule == 'story')
         {
             if($currentMethod != 'create' and $currentMethod != 'batchcreate') $currentModule = 'product';
-            if($currentMethod == 'view') $currentMethod = 'browse';
+            if($currentMethod == 'view' || $currentMethod == 'change' || $currentMethod == 'review') $currentMethod = 'browse';
         }
         if($currentMethod == 'report') $currentMethod = 'browse';
 
@@ -337,6 +337,58 @@ class productModel extends model
     public function getStatusGroups()
     {
         $products = $this->dao->select('id, name, status')->from(TABLE_PRODUCT)->where('deleted')->eq(0)->fetchGroup('status');
+    }
+
+    /**
+     * Get ordered products 
+     * 
+     * @param  string $status 
+     * @param  int    $num 
+     * @access public
+     * @return array
+     */
+    public function getOrderedProducts($status, $num = 0)
+    {
+        $products = $this->getList($status);
+        if(empty($products)) return $products;
+
+        $lines = $this->loadModel('tree')->getLinePairs($useShort = true);
+        $productList = array();
+        foreach($lines as $id => $name)
+        {
+            foreach($products as $key => $product)
+            {
+                if($product->line == $id)
+                {
+                    $product->name = $name . '/' . $product->name;
+                    $productList[] = $product;
+                    unset($products[$key]);
+                }
+            }
+        }
+        $productList = array_merge($productList, $products);
+
+        $products = $mineProducts = $otherProducts = $closedProducts = array();
+        foreach($productList as $product)
+        {
+            if(!$this->app->user->admin and !$this->checkPriv($product->id)) continue;
+            if($product->status == 'normal' and $product->PO == $this->app->user->account) 
+            {
+                $mineProducts[$product->id] = $product;
+            }
+            elseif($product->status == 'normal' and $product->PO != $this->app->user->account) 
+            {
+                $otherProducts[$product->id] = $product;
+            }
+            elseif($product->status == 'closed')
+            {
+                $closedProducts[$product->id] = $product;
+            }
+        }
+        $products = $mineProducts + $otherProducts + $closedProducts;
+
+        if(empty($num)) return $products;
+        return array_slice($products, 0, $num, true);
     }
 
     /**

@@ -344,6 +344,11 @@ class userModel extends model
             }
             unset($user->group);
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
+
+            /* Fix bug #2941 */
+            $userID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('user', $userID, 'Created');
+
             if(dao::isError())
             {
                 echo js::error(dao::getError());
@@ -1330,9 +1335,19 @@ class userModel extends model
         if(empty($account)) $account = $this->session->user->account;
         if(empty($account)) return array();
         if(empty($acls) and !empty($this->session->user->rights['acls'])) $acls = $this->session->user->rights['acls'];
-        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
 
+        $userView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(empty($userView)) $userView = $this->computeUserView($account);
+
+        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
+        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->fetchAll('id');
+
+        $openedProducts = join(',', array_keys($openedProducts));
+        $openedProjects = join(',', array_keys($openedProjects));
+
+        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
+        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
+
         if(isset($_SESSION['user']->admin)) $isAdmin = $this->session->user->admin;
         if(!isset($isAdmin)) $isAdmin = strpos($this->app->company->admins, ",{$account},") !== false;
         if(!empty($acls['products']) and !$isAdmin)
@@ -1356,15 +1371,6 @@ class userModel extends model
 
         $userView->products = trim($userView->products, ',');
         $userView->projects = trim($userView->projects, ',');
-
-        $openedProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('acl')->eq('open')->fetchAll('id');
-        $openedProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('acl')->eq('open')->fetchAll('id');
-
-        $openedProducts = join(',', array_keys($openedProducts));
-        $openedProjects = join(',', array_keys($openedProjects));
-
-        $userView->projects = rtrim($userView->projects, ',') . ',' . $openedProjects;
-        $userView->products = rtrim($userView->products, ',') . ',' . $openedProducts;
 
         return $userView;
     }
@@ -1443,7 +1449,6 @@ class userModel extends model
         {
             $this->dao->update(TABLE_USERVIEW)->data($data)->where('account')->eq($account)->exec();
         }
-        exit;
     }
 
     /**

@@ -81,7 +81,7 @@ js::set('flow',          $config->global->flow);
     </div>
   </div>
   <div class="main-col">
-    <div id='queryBox' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
+    <div id='queryBox' data-module='caselib' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
     <?php if(empty($cases)):?>
     <div class="table-empty-tip">
       <p>

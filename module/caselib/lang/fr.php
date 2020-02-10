@@ -27,9 +27,13 @@ $lang->caselib->import           = 'Import';
 $lang->caselib->importAction     = 'Import Case';
 $lang->caselib->showImport       = 'Imported Data';
 
-$lang->caselib->id   = 'ID';
-$lang->caselib->name = 'Name';
-$lang->caselib->desc = 'Description';
+$lang->caselib->id             = 'ID';
+$lang->caselib->name           = 'Name';
+$lang->caselib->desc           = 'Description';
+$lang->caselib->addedBy        = 'CreatedBy';
+$lang->caselib->addedDate      = 'CreatedDate';
+$lang->caselib->lastEditedBy   = 'LastEditedBy';
+$lang->caselib->lastEditedDate = 'LastEditedDate';
 
 $lang->caselib->legendDesc = 'Description';
 

@@ -49,7 +49,7 @@ class cronModel extends model
     {
         $this->app->loadClass('crontab', true);
 
-        $parsedCron = array();
+        $parsedCrons = array();
         foreach($crons as $cron)
         {
             $row = "{$cron->m} {$cron->h} {$cron->dom} {$cron->mon} {$cron->dow} {$cron->command}";

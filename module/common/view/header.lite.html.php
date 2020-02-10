@@ -1,15 +1,16 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php
+$clientLang   = $app->getClientLang();
 $webRoot      = $this->app->getWebRoot();
 $jsRoot       = $webRoot . "js/";
 $themeRoot    = $webRoot . "theme/";
 $defaultTheme = $webRoot . 'theme/default/';
-$langTheme    = $themeRoot . 'lang/' . $app->getClientLang() . '.css';
+$langTheme    = $themeRoot . 'lang/' . $clientLang . '.css';
 $clientTheme  = $this->app->getClientTheme();
 $onlybody     = zget($_GET, 'onlybody', 'no');
 ?>
 <!DOCTYPE html>
-<html lang='<?php echo $app->getClientLang();?>'>
+<html lang='<?php echo $clientLang;?>'>
 <head>
   <meta charset='utf-8'>
   <meta http-equiv='X-UA-Compatible' content='IE=edge'>
@@ -22,7 +23,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
   if($config->debug)
   {
       $timestamp = time();
-      
+
       css::import($themeRoot . 'zui/css/min.css?t=' . $timestamp);
       css::import($defaultTheme . 'style.css?t=' . $timestamp);
 
@@ -31,6 +32,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
 
       js::import($jsRoot . 'jquery/lib.js');
       js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
+      if($clientLang === 'ja') js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
 
   }
@@ -40,6 +42,7 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
       if(!file_exists($this->app->getThemeRoot() . 'default/' . $this->cookie->lang . '.' . $this->cookie->theme . '.css')) $minCssFile = $defaultTheme . 'en.' . $this->cookie->theme . '.css';
       css::import($minCssFile);
       js::import($jsRoot . 'all.js');
+      if($clientLang === 'ja') js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js');
   }
   if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');
 

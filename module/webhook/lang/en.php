@@ -75,6 +75,7 @@ $lang->webhook->note->dingKey = " <a href='http://www.zentao.net/book/zentaopmsh
 
 $lang->webhook->note->typeList['bearychat'] = 'Add a ZenTao bot in bearychat and get the webhook url.';
 $lang->webhook->note->typeList['dingding']  = 'Add a customized bot in dingding and get the webhook url.';
+$lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat and get the webhook url.';
 $lang->webhook->note->typeList['default']   = 'Get a webhook url from others';
 
 $lang->webhook->error = new stdclass();

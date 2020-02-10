@@ -8,7 +8,10 @@ $(function()
         $titleInput = $('#blockParams').find('#title');
         var title = $titleInput.val();
         var value = $(this).find('option:selected').text();
-        if(title.indexOf(' - ' + preValue) >= 0) $titleInput.val(blockTitle + ' - ' + value);
+
+        var preIndex = blockTitle.indexOf(' - ' + preValue);
+        if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
+        $titleInput.val(blockTitle + ' - ' + value);
 
         preValue = value;
     });
@@ -36,7 +39,7 @@ $(function()
             blockTitle = $titleInput.val();
             preValue = $('#blockParams #paramstype').find('option:selected').text();
             var preIndex = blockTitle.indexOf(' - ' + preValue);
-            if(preIndex < -1) blockTitle = blockTitle.substring(0, preIndex);
+            if(preIndex >= 0) blockTitle = blockTitle.substring(0, preIndex);
             $titleInput.val(blockTitle + ' - ' + preValue);
         }
     };

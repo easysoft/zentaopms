@@ -137,7 +137,7 @@
             <table class='table table-form' cellpadding='0' cellspacing='0'>
               <?php if($isLibCase):?>
               <tr>
-                <th class='w-80px'><?php echo $lang->testcase->lib;?></th>
+                <th class='w-100px'><?php echo $lang->testcase->lib;?></th>
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('lib', $libraries, $libID , "onchange='loadLibModules(this.value)' class='form-control chosen'");?>

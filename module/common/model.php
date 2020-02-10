@@ -172,6 +172,7 @@ class commonModel extends model
             if($module == 'tutorial') return true;
             if($module == 'block') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
+            if($module == 'report' and $method == 'annualdata') return true;
         }
         return false;
     }
@@ -661,7 +662,11 @@ class commonModel extends model
         echo '<li>' . html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . '</li>';
         if($moduleName != 'index')
         {
-            if(!isset($lang->menu->$mainMenu)) return;
+            if(!isset($lang->menu->$mainMenu))
+            {
+                echo "</ul>";
+                return;
+            }
             $menuLink = $lang->menu->$mainMenu;
             list($menuLabel, $module, $method) = explode('|', $menuLink);
             echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
@@ -748,8 +753,8 @@ class commonModel extends model
     public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
     {
         global $lang, $app;
-        if(empty($module)) $module = $app->getModuleName();
-        if(empty($method)) $method = $app->getMethodName();
+        if(empty($module)) $module = isset($app->rawModule) ? $app->rawModule : $app->getModuleName();
+        if(empty($method)) $method = isset($app->rawMethod) ? $app->rawMethod : $app->getMethodName();
         $className = 'header';
         $isMobile  = $app->viewType === 'mhtml';
 
@@ -1410,6 +1415,12 @@ EOD;
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
+        if($this->app->isFlow)
+        {
+            $module = $this->app->rawModule;
+            $method = $this->app->rawMethod;
+        }
+
         if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword')));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
@@ -1449,6 +1460,8 @@ EOD;
         $acls    = $app->user->rights['acls'];
         $module  = strtolower($module);
         $method  = strtolower($method);
+
+        if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
 
         if(isset($rights[$module][$method]))
         {

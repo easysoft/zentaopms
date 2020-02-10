@@ -1,2 +1,2 @@
 <?php
-$this->loadExtension('xuanxuan')->send($objectType, $objectID, $actionType, $actionID);
+$this->loadExtension('xuanxuan')->send($objectType, $objectID, $actionType, $actionID, $actor);

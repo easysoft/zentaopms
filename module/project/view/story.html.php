@@ -12,7 +12,6 @@
 ?>
 <?php $canOrder = common::hasPriv('project', 'storySort');?>
 <?php include '../../common/view/header.html.php';?>
-<?php include '../../common/view/tablesorter.html.php';?>
 <?php if($canOrder) include '../../common/view/sortable.html.php';?>
 <?php js::set('moduleID', $this->cookie->storyModuleParam);?>
 <?php js::set('productID', $this->cookie->storyProductParam);?>
@@ -55,8 +54,9 @@
         echo "<i class='icon-plus'></i> {$lang->story->create} <span class='caret'></span>";
         echo '</button>';
         echo "<ul class='dropdown-menu pull-right' id='createActionMenu'>";
-        if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id"), $lang->story->create) . '</li>';
-        if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&project=$project->id"), $lang->story->batchCreate) . '</li>';
+        $storyModuleID = (int)$this->cookie->storyModuleParam;
+        if(common::hasPriv('story', 'create')) echo '<li>' . html::a($this->createLink('story', 'create',  "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->create) . '</li>';
+        if(common::hasPriv('story', 'batchCreate')) echo '<li>' . html::a($this->createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&project=$project->id"), $lang->story->batchCreate) . '</li>';
         echo '</ul>';
         echo '</div>';
     }
@@ -90,7 +90,7 @@
     </div>
   </div>
   <div class="main-col">
-    <div id='queryBox' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
+    <div id='queryBox' data-module='projectStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>

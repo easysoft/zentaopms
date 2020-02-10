@@ -752,7 +752,7 @@ class block extends control
         $status = isset($this->params->type) ? $this->params->type : '';
         $num    = isset($this->params->num) ? $this->params->num : '';
 
-        $products      = $this->block->getProducts($status, $num);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $num);
         $productIdList = array_keys($products);
 
         if(empty($products))
@@ -883,7 +883,7 @@ class block extends control
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
         /* Get projects. */
-        $projects = $this->block->getProjects($status, $num);
+        $projects = $this->loadModel('project')->getOrderedProjects($status, $num);
         if(empty($projects))
         {
             $this->view->projects = $projects;
@@ -893,11 +893,12 @@ class block extends control
         $projectIdList = array_keys($projects);
 
 
-        /* Get tasks. */
+        /* Get tasks. Fix bug #2918.*/
         $yesterday = date('Y-m-d', strtotime('-1 day'));
         $tasks     = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
             ->groupBy('project')
             ->fetchAll('project');
         foreach($tasks as $projectID => $task)
@@ -992,7 +993,7 @@ class block extends control
         $status  = isset($this->params->type) ? $this->params->type : '';
         $num     = isset($this->params->num)  ? (int)$this->params->num : 0;
 
-        $products      = $this->block->getProducts($status, $num);
+        $products      = $this->loadModel('product')->getOrderedProducts($status, $num);
         $productIdList = array_keys($products);
 
         if(empty($products))

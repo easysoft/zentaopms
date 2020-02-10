@@ -149,9 +149,9 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = '', $groupBy = 'stroy')
+    public function groupCase($productID = 0, $branch = '', $groupBy = 'story')
     {
-        $groupBy   = empty($groupBy) ? 'stroy' : $groupBy;
+        $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
         if($branch === '') $branch = (int)$this->cookie->preBranch;
 
@@ -219,6 +219,7 @@ class testcase extends control
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
 
+            setcookie('lastCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $caseResult = $this->testcase->create($bugID);
             if(!$caseResult or dao::isError())
             {
@@ -243,7 +244,7 @@ class testcase extends control
             /* If link from no head then reload. */
             if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
 
-            setcookie('caseModule', (int)$this->post->module, 0, $this->config->webRoot, '', false, false);
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
             $response['locate'] = $this->createLink('testcase', 'browse', "productID={$this->post->product}&branch={$this->post->branch}&browseType=all&param=0&orderBy=id_desc");
             $this->send($response);
         }
@@ -340,7 +341,7 @@ class testcase extends control
         $this->view->productID        = $productID;
         $this->view->productName      = $this->products[$productID];
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->currentModuleID  = $currentModuleID ? $currentModuleID : (int)$this->cookie->lastCaseModule;
         $this->view->stories          = $stories;
         $this->view->caseTitle        = $caseTitle;
         $this->view->color            = $color;
@@ -376,7 +377,9 @@ class testcase extends control
             $caseID = $this->testcase->batchCreate($productID, $branch, $storyID);
             if(dao::isError()) die(js::error(dao::getError()));
             if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=byModule&param=$moduleID"), 'parent'));
+
+            setcookie('caseModule', 0, 0, $this->config->webRoot, '', false, false);
+            die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
