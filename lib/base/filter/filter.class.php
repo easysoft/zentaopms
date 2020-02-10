@@ -319,6 +319,11 @@ class baseValidater
         return self::checkInt($length, $min, $max);
     }
 
+    public static function checkIsUrl($var)
+    {
+        return strlen(trim($var)) != 0;
+    }
+
     /**
      * 检查不为空。
      * Not empty checking.

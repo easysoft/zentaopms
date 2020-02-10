@@ -261,11 +261,13 @@ class Subversion
         $resourcePath = $entry;
         $entry   = '"' . $this->root . '/' . str_replace('%2F', '/', urlencode($entry)) . '"';
         $svnInfo = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'info', "-r $revision --xml")));
+
         $svninfo = execCmd($svnInfo, 'string', $result);
         if($result)
         {
             $entry   = '"' . $this->root . '/' . $resourcePath . '"';
             $svnInfo = $this->replaceAuth(escapeCmd($this->buildCMD($entry, 'info', "-r $revision --xml")));
+
             $svninfo = execCmd($svnInfo, 'string', $result);
             if($result) $svninfo = '';
         }

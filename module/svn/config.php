@@ -15,6 +15,10 @@
  * $config->svn->repos['pms']['password'] = 'pass';
  *
  */
+
+$config->svn->tagRequiredFields = 'name,repo';
+
+/* will use the config of repo records in db
 $config->svn = new stdClass();
 $config->svn->encodings = 'utf-8';
 $config->svn->client    = '';
@@ -25,7 +29,6 @@ $config->svn->repos[$i]['encoding'] = 'utf-8';
 $config->svn->repos[$i]['username'] = '';
 $config->svn->repos[$i]['password'] = '';
 
-/*
 $i ++;
 $config->svn->repos[$i]['path']     = '';
 $config->svn->repos[$i]['username'] = '';

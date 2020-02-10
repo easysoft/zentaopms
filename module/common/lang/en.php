@@ -122,7 +122,7 @@ $lang->menu->my      = '<span>Dashboard</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = 'Test|qa|index';
-$lang->menu->repo    = 'Code|repo|log';
+$lang->menu->repo    = 'CI|repo|browse';
 $lang->menu->doc     = 'Doc|doc|index';
 $lang->menu->report  = 'Report|report|index';
 $lang->menu->company = 'Company|company|index';
@@ -333,9 +333,14 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|caselib|browse|l
 
 $lang->repo = new stdclass();
 $lang->repo->menu = new stdclass();
-$lang->repo->menu->browse   = array('link' =>'Browse|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
-$lang->repo->menu->settings = 'Settings|repo|settings|repoID=%s';
-$lang->repo->menu->delete   = array('link' => 'Delete|repo|delete|repoID=%s', 'target' => 'hiddenwin');
+$lang->repo->menu->browse   = array('link' =>'Browse|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->repo->menu->maintain = array('link' =>'Repo|repo|maintain', 'alias' => 'create,edit');
+$lang->repo->menu->job      = array('link' =>'Build|ci|browsejob', 'alias' => 'createjob,editjob,browsebuild,viewbuildlogs');
+$lang->repo->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
+
+$lang->ci            = new stdclass();
+$lang->ci->menu      = $lang->repo->menu;
+$lang->jenkins->menu = $lang->repo->menu;
 
 /* Doc menu settings. */
 $lang->doc = new stdclass();
@@ -475,6 +480,10 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
+$lang->menugroup->repo        = 'devops';
+$lang->menugroup->ci          = 'devops';
+$lang->menugroup->jenkins     = 'devops';
+
 /* Error info. */
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
@@ -501,6 +510,7 @@ $lang->error->pasteImg        = 'Images are not allowed to be pasted in your bro
 $lang->error->noData          = 'No data.';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please quit tutorial first!';
+$lang->error->noCurlExt       = 'No Curl module installed';
 
 /* Page info. */
 $lang->pager = new stdclass();

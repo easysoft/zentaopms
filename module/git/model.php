@@ -87,51 +87,92 @@ class gitModel extends model
         $this->setLogRoot();
         $this->setRestartFile();
 
-        foreach($this->repos as $name => $repo)
+        foreach($this->repos as $repo)
         {
-            $this->printLog("begin repo $name");
-            $repo = (object)$repo;
-            $repo->name = $name;
+            $this->printLog("begin repo $repo->id");
             if(!$this->setRepo($repo)) return false;
 
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
             $logs = $this->getRepoLogs($repo, $savedRevision);
-            if(empty($logs)) continue;
+            if(!empty($logs)) {
+                $this->printLog("get " . count($logs) . " logs");
+                $this->printLog('begin parsing logs');
+                $latestRevision = $logs[0]->revision;
 
-            $this->printLog("get " . count($logs) . " logs");
-            $this->printLog('begin parsing logs');
-            $latestRevision = $logs[0]->revision;
-            foreach($logs as $log)
-            {
-                $this->printLog("parsing log {$log->revision}");
-                if($log->revision == $savedRevision)
-                {
-                    $this->printLog("{$log->revision} alread parsed, commit it");
-                    continue;
+                $allCommands = [];
+                foreach ($logs as $log) {
+                    $this->printLog("parsing log {$log->revision}");
+                    if ($log->revision == $savedRevision) {
+                        $this->printLog("{$log->revision} alread parsed, commit it");
+                        continue;
+                    }
+
+                    $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+
+                    $scm = $this->app->loadClass('scm');
+                    $objects = $scm->parseComment($log->msg, $allCommands);
+
+                    if($objects)
+                    {
+                        $this->printLog('extract' .
+                            ' story:' . join(' ', $objects['stories']) .
+                            ' task:' . join(' ', $objects['tasks']) .
+                            ' bug:'  . join(',', $objects['bugs']));
+
+                        $this->saveAction2PMS($objects, $log, $repo->encoding);
+                    }
+                    else
+                    {
+                        $this->printLog('no objects found' . "\n");
+                    }
                 }
 
-                $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                $objects = $this->parseComment($log->msg);
-                if($objects)
-                {
-                    $this->printLog('extract' . 
-                        ' story:' . join(' ', $objects['stories']) . 
-                        ' task:' . join(' ', $objects['tasks']) . 
-                        ' bug:'  . join(',', $objects['bugs']));
+                $this->saveLastRevision($latestRevision);
+                $this->printLog("save revision $latestRevision");
+                $this->deleteRestartFile();
+                $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
 
-                    $this->saveAction2PMS($objects, $log);
-                }
-                else
-                {
-                    $this->printLog('no objects found' . "\n");
-                }
+                $this->printLog('extract commands from logs' . json_encode($allCommands));
             }
 
-            $this->saveLastRevision($latestRevision);
-            $this->printLog("save revision $latestRevision");
-            $this->deleteRestartFile();
-            $this->printLog("\n\nrepo $name finished");
+            // exe ci task from logs
+            $cijobIDs = $allCommands['build']['start'];
+            foreach($cijobIDs as $id)
+            {
+                $this->loadModel('ci')->exeJob($id);
+            }
+
+            // dealwith tag commands
+            $this->printLog("dealwith tag commands");
+            $savedTag = $this->getSavedTag();
+
+            $tags = $this->getRepoTags($repo);
+            if(!empty($tags)) {
+                $arriveLastTag = false;
+                $jobToBuild = [];
+                foreach ($tags as $tag) {
+                    if (!empty($savedTag) && $tag === $savedTag) { // get the last build tag position
+                        $arriveLastTag = true;
+                        continue;
+                    }
+
+                    if (!empty($savedTag) && !$arriveLastTag) { // not get
+                        continue;
+                    }
+
+                    $scm = $this->app->loadClass('scm');
+                    $scm->parseTag($tag, $jobToBuild);
+                }
+
+                $this->saveLastTag($tags[count($tags) - 1]);
+
+                $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
+
+                foreach ($jobToBuild as $id) {
+                    $this->loadModel('ci')->exeJob($id);
+                }
+            }
         }
     }
 
@@ -177,13 +218,28 @@ class gitModel extends model
      */
     public function setRepos()
     {
-        if(!$this->config->git->repos)
+        $repo = $this->loadModel('repo');
+        $repoObjs = $repo->listForSync("SCM='Git'");
+
+        $gitRepos = [];
+        $paths = [];
+        // ignore same repo in config.php
+        foreach($repoObjs as $repoInDb)
+        {
+            if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
+                $gitRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path,
+                    'encoding' => $repoInDb->encoding, 'client' => $repoInDb->client);
+                $paths[] = $repoInDb->path;
+            }
+        }
+
+        if(!$gitRepos)
         {
             echo "You must set one git repo.\n";
             return false;
         }
 
-        $this->repos = $this->config->git->repos;
+        $this->repos = $gitRepos;
         return true;
     }
 
@@ -218,40 +274,48 @@ class gitModel extends model
         $this->setClient($repo);
         if(empty($this->client)) return false;
 
-        $this->setLogFile($repo->name);
+        $this->setLogFile($repo->id);
+        $this->setTagFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
 
     /**
      * Set the git binary client of a repo.
-     * 
-     * @param  object    $repo 
+     *
+     * @param  object    $repo
      * @access public
      * @return bool
      */
+
     public function setClient($repo)
     {
-        if($this->config->git->client == '')
-        {
-            echo "You must set the git client file.\n";
-            return false;
-        }
-
-        $this->client = $this->config->git->client;
+        $this->client = $repo->client;
         return true;
     }
 
     /**
      * Set the log file of a repo.
-     * 
-     * @param  string    $repoName 
+     *
+     * @param  string    $repoId
      * @access public
      * @return void
      */
-    public function setLogFile($repoName)
+    public function setLogFile($repoId)
     {
-        $this->logFile = $this->logRoot . $repoName;
+        $this->logFile = $this->logRoot . $repoId . '.log';
+    }
+
+    /**
+     * Set the tag file of a repo.
+     *
+     * @param  string    $repoId
+     * @access public
+     * @return void
+     */
+    public function setTagFile($repoId)
+    {
+        $this->tagFile = $this->logRoot . $repoId . '.tag';
     }
 
     /**
@@ -264,6 +328,32 @@ class gitModel extends model
     public function setRepoRoot($repo)
     {
         $this->repoRoot = $repo->path;
+    }
+
+    /**
+     * get tags histories for repo.
+     *
+     * @param  object    $repo
+     * @access public
+     * @return void
+     */
+    public function getRepoTags($repo)
+    {
+        $parsedTags = array();
+
+        /* The git tag command. */
+        chdir($this->repoRoot);
+        exec("{$this->client} config core.quotepath false");
+
+        $cmd = "$this->client for-each-ref --sort=taggerdate | grep refs/tags | grep -v commit";
+        exec($cmd, $list, $return);
+        foreach($list as $line)
+        {
+            $arr = explode('refs/tags/', $line);
+            $parsedTags[] = $arr[count($arr) - 1];
+        }
+
+        return $parsedTags;
     }
 
     /**
@@ -352,63 +442,6 @@ class gitModel extends model
         $parsedLog->files     = $files;
 
         return $parsedLog;
-    }
-
-    /**
-     * Parse the comment of git, extract object id list from it.
-     * 
-     * @param  string    $comment 
-     * @access public
-     * @return array
-     */
-    public function parseComment($comment)
-    {
-        $stories = array(); 
-        $tasks   = array();
-        $bugs    = array();
-
-        // bug|story|task(case insensitive) + some space + #|:|：(Chinese) + id lists(maybe join with space or ,)
-        // $comment = "bug # 1,2,3,4 Bug:1 2 3 4 5 story:9999,1234566 story:456,1234566";
-        $commonReg = "(?:\s){0,}(?:#|:|：){0,}([0-9, ]{1,})";
-        $taskReg  = '/task' .  $commonReg . '/i';
-        $storyReg = '/story' . $commonReg . '/i';
-        $bugReg   = '/bug'   . $commonReg . '/i';
-
-        if(preg_match_all($storyReg, $comment, $result)) $stories = join(' ', $result[1]);
-        if(preg_match_all($taskReg, $comment, $result))  $tasks   = join(' ', $result[1]);
-        if(preg_match_all($bugReg, $comment, $result))   $bugs    = join(' ', $result[1]);
-
-        if($stories) $stories = array_unique(explode(' ', str_replace(',', ' ', $stories)));
-        if($tasks)   $tasks   = array_unique(explode(' ', str_replace(',', ' ', $tasks)));
-        if($bugs)    $bugs    = array_unique(explode(' ', str_replace(',', ' ', $bugs)));
-
-        if(!$stories and !$tasks and !$bugs) return array();
-        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs);
-    }
-
-    /**
-     * Convert the comment to uft-8.
-     * 
-     * @param  string    $comment 
-     * @access public
-     * @return string
-     */
-    public function iconvComment($comment)
-    {
-        /* Get encodings. */
-        $encodings = str_replace(' ', '', isset($this->config->git->encodings) ? $this->config->git->encodings : '');
-        if($encodings == '') return $comment;
-        $encodings = explode(',', $encodings);
-
-        /* Try convert. */
-        foreach($encodings as $encoding)
-        {
-            if($encoding == 'utf-8') continue;
-            $result = helper::convertEncoding($comment, $encoding, 'utf-8');
-            if($result) return $result;
-        }
-
-        return $comment;
     }
 
     /**
@@ -520,13 +553,15 @@ class gitModel extends model
      * @access public
      * @return void
      */
-    public function saveAction2PMS($objects, $log, $repoRoot = '')
+    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8')
     {
         $action = new stdclass();
         $action->actor   = $log->author;
         $action->action  = 'gitcommited';
         $action->date    = $log->date;
-        $action->comment = htmlspecialchars($this->iconvComment($log->msg));
+
+        $scm = $this->app->loadClass('scm');
+        $action->comment = htmlspecialchars($scm->iconvComment($log->msg, $encodings));
         $action->extra   = substr($log->revision, 0, 10);
 
         $changes = $this->createActionChanges($log, $repoRoot);
@@ -738,7 +773,32 @@ class gitModel extends model
      */
     public function saveLastRevision($revision)
     {
-        file_put_contents($this->logFile, $revision);
+        $ret = file_put_contents($this->logFile, $revision);
+    }
+
+    /**
+     * Get the saved tag.
+     *
+     * @access public
+     * @return int
+     */
+    public function getSavedTag()
+    {
+        if(!file_exists($this->tagFile)) return 0;
+        if(file_exists($this->restartFile)) return 0;
+        return trim(file_get_contents($this->tagFile));
+    }
+
+    /**
+     * Save the last revision.
+     *
+     * @param  int    $tag
+     * @access public
+     * @return void
+     */
+    public function saveLastTag($tag)
+    {
+        $ret = file_put_contents($this->tagFile, $tag);
     }
 
     /**
@@ -752,6 +812,7 @@ class gitModel extends model
     {
         echo helper::now() . " $log\n";
     }
+
 
     /**
      * Build URL.

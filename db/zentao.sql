@@ -1,3 +1,7 @@
+CREATE DATABASE `zentao_zhonghe_testing` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+use    zentao_zhonghe_testing;
+
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -89,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `duplicateBug` mediumint(8) unsigned NOT NULL,
   `linkBug` varchar(255) NOT NULL,
   `case` mediumint(8) unsigned NOT NULL,
-  `caseVersion` smallint(6) NOT NULL default '1',
+  `caseVersion` smallint(6) NOT NULL,
   `result` mediumint(8) unsigned NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `entry` varchar(255) NOT NULL,
@@ -1045,6 +1049,126 @@ CREATE TABLE `zt_score` (
   KEY `method` (`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_repo`;
+CREATE TABLE IF NOT EXISTS `zt_repo` (
+  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `prefix` varchar(100) NOT NULL,
+  `encoding` varchar(20) NOT NULL,
+  `SCM` varchar(10) NOT NULL,
+  `client` varchar(100) NOT NULL,
+  `commits` mediumint(8) unsigned NOT NULL,
+  `account` varchar(30) NOT NULL,
+  `password` varchar(30) NOT NULL,
+  `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
+  `acl` text NOT NULL,
+  `synced` tinyint(1) NOT NULL DEFAULT '0',
+  `lastSync` datetime NOT NULL,
+  `desc` TEXT NULL,
+  `deleted` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_repobranch`;
+CREATE TABLE IF NOT EXISTS `zt_repobranch` (
+  `repo` mediumint(8) unsigned NOT NULL,
+  `revision` mediumint(8) unsigned NOT NULL,
+  `branch` varchar(255) NOT NULL,
+  UNIQUE KEY `repo_revision_branch` (`repo`,`revision`,`branch`),
+  KEY `branch` (`branch`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_repohistory`;
+CREATE TABLE IF NOT EXISTS `zt_repohistory` (
+  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `repo` mediumint(9) NOT NULL,
+  `revision` varchar(40) NOT NULL,
+  `commit` mediumint(8) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `committer` varchar(100) NOT NULL,
+  `time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `repo` (`repo`,`revision`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_repofiles`;
+CREATE TABLE IF NOT EXISTS `zt_repofiles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `repo` mediumint(8) unsigned NOT NULL,
+  `revision` mediumint(8) unsigned NOT NULL,
+  `path` varchar(255) NOT NULL,
+  `parent` varchar(255) NOT NULL,
+  `type` varchar(20) NOT NULL,
+  `action` char(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `path` (`path`),
+  KEY `parent` (`parent`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_tag` (
+  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `repo` mediumint(9) NOT NULL,
+  `name` varchar(40) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_jenkins` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `account` varchar(255) DEFAULT NULL,
+  `serviceUrl` varchar(255) DEFAULT NULL,
+  `token` varchar(255) DEFAULT NULL,
+  `desc` text NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `password` varchar(30) NOT NULL,
+  `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_cijob` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `repo` mediumint(8) unsigned NOT NULL,
+  `jenkins` mediumint(8) unsigned NOT NULL,
+  `jenkinsJob` varchar(500) NOT NULL,
+  `triggerType` varchar(255) NOT NULL,
+  `scheduleType` varchar(255) NOT NULL,
+  `cronExpression` varchar(255) DEFAULT NULL,
+  `scheduleDay` varchar(255) DEFAULT NULL,
+  `scheduleTime` varchar(255) DEFAULT NULL,
+  `scheduleInterval` mediumint(8) DEFAULT NULL,
+  `tagKeywords` varchar(255) DEFAULT NULL,
+  `commentKeywords` varchar(255) DEFAULT NULL,
+  `desc` text,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `lastExec` datetime DEFAULT NULL,
+  `lastStatus` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+
+CREATE TABLE `zt_cibuild` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `cijob` mediumint(8) unsigned NOT NULL,
+  `queueItem` mediumint(8) NOT NULL,
+  `status` varchar(255) NOT NULL,
+  `logs` text,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `updateDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=75 DEFAULT CHARSET=utf8;
+
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*',    '*',    '*',    '*',    '*',    '', '监控定时任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('30',   '23',   '*',    '*',    '*',    'moduleName=project&methodName=computeburn', '更新燃尽图',      'zentao', 1, 'normal', '0000-00-00 00:00:00'),
@@ -1056,6 +1180,7 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=webhook&methodName=asyncSend',   '异步发送Webhook', 'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=admin&methodName=deleteLog',     '删除过期日志',    'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('1',    '1',    '*',    '*',    '*',    'moduleName=todo&methodName=createCycle',    '生成周期性待办',  'zentao', 1, 'normal', '0000-00-00 00:00:00');
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', -1, 'normal',   '0000-00-00 00:00:00');
 
 INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (1, 'ADMIN', 'admin', 'for administrator'),
