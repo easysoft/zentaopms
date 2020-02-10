@@ -159,8 +159,6 @@ cron="$phpcli $basePath/php/crond.php"
 echo $cron > $basePath/cron.sh
 echo "cron.sh ok"
 
-0 */1 * * * ?
-
 chmod 755 $basePath/*.sh
 
 exit 0
