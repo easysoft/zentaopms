@@ -561,6 +561,7 @@ if(!defined('DT_DATE1'))     define('DT_DATE1',     'Y-m-d');
 if(!defined('DT_DATE2'))     define('DT_DATE2',     'Ymd');
 if(!defined('DT_DATE3'))     define('DT_DATE3',     'Y/m/d');
 if(!defined('DT_DATE4'))     define('DT_DATE4',     'n/j');
+if(!defined('DT_DATE5'))     define('DT_DATE5',     'j/n');
 if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
 
