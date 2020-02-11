@@ -448,20 +448,15 @@ class todo extends control
      */
     public function batchClose()
     {
-        if(!empty($_POST['todoIDList']))
+        $waitID = array();
+        foreach($_POST['todoIDList'] as $todoID)
         {
-            $waitID     = array();
-            $todoIDList = array();
-            foreach($_POST['todoIDList'] as $todoID)
-            {
-                $todo = $this->todo->getById($todoID);
-                ($todo->status != 'done' && $todo->status != 'closed') ? $waitID[] = $todoID : $todoIDList[] = $todoID;
-            }
-            if(!empty($waitID)) die(js::execute('alert("ID: ' .implode(',', $waitID). '的待办处于未完成状态。");'));
-
-            foreach($todoIDList as $todoID) $this->todo->close($todoID);
-            die(js::reload('parent'));
+            $todo = $this->todo->getById($todoID);
+            ($todo->status == 'done') ? $this->todo->close($todoID) : $waitID[] = $todoID;
         }
+        if(!empty($waitID)) die(js::alert('ID: ' . implode(',', $waitID) . $this->lang->todo->unfinishedTodo));
+
+        die(js::reload('parent'));
     }
 
     /**
