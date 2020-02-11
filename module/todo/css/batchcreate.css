@@ -14,4 +14,5 @@ html[lang="en"] #todoBatchAddForm .col-pending {width: 90px;}
 .main-header > .input-group {width: 240px;}
 html[lang="en"] .main-header > .input-group {width: 250px;}
 
-#formSettingBtn {position: absolute; top: 14px; right: 53px; z-index: 1000;}
+#formSettingBtn {position: absolute; top: 14px; right: 20px; z-index: 1000;}
+#formSettingBtn .dropdown{margin-right:0px;}
