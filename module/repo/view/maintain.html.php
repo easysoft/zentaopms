@@ -23,8 +23,8 @@
                     <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->repo->id); ?></th>
                     <th class='w-120px'><?php common::printOrderLink('SCM', $orderBy, $vars, $lang->repo->type); ?></th>
                     <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
-                    <th class='w-200px text-left'><?php echo $lang->repo->path; ?></th>
-                    <th class='c-actions-4'><?php echo $lang->actions; ?></th>
+                    <th class='text-left'><?php echo $lang->repo->path; ?></th>
+                    <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -34,7 +34,7 @@
                         <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
                         <td class='text' title='<?php echo $repo->name; ?>'><?php echo $repo->name; ?></td>
                         <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
-                        <td class='c-actions text-right'>
+                        <td class='text-center c-actions'>
                             <?php
                             common::printIcon('repo', 'edit', "repoID=$id", '', 'list',  'edit');
                             if (common::hasPriv('repo', 'delete'))

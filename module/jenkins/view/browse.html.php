@@ -22,8 +22,8 @@
                     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
                     <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->jenkins->id); ?></th>
                     <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->jenkins->name); ?></th>
-                    <th class='w-200px text-left'><?php common::printOrderLink('serviceUrl', $orderBy, $vars, $lang->jenkins->serviceUrl); ?></th>
-                    <th class='c-actions-4'><?php echo $lang->actions; ?></th>
+                    <th class='text-left'><?php common::printOrderLink('serviceUrl', $orderBy, $vars, $lang->jenkins->serviceUrl); ?></th>
+                    <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,7 +33,7 @@
                         <td class='text' title='<?php echo $jenkins->name; ?>'><?php echo $jenkins->name; ?></td>
                         <td class='text' title='<?php echo $jenkins->serviceUrl; ?>'><?php echo $jenkins->serviceUrl; ?></td>
 
-                        <td class='c-actions text-right'>
+                        <td class='c-actions text-center'>
                             <?php
                             common::printIcon('jenkins', 'edit', "jenkinsID=$id", '', 'list',  'edit');
                             if (common::hasPriv('jenkins', 'delete'))

@@ -39,10 +39,10 @@
                     <th class='w-200px text-left'><?php echo $lang->ci->jenkins; ?></th>
                     <th class='w-200px text-left'><?php echo $lang->job->triggerType; ?></th>
 
-                    <th class='w-100px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->job->buildStatus); ?></th>
-                    <th class='w-100px text-left'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->job->buildTime); ?></th>
+                    <th class='w-150px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->job->buildStatus); ?></th>
+                    <th class='text-left'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->job->buildTime); ?></th>
 
-                    <th class='c-actions-4'><?php echo $lang->actions; ?></th>
+                    <th class='w-100px c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -61,7 +61,7 @@
                         </td>
                         <td class='text' title='<?php echo $build->createDate; ?>'><?php echo $build->createdDate; ?></td>
 
-                        <td class='c-actions text-right'>
+                        <td class='c-actions text-center'>
                             <?php
                             common::printIcon('ci', 'viewBuildLogs', "buildID=$id", '', 'list', 'file-text',
                                 '', '', '', '', $lang->job->viewLogs);

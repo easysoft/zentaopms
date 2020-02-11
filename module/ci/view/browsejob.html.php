@@ -22,17 +22,20 @@
                     <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"; ?>
 
                     <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id); ?></th>
-                    <th class='w-150px text-left'>
+                    <th class='w-200px text-left'>
                         <?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name); ?></th>
-                    <th class='w-100px text-left'>
-                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo); ?></th>
-                    <th class='w-100px text-left'>
-                        <?php common::printOrderLink('jenkins', $orderBy, $vars, $lang->job->jenkins); ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->job->jenkinsJob; ?></th>
-                    <th class='w-100px text-left'><?php echo $lang->job->triggerType; ?></th>
-                    <th class='w-200px text-left'><?php echo $lang->job->lastExe; ?></th>
 
-                    <th class='c-actions-4'><?php echo $lang->actions; ?></th>
+                    <th class='w-200px text-left'>
+                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo); ?></th>
+                    <th class='w-150px text-left'><?php echo $lang->job->triggerType; ?></th>
+
+                    <th class='w-200px text-left'>
+                        <?php common::printOrderLink('jenkins', $orderBy, $vars, $lang->job->jenkins); ?></th>
+                    <th class='w-200px text-left'><?php echo $lang->job->jenkinsJob; ?></th>
+
+                    <th class='text-left'><?php echo $lang->job->lastExe; ?></th>
+
+                    <th class='w-120px c-actions-4'><?php echo $lang->actions; ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -40,16 +43,19 @@
                     <tr>
                         <td class='text-center'><?php echo $id; ?></td>
                         <td class='text' title='<?php echo $job->name; ?>'><?php echo $job->name; ?></td>
+
                         <td class='text' title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
-                        <td class='text' title='<?php echo $job->jenkinsName; ?>'><?php echo $job->jenkinsName; ?></td>
-                        <td class='text' title='<?php echo $job->jenkinsJob; ?>'><?php echo $job->jenkinsJob; ?></td>
                         <td class='text' title='<?php echo $lang->job->triggerTypeList[$job->triggerType]; ?>'>
                             <?php echo $lang->job->triggerTypeList[$job->triggerType]; ?></td>
+
+                        <td class='text' title='<?php echo $job->jenkinsName; ?>'><?php echo $job->jenkinsName; ?></td>
+                        <td class='text' title='<?php echo $job->jenkinsJob; ?>'><?php echo $job->jenkinsJob; ?></td>
+
                         <td class='text' title='<?php echo $lang->job->lastBuild; ?>'>
                             <?php if ($job->lastStatus) echo $lang->job->buildStatusList[$job->lastStatus] . $lang->ci->at . $job->lastExec; ?>
                         </td>
 
-                        <td class='c-actions text-right'>
+                        <td class='c-actions text-center'>
                             <?php
                             common::printIcon('ci', 'browseBuild', "jobID=$id", '', 'list', 'file-text');
                             common::printIcon('ci', 'editJob', "jobID=$id", '', 'list',  'edit');

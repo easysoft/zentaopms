@@ -1,6 +1,6 @@
 a{color:#169;}
 a:hover, a:active{ text-decoration:underline; color:#C61A1A;}
-h2,h3 {font-size:20px; padding:0 0 10px; margin: 0; clear: both;}
+h2,h3 {font-size:20px; margin: 0; clear: both;}
 h3 {font-size:16px;}
 .revision{font-size:12px; line-height:20px; text-align:right; padding-right:8px;}
 .directory{ background-image:url('theme/default/images/repo/dir.png')}
