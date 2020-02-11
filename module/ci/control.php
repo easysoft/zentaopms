@@ -28,7 +28,7 @@ class ci extends control
         }
 
         if(common::hasPriv('ci', 'createJob') and strpos(',browsejob,', $this->methodName) > -1) {
-            $this->lang->modulePageActions = html::a(helper::createLink('ci', 'createJob'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->ci->create, '', "class='btn'");
+            $this->lang->modulePageActions = html::a(helper::createLink('ci', 'createJob'), "<i class='icon icon-plus'></i> " . $this->lang->ci->create, '', "class='btn btn-primary'");
         }
     }
 

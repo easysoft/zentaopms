@@ -1,7 +1,4 @@
 
-ALTER TABLE `zt_repo`
-ADD COLUMN `desc` TEXT NULL AFTER `lastSync`;
-
 CREATE TABLE `zt_tag` (
   `id` mediumint(9) NOT NULL AUTO_INCREMENT,
   `repo` mediumint(9) NOT NULL,
@@ -39,7 +36,6 @@ CREATE TABLE `zt_cijob` (
   `scheduleInterval` mediumint(8) DEFAULT NULL,
   `tagKeywords` varchar(255) DEFAULT NULL,
   `commentKeywords` varchar(255) DEFAULT NULL,
-  `desc` text,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` varchar(30) NOT NULL,

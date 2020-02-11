@@ -28,7 +28,7 @@ class jenkins extends control
         }
 
         if(common::hasPriv('jenkins', 'create') and strpos(',browsejob,', $this->methodName) > -1) {
-            $this->lang->modulePageActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus text-muted'></i> " . $this->lang->jenkins->create, '', "class='btn'");
+            $this->lang->modulePageActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->jenkins->create, '', "class='btn btn-primary'");
         }
     }
 
