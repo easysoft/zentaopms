@@ -74,16 +74,19 @@ class ciModel extends model
             ->autoCheck()
             ->exec();
 
-        if ($job->triggerType === 'schedule') {
+        if ($job->triggerType === 'schedule')
+        {
             $jobId = $this->dao->lastInsertID();
 
             $arr = explode(":", $job->scheduleTime);
             $hour = $arr[0];
             $min = $arr[1];
 
-            if ($job->scheduleDay == 'everyDay') {
+            if ($job->scheduleDay == 'everyDay')
+            {
                 $days = '1-7';
-            } else if ($job->scheduleDay == 'workDay') {
+            } else if ($job->scheduleDay == 'workDay')
+            {
                 $days = '1-5';
             }
 
@@ -125,7 +128,8 @@ class ciModel extends model
             ->where('id')->eq($id)
             ->exec();
 
-        if ($job->triggerType === 'schedule') {
+        if ($job->triggerType === 'schedule')
+        {
             $command = 'moduleName=ci&methodName=exeJob&parm=' . $id;
 
             $arr = explode(":", $job->scheduleTime);
@@ -133,9 +137,11 @@ class ciModel extends model
             $min = $arr[1];
 
             $jobId = $this->dao->lastInsertID();
-            if ($job->scheduleDay == 'everyDay') {
+            if ($job->scheduleDay == 'everyDay')
+            {
                 $days = '1-7';
-            } else if ($job->scheduleDay == 'workDay') {
+            } else if ($job->scheduleDay == 'workDay')
+            {
                 $days = '2-6';
             }
 
@@ -161,15 +167,13 @@ class ciModel extends model
      */
     public function exeJob($jobID)
     {
-        $po = $this->dao->select('job.id jobId, job.name jobName, job.repo, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
+        $job = $this->dao->select('job.id jobId, job.name jobName, job.repo, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
             ->from(TABLE_CI_JOB)->alias('job')
             ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
             ->where('job.id')->eq($jobID)
             ->fetch();
 
-        if (!$po) {
-            return false;
-        }
+        if (!$job) return false;
 
         $jenkinsServer = $po->serviceUrl;
         $jenkinsUser = $po->account;
@@ -274,7 +278,8 @@ class ciModel extends model
             $queueUrl = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $po->queueItem);
 
             $response = common::http($queueUrl);
-            if (strripos($response,"404") > -1) { // queue expired, use another api
+            if (strripos($response,"404") > -1)
+            { // queue expired, use another api
                 $infoUrl = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $po->jenkinsJob, $po->queueItem);
                 $response = common::http($infoUrl);
                 $buildInfo = json_decode($response);
@@ -286,7 +291,8 @@ class ciModel extends model
                 $logs = json_decode($response);
 
                 $this->dao->update(TABLE_CI_BUILD)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
-            } else {
+            } else
+                {
                 $queueInfo = json_decode($response);
 
                 if (!empty($queueInfo->executable)) {

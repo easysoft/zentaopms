@@ -154,7 +154,7 @@ $lang->bug->lblLastEdited = '最后修改';
 $lang->bug->lblResolved   = '由谁解决';
 $lang->bug->allUsers      = '加载所有用户';
 $lang->bug->allBuilds     = '所有';
-$lang->bug->createBuild   = '新建';
+$lang->bug->createBuild   = '创建';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';

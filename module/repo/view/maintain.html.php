@@ -37,7 +37,8 @@
                         <td class='c-actions text-right'>
                             <?php
                             common::printIcon('repo', 'edit', "repoID=$id", '', 'list',  'edit');
-                            if (common::hasPriv('repo', 'delete')) {
+                            if (common::hasPriv('repo', 'delete'))
+                            {
                                 $deleteURL = $this->createLink('repo', 'delete', "repoID=$id&confirm=yes");
                                 echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"repoList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->repo->delete}' class='btn'");
                             }

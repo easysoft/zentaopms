@@ -103,7 +103,8 @@ class gitModel extends model
                 $allCommands = [];
                 foreach ($logs as $log) {
                     $this->printLog("parsing log {$log->revision}");
-                    if ($log->revision == $savedRevision) {
+                    if ($log->revision == $savedRevision)
+                    {
                         $this->printLog("{$log->revision} alread parsed, commit it");
                         continue;
                     }
@@ -152,12 +153,14 @@ class gitModel extends model
                 $arriveLastTag = false;
                 $jobToBuild = [];
                 foreach ($tags as $tag) {
-                    if (!empty($savedTag) && $tag === $savedTag) { // get the last build tag position
+                    if (!empty($savedTag) && $tag === $savedTag) // get the last build tag position
+                    {
                         $arriveLastTag = true;
                         continue;
                     }
 
-                    if (!empty($savedTag) && !$arriveLastTag) { // not get
+                    if (!empty($savedTag) && !$arriveLastTag) // not get
+                    {
                         continue;
                     }
 

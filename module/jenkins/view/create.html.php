@@ -48,11 +48,6 @@
                     </tr>
 
                     <tr>
-                        <th><?php echo $lang->jenkins->desc; ?></th>
-                        <td><?php echo html::textarea('desc', '', "rows='3' class='form-control'"); ?></td>
-                        <td></td>
-                    </tr>
-                    <tr>
                         <th></th>
                         <td class='text-center form-actions'>
                             <?php echo html::submitButton(); ?>

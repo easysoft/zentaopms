@@ -54,7 +54,8 @@
                             common::printIcon('ci', 'browseBuild', "jobID=$id", '', 'list', 'file-text');
                             common::printIcon('ci', 'editJob', "jobID=$id", '', 'list',  'edit');
 
-                            if (common::hasPriv('ci', 'deleteJob')) {
+                            if (common::hasPriv('ci', 'deleteJob'))
+                            {
                                 $deleteURL = $this->createLink('ci', 'deleteJob', "jobID=$id&confirm=yes");
                                 echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"jobList\", confirmDelete)", '<i class="icon-trash"></i>', '', "title='{$lang->job->delete}' class='btn'");
                             }

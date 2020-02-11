@@ -42,9 +42,11 @@ Copyright (c) Vladimir Gubarkov <xonixx@gmail.com>
             }
 
             function copyToBuffer(textToCopy) {
-                if (window.clipboardData) { // IE
+                if (window.clipboardData)
+                { // IE
                     window.clipboardData.setData("Text", textToCopy);
-                } else if (window.netscape) { // FF
+                } else if (window.netscape)
+                { // FF
                     // from http://developer.mozilla.org/en/docs/Using_the_Clipboard
                     netscape.security.PrivilegeManager.enablePrivilege('UniversalXPConnect');
                     var gClipboardHelper = Components.classes["@mozilla.org/widget/clipboardhelper;1"].getService(Components.interfaces.nsIClipboardHelper);

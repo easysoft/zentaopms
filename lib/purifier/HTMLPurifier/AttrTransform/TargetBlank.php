@@ -27,17 +27,14 @@ class HTMLPurifier_AttrTransform_TargetBlank extends HTMLPurifier_AttrTransform
      */
     public function transform($attr, $config, $context)
     {
-        if (!isset($attr['href'])) {
-            return $attr;
-        }
+        if (!isset($attr['href'])) return $attr;
 
         // XXX Kind of inefficient
         $url = $this->parser->parse($attr['href']);
         $scheme = $url->getSchemeObj($config, $context);
 
-        if ($scheme->browsable && !$url->isBenign($config, $context)) {
-            $attr['target'] = '_blank';
-        }
+        if ($scheme->browsable && !$url->isBenign($config, $context)) $attr['target'] = '_blank';
+
         return $attr;
     }
 }

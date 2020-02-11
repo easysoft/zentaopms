@@ -45,9 +45,8 @@ class HTMLPurifier_ChildDef_Custom extends HTMLPurifier_ChildDef
     protected function _compileRegex()
     {
         $raw = str_replace(' ', '', $this->dtd_regex);
-        if ($raw{0} != '(') {
-            $raw = "($raw)";
-        }
+        if ($raw{0} != '(') $raw = "($raw)";
+
         $el = '[#a-zA-Z0-9_.-]+';
         $reg = $raw;
 

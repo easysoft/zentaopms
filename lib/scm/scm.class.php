@@ -104,19 +104,19 @@ class scm
                 $entityIds = $matches[3][$i];
 
                 $currArr = $allCommands[$entityType][$action];
-                if (empty($currArr)) {
-                    $currArr = [];
-                }
+                if (empty($currArr)) $currArr = [];
+
                 $newArr = explode(",", $entityIds);
                 $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
 
-                if ($entityType === 'story') {
+                if ($entityType === 'story')
+                {
                     $stories = array_merge($stories, $newArr);
-                }
-                if ($entityType === 'task') {
+                } else if ($entityType === 'task')
+                {
                     $tasks = array_merge($tasks, $newArr);
-                }
-                if ($entityType === 'bug') {
+                } else if ($entityType === 'bug')
+                {
                     $bugs = array_merge($bugs, $newArr);
                 }
 
@@ -144,9 +144,8 @@ class scm
         {
             $entityIds = $matches[1];
 
-            if (empty($taskToBuild)) {
-                $taskToBuild = [];
-            }
+            if (empty($taskToBuild)) $taskToBuild = [];
+
             $newArr = explode(",", $entityIds);
             $jobToBuild = array_keys(array_flip($taskToBuild) + array_flip($newArr));
         }

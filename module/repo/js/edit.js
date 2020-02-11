@@ -4,12 +4,14 @@ $(function()
 });
 
 function scmChanged(scm) {
-    if(scm == 'Git') {
+    if(scm == 'Git')
+    {
         $('.account-fields').addClass('hidden');
 
         $('.tips-git').removeClass('hidden');
         $('.tips-svn').addClass('hidden');
-    } else {
+    } else
+    {
         $('.account-fields').removeClass('hidden');
 
         $('.tips-git').addClass('hidden');

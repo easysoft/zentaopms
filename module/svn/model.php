@@ -103,7 +103,8 @@ class svnModel extends model
                 $allCommands = [];
                 foreach ($logs as $log) {
                     $this->printLog("parsing log {$log->revision}");
-                    if ($log->revision == $savedRevision) {
+                    if ($log->revision == $savedRevision)
+                    {
                         $this->printLog("{$log->revision} alread parsed, commit it");
                         continue;
                     }
@@ -152,7 +153,8 @@ class svnModel extends model
             if(!empty($tags)) {
                 $jobToBuild = [];
                 foreach ($tags as $tag) {
-                    if ($savedTags[$tag]) { // old
+                    if ($savedTags[$tag]) // old
+                    {
                         continue;
                     }
 
@@ -348,9 +350,8 @@ class svnModel extends model
     public function getRepoTags($repo)
     {
         $path = $repo->path;
-        if (substr($path, -1) != '/') {
-            $path .= '/';
-        }
+        if (substr($path, -1) != '/') $path .= '/';
+
         $path = str_replace("/trunk/","/tags/", $path);
 
         $parsedTags = array();
@@ -360,9 +361,7 @@ class svnModel extends model
         exec($cmd, $list, $return);
         foreach($list as $line)
         {
-            if (substr($path, -1) == '/') {
-                $line = substr($line, 0, strlen($line) - 1);
-            }
+            if (substr($path, -1) == '/') $line = substr($line, 0, strlen($line) - 1);
 
             $parsedTags[] = $line;
         }
