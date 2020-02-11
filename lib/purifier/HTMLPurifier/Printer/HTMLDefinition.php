@@ -137,25 +137,29 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
             $ret .= $this->element('th', 'Inline content');
             $ret .= $this->element('td', $def->descendants_are_inline ? 'Yes' : 'No');
             $ret .= $this->end('tr');
-            if (!empty($def->excludes)) {
+            if (!empty($def->excludes))
+            {
                 $ret .= $this->start('tr');
                 $ret .= $this->element('th', 'Excludes');
                 $ret .= $this->element('td', $this->listifyTagLookup($def->excludes));
                 $ret .= $this->end('tr');
             }
-            if (!empty($def->attr_transform_pre)) {
+            if (!empty($def->attr_transform_pre))
+            {
                 $ret .= $this->start('tr');
                 $ret .= $this->element('th', 'Pre-AttrTransform');
                 $ret .= $this->element('td', $this->listifyObjectList($def->attr_transform_pre));
                 $ret .= $this->end('tr');
             }
-            if (!empty($def->attr_transform_post)) {
+            if (!empty($def->attr_transform_post))
+            {
                 $ret .= $this->start('tr');
                 $ret .= $this->element('th', 'Post-AttrTransform');
                 $ret .= $this->element('td', $this->listifyObjectList($def->attr_transform_post));
                 $ret .= $this->end('tr');
             }
-            if (!empty($def->auto_close)) {
+            if (!empty($def->auto_close))
+            {
                 $ret .= $this->start('tr');
                 $ret .= $this->element('th', 'Auto closed by');
                 $ret .= $this->element('td', $this->listifyTagLookup($def->auto_close));
@@ -166,9 +170,7 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
             $ret .= $this->element('td', $this->listifyAttr($def->attr), array(), 0);
             $ret .= $this->end('tr');
 
-            if (!empty($def->required_attr)) {
-                $ret .= $this->row('Required attributes', $this->listify($def->required_attr));
-            }
+            if (!empty($def->required_attr)) $ret .= $this->row('Required attributes', $this->listify($def->required_attr));
 
             $ret .= $this->renderChildren($def->child);
         }
@@ -188,17 +190,22 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         $ret .= $this->start('tr');
         $elements = array();
         $attr = array();
-        if (isset($def->elements)) {
-            if ($def->type == 'strictblockquote') {
+        if (isset($def->elements))
+        {
+            if ($def->type == 'strictblockquote')
+            {
                 $def->validateChildren(array(), $this->config, $context);
             }
             $elements = $def->elements;
         }
-        if ($def->type == 'chameleon') {
+        if ($def->type == 'chameleon')
+        {
             $attr['rowspan'] = 2;
-        } elseif ($def->type == 'empty') {
+        } elseif ($def->type == 'empty')
+        {
             $elements = array();
-        } elseif ($def->type == 'table') {
+        } elseif ($def->type == 'table')
+        {
             $elements = array_flip(
                 array(
                     'col',
@@ -213,7 +220,8 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
         }
         $ret .= $this->element('th', 'Allowed children', $attr);
 
-        if ($def->type == 'chameleon') {
+        if ($def->type == 'chameleon')
+        {
 
             $ret .= $this->element(
                 'td',
@@ -232,7 +240,8 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
                 0
             );
 
-        } elseif ($def->type == 'custom') {
+        } elseif ($def->type == 'custom')
+        {
 
             $ret .= $this->element(
                 'td',
@@ -240,7 +249,8 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
                 $def->dtd_regex
             );
 
-        } else {
+        } else
+        {
             $ret .= $this->element(
                 'td',
                 '<em>' . ucfirst($def->type) . '</em>: ' .
@@ -262,10 +272,10 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
     {
         ksort($array);
         $list = array();
-        foreach ($array as $name => $discard) {
-            if ($name !== '#PCDATA' && !isset($this->def->info[$name])) {
-                continue;
-            }
+        foreach ($array as $name => $discard)
+        {
+            if ($name !== '#PCDATA' && !isset($this->def->info[$name])) continue;
+
             $list[] = $name;
         }
         return $this->listify($list);
@@ -296,10 +306,10 @@ class HTMLPurifier_Printer_HTMLDefinition extends HTMLPurifier_Printer
     {
         ksort($array);
         $list = array();
-        foreach ($array as $name => $obj) {
-            if ($obj === false) {
-                continue;
-            }
+        foreach ($array as $name => $obj)
+        {
+            if ($obj === false) continue;
+
             $list[] = "$name&nbsp;=&nbsp;<i>" . $this->getClass($obj, 'AttrDef_') . '</i>';
         }
         return $this->listify($list);
