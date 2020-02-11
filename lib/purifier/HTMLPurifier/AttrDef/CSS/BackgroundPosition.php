@@ -89,20 +89,18 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
         );
 
         foreach ($bits as $bit) {
-            if ($bit === '') continue;
+            if ($bit === '') {
+                continue;
+            }
 
             // test for keyword
             $lbit = ctype_lower($bit) ? $bit : strtolower($bit);
-            if (isset($lookup[$lbit]))
-            {
+            if (isset($lookup[$lbit])) {
                 $status = $lookup[$lbit];
-                if ($status == 'c')
-                {
-                    if ($i == 0)
-                    {
+                if ($status == 'c') {
+                    if ($i == 0) {
                         $status = 'ch';
-                    } else
-                    {
+                    } else {
                         $status = 'cv';
                     }
                 }
@@ -112,51 +110,46 @@ class HTMLPurifier_AttrDef_CSS_BackgroundPosition extends HTMLPurifier_AttrDef
 
             // test for length
             $r = $this->length->validate($bit, $config, $context);
-            if ($r !== false)
-            {
+            if ($r !== false) {
                 $measures[] = $r;
                 $i++;
             }
 
             // test for percentage
             $r = $this->percentage->validate($bit, $config, $context);
-            if ($r !== false)
-            {
+            if ($r !== false) {
                 $measures[] = $r;
                 $i++;
             }
         }
 
-        if (!$i) return false; // no valid values were caught
+        if (!$i) {
+            return false;
+        } // no valid values were caught
 
         $ret = array();
 
         // first keyword
-        if ($keywords['h'])
-        {
+        if ($keywords['h']) {
             $ret[] = $keywords['h'];
-        } elseif ($keywords['ch'])
-        {
+        } elseif ($keywords['ch']) {
             $ret[] = $keywords['ch'];
             $keywords['cv'] = false; // prevent re-use: center = center center
-        } elseif (count($measures))
-        {
+        } elseif (count($measures)) {
             $ret[] = array_shift($measures);
         }
 
-        if ($keywords['v'])
-        {
+        if ($keywords['v']) {
             $ret[] = $keywords['v'];
-        } elseif ($keywords['cv'])
-        {
+        } elseif ($keywords['cv']) {
             $ret[] = $keywords['cv'];
-        } elseif (count($measures))
-        {
+        } elseif (count($measures)) {
             $ret[] = array_shift($measures);
         }
 
-        if (empty($ret)) return false;
-
+        if (empty($ret)) {
+            return false;
+        }
         return implode(' ', $ret);
     }
 }
