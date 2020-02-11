@@ -134,7 +134,7 @@ class reportModel extends model
      * @access public
      * @return array
      */
-    public function getProducts($conditions)
+    public function getProducts($conditions, $storyType = 'story')
     {
         $products = $this->dao->select('id, code, name, PO')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
@@ -162,7 +162,11 @@ class reportModel extends model
 
         $planStories      = array();
         $unplannedStories = array();
-        $stmt = $this->dao->select('id,plan,product,status')->from(TABLE_STORY)->where('deleted')->eq(0)->query();
+        $stmt = $this->dao->select('id,plan,product,status')
+            ->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
+            ->query();
         while($story = $stmt->fetch())
         {
             if(empty($story->plan))
@@ -548,12 +552,19 @@ class reportModel extends model
      * @param  array  $products 
      * @param  string $account 
      * @param  int    $year 
+     * @param  string $type requirement|story
      * @access public
      * @return array
      */
-    public function getUserYearStory($products, $account, $year)
+    public function getUserYearStory($products, $account, $year, $type = 'story')
     {
-        $stories = $this->dao->select('*')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('product')->in(array_keys($products))->andWhere('LEFT(openedDate, 4)')->eq($year)->andWhere('deleted')->eq(0)->fetchAll();
+        $stories = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('openedBy')->eq($account)
+            ->andWhere('product')->in(array_keys($products))
+            ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
+            ->fetchAll();
 
         $storyInfo = array();
         $storyInfo['count'] = 0;
@@ -766,15 +777,17 @@ class reportModel extends model
      * @param  array  $products 
      * @param  string $account 
      * @param  int    $year 
+     * @param  string $type requirement|story
      * @access public
      * @return array
      */
-    public function getStoriesByProducts($products, $account, $year)
+    public function getStoriesByProducts($products, $account, $year, $type = 'story')
     {
         return $this->dao->select('product, count(*) as stories')->from(TABLE_STORY)
             ->where('product')->in(array_keys($products))
             ->andWhere('LEFT(openedDate, 4)')->eq($year)
             ->andWhere('openedBy')->eq($account)
+            ->andWhere('type')->eq($type)
             ->groupBy('product')
             ->fetchPairs('product', 'stories');
     }
@@ -921,20 +934,23 @@ class reportModel extends model
      * @param  array  $products 
      * @param  string $account 
      * @param  int    $year 
+     * @param  string $type requirement|story
      * @access public
      * @return array
      */
-    public function getStatByProducts($products, $account, $year)
+    public function getStatByProducts($products, $account, $year, $type = 'story')
     {
         $allStories = $this->dao->select('product, count(*) as count')->from(TABLE_STORY)
             ->where('product')->in(array_keys($products))
             ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->groupBy('product')
             ->fetchPairs('product', 'count');
         $mineStories = $this->dao->select('product, count(*) as count')->from(TABLE_STORY)
             ->where('product')->in(array_keys($products))
             ->andWhere('openedBy')->eq($account)
             ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->groupBy('product')
             ->fetchPairs('product', 'count');
 

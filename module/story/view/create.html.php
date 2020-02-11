@@ -205,7 +205,7 @@
         <tfoot>
           <tr>
             <td colspan="5" class="text-center form-actions">
-              <?php echo html::submitButton();?>
+              <?php echo html::hidden('type', $type) . html::submitButton();?>
               <?php echo html::backButton();?>
             </td>
           </tr>

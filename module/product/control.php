@@ -93,6 +93,7 @@ class product extends control
      * @param  int    $productID
      * @param  string $browseType
      * @param  int    $param
+     * @param  string $storyType requirement|story
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -100,7 +101,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -145,7 +146,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get stories. */
-        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager);
+        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');
@@ -158,7 +159,7 @@ class product extends control
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         /* Build search form. */
-        $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
@@ -194,6 +195,7 @@ class product extends control
         $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->view->products      = $this->products;
+        $this->view->storyType     = $storyType;
         $this->display();
     }
 

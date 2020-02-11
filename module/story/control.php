@@ -39,10 +39,11 @@ class story extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
+     * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '')
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -273,6 +274,7 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->type             = $type;
 
         $this->display();
     }
@@ -286,10 +288,11 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $project
      * @param  int    $plan
+     * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0)
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
         if(!empty($_POST))
         {
