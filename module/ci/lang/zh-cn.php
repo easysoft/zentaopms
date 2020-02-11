@@ -5,6 +5,8 @@ $lang->ci->at             = '于';
 $lang->ci->jenkins        = 'Jenkins';
 $lang->ci->repo           = '版本库';
 $lang->ci->job            = '构建';
+$lang->ci->task           = '任务';
+$lang->ci->history        = '历史';
 $lang->ci->browse         = '浏览';
 $lang->ci->create         = '创建';
 $lang->ci->edit           = '编辑';
@@ -18,10 +20,6 @@ $lang->job->edit          = '编辑构建任务';
 $lang->job->exeNow        = '立即执行';
 $lang->job->delete        = '删除构建任务';
 $lang->job->confirmDelete = '确认删除该构建任务吗？';
-
-$lang->job->repo   = '构建状态';
-$lang->job->buildStatus   = '构建状态';
-$lang->job->buildStatus   = '构建状态';
 $lang->job->buildStatus   = '构建状态';
 $lang->job->buildTime     = '构建时间';
 

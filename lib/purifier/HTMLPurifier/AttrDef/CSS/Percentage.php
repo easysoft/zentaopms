@@ -30,18 +30,23 @@ class HTMLPurifier_AttrDef_CSS_Percentage extends HTMLPurifier_AttrDef
     {
         $string = $this->parseCDATA($string);
 
-        if ($string === '') return false;
-
+        if ($string === '') {
+            return false;
+        }
         $length = strlen($string);
-        if ($length === 1) return false;
-
-        if ($string[$length - 1] !== '%') return false;
+        if ($length === 1) {
+            return false;
+        }
+        if ($string[$length - 1] !== '%') {
+            return false;
+        }
 
         $number = substr($string, 0, $length - 1);
         $number = $this->number_def->validate($number, $config, $context);
 
-        if ($number === false) return false;
-
+        if ($number === false) {
+            return false;
+        }
         return "$number%";
     }
 }

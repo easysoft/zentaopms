@@ -13,6 +13,23 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->job->confirmDelete); ?>
 
+<div id="mainMenu" class="clearfix">
+    <div class="btn-toolbar pull-left">
+        <?php
+            $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
+            echo html::a($this->inlink('browsejob', ""), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link" . ('browseJob' == $method ? ' btn-active-text' : '') . "'");
+            echo html::a($this->inlink('browsebuild', ""), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link" . ('browseBuild' == $method ? ' btn-active-text' : '') . "'");
+        ?>
+    </div>
+    <div class="btn-toolbar pull-right">
+        <?php
+            if(common::hasPriv('ci', 'createJob')) {
+                common::printLink('ci', 'createJob', "", "<i class='icon icon-plus'></i> " . $lang->ci->create, '', "class='btn btn-primary'");
+            }
+         ?>
+    </div>
+</div>
+
 <div id='mainContent' class='main-row'>
     <div class='main-col main-content'>
         <form class='main-table' id='ajaxForm' method='post'>
@@ -26,7 +43,7 @@
                         <?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name); ?></th>
 
                     <th class='w-200px text-left'>
-                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo); ?></th>
+                        <?php common::printOrderLink('repo', $orderBy, $vars, $lang->ci->repo); ?></th>
                     <th class='w-150px text-left'><?php echo $lang->job->triggerType; ?></th>
 
                     <th class='w-200px text-left'>

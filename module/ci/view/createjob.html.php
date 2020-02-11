@@ -29,7 +29,7 @@
                         <td colspan="2" ></td>
                     </tr>
                     <tr>
-                        <th><?php echo $lang->job->repo; ?></th>
+                        <th><?php echo $lang->ci->repo; ?></th>
                         <td><?php echo html::select('repo', $repoList, '',
                                 "onchange='repoTypeChanged(this.value)' class='form-control chosen'"); ?></td>
 

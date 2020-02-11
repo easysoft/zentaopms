@@ -1,6 +1,9 @@
 <?php
 class scm
 {
+    public $commitCommandRegx = '/\s*([a-z]+)\s+((?:build)|(?:story)|(?:task)|(?:bug))\s+#((?:\d|,)+)\s*/i';
+    public $tagCommandRegx = '/build[\-_]#((?:\d|,)+)/i';
+
     public $engine;
 
     public function setEngine($repo)
@@ -72,9 +75,6 @@ class scm
     {
         return $this->engine->getCommits($version, $count, $branch);
     }
-
-    public $commitCommandRegx = '/\s*([a-z]+)\s+((?:build)|(?:story)|(?:task)|(?:bug))\s+#((?:\d|,)+)\s*/i';
-    public $tagCommandRegx = '/build[\-_]#((?:\d|,)+)/i';
 
     /**
      * Parse the comment of git, extract object id list from it.

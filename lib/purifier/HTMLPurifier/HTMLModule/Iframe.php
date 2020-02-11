@@ -25,8 +25,9 @@ class HTMLPurifier_HTMLModule_Iframe extends HTMLPurifier_HTMLModule
      */
     public function setup($config)
     {
-        if ($config->get('HTML.SafeIframe')) $this->safe = true;
-
+        if ($config->get('HTML.SafeIframe')) {
+            $this->safe = true;
+        }
         $this->addElement(
             'iframe',
             'Inline',

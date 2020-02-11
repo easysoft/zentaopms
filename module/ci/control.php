@@ -27,9 +27,9 @@ class ci extends control
             common::setMenuVars($this->lang->ci->menu, $key, $repoID);
         }
 
-        if(common::hasPriv('ci', 'createJob') and strpos(',browsejob,', $this->methodName) > -1) {
-            $this->lang->modulePageActions = html::a(helper::createLink('ci', 'createJob'), "<i class='icon icon-plus'></i> " . $this->lang->ci->create, '', "class='btn btn-primary'");
-        }
+//        if(common::hasPriv('ci', 'createJob') and strpos(',browsejob,', $this->methodName) > -1) {
+//            $this->lang->modulePageActions = html::a(helper::createLink('ci', 'createJob'), "<i class='icon icon-plus'></i> " . $this->lang->ci->create, '', "class='btn btn-primary'");
+//        }
     }
 
     /**
@@ -68,6 +68,7 @@ class ci extends control
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
+        $this->view->method     = 'browseJob';
 
         $this->display();
     }
@@ -191,7 +192,8 @@ class ci extends control
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
-        $this->view->module     = 'ci';
+
+        $this->view->method     = 'browseBuild';
         $this->display();
     }
 
