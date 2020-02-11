@@ -64,6 +64,7 @@ zentaoxx:
 	cp -r xuan/xxb/module/im zentaoxx/module/
 	cp -r xuan/xxb/module/client zentaoxx/module/
 	cp -r xuan/xxb/module/common/ext/model/hook zentaoxx/module/common/ext/model/
+	cp -r xuan/xxb/module/license zentaoxx/module/
 	mkdir -p zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view
@@ -115,9 +116,7 @@ zentaoxx:
 	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/setRequiredFields(/d' zentaoxx/module/common/view/header.modal.html.php
 	sed -i 's/header.html.php/header.lite.html.php/g' zentaoxx/module/common/view/header.modal.html.php
-	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/header.modal.html.php
 	sed -i 's/footer.html.php/footer.lite.html.php/g' zentaoxx/module/common/view/footer.modal.html.php
-	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/footer.modal.html.php
 	sed -i 's/v\.//g' zentaoxx/module/im/js/debug.js
 	sed -i 's/helper::jsonEncode(/json_encode(/g' zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/im/view/debug.html.php
