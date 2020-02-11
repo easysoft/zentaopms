@@ -143,8 +143,10 @@ $lang->repo->error->encoding      = "编码可能错误，请更换编码重试�
 $lang->repo->synTips              = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
 $lang->repo->encodingsTips        = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
 $lang->repo->example              = new stdclass();
+$lang->repo->example->client      = new stdclass();
 $lang->repo->example->client->git = "例如：/usr/bin/git";
 $lang->repo->example->client->svn = "例如：/usr/bin/svn";
+$lang->repo->example->path        = new stdclass();
 $lang->repo->example->path->git   = "例如：/homt/user/myproject";
 $lang->repo->example->path->svn   = "例如：http://example.googlecode.com/svn/trunk/myproject";
 $lang->repo->example->config      = "https需要填写配置目录的位置，通过config-dir选项生成配置目录";
