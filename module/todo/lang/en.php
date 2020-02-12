@@ -102,6 +102,7 @@ $lang->todo->lblBeforeDays  = "Create a todo %s day(s) earlier";
 $lang->todo->lblClickCreate = "Click to Add Todo";
 $lang->todo->noTodo         = 'No todos of this type.';
 $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
+$lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 
 $lang->todo->periods['all']        = 'All Todos';
 $lang->todo->periods['thisYear']   = 'ThisYear';

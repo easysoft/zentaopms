@@ -102,6 +102,7 @@ $lang->todo->lblBeforeDays  = "Erstelle einen ToDo %s Tag(e) früher";
 $lang->todo->lblClickCreate = "Klicken um einen ToDo hinzuzufügen";
 $lang->todo->noTodo         = 'Keine ToDos dieses Typs.';
 $lang->todo->noAssignedTo   = "Zuordung an darf nicht leer sein.";
+$lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 
 $lang->todo->periods['all']        = 'Alle';
 $lang->todo->periods['thisYear']   = 'Dieses Jahr';

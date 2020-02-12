@@ -560,6 +560,7 @@ class upgradeModel extends model
             $this->adjustPriv12_0();
             $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
             $this->appendExec('11_7');
+        case '12_0':
         }
 
         $this->deletePatch();
@@ -721,6 +722,7 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '11_7' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.7'));
+            case '12_0' :
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

@@ -18,6 +18,7 @@ $lang->productCommon = '';
 $lang->projectCommon = '';
 $lang->storyCommon   = '';
 
+$whiteList[] = 'report-annualdata';
 $whiteList[] = 'api-getsessionid';
 $whiteList[] = 'admin-setflow';
 $whiteList[] = 'bug-buildtemplates';
@@ -48,6 +49,7 @@ $whiteList[] = 'task-commonaction';
 $whiteList[] = 'task-sendmail';
 $whiteList[] = 'testtask-sendmail';
 $whiteList[] = 'user-login';
+$whiteList[] = 'im-login';
 $whiteList[] = 'user-deny';
 $whiteList[] = 'user-logout';
 $whiteList[] = 'user-setreferer';
