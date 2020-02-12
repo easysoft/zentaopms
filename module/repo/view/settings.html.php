@@ -27,21 +27,21 @@
         </tr>  
         <tr>
           <th><?php echo $lang->repo->name;?></th>
-          <td><?php echo html::input('name', $repo->name, "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('name', $repo->name, "class='form-control'");?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->repo->path;?></th>
-          <td><?php echo html::input('path', $repo->path, "class='form-control'")?></td>
+          <td class='required'><?php echo html::input('path', $repo->path, "class='form-control'")?></td>
           <td class='text-muted'><?php echo $lang->repo->example->path;?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->repo->encoding;?></th>
-          <td><?php echo html::input('encoding', $repo->encoding, "class='form-control'")?></td>
+          <td class='required'><?php echo html::input('encoding', $repo->encoding, "class='form-control'")?></td>
           <td class='text-muted'><?php echo $lang->repo->example->encoding;?></td>
         </tr> 
         <tr>
           <th><?php echo $lang->repo->client;?></th>
-          <td><?php echo html::input('client', $repo->client, "class='form-control'")?></td>
+          <td class='required'><?php echo html::input('client', $repo->client, "class='form-control'")?></td>
           <td class='text-muted'><?php echo $lang->repo->example->client;?></td>
         </tr>
         <tr>

@@ -27,20 +27,20 @@
         </tr>
         <tr>
           <th><?php echo $lang->repo->name;?></th>
-          <td><?php echo html::input('name', '', "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('name', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->repo->path;?></th>
-          <td><?php echo html::input('path', '', "class='form-control'")?></td>
+          <td class='required'><?php echo html::input('path', '', "class='form-control'")?></td>
           <td class='muted'><?php echo $lang->repo->example->path;?></td>
         </tr>  
         <tr>
           <th><?php echo $lang->repo->encoding;?></th>
-          <td><?php echo html::input('encoding', 'utf-8', "class='form-control'");?></td>
+          <td class='required'><?php echo html::input('encoding', 'utf-8', "class='form-control'");?></td>
         </tr> 
         <tr>
           <th><?php echo $lang->repo->client;?></th>
-          <td><?php echo html::input('client', '', "class='form-control'")?></td>
+          <td class='required'><?php echo html::input('client', '', "class='form-control'")?></td>
           <td class='muted'><?php echo $lang->repo->example->client;?></td>
         </tr>
         <tr>
