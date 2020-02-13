@@ -58,7 +58,7 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->story->planAB;?></th>
+            <th class='planTh'><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
               <div class='input-group' id='planIdBox'>
                 <?php

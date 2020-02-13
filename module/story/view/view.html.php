@@ -197,7 +197,7 @@
                   <th><?php echo $lang->story->status;?></th>
                   <td><span class='status-story status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span></td>
                 </tr>
-                <tr>
+                <tr class='stage-line'>
                   <th><?php echo $lang->story->stage;?></th>
                   <td>
                   <?php
