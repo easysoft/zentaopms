@@ -78,8 +78,8 @@ $lang->caselib->menuOrder    = $lang->testcase->menuOrder;
 $lang->testreport->menuOrder = $lang->testcase->menuOrder;
 
 $lang->ci->menuOrder[5]  = 'browse';
-$lang->ci->menuOrder[10] = 'maintain';
-$lang->ci->menuOrder[15] = 'job';
+$lang->ci->menuOrder[10] = 'job';
+$lang->ci->menuOrder[15] = 'maintain';
 $lang->ci->menuOrder[20] = 'jenkins';
 
 $lang->repo->menuOrder    = $lang->ci->menuOrder;
