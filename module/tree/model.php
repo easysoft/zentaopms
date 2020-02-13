@@ -872,14 +872,12 @@ class treeModel extends model
      *
      * @param  string $type
      * @param  object $module
-     * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createRequirementLink($type, $module, $extra)
+    public function createRequirementLink($type, $module)
     {    
-        $projectID = $extra['projectID'];
-        return html::a(helper::createLink('project', 'requirement', "projectID={$projectID}&orderBy=&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}'");
+        return html::a(helper::createLink('product', 'browse', "root={$module->root}&branch=&type=byModule&param={$module->id}&storyType=requirement"), $module->name, '_self', "id='module{$module->id}'");
     }
 
     /**

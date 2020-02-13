@@ -166,6 +166,8 @@ class product extends control
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
 
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+
         /* Assign. */
         $this->view->title         = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
         $this->view->position[]    = $this->products[$productID];
@@ -177,7 +179,7 @@ class product extends control
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
         $this->view->summary       = $this->product->summary($stories);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', 'createStoryLink'), '', $branch);
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch);
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter|pofirst|nodeleted');
