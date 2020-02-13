@@ -391,6 +391,51 @@ class repo extends control
     }
 
     /**
+     * Blame repo file. 
+     * 
+     * @param  int    $repoID 
+     * @param  string $entry 
+     * @param  string $revision 
+     * @param  string $encoding 
+     * @access public
+     * @return void
+     */
+    public function blame($repoID, $entry, $revision = 'HEAD', $encoding = '')
+    {
+        if($this->get->entry) $entry = $this->get->entry;
+        $this->repo->setMenu($this->repos, $repoID);
+        if($repoID == 0) $repoID = $this->session->repoID;
+        $repo  = $this->repo->getRepoByID($repoID);
+        $file  = $entry;
+        $entry = $this->repo->decodePath($entry);
+
+        $this->scm->setEngine($repo);
+        $encoding  = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding  = strtolower(str_replace('_', '-', $encoding));
+        $blames    = $this->scm->blame($entry, $revision);
+        $revisions = array();
+        foreach($blames as $i => $blame)
+        {
+            if(isset($blame['revision'])) $revisions[$blame['revision']] = $blame['revision'];
+            if($encoding != 'utf-8') $blames[$i]['content'] = helper::convertEncoding($blame['content'], $encoding);
+        }
+
+        $log = $repo->SCM == 'Git' ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->eq($revision)->andWhere('repo')->eq($repo->id)->fetch() : '';
+
+        $this->view->title        = $this->lang->repo->common;
+        $this->view->repoID       = $repoID;
+        $this->view->repo         = $repo;
+        $this->view->revision     = $revision;
+        $this->view->entry        = $entry;
+        $this->view->file         = $file;
+        $this->view->encoding     = str_replace('-', '_', $encoding);
+        $this->view->historys     = $repo->SCM == 'Git' ? $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repo->id)->fetchPairs() : '';
+        $this->view->revisionName = ($log and $repo->SCM == 'Git') ? $this->repo->getGitRevisionName($log->revision, $log->commit) : $revision;
+        $this->view->blames       = $blames;
+        $this->display();
+    }
+
+    /**
      * Show diff.
      * 
      * @param  int    $repoID 
