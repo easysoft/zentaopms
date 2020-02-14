@@ -7,7 +7,6 @@ $lang->repo->createAction    = '创建版本库';
 $lang->repo->edit            = '编辑';
 $lang->repo->editAction      = '编辑版本库';
 $lang->repo->delete          = '删除版本库';
-$lang->repo->confirmDelete   = '确认删除该版本库吗？';
 $lang->repo->showSyncComment = '显示同步进度';
 $lang->repo->ajaxSyncComment = '接口：AJAX同步注释';
 $lang->repo->download        = '下载';

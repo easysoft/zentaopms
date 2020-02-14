@@ -86,6 +86,7 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
+        $this->repo->setMenu($this->repos, '', false);
         $this->app->loadLang('action');
 
         $this->view->groups = $this->loadModel('group')->getPairs();
@@ -120,6 +121,7 @@ class repo extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
         }
 
+        $this->repo->setMenu($this->repos, $repo->id, false);
         $this->app->loadLang('action');
 
         $repo->repoType     = $repo->id . '-' . $repo->SCM;
@@ -155,8 +157,8 @@ class repo extends control
         $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
 
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        $this->send(array('result' => 'success'));
+        if(dao::isError()) die(js::error(dao::getError()));
+        die(js::reload('parent'));
     }
 
     /**

@@ -7,7 +7,6 @@ $lang->repo->createAction    = 'Create Repo';
 $lang->repo->edit            = 'Edit';
 $lang->repo->editAction      = 'Edit Repo';
 $lang->repo->delete          = 'Delete Repo';
-$lang->repo->confirmDelete   = 'Do you want to delete this repo?';
 $lang->repo->showSyncComment = 'Display Synchronization';
 $lang->repo->ajaxSyncComment = 'Interface: Ajax Sync Note';
 $lang->repo->download        = 'Download File';
