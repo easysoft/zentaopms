@@ -170,7 +170,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <tr>
+                <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
                   <td>
                   <?php
