@@ -44,6 +44,7 @@ $lang->repo->name      = 'Name';
 $lang->repo->path      = 'Path';
 $lang->repo->prefix    = 'Prefix';
 $lang->repo->config    = 'Config';
+$lang->repo->desc      = 'Describe';
 $lang->repo->account   = 'Username';
 $lang->repo->password  = 'Password';
 $lang->repo->encoding  = 'Encoding';
@@ -141,9 +142,12 @@ $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n"
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
 $lang->repo->error->encoding      = "The encoding maybe wrong. Please change the encoding and try again.";
 
-$lang->repo->synTips              = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">here</a>.</strong>';
-$lang->repo->encodingsTips        = "The encodings of commit comments, can be comma separated values，e.g. utf-8";
+$lang->repo->synTips       = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
+$lang->repo->encodingsTips = "The encodings of commit comments, can be comma separated values，e.g. utf-8";
+
 $lang->repo->example              = new stdclass();
+$lang->repo->example->client      = new stdclass();
+$lang->repo->example->path        = new stdclass();
 $lang->repo->example->client->git = "e.g. /usr/bin/git";
 $lang->repo->example->client->svn = "e.g. /usr/bin/svn";
 $lang->repo->example->path->git   = "e.g. /homt/user/myproject";
