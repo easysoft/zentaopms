@@ -1525,6 +1525,7 @@ class treeModel extends model
             $this->dao->update(TABLE_BUG)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
             $this->dao->update(TABLE_CASE)->set('module')->eq($module->parent)->where('module')->in($childs)->exec();
         }
+        if(strpos($this->session->{$module->type . 'List'}, 'param=' . $moduleID)) $this->session->set($module->type . 'List', str_replace('param=' . $moduleID, 'param=0', $this->session->{$module->type . 'List'}));
 
         return true;
     }
@@ -1719,7 +1720,6 @@ class treeModel extends model
             /* Ignore useless module for task. */
             $allModule = (isset($this->config->project->task->allModule) and ($this->config->project->task->allModule == 1));
             if($keepModules and !isset($keepModules[$module->id]) and !$allModule) continue;
-            if($viewType == 'task' and empty($keepModules) and !$allModule) continue;
             if(isset($parent[$module->id]))
             {
                 $module->children = $parent[$module->id]->children;
