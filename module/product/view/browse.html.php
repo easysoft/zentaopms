@@ -22,7 +22,7 @@
       echo $moduleName;
       if($moduleID)
       {
-          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
+          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -52,20 +52,20 @@
                 foreach($lang->product->moreSelects as $key => $value)
                 {
                     $active = $key == $storyBrowseType ? 'btn-active-text' : '';
-                    echo '<li>' . html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
+                    echo '<li>' . html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
                 }
                 echo '</ul></div>';
             }
         }
         elseif($menuItem->name == 'QUERY')
         {
-            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s");
+            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType");
             $isBySearch       = $this->session->storyBrowseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
         else
         {
-            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
+            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
         }
     }
     ?>
@@ -170,7 +170,7 @@
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       $setting = $this->datatable->getSetting('product');

@@ -39,10 +39,11 @@ class story extends control
      * @param  int    $planID
      * @param  int    $todoID
      * @param  string $extra for example feedbackID=0
+     * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '')
+    public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $projectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -129,7 +130,7 @@ class story extends control
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
                 $productID = $this->post->product ? $this->post->product : $productID;
                 $branchID  = $this->post->branch ? $this->post->branch : $branch;
-                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&orderBy=id_desc");
+                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&type=$type&orderBy=id_desc");
             }
             else
             {
@@ -273,6 +274,7 @@ class story extends control
         $this->view->keywords         = $keywords;
         $this->view->mailto           = $mailto;
         $this->view->needReview       = ($this->app->user->account == $product->PO || $projectID > 0 || $this->config->story->needReview == 0) ? "checked='checked'" : "";
+        $this->view->type             = $type;
 
         $this->display();
     }
@@ -286,10 +288,11 @@ class story extends control
      * @param  int    $storyID
      * @param  int    $project
      * @param  int    $plan
+     * @param  string $type requirement|story
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0)
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
         if(!empty($_POST))
         {
@@ -320,7 +323,7 @@ class story extends control
             else
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', false, false);
-                die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch"), 'parent'));
+                die(js::locate($this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type"), 'parent'));
             }
         }
 
@@ -394,6 +397,7 @@ class story extends control
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;
         $this->view->spec             = $spec;
+        $this->view->type             = $type;
         $this->view->branch           = $branch;
         $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
         $this->view->needReview       = ($this->app->user->account == $product->PO || $this->config->story->needReview == 0) ? 0 : 1;
