@@ -249,7 +249,7 @@ class block extends control
             $block->actionLink = '';
             if($block->block == 'overview')
             {
-                if($module == 'qa'      && common::hasPriv('testcase', 'create'))
+                if($module == 'qa' && common::hasPriv('testcase', 'create'))
                 {
                     $this->app->loadLang('testcase');
                     $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
