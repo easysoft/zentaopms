@@ -541,6 +541,7 @@ class bug extends control
      * View a bug.
      *
      * @param  int    $bugID
+     * @param  string $form
      * @access public
      * @return void
      */

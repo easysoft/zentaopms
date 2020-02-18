@@ -18,11 +18,16 @@ class scm
         return $this->engine->ls($path, $revision);
     }
 
+    public function tags($path, $revision, $onlyDir = true)
+    {
+        return $this->engine->tags($path, $revision, $onlyDir);
+    }
+
     public function branch()
     {
         return $this->engine->branch();
     }
-    
+
     public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0)
     {
         return $this->engine->log($path, $fromRevision, $toRevision);

@@ -731,4 +731,58 @@ class repo extends control
             if($commits > 0) die('finished');
         }
     }
+
+    public function ajaxGetSVNTags($repoID, $path = '', $revision = 'HEAD')
+    {
+        if($this->get->path) $entry = $this->get->path;
+        $repo = $this->repo->getRepoByID($repoID);
+        if($repo->SCM != 'Subversion') die(json_encode(array()));
+
+        $this->scm->setEngine($repo);
+        $path = $this->repo->decodePath($path);
+        $tags = $this->scm->tags($path, $revision);
+
+        $parentInfos = array();
+        $parentPath  = '';
+
+        $info = array();
+        $info['path'] = '/';
+        $info['url']  = $repo->path . $info['path'];
+        $info['encodePath'] = $this->repo->encodePath($info['path']);
+        $parentInfos['/'] = $info;
+
+        foreach(explode('/', $path) as $parent)
+        {
+            if(empty($parent)) continue;
+            $parentPath .= '/' . $parent;
+
+            $info = array();
+            $info['path'] = $parentPath;
+            $info['url']  = $repo->path . $info['path'];
+
+            $info['encodePath'] = $this->repo->encodePath($info['path']);
+
+            $parentInfos[$parent] = $info;
+        }
+
+        $tagInfos = array();
+        foreach($tags as $tag)
+        {
+            $info = array();
+            $info['path'] = '/';
+            if($path) $info['path'] .= $path . '/';
+            $info['path'] .= $tag;
+            $info['url']   = $repo->path . $info['path'];
+
+            $info['encodePath'] = $this->repo->encodePath($info['path']);
+
+            $tagInfos[$tag] = $info;
+        }
+
+        $svnTags = array();
+        $svnTags['parent'] = $parentInfos;
+        $svnTags['tags']   = $tagInfos;
+
+        die(json_encode($svnTags));
+    }
 }

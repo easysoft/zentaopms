@@ -105,8 +105,8 @@ class jenkinsModel extends model
     {
         $repos = $this->dao->select('id, name')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
-            ->orderBy(id)
+            ->beginIF(!empty($whr))->andWhere('(' . $whr . ')')->fi()
+            ->orderBy('id')
             ->fetchPairs();
         $repos[''] = '';
         return $repos;

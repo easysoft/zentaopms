@@ -29,7 +29,7 @@ class Git
 
         $infos   = array();
         foreach($list as $entry)
-        {   
+        {
             list($mod, $kind, $revision, $size, $name) = preg_split('/[\t ]+/', $entry);
 
             /* Get commit info. */
@@ -68,6 +68,15 @@ class Git
         if($infos) array_multisort($kinds, SORT_ASC, $infos);
 
         return $infos;
+    }
+
+    public function tags($path, $revision = 'HEAD')
+    {
+        chdir($this->root);
+        $cmd  = escapeCmd("$this->client tag --sort=taggerdate");
+        $list = execCmd($cmd . ' 2>&1', 'array', $result);
+        if($result) return array();
+        return $list;
     }
 
     public function branch()

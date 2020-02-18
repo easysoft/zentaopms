@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The control file of ci module of ZenTaoPMS.
  *
@@ -94,8 +93,17 @@ class ci extends control
         $this->view->position[] = html::a(inlink('browseJob'), $this->lang->ci->job);
         $this->view->position[] = $this->lang->ci->create;
 
-        $this->view->repoList      = $this->loadModel('repo')->listForSelectionWithType("true");
-        $this->view->jenkinsList   = $this->loadModel('jenkins')->listForSelection("true");
+        $repoList  = $this->loadModel('repo')->getAllRepos();
+        $repoPairs = array(0 => '');
+        $repoTypes = array();
+        foreach($repoList as $repo)
+        {
+            $repoPairs[$repo->id] = $repo->name;
+            $repoTypes[$repo->id] = $repo->SCM;
+        }
+        $this->view->repoPairs   = $repoPairs;
+        $this->view->repoTypes   = $repoTypes;
+        $this->view->jenkinsList = $this->loadModel('jenkins')->listForSelection("true");
 
         $this->display();
     }
@@ -119,16 +127,24 @@ class ci extends control
 
         $this->app->loadLang('action');
 
-        $repo        = $this->loadModel('repo')->getRepoByID($job->repo);
-        $job->repoType           = $repo->id . '-' . $repo->SCM;
-        $this->view->job         = $job;
-
-        $this->view->repoList    = $this->loadModel('repo')->listForSelectionWithType("true");
-        $this->view->jenkinsList = $this->loadModel('jenkins')->listForSelection("true");
-
         $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->ci->edit;
         $this->view->position[]  = html::a(inlink('browseJob'), $this->lang->ci->job);
         $this->view->position[]  = $this->lang->ci->edit;
+
+        $repo      = $this->loadModel('repo')->getRepoByID($job->repo);
+        $repoList  = $this->loadModel('repo')->getAllRepos();
+        $repoPairs = array(0 => '', $repo->id => $repo->name);
+        $repoTypes[$repo->id] = $repo->SCM;
+        foreach($repoList as $repo)
+        {
+            $repoPairs[$repo->id] = $repo->name;
+            $repoTypes[$repo->id] = $repo->SCM;
+        }
+
+        $this->view->repoPairs   = $repoPairs;
+        $this->view->repoTypes   = $repoTypes;
+        $this->view->job         = $job;
+        $this->view->jenkinsList = $this->loadModel('jenkins')->listForSelection("true");
 
         $this->display();
     }

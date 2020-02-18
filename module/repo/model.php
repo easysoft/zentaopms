@@ -741,6 +741,7 @@ class repoModel extends model
      */
     public function encodePath($path = '')
     {
+        if(empty($path)) return $path;
         return helper::safe64Encode(urlencode($path));
     }
 
@@ -753,6 +754,7 @@ class repoModel extends model
      */
     public function decodePath($path = '')
     {
+        if(empty($path)) return $path;
         return trim(urldecode(helper::safe64Decode($path)), '/');
     }
 
@@ -929,21 +931,6 @@ class repoModel extends model
         $repos[''] = '';
         return $repos;
     }
-    /**
-     * list repos for jenkins job edit， key will be 12-git
-     *
-     * @return mixed
-     */
-    public function listForSelectionWithType($whr)
-    {
-        $repos = $this->dao->select("concat(id, '-', SCM), name")->from(TABLE_REPO)
-            ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
-            ->orderBy(id)
-            ->fetchPairs();
-        $repos[''] = '';
-        return $repos;
-    }
 
     /**
      * list repos for sync
@@ -954,8 +941,8 @@ class repoModel extends model
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
-            ->orderBy(id)
+            ->beginIF(!empty($whr))->andWhere('(' . $whr . ')')->fi()
+            ->orderBy('id')
             ->fetchAll();
 
         foreach($repos as $repo)

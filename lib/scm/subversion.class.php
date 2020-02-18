@@ -65,6 +65,19 @@ class Subversion
         return $infos;
     }
 
+    public function tags($path, $revision = 'HEAD', $onlyDir = true)
+    {
+        $infos = $this->ls($path, $revision);
+        $tags  = array();
+        foreach($infos as $info)
+        {
+            if($onlyDir and $info->kind != 'dir') continue;
+            $tags[$info->name] = $info->name;
+        }
+
+        return $tags;
+    }
+
     public function branch()
     {
         return array();

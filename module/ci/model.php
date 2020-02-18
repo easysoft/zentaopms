@@ -59,33 +59,31 @@ class ciModel extends model
         $job = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
+            ->remove('repoType')
             ->get();
-        $arr = explode("-", $job->repo);
-        $job->repo = $arr[0];
-        $repoType = $arr[1];
 
         $this->dao->insert(TABLE_CI_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
-            ->batchCheckIF($repoType == 'Subversion', "svnFolder", 'notempty')
+            ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
 
             ->autoCheck()
             ->exec();
 
-        if ($job->triggerType === 'schedule')
+        $jobId = $this->dao->lastInsertID();
+        if($job->triggerType =='schedule')
         {
-            $jobId = $this->dao->lastInsertID();
-
-            $arr = explode(":", $job->scheduleTime);
+            $arr  = explode(":", $job->scheduleTime);
             $hour = $arr[0];
-            $min = $arr[1];
+            $min  = $arr[1];
 
-            if ($job->scheduleDay == 'everyDay')
+            if($job->scheduleDay == 'everyDay')
             {
                 $days = '1-7';
-            } else if ($job->scheduleDay == 'workDay')
+            }
+            elseif($job->scheduleDay == 'workDay')
             {
                 $days = '1-5';
             }
@@ -112,17 +110,15 @@ class ciModel extends model
         $job = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
+            ->remove('repoType')
             ->get();
-        $arr = explode("-", $job->repo);
-        $job->repo = $arr[0];
-        $repoType = $arr[1];
 
         $this->dao->update(TABLE_CI_JOB)->data($job)
             ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
-            ->batchCheckIF($repoType == 'Subversion', "svnFolder", 'notempty')
+            ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
 
             ->autoCheck()
             ->where('id')->eq($id)
@@ -132,15 +128,15 @@ class ciModel extends model
         {
             $command = 'moduleName=ci&methodName=exeJob&parm=' . $id;
 
-            $arr = explode(":", $job->scheduleTime);
+            $arr  = explode(":", $job->scheduleTime);
             $hour = $arr[0];
-            $min = $arr[1];
+            $min  = $arr[1];
 
-            $jobId = $this->dao->lastInsertID();
-            if ($job->scheduleDay == 'everyDay')
+            if($job->scheduleDay == 'everyDay')
             {
                 $days = '1-7';
-            } else if ($job->scheduleDay == 'workDay')
+            }
+            elseif($job->scheduleDay == 'workDay')
             {
                 $days = '2-6';
             }
