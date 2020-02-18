@@ -158,7 +158,7 @@ class ci extends control
      */
     public function deleteJob($id)
     {
-        $this->ci->delete(TABLE_CI_JOB, $id);
+        $this->ci->delete(TABLE_INTEGRATION, $id);
 
         $command = 'moduleName=ci&methodName=exe&parm=' . $id;
         $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();

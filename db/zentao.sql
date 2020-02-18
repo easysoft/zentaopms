@@ -1125,13 +1125,14 @@ CREATE TABLE `zt_jenkins` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `zt_cijob` (
+CREATE TABLE `zt_integration` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `jenkins` mediumint(8) unsigned NOT NULL,
   `jenkinsJob` varchar(500) NOT NULL,
   `triggerType` varchar(255) NOT NULL,
+  `svnFolder` varchar(255) NOT NULL,
   `scheduleType` varchar(255) NOT NULL,
   `cronExpression` varchar(255) DEFAULT NULL,
   `scheduleDay` varchar(255) DEFAULT NULL,
@@ -1149,7 +1150,7 @@ CREATE TABLE `zt_cijob` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `zt_cibuild` (
+CREATE TABLE `zt_compile` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   `cijob` mediumint(8) unsigned NOT NULL,

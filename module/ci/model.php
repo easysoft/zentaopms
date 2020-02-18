@@ -25,7 +25,7 @@ class ciModel extends model
     public function listJob($orderBy = 'id_desc', $pager = null, $decode = true)
     {
         $list = $this->dao->
-        select('t1.*, t2.name repoName, t3.name as jenkinsName')->from(TABLE_CI_JOB)->alias('t1')
+        select('t1.*, t2.name repoName, t3.name as jenkinsName')->from(TABLE_INTEGRATION)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
             ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t1.jenkins=t3.id')
             ->where('t1.deleted')->eq('0')
@@ -44,7 +44,7 @@ class ciModel extends model
      */
     public function getJobByID($id)
     {
-        $jenkins = $this->dao->select('*')->from(TABLE_CI_JOB)->where('id')->eq($id)->fetch();
+        $jenkins = $this->dao->select('*')->from(TABLE_INTEGRATION)->where('id')->eq($id)->fetch();
         return $jenkins;
     }
 
@@ -62,7 +62,7 @@ class ciModel extends model
             ->remove('repoType')
             ->get();
 
-        $this->dao->insert(TABLE_CI_JOB)->data($job)
+        $this->dao->insert(TABLE_INTEGRATION)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
@@ -113,7 +113,7 @@ class ciModel extends model
             ->remove('repoType')
             ->get();
 
-        $this->dao->update(TABLE_CI_JOB)->data($job)
+        $this->dao->update(TABLE_INTEGRATION)->data($job)
             ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
 
             ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
@@ -164,7 +164,7 @@ class ciModel extends model
     public function exeJob($jobID)
     {
         $job = $this->dao->select('job.id jobId, job.name jobName, job.repo, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
-            ->from(TABLE_CI_JOB)->alias('job')
+            ->from(TABLE_INTEGRATION)->alias('job')
             ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
             ->where('job.id')->eq($jobID)
             ->fetch();
@@ -199,8 +199,8 @@ class ciModel extends model
     {
         $list = $this->dao->
         select('build.id, build.name, build.status, build.createdDate, job.triggerType, repo.name repoName, jenkins.name as jenkinsName')
-            ->from(TABLE_CI_BUILD)->alias('build')
-            ->leftJoin(TABLE_CI_JOB)->alias('job')->on('build.cijob=job.id')
+            ->from(TABLE_COMPILE)->alias('build')
+            ->leftJoin(TABLE_INTEGRATION)->alias('job')->on('build.cijob=job.id')
             ->leftJoin(TABLE_REPO)->alias('repo')->on('job.repo=repo.id')
             ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
 
@@ -222,7 +222,7 @@ class ciModel extends model
      */
     public function getBuildByID($buildID)
     {
-        $build = $this->dao->select('*')->from(TABLE_CI_BUILD)->where('id')->eq($buildID)->fetch();
+        $build = $this->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($buildID)->fetch();
         return $build;
     }
 
@@ -243,7 +243,7 @@ class ciModel extends model
         $build->createdBy = $this->app->user->account;
         $build->createdDate = helper::now();
 
-        $this->dao->insert(TABLE_CI_BUILD)->data($build)->exec();
+        $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
     }
 
     /**
@@ -255,8 +255,8 @@ class ciModel extends model
     public function checkBuildStatus()
     {
         $pos = $this->dao->select('build.*, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
-            ->from(TABLE_CI_BUILD)->alias('build')
-            ->leftJoin(TABLE_CI_JOB)->alias('job')->on('build.cijob=job.id')
+            ->from(TABLE_COMPILE)->alias('build')
+            ->leftJoin(TABLE_INTEGRATION)->alias('job')->on('build.cijob=job.id')
             ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
             ->where('build.status')->ne('success')
             ->andWhere('build.status')->ne('fail')
@@ -286,7 +286,7 @@ class ciModel extends model
                 $response = common::http($logUrl);
                 $logs = json_decode($response);
 
-                $this->dao->update(TABLE_CI_BUILD)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
+                $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
             } else
                 {
                 $queueInfo = json_decode($response);
@@ -310,7 +310,7 @@ class ciModel extends model
                         $response = common::http($logUrl);
                         $logs = json_decode($response);
 
-                        $this->dao->update(TABLE_CI_BUILD)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
+                        $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
                     }
                 }
             }
@@ -327,9 +327,9 @@ class ciModel extends model
      */
     public function updateBuildStatus($build, $status)
     {
-        $this->dao->update(TABLE_CI_BUILD)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
+        $this->dao->update(TABLE_COMPILE)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
 
-        $this->dao->update(TABLE_CI_JOB)
+        $this->dao->update(TABLE_INTEGRATION)
             ->set('lastExec')->eq(helper::now())
             ->set('lastStatus')->eq($status)
             ->where('id')->eq($build->cijob)->exec();

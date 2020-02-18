@@ -171,8 +171,8 @@ define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
 define('TABLE_CREDENTIALS',   '`' . $config->db->prefix . 'credentials`');
 define('TABLE_JENKINS',       '`' . $config->db->prefix . 'jenkins`');
-define('TABLE_CI_JOB',        '`' . $config->db->prefix . 'cijob`');
-define('TABLE_CI_BUILD',      '`' . $config->db->prefix . 'cibuild`');
+define('TABLE_INTEGRATION',   '`' . $config->db->prefix . 'integration`');
+define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_TAG',           '`' . $config->db->prefix . 'tag`');
 
 define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');

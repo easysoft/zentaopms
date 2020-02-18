@@ -15,7 +15,6 @@
 <div id="mainMenu" class="clearfix">
     <div class="btn-toolbar pull-left">
         <?php
-        $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
         echo html::a($this->inlink('browsejob', ""), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link" . ('browseJob' == $method ? ' btn-active-text' : '') . "'");
         echo html::a($this->inlink('browsebuild', ""), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link" . ('browseBuild' == $method ? ' btn-active-text' : '') . "'");
         ?>
