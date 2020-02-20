@@ -296,7 +296,7 @@ class story extends control
     {
         if(!empty($_POST))
         {
-            $mails = $this->story->batchCreate($productID, $branch);
+            $mails = $this->story->batchCreate($productID, $branch, $type);
             if(dao::isError()) die(js::error(dao::getError()));
 
             $stories = array();
