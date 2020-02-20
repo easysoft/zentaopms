@@ -690,6 +690,10 @@ class product extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Save this url to session. */
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('lineList', $uri);
+
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;
         $this->view->position[]   = $this->lang->product->allProduct;
