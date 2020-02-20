@@ -30,6 +30,7 @@ $lang->integration->example    = '举例';
 $lang->integration->tagEx      = 'build_#15，其中15为Jenkins任务编号';
 $lang->integration->commitEx   = 'start build #15，其中15为Jenkins任务编号';
 $lang->integration->cronSample = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
+$lang->integration->sendExec   = '发送执行请求成功！';
 
 $lang->integration->dayTypeList['workDay']  = '工作日';
 $lang->integration->dayTypeList['everyDay'] = '每天';

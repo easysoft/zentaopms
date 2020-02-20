@@ -63,56 +63,65 @@ $(document).on('change', '#svnFolder', function()
     })
 })
 
-$(function()
+$('#triggerType').change(function()
 {
-    $('#repo').change();
-    triggerTypeChanged(triggerType);
-});
-
-function execJob(id) {
-    var link = createLink('integration', 'exec', 'id=' + id);
-    $.ajax({
-        type:"POST",
-        url: link,
-        data: {},
-        datatype: "json",
-        success:function(str)
-        {
-            $('.exe-job-button').tooltip('show', '发送执行请求成功！');
-        }
-    });
-}
-
-function triggerTypeChanged(type) {
-    if(type == 'tag') {
+    var type = $(this).val();
+    if(type == 'tag')
+    {
         $('.tag-fields').removeClass('hidden');
         $('.comment-fields').addClass('hidden');
 
         scheduleTypeChanged();
-    } else if(type == 'commit') {
+    }
+    else if(type == 'commit')
+    {
         $('.tag-fields').addClass('hidden');
         $('.comment-fields').removeClass('hidden');
-
         $('.custom-fields').addClass('hidden');
 
         scheduleTypeChanged();
-    } else if(type == 'schedule') {
+    }
+    else if(type == 'schedule')
+    {
         $('.tag-fields').addClass('hidden');
         $('.comment-fields').addClass('hidden');
 
         var val = $("input[name='scheduleType']:checked").val();
         scheduleTypeChanged(val? val: 'custom');
     }
+});
+
+$(function()
+{
+    $('#repo').change();
+    $('#triggerType').change();
+});
+
+function execJob(id)
+{
+    $.ajax(
+    {
+        type:"POST",
+        url: createLink('integration', 'exec', 'id=' + id),
+        data: {},
+        datatype: "json",
+        success:function(data)
+        {
+            $('.exe-job-button').tooltip('show', sendExec);
+        }
+    });
 }
 
-function scheduleTypeChanged(type) {
-    if(type == 'custom') {
+function scheduleTypeChanged(type)
+{
+    if(type == 'custom')
+    {
         $('.schedule-fields').removeClass('hidden');
-
         $('.custom-fields').removeClass('hidden');
-    } else {
+    }
+    else
+    {
         $('.schedule-fields').addClass('hidden');
-
         $('.custom-fields').addClass('hidden');
     }
 }

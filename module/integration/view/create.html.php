@@ -42,7 +42,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->integration->triggerType; ?></th>
-            <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, '', "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
+            <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, '', "class='form-control chosen'");?></td>
             <td colspan="2"></td>
           </tr>
           <tr class="tag-fields" class="tag-fields">

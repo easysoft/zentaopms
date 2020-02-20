@@ -1,7 +1,2 @@
-.row.text-with-input .col {
-    line-height: 32px;
-}
-
-.only-pick-time thead th, .only-pick-time tfoot th {
-    color: transparent !important;
-}
+.row.text-with-input .col{line-height: 32px;}
+.only-pick-time thead th, .only-pick-time tfoot th {color: transparent !important;}

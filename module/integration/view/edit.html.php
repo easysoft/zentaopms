@@ -45,7 +45,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->integration->triggerType; ?></th>
-            <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, $job->triggerType, "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
+            <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, $job->triggerType, "class='form-control chosen'"); ?></td>
             <td colspan="2"></td>
           </tr>
           <tr class="tag-fields">
@@ -77,7 +77,7 @@
               <?php echo html::backButton(); ?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
               &nbsp;
-              <?php echo html::commonButton($lang->integration->execNow, "onclick=execJob($job->id)  data-tip-class='tooltip-success'", "btn btn-info exe-job-button");?>
+              <?php echo html::commonButton($lang->integration->execNow, "onclick=execJob($job->id) data-tip-class='tooltip-success'", "btn btn-info exe-job-button");?>
             </td>
           </tr>
         </table>
@@ -85,4 +85,5 @@
     </div>
   </div>
 </div>
+<?php js::set('sendExec', $lang->integration->sendExec);?>
 <?php include '../../common/view/footer.html.php';?>

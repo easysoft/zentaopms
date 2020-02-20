@@ -61,14 +61,9 @@ $(document).on('change', '#svnFolder', function()
     })
 })
 
-$(function()
+$('#triggerType').change(function()
 {
-    $('#repo').change();
-    triggerTypeChanged(triggerType);
-});
-
-function triggerTypeChanged(type)
-{
+    var type = $(this).val();
     if(type == 'tag')
     {
         $('.tag-fields').removeClass('hidden');
@@ -92,7 +87,13 @@ function triggerTypeChanged(type)
         var val = $("input[name='scheduleType']:checked").val();
         scheduleTypeChanged(val ? val : 'custom');
     }
-}
+});
+
+$(function()
+{
+    $('#repo').change();
+    $('#triggerType').change();
+});
 
 function scheduleTypeChanged(type)
 {
