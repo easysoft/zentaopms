@@ -1,11 +1,11 @@
 <?php
 /**
- * The edit view file of ci job module of ZenTaoPMS.
+ * The edit view file of integration module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
- * @package     job
+ * @package     integration
  * @version     $Id$
  * @link        http://www.zentao.net
  */
@@ -22,51 +22,51 @@
   <div class='main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->job->edit; ?></h2>
+        <h2><?php echo $lang->integration->edit; ?></h2>
       </div>
       <form id='jobForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->job->name; ?></th>
+            <th><?php echo $lang->integration->name; ?></th>
             <td class='required'><?php echo html::input('name', $job->name, "class='form-control'"); ?></td>
             <td colspan="2" ></td>
           </tr>
           <tr>
-            <th><?php echo $lang->ci->repo; ?></th>
+            <th><?php echo $lang->integration->repo; ?></th>
             <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'"); ?></td>
-            <th class="svn-fields hidden"><?php echo $lang->job->svnFolder; ?></th>
+            <th class="svn-fields hidden"><?php echo $lang->integration->svnFolder; ?></th>
             <td class="svn-fields hidden" id='svnFolderBox'></td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->jenkins; ?></th>
+            <th><?php echo $lang->integration->jenkins; ?></th>
             <td><?php echo html::select('jenkins', $jenkinsList, $job->jenkins, "class='form-control chosen'"); ?></td>
-            <th><?php echo $lang->job->jenkinsJob; ?></th>
+            <th><?php echo $lang->integration->jenkinsJob; ?></th>
             <td><?php echo html::input('jenkinsJob', $job->jenkinsJob, "class='form-control'"); ?></td>
           </tr>
           <tr>
-            <th><?php echo $lang->job->triggerType; ?></th>
-            <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, $job->triggerType, "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
+            <th><?php echo $lang->integration->triggerType; ?></th>
+            <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, $job->triggerType, "onchange='triggerTypeChanged(this.value)' class='form-control chosen'"); ?></td>
             <td colspan="2"></td>
           </tr>
           <tr class="tag-fields">
-            <th><?php echo $lang->job->example; ?></th>
-            <td colspan="3"><?php echo $lang->job->tagEx; ?></td>
+            <th><?php echo $lang->integration->example; ?></th>
+            <td colspan="3"><?php echo $lang->integration->tagEx; ?></td>
           </tr>
           <tr class="comment-fields">
-            <th><?php echo $lang->job->example; ?></th>
-            <td colspan="3"><?php echo $lang->job->commitEx; ?></td>
+            <th><?php echo $lang->integration->example; ?></th>
+            <td colspan="3"><?php echo $lang->integration->commitEx; ?></td>
           </tr>
           <tr class="custom-fields">
-            <th><?php echo $lang->job->custom; ?></th>
+            <th><?php echo $lang->integration->custom; ?></th>
             <td colspan="3">
               <div class="row text-with-input">
-                <div class="col w-50px"><?php echo $lang->job->scheduleInterval;?></div>
+                <div class="col w-50px"><?php echo $lang->integration->scheduleInterval;?></div>
                 <div class="col w-100px"><?php echo html::number('scheduleInterval', $job->scheduleInterval, "class='form-control'");?></div>
-                <div class="col w-40px"><?php echo $lang->job->day; ?>,&nbsp;&nbsp;</div>
-                <div class="col <?php echo $this->app->getClientLang() == 'en' ? 'w-100px' : '2-30px'; ?>"><?php echo $lang->job->at;?></div>
-                <div class="col w-150px"><?php echo html::select('scheduleDay', $lang->job->dayTypeList, $job->scheduleDay,"class='form-control chosen'");?></div>
+                <div class="col w-40px"><?php echo $lang->integration->day; ?>,&nbsp;&nbsp;</div>
+                <div class="col <?php echo $this->app->getClientLang() == 'en' ? 'w-100px' : '2-30px'; ?>"><?php echo $lang->integration->at;?></div>
+                <div class="col w-150px"><?php echo html::select('scheduleDay', $lang->integration->dayTypeList, $job->scheduleDay,"class='form-control chosen'");?></div>
                 <div class="col w-100px"><?php echo html::input('scheduleTime', $job->scheduleTime, "class='form-control form-time time-only' min='1'");?></div>
-                <div class="col w-120px"><?php echo $lang->job->exe; ?>.</div>
+                <div class="col w-120px"><?php echo $lang->integration->exec; ?>.</div>
               </div>
             </td>
           </tr>
@@ -77,7 +77,7 @@
               <?php echo html::backButton(); ?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
               &nbsp;
-              <?php echo html::commonButton($lang->job->exeNow, "onclick=exeJob($job->id)  data-tip-class='tooltip-success'", "btn btn-info exe-job-button");?>
+              <?php echo html::commonButton($lang->integration->execNow, "onclick=execJob($job->id)  data-tip-class='tooltip-success'", "btn btn-info exe-job-button");?>
             </td>
           </tr>
         </table>

@@ -99,16 +99,12 @@ class jenkinsModel extends model
     /**
      * list jenkins for ci task edit
      *
-     * @return mixed
+     * @return array
      */
-    public function listForSelection($whr)
+    public function getPairs()
     {
-        $repos = $this->dao->select('id, name')->from(TABLE_JENKINS)
-            ->where('deleted')->eq('0')
-            ->beginIF(!empty($whr))->andWhere('(' . $whr . ')')->fi()
-            ->orderBy('id')
-            ->fetchPairs();
-        $repos[''] = '';
+        $repos = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
+        $repos = array('' => '') + $repos;
         return $repos;
     }
 }

@@ -917,22 +917,6 @@ class repoModel extends model
     }
 
     /**
-     * list repos for jenkins job edit
-     *
-     * @return mixed
-     */
-    public function listForSelection($whr)
-    {
-        $repos = $this->dao->select('id, name')->from(TABLE_REPO)
-            ->where('deleted')->eq('0')
-            ->beginIF(!empty(whr))->andWhere('(' . $whr . ')')->fi()
-            ->orderBy(id)
-            ->fetchPairs();
-        $repos[''] = '';
-        return $repos;
-    }
-
-    /**
      * list repos for sync
      *
      * @return mixed

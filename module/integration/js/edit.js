@@ -69,8 +69,8 @@ $(function()
     triggerTypeChanged(triggerType);
 });
 
-function exeJob(id) {
-    var link = createLink('ci', 'exeJob', 'id=' + id);
+function execJob(id) {
+    var link = createLink('integration', 'exec', 'id=' + id);
     $.ajax({
         type:"POST",
         url: link,
