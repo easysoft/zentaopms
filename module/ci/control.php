@@ -23,16 +23,21 @@ class ci extends control
     }
 
     /**
-     * CI index page.
-     *
+     * Build today job.
+     * 
      * @access public
      * @return void
      */
-    public function index()
+    public function buildTodayJob()
     {
-        $this->view->position[] = $this->lang->ci->common;
+        $scheduleJobs = $this->loadModel('integration')->getListByTriggerType('schedule');
 
-        $this->display();
+        $week = date('w');
+        foreach($scheduleJobs as $job)
+        {
+            if(strpos($job->scheduleDay, $week) !== false) $this->integration->exec($job->id);
+        }
+        die('success');
     }
 
     /**

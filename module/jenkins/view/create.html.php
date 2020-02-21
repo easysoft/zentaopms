@@ -11,53 +11,48 @@
  */
 ?>
 <?php include '../../common/view/header.html.php'; ?>
-
 <div id='mainContent' class='main-row'>
-    <div class='main-col main-content'>
-        <div class='center-block'>
-            <div class='main-header'>
-                <h2><?php echo $lang->jenkins->create; ?></h2>
-            </div>
-            <form id='jenkinsForm' method='post' class='form-ajax'>
-                <table class='table table-form'>
-                    <tr>
-                        <th><?php echo $lang->jenkins->name; ?></th>
-                        <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $lang->jenkins->serviceUrl; ?></th>
-                        <td class='required'><?php echo html::input('serviceUrl', '', "class='form-control'"); ?></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $lang->jenkins->account;?></th>
-                        <td><?php echo html::input('account', '', "class='form-control'");?></td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $lang->jenkins->token;?></th>
-                        <td><?php echo html::input('token', '', "class='form-control'");?></td>
-                        <td><?php echo $lang->jenkins->tokenFirst;?></td>
-                    </tr>
-                    <tr>
-                        <th><?php echo $lang->jenkins->password;?></th>
-                        <td>
-                            <?php echo html::password('password', '', "class='form-control'");?>
-                        </td>
-                        <td><?php echo $lang->jenkins->tips;?></td>
-                    </tr>
-
-                    <tr>
-                        <th></th>
-                        <td class='text-center form-actions'>
-                            <?php echo html::submitButton(); ?>
-                            <?php echo html::backButton(); ?>
-                        </td>
-                    </tr>
-                </table>
-            </form>
-        </div>
+  <div class='main-col main-content'>
+    <div class='center-block'>
+      <div class='main-header'>
+        <h2><?php echo $lang->jenkins->create; ?></h2>
+      </div>
+      <form id='jenkinsForm' method='post' class='form-ajax'>
+        <table class='table table-form'>
+          <tr>
+            <th><?php echo $lang->jenkins->name; ?></th>
+            <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->jenkins->serviceUrl; ?></th>
+            <td class='required'><?php echo html::input('serviceUrl', '', "class='form-control'"); ?></td>
+            <td></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->jenkins->account;?></th>
+            <td><?php echo html::input('account', '', "class='form-control'");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->jenkins->token;?></th>
+            <td><?php echo html::input('token', '', "class='form-control'");?></td>
+            <td><?php echo $lang->jenkins->tokenFirst;?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->jenkins->password;?></th>
+            <td><?php echo html::password('password', '', "class='form-control'");?></td>
+            <td><?php echo $lang->jenkins->tips;?></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td class='text-center form-actions'>
+              <?php echo html::submitButton(); ?>
+              <?php echo html::backButton(); ?>
+            </td>
+          </tr>
+        </table>
+      </form>
     </div>
+  </div>
 </div>
-
 <?php include '../../common/view/footer.html.php'; ?>

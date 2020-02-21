@@ -43,6 +43,21 @@ class integrationModel extends model
     }
 
     /**
+     * Get list by triggerType field
+     * 
+     * @param  string    $triggerType 
+     * @access public
+     * @return array
+     */
+    public function getListByTriggerType($triggerType)
+    {
+        return $this->dao->select('*')->from(TABLE_INTEGRATION)
+            ->where('deleted')->eq('0')
+            ->andWhere('triggerType')->eq($triggerType)
+            ->fetchAll('id');
+    }
+
+    /**
      * Create integration
      * 
      * @access public
@@ -55,40 +70,20 @@ class integrationModel extends model
             ->add('createdDate', helper::now())
             ->remove('repoType')
             ->get();
+        if($integration->triggerType == 'schedule')
+        {
+            if(!isset($integration->scheduleDay)) $integration->scheduleDay = array();
+            $integration->scheduleDay = join(',', $integration->scheduleDay);
+        }
 
         $this->dao->insert(TABLE_INTEGRATION)->data($integration)
             ->batchCheck($this->config->integration->create->requiredFields, 'notempty')
 
-            ->batchCheckIF($integration->triggerType === 'schedule' && $integration->scheduleType == 'cron', "cronExpression", 'notempty')
-            ->batchCheckIF($integration->triggerType === 'schedule' && $integration->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+            ->batchCheckIF($integration->triggerType === 'schedule', "scheduleDay", 'notempty')
             ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
 
             ->autoCheck()
             ->exec();
-
-        $integrationId = $this->dao->lastInsertID();
-        if($integration->triggerType =='schedule')
-        {
-            $arr  = explode(":", $integration->scheduleTime);
-            $hour = $arr[0];
-            $min  = $arr[1];
-
-            if($integration->scheduleDay == 'everyDay')
-            {
-                $days = '1-7';
-            }
-            elseif($integration->scheduleDay == 'workDay')
-            {
-                $days = '1-5';
-            }
-
-            $cron = (object)array('m' => $min, 'h' => $hour, 'dom' => '*', 'mon' => '*',
-                'dow' => $days . '/' . $integration->scheduleInterval, 'command' => 'moduleName=ci&methodName=exeJob&parm=' . $integrationId,
-                'remark' => ($this->lang->ci->extJob . $integrationId), 'type' => 'zentao',
-                'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
-            $this->dao->insert(TABLE_CRON)->data($cron)->exec();
-        }
-
         return true;
     }
 
@@ -106,45 +101,21 @@ class integrationModel extends model
             ->add('editedDate', helper::now())
             ->remove('repoType')
             ->get();
+        if($integration->triggerType == 'schedule')
+        {
+            if(!isset($integration->scheduleDay)) $integration->scheduleDay = array();
+            $integration->scheduleDay = join(',', $integration->scheduleDay);
+        }
 
         $this->dao->update(TABLE_INTEGRATION)->data($integration)
             ->batchCheck($this->config->integration->edit->requiredFields, 'notempty')
 
-            ->batchCheckIF($integration->triggerType === 'schedule' && $integration->scheduleType == 'cron', "cronExpression", 'notempty')
-            ->batchCheckIF($integration->triggerType === 'schedule' && $integration->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
+            ->batchCheckIF($integration->triggerType === 'schedule', "scheduleDay", 'notempty')
             ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
 
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
-
-        if ($integration->triggerType === 'schedule')
-        {
-            $command = 'moduleName=ci&methodName=exeJob&parm=' . $id;
-
-            $arr  = explode(":", $integration->scheduleTime);
-            $hour = $arr[0];
-            $min  = $arr[1];
-
-            if($integration->scheduleDay == 'everyDay')
-            {
-                $days = '1-7';
-            }
-            elseif($integration->scheduleDay == 'workDay')
-            {
-                $days = '2-6';
-            }
-
-            $this->dao->update(TABLE_CRON)
-                ->set('m')->eq($min)
-                ->set('h')->eq($hour)
-                ->set('dom')->eq('*')
-                ->set('mon')->eq('*')
-                ->set('dow')->eq($days . '/' . $integration->scheduleInterval)
-                ->set('lastTime')->eq('0000-00-00 00:00:00')
-                ->where('command')->eq($command)->exec();
-        }
-
         return true;
     }
 
@@ -163,7 +134,7 @@ class integrationModel extends model
             ->where('t1.id')->eq($integrationID)
             ->fetch();
 
-        if (!$integration) return false;
+        if(!$integration) return false;
 
         $jenkinsServer   = $integration->serviceUrl;
         $jenkinsUser     = $integration->account;

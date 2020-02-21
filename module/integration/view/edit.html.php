@@ -57,18 +57,8 @@
             <td colspan="3"><?php echo $lang->integration->commitEx; ?></td>
           </tr>
           <tr class="custom-fields">
-            <th><?php echo $lang->integration->custom; ?></th>
-            <td colspan="3">
-              <div class="row text-with-input">
-                <div class="col w-50px"><?php echo $lang->integration->scheduleInterval;?></div>
-                <div class="col w-100px"><?php echo html::number('scheduleInterval', $job->scheduleInterval, "class='form-control'");?></div>
-                <div class="col w-40px"><?php echo $lang->integration->day; ?>,&nbsp;&nbsp;</div>
-                <div class="col <?php echo $this->app->getClientLang() == 'en' ? 'w-100px' : '2-30px'; ?>"><?php echo $lang->integration->at;?></div>
-                <div class="col w-150px"><?php echo html::select('scheduleDay', $lang->integration->dayTypeList, $job->scheduleDay,"class='form-control chosen'");?></div>
-                <div class="col w-100px"><?php echo html::input('scheduleTime', $job->scheduleTime, "class='form-control form-time time-only' min='1'");?></div>
-                <div class="col w-120px"><?php echo $lang->integration->exec; ?>.</div>
-              </div>
-            </td>
+            <th><?php echo $lang->integration->scheduleDay;?></th>
+            <td colspan="3"><?php echo html::checkbox('scheduleDay', $lang->datepicker->dayNames, $job->scheduleDay, '', 'inline');?></td>
           </tr>
           <tr>
             <th></th>
@@ -76,7 +66,6 @@
               <?php echo html::submitButton(); ?>
               <?php echo html::backButton(); ?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
-              &nbsp;
               <?php echo html::commonButton($lang->integration->execNow, "onclick=execJob($job->id) data-tip-class='tooltip-success'", "btn btn-info exe-job-button");?>
             </td>
           </tr>

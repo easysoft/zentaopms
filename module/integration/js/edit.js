@@ -70,24 +70,19 @@ $('#triggerType').change(function()
     {
         $('.tag-fields').removeClass('hidden');
         $('.comment-fields').addClass('hidden');
-
-        scheduleTypeChanged();
+        $('.custom-fields').addClass('hidden');
     }
     else if(type == 'commit')
     {
         $('.tag-fields').addClass('hidden');
         $('.comment-fields').removeClass('hidden');
         $('.custom-fields').addClass('hidden');
-
-        scheduleTypeChanged();
     }
     else if(type == 'schedule')
     {
         $('.tag-fields').addClass('hidden');
         $('.comment-fields').addClass('hidden');
-
-        var val = $("input[name='scheduleType']:checked").val();
-        scheduleTypeChanged(val? val: 'custom');
+        $('.custom-fields').removeClass('hidden');
     }
 });
 
@@ -101,27 +96,13 @@ function execJob(id)
 {
     $.ajax(
     {
-        type:"POST",
+        type: "POST",
         url: createLink('integration', 'exec', 'id=' + id),
         data: {},
         datatype: "json",
-        success:function(data)
+        success: function(data)
         {
             $('.exe-job-button').tooltip('show', sendExec);
         }
     });
-}
-
-function scheduleTypeChanged(type)
-{
-    if(type == 'custom')
-    {
-        $('.schedule-fields').removeClass('hidden');
-        $('.custom-fields').removeClass('hidden');
-    }
-    else
-    {
-        $('.schedule-fields').addClass('hidden');
-        $('.custom-fields').addClass('hidden');
-    }
 }

@@ -138,10 +138,7 @@ class integration extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm != 'yes')
-        {
-            die(js::confirm($this->lang->integration->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
-        }
+        if($confirm != 'yes') die(js::confirm($this->lang->integration->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
 
         $this->integration->delete(TABLE_INTEGRATION, $id);
 

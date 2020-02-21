@@ -32,18 +32,16 @@ class jenkinsModel extends model
      *
      * @param  string $orderBy
      * @param  object $pager
-     * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function listAll($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getList($orderBy = 'id_desc', $pager = null)
     {
-        $jenkinsList = $this->dao->select('*')->from(TABLE_JENKINS)
+        return $this->dao->select('*')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $jenkinsList;
     }
 
     /**
