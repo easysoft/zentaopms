@@ -5,9 +5,10 @@ $(function()
         var type = $(this).val();
         $('#sendTypeTR').toggle(type != 'dingding' && type != 'dingapi');
         $('#secretTR').toggle(type == 'dingding');
-        $('#urlTR').toggle(type != 'dingapi');
+        $('#urlTR').toggle(type != 'dingapi' && type != 'weixin');
         $('.dingapiTR').toggle(type == 'dingapi');
-        $('#paramsTR').toggle(type != 'bearychat' && type != 'dingding' && type != 'dingapi' && type != 'weixin');
+        $('.wechatTR').toggle(type == 'weixin');
+        $('#paramsTR').toggle(type != 'bearychat' && type != 'dingding' && type != 'dingapi' && type != 'weixin' && type != 'wxRobot');
         $('#urlNote').html(urlNote[type]);
     });
 

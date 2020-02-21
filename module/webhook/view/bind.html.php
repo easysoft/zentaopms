@@ -10,8 +10,8 @@
         <tr class='text-center'>
           <th class='text-left'><?php echo $lang->user->account?></th>
           <th class='w-200px text-left'><?php echo $lang->user->realname?></th>
-          <th class='w-200px'><?php echo $lang->webhook->dingUserid?></th>
-          <th class='w-100px'><?php echo $lang->webhook->dingBindStatus?></th>
+          <th class='w-200px'><?php echo $webhook->type == 'dingapi' ? $lang->webhook->dingUserid : $lang->webhook->wechatUserid;?></th>
+          <th class='w-100px'><?php echo $webhook->type == 'dingapi' ? $lang->webhook->dingBindStatus : $lang->webhook->wechatBindStatus;?></th>
         </tr>
         </thead>
         <tbody>

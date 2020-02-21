@@ -6,6 +6,7 @@ $config->webhook->edit = new stdclass();
 $config->webhook->edit->requiredFields = 'name, url';
 
 $config->webhook->dingapiUrl = 'https://oapi.dingtalk.com/';
+$config->webhook->wechatApiUrl = 'https://qyapi.weixin.qq.com/cgi-bin/';
 
 /* Unset entry to hide actions. */
 $config->webhook->objectTypes = array();

@@ -52,6 +52,21 @@
           <th><?php echo $lang->webhook->dingAppSecret;?></th>
           <td class='required'><?php echo html::input('appSecret', '', "class='form-control'");?></td>
         </tr>
+        <tr class="wechatTR">
+          <th><?php echo $lang->webhook->wechatCorpId;?></th>
+          <td class='required'><?php echo html::input('wechatCorpId', '', "class='form-control'")?></td>
+          <td><?php echo $lang->webhook->note->wechatCorpid;?></td>
+        </tr>
+        <tr class="wechatTR">
+          <th><?php echo $lang->webhook->wechatCorpSecret;?></th>
+          <td class='required'><?php echo html::input('wechatSecret', '', "class='form-control'")?></td>
+          <td><?php echo $lang->webhook->note->wechatSecret;?></td>
+        </tr>
+        <tr class="wechatTR">
+          <th><?php echo $lang->webhook->wechatAgentId;?></th>
+          <td class='required'><?php echo html::input('wechatAppId', '', "class='form-control'")?></td>
+          <td></td>
+        </tr>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>
           <td><?php echo html::input('domain', common::getSysURL(), "class='form-control'");?></td>
