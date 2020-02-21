@@ -117,4 +117,17 @@ class jenkins extends control
         $this->jenkins->delete(TABLE_JENKINS, $id);
         die(js::reload('parent'));
     }
+
+    /**
+     * Ajax get tasks.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTasks($id)
+    {
+        $tasks = $this->jenkins->getTasks($id);
+        die(json_encode($tasks));
+    }
 }

@@ -38,7 +38,7 @@
             <th><?php echo $lang->integration->jenkins; ?></th>
             <td><?php echo html::select('jenkins', $jenkinsList, '', "class='form-control chosen'"); ?></td>
             <th><?php echo $lang->integration->jenkinsJob; ?></th>
-            <td><?php echo html::input('jenkinsJob', '', "class='form-control'"); ?></td>
+            <td id='jenkinsJobBox'><?php echo html::select('jenkinsJob', array('' => ''), '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->integration->triggerType; ?></th>

@@ -17,6 +17,7 @@
 <?php js::set('jobRepo', $job->repo);?>
 <?php js::set('svnFolder', $job->svnFolder);?>
 <?php js::set('encodeSVNFolder', $this->loadModel('repo')->encodePath($job->svnFolder));?>
+<?php js::set('jenkinsJob', $job->jenkinsJob);?>
 
 <div id='mainContent' class='main-row'>
   <div class='main-content'>
@@ -41,7 +42,7 @@
             <th><?php echo $lang->integration->jenkins; ?></th>
             <td><?php echo html::select('jenkins', $jenkinsList, $job->jenkins, "class='form-control chosen'"); ?></td>
             <th><?php echo $lang->integration->jenkinsJob; ?></th>
-            <td><?php echo html::input('jenkinsJob', $job->jenkinsJob, "class='form-control'"); ?></td>
+            <td id='jenkinsJobBox'><?php echo html::select('jenkinsJob', $jenkinsJobs, $job->jenkinsJob, "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->integration->triggerType; ?></th>

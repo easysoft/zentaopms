@@ -86,6 +86,24 @@ $('#triggerType').change(function()
     }
 });
 
+$('#jenkins').change(function()
+{
+    var jenkinsID = $(this).val();
+    $('#jenkinsJobBox').html("<div class='load-indicator loading'></div>");
+    $.getJSON(createLink('jenkins', 'ajaxGetTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+    {
+        html  = "<select id='jenkinsJob' name='jenkinsJob' class='form-control'>";
+        for(taskKey in tasks)
+        {
+            var task = tasks[taskKey];
+            html += "<option value='" + taskKey + "'>" + task + "</option>";
+        }
+        html += '</select>';
+        $('#jenkinsJobBox').html(html);
+        $('#jenkinsJobBox #jenkinsJob').chosen();
+    })
+})
+
 $(function()
 {
     $('#repo').change();

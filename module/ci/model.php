@@ -31,14 +31,14 @@ class ciModel extends model
      */
     public function checkBuildStatus()
     {
-        $pos = $this->dao->select('build.*, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
-            ->from(TABLE_COMPILE)->alias('build')
-            ->leftJoin(TABLE_INTEGRATION)->alias('job')->on('build.cijob=job.id')
-            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
-            ->where('build.status')->ne('success')
-            ->andWhere('build.status')->ne('fail')
-            ->andWhere('build.status')->ne('timeout')
-            ->andWhere('build.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
+        $pos = $this->dao->select('t1.*, t2.jenkinsJob, t3.name jenkinsName,t3.serviceUrl,t3.account,t3.token,t3.password')
+            ->from(TABLE_COMPILE)->alias('t1')
+            ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.cijob=t2.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jenkins=t3.id')
+            ->where('t1.status')->ne('success')
+            ->andWhere('t1.status')->ne('fail')
+            ->andWhere('t1.status')->ne('timeout')
+            ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
         foreach($pos as $po)
@@ -47,7 +47,7 @@ class ciModel extends model
             $jenkinsUser     = $po->account;
             $jenkinsPassword = $po->token ? $po->token : base64_decode($po->password);
 
-            $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
+            $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
             $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
             $queueUrl = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $po->queueItem);
 
@@ -73,7 +73,7 @@ class ciModel extends model
                 if(!empty($queueInfo->executable))
                 {
                     $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
-                    $buildUrl = str_replace('://', $r, $buildUrl);
+                    $buildUrl = str_replace('://', $jenkinsAuth, $buildUrl);
 
                     $response = common::http($buildUrl);
                     $buildInfo = json_decode($response);
@@ -88,7 +88,7 @@ class ciModel extends model
                         $this->updateBuildStatus($po, $result);
 
                         $logUrl = $buildInfo->url . 'logText/progressiveText/api/json';
-                        $logUrl = str_replace('://', $r, $logUrl);
+                        $logUrl = str_replace('://', $jenkinsAuth, $logUrl);
 
                         $response = common::http($logUrl);
                         $logs = json_decode($response);

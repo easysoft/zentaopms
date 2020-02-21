@@ -125,6 +125,7 @@ class integration extends control
         $this->view->repoTypes   = $repoTypes;
         $this->view->job         = $job;
         $this->view->jenkinsList = $this->loadModel('jenkins')->getPairs();
+        $this->view->jenkinsJobs = $this->jenkins->getTasks($job->jenkins);
 
         $this->display();
     }

@@ -44,7 +44,7 @@
           <?php $triggerType = zget($lang->integration->triggerTypeList, $job->triggerType);?>
           <td class='text' title='<?php echo $triggerType;?>'><?php echo $triggerType;?></td>
           <td class='text' title='<?php echo $job->jenkinsName; ?>'><?php echo $job->jenkinsName; ?></td>
-          <td class='text' title='<?php echo $job->jenkinsJob; ?>'><?php echo $job->jenkinsJob; ?></td>
+          <td class='text' title='<?php echo $job->jenkinsJob; ?>'><?php echo urldecode($job->jenkinsJob);?></td>
           <td class='text'><?php if($job->lastStatus) echo zget($lang->compile->statusList, $job->lastStatus) . $lang->ci->at . $job->lastExec;?></td>
           <td class='c-actions text-center'>
             <?php

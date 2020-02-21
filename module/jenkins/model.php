@@ -101,8 +101,38 @@ class jenkinsModel extends model
      */
     public function getPairs()
     {
-        $repos = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
-        $repos = array('' => '') + $repos;
-        return $repos;
+        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
+        $jenkins = array('' => '') + $jenkins;
+        return $jenkins;
+    }
+
+    /**
+     * Get jenkins tasks.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return array
+     */
+    public function getTasks($id)
+    {
+        $jenkins = $this->getById($id);
+
+        $jenkinsServer   = $jenkins->serviceUrl;
+        $jenkinsUser     = $jenkins->account;
+        $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
+
+        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
+        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
+
+        $response = common::http($jenkinsServer . '/api/json/items/list');
+        $response = json_decode($response);
+
+        $tasks = array();
+        if(isset($response->jobs))
+        {
+            foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
+        }
+        return $tasks;
+
     }
 }
