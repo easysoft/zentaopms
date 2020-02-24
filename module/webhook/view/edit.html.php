@@ -60,12 +60,12 @@
         <tr class="wechatTR">
             <th><?php echo $lang->webhook->wechatCorpId;?></th>
             <td class='required'><?php echo html::input('wechatCorpId', $secret->appKey, "class='form-control'")?></td>
-            <td><?php echo $lang->webhook->note->wechatCorpid;?></td>
+            <td><?php echo $lang->webhook->note->wechat;?></td>
         </tr>
         <tr class="wechatTR">
             <th><?php echo $lang->webhook->wechatCorpSecret;?></th>
             <td class='required'><?php echo html::input('wechatCorpSecret', $secret->appSecret, "class='form-control'")?></td>
-            <td><?php echo $lang->webhook->note->wechatCorpSecret;?></td>
+            <td></td>
         </tr>
         <tr class="wechatTR">
             <th><?php echo $lang->webhook->wechatAgentId;?></th>
