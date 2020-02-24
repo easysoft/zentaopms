@@ -81,6 +81,7 @@ $lang->ci->menuOrder[5]  = 'browse';
 $lang->ci->menuOrder[10] = 'job';
 $lang->ci->menuOrder[15] = 'maintain';
 $lang->ci->menuOrder[20] = 'jenkins';
+$lang->ci->menuOrder[25] = 'match';
 
 $lang->repo->menuOrder    = $lang->ci->menuOrder;
 $lang->jenkins->menuOrder = $lang->ci->menuOrder;

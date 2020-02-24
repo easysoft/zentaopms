@@ -338,6 +338,7 @@ $lang->ci->menu->browse   = array('link' =>'浏览|repo|browse|repoID=%s', 'alia
 $lang->ci->menu->job      = array('link' =>'构建|integration|browse', 'subModule' => 'compile,integration');
 $lang->ci->menu->maintain = array('link' =>'版本库|repo|maintain', 'alias' => 'create,edit');
 $lang->ci->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
+$lang->ci->menu->match    = array('link' =>'匹配设置|repo|setmatchcomment');
 
 $lang->repo              = new stdclass();
 $lang->jenkins           = new stdclass();
