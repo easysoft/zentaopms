@@ -143,6 +143,12 @@ class webhookModel extends model
             ->join('products', ',')
             ->join('projects', ',')
             ->skipSpecial('url')
+            ->trim('agentId')
+            ->trim('appKey')
+            ->trim('appSecret')
+            ->trim('wechatAgentId')
+            ->trim('wechatCorpId')
+            ->trim('wechatCorpSecret')
             ->remove('allParams, allActions')
             ->get();
         $webhook->params = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
@@ -203,6 +209,12 @@ class webhookModel extends model
             ->join('products', ',')
             ->join('projects', ',')
             ->skipSpecial('url')
+            ->trim('agentId')
+            ->trim('appKey')
+            ->trim('appSecret')
+            ->trim('wechatAgentId')
+            ->trim('wechatCorpId')
+            ->trim('wechatCorpSecret')
             ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
