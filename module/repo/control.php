@@ -54,7 +54,7 @@ class repo extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->repoList   = $this->repo->listAll($orderBy, $pager);
+        $this->view->repoList   = $this->repo->getList($orderBy, $pager);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;
@@ -572,6 +572,34 @@ class repo extends control
     }
 
     /**
+     * Set matchComment.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setMatchComment()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.repo.matchComment', json_encode($this->post->matchComment));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setMatchComment')));
+        }
+
+        $this->repo->setMenu($this->repos, $this->session->repoID, false);
+
+        $this->app->loadLang('task');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('story');
+        $this->app->loadLang('testtask');
+        if(is_string($this->config->repo->matchComment)) $this->config->repo->matchComment = json_decode($this->config->repo->matchComment, true);
+
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setMatchComment;
+        $this->view->position[] = $this->lang->repo->setMatchComment;
+
+        $this->display();
+    }
+
+    /**
      * Show sync comment.
      * 
      * @param  int    $repoID 
@@ -732,6 +760,15 @@ class repo extends control
         }
     }
 
+    /**
+     * Ajax get svn tags 
+     * 
+     * @param  int    $repoID 
+     * @param  string $path 
+     * @param  string $revision 
+     * @access public
+     * @return void
+     */
     public function ajaxGetSVNTags($repoID, $path = '', $revision = 'HEAD')
     {
         if($this->get->path) $entry = $this->get->path;

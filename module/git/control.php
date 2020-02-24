@@ -72,7 +72,7 @@ class git extends control
         $path = helper::safe64Decode($path);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->listAll();
+            $repos = $this->loadModel('repo')->getList();
             foreach($repos as $repo)
             {
                 if($repo->SCM != 'Git') continue;
@@ -121,11 +121,10 @@ class git extends control
             }
 
             $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
+            $this->loadModel('repo');
             foreach($parsedLogs as $log)
             {
-                $allCommands = [];
-                $scm = $this->app->loadClass('scm');
-                $objects = $scm->parseComment($log->msg, $allCommands);
+                $objects = $this->repo->parseComment($log->msg);
 
                 if($objects)
                 {
@@ -184,9 +183,7 @@ class git extends control
             $parsedFiles[$action][] = ltrim($path, '/');
         }
 
-        $allCommands = [];
-        $scm = $this->app->loadClass('scm');
-        $objects = $scm->parseComment($message, $allCommands);
+        $objects = $this->loadModel('repo')->parseComment($message);
 
         if($objects)
         {

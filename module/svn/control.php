@@ -72,7 +72,7 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->listAll();
+            $repos = $this->loadModel('repo')->getList();
             foreach($repos as $repo)
             {
                 if($repo->SCM != 'Subversion') continue;
@@ -109,11 +109,10 @@ class svn extends control
                 $parsedLogs[] = $this->svn->convertLog($entry);
             }
             $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
+            $this->loadModel('repo');
             foreach($parsedLogs as $log)
             {
-                $allCommands = [];
-                $scm = $this->app->loadClass('scm');
-                $objects = $scm->parseComment($log->msg, $allCommands);
+                $objects = $this->repo->parseComment($log->msg);
 
                 if($objects)
                 {
@@ -173,9 +172,7 @@ class svn extends control
             $parsedFiles[$action][] = $path;
         }
 
-        $allCommands = [];
-        $scm = $this->app->loadClass('scm');
-        $objects = $scm->parseComment($message, $allCommands);
+        $objects = $this->loadModel('repo')->parseComment($message);
 
         if($objects)
         {

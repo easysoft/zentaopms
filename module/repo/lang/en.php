@@ -9,6 +9,7 @@ $lang->repo->editAction      = 'Edit Repo';
 $lang->repo->delete          = 'Delete Repo';
 $lang->repo->showSyncComment = 'Display Synchronization';
 $lang->repo->ajaxSyncComment = 'Interface: Ajax Sync Note';
+$lang->repo->setMatchComment = 'Set match comment';
 $lang->repo->download        = 'Download File';
 $lang->repo->downloadDiff    = 'Download Diff';
 $lang->repo->diffAction      = 'Revision Diff';
@@ -94,6 +95,8 @@ $lang->repo->commentEdit    = '<i class="icon-pencil"></i>';
 $lang->repo->commentDelete  = '<i class="icon-remove"></i>';
 $lang->repo->allChanges     = "Other Changes";
 $lang->repo->commitTitle    = "The %sth Commit";
+$lang->repo->mark           = "Mark Tag";
+$lang->repo->split          = "Split Mark";
 
 $lang->repo->viewDiffList['inline'] = 'Inline';
 $lang->repo->viewDiffList['appose'] = 'Parallel';
@@ -121,6 +124,12 @@ $lang->repo->notice->commentContent = 'Comment';
 $lang->repo->notice->deleteBug      = 'Are you sure to delete this bug?';
 $lang->repo->notice->deleteComment  = 'Are you sure to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';
+
+$lang->repo->matchComment = new stdclass();
+$lang->repo->matchComment->exampleLabel = "Comment Example";
+$lang->repo->matchComment->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->matchComment->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
+$lang->repo->matchComment->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = 'Your server disabled exec and shell_exec, so it cannot be applied.';
@@ -151,9 +160,8 @@ $lang->repo->example->client->git = "e.g. /usr/bin/git";
 $lang->repo->example->client->svn = "e.g. /usr/bin/svn";
 $lang->repo->example->path->git   = "e.g. /homt/user/myproject";
 $lang->repo->example->path->svn   = "e.g. http://example.googlecode.com/svn/trunk/myproject";
-
-$lang->repo->example->config   = "Config directory is required in https. Use '--config-dir' to generate config dir.";
-$lang->repo->example->encoding = "input encoding of files";
+$lang->repo->example->config      = "Config directory is required in https. Use '--config-dir' to generate config dir.";
+$lang->repo->example->encoding    = "input encoding of files";
 
 $lang->repo->typeList['standard']    = 'Standard';
 $lang->repo->typeList['performance'] = 'Performance';

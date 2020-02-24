@@ -71,6 +71,7 @@ class gitModel extends model
     {
         parent::__construct();
         $this->loadModel('action');
+        $this->loadModel('repo');
     }
 
     /**
@@ -94,16 +95,18 @@ class gitModel extends model
 
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
-            $logs = $this->getRepoLogs($repo, $savedRevision);
-            if(!empty($logs)) {
+            $logs    = $this->getRepoLogs($repo, $savedRevision);
+            $objects = array();
+            if(!empty($logs))
+            {
                 $this->printLog("get " . count($logs) . " logs");
                 $this->printLog('begin parsing logs');
                 $latestRevision = $logs[0]->revision;
 
-                $allCommands = [];
-                foreach ($logs as $log) {
+                foreach($logs as $log)
+                {
                     $this->printLog("parsing log {$log->revision}");
-                    if ($log->revision == $savedRevision)
+                    if($log->revision == $savedRevision)
                     {
                         $this->printLog("{$log->revision} alread parsed, commit it");
                         continue;
@@ -111,8 +114,7 @@ class gitModel extends model
 
                     $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
-                    $scm = $this->app->loadClass('scm');
-                    $objects = $scm->parseComment($log->msg, $allCommands);
+                    $objects = $this->repo->parseComment($log->msg);
 
                     if($objects)
                     {
@@ -133,48 +135,40 @@ class gitModel extends model
                 $this->printLog("save revision $latestRevision");
                 $this->deleteRestartFile();
                 $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
-
-                $this->printLog('extract commands from logs' . json_encode($allCommands));
             }
 
             // exe ci task from logs
-            $cijobIDs = $allCommands['build']['start'];
-            foreach($cijobIDs as $id)
-            {
-                $this->loadModel('ci')->exeJob($id);
-            }
+            $cijobIdList = zget($objects, 'testtasks', array());
+            $this->loadModel('integration');
+            foreach($cijobIdList as $id) $this->integration->exec($id);
 
             // dealwith tag commands
             $this->printLog("dealwith tag commands");
             $savedTag = $this->getSavedTag();
 
             $tags = $this->getRepoTags($repo);
-            if(!empty($tags)) {
+            if(!empty($tags))
+            {
                 $arriveLastTag = false;
-                $jobToBuild = [];
-                foreach ($tags as $tag) {
-                    if (!empty($savedTag) && $tag === $savedTag) // get the last build tag position
+                $jobToBuild = array();
+                foreach($tags as $tag)
+                {
+                    if(!empty($savedTag) && $tag === $savedTag) // get the last build tag position
                     {
                         $arriveLastTag = true;
                         continue;
                     }
 
-                    if (!empty($savedTag) && !$arriveLastTag) // not get
-                    {
-                        continue;
-                    }
+                    if(!empty($savedTag) && !$arriveLastTag) continue;
 
-                    $scm = $this->app->loadClass('scm');
-                    $scm->parseTag($tag, $jobToBuild);
+                    $jobToBuild += $this->repo->parseTag($tag);
                 }
 
                 $this->saveLastTag($tags[count($tags) - 1]);
 
                 $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
 
-                foreach ($jobToBuild as $id) {
-                    $this->loadModel('ci')->exeJob($id);
-                }
+                foreach($jobToBuild as $id) $this->integration->exec($id);
             }
         }
     }
@@ -563,8 +557,7 @@ class gitModel extends model
         $action->action  = 'gitcommited';
         $action->date    = $log->date;
 
-        $scm = $this->app->loadClass('scm');
-        $action->comment = htmlspecialchars($scm->iconvComment($log->msg, $encodings));
+        $action->comment = htmlspecialchars($this->repo->iconvComment($log->msg, $encodings));
         $action->extra   = substr($log->revision, 0, 10);
 
         $changes = $this->createActionChanges($log, $repoRoot);

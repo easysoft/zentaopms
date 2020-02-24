@@ -1,9 +1,6 @@
 <?php
 class scm
 {
-    public $commitCommandRegx = '/\s*([a-z]+)\s+((?:build)|(?:story)|(?:task)|(?:bug))\s+#((?:\d|,)+)\s*/i';
-    public $tagCommandRegx = '/build[\-_]#((?:\d|,)+)/i';
-
     public $engine;
 
     public function setEngine($repo)
@@ -79,98 +76,6 @@ class scm
     public function getCommits($version = '', $count = 0, $branch = '')
     {
         return $this->engine->getCommits($version, $count, $branch);
-    }
-
-    /**
-     * Parse the comment of git, extract object id list from it.
-     *
-     * @param  string    $comment
-     * @param  array     $allCommands
-     * @access public
-     * @return array
-     */
-    public function parseComment($comment, &$allCommands)
-    {
-        $pattern = $this->commitCommandRegx;
-        $matches = array();
-        preg_match_all($pattern, $comment,$matches);
-
-        $stories = array();
-        $tasks   = array();
-        $bugs    = array();
-
-        if(count($matches) > 1 && count($matches[1]) > 0)
-        {
-            $i = 0;
-            foreach($matches[1] as $action)
-            {
-                $action = $matches[1][$i];
-                $entityType = $matches[2][$i];
-                $entityIds = $matches[3][$i];
-
-                $currArr = $allCommands[$entityType][$action];
-                if (empty($currArr)) $currArr = [];
-
-                $newArr = explode(",", $entityIds);
-                $allCommands[$entityType][$action] = array_keys(array_flip($currArr) + array_flip($newArr));
-
-                if ($entityType === 'story')
-                {
-                    $stories = array_merge($stories, $newArr);
-                } else if ($entityType === 'task')
-                {
-                    $tasks = array_merge($tasks, $newArr);
-                } else if ($entityType === 'bug')
-                {
-                    $bugs = array_merge($bugs, $newArr);
-                }
-
-                $i++;
-            }
-        }
-
-        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs);
-    }
-
-    /**
-     * Parse the tag, extract task list from it.
-     *
-     * @param  string    $comment
-     * @param  array     $jobToBuild
-     * @access public
-     */
-    public function parseTag($comment, &$jobToBuild)
-    {
-        $pattern = $this->tagCommandRegx;
-        $matches = array();
-        preg_match($pattern, $comment,$matches);
-
-        if(count($matches) > 0)
-        {
-            $entityIds = $matches[1];
-
-            if (empty($taskToBuild)) $taskToBuild = [];
-
-            $newArr = explode(",", $entityIds);
-            $jobToBuild = array_keys(array_flip($taskToBuild) + array_flip($newArr));
-        }
-    }
-
-    public function iconvComment($comment, $encodings)
-    {
-        /* Get encodings. */
-        if($encodings == '') return $comment;
-        $encodings = explode(',', $encodings);
-
-        /* Try convert. */
-        foreach($encodings as $encoding)
-        {
-            if($encoding == 'utf-8') continue;
-            $result = helper::convertEncoding($comment, $encoding);
-            if($result) return $result;
-        }
-
-        return $comment;
     }
 }
 

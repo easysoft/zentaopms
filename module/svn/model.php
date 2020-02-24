@@ -71,6 +71,7 @@ class svnModel extends model
     {
         parent::__construct();
         $this->loadModel('action');
+        $this->loadModel('repo');
     }
 
     /**
@@ -94,16 +95,18 @@ class svnModel extends model
 
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
-            $logs = $this->getRepoLogs($repo, $savedRevision);
 
-            if(!empty($logs)) {
+            $logs    = $this->getRepoLogs($repo, $savedRevision);
+            $objects = array();
+            if(!empty($logs))
+            {
                 $this->printLog("get " . count($logs) . " logs");
                 $this->printLog('begin parsing logs');
 
-                $allCommands = [];
-                foreach ($logs as $log) {
+                foreach($logs as $log)
+                {
                     $this->printLog("parsing log {$log->revision}");
-                    if ($log->revision == $savedRevision)
+                    if($log->revision == $savedRevision)
                     {
                         $this->printLog("{$log->revision} alread parsed, commit it");
                         continue;
@@ -111,8 +114,7 @@ class svnModel extends model
 
                     $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
-                    $scm = $this->app->loadClass('scm');
-                    $objects = $scm->parseComment($log->msg, $allCommands);
+                    $objects = $this->repo->parseComment($log->msg);
                     if($objects)
                     {
                         $this->printLog('extract' .
@@ -134,41 +136,33 @@ class svnModel extends model
                 $this->printLog("save revision $savedRevision");
                 $this->deleteRestartFile();
                 $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
-
-                $this->printLog('extract commands from logs' . json_encode($allCommands));
             }
 
             // exe ci jobs in log
-            $cijobIDs = $allCommands['build']['start'];
-            foreach($cijobIDs as $id)
-            {
-                $this->loadModel('ci')->exeJob($id);
-            }
+            $cijobIdList = zget($objects, 'testtasks', array());
+            $this->loadModel('integration');
+            foreach($cijobIdList as $id) $this->integration->exec($id);
 
             // dealwith tag commands
             $this->printLog("dealwith tag commands");
             $savedTags = $this->getSavedTags($repo->id);
 
             $tags = $this->getRepoTags($repo);
-            if(!empty($tags)) {
-                $jobToBuild = [];
-                foreach ($tags as $tag) {
-                    if ($savedTags[$tag]) // old
-                    {
-                        continue;
-                    }
+            if(!empty($tags))
+            {
+                $jobToBuild = array();
+                foreach($tags as $tag)
+                {
+                    if($savedTags[$tag]) continue;
 
-                    $scm = $this->app->loadClass('scm');
-                    $scm->parseTag($tag, $jobToBuild);
+                    $jobToBuild += $this->repo->parseTag($tag);
 
                     $this->saveLastTag($tag, $repo->id);
                 }
                 $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
 
                 // exe ci jobs in tag
-                foreach ($jobToBuild as $id) {
-                    $this->loadModel('ci')->exeJob($id);
-                }
+                foreach($jobToBuild as $id) $this->integration->exec($id);
             }
         }
     }
@@ -522,8 +516,7 @@ class svnModel extends model
         $action->action  = 'svncommited';
         $action->date    = $log->date;
 
-        $scm = $this->app->loadClass('scm');
-        $action->comment = htmlspecialchars($scm->iconvComment($log->msg, $encodings));
+        $action->comment = htmlspecialchars($this->repo->iconvComment($log->msg, $encodings));
         $action->extra   = $log->revision;
 
         $changes = $this->createActionChanges($log, $repoRoot);

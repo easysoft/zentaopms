@@ -139,7 +139,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function listAll($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getList($orderBy = 'id_desc', $pager = null, $decode = true)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
@@ -935,5 +935,166 @@ class repoModel extends model
         }
 
         return $repos;
+    }
+
+    /**
+     * Parse the comment of git, extract object id list from it.
+     *
+     * @param  string    $comment
+     * @access public
+     * @return array
+     */
+    public function parseComment($comment)
+    {
+        if(is_string($this->config->repo->matchComment)) $this->config->repo->matchComment = json_decode($this->config->repo->matchComment, true);
+        $matchComment = $this->config->repo->matchComment;
+
+        $matches   = array();
+        $stories   = array();
+        $tasks     = array();
+        $bugs      = array();
+        $testtasks = array();
+        $actions   = array();
+        while(true)
+        {
+            $found = preg_match("/{$matchComment['id']['mark']}[0-9]+({$matchComment['id']['split']}[0-9]+)*/", $comment, $matches);
+            if(empty($found)) break;
+            if($found)
+            {
+                $position   = strpos($comment, $matches[0]);
+                $subComment = substr($comment, 0, $position + strlen($matches[0]));
+                $comment    = substr($comment, $position + strlen($matches[0]) + 1);
+
+                $idList = explode($matchComment['id']['mark'], str_replace($matchComment['id']['split'], '', $matches[0]));
+                foreach($matchComment['module'] as $module => $moduleMatch)
+                {
+                    if(stripos($subComment, $moduleMatch) !== false)
+                    {
+                        if($module == 'story')
+                        {
+                            foreach($idList as $id) $stories[$id] = $id;
+                        }
+                        elseif($module == 'task')
+                        {
+                            foreach($idList as $id) $tasks[$id] = $id;
+                            foreach($matchComment['task'] as $method => $match)
+                            {
+                                if(strpos($subComment, $match) !== false)
+                                {
+                                    $consumed = 0;
+                                    preg_match("/{$matchComment['task']['consumed']}{$matchComment['mark']['consumed']}([0-9]+)/", $comment, $costMatch);
+                                    if($costMatch) $consumed = $costMatch[1];
+
+                                    $left = 0;
+                                    preg_match("/{$matchComment['task']['left']}{$matchComment['mark']['left']}([0-9]+)/", $comment, $leftMatch);
+                                    if($leftMatch) $left = $leftMatch[1];
+
+                                    foreach($idList as $id)
+                                    {
+                                        $actions['task'][$id]['action']   = $method;
+                                        $actions['task'][$id]['consumed'] = $consumed;
+                                        $actions['task'][$id]['left']     = $left;
+                                    }
+                                }
+                            }
+                        }
+                        elseif($module == 'bug')
+                        {
+                            foreach($idList as $id) $bugs[$id] = $id;
+                            foreach($matchComment['bug'] as $method => $match)
+                            {
+                                if(strpos($subComment, $match) !== false)
+                                {
+                                    $buildID = 0;
+                                    preg_match("/{$matchComment['bug']['resolvedBuild']}{$matchComment['mark']['resolvedBuild']}([0-9]+)/", $comment, $buildMatch);
+                                    if($buildMatch) $buildID = $buildMatch[1];
+
+                                    foreach($idList as $id)
+                                    {
+                                        $actions['bug'][$id]['action']        = $method;
+                                        $actions['bug'][$id]['resolvedBuild'] = $buildID;
+                                    }
+                                }
+                            }
+                        }
+                        elseif($module == 'testtask')
+                        {
+                            foreach($idList as $id) $testtasks[$id] = $id;
+                            foreach($matchComment['testtask'] as $method => $match)
+                            {
+                                if(strpos($subComment, $match) !== false)
+                                {
+                                    foreach($idList as $id) $actions['testtask'][$id]['action'] = $method;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'testtasks' => $testtasks, 'actions' => $actions);
+    }
+
+    /**
+     * Parse the tag, extract task list from it.
+     *
+     * @param  string    $comment
+     * @access public
+     */
+    public function parseTag($comment)
+    {
+        global $config;
+        if(is_string($config->repo->matchComment)) $config->repo->matchComment = json_decode($config->repo->matchComment, true);
+        $matchComment = $config->repo->matchComment;
+
+        $testtasks = array();
+        while(true)
+        {
+            $found = preg_match("/{$matchComment['id']['mark']}[0-9]+({$matchComment['id']['split']}[0-9]+)*/", $comment, $matches);
+            if(empty($found)) break;
+            if($found)
+            {
+                $position   = strpos($comment, $matches[0]);
+                $subComment = substr($comment, 0, $position + strlen($matches[0]));
+                $comment    = substr($comment, $position + strlen($matches[0]) + 1);
+
+                $idList = explode($matchComment['id']['mark'], str_replace($matchComment['id']['split'], '', $matches[0]));
+                foreach($matchComment['module'] as $module => $moduleMatch)
+                {
+                    if($module != 'testtask') continue;
+                    if(stripos($subComment, $moduleMatch) !== false)
+                    {
+                        foreach($idList as $id) $testtasks[$id] = $id;
+                    }
+                }
+            }
+        }
+        return $testtasks;
+    }
+
+    /**
+     * Iconv Comment.
+     * 
+     * @param  string $comment 
+     * @param  string $encodings 
+     * @access public
+     * @return string
+     */
+    public function iconvComment($comment, $encodings)
+    {
+        /* Get encodings. */
+        if($encodings == '') return $comment;
+        $encodings = explode(',', $encodings);
+
+        /* Try convert. */
+        foreach($encodings as $encoding)
+        {
+            if($encoding == 'utf-8') continue;
+            $result = helper::convertEncoding($comment, $encoding);
+            if($result) return $result;
+        }
+
+        return $comment;
     }
 }
