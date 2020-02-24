@@ -53,7 +53,7 @@ class wechatapi
      */
     public function getAllUsers()
     {
-        $depts = $this->getAllDepts();
+        $depts = $this->getAgent();
         if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
 
         $users = array();
@@ -70,12 +70,12 @@ class wechatapi
     }
 
     /**
-     * Get all depts.
+     * Get agent details.
      *
      * @access public
      * @return stdClass
      */
-    public function getAllDepts()
+    public function getAgent()
     {
         $response = $this->queryAPI($this->apiUrl . "agent/get?access_token={$this->token}&agentid={$this->agentId}");
 
@@ -83,7 +83,8 @@ class wechatapi
         $deptInfo->userList = array();
         if(isset($response->allow_userinfos))
         {
-            foreach ($response->allow_userinfos->user as $user) {
+            foreach ($response->allow_userinfos->user as $user)
+            {
                 $userInfo = $this->queryAPI($this->apiUrl . "user/get?access_token={$this->token}&userid={$user->userid}");
                 $deptInfo->userList[$userInfo->name] = $userInfo->userid;
             }
