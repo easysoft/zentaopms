@@ -32,18 +32,16 @@ class jenkinsModel extends model
      *
      * @param  string $orderBy
      * @param  object $pager
-     * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function listAll($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getList($orderBy = 'id_desc', $pager = null)
     {
-        $jenkinsList = $this->dao->select('*')->from(TABLE_JENKINS)
+        return $this->dao->select('*')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $jenkinsList;
     }
 
     /**
@@ -99,16 +97,42 @@ class jenkinsModel extends model
     /**
      * list jenkins for ci task edit
      *
-     * @return mixed
+     * @return array
      */
-    public function listForSelection($whr)
+    public function getPairs()
     {
-        $repos = $this->dao->select('id, name')->from(TABLE_JENKINS)
-            ->where('deleted')->eq('0')
-            ->beginIF(!empty($whr))->andWhere('(' . $whr . ')')->fi()
-            ->orderBy('id')
-            ->fetchPairs();
-        $repos[''] = '';
-        return $repos;
+        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
+        $jenkins = array('' => '') + $jenkins;
+        return $jenkins;
+    }
+
+    /**
+     * Get jenkins tasks.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return array
+     */
+    public function getTasks($id)
+    {
+        $jenkins = $this->getById($id);
+
+        $jenkinsServer   = $jenkins->serviceUrl;
+        $jenkinsUser     = $jenkins->account;
+        $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
+
+        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
+        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
+
+        $response = common::http($jenkinsServer . '/api/json/items/list');
+        $response = json_decode($response);
+
+        $tasks = array();
+        if(isset($response->jobs))
+        {
+            foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
+        }
+        return $tasks;
+
     }
 }

@@ -1,0 +1,4 @@
+.row.text-with-input .col{line-height: 32px;}
+.only-pick-time thead th, .only-pick-time tfoot th {color: transparent !important;}
+.checkbox-primary.checkbox-inline{display:inline-block !important;}
+.checkbox-primary.checkbox-inline label{padding-left:5px !important;}

@@ -20,16 +20,7 @@ class jenkins extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-
-        $repoID = $this->session->repoID;
-        foreach($this->lang->repo->menu as $key => $menu)
-        {
-            common::setMenuVars($this->lang->ci->menu, $key, $repoID);
-        }
-
-        if(common::hasPriv('jenkins', 'create') and strpos(',browsejob,', $this->methodName) > -1) {
-            $this->lang->modulePageActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->jenkins->create, '', "class='btn btn-primary'");
-        }
+        $this->loadModel('ci')->setMenu();
     }
 
     /**
@@ -44,17 +35,18 @@ class jenkins extends control
      */
     public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        if(common::hasPriv('jenkins', 'create')) $this->lang->modulePageActions = html::a(helper::createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->jenkins->create, '', "class='btn btn-primary'");
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $this->view->jenkinsList   = $this->jenkins->listAll($orderBy, $pager);
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->browse;
         $this->view->position[] = $this->lang->jenkins->common;
         $this->view->position[] = $this->lang->jenkins->browse;
 
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->jenkinsList = $this->jenkins->getList($orderBy, $pager);
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
 
         $this->display();
     }
@@ -118,11 +110,24 @@ class jenkins extends control
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete($id, $confim = 'no')
     {
-        $this->jenkins->delete(TABLE_JENKINS, $id);
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if($confim != 'yes') die(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $this->send(array('result' => 'success'));
+        $this->jenkins->delete(TABLE_JENKINS, $id);
+        die(js::reload('parent'));
+    }
+
+    /**
+     * Ajax get tasks.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTasks($id)
+    {
+        $tasks = $this->jenkins->getTasks($id);
+        die(json_encode($tasks));
     }
 }

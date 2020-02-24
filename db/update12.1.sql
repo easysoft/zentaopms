@@ -66,3 +66,9 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 
 ALTER TABLE `zt_cibuild` RENAME TO `zt_compile`;
 ALTER TABLE `zt_cijob` RENAME TO `zt_integration`;
+
+ALTER TABLE `zt_integration`
+DROP `scheduleType`,
+DROP `cronExpression`,
+DROP `scheduleTime`,
+DROP `scheduleInterval`;

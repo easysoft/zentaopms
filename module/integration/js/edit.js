@@ -63,56 +63,64 @@ $(document).on('change', '#svnFolder', function()
     })
 })
 
+$('#triggerType').change(function()
+{
+    var type = $(this).val();
+    if(type == 'tag')
+    {
+        $('.tag-fields').removeClass('hidden');
+        $('.comment-fields').addClass('hidden');
+        $('.custom-fields').addClass('hidden');
+    }
+    else if(type == 'commit')
+    {
+        $('.tag-fields').addClass('hidden');
+        $('.comment-fields').removeClass('hidden');
+        $('.custom-fields').addClass('hidden');
+    }
+    else if(type == 'schedule')
+    {
+        $('.tag-fields').addClass('hidden');
+        $('.comment-fields').addClass('hidden');
+        $('.custom-fields').removeClass('hidden');
+    }
+});
+
+$('#jenkins').change(function()
+{
+    var jenkinsID = $(this).val();
+    $('#jenkinsJobBox').html("<div class='load-indicator loading'></div>");
+    $.getJSON(createLink('jenkins', 'ajaxGetTasks', 'jenkinsID=' + jenkinsID), function(tasks)
+    {
+        html  = "<select id='jenkinsJob' name='jenkinsJob' class='form-control'>";
+        for(taskKey in tasks)
+        {
+            var task = tasks[taskKey];
+            html += "<option value='" + taskKey + "'>" + task + "</option>";
+        }
+        html += '</select>';
+        $('#jenkinsJobBox').html(html);
+        $('#jenkinsJobBox #jenkinsJob').chosen();
+    })
+})
+
 $(function()
 {
     $('#repo').change();
-    triggerTypeChanged(triggerType);
+    $('#triggerType').change();
 });
 
-function exeJob(id) {
-    var link = createLink('ci', 'exeJob', 'id=' + id);
-    $.ajax({
-        type:"POST",
-        url: link,
+function execJob(id)
+{
+    $.ajax(
+    {
+        type: "POST",
+        url: createLink('integration', 'exec', 'id=' + id),
         data: {},
         datatype: "json",
-        success:function(str)
+        success: function(data)
         {
-            $('.exe-job-button').tooltip('show', '发送执行请求成功！');
+            $('.exe-job-button').tooltip('show', sendExec);
         }
     });
-}
-
-function triggerTypeChanged(type) {
-    if(type == 'tag') {
-        $('.tag-fields').removeClass('hidden');
-        $('.comment-fields').addClass('hidden');
-
-        scheduleTypeChanged();
-    } else if(type == 'commit') {
-        $('.tag-fields').addClass('hidden');
-        $('.comment-fields').removeClass('hidden');
-
-        $('.custom-fields').addClass('hidden');
-
-        scheduleTypeChanged();
-    } else if(type == 'schedule') {
-        $('.tag-fields').addClass('hidden');
-        $('.comment-fields').addClass('hidden');
-
-        var val = $("input[name='scheduleType']:checked").val();
-        scheduleTypeChanged(val? val: 'custom');
-    }
-}
-
-function scheduleTypeChanged(type) {
-    if(type == 'custom') {
-        $('.schedule-fields').removeClass('hidden');
-
-        $('.custom-fields').removeClass('hidden');
-    } else {
-        $('.schedule-fields').addClass('hidden');
-
-        $('.custom-fields').addClass('hidden');
-    }
 }

@@ -1,9 +1,6 @@
 <?php
 /**
  * The model file of ci module of ZenTaoPMS.
- *
- * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: $
@@ -12,238 +9,18 @@
 
 class ciModel extends model
 {
-
     /**
-     * Get ci job list.
-     *
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  bool   $decode
+     * Set menu.
+     * 
      * @access public
-     * @return array
+     * @return void
      */
-    public function listJob($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function setMenu()
     {
-        $list = $this->dao->
-        select('t1.*, t2.name repoName, t3.name as jenkinsName')->from(TABLE_INTEGRATION)->alias('t1')
-            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
-            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t1.jenkins=t3.id')
-            ->where('t1.deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-        return $list;
-    }
-
-    /**
-     * Get a ci job by id.
-     *
-     * @param  int    $id
-     * @access public
-     * @return object
-     */
-    public function getJobByID($id)
-    {
-        $jenkins = $this->dao->select('*')->from(TABLE_INTEGRATION)->where('id')->eq($id)->fetch();
-        return $jenkins;
-    }
-
-    /**
-     * Create a ci job.
-     *
-     * @access public
-     * @return bool
-     */
-    public function createJob()
-    {
-        $job = fixer::input('post')
-            ->add('createdBy', $this->app->user->account)
-            ->add('createdDate', helper::now())
-            ->remove('repoType')
-            ->get();
-
-        $this->dao->insert(TABLE_INTEGRATION)->data($job)
-            ->batchCheck($this->config->job->create->requiredFields, 'notempty')
-
-            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
-            ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
-
-            ->autoCheck()
-            ->exec();
-
-        $jobId = $this->dao->lastInsertID();
-        if($job->triggerType =='schedule')
-        {
-            $arr  = explode(":", $job->scheduleTime);
-            $hour = $arr[0];
-            $min  = $arr[1];
-
-            if($job->scheduleDay == 'everyDay')
-            {
-                $days = '1-7';
-            }
-            elseif($job->scheduleDay == 'workDay')
-            {
-                $days = '1-5';
-            }
-
-            $cron = (object)array('m' => $min, 'h' => $hour, 'dom' => '*', 'mon' => '*',
-                'dow' => $days . '/' . $job->scheduleInterval, 'command' => 'moduleName=ci&methodName=exeJob&parm=' . $jobId,
-                'remark' => ($this->lang->ci->extJob . $jobId), 'type' => 'zentao',
-                'buildin' => '-1', 'status' => 'normal', 'lastTime' => '0000-00-00 00:00:00');
-            $this->dao->insert(TABLE_CRON)->data($cron)->exec();
-        }
-
-        return true;
-    }
-
-    /**
-     * Update a ci job.
-     *
-     * @param  int    $id
-     * @access public
-     * @return bool
-     */
-    public function updateJob($id)
-    {
-        $job = fixer::input('post')
-            ->add('editedBy', $this->app->user->account)
-            ->add('editedDate', helper::now())
-            ->remove('repoType')
-            ->get();
-
-        $this->dao->update(TABLE_INTEGRATION)->data($job)
-            ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
-
-            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'cron', "cronExpression", 'notempty')
-            ->batchCheckIF($job->triggerType === 'schedule' && $job->scheduleType == 'custom', "scheduleDay,scheduleTime,scheduleInterval", 'notempty')
-            ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
-
-            ->autoCheck()
-            ->where('id')->eq($id)
-            ->exec();
-
-        if ($job->triggerType === 'schedule')
-        {
-            $command = 'moduleName=ci&methodName=exeJob&parm=' . $id;
-
-            $arr  = explode(":", $job->scheduleTime);
-            $hour = $arr[0];
-            $min  = $arr[1];
-
-            if($job->scheduleDay == 'everyDay')
-            {
-                $days = '1-7';
-            }
-            elseif($job->scheduleDay == 'workDay')
-            {
-                $days = '2-6';
-            }
-
-            $this->dao->update(TABLE_CRON)
-                ->set('m')->eq($min)
-                ->set('h')->eq($hour)
-                ->set('dom')->eq('*')
-                ->set('mon')->eq('*')
-                ->set('dow')->eq($days . '/' . $job->scheduleInterval)
-                ->set('lastTime')->eq('0000-00-00 00:00:00')
-                ->where('command')->eq($command)->exec();
-        }
-
-        return true;
-    }
-
-    /**
-     * Execute ci job.
-     *
-     * @param  int    $id
-     * @access public
-     * @return bool
-     */
-    public function exeJob($jobID)
-    {
-        $job = $this->dao->select('job.id jobId, job.name jobName, job.repo, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
-            ->from(TABLE_INTEGRATION)->alias('job')
-            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
-            ->where('job.id')->eq($jobID)
-            ->fetch();
-
-        if (!$job) return false;
-
-        $jenkinsServer = $po->serviceUrl;
-        $jenkinsUser = $po->account;
-        $jenkinsTokenOrPassword = $po->token ? $po->token : base64_decode($po->password);
-
-        $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
-        $jenkinsServer = str_replace('://', $r, $jenkinsServer);
-        $buildUrl = sprintf('%s/job/%s/build/api/json', $jenkinsServer, $po->jenkinsJob);
-
-        $po->queueItem = $this->sendBuildRequest($buildUrl);
-        $this->saveBuild($po);
-
-        return !dao::isError();
-    }
-
-    /**
-     * Get jenkins build list.
-     *
-     * @param  int $jobID
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  bool   $decode
-     * @access public
-     * @return array
-     */
-    public function listBuild($jobID, $orderBy = 'id_desc', $pager = null, $decode = true)
-    {
-        $list = $this->dao->
-        select('build.id, build.name, build.status, build.createdDate, job.triggerType, repo.name repoName, jenkins.name as jenkinsName')
-            ->from(TABLE_COMPILE)->alias('build')
-            ->leftJoin(TABLE_INTEGRATION)->alias('job')->on('build.cijob=job.id')
-            ->leftJoin(TABLE_REPO)->alias('repo')->on('job.repo=repo.id')
-            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
-
-            ->where('build.deleted')->eq('0')
-            ->andWhere('build.cijob')->eq($jobID)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
-
-        return $list;
-    }
-
-    /**
-     * Get jenkins build logs.
-     *
-     * @param  int $buildID
-     * @access public
-     * @return array
-     */
-    public function getBuildByID($buildID)
-    {
-        $build = $this->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($buildID)->fetch();
-        return $build;
-    }
-
-    /**
-     * Save build to db.
-     *
-     * @param  object $job
-     * @access public
-     * @return bool
-     */
-    public function saveBuild($job)
-    {
-        $build = new stdClass();
-        $build->cijob = $job->jobId;
-        $build->name = $job->jobName;
-        $build->queueItem = $job->queueItem;
-        $build->status = $job->queueItem ? 'created' : 'create_fail';
-        $build->createdBy = $this->app->user->account;
-        $build->createdDate = helper::now();
-
-        $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
+        $repoID = $this->session->repoID;
+        $moduleName = $this->app->getModuleName();
+        foreach($this->lang->{$moduleName}->menu as $key => $menu) common::setMenuVars($this->lang->{$moduleName}->menu, $key, $repoID);
+        $this->lang->{$moduleName}->menuOrder = $this->lang->ci->menuOrder;
     }
 
     /**
@@ -254,27 +31,28 @@ class ciModel extends model
      */
     public function checkBuildStatus()
     {
-        $pos = $this->dao->select('build.*, job.jenkinsJob, jenkins.name jenkinsName,jenkins.serviceUrl,jenkins.account,jenkins.token,jenkins.password')
-            ->from(TABLE_COMPILE)->alias('build')
-            ->leftJoin(TABLE_INTEGRATION)->alias('job')->on('build.cijob=job.id')
-            ->leftJoin(TABLE_JENKINS)->alias('jenkins')->on('job.jenkins=jenkins.id')
-            ->where('build.status')->ne('success')
-            ->andWhere('build.status')->ne('fail')
-            ->andWhere('build.status')->ne('timeout')
-            ->andWhere('build.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
+        $pos = $this->dao->select('t1.*, t2.jenkinsJob, t3.name jenkinsName,t3.serviceUrl,t3.account,t3.token,t3.password')
+            ->from(TABLE_COMPILE)->alias('t1')
+            ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.cijob=t2.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jenkins=t3.id')
+            ->where('t1.status')->ne('success')
+            ->andWhere('t1.status')->ne('fail')
+            ->andWhere('t1.status')->ne('timeout')
+            ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        foreach($pos as $po) {
-            $jenkinsServer = $po->serviceUrl;
-            $jenkinsUser = $po->account;
-            $jenkinsTokenOrPassword = $po->token ? $po->token : base64_decode($po->password);
+        foreach($pos as $po)
+        {
+            $jenkinsServer   = $po->serviceUrl;
+            $jenkinsUser     = $po->account;
+            $jenkinsPassword = $po->token ? $po->token : base64_decode($po->password);
 
-            $r = '://' . $jenkinsUser . ':' . $jenkinsTokenOrPassword . '@';
-            $jenkinsServer = str_replace('://', $r, $jenkinsServer);
+            $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
+            $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
             $queueUrl = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $po->queueItem);
 
             $response = common::http($queueUrl);
-            if (strripos($response,"404") > -1)
+            if(strripos($response, "404") > -1)
             { // queue expired, use another api
                 $infoUrl = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $po->jenkinsJob, $po->queueItem);
                 $response = common::http($infoUrl);
@@ -287,25 +65,30 @@ class ciModel extends model
                 $logs = json_decode($response);
 
                 $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($po->id)->exec();
-            } else
-                {
+            }
+            else
+            {
                 $queueInfo = json_decode($response);
 
-                if (!empty($queueInfo->executable)) {
+                if(!empty($queueInfo->executable))
+                {
                     $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
-                    $buildUrl = str_replace('://', $r, $buildUrl);
+                    $buildUrl = str_replace('://', $jenkinsAuth, $buildUrl);
 
                     $response = common::http($buildUrl);
                     $buildInfo = json_decode($response);
 
-                    if ($buildInfo->building) {
+                    if($buildInfo->building)
+                    {
                         $this->updateBuildStatus($po, 'building');
-                    } else {
+                    }
+                    else
+                    {
                         $result = strtolower($buildInfo->result);
                         $this->updateBuildStatus($po, $result);
 
                         $logUrl = $buildInfo->url . 'logText/progressiveText/api/json';
-                        $logUrl = str_replace('://', $r, $logUrl);
+                        $logUrl = str_replace('://', $jenkinsAuth, $logUrl);
 
                         $response = common::http($logUrl);
                         $logs = json_decode($response);
@@ -332,47 +115,20 @@ class ciModel extends model
         $this->dao->update(TABLE_INTEGRATION)
             ->set('lastExec')->eq(helper::now())
             ->set('lastStatus')->eq($status)
-            ->where('id')->eq($build->cijob)->exec();
+            ->where('id')->eq($build->cijob)
+            ->exec();
     }
 
     /**
      * @param $url
      * @return false|mixed|string
      */
-    public function sendBuildRequest($url) // not to use common http
-    {
-        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $this->lang->error->noCurlExt));
+	public function sendRequest($url, $data)
+	{
+		if(!empty($data->PARAM_TAG)) $data->PARAM_REVISION = '';
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
-        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_ENCODING, "");
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
-        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
-        curl_setopt($curl, CURLOPT_HEADER, FALSE);
-
-        $headers[] = "API-RemoteIP: " . $_SERVER['REMOTE_ADDR'];
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
-
-        curl_setopt ($curl , CURLOPT_HEADER, 1 );
-
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, new stdClass());
-
-        $response = curl_exec($curl);
-        $errors   = curl_error($curl);
-        curl_close($curl);
-
-        if ( preg_match ( "!Location: .*item/(.*)/!", $response , $matches ) ) {
-            return $matches[1];
-        }
-
-        return '';
-    }
+		$response = common::http($url, $data, true);
+		if(preg_match("!Location: .*item/(.*)/!", $response, $matches)) return $matches[1];
+		return '';
+	}
 }

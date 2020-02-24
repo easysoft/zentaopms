@@ -1820,7 +1820,7 @@ EOD;
      * @access public
      * @return string
      */
-    public static function http($url, $data = null)
+    public static function http($url, $data = null, $optHeader = false)
     {
         global $lang, $app;
         if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
@@ -1841,6 +1841,7 @@ EOD;
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+        if($optHeader) curl_setopt($curl, CURLOPT_HEADER, true);
         if(!empty($data))
         {
             curl_setopt($curl, CURLOPT_POST, true);
