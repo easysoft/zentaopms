@@ -34,12 +34,12 @@ $lang->webhook->date        = '发送时间';
 $lang->webhook->data        = '数据';
 $lang->webhook->result      = '结果';
 
-$lang->webhook->typeList['']         = '';
-$lang->webhook->typeList['dingding'] = '钉钉群通知机器人';
-$lang->webhook->typeList['dingapi']  = '钉钉工作消息通知';
-$lang->webhook->typeList['weixin']   = '企业微信应用消息';
-$lang->webhook->typeList['wxRobot']  = '企业微信机器人';
-$lang->webhook->typeList['default']  = '其他';
+$lang->webhook->typeList['']          = '';
+$lang->webhook->typeList['dingding']  = '钉钉群通知机器人';
+$lang->webhook->typeList['dingapi']   = '钉钉工作消息通知';
+$lang->webhook->typeList['weixin']    = '企业微信群机器人';
+$lang->webhook->typeList['wechatApi'] = '企业微信应用消息';
+$lang->webhook->typeList['default']   = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '异步';
@@ -84,7 +84,7 @@ $lang->webhook->note->wechatSecret = " <a href='https://work.weixin.qq.com/api/d
 
 $lang->webhook->note->typeList['bearychat']   = '请在倍洽中添加一个禅道机器人，并将其webhook填写到此处。';
 $lang->webhook->note->typeList['dingding']    = '请在钉钉中添加一个自定义机器人，并将其webhook填写到此处。';
-$lang->webhook->note->typeList['wechatRobot'] = '请在企业微信中添加一个自定义机器人，并将其webhook填写到此处。';
+$lang->webhook->note->typeList['weixin']      = '请在企业微信中添加一个自定义机器人，并将其webhook填写到此处。';
 $lang->webhook->note->typeList['default']     = '从第三方系统获取webhook并填写到此处。';
 
 $lang->webhook->error = new stdclass();

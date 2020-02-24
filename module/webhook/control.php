@@ -166,7 +166,7 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dingapi' && $webhook->type != 'weixin')
+        if($webhook->type != 'dingapi' && $webhook->type != 'wechatApi')
         {
             echo js::alert($this->lang->webhook->note->bind);
             die(js::locate($this->createLink('webhook', 'browse')));
@@ -177,11 +177,11 @@ class webhook extends control
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
             $response = $dingapi->getAllUsers();
-        }elseif ($webhook->type == 'weixin')
+        }elseif ($webhook->type == 'wechatApi')
         {
             $this->app->loadClass('wechatapi', true);
-            $weichatapi  = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-            $response = $weichatapi->getAllUsers();
+            $wechatApi  = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $response = $wechatApi->getAllUsers();
         }
 
         if($response['result'] == 'fail')
