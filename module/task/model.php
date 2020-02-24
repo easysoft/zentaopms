@@ -27,11 +27,12 @@ class taskModel extends model
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
+        $projectID  = (int)$projectID;
         $taskIdList = array();
         $taskFiles  = array();
         $this->loadModel('file');
         $task = fixer::input('post')
-            ->setDefault('project', (int)$projectID)
+            ->setDefault('project', $projectID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
@@ -65,7 +66,7 @@ class taskModel extends model
             /* Check duplicate task. */
             if($task->type != 'affair')
             {
-                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID and story=" . (int)$task->story);
+                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project={$projectID} and story=" . (int)$task->story);
                 if($result['stop'])
                 {
                     $taskIdList[$assignedTo] = array('status' => 'exists', 'id' => $result['duplicate']);

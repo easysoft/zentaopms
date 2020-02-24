@@ -181,6 +181,7 @@ class bugModel extends model
     {
         $this->loadModel('action');
         $branch     = (int)$branch;
+        $productID  = (int)$productID;
         $now        = helper::now();
         $actions    = array();
         $data       = fixer::input('post')->get();
