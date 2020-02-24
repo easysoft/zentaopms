@@ -12,17 +12,14 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
+  <div class="main-header">
+    <h2><?php echo $lang->repo->setMatchComment;?></h2>
+  </div>
   <form class='main-form form-ajax' method='post'>
     <table class='table table-form'>
-      <thead>
-        <tr>
-          <th class='w-90px'><?php echo $lang->repo->module;?></th>
-          <th><?php echo $lang->repo->setMatchComment;?></th>
-        </tr>
-      </thead>
       <tbody>
         <tr>
-          <th><?php echo $lang->repo->module;?></th>
+          <th class='w-100px'><?php echo $lang->repo->module;?></th>
           <td>
             <div class='input-group'>
               <?php foreach($config->repo->matchComment['module'] as $module => $match):?>
