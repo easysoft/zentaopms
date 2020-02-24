@@ -57,7 +57,7 @@ class wechatapi
         if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
 
         $users = array();
-        foreach($depts as $deptID => $deptName)
+        foreach($depts->deptList as $deptID)
         {
             $response = $this->queryAPI($this->apiUrl . "user/simplelist?access_token={$this->token}&department_id={$deptID}");
             if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
@@ -65,6 +65,7 @@ class wechatapi
             foreach($response->userlist as $user) $users[$user->name] = $user->userid;
         }
 
+        $users = array_merge($users, $depts->userList);
         return array('result' => 'success', 'data' => $users);
     }
 
@@ -72,17 +73,28 @@ class wechatapi
      * Get all depts.
      *
      * @access public
-     * @return array
+     * @return stdClass
      */
     public function getAllDepts()
     {
-        $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
+        $response = $this->queryAPI($this->apiUrl . "agent/get?access_token={$this->token}&agentid={$this->agentId}");
+
+        $deptInfo = new stdClass();
+        $deptInfo->userList = array();
+        if(isset($response->allow_userinfos))
+        {
+            foreach ($response->allow_userinfos->user as $user) {
+                $userInfo = $this->queryAPI($this->apiUrl . "user/get?access_token={$this->token}&userid={$user->userid}");
+                $deptInfo->userList[$userInfo->name] = $userInfo->userid;
+            }
+        }
+
+        $deptInfo->deptList = array();
+        if(isset($response->allow_partys)) $deptInfo->deptList = $response->allow_partys->partyid;
 
         if($this->isError()) return false;
 
-        $deptPairs = array();
-        foreach($response->department as $dept) $deptPairs[$dept->id] = $dept->name;
-        return $deptPairs;
+        return $deptInfo;
     }
 
     /**
