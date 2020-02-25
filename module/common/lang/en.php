@@ -334,7 +334,7 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|caselib|browse|l
 
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
-$lang->ci->menu->browse   = array('link' =>'Browse|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->ci->menu->browse   = array('link' =>'Code|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->ci->menu->job      = array('link' =>'Build|ci|browsejob', 'alias' => 'createjob,editjob,browsebuild,viewbuildlogs');
 $lang->ci->menu->maintain = array('link' =>'Repo|repo|maintain', 'alias' => 'create,edit');
 $lang->ci->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');

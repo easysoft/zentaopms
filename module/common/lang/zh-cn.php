@@ -334,7 +334,7 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 
 $lang->ci = new stdclass();
 $lang->ci->menu           = new stdclass();
-$lang->ci->menu->browse   = array('link' =>'浏览|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->ci->menu->browse   = array('link' =>'代码|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->ci->menu->job      = array('link' =>'构建|integration|browse', 'subModule' => 'compile,integration');
 $lang->ci->menu->maintain = array('link' =>'版本库|repo|maintain', 'alias' => 'create,edit');
 $lang->ci->menu->jenkins  = array('link' =>'Jenkins|jenkins|browse', 'alias' => 'create,edit');
