@@ -37,10 +37,9 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'diff'))
         {
-            $repos = $this->loadModel('repo')->getAllRepos();
-            foreach($repos as $repo)
+            $svnRepos = $this->loadModel('repo')->getListBySCM('Subversion', 'haspriv');
+            foreach($svnRepos as $repo)
             {
-                if($repo->SCM != 'Subversion') continue;
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0) 
                 {
                     $entry = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
@@ -72,10 +71,9 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->getList();
+            $repos = $this->loadModel('repo')->getListBySCM('Subversion', 'haspriv');
             foreach($repos as $repo)
             {
-                if($repo->SCM != 'Subversion') continue;
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0)
                 {
                     $entry = $this->repo->encodePath(str_ireplace(strtolower($repo->path), '', $url));

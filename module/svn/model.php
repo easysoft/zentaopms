@@ -135,7 +135,7 @@ class svnModel extends model
                 $this->saveLastRevision($savedRevision);
                 $this->printLog("save revision $savedRevision");
                 $this->deleteRestartFile();
-                $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
+                $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
 
             // exe ci jobs in log
@@ -157,6 +157,13 @@ class svnModel extends model
         if(!is_dir($this->logRoot)) mkdir($this->logRoot);
     }
 
+    /**
+     * Set the tag file of a repo.
+     *
+     * @param  string    $repoId
+     * @access public
+     * @return void
+     */
     public function setTagFile($repoId)
     {
         $this->setLogRoot();
@@ -200,12 +207,34 @@ class svnModel extends model
 
         foreach($repos as $repo)
         {
-            if(strtolower($repo->SCM) === 'subversion' && !isset($paths[$repo->path]))
+            if(isset($paths[$repo->path])) continue;
+
+            unset($repo->acl);
+            unset($repo->desc);
+            $svnRepos[] = $repo;
+            $paths[$repo->path] = $repo->path;
+        }
+
+        if(isset($this->config->svn->repos))
+        {
+            foreach($this->config->svn->repos as $i => $repo)
             {
-                unset($repo->acl);
-                unset($repo->desc);
-                $svnRepos[] = $repo;
-                $paths[$repo->path] = $repo->path;
+                $repoPath = $repo['path'];
+                if(empty($repoPath)) continue;
+                if(isset($paths[$repoPath])) continue;
+
+                $svnRepo = new stdclass();
+                $svnRepo->id       = "c{$i}";
+                $svnRepo->client   = $this->config->svn->client;
+                $svnRepo->path     = $repoPath;
+                $svnRepo->prefix   = '';
+                $svnRepo->SCM      = 'Subversion';
+                $svnRepo->account  = $repo['username'];
+                $svnRepo->password = $repo['password'];
+                $svnRepo->encoding = zget($repo, 'encoding', $this->config->svn->client);
+
+                $svnRepos[] = $svnRepo;
+                $paths[$repoPath] = $repoPath;
             }
         }
 
@@ -287,18 +316,6 @@ class svnModel extends model
     }
 
     /**
-     * Set the tag file of a repo.
-     *
-     * @param  string    $repoId
-     * @access public
-     * @return void
-     */
-    public function setTagFile($repoId)
-    {
-        $this->tagFile = $this->logRoot . $repoId . '.tag';
-    }
-
-    /**
      * set the root path of a repo.
      * 
      * @param  object    $repo 
@@ -307,11 +324,10 @@ class svnModel extends model
      */
     public function setRepoRoot($repo)
     {
-        $cmd  = $this->client . " info --xml $repo->path";
-        $info = `$cmd`;
-        $info = simplexml_load_string($info);
-        $repoRoot = $info->entry->repository->root;
-        $this->repoRoot = $repoRoot;
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $info = $scm->info('');
+        $this->repoRoot = $info->root;
     }
 
     /**
@@ -338,53 +354,24 @@ class svnModel extends model
      */
     public function getRepoLogs($repo, $fromRevision)
     {
-        $parsedLogs = array();
-
         /* The svn log command. */
-        $cmd     = $this->client . " log -r $fromRevision:HEAD -v --xml $repo->path";
-        $rawLogs = `$cmd`;
-        $logs    = @simplexml_load_string($rawLogs);    // Convert it to object.
-        if(!$logs)
-        {
-            echo "Some error occers: \nThe command is $cmd\n the svn logs is $rawLogs\n";
-            return false;
-        }
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $logs = $scm->log('', $fromRevision);
+        if(empty($logs)) return false;
 
         /* Process logs. */
-        foreach($logs->logentry as $entry) $parsedLogs[] = $this->convertLog($entry);
-        return $parsedLogs;
-    }
-
-    /**
-     * Convert log from xml format to object.
-     * 
-     * @param  object    $log 
-     * @access public
-     * @return object
-     */
-    public function convertLog($log)
-    {
-        /* Get author, revision, msg, date attributes. */
-        $parsedLog = new stdClass();
-        $parsedLog->author   = (string)$log->author; 
-        $parsedLog->revision = (int)$log['revision']; 
-        $parsedLog->msg      = trim((string)$log->msg);
-        $parsedLog->date     = date('Y-m-d H:i:s', strtotime($log->date));
-
-        /* Process files. */
-        $parsedLog->files = array();
-        foreach ($log->paths as $key => $paths)
+        foreach($logs as $log)
         {
-            $parsedFiles = array();
-            foreach($paths as $path)
-            {
-                $action = (string)$path['action'];
-                $parsedFiles[$action][] = (string)$path;
-            }
-        }
-        $parsedLog->files = $parsedFiles;
+            $log->author = $log->committer;
+            $log->msg    = $log->comment;
+            $log->date   = $log->time;
 
-        return $parsedLog;
+            /* Process files. */
+            $log->files = array();
+            foreach($log->change as $file => $info) $log->files[$info['action']][] = $file;
+        }
+        return $logs;
     }
 
     /**
@@ -739,7 +726,7 @@ class svnModel extends model
         if(file_exists($this->restartFile)) return array();
 
         $tags = array();
-        foreach(json_decode(file_get_contents($this->tagFile)), $tag) $tags[$tag] = $tag;
+        foreach(json_decode(file_get_contents($this->tagFile)) as $tag) $tags[$tag] = $tag;
         return $tags;
     }
 

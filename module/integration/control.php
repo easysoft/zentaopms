@@ -73,7 +73,7 @@ class integration extends control
         $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
         $this->view->position[] = $this->lang->integration->create;
 
-        $repoList  = $this->loadModel('repo')->getAllRepos();
+        $repoList  = $this->loadModel('repo')->getList();
         $repoPairs = array(0 => '');
         $repoTypes = array();
         foreach($repoList as $repo)
@@ -112,7 +112,7 @@ class integration extends control
         $this->view->position[]  = $this->lang->integration->edit;
 
         $repo      = $this->loadModel('repo')->getRepoByID($job->repo);
-        $repoList  = $this->loadModel('repo')->getAllRepos();
+        $repoList  = $this->repo->getList();
         $repoPairs = array(0 => '', $repo->id => $repo->name);
         $repoTypes[$repo->id] = $repo->SCM;
         foreach($repoList as $repo)

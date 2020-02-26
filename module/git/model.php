@@ -134,7 +134,7 @@ class gitModel extends model
                 $this->saveLastRevision($latestRevision);
                 $this->printLog("save revision $latestRevision");
                 $this->deleteRestartFile();
-                $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
+                $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
 
             // exe ci jobs in log
@@ -191,12 +191,35 @@ class gitModel extends model
         $paths    = array();
         foreach($repos as $repo)
         {
-            if(strtolower($repo->SCM) == 'git' && !isset($paths[$repo->path]))
+            if(!isset($paths[$repo->path]))
             {
                 unset($repo->acl);
                 unset($repo->desc);
                 $gitRepos[] = $repo;
                 $paths[$repo->path] = $repo->path;
+            }
+        }
+
+        if(isset($this->config->git->repos))
+        {
+            foreach($this->config->git->repos as $i => $repo)
+            {
+                $repoPath = $repo['path'];
+                if(empty($repoPath)) continue;
+                if(isset($paths[$repoPath])) continue;
+
+                $gitRepo = new stdclass();
+                $gitRepo->id       = "c{$i}";
+                $gitRepo->client   = $this->config->git->client;
+                $gitRepo->path     = $repoPath;
+                $gitRepo->prefix   = '';
+                $gitRepo->SCM      = 'Git';
+                $gitRepo->account  = '';
+                $gitRepo->password = '';
+                $gitRepo->encoding = zget($repo, 'encoding', $this->config->git->client);
+
+                $gitRepos[] = $gitRepo;
+                $paths[$repoPath] = $repoPath;
             }
         }
 
@@ -214,15 +237,11 @@ class gitModel extends model
      */
     public function getRepos()
     {
-        $repos = array();
-        if(!$this->config->git->repos) return $repos;
+        $repos     = $this->setRepos();
+        $repoPairs = array();
+        foreach($repos as $repo) $repoPairs[] = $repo->path;
 
-        foreach($this->config->git->repos as $repo)
-        {
-            if(empty($repo['path'])) continue;
-            $repos[] = $repo['path'];
-        }
-        return $repos;
+        return $repoPairs;
     }
 
     /**
@@ -305,7 +324,7 @@ class gitModel extends model
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-        return $scm->tags('/');
+        return $scm->tags('');
     }
 
     /**
@@ -318,40 +337,22 @@ class gitModel extends model
      */
     public function getRepoLogs($repo, $fromRevision)
     {
-        $parsedLogs = array();
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $logs = $scm->log('', $fromRevision);
+        if(empty($logs)) return false;
 
-        /* The git log command. */
-        chdir($this->repoRoot);
-        exec("{$this->client} config core.quotepath false");
-        if($fromRevision)
+        foreach($logs as $log)
         {
-            $cmd = "$this->client log --stat=1024 --stat-name-width=1000 --name-status $fromRevision..HEAD";
-        }
-        else
-        {
-            $cmd = "$this->client log --stat=1024 --stat-name-width=1000 --name-status";
-        }
-        exec($cmd, $list, $return);
+            $log->author = $log->committer;
+            $log->msg    = $log->comment;
+            $log->date   = $log->time;
 
-        if(!$list and $return) 
-        {
-            echo "Some error occers: \nThe command is $cmd\n";
-            return false;
+            /* Process files. */
+            $log->files = array();
+            foreach($log->change as $file => $info) $log->files[$info['action']][] = $file;
         }
-        if(!$list and !$return) return array();
-
-        /* Process logs. */
-        $logs = array();
-        $i    = 0;
-
-        foreach($list as $line) 
-        {
-            if(strpos($line, 'commit ') === 0) $i++;
-            $logs[$i][] = $line;
-        }
-
-        foreach($logs as $log) $parsedLogs[] = $this->convertLog($log);
-        return $parsedLogs;
+        return $logs;
     }
 
     /**

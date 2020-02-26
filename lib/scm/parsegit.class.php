@@ -1,5 +1,5 @@
 <?php
-class Git
+class ParseGit
 {
     public $client;
     public $root;
@@ -125,7 +125,7 @@ class Git
             $logs = array();
             chdir($this->root);
 
-            $list = execCmd(escapeCmd("$this->client log --stat=1024 --name-status -1 $fromRevision -- $path"), 'array');
+            $list = execCmd(escapeCmd("$this->client log --stat=1024 --name-status --stat-name-width=1000 -1 $fromRevision -- $path"), 'array');
             $logs = $this->parseLog($list);
             return $logs;
         }
@@ -139,7 +139,7 @@ class Git
             $revisions = "$fromRevision..$toRevision"; 
         }
         chdir($this->root);
-        $list = execCmd(escapeCmd("$this->client log $count $revisions -- $path"), 'array');
+        $list = execCmd(escapeCmd("$this->client log  --stat=1024 --name-status --stat-name-width=1000 $count $revisions -- $path"), 'array');
         $logs = $this->parseLog($list);
 
         return $logs;

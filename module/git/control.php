@@ -37,10 +37,9 @@ class git extends control
         $path = helper::safe64Decode($path);
         if(common::hasPriv('repo', 'diff'))
         {
-            $repos   = $this->loadModel('repo')->getAllRepos();
+            $repos = $this->loadModel('repo')->getListBySCM('Git', 'haspriv');
             foreach($repos as $repo)
             {
-                if($repo->SCM != 'Git') continue;
                 if(strpos($path, $repo->path) === 0)
                 {
                     $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
@@ -72,10 +71,9 @@ class git extends control
         $path = helper::safe64Decode($path);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->getList();
+            $repos = $this->loadModel('repo')->getListBySCM('Git', 'haspriv');
             foreach($repos as $repo)
             {
-                if($repo->SCM != 'Git') continue;
                 if(strpos($path, $repo->path) === 0)
                 {
                     $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));

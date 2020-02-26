@@ -139,10 +139,9 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null, $decode = true)
+    public function getList($orderBy = 'id_desc', $pager = null)
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)
-            ->where('deleted')->eq('0')
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -151,6 +150,31 @@ class repoModel extends model
         {
             $repo->acl = json_decode($repo->acl);
             if(!$this->checkPriv($repo)) unset($repos[$i]);
+        }
+
+        return $repos;
+    }
+
+    /**
+     * Get list by SCM.
+     * 
+     * @param  strint $scm 
+     * @param  string $type 
+     * @access public
+     * @return array
+     */
+    public function getListBySCM($scm, $type = 'all')
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->andWhere('SCM')->eq($scm)
+            ->orderBy('id')
+            ->fetchAll();
+
+        foreach($repos as $i => $repo)
+        {
+            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+            $repo->acl = json_decode($repo->acl);
+            if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
         }
 
         return $repos;
@@ -185,24 +209,6 @@ class repoModel extends model
             ->autoCheck()
             ->exec();
         return $this->dao->lastInsertID();
-    }
-
-    /**
-     * Get all repos.
-     * 
-     * @access public
-     * @return array
-     */
-    public function getAllRepos()
-    {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll();
-        foreach($repos as $i => $repo)
-        {
-            $repo->acl = json_decode($repo->acl);
-            if(!$this->checkPriv($repo)) unset($repos[$i]);
-        }
-
-        return $repos;
     }
 
     /**
@@ -926,26 +932,6 @@ class repoModel extends model
             $replaceLines[$matches[0][$key]] = rtrim($links, $spit);
         }
         return $replaceLines;
-    }
-
-    /**
-     * list repos for sync
-     *
-     * @return mixed
-     */
-    public function getListBySCM($scm)
-    {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq($scm)
-            ->orderBy('id')
-            ->fetchAll();
-
-        foreach($repos as $repo)
-        {
-            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-        }
-
-        return $repos;
     }
 
     /**

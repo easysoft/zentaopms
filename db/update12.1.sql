@@ -62,7 +62,9 @@ CREATE TABLE `zt_cibuild` (
 
 ALTER TABLE `zt_cijob` ADD `svnFolder` varchar(255) COLLATE 'utf8_general_ci' NOT NULL AFTER `triggerType`;
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', 1, 'normal',   '0000-00-00 00:00:00');
+('1',    '1',    '*',    '*',    '*',    'moduleName=ci&methodName=buildTodayJob', '创建周期性任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行Jenkins任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00');
 
 ALTER TABLE `zt_cibuild` RENAME TO `zt_compile`;
 ALTER TABLE `zt_cijob` RENAME TO `zt_integration`;
