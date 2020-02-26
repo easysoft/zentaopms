@@ -52,12 +52,12 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->testtask->common;?></th>
+          <th><?php echo $lang->integration->common;?></th>
           <td>
             <div class='input-group'>
-              <?php foreach($config->repo->matchComment['testtask'] as $method => $match):?>
-              <span class='input-group-addon'><?php echo $lang->testtask->$method;?></span>
-              <?php echo html::input("matchComment[testtask][{$method}]", $match, "class='form-control'");?>
+              <?php foreach($config->repo->matchComment['integration'] as $method => $match):?>
+              <span class='input-group-addon'><?php echo $lang->integration->$method;?></span>
+              <?php echo html::input("matchComment[integration][{$method}]", $match, "class='form-control'");?>
               <?php endforeach;?>
             </div>
           </td>

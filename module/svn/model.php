@@ -139,31 +139,9 @@ class svnModel extends model
             }
 
             // exe ci jobs in log
-            $cijobIdList = zget($objects, 'testtasks', array());
-            $this->loadModel('integration');
-            foreach($cijobIdList as $id) $this->integration->exec($id);
-
-            // dealwith tag commands
-            $this->printLog("dealwith tag commands");
-            $savedTags = $this->getSavedTags($repo->id);
-
-            $tags = $this->getRepoTags($repo);
-            if(!empty($tags))
-            {
-                $jobToBuild = array();
-                foreach($tags as $tag)
-                {
-                    if($savedTags[$tag]) continue;
-
-                    $jobToBuild += $this->repo->parseTag($tag);
-
-                    $this->saveLastTag($tag, $repo->id);
-                }
-                $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
-
-                // exe ci jobs in tag
-                foreach($jobToBuild as $id) $this->integration->exec($id);
-            }
+            $cijobIdList = zget($objects, 'integrations', array());
+            $this->loadModel('compile');
+            foreach($cijobIdList as $id) $this->compile->execByCompile($id);
         }
     }
 
@@ -177,6 +155,12 @@ class svnModel extends model
     {
         $this->logRoot = $this->app->getTmpRoot() . 'svn/';
         if(!is_dir($this->logRoot)) mkdir($this->logRoot);
+    }
+
+    public function setTagFile($repoId)
+    {
+        $this->setLogRoot();
+        $this->tagFile = $this->logRoot . $repoId . '.tag';
     }
 
     /**
@@ -209,27 +193,23 @@ class svnModel extends model
      */
     public function setRepos()
     {
-        $repo = $this->loadModel('repo');
-        $repoObjs = $repo->listForSync("SCM='Subversion'");
+        $repos = $this->loadModel('repo')->getListBySCM('Subversion');
 
-        $svnRepos = [];
-        $paths = [];
-        // ignore same repo in config.php
-        foreach($repoObjs as $repoInDb)
+        $svnRepos = array();
+        $paths    = array();
+
+        foreach($repos as $repo)
         {
-            if(strtolower($repoInDb->SCM) === 'subversion' && !in_array($repoInDb->path, $svnRepos)) {
-                $svnRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path,
-                    'encoding' => $repoInDb->encoding, 'client' => $repoInDb->client, 'account' => $repoInDb->account, 'password' => $repoInDb->password);
-                $paths[] = $repoInDb->path;
+            if(strtolower($repo->SCM) === 'subversion' && !isset($paths[$repo->path]))
+            {
+                unset($repo->acl);
+                unset($repo->desc);
+                $svnRepos[] = $repo;
+                $paths[$repo->path] = $repo->path;
             }
         }
 
-        if(!$svnRepos)
-        {
-            echo "You must set one svn repo.\n";
-            return false;
-        }
-
+        if(empty($svnRepos)) echo "You must set one svn repo.\n";
         $this->repos = $svnRepos;
         return true;
     }
@@ -341,26 +321,11 @@ class svnModel extends model
      * @access public
      * @return void
      */
-    public function getRepoTags($repo)
+    public function getRepoTags($repo, $path)
     {
-        $path = $repo->path;
-        if (substr($path, -1) != '/') $path .= '/';
-
-        $path = str_replace("/trunk/","/tags/", $path);
-
-        $parsedTags = array();
-
-        chdir($this->repoRoot);
-        $cmd = "$this->client ls $path";
-        exec($cmd, $list, $return);
-        foreach($list as $line)
-        {
-            if (substr($path, -1) == '/') $line = substr($line, 0, strlen($line) - 1);
-
-            $parsedTags[] = $line;
-        }
-
-        return $parsedTags;
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        return $scm->tags($path);
     }
 
     /**
@@ -767,9 +732,14 @@ class svnModel extends model
      * @access public
      * @return int
      */
-    public function getSavedTags($repoId)
+    public function getSavedTag($repoID = 0)
     {
-        $tags = $this->dao->select('name, id')->from(TABLE_TAG)->where('repo')->eq($repoId)->fetchPairs();
+        if($repoID) $this->setTagFile($repoID);
+        if(!file_exists($this->tagFile)) return array();
+        if(file_exists($this->restartFile)) return array();
+
+        $tags = array();
+        foreach(json_decode(file_get_contents($this->tagFile)), $tag) $tags[$tag] = $tag;
         return $tags;
     }
 
@@ -780,12 +750,10 @@ class svnModel extends model
      * @access public
      * @return void
      */
-    public function saveLastTag($tag, $repoId)
+    public function saveLastTag($tag, $repoId = 0)
     {
-        $data = (object) array('name'=>$tag, 'repo'=>$repoId);
-
-        $ret = $this->dao->insert(TABLE_TAG)->data($data)
-            ->batchCheck($this->config->svn->tagRequiredFields, 'notempty')
-            ->autoCheck()->exec();
+        if($repoId) $this->setTagFile($repoId);
+        if(is_array($tag)) $tag = json_encode($tag);
+        file_put_contents($this->tagFile, $tag);
     }
 }

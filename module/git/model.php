@@ -137,39 +137,10 @@ class gitModel extends model
                 $this->printLog("\n\nrepo ' . $repo->id . ': ' . $repo->path . ' finished");
             }
 
-            // exe ci task from logs
-            $cijobIdList = zget($objects, 'testtasks', array());
-            $this->loadModel('integration');
-            foreach($cijobIdList as $id) $this->integration->exec($id);
-
-            // dealwith tag commands
-            $this->printLog("dealwith tag commands");
-            $savedTag = $this->getSavedTag();
-
-            $tags = $this->getRepoTags($repo);
-            if(!empty($tags))
-            {
-                $arriveLastTag = false;
-                $jobToBuild = array();
-                foreach($tags as $tag)
-                {
-                    if(!empty($savedTag) && $tag === $savedTag) // get the last build tag position
-                    {
-                        $arriveLastTag = true;
-                        continue;
-                    }
-
-                    if(!empty($savedTag) && !$arriveLastTag) continue;
-
-                    $jobToBuild += $this->repo->parseTag($tag);
-                }
-
-                $this->saveLastTag($tags[count($tags) - 1]);
-
-                $this->printLog('extract tasks to build: ' . json_encode($jobToBuild));
-
-                foreach($jobToBuild as $id) $this->integration->exec($id);
-            }
+            // exe ci jobs in log
+            $cijobIdList = zget($objects, 'integrations', array());
+            $this->loadModel('compile');
+            foreach($cijobIdList as $id) $this->compile->execByIntegration($id);
         }
     }
 
@@ -215,26 +186,21 @@ class gitModel extends model
      */
     public function setRepos()
     {
-        $repo = $this->loadModel('repo');
-        $repoObjs = $repo->listForSync("SCM='Git'");
-
-        $gitRepos = [];
-        $paths = [];
-        // ignore same repo in config.php
-        foreach($repoObjs as $repoInDb)
+        $repos    = $this->loadModel('repo')->getListBySCM('Git');
+        $gitRepos = array();
+        $paths    = array();
+        foreach($repos as $repo)
         {
-            if(strtolower($repoInDb->SCM) === 'git' && !in_array($repoInDb->path, $gitRepos)) {
-                $gitRepos[] = (object)array('id'=>$repoInDb->id, 'path' => $repoInDb->path,
-                    'encoding' => $repoInDb->encoding, 'client' => $repoInDb->client);
-                $paths[] = $repoInDb->path;
+            if(strtolower($repo->SCM) == 'git' && !isset($paths[$repo->path]))
+            {
+                unset($repo->acl);
+                unset($repo->desc);
+                $gitRepos[] = $repo;
+                $paths[$repo->path] = $repo->path;
             }
         }
 
-        if(!$gitRepos)
-        {
-            echo "You must set one git repo.\n";
-            return false;
-        }
+        if(empty($gitRepos)) echo "You must set one git repo.\n";
 
         $this->repos = $gitRepos;
         return true;
@@ -312,6 +278,7 @@ class gitModel extends model
      */
     public function setTagFile($repoId)
     {
+        $this->setLogRoot();
         $this->tagFile = $this->logRoot . $repoId . '.tag';
     }
 
@@ -336,21 +303,9 @@ class gitModel extends model
      */
     public function getRepoTags($repo)
     {
-        $parsedTags = array();
-
-        /* The git tag command. */
-        chdir($this->repoRoot);
-        exec("{$this->client} config core.quotepath false");
-
-        $cmd = "$this->client for-each-ref --sort=taggerdate | grep refs/tags | grep -v commit";
-        exec($cmd, $list, $return);
-        foreach($list as $line)
-        {
-            $arr = explode('refs/tags/', $line);
-            $parsedTags[] = $arr[count($arr) - 1];
-        }
-
-        return $parsedTags;
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        return $scm->tags('/');
     }
 
     /**
@@ -778,8 +733,9 @@ class gitModel extends model
      * @access public
      * @return int
      */
-    public function getSavedTag()
+    public function getSavedTag($repoID = 0)
     {
+        if($repoID) $this->setTagFile($repoID);
         if(!file_exists($this->tagFile)) return 0;
         if(file_exists($this->restartFile)) return 0;
         return trim(file_get_contents($this->tagFile));
@@ -792,9 +748,10 @@ class gitModel extends model
      * @access public
      * @return void
      */
-    public function saveLastTag($tag)
+    public function saveLastTag($tag, $repoId = 0)
     {
-        $ret = file_put_contents($this->tagFile, $tag);
+        if($repoId) $this->setTagFile($repoId);
+        file_put_contents($this->tagFile, $tag);
     }
 
     /**

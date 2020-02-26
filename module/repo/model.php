@@ -178,7 +178,7 @@ class repoModel extends model
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
 
-        $data->password = base64_encode($data->password);
+        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->insert(TABLE_REPO)->data($data)
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
@@ -236,7 +236,7 @@ class repoModel extends model
 
         if($data->path != $repo->path) $data->synced = 0;
 
-        $data->password = base64_encode($data->password);
+        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data)
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
@@ -284,9 +284,21 @@ class repoModel extends model
         $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
-        $repo->password = base64_decode($repo->password);
+        if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         $repo->acl = json_decode($repo->acl);
         return $repo;
+    }
+
+    public function getByIdList($idList)
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll();
+        foreach($repos as $i => $repo)
+        {
+            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+            $repo->acl = json_decode($repo->acl);
+        }
+
+        return $repos;
     }
 
     /**
@@ -921,17 +933,16 @@ class repoModel extends model
      *
      * @return mixed
      */
-    public function listForSync($whr)
+    public function getListBySCM($scm)
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)
-            ->where('deleted')->eq('0')
-            ->beginIF(!empty($whr))->andWhere('(' . $whr . ')')->fi()
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->andWhere('SCM')->eq($scm)
             ->orderBy('id')
             ->fetchAll();
 
         foreach($repos as $repo)
         {
-            $repo->password = base64_decode($repo->password);
+            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         }
 
         return $repos;
@@ -949,12 +960,12 @@ class repoModel extends model
         if(is_string($this->config->repo->matchComment)) $this->config->repo->matchComment = json_decode($this->config->repo->matchComment, true);
         $matchComment = $this->config->repo->matchComment;
 
-        $matches   = array();
-        $stories   = array();
-        $tasks     = array();
-        $bugs      = array();
-        $testtasks = array();
-        $actions   = array();
+        $matches      = array();
+        $stories      = array();
+        $tasks        = array();
+        $bugs         = array();
+        $integrations = array();
+        $actions      = array();
         while(true)
         {
             $found = preg_match("/{$matchComment['id']['mark']}[0-9]+({$matchComment['id']['split']}[0-9]+)*/", $comment, $matches);
@@ -1017,14 +1028,14 @@ class repoModel extends model
                                 }
                             }
                         }
-                        elseif($module == 'testtask')
+                        elseif($module == 'integration')
                         {
-                            foreach($idList as $id) $testtasks[$id] = $id;
-                            foreach($matchComment['testtask'] as $method => $match)
+                            foreach($idList as $id) $integrations[$id] = $id;
+                            foreach($matchComment['integration'] as $method => $match)
                             {
                                 if(strpos($subComment, $match) !== false)
                                 {
-                                    foreach($idList as $id) $actions['testtask'][$id]['action'] = $method;
+                                    foreach($idList as $id) $actions['integration'][$id]['action'] = $method;
                                 }
                             }
                         }
@@ -1033,44 +1044,7 @@ class repoModel extends model
             }
         }
 
-        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'testtasks' => $testtasks, 'actions' => $actions);
-    }
-
-    /**
-     * Parse the tag, extract task list from it.
-     *
-     * @param  string    $comment
-     * @access public
-     */
-    public function parseTag($comment)
-    {
-        global $config;
-        if(is_string($config->repo->matchComment)) $config->repo->matchComment = json_decode($config->repo->matchComment, true);
-        $matchComment = $config->repo->matchComment;
-
-        $testtasks = array();
-        while(true)
-        {
-            $found = preg_match("/{$matchComment['id']['mark']}[0-9]+({$matchComment['id']['split']}[0-9]+)*/", $comment, $matches);
-            if(empty($found)) break;
-            if($found)
-            {
-                $position   = strpos($comment, $matches[0]);
-                $subComment = substr($comment, 0, $position + strlen($matches[0]));
-                $comment    = substr($comment, $position + strlen($matches[0]) + 1);
-
-                $idList = explode($matchComment['id']['mark'], str_replace($matchComment['id']['split'], '', $matches[0]));
-                foreach($matchComment['module'] as $module => $moduleMatch)
-                {
-                    if($module != 'testtask') continue;
-                    if(stripos($subComment, $moduleMatch) !== false)
-                    {
-                        foreach($idList as $id) $testtasks[$id] = $id;
-                    }
-                }
-            }
-        }
-        return $testtasks;
+        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'integrations' => $integrations, 'actions' => $actions);
     }
 
     /**

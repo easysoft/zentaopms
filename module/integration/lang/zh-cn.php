@@ -1,6 +1,8 @@
 <?php
+$lang->integration->common        = '构建任务';
 $lang->integration->browse        = '浏览构建任务';
 $lang->integration->create        = '创建构建任务';
+$lang->integration->start         = '执行构建';
 $lang->integration->edit          = '编辑构建任务';
 $lang->integration->execNow       = '立即执行';
 $lang->integration->delete        = '删除构建任务';

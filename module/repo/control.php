@@ -590,7 +590,7 @@ class repo extends control
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
         $this->app->loadLang('story');
-        $this->app->loadLang('testtask');
+        $this->app->loadLang('integration');
         if(is_string($this->config->repo->matchComment)) $this->config->repo->matchComment = json_decode($this->config->repo->matchComment, true);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setMatchComment;

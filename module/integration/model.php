@@ -84,6 +84,8 @@ class integrationModel extends model
 
             ->autoCheck()
             ->exec();
+
+        if($integration->triggerType == 'schedule' and strpos($integration->scheduleDay, date('w')) !== false) $this->loadModel('compile')->createByIntegration($integration->id);
         return true;
     }
 
@@ -96,6 +98,7 @@ class integrationModel extends model
      */
     public function update($id)
     {
+        $oldIntegration = $this->getById($id);
         $integration = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
@@ -116,44 +119,15 @@ class integrationModel extends model
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
+
+        if($integration->triggerType == 'schedule')
+        {
+            $week = date('w');
+            if($integration->triggerType != $oldIntegration->triggerType or strpos($oldIntegration->scheduleDay, $week) === false)
+            {
+                if(strpos($integration->scheduleDay, $week) !== false) $this->loadModel('compile')->createByIntegration($integration->id);
+            }
+        }
         return true;
-    }
-
-    /**
-     * Execute integration
-     * 
-     * @param  int    $integrationID 
-     * @access public
-     * @return bool
-     */
-    public function exec($integrationID)
-    {
-        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jenkinsJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
-            ->from(TABLE_INTEGRATION)->alias('t1')
-            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jenkins=t2.id')
-            ->where('t1.id')->eq($integrationID)
-            ->fetch();
-
-        if(!$integration) return false;
-
-        $jenkinsServer   = $integration->serviceUrl;
-        $jenkinsUser     = $integration->account;
-        $jenkinsPassword = $integration->token ? $integration->token : base64_decode($integration->password);
-
-        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
-        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-        $buildUrl      = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $integration->jenkinsJob);
-
-        $data = new stdClass();
-        //  TODO: 将参数加入$data，代码完成后删除注释
-        //  PARAM_TAG：git tag name or svn tag url
-        //  PARAM_REVISION：git revision string or svn revision number
-        $data->PARAM_TAG      = "tag111";
-        $data->PARAM_REVISION = "6c3a7bf931855842e261c7991bb143c1e0c3fb19";
-
-        $integration->queueItem = $this->loadModel('ci')->sendRequest($buildUrl, $data);
-        $this->loadModel('compile')->saveBuild($integration);
-
-        return !dao::isError();
     }
 }

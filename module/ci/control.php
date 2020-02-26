@@ -33,11 +33,72 @@ class ci extends control
         $scheduleJobs = $this->loadModel('integration')->getListByTriggerType('schedule');
 
         $week = date('w');
+        $this->loadModel('compile');
         foreach($scheduleJobs as $job)
         {
-            if(strpos($job->scheduleDay, $week) !== false) $this->integration->exec($job->id);
+            if(strpos($job->scheduleDay, $week) !== false) $this->compile->createByIntegration($job->id);
         }
-        die('success');
+        echo 'success';
+    }
+
+    /**
+     * Exec compile.
+     * 
+     * @access public
+     * @return void
+     */
+    public function exec()
+    {
+        $compiles = $this->loadModel('compile')->getUnexecutedList();
+        foreach($compiles as $compile) $this->compile->execByCompile($compile);
+
+        $integrations = $this->loadModel('integration')->getListByTriggerType('tag');
+
+        $repoIdList = array();
+        $repos      = array();
+        foreach($integrations as $integration) $repoIdList[$integration->id] = $integration->id;
+        if($repoIdList) $repos = $this->loadModel('repo')->getByIdList($repoIdList);
+
+        foreach($integrations as $integration)
+        {
+            $repo = zget($repos, $integration->repo, null);
+            if(empty($repo)) continue;
+
+            $scm      = $repo->SCM == 'Git' ? 'git' : 'svn';
+            $savedTag = $this->loadModel($scm)->getSavedTag($repo->id);
+
+            $tags = $this->$scm->getRepoTags($repo, $scm == 'svn' ? $integration->svnFolder : '');
+            if(!empty($tags))
+            {
+                $arriveLastTag = false;
+                foreach($tags as $tag)
+                {
+                    /* Get the last build tag position */
+                    if($scm == 'git')
+                    {
+                        if(!empty($savedTag) && !$arriveLastTag) continue;
+                        if(!empty($savedTag) && $tag == $savedTag)
+                        {
+                            $arriveLastTag = true;
+                            continue;
+                        }
+                    }
+                    elseif($scm == 'svn')
+                    {
+                        if(isset($savedTag[$tag])) continue;
+                        $tag = rtrim($repo->path , '/') . '/' . trim($integration->svnFolder, '/') . '/' . $tag;
+                    }
+
+                    $tagData = new stdclass();
+                    $tagData->PARAM_TAG = $tag;
+                    $this->compile->execByIntegration($integration->id, $tagData);
+                }
+
+                if($scm == 'svn') $tag = json_encode($tags);
+                $this->$scm->saveLastTag($tag, $repo->id);
+            }
+        }
+        echo 'success';
     }
 
     /**
@@ -49,8 +110,13 @@ class ci extends control
     public function checkBuildStatus()
     {
         $this->ci->checkBuildStatus();
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $this->send(array('result' => 'success'));
+        if(dao::isError())
+        {
+            echo json_encode(dao::getError());
+        }
+        else
+        {
+            echo 'success';
+        }
     }
 }

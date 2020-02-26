@@ -142,10 +142,6 @@ class integration extends control
         if($confirm != 'yes') die(js::confirm($this->lang->integration->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
 
         $this->integration->delete(TABLE_INTEGRATION, $id);
-
-        $command = 'moduleName=ci&methodName=exe&parm=' . $id;
-        $this->dao->delete()->from(TABLE_CRON)->where('command')->eq($command)->exec();
-
         die(js::reload('parent'));
     }
 

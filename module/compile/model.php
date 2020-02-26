@@ -46,22 +46,108 @@ class compileModel extends model
     }
 
     /**
+     * Get unexecuted list.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getUnexecutedList()
+    {
+        return $this->dao->select('*')->from(TABLE_COMPILE)->where('status')->eq('')->andWhere('deleted')->eq('0')->fetchAll();
+    }
+
+    /**
      * Save build by job
      * 
      * @param  object    $job 
      * @access public
      * @return void
      */
-    public function saveBuild($job)
+    public function createByIntegration($integrationID)
     {
+        $integration = $this->dao->select('id,name')->from(TABLE_INTEGRATION)->where('id')->eq($integrationID)->fetch();
+
         $build = new stdClass();
-        $build->cijob       = $job->jobId;
-        $build->name        = $job->jobName;
-        $build->queueItem   = $job->queueItem;
-        $build->status      = $job->queueItem ? 'created' : 'create_fail';
+        $build->cijob       = $integration->id;
+        $build->name        = $integration->name;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
 
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
+    }
+
+    /**
+     * Execute compile
+     * 
+     * @param  object $compile 
+     * @access public
+     * @return bool
+     */
+    public function execByCompile($compile, $data = null)
+    {
+        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jenkinsJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+            ->from(TABLE_INTEGRATION)->alias('t1')
+            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jenkins=t2.id')
+            ->where('t1.id')->eq($compile->cijob)
+            ->fetch();
+
+        if(!$integration) return false;
+
+        $buildUrl = $this->getBuildUrl($integration);
+        $build    = new stdclass();
+        $build->queueItem = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $build->status    = $build->queueItem ? 'created' : 'create_fail';
+        $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Execute by integration.
+     * 
+     * @param  int $compile 
+     * @access public
+     * @return bool
+     */
+    public function execByIntegration($integrationID, $data = null)
+    {
+        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jenkinsJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+            ->from(TABLE_INTEGRATION)->alias('t1')
+            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jenkins=t2.id')
+            ->where('t1.id')->eq($integrationID)
+            ->fetch();
+
+        if(!$integration) return false;
+
+        $buildUrl = $this->getBuildUrl($integration);
+        $build    = new stdClass();
+        $build->cijob       = $integration->jobId;
+        $build->name        = $integration->jobName;
+        $build->queueItem   = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $build->status      = $build->queueItem ? 'created' : 'create_fail';
+        $build->createdBy   = $this->app->user->account;
+        $build->createdDate = helper::now();
+        $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
+
+        return !dao::isError();
+    }
+
+    /**
+     * Get build url.
+     * 
+     * @param  object $jenkins 
+     * @access public
+     * @return string
+     */
+    public function getBuildUrl($jenkins)
+    {
+        $jenkinsServer   = $jenkins->serviceUrl;
+        $jenkinsUser     = $jenkins->account;
+        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+
+        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
+        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
+        $buildUrl      = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jenkinsJob);
+        return $buildUrl;
     }
 }
