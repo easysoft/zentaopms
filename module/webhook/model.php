@@ -218,6 +218,7 @@ class webhookModel extends model
             ->remove('allParams, allActions')
             ->get();
         $webhook->params  = $this->post->params ? implode(',', $this->post->params) . ',text' : 'text';
+
         if($webhook->type == 'dingapi')
         {
             $webhook->secret = array();
