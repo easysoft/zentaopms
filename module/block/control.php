@@ -249,7 +249,7 @@ class block extends control
             $block->actionLink = '';
             if($block->block == 'overview')
             {
-                if($module == 'qa'      && common::hasPriv('testcase', 'create'))
+                if($module == 'qa' && common::hasPriv('testcase', 'create'))
                 {
                     $this->app->loadLang('testcase');
                     $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
@@ -743,9 +743,10 @@ class block extends control
      * Print product statistic block.
      *
      * @access public
+     * @param  string $storyType requirement|story
      * @return void
      */
-    public function printProductStatisticBlock()
+    public function printProductStatisticBlock($storyType = 'story')
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
@@ -765,6 +766,7 @@ class block extends control
         $stories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
+            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
             ->groupBy('product, stage')
             ->fetchGroup('product', 'stage');
         /* Padding the stories to sure all status have records. */

@@ -85,7 +85,7 @@
                       <?php $inputName = $stepResult['type'] != 'group' ? 'stepIdList[]' : '';?>
                       <div class='checkbox-primary'>
                         <input type='checkbox' id='<?php echo $inputName;?>' name='<?php echo $inputName;?>'  value='<?php echo $key;?>'/>
-                        <label><?php echo $stepId;?></label>
+                        <label><?php if($stepClass == 'step-group') echo $stepId;?></label>
                       </div>
                       <?php else:?>
                       <?php echo $stepId;?>

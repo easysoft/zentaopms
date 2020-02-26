@@ -166,16 +166,24 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dingapi')
+        if($webhook->type != 'dingapi' && $webhook->type != 'wechatApi')
         {
             echo js::alert($this->lang->webhook->note->bind);
             die(js::locate($this->createLink('webhook', 'browse')));
         }
         $webhook->secret = json_decode($webhook->secret);
 
-        $this->app->loadClass('dingapi', true);
-        $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
-        $response = $dingapi->getAllUsers();
+        if($webhook->type == 'dingapi'){
+            $this->app->loadClass('dingapi', true);
+            $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $response = $dingapi->getAllUsers();
+        }elseif ($webhook->type == 'wechatApi')
+        {
+            $this->app->loadClass('wechatapi', true);
+            $wechatApi  = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
+            $response = $wechatApi->getAllUsers();
+        }
+
         if($response['result'] == 'fail')
         {
             echo js::error($response['message']);
@@ -204,6 +212,7 @@ class webhook extends control
         $this->view->position[] = html::a($this->createLink('webhook', 'browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->bind;
 
+        $this->view->webhook     = $webhook;
         $this->view->dingUsers   = $dingUsers;
         $this->view->useridPairs = $useridPairs;
         $this->view->users       = $users;

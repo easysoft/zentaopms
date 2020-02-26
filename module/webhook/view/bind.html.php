@@ -10,8 +10,9 @@
         <tr class='text-center'>
           <th class='text-left'><?php echo $lang->user->account?></th>
           <th class='w-200px text-left'><?php echo $lang->user->realname?></th>
-          <th class='w-200px'><?php echo $lang->webhook->dingUserid?></th>
-          <th class='w-100px'><?php echo $lang->webhook->dingBindStatus?></th>
+          <th class='w-200px'><?php echo $webhook->type == 'dingapi' ? $lang->webhook->dingUserid : $lang->webhook->wechatUserid;?></th>
+          <th class='w-100px'><?php echo $lang->actions;?></th>
+          <th class='w-100px'><?php echo $webhook->type == 'dingapi' ? $lang->webhook->dingBindStatus : $lang->webhook->wechatBindStatus;?></th>
         </tr>
         </thead>
         <tbody>
@@ -33,7 +34,9 @@
               $userid = $dingUsers[$user->realname];
           }
           ?>
-          <td><?php echo html::select("userid[{$user->account}]", $useridPairs, $userid, 'class="form-control"')?></td>
+<!--          <td>--><?php //echo html::select("userid[{$user->account}]", $useridPairs, 0, 'class="form-control"')?><!--</td>-->
+          <td ><?php echo '<span class="label label-badge label-primary label-outline">' . $useridPairs[$userid] . '</span>'; echo html::input("userid[{$user->account}]", $userid, 'class="form-control hidden"');?></td>
+          <td class='text-center c-actions'><?php echo '<button class="btn bind" type="button" data-value="userid[' . $user->account . ']"><i class="icon-common-edit icon-edit"></i></button>';?></td>
           <td class='text-center'><?php echo zget($lang->webhook->dingBindStatusList, $bindStatus, '');?></td>
         </tr>
         <?php $inputVars += 1;?>
@@ -50,14 +53,43 @@
       </div>
       <?php endif;?>
     </form>
+    <div class="content" id="user-list">
+      <?php echo html::select("userid", $useridPairs, 0, 'class="form-control" id="user-select"')?>
+      <div class='table-footer'>
+          <?php echo html::submitButton($lang->save, '', 'btn btn-primary btn-select');?>
+          <?php echo html::submitButton($lang->cancel, '', 'btn btn-close');?>
+      </div>
+      <script>
+        $(".btn-close").click(function(){myModalTrigger.close()});
+        $(".btn-select").click(function()
+          {
+              var inputValue1 = $("#user-select option:selected").val();
+              var spanValue = $("#user-select option:selected").text();
+              var inputName = $("#save-input").children('input').eq(0).attr("name");
+              setInput(inputName, inputValue1, spanValue);
+              myModalTrigger.close()
+          });
+      </script>
+    </div>
+    <div id="save-input"></div>
   </div>
 </div>
 <script>
+var myModalTrigger = myModalTrigger = new $.zui.ModalTrigger({title:"<?php echo $lang->webhook->bind;?>", custom:$('#user-list').html(), height:"auto"});
+$(function () {$("#user-list").html("");});
+$(".bind").on("click",function()
+{
+  var inputName = this.getAttribute("data-value");
+  $("#save-input").html();
+  $("#save-input").html("<input type='hidden' name='" + inputName + "' value=''>");
+  myModalTrigger.show();
+});
+function setInput(setName, setValue1, spanValue){$("input[name='" + setName + "']").attr("value", setValue1); $("input[name='" + setName + "']").prev().html(spanValue);}
 <?php if(common::judgeSuhosinSetting($inputVars)):?>
 $(function()
 {
     $('.table-footer').before("<div class='alert alert-info'><?php echo  extension_loaded('suhosin') ? trim(sprintf($lang->suhosinInfo, $inputVars)) : trim(sprintf($lang->maxVarsInfo, $inputVars));?></div>")
-})
+});
 <?php endif;?>
 </script>
 <?php include '../../common/view/footer.html.php';?>
