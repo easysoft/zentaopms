@@ -68,19 +68,16 @@ $('#triggerType').change(function()
     var type = $(this).val();
     if(type == 'tag')
     {
-        $('.tag-fields').removeClass('hidden');
         $('.comment-fields').addClass('hidden');
         $('.custom-fields').addClass('hidden');
     }
     else if(type == 'commit')
     {
-        $('.tag-fields').addClass('hidden');
         $('.comment-fields').removeClass('hidden');
         $('.custom-fields').addClass('hidden');
     }
     else if(type == 'schedule')
     {
-        $('.tag-fields').addClass('hidden');
         $('.comment-fields').addClass('hidden');
         $('.custom-fields').removeClass('hidden');
     }

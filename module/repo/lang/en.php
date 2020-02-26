@@ -21,6 +21,7 @@ $lang->repo->deleteBug       = 'Delete Bug';
 $lang->repo->addComment      = 'Add Comment';
 $lang->repo->editComment     = 'Edit Comment';
 $lang->repo->deleteComment   = 'Delete Comment';
+$lang->repo->selectModule    = 'Select Module';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';

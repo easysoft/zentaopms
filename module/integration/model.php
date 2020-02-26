@@ -75,6 +75,10 @@ class integrationModel extends model
             if(!isset($integration->scheduleDay)) $integration->scheduleDay = array();
             $integration->scheduleDay = join(',', $integration->scheduleDay);
         }
+        else
+        {
+            $integration->scheduleDay = '';
+        }
 
         $this->dao->insert(TABLE_INTEGRATION)->data($integration)
             ->batchCheck($this->config->integration->create->requiredFields, 'notempty')
@@ -99,7 +103,7 @@ class integrationModel extends model
     public function update($id)
     {
         $oldIntegration = $this->getById($id);
-        $integration = fixer::input('post')
+        $integration    = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->remove('repoType')
@@ -108,6 +112,10 @@ class integrationModel extends model
         {
             if(!isset($integration->scheduleDay)) $integration->scheduleDay = array();
             $integration->scheduleDay = join(',', $integration->scheduleDay);
+        }
+        else
+        {
+            $integration->scheduleDay = '';
         }
 
         $this->dao->update(TABLE_INTEGRATION)->data($integration)

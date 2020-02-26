@@ -20,8 +20,7 @@ $lang->integration->scheduleDay = '自定义天数';
 $lang->integration->lastExec    = '最后执行';
 
 $lang->integration->example    = '举例';
-$lang->integration->tagEx      = 'build_#15，其中15为Jenkins任务编号';
-$lang->integration->commitEx   = 'start build #15，其中15为Jenkins任务编号';
+$lang->integration->commitEx   = '%build% %integration% %id%15，其中15为Jenkins任务编号';
 $lang->integration->cronSample = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
 $lang->integration->sendExec   = '发送执行请求成功！';
 

@@ -21,6 +21,7 @@ $lang->repo->deleteBug       = '删除评审';
 $lang->repo->addComment      = '添加备注';
 $lang->repo->editComment     = '编辑备注';
 $lang->repo->deleteComment   = '删除备注';
+$lang->repo->selectModule    = '选择模块';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -127,9 +128,11 @@ $lang->repo->notice->lastSyncTime   = '最后更新于：';
 
 $lang->repo->matchComment = new stdclass();
 $lang->repo->matchComment->exampleLabel = "注释示例";
-$lang->repo->matchComment->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
-$lang->repo->matchComment->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
-$lang->repo->matchComment->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
+$lang->repo->matchComment->example['story']['common']      = "%story% %id%1%split%2";
+$lang->repo->matchComment->example['task']['start']        = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->matchComment->example['task']['finish']       = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
+$lang->repo->matchComment->example['bug']['resolve']       = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
+$lang->repo->matchComment->example['integration']['start'] = "%build% %integration% %id%1%split%2";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = '你的服务器禁用了exec,shell_exec方法，无法使用该功能';

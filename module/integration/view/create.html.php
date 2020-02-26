@@ -45,13 +45,10 @@
             <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, '', "class='form-control chosen'");?></td>
             <td colspan="2"></td>
           </tr>
-          <tr class="tag-fields" class="tag-fields">
-            <th><?php echo $lang->integration->example; ?></th>
-            <td colspan="3"><?php echo $lang->integration->tagEx; ?></td>
-          </tr>
           <tr class="comment-fields" class="comment-fields">
             <th><?php echo $lang->integration->example; ?></th>
-            <td colspan="3"><?php echo $lang->integration->commitEx; ?></td>
+            <?php if(is_string($config->repo->matchComment)) $config->repo->matchComment = json_decode($config->repo->matchComment, true);?>
+            <td colspan="3"><?php echo str_replace(array('%build%', '%integration%', '%id%'), array($config->repo->matchComment['integration']['start'], $config->repo->matchComment['module']['integration'], $config->repo->matchComment['id']['mark']), $lang->integration->commitEx);?></td>
           </tr>
           <tr class="custom-fields">
             <th><?php echo $lang->integration->scheduleDay; ?></th>

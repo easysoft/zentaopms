@@ -577,12 +577,14 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function setMatchComment()
+    public function setMatchComment($module = '')
     {
         if($_POST)
         {
+            $module = $this->post->selectModule;
+            unset($_POST['selectModule']);
             $this->loadModel('setting')->setItem('system.repo.matchComment', json_encode($this->post->matchComment));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setMatchComment')));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setMatchComment', "module={$module}")));
         }
 
         $this->repo->setMenu($this->repos, $this->session->repoID, false);
@@ -596,6 +598,7 @@ class repo extends control
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setMatchComment;
         $this->view->position[] = $this->lang->repo->setMatchComment;
 
+        $this->view->selectModule = $module;
         $this->display();
     }
 
