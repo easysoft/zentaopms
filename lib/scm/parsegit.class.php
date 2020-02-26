@@ -4,6 +4,17 @@ class ParseGit
     public $client;
     public $root;
 
+    /**
+     * Construct 
+     * 
+     * @param  string $client 
+     * @param  string $root 
+     * @param  string $username 
+     * @param  string $password 
+     * @param  string $encoding 
+     * @access public
+     * @return void
+     */
     public function __construct($client, $root, $username, $password, $encoding = 'UTF-8')
     {
         putenv('LC_CTYPE=en_US.UTF-8');
@@ -16,6 +27,14 @@ class ParseGit
         exec("{$this->client} config core.quotepath false");
     }
 
+    /**
+     * List files.
+     * 
+     * @param  string $path 
+     * @param  string $revision 
+     * @access public
+     * @return array
+     */
     public function ls($path, $revision = 'HEAD')
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
@@ -70,6 +89,14 @@ class ParseGit
         return $infos;
     }
 
+    /**
+     * Get tags 
+     * 
+     * @param  string $path 
+     * @param  string $revision 
+     * @access public
+     * @return array
+     */
     public function tags($path, $revision = 'HEAD')
     {
         chdir($this->root);
@@ -79,6 +106,12 @@ class ParseGit
         return $list;
     }
 
+    /**
+     * Get branch 
+     * 
+     * @access public
+     * @return array
+     */
     public function branch()
     {
         chdir($this->root);
@@ -101,6 +134,14 @@ class ParseGit
         return $branches;
     }
 
+    /**
+     * Get last log. 
+     * 
+     * @param  string $path 
+     * @param  int    $count 
+     * @access public
+     * @return array
+     */
     public function getLastLog($path, $count = 10)
     {
         $path     = ltrim($path, DIRECTORY_SEPARATOR);
@@ -113,6 +154,16 @@ class ParseGit
         return $logs;
     }
 
+    /**
+     * Get logs
+     * 
+     * @param  string $path 
+     * @param  string $fromRevision 
+     * @param  string $toRevision 
+     * @param  int    $count 
+     * @access public
+     * @return array
+     */
     public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0)
     {
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
@@ -145,6 +196,14 @@ class ParseGit
         return $logs;
     }
 
+    /**
+     * Blame file
+     * 
+     * @param  string $path 
+     * @param  string $revision 
+     * @access public
+     * @return array
+     */
     public function blame($path, $revision)
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
@@ -187,6 +246,15 @@ class ParseGit
         return $blames;
     }
 
+    /**
+     * Diff file.
+     * 
+     * @param  string $path 
+     * @param  string $fromRevision 
+     * @param  string $toRevision 
+     * @access public
+     * @return array
+     */
     public function diff($path, $fromRevision, $toRevision)
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
@@ -202,6 +270,14 @@ class ParseGit
         return $lines;
     }
 
+    /**
+     * Cat file.
+     * 
+     * @param  string $entry 
+     * @param  string $revision 
+     * @access public
+     * @return string
+     */
     public function cat($entry, $revision = 'HEAD')
     {
         chdir($this->root);
@@ -212,6 +288,14 @@ class ParseGit
         return $content;
     }
 
+    /**
+     * Get info.
+     * 
+     * @param  string $entry 
+     * @param  string $revision 
+     * @access public
+     * @return object
+     */
     public function info($entry, $revision = 'HEAD')
     {
         chdir($this->root);
@@ -244,6 +328,13 @@ class ParseGit
         return $info;
     }
 
+    /**
+     * Parse diff.
+     * 
+     * @param  array $lines 
+     * @access public
+     * @return array
+     */
     public function parseDiff($lines)
     {
         if(empty($lines)) return array();
@@ -332,6 +423,14 @@ class ParseGit
         return $diffs;
     }
 
+    /**
+     * Get commit count.
+     * 
+     * @param  int    $commits 
+     * @param  string $lastVersion 
+     * @access public
+     * @return int
+     */
     public function getCommitCount($commits = 0, $lastVersion = '')
     {
         chdir($this->root);
@@ -339,6 +438,12 @@ class ParseGit
         return execCmd(escapeCmd("$this->client rev-list --count $revision -- ./"), 'string');
     }
 
+    /**
+     * Get first revision.
+     * 
+     * @access public
+     * @return string
+     */
     public function getFirstRevision()
     {
         chdir($this->root);
@@ -346,6 +451,12 @@ class ParseGit
         return $list[0];
     }
 
+    /**
+     * Get latest revision 
+     * 
+     * @access public
+     * @return string
+     */
     public function getLatestRevision()
     {
         chdir($this->root);
@@ -354,6 +465,15 @@ class ParseGit
         return $list[0];
     }
 
+    /**
+     * Get commits.
+     * 
+     * @param  string $version 
+     * @param  int    $count 
+     * @param  string $branch 
+     * @access public
+     * @return array
+     */
     public function getCommits($version = '', $count = 0, $branch = '')
     {
         if($version == 'HEAD' and $branch) $version = $branch;
@@ -406,6 +526,13 @@ class ParseGit
         return $logs;
     }
 
+    /**
+     * Parse log.
+     * 
+     * @param  array  $logs 
+     * @access public
+     * @return array
+     */
     public function parseLog($logs)
     {
         $parsedLogs = array();

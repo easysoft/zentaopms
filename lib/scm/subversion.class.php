@@ -9,6 +9,17 @@ class Subversion
     public $remote;
     public $encoding;
 
+    /**
+     * Construct 
+     * 
+     * @param  string $client 
+     * @param  string $root 
+     * @param  string $account 
+     * @param  string $password 
+     * @param  string $encoding 
+     * @access public
+     * @return void
+     */
     public function __construct($client, $root, $account, $password, $encoding = 'UTF-8')
     {
         putenv('LC_CTYPE=en_US.UTF-8');
@@ -22,6 +33,14 @@ class Subversion
         if($this->encoding == 'utf-8') $this->encoding = 'gbk';
     }
 
+    /**
+     * List files. 
+     * 
+     * @param  string $path 
+     * @param  string $revision 
+     * @access public
+     * @return array
+     */
     public function ls($path, $revision = 'HEAD')
     {
         $resourcePath = $path;
@@ -65,6 +84,15 @@ class Subversion
         return $infos;
     }
 
+    /**
+     * Get tags.
+     * 
+     * @param  string $path 
+     * @param  string $revision 
+     * @param  bool   $onlyDir 
+     * @access public
+     * @return array
+     */
     public function tags($path, $revision = 'HEAD', $onlyDir = true)
     {
         $infos = $this->ls($path, $revision);
@@ -78,11 +106,25 @@ class Subversion
         return $tags;
     }
 
+    /**
+     * Get branch.
+     * 
+     * @access public
+     * @return array
+     */
     public function branch()
     {
         return array();
     }
 
+    /**
+     * Get last log.
+     * 
+     * @param  string $path 
+     * @param  int    $count 
+     * @access public
+     * @return array
+     */
     public function getLastLog($path, $count = 10)
     {
         $resourcePath = $path;
@@ -123,6 +165,17 @@ class Subversion
         return $logs;
     }
 
+    /**
+     * Get log.
+     * 
+     * @param  string $path 
+     * @param  int    $fromRevision 
+     * @param  string $toRevision 
+     * @param  int    $count 
+     * @param  bool   $quiet 
+     * @access public
+     * @return array
+     */
     public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0, $quiet = false)
     {
         $resourcePath = $path;
@@ -178,6 +231,14 @@ class Subversion
         return $logs;
     }
 
+    /**
+     * Blame file.
+     * 
+     * @param  string $path 
+     * @param  int    $revision 
+     * @access public
+     * @return array
+     */
     public function blame($path, $revision)
     {
         $resourcePath = $path;
@@ -238,6 +299,15 @@ class Subversion
         return $blames;
     }
 
+    /**
+     * Diff file.
+     * 
+     * @param  string $path 
+     * @param  int    $fromRevision 
+     * @param  int    $toRevision 
+     * @access public
+     * @return array
+     */
     public function diff($path, $fromRevision, $toRevision)
     {
         $resourcePath = $path;
@@ -254,6 +324,14 @@ class Subversion
         return $lines;
     }
 
+    /**
+     * Cat file.
+     * 
+     * @param  string $entry 
+     * @param  string $revision 
+     * @access public
+     * @return string
+     */
     public function cat($entry, $revision = 'HEAD')
     {
         $resourcePath = $entry;
@@ -269,6 +347,14 @@ class Subversion
         return $content;
     }
 
+    /**
+     * Get info.
+     * 
+     * @param  string $entry 
+     * @param  string $revision 
+     * @access public
+     * @return object
+     */
     public function info($entry, $revision = 'HEAD')
     {
         $resourcePath = $entry;
@@ -300,6 +386,13 @@ class Subversion
         return $info;
     }
 
+    /**
+     * Parse diff.
+     * 
+     * @param  array  $lines 
+     * @access public
+     * @return array
+     */
     public function parseDiff($lines)
     {
         if(empty($lines)) return array();
@@ -373,6 +466,14 @@ class Subversion
         return $diffs;
     }
 
+    /**
+     * Get commit count.
+     * 
+     * @param  int    $commits 
+     * @param  int    $lastVersion 
+     * @access public
+     * @return int
+     */
     public function getCommitCount($commits = 0, $lastVersion = 0)
     {
         if(empty($commits))     $commits     = 0;
@@ -396,6 +497,12 @@ class Subversion
         return $commits;
     }
 
+    /**
+     * Get first revision.
+     * 
+     * @access public
+     * @return int
+     */
     public function getFirstRevision()
     {
         $logs     = $this->log('', 0, 'HEAD', 1, $quiet = true);
@@ -404,12 +511,26 @@ class Subversion
         return $firstLog->revision;
     }
 
+    /**
+     * Get latest revision.
+     * 
+     * @access public
+     * @return int
+     */
     public function getLatestRevision()
     {
         $info = $this->info('');
         return $info->cRevision;
     }
 
+    /**
+     * Get commits.
+     * 
+     * @param  string $version 
+     * @param  int    $count 
+     * @access public
+     * @return array
+     */
     public function getCommits($version = '', $count = 0)
     {
         $count = $count == 0 ? '' : "--limit $count";
@@ -458,11 +579,27 @@ class Subversion
         return $logs;
     }
 
+    /**
+     * Replace svn auth.
+     * 
+     * @param  string $cmd 
+     * @access public
+     * @return string
+     */
     public function replaceAuth($cmd)
     {
         return str_replace(array('@account@', '@password@'), array($this->account, $this->password), $cmd);
     }
 
+    /**
+     * Build command. 
+     * 
+     * @param  string $path 
+     * @param  string $action 
+     * @param  string $param 
+     * @access public
+     * @return string
+     */
     public function buildCMD($path, $action, $param)
     {
         if($this->ssh)
