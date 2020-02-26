@@ -177,12 +177,6 @@ class cron extends control
             $this->common->loadConfigFromDB();
             foreach($parsedCrons as $id => $cron)
             {
-                // TODO: debug cron dow = 2-6/1
-                $temp = $now > $cron['time'];
-                if ($id == 13 && $temp) {
-                    error_log($temp . ' = ' . date_format($now, "Y/m/d H:i:s") . ' > ' . date_format($cron['time'], "Y/m/d H:i:s"));
-                }
-
                 $cronInfo = $this->cron->getById($id);
                 /* Skip empty and stop cron.*/
                 if(empty($cronInfo) or $cronInfo->status == 'stop') continue;
@@ -217,15 +211,12 @@ class cron extends control
                         }
 
                         /* Save log. */
-                        $log  = '';
-                        $time = $now->format('G:i:s');
-                        if (empty($output)) {
-                            $output = "\n";
-                        }
-                        if (strlen($output) > 100) { // return if output a lot of info
-                            $output = "\n" . $output;
-                        }
-                        $log  = "$time task " .  $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
+                        $log    = '';
+                        $time   = $now->format('G:i:s');
+                        $output = "\n";
+                        if(strlen($output) > 100) $output = "\n" . $output;
+
+                        $log = "$time task " . $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
                         $this->cron->logCron($log);
                         unset($log);
                     }

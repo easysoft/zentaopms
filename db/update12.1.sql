@@ -1,11 +1,3 @@
-
-CREATE TABLE `zt_tag` (
-  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `repo` mediumint(9) NOT NULL,
-  `name` varchar(40) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 CREATE TABLE `zt_jenkins` (
   `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,

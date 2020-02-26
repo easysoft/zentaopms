@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `duplicateBug` mediumint(8) unsigned NOT NULL,
   `linkBug` varchar(255) NOT NULL,
   `case` mediumint(8) unsigned NOT NULL,
-  `caseVersion` smallint(6) NOT NULL DEFAULT 1,
+  `caseVersion` smallint(6) NOT NULL DEFAULT '1',
   `result` mediumint(8) unsigned NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `entry` varchar(255) NOT NULL,
@@ -1102,13 +1102,6 @@ CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   KEY `parent` (`parent`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-CREATE TABLE `zt_tag` (
-  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `repo` mediumint(9) NOT NULL,
-  `name` varchar(40) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 CREATE TABLE `zt_jenkins` (
   `id` smallint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -1174,8 +1167,10 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=mail&methodName=asyncSend',      '异步发信',        'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=webhook&methodName=asyncSend',   '异步发送Webhook', 'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=admin&methodName=deleteLog',     '删除过期日志',    'zentao', 1, 'normal', '0000-00-00 00:00:00'),
-('1',    '1',    '*',    '*',    '*',    'moduleName=todo&methodName=createCycle',    '生成周期性待办',  'zentao', 1, 'normal', '0000-00-00 00:00:00');
-('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', 1, 'normal',   '0000-00-00 00:00:00');
+('1',    '1',    '*',    '*',    '*',    'moduleName=todo&methodName=createCycle',    '生成周期性待办',  'zentao', 1, 'normal', '0000-00-00 00:00:00'),
+('1',    '1',    '*',    '*',    '*',    'moduleName=ci&methodName=buildTodayJob', '创建周期性任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
+('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行Jenkins任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00');
 
 INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (1, 'ADMIN', 'admin', 'for administrator'),

@@ -306,9 +306,6 @@ function ajaxDelete(url, replaceID, notice)
 {
     if(confirm(notice))
     {
-        console.log(url, replaceID);
-
-
         $.ajax(
         {
             type:     'GET',
@@ -316,7 +313,6 @@ function ajaxDelete(url, replaceID, notice)
             dataType: 'json',
             success:  function(data)
             {
-
                 if(data.result == 'success')
                 {
                     $.get(document.location.href, function(data)

@@ -295,6 +295,13 @@ class repoModel extends model
         return $repo;
     }
 
+    /**
+     * Get by id list.
+     * 
+     * @param  array  $idList 
+     * @access public
+     * @return array
+     */
     public function getByIdList($idList)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll();

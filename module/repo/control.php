@@ -75,7 +75,6 @@ class repo extends control
      */
     public function create()
     {
-
         if($_POST)
         {
             $repoID = $this->repo->create();
