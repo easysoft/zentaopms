@@ -63,7 +63,7 @@ zentaoxx:
 	cp -r xuan/xxb/db/*.sql zentaoxx/db/
 	cp -r xuan/xxb/module/im zentaoxx/module/
 	cp -r xuan/xxb/module/client zentaoxx/module/
-	cp -r xuan/xxb/module/common/ext/model/hook zentaoxx/module/common/ext/model/
+	cp -r xuan/xxb/module/license zentaoxx/module/
 	mkdir -p zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view

@@ -1044,7 +1044,7 @@ class projectModel extends model
             $delay = helper::diffDate(helper::today(), $project->end);
             if($delay > 0) $project->delay = $delay;
         }
-        /* Fix bug #2943. */
+
         $total = $this->dao->select('
             SUM(estimate) AS totalEstimate,
             SUM(consumed) AS totalConsumed,
@@ -1433,7 +1433,7 @@ class projectModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->fetch('storyCount');
 
-        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('parent')->lt(1)->andWhere('deleted')->eq(0)->fetch('taskCount');
+        $taskCount = $this->dao->select('count(id) as taskCount')->from(TABLE_TASK)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('taskCount');
         $bugCount  = $this->dao->select('count(id) as bugCount')->from(TABLE_BUG)->where('project')->eq($projectID)->andWhere('deleted')->eq(0)->fetch('bugCount');
 
         $statData = new stdclass();
@@ -2698,7 +2698,7 @@ class projectModel extends model
         foreach($dateList as $i => $date) $baselineJSON .= round(($days - $i) * $rate, 1) . ',';
         $baselineJSON = rtrim($baselineJSON, ',') . ']';
 
-        $chartData['labels']   = $this->report->convertFormat($dateList, 'n/j');
+        $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baselineJSON;
 

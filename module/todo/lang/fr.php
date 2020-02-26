@@ -102,6 +102,7 @@ $lang->todo->lblBeforeDays  = "Créer une entrée %s jour(s) plus tôt";
 $lang->todo->lblClickCreate = "Cliquez pour ajouter une entrée";
 $lang->todo->noTodo         = 'Aucune entrée de ce type.';
 $lang->todo->noAssignedTo   = "Le champ Assigné à ne doit pas être vide.";
+$lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 
 $lang->todo->periods['all']        = 'Toutes les entrées';
 $lang->todo->periods['thisYear']   = 'Cette Année';

@@ -255,7 +255,7 @@ class backupModel extends model
     {
         $zfile = $this->app->loadClass('zfile');
         if(!is_dir($backupFile)) return $zfile->getFileSize($backupFile);
-        return $zfile->getDirSize($backupFile);
+        return 0;
     }
 
     /**

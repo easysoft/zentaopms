@@ -27,9 +27,13 @@ $lang->caselib->import           = '導入';
 $lang->caselib->importAction     = '導入用例';
 $lang->caselib->showImport       = '顯示導入數據';
 
-$lang->caselib->id   = '編號';
-$lang->caselib->name = '名稱';
-$lang->caselib->desc = '描述';
+$lang->caselib->id             = '編號';
+$lang->caselib->name           = '名稱';
+$lang->caselib->desc           = '描述';
+$lang->caselib->addedBy        = '由誰創建';
+$lang->caselib->addedDate      = '創建時間';
+$lang->caselib->lastEditedBy   = '最後編輯人';
+$lang->caselib->lastEditedDate = '最後編輯時間';
 
 $lang->caselib->legendDesc = '描述';
 

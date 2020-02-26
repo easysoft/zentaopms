@@ -153,15 +153,14 @@ class searchModel extends model
                 $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
             }
 
-            /* Set filed name. */
+            /* Processing query criteria. */
             if($operator == '=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
             {
                 $condition  = '`' . $this->post->$fieldName . "` >= '$value' AND `" . $this->post->$fieldName . "` <= '$value 23:59:59'";
                 $where     .= " $andOr ($condition)";
             }
-            elseif ($operator == '<=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
+            elseif($operator == '<=' and preg_match('/^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$/', $value))
             {
-                /* Fix bug #2896. */
                 $where .= " $andOr " . '`' . $this->post->$fieldName . "` <= '$value 23:59:59'";
             }
             elseif($condition)

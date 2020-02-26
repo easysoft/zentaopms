@@ -69,16 +69,18 @@ class storyModel extends model
      * Get stories by idList.
      *
      * @param  int|array|string    $storyIdList
+     * @param  string $type requirement|story
      * @access public
      * @return array
      */
-    public function getByList($storyIdList = 0)
+    public function getByList($storyIdList = 0, $type = 'story')
     {
         return $this->dao->select('t1.*, t2.spec, t2.verify')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.version=t2.version')
             ->beginIF($storyIdList)->andWhere('t1.id')->in($storyIdList)->fi()
+            ->beginIF(!$storyIdList)->andWhere('t1.type')->eq($type)->fi()
             ->fetchAll('id');
     }
 
@@ -259,8 +261,9 @@ class storyModel extends model
      *
      * @access public
      * @return int|bool the id of the created story or false when error.
+     * @return type requirement|story
      */
-    public function batchCreate($productID = 0, $branch = 0)
+    public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
         $this->loadModel('action');
         $branch    = (int)$branch;
@@ -297,6 +300,7 @@ class storyModel extends model
         {
             if(empty($title)) continue;
             $story = new stdclass();
+            $story->type       = $type;
             $story->branch     = isset($stories->branch[$i]) ? $stories->branch[$i] : 0;
             $story->module     = $stories->module[$i];
             $story->plan       = $stories->plan[$i];
@@ -1385,13 +1389,14 @@ class storyModel extends model
      * @param  int          $branch
      * @param  array|string $moduleIdList
      * @param  string       $status
+     * @param  string       $type    requirement|story
      * @param  string       $orderBy
      * @param  object       $pager
      *
      * @access public
      * @return array
      */
-    public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $type = 'story', $orderBy = 'id_desc', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
@@ -1407,6 +1412,7 @@ class storyModel extends model
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq($type)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $this->mergePlanTitle($productID, $stories, $branch);
     }
@@ -1419,10 +1425,12 @@ class storyModel extends model
      * @param  string        $status
      * @param  string        $order
      * @param  int           $limit
+     * @param  string        $type
+     * @param  string        $storyType    requirement|story
      * @access public
      * @return array
      */
-    public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full')
+    public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story')
     {
         if($branch) $branch = "0,$branch";//Fix bug 1059.
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
@@ -1433,6 +1441,7 @@ class storyModel extends model
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->eq($storyType)
             ->orderBy($order)
             ->fetchAll();
         if(!$stories) return array();
@@ -1444,14 +1453,15 @@ class storyModel extends model
      *
      * @param  int    $productID
      * @param  string $account
+     * @param  string $type    requirement|story
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getByAssignedTo($productID, $branch, $modules, $account, $orderBy, $pager)
+    public function getByAssignedTo($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, $modules, 'assignedTo', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'assignedTo', $account, $type, $orderBy, $pager);
     }
 
     /**
@@ -1459,14 +1469,15 @@ class storyModel extends model
      *
      * @param  int    $productID
      * @param  string $account
+     * @param  string $type    requirement|story
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getByOpenedBy($productID, $branch, $modules, $account, $orderBy, $pager)
+    public function getByOpenedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, $modules, 'openedBy', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'openedBy', $account, $type, $orderBy, $pager);
     }
 
     /**
@@ -1474,14 +1485,15 @@ class storyModel extends model
      *
      * @param  int    $productID
      * @param  string $account
+     * @param  string $type    requirement|story
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getByReviewedBy($productID, $branch, $modules, $account, $orderBy, $pager)
+    public function getByReviewedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, $modules, 'reviewedBy', $account, $orderBy, $pager, 'include');
+        return $this->getByField($productID, $branch, $modules, 'reviewedBy', $account, $type, $orderBy, $pager, 'include');
     }
 
     /**
@@ -1489,45 +1501,48 @@ class storyModel extends model
      *
      * @param  int    $productID
      * @param  string $account
+     * @param  string $type    requirement|story
      * @param  string $orderBy
      * @param  object $pager
      * @return array
      */
-    public function getByClosedBy($productID, $branch, $modules, $account, $orderBy, $pager)
+    public function getByClosedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, $modules, 'closedBy', $account, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'closedBy', $account, $type, $orderBy, $pager);
     }
 
     /**
      * Get stories by status.
      *
      * @param  int    $productID
+     * @param  string $status
+     * @param  string $type    requirement|story
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $status
      * @access public
      * @return array
      */
-    public function getByStatus($productID, $branch, $modules, $status, $orderBy, $pager)
+    public function getByStatus($productID, $branch, $modules, $status, $type = 'story', $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, $modules, 'status', $status, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'status', $status, $type, $orderBy, $pager);
     }
 
     /**
      * Get stories by plan.
      *
-     * @param $productID
-     * @param $branch
-     * @param $modules
-     * @param $plan
-     * @param $orderBy
-     * @param $pager
+     * @param int    $productID
+     * @param int    $branch
+     * @param array  $modules
+     * @param int    $plan
+     * @param string $type    requirement|story
+     * @param string $orderBy
+     * @param object $pager
      *
      * @return array
      */
-    public function getByPlan($productID, $branch, $modules, $plan, $orderBy, $pager)
+    public function getByPlan($productID, $branch, $modules, $plan, $type = 'story', $orderBy, $pager)
     {
-        return $this->getByField($productID, $branch, $modules, 'plan', $plan, $orderBy, $pager);
+        return $this->getByField($productID, $branch, $modules, 'plan', $plan, $type, $orderBy, $pager);
     }
 
     /**
@@ -1536,18 +1551,20 @@ class storyModel extends model
      * @param  int    $productID
      * @param  string $fieldName
      * @param  mixed  $fieldValue
+     * @param  string $type         requirement|story
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $operator     equal|include
      * @access public
      * @return array
      */
-    public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $orderBy, $pager, $operator = 'equal')
+    public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $type = 'story', $orderBy, $pager, $operator = 'equal')
     {
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName)) return array();
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq($type)
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
@@ -1562,15 +1579,17 @@ class storyModel extends model
      * Get to be closed stories.
      *
      * @param  int    $productID
+     * @param  string $type requirement|story
      * @param  string $orderBy
      * @param  string $pager
      * @access public
      * @return array
      */
-    public function get2BeClosed($productID, $branch, $modules, $orderBy, $pager)
+    public function get2BeClosed($productID, $branch, $modules, $type = 'story', $orderBy, $pager)
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
+            ->andWhere('type')->eq($type)
             ->beginIF($branch)->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->andWhere('deleted')->eq(0)
@@ -1591,10 +1610,12 @@ class storyModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $projectID
+     * @param  int    $branch
+     * @param  string $type requirement|story
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0)
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $projectID = '', $branch = 0, $type = 'story')
     {
         if($projectID != '')
         {
@@ -1646,7 +1667,7 @@ class storyModel extends model
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
-        return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager);
+        return $this->getBySQL($queryProductID, $storyQuery, $orderBy, $pager, $type);
     }
 
     /**
@@ -1656,10 +1677,11 @@ class storyModel extends model
      * @param  string $sql
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $type requirement|story
      * @access public
      * @return array
      */
-    public function getBySQL($productID, $sql, $orderBy, $pager = null)
+    public function getBySQL($productID, $sql, $orderBy, $pager = null, $type = 'story')
     {
         /* Get plans. */
         $plans = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)
@@ -1673,6 +1695,7 @@ class storyModel extends model
             ->where($sql)
             ->beginIF($productID != 'all' and $productID != '')->andWhere('t1.`product`')->eq((int)$productID)->fi()
             ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq($type)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
@@ -1696,6 +1719,9 @@ class storyModel extends model
      *
      * @param  int    $projectID
      * @param  string $orderBy
+     * @param  string $type
+     * @param  int    $param
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -1858,14 +1884,16 @@ class storyModel extends model
      * @param  string $type         the query type
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $storyType    requirement|story
      * @access public
      * @return array
      */
-    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null)
+    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story')
     {
         $stories = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->eq($storyType)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
@@ -1889,14 +1917,16 @@ class storyModel extends model
      *
      * @param  string    $account
      * @param  string    $limit
+     * @param  string    $type requirement|story
      * @access public
      * @return array
      */
-    public function getUserStoryPairs($account, $limit = 10)
+    public function getUserStoryPairs($account, $limit = 10, $type = 'story')
     {
         return $this->dao->select('id, title')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($type)
             ->andWhere('assignedTo')->eq($account)
             ->orderBy('id_desc')
             ->limit($limit)
@@ -1954,7 +1984,7 @@ class storyModel extends model
      */
     public function getZeroCase($productID, $orderBy = 'id_desc')
     {
-        $allStories   = $this->getProductStories($productID, 0, 0, 'all', $orderBy);
+        $allStories   = $this->getProductStories($productID, 0, 0, 'all', 'story', $orderBy);
         $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
 
         foreach($allStories as $key => $story)

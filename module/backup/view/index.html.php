@@ -31,7 +31,7 @@
     </div>
   </div>
   <table class='table table-condensed table-bordered active-disabled table-fixed'>
-    <thead>
+    <thead class="text-center">
       <tr>
         <th class='w-150px'><?php echo $lang->backup->time?></th>
         <th><?php echo $lang->backup->files?></th>

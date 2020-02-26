@@ -12,3 +12,5 @@ tr,th,td {border-bottom:none;}
 .repoCode .image {text-align:center; padding-top:10px;}
 .panel .panel-heading .action .input-group {margin-top:-6px; margin-right:-10px;}
 .body-modal .panel-actions {right:30px;}
+.icon-angle-left{transform: rotateY(180deg);}
+#main {padding: 20px 0; overflow: hidden;}

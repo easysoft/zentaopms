@@ -12,7 +12,7 @@
     foreach($actions as $action)
     {
         $user = zget($users, $action->actor);
-        if($action->action == 'login' or $action->action == 'logout' or empty($action->objectLink)) $action->objectName = $action->objectLabel = '';
+        if($action->action == 'login' or $action->action == 'logout') $action->objectName = $action->objectLabel = '';
         $class = $action->major ? "class='active'" : '';
         echo "<li $class><div>";
         printf($lang->block->dynamicInfo, $action->date, $user, $action->actionLabel, $action->objectLabel, $action->objectLink, $action->objectName, $action->objectName);

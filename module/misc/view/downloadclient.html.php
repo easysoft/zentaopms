@@ -71,7 +71,7 @@
                   {
                       $('#setted').removeClass('hidden');
                       var link = createLink('misc', 'downloadClient', "action=downloadPackage" + '&os=' + os);
-                      parent.$.closeModal();
+                      $.closeModal();
                       location.href = link;
                   }
                   else

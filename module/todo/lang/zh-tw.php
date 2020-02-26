@@ -102,6 +102,7 @@ $lang->todo->lblBeforeDays  = "提前%s天生成待辦";
 $lang->todo->lblClickCreate = "點擊添加待辦";
 $lang->todo->noTodo         = '該類型沒有待辦事務';
 $lang->todo->noAssignedTo   = '被指派人不能為空';
+$lang->todo->unfinishedTodo = '待辦ID %s 不是完成狀態，不能關閉。';
 
 $lang->todo->periods['all']        = '所有待辦';
 $lang->todo->periods['thisYear']   = '本年';

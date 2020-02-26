@@ -590,10 +590,9 @@ class actionModel extends model
     /**
      * Get actions as dynamic.
      * 
-     * @param  string $objectType 
-     * @param  string $count 
-     * @param  string $period 
-     * @param  string $orderBy 
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
      * @param  object $pager
      * @param  string|int $productID   all|int(like 123)|notzero   all => include zeror, notzero, great than 0
      * @param  string|int $projectID   same as productID
@@ -656,7 +655,6 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-       
         return $this->transformActions($actions);;
     }
 
