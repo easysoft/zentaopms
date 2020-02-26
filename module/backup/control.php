@@ -143,21 +143,20 @@ class backup extends control
         $backupFiles = glob("{$this->backupPath}*.*");
         if(!empty($backupFiles))
         {
-            $time = time();
+            $time  = time();
+            $zfile = $this->app->loadClass('zfile');
             foreach($backupFiles as $file)
             {
-                if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600) unlink($file);
+                if($time - filemtime($file) > $this->config->backup->holdDays * 24 * 3600)
+                {
+                    $rmFunc = is_file($file) ? 'removeFile' : 'removeDir';
+                    $zfile->{$rmFunc}($file);
+                }
             }
         }
 
-        if($reload == 'yes')
-        {
-            die(js::reload('parent'));
-        }
-        else
-        {
-            echo $this->lang->backup->success->backup . "\n";
-        }
+        if($reload == 'yes') die(js::reload('parent'));
+        echo $this->lang->backup->success->backup . "\n";
     }
 
     /**

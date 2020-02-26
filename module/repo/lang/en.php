@@ -1,11 +1,15 @@
 <?php
 $lang->repo->common          = 'Repo';
-$lang->repo->create          = 'Create Repo';
-$lang->repo->settings        = 'Settings';
-$lang->repo->browse          = 'View Repo';
+$lang->repo->browse          = 'View';
+$lang->repo->viewRevision    = 'View Revision';
+$lang->repo->create          = 'Create';
+$lang->repo->createAction    = 'Create Repo';
+$lang->repo->edit            = 'Edit';
+$lang->repo->editAction      = 'Edit Repo';
 $lang->repo->delete          = 'Delete Repo';
 $lang->repo->showSyncComment = 'Display Synchronization';
 $lang->repo->ajaxSyncComment = 'Interface: Ajax Sync Note';
+$lang->repo->setMatchComment = 'Set match comment';
 $lang->repo->download        = 'Download File';
 $lang->repo->downloadDiff    = 'Download Diff';
 $lang->repo->diffAction      = 'Revision Diff';
@@ -17,6 +21,7 @@ $lang->repo->deleteBug       = 'Delete Bug';
 $lang->repo->addComment      = 'Add Comment';
 $lang->repo->editComment     = 'Edit Comment';
 $lang->repo->deleteComment   = 'Delete Comment';
+$lang->repo->selectModule    = 'Select Module';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
@@ -40,6 +45,7 @@ $lang->repo->name      = 'Name';
 $lang->repo->path      = 'Path';
 $lang->repo->prefix    = 'Prefix';
 $lang->repo->config    = 'Config';
+$lang->repo->desc      = 'Describe';
 $lang->repo->account   = 'Username';
 $lang->repo->password  = 'Password';
 $lang->repo->encoding  = 'Encoding';
@@ -90,6 +96,8 @@ $lang->repo->commentEdit    = '<i class="icon-pencil"></i>';
 $lang->repo->commentDelete  = '<i class="icon-remove"></i>';
 $lang->repo->allChanges     = "Other Changes";
 $lang->repo->commitTitle    = "The %sth Commit";
+$lang->repo->mark           = "Mark Tag";
+$lang->repo->split          = "Split Mark";
 
 $lang->repo->viewDiffList['inline'] = 'Inline';
 $lang->repo->viewDiffList['appose'] = 'Parallel';
@@ -104,8 +112,8 @@ $lang->repo->logStyles['D'] = 'Delete';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Git']        = 'Git';
+$lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = 'Synchronizing. Please wait ...';
@@ -117,6 +125,12 @@ $lang->repo->notice->commentContent = 'Comment';
 $lang->repo->notice->deleteBug      = 'Are you sure to delete this bug?';
 $lang->repo->notice->deleteComment  = 'Are you sure to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';
+
+$lang->repo->matchComment = new stdclass();
+$lang->repo->matchComment->exampleLabel = "Comment Example";
+$lang->repo->matchComment->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->matchComment->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
+$lang->repo->matchComment->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = 'Your server disabled exec and shell_exec, so it cannot be applied.';
@@ -137,11 +151,18 @@ $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n"
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
 $lang->repo->error->encoding      = "The encoding maybe wrong. Please change the encoding and try again.";
 
-$lang->repo->example           = new stdclass();
-$lang->repo->example->client   = "For example, /usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
-$lang->repo->example->path     = "For example, SVN: http://example.googlecode.com/svn/, GIT: /home/test";
-$lang->repo->example->config   = "Config directory is required in https. Use '--config-dir' to generate config dir.";
-$lang->repo->example->encoding = "input encoding of files";
+$lang->repo->synTips       = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
+$lang->repo->encodingsTips = "The encodings of commit comments, can be comma separated values，e.g. utf-8";
+
+$lang->repo->example              = new stdclass();
+$lang->repo->example->client      = new stdclass();
+$lang->repo->example->path        = new stdclass();
+$lang->repo->example->client->git = "e.g. /usr/bin/git";
+$lang->repo->example->client->svn = "e.g. /usr/bin/svn";
+$lang->repo->example->path->git   = "e.g. /homt/user/myproject";
+$lang->repo->example->path->svn   = "e.g. http://example.googlecode.com/svn/trunk/myproject";
+$lang->repo->example->config      = "Config directory is required in https. Use '--config-dir' to generate config dir.";
+$lang->repo->example->encoding    = "input encoding of files";
 
 $lang->repo->typeList['standard']    = 'Standard';
 $lang->repo->typeList['performance'] = 'Performance';

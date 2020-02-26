@@ -869,7 +869,7 @@ class fileModel extends model
      * @access public
      * @return void
      */
-    public function sendDownHeader($fileName, $fileType, $content)
+    public function sendDownHeader($fileName, $fileType, $content, $type = 'content')
     {
         /* Clean the ob content to make sure no space or utf-8 bom output. */
         $obLevel = ob_get_level();
@@ -893,6 +893,14 @@ class fileModel extends model
         header("Content-Disposition: attachment; filename=\"$fileName\"");
         header("Pragma: no-cache");
         header("Expires: 0");
-        die($content);
+        if($type == 'content') die($content);
+        if($type == 'file' and file_exists($content))
+        {
+            $chunkSize = 1024 * 1024;
+            $handle    = fopen($content, "r");
+            while(!feof($handle)) echo fread($handle, $chunkSize);
+            fclose($handle);
+            die();
+        }
     }
 }

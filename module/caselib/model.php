@@ -579,6 +579,7 @@ class caselibModel extends model
         $this->loadModel('action');
 
         $now      = helper::now();
+        $libID    = (int)$libID;
         $cases    = fixer::input('post')->get();
         $batchNum = count(reset($cases));
 

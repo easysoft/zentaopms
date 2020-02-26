@@ -32,7 +32,7 @@ class repoModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($repos, $repoID = '')
+    public function setMenu($repos, $repoID = '', $showRepoSeletion = true)
     {
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
@@ -54,7 +54,7 @@ class repoModel extends model
             }
         }
 
-        if(!empty($repos))
+        if($showRepoSeletion && !empty($repos))
         {
             $repoIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
             $repoIndex .= $this->select($repos, $repoID);
@@ -131,14 +131,21 @@ class repoModel extends model
     }
 
     /**
-     * Get all repos.
-     * 
+     * Get repo list.
+     *
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  bool   $decode
      * @access public
      * @return array
      */
-    public function getAllRepos()
+    public function getList($orderBy = 'id_desc', $pager = null)
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchAll();
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
         foreach($repos as $i => $repo)
         {
             $repo->acl = json_decode($repo->acl);
@@ -146,6 +153,109 @@ class repoModel extends model
         }
 
         return $repos;
+    }
+
+    /**
+     * Get list by SCM.
+     * 
+     * @param  strint $scm 
+     * @param  string $type 
+     * @access public
+     * @return array
+     */
+    public function getListBySCM($scm, $type = 'all')
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->andWhere('SCM')->eq($scm)
+            ->orderBy('id')
+            ->fetchAll();
+
+        foreach($repos as $i => $repo)
+        {
+            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+            $repo->acl = json_decode($repo->acl);
+            if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
+        }
+
+        return $repos;
+    }
+
+    /**
+     * Create a repo.
+     *
+     * @access public
+     * @return bool
+     */
+    public function create()
+    {
+        $this->checkConnection();
+        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
+        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
+        if(empty($data->client)) $data->client = 'svn';
+
+        if($data->SCM == 'Subversion')
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($data);
+            $info = $scm->info('');
+            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
+            if($data->prefix) $data->prefix = '/' . $data->prefix;
+        }
+
+        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
+        $this->dao->insert(TABLE_REPO)->data($data)
+            ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Update a repo.
+     *
+     * @param  int    $id
+     * @access public
+     * @return bool
+     */
+    public function update($id)
+    {
+        $this->checkConnection();
+        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
+        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
+
+        if(empty($data->client)) $data->client = 'svn';
+        $repo = $this->getRepoByID($id);
+        $data->prefix = $repo->prefix;
+        if($data->SCM == 'Subversion' and $data->path != $repo->path)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($data);
+            $info = $scm->info('');
+            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
+            if($data->prefix) $data->prefix = '/' . $data->prefix;
+        }
+        elseif($data->SCM != $repo->SCM and $data->SCM == 'Git')
+        {
+            $data->prefix = '';
+        }
+
+        if($data->path != $repo->path) $data->synced = 0;
+
+        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
+        $this->dao->update(TABLE_REPO)->data($data)
+            ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->autoCheck()
+            ->where('id')->eq($id)->exec();
+
+        if($repo->path != $data->path)
+        {
+            $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($id)->exec();
+            $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($id)->exec();
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -183,6 +293,25 @@ class repoModel extends model
         if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
         $repo->acl = json_decode($repo->acl);
         return $repo;
+    }
+
+    /**
+     * Get by id list.
+     * 
+     * @param  array  $idList 
+     * @access public
+     * @return array
+     */
+    public function getByIdList($idList)
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll();
+        foreach($repos as $i => $repo)
+        {
+            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
+            $repo->acl = json_decode($repo->acl);
+        }
+
+        return $repos;
     }
 
     /**
@@ -297,6 +426,36 @@ class repoModel extends model
     }
 
     /**
+     * Get revisions from db. 
+     * 
+     * @param  int    $repoID 
+     * @param  string $limit 
+     * @param  string $maxRevision 
+     * @param  string $minRevision 
+     * @access public
+     * @return array
+     */
+    public function getRevisionsFromDB($repoID, $limit = '', $maxRevision = '', $minRevision = '')
+    {
+        $revisions = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->where('t1.repo')->eq($repoID)
+            ->beginIF(!empty($maxRevision))->andWhere('t1.revision')->le($maxRevision)->fi()
+            ->beginIF(!empty($minRevision))->andWhere('t1.revision')->ge($minRevision)->fi()
+            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->orderBy('t1.revision desc')
+            ->beginIF(!empty($limit))->limit($limit)->fi()
+            ->fetchAll('revision');
+        $commiters = $this->loadModel('user')->getCommiters();
+        foreach($revisions as $revision)
+        {
+            $revision->comment   = $this->replaceCommentLink($revision->comment);
+            $revision->committer = isset($commiters[$revision->committer]) ? $commiters[$revision->committer] : $revision->committer;
+        }
+        return $revisions;
+    }
+
+    /**
      * Get git revisionName.
      * 
      * @param  string $revision 
@@ -308,75 +467,6 @@ class repoModel extends model
     {
         if(empty($commit)) return substr($revision, 0, 10);
         return substr($revision, 0, 10) . '<span title="' . sprintf($this->lang->repo->commitTitle, $commit) . '"> (' . $commit . ') </span>';
-    }
-
-    /**
-     * create 
-     * 
-     * @access public
-     * @return int
-     */
-    public function create()
-    {
-        $this->checkConnection();
-        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
-        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-        if(empty($data->client)) $data->client = 'svn';
-
-        if($data->SCM == 'Subversion')
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($data);
-            $info = $scm->info('');
-            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
-            if($data->prefix) $data->prefix = '/' . $data->prefix;
-        }
-
-        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->insert(TABLE_REPO)->data($data)->exec();
-        return $this->dao->lastInsertID();
-    }
-
-    /**
-     * Save settings.
-     * 
-     * @param  int    $repoID 
-     * @access public
-     * @return bool
-     */
-    public function saveSettings($repoID)
-    {
-        $this->checkConnection();
-        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
-        $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-
-        if(empty($data->client)) $data->client = 'svn';
-        $repo = $this->getRepoByID($repoID);
-        $data->prefix = $repo->prefix;
-        if($data->SCM == 'Subversion' and $data->path != $repo->path)
-        {
-            $scm = $this->app->loadClass('scm');
-            $scm->setEngine($data);
-            $info = $scm->info('');
-            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
-            if($data->prefix) $data->prefix = '/' . $data->prefix;
-        }
-        elseif($data->SCM != $repo->SCM and $data->SCM == 'Git')
-        {
-            $data->prefix = '';
-        }
-
-        if($data->path != $repo->path) $data->synced = 0;
-        if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
-        $this->dao->update(TABLE_REPO)->data($data)->where('id')->eq($repoID)->exec();
-        if($repo->path != $data->path)
-        {
-            $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
-            $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
-            $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -676,6 +766,7 @@ class repoModel extends model
      */
     public function encodePath($path = '')
     {
+        if(empty($path)) return $path;
         return helper::safe64Encode(urlencode($path));
     }
 
@@ -688,6 +779,7 @@ class repoModel extends model
      */
     public function decodePath($path = '')
     {
+        if(empty($path)) return $path;
         return trim(urldecode(helper::safe64Decode($path)), '/');
     }
 
@@ -801,7 +893,7 @@ class repoModel extends model
         $stories = array();
         $tasks   = array();
         $bugs    = array();
-        $commonReg = "(?:\s){0,}((?:#|:|：){0,})([0-9, ]{1,})";
+        $commonReg = "(?:\s){0,}((?:#|:|��){0,})([0-9, ]{1,})";
         $taskReg  = '/task' .  $commonReg . '/i';
         $storyReg = '/story' . $commonReg . '/i';
         $bugReg   = '/bug'   . $commonReg . '/i';
@@ -847,5 +939,129 @@ class repoModel extends model
             $replaceLines[$matches[0][$key]] = rtrim($links, $spit);
         }
         return $replaceLines;
+    }
+
+    /**
+     * Parse the comment of git, extract object id list from it.
+     *
+     * @param  string    $comment
+     * @access public
+     * @return array
+     */
+    public function parseComment($comment)
+    {
+        if(is_string($this->config->repo->matchComment)) $this->config->repo->matchComment = json_decode($this->config->repo->matchComment, true);
+        $matchComment = $this->config->repo->matchComment;
+
+        $matches      = array();
+        $stories      = array();
+        $tasks        = array();
+        $bugs         = array();
+        $integrations = array();
+        $actions      = array();
+        while(true)
+        {
+            $found = preg_match("/{$matchComment['id']['mark']}[0-9]+({$matchComment['id']['split']}[0-9]+)*/", $comment, $matches);
+            if(empty($found)) break;
+            if($found)
+            {
+                $position   = strpos($comment, $matches[0]);
+                $subComment = substr($comment, 0, $position + strlen($matches[0]));
+                $comment    = substr($comment, $position + strlen($matches[0]) + 1);
+
+                $idList = explode($matchComment['id']['mark'], str_replace($matchComment['id']['split'], '', $matches[0]));
+                foreach($matchComment['module'] as $module => $moduleMatch)
+                {
+                    if(stripos($subComment, $moduleMatch) !== false)
+                    {
+                        if($module == 'story')
+                        {
+                            foreach($idList as $id) $stories[$id] = $id;
+                        }
+                        elseif($module == 'task')
+                        {
+                            foreach($idList as $id) $tasks[$id] = $id;
+                            foreach($matchComment['task'] as $method => $match)
+                            {
+                                if(strpos($subComment, $match) !== false)
+                                {
+                                    $consumed = 0;
+                                    preg_match("/{$matchComment['task']['consumed']}{$matchComment['mark']['consumed']}([0-9]+)/", $comment, $costMatch);
+                                    if($costMatch) $consumed = $costMatch[1];
+
+                                    $left = 0;
+                                    preg_match("/{$matchComment['task']['left']}{$matchComment['mark']['left']}([0-9]+)/", $comment, $leftMatch);
+                                    if($leftMatch) $left = $leftMatch[1];
+
+                                    foreach($idList as $id)
+                                    {
+                                        $actions['task'][$id]['action']   = $method;
+                                        $actions['task'][$id]['consumed'] = $consumed;
+                                        $actions['task'][$id]['left']     = $left;
+                                    }
+                                }
+                            }
+                        }
+                        elseif($module == 'bug')
+                        {
+                            foreach($idList as $id) $bugs[$id] = $id;
+                            foreach($matchComment['bug'] as $method => $match)
+                            {
+                                if(strpos($subComment, $match) !== false)
+                                {
+                                    $buildID = 0;
+                                    preg_match("/{$matchComment['bug']['resolvedBuild']}{$matchComment['mark']['resolvedBuild']}([0-9]+)/", $comment, $buildMatch);
+                                    if($buildMatch) $buildID = $buildMatch[1];
+
+                                    foreach($idList as $id)
+                                    {
+                                        $actions['bug'][$id]['action']        = $method;
+                                        $actions['bug'][$id]['resolvedBuild'] = $buildID;
+                                    }
+                                }
+                            }
+                        }
+                        elseif($module == 'integration')
+                        {
+                            foreach($idList as $id) $integrations[$id] = $id;
+                            foreach($matchComment['integration'] as $method => $match)
+                            {
+                                if(strpos($subComment, $match) !== false)
+                                {
+                                    foreach($idList as $id) $actions['integration'][$id]['action'] = $method;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'integrations' => $integrations, 'actions' => $actions);
+    }
+
+    /**
+     * Iconv Comment.
+     * 
+     * @param  string $comment 
+     * @param  string $encodings 
+     * @access public
+     * @return string
+     */
+    public function iconvComment($comment, $encodings)
+    {
+        /* Get encodings. */
+        if($encodings == '') return $comment;
+        $encodings = explode(',', $encodings);
+
+        /* Try convert. */
+        foreach($encodings as $encoding)
+        {
+            if($encoding == 'utf-8') continue;
+            $result = helper::convertEncoding($comment, $encoding);
+            if($result) return $result;
+        }
+
+        return $comment;
     }
 }

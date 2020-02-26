@@ -4,7 +4,7 @@ $lang->menuOrder[5]  = 'my';
 $lang->menuOrder[10] = 'product';
 $lang->menuOrder[15] = 'project';
 $lang->menuOrder[20] = 'qa';
-$lang->menuOrder[25] = 'repo';
+$lang->menuOrder[25] = 'ci';
 $lang->menuOrder[30] = 'doc';
 $lang->menuOrder[35] = 'report';
 $lang->menuOrder[40] = 'company';
@@ -77,9 +77,14 @@ $lang->testsuite->menuOrder  = $lang->testcase->menuOrder;
 $lang->caselib->menuOrder    = $lang->testcase->menuOrder;
 $lang->testreport->menuOrder = $lang->testcase->menuOrder;
 
-$lang->repo->menuOrder[5]  = 'browse';
-$lang->repo->menuOrder[15] = 'settings';
-$lang->repo->menuOrder[20] = 'delete';
+$lang->ci->menuOrder[5]  = 'browse';
+$lang->ci->menuOrder[10] = 'job';
+$lang->ci->menuOrder[15] = 'maintain';
+$lang->ci->menuOrder[20] = 'jenkins';
+$lang->ci->menuOrder[25] = 'match';
+
+$lang->repo->menuOrder    = $lang->ci->menuOrder;
+$lang->jenkins->menuOrder = $lang->ci->menuOrder;
 
 /* doc menu order. */
 $lang->doc->menuOrder[5]  = 'list';

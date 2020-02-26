@@ -541,10 +541,11 @@ class bug extends control
      * View a bug.
      *
      * @param  int    $bugID
+     * @param  string $form
      * @access public
      * @return void
      */
-    public function view($bugID)
+    public function view($bugID, $from = 'bug')
     {
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
@@ -555,7 +556,18 @@ class bug extends control
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
         /* Set menu. */
-        $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+        if($from == 'bug')
+        {
+            $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+        }
+        elseif($from == 'repo')
+        {
+            session_write_close();
+            $this->lang->set('menugroup.bug', 'repo');
+            $repos = $this->loadModel('repo')->getRepoPairs();
+            $this->repo->setMenu($repos);
+            $this->lang->bug->menu      = $this->lang->repo->menu;
+        }
 
         /* Get product info. */
         $productID   = $bug->product;
@@ -576,6 +588,7 @@ class bug extends control
         $this->view->modulePath  = $this->tree->getParents($bug->module);
         $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
         $this->view->bug         = $bug;
+        $this->view->from        = $from;
         $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);

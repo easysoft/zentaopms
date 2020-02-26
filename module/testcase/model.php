@@ -242,6 +242,7 @@ class testcaseModel extends model
     function batchCreate($productID, $branch, $storyID)
     {
         $branch      = (int)$branch;
+        $productID   = (int)$productID;
         $now         = helper::now();
         $cases       = fixer::input('post')->get();
 

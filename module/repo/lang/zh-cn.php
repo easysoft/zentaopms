@@ -1,11 +1,15 @@
 <?php
 $lang->repo->common          = '代码';
-$lang->repo->create          = '创建版本库';
-$lang->repo->settings        = '版本库设置';
 $lang->repo->browse          = '浏览';
+$lang->repo->viewRevision    = '查看修订';
+$lang->repo->create          = '创建';
+$lang->repo->createAction    = '创建版本库';
+$lang->repo->edit            = '编辑';
+$lang->repo->editAction      = '编辑版本库';
 $lang->repo->delete          = '删除版本库';
 $lang->repo->showSyncComment = '显示同步进度';
 $lang->repo->ajaxSyncComment = '接口：AJAX同步注释';
+$lang->repo->setMatchComment = '注释指令配置';
 $lang->repo->download        = '下载';
 $lang->repo->downloadDiff    = '下载Diff';
 $lang->repo->diffAction      = '版本对比';
@@ -17,6 +21,7 @@ $lang->repo->deleteBug       = '删除评审';
 $lang->repo->addComment      = '添加备注';
 $lang->repo->editComment     = '编辑备注';
 $lang->repo->deleteComment   = '删除备注';
+$lang->repo->selectModule    = '选择模块';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -40,6 +45,7 @@ $lang->repo->name      = '名称';
 $lang->repo->path      = '地址';
 $lang->repo->prefix    = '地址扩展';
 $lang->repo->config    = '配置目录';
+$lang->repo->desc      = '描述';
 $lang->repo->account   = '用户名';
 $lang->repo->password  = '密码';
 $lang->repo->encoding  = '编码';
@@ -90,6 +96,8 @@ $lang->repo->commentEdit    = '<i class="icon-pencil"></i>';
 $lang->repo->commentDelete  = '<i class="icon-remove"></i>';
 $lang->repo->allChanges     = "其他改动";
 $lang->repo->commitTitle    = "第%s次提交";
+$lang->repo->mark           = "匹配标记";
+$lang->repo->split          = "分割匹配";
 
 $lang->repo->viewDiffList['inline'] = '直列';
 $lang->repo->viewDiffList['appose'] = '并排';
@@ -104,8 +112,8 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Subversion'] = 'Subversion';
 $lang->repo->scmList['Git']        = 'Git';
+$lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->notice                 = new stdclass();
 $lang->repo->notice->syncing        = '正在同步中, 请稍等...';
@@ -117,6 +125,14 @@ $lang->repo->notice->commentContent = '输入回复内容';
 $lang->repo->notice->deleteBug      = '确认删除该Bug？';
 $lang->repo->notice->deleteComment  = '确认删除该回复？';
 $lang->repo->notice->lastSyncTime   = '最后更新于：';
+
+$lang->repo->matchComment = new stdclass();
+$lang->repo->matchComment->exampleLabel = "注释示例";
+$lang->repo->matchComment->example['story']['common']      = "%story% %id%1%split%2";
+$lang->repo->matchComment->example['task']['start']        = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->matchComment->example['task']['finish']       = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
+$lang->repo->matchComment->example['bug']['resolve']       = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
+$lang->repo->matchComment->example['integration']['start'] = "%build% %integration% %id%1%split%2";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = '你的服务器禁用了exec,shell_exec方法，无法使用该功能';
@@ -137,11 +153,18 @@ $lang->repo->error->output        = "执行命令：%s\n错误结果(%s)： %s\n
 $lang->repo->error->clientVersion = "客户端版本过低，请升级或更换SVN客户端";
 $lang->repo->error->encoding      = "编码可能错误，请更换编码重试。";
 
-$lang->repo->example           = new stdclass();
-$lang->repo->example->client   = "例如：/usr/bin/svn, C:\subversion\svn.exe, /usr/bin/git";
-$lang->repo->example->path     = "例如：SVN: http://example.googlecode.com/svn/,  GIT: /homt/test";
-$lang->repo->example->config   = "https需要填写配置目录的位置，通过config-dir选项生成配置目录";
-$lang->repo->example->encoding = "填写版本库中文件的编码";
+$lang->repo->synTips       = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
+$lang->repo->encodingsTips = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
+
+$lang->repo->example              = new stdclass();
+$lang->repo->example->client      = new stdclass();
+$lang->repo->example->path        = new stdclass();
+$lang->repo->example->client->git = "例如：/usr/bin/git";
+$lang->repo->example->client->svn = "例如：/usr/bin/svn";
+$lang->repo->example->path->git   = "例如：/homt/user/myproject";
+$lang->repo->example->path->svn   = "例如：http://example.googlecode.com/svn/trunk/myproject";
+$lang->repo->example->config      = "https需要填写配置目录的位置，通过config-dir选项生成配置目录";
+$lang->repo->example->encoding    = "填写版本库中文件的编码";
 
 $lang->repo->typeList['standard']    = '规范';
 $lang->repo->typeList['performance'] = '性能';

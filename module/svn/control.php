@@ -37,10 +37,9 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'diff'))
         {
-            $repos = $this->loadModel('repo')->getAllRepos();
-            foreach($repos as $repo)
+            $svnRepos = $this->loadModel('repo')->getListBySCM('Subversion', 'haspriv');
+            foreach($svnRepos as $repo)
             {
-                if($repo->SCM != 'Subversion') continue;
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0) 
                 {
                     $entry = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
@@ -72,10 +71,9 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->getAllRepos();
+            $repos = $this->loadModel('repo')->getListBySCM('Subversion', 'haspriv');
             foreach($repos as $repo)
             {
-                if($repo->SCM != 'Subversion') continue;
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0)
                 {
                     $entry = $this->repo->encodePath(str_ireplace(strtolower($repo->path), '', $url));
@@ -109,9 +107,11 @@ class svn extends control
                 $parsedLogs[] = $this->svn->convertLog($entry);
             }
             $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
+            $this->loadModel('repo');
             foreach($parsedLogs as $log)
             {
-                $objects = $this->svn->parseComment($log->msg);
+                $objects = $this->repo->parseComment($log->msg);
+
                 if($objects)
                 {
                     $this->svn->saveAction2PMS($objects, $log, $repoRoot);
@@ -170,7 +170,8 @@ class svn extends control
             $parsedFiles[$action][] = $path;
         }
 
-        $objects = $this->svn->parseComment($message);
+        $objects = $this->loadModel('repo')->parseComment($message);
+
         if($objects)
         {
             $log = new stdclass();

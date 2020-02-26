@@ -71,6 +71,7 @@ class svnModel extends model
     {
         parent::__construct();
         $this->loadModel('action');
+        $this->loadModel('repo');
     }
 
     /**
@@ -90,47 +91,57 @@ class svnModel extends model
         foreach($this->repos as $name => $repo)
         {
             $this->printLog("begin repo $name");
-            $repo = (object)$repo;
-            $repo->name = $name;
             if(!$this->setRepo($repo)) return false;
 
             $savedRevision = $this->getSavedRevision();
             $this->printLog("start from revision $savedRevision");
-            $logs = $this->getRepoLogs($repo, $savedRevision);
-            if(empty($logs)) continue;
 
-            $this->printLog("get " . count($logs) . " logs");
-            $this->printLog('begin parsing logs');
-            foreach($logs as $log)
+            $logs    = $this->getRepoLogs($repo, $savedRevision);
+            $objects = array();
+            if(!empty($logs))
             {
-                $this->printLog("parsing log {$log->revision}");
-                if($log->revision == $savedRevision)
+                $this->printLog("get " . count($logs) . " logs");
+                $this->printLog('begin parsing logs');
+
+                foreach($logs as $log)
                 {
-                    $this->printLog("{$log->revision} alread parsed, ommit it");
-                    continue;
+                    $this->printLog("parsing log {$log->revision}");
+                    if($log->revision == $savedRevision)
+                    {
+                        $this->printLog("{$log->revision} alread parsed, commit it");
+                        continue;
+                    }
+
+                    $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+
+                    $objects = $this->repo->parseComment($log->msg);
+                    if($objects)
+                    {
+                        $this->printLog('extract' .
+                            'story:' . join(' ', $objects['stories']) .
+                            ' task:' . join(' ', $objects['tasks']) .
+                            ' bug:'  . join(',', $objects['bugs']));
+
+                        $this->saveAction2PMS($objects, $log, $repo->encoding);
+                    }
+                    else
+                    {
+                        $this->printLog('no objects found' . "\n");
+                    }
+
+                    if($log->revision > $savedRevision) $savedRevision = $log->revision;
                 }
 
-                $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
-                $objects = $this->parseComment($log->msg);
-                if($objects)
-                {
-                    $this->printLog('extract' . 
-                        'story:' . join(' ', $objects['stories']) . 
-                        ' task:' . join(' ', $objects['tasks']) . 
-                        ' bug:'  . join(',', $objects['bugs']));
-
-                    $this->saveAction2PMS($objects, $log);
-                }
-                else
-                {
-                    $this->printLog('no objects found' . "\n");
-                }
-                if($log->revision > $savedRevision) $savedRevision = $log->revision;
+                $this->saveLastRevision($savedRevision);
+                $this->printLog("save revision $savedRevision");
+                $this->deleteRestartFile();
+                $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
-            $this->saveLastRevision($savedRevision);
-            $this->printLog("save revision $savedRevision");
-            $this->deleteRestartFile();
-            $this->printLog("\n\nrepo $name finished");
+
+            // exe ci jobs in log
+            $cijobIdList = zget($objects, 'integrations', array());
+            $this->loadModel('compile');
+            foreach($cijobIdList as $id) $this->compile->execByCompile($id);
         }
     }
 
@@ -144,6 +155,19 @@ class svnModel extends model
     {
         $this->logRoot = $this->app->getTmpRoot() . 'svn/';
         if(!is_dir($this->logRoot)) mkdir($this->logRoot);
+    }
+
+    /**
+     * Set the tag file of a repo.
+     *
+     * @param  string    $repoId
+     * @access public
+     * @return void
+     */
+    public function setTagFile($repoId)
+    {
+        $this->setLogRoot();
+        $this->tagFile = $this->logRoot . $repoId . '.tag';
     }
 
     /**
@@ -176,13 +200,46 @@ class svnModel extends model
      */
     public function setRepos()
     {
-        if(!$this->config->svn->repos)
+        $repos = $this->loadModel('repo')->getListBySCM('Subversion');
+
+        $svnRepos = array();
+        $paths    = array();
+
+        foreach($repos as $repo)
         {
-            echo "You must set one svn repo.\n";
-            return false;
+            if(isset($paths[$repo->path])) continue;
+
+            unset($repo->acl);
+            unset($repo->desc);
+            $svnRepos[] = $repo;
+            $paths[$repo->path] = $repo->path;
         }
 
-        $this->repos = $this->config->svn->repos;
+        if(isset($this->config->svn->repos))
+        {
+            foreach($this->config->svn->repos as $i => $repo)
+            {
+                $repoPath = $repo['path'];
+                if(empty($repoPath)) continue;
+                if(isset($paths[$repoPath])) continue;
+
+                $svnRepo = new stdclass();
+                $svnRepo->id       = "c{$i}";
+                $svnRepo->client   = $this->config->svn->client;
+                $svnRepo->path     = $repoPath;
+                $svnRepo->prefix   = '';
+                $svnRepo->SCM      = 'Subversion';
+                $svnRepo->account  = $repo['username'];
+                $svnRepo->password = $repo['password'];
+                $svnRepo->encoding = zget($repo, 'encoding', $this->config->svn->client);
+
+                $svnRepos[] = $svnRepo;
+                $paths[$repoPath] = $repoPath;
+            }
+        }
+
+        if(empty($svnRepos)) echo "You must set one svn repo.\n";
+        $this->repos = $svnRepos;
         return true;
     }
 
@@ -217,7 +274,8 @@ class svnModel extends model
         $this->setClient($repo);
         if(empty($this->client)) return false;
 
-        $this->setLogFile($repo->name);
+        $this->setLogFile($repo->id);
+        $this->setTagFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
@@ -231,23 +289,17 @@ class svnModel extends model
      */
     public function setClient($repo)
     {
-        if($this->config->svn->client == '') 
-        {
-            echo "You must set the svn client file.\n";
-            return false;
-        }
-
-        $this->client = $this->config->svn->client . " --non-interactive";
+        $this->client = $repo->client . " --non-interactive";
         if(stripos($repo->path, 'https') === 0 or stripos($repo->path, 'svn') === 0)
         {
-            $cmd = $this->config->svn->client . ' --version --quiet';
+            $cmd = $repo->client . ' --version --quiet';
             $version = `$cmd`;
             if(version_compare($version, '1.6.0', '>'))
             {
                 $this->client .= ' --trust-server-cert'; 
             }
         }
-        if(isset($repo->username)) $this->client .= " --username $repo->username --password $repo->password --no-auth-cache";
+        if(isset($repo->account)) $this->client .= " --username $repo->account --password $repo->password --no-auth-cache";
         return true;
     }
 
@@ -258,9 +310,9 @@ class svnModel extends model
      * @access public
      * @return void
      */
-    public function setLogFile($repoName)
+    public function setLogFile($repoId)
     {
-        $this->logFile = $this->logRoot . $repoName;
+        $this->logFile = $this->logRoot . $repoId . '.log';
     }
 
     /**
@@ -272,11 +324,24 @@ class svnModel extends model
      */
     public function setRepoRoot($repo)
     {
-        $cmd  = $this->client . " info --xml $repo->path";
-        $info = `$cmd`;
-        $info = simplexml_load_string($info);
-        $repoRoot = $info->entry->repository->root;
-        $this->repoRoot = $repoRoot;
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $info = $scm->info('');
+        $this->repoRoot = $info->root;
+    }
+
+    /**
+     * get tags histories for repo.
+     *
+     * @param  object    $repo
+     * @access public
+     * @return void
+     */
+    public function getRepoTags($repo, $path)
+    {
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        return $scm->tags($path);
     }
 
     /**
@@ -289,110 +354,24 @@ class svnModel extends model
      */
     public function getRepoLogs($repo, $fromRevision)
     {
-        $parsedLogs = array();
-
         /* The svn log command. */
-        $cmd     = $this->client . " log -r $fromRevision:HEAD -v --xml $repo->path";
-        $rawLogs = `$cmd`;
-        $logs    = @simplexml_load_string($rawLogs);    // Convert it to object.
-        if(!$logs)
-        {
-            echo "Some error occers: \nThe command is $cmd\n the svn logs is $rawLogs\n";
-            return false;
-        }
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $logs = $scm->log('', $fromRevision);
+        if(empty($logs)) return false;
 
         /* Process logs. */
-        foreach($logs->logentry as $entry) $parsedLogs[] = $this->convertLog($entry);
-        return $parsedLogs;
-    }
-
-    /**
-     * Convert log from xml format to object.
-     * 
-     * @param  object    $log 
-     * @access public
-     * @return object
-     */
-    public function convertLog($log)
-    {
-        /* Get author, revision, msg, date attributes. */
-        $parsedLog = new stdClass();
-        $parsedLog->author   = (string)$log->author; 
-        $parsedLog->revision = (int)$log['revision']; 
-        $parsedLog->msg      = trim((string)$log->msg);
-        $parsedLog->date     = date('Y-m-d H:i:s', strtotime($log->date));
-
-        /* Process files. */
-        $parsedLog->files = array();
-        foreach ($log->paths as $key => $paths)
+        foreach($logs as $log)
         {
-            $parsedFiles = array();
-            foreach($paths as $path)
-            {
-                $action = (string)$path['action'];
-                $parsedFiles[$action][] = (string)$path;
-            }
+            $log->author = $log->committer;
+            $log->msg    = $log->comment;
+            $log->date   = $log->time;
+
+            /* Process files. */
+            $log->files = array();
+            foreach($log->change as $file => $info) $log->files[$info['action']][] = $file;
         }
-        $parsedLog->files = $parsedFiles;
-
-        return $parsedLog;
-    }
-
-    /**
-     * Parse the comment of svn, extract object id list from it.
-     * 
-     * @param  string    $comment 
-     * @access public
-     * @return array
-     */
-    public function parseComment($comment)
-    {
-        $stories = array(); 
-        $tasks   = array();
-        $bugs    = array();
-
-        // bug|story|task(case insensitive) + some space + #|:|：(Chinese) + id lists(maybe join with space or ,)
-        // $comment = "bug # 1,2,3,4 Bug:1 2 3 4 5 story:9999,1234566 story:456,1234566";
-        $commonReg = "(?:\s){0,}(?:#|:|：){0,}([0-9, ]{1,})";
-        $taskReg  = '/task' .  $commonReg . '/i';
-        $storyReg = '/story' . $commonReg . '/i';
-        $bugReg   = '/bug'   . $commonReg . '/i';
-
-        if(preg_match_all($storyReg, $comment, $result)) $stories = join(' ', $result[1]);
-        if(preg_match_all($taskReg, $comment, $result))  $tasks   = join(' ', $result[1]);
-        if(preg_match_all($bugReg, $comment, $result))   $bugs    = join(' ', $result[1]);
-
-        if($stories) $stories = array_unique(explode(' ', str_replace(',', ' ', $stories)));
-        if($tasks)   $tasks   = array_unique(explode(' ', str_replace(',', ' ', $tasks)));
-        if($bugs)    $bugs    = array_unique(explode(' ', str_replace(',', ' ', $bugs)));
-
-        if(!$stories and !$tasks and !$bugs) return array();
-        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs);
-    }
-
-    /**
-     * Convert the comment to uft-8.
-     * 
-     * @param  string    $comment 
-     * @access public
-     * @return string
-     */
-    public function iconvComment($comment)
-    {
-        /* Get encodings. */
-        $encodings = str_replace(' ', '', isset($this->config->svn->encodings) ? $this->config->svn->encodings : '');
-        if($encodings == '') return $comment;
-        $encodings = explode(',', $encodings);
-
-        /* Try convert. */
-        foreach($encodings as $encoding)
-        {
-            if($encoding == 'utf-8') continue;
-            $result = helper::convertEncoding($comment, $encoding);
-            if($result) return $result;
-        }
-
-        return $comment;
+        return $logs;
     }
 
     /**
@@ -482,13 +461,14 @@ class svnModel extends model
      * @access public
      * @return void
      */
-    public function saveAction2PMS($objects, $log, $repoRoot = '')
+    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8')
     {
         $action = new stdclass();
         $action->actor   = $log->author;
         $action->action  = 'svncommited';
         $action->date    = $log->date;
-        $action->comment = htmlspecialchars($this->iconvComment($log->msg));
+
+        $action->comment = htmlspecialchars($this->repo->iconvComment($log->msg, $encodings));
         $action->extra   = $log->revision;
 
         $changes = $this->createActionChanges($log, $repoRoot);
@@ -731,5 +711,36 @@ class svnModel extends model
         $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
 
         return $buildedURL;
+    }
+
+    /**
+     * Get the saved tag.
+     *
+     * @access public
+     * @return int
+     */
+    public function getSavedTag($repoID = 0)
+    {
+        if($repoID) $this->setTagFile($repoID);
+        if(!file_exists($this->tagFile)) return array();
+        if(file_exists($this->restartFile)) return array();
+
+        $tags = array();
+        foreach(json_decode(file_get_contents($this->tagFile)) as $tag) $tags[$tag] = $tag;
+        return $tags;
+    }
+
+    /**
+     * Save the last revision.
+     *
+     * @param  int    $tag
+     * @access public
+     * @return void
+     */
+    public function saveLastTag($tag, $repoId = 0)
+    {
+        if($repoId) $this->setTagFile($repoId);
+        if(is_array($tag)) $tag = json_encode($tag);
+        file_put_contents($this->tagFile, $tag);
     }
 }

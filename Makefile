@@ -69,6 +69,7 @@ zentaoxx:
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/footer.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/version.html.php zentaoxx/module/common/view
+	cp -r xuan/xxb/module/license zentaoxx/module/
 	mkdir -p zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/markedjs zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/version.js zentaoxx/www/js/
