@@ -1028,7 +1028,7 @@ class baseFixer
 
             if(!isset($this->stripedFields[$fieldName]) and (!defined('RUN_MODE') or RUN_MODE != 'admin'))
             {
-                $this->data->$fieldName = self::dataStripTags($this->data->$fieldName);
+                $this->data->$fieldName = self::stripDataTags($this->data->$fieldName);
 
                 /* Code for bug #2721. */
                 $this->data->$fieldName = baseValidater::replaceSpace2Tag($this->data->$fieldName);
@@ -1047,7 +1047,7 @@ class baseFixer
      * @access public
      * @return string
      */
-    public static function dataStripTags($data, $allowedTags = '')
+    public static function stripDataTags($data, $allowedTags = '')
     {
         if(empty($data)) return $data;
 
