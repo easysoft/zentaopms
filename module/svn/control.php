@@ -106,8 +106,8 @@ class svn extends control
             {
                 $parsedLogs[] = $this->svn->convertLog($entry);
             }
-            $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
             $this->loadModel('repo');
+            $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
             foreach($parsedLogs as $log)
             {
                 $objects = $this->repo->parseComment($log->msg);
