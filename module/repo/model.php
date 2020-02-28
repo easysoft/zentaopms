@@ -456,6 +456,24 @@ class repoModel extends model
     }
 
     /**
+     * Get history.
+     * 
+     * @param  int    $repoID 
+     * @param  array  $revisions 
+     * @access public
+     * @return array
+     */
+    public function getHistory($repoID, $revisions)
+    {
+        return $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->where('t1.repo')->eq($repoID)
+            ->andWhere('t1.revision')->in($revisions)
+            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->fetchAll('revision');
+    }
+
+    /**
      * Get git revisionName.
      * 
      * @param  string $revision 

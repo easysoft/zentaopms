@@ -263,7 +263,76 @@ class repo extends control
     public function browse($repoID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         if($this->get->path) $path = $this->get->path;
-        $this->locate($this->repo->createLink('log', "repoID=$repoID&entry=&revision=$revision", empty($path) ? '' : "entry=$path"));
+        if(empty($refresh) and $this->cookie->repoRefresh) $refresh = $this->cookie->repoRefresh;
+        $this->repo->setMenu($this->repos, $repoID);
+        $this->repo->setBackSession('list', $withOtherModule = true);
+        if($repoID == 0) $repoID = $this->session->repoID;
+
+        $repo = $this->repo->getRepoByID($repoID);
+        if(!$repo->synced) $this->locate($this->repo->createLink('showSyncComment', "repoID=$repoID"));
+
+        $path      = $this->repo->decodePath($path);
+        $cacheFile = $this->repo->getCacheFile($repoID, $path, $revision);
+        $this->scm->setEngine($repo);
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 8, 1);
+
+        /* Cache infos. */
+        if($refresh or !$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->repo->cacheTime)
+        {
+            $infos = $this->scm->ls($path, $revision);
+
+            if($infos and $repo->SCM == 'Subversion')
+            {
+                $revisionList = array();
+                foreach($infos as $info) $revisionList[$info->revision] = $info->revision;
+                $comments = $this->repo->getHistory($repoID, $revisionList);
+                foreach($infos as $info)
+                {
+                    if(isset($comments[$info->revision]))
+                    {
+                        $comment = $comments[$info->revision];
+                        $info->comment = $comment->comment;
+                    }
+                }
+            }
+
+            if($cacheFile)
+            {
+                if(!file_exists($cacheFile . '.lock'))
+                {
+                    touch($cacheFile .  '.lock');
+                    file_put_contents($cacheFile, serialize($infos));
+                    unlink($cacheFile . '.lock');
+                }
+            }
+        }
+        else
+        {
+            $infos = unserialize(file_get_contents($cacheFile));
+        }
+        if($refresh) $this->repo->updateLatestCommit($repo);
+        if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot);
+
+        $logType   = 'dir';
+        $revisions = $this->repo->getLogs($repo, $path, $revision, $logType, $pager);
+        $commiters = $this->loadModel('user')->getCommiters();
+        foreach($infos as $info) $info->committer = zget($commiters, $info->account, $info->account);
+        foreach($revisions as $log) $log->committer = zget($commiters, $log->committer, $log->committer);
+
+        $this->view->title     = $this->lang->repo->common;
+        $this->view->repo      = $repo;
+        $this->view->revisions = $revisions;
+        $this->view->revision  = $revision;
+        $this->view->infos     = $infos;
+        $this->view->repoID    = $repoID;
+        $this->view->pager     = $pager;
+        $this->view->path      = urldecode($path);
+        $this->view->logType   = $logType;
+        $this->view->cacheTime = date('m-d H:i', filemtime($cacheFile));
+
+        $this->display();
     }
 
     /**
