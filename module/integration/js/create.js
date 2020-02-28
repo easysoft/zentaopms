@@ -5,97 +5,79 @@ $('#repo').change(function()
     if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
     $('.svn-fields').toggleClass('hidden', type != 'Subversion');
     $('#repoType').val(type);
+    $('#triggerType option[value=tag]').html(type == 'Subversion' ? dirChange : buildTag).trigger('chosen:updated');
+    $('#repo_chosen .chosen-single').attr('style', type == 'Subversion' ? 'border-right:0px' : '');
     if(type == 'Subversion')
     {
-        $('#svnFolderBox').html("<div class='load-indicator loading'></div>");
-        $.getJSON(createLink('repo', 'ajaxGetSVNTags', 'repoID=' + repoID), function(svnTags)
+        $('#svnDirBox #svnDir').remove();
+        $('#svnDirBox #svnDir_chosen').remove();
+        $('#svnDirBox .input-group').append("<div class='load-indicator loading'></div>");
+        $.getJSON(createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID), function(tags)
         {
-            var tags    = svnTags['tags'];
-            var parents = svnTags['parent'];
-
-            html = "<select id='svnFolder' name='svnFolder' class='form-control'>";
-            for(tag in parents)
+            html = "<select id='svnDir' name='svnDir' class='form-control'>";
+            for(path in tags)
             {
-                var info = parents[tag];
-                html += "<option value='" + info['path'] + "' data-encodePath='" + info['encodePath'] + "'>" + info['path'] + "</option>";
-            }
-
-            for(tag in tags)
-            {
-                var info = tags[tag];
-                html += "<option value='" + info['path'] + "' data-encodePath='" + info['encodePath'] + "'>" + info['path'] + "</option>";
+                var encodePath = tags[path];
+                html += "<option value='" + path + "' data-encodePath='" + encodePath + "'>" + path + "</option>";
             }
             html += '</select>';
-            $('#svnFolderBox').html(html);
-            $('#svnFolderBox #svnFolder').chosen();
+            $('#svnDirBox .loading').remove();
+            $('#svnDirBox .input-group').append(html);
+            $('#svnDirBox #svnDir').chosen();
         })
     }
 })
 
-$(document).on('change', '#svnFolder', function()
+$(document).on('change', '#svnDir', function()
 {
     var repoID      = $('#repo').val();
     var selectedTag = $(this).val();
     var encodePath  = $(this).find("option:selected").attr('data-encodePath');
-    $('#svnFolderBox').html("<div class='load-indicator loading'></div>");
-    $.getJSON(createLink('repo', 'ajaxGetSVNTags', 'repoID=' + repoID + '&path=' + encodePath), function(svnTags)
+    $('#svnDirBox #svnDir').remove();
+    $('#svnDirBox #svnDir_chosen').remove();
+    $('#svnDirBox .input-group').append("<div class='load-indicator loading'></div>");
+    $.getJSON(createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID + '&path=' + encodePath), function(tags)
     {
-        var tags    = svnTags['tags'];
-        var parents = svnTags['parent'];
-
-        html = "<select id='svnFolder' name='svnFolder' class='form-control'>";
-        for(tag in parents)
+        html = "<select id='svnDir' name='svnDir' class='form-control'>";
+        for(path in tags)
         {
-            var info = parents[tag];
-            html += "<option value='" + info['path'] + "' data-encodePath='" + info['encodePath'] + "'>" + info['path'] + "</option>";
-        }
-
-        for(tag in tags)
-        {
-            var info = tags[tag];
-            html += "<option value='" + info['path'] + "' data-encodePath='" + info['encodePath'] + "'>" + info['path'] + "</option>";
+            var encodePath = tags[path];
+            html += "<option value='" + path + "' data-encodePath='" + encodePath + "'>" + path + "</option>";
         }
         html += '</select>';
-        $('#svnFolderBox').html(html);
-        $('#svnFolderBox #svnFolder').val(selectedTag).chosen();
+        $('#svnDirBox .loading').remove();
+        $('#svnDirBox .input-group').append(html);
+        $('#svnDirBox #svnDir').val(selectedTag).chosen();
     })
 })
 
 $('#triggerType').change(function()
 {
     var type = $(this).val();
-    if(type == 'tag')
-    {
-        $('.comment-fields').addClass('hidden');
-        $('.custom-fields').addClass('hidden');
-    }
-    else if(type == 'commit')
-    {
-        $('.comment-fields').removeClass('hidden');
-        $('.custom-fields').addClass('hidden');
-    }
-    else if(type == 'schedule')
-    {
-        $('.comment-fields').addClass('hidden');
-        $('.custom-fields').removeClass('hidden');
-    }
+    $('.comment-fields').addClass('hidden');
+    $('.custom-fields').addClass('hidden');
+    if(type == 'commit')   $('.comment-fields').removeClass('hidden');
+    if(type == 'schedule') $('.custom-fields').removeClass('hidden');
 });
 
-$('#jenkins').change(function()
+$('#jkHost').change(function()
 {
     var jenkinsID = $(this).val();
-    $('#jenkinsJobBox').html("<div class='load-indicator loading'></div>");
+    $('#jkJobBox #jkJob').remove();
+    $('#jkJobBox #jkJob_chosen').remove();
+    $('#jkJobBox .input-group').append("<div class='load-indicator loading'></div>");
     $.getJSON(createLink('jenkins', 'ajaxGetTasks', 'jenkinsID=' + jenkinsID), function(tasks)
     {
-        html  = "<select id='jenkinsJob' name='jenkinsJob' class='form-control'>";
+        html  = "<select id='jkJob' name='jkJob' class='form-control'>";
         for(taskKey in tasks)
         {
             var task = tasks[taskKey];
             html += "<option value='" + taskKey + "'>" + task + "</option>";
         }
         html += '</select>';
-        $('#jenkinsJobBox').html(html);
-        $('#jenkinsJobBox #jenkinsJob').chosen();
+        $('#jkJobBox .loading').remove();
+        $('#jkJobBox .input-group').append(html);
+        $('#jkJobBox #jkJob').chosen();
     })
 })
 

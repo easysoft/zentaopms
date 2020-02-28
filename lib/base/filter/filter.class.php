@@ -1086,6 +1086,20 @@ class baseFixer
     }
 
     /**
+     * 去除字符串左右空格
+     * Remove the left and right Spaces of the string.
+     *
+     * @param string $fieldName
+     * @access public
+     * @return object fixer object
+     */
+    public function trim($fieldName)
+    {
+        if(isset($this->data->$fieldName)) $this->data->$fieldName = trim($this->data->$fieldName);
+        return $this;
+    }
+
+    /**
      * 忽略处理给定的字段。
      * Skip special chars check.
      * 
@@ -1296,19 +1310,4 @@ class baseFixer
         foreach($fields as $key => $fieldName) if(!isset($this->data->$fieldName)) unset($fields[$key]);
         return $fields;
     }
-
-    /**
-     * 去除字符串左右空格
-     * Remove the left and right Spaces of the string.
-     *
-     * @param string $fieldName
-     * @access public
-     * @return object fixer object
-     */
-    public function trim($fieldName)
-    {
-        if(isset($this->data->$fieldName)) $this->data->$fieldName = trim($this->data->$fieldName);
-        return $this;
-    }
-
 }

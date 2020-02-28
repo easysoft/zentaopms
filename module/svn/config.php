@@ -16,8 +16,6 @@
  *
  */
 
-$config->svn->tagRequiredFields = 'name,repo';
-
 /* will use the config of repo records in db
 $config->svn = new stdClass();
 $config->svn->encodings = 'utf-8';

@@ -25,7 +25,7 @@ class compileModel extends model
         return $this->dao->select('t1.id, t1.name, t1.status, t1.createdDate, t2.triggerType, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.cijob=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
-            ->leftJoin(TABLE_JENKINS)->alias('t4')->on('t2.jenkins=t4.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t4')->on('t2.jkHost=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.cijob')->eq($jobID)
             ->orderBy($orderBy)
@@ -85,9 +85,9 @@ class compileModel extends model
      */
     public function execByCompile($compile, $data = null)
     {
-        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jenkinsJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
             ->from(TABLE_INTEGRATION)->alias('t1')
-            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jenkins=t2.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($compile->cijob)
             ->fetch();
 
@@ -111,9 +111,9 @@ class compileModel extends model
      */
     public function execByIntegration($integrationID, $data = null)
     {
-        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jenkinsJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
             ->from(TABLE_INTEGRATION)->alias('t1')
-            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jenkins=t2.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($integrationID)
             ->fetch();
 
@@ -147,7 +147,7 @@ class compileModel extends model
 
         $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
         $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-        $buildUrl      = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jenkinsJob);
+        $buildUrl      = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
         return $buildUrl;
     }
 }

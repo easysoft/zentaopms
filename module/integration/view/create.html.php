@@ -12,8 +12,10 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 
-<?php js::set('repoTypes', $repoTypes)?>
-<?php js::set('triggerType', 'tag')?>
+<?php js::set('repoTypes', $repoTypes);?>
+<?php js::set('triggerType', 'tag');?>
+<?php js::set('dirChange', $lang->integration->dirChange);?>
+<?php js::set('buildTag', $lang->integration->buildTag);?>
 
 <div id='mainContent' class='main-row'>
   <div class='main-content'>
@@ -30,29 +32,53 @@
           </tr>
           <tr>
             <th><?php echo $lang->integration->repo; ?></th>
-            <td><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></td>
-            <th class="svn-fields hidden"><?php echo $lang->integration->svnFolder; ?></th>
-            <td class="svn-fields hidden" id='svnFolderBox'></td>
-          </tr>
-          <tr>
-            <th><?php echo $lang->integration->jenkins; ?></th>
-            <td><?php echo html::select('jenkins', $jenkinsList, '', "class='form-control chosen'"); ?></td>
-            <th><?php echo $lang->integration->jenkinsJob; ?></th>
-            <td id='jenkinsJobBox'><?php echo html::select('jenkinsJob', array('' => ''), '', "class='form-control chosen'"); ?></td>
+            <td colspan='2'>
+              <div class='table-row'>
+                <div class='table-col'><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></div>
+                <div id='svnDirBox' class="table-col">
+                  <div class='input-group svn-fields hidden'>
+                    <span class='input-group-addon'><?php echo $lang->integration->svnDir;?></span>
+                    <?php echo html::select('svnDir', array('' => ''), '', "class='form-control chosen'");?>
+                  </div>
+                </div>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->integration->triggerType; ?></th>
             <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, '', "class='form-control chosen'");?></td>
             <td colspan="2"></td>
           </tr>
-          <tr class="comment-fields" class="comment-fields">
-            <th><?php echo $lang->integration->example; ?></th>
-            <?php if(is_string($config->repo->matchComment)) $config->repo->matchComment = json_decode($config->repo->matchComment, true);?>
-            <td colspan="3"><?php echo str_replace(array('%build%', '%integration%', '%id%'), array($config->repo->matchComment['integration']['start'], $config->repo->matchComment['module']['integration'], $config->repo->matchComment['id']['mark']), $lang->integration->commitEx);?></td>
+          <tr class="comment-fields">
+            <th><?php echo $lang->integration->comment;?></th>
+            <td class='required'><?php echo html::input('comment', '', "class='form-control'");?></td>
+            <td colspan='2'><?php echo $lang->integration->commitEx;?></td>
           </tr>
           <tr class="custom-fields">
-            <th><?php echo $lang->integration->scheduleDay; ?></th>
-            <td colspan="3"><?php echo html::checkbox('scheduleDay', $lang->datepicker->dayNames, '', '', 'inline');?></td>
+            <th rowspan='2'></th>
+            <td colspan="3"><?php echo html::checkbox('atDay', $lang->datepicker->dayNames, '', '', 'inline');?></td>
+          </tr>
+          <tr class="custom-fields">
+            <td>
+              <div class='input-group'>
+                <span class='input-group-addon'><?php echo $lang->integration->atTime;?></span>
+                <?php echo html::input('atTime', '', "class='form-control form-time'");?>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->integration->jkHost; ?></th>
+            <td colspan='2'>
+              <div class='table-row'>
+                <div class='table-col'><?php echo html::select('jkHost', $jkHostList, '', "class='form-control chosen'"); ?></div>
+                <div id='jkJobBox' class='table-col'>
+                  <div class='input-group'>
+                    <span class='input-group-addon'><?php echo $lang->integration->jkJob; ?></span>
+                    <?php echo html::select('jkJob', array('' => ''), '', "class='form-control chosen'"); ?>
+                  </div>
+                </div>
+              </div>
+            </td>
           </tr>
           <tr>
             <th></th>

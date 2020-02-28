@@ -81,9 +81,9 @@ class integration extends control
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
         }
-        $this->view->repoPairs   = $repoPairs;
-        $this->view->repoTypes   = $repoTypes;
-        $this->view->jenkinsList = $this->loadModel('jenkins')->getPairs();
+        $this->view->repoPairs  = $repoPairs;
+        $this->view->repoTypes  = $repoTypes;
+        $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
 
         $this->display();
     }
@@ -121,11 +121,11 @@ class integration extends control
             $repoTypes[$repo->id] = $repo->SCM;
         }
 
-        $this->view->repoPairs   = $repoPairs;
-        $this->view->repoTypes   = $repoTypes;
-        $this->view->job         = $job;
-        $this->view->jenkinsList = $this->loadModel('jenkins')->getPairs();
-        $this->view->jenkinsJobs = $this->jenkins->getTasks($job->jenkins);
+        $this->view->repoPairs  = $repoPairs;
+        $this->view->repoTypes  = $repoTypes;
+        $this->view->job        = $job;
+        $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
+        $this->view->jkJobs     = $this->jenkins->getTasks($job->jkHost);
 
         $this->display();
     }

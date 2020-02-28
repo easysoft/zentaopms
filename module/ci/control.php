@@ -36,7 +36,7 @@ class ci extends control
         $this->loadModel('compile');
         foreach($scheduleJobs as $job)
         {
-            if(strpos($job->scheduleDay, $week) !== false) $this->compile->createByIntegration($job->id);
+            if(strpos($job->atDay, $week) !== false) $this->compile->createByIntegration($job->id);
         }
         echo 'success';
     }
@@ -67,7 +67,7 @@ class ci extends control
             $scm      = $repo->SCM == 'Git' ? 'git' : 'svn';
             $savedTag = $this->loadModel($scm)->getSavedTag($repo->id);
 
-            $tags = $this->$scm->getRepoTags($repo, $scm == 'svn' ? $integration->svnFolder : '');
+            $tags = $this->$scm->getRepoTags($repo, $scm == 'svn' ? $integration->svnDir : '');
             if(!empty($tags))
             {
                 $arriveLastTag = false;
@@ -86,7 +86,7 @@ class ci extends control
                     elseif($scm == 'svn')
                     {
                         if(isset($savedTag[$tag])) continue;
-                        $tag = rtrim($repo->path , '/') . '/' . trim($integration->svnFolder, '/') . '/' . $tag;
+                        $tag = rtrim($repo->path , '/') . '/' . trim($integration->svnDir, '/') . '/' . $tag;
                     }
 
                     $tagData = new stdclass();

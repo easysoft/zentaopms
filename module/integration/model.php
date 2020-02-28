@@ -35,7 +35,7 @@ class integrationModel extends model
     {
         return $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_INTEGRATION)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
-            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t1.jenkins=t3.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t1.jkHost=t3.id')
             ->where('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -66,30 +66,26 @@ class integrationModel extends model
     public function create()
     {
         $integration = fixer::input('post')
+            ->setDefault('atDay', '')
+            ->setIF($this->post->repoType != 'Subversion', 'svnDir', '')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('repoType')
             ->get();
-        if($integration->triggerType == 'schedule')
-        {
-            if(!isset($integration->scheduleDay)) $integration->scheduleDay = array();
-            $integration->scheduleDay = join(',', $integration->scheduleDay);
-        }
-        else
-        {
-            $integration->scheduleDay = '';
-        }
+        if($integration->triggerType == 'schedule') $integration->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $this->dao->insert(TABLE_INTEGRATION)->data($integration)
             ->batchCheck($this->config->integration->create->requiredFields, 'notempty')
 
-            ->batchCheckIF($integration->triggerType === 'schedule', "scheduleDay", 'notempty')
-            ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
+            ->batchCheckIF($integration->triggerType === 'schedule', "atDay,atTime", 'notempty')
+            ->batchCheckIF($integration->triggerType === 'commit', "comment", 'notempty')
+            ->batchCheckIF($this->post->repoType == 'Subversion', "svnDir", 'notempty')
 
             ->autoCheck()
             ->exec();
 
-        if($integration->triggerType == 'schedule' and strpos($integration->scheduleDay, date('w')) !== false) $this->loadModel('compile')->createByIntegration($integration->id);
+        $id = $this->dao->lastInsertId();
+        if($integration->triggerType == 'schedule' and strpos($integration->atDay, date('w')) !== false) $this->loadModel('compile')->createByIntegration($id);
         return true;
     }
 
@@ -104,25 +100,20 @@ class integrationModel extends model
     {
         $oldIntegration = $this->getById($id);
         $integration    = fixer::input('post')
+            ->setDefault('atDay', '')
+            ->setIF($this->post->repoType != 'Subversion', 'svnDir', '')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->remove('repoType')
             ->get();
-        if($integration->triggerType == 'schedule')
-        {
-            if(!isset($integration->scheduleDay)) $integration->scheduleDay = array();
-            $integration->scheduleDay = join(',', $integration->scheduleDay);
-        }
-        else
-        {
-            $integration->scheduleDay = '';
-        }
+        if($integration->triggerType == 'schedule') $integration->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $this->dao->update(TABLE_INTEGRATION)->data($integration)
             ->batchCheck($this->config->integration->edit->requiredFields, 'notempty')
 
-            ->batchCheckIF($integration->triggerType === 'schedule', "scheduleDay", 'notempty')
-            ->batchCheckIF($this->post->repoType == 'Subversion', "svnFolder", 'notempty')
+            ->batchCheckIF($integration->triggerType === 'schedule', "atDay,atTime", 'notempty')
+            ->batchCheckIF($integration->triggerType === 'commit', "comment", 'notempty')
+            ->batchCheckIF($this->post->repoType == 'Subversion', "svnDir", 'notempty')
 
             ->autoCheck()
             ->where('id')->eq($id)
@@ -131,9 +122,9 @@ class integrationModel extends model
         if($integration->triggerType == 'schedule')
         {
             $week = date('w');
-            if($integration->triggerType != $oldIntegration->triggerType or strpos($oldIntegration->scheduleDay, $week) === false)
+            if($integration->triggerType != $oldIntegration->triggerType or strpos($oldIntegration->atDay, $week) === false)
             {
-                if(strpos($integration->scheduleDay, $week) !== false) $this->loadModel('compile')->createByIntegration($integration->id);
+                if(strpos($integration->atDay, $week) !== false) $this->loadModel('compile')->createByIntegration($integration->id);
             }
         }
         return true;

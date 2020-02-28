@@ -1,5 +1,5 @@
 <?php
-class ParseGit
+class GitRepo
 {
     public $client;
     public $root;

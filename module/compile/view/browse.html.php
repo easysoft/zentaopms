@@ -29,7 +29,7 @@
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
           <th class='w-200px text-left'><?php echo $lang->integration->repo;?></th>
-          <th class='w-200px text-left'><?php echo $lang->integration->jenkins;?></th>
+          <th class='w-200px text-left'><?php echo $lang->integration->jkHost;?></th>
           <th class='w-200px text-left'><?php echo $lang->integration->triggerType;?></th>
           <th class='w-150px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
           <th class='text-left'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>

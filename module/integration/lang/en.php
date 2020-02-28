@@ -9,12 +9,12 @@ $lang->integration->confirmDelete = 'Do you want to delete this Build?';
 $lang->integration->id          = 'ID';
 $lang->integration->name        = 'Name';
 $lang->integration->repo        = 'Repo';
-$lang->integration->svnFolder   = 'SVN Tag Watch Path';
-$lang->integration->jenkins     = 'Jenkins Server';
+$lang->integration->svnDir      = 'SVN Tag Watch Path';
+$lang->integration->jkHost      = 'Jenkins Server';
 $lang->integration->buildType   = 'Build Type';
-$lang->integration->jenkinsJob  = 'Jenkins Task';
+$lang->integration->jkJob       = 'Jenkins Task';
 $lang->integration->triggerType = 'Trigger';
-$lang->integration->scheduleDay = 'Custom Days';
+$lang->integration->atDay       = 'Custom Days';
 $lang->integration->lastExec    = 'Last Executed';
 
 $lang->integration->example    = 'e.g.';

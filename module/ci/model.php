@@ -31,10 +31,10 @@ class ciModel extends model
      */
     public function checkBuildStatus()
     {
-        $compiles = $this->dao->select('t1.*, t2.jenkinsJob, t3.name jenkinsName,t3.serviceUrl,t3.account,t3.token,t3.password')
+        $compiles = $this->dao->select('t1.*, t2.jkJob, t3.name jenkinsName,t3.serviceUrl,t3.account,t3.token,t3.password')
             ->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.cijob=t2.id')
-            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jenkins=t3.id')
+            ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jkHost=t3.id')
             ->where('t1.status')->ne('success')
             ->andWhere('t1.status')->ne('fail')
             ->andWhere('t1.status')->ne('timeout')
@@ -55,13 +55,13 @@ class ciModel extends model
             if(strripos($response, "404") > -1)
             {
                 /* Queue expired, use another api. */
-                $infoUrl   = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $compile->jenkinsJob, $compile->queueItem);
+                $infoUrl   = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $compile->jkJob, $compile->queueItem);
                 $response  = common::http($infoUrl);
                 $buildInfo = json_decode($response);
                 $result    = strtolower($buildInfo->result);
                 $this->updateBuildStatus($compile, $result);
 
-                $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jenkinsJob, $compile->queueItem);
+                $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $compile->queueItem);
                 $response = common::http($logUrl);
                 $logs     = json_decode($response);
 

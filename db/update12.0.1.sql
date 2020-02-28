@@ -59,3 +59,14 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('1',    '1',    '*',    '*',    '*',    'moduleName=ci&methodName=buildTodayJob', '创建周期性任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行Jenkins任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00');
+
+ALTER TABLE `zt_integration`
+CHANGE `jenkins` `jkHost` mediumint(8) unsigned NOT NULL AFTER `repo`,
+CHANGE `jenkinsJob` `jkJob` varchar(500) COLLATE 'utf8_general_ci' NOT NULL AFTER `jkHost`,
+CHANGE `svnFolder` `svnDir` varchar(255) COLLATE 'utf8_general_ci' NOT NULL AFTER `triggerType`,
+CHANGE `scheduleDay` `atDay` varchar(20) COLLATE 'utf8_general_ci' NULL AFTER `svnDir`,
+ADD `atTime` varchar(10) COLLATE 'utf8_general_ci' NULL AFTER `atDay`,
+DROP `tagKeywords`,
+DROP `commentKeywords`,
+ADD `comment` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `atTime`,
+ADD `lastTag` varchar(255) COLLATE 'utf8_general_ci' NULL;

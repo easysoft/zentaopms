@@ -83,7 +83,6 @@ class webhook extends control
      */
     public function edit($id)
     {
-        $webhook = $this->webhook->getByID($id);
         if($_POST)
         {
             $this->webhook->update($id);
@@ -91,14 +90,16 @@ class webhook extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->app->loadLang('action');
-        $this->view->title         = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
-        $this->view->products      = $this->loadModel('product')->getPairs();
-        $this->view->projects      = $this->loadModel('project')->getPairs();
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
-        $this->view->position[]    = $this->lang->webhook->edit;
-        $this->view->webhook       = $webhook;
+        $webhook = $this->webhook->getByID($id);
+
+        $this->view->title      = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
+        $this->view->position[] = $this->lang->webhook->edit;
+
+        $this->view->products = $this->loadModel('product')->getPairs();
+        $this->view->projects = $this->loadModel('project')->getPairs();
+        $this->view->webhook  = $webhook;
         $this->display();
     }
 

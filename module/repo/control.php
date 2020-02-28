@@ -769,61 +769,47 @@ class repo extends control
      * 
      * @param  int    $repoID 
      * @param  string $path 
-     * @param  string $revision 
      * @access public
      * @return void
      */
-    public function ajaxGetSVNTags($repoID, $path = '', $revision = 'HEAD')
+    public function ajaxGetSVNDirs($repoID, $path = '')
     {
-        if($this->get->path) $entry = $this->get->path;
         $repo = $this->repo->getRepoByID($repoID);
         if($repo->SCM != 'Subversion') die(json_encode(array()));
 
-        $this->scm->setEngine($repo);
         $path = $this->repo->decodePath($path);
-        $tags = $this->scm->tags($path, $revision);
+        if(empty($path) and empty($repo->prefix)) $path = '/';
 
-        $parentInfos = array();
-        $parentPath  = '';
-
-        $info = array();
-        $info['path'] = '/';
-        $info['url']  = $repo->path . $info['path'];
-        $info['encodePath'] = $this->repo->encodePath($info['path']);
-        $parentInfos['/'] = $info;
-
-        foreach(explode('/', $path) as $parent)
+        $dirs['/'] = '';
+        $parent    = '';
+        foreach(explode('/', $path) as $subPath)
         {
-            if(empty($parent)) continue;
-            $parentPath .= '/' . $parent;
-
-            $info = array();
-            $info['path'] = $parentPath;
-            $info['url']  = $repo->path . $info['path'];
-
-            $info['encodePath'] = $this->repo->encodePath($info['path']);
-
-            $parentInfos[$parent] = $info;
+            if(empty($subPath)) continue;
+            $parent .= '/' . $subPath;
+            $dirs[$parent] = $this->repo->encodePath($parent);
         }
 
-        $tagInfos = array();
-        foreach($tags as $tag)
+        $parent = '/';
+        if($repo->prefix) $parent = rtrim($repo->prefix, '/');
+        if(trim($path, '/')) $parent = rtrim($repo->prefix, '/') . '/' . trim($path, '/');
+        $stmt = $this->dao->select('t1.*,t2.revision as svnRevision,t2.time')->from(TABLE_REPOFILES)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision = t2.id')
+            ->where('t1.repo')->eq($repoID)
+            ->andWhere('t1.type')->eq('dir')
+            ->andWhere('t1.parent')->eq($parent)
+            ->orderBy('path,svnRevision,time')
+            ->query();
+
+        while($row = $stmt->fetch())
         {
-            $info = array();
-            $info['path'] = '/';
-            if($path) $info['path'] .= $path . '/';
-            $info['path'] .= $tag;
-            $info['url']   = $repo->path . $info['path'];
+            $path = $row->path;
+            if($repo->prefix) $path = str_replace($repo->prefix, '', $path);
+            if(empty($path)) $path = '/';
 
-            $info['encodePath'] = $this->repo->encodePath($info['path']);
-
-            $tagInfos[$tag] = $info;
+            $dirs[$path] = $this->repo->encodePath($path);
+            if($row->action == 'D') unset($dirs[$path]);
         }
 
-        $svnTags = array();
-        $svnTags['parent'] = $parentInfos;
-        $svnTags['tags']   = $tagInfos;
-
-        die(json_encode($svnTags));
+        die(json_encode($dirs));
     }
 }

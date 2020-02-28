@@ -100,7 +100,8 @@ class Subversion
         foreach($infos as $info)
         {
             if($onlyDir and $info->kind != 'dir') continue;
-            $tags[$info->name] = $info->name;
+            $dirPath = $path . '/' . $info->name;
+            $tags[$dirPath] = $info->name;
         }
 
         return $tags;
