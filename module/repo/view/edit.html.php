@@ -30,7 +30,7 @@
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, $repo->SCM, "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
             <td>
-                <span class="tips-git"><?php echo $lang->repo->synTips; ?></span>
+                <span class="tips-git"><?php echo $lang->repo->syncTips; ?></span>
             </td>
           </tr>
           <tr>
@@ -66,7 +66,11 @@
           <tr class="account-fields">
             <th><?php echo $lang->repo->password;?></th>
             <td>
+              <div class='input-group'>
                 <?php echo html::password('password', $repo->password, "class='form-control'");?>
+                <span class='input-group-addon fix-border fix-padding'></span>
+                <?php echo html::select('encrypt', $lang->repo->encryptList, $repo->encrypt, "class='form-control'");?>
+              </div>
             </td>
             <td></td>
           </tr>
