@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
-('1',    '1',    '*',    '*',    '*',    'moduleName=ci&methodName=buildTodayJob', '创建周期性任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
+('1',    '1',    '*',    '*',    '*',    'moduleName=ci&methodName=initQueue', '创建周期性任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=checkBuildStatus', '同步Jenkins任务状态', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行Jenkins任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00');
 

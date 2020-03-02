@@ -165,7 +165,7 @@ $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = '异步�
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = '异步发送Webhook';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']     = '删除过期日志';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']    = '生成周期性待办';
-$lang->install->cronList['moduleName=ci&methodName=buildTodayJob']    = '创建周期性任务';
+$lang->install->cronList['moduleName=ci&methodName=initQueue']        = '创建周期性任务';
 $lang->install->cronList['moduleName=ci&methodName=checkBuildStatus'] = '同步Jenkins任务状态';
 $lang->install->cronList['moduleName=ci&methodName=exec']             = '执行Jenkins任务';
 

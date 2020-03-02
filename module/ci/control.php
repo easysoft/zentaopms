@@ -23,12 +23,12 @@ class ci extends control
     }
 
     /**
-     * Build today job.
+     * Init compile queue.
      * 
      * @access public
      * @return void
      */
-    public function buildTodayJob()
+    public function initQueue()
     {
         $scheduleJobs = $this->loadModel('integration')->getListByTriggerType('schedule');
 
