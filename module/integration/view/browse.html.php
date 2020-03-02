@@ -52,9 +52,9 @@
           <td class='text'><?php if($job->lastStatus) echo zget($lang->compile->statusList, $job->lastStatus) . $lang->ci->at . $job->lastExec;?></td>
           <td class='c-actions text-center'>
             <?php
-            common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'file-text');
-            common::printIcon('integration', 'edit', "jobID=$id", '', 'list',  'edit');
-            if(common::hasPriv('integration', 'delete')) echo html::a($this->createLink('integration', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->integration->delete}' class='btn'");
+            common::printIcon('compile', 'browse', "integrationID=$id", '', 'list', 'file-text');
+            common::printIcon('integration', 'edit', "integrationID=$id", '', 'list',  'edit');
+            if(common::hasPriv('integration', 'delete')) echo html::a($this->createLink('integration', 'delete', "integrationID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->integration->delete}' class='btn'");
             ?>
           </td>
         </tr>

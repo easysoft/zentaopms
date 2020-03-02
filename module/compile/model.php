@@ -14,21 +14,21 @@ class compileModel extends model
     /**
      * Get build list.
      * 
-     * @param  int    $jobID 
+     * @param  int    $integrationID 
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getList($jobID, $orderBy = 'id_desc', $pager = null)
+    public function getList($integrationID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.id, t1.name, t1.status, t1.createdDate, t2.triggerType, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
-            ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.cijob=t2.id')
+            ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.integration=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_JENKINS)->alias('t4')->on('t2.jkHost=t4.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.cijob')->ne('0')
-            ->beginIF(!empty($jobID))->andWhere('t1.cijob')->eq($jobID)->fi()
+            ->andWhere('t1.integration')->ne('0')
+            ->beginIF(!empty($integrationID))->andWhere('t1.integration')->eq($integrationID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -58,9 +58,9 @@ class compileModel extends model
     }
 
     /**
-     * Save build by job
+     * Save build by integration
      * 
-     * @param  object    $job 
+     * @param  int    $integrationID 
      * @access public
      * @return void
      */
@@ -69,7 +69,7 @@ class compileModel extends model
         $integration = $this->dao->select('id,name')->from(TABLE_INTEGRATION)->where('id')->eq($integrationID)->fetch();
 
         $build = new stdClass();
-        $build->cijob       = $integration->id;
+        $build->integration = $integration->id;
         $build->name        = $integration->name;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
@@ -86,18 +86,18 @@ class compileModel extends model
      */
     public function execByCompile($compile, $data = null)
     {
-        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
             ->from(TABLE_INTEGRATION)->alias('t1')
             ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
-            ->where('t1.id')->eq($compile->cijob)
+            ->where('t1.id')->eq($compile->integration)
             ->fetch();
 
         if(!$integration) return false;
 
         $buildUrl = $this->getBuildUrl($integration);
         $build    = new stdclass();
-        $build->queueItem = $this->loadModel('ci')->sendRequest($buildUrl, $data);
-        $build->status    = $build->queueItem ? 'created' : 'create_fail';
+        $build->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $build->status = $build->queue ? 'created' : 'create_fail';
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
 
         return !dao::isError();
@@ -112,7 +112,7 @@ class compileModel extends model
      */
     public function execByIntegration($integrationID, $data = null)
     {
-        $integration = $this->dao->select('t1.id as jobId,t1.name as jobName,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
             ->from(TABLE_INTEGRATION)->alias('t1')
             ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($integrationID)
@@ -122,10 +122,10 @@ class compileModel extends model
 
         $buildUrl = $this->getBuildUrl($integration);
         $build    = new stdClass();
-        $build->cijob       = $integration->jobId;
-        $build->name        = $integration->jobName;
-        $build->queueItem   = $this->loadModel('ci')->sendRequest($buildUrl, $data);
-        $build->status      = $build->queueItem ? 'created' : 'create_fail';
+        $build->integration = $integration->id;
+        $build->name        = $integration->name;
+        $build->queue       = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $build->status      = $build->queue ? 'created' : 'create_fail';
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();

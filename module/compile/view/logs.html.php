@@ -18,7 +18,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php echo html::a(helper::createLink('compile', "browse", "jobId=$build->cijob"), "<i class='icon icon-back icon-sm'></i> ". $lang->goback, '', "class='btn btn-secondary'");?>
+    <?php echo html::a(helper::createLink('compile', "browse", "integrationID=$build->integration"), "<i class='icon icon-back icon-sm'></i> ". $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
 </div>
 <div id='mainContent'>

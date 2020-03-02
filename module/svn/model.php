@@ -138,10 +138,10 @@ class svnModel extends model
                 $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
 
-            // exe ci jobs in log
-            $cijobIdList = zget($objects, 'integrations', array());
+            // Create compile by integration.
+            $integrations = zget($objects, 'integrations', array());
             $this->loadModel('compile');
-            foreach($cijobIdList as $id) $this->compile->execByCompile($id);
+            foreach($integrations as $id) $this->compile->createByIntegration($id);
         }
     }
 

@@ -70,3 +70,7 @@ DROP `tagKeywords`,
 DROP `commentKeywords`,
 ADD `comment` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `atTime`,
 ADD `lastTag` varchar(255) COLLATE 'utf8_general_ci' NULL;
+
+ALTER TABLE `zt_compile`
+CHANGE `cijob` `integration` mediumint(8) unsigned NOT NULL AFTER `name`,
+CHANGE `queueItem` `queue` mediumint(8) NOT NULL AFTER `integration`;

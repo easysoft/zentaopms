@@ -25,7 +25,7 @@
     <table id='buildList' class='table has-sort-head table-fixed'>
       <thead>
         <tr class='text-center'>
-          <?php $vars = "jobID={$jobID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+          <?php $vars = "integrationID={$integrationID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
           <th class='text-left'><?php echo $lang->integration->repo;?></th>

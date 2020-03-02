@@ -28,6 +28,7 @@ class compile extends control
     /**
      * Browse jenkins build.
      *
+     * @param  int    $integrationID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -35,7 +36,7 @@ class compile extends control
      * @access public
      * @return void
      */
-    public function browse($jobID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($integrationID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -45,10 +46,10 @@ class compile extends control
         $this->view->position[] = $this->lang->compile->browse;
 
         $this->app->loadLang('integration');
-        $this->view->buildList  = $this->compile->getList($jobID, $orderBy, $pager);
-        $this->view->jobID      = $jobID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
+        $this->view->integrationID = $integrationID;
+        $this->view->buildList     = $this->compile->getList($integrationID, $orderBy, $pager);
+        $this->view->orderBy       = $orderBy;
+        $this->view->pager         = $pager;
         $this->display();
     }
 
@@ -67,7 +68,7 @@ class compile extends control
 
         $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->logs;
         $this->view->position[] = html::a($this->createLink('integration', 'browse'), $this->lang->ci->job);
-        $this->view->position[] = html::a($this->createLink('compile', 'browse', "jobID=" . $build->cijob), $this->lang->compile->browse);
+        $this->view->position[] = html::a($this->createLink('compile', 'browse', "integrationID=" . $build->integration), $this->lang->compile->browse);
         $this->view->position[] = $this->lang->compile->logs;
         $this->display();
     }
