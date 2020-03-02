@@ -13,13 +13,15 @@ $lang->integration->id          = 'ID';
 $lang->integration->name        = '名称';
 $lang->integration->repo        = '代码库';
 $lang->integration->svnDir      = 'SVN Tag监控路径';
+$lang->integration->jenkins     = 'Jenkins';
 $lang->integration->jkHost      = 'Jenkins服务';
 $lang->integration->buildType   = '构建类型';
 $lang->integration->jkJob       = 'Jenkins任务名';
 $lang->integration->triggerType = '触发方式';
 $lang->integration->atDay       = '自定义日期';
 $lang->integration->atTime      = '执行时间';
-$lang->integration->lastExec    = '最后执行';
+$lang->integration->lastStatus  = '最后执行状态';
+$lang->integration->lastExec    = '最后执行时间';
 $lang->integration->comment     = '匹配关键字';
 
 $lang->integration->example    = '举例';
