@@ -24,30 +24,30 @@
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='buildList' class='table has-sort-head table-fixed'>
       <thead>
-        <tr>
-          <?php $vars = "jobID={$job->id}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+        <tr class='text-center'>
+          <?php $vars = "jobID={$jobID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
-          <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
-          <th class='w-200px text-left'><?php echo $lang->integration->repo;?></th>
+          <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
+          <th class='text-left'><?php echo $lang->integration->repo;?></th>
           <th class='w-200px text-left'><?php echo $lang->integration->jkHost;?></th>
-          <th class='w-200px text-left'><?php echo $lang->integration->triggerType;?></th>
-          <th class='w-150px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
-          <th class='text-left'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
-          <th class='w-100px c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='w-140px text-left'><?php echo $lang->integration->triggerType;?></th>
+          <th class='w-80px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
+          <th class='w-130px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
+          <th class='c-actions-1'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
-        <?php foreach ($buildList as $id => $build): ?>
+        <?php foreach($buildList as $id => $build):?>
         <tr>
-          <td class='text-center'><?php echo $id; ?></td>
-          <td class='text' title='<?php echo $build->name; ?>'><?php echo $build->name; ?></td>
-          <td class='text' title='<?php echo $build->repoName; ?>'><?php echo $build->repoName; ?></td>
-          <td class='text' title='<?php echo $build->jenkinsName; ?>'><?php echo $build->jenkinsName; ?></td>
+          <td class='text-center'><?php echo $id;?></td>
+          <td class='text' title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
+          <td class='text' title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
+          <td class='text' title='<?php echo $build->jenkinsName;?>'><?php echo $build->jenkinsName;?></td>
           <?php $triggerType = zget($lang->integration->triggerTypeList, $build->triggerType);?>
           <td class='text' title='<?php echo $triggerType;?>'><?php echo $triggerType;?></td>
           <?php $buildStatus = zget($lang->compile->statusList, $build->status);?>
           <td class='text' title='<?php echo $buildStatus;?>'><?php echo $buildStatus;?></td>
-          <td class='text' title='<?php echo $build->createDate; ?>'><?php echo $build->createdDate; ?></td>
+          <td class='text' title='<?php echo $build->createdDate;?>'><?php echo $build->createdDate;?></td>
           <td class='c-actions text-center'>
             <?php common::printIcon('compile', 'logs', "buildID=$id", '', 'list', 'file-text', '', '', '', '', $lang->compile->logs);?>
           </td>
@@ -60,4 +60,4 @@
     <?php endif; ?>
   </form>
 </div>
-<?php include '../../common/view/footer.html.php'; ?>
+<?php include '../../common/view/footer.html.php';?>

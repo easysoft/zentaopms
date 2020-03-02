@@ -14,6 +14,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php echo html::a($this->createLink('integration', 'browse'), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a($this->createLink('compile', 'browse'), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('integration', 'create')) common::printLink('integration', 'create', "", "<i class='icon icon-plus'></i> " . $lang->integration->create, '', "class='btn btn-primary'");?>
@@ -23,7 +24,7 @@
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='jobList' class='table has-sort-head table-fixed'>
       <thead>
-        <tr>
+        <tr class='text-center'>
           <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->integration->id);?></th>
           <th class='w-200px text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->integration->name);?></th>
@@ -32,7 +33,7 @@
           <th class='w-200px text-left'><?php common::printOrderLink('jkHost', $orderBy, $vars, $lang->integration->jkHost);?></th>
           <th class='w-200px text-left'><?php echo $lang->integration->jkJob;?></th>
           <th class='text-left'><?php echo $lang->integration->lastExec;?></th>
-          <th class='w-120px c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='w-120px c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

@@ -27,7 +27,8 @@ class compileModel extends model
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_JENKINS)->alias('t4')->on('t2.jkHost=t4.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.cijob')->eq($jobID)
+            ->andWhere('t1.cijob')->ne('0')
+            ->beginIF(!empty($jobID))->andWhere('t1.cijob')->eq($jobID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

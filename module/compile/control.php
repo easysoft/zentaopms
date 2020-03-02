@@ -44,8 +44,9 @@ class compile extends control
         $this->view->position[] = html::a($this->createLink('integration', 'browse'), $this->lang->ci->job);
         $this->view->position[] = $this->lang->compile->browse;
 
+        $this->app->loadLang('integration');
         $this->view->buildList  = $this->compile->getList($jobID, $orderBy, $pager);
-        $this->view->job        = $this->loadModel('integration')->getByID($jobID);
+        $this->view->jobID      = $jobID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->display();
