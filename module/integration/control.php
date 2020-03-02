@@ -26,7 +26,7 @@ class integration extends control
     }
 
     /**
-     * Browse ci job.
+     * Browse integration.
      *
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -53,7 +53,7 @@ class integration extends control
     }
 
     /**
-     * Create a ci job.
+     * Create a integration.
      *
      * @access public
      * @return void
@@ -89,7 +89,7 @@ class integration extends control
     }
 
     /**
-     * Edit a ci job.
+     * Edit a integration.
      *
      * @param  int    $id
      * @access public
@@ -131,7 +131,7 @@ class integration extends control
     }
 
     /**
-     * Delete a ci job.
+     * Delete a integration.
      *
      * @param  int    $id
      * @access public
@@ -146,7 +146,7 @@ class integration extends control
     }
 
     /**
-     * Exec a ci job.
+     * Exec a integration.
      *
      * @param  int    $id
      * @access public
