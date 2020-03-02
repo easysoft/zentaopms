@@ -1,10 +1,13 @@
 <?php
+$lang->integration->common        = 'Integration';
 $lang->integration->browse        = 'Browse Integration';
 $lang->integration->create        = 'Create Integration';
 $lang->integration->edit          = 'Edit Integration';
 $lang->integration->execNow       = 'Execute now';
 $lang->integration->delete        = 'Delete Integration';
-$lang->integration->confirmDelete = 'Do you want to delete this Build?';
+$lang->integration->confirmDelete = 'Do you want to delete this integration?';
+$lang->integration->dirChange     = 'Directory Changed';
+$lang->integration->buildTag      = 'Build Tag';
 
 $lang->integration->id          = 'ID';
 $lang->integration->name        = 'Name';

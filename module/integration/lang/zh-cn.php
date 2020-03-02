@@ -1,12 +1,11 @@
 <?php
-$lang->integration->common        = '构建任务';
-$lang->integration->browse        = '浏览构建任务';
-$lang->integration->create        = '创建构建任务';
-$lang->integration->start         = '执行构建';
-$lang->integration->edit          = '编辑构建任务';
+$lang->integration->common        = '构建计划';
+$lang->integration->browse        = '浏览构建计划';
+$lang->integration->create        = '创建构建计划';
+$lang->integration->edit          = '编辑构建计划';
 $lang->integration->execNow       = '立即执行';
-$lang->integration->delete        = '删除构建任务';
-$lang->integration->confirmDelete = '确认删除该构建任务吗？';
+$lang->integration->delete        = '删除构建计划';
+$lang->integration->confirmDelete = '确认删除该构建计划吗？';
 $lang->integration->dirChange     = '目录改动';
 $lang->integration->buildTag      = '打标签';
 

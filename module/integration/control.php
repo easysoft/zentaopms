@@ -43,8 +43,8 @@ class integration extends control
         $this->app->loadLang('compile');
         $this->view->jobList = $this->integration->getList($orderBy, $pager);
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->integration->browse;
-        $this->view->position[] = $this->lang->ci->job;
+        $this->view->title      = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->browse;
+        $this->view->position[] = $this->lang->ci->integration;
         $this->view->position[] = $this->lang->integration->browse;
 
         $this->view->orderBy    = $orderBy;
@@ -69,8 +69,8 @@ class integration extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->integration->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->title      = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->create;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->integration);
         $this->view->position[] = $this->lang->integration->create;
 
         $repoList  = $this->loadModel('repo')->getList();
@@ -107,8 +107,8 @@ class integration extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->integration->edit;
-        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->title       = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->edit;
+        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->integration);
         $this->view->position[]  = $this->lang->integration->edit;
 
         $repo      = $this->loadModel('repo')->getRepoByID($job->repo);

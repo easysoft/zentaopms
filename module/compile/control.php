@@ -41,8 +41,8 @@ class compile extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->browse;
-        $this->view->position[] = html::a($this->createLink('integration', 'browse'), $this->lang->ci->job);
+        $this->view->title      = $this->lang->ci->integration . $this->lang->colon . $this->lang->compile->browse;
+        $this->view->position[] = html::a($this->createLink('integration', 'browse'), $this->lang->ci->integration);
         $this->view->position[] = $this->lang->compile->browse;
 
         $this->app->loadLang('integration');
@@ -66,8 +66,8 @@ class compile extends control
         $this->view->logs   = str_replace("\r\n","<br />", $build->logs);
         $this->view->build  = $build;
 
-        $this->view->title = $this->lang->ci->job . $this->lang->colon . $this->lang->compile->logs;
-        $this->view->position[] = html::a($this->createLink('integration', 'browse'), $this->lang->ci->job);
+        $this->view->title = $this->lang->ci->integration . $this->lang->colon . $this->lang->compile->logs;
+        $this->view->position[] = html::a($this->createLink('integration', 'browse'), $this->lang->ci->integration);
         $this->view->position[] = html::a($this->createLink('compile', 'browse', "integrationID=" . $build->integration), $this->lang->compile->browse);
         $this->view->position[] = $this->lang->compile->logs;
         $this->display();
