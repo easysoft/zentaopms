@@ -340,10 +340,14 @@ $lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' =>
 $lang->ci->menu->maintain = array('link' => 'Repo|repo|maintain', 'alias' => 'create,edit');
 $lang->ci->menu->rule     = array('link' => 'Rule|repo|setmatchcomment');
 
-$lang->repo          = new stdclass();
-$lang->jenkins       = new stdclass();
-$lang->repo->menu    = $lang->ci->menu;
-$lang->jenkins->menu = $lang->ci->menu;
+$lang->repo              = new stdclass();
+$lang->jenkins           = new stdclass();
+$lang->compile           = new stdclass();
+$lang->integration       = new stdclass();
+$lang->repo->menu        = $lang->ci->menu;
+$lang->jenkins->menu     = $lang->ci->menu;
+$lang->compile->menu     = $lang->ci->menu;
+$lang->integration->menu = $lang->ci->menu;
 
 /* Doc menu settings. */
 $lang->doc = new stdclass();

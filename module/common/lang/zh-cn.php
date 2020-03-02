@@ -333,7 +333,7 @@ $lang->caselib->menu->report    = array('link' => '报告|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
 $lang->ci = new stdclass();
-$lang->ci->menu           = new stdclass();
+$lang->ci->menu = new stdclass();
 $lang->ci->menu->code     = array('link' => '代码|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
 $lang->ci->menu->build    = array('link' => '构建|integration|browse', 'subModule' => 'compile,integration');
 $lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' => 'create,edit');
