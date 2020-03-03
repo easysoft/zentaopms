@@ -338,7 +338,7 @@ $lang->ci->menu->code     = array('link' => 'Code|repo|browse|repoID=%s', 'alias
 $lang->ci->menu->build    = array('link' => 'Build|integration|browse', 'subModule' => 'compile,integration');
 $lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' => 'create,edit');
 $lang->ci->menu->maintain = array('link' => 'Repo|repo|maintain', 'alias' => 'create,edit');
-$lang->ci->menu->rule     = array('link' => 'Rule|repo|setmatchcomment');
+$lang->ci->menu->rule     = array('link' => 'Rule|repo|setrules');
 
 $lang->repo              = new stdclass();
 $lang->jenkins           = new stdclass();

@@ -9,7 +9,7 @@ $lang->repo->editAction      = 'Edit Repo';
 $lang->repo->delete          = 'Delete Repo';
 $lang->repo->showSyncComment = 'Display Synchronization';
 $lang->repo->ajaxSyncComment = 'Interface: Ajax Sync Note';
-$lang->repo->setMatchComment = 'Set match comment';
+$lang->repo->setRules        = 'Set rules';
 $lang->repo->download        = 'Download File';
 $lang->repo->downloadDiff    = 'Download Diff';
 $lang->repo->diffAction      = 'Revision Diff';
@@ -126,11 +126,11 @@ $lang->repo->notice->deleteBug      = 'Are you sure to delete this bug?';
 $lang->repo->notice->deleteComment  = 'Are you sure to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';
 
-$lang->repo->matchComment = new stdclass();
-$lang->repo->matchComment->exampleLabel = "Comment Example";
-$lang->repo->matchComment->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
-$lang->repo->matchComment->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
-$lang->repo->matchComment->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
+$lang->repo->rules = new stdclass();
+$lang->repo->rules->exampleLabel = "Comment Example";
+$lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
+$lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = 'Your server disabled exec and shell_exec, so it cannot be applied.';

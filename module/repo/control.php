@@ -640,33 +640,28 @@ class repo extends control
     }
 
     /**
-     * Set matchComment.
+     * Set Rules.
      * 
      * @access public
      * @return void
      */
-    public function setMatchComment($module = '')
+    public function setRules($module = '')
     {
         if($_POST)
         {
-            $module = $this->post->selectModule;
-            unset($_POST['selectModule']);
-            $this->loadModel('setting')->setItem('system.repo.matchComment', json_encode($this->post->matchComment));
-            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setMatchComment', "module={$module}")));
+            $this->loadModel('setting')->setItem('system.repo.rules', json_encode($this->post->rules));
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('setRules')));
         }
 
         $this->repo->setMenu($this->repos, $this->session->repoID, false);
 
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
-        $this->app->loadLang('story');
-        $this->app->loadLang('integration');
-        if(is_string($this->config->repo->matchComment)) $this->config->repo->matchComment = json_decode($this->config->repo->matchComment, true);
+        if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setMatchComment;
-        $this->view->position[] = $this->lang->repo->setMatchComment;
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setRules;
+        $this->view->position[] = $this->lang->repo->setRules;
 
-        $this->view->selectModule = $module;
         $this->display();
     }
 

@@ -9,7 +9,7 @@ $lang->repo->editAction      = '编辑版本库';
 $lang->repo->delete          = '删除版本库';
 $lang->repo->showSyncComment = '显示同步进度';
 $lang->repo->ajaxSyncComment = '接口：AJAX同步注释';
-$lang->repo->setMatchComment = '注释指令配置';
+$lang->repo->setRules        = '指令配置';
 $lang->repo->download        = '下载';
 $lang->repo->downloadDiff    = '下载Diff';
 $lang->repo->diffAction      = '版本对比';
@@ -21,7 +21,6 @@ $lang->repo->deleteBug       = '删除评审';
 $lang->repo->addComment      = '添加备注';
 $lang->repo->editComment     = '编辑备注';
 $lang->repo->deleteComment   = '删除备注';
-$lang->repo->selectModule    = '选择模块';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -96,8 +95,14 @@ $lang->repo->commentEdit    = '<i class="icon-pencil"></i>';
 $lang->repo->commentDelete  = '<i class="icon-remove"></i>';
 $lang->repo->allChanges     = "其他改动";
 $lang->repo->commitTitle    = "第%s次提交";
-$lang->repo->mark           = "匹配标记";
-$lang->repo->split          = "分割匹配";
+$lang->repo->mark           = "开始标记";
+$lang->repo->split          = "多ID间隔";
+
+$lang->repo->objectRule   = '对象匹配规则';
+$lang->repo->objectIdRule = '对象ID匹配规则';
+$lang->repo->actionRule   = '动作匹配规则';
+$lang->repo->manHourRule  = '工时匹配规则';
+$lang->repo->ruleSplit    = "多关键字用';'分割，如：任务多关键字： Task;task";
 
 $lang->repo->viewDiffList['inline'] = '直列';
 $lang->repo->viewDiffList['appose'] = '并排';
@@ -126,13 +131,12 @@ $lang->repo->notice->deleteBug      = '确认删除该Bug？';
 $lang->repo->notice->deleteComment  = '确认删除该回复？';
 $lang->repo->notice->lastSyncTime   = '最后更新于：';
 
-$lang->repo->matchComment = new stdclass();
-$lang->repo->matchComment->exampleLabel = "注释示例";
-$lang->repo->matchComment->example['story']['common']      = "%story% %id%1%split%2";
-$lang->repo->matchComment->example['task']['start']        = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
-$lang->repo->matchComment->example['task']['finish']       = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
-$lang->repo->matchComment->example['bug']['resolve']       = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
-$lang->repo->matchComment->example['integration']['start'] = "%build% %integration% %id%1%split%2";
+$lang->repo->rules = new stdclass();
+$lang->repo->rules->exampleLabel = "注释示例";
+$lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
+$lang->repo->rules->example['task']['effort'] = "%effort% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = '你的服务器禁用了exec,shell_exec方法，无法使用该功能';

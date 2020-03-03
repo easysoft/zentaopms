@@ -908,18 +908,12 @@ class repoModel extends model
      */
     public function replaceCommentLink($comment)
     {
+        $rules   = $this->processRules();
         $stories = array();
         $tasks   = array();
         $bugs    = array();
-        $commonReg = "(?:\s){0,}((?:#|:|��){0,})([0-9, ]{1,})";
-        $taskReg  = '/task' .  $commonReg . '/i';
-        $storyReg = '/story' . $commonReg . '/i';
-        $bugReg   = '/bug'   . $commonReg . '/i';
-        if(preg_match_all($storyReg, $comment, $result))
-        {
-            $storyLinks = $this->addLink($result, 'story');
-            foreach($storyLinks as $search => $replace) $comment = str_replace($search, $replace, $comment);
-        }
+        $taskReg  = '/' . $rules['taskReg'] . '/i';
+        $bugReg   = '/' . $rules['bugReg'] . '/i';
         if(preg_match_all($taskReg, $comment, $result))
         {
             $taskLinks = $this->addLink($result, 'task');
@@ -945,16 +939,15 @@ class repoModel extends model
     {
         if(empty($matches)) return null;
         $replaceLines = array();
-        foreach($matches[2] as $key => $ids)
+        foreach($matches[3] as $i => $idList)
         {
-            $spit = strpos($ids, ',') !== false ? ',' : ' ';
-            $ids = explode(' ', str_replace(',', ' ', $ids));
-            $links = $method . " " . $matches[1][$key];
-            foreach($ids as $id)
+            $links = $matches[2][$i] . ' ' . $matches[4][$i];
+            preg_match_all('/\d+/', $idList, $idMatches);
+            foreach($idMatches[0] as $id)
             {
-                if($id) $links .= html::a(helper::createLink($method, 'view', "id=$id"), $id) . $spit;
+                $links .= html::a(helper::createLink($method, 'view', "id=$id"), $id) . $matches[6][$i];
             }
-            $replaceLines[$matches[0][$key]] = rtrim($links, $spit);
+            $replaceLines[$matches[0][$i]] = rtrim($links, $matches[6][$i]);
         }
         return $replaceLines;
     }
@@ -968,94 +961,95 @@ class repoModel extends model
      */
     public function parseComment($comment)
     {
-        if(is_string($this->config->repo->matchComment)) $this->config->repo->matchComment = json_decode($this->config->repo->matchComment, true);
-        $matchComment = $this->config->repo->matchComment;
+        $rules   = $this->processRules();
+        $stories = array();
+        $tasks   = array();
+        $bugs    = array();
+        $actions = array();
 
-        $matches      = array();
-        $stories      = array();
-        $tasks        = array();
-        $bugs         = array();
-        $integrations = array();
-        $actions      = array();
-        while(true)
+        preg_match_all("/{$rules['startTaskReg']}/", $comment, $matches);
+        if($matches[0])
         {
-            $found = preg_match("/{$matchComment['id']['mark']}[0-9]+({$matchComment['id']['split']}[0-9]+)*/", $comment, $matches);
-            if(empty($found)) break;
-            if($found)
+            foreach($matches[4] as $i => $idList)
             {
-                $position   = strpos($comment, $matches[0]);
-                $subComment = substr($comment, 0, $position + strlen($matches[0]));
-                $comment    = substr($comment, $position + strlen($matches[0]) + 1);
-
-                $idList = explode($matchComment['id']['mark'], str_replace($matchComment['id']['split'], '', $matches[0]));
-                foreach($matchComment['module'] as $module => $moduleMatch)
+                preg_match_all('/\d+/', $idList, $idMatches);
+                foreach($idMatches[0] as $id)
                 {
-                    if(stripos($subComment, $moduleMatch) !== false)
-                    {
-                        if($module == 'story')
-                        {
-                            foreach($idList as $id) $stories[$id] = $id;
-                        }
-                        elseif($module == 'task')
-                        {
-                            foreach($idList as $id) $tasks[$id] = $id;
-                            foreach($matchComment['task'] as $method => $match)
-                            {
-                                if(strpos($subComment, $match) !== false)
-                                {
-                                    $consumed = 0;
-                                    preg_match("/{$matchComment['task']['consumed']}{$matchComment['mark']['consumed']}([0-9]+)/", $comment, $costMatch);
-                                    if($costMatch) $consumed = $costMatch[1];
-
-                                    $left = 0;
-                                    preg_match("/{$matchComment['task']['left']}{$matchComment['mark']['left']}([0-9]+)/", $comment, $leftMatch);
-                                    if($leftMatch) $left = $leftMatch[1];
-
-                                    foreach($idList as $id)
-                                    {
-                                        $actions['task'][$id]['action']   = $method;
-                                        $actions['task'][$id]['consumed'] = $consumed;
-                                        $actions['task'][$id]['left']     = $left;
-                                    }
-                                }
-                            }
-                        }
-                        elseif($module == 'bug')
-                        {
-                            foreach($idList as $id) $bugs[$id] = $id;
-                            foreach($matchComment['bug'] as $method => $match)
-                            {
-                                if(strpos($subComment, $match) !== false)
-                                {
-                                    $buildID = 0;
-                                    preg_match("/{$matchComment['bug']['resolvedBuild']}{$matchComment['mark']['resolvedBuild']}([0-9]+)/", $comment, $buildMatch);
-                                    if($buildMatch) $buildID = $buildMatch[1];
-
-                                    foreach($idList as $id)
-                                    {
-                                        $actions['bug'][$id]['action']        = $method;
-                                        $actions['bug'][$id]['resolvedBuild'] = $buildID;
-                                    }
-                                }
-                            }
-                        }
-                        elseif($module == 'integration')
-                        {
-                            foreach($idList as $id) $integrations[$id] = $id;
-                            foreach($matchComment['integration'] as $method => $match)
-                            {
-                                if(strpos($subComment, $match) !== false)
-                                {
-                                    foreach($idList as $id) $actions['integration'][$id]['action'] = $method;
-                                }
-                            }
-                        }
-                    }
+                    $tasks[$id] = $id;
+                    $actions['task'][$id]['action']   = 'start';
+                    $actions['task'][$id]['consumed'] = $matches[11][$i];
+                    $actions['task'][$id]['left']     = $matches[15][$i];
                 }
             }
         }
 
-        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'integrations' => $integrations, 'actions' => $actions);
+        preg_match_all("/{$rules['effortTaskReg']}/", $comment, $matches);
+        if($matches[0])
+        {
+            foreach($matches[4] as $i => $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+                foreach($idMatches[0] as $id)
+                {
+                    $tasks[$id] = $id;
+                    $actions['task'][$id]['action']   = 'recordEstimate';
+                    $actions['task'][$id]['consumed'] = $matches[11][$i];
+                    $actions['task'][$id]['left']     = $matches[15][$i];
+                }
+            }
+        }
+
+        preg_match_all("/{$rules['finishTaskReg']}/", $comment, $matches);
+        if($matches[0])
+        {
+            foreach($matches[4] as $i => $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+                foreach($idMatches[0] as $id)
+                {
+                    $tasks[$id] = $id;
+                    $actions['task'][$id]['action']   = 'finish';
+                    $actions['task'][$id]['consumed'] = $matches[11][$i];
+                }
+            }
+        }
+
+        preg_match_all("/{$rules['resolveBugReg']}/", $comment, $matches);
+        if($matches[0])
+        {
+            foreach($matches[4] as $i => $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+                foreach($idMatches[0] as $id)
+                {
+                    $bugs[$id] = $id;
+                    $actions['bug'][$id]['action'] = 'resolve';
+                    $actions['bug'][$id]['build']  = $matches[11][$i];
+                }
+            }
+        }
+
+        preg_match_all("/{$rules['taskReg']}/", $comment, $matches);
+        if($matches[0])
+        {
+            foreach($matches[3] as $i => $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+                foreach($idMatches[0] as $id) $tasks[$id] = $id;
+            }
+        }
+
+        preg_match_all("/{$rules['bugReg']}/", $comment, $matches);
+        if($matches[0])
+        {
+            foreach($matches[3] as $i => $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+                foreach($idMatches[0] as $id) $bugs[$id] = $id;
+            }
+        }
+
+        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs, 'actions' => $actions);
     }
 
     /**
@@ -1081,5 +1075,55 @@ class repoModel extends model
         }
 
         return $comment;
+    }
+
+    /**
+     * Process rules to REG.
+     * 
+     * @access public
+     * @return array
+     */
+    public function processRules()
+    {
+        if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
+        $rules = $this->config->repo->rules;
+
+        $idMarks       = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['id']['mark'], ';')));
+        $idSplits      = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['id']['split'], ';')));
+        $costs         = str_replace(';', '|', trim($rules['task']['consumed'], ';'));
+        $costMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['consumed'], ';')));
+        $lefts         = str_replace(';', '|', trim($rules['task']['left'], ';'));
+        $leftMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['left'], ';')));
+        $builds        = str_replace(';', '|', trim($rules['bug']['resolvedBuild'], ';'));
+        $buildMarks    = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['resolvedBuild'], ';')));
+        $taskModule    = str_replace(';', '|', trim($rules['module']['task'], ';'));
+        $bugModule     = str_replace(';', '|', trim($rules['module']['bug'], ';'));
+        $startAction   = str_replace(';', '|', trim($rules['task']['start'], ';'));
+        $finishAction  = str_replace(';', '|', trim($rules['task']['finish'], ';'));
+        $effortAction  = str_replace(';', '|', trim($rules['task']['logEfforts'], ';'));
+        $resolveAction = str_replace(';', '|', trim($rules['bug']['resolve'], ';'));
+
+        $taskReg  = "(($taskModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
+        $bugReg   = "(($bugModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
+        $costReg  = "($costs) *(($costMarks)([0-9]+))";
+        $leftReg  = "($lefts) *(($leftMarks)([0-9]+))";
+        $buildReg = "($builds) *(($buildMarks)([0-9]+))";
+
+        $startTaskReg  = "({$startAction}) *{$taskReg} +$costReg +$leftReg";
+        $effortTaskReg = "({$effortAction}) *{$taskReg} +$costReg +$leftReg";
+        $finishTaskReg = "({$finishAction}) *{$taskReg} +$costReg";
+        $resolveBugReg = "({$resolveAction}) *{$bugReg} +$buildReg";
+
+        $reg = array();
+        $reg['taskReg']       = $taskReg;
+        $reg['bugReg']        = $bugReg;
+        $reg['costReg']       = $costReg;
+        $reg['leftReg']       = $leftReg;
+        $reg['buildReg']      = $buildReg;
+        $reg['startTaskReg']  = $startTaskReg;
+        $reg['effortTaskReg'] = $effortTaskReg;
+        $reg['finishTaskReg'] = $finishTaskReg;
+        $reg['resolveBugReg'] = $resolveBugReg;
+        return $reg;
     }
 }
