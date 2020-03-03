@@ -84,9 +84,11 @@ $(function()
         });
     }
 
-    if($("main").is(".hide-sidebar")){
+    if($("main").is(".hide-sidebar"))
+    {
         $(".sidebar-toggle").children().attr("class", "icon icon-angle-left");
-    }else
+    }
+    else
     {
         $("#sidebar").bind("click", function ()
         {

@@ -29,22 +29,23 @@
           <td><?php echo html::input('name', $webhook->name, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <tr id='urlTR' class='<?php echo in_array($webhook->type, array('dingapi', 'wechatApi')) ? 'hidden' : '';?>'>
+        <tr id='urlTR' class='<?php echo in_array($webhook->type, array('dinguser', 'wechatuser')) ? 'hidden' : '';?>'>
           <th><?php echo $lang->webhook->url;?></th>
           <td><?php echo html::input('url', $webhook->url, "class='form-control'");?></td>
           <td><?php echo zget($lang->webhook->note->typeList, $webhook->type, '');?></td>
         </tr>
-        <?php if($webhook->type == 'dingding'):?>
+        <?php if($webhook->type == 'dinggroup'):?>
         <tr id='secretTR'>
           <th><?php echo $lang->webhook->secret;?></th>
           <td><?php echo html::input('secret', $webhook->secret, "class='form-control'");?></td>
         </tr>
         <?php endif;?>
-        <?php if($webhook->type == 'dingapi'):?>
+        <?php if($webhook->type == 'dinguser'):?>
         <?php $secret = json_decode($webhook->secret);?>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAgentId;?></th>
           <td class='required'><?php echo html::input('agentId', $secret->agentId, "class='form-control'");?></td>
+          <td><?php echo $lang->webhook->note->dingHelp;?></td>
         </tr>
         <tr class='dingapiTR'>
           <th><?php echo $lang->webhook->dingAppKey;?></th>
@@ -55,22 +56,22 @@
           <td class='required'><?php echo html::input('appSecret', $secret->appSecret, "class='form-control'");?></td>
         </tr>
         <?php endif;?>
-        <?php if($webhook->type == 'wechatApi'):?>
+        <?php if($webhook->type == 'wechatuser'):?>
         <?php $secret = json_decode($webhook->secret);?>
         <tr class="wechatTR">
-            <th><?php echo $lang->webhook->wechatCorpId;?></th>
-            <td class='required'><?php echo html::input('wechatCorpId', $secret->appKey, "class='form-control'")?></td>
-            <td><?php echo $lang->webhook->note->wechat;?></td>
+          <th><?php echo $lang->webhook->wechatCorpId;?></th>
+          <td class='required'><?php echo html::input('wechatCorpId', $secret->appKey, "class='form-control'")?></td>
+          <td><?php echo $lang->webhook->note->wechatHelp;?></td>
         </tr>
         <tr class="wechatTR">
-            <th><?php echo $lang->webhook->wechatCorpSecret;?></th>
-            <td class='required'><?php echo html::input('wechatCorpSecret', $secret->appSecret, "class='form-control'")?></td>
-            <td></td>
+          <th><?php echo $lang->webhook->wechatCorpSecret;?></th>
+          <td class='required'><?php echo html::input('wechatCorpSecret', $secret->appSecret, "class='form-control'")?></td>
+          <td></td>
         </tr>
         <tr class="wechatTR">
-            <th><?php echo $lang->webhook->wechatAgentId;?></th>
-            <td class='required'><?php echo html::input('wechatAgentId', $secret->agentId, "class='form-control'")?></td>
-            <td></td>
+          <th><?php echo $lang->webhook->wechatAgentId;?></th>
+          <td class='required'><?php echo html::input('wechatAgentId', $secret->agentId, "class='form-control'")?></td>
+          <td></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -78,7 +79,7 @@
           <td><?php echo html::input('domain', $webhook->domain, "class='form-control'");?></td>
           <td></td>
         </tr>
-        <?php if($webhook->type != 'dingding' and $webhook->type != 'dingapi'):?>
+        <?php if(!in_array($webhook->type,array('dinggroup', 'dinguser', 'wechatgroup', 'wechatuser'))):?>
         <tr>
           <th><?php echo $lang->webhook->sendType;?></th>
           <td><?php echo html::select('sendType', $lang->webhook->sendTypeList, $webhook->sendType, "class='form-control'");?></td>
@@ -95,7 +96,7 @@
           <td><?php echo html::select('projects[]', $projects, $webhook->projects, "class='form-control chosen' multiple");?></td>
           <td><?php echo $lang->webhook->note->project;?></td>
         </tr>
-        <?php if(strpos(',bearychat,dingding,dingapi,weixin,wechatApi,', ",$webhook->type,") === false):?>
+        <?php if(strpos(',bearychat,dinggroup,dinguser,wechatgroup,wechatuser,', ",$webhook->type,") === false):?>
         <tr id='paramsTR'>
           <th>
             <div class='checkbox-primary'>
