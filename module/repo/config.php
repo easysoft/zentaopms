@@ -54,3 +54,5 @@ $config->repo->rules['id']['split']           = ',';
 $config->repo->rules['mark']['consumed']      = ':';
 $config->repo->rules['mark']['left']          = ':';
 $config->repo->rules['mark']['resolvedBuild'] = '#';
+$config->repo->rules['unit']['consumed']      = 'h';
+$config->repo->rules['unit']['left']          = 'h';

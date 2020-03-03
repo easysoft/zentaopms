@@ -64,12 +64,16 @@
               <?php echo html::input("rules[task][consumed]", $config->repo->rules['task']['consumed'], "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->repo->mark?></span>
               <?php echo html::input("rules[mark][consumed]", $config->repo->rules['mark']['consumed'], "class='form-control'");?>
+              <span class='input-group-addon'><?php echo $lang->repo->ruleUnit?></span>
+              <?php echo html::input("rules[unit][consumed]", $config->repo->rules['unit']['consumed'], "class='form-control'");?>
             </div>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->task->left?></span>
               <?php echo html::input("rules[task][left]", $config->repo->rules['task']['left'], "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->repo->mark?></span>
               <?php echo html::input("rules[mark][left]", $config->repo->rules['mark']['left'], "class='form-control'");?>
+              <span class='input-group-addon'><?php echo $lang->repo->ruleUnit?></span>
+              <?php echo html::input("rules[unit][left]", $config->repo->rules['unit']['left'], "class='form-control'");?>
             </div>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->bug->resolvedBuild?></span>

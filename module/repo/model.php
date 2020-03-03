@@ -978,7 +978,7 @@ class repoModel extends model
                     $tasks[$id] = $id;
                     $actions['task'][$id]['action']   = 'start';
                     $actions['task'][$id]['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['left']     = $matches[15][$i];
+                    $actions['task'][$id]['left']     = $matches[16][$i];
                 }
             }
         }
@@ -994,7 +994,7 @@ class repoModel extends model
                     $tasks[$id] = $id;
                     $actions['task'][$id]['action']   = 'recordEstimate';
                     $actions['task'][$id]['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['left']     = $matches[15][$i];
+                    $actions['task'][$id]['left']     = $matches[16][$i];
                 }
             }
         }
@@ -1098,6 +1098,8 @@ class repoModel extends model
         $buildMarks    = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['resolvedBuild'], ';')));
         $taskModule    = str_replace(';', '|', trim($rules['module']['task'], ';'));
         $bugModule     = str_replace(';', '|', trim($rules['module']['bug'], ';'));
+        $costUnit      = str_replace(';', '|', trim($rules['unit']['consumed'], ';'));
+        $leftUnit      = str_replace(';', '|', trim($rules['unit']['left'], ';'));
         $startAction   = str_replace(';', '|', trim($rules['task']['start'], ';'));
         $finishAction  = str_replace(';', '|', trim($rules['task']['finish'], ';'));
         $effortAction  = str_replace(';', '|', trim($rules['task']['logEfforts'], ';'));
@@ -1105,8 +1107,8 @@ class repoModel extends model
 
         $taskReg  = "(($taskModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $bugReg   = "(($bugModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
-        $costReg  = "($costs) *(($costMarks)([0-9]+))";
-        $leftReg  = "($lefts) *(($leftMarks)([0-9]+))";
+        $costReg  = "($costs) *(($costMarks)([0-9]+)($costUnit))";
+        $leftReg  = "($lefts) *(($leftMarks)([0-9]+)($leftUnit))";
         $buildReg = "($builds) *(($buildMarks)([0-9]+))";
 
         $startTaskReg  = "({$startAction}) *{$taskReg} +$costReg +$leftReg";

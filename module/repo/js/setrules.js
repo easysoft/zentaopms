@@ -15,6 +15,8 @@ function replaceExample()
     var consumedmark = $('[id*=mark][id*=consumed]').val().split(';');
     var lefts        = $('[id*=task][id*=left]').val().split(';');
     var leftMarks    = $('[id*=mark][id*=left]').val().split(';');
+    var cunits       = $('[id*=unit][id*=consumed]').val().split(';');
+    var lunits       = $('[id*=unit][id*=left]').val().split(';');
 
     for(i in startTask)
     {
@@ -40,14 +42,24 @@ function replaceExample()
                                 for(p in leftMarks)
                                 {
                                     leftMark = leftMarks[p];
-                                    html += '<br />' + rulesExample['task']['start'].replace('%start%', start)
-                                        .replace('%task%', task)
-                                        .replace('%id%', id)
-                                        .replace('%split%', split)
-                                        .replace('%cost%', cost)
-                                        .replace('%consumedmark%', consumed)
-                                        .replace('%left%', left)
-                                        .replace('%leftmark%', leftMark);
+                                    for(q in cunits)
+                                    {
+                                        cunit = cunits[q];
+                                        for(r in cunits)
+                                        {
+                                            lunit = lunits[q];
+                                            html += '<br />' + rulesExample['task']['start'].replace('%start%', start)
+                                              .replace('%task%', task)
+                                              .replace('%id%', id)
+                                              .replace('%split%', split)
+                                              .replace('%cost%', cost)
+                                              .replace('%consumedmark%', consumed)
+                                              .replace('%left%', left)
+                                              .replace('%leftmark%', leftMark)
+                                              .replace('%cunit%', cunit)
+                                              .replace('%lunit%', lunit);
+                                        }
+                                    }
                                 }
                             }
                         }
@@ -76,12 +88,22 @@ function replaceExample()
                         for(n in consumedmark)
                         {
                             consumed = consumedmark[n];
-                            html += '<br />' + rulesExample['task']['finish'].replace('%finish%', finish)
-                              .replace('%task%', task)
-                              .replace('%id%', id)
-                              .replace('%split%', split)
-                              .replace('%cost%', cost)
-                              .replace('%consumedmark%', consumed)
+                            for(o in cunits)
+                            {
+                                cunit = cunits[o];
+                                for(p in cunits)
+                                {
+                                    lunit = lunits[p];
+                                    html += '<br />' + rulesExample['task']['finish'].replace('%finish%', finish)
+                                      .replace('%task%', task)
+                                      .replace('%id%', id)
+                                      .replace('%split%', split)
+                                      .replace('%cost%', cost)
+                                      .replace('%consumedmark%', consumed)
+                                      .replace('%cunit%', cunit)
+                                      .replace('%lunit%', lunit);
+                                }
+                            }
                         }
                     }
                 }
@@ -114,14 +136,24 @@ function replaceExample()
                                 for(p in leftMarks)
                                 {
                                     leftMark = leftMarks[p];
-                                    html += '<br />' + rulesExample['task']['effort'].replace('%effort%', effort)
-                                        .replace('%task%', task)
-                                        .replace('%id%', id)
-                                        .replace('%split%', split)
-                                        .replace('%cost%', cost)
-                                        .replace('%consumedmark%', consumed)
-                                        .replace('%left%', left)
-                                        .replace('%leftmark%', leftMark);
+                                    for(q in cunits)
+                                    {
+                                        cunit = cunits[q];
+                                        for(r in cunits)
+                                        {
+                                            lunit = lunits[r];
+                                            html += '<br />' + rulesExample['task']['effort'].replace('%effort%', effort)
+                                                .replace('%task%', task)
+                                                .replace('%id%', id)
+                                                .replace('%split%', split)
+                                                .replace('%cost%', cost)
+                                                .replace('%consumedmark%', consumed)
+                                                .replace('%left%', left)
+                                                .replace('%leftmark%', leftMark)
+                                                .replace('%cunit%', cunit)
+                                                .replace('%lunit%', lunit);
+                                        }
+                                    }
                                 }
                             }
                         }

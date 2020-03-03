@@ -102,6 +102,7 @@ $lang->repo->objectRule   = '对象匹配规则';
 $lang->repo->objectIdRule = '对象ID匹配规则';
 $lang->repo->actionRule   = '动作匹配规则';
 $lang->repo->manHourRule  = '工时匹配规则';
+$lang->repo->ruleUnit     = "单位";
 $lang->repo->ruleSplit    = "多关键字用';'分割，如：任务多关键字： Task;task";
 
 $lang->repo->viewDiffList['inline'] = '直列';
@@ -133,9 +134,9 @@ $lang->repo->notice->lastSyncTime   = '最后更新于：';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "注释示例";
-$lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
-$lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
-$lang->repo->rules->example['task']['effort'] = "%effort% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
+$lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1%cunit% %left%%leftmark%3%lunit%";
+$lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10%cunit%";
+$lang->repo->rules->example['task']['effort'] = "%effort% %task% %id%1%split%2 %cost%%consumedmark%1%cunit% %left%%leftmark%3%lunit%";
 $lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
 
 $lang->repo->error                = new stdclass();
