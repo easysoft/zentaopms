@@ -22,7 +22,7 @@ class compileModel extends model
      */
     public function getList($integrationID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.id, t1.name, t1.status, t1.createdDate, t2.triggerType, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
+        return $this->dao->select('t1.id, t1.name, t1.status, t1.createdDate, t2.jkJob,t2.triggerType,t2.comment,t2.atDay,t2.atTime, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.integration=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_JENKINS)->alias('t4')->on('t2.jkHost=t4.id')

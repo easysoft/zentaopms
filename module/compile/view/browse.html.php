@@ -29,8 +29,8 @@
           <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->compile->id);?></th>
           <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->compile->name);?></th>
           <th class='text-left'><?php echo $lang->integration->repo;?></th>
-          <th class='w-200px text-left'><?php echo $lang->integration->jkHost;?></th>
-          <th class='w-140px text-left'><?php echo $lang->integration->triggerType;?></th>
+          <th class='w-250px text-left'><?php echo $lang->integration->jenkins;?></th>
+          <th class='w-200px text-left'><?php echo $lang->integration->triggerType;?></th>
           <th class='w-80px text-left'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
           <th class='w-130px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
           <th class='c-actions-1'><?php echo $lang->actions;?></th>
@@ -42,9 +42,26 @@
           <td class='text-center'><?php echo $id;?></td>
           <td class='text' title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
           <td class='text' title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
-          <td class='text' title='<?php echo $build->jenkinsName;?>'><?php echo $build->jenkinsName;?></td>
-          <?php $triggerType = zget($lang->integration->triggerTypeList, $build->triggerType);?>
-          <td class='text' title='<?php echo $triggerType;?>'><?php echo $triggerType;?></td>
+          <td class='text' title='<?php echo $build->jenkinsName;?>'><?php echo urldecode($build->jkJob) . "@{$build->jenkinsName}";?></td>
+          <?php
+          $triggerType = zget($lang->integration->triggerTypeList, $build->triggerType);
+          if($build->triggerType == 'tag' and !empty($build->svnDir)) $triggerType = $lang->integration->dirChange;
+
+          $triggerConfig = '';
+          if($build->triggerType == 'commit')
+          {
+              $triggerConfig = "({$build->comment})";
+          }
+          elseif($build->triggerType == 'schedule')
+          {
+              $atDay = '';
+              foreach(explode(',', $build->atDay) as $day) $atDay .= zget($lang->datepicker->dayNames, trim($day), '') . ',';
+              $atDay = trim($atDay, ',');
+
+              $triggerConfig = "({$atDay}, {$build->atTime})";
+          }
+          ?>
+          <td class='text' title='<?php echo $triggerType . $triggerConfig;?>'><?php echo $triggerType . $triggerConfig;?></td>
           <?php $buildStatus = zget($lang->compile->statusList, $build->status);?>
           <td class='text' title='<?php echo $buildStatus;?>'><?php echo $buildStatus;?></td>
           <td class='text' title='<?php echo $build->createdDate;?>'><?php echo $build->createdDate;?></td>
