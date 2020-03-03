@@ -593,10 +593,11 @@ class zentao
             $responseData = json_decode($responseData->data);
             foreach ($extraFields as $k => $v)
             {
-                $returnResult['result'][$v] = $responseData->$v;
+                isset($responseData->$v) ? $returnResult['result'][$v] = $responseData->$v : $returnResult['result'][$v] = array();
             }
             if (count($extraFields) == 0) $returnResult['result'] = $responseData;
-        } elseif (!empty($responseData->result))
+        }
+        elseif (!empty($responseData->result))
         {
             if (strcmp($responseData->result, 'success') === 0) $returnResult = array('status' => 1, 'msg' => 'success');
             $returnResult['result'] = $responseData->message;

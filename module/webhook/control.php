@@ -65,12 +65,12 @@ class webhook extends control
         }
 
         $this->app->loadLang('action');
-        $this->view->title         = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
-        $this->view->products      = $this->loadModel('product')->getPairs();
-        $this->view->projects      = $this->loadModel('project')->getPairs();
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->api);
-        $this->view->position[]    = html::a(inlink('browse'), $this->lang->webhook->common);
-        $this->view->position[]    = $this->lang->webhook->create;
+        $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
+        $this->view->products   = $this->loadModel('product')->getPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairs();
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
+        $this->view->position[] = $this->lang->webhook->create;
         $this->display();
     }
 
@@ -91,15 +91,16 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getByID($id);
+        $this->app->loadLang('action');
 
         $this->view->title      = $this->lang->webhook->edit . $this->lang->colon . $webhook->name;
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->api);
         $this->view->position[] = html::a(inlink('browse'), $this->lang->webhook->common);
         $this->view->position[] = $this->lang->webhook->edit;
+        $this->view->products   = $this->loadModel('product')->getPairs();
+        $this->view->projects   = $this->loadModel('project')->getPairs();
+        $this->view->webhook    = $webhook;
 
-        $this->view->products = $this->loadModel('product')->getPairs();
-        $this->view->projects = $this->loadModel('project')->getPairs();
-        $this->view->webhook  = $webhook;
         $this->display();
     }
 
@@ -156,7 +157,7 @@ class webhook extends control
      * @access public
      * @return void
      */
-    public function bind($id, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function bind($id, $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         if($_POST)
         {
@@ -167,18 +168,20 @@ class webhook extends control
         }
 
         $webhook = $this->webhook->getById($id);
-        if($webhook->type != 'dingapi' && $webhook->type != 'wechatApi')
+        if($webhook->type != 'dinguser' && $webhook->type != 'wechatuser')
         {
             echo js::alert($this->lang->webhook->note->bind);
             die(js::locate($this->createLink('webhook', 'browse')));
         }
         $webhook->secret = json_decode($webhook->secret);
 
-        if($webhook->type == 'dingapi'){
+        if($webhook->type == 'dinguser')
+        {
             $this->app->loadClass('dingapi', true);
             $dingapi  = new dingapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
             $response = $dingapi->getAllUsers();
-        }elseif ($webhook->type == 'wechatApi')
+        }
+        elseif($webhook->type == 'wechatuser')
         {
             $this->app->loadClass('wechatapi', true);
             $wechatApi  = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
