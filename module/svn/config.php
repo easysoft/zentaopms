@@ -12,23 +12,7 @@
  * $config->svn->client = '/usr/bin/svn'; // c:\svn\svn.exe
  * $config->svn->repos['pms']['path']     = 'http://svn.zentao.net/zentao/trunk/';
  * $config->svn->repos['pms']['username'] = 'user';
+ * $config->svn->repos['pms']['encoding'] = 'utf-8';
  * $config->svn->repos['pms']['password'] = 'pass';
  *
  */
-
-/* will use the config of repo records in db
-$config->svn = new stdClass();
-$config->svn->encodings = 'utf-8';
-$config->svn->client    = '';
-
-$i = 1;
-$config->svn->repos[$i]['path']     = '';
-$config->svn->repos[$i]['encoding'] = 'utf-8';
-$config->svn->repos[$i]['username'] = '';
-$config->svn->repos[$i]['password'] = '';
-
-$i ++;
-$config->svn->repos[$i]['path']     = '';
-$config->svn->repos[$i]['username'] = '';
-$config->svn->repos[$i]['password'] = '';
-*/

@@ -118,8 +118,8 @@ class git extends control
                 $parsedLogs[] = $this->convertLog($log);
             }
 
-            $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
             $this->loadModel('repo');
+            $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
             foreach($parsedLogs as $log)
             {
                 $objects = $this->repo->parseComment($log->msg);

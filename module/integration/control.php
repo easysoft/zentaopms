@@ -26,7 +26,7 @@ class integration extends control
     }
 
     /**
-     * Browse ci job.
+     * Browse integration.
      *
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -43,8 +43,8 @@ class integration extends control
         $this->app->loadLang('compile');
         $this->view->jobList = $this->integration->getList($orderBy, $pager);
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->integration->browse;
-        $this->view->position[] = $this->lang->ci->job;
+        $this->view->title      = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->browse;
+        $this->view->position[] = $this->lang->ci->integration;
         $this->view->position[] = $this->lang->integration->browse;
 
         $this->view->orderBy    = $orderBy;
@@ -53,7 +53,7 @@ class integration extends control
     }
 
     /**
-     * Create a ci job.
+     * Create a integration.
      *
      * @access public
      * @return void
@@ -69,8 +69,8 @@ class integration extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->integration->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->title      = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->create;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->integration);
         $this->view->position[] = $this->lang->integration->create;
 
         $repoList  = $this->loadModel('repo')->getList();
@@ -89,7 +89,7 @@ class integration extends control
     }
 
     /**
-     * Edit a ci job.
+     * Edit a integration.
      *
      * @param  int    $id
      * @access public
@@ -107,8 +107,8 @@ class integration extends control
 
         $this->app->loadLang('action');
 
-        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->integration->edit;
-        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->title       = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->edit;
+        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->integration);
         $this->view->position[]  = $this->lang->integration->edit;
 
         $repo      = $this->loadModel('repo')->getRepoByID($job->repo);
@@ -131,7 +131,7 @@ class integration extends control
     }
 
     /**
-     * Delete a ci job.
+     * Delete a integration.
      *
      * @param  int    $id
      * @access public
@@ -139,14 +139,14 @@ class integration extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->integration->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
+        if($confirm != 'yes') die(js::confirm($this->lang->integration->confirmDelete, inlink('delete', "integrationID=$id&confirm=yes")));
 
         $this->integration->delete(TABLE_INTEGRATION, $id);
         die(js::reload('parent'));
     }
 
     /**
-     * Exec a ci job.
+     * Exec a integration.
      *
      * @param  int    $id
      * @access public

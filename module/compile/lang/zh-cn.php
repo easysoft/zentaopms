@@ -3,7 +3,7 @@ $lang->compile->browse = '构建历史';
 $lang->compile->logs   = '构建日志';
 
 $lang->compile->id     = 'ID';
-$lang->compile->name   = '名称';
+$lang->compile->name   = '构建名称';
 $lang->compile->status = '构建状态';
 $lang->compile->time   = '构建时间';
 
