@@ -31,7 +31,7 @@ class ciModel extends model
      */
     public function checkBuildStatus()
     {
-        $compiles = $this->dao->select('t1.*, t2.jkJob, t3.name jenkinsName,t3.serviceUrl,t3.account,t3.token,t3.password')
+        $compiles = $this->dao->select('t1.*, t2.jkJob, t3.name jenkinsName,t3.url,t3.account,t3.token,t3.password')
             ->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.integration=t2.id')
             ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jkHost=t3.id')
@@ -43,7 +43,7 @@ class ciModel extends model
 
         foreach($compiles as $compile)
         {
-            $jenkinsServer   = $compile->serviceUrl;
+            $jenkinsServer   = $compile->url;
             $jenkinsUser     = $compile->account;
             $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
 

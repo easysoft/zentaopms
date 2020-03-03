@@ -80,3 +80,5 @@ ALTER TABLE `zt_compile`
 CHANGE `cijob` `integration` mediumint(8) unsigned NOT NULL AFTER `name`,
 CHANGE `queueItem` `queue` mediumint(8) NOT NULL AFTER `integration`;
 
+ALTER TABLE `zt_jenkins` CHANGE `serviceUrl` `url` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `name`;
+ALTER TABLE `zt_jenkins` DROP `encrypt`;

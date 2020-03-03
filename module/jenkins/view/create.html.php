@@ -25,8 +25,8 @@
             <td></td>
           </tr>
           <tr>
-            <th><?php echo $lang->jenkins->serviceUrl; ?></th>
-            <td class='required'><?php echo html::input('serviceUrl', '', "class='form-control'"); ?></td>
+            <th><?php echo $lang->jenkins->url; ?></th>
+            <td class='required'><?php echo html::input('url', '', "class='form-control'"); ?></td>
             <td></td>
           </tr>
           <tr>

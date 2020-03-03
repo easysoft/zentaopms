@@ -86,7 +86,7 @@ class compileModel extends model
      */
     public function execByCompile($compile, $data = null)
     {
-        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_INTEGRATION)->alias('t1')
             ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($compile->integration)
@@ -112,7 +112,7 @@ class compileModel extends model
      */
     public function execByIntegration($integrationID, $data = null)
     {
-        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.serviceUrl,t2.account,t2.token,t2.password')
+        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_INTEGRATION)->alias('t1')
             ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
             ->where('t1.id')->eq($integrationID)
@@ -142,7 +142,7 @@ class compileModel extends model
      */
     public function getBuildUrl($jenkins)
     {
-        $jenkinsServer   = $jenkins->serviceUrl;
+        $jenkinsServer   = $jenkins->url;
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
 

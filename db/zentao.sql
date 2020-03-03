@@ -217,8 +217,8 @@ CREATE TABLE IF NOT EXISTS `zt_company` (
 CREATE TABLE IF NOT EXISTS `zt_compile` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
-  `cijob` mediumint(8) unsigned NOT NULL,
-  `queueItem` mediumint(8) NOT NULL,
+  `integration` mediumint(8) unsigned NOT NULL,
+  `queue` mediumint(8) NOT NULL,
   `status` varchar(255) NOT NULL,
   `logs` text,
   `createdBy` varchar(30) NOT NULL,
@@ -450,7 +450,6 @@ CREATE TABLE IF NOT EXISTS `zt_jenkins` (
   `url` varchar(255) DEFAULT NULL,
   `account` varchar(30) DEFAULT NULL,
   `password` varchar(30) NOT NULL,
-  `encrypt` varchar(30) NOT NULL DEFAULT 'plain',
   `token` varchar(255) DEFAULT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,

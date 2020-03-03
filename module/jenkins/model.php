@@ -55,14 +55,14 @@ class jenkinsModel extends model
         $jenkins = fixer::input('post')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->skipSpecial('serviceUrl,token,account,password')
+            ->skipSpecial('url,token,account,password')
             ->get();
 
         $jenkins->password = base64_encode($jenkins->password);
 
         $this->dao->insert(TABLE_JENKINS)->data($jenkins)
             ->batchCheck($this->config->jenkins->create->requiredFields, 'notempty')
-            ->batchCheck("serviceUrl", 'URL')
+            ->batchCheck("url", 'URL')
             ->autoCheck()
             ->exec();
         return !dao::isError();
@@ -80,14 +80,14 @@ class jenkinsModel extends model
         $jenkins = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->skipSpecial('serviceUrl,token,account,password')
+            ->skipSpecial('url,token,account,password')
             ->get();
 
         $jenkins->password = base64_encode($jenkins->password);
 
         $this->dao->update(TABLE_JENKINS)->data($jenkins)
             ->batchCheck($this->config->jenkins->edit->requiredFields, 'notempty')
-            ->batchCheck("serviceUrl", 'URL')
+            ->batchCheck("url", 'URL')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
@@ -117,7 +117,7 @@ class jenkinsModel extends model
     {
         $jenkins = $this->getById($id);
 
-        $jenkinsServer   = $jenkins->serviceUrl;
+        $jenkinsServer   = $jenkins->url;
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
 
