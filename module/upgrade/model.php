@@ -3654,6 +3654,9 @@ class upgradeModel extends model
                 $repoPath = $repo['path'];
                 if(empty($repoPath)) continue;
 
+                $existRepo = $this->dao->select('*')->from(TABLE_REPO)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Subversion')->fetch();
+                if($existRepo) continue;
+
                 $svnRepo = new stdclass();
                 $svnRepo->client   = $this->config->svn->client;
                 $svnRepo->name     = basename($repoPath);
@@ -3681,6 +3684,9 @@ class upgradeModel extends model
             {
                 $repoPath = $repo['path'];
                 if(empty($repoPath)) continue;
+
+                $existRepo = $this->dao->select('*')->from(TABLE_REPO)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Git')->fetch();
+                if($existRepo) continue;
 
                 $gitRepo = new stdclass();
                 $gitRepo->client   = $this->config->git->client;
