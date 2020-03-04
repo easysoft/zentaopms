@@ -30,22 +30,6 @@ class svnModel extends model
     public $repos = array(); 
 
     /**
-     * The log root.
-     * 
-     * @var string
-     * @access public
-     */
-    public $logRoot = '';
-
-    /**
-     * The restart file.
-     * 
-     * @var string
-     * @access public
-     */
-    public $restartFile = '';
-
-    /**
      * The root path of a repo
      * 
      * @var string
@@ -85,9 +69,6 @@ class svnModel extends model
         $this->setRepos();
         if(empty($this->repos)) return false;
 
-        $this->setLogRoot();
-        $this->setRestartFile();
-
         $this->loadModel('compile');
         /* Get commit triggerType integrations by repoIdList */
         $commitPlans = $this->loadModel('integration')->getListByTriggerType('commit', array_keys($this->repos));
@@ -121,17 +102,15 @@ class svnModel extends model
                 foreach($logs as $log)
                 {
                     $this->printLog("parsing log {$log->revision}");
-                    $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
+                    $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
                     $objects = $this->repo->parseComment($log->msg);
                     if($objects)
                     {
                         $this->printLog('extract' .
-                            'story:' . join(' ', $objects['stories']) .
-                            ' task:' . join(' ', $objects['tasks']) .
+                            'task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
-
-                        $this->saveAction2PMS($objects, $log, $repo->encoding);
+                        $this->repo->saveAction2PMS($objects, $log, $repo->encoding, 'svn');
                     }
                     else
                     {
@@ -153,7 +132,6 @@ class svnModel extends model
                 $this->repo->updateCommitCount($repoID, $lastInDB->commit + count($logs));
                 $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
 
-                $this->deleteRestartFile();
                 $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
 
@@ -172,40 +150,6 @@ class svnModel extends model
                 }
             }
         }
-    }
-
-    /**
-     * Set the log root.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setLogRoot()
-    {
-        $this->logRoot = $this->app->getTmpRoot() . 'svn/';
-        if(!is_dir($this->logRoot)) mkdir($this->logRoot);
-    }
-
-    /**
-     * Set the restart file.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setRestartFile()
-    {
-        $this->restartFile = dirname(__FILE__) . '/restart';
-    }
-
-    /**
-     * Delete the restart file.
-     * 
-     * @access public
-     * @return void
-     */
-    public function deleteRestartFile()
-    {
-        if(is_file($this->restartFile)) unlink($this->restartFile);
     }
 
     /**
@@ -459,212 +403,6 @@ class svnModel extends model
     }
 
     /**
-     * Save action to pms.
-     * 
-     * @param  array    $objects 
-     * @param  object   $log 
-     * @param  string   $repoRoot 
-     * @access public
-     * @return void
-     */
-    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8')
-    {
-        $action = new stdclass();
-        $action->actor   = $log->author;
-        $action->action  = 'svncommited';
-        $action->date    = $log->date;
-
-        $action->comment = htmlspecialchars($this->repo->iconvComment($log->msg, $encodings));
-        $action->extra   = $log->revision;
-
-        $changes = $this->createActionChanges($log, $repoRoot);
-
-        if($objects['stories'])
-        {
-            $products = $this->getStoryProducts($objects['stories']);
-            foreach($objects['stories'] as $storyID)
-            {
-                $storyID = (int)$storyID;
-                if(!isset($products[$storyID])) continue;
-
-                $action->objectType = 'story';
-                $action->objectID   = $storyID;
-                $action->product    = $products[$storyID];
-                $action->project    = 0;
-
-                $this->saveRecord($action, $changes);
-            }
-        }
-
-        if($objects['tasks'])
-        {
-            $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
-            foreach($objects['tasks'] as $taskID)
-            {
-                $taskID = (int)$taskID;
-                if(!isset($productsAndProjects[$taskID])) continue;
-
-                $action->objectType = 'task';
-                $action->objectID   = $taskID;
-                $action->product    = $productsAndProjects[$taskID]['product'];
-                $action->project    = $productsAndProjects[$taskID]['project'];
-
-                $this->saveRecord($action, $changes);
-            }
-        }
-
-        if($objects['bugs'])
-        {
-            $productsAndProjects = $this->getBugProductsAndProjects($objects['bugs']);
-
-            foreach($objects['bugs'] as $bugID)
-            {
-                $bugID = (int)$bugID;
-                if(!isset($productsAndProjects[$bugID])) continue;
-
-                $action->objectType = 'bug';
-                $action->objectID   = $bugID;
-                $action->product    = $productsAndProjects[$bugID]->product;
-                $action->project    = $productsAndProjects[$bugID]->project;
-
-                $this->saveRecord($action, $changes);
-            }
-        }
-    }
-
-    /**
-     * Save an action to pms.
-     * 
-     * @param  object $action
-     * @param  object $log
-     * @access public
-     * @return bool
-     */
-    public function saveRecord($action, $changes)
-    {
-        $record = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where('objectType')->eq($action->objectType)
-            ->andWhere('objectID')->eq($action->objectID)
-            ->andWhere('extra')->eq($action->extra)
-            ->andWhere('action')->eq('svncommited')
-            ->fetch();
-        if($record)
-        {
-            $this->dao->update(TABLE_ACTION)->data($action)->where('id')->eq($record->id)->exec();
-            if($changes)
-            {
-                $historyID = $this->dao->findByAction($record->id)->from(TABLE_HISTORY)->fetch('id');
-                if($historyID)
-                {
-                    $this->dao->update(TABLE_HISTORY)->data($changes)->where('id')->eq($historyID)->exec();
-                }
-                else
-                {
-                    $this->action->logHistory($record->id, array($changes));
-                }
-            }
-        }
-        else
-        {
-            $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
-            if($changes)
-            {
-                $actionID = $this->dao->lastInsertID();
-                $this->action->logHistory($actionID, array($changes));
-            }
-        }
-    }
-
-    /**
-     * Create changes for action from a log.
-     * 
-     * @param  object    $log 
-     * @param  string    $repoRoot 
-     * @access public
-     * @return array
-     */
-    public function createActionChanges($log, $repoRoot)
-    {
-        if(!$log->files) return array();
-        $diff = '';
-
-        $oldSelf = $this->server->PHP_SELF;
-        $this->server->set('PHP_SELF', $this->config->webRoot, '', false, true);
-
-        if(!$repoRoot) $repoRoot = $this->repoRoot;
-
-        foreach($log->files as $action => $actionFiles)
-        {
-            foreach($actionFiles as $file)
-            {
-                $catLink  = trim(html::a($this->buildURL('cat', $repoRoot . $file, $log->revision), 'view', '', "class='iframe' data-width='960'"));
-                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision), 'diff', '', "class='iframe' data-width='960'"));
-                $diff .= $action . " " . $file . " $catLink ";
-                $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
-            }
-        }
-        $changes = new stdclass();
-        $changes->field = 'subversion';
-        $changes->old   = '';
-        $changes->new   = '';
-        $changes->diff  = trim($diff);
-
-        $this->server->set('PHP_SELF', $oldSelf);
-        return (array)$changes;
-    }
-
-    /**
-     * Get products of stories.
-     * 
-     * @param  array    $stories 
-     * @access public
-     * @return array
-     */
-    public function getStoryProducts($stories)
-    {
-        return $this->dao->select('id, product')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
-    }
-
-    /**
-     * Get products and projects of tasks.
-     * 
-     * @param  array    $tasks 
-     * @access public
-     * @return array
-     */
-    public function getTaskProductsAndProjects($tasks)
-    {
-        $records = array();
-        $products = $this->dao->select('t1.id, t2.product')
-            ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where('t1.id')->in($tasks)->fetchPairs();
-
-        $projects = $this->dao->select('id, project')->from(TABLE_TASK)->where('id')->in($tasks)->fetchPairs();
-
-        foreach($projects as $taskID => $projectID)
-        {
-            $record = array();
-            $record['project'] = $projectID;
-            $record['product'] = isset($products[$taskID]) ? $products[$taskID] : 0;
-            $records[$taskID] = $record;
-        }
-        return $records;
-    }
-
-    /**
-     * Get products and projects of bugs.
-     * 
-     * @param  array    $bugs 
-     * @access public
-     * @return array
-     */
-    public function getBugProductsAndProjects($bugs)
-    {
-        return $this->dao->select('id, project, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
-    }
-
-    /**
      * Pring log.
      * 
      * @param  sting    $log 
@@ -674,23 +412,5 @@ class svnModel extends model
     public function printLog($log)
     {
         echo helper::now() . " $log\n";
-    }
-
-    /**
-     * Build URL.
-     * 
-     * @param  string $methodName 
-     * @param  string $url 
-     * @param  int    $revision 
-     * @access public
-     * @return string
-     */
-    public function buildURL($methodName, $url, $revision)
-    {
-        $buildedURL  = helper::createLink('svn', $methodName, "url=&revision=$revision", 'html');
-        $buildedURL .= strpos($buildedURL, '?') === false ? '?' : '&';
-        $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
-
-        return $buildedURL;
     }
 }

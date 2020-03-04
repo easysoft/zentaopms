@@ -1069,9 +1069,8 @@ class repoModel extends model
                 foreach($idMatches[0] as $id)
                 {
                     $tasks[$id] = $id;
-                    $actions['task'][$id]['action']   = 'start';
-                    $actions['task'][$id]['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['left']     = $matches[16][$i];
+                    $actions['task'][$id]['start']['consumed'] = $matches[11][$i];
+                    $actions['task'][$id]['start']['left']     = $matches[16][$i];
                 }
             }
         }
@@ -1085,9 +1084,8 @@ class repoModel extends model
                 foreach($idMatches[0] as $id)
                 {
                     $tasks[$id] = $id;
-                    $actions['task'][$id]['action']   = 'recordEstimate';
-                    $actions['task'][$id]['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['left']     = $matches[16][$i];
+                    $actions['task'][$id]['effort']['consumed'] = $matches[11][$i];
+                    $actions['task'][$id]['effort']['left']     = $matches[16][$i];
                 }
             }
         }
@@ -1101,8 +1099,7 @@ class repoModel extends model
                 foreach($idMatches[0] as $id)
                 {
                     $tasks[$id] = $id;
-                    $actions['task'][$id]['action']   = 'finish';
-                    $actions['task'][$id]['consumed'] = $matches[11][$i];
+                    $actions['task'][$id]['finish']['consumed'] = $matches[11][$i];
                 }
             }
         }
@@ -1116,8 +1113,7 @@ class repoModel extends model
                 foreach($idMatches[0] as $id)
                 {
                     $bugs[$id] = $id;
-                    $actions['bug'][$id]['action'] = 'resolve';
-                    $actions['bug'][$id]['build']  = $matches[11][$i];
+                    $actions['bug'][$id]['resolve']['build'] = $matches[11][$i];
                 }
             }
         }
@@ -1220,5 +1216,290 @@ class repoModel extends model
         $reg['finishTaskReg'] = $finishTaskReg;
         $reg['resolveBugReg'] = $resolveBugReg;
         return $reg;
+    }
+
+    /**
+     * Save action to pms.
+     * 
+     * @param  array    $objects 
+     * @param  object   $log 
+     * @param  string   $repoRoot 
+     * @access public
+     * @return void
+     */
+    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn')
+    {
+        $account = $this->app->user->account;
+        $this->app->user->account = $log->author;
+
+        $action  = new stdclass();
+        $action->actor   = $log->author;
+        $action->date    = $log->date;
+
+        $action->comment = htmlspecialchars($this->repo->iconvComment($log->msg, $encodings));
+        $action->extra   = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
+
+        $this->loadModel('action');
+        $actions = $objects['actions'];
+        if(isset($actions['task']))
+        {
+            $this->loadModel('task');
+            $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
+            foreach($actions['task'] as $taskID => $taskActions)
+            {
+                $action->objectType = 'task';
+                $action->objectID   = $taskID;
+                $action->product    = $productsAndProjects[$taskID]['product'];
+                $action->project    = $productsAndProjects[$taskID]['project'];
+                foreach($taskActions as $taskAction => $params)
+                {
+                    foreach($params as $field => $param) $this->post->set($field, $param);
+                    if($taskAction == 'start')
+                    {
+                        $this->post->set('realStarted', date('Y-m-d'));
+                        $changes = $this->task->start($taskID);
+                        if($changes)
+                        {
+                            $action->action = $this->post->left == 0 ? 'finished' : 'started';
+                            $this->saveRecord($action, $changes);
+                        }
+                    }
+                    elseif($taskAction == 'effort')
+                    {
+                        $_POST['id'][1]         = 1;
+                        $_POST['dates'][1]      = date('Y-m-d');
+                        $_POST['consumed'][1]   = $params['consumed'];
+                        $_POST['left'][1]       = $params['left'];
+                        $_POST['objectType'][1] = 'task';
+                        $_POST['objectID'][1]   = $taskID;
+                        $_POST['work'][1]       = $action->comment;
+                        if(is_dir($this->app->getModuleRoot() . 'effort'))
+                        {
+                            $this->loadModel('effort')->batchCreate();
+                        }
+                        else
+                        {
+                            $this->task->recordEstimate($taskID);
+                        }
+                    }
+                    elseif($taskAction == 'finish')
+                    {
+                        $this->post->set('finishedDate', date('Y-m-d'));
+                        $changes = $this->task->finish($taskID);
+                        if($changes)
+                        {
+                            $action->action = 'finished';
+                            $this->saveRecord($action, $changes);
+                        }
+                    }
+                }
+                unset($object['tasks'][$taskID]);
+            }
+        }
+        if(isset($actions['bug']))
+        {
+            $this->loadModel('bug');
+            $productsAndProjects = $this->getBugProductsAndProjects($objects['bugs']);
+            foreach($actions['bug'] as $bugID => $bugActions)
+            {
+                $action->objectType = 'bug';
+                $action->objectID   = $bugID;
+                $action->product    = $productsAndProjects[$bugID]->product;
+                $action->project    = $productsAndProjects[$bugID]->project;
+                foreach($bugActions as $bugAction => $params)
+                {
+                    foreach($params as $field => $param) $this->post->set($field, $param);
+                    if($bugAction == 'resolve')
+                    {
+                        $this->post->set('resolution', 'fixed');
+                        $changes = $this->bug->resolve($bugID);
+                        if($changes)
+                        {
+                            $action->action = 'resolved';
+                            $this->saveRecord($action, $changes);
+                        }
+                    }
+                }
+                unset($object['bugs'][$bugID]);
+            }
+        }
+
+        $action->action = $scm == 'svn' ? 'svncommited' : 'gitcommited';
+        $changes = $this->createActionChanges($log, $repoRoot, $scm);
+
+        if($objects['tasks'])
+        {
+            $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);
+            foreach($objects['tasks'] as $taskID)
+            {
+                $taskID = (int)$taskID;
+                if(!isset($productsAndProjects[$taskID])) continue;
+
+                $action->objectType = 'task';
+                $action->objectID   = $taskID;
+                $action->product    = $productsAndProjects[$taskID]['product'];
+                $action->project    = $productsAndProjects[$taskID]['project'];
+
+                $this->saveRecord($action, $changes);
+            }
+        }
+
+        if($objects['bugs'])
+        {
+            $productsAndProjects = $this->getBugProductsAndProjects($objects['bugs']);
+            foreach($objects['bugs'] as $bugID)
+            {
+                $bugID = (int)$bugID;
+                if(!isset($productsAndProjects[$bugID])) continue;
+
+                $action->objectType = 'bug';
+                $action->objectID   = $bugID;
+                $action->product    = $productsAndProjects[$bugID]->product;
+                $action->project    = $productsAndProjects[$bugID]->project;
+
+                $this->saveRecord($action, $changes);
+            }
+        }
+
+        $this->app->user->account = $account;
+    }
+
+    /**
+     * Save an action to pms.
+     * 
+     * @param  object $action
+     * @param  object $log
+     * @access public
+     * @return bool
+     */
+    public function saveRecord($action, $changes)
+    {
+        $record = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq($action->objectType)
+            ->andWhere('objectID')->eq($action->objectID)
+            ->andWhere('extra')->eq($action->extra)
+            ->andWhere('action')->eq($action->action)
+            ->fetch();
+        if($record)
+        {
+            $this->dao->update(TABLE_ACTION)->data($action)->where('id')->eq($record->id)->exec();
+            if($changes)
+            {
+                $historyID = $this->dao->findByAction($record->id)->from(TABLE_HISTORY)->fetch('id');
+                if($historyID)
+                {
+                    $this->dao->update(TABLE_HISTORY)->data($changes)->where('id')->eq($historyID)->exec();
+                }
+                else
+                {
+                    $this->action->logHistory($record->id, array($changes));
+                }
+            }
+        }
+        else
+        {
+            $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
+            if($changes)
+            {
+                $actionID = $this->dao->lastInsertID();
+                $this->action->logHistory($actionID, array($changes));
+            }
+        }
+    }
+
+    /**
+     * Create changes for action from a log.
+     * 
+     * @param  object    $log 
+     * @param  string    $repoRoot 
+     * @access public
+     * @return array
+     */
+    public function createActionChanges($log, $repoRoot, $scm = 'svn')
+    {
+        if(!$log->files) return array();
+        $diff = '';
+
+        $oldSelf = $this->server->PHP_SELF;
+        $this->server->set('PHP_SELF', $this->config->webRoot, '', false, true);
+
+        if(!$repoRoot) $repoRoot = $this->repoRoot;
+
+        foreach($log->files as $action => $actionFiles)
+        {
+            foreach($actionFiles as $file)
+            {
+                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, $log->revision, $scm), 'view', '', "class='iframe' data-width='960'"));
+                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, $log->revision, $scm), 'diff', '', "class='iframe' data-width='960'"));
+                $diff .= $action . " " . $file . " $catLink ";
+                $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
+            }
+        }
+        $changes = new stdclass();
+        $changes->field = $scm == 'svn' ? 'subversion' : 'git';
+        $changes->old   = '';
+        $changes->new   = '';
+        $changes->diff  = trim($diff);
+
+        $this->server->set('PHP_SELF', $oldSelf);
+        return (array)$changes;
+    }
+
+    /**
+     * Get products and projects of tasks.
+     * 
+     * @param  array    $tasks 
+     * @access public
+     * @return array
+     */
+    public function getTaskProductsAndProjects($tasks)
+    {
+        $records = array();
+        $products = $this->dao->select('t1.id,t1.project,t2.product')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project = t2.project')
+            ->where('t1.id')->in($tasks)->fetchGroup('id','product');
+
+        $projects = $this->dao->select('id, project')->from(TABLE_TASK)->where('id')->in($tasks)->fetchPairs();
+
+        foreach($projects as $taskID => $projectID)
+        {
+            $record = array();
+            $record['project'] = $projectID;
+            $record['product'] = isset($products[$taskID]) ? "," . join(',', array_keys($products[$taskID])) . "," : ",0,";
+            $records[$taskID] = $record;
+        }
+        return $records;
+    }
+
+    /**
+     * Get products and projects of bugs.
+     * 
+     * @param  array    $bugs 
+     * @access public
+     * @return array
+     */
+    public function getBugProductsAndProjects($bugs)
+    {
+        $records = $this->dao->select('id, project, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
+        foreach($records as $record) $record->product = ",{$record->product},";
+        return $records;
+    }
+
+    /**
+     * Build URL.
+     * 
+     * @param  string $methodName 
+     * @param  string $url 
+     * @param  int    $revision 
+     * @access public
+     * @return string
+     */
+    public function buildURL($methodName, $url, $revision, $scm = 'svn')
+    {
+        $buildedURL  = helper::createLink($scm, $methodName, "url=&revision=$revision", 'html');
+        $buildedURL .= strpos($buildedURL, '?') === false ? '?' : '&';
+        $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
+
+        return $buildedURL;
     }
 }
