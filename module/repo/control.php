@@ -312,7 +312,6 @@ class repo extends control
         {
             $infos = unserialize(file_get_contents($cacheFile));
         }
-        if($refresh) $this->repo->updateLatestCommit($repo);
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot);
 
         $logType   = 'dir';
@@ -806,26 +805,6 @@ class repo extends control
         $this->view->logType    = $type;
         $this->view->path       = urldecode($path);
         $this->display();
-    }
-
-    /**
-     * Ajax sync latest commit.
-     * 
-     * @param  int    $repoID 
-     * @access public
-     * @return void
-     */
-    public function ajaxSyncLatestCommit($repoID)
-    {
-        set_time_limit(0);
-        $repo = $this->repo->getRepoByID($repoID);
-        if((time() - strtotime($repo->lastSync)) / 60 >= $this->config->repo->syncTime)
-        {
-            $commits = $this->repo->updateLatestCommit($repo);
-            if($commits > 0) die('finished');
-        }
-
-        die('norecords');
     }
 
     /**

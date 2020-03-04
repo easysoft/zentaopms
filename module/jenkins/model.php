@@ -45,6 +45,48 @@ class jenkinsModel extends model
     }
 
     /**
+     * Get jenkins pairs
+     *
+     * @return array
+     */
+    public function getPairs()
+    {
+        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
+        $jenkins = array('' => '') + $jenkins;
+        return $jenkins;
+    }
+
+    /**
+     * Get jenkins tasks.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return array
+     */
+    public function getTasks($id)
+    {
+        $jenkins = $this->getById($id);
+
+        $jenkinsServer   = $jenkins->url;
+        $jenkinsUser     = $jenkins->account;
+        $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
+
+        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
+        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
+
+        $response = common::http($jenkinsServer . '/api/json/items/list');
+        $response = json_decode($response);
+
+        $tasks = array();
+        if(isset($response->jobs))
+        {
+            foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
+        }
+        return $tasks;
+
+    }
+
+    /**
      * Create a jenkins.
      *
      * @access public
@@ -92,47 +134,5 @@ class jenkinsModel extends model
             ->where('id')->eq($id)
             ->exec();
         return !dao::isError();
-    }
-
-    /**
-     * list jenkins for ci task edit
-     *
-     * @return array
-     */
-    public function getPairs()
-    {
-        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
-        $jenkins = array('' => '') + $jenkins;
-        return $jenkins;
-    }
-
-    /**
-     * Get jenkins tasks.
-     * 
-     * @param  int    $id 
-     * @access public
-     * @return array
-     */
-    public function getTasks($id)
-    {
-        $jenkins = $this->getById($id);
-
-        $jenkinsServer   = $jenkins->url;
-        $jenkinsUser     = $jenkins->account;
-        $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
-
-        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
-        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-
-        $response = common::http($jenkinsServer . '/api/json/items/list');
-        $response = json_decode($response);
-
-        $tasks = array();
-        if(isset($response->jobs))
-        {
-            foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
-        }
-        return $tasks;
-
     }
 }

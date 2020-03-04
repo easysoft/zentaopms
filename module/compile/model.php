@@ -12,6 +12,18 @@
 class compileModel extends model
 {
     /**
+     * Get by id 
+     * 
+     * @param  int    $buildID 
+     * @access public
+     * @return object
+     */
+    public function getByID($buildID)
+    {
+        return $this->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($buildID)->fetch();
+    }
+
+    /**
      * Get build list.
      * 
      * @param  int    $integrationID 
@@ -35,18 +47,6 @@ class compileModel extends model
     }
 
     /**
-     * Get by id 
-     * 
-     * @param  int    $buildID 
-     * @access public
-     * @return object
-     */
-    public function getByID($buildID)
-    {
-        return $this->dao->select('*')->from(TABLE_COMPILE)->where('id')->eq($buildID)->fetch();
-    }
-
-    /**
      * Get unexecuted list.
      * 
      * @access public
@@ -55,6 +55,25 @@ class compileModel extends model
     public function getUnexecutedList()
     {
         return $this->dao->select('*')->from(TABLE_COMPILE)->where('status')->eq('')->andWhere('deleted')->eq('0')->fetchAll();
+    }
+
+    /**
+     * Get build url.
+     * 
+     * @param  object $jenkins 
+     * @access public
+     * @return string
+     */
+    public function getBuildUrl($jenkins)
+    {
+        $jenkinsServer   = $jenkins->url;
+        $jenkinsUser     = $jenkins->account;
+        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+
+        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
+        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
+        $buildUrl      = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
+        return $buildUrl;
     }
 
     /**
@@ -111,24 +130,5 @@ class compileModel extends model
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
 
         return !dao::isError();
-    }
-
-    /**
-     * Get build url.
-     * 
-     * @param  object $jenkins 
-     * @access public
-     * @return string
-     */
-    public function getBuildUrl($jenkins)
-    {
-        $jenkinsServer   = $jenkins->url;
-        $jenkinsUser     = $jenkins->account;
-        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
-
-        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
-        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-        $buildUrl      = sprintf('%s/job/%s/buildWithParameters/api/json', $jenkinsServer, $jenkins->jkJob);
-        return $buildUrl;
     }
 }

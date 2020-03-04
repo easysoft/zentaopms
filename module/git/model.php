@@ -104,56 +104,65 @@ class gitModel extends model
             $this->printLog("begin repo $repo->id");
             if(!$this->setRepo($repo)) return false;
 
-            $savedRevision = $this->getSavedRevision();
-            $this->printLog("start from revision $savedRevision");
-            $logs    = $this->getRepoLogs($repo, $savedRevision);
-            $objects = array();
-            if(!empty($logs))
+            $branches = $this->repo->getBranches($repo);
+            foreach($branches as $branch)
             {
-                $this->printLog("get " . count($logs) . " logs");
-                $this->printLog('begin parsing logs');
-                $latestRevision = $logs[0]->revision;
+                $this->printLog("sync branch $branch logs.");
+                $_COOKIE['repoBranch'] = $branch;
 
-                foreach($logs as $log)
+                $this->printLog("get this repo logs.");
+
+                $lastInDB = $this->getLatestComment($repoID);
+                /* Ignore unsynced branch. */
+                if(empty($lastInDB)) continue;
+
+                $commits = $repo->commits;
+                $version = $lastInDB->commit;
+                $logs    = $this->repo->getUnsyncLogs($repo);
+                $objects = array();
+                if(!empty($logs))
                 {
-                    $this->printLog("parsing log {$log->revision}");
-                    if($log->revision == $savedRevision)
+                    $this->printLog("get " . count($logs) . " logs");
+                    $this->printLog('begin parsing logs');
+
+                    foreach($logs as $log)
                     {
-                        $this->printLog("{$log->revision} alread parsed, commit it");
-                        continue;
-                    }
+                        $this->printLog("parsing log {$log->revision}");
 
-                    $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
+                        $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
-                    $objects = $this->repo->parseComment($log->msg);
+                        $objects = $this->repo->parseComment($log->msg);
 
-                    if($objects)
-                    {
-                        $this->printLog('extract' .
-                            ' story:' . join(' ', $objects['stories']) .
-                            ' task:' . join(' ', $objects['tasks']) .
-                            ' bug:'  . join(',', $objects['bugs']));
-
-                        $this->saveAction2PMS($objects, $log, $repo->encoding);
-                    }
-                    else
-                    {
-                        $this->printLog('no objects found' . "\n");
-                    }
-
-                    /* Create compile by comment. */
-                    $integrations = zget($commitGroup, $repoID, array());
-                    foreach($integrations as $integration)
-                    {
-                        foreach(explode(',', $integration->comment) as $comment)
+                        if($objects)
                         {
-                            if(strpos($log->msg, $comment) !== false) $this->compile->createByIntegration($integration->id);
+                            $this->printLog('extract' .
+                                ' story:' . join(' ', $objects['stories']) .
+                                ' task:' . join(' ', $objects['tasks']) .
+                                ' bug:'  . join(',', $objects['bugs']));
+
+                            $this->saveAction2PMS($objects, $log, $repo->encoding);
                         }
+                        else
+                        {
+                            $this->printLog('no objects found' . "\n");
+                        }
+
+                        /* Create compile by comment. */
+                        $integrations = zget($commitGroup, $repoID, array());
+                        foreach($integrations as $integration)
+                        {
+                            foreach(explode(',', $integration->comment) as $comment)
+                            {
+                                if(strpos($log->msg, $comment) !== false) $this->compile->createByIntegration($integration->id);
+                            }
+                        }
+                        $version  = $this->repo->saveOneCommit($repoID, $log, $version);
+                        $commits += count($logs)
                     }
                 }
+                $this->repo->updateCommitCount($repoID, $commits);
+                $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
 
-                $this->saveLastRevision($latestRevision);
-                $this->printLog("save revision $latestRevision");
                 $this->deleteRestartFile();
                 $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
@@ -162,9 +171,9 @@ class gitModel extends model
             $integrations = zget($tagGroup, $repoID, array());
             foreach($integrations as $integration)
             {
-                $dirs = $this->getRepoTags($repo);
-                end($dirs);
-                $lastTag = current($dirs);
+                $tags = $this->getRepoTags($repo);
+                end($tags);
+                $lastTag = current($tags);
                 if($lastTag != $integration->lastTag)
                 {
                     $this->compile->createByIntegration($integration->id, $lastTag, 'tag');
@@ -263,7 +272,6 @@ class gitModel extends model
         $this->setClient($repo);
         if(empty($this->client)) return false;
 
-        $this->setLogFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
@@ -280,18 +288,6 @@ class gitModel extends model
     {
         $this->client = $repo->client;
         return true;
-    }
-
-    /**
-     * Set the log file of a repo.
-     *
-     * @param  string    $repoId
-     * @access public
-     * @return void
-     */
-    public function setLogFile($repoId)
-    {
-        $this->logFile = $this->logRoot . $repoId . '.log';
     }
 
     /**
@@ -694,31 +690,6 @@ class gitModel extends model
     public function getBugProductsAndProjects($bugs)
     {
         return $this->dao->select('id, project, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
-    }
-
-    /**
-     * Get the saved revision.
-     * 
-     * @access public
-     * @return int
-     */
-    public function getSavedRevision()
-    {
-        if(!file_exists($this->logFile)) return 0;
-        if(file_exists($this->restartFile)) return 0;
-        return trim(file_get_contents($this->logFile));
-    }
-
-    /**
-     * Save the last revision.
-     * 
-     * @param  int    $revision 
-     * @access public
-     * @return void
-     */
-    public function saveLastRevision($revision)
-    {
-        $ret = file_put_contents($this->logFile, $revision);
     }
 
     /**

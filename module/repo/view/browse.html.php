@@ -76,38 +76,4 @@
     <div class='side-body'><?php include 'ajaxsidelogs.html.php';?></div>
   </div>
 </div>
-<script>
-$(function()
-{
-    $.get(createLink('repo', 'ajaxSyncLatestCommit', "repoID=<?php echo $repoID;?>"), function(data)
-    {
-        if(data == 'finished')
-        {
-            $('#mainContent').load(location.href + ' #mainContent', function()
-            {
-                $('#mainContent #mainContent .main-col').unwrap();
-                $('#sidebar #logForm').table();
-
-                if($("input:checkbox[name='revision[]']:checked").length < 2)
-                {
-                    $("input:checkbox[name='revision[]']:lt(2)").attr('checked', 'checked');
-                }
-                $("input:checkbox[name='revision[]']").each(function(){ if(!$(this).is(':checked')) $(this).attr("disabled","disabled")});
-                $("input:checkbox[name='revision[]']").click(function()
-                {
-                    var checkNum = $("input:checkbox[name='revision[]']:checked").length;
-                    if (checkNum >= 2) 
-                    {
-                        $("input:checkbox[name='revision[]']").each(function(){ if(!$(this).is(':checked')) $(this).attr("disabled","disabled")});
-                    }
-                    else
-                    {
-                        $("input:checkbox[name='revision[]']").each(function(){$(this).attr("disabled", false)});
-                    }
-                });
-            });
-        }
-    });
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>

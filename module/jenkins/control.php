@@ -66,8 +66,6 @@ class jenkins extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->app->loadLang('action');
-
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->create;
         $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);
         $this->view->position[] = $this->lang->jenkins->create;
@@ -91,8 +89,6 @@ class jenkins extends control
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
-
-        $this->app->loadLang('action');
 
         $this->view->title      = $this->lang->jenkins->common . $this->lang->colon . $this->lang->jenkins->edit;
         $this->view->position[] = html::a(inlink('browse'), $this->lang->jenkins->common);

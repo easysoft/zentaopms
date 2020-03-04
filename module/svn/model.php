@@ -99,15 +99,19 @@ class svnModel extends model
         $tagGroup = array();
         foreach($tagPlans as $integration) $tagGroup[$integration->repo][$integration->id] = $integration;
 
+        $_COOKIE['repoBranch'] = '';
         foreach($this->repos as $repoID => $repo)
         {
             $this->printLog("begin repo {$repo->name}");
             if(!$this->setRepo($repo)) return false;
 
-            $savedRevision = $this->getSavedRevision();
-            $this->printLog("start from revision $savedRevision");
+            $this->printLog("get this repo logs.");
+            $lastInDB = $this->getLatestComment($repoID);
+            /* Ignore unsynced repo. */
+            if(empty($lastInDB)) continue;
 
-            $logs    = $this->getRepoLogs($repo, $savedRevision);
+            $version = $lastInDB->commit;
+            $logs    = $this->repo->getUnsyncLogs($repo);
             $objects = array();
             if(!empty($logs))
             {
@@ -117,12 +121,6 @@ class svnModel extends model
                 foreach($logs as $log)
                 {
                     $this->printLog("parsing log {$log->revision}");
-                    if($log->revision == $savedRevision)
-                    {
-                        $this->printLog("{$log->revision} alread parsed, commit it");
-                        continue;
-                    }
-
                     $this->printLog("comment is\n----------\n" . trim($log->msg) . "\n----------");
 
                     $objects = $this->repo->parseComment($log->msg);
@@ -150,11 +148,11 @@ class svnModel extends model
                         }
                     }
 
-                    if($log->revision > $savedRevision) $savedRevision = $log->revision;
+                    $version = $this->repo->saveOneCommit($repoID, $log, $version);
                 }
+                $this->repo->updateCommitCount($repoID, $lastInDB->commit + count($logs));
+                $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
 
-                $this->saveLastRevision($savedRevision);
-                $this->printLog("save revision $savedRevision");
                 $this->deleteRestartFile();
                 $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
@@ -265,7 +263,6 @@ class svnModel extends model
         $this->setClient($repo);
         if(empty($this->client)) return false;
 
-        $this->setLogFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
@@ -291,18 +288,6 @@ class svnModel extends model
         }
         if(isset($repo->account)) $this->client .= " --username $repo->account --password $repo->password --no-auth-cache";
         return true;
-    }
-
-    /**
-     * Set the log file of a repo.
-     * 
-     * @param  string    $repoName 
-     * @access public
-     * @return void
-     */
-    public function setLogFile($repoId)
-    {
-        $this->logFile = $this->logRoot . $repoId . '.log';
     }
 
     /**
@@ -677,31 +662,6 @@ class svnModel extends model
     public function getBugProductsAndProjects($bugs)
     {
         return $this->dao->select('id, project, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
-    }
-
-    /**
-     * Get the saved revision.
-     * 
-     * @access public
-     * @return int
-     */
-    public function getSavedRevision()
-    {
-        if(!file_exists($this->logFile)) return 0;
-        if(file_exists($this->restartFile)) return 0;
-        return (int)trim(file_get_contents($this->logFile));
-    }
-
-    /**
-     * Save the last revision.
-     * 
-     * @param  int    $revision 
-     * @access public
-     * @return void
-     */
-    public function saveLastRevision($revision)
-    {
-        file_put_contents($this->logFile, $revision);
     }
 
     /**

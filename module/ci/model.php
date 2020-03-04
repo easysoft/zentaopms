@@ -27,7 +27,7 @@ class ciModel extends model
      * Send a request to jenkins to check build status.
      *
      * @access public
-     * @return bool
+     * @return void
      */
     public function checkBuildStatus()
     {
@@ -106,7 +106,7 @@ class ciModel extends model
      * @param  object $build
      * @param  string $status
      * @access public
-     * @return bool
+     * @return void
      */
     public function updateBuildStatus($build, $status)
     {
@@ -115,8 +115,12 @@ class ciModel extends model
     }
 
     /**
-     * @param $url
-     * @return false|mixed|string
+     * Send request.
+     * 
+     * @param  string $url 
+     * @param  object $data 
+     * @access public
+     * @return int
      */
     public function sendRequest($url, $data)
     {

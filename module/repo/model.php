@@ -542,6 +542,56 @@ class repoModel extends model
     }
 
     /**
+     * Save One Commit.
+     * 
+     * @param  int    $repoID 
+     * @param  object $commit 
+     * @param  int    $version 
+     * @param  string $branch 
+     * @access public
+     * @return int
+     */
+    public function saveOneCommit($repoID, $commit, $version, $branch = '')
+    {
+        $existsRevision  = $this->dao->select('id,revision')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($commit->revision)->fetch();
+        if($existsRevision)
+        {
+            if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($existsRevision->id)->set('branch')->eq($branch)->exec();
+            continue;
+        }
+
+        $commit->repo    = $repoID;
+        $commit->commit  = $version;
+        $commit->comment = htmlspecialchars($commit->comment);
+        $this->dao->insert(TABLE_REPOHISTORY)->data($commit)->exec();
+        if(!dao::isError())
+        {
+            $commitID = $this->dao->lastInsertID();
+            if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($commitID)->set('branch')->eq($branch)->exec();
+            foreach($commit->change as $file => $info)
+            {
+                $parentPath = dirname($file);
+
+                $repoFile = new stdclass();
+                $repoFile->repo     = $repoID;
+                $repoFile->revision = $commitID;
+                $repoFile->path     = $file;
+                $repoFile->parent   = $parentPath == '\\' ? '/' : $parentPath;
+                $repoFile->type     = $info['kind'];
+                $repoFile->action   = $info['action'];
+                $this->dao->insert(TABLE_REPOFILES)->data($repoFile)->exec();
+            }
+            $version++;
+        }
+        else
+        {
+            dao::getError();
+        }
+
+        return $version;
+    }
+
+    /**
      * Save exists log branch.
      * 
      * @param  int    $repoID 
@@ -576,6 +626,44 @@ class repoModel extends model
     public function updateCommitCount($repoID, $count)
     {
         return $this->dao->update(TABLE_REPO)->set('commits')->eq($count)->where('id')->eq($repoID)->exec();
+    }
+
+    /**
+     * Get unsync logs 
+     * 
+     * @param  object $repo 
+     * @access public
+     * @return array
+     */
+    public function getUnsyncLogs($repo)
+    {
+        $repoID   = $repo->id;
+        $lastInDB = $this->getLatestComment($repoID);
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+
+        $logs = $scm->log('', $lastInDB->revision);
+        if(empty($logs)) return false;
+
+        /* Process logs. */
+        foreach($logs as $i => $log)
+        {
+            if($lastInDB->revision == $log->revision)
+            {
+                unset($logs[$i]);
+                continue;
+            }
+
+            $log->author = $log->committer;
+            $log->msg    = $log->comment;
+            $log->date   = $log->time;
+
+            /* Process files. */
+            $log->files = array();
+            foreach($log->change as $file => $info) $log->files[$info['action']][] = $file;
+        }
+        return $logs;
     }
 
     /**
