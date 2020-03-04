@@ -141,6 +141,20 @@ class gitModel extends model
             $integrations = zget($objects, 'integrations', array());
             $this->loadModel('compile');
             foreach($integrations as $id) $this->compile->createByIntegration($id);
+
+            // Create compile by tag.
+            $integrations = $this->dao->select('*')->from(TABLE_INTEGRATION)->where('triggerType')->eq('tag')->andWhere('repo')->eq($repo->id)->fetchAll('id');
+            foreach($integrations as $integration)
+            {
+                $dirs = $this->getRepoTags($repo);
+                end($dirs);
+                $lastTag = current($dirs);
+                if($lastTag != $integration->lastTag)
+                {
+                    $this->compile->createByIntegration($integration->id, $lastTag, 'tag');
+                    $this->dao->update(TABLE_INTEGRATION)->set('lastTag')->eq($lastTag)->where('id')->eq($integration->id)->exec();
+                }
+            }
         }
     }
 

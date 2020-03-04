@@ -96,12 +96,23 @@ class Subversion
     public function tags($path, $revision = 'HEAD', $onlyDir = true)
     {
         $infos = $this->ls($path, $revision);
-        $tags  = array();
+        $dirs  = array();
         foreach($infos as $info)
         {
             if($onlyDir and $info->kind != 'dir') continue;
-            $dirPath = $path . '/' . $info->name;
-            $tags[$dirPath] = $info->name;
+            $dirs[$info->date][$info->name] = $info->name;
+        }
+
+        ksort($dirs);
+        $tags = array();
+        foreach($dirs as $dirNames)
+        {
+            ksort($dirNames);
+            foreach($dirNames as $dirName)
+            {
+                $dirPath = $path . '/' . $dirName;
+                $tags[$dirPath] = $dirName;
+            }
         }
 
         return $tags;

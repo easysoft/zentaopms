@@ -853,27 +853,8 @@ class repo extends control
             $dirs[$parent] = $this->repo->encodePath($parent);
         }
 
-        $parent = '/';
-        if($repo->prefix) $parent = rtrim($repo->prefix, '/');
-        if(trim($path, '/')) $parent = rtrim($repo->prefix, '/') . '/' . trim($path, '/');
-        $stmt = $this->dao->select('t1.*,t2.revision as svnRevision,t2.time')->from(TABLE_REPOFILES)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision = t2.id')
-            ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.type')->eq('dir')
-            ->andWhere('t1.parent')->eq($parent)
-            ->orderBy('path,svnRevision,time')
-            ->query();
-
-        while($row = $stmt->fetch())
-        {
-            $path = $row->path;
-            if($repo->prefix) $path = str_replace($repo->prefix, '', $path);
-            if(empty($path)) $path = '/';
-
-            $dirs[$path] = $this->repo->encodePath($path);
-            if($row->action == 'D') unset($dirs[$path]);
-        }
-
+        $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
+        foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
         die(json_encode($dirs));
     }
 }

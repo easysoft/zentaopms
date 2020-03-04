@@ -36,7 +36,7 @@ class ci extends control
         $this->loadModel('compile');
         foreach($scheduleJobs as $job)
         {
-            if(strpos($job->atDay, $week) !== false) $this->compile->createByIntegration($job->id);
+            if(strpos($job->atDay, $week) !== false) $this->compile->createByIntegration($job->id, $job->atTime, 'atTime');
         }
         echo 'success';
     }
@@ -50,53 +50,10 @@ class ci extends control
     public function exec()
     {
         $compiles = $this->loadModel('compile')->getUnexecutedList();
-        foreach($compiles as $compile) $this->compile->execByCompile($compile);
-
-        $integrations = $this->loadModel('integration')->getListByTriggerType('tag');
-
-        $repoIdList = array();
-        $repos      = array();
-        foreach($integrations as $integration) $repoIdList[$integration->id] = $integration->id;
-        if($repoIdList) $repos = $this->loadModel('repo')->getByIdList($repoIdList);
-
-        foreach($integrations as $integration)
+        foreach($compiles as $compile)
         {
-            $repo = zget($repos, $integration->repo, null);
-            if(empty($repo)) continue;
-
-            $scm      = $repo->SCM == 'Git' ? 'git' : 'svn';
-            $savedTag = $this->loadModel($scm)->getSavedTag($repo->id);
-
-            $tags = $this->$scm->getRepoTags($repo, $scm == 'svn' ? $integration->svnDir : '');
-            if(!empty($tags))
-            {
-                $arriveLastTag = false;
-                foreach($tags as $tag)
-                {
-                    /* Get the last build tag position */
-                    if($scm == 'git')
-                    {
-                        if(!empty($savedTag) && !$arriveLastTag) continue;
-                        if(!empty($savedTag) && $tag == $savedTag)
-                        {
-                            $arriveLastTag = true;
-                            continue;
-                        }
-                    }
-                    elseif($scm == 'svn')
-                    {
-                        if(isset($savedTag[$tag])) continue;
-                        $tag = rtrim($repo->path , '/') . '/' . trim($integration->svnDir, '/') . '/' . $tag;
-                    }
-
-                    $tagData = new stdclass();
-                    $tagData->PARAM_TAG = $tag;
-                    $this->compile->execByIntegration($integration->id, $tagData);
-                }
-
-                if($scm == 'svn') $tag = json_encode($tags);
-                $this->$scm->saveLastTag($tag, $repo->id);
-            }
+            if($compile->atTime and date('H:i') < $compile->atTime) continue; 
+            $this->compile->execByCompile($compile);
         }
         echo 'success';
     }

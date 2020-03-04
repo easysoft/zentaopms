@@ -61,16 +61,19 @@ class compileModel extends model
      * Save build by integration
      * 
      * @param  int    $integrationID 
+     * @param  string $data 
+     * @param  string $type 
      * @access public
      * @return void
      */
-    public function createByIntegration($integrationID)
+    public function createByIntegration($integrationID, $data = '', $type = 'tag')
     {
         $integration = $this->dao->select('id,name')->from(TABLE_INTEGRATION)->where('id')->eq($integrationID)->fetch();
 
         $build = new stdClass();
         $build->integration = $integration->id;
         $build->name        = $integration->name;
+        $build->$type       = $data;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
 
@@ -84,7 +87,7 @@ class compileModel extends model
      * @access public
      * @return bool
      */
-    public function execByCompile($compile, $data = null)
+    public function execByCompile($compile)
     {
         $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_INTEGRATION)->alias('t1')
@@ -94,41 +97,18 @@ class compileModel extends model
 
         if(!$integration) return false;
 
+        $tagData = '';
+        if($compile->tag)
+        {
+            $tagData = new stdclass();
+            $tagData->PARAM_TAG = $compile->tag;
+        }
+
         $buildUrl = $this->getBuildUrl($integration);
         $build    = new stdclass();
-        $build->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $build->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $tagData);
         $build->status = $build->queue ? 'created' : 'create_fail';
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
-
-        return !dao::isError();
-    }
-
-    /**
-     * Execute by integration.
-     * 
-     * @param  int $compile 
-     * @access public
-     * @return bool
-     */
-    public function execByIntegration($integrationID, $data = null)
-    {
-        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
-            ->from(TABLE_INTEGRATION)->alias('t1')
-            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
-            ->where('t1.id')->eq($integrationID)
-            ->fetch();
-
-        if(!$integration) return false;
-
-        $buildUrl = $this->getBuildUrl($integration);
-        $build    = new stdClass();
-        $build->integration = $integration->id;
-        $build->name        = $integration->name;
-        $build->queue       = $this->loadModel('ci')->sendRequest($buildUrl, $data);
-        $build->status      = $build->queue ? 'created' : 'create_fail';
-        $build->createdBy   = $this->app->user->account;
-        $build->createdDate = helper::now();
-        $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
 
         return !dao::isError();
     }

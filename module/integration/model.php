@@ -86,6 +86,24 @@ class integrationModel extends model
 
         $id = $this->dao->lastInsertId();
         if($integration->triggerType == 'schedule' and strpos($integration->atDay, date('w')) !== false) $this->loadModel('compile')->createByIntegration($id);
+        if($integration->triggerType == 'tag')
+        {
+            $repo    = $this->loadModel('repo')->getRepoByID($integration->repo);
+            $lastTag = '';
+            if($this->post->repoType != 'Subversion')
+            {
+                $dirs = $this->loadModel('svn')->getRepoTags($repo, $integration->svnDir);
+                end($dirs);
+                $lastTag = current($dirs);
+            }
+            else
+            {
+                $tags = $this->loadModel('git')->getRepoTags($repo);
+                end($tags);
+                $lastTag = current($tags);
+            }
+            $this->dao->update(TABLE_INTEGRATION)->set('lastTag')->eq($lastTag)->where('id')->eq($id)->exec();
+        }
         return true;
     }
 
@@ -102,6 +120,10 @@ class integrationModel extends model
         $integration    = fixer::input('post')
             ->setDefault('atDay', '')
             ->setIF($this->post->repoType != 'Subversion', 'svnDir', '')
+            ->setIF($this->post->triggerType != 'commit', 'comment', '')
+            ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
+            ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
+            ->setIF($this->post->triggerType != 'tag', 'lastTag', '')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
             ->remove('repoType')
@@ -125,6 +147,27 @@ class integrationModel extends model
             if($integration->triggerType != $oldIntegration->triggerType or strpos($oldIntegration->atDay, $week) === false)
             {
                 if(strpos($integration->atDay, $week) !== false) $this->loadModel('compile')->createByIntegration($integration->id);
+            }
+        }
+        elseif($integration->triggerType == 'tag')
+        {
+            if($integration->triggerType != $oldIntegration->triggerType or $integration->repo != $oldIntegration->repo)
+            {
+                $repo    = $this->loadModel('repo')->getRepoByID($integration->repo);
+                $lastTag = '';
+                if($this->post->repoType == 'Subversion')
+                {
+                    $dirs = $this->loadModel('svn')->getRepoTags($repo, $integration->svnDir);
+                    end($dirs);
+                    $lastTag = current($dirs);
+                }
+                else
+                {
+                    $tags = $this->loadModel('git')->getRepoTags($repo);
+                    end($tags);
+                    $lastTag = current($tags);
+                }
+                $this->dao->update(TABLE_INTEGRATION)->set('lastTag')->eq($lastTag)->where('id')->eq($id)->exec();
             }
         }
         return true;

@@ -78,6 +78,7 @@ class integration extends control
         $repoTypes = array();
         foreach($repoList as $repo)
         {
+            if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
         }
@@ -117,6 +118,7 @@ class integration extends control
         $repoTypes[$repo->id] = $repo->SCM;
         foreach($repoList as $repo)
         {
+            if(empty($repo->synced)) continue;
             $repoPairs[$repo->id] = $repo->name;
             $repoTypes[$repo->id] = $repo->SCM;
         }
