@@ -99,7 +99,7 @@ class gitModel extends model
         $tagGroup = array();
         foreach($tagPlans as $integration) $tagGroup[$integration->repo][$integration->id] = $integration;
 
-        foreach($this->repos as $repo)
+        foreach($this->repos as $repoID => $repo)
         {
             $this->printLog("begin repo $repo->id");
             if(!$this->setRepo($repo)) return false;
@@ -112,7 +112,7 @@ class gitModel extends model
 
                 $this->printLog("get this repo logs.");
 
-                $lastInDB = $this->getLatestComment($repoID);
+                $lastInDB = $this->repo->getLatestComment($repoID);
                 /* Ignore unsynced branch. */
                 if(empty($lastInDB)) continue;
 
@@ -157,7 +157,7 @@ class gitModel extends model
                             }
                         }
                         $version  = $this->repo->saveOneCommit($repoID, $log, $version);
-                        $commits += count($logs)
+                        $commits += count($logs);
                     }
                 }
                 $this->repo->updateCommitCount($repoID, $commits);

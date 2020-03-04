@@ -106,7 +106,7 @@ class svnModel extends model
             if(!$this->setRepo($repo)) return false;
 
             $this->printLog("get this repo logs.");
-            $lastInDB = $this->getLatestComment($repoID);
+            $lastInDB = $this->repo->getLatestComment($repoID);
             /* Ignore unsynced repo. */
             if(empty($lastInDB)) continue;
 

@@ -557,13 +557,17 @@ class repoModel extends model
         if($existsRevision)
         {
             if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($existsRevision->id)->set('branch')->eq($branch)->exec();
-            continue;
+            return true;
         }
 
-        $commit->repo    = $repoID;
-        $commit->commit  = $version;
-        $commit->comment = htmlspecialchars($commit->comment);
-        $this->dao->insert(TABLE_REPOHISTORY)->data($commit)->exec();
+        $history = new stdclass();
+        $history->repo      = $repoID;
+        $history->revision  = $commit->revision;
+        $history->committer = $commit->committer;
+        $history->time      = $commit->time;
+        $history->commit    = $version;
+        $history->comment   = htmlspecialchars($commit->comment);
+        $this->dao->insert(TABLE_REPOHISTORY)->data($history)->exec();
         if(!dao::isError())
         {
             $commitID = $this->dao->lastInsertID();
