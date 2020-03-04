@@ -200,29 +200,6 @@ class gitModel extends model
             }
         }
 
-        if(isset($this->config->git->repos))
-        {
-            foreach($this->config->git->repos as $i => $repo)
-            {
-                $repoPath = $repo['path'];
-                if(empty($repoPath)) continue;
-                if(isset($paths[$repoPath])) continue;
-
-                $gitRepo = new stdclass();
-                $gitRepo->id       = "c{$i}";
-                $gitRepo->client   = $this->config->git->client;
-                $gitRepo->path     = $repoPath;
-                $gitRepo->prefix   = '';
-                $gitRepo->SCM      = 'Git';
-                $gitRepo->account  = '';
-                $gitRepo->password = '';
-                $gitRepo->encoding = zget($repo, 'encoding', $this->config->git->client);
-
-                $gitRepos[] = $gitRepo;
-                $paths[$repoPath] = $repoPath;
-            }
-        }
-
         if(empty($gitRepos)) echo "You must set one git repo.\n";
 
         $this->repos = $gitRepos;

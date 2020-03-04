@@ -215,29 +215,6 @@ class svnModel extends model
             $paths[$repo->path] = $repo->path;
         }
 
-        if(isset($this->config->svn->repos))
-        {
-            foreach($this->config->svn->repos as $i => $repo)
-            {
-                $repoPath = $repo['path'];
-                if(empty($repoPath)) continue;
-                if(isset($paths[$repoPath])) continue;
-
-                $svnRepo = new stdclass();
-                $svnRepo->id       = "c{$i}";
-                $svnRepo->client   = $this->config->svn->client;
-                $svnRepo->path     = $repoPath;
-                $svnRepo->prefix   = '';
-                $svnRepo->SCM      = 'Subversion';
-                $svnRepo->account  = $repo['username'];
-                $svnRepo->password = $repo['password'];
-                $svnRepo->encoding = zget($repo, 'encoding', $this->config->svn->client);
-
-                $svnRepos[] = $svnRepo;
-                $paths[$repoPath] = $repoPath;
-            }
-        }
-
         if(empty($svnRepos)) echo "You must set one svn repo.\n";
         $this->repos = $svnRepos;
         return true;
