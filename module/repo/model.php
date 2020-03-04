@@ -29,10 +29,11 @@ class repoModel extends model
      * 
      * @param  array  $repos 
      * @param  int    $repoID 
+     * @param  bool   $showSeleter 
      * @access public
      * @return void
      */
-    public function setMenu($repos, $repoID = '', $showRepoSeletion = true)
+    public function setMenu($repos, $repoID = '', $showSeleter = true)
     {
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
@@ -54,7 +55,7 @@ class repoModel extends model
             }
         }
 
-        if($showRepoSeletion && !empty($repos))
+        if($showSeleter && !empty($repos))
         {
             $repoIndex  = '<div class="btn-group angle-btn"><div class="btn-group"><button data-toggle="dropdown" type="button" class="btn">' . ($repo->SCM == 'Subversion' ? '[SVN] ' : '[GIT] ') . $repo->name . ' <span class="caret"></span></button>';
             $repoIndex .= $this->select($repos, $repoID);
@@ -135,7 +136,6 @@ class repoModel extends model
      *
      * @param  string $orderBy
      * @param  object $pager
-     * @param  bool   $decode
      * @access public
      * @return array
      */
@@ -158,8 +158,8 @@ class repoModel extends model
     /**
      * Get list by SCM.
      * 
-     * @param  strint $scm 
-     * @param  string $type 
+     * @param  string $scm 
+     * @param  string $type  all|haspriv
      * @access public
      * @return array
      */
