@@ -134,7 +134,7 @@ class gitModel extends model
                                 if(strpos($log->msg, $comment) !== false) $this->compile->createByIntegration($integration->id);
                             }
                         }
-                        $version  = $this->repo->saveOneCommit($repoID, $log, $version);
+                        $version  = $this->repo->saveOneCommit($repoID, $log, $version, $branch);
                         $commits += count($logs);
                     }
                 }

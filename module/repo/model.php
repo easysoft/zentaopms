@@ -1236,7 +1236,7 @@ class repoModel extends model
         $action->actor   = $log->author;
         $action->date    = $log->date;
 
-        $action->comment = htmlspecialchars($this->repo->iconvComment($log->msg, $encodings));
+        $action->comment = htmlspecialchars($this->iconvComment($log->msg, $encodings));
         $action->extra   = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
 
         $this->loadModel('action');
