@@ -173,19 +173,6 @@ class svnModel extends model
     }
 
     /**
-     * Set the tag file of a repo.
-     *
-     * @param  string    $repoId
-     * @access public
-     * @return void
-     */
-    public function setTagFile($repoId)
-    {
-        $this->setLogRoot();
-        $this->tagFile = $this->logRoot . $repoId . '.tag';
-    }
-
-    /**
      * Set the restart file.
      * 
      * @access public
@@ -243,14 +230,10 @@ class svnModel extends model
      */
     public function getRepos()
     {
-        $repos = array();
-        if(!$this->config->svn->repos) return $repos;
+        if($this->repos) $this->setRepos();
 
-        foreach($this->config->svn->repos as $repo)
-        {
-            if(empty($repo['path'])) continue;
-            $repos[] = $repo['path'];
-        }
+        $repos = array();
+        foreach($this->repos as $repo) $repos[] = $repo->path;
         return $repos;
     }
 
@@ -267,7 +250,6 @@ class svnModel extends model
         if(empty($this->client)) return false;
 
         $this->setLogFile($repo->id);
-        $this->setTagFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
@@ -734,36 +716,5 @@ class svnModel extends model
         $buildedURL .= 'repoUrl=' . helper::safe64Encode($url);
 
         return $buildedURL;
-    }
-
-    /**
-     * Get the saved tag.
-     *
-     * @access public
-     * @return int
-     */
-    public function getSavedTag($repoID = 0)
-    {
-        if($repoID) $this->setTagFile($repoID);
-        if(!file_exists($this->tagFile)) return array();
-        if(file_exists($this->restartFile)) return array();
-
-        $tags = array();
-        foreach(json_decode(file_get_contents($this->tagFile)) as $tag) $tags[$tag] = $tag;
-        return $tags;
-    }
-
-    /**
-     * Save the last revision.
-     *
-     * @param  int    $tag
-     * @access public
-     * @return void
-     */
-    public function saveLastTag($tag, $repoId = 0)
-    {
-        if($repoId) $this->setTagFile($repoId);
-        if(is_array($tag)) $tag = json_encode($tag);
-        file_put_contents($this->tagFile, $tag);
     }
 }

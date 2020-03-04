@@ -248,7 +248,6 @@ class gitModel extends model
         if(empty($this->client)) return false;
 
         $this->setLogFile($repo->id);
-        $this->setTagFile($repo->id);
         $this->setRepoRoot($repo);
         return true;
     }
@@ -277,19 +276,6 @@ class gitModel extends model
     public function setLogFile($repoId)
     {
         $this->logFile = $this->logRoot . $repoId . '.log';
-    }
-
-    /**
-     * Set the tag file of a repo.
-     *
-     * @param  string    $repoId
-     * @access public
-     * @return void
-     */
-    public function setTagFile($repoId)
-    {
-        $this->setLogRoot();
-        $this->tagFile = $this->logRoot . $repoId . '.tag';
     }
 
     /**
@@ -717,33 +703,6 @@ class gitModel extends model
     public function saveLastRevision($revision)
     {
         $ret = file_put_contents($this->logFile, $revision);
-    }
-
-    /**
-     * Get the saved tag.
-     *
-     * @access public
-     * @return int
-     */
-    public function getSavedTag($repoID = 0)
-    {
-        if($repoID) $this->setTagFile($repoID);
-        if(!file_exists($this->tagFile)) return 0;
-        if(file_exists($this->restartFile)) return 0;
-        return trim(file_get_contents($this->tagFile));
-    }
-
-    /**
-     * Save the last revision.
-     *
-     * @param  int    $tag
-     * @access public
-     * @return void
-     */
-    public function saveLastTag($tag, $repoId = 0)
-    {
-        if($repoId) $this->setTagFile($repoId);
-        file_put_contents($this->tagFile, $tag);
     }
 
     /**
