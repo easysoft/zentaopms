@@ -88,6 +88,17 @@ class gitModel extends model
         $this->setLogRoot();
         $this->setRestartFile();
 
+        $this->loadModel('compile');
+        /* Get commit triggerType integrations by repoIdList. */
+        $commitPlans = $this->loadModel('integration')->getListByTriggerType('commit', array_keys($this->repos));
+        $commitGroup = array();
+        foreach($commitPlans as $integration) $commitGroup[$integration->repo][$integration->id] = $integration;
+
+        /* Get tag triggerType integrations by repoIdList. */
+        $tagPlans = $this->integration->getListByTriggerType('tag', array_keys($this->repos));
+        $tagGroup = array();
+        foreach($tagPlans as $integration) $tagGroup[$integration->repo][$integration->id] = $integration;
+
         foreach($this->repos as $repo)
         {
             $this->printLog("begin repo $repo->id");
@@ -129,6 +140,16 @@ class gitModel extends model
                     {
                         $this->printLog('no objects found' . "\n");
                     }
+
+                    /* Create compile by comment. */
+                    $integrations = zget($commitGroup, $repoID, array());
+                    foreach($integrations as $integration)
+                    {
+                        foreach(explode(',', $integration->comment) as $comment)
+                        {
+                            if(strpos($log->msg, $comment) !== false) $this->compile->createByIntegration($integration->id);
+                        }
+                    }
                 }
 
                 $this->saveLastRevision($latestRevision);
@@ -137,13 +158,8 @@ class gitModel extends model
                 $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
 
-            // Create compile by integration.
-            $integrations = zget($objects, 'integrations', array());
-            $this->loadModel('compile');
-            foreach($integrations as $id) $this->compile->createByIntegration($id);
-
             // Create compile by tag.
-            $integrations = $this->dao->select('*')->from(TABLE_INTEGRATION)->where('triggerType')->eq('tag')->andWhere('repo')->eq($repo->id)->fetchAll('id');
+            $integrations = zget($tagGroup, $repoID, array());
             foreach($integrations as $integration)
             {
                 $dirs = $this->getRepoTags($repo);
@@ -209,8 +225,8 @@ class gitModel extends model
             {
                 unset($repo->acl);
                 unset($repo->desc);
-                $gitRepos[] = $repo;
-                $paths[$repo->path] = $repo->path;
+                $gitRepos[$repo->id] = $repo;
+                $paths[$repo->path]  = $repo->path;
             }
         }
 

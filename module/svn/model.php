@@ -88,9 +88,20 @@ class svnModel extends model
         $this->setLogRoot();
         $this->setRestartFile();
 
-        foreach($this->repos as $name => $repo)
+        $this->loadModel('compile');
+        /* Get commit triggerType integrations by repoIdList */
+        $commitPlans = $this->loadModel('integration')->getListByTriggerType('commit', array_keys($this->repos));
+        $commitGroup = array();
+        foreach($commitPlans as $integration) $commitGroup[$integration->repo][$integration->id] = $integration;
+
+        /* Get tag triggerType integrations by repoIdList */
+        $tagPlans = $this->integration->getListByTriggerType('tag', array_keys($this->repos));
+        $tagGroup = array();
+        foreach($tagPlans as $integration) $tagGroup[$integration->repo][$integration->id] = $integration;
+
+        foreach($this->repos as $repoID => $repo)
         {
-            $this->printLog("begin repo $name");
+            $this->printLog("begin repo {$repo->name}");
             if(!$this->setRepo($repo)) return false;
 
             $savedRevision = $this->getSavedRevision();
@@ -129,6 +140,16 @@ class svnModel extends model
                         $this->printLog('no objects found' . "\n");
                     }
 
+                    /* Create compile by comment. */
+                    $integrations = zget($commitGroup, $repoID, array());
+                    foreach($integrations as $integration)
+                    {
+                        foreach(explode(',', $integration->comment) as $comment)
+                        {
+                            if(strpos($log->msg, $comment) !== false) $this->compile->createByIntegration($integration->id);
+                        }
+                    }
+
                     if($log->revision > $savedRevision) $savedRevision = $log->revision;
                 }
 
@@ -138,13 +159,8 @@ class svnModel extends model
                 $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
 
-            // Create compile by integration.
-            $integrations = zget($objects, 'integrations', array());
-            $this->loadModel('compile');
-            foreach($integrations as $id) $this->compile->createByIntegration($id);
-
             /* Create compile by tag. */
-            $integrations = $this->dao->select('*')->from(TABLE_INTEGRATION)->where('triggerType')->eq('tag')->andWhere('repo')->eq($repo->id)->fetchAll('id');
+            $integrations = zget($tagGroup, $repoID, array());
             foreach($integrations as $integration)
             {
                 $dirs = $this->getRepoTags($repo, $integration->svnDir);
@@ -213,8 +229,8 @@ class svnModel extends model
 
             unset($repo->acl);
             unset($repo->desc);
-            $svnRepos[] = $repo;
-            $paths[$repo->path] = $repo->path;
+            $svnRepos[$repo->id] = $repo;
+            $paths[$repo->path]  = $repo->path;
         }
 
         if(empty($svnRepos)) echo "You must set one svn repo.\n";

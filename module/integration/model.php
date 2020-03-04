@@ -49,11 +49,12 @@ class integrationModel extends model
      * @access public
      * @return array
      */
-    public function getListByTriggerType($triggerType)
+    public function getListByTriggerType($triggerType, $repoIdList = array())
     {
         return $this->dao->select('*')->from(TABLE_INTEGRATION)
             ->where('deleted')->eq('0')
             ->andWhere('triggerType')->eq($triggerType)
+            ->beginIF($repoIdList)->andWhere('repo')->in($repoIdList)->fi()
             ->fetchAll('id');
     }
 
