@@ -953,7 +953,7 @@ class repoModel extends model
     }
 
     /**
-     * Parse the comment of git, extract object id list from it.
+     * Parse the comment of git and svn, extract object id list from it.
      *
      * @param  string    $comment
      * @access public
