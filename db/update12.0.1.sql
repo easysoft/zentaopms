@@ -75,6 +75,7 @@ ALTER TABLE `zt_webhook` MODIFY COLUMN `type` varchar(15) NOT NULL;
 UPDATE `zt_webhook` SET `type` = 'dinggroup' WHERE `type` = 'dingding';
 UPDATE `zt_webhook` SET `type` = 'dinguser' WHERE `type` = 'dingapi';
 UPDATE `zt_webhook` SET `type` = 'wechatgroup' WHERE `type` = 'weixin';
+UPDATE `zt_grouppriv` SET `method` = 'edit' WHERE `module` = 'repo' AND `method` = 'settings';
 
 ALTER TABLE `zt_compile`
 CHANGE `cijob` `integration` mediumint(8) unsigned NOT NULL AFTER `name`,
@@ -82,3 +83,5 @@ CHANGE `queueItem` `queue` mediumint(8) NOT NULL AFTER `integration`;
 
 ALTER TABLE `zt_jenkins` CHANGE `serviceUrl` `url` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `name`;
 ALTER TABLE `zt_jenkins` DROP `encrypt`;
+
+ALTER TABLE `zt_compile` ADD `atTime` varchar(10) COLLATE 'utf8_general_ci' NULL AFTER `logs`;
