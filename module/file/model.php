@@ -896,7 +896,8 @@ class fileModel extends model
         if($type == 'content') die($content);
         if($type == 'file' and file_exists($content))
         {
-            $chunkSize = 1024 * 1024;
+            set_time_limit(0);
+            $chunkSize = 10 * 1024 * 1024;
             $handle    = fopen($content, "r");
             while(!feof($handle)) echo fread($handle, $chunkSize);
             fclose($handle);
