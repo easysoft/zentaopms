@@ -43,11 +43,14 @@
           <td class='text' title='<?php echo $job->name; ?>'><?php echo $job->name; ?></td>
           <td class='text' title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
           <?php
-          $triggerType = zget($lang->integration->triggerTypeList, $job->triggerType);
-          if($job->triggerType == 'tag' and !empty($job->svnDir)) $triggerType = $lang->integration->dirChange;
-
+          $triggerType   = zget($lang->integration->triggerTypeList, $job->triggerType);
           $triggerConfig = '';
-          if($job->triggerType == 'commit')
+          if($job->triggerType == 'tag' and !empty($job->svnDir))
+          {
+              $triggerType   = $lang->integration->dirChange;
+              $triggerConfig = "({$job->svnDir})";
+          }
+          elseif($job->triggerType == 'commit')
           {
               $triggerConfig = "({$job->comment})";
           }

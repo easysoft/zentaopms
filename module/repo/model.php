@@ -651,6 +651,7 @@ class repoModel extends model
         if(empty($logs)) return false;
 
         /* Process logs. */
+        $logs = array_reverse($logs, true);
         foreach($logs as $i => $log)
         {
             if($lastInDB->revision == $log->revision)
@@ -668,38 +669,6 @@ class repoModel extends model
             foreach($log->change as $file => $info) $log->files[$info['action']][] = $file;
         }
         return $logs;
-    }
-
-    /**
-     * Update latest commit.
-     * 
-     * @param  object $repo 
-     * @access public
-     * @return void
-     */
-    public function updateLatestCommit($repo)
-    {
-        $repoID     = $repo->id;
-        $latestInDB = $this->getLatestComment($repoID);
-        $version    = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-        $commits    = 0;
-
-        $scm = $this->app->loadClass('scm');
-        $scm->setEngine($repo);
-        $commitCount = $scm->getCommitCount(empty($latestInDB) ? 0 : $latestInDB->commit, empty($latestInDB) ? 0 : $latestInDB->revision);
-        if($commitCount >= $version)
-        {
-            $revision = 'HEAD';
-            $logs = $scm->getCommits($revision, $commitCount - $version + 1, $this->cookie->repoBranch);
-            $logs['commits'] = array_reverse($logs['commits'], true);
-
-            $commits = $this->saveCommit($repoID, $logs, $version, $this->cookie->repoBranch);
-            if($repo->SCM == 'Git' and empty($latestInDB)) $this->fixCommit($repo->id);
-            $this->updateCommitCount($repoID, $commits);
-        }
-        $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
-
-        return $commits;
     }
 
     /**
@@ -1118,7 +1087,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['taskReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['taskReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[3] as $i => $idList)
@@ -1128,7 +1097,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['bugReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['bugReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[3] as $i => $idList)

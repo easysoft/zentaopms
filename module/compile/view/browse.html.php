@@ -44,11 +44,14 @@
           <td class='text' title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
           <td class='text' title='<?php echo $build->jenkinsName;?>'><?php echo urldecode($build->jkJob) . "@{$build->jenkinsName}";?></td>
           <?php
-          $triggerType = zget($lang->integration->triggerTypeList, $build->triggerType);
-          if($build->triggerType == 'tag' and !empty($build->svnDir)) $triggerType = $lang->integration->dirChange;
-
+          $triggerType   = zget($lang->integration->triggerTypeList, $build->triggerType);
           $triggerConfig = '';
-          if($build->triggerType == 'commit')
+          if($build->triggerType == 'tag' and !empty($build->svnDir))
+          {
+              $triggerType   = $lang->integration->dirChange;
+              $triggerConfig = "({$build->svnDir})";
+          }
+          elseif($build->triggerType == 'commit')
           {
               $triggerConfig = "({$build->comment})";
           }

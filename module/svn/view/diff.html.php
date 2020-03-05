@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php $catLink = $this->svn->buildURL('cat', $url, $revision);?>
+<?php $catLink = $this->loadModel('repo')->buildURL('cat', $url, $revision);?>
 <div class='detail'>
   <div class='detail-title'><?php echo html::a($catLink, "$url@$revision");?></div>
   <div class='detail-content'><xmp><?php echo $diff;?></xmp></div>

@@ -25,7 +25,11 @@
 </div>
 <script language='Javascript'>
 $(function(){
+    <?php if(empty($branch)):?>
     var link = createLink('repo', 'ajaxSyncComment', "repoID=<?php echo $repoID?>");
+    <?php else:?>
+    var link = createLink('repo', 'ajaxSyncBranchComment', "repoID=<?php echo $repoID?>&branch=<?php echo $branch;?>");
+    <?php endif;?>
     function syncComments()
     {
         $.get(link, function(data)

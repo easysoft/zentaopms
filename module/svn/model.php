@@ -108,9 +108,9 @@ class svnModel extends model
                     if($objects)
                     {
                         $this->printLog('extract' .
-                            'task:' . join(' ', $objects['tasks']) .
+                            ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
-                        $this->repo->saveAction2PMS($objects, $log, $repo->encoding, 'svn');
+                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'svn');
                     }
                     else
                     {
@@ -394,10 +394,10 @@ class svnModel extends model
      */
     public function getRepoByURL($url)
     {
-        foreach($this->config->svn->repos as $repo)
+        if(empty($this->repos)) $this->setRepos();
+        foreach($this->repos as $repo)
         {
-            if(empty($repo['path'])) continue;
-            if(strpos(strtolower($url), strtolower($repo['path'])) !== false) return (object)$repo;
+            if(strpos(strtolower($url), strtolower($repo->path)) !== false) return $repo;
         }
         return false;
     }

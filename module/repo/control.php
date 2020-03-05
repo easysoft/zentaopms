@@ -316,6 +316,7 @@ class repo extends control
 
         $logType   = 'dir';
         $revisions = $this->repo->getLogs($repo, $path, $revision, $logType, $pager);
+        if($repo->SCM == 'Git' and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncComment', "repoID=$repoID&branch={$this->cookie->repoBranch}"));
         $commiters = $this->loadModel('user')->getCommiters();
         foreach($infos as $info) $info->committer = zget($commiters, $info->account, $info->account);
         foreach($revisions as $log) $log->committer = zget($commiters, $log->committer, $log->committer);
@@ -668,10 +669,11 @@ class repo extends control
      * Show sync comment.
      * 
      * @param  int    $repoID 
+     * @param  string $branch 
      * @access public
      * @return void
      */
-    public function showSyncComment($repoID = 0)
+    public function showSyncComment($repoID = 0, $branch = '')
     {
         $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
@@ -682,6 +684,7 @@ class repo extends control
         $latestInDB = $this->repo->getLatestComment($repoID);
         $this->view->version = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID  = $repoID;
+        $this->view->branch  = $branch;
         $this->display();
     }
 
@@ -772,6 +775,53 @@ class repo extends control
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
         echo $type == 'batch' ?  $commitCount : 'finish';
+    }
+
+    /**
+     * Ajax sync git branch comment.
+     * 
+     * @param  int    $repoID 
+     * @param  string $branch 
+     * @access public
+     * @return void
+     */
+    public function ajaxSyncBranchComment($repoID = 0, $branch = '')
+    {
+        set_time_limit(0);
+        $repo = $this->repo->getRepoByID($repoID);
+        if(empty($repo)) die();
+        if($repo->SCM != 'Git') die('finish');
+
+        $this->scm->setEngine($repo);
+
+        $this->repo->setRepoBranch($branch);
+        setcookie("syncBranch", $branch, 0, $this->config->webRoot);
+
+        $latestInDB = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
+            ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
+            ->where('t1.repo')->eq($repoID)
+            ->beginIF($repo->SCM == 'Git' and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->orderBy('t1.time')
+            ->limit(1)
+            ->fetch();
+
+        $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
+        $logs     = array();
+        $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
+
+        $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
+        $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
+        if(empty($commitCount))
+        {
+            if($branch) $this->repo->saveExistsLogBranch($repo->id, $branch);
+
+            setcookie("syncBranch", $branch, 0, $this->config->webRoot);
+            $this->repo->markSynced($repoID);
+            die('finish');
+        }
+
+        $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
+        echo $commitCount;
     }
 
     /**

@@ -114,7 +114,7 @@ class svn extends control
 
                 if($objects)
                 {
-                    $this->svn->saveAction2PMS($objects, $log, $repoRoot);
+                    $this->repo->saveAction2PMS($objects, $log, $repoRoot);
                     if($objects['stories']) $parsedObjects['stories'] = array_merge($parsedObjects['stories'], $objects['stories']);
                     if($objects['tasks'])   $parsedObjects['tasks'  ] = array_merge($parsedObjects['tasks'],   $objects['tasks']);
                     if($objects['bugs'])    $parsedObjects['bugs']    = array_merge($parsedObjects['bugs'],    $objects['bugs']);
@@ -180,7 +180,7 @@ class svn extends control
             $log->msg      = $message;
             $log->revision = $revision;
             $log->files    = $parsedFiles;
-            $this->svn->saveAction2PMS($objects, $log, $repoUrl);
+            $this->repo->saveAction2PMS($objects, $log, $repoUrl);
         }
         die();
     }

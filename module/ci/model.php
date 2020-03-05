@@ -57,9 +57,13 @@ class ciModel extends model
                 /* Queue expired, use another api. */
                 $infoUrl   = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $compile->jkJob, $compile->queue);
                 $response  = common::http($infoUrl);
+
                 $buildInfo = json_decode($response);
-                $result    = strtolower($buildInfo->result);
-                $this->updateBuildStatus($compile, $result);
+                if($buildInfo)
+                {
+                    $result = strtolower($buildInfo->result);
+                    $this->updateBuildStatus($compile, $result);
+                }
 
                 $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $compile->queue);
                 $response = common::http($logUrl);

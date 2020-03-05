@@ -118,7 +118,7 @@ class gitModel extends model
                                 'task:' . join(' ', $objects['tasks']) .
                                 ' bug:'  . join(',', $objects['bugs']));
 
-                            $this->repo->saveAction2PMS($objects, $log, $repo->encoding, 'git');
+                            $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git');
                         }
                         else
                         {
@@ -138,11 +138,11 @@ class gitModel extends model
                         $commits += count($logs);
                     }
                 }
-                $this->repo->updateCommitCount($repoID, $commits);
-                $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
 
-                $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
             }
+            $this->repo->updateCommitCount($repoID, $commits);
+            $this->dao->update(TABLE_REPO)->set('lastSync')->eq(helper::now())->where('id')->eq($repoID)->exec();
+            $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
 
             // Create compile by tag.
             $integrations = zget($tagGroup, $repoID, array());

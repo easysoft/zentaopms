@@ -125,9 +125,11 @@ class compileModel extends model
 
         $buildUrl = $this->getBuildUrl($integration);
         $build    = new stdclass();
-        $build->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $tagData);
-        $build->status = $build->queue ? 'created' : 'create_fail';
+        $build->queue      = $this->loadModel('ci')->sendRequest($buildUrl, $tagData);
+        $build->status     = $build->queue ? 'created' : 'create_fail';
+        $build->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
+        $this->dao->update(TABLE_INTEGRATION)->set('lastStatus')->eq($build->status)->set('lastExec')->eq($build->updateDate)->where('id')->eq($compile->integration)->exec();
 
         return !dao::isError();
     }
