@@ -71,6 +71,7 @@
             <?php
             common::printIcon('compile', 'browse', "integrationID=$id", '', 'list', 'file-text');
             common::printIcon('integration', 'edit', "integrationID=$id", '', 'list',  'edit');
+            common::printIcon('integration', 'exec', "integrationID=$id", '', 'list',  'play', 'hiddenwin');
             if(common::hasPriv('integration', 'delete')) echo html::a($this->createLink('integration', 'delete', "integrationID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->integration->delete}' class='btn'");
             ?>
           </td>

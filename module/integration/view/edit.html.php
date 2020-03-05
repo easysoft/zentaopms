@@ -90,7 +90,6 @@
               <?php echo html::submitButton(); ?>
               <?php echo html::backButton(); ?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
-              <?php echo html::commonButton($lang->integration->execNow, "onclick=execJob($job->id) data-tip-class='tooltip-success'", "btn btn-info exe-job-button");?>
             </td>
           </tr>
         </table>
@@ -98,5 +97,4 @@
     </div>
   </div>
 </div>
-<?php js::set('sendExec', $lang->integration->sendExec);?>
 <?php include '../../common/view/footer.html.php';?>

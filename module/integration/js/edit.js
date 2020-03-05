@@ -89,18 +89,3 @@ $(function()
     $('#jkHost').change();
     $('#triggerType').change();
 });
-
-function execJob(id)
-{
-    $.ajax(
-    {
-        type: "POST",
-        url: createLink('integration', 'exec', 'id=' + id),
-        data: {},
-        datatype: "json",
-        success: function(data)
-        {
-            $('.exe-job-button').tooltip('show', sendExec);
-        }
-    });
-}

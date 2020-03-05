@@ -54,22 +54,19 @@ class ciModel extends model
             $response = common::http($queueUrl);
             if(strripos($response, "404") > -1)
             {
-                /* Queue expired, use another api. */
-                $infoUrl   = sprintf('%s/job/%s/%s/api/json', $jenkinsServer, $compile->jkJob, $compile->queue);
-                $response  = common::http($infoUrl);
-
-                $buildInfo = json_decode($response);
-                if($buildInfo)
+                $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->jkJob, $compile->queue);
+                $response = common::http($infoUrl);
+                if($response)
                 {
-                    $result = strtolower($buildInfo->result);
+                    $buildInfo   = simplexml_load_string($response);
+                    $buildNumber = strtolower($buildInfo->number);
+                    $result      = strtolower($buildInfo->result);
                     $this->updateBuildStatus($compile, $result);
+
+                    $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
+                    $response = common::http($logUrl);
+                    $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
                 }
-
-                $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $compile->queue);
-                $response = common::http($logUrl);
-                $logs     = json_decode($response);
-
-                $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
             }
             else
             {
@@ -91,12 +88,9 @@ class ciModel extends model
                         $result = strtolower($buildInfo->result);
                         $this->updateBuildStatus($compile, $result);
 
-                        $logUrl = $buildInfo->url . 'logText/progressiveText/api/json';
-                        $logUrl = str_replace('://', $jenkinsAuth, $logUrl);
-
+                        $logUrl   = $buildInfo->url . 'logText/progressiveText/api/json';
+                        $logUrl   = str_replace('://', $jenkinsAuth, $logUrl);
                         $response = common::http($logUrl);
-                        $logs     = json_decode($response);
-
                         $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
                     }
                 }

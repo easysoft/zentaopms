@@ -173,4 +173,76 @@ class integrationModel extends model
         }
         return true;
     }
+
+    /**
+     * Exec integration.
+     * 
+     * @param  int    $id 
+     * @access public
+     * @return bool
+     */
+    public function exec($id)
+    {
+        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t1.triggerType,t1.atTime,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+            ->from(TABLE_INTEGRATION)->alias('t1')
+            ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
+            ->where('t1.id')->eq($id)
+            ->fetch();
+        if(!$integration) return false;
+
+		$buildUrl = $this->loadModel('compile')->getBuildUrl($integration);
+        $build    = new stdclass();
+        $build->integration = $integration->id;
+        $build->name        = $integration->name;
+
+        $now  = helper::now();
+        $data = '';
+        if($integration->triggerType == 'tag')
+        {
+            $repo    = $this->loadModel('repo')->getRepoById($integration->repo);
+            $lastTag = '';
+            if($repo->SCM == 'Subversion')
+            {
+                $dirs = $this->loadModel('svn')->getRepoTags($repo, $integration->svnDir);
+                if($dirs)
+                {
+                    end($dirs);
+                    $lastTag = current($dirs);
+                    $lastTag = rtrim($repo->path , '/') . '/' . trim($integration->svnDir, '/') . '/' . $lastTag;
+                }
+            }
+            else
+            {
+                $tags = $this->loadModel('git')->getRepoTags($repo);
+                if($tags)
+                {
+                    end($tags);
+                    $lastTag = current($tags);
+                }
+            }
+
+            if($lastTag)
+            {
+                $build->tag = $lastTag;
+                $this->dao->update(TABLE_INTEGRATION)->set('lastTag')->eq($lastTag)->where('id')->eq($integration->id)->exec();
+
+                $data = new stdClass();
+                $data->PARAM_TAG = $lastTag;
+            }
+        }
+        elseif($integration->triggerType == 'schedule')
+        {
+            $build->atTime = $integration->atTime;
+        }
+
+        $build->queue       = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $build->status      = $build->queue ? 'created' : 'create_fail';
+        $build->createdBy   = $this->app->user->account;
+        $build->createdDate = $now;
+        $build->updateDate  = $now;
+        $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
+        $this->dao->update(TABLE_INTEGRATION)->set('lastExec')->eq($now)->set('lastStatus')->eq($build->status)->where('id')->eq($integration->id)->exec();
+
+        return !dao::isError();
+    }
 }

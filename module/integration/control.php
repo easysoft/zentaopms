@@ -159,7 +159,6 @@ class integration extends control
         $result = $this->integration->exec($id);
         if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if(!$result) $this->send(array('result' => 'fail', 'message' => 'not found'));
-
-        $this->send(array('result' => 'success'));
+        die(js::alert($this->lang->integration->sendExec));
     }
 }
