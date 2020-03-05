@@ -213,8 +213,7 @@ class cron extends control
                         /* Save log. */
                         $log    = '';
                         $time   = $now->format('G:i:s');
-                        $output = "\n";
-                        if(strlen($output) > 100) $output = "\n" . $output;
+                        $output = "\n" . $output;
 
                         $log = "$time task " . $id . " executed,\ncommand: $cron[command].\nreturn : $return.\noutput : $output\n";
                         $this->cron->logCron($log);
