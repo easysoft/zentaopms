@@ -14,9 +14,6 @@
 
 <?php js::set('repoTypes', $repoTypes)?>
 <?php js::set('triggerType', $job->triggerType);?>
-<?php js::set('jobRepo', $job->repo);?>
-<?php js::set('svnDir', $job->svnDir);?>
-<?php js::set('encodeSVNDir', $this->loadModel('repo')->encodePath($job->svnDir));?>
 <?php js::set('jkJob', $job->jkJob);?>
 <?php js::set('dirChange', $lang->integration->dirChange);?>
 <?php js::set('buildTag', $lang->integration->buildTag);?>
@@ -30,32 +27,52 @@
       <form id='jobForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->integration->name; ?></th>
+            <th class='w-120px'><?php echo $lang->integration->name; ?></th>
             <td class='required'><?php echo html::input('name', $job->name, "class='form-control'"); ?></td>
             <td colspan="2" ></td>
           </tr>
           <tr>
             <th><?php echo $lang->integration->repo; ?></th>
-            <td colspan='2'>
-              <div class='table-row'>
-                <div class='table-col'><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'");?></div>
-                <div id='svnDirBox' class="table-col">
-                  <div class='input-group svn-fields hidden'>
-                    <span class='input-group-addon'><?php echo $lang->integration->svnDir;?></span>
-                    <?php echo html::select('svnDir', array('' => ''), $job->svnDir, "class='form-control chosen'");?>
-                  </div>
-                </div>
-              </div>
+            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'");?>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->integration->triggerType; ?></th>
+            <?php if($repoType == 'Subversion') $lang->integration->triggerTypeList['tag'] = $lang->integration->dirChange;?>
             <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, $job->triggerType, "class='form-control chosen'");?></td>
             <td colspan="2"></td>
           </tr>
+          <tr id='svnDirBox' class='svn-fields'>
+            <th><?php echo $lang->integration->svnDir;?></th>
+            <td colspan='2'>
+              <div class='input-group'>
+                <?php
+                if($repoType == 'Subversion' and $job->svnDir)
+                {
+                    $job->svnDir = '/zentaoext';
+                    $path = '';
+                    $svnDirs = empty(trim($job->svnDir, '/')) ? '' : $job->svnDir;
+                    $svnDirs = explode('/', $svnDirs);
+                    foreach($svnDirs as $i => $svnDir)
+                    {
+                        $path .= '/' . $svnDir;
+                        $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
+                        if(empty($tags)) continue;
+
+                        $selected  = isset($svnDirs[$i + 1]) ? $path . $svnDirs[$i + 1] : '/';
+                        echo "<select id='svnDir{$i}' name='svnDir[]' class='form-control chosen'>";
+                        echo "<option value='/' data-encodePath='" . $this->repo->encodePath($path) . "'>/</option>";
+                        foreach($tags as $dirPath => $dirName) echo "<option value='{$dirPath}' data-encodePath='" . $this->repo->encodePath($dirPath) . "' " . ($selected == $dirPath ? 'selected' : '') . ">/" . basename($dirPath) . "</option>";
+                        echo "</select>";
+                    }
+                }
+                ?>
+              </div>
+            </td>
+          </tr>
           <tr class="comment-fields">
             <th><?php echo $lang->integration->comment;?></th>
-            <td class='required'><?php echo html::input('comment', '', "class='form-control'");?></td>
+            <td class='required'><?php echo html::input('comment', $job->comment, "class='form-control'");?></td>
             <td colspan='2'><?php echo $lang->integration->commitEx;?></td>
           </tr>
           <tr class="custom-fields">

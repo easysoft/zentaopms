@@ -3,20 +3,19 @@ $('#repo').change(function()
     var repoID = $(this).val();
     var type   = 'Git';
     if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
-    $('.svn-fields').toggleClass('hidden', type != 'Subversion');
+
+    $('.svn-fields').addClass('hidden');
+    if(type == 'Subversion' && $('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
+
     $('#repoType').val(type);
     $('#triggerType option[value=tag]').html(type == 'Subversion' ? dirChange : buildTag).trigger('chosen:updated');
-    $('#repo_chosen .chosen-single').attr('style', type == 'Subversion' ? 'border-right:0px' : '');
     if(type == 'Subversion')
     {
-        $('#svnDirBox #svnDir').remove();
-        $('#svnDirBox #svnDir_chosen').remove();
+        $('#svnDirBox .input-group').empty();
         $('#svnDirBox .input-group').append("<div class='load-indicator loading'></div>");
-        var params = 'repoID=' + repoID;
-        if(jobRepo == repoID) params = 'repoID=' + repoID + '&path=' + encodeSVNDir;
-        $.getJSON(createLink('repo', 'ajaxGetSVNDirs', params), function(tags)
+        $.getJSON(createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID), function(tags)
         {
-            html = "<select id='svnDir' name='svnDir' class='form-control'>";
+            html = "<select id='svnDir' name='svnDir[]' class='form-control'>";
             for(path in tags)
             {
                 var encodePath = tags[path];
@@ -25,7 +24,7 @@ $('#repo').change(function()
             html += '</select>';
             $('#svnDirBox .loading').remove();
             $('#svnDirBox .input-group').append(html);
-            $('#svnDirBox #svnDir').val(svnDir).chosen();
+            $('#svnDirBox #svnDir').chosen();
         })
     }
 })
@@ -35,31 +34,51 @@ $(document).on('change', '#svnDir', function()
     var repoID      = $('#repo').val();
     var selectedTag = $(this).val();
     var encodePath  = $(this).find("option:selected").attr('data-encodePath');
-    $('#svnDirBox #svnDir').remove();
-    $('#svnDirBox #svnDir_chosen').remove();
+    $(this).next('[id$=_chosen]').nextAll('[id^=svnDir]').remove();
+    $(this).next('[id$=_chosen]').nextAll('[id$=_chosen]').remove();
+    if(selectedTag == '/') return true;
+
     $('#svnDirBox .input-group').append("<div class='load-indicator loading'></div>");
     $.getJSON(createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID + '&path=' + encodePath), function(tags)
     {
-        html = "<select id='svnDir' name='svnDir' class='form-control'>";
-        for(path in tags)
+        html    = '';
+        length  = $('#svnDirBox .input-group [name^=svnDir]').length;
+        length += 1;
+        if(tags.length != 0)
         {
-            var encodePath = tags[path];
-            html += "<option value='" + path + "' data-encodePath='" + encodePath + "'>" + path + "</option>";
+            html = "<select id='svnDir" + length + "' name='svnDir[]' class='form-control'>";
+            for(path in tags)
+            {
+                var encodePath = tags[path];
+
+                var idx = path.lastIndexOf('/')
+                var basename = idx < 0 ? path : path.substring(idx);
+
+                html += "<option value='" + path + "' data-encodePath='" + encodePath + "'>" + basename + "</option>";
+            }
+            html += '</select>';
         }
-        html += '</select>';
         $('#svnDirBox .loading').remove();
         $('#svnDirBox .input-group').append(html);
-        $('#svnDirBox #svnDir').val(selectedTag).chosen();
+        $('#svnDirBox #svnDir' + length).chosen();
     })
 })
 
 $('#triggerType').change(function()
 {
     var type = $(this).val();
+    $('.svn-fields').addClass('hidden');
     $('.comment-fields').addClass('hidden');
     $('.custom-fields').addClass('hidden');
     if(type == 'commit')   $('.comment-fields').removeClass('hidden');
     if(type == 'schedule') $('.custom-fields').removeClass('hidden');
+    if(type == 'tag')
+    {
+        var repoID = $('#repo').val();
+        var type   = 'Git';
+        if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
+        if(type == 'Subversion') $('.svn-fields').removeClass('hidden');
+    }
 });
 
 $('#jkHost').change(function()
@@ -85,7 +104,6 @@ $('#jkHost').change(function()
 
 $(function()
 {
-    $('#repo').change();
     $('#jkHost').change();
     $('#triggerType').change();
 });

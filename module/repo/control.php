@@ -871,19 +871,19 @@ class repo extends control
         if($repo->SCM != 'Subversion') die(json_encode(array()));
 
         $path = $this->repo->decodePath($path);
-        if(empty($path) and empty($repo->prefix)) $path = '/';
-
-        $dirs['/'] = '';
-        $parent    = '';
-        foreach(explode('/', $path) as $subPath)
+        $dirs = array();
+        if(empty($path))
         {
-            if(empty($subPath)) continue;
-            $parent .= '/' . $subPath;
-            $dirs[$parent] = $this->repo->encodePath($parent);
+            $dirs['/'] = '';
+            if(empty($repo->prefix)) $path = '/';
         }
 
         $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
-        foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
+        if($tags)
+        {
+            $dirs['/'] = $this->repo->encodePath($path);
+            foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
+        }
         die(json_encode($dirs));
     }
 }

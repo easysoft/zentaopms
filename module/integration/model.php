@@ -74,6 +74,11 @@ class integrationModel extends model
             ->remove('repoType')
             ->get();
         if($integration->triggerType == 'schedule') $integration->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($integration->triggerType == 'tag' and $this->post->repoType == 'Subversion')
+        {
+            $integration->svnDir = array_pop($_POST['svnDir']);
+            if($integration->svnDir == '/' and $_POST['svnDir']) $integration->svnDir = array_pop($_POST['svnDir']);
+        }
 
         $this->dao->insert(TABLE_INTEGRATION)->data($integration)
             ->batchCheck($this->config->integration->create->requiredFields, 'notempty')
@@ -130,6 +135,11 @@ class integrationModel extends model
             ->remove('repoType')
             ->get();
         if($integration->triggerType == 'schedule') $integration->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+        if($integration->triggerType == 'tag' and $this->post->repoType == 'Subversion')
+        {
+            $integration->svnDir = array_pop($_POST['svnDir']);
+            if($integration->svnDir == '/' and $_POST['svnDir']) $integration->svnDir = array_pop($_POST['svnDir']);
+        }
 
         $this->dao->update(TABLE_INTEGRATION)->data($integration)
             ->batchCheck($this->config->integration->edit->requiredFields, 'notempty')

@@ -26,28 +26,26 @@
       <form id='jobForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->integration->name; ?></th>
+            <th class='w-120px'><?php echo $lang->integration->name; ?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
             <td colspan="2" ></td>
           </tr>
           <tr>
             <th><?php echo $lang->integration->repo; ?></th>
-            <td colspan='2'>
-              <div class='table-row'>
-                <div class='table-col'><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></div>
-                <div id='svnDirBox' class="table-col">
-                  <div class='input-group svn-fields hidden'>
-                    <span class='input-group-addon'><?php echo $lang->integration->svnDir;?></span>
-                    <?php echo html::select('svnDir', array('' => ''), '', "class='form-control chosen'");?>
-                  </div>
-                </div>
-              </div>
-            </td>
+            <td><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
             <th><?php echo $lang->integration->triggerType; ?></th>
             <td><?php echo html::select('triggerType', $lang->integration->triggerTypeList, '', "class='form-control chosen'");?></td>
             <td colspan="2"></td>
+          </tr>
+          <tr id='svnDirBox' class='svn-fields'>
+            <th><?php echo $lang->integration->svnDir;?></th>
+            <td colspan='2'>
+              <div class='input-group'>
+                <?php echo html::select('svnDir[]', array('' => ''), '', "class='form-control chosen'");?>
+              </div>
+            </td>
           </tr>
           <tr class="comment-fields">
             <th><?php echo $lang->integration->comment;?></th>

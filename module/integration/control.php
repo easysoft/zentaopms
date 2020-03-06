@@ -106,13 +106,13 @@ class integration extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->app->loadLang('action');
-
         $this->view->title       = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->edit;
         $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->integration);
         $this->view->position[]  = $this->lang->integration->edit;
 
-        $repo      = $this->loadModel('repo')->getRepoByID($job->repo);
+        $repo = $this->loadModel('repo')->getRepoByID($job->repo);
+        $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
+
         $repoList  = $this->repo->getList();
         $repoPairs = array(0 => '', $repo->id => $repo->name);
         $repoTypes[$repo->id] = $repo->SCM;
@@ -125,6 +125,7 @@ class integration extends control
 
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
+        $this->view->repoType   = zget($repoTypes, $job->repo, 'Git');
         $this->view->job        = $job;
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
         $this->view->jkJobs     = $this->jenkins->getTasks($job->jkHost);
