@@ -681,18 +681,18 @@ $lang->caselib->methodOrder[40] = 'exportTemplet';
 $lang->caselib->methodOrder[45] = 'import';
 $lang->caselib->methodOrder[50] = 'showImport';
 
-$lang->resource->repo                  = new stdclass();
-$lang->resource->repo->browse          = 'browse';
-$lang->resource->repo->view            = 'view';
-$lang->resource->repo->log             = 'log';
-$lang->resource->repo->revision        = 'revisionAction';
-$lang->resource->repo->blame           = 'blameAction';
-$lang->resource->repo->create          = 'createAction';
-$lang->resource->repo->edit            = 'editAction';
-$lang->resource->repo->delete          = 'delete';
-$lang->resource->repo->showSyncComment = 'showSyncComment';
-$lang->resource->repo->diff            = 'diffAction';
-$lang->resource->repo->download        = 'download';
+$lang->resource->repo                 = new stdclass();
+$lang->resource->repo->browse         = 'browse';
+$lang->resource->repo->view           = 'view';
+$lang->resource->repo->log            = 'log';
+$lang->resource->repo->revision       = 'revisionAction';
+$lang->resource->repo->blame          = 'blameAction';
+$lang->resource->repo->create         = 'createAction';
+$lang->resource->repo->edit           = 'editAction';
+$lang->resource->repo->delete         = 'delete';
+$lang->resource->repo->showSyncCommit = 'showSyncCommit';
+$lang->resource->repo->diff           = 'diffAction';
+$lang->resource->repo->download       = 'download';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();

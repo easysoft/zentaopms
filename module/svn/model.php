@@ -71,9 +71,9 @@ class svnModel extends model
 
         $this->loadModel('compile');
         /* Get commit triggerType jobs by repoIdList */
-        $commitJobs  = $this->loadModel('job')->getListByTriggerType('commit', array_keys($this->repos));
-        $commitGroup = array();
-        foreach($commitJobs as $job) $commitGroup[$job->repo][$job->id] = $job;
+        $commentJobs  = $this->loadModel('job')->getListByTriggerType('commit', array_keys($this->repos));
+        $commentGroup = array();
+        foreach($commentJobs as $job) $commentGroup[$job->repo][$job->id] = $job;
 
         /* Get tag triggerType jobs by repoIdList */
         $tagJobs  = $this->job->getListByTriggerType('tag', array_keys($this->repos));
@@ -87,12 +87,12 @@ class svnModel extends model
             if(!$this->setRepo($repo)) return false;
 
             $this->printLog("get this repo logs.");
-            $lastInDB = $this->repo->getLatestComment($repoID);
+            $lastInDB = $this->repo->getLatestCommit($repoID);
             /* Ignore unsynced repo. */
             if(empty($lastInDB)) continue;
 
             $version = $lastInDB->commit;
-            $logs    = $this->repo->getUnsyncLogs($repo);
+            $logs    = $this->repo->getUnsyncCommits($repo);
             $objects = array();
             if(!empty($logs))
             {
@@ -118,7 +118,7 @@ class svnModel extends model
                     }
 
                     /* Create compile by comment. */
-                    $jobs = zget($commitGroup, $repoID, array());
+                    $jobs = zget($commentGroup, $repoID, array());
                     foreach($jobs as $job)
                     {
                         foreach(explode(',', $job->comment) as $comment)

@@ -76,6 +76,7 @@ UPDATE `zt_webhook` SET `type` = 'dinggroup' WHERE `type` = 'dingding';
 UPDATE `zt_webhook` SET `type` = 'dinguser' WHERE `type` = 'dingapi';
 UPDATE `zt_webhook` SET `type` = 'wechatgroup' WHERE `type` = 'weixin';
 UPDATE `zt_grouppriv` SET `method` = 'edit' WHERE `module` = 'repo' AND `method` = 'settings';
+UPDATE `zt_grouppriv` SET `method` = 'showsynccommit' WHERE `module` = 'repo' AND `method` = 'showsynccomment';
 
 ALTER TABLE `zt_compile`
 CHANGE `cijob` `integration` mediumint(8) unsigned NOT NULL AFTER `name`,

@@ -82,7 +82,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
   <?php if(!isonlybody()):?>
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
-    <div class='side-body'><?php include 'ajaxsidelogs.html.php';?></div>
+    <div class='side-body'><?php include 'ajaxsidecommits.html.php';?></div>
   </div>
   <?php endif;?>
 <?php if(!isonlybody()):?>

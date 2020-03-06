@@ -81,7 +81,7 @@ class repo extends control
 
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $link = $this->repo->createLink('showSyncComment', "repoID=$repoID");
+            $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -114,7 +114,7 @@ class repo extends control
             if(dao::isError()) die(js::error(dao::getError()));
             if(!$noNeedSync)
             {
-                $link = $this->repo->createLink('showSyncComment', "repoID=$repoID");
+                $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
                 $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
             }
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
@@ -209,7 +209,7 @@ class repo extends control
 
         $commiters = $this->loadModel('user')->getCommiters();
         $logType   = 'file';
-        $revisions = $this->repo->getLogs($repo, '/' . $entry, 'HEAD', $logType, $pager);
+        $revisions = $this->repo->getCommits($repo, '/' . $entry, 'HEAD', $logType, $pager);
 
         $i = 0;
         foreach($revisions as $log)
@@ -269,7 +269,7 @@ class repo extends control
         if($repoID == 0) $repoID = $this->session->repoID;
 
         $repo = $this->repo->getRepoByID($repoID);
-        if(!$repo->synced) $this->locate($this->repo->createLink('showSyncComment', "repoID=$repoID"));
+        if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID"));
 
         $path      = $this->repo->decodePath($path);
         $cacheFile = $this->repo->getCacheFile($repoID, $path, $revision);
@@ -315,8 +315,8 @@ class repo extends control
         if($this->cookie->repoRefresh) setcookie('repoRefresh', 0, 0, $this->config->webRoot);
 
         $logType   = 'dir';
-        $revisions = $this->repo->getLogs($repo, $path, $revision, $logType, $pager);
-        if($repo->SCM == 'Git' and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncComment', "repoID=$repoID&branch={$this->cookie->repoBranch}"));
+        $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
+        if($repo->SCM == 'Git' and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&branch={$this->cookie->repoBranch}"));
         $commiters = $this->loadModel('user')->getCommiters();
         foreach($infos as $info) $info->committer = zget($commiters, $info->account, $info->account);
         foreach($revisions as $log) $log->committer = zget($commiters, $log->committer, $log->committer);
@@ -365,7 +365,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
 
-        $logs      = $this->repo->getLogs($repo, $entry, $revision, $type, $pager);
+        $logs      = $this->repo->getCommits($repo, $entry, $revision, $type, $pager);
         $commiters = $this->loadModel('user')->getCommiters();
         foreach($logs as $log) $log->committer = zget($commiters, $log->committer, $log->committer);
 
@@ -673,15 +673,15 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function showSyncComment($repoID = 0, $branch = '')
+    public function showSyncCommit($repoID = 0, $branch = '')
     {
         $this->repo->setMenu($this->repos, $repoID);
         if($repoID == 0) $repoID = $this->session->repoID;
 
-        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncComment;
-        $this->view->position[] = $this->lang->repo->showSyncComment;
+        $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
+        $this->view->position[] = $this->lang->repo->showSyncCommit;
 
-        $latestInDB = $this->repo->getLatestComment($repoID);
+        $latestInDB = $this->repo->getLatestCommit($repoID);
         $this->view->version = $latestInDB ? (int)$latestInDB->commit : 1;
         $this->view->repoID  = $repoID;
         $this->view->branch  = $branch;
@@ -696,7 +696,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxSyncComment($repoID = 0, $type = 'batch')
+    public function ajaxSyncCommit($repoID = 0, $type = 'batch')
     {
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
@@ -757,7 +757,7 @@ class repo extends control
             {
                 if($repo->SCM == 'Git')
                 {
-                    if($branchID) $this->repo->saveExistsLogBranch($repo->id, $branchID);
+                    if($branchID) $this->repo->saveExistCommits4Branch($repo->id, $branchID);
 
                     $branchID = reset($branches);
                     setcookie("syncBranch", $branchID, 0, $this->config->webRoot);
@@ -785,7 +785,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxSyncBranchComment($repoID = 0, $branch = '')
+    public function ajaxSyncBranchCommit($repoID = 0, $branch = '')
     {
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
@@ -813,7 +813,7 @@ class repo extends control
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
         if(empty($commitCount))
         {
-            if($branch) $this->repo->saveExistsLogBranch($repo->id, $branch);
+            if($branch) $this->repo->saveExistCommits4Branch($repo->id, $branch);
 
             setcookie("syncBranch", $branch, 0, $this->config->webRoot);
             $this->repo->markSynced($repoID);
@@ -836,7 +836,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxSideLogs($repoID, $path, $type = 'dir', $recTotal = 0, $recPerPage = 8, $pageID = 1)
+    public function ajaxSideCommits($repoID, $path, $type = 'dir', $recTotal = 0, $recPerPage = 8, $pageID = 1)
     {
         if($this->get->path) $path = $this->get->path;
         $this->app->loadClass('pager', $static = true);
@@ -845,7 +845,7 @@ class repo extends control
         $repo      = $this->repo->getRepoByID($repoID);
         $path      = $this->repo->decodePath($path);
         $commiters = $this->loadModel('user')->getCommiters();
-        $revisions = $this->repo->getLogs($repo, $path, 'HEAD', $type, $pager);
+        $revisions = $this->repo->getCommits($repo, $path, 'HEAD', $type, $pager);
         foreach($revisions as $revision) $revision->committer = zget($commiters, $revision->committer, $revision->committer);
 
         $this->view->repo       = $this->repo->getRepoByID($repoID);

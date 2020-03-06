@@ -73,7 +73,7 @@
   </div>
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-right"></i></div>
-    <div class='side-body'><?php include 'ajaxsidelogs.html.php';?></div>
+    <div class='side-body'><?php include 'ajaxsidecommits.html.php';?></div>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * The showSyncComment view file of repo module of ZenTaoPMS.
+ * The showSyncCommit view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
  * @license     LGPL (http://www.gnu.org/licenses/lgpl.html)
@@ -26,9 +26,9 @@
 <script language='Javascript'>
 $(function(){
     <?php if(empty($branch)):?>
-    var link = createLink('repo', 'ajaxSyncComment', "repoID=<?php echo $repoID?>");
+    var link = createLink('repo', 'ajaxSyncCommit', "repoID=<?php echo $repoID?>");
     <?php else:?>
-    var link = createLink('repo', 'ajaxSyncBranchComment', "repoID=<?php echo $repoID?>&branch=<?php echo $branch;?>");
+    var link = createLink('repo', 'ajaxSyncBranchCommit', "repoID=<?php echo $repoID?>&branch=<?php echo $branch;?>");
     <?php endif;?>
     function syncComments()
     {

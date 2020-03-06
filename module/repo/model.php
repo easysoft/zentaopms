@@ -330,7 +330,7 @@ class repoModel extends model
     }
 
     /**
-     * Get logs.
+     * Get commits.
      * 
      * @param  object $repo 
      * @param  string $entry 
@@ -340,7 +340,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getLogs($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null)
+    public function getCommits($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null)
     {
         $entry = ltrim($entry, '/');
         $entry = $repo->prefix . (empty($entry) ? '' : '/' . $entry);
@@ -393,13 +393,13 @@ class repoModel extends model
     }
 
     /**
-     * Get latest comment.
+     * Get latest commit.
      * 
      * @param  int    $repoID 
      * @access public
      * @return object
      */
-    public function getLatestComment($repoID)
+    public function getLatestCommit($repoID)
     {
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
@@ -603,7 +603,7 @@ class repoModel extends model
      * @access public
      * @return void
      */
-    public function saveExistsLogBranch($repoID, $branch)
+    public function saveExistCommits4Branch($repoID, $branch)
     {
         $lastBranchLog = $this->dao->select('t1.time')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
@@ -633,16 +633,16 @@ class repoModel extends model
     }
 
     /**
-     * Get unsync logs 
+     * Get unsync commits 
      * 
      * @param  object $repo 
      * @access public
      * @return array
      */
-    public function getUnsyncLogs($repo)
+    public function getUnsyncCommits($repo)
     {
         $repoID   = $repo->id;
-        $lastInDB = $this->getLatestComment($repoID);
+        $lastInDB = $this->getLatestCommit($repoID);
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
