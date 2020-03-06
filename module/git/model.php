@@ -70,15 +70,15 @@ class gitModel extends model
         if(empty($this->repos)) return false;
 
         $this->loadModel('compile');
-        /* Get commit triggerType integrations by repoIdList. */
-        $commitPlans = $this->loadModel('integration')->getListByTriggerType('commit', array_keys($this->repos));
+        /* Get commit triggerType jobs by repoIdList. */
+        $commitJobs  = $this->loadModel('job')->getListByTriggerType('commit', array_keys($this->repos));
         $commitGroup = array();
-        foreach($commitPlans as $integration) $commitGroup[$integration->repo][$integration->id] = $integration;
+        foreach($commitJobs as $job) $commitGroup[$job->repo][$job->id] = $job;
 
-        /* Get tag triggerType integrations by repoIdList. */
-        $tagPlans = $this->integration->getListByTriggerType('tag', array_keys($this->repos));
+        /* Get tag triggerType jobs by repoIdList. */
+        $tagJobs  = $this->job->getListByTriggerType('tag', array_keys($this->repos));
         $tagGroup = array();
-        foreach($tagPlans as $integration) $tagGroup[$integration->repo][$integration->id] = $integration;
+        foreach($tagJobs as $job) $tagGroup[$job->repo][$job->id] = $job;
 
         foreach($this->repos as $repoID => $repo)
         {
@@ -126,12 +126,12 @@ class gitModel extends model
                         }
 
                         /* Create compile by comment. */
-                        $integrations = zget($commitGroup, $repoID, array());
-                        foreach($integrations as $integration)
+                        $jobs = zget($commitGroup, $repoID, array());
+                        foreach($jobs as $job)
                         {
-                            foreach(explode(',', $integration->comment) as $comment)
+                            foreach(explode(',', $job->comment) as $comment)
                             {
-                                if(strpos($log->msg, $comment) !== false) $this->compile->createByIntegration($integration->id);
+                                if(strpos($log->msg, $comment) !== false) $this->compile->createByJob($job->id);
                             }
                         }
                         $version  = $this->repo->saveOneCommit($repoID, $log, $version, $branch);
@@ -145,16 +145,16 @@ class gitModel extends model
             $this->printLog("\n\nrepo #" . $repo->id . ': ' . $repo->path . " finished");
 
             // Create compile by tag.
-            $integrations = zget($tagGroup, $repoID, array());
-            foreach($integrations as $integration)
+            $jobs = zget($tagGroup, $repoID, array());
+            foreach($jobs as $job)
             {
                 $tags = $this->getRepoTags($repo);
                 end($tags);
                 $lastTag = current($tags);
-                if($lastTag != $integration->lastTag)
+                if($lastTag != $job->lastTag)
                 {
-                    $this->compile->createByIntegration($integration->id, $lastTag, 'tag');
-                    $this->dao->update(TABLE_INTEGRATION)->set('lastTag')->eq($lastTag)->where('id')->eq($integration->id)->exec();
+                    $this->compile->createByJob($job->id, $lastTag, 'tag');
+                    $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
                 }
             }
         }

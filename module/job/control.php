@@ -1,15 +1,15 @@
 <?php
 /**
- * The control file of integration of ZenTaoPMS.
+ * The control file of job of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
- * @package     integration
+ * @package     job
  * @version     $Id$
  * @link        http://www.zentao.net
  */
-class integration extends control
+class job extends control
 {
     /**
      * Construct 
@@ -26,7 +26,7 @@ class integration extends control
     }
 
     /**
-     * Browse integration.
+     * Browse job.
      *
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -41,11 +41,11 @@ class integration extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->app->loadLang('compile');
-        $this->view->jobList = $this->integration->getList($orderBy, $pager);
+        $this->view->jobList = $this->job->getList($orderBy, $pager);
 
-        $this->view->title      = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->browse;
-        $this->view->position[] = $this->lang->ci->integration;
-        $this->view->position[] = $this->lang->integration->browse;
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
+        $this->view->position[] = $this->lang->ci->job;
+        $this->view->position[] = $this->lang->job->browse;
 
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -53,7 +53,7 @@ class integration extends control
     }
 
     /**
-     * Create a integration.
+     * Create a job.
      *
      * @access public
      * @return void
@@ -62,16 +62,16 @@ class integration extends control
     {
         if($_POST)
         {
-            $this->integration->create();
+            $this->job->create();
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
         $this->app->loadLang('action');
 
-        $this->view->title      = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->create;
-        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->integration);
-        $this->view->position[] = $this->lang->integration->create;
+        $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->create;
+        $this->view->position[] = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[] = $this->lang->job->create;
 
         $repoList  = $this->loadModel('repo')->getList();
         $repoPairs = array(0 => '');
@@ -90,7 +90,7 @@ class integration extends control
     }
 
     /**
-     * Edit a integration.
+     * Edit a job.
      *
      * @param  int    $id
      * @access public
@@ -98,17 +98,17 @@ class integration extends control
      */
     public function edit($id)
     {
-        $job = $this->integration->getByID($id);
+        $job = $this->job->getByID($id);
         if($_POST)
         {
-            $this->integration->update($id);
+            $this->job->update($id);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title       = $this->lang->ci->integration . $this->lang->colon . $this->lang->integration->edit;
-        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->integration);
-        $this->view->position[]  = $this->lang->integration->edit;
+        $this->view->title       = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
+        $this->view->position[]  = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[]  = $this->lang->job->edit;
 
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
@@ -134,7 +134,7 @@ class integration extends control
     }
 
     /**
-     * Delete a integration.
+     * Delete a job.
      *
      * @param  int    $id
      * @access public
@@ -142,14 +142,14 @@ class integration extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->integration->confirmDelete, inlink('delete', "integrationID=$id&confirm=yes")));
+        if($confirm != 'yes') die(js::confirm($this->lang->job->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
 
-        $this->integration->delete(TABLE_INTEGRATION, $id);
+        $this->job->delete(TABLE_JOB, $id);
         die(js::reload('parent'));
     }
 
     /**
-     * Exec a integration.
+     * Exec a job.
      *
      * @param  int    $id
      * @access public
@@ -157,9 +157,11 @@ class integration extends control
      */
     public function exec($id)
     {
-        $result = $this->integration->exec($id);
-        if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
-        if(!$result) $this->send(array('result' => 'fail', 'message' => 'not found'));
-        die(js::alert($this->lang->integration->sendExec));
+        $status = $this->job->exec($id);
+        if(dao::isError()) die(js::error(dao::getError()));
+
+        $this->app->loadLang('compile');
+        echo js::alert(sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $status)));
+        die(js::reload('parent'));
     }
 }

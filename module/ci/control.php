@@ -30,13 +30,13 @@ class ci extends control
      */
     public function initQueue()
     {
-        $scheduleJobs = $this->loadModel('integration')->getListByTriggerType('schedule');
+        $scheduleJobs = $this->loadModel('job')->getListByTriggerType('schedule');
 
         $week = date('w');
         $this->loadModel('compile');
         foreach($scheduleJobs as $job)
         {
-            if(strpos($job->atDay, $week) !== false) $this->compile->createByIntegration($job->id, $job->atTime, 'atTime');
+            if(strpos($job->atDay, $week) !== false) $this->compile->createByJob($job->id, $job->atTime, 'atTime');
         }
         echo 'success';
     }

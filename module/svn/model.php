@@ -70,15 +70,15 @@ class svnModel extends model
         if(empty($this->repos)) return false;
 
         $this->loadModel('compile');
-        /* Get commit triggerType integrations by repoIdList */
-        $commitPlans = $this->loadModel('integration')->getListByTriggerType('commit', array_keys($this->repos));
+        /* Get commit triggerType jobs by repoIdList */
+        $commitJobs  = $this->loadModel('job')->getListByTriggerType('commit', array_keys($this->repos));
         $commitGroup = array();
-        foreach($commitPlans as $integration) $commitGroup[$integration->repo][$integration->id] = $integration;
+        foreach($commitJobs as $job) $commitGroup[$job->repo][$job->id] = $job;
 
-        /* Get tag triggerType integrations by repoIdList */
-        $tagPlans = $this->integration->getListByTriggerType('tag', array_keys($this->repos));
+        /* Get tag triggerType jobs by repoIdList */
+        $tagJobs  = $this->job->getListByTriggerType('tag', array_keys($this->repos));
         $tagGroup = array();
-        foreach($tagPlans as $integration) $tagGroup[$integration->repo][$integration->id] = $integration;
+        foreach($tagJobs as $job) $tagGroup[$job->repo][$job->id] = $job;
 
         $_COOKIE['repoBranch'] = '';
         foreach($this->repos as $repoID => $repo)
@@ -118,12 +118,12 @@ class svnModel extends model
                     }
 
                     /* Create compile by comment. */
-                    $integrations = zget($commitGroup, $repoID, array());
-                    foreach($integrations as $integration)
+                    $jobs = zget($commitGroup, $repoID, array());
+                    foreach($jobs as $job)
                     {
-                        foreach(explode(',', $integration->comment) as $comment)
+                        foreach(explode(',', $job->comment) as $comment)
                         {
-                            if(strpos($log->msg, $comment) !== false) $this->compile->createByIntegration($integration->id);
+                            if(strpos($log->msg, $comment) !== false) $this->compile->createByJob($job->id);
                         }
                     }
 
@@ -136,17 +136,17 @@ class svnModel extends model
             }
 
             /* Create compile by tag. */
-            $integrations = zget($tagGroup, $repoID, array());
-            foreach($integrations as $integration)
+            $jobs = zget($tagGroup, $repoID, array());
+            foreach($jobs as $job)
             {
-                $dirs = $this->getRepoTags($repo, $integration->svnDir);
+                $dirs = $this->getRepoTags($repo, $job->svnDir);
                 end($dirs);
                 $lastTag = current($dirs);
-                if($lastTag != $integration->lastTag)
+                if($lastTag != $job->lastTag)
                 {
-                    $tag = rtrim($repo->path , '/') . '/' . trim($integration->svnDir, '/') . '/' . $lastTag;
-                    $this->compile->createByIntegration($integration->id, $tag, 'tag');
-                    $this->dao->update(TABLE_INTEGRATION)->set('lastTag')->eq($lastTag)->where('id')->eq($integration->id)->exec();
+                    $tag = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
+                    $this->compile->createByJob($job->id, $tag, 'tag');
+                    $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
                 }
             }
         }

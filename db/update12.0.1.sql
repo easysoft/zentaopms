@@ -86,3 +86,5 @@ ALTER TABLE `zt_jenkins` DROP `encrypt`;
 
 ALTER TABLE `zt_compile` ADD `atTime` varchar(10) COLLATE 'utf8_general_ci' NULL AFTER `logs`;
 ALTER TABLE `zt_compile` ADD `tag` varchar(255) COLLATE 'utf8_general_ci' NULL AFTER `logs`;
+ALTER TABLE `zt_integration` RENAME TO `zt_job`;
+ALTER TABLE `zt_compile` CHANGE `integration` `job` mediumint(8) unsigned NOT NULL AFTER `name`;

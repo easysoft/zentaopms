@@ -170,7 +170,7 @@ define('TABLE_SCORE',         '`' . $config->db->prefix . 'score`');
 define('TABLE_NOTIFY',        '`' . $config->db->prefix . 'notify`');
 define('TABLE_OAUTH',         '`' . $config->db->prefix . 'oauth`');
 define('TABLE_JENKINS',       '`' . $config->db->prefix . 'jenkins`');
-define('TABLE_INTEGRATION',   '`' . $config->db->prefix . 'integration`');
+define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 
 define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');

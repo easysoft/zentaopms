@@ -335,19 +335,19 @@ $lang->caselib->menu->caselib   = array('link' => 'Case Library|caselib|browse|l
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
 $lang->ci->menu->code     = array('link' => 'Code|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
-$lang->ci->menu->build    = array('link' => 'Build|integration|browse', 'subModule' => 'compile,integration');
+$lang->ci->menu->build    = array('link' => 'Build|job|browse', 'subModule' => 'compile,job');
 $lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' => 'create,edit');
 $lang->ci->menu->maintain = array('link' => 'Repo|repo|maintain', 'alias' => 'create,edit');
 $lang->ci->menu->rules    = array('link' => 'Rule|repo|setrules');
 
-$lang->repo              = new stdclass();
-$lang->jenkins           = new stdclass();
-$lang->compile           = new stdclass();
-$lang->integration       = new stdclass();
-$lang->repo->menu        = $lang->ci->menu;
-$lang->jenkins->menu     = $lang->ci->menu;
-$lang->compile->menu     = $lang->ci->menu;
-$lang->integration->menu = $lang->ci->menu;
+$lang->repo          = new stdclass();
+$lang->jenkins       = new stdclass();
+$lang->compile       = new stdclass();
+$lang->job           = new stdclass();
+$lang->repo->menu    = $lang->ci->menu;
+$lang->jenkins->menu = $lang->ci->menu;
+$lang->compile->menu = $lang->ci->menu;
+$lang->job->menu     = $lang->ci->menu;
 
 /* Doc menu settings. */
 $lang->doc = new stdclass();

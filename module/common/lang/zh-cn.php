@@ -335,19 +335,19 @@ $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libI
 $lang->ci = new stdclass();
 $lang->ci->menu = new stdclass();
 $lang->ci->menu->code     = array('link' => '代码|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
-$lang->ci->menu->build    = array('link' => '构建|integration|browse', 'subModule' => 'compile,integration');
+$lang->ci->menu->build    = array('link' => '构建|job|browse', 'subModule' => 'compile,job');
 $lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' => 'create,edit');
 $lang->ci->menu->maintain = array('link' => '版本库|repo|maintain', 'alias' => 'create,edit');
 $lang->ci->menu->rules    = array('link' => '指令|repo|setrules');
 
-$lang->repo              = new stdclass();
-$lang->jenkins           = new stdclass();
-$lang->compile           = new stdclass();
-$lang->integration       = new stdclass();
-$lang->repo->menu        = $lang->ci->menu;
-$lang->jenkins->menu     = $lang->ci->menu;
-$lang->compile->menu     = $lang->ci->menu;
-$lang->integration->menu = $lang->ci->menu;
+$lang->repo          = new stdclass();
+$lang->jenkins       = new stdclass();
+$lang->compile       = new stdclass();
+$lang->job           = new stdclass();
+$lang->repo->menu    = $lang->ci->menu;
+$lang->jenkins->menu = $lang->ci->menu;
+$lang->compile->menu = $lang->ci->menu;
+$lang->job->menu     = $lang->ci->menu;
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -487,10 +487,10 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
-$lang->menugroup->repo        = 'ci';
-$lang->menugroup->jenkins     = 'ci';
-$lang->menugroup->compile     = 'ci';
-$lang->menugroup->integration = 'ci';
+$lang->menugroup->repo    = 'ci';
+$lang->menugroup->jenkins = 'ci';
+$lang->menugroup->compile = 'ci';
+$lang->menugroup->job     = 'ci';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

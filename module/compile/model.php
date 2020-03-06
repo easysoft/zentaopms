@@ -26,21 +26,21 @@ class compileModel extends model
     /**
      * Get build list.
      * 
-     * @param  int    $integrationID 
+     * @param  int    $jobID 
      * @param  string $orderBy 
      * @param  object $pager 
      * @access public
      * @return array
      */
-    public function getList($integrationID, $orderBy = 'id_desc', $pager = null)
+    public function getList($jobID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.id, t1.name, t1.status, t1.createdDate, t2.jkJob,t2.triggerType,t2.comment,t2.atDay,t2.atTime, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
-            ->leftJoin(TABLE_INTEGRATION)->alias('t2')->on('t1.integration=t2.id')
+            ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_JENKINS)->alias('t4')->on('t2.jkHost=t4.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.integration')->ne('0')
-            ->beginIF(!empty($integrationID))->andWhere('t1.integration')->eq($integrationID)->fi()
+            ->andWhere('t1.job')->ne('0')
+            ->beginIF(!empty($jobID))->andWhere('t1.job')->eq($jobID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -77,21 +77,21 @@ class compileModel extends model
     }
 
     /**
-     * Save build by integration
+     * Save build by job
      * 
-     * @param  int    $integrationID 
+     * @param  int    $jobID 
      * @param  string $data 
      * @param  string $type 
      * @access public
      * @return void
      */
-    public function createByIntegration($integrationID, $data = '', $type = 'tag')
+    public function createByJob($jobID, $data = '', $type = 'tag')
     {
-        $integration = $this->dao->select('id,name')->from(TABLE_INTEGRATION)->where('id')->eq($integrationID)->fetch();
+        $job = $this->dao->select('id,name')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch();
 
         $build = new stdClass();
-        $build->integration = $integration->id;
-        $build->name        = $integration->name;
+        $build->job         = $job->id;
+        $build->name        = $job->name;
         $build->$type       = $data;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
@@ -108,13 +108,13 @@ class compileModel extends model
      */
     public function execByCompile($compile)
     {
-        $integration = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
-            ->from(TABLE_INTEGRATION)->alias('t1')
+        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.jkJob,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+            ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_JENKINS)->alias('t2')->on('t1.jkHost=t2.id')
-            ->where('t1.id')->eq($compile->integration)
+            ->where('t1.id')->eq($compile->job)
             ->fetch();
 
-        if(!$integration) return false;
+        if(!$job) return false;
 
         $tagData = '';
         if($compile->tag)
@@ -123,13 +123,13 @@ class compileModel extends model
             $tagData->PARAM_TAG = $compile->tag;
         }
 
-        $buildUrl = $this->getBuildUrl($integration);
+        $buildUrl = $this->getBuildUrl($job);
         $build    = new stdclass();
         $build->queue      = $this->loadModel('ci')->sendRequest($buildUrl, $tagData);
         $build->status     = $build->queue ? 'created' : 'create_fail';
         $build->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
-        $this->dao->update(TABLE_INTEGRATION)->set('lastStatus')->eq($build->status)->set('lastExec')->eq($build->updateDate)->where('id')->eq($compile->integration)->exec();
+        $this->dao->update(TABLE_JOB)->set('lastStatus')->eq($build->status)->set('lastExec')->eq($build->updateDate)->where('id')->eq($compile->job)->exec();
 
         return !dao::isError();
     }
