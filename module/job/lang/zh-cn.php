@@ -1,11 +1,11 @@
 <?php
-$lang->job->common        = '构建计划';
-$lang->job->browse        = '浏览构建计划';
-$lang->job->create        = '创建构建计划';
-$lang->job->edit          = '编辑构建计划';
+$lang->job->common        = '构建任务';
+$lang->job->browse        = '浏览构建任务';
+$lang->job->create        = '创建构建任务';
+$lang->job->edit          = '编辑构建任务';
 $lang->job->exec          = '执行构建';
-$lang->job->delete        = '删除构建计划';
-$lang->job->confirmDelete = '确认删除该构建计划吗？';
+$lang->job->delete        = '删除构建任务';
+$lang->job->confirmDelete = '确认删除该构建任务';
 $lang->job->dirChange     = '目录改动';
 $lang->job->buildTag      = '打标签';
 

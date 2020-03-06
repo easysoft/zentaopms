@@ -2,5 +2,5 @@
 $lang->ci->common  = 'CI';
 
 $lang->ci->job     = 'Construction';
-$lang->ci->plan    = 'Plan';
+$lang->ci->task    = 'Task';
 $lang->ci->history = 'History';
