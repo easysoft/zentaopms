@@ -139,15 +139,23 @@ class svnModel extends model
             $jobs = zget($tagGroup, $repoID, array());
             foreach($jobs as $job)
             {
-                $dirs = $this->getRepoTags($repo, $job->svnDir);
-                end($dirs);
-                $lastTag = current($dirs);
-                if($lastTag != $job->lastTag)
+                $dirs    = $this->getRepoTags($repo, $job->svnDir);
+                $isNew   = false;
+                $lastTag = '';
+                foreach($dirs as $dir)
                 {
-                    $tag = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
+                    if($dir == $job->lastTag)
+                    {
+                        $isNew = true;
+                        continue;
+                    }
+                    if(!$isNew) continue;
+
+                    $lastTag = $dir;
+                    $tag     = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
                     $this->compile->createByJob($job->id, $tag, 'tag');
-                    $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
                 }
+                if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
         }
     }

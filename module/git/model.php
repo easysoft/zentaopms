@@ -148,14 +148,22 @@ class gitModel extends model
             $jobs = zget($tagGroup, $repoID, array());
             foreach($jobs as $job)
             {
-                $tags = $this->getRepoTags($repo);
-                end($tags);
-                $lastTag = current($tags);
-                if($lastTag != $job->lastTag)
+                $tags    = $this->getRepoTags($repo);
+                $isNew   = false;
+                $lastTag = '';
+                foreach($tags as $tag)
                 {
+                    if($tag == $job->lastTag)
+                    {
+                        $isNew = true;
+                        continue;
+                    }
+                    if(!$isNew) continue;
+
+                    $lastTag = $tag;
                     $this->compile->createByJob($job->id, $lastTag, 'tag');
-                    $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
                 }
+                if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
         }
     }
