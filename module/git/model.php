@@ -119,7 +119,7 @@ class gitModel extends model
                         if($objects)
                         {
                             $this->printLog('extract' .
-                                'task:' . join(' ', $objects['tasks']) .
+                                ' task:' . join(' ', $objects['tasks']) .
                                 ' bug:'  . join(',', $objects['bugs']));
 
                             $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git');

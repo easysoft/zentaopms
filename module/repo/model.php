@@ -1166,9 +1166,9 @@ class repoModel extends model
         $costReg  = "($costs) *(($costMarks)([0-9]+)($costUnit))";
         $leftReg  = "($lefts) *(($leftMarks)([0-9]+)($leftUnit))";
 
-        $startTaskReg  = "({$startAction}) *{$taskReg} +$costReg +$leftReg";
-        $effortTaskReg = "({$effortAction}) *{$taskReg} +$costReg +$leftReg";
-        $finishTaskReg = "({$finishAction}) *{$taskReg} +$costReg";
+        $startTaskReg  = "({$startAction}) *{$taskReg}.*$costReg.*$leftReg";
+        $effortTaskReg = "({$effortAction}) *{$taskReg}.*$costReg.*$leftReg";
+        $finishTaskReg = "({$finishAction}) *{$taskReg}.*$costReg";
         $resolveBugReg = "({$resolveAction}) *{$bugReg}";
 
         $reg = array();
@@ -1249,7 +1249,10 @@ class repoModel extends model
                     }
                     elseif($taskAction == 'finish')
                     {
+                        $task = $this->task->getById($taskID);
                         $this->post->set('finishedDate', date('Y-m-d'));
+                        $this->post->set('currentConsumed', $this->post->consumed);
+                        $this->post->set('consumed', $this->post->consumed + $task->consumed);
                         $changes = $this->task->finish($taskID);
                         if($changes)
                         {
@@ -1258,7 +1261,7 @@ class repoModel extends model
                         }
                     }
                 }
-                unset($object['tasks'][$taskID]);
+                unset($objects['tasks'][$taskID]);
             }
         }
         if(isset($actions['bug']))
@@ -1285,7 +1288,7 @@ class repoModel extends model
                         }
                     }
                 }
-                unset($object['bugs'][$bugID]);
+                unset($objects['bugs'][$bugID]);
             }
         }
 
@@ -1350,15 +1353,9 @@ class repoModel extends model
             $this->dao->update(TABLE_ACTION)->data($action)->where('id')->eq($record->id)->exec();
             if($changes)
             {
-                $historyID = $this->dao->findByAction($record->id)->from(TABLE_HISTORY)->fetch('id');
-                if($historyID)
-                {
-                    $this->dao->update(TABLE_HISTORY)->data($changes)->where('id')->eq($historyID)->exec();
-                }
-                else
-                {
-                    $this->action->logHistory($record->id, array($changes));
-                }
+                $historyIdList = $this->dao->findByAction($record->id)->from(TABLE_HISTORY)->fetchPairs('id', 'id');
+                if($historyIdList) $this->dao->delete()->from(TABLE_HISTORY)->where('id')->in($historyIdList)->exec();
+                $this->action->logHistory($record->id, $changes);
             }
         }
         else
@@ -1367,7 +1364,7 @@ class repoModel extends model
             if($changes)
             {
                 $actionID = $this->dao->lastInsertID();
-                $this->action->logHistory($actionID, array($changes));
+                $this->action->logHistory($actionID, $changes);
             }
         }
     }
@@ -1400,14 +1397,15 @@ class repoModel extends model
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
         }
-        $changes = new stdclass();
-        $changes->field = $scm == 'svn' ? 'subversion' : 'git';
-        $changes->old   = '';
-        $changes->new   = '';
-        $changes->diff  = trim($diff);
+        $change = new stdclass();
+        $change->field = $scm == 'svn' ? 'subversion' : 'git';
+        $change->old   = '';
+        $change->new   = '';
+        $change->diff  = trim($diff);
+        $changes[] = $change;
 
         $this->server->set('PHP_SELF', $oldSelf);
-        return (array)$changes;
+        return $changes;
     }
 
     /**

@@ -37,6 +37,7 @@ class ciModel extends model
             ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jkHost=t3.id')
             ->where('t1.status')->ne('success')
             ->andWhere('t1.status')->ne('fail')
+            ->andWhere('t1.status')->ne('create_fail')
             ->andWhere('t1.status')->ne('timeout')
             ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
