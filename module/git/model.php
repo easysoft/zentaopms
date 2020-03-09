@@ -95,7 +95,11 @@ class gitModel extends model
 
                 $lastInDB = $this->repo->getLatestCommit($repoID);
                 /* Ignore unsynced branch. */
-                if(empty($lastInDB)) continue;
+                if(empty($lastInDB))
+                {
+                    $this->printLog("Please init repo {$repo->name}");
+                    continue;
+                }
 
                 $commits = $repo->commits;
                 $version = $lastInDB->commit;

@@ -89,7 +89,11 @@ class svnModel extends model
             $this->printLog("get this repo logs.");
             $lastInDB = $this->repo->getLatestCommit($repoID);
             /* Ignore unsynced repo. */
-            if(empty($lastInDB)) continue;
+            if(empty($lastInDB))
+            {
+                $this->printLog("Please init repo {$repo->name}");
+                continue;
+            }
 
             $version = $lastInDB->commit;
             $logs    = $this->repo->getUnsyncCommits($repo);
