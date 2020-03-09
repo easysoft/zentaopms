@@ -29,7 +29,7 @@ $('#repo').change(function()
     }
 })
 
-$(document).on('change', '#svnDir', function()
+$(document).on('change', '[name^=svnDir]', function()
 {
     var repoID      = $('#repo').val();
     var selectedTag = $(this).val();
@@ -61,6 +61,7 @@ $(document).on('change', '#svnDir', function()
         $('#svnDirBox .loading').remove();
         $('#svnDirBox .input-group').append(html);
         $('#svnDirBox #svnDir' + length).chosen();
+        $('#svnDirBox #svnDir' + length + '_chosen .chosen-single').css('border-left', '0px');
     })
 })
 
