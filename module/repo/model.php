@@ -1082,7 +1082,7 @@ class repoModel extends model
                 foreach($idMatches[0] as $id)
                 {
                     $bugs[$id] = $id;
-                    $actions['bug'][$id]['resolve']['build'] = $matches[11][$i];
+                    $actions['bug'][$id]['resolve'] = array();
                 }
             }
         }
