@@ -168,7 +168,7 @@ class webhookModel extends model
             $webhook->secret = json_encode($webhook->secret);
             $webhook->url    = $this->config->webhook->dingapiUrl;
         }
-        elseif ($webhook->type == 'wechatuser')
+        elseif($webhook->type == 'wechatuser')
         {
             $webhook->secret = array();
             $webhook->secret['agentId']   = $webhook->wechatAgentId;
@@ -234,7 +234,7 @@ class webhookModel extends model
 
             $webhook->secret = json_encode($webhook->secret);
         }
-        elseif ($webhook->type == 'wechatuser')
+        elseif($webhook->type == 'wechatuser')
         {
             $webhook->secret = array();
             $webhook->secret['agentId']   = $webhook->wechatAgentId;
@@ -574,7 +574,7 @@ class webhookModel extends model
                 $result  = $dingapi->send($openIdList, $sendData);
                 return json_encode($result);
             }
-            elseif ($webhook->type == 'wechatuser')
+            elseif($webhook->type == 'wechatuser')
             {
                 $this->app->loadClass('wechatapi', true);
                 $wechatapi = new wechatapi($webhook->secret->appKey, $webhook->secret->appSecret, $webhook->secret->agentId);
@@ -645,8 +645,8 @@ class webhookModel extends model
     /**
      * Save log. 
      *
-     * @param  int    $actionID 
      * @param  object $webhook 
+     * @param  int    $actionID 
      * @param  string $data 
      * @param  string $result
      * @access public
