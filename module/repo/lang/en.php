@@ -130,7 +130,7 @@ $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "Comment Example";
 $lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
 $lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
-$lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
+$lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = 'Your server disabled exec and shell_exec, so it cannot be applied.';

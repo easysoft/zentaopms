@@ -1152,8 +1152,6 @@ class repoModel extends model
         $costMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['consumed'], ';')));
         $lefts         = str_replace(';', '|', trim($rules['task']['left'], ';'));
         $leftMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['left'], ';')));
-        $builds        = str_replace(';', '|', trim($rules['bug']['resolvedBuild'], ';'));
-        $buildMarks    = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['resolvedBuild'], ';')));
         $taskModule    = str_replace(';', '|', trim($rules['module']['task'], ';'));
         $bugModule     = str_replace(';', '|', trim($rules['module']['bug'], ';'));
         $costUnit      = str_replace(';', '|', trim($rules['unit']['consumed'], ';'));
@@ -1167,19 +1165,17 @@ class repoModel extends model
         $bugReg   = "(($bugModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $costReg  = "($costs) *(($costMarks)([0-9]+)($costUnit))";
         $leftReg  = "($lefts) *(($leftMarks)([0-9]+)($leftUnit))";
-        $buildReg = "($builds) *(($buildMarks)([0-9]+))";
 
         $startTaskReg  = "({$startAction}) *{$taskReg} +$costReg +$leftReg";
         $effortTaskReg = "({$effortAction}) *{$taskReg} +$costReg +$leftReg";
         $finishTaskReg = "({$finishAction}) *{$taskReg} +$costReg";
-        $resolveBugReg = "({$resolveAction}) *{$bugReg} +$buildReg";
+        $resolveBugReg = "({$resolveAction}) *{$bugReg}";
 
         $reg = array();
         $reg['taskReg']       = $taskReg;
         $reg['bugReg']        = $bugReg;
         $reg['costReg']       = $costReg;
         $reg['leftReg']       = $leftReg;
-        $reg['buildReg']      = $buildReg;
         $reg['startTaskReg']  = $startTaskReg;
         $reg['effortTaskReg'] = $effortTaskReg;
         $reg['finishTaskReg'] = $finishTaskReg;
@@ -1277,9 +1273,9 @@ class repoModel extends model
                 $action->project    = $productsAndProjects[$bugID]->project;
                 foreach($bugActions as $bugAction => $params)
                 {
-                    foreach($params as $field => $param) $this->post->set($field, $param);
                     if($bugAction == 'resolve')
                     {
+                        $this->post->set('resolvedBuild', 'trunk');
                         $this->post->set('resolution', 'fixed');
                         $changes = $this->bug->resolve($bugID);
                         if($changes)

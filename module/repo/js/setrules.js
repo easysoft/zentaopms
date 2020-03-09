@@ -165,8 +165,6 @@ function replaceExample()
 
     var resolveBug  = $('[id*=bug][id*="resolve\]"]').val().split(';');
     var bugModule   = $('[id*=module][id*=bug]').val().split(';');
-    var builds      = $('[id*=bug][id*=resolvedBuild]').val().split(';');
-    var buildMarks  = $('[id*=mark][id*=resolvedBuild]').val().split(';');
     for(i in resolveBug)
     {
         resolve = resolveBug[i];
@@ -179,20 +177,10 @@ function replaceExample()
                 for(l in idSplit)
                 {
                     split = idSplit[l];
-                    for(m in builds)
-                    {
-                        build = builds[m];
-                        for(n in buildMarks)
-                        {
-                            buildMark = buildMarks[n];
-                            html += '<br />' + rulesExample['bug']['resolve'].replace('%resolve%', resolve)
-                                .replace('%bug%', bug)
-                                .replace('%id%', id)
-                                .replace('%split%', split)
-                                .replace('%resolvedBuild%', build)
-                                .replace('%buildmark%', buildMark);
-                        }
-                    }
+                    html += '<br />' + rulesExample['bug']['resolve'].replace('%resolve%', resolve)
+                        .replace('%bug%', bug)
+                        .replace('%id%', id)
+                        .replace('%split%', split);
                 }
             }
         }
