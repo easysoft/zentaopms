@@ -21,7 +21,6 @@ $lang->repo->deleteBug       = 'Delete Bug';
 $lang->repo->addComment      = 'Add Comment';
 $lang->repo->editComment     = 'Edit Comment';
 $lang->repo->deleteComment   = 'Delete Comment';
-$lang->repo->selectModule    = 'Select Module';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
@@ -99,6 +98,13 @@ $lang->repo->commitTitle    = "The %sth Commit";
 $lang->repo->mark           = "Mark Tag";
 $lang->repo->split          = "Split Mark";
 
+$lang->repo->objectRule   = 'Object Rule';
+$lang->repo->objectIdRule = 'Object ID Rule';
+$lang->repo->actionRule   = 'Action RUle';
+$lang->repo->manHourRule  = 'Man-hour Rule';
+$lang->repo->ruleUnit     = "Unit";
+$lang->repo->ruleSplit    = "Multiple keywords are divided by ';'. For example: task multiple keywords: Task;task";
+
 $lang->repo->viewDiffList['inline'] = 'Inline';
 $lang->repo->viewDiffList['appose'] = 'Parallel';
 
@@ -128,8 +134,9 @@ $lang->repo->notice->lastSyncTime   = 'Last Sync:';
 
 $lang->repo->rules = new stdclass();
 $lang->repo->rules->exampleLabel = "Comment Example";
-$lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1 %left%%leftmark%3";
-$lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10";
+$lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1%cunit% %left%%leftmark%3%lunit%";
+$lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10%cunit%";
+$lang->repo->rules->example['task']['effort'] = "%effort% %task% %id%1%split%2 %cost%%consumedmark%1%cunit% %left%%leftmark%3%lunit%";
 $lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2";
 
 $lang->repo->error                = new stdclass();

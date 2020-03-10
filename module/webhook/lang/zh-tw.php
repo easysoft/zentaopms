@@ -76,7 +76,7 @@ $lang->webhook->confirmDelete = '您確認要刪除該webhook嗎？';
 $lang->webhook->trimWords = '了';
 
 $lang->webhook->note = new stdClass();
-$lang->webhook->note->async   = '非同步需要打開計劃任務';
+$lang->webhook->note->async   = '非同步需要打開計劃任務。';
 $lang->webhook->note->bind    = '只有[釘釘/微信]工作通知類型才需要綁定用戶。';
 $lang->webhook->note->product = "此項為空時所有{$lang->productCommon}的動作都會觸發鈎子，否則只有關聯{$lang->productCommon}的動作才會觸發。";
 $lang->webhook->note->project = "此項為空時所有{$lang->projectCommon}的動作都會觸發鈎子，否則只有關聯{$lang->projectCommon}的動作才會觸發。";

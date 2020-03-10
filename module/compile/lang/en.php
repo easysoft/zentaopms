@@ -1,4 +1,5 @@
 <?php
+$lang->compile->common = 'Build';
 $lang->compile->browse = 'Build Histories';
 $lang->compile->logs   = 'Build Logs';
 
