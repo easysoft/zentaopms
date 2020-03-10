@@ -489,6 +489,23 @@ class repoModel extends model
     }
 
     /**
+     * Get cache file.
+     * 
+     * @param  int    $repoID 
+     * @param  string $path 
+     * @param  int    $revision 
+     * @access public
+     * @return string
+     */
+    public function getCacheFile($repoID, $path, $revision)
+    {
+        $cachePath = $this->app->getCacheRoot() . '/' . 'repo';
+        if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
+        if(!is_writable($cachePath)) return false;
+        return $cachePath . '/' . $repoID . '-' . md5("{$this->cookie->repoBranch}-$path-$revision");
+    }
+
+    /**
      * Save commit.
      * 
      * @param  int    $repoID 
