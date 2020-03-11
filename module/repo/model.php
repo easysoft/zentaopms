@@ -1240,6 +1240,7 @@ class repoModel extends model
                     {
                         $this->post->set('realStarted', date('Y-m-d'));
                         $changes = $this->task->start($taskID);
+                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
                         {
                             $action->action = $this->post->left == 0 ? 'finished' : 'started';
@@ -1263,6 +1264,15 @@ class repoModel extends model
                         {
                             $this->task->recordEstimate($taskID);
                         }
+
+                        $action->action     = $scm == 'svn' ? 'svncommited' : 'gitcommited';
+                        $action->objectType = 'task';
+                        $action->objectID   = $taskID;
+                        $action->product    = $productsAndProjects[$taskID]['product'];
+                        $action->project    = $productsAndProjects[$taskID]['project'];
+
+                        $changes = $this->createActionChanges($log, $repoRoot, $scm);
+                        $this->saveRecord($action, $changes);
                     }
                     elseif($taskAction == 'finish')
                     {
@@ -1271,6 +1281,7 @@ class repoModel extends model
                         $this->post->set('currentConsumed', $this->post->consumed);
                         $this->post->set('consumed', $this->post->consumed + $task->consumed);
                         $changes = $this->task->finish($taskID);
+                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
                         {
                             $action->action = 'finished';
@@ -1298,6 +1309,7 @@ class repoModel extends model
                         $this->post->set('resolvedBuild', 'trunk');
                         $this->post->set('resolution', 'fixed');
                         $changes = $this->bug->resolve($bugID);
+                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
                         {
                             $action->action = 'resolved';
@@ -1372,7 +1384,7 @@ class repoModel extends model
             {
                 $historyIdList = $this->dao->findByAction($record->id)->from(TABLE_HISTORY)->fetchPairs('id', 'id');
                 if($historyIdList) $this->dao->delete()->from(TABLE_HISTORY)->where('id')->in($historyIdList)->exec();
-                $this->action->logHistory($record->id, $changes);
+                $this->loadModel('action')->logHistory($record->id, $changes);
             }
         }
         else
@@ -1381,7 +1393,7 @@ class repoModel extends model
             if($changes)
             {
                 $actionID = $this->dao->lastInsertID();
-                $this->action->logHistory($actionID, $changes);
+                $this->loadModel('action')->logHistory($actionID, $changes);
             }
         }
     }
