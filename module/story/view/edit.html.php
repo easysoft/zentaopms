@@ -278,4 +278,5 @@
     </div>
   </form>
 </div>
+<?php js::set('storyType', $story->type);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -134,5 +134,6 @@ $(function()
     });
 });
 </script>
+<?php js::set('storyType', $type);?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

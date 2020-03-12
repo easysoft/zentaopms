@@ -840,7 +840,7 @@ class storyModel extends model
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->where('id')->eq($storyID)->exec();
         $changes  = common::createChanges($oldStory, $newStory);
-        $actionID = $this->action->create('story', $storyID, 'Closed', '', 'Subdivided');
+        $actionID = $this->loadModel('action')->create('story', $storyID, 'Closed', '', 'Subdivided');
         $this->action->logHistory($actionID, $changes);
 
         return $actionID;
