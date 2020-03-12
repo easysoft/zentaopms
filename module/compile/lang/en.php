@@ -10,7 +10,7 @@ $lang->compile->time   = 'Time';
 
 $lang->compile->statusList['success']     = 'Done';
 $lang->compile->statusList['failure']     = 'Failed';
-$lang->compile->statusList['created']     = 'Create';
+$lang->compile->statusList['created']     = 'Created';
 $lang->compile->statusList['building']    = 'Creating';
 $lang->compile->statusList['create_fail'] = 'Failed to create';
 $lang->compile->statusList['timeout']     = 'Timeout';
