@@ -4,6 +4,7 @@ $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
 $lang->repo->create          = '创建';
 $lang->repo->createAction    = '创建版本库';
+$lang->repo->maintain        = '版本库列表';
 $lang->repo->edit            = '编辑';
 $lang->repo->editAction      = '编辑版本库';
 $lang->repo->delete          = '删除版本库';
@@ -137,7 +138,7 @@ $lang->repo->rules->exampleLabel = "注释示例";
 $lang->repo->rules->example['task']['start']  = "%start% %task% %id%1%split%2 %cost%%consumedmark%1%cunit% %left%%leftmark%3%lunit%";
 $lang->repo->rules->example['task']['finish'] = "%finish% %task% %id%1%split%2 %cost%%consumedmark%10%cunit%";
 $lang->repo->rules->example['task']['effort'] = "%effort% %task% %id%1%split%2 %cost%%consumedmark%1%cunit% %left%%leftmark%3%lunit%";
-$lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2 %resolvedBuild% %buildmark%10";
+$lang->repo->rules->example['bug']['resolve'] = "%resolve% %bug% %id%1%split%2";
 
 $lang->repo->error                = new stdclass();
 $lang->repo->error->useless       = '你的服务器禁用了exec,shell_exec方法，无法使用该功能';

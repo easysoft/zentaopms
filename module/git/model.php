@@ -95,7 +95,11 @@ class gitModel extends model
 
                 $lastInDB = $this->repo->getLatestCommit($repoID);
                 /* Ignore unsynced branch. */
-                if(empty($lastInDB)) continue;
+                if(empty($lastInDB))
+                {
+                    $this->printLog("Please init repo {$repo->name}");
+                    continue;
+                }
 
                 $commits = $repo->commits;
                 $version = $lastInDB->commit;
@@ -115,7 +119,7 @@ class gitModel extends model
                         if($objects)
                         {
                             $this->printLog('extract' .
-                                'task:' . join(' ', $objects['tasks']) .
+                                ' task:' . join(' ', $objects['tasks']) .
                                 ' bug:'  . join(',', $objects['bugs']));
 
                             $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git');
@@ -148,14 +152,22 @@ class gitModel extends model
             $jobs = zget($tagGroup, $repoID, array());
             foreach($jobs as $job)
             {
-                $tags = $this->getRepoTags($repo);
-                end($tags);
-                $lastTag = current($tags);
-                if($lastTag != $job->lastTag)
+                $tags    = $this->getRepoTags($repo);
+                $isNew   = false;
+                $lastTag = '';
+                foreach($tags as $tag)
                 {
+                    if($tag == $job->lastTag)
+                    {
+                        $isNew = true;
+                        continue;
+                    }
+                    if(!$isNew) continue;
+
+                    $lastTag = $tag;
                     $this->compile->createByJob($job->id, $lastTag, 'tag');
-                    $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
                 }
+                if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
         }
     }

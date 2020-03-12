@@ -10,6 +10,7 @@ $lang->my->bug            = '我的Bug';
 $lang->my->testTask       = '我的版本';
 $lang->my->testCase       = '我的用例';
 $lang->my->story          = "我的{$lang->storyCommon}";
+$lang->my->requirement    = "我的用户{$lang->storyCommon}";
 $lang->my->myProject      = "我的{$lang->projectCommon}";
 $lang->my->profile        = '我的档案';
 $lang->my->dynamic        = '我的动态';

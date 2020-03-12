@@ -489,6 +489,23 @@ class repoModel extends model
     }
 
     /**
+     * Get cache file.
+     * 
+     * @param  int    $repoID 
+     * @param  string $path 
+     * @param  int    $revision 
+     * @access public
+     * @return string
+     */
+    public function getCacheFile($repoID, $path, $revision)
+    {
+        $cachePath = $this->app->getCacheRoot() . '/' . 'repo';
+        if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
+        if(!is_writable($cachePath)) return false;
+        return $cachePath . '/' . $repoID . '-' . md5("{$this->cookie->repoBranch}-$path-$revision");
+    }
+
+    /**
      * Save commit.
      * 
      * @param  int    $repoID 
@@ -1082,7 +1099,7 @@ class repoModel extends model
                 foreach($idMatches[0] as $id)
                 {
                     $bugs[$id] = $id;
-                    $actions['bug'][$id]['resolve']['build'] = $matches[11][$i];
+                    $actions['bug'][$id]['resolve'] = array();
                 }
             }
         }
@@ -1152,8 +1169,6 @@ class repoModel extends model
         $costMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['consumed'], ';')));
         $lefts         = str_replace(';', '|', trim($rules['task']['left'], ';'));
         $leftMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['left'], ';')));
-        $builds        = str_replace(';', '|', trim($rules['bug']['resolvedBuild'], ';'));
-        $buildMarks    = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['resolvedBuild'], ';')));
         $taskModule    = str_replace(';', '|', trim($rules['module']['task'], ';'));
         $bugModule     = str_replace(';', '|', trim($rules['module']['bug'], ';'));
         $costUnit      = str_replace(';', '|', trim($rules['unit']['consumed'], ';'));
@@ -1167,19 +1182,17 @@ class repoModel extends model
         $bugReg   = "(($bugModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $costReg  = "($costs) *(($costMarks)([0-9]+)($costUnit))";
         $leftReg  = "($lefts) *(($leftMarks)([0-9]+)($leftUnit))";
-        $buildReg = "($builds) *(($buildMarks)([0-9]+))";
 
-        $startTaskReg  = "({$startAction}) *{$taskReg} +$costReg +$leftReg";
-        $effortTaskReg = "({$effortAction}) *{$taskReg} +$costReg +$leftReg";
-        $finishTaskReg = "({$finishAction}) *{$taskReg} +$costReg";
-        $resolveBugReg = "({$resolveAction}) *{$bugReg} +$buildReg";
+        $startTaskReg  = "({$startAction}) *{$taskReg}.*$costReg.*$leftReg";
+        $effortTaskReg = "({$effortAction}) *{$taskReg}.*$costReg.*$leftReg";
+        $finishTaskReg = "({$finishAction}) *{$taskReg}.*$costReg";
+        $resolveBugReg = "({$resolveAction}) *{$bugReg}";
 
         $reg = array();
         $reg['taskReg']       = $taskReg;
         $reg['bugReg']        = $bugReg;
         $reg['costReg']       = $costReg;
         $reg['leftReg']       = $leftReg;
-        $reg['buildReg']      = $buildReg;
         $reg['startTaskReg']  = $startTaskReg;
         $reg['effortTaskReg'] = $effortTaskReg;
         $reg['finishTaskReg'] = $finishTaskReg;
@@ -1227,6 +1240,7 @@ class repoModel extends model
                     {
                         $this->post->set('realStarted', date('Y-m-d'));
                         $changes = $this->task->start($taskID);
+                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
                         {
                             $action->action = $this->post->left == 0 ? 'finished' : 'started';
@@ -1250,11 +1264,24 @@ class repoModel extends model
                         {
                             $this->task->recordEstimate($taskID);
                         }
+
+                        $action->action     = $scm == 'svn' ? 'svncommited' : 'gitcommited';
+                        $action->objectType = 'task';
+                        $action->objectID   = $taskID;
+                        $action->product    = $productsAndProjects[$taskID]['product'];
+                        $action->project    = $productsAndProjects[$taskID]['project'];
+
+                        $changes = $this->createActionChanges($log, $repoRoot, $scm);
+                        $this->saveRecord($action, $changes);
                     }
                     elseif($taskAction == 'finish')
                     {
+                        $task = $this->task->getById($taskID);
                         $this->post->set('finishedDate', date('Y-m-d'));
+                        $this->post->set('currentConsumed', $this->post->consumed);
+                        $this->post->set('consumed', $this->post->consumed + $task->consumed);
                         $changes = $this->task->finish($taskID);
+                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
                         {
                             $action->action = 'finished';
@@ -1262,7 +1289,7 @@ class repoModel extends model
                         }
                     }
                 }
-                unset($object['tasks'][$taskID]);
+                unset($objects['tasks'][$taskID]);
             }
         }
         if(isset($actions['bug']))
@@ -1277,11 +1304,12 @@ class repoModel extends model
                 $action->project    = $productsAndProjects[$bugID]->project;
                 foreach($bugActions as $bugAction => $params)
                 {
-                    foreach($params as $field => $param) $this->post->set($field, $param);
                     if($bugAction == 'resolve')
                     {
+                        $this->post->set('resolvedBuild', 'trunk');
                         $this->post->set('resolution', 'fixed');
                         $changes = $this->bug->resolve($bugID);
+                        foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
                         {
                             $action->action = 'resolved';
@@ -1289,7 +1317,7 @@ class repoModel extends model
                         }
                     }
                 }
-                unset($object['bugs'][$bugID]);
+                unset($objects['bugs'][$bugID]);
             }
         }
 
@@ -1354,15 +1382,9 @@ class repoModel extends model
             $this->dao->update(TABLE_ACTION)->data($action)->where('id')->eq($record->id)->exec();
             if($changes)
             {
-                $historyID = $this->dao->findByAction($record->id)->from(TABLE_HISTORY)->fetch('id');
-                if($historyID)
-                {
-                    $this->dao->update(TABLE_HISTORY)->data($changes)->where('id')->eq($historyID)->exec();
-                }
-                else
-                {
-                    $this->action->logHistory($record->id, array($changes));
-                }
+                $historyIdList = $this->dao->findByAction($record->id)->from(TABLE_HISTORY)->fetchPairs('id', 'id');
+                if($historyIdList) $this->dao->delete()->from(TABLE_HISTORY)->where('id')->in($historyIdList)->exec();
+                $this->loadModel('action')->logHistory($record->id, $changes);
             }
         }
         else
@@ -1371,7 +1393,7 @@ class repoModel extends model
             if($changes)
             {
                 $actionID = $this->dao->lastInsertID();
-                $this->action->logHistory($actionID, array($changes));
+                $this->loadModel('action')->logHistory($actionID, $changes);
             }
         }
     }
@@ -1404,14 +1426,15 @@ class repoModel extends model
                 $diff .= $action == 'M' ? "$diffLink\n" : "\n" ;
             }
         }
-        $changes = new stdclass();
-        $changes->field = $scm == 'svn' ? 'subversion' : 'git';
-        $changes->old   = '';
-        $changes->new   = '';
-        $changes->diff  = trim($diff);
+        $change = new stdclass();
+        $change->field = $scm == 'svn' ? 'subversion' : 'git';
+        $change->old   = '';
+        $change->new   = '';
+        $change->diff  = trim($diff);
+        $changes[] = $change;
 
         $this->server->set('PHP_SELF', $oldSelf);
-        return (array)$changes;
+        return $changes;
     }
 
     /**

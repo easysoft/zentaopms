@@ -503,7 +503,14 @@ class actionModel extends model
         if(empty($actionID)) return false;
         foreach($changes as $change) 
         {
-            $change['action'] = $actionID;
+            if(is_object($change))
+            {
+                $change->action = $actionID;
+            }
+            else
+            {
+                $change['action'] = $actionID;
+            }
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
         }
     }

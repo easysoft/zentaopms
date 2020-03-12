@@ -85,6 +85,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Letzte Version';
 $lang->misc->feature->detailed = 'Details';
 
+$lang->misc->releaseDate['12.1']        = '2020-03-10';
 $lang->misc->releaseDate['12.0.1']      = '2020-02-12';
 $lang->misc->releaseDate['12.0']        = '2020-01-03';
 $lang->misc->releaseDate['11.7']        = '2019-11-28';
@@ -123,6 +124,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['12.1'][]   = array('title'=>'Add Integration.', 'desc' => '<p>Add integration, and build in Jenkins</p>');
 $lang->misc->feature->all['12.0.1'][] = array('title'=>'Fix Bug.', 'desc' => '');
 
 $lang->misc->feature->all['12.0'][]   = array('title'=>'Move repo function to zentao', 'desc' => '');

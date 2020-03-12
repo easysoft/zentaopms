@@ -4,4 +4,4 @@
 .checkbox-primary.checkbox-inline label{padding-left:5px !important;}
 #jkHost_chosen .chosen-single{border-right:0px;}
 #jkJobBox{width:385px;}
-#svnDirBox .input-group .chosen-single{min-width:200px;}
+#svnDirBox .input-group{width:unset !important}

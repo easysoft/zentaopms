@@ -34,11 +34,12 @@ $lang->webhook->date        = 'Sent';
 $lang->webhook->data        = 'Data';
 $lang->webhook->result      = 'Result';
 
-$lang->webhook->typeList['']          = '';
-$lang->webhook->typeList['dingding']  = 'Dingding Robot';
-$lang->webhook->typeList['dingapi']   = 'Dingding Notifier';
-$lang->webhook->typeList['weixin']    = 'Enterprise WeChat';
-$lang->webhook->typeList['default']   = 'Others';
+$lang->webhook->typeList['']            = '';
+$lang->webhook->typeList['dinggroup']   = 'Dingding Robot';
+$lang->webhook->typeList['dinguser']    = 'Dingding Notifier';
+$lang->webhook->typeList['wechatgroup'] = 'Enterprise WeChat Robot';
+$lang->webhook->typeList['wechatuser']  = 'Enterprise WeChat Notifier';
+$lang->webhook->typeList['default']     = 'Others';
 
 $lang->webhook->sendTypeList['sync']  = 'Synchronous';
 $lang->webhook->sendTypeList['async'] = 'Asynchronous';
@@ -46,8 +47,16 @@ $lang->webhook->sendTypeList['async'] = 'Asynchronous';
 $lang->webhook->dingAgentId    = 'AgentID';
 $lang->webhook->dingAppKey     = 'AppKey';
 $lang->webhook->dingAppSecret  = 'AppSecret';
-$lang->webhook->dingUserid     = 'UserID';
+$lang->webhook->dingUserid     = 'Ding UserID';
 $lang->webhook->dingBindStatus = 'Bind Status';
+
+$lang->webhook->wechatCorpId     = 'Corp ID';
+$lang->webhook->wechatCorpSecret = 'Corp Secret';
+$lang->webhook->wechatAgentId    = 'Agent ID';
+$lang->webhook->wechatUserid     = 'Wechat Userid';
+$lang->webhook->wechatBindStatus = 'Bind Status';
+
+$lang->webhook->zentaoUser  = 'Zentao User';
 
 $lang->webhook->dingBindStatusList['0'] = 'No';
 $lang->webhook->dingBindStatusList['1'] = 'Yes';
@@ -71,7 +80,9 @@ $lang->webhook->note->async   = 'If it is asynchronous, you have to go to Admin-
 $lang->webhook->note->bind    = 'Bind User is only required for Dingding Notifier.';
 $lang->webhook->note->product = "All actions will trigger the hook if {$lang->productCommon} is empty, or only actions of selected {$lang->productCommon} will trigger it.";
 $lang->webhook->note->project = "All actions will trigger the hook if {$lang->projectCommon} is empty, or only actions of selected {$lang->projectCommon} will trigger it.";
-$lang->webhook->note->dingKey = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
+
+$lang->webhook->note->dingHelp   = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
+$lang->webhook->note->wechatHelp = " <a href='http://www.zentao.net/book/zentaopmshelp/367.html' target='_blank'><i class='icon-help'></i></a>";
 
 $lang->webhook->note->typeList['bearychat'] = 'Add a ZenTao bot in bearychat and get the webhook url.';
 $lang->webhook->note->typeList['dingding']  = 'Add a customized bot in dingding and get the webhook url.';

@@ -566,7 +566,7 @@ class upgradeModel extends model
         case '12_0_1':
             $this->saveLogs('Execute 12_0_1');
             $this->execSQL($this->getUpgradeFile('12.0.1'));
-            $this->saveRepo();
+            $this->importRepoFromConfig();
             $this->appendExec('12_0_1');
         }
 
@@ -730,6 +730,7 @@ class upgradeModel extends model
                 }
             case '11_7' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.7'));
             case '12_0' :
+            case '12_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('12.0.1'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3641,9 +3642,9 @@ class upgradeModel extends model
      * Save repo from svn and git config.
      * 
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveRepo()
+    public function importRepoFromConfig()
     {
         $this->app->loadConfig('svn');
         if(isset($this->config->svn->repos))
@@ -3667,7 +3668,7 @@ class upgradeModel extends model
                 $svnRepo->encrypt  = 'base64';
                 $svnRepo->encoding = zget($repo, 'encoding', $this->config->svn->encoding);
 
-                $scm->setEngine($repo);
+                $scm->setEngine($svnRepo);
                 $info = $scm->info('');
                 $svnRepo->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $svnRepo->path)), '/');
                 if($svnRepo->prefix) $svnRepo->prefix = '/' . $svnRepo->prefix;
@@ -3701,6 +3702,7 @@ class upgradeModel extends model
                 $this->dao->insert(TABLE_REPO)->data($gitRepo)->exec();
             }
         }
+        return true;
     }
 
     /**

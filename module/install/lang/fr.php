@@ -165,6 +165,9 @@ $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Désync
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Désynchroniser envoi Webhooks';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Suppression Logs échus';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Créer tâches récurrentes';
+$lang->install->cronList['moduleName=ci&methodName=initQueue']        = 'Create recurring jenkins';
+$lang->install->cronList['moduleName=ci&methodName=checkBuildStatus'] = 'Synchronize Jenkins Status';
+$lang->install->cronList['moduleName=ci&methodName=exec']             = 'Execute Jenkins';
 
 $lang->install->success  = "Installé !";
 $lang->install->login    = 'Login ZenTao';

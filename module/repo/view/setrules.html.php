@@ -20,7 +20,7 @@
       <tbody>
         <tr>
           <th class='w-110px'><?php echo $lang->repo->objectRule;?></th>
-          <td>
+          <td class='w-400px'>
             <div class='input-group'>
               <?php foreach($config->repo->rules['module'] as $module => $match):?>
               <span class='input-group-addon'><?php echo $lang->{$module}->common;?></span>
@@ -28,6 +28,8 @@
               <?php endforeach;?>
             </div>
           </td>
+          <td class='w-150px'></td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->repo->objectIdRule;?></th>
@@ -49,16 +51,19 @@
               <?php echo html::input("rules[task][start]", $config->repo->rules['task']['start'], "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->task->common . $space . $lang->task->finish;?></span>
               <?php echo html::input("rules[task][finish]", $config->repo->rules['task']['finish'], "class='form-control'");?>
-              <span class='input-group-addon'><?php echo $lang->task->common . $space . $lang->task->logEfforts;?></span>
-              <?php echo html::input("rules[task][logEfforts]", $config->repo->rules['task']['logEfforts'], "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->bug->common . $space . $lang->bug->resolve;?></span>
               <?php echo html::input("rules[bug][resolve]", $config->repo->rules['bug']['resolve'], "class='form-control'");?>
             </div>
           </td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->repo->manHourRule;?></th>
           <td>
+            <div class='input-group'>
+              <span class='input-group-addon'><?php echo $lang->task->common . $space . $lang->task->logEfforts;?></span>
+              <?php echo html::input("rules[task][logEfforts]", $config->repo->rules['task']['logEfforts'], "class='form-control'");?>
+            </div>
             <div class='input-group'>
               <span class='input-group-addon'><?php echo $lang->task->consumed?></span>
               <?php echo html::input("rules[task][consumed]", $config->repo->rules['task']['consumed'], "class='form-control'");?>
@@ -75,24 +80,18 @@
               <span class='input-group-addon'><?php echo $lang->repo->ruleUnit?></span>
               <?php echo html::input("rules[unit][left]", $config->repo->rules['unit']['left'], "class='form-control'");?>
             </div>
-            <div class='input-group'>
-              <span class='input-group-addon'><?php echo $lang->bug->resolvedBuild?></span>
-              <?php echo html::input("rules[bug][resolvedBuild]", $config->repo->rules['bug']['resolvedBuild'], "class='form-control'");?>
-              <span class='input-group-addon'><?php echo $lang->repo->mark?></span>
-              <?php echo html::input("rules[mark][resolvedBuild]", $config->repo->rules['mark']['resolvedBuild'], "class='form-control'");?>
-            </div>
           </td>
         </tr>
         <tr>
           <th></th>
-          <td colspan='2'><?php echo $lang->repo->ruleSplit;?></td>
+          <td class='red' colspan='3'><?php echo $lang->repo->ruleSplit;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->repo->rules->exampleLabel;?></th>
-          <td colspan='2' id='example'></td>
+          <td colspan='3' id='example'></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center'>
+          <td colspan='4' class='text-center'>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>

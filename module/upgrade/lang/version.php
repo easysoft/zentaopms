@@ -117,3 +117,4 @@ $lang->upgrade->fromVersions['11_6_4']     = '11.6.4';
 $lang->upgrade->fromVersions['11_6_5']     = '11.6.5';
 $lang->upgrade->fromVersions['11_7']       = '11.7';
 $lang->upgrade->fromVersions['12_0']       = '12.0';
+$lang->upgrade->fromVersions['12_0_1']     = '12.0.1';

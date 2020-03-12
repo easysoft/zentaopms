@@ -1,4 +1,5 @@
 <?php
+$lang->compile->common = '构建';
 $lang->compile->browse = '构建历史';
 $lang->compile->logs   = '构建日志';
 

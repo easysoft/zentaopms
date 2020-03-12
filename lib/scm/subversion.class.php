@@ -104,13 +104,14 @@ class Subversion
         }
 
         ksort($dirs);
-        $tags = array();
+        $tags   = array();
+        $prefix = empty(trim($path, '/')) ? '/' : '/' . trim($path, '/') . '/';
         foreach($dirs as $dirNames)
         {
             ksort($dirNames);
             foreach($dirNames as $dirName)
             {
-                $dirPath = $path . '/' . $dirName;
+                $dirPath = $prefix . $dirName;
                 $tags[$dirPath] = $dirName;
             }
         }

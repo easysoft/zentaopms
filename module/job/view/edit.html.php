@@ -44,12 +44,11 @@
           </tr>
           <tr id='svnDirBox' class='svn-fields'>
             <th><?php echo $lang->job->svnDir;?></th>
-            <td colspan='2'>
+            <td colspan='3'>
               <div class='input-group'>
                 <?php
                 if($repoType == 'Subversion' and $job->svnDir)
                 {
-                    $job->svnDir = '/zentaoext';
                     $path = '';
                     $svnDirs = empty(trim($job->svnDir, '/')) ? '' : $job->svnDir;
                     $svnDirs = explode('/', $svnDirs);

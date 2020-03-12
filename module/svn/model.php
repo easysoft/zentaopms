@@ -89,7 +89,11 @@ class svnModel extends model
             $this->printLog("get this repo logs.");
             $lastInDB = $this->repo->getLatestCommit($repoID);
             /* Ignore unsynced repo. */
-            if(empty($lastInDB)) continue;
+            if(empty($lastInDB))
+            {
+                $this->printLog("Please init repo {$repo->name}");
+                continue;
+            }
 
             $version = $lastInDB->commit;
             $logs    = $this->repo->getUnsyncCommits($repo);
@@ -139,15 +143,23 @@ class svnModel extends model
             $jobs = zget($tagGroup, $repoID, array());
             foreach($jobs as $job)
             {
-                $dirs = $this->getRepoTags($repo, $job->svnDir);
-                end($dirs);
-                $lastTag = current($dirs);
-                if($lastTag != $job->lastTag)
+                $dirs    = $this->getRepoTags($repo, $job->svnDir);
+                $isNew   = false;
+                $lastTag = '';
+                foreach($dirs as $dir)
                 {
-                    $tag = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
+                    if($dir == $job->lastTag)
+                    {
+                        $isNew = true;
+                        continue;
+                    }
+                    if(!$isNew) continue;
+
+                    $lastTag = $dir;
+                    $tag     = rtrim($repo->path , '/') . '/' . trim($job->svnDir, '/') . '/' . $lastTag;
                     $this->compile->createByJob($job->id, $tag, 'tag');
-                    $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
                 }
+                if($lastTag) $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
             }
         }
     }
@@ -258,40 +270,9 @@ class svnModel extends model
      */
     public function getRepoTags($repo, $path)
     {
-        $parent = '/';
-        if($repo->prefix) $parent = rtrim($repo->prefix, '/');
-        if(trim($path, '/')) $parent = rtrim($repo->prefix, '/') . '/' . trim($path, '/');
-        $stmt = $this->dao->select('t1.*,t2.revision as svnRevision,t2.time')->from(TABLE_REPOFILES)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision = t2.id')
-            ->where('t1.repo')->eq($repo->id)
-            ->andWhere('t1.type')->eq('dir')
-            ->andWhere('t1.parent')->eq($parent)
-            ->orderBy('path,svnRevision,time')
-            ->query();
-
-        $dirs = array();
-        while($row = $stmt->fetch())
-        {
-            $path = $row->path;
-            if($repo->prefix) $path = str_replace($repo->prefix, '', $path);
-            if(empty($path)) $path = '/';
-
-            $dirs[$path] = $row;
-            if($row->action == 'D') unset($dirs[$path]);
-        }
-
-        $dirTime = array();
-        foreach($dirs as $dirPath => $dir) $dirTime[$dir->time][$dirPath] = $dirPath;
-
-        ksort($dirTime);
-        $dirPairs = array();
-        foreach($dirTime as $time => $dirPaths)
-        {
-            ksort($dirPaths);
-            foreach($dirPaths as $dirPath) $dirPairs[$dirPath] = basename($dirPath);
-        }
-
-        return $dirPairs;
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        return $scm->tags($path);
     }
 
     /**

@@ -487,8 +487,10 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
-$lang->menugroup->repo        = 'ci';
-$lang->menugroup->jenkins     = 'ci';
+$lang->menugroup->repo    = 'ci';
+$lang->menugroup->jenkins = 'ci';
+$lang->menugroup->compile = 'ci';
+$lang->menugroup->job     = 'ci';
 
 /* Error info. */
 $lang->error = new stdclass();

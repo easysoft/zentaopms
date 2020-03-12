@@ -693,6 +693,53 @@ $lang->resource->repo->delete         = 'delete';
 $lang->resource->repo->showSyncCommit = 'showSyncCommit';
 $lang->resource->repo->diff           = 'diffAction';
 $lang->resource->repo->download       = 'download';
+$lang->resource->repo->maintain       = 'maintain';
+$lang->resource->repo->setRules       = 'setRules';
+
+$lang->repo->methodOrder[5]  = 'create';
+$lang->repo->methodOrder[10] = 'edit';
+$lang->repo->methodOrder[15] = 'delete';
+$lang->repo->methodOrder[20] = 'showSyncCommit';
+$lang->repo->methodOrder[25] = 'maintain';
+$lang->repo->methodOrder[30] = 'browse';
+$lang->repo->methodOrder[35] = 'view';
+$lang->repo->methodOrder[40] = 'diff';
+$lang->repo->methodOrder[45] = 'log';
+$lang->repo->methodOrder[50] = 'revision';
+$lang->repo->methodOrder[55] = 'blame';
+$lang->repo->methodOrder[60] = 'download';
+$lang->repo->methodOrder[65] = 'setRules';
+
+$lang->resource->compile = new stdclass();
+$lang->resource->compile->browse = 'browse';
+$lang->resource->compile->logs   = 'logs';
+
+$lang->compile->methodOrder[5]  = 'browse';
+$lang->compile->methodOrder[10] = 'logs';
+
+$lang->resource->jenkins = new stdclass();
+$lang->resource->jenkins->browse = 'browse';
+$lang->resource->jenkins->create = 'create';
+$lang->resource->jenkins->edit   = 'edit';
+$lang->resource->jenkins->delete = 'delete';
+
+$lang->jenkins->methodOrder[5]  = 'browse';
+$lang->jenkins->methodOrder[10] = 'create';
+$lang->jenkins->methodOrder[15] = 'edit';
+$lang->jenkins->methodOrder[20] = 'delete';
+
+$lang->resource->job = new stdclass(); 
+$lang->resource->job->browse = 'browse'; 
+$lang->resource->job->create = 'create';
+$lang->resource->job->edit   = 'edit';
+$lang->resource->job->delete = 'delete';
+$lang->resource->job->exec   = 'exec';
+
+$lang->job->methodOrder[5]  = 'browse';
+$lang->job->methodOrder[10] = 'create';
+$lang->job->methodOrder[15] = 'edit';
+$lang->job->methodOrder[20] = 'delete';
+$lang->job->methodOrder[25] = 'exec';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();

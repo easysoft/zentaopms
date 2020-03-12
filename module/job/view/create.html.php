@@ -41,7 +41,7 @@
           </tr>
           <tr id='svnDirBox' class='svn-fields'>
             <th><?php echo $lang->job->svnDir;?></th>
-            <td colspan='2'>
+            <td colspan='3'>
               <div class='input-group'>
                 <?php echo html::select('svnDir[]', array('' => ''), '', "class='form-control chosen'");?>
               </div>

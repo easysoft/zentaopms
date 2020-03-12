@@ -165,6 +165,9 @@ $lang->install->cronList['moduleName=mail&methodName=asyncSend']      = '非同�
 $lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = '非同步發送Webhook';
 $lang->install->cronList['moduleName=admin&methodName=deleteLog']     = '刪除過期日誌';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']    = '生成周期性待辦';
+$lang->install->cronList['moduleName=ci&methodName=initQueue']        = '創建周期性任務';
+$lang->install->cronList['moduleName=ci&methodName=checkBuildStatus'] = '同步Jenkins任務狀態';
+$lang->install->cronList['moduleName=ci&methodName=exec']             = '執行Jenkins任務';
 
 $lang->install->success  = "安裝成功";
 $lang->install->login    = '登錄禪道管理系統';

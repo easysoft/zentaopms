@@ -113,25 +113,7 @@ class jobModel extends model
             ->exec();
 
         $id = $this->dao->lastInsertId();
-        if($job->triggerType == 'schedule' and strpos($job->atDay, date('w')) !== false) $this->loadModel('compile')->createByJob($id);
-        if($job->triggerType == 'tag')
-        {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
-            $lastTag = '';
-            if($this->post->repoType != 'Subversion')
-            {
-                $dirs = $this->loadModel('svn')->getRepoTags($repo, $job->svnDir);
-                end($dirs);
-                $lastTag = current($dirs);
-            }
-            else
-            {
-                $tags = $this->loadModel('git')->getRepoTags($repo);
-                end($tags);
-                $lastTag = current($tags);
-            }
-            $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($id)->exec();
-        }
+        $this->initJob($id, $job, $this->post->repoType);
         return true;
     }
 
@@ -144,8 +126,7 @@ class jobModel extends model
      */
     public function update($id)
     {
-        $oldJob = $this->getById($id);
-        $job    = fixer::input('post')
+        $job = fixer::input('post')
             ->setDefault('atDay', '')
             ->setIF($this->post->repoType != 'Subversion', 'svnDir', '')
             ->setIF($this->post->triggerType != 'commit', 'comment', '')
@@ -174,35 +155,51 @@ class jobModel extends model
             ->where('id')->eq($id)
             ->exec();
 
-        if($job->triggerType == 'schedule')
+        $this->initJob($id, $job, $this->post->repoType);
+        return true;
+    }
+
+    /**
+     * Init when create or update job.
+     * 
+     * @param  int    $id 
+     * @param  object $job 
+     * @param  string $repoType 
+     * @access public
+     * @return bool
+     */
+    public function initJob($id, $job, $repoType)
+    {
+        if($job->triggerType == 'schedule' and strpos($job->atDay, date('w')) !== false)
         {
-            $week = date('w');
-            if($job->triggerType != $oldJob->triggerType or strpos($oldJob->atDay, $week) === false)
+            $compiles = $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($id)->andWhere('LEFT(createdDate, 10)')->eq(date('Y-m-d'))->fetchAll();
+            foreach($compiles as $compile)
             {
-                if(strpos($job->atDay, $week) !== false) $this->loadModel('compile')->createByJob($job->id);
+                if(!empty($compile->status)) return true;
+                $this->dao->delete()->from(TABLE_COMPILE)->where('id')->eq($compile->id)->exec();
             }
+            $this->loadModel('compile')->createByJob($id);
         }
-        elseif($job->triggerType == 'tag')
+
+        if($job->triggerType == 'tag')
         {
-            if($job->triggerType != $oldJob->triggerType or $job->repo != $oldJob->repo)
+            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
+            $lastTag = '';
+            if($repoType == 'Subversion')
             {
-                $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
-                $lastTag = '';
-                if($this->post->repoType == 'Subversion')
-                {
-                    $dirs = $this->loadModel('svn')->getRepoTags($repo, $job->svnDir);
-                    end($dirs);
-                    $lastTag = current($dirs);
-                }
-                else
-                {
-                    $tags = $this->loadModel('git')->getRepoTags($repo);
-                    end($tags);
-                    $lastTag = current($tags);
-                }
-                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($id)->exec();
+                $dirs = $this->loadModel('svn')->getRepoTags($repo, $job->svnDir);
+                end($dirs);
+                $lastTag = current($dirs);
             }
+            else
+            {
+                $tags = $this->loadModel('git')->getRepoTags($repo);
+                end($tags);
+                $lastTag = current($tags);
+            }
+            $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($id)->exec();
         }
+
         return true;
     }
 
