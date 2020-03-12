@@ -1432,7 +1432,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'pie')
+    public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'pie', $storyType = 'story')
     {
         $this->loadModel('report');
         $this->view->charts   = array();
@@ -1460,6 +1460,7 @@ class story extends control
         $this->view->productID     = $productID;
         $this->view->branchID      = $branchID;
         $this->view->browseType    = $browseType;
+        $this->view->storyType     = $storyType;
         $this->view->moduleID      = $moduleID;
         $this->view->chartType     = $chartType;
         $this->view->checkedCharts = $this->post->charts ? join(',', $this->post->charts) : '';

@@ -86,4 +86,5 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('branchID', $branchID);?>
 <?php js::set('moduleID', $moduleID);?>
+<?php js::set('storyType', $storyType);?>
 <?php include '../../common/view/footer.html.php';?>
