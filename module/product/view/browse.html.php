@@ -33,6 +33,7 @@
     foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
+        if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         if($menuItem->name == 'more')
         {
@@ -198,6 +199,17 @@
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
           </tr>
+          <?php if(!empty($story->children)):?>
+          <?php $i = 0;?> 
+          <?php foreach($story->children as $key => $child):?>
+          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
+          <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
+          <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+          </tr>
+          <?php $i ++;?>
+          <?php endforeach;?>
+          <?php endif;?>
           <?php endforeach;?>
         </tbody>
       </table>

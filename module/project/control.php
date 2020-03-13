@@ -2008,7 +2008,11 @@ class project extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active');
+            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', $pager = null, $hasParent = false);
+        }
+        foreach($allStories as $id => $story)
+        {
+            if(isset($prjStories[$story->id])) unset($allStories[$id]);
         }
         $prjStories = $this->story->getProjectStoryPairs($projectID);
 

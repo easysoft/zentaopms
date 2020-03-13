@@ -294,6 +294,13 @@ class story extends control
      */
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
+        /* Check can subdivide or not. */
+        if($storyID)
+        {
+            $story = $this->story->getById($storyID);
+            if($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) die(js::alert($this->lang->story->errorNotSubdivide));
+        }
+
         if(!empty($_POST))
         {
             $mails = $this->story->batchCreate($productID, $branch, $type);
@@ -307,7 +314,7 @@ class story extends control
             if($storyID)
             {
                 if(empty($mails)) die(js::closeModal('parent.parent', 'this'));
-                $actionID = $this->story->subdivide($storyID, $mails);
+                $this->story->subdivide($storyID, $stories);
 
                 if(dao::isError()) die(js::error(dao::getError()));
 
@@ -474,6 +481,7 @@ class story extends control
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
+        $this->view->stories    = $this->story->getParentStoryPairs($story->product, $story->parent);
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->view->product    = $product;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
@@ -766,6 +774,9 @@ class story extends control
      */
     public function delete($storyID, $confirm = 'no')
     {
+        $story = $this->story->getById($storyID);
+        if($story->parent < 0) die(js::alert($this->lang->story->cannotDeleteParent));
+
         if($confirm == 'no')
         {
             echo js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), '');
@@ -774,6 +785,11 @@ class story extends control
         else
         {
             $this->story->delete(TABLE_STORY, $storyID);
+            if($story->parent > 0)
+            {
+                $this->story->updateParentStatus($story->id);
+                $this->loadModel('action')->create('story', $task->parent, 'deleteChildrenStory', '', $storyID);
+            }
 
             $this->executeHooks($storyID);
 
@@ -1316,7 +1332,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full')
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1)
     {
         if($moduleID)
         {
@@ -1332,7 +1348,7 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type);
+        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
@@ -1511,6 +1527,32 @@ class story extends control
                 while($row = $stmt->fetch()) $stories[$row->id] = $row;
             }
 
+            if($stories)
+            {
+                $children = array();
+                foreach($stories as $story)
+                {
+                    if($story->parent > 0 and isset($stories[$story->parent]))
+                    {
+                        $children[$story->parent][$story->id] = $story;
+                        unset($stories[$story->id]);
+                    }
+                }
+                if(!empty($children))
+                {
+                    $position = 0;
+                    foreach($stories as $story)
+                    {
+                        $position ++;
+                        if(isset($children[$story->id]))
+                        {
+                            array_splice($stories, $position, 0, $children[$story->id]);
+                            $position += count($children[$story->id]);
+                        }
+                    }
+                }
+            }
+
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
             $products = $this->loadModel('product')->getPairs('nocode');
@@ -1667,6 +1709,8 @@ class story extends control
                 }
                 $story->reviewedBy = rtrim($story->reviewedBy, ',');
 
+                /* Set child story title. */
+                if($story->parent > 0 && strpos($story->title, htmlentities('>')) !== 0) $story->title = '>' . $story->title;
             }
 
             if($projectID)

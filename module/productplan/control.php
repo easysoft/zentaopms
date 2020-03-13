@@ -398,7 +398,7 @@ class productplan extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed');
+            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed', null, $hasParent = false);
         }
 
         $this->view->allStories  = $allStories;

@@ -22,7 +22,10 @@
     <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $story->id?></span>
-      <span class="text" title='<?php echo $story->title;?>' style='color: <?php echo $story->color;?>'><?php echo $story->title;?></span>
+      <span class="text" title='<?php echo $story->title;?>' style='color: <?php echo $story->color;?>'>
+        <?php if($story->parent > 0) echo '<span class="label label-badge label-primary no-margin">' . $this->lang->story->childrenAB . '</span>';?>
+        <?php if($story->parent > 0) echo isset($story->parentName) ? html::a(inlink('view', "storyID={$story->parent}"), $story->parentName) . ' / ' : '';?><?php echo $story->title;?>
+      </span>
       <?php if($story->version > 1):?>
       <small class='dropdown'>
         <a href='#' data-toggle='dropdown' class='text-muted'><?php echo '#' . $version;?> <span class='caret'></span></a>
@@ -61,6 +64,55 @@
       </div>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true'));?>
       <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=story&objectID=$story->id");?>
+      <?php if(!empty($story->children)):?>
+      <div class='detail'>
+        <div class='detail-title'><?php echo $this->lang->story->children;?></div>
+        <div class='detail-content article-content'>
+          <table class='table table-hover table-fixed'>
+            <thead>
+              <tr class='text-center'>
+                <th class='w-50px'> <?php echo $lang->story->id;?></th>
+                <th class='w-40px'> <?php echo $lang->priAB;?></th>
+                <th>                <?php echo $lang->story->title;?></th>
+                <th class='w-100px'><?php echo $lang->story->assignedTo;?></th>
+                <th class='w-80px'> <?php echo $lang->story->estimate;?></th>
+                <th class='w-80px'> <?php echo $lang->story->status;?></th>
+                <th class='w-200px'><?php echo $lang->actions;?></th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php foreach($story->children as $child):?>
+              <tr class='text-center'>
+                <td><?php echo $child->id;?></td>
+                <td>
+                  <?php
+                  echo "<span class='pri-" . $child->pri . "'>";
+                  echo $child->pri == '0' ? '' : zget($this->lang->story->priList, $child->pri, $child->pri);
+                  echo "</span>";
+                  ?>
+                </td>
+                <td class='text-left' title='<?php echo $child->title;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('story', 'view', "storyID=$child->id", '', true); ?>"><?php echo $child->title;?></a></td>
+                <td><?php echo zget($users, $child->assignedTo);?></td>
+                <td><?php echo $child->estimate;?></td>
+                <td><?php echo $this->processStatus('story', $child);?></td>
+                <td class='c-actions'>
+                  <?php
+                  common::printIcon('story', 'change', "storyID=$child->id", $child, 'list');
+                  common::printIcon('story', 'review', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'assignTo', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'close',  "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'activate', "storyID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
+                  common::printIcon('story', 'edit',   "storyID=$child->id", $child, 'list');
+                  common::printIcon('story', 'createCase', "productID=$child->product&branch=$child->branch&module=0&from=&param=0&story={$child->id}", $child, 'list', 'sitemap');
+                  ?>
+                </td>
+              </tr>
+              <?php endforeach;?>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <?php endif;?>
     </div>
     <?php $this->printExtendFields($story, 'div', "position=left&inForm=0&inCell=1");?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
@@ -72,19 +124,19 @@
         <?php
         common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
         common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
-        if($story->status != 'closed' and !isonlybody())
+        if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
         {
             $divideLang = ($story->type == 'story' || !$story->type) ? $lang->story->subdivide : $lang->story->splitRequirent; 
             $misc       = "class='btn divideStory' data-toggle='modal' data-type='iframe' data-width='95%'";
             $link       = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
-            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $divideLang, '', $misc);
+            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $divideLang, '', $misc);
         }
 
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
 
-        if($config->global->flow != 'onlyStory' and !isonlybody() and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
+        if($config->global->flow != 'onlyStory' and !isonlybody() and $story->parent >= 0 and (common::hasPriv('testcase', 'create') or common::hasPriv('testcase', 'batchCreate')))
         {
             $this->app->loadLang('testcase');
             echo "<div class='btn-group dropup'>";

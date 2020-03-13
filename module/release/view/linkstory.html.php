@@ -50,7 +50,12 @@
             <?php printf('%03d', $story->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
-          <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+          <td class='text-left nobr' title='<?php echo $story->title?>'>
+            <?php
+            if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+            echo html::a($this->createLink('story', 'view', "storyID=$story->id", '', true), $story->title, '', "data-toggle='modal' data-type='iframe' data-width='90%'");
+            ?>
+          </td>
           <td><?php echo zget($users, $story->openedBy);?></td>
           <td><?php echo zget($users, $story->assignedTo);?></td>
           <td><?php echo $story->estimate;?></td>
