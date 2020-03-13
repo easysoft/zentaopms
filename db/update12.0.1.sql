@@ -66,3 +66,5 @@ UPDATE `zt_webhook` SET `type` = 'wechatgroup' WHERE `type` = 'weixin';
 UPDATE `zt_grouppriv` SET `method` = 'edit' WHERE `module` = 'repo' AND `method` = 'settings';
 UPDATE `zt_grouppriv` SET `method` = 'showsynccommit' WHERE `module` = 'repo' AND `method` = 'showsynccomment';
 UPDATE `zt_grouppriv` SET `method` = 'showsynccommit' WHERE `module` = 'repo' AND `method` = 'showSyncComment';
+
+ALTER TABLE `zt_repo` ADD `desc` text NOT NULL AFTER `lastSync`;
