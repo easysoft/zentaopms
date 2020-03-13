@@ -126,9 +126,10 @@
         common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
         if($story->status != 'closed' and $story->status != 'draft' and $story->parent <= 0 and !isonlybody())
         {
-            $misc = "class='btn' data-toggle='modal' data-type='iframe' data-width='95%'";
-            $link = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
-            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $lang->story->subdivide, '', $misc);
+            $divideLang = ($story->type == 'story' || !$story->type) ? $lang->story->subdivide : $lang->story->splitRequirent; 
+            $misc       = "class='btn divideStory' data-toggle='modal' data-type='iframe' data-width='95%'";
+            $link       = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
+            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $divideLang, '', $misc);
         }
 
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
@@ -160,7 +161,7 @@
 
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
-        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", $story, 'button', 'copy', '', '', true, "data-width='1050'");
+        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&projectID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', true, "data-width='1050'");
         common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin');
         ?>
         <?php endif;?>
@@ -452,6 +453,7 @@ js::set('createStory', $lang->story->create);
 js::set('productID', $story->product);
 js::set('branch', $story->branch);
 js::set('moduleID', $story->module);
+js::set('storyType', $story->type);
 ?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

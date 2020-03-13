@@ -24,6 +24,7 @@ $lang->story->edit            = "编辑";
 $lang->story->batchEdit       = "批量编辑";
 $lang->story->subdivide       = '细分';
 $lang->story->subdivideAction = "细分{$lang->storyCommon}";
+$lang->story->splitRequirent  = '拆分';
 $lang->story->close           = '关闭';
 $lang->story->closeAction     = "关闭{$lang->storyCommon}";
 $lang->story->batchClose      = '批量关闭';

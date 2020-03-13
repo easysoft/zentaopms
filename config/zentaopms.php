@@ -174,6 +174,7 @@ define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 
 define('TABLE_REPO',        '`' . $config->db->prefix . 'repo`');
+define('TABLE_RELATION',    '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY', '`' . $config->db->prefix . 'repohistory`');
 define('TABLE_REPOFILES',   '`' . $config->db->prefix . 'repofiles`');
 define('TABLE_REPOBRANCH',  '`' . $config->db->prefix . 'repobranch`');

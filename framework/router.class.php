@@ -136,6 +136,8 @@ class router extends baseRouter
                 if($setting->key == 'hourPoint') $hourCommon = $setting->value;
             }
 
+            $config->storyCommon = $storyCommon;
+
             /* Set productCommon, projectCommon, storyCommon and hourCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][(int)$projectCommon];

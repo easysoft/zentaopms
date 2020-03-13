@@ -1012,7 +1012,7 @@ class storyModel extends model
         $changes = common::createChanges($oldStory, $newStory);
         if($changes)
         {
-            $actionID = $this->action->create('story', $storyID, 'createChildrenStory', '', $childStories);
+            $actionID = $this->loadModel('action')->create('story', $storyID, 'createChildrenStory', '', $childStories);
             $this->action->logHistory($actionID, $changes);
         }
     }

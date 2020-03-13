@@ -24,6 +24,7 @@ $lang->story->edit            = "Edit Story";
 $lang->story->batchEdit       = "Batch Edit";
 $lang->story->subdivide       = 'Decompose';
 $lang->story->subdivideAction = 'Decompose Story';
+$lang->story->splitRequirent  = 'Decompose';
 $lang->story->close           = 'Close';
 $lang->story->closeAction     = 'Close Story';
 $lang->story->batchClose      = 'Batch Close';
