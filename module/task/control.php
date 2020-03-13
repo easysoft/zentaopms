@@ -1393,7 +1393,7 @@ class task extends control
                 $children = array();
                 foreach($tasks as $task)
                 {
-                    if(!empty($task->parent) and isset($tasks[$task->parent]))
+                    if($task->parent > 0 and isset($tasks[$task->parent]))
                     {
                         $children[$task->parent][$task->id] = $task;
                         unset($tasks[$task->id]);

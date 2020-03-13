@@ -153,7 +153,14 @@ class product extends control
 
         /* Get related tasks, bugs, cases count of each story. */
         $storyIdList = array();
-        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
+        foreach($stories as $story)
+        {
+            $storyIdList[$story->id] = $story->id;
+            if(!empty($story->children))
+            {
+                foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
+            }
+        }
         $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);

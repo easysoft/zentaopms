@@ -66,6 +66,7 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
+              <?php if($story->parent <= 0):?>
               <tr>
                 <th class='thWidth'><?php echo $lang->story->product;?></th>
                 <td>
@@ -76,8 +77,9 @@
                   </div>
                 </td>
               </tr>
+              <?php endif;?>
               <tr>
-                <th><?php echo $lang->story->module;?></th>
+                <th class='thWidth'><?php echo $lang->story->module;?></th>
                 <td>
                   <div class='input-group' id='moduleIdBox'>
                   <?php
@@ -94,6 +96,12 @@
                   </div>
                 </td>
               </tr>
+              <?php if($story->parent >= 0):?>
+              <tr>
+                <th><?php echo $lang->story->parent;?></th>
+                <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
+              </tr>
+              <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->plan;?></th>
                 <td>
@@ -153,7 +161,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->estimate;?></th>
-                <td><?php echo html::input('estimate', $story->estimate, "class='form-control'");?></td>
+                <td><?php echo $story->parent >= 0 ? html::input('estimate', $story->estimate, "class='form-control'") : $story->estimate;?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->story->keywords;?></th>

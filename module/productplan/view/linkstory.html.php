@@ -41,6 +41,7 @@
       <tbody class='text-center'>
         <?php $unlinkedCount = 0;?>
         <?php foreach($allStories as $story):?>
+        <?php if($story->parent < 0) continue;?>
         <?php if(isset($planStories[$story->id])) continue;?>
         <tr>
           <td class='c-id text-left'>

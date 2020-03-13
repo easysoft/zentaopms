@@ -60,6 +60,7 @@ $lang->story->viewAll           = '查看全部';
 
 $lang->story->common         = $lang->storyCommon;
 $lang->story->id             = '编号';
+$lang->story->parent         = '父需求';
 $lang->story->product        = "所属{$lang->productCommon}";
 $lang->story->branch         = "分支/平台";
 $lang->story->module         = '所属模块';
@@ -100,6 +101,8 @@ $lang->story->version        = '版本号';
 $lang->story->plan           = '所属计划';
 $lang->story->planAB         = '计划';
 $lang->story->comment        = '备注';
+$lang->story->children       = "子{$lang->storyCommon}";
+$lang->story->childrenAB     = "子";
 $lang->story->linkStories    = "相关{$lang->storyCommon}";
 $lang->story->childStories   = "细分{$lang->storyCommon}";
 $lang->story->duplicateStory = "重复{$lang->storyCommon}ID";
@@ -216,6 +219,7 @@ $lang->story->mustChooseResult      = '必须选择评审结果';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->noStory               = "暂时没有{$lang->storyCommon}。";
 $lang->story->ignoreChangeStage     = "{$lang->storyCommon} %s 为草稿状态，没有修改其阶段。";
+$lang->story->cannotDeleteParent    = "不能删除父{$lang->storyCommon}";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area      = "该{$lang->storyCommon}所属范围";

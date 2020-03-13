@@ -307,7 +307,7 @@ class story extends control
             if($storyID)
             {
                 if(empty($mails)) die(js::closeModal('parent.parent', 'this'));
-                $actionID = $this->story->subdivide($storyID, $mails);
+                $this->story->subdivide($storyID, $stories);
 
                 if(dao::isError()) die(js::error(dao::getError()));
 
@@ -474,6 +474,7 @@ class story extends control
         $this->view->title      = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[] = $this->lang->story->edit;
         $this->view->story      = $story;
+        $this->view->stories    = $this->story->getParentStoryPairs($story->product, $story->parent);
         $this->view->users      = $this->user->getPairs('pofirst|nodeleted', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $this->view->product    = $product;
         $this->view->branches   = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
@@ -766,6 +767,9 @@ class story extends control
      */
     public function delete($storyID, $confirm = 'no')
     {
+        $story = $this->story->getById($storyID);
+        if($story->parent < 0) die(js::alert($this->lang->story->cannotDeleteParent));
+
         if($confirm == 'no')
         {
             echo js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), '');
@@ -774,6 +778,11 @@ class story extends control
         else
         {
             $this->story->delete(TABLE_STORY, $storyID);
+            if($story->parent > 0)
+            {
+                $this->story->updateParentStatus($story->id);
+                $this->loadModel('action')->create('story', $task->parent, 'deleteChildrenStory', '', $storyID);
+            }
 
             $this->executeHooks($storyID);
 
@@ -1510,6 +1519,32 @@ class story extends control
                 while($row = $stmt->fetch()) $stories[$row->id] = $row;
             }
 
+            if($stories)
+            {
+                $children = array();
+                foreach($stories as $story)
+                {
+                    if($story->parent > 0 and isset($stories[$story->parent]))
+                    {
+                        $children[$story->parent][$story->id] = $story;
+                        unset($stories[$story->id]);
+                    }
+                }
+                if(!empty($children))
+                {
+                    $position = 0;
+                    foreach($stories as $story)
+                    {
+                        $position ++;
+                        if(isset($children[$story->id]))
+                        {
+                            array_splice($stories, $position, 0, $children[$story->id]);
+                            $position += count($children[$story->id]);
+                        }
+                    }
+                }
+            }
+
             /* Get users, products and projects. */
             $users    = $this->loadModel('user')->getPairs('noletter');
             $products = $this->loadModel('product')->getPairs('nocode');
@@ -1666,6 +1701,8 @@ class story extends control
                 }
                 $story->reviewedBy = rtrim($story->reviewedBy, ',');
 
+                /* Set child story title. */
+                if($story->parent > 0 && strpos($story->title, htmlentities('>')) !== 0) $story->title = '>' . $story->title;
             }
 
             if($projectID)

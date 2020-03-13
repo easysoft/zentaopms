@@ -33,6 +33,9 @@ class storyModel extends model
         $story->spec   = isset($spec->spec)   ? $spec->spec   : '';
         $story->verify = isset($spec->verify) ? $spec->verify : '';
 
+        /* Check parent story. */
+        if($story->parent > 0) $story->parentName = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch('title');
+
         $story = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
@@ -62,6 +65,10 @@ class storyModel extends model
         if($story->childStories)   $extraStories = array_merge($extraStories, explode(',', $story->childStories));
         $extraStories = array_unique($extraStories);
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
+
+        $story->children = array();
+        if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
+
         return $story;
     }
 
@@ -574,9 +581,177 @@ class storyModel extends model
                     $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
             }
+
+            $this->loadModel('action');
+            $changed = $story->parent != $oldStory->parent;
+            if($oldStory->parent > 0)
+            {
+                $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
+                $this->updateParentStatus($storyID, $oldStory->parent, !$changed);
+
+                if($changed)
+                {
+                    $oldChildren = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($oldStory->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+                    if(empty($oldChildren)) $this->dao->update(TABLE_STORY)->set('parent')->eq(0)->where('id')->eq($oldStory->parent)->exec();
+                    $this->dao->update(TABLE_STORY)->set('childStories')->eq(join(',', $oldChildren))->set('lastEditedBy')->eq($this->app->user->account)->set('lastEditedDate')->eq(helper::now())->where('id')->eq($oldStory->parent)->exec();
+                    $this->action->create('story', $storyID, 'unlinkParentStory', '', $oldStory->parent, '', false);
+
+                    $actionID = $this->action->create('story', $oldStory->parent, 'unLinkChildrenStory', '', $storyID, '', false);
+
+                    $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($oldStory->parent)->fetch();
+                    $changes = common::createChanges($oldParentStory, $newParentStory);
+                    if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+                }
+            }
+
+            if($story->parent > 0)
+            {
+                $parentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
+                $this->dao->update(TABLE_STORY)->set('parent')->eq(-1)->where('id')->eq($story->parent)->exec();
+                $this->updateParentStatus($storyID, $story->parent, !$changed);
+
+                if($changed)
+                {
+                    $children = $this->dao->select('id')->from(TABLE_STORY)->where('parent')->eq($story->parent)->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+                    $this->dao->update(TABLE_STORY)
+                        ->set('parent')->eq('-1')
+                        ->set('childStories')->eq(join(',', $children))
+                        ->set('lastEditedBy')->eq($this->app->user->account)
+                        ->set('lastEditedDate')->eq(helper::now())
+                        ->where('id')->eq($story->parent)
+                        ->exec();
+
+                    $this->action->create('story', $storyID, 'linkParentStory', '', $story->parent, '', false);
+                    $actionID = $this->action->create('story', $story->parent, 'linkChildStory', '', $storyID, '', false);
+
+                    $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch();
+                    $changes = common::createChanges($parentStory, $newParentStory);
+                    if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+                }
+            }
+
             if(isset($story->closedReason) and $story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
+
+            unset($oldStory->parent);
+            unset($story->parent);
             return common::createChanges($oldStory, $story);
         }
+    }
+
+    /**
+     * Update parent status.
+     * 
+     * @param  int    $storyID 
+     * @param  int    $parentID 
+     * @param  bool   $createAction 
+     * @access public
+     * @return mixed
+     */
+    public function updateParentStatus($storyID, $parentID = 0, $createAction = true)
+    {
+        $childStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+        if(empty($parentID)) $parentID = $childStory->parent;
+        if($parentID <= 0) return true;
+
+        $oldParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->andWhere('deleted')->eq(0)->fetch();
+        if(empty($oldParentStory)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($storyID)->exec();
+        if($oldParentStory->parent != '-1') $this->dao->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec(); 
+        $this->computeEstimate($parentID);
+
+        $childrenStatus = $this->dao->select('id,status')->from(TABLE_STORY)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
+        if(empty($childrenStatus)) return $this->dao->update(TABLE_STORY)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
+
+        $status = $oldParentStory->status;
+        if(count($childrenStatus) == 1 and $oldParentStory->status != 'changed')
+        {
+            $status = current($childrenStatus);
+            if($status == 'draft' or $status == 'changed') $status = 'active';
+        }
+        elseif(count($childrenStatus) != 1 and $oldParentStory->status == 'closed')
+        {
+            $status = 'active';
+        }
+
+        if($status and $oldParentStory->status != $status)
+        {
+            $now  = helper::now();
+            $story = new stdclass();
+            $story->status = $status;
+            $story->stage  = 'wait';
+            if($status == 'active')
+            {
+                $story->assignedTo   = $oldParentStory->openedBy;
+                $story->assignedDate = $now;
+                $story->closedBy     = '';
+                $story->closedReason = '';
+                $story->closedDate   = '0000-00-00';
+                $story->reviewedBy   = '';
+                $story->reviewedDate = '0000-00-00';
+            }
+
+            if($status == 'closed')
+            {
+                $story->assignedTo   = 'closed';
+                $story->assignedDate = $now;
+                $story->closedBy     = $this->app->user->account;
+                $story->closedDate   = $now;
+                $story->closedReason = 'done';
+                $story->closedReason = 'done';
+            }
+
+            $story->lastEditedBy   = $this->app->user->account;
+            $story->lastEditedDate = $now;
+            $story->parent         = '-1';
+            $this->dao->update(TABLE_STORY)->data($story)->where('id')->eq($parentID)->exec();
+            if(!dao::isError())
+            {
+                if(!$createAction) return $story;
+
+                $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
+                $changes = common::createChanges($oldParentStory, $newParentStory);
+                $action  = '';
+                if($status == 'active') $action = 'Activated';
+                if($status == 'closed') $action = 'Closed';
+                if($action)
+                {
+                    $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', '', '', false);
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+        }
+        else
+        {
+            if(!dao::isError())
+            {
+                $newParentStory = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($parentID)->fetch();
+                $changes = common::createChanges($oldParentStory, $newParentStory);
+                if($changes)
+                {
+                    $actionID = $this->loadModel('action')->create('story', $parentID, 'Edited', '', '', '', false);
+                    $this->action->logHistory($actionID, $changes);
+                }
+            }
+        }
+    }
+
+    /**
+     * Compute parent story estimate.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return bool
+     */
+    public function computeEstimate($storyID)
+    {
+        if(!$storyID) return true;
+
+        $stories = $this->dao->select('`id`,`estimate`,status')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        if(empty($stories)) return true;
+
+        $estimate = 0;
+        foreach($stories as $story) $estimate += $story->estimate;
+        $this->dao->update(TABLE_STORY)->set('estimate')->eq($estimate)->autoCheck()->where('id')->eq($storyID)->exec();
+        return !dao::isError();
     }
 
     /**
@@ -810,40 +985,36 @@ class storyModel extends model
      * @param  int    $storyID
      * @param  array  $stories
      * @access public
-     * @return int
+     * @return void
      */
     public function subdivide($storyID, $stories)
     {
         $now      = helper::now();
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
 
+        /* Set parent to child story. */
+        $this->dao->update(TABLE_STORY)->set('parent')->eq($storyID)->where('id')->in($stories)->exec();
+        $this->computeEstimate($storyID);
+
         /* Set childStories. */
-        $childStories = '';
-        foreach($stories as $story) $childStories .= $story->storyID . ',';
-        $childStories = trim($childStories, ',');
+        $childStories = join(',', $stories);
 
         $newStory = new stdClass();
+        $newStory->parent         = '-1';
         $newStory->plan           = 0;
         $newStory->lastEditedBy   = $this->app->user->account;
         $newStory->lastEditedDate = $now;
-        $newStory->closedDate     = $now;
-        $newStory->closedBy       = $this->app->user->account;
-        $newStory->assignedTo     = 'closed';
-        $newStory->assignedDate   = $now;
-        $newStory->status         = 'closed';
-        $newStory->closedReason   = 'subdivided';
-        $newStory->childStories   = $childStories;
+        $newStory->childStories   = trim($oldStory->childStories . ',' . $childStories, ',');
 
-        /* Subdivide story and close it. */
-        $this->dao->update(TABLE_STORY)->data($newStory)
-            ->autoCheck()
-            ->batchCheck($this->config->story->close->requiredFields, 'notempty')
-            ->where('id')->eq($storyID)->exec();
-        $changes  = common::createChanges($oldStory, $newStory);
-        $actionID = $this->action->create('story', $storyID, 'Closed', '', 'Subdivided');
-        $this->action->logHistory($actionID, $changes);
+        /* Subdivide story. */
+        $this->dao->update(TABLE_STORY)->data($newStory)->autoCheck()->where('id')->eq($storyID)->exec();
 
-        return $actionID;
+        $changes = common::createChanges($oldStory, $newStory);
+        if($changes)
+        {
+            $actionID = $this->action->create('story', $storyID, 'createChildrenStory', '', $childStories);
+            $this->action->logHistory($actionID, $changes);
+        }
     }
 
     /**
@@ -876,6 +1047,10 @@ class storyModel extends model
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
+
+        /* Update parent story status. */
+        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+
         if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
     }
@@ -934,6 +1109,9 @@ class storyModel extends model
 
             if(!dao::isError())
             {
+                /* Update parent story status. */
+                if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
             }
             else
@@ -1164,6 +1342,9 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
         $this->setStage($storyID);
 
+        /* Update parent story status. */
+        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
+
         return common::createChanges($oldStory, $story);
     }
 
@@ -1392,11 +1573,12 @@ class storyModel extends model
      * @param  string       $type    requirement|story
      * @param  string       $orderBy
      * @param  object       $pager
+     * @param  bool         $hasParent
      *
      * @access public
      * @return array
      */
-    public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $type = 'story', $orderBy = 'id_desc', $pager = null)
+    public function getProductStories($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $type = 'story', $orderBy = 'id_desc', $pager = null, $hasParent = true)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
@@ -1408,12 +1590,13 @@ class storyModel extends model
         }
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
+            ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
             ->beginIF($branch)->andWhere("branch")->in($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
-            ->orderBy($orderBy)->page($pager)->fetchAll();
+            ->orderBy($orderBy)->page($pager)->fetchAll('id');
         return $this->mergePlanTitle($productID, $stories, $branch);
     }
 
@@ -1571,7 +1754,7 @@ class storyModel extends model
             ->beginIF($operator == 'include')->andWhere($fieldName)->like("%$fieldValue%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
         return $this->mergePlanTitle($productID, $stories, $branch);
     }
 
@@ -1877,6 +2060,18 @@ class storyModel extends model
             ->fetchAll();
     }
 
+    public function getParentStoryPairs($productID, $append = '')
+    {
+        $stories = $this->dao->select('id, title')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('parent')->le(0)
+            ->andWhere('status')->notin('closed,draft')
+            ->andWhere('product')->eq($productID)
+            ->beginIF($append)->orWhere('id')->in($append)->fi()
+            ->fetchPairs();
+        return array(0 => '') + $stories ;
+    }
+
     /**
      * Get stories of a user.
      *
@@ -1903,7 +2098,7 @@ class storyModel extends model
             ->fi()
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
         $productIdList = array();
@@ -1984,7 +2179,7 @@ class storyModel extends model
      */
     public function getZeroCase($productID, $orderBy = 'id_desc')
     {
-        $allStories   = $this->getProductStories($productID, 0, 0, 'all', 'story', $orderBy);
+        $allStories   = $this->getProductStories($productID, 0, 0, 'all', 'story', $orderBy, null, $hasParent = false);
         $casedStories = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('story')->ne(0)->andWhere('deleted')->eq(0)->fetchAll('story');
 
         foreach($allStories as $key => $story)
@@ -2413,11 +2608,15 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
+        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
+
         if($action == 'change')   return $story->status != 'closed';
         if($action == 'review')   return $story->status == 'draft' or $story->status == 'changed';
         if($action == 'close')    return $story->status != 'closed';
         if($action == 'activate') return $story->status == 'closed';
         if($action == 'assignto') return $story->status != 'closed';
+        if($action == 'batchcreate' and $story->parent > 0) return false;
+        if($action == 'batchcreate' and ($story->status == 'closed' or $story->status == 'draft' or $story->stage != 'wait')) return false;
 
         return true;
     }
@@ -2446,8 +2645,31 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'title');
 
+        $parents    = array();
+        $tmpStories = array();
         foreach($stories as $story)
         {
+            $tmpStories[$story->id] = $story;
+            if($story->parent > 0) $parents[$story->parent] = $story->parent;
+        }
+        $parents = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($parents)->fetchAll('id');
+
+        foreach($stories as $storyID => $story)
+        {
+            if($story->parent > 0)
+            {
+                if(isset($stories[$story->parent]))
+                {
+                    $stories[$story->parent]->children[$story->id] = $story;
+                    unset($stories[$storyID]);
+                }
+                else
+                {
+                    $parent = $parents[$story->parent];
+                    $story->parentName = $story->title;
+                }
+            }
+
             $story->planTitle = '';
             $storyPlans = explode(',', trim($story->plan, ','));
             foreach($storyPlans as $planID) $story->planTitle .= zget($plans, $planID, '') . ' ';
@@ -2484,14 +2706,21 @@ class storyModel extends model
             $class = "c-{$id}";
             $title = '';
 
-            if ($id == 'assignedTo')
+            if($id == 'assignedTo')
             {
                 $title = zget($users, $story->assignedTo, $story->assignedTo);
                 if($story->assignedTo == $account) $class .= ' red';
             }
-            else if($id == 'openedBy') $title = zget($users, $story->openedBy, $story->openedBy);
-            else if($id == 'title') $title = $story->title;
-            else if($id == 'plan')
+            elseif($id == 'openedBy')
+            {
+                $title = zget($users, $story->openedBy, $story->openedBy);
+            }
+            elseif($id == 'title')
+            {
+                $title = $story->title;
+                if(!empty($story->children)) $class .= ' has-child';
+            }
+            elseif($id == 'plan')
             {
                 $title  = $story->planTitle;
                 $class .= ' text-ellipsis';
@@ -2524,9 +2753,12 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
+                if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
                 if($story->branch and isset($branches[$story->branch])) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
+                if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
                 echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color'") : "<span style='color: $story->color'>{$story->title}</span>";
+                if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 break;
             case 'plan':
                 echo $story->planTitle;
@@ -2634,6 +2866,7 @@ class storyModel extends model
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
                 common::printIcon('story', 'edit',       $vars, $story, 'list');
                 if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
+                common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=0&storyID=$story->id", $story, 'list', 'treemap-alt', '', '', '', '', $this->lang->story->subdivide);
                 break;
             }
             echo '</td>';
