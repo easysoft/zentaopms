@@ -124,12 +124,12 @@
         <?php
         common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
         common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', '', '', 'showinonlybody');
-        if($story->status != 'closed' and $story->status != 'draft' and $story->parent <= 0 and !isonlybody())
+        if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
         {
             $divideLang = ($story->type == 'story' || !$story->type) ? $lang->story->subdivide : $lang->story->splitRequirent; 
             $misc       = "class='btn divideStory' data-toggle='modal' data-type='iframe' data-width='95%'";
             $link       = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
-            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-sitemap'></i> " . $divideLang, '', $misc);
+            if(common::hasPriv('story', 'batchCreate')) echo html::a($link, "<i class='icon icon-treemap-alt'></i> " . $divideLang, '', $misc);
         }
 
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);

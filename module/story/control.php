@@ -294,6 +294,13 @@ class story extends control
      */
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $project = 0, $plan = 0, $type = 'story')
     {
+        /* Check can subdivide or not. */
+        if($storyID)
+        {
+            $story = $this->story->getById($storyID);
+            if($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) die(js::alert($this->lang->story->errorNotSubdivide));
+        }
+
         if(!empty($_POST))
         {
             $mails = $this->story->batchCreate($productID, $branch, $type);

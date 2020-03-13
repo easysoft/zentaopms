@@ -216,6 +216,7 @@ $lang->story->needNotReview         = '不需要评审';
 $lang->story->successSaved          = "{$lang->storyCommon}成功添加，";
 $lang->story->confirmDelete         = "您确认删除该{$lang->storyCommon}吗?";
 $lang->story->errorEmptyChildStory  = "『细分{$lang->storyCommon}』不能为空。";
+$lang->story->errorNotSubdivide     = "状态不是激活，或者阶段不是未开始的{$lang->storyCommon}，或者是子需求，则不能细分。";
 $lang->story->mustChooseResult      = '必须选择评审结果';
 $lang->story->mustChoosePreVersion  = '必须选择回溯的版本';
 $lang->story->noStory               = "暂时没有{$lang->storyCommon}。";
