@@ -64,7 +64,12 @@
         <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
         <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
         <td class='text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
-        <td class='text-left nobr' title="<?php echo $story->title?>"><?php echo html::a($storyLink, $story->title);?></td>
+        <td class='text-left nobr' title="<?php echo $story->title?>">
+          <?php
+          if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+          echo html::a($storyLink, $story->title);
+          ?>
+        </td>
         <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>
         <?php if($productType != 'normal'):?>

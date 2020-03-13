@@ -23,7 +23,7 @@ $(document).ready(function()
                     }
                 }
             }
-            var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID='+ ($(select).val() || '0') + '&onlyOption=true&status=noclosed&limit=0&type=null');
+            var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID='+ ($(select).val() || '0') + '&onlyOption=true&status=noclosed&limit=0&type=null&hasParent=0');
             var $story = $('#story' + index);
             if($story.data('loadLink') !== link)
             {

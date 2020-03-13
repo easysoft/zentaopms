@@ -1610,10 +1610,11 @@ class storyModel extends model
      * @param  int           $limit
      * @param  string        $type
      * @param  string        $storyType    requirement|story
+     * @param  bool          $hasParent
      * @access public
      * @return array
      */
-    public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story')
+    public function getProductStoryPairs($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $order = 'id_desc', $limit = 0, $type = 'full', $storyType = 'story', $hasParent = true)
     {
         if($branch) $branch = "0,$branch";//Fix bug 1059.
         $stories = $this->dao->select('t1.id, t1.title, t1.module, t1.pri, t1.estimate, t2.name AS product')
@@ -1622,6 +1623,7 @@ class storyModel extends model
             ->beginIF($productID)->andWhere('t1.product')->in($productID)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF(!$hasParent)->andWhere('t1.parent')->ge(0)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($storyType)
