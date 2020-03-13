@@ -33,6 +33,7 @@
     foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
+        if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         if($menuItem->name == 'more')
         {
