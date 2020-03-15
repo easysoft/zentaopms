@@ -1597,7 +1597,7 @@ class storyModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
-        return $this->mergePlanTitle($productID, $stories, $branch);
+        return $this->mergePlanTitle($productID, $stories, $branch, $type);
     }
 
     /**
@@ -1757,7 +1757,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $this->mergePlanTitle($productID, $stories, $branch);
+        return $this->mergePlanTitle($productID, $stories, $branch, $type);
     }
 
     /**
@@ -1783,7 +1783,7 @@ class storyModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
-        return $this->mergePlanTitle($productID, $stories, $branch);
+        return $this->mergePlanTitle($productID, $stories, $branch, $type);
     }
 
     /**
@@ -2106,7 +2106,7 @@ class storyModel extends model
         $productIdList = array();
         foreach($stories as $story) $productIdList[$story->product] = $story->product;
 
-        return $this->mergePlanTitle($productIdList, $stories);
+        return $this->mergePlanTitle($productIdList, $stories, 0, $storyType);
     }
 
     /**
@@ -2633,7 +2633,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function mergePlanTitle($productID, $stories, $branch = 0)
+    public function mergePlanTitle($productID, $stories, $branch = 0, $type = 'story')
     {
         $query = $this->dao->get();
         if(is_array($branch))
@@ -2646,6 +2646,26 @@ class storyModel extends model
             ->where('product')->in($productID)
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id', 'title');
+
+        /* For requirement children. */
+        if($type == 'requirement' && $this->config->storyCommon == 0)
+        {
+            $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
+              ->where('AID')->in(array_keys($stories))  
+              ->andWhere('AType')->eq('requirement')  
+              ->andWhere('BType')->eq('story')  
+              ->andWhere('relation')->eq('subdivideinto')  
+              ->fetchAll();
+
+            $group = array();
+            foreach($relations as $relation) $group[$relation->AID][] = $relation->BID; 
+
+            foreach($stories as $story) 
+            {
+                if(!isset($group[$story->id])) continue;
+                $story->children = $this->getByList($group[$story->id]); 
+            }
+        }
 
         $parents    = array();
         $tmpStories = array();
@@ -2697,7 +2717,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable')
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
     {
         $canView   = common::hasPriv('story', 'view');
         $storyLink = helper::createLink('story', 'view', "storyID=$story->id");
@@ -2724,7 +2744,7 @@ class storyModel extends model
             }
             elseif($id == 'plan')
             {
-                $title  = $story->planTitle;
+                $title  = isset($story->planTitle) ? $story->planTitle : '';
                 $class .= ' text-ellipsis';
             }
             else if($id == 'sourceNote')
@@ -2755,6 +2775,7 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
+                if($storyType == 'requirement') echo '<span class="label label-badge label-light">SR</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
                 if($story->branch and isset($branches[$story->branch])) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
@@ -2763,7 +2784,7 @@ class storyModel extends model
                 if(!empty($story->children)) echo '<a class="story-toggle" data-id="' . $story->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 break;
             case 'plan':
-                echo $story->planTitle;
+                echo isset($story->planTitle) ? $story->planTitle : '';
                 break;
             case 'branch':
                 echo zget($branches, $story->branch, '');
