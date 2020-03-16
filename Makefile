@@ -81,7 +81,6 @@ zentaoxx:
 	cp -r xuan/xxb/config/ext/maps.php zentaoxx/config/ext/
 	cp -r xuan/xxb/apischeme.json zentaoxx/
 	cp $(XUANPATH)/xxb/config/ext/maps.php zentaoxx/config/ext/
-	cp $(XUANPATH)/xxb/apischeme.json zentaoxx/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
