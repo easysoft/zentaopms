@@ -1,6 +1,6 @@
 <?php
 $lang->ci->common  = 'CI';
 
-$lang->ci->job     = 'Build';
-$lang->ci->task    = 'Build Task';
-$lang->ci->history = 'Build History';
+$lang->ci->job     = 'Job';
+$lang->ci->task    = 'Task';
+$lang->ci->history = 'History';
