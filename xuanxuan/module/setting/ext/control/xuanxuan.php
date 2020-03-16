@@ -24,9 +24,9 @@ class setting extends control
                 if(empty($setting->sslkey)) $errors['sslkey'] = $this->lang->im->errorSSLKey;
             }
 
-            if($setting->turnon and strpos($setting->server, '127.0.0.1') !== false) $errors[] = $this->lang->im->xxdServerError;
-            if(strpos($setting->server, 'https://') !== 0 and strpos($setting->server, 'http://') !== 0) $errors[] = $this->lang->im->xxdSchemeError;
-            if(empty($setting->server)) $errors[] = $this->lang->im->xxdServerEmpty;
+            if($setting->turnon and strpos($setting->server, '127.0.0.1') !== false) $errors['server'] = $this->lang->im->xxdServerError;
+            if(strpos($setting->server, 'https://') !== 0 and strpos($setting->server, 'http://') !== 0) $errors['server'] = $this->lang->im->xxdSchemeError;
+            if(empty($setting->server)) $errors['server'] = $this->lang->im->xxdServerEmpty;
 
             if($errors) $this->send(array('result' => 'fail', 'message' => $errors));
 
