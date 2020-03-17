@@ -1,4 +1,5 @@
 .main-actions{display: none}
+#main{margin-bottom: 40px;}
 #mainMenu .pull-left>a{display: none}
 #mainMenu .pull-left .divider{display: none}
 #mainMenu .pull-right{display: none}
