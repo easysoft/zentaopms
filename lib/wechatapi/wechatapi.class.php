@@ -59,7 +59,7 @@ class wechatapi
         $users = array();
         foreach($depts->deptList as $deptID)
         {
-            $response = $this->queryAPI($this->apiUrl . "user/simplelist?access_token={$this->token}&department_id={$deptID}");
+            $response = $this->queryAPI($this->apiUrl . "user/simplelist?access_token={$this->token}&department_id={$deptID}&fetch_child=1");
             if($this->isError()) return array('result' => 'fail', 'message' => $this->errors);
 
             foreach($response->userlist as $user) $users[$user->name] = $user->userid;
