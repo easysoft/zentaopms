@@ -2062,6 +2062,14 @@ class storyModel extends model
             ->fetchAll();
     }
 
+    /**
+     * Get parent story pairs.
+     * 
+     * @param  int    $productID 
+     * @param  string $append 
+     * @access public
+     * @return void
+     */
     public function getParentStoryPairs($productID, $append = '')
     {
         $stories = $this->dao->select('id, title')->from(TABLE_STORY)

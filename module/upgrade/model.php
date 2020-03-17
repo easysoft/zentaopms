@@ -568,6 +568,19 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('12.0.1'));
             $this->importRepoFromConfig();
             $this->appendExec('12_0_1');
+        case '12_1':
+            $this->saveLogs('Execute 12_1');
+
+            if(!isset($this->config->isINT) or !($this->config->isINT))
+            {
+                if(!$executeXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+            }
+
+            $this->appendExec('12_1');
         }
 
         $this->deletePatch();

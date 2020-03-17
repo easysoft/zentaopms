@@ -65,6 +65,7 @@ zentaoxx:
 	cp -r xuan/xxb/module/im zentaoxx/module/
 	cp -r xuan/xxb/module/client zentaoxx/module/
 	cp -r xuan/xxb/module/license zentaoxx/module/
+	cp -r xuan/xxb/module/owt zentaoxx/module/
 	mkdir -p zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view
@@ -79,9 +80,6 @@ zentaoxx:
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
 	cp -r xuan/xxb/config/ext/xxb.php zentaoxx/config/ext/
 	cp -r xuan/xxb/config/ext/maps.php zentaoxx/config/ext/
-	cp -r xuan/xxb/apischeme.json zentaoxx/
-	cp $(XUANPATH)/xxb/config/ext/maps.php zentaoxx/config/ext/
-	cp $(XUANPATH)/xxb/apischeme.json zentaoxx/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
