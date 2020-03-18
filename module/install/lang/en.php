@@ -220,7 +220,7 @@ EOD;
 
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = 'Y Disk-Free NetDisk';
+$lang->install->ydisk->name  = 'YDisk';
 $lang->install->ydisk->logo  = 'images/main/ydisk.ico';
 $lang->install->ydisk->url   = 'http://www.ydisk.cn';
 $lang->install->ydisk->desc  = <<<EOD
