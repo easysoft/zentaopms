@@ -23,6 +23,8 @@ class myMisc extends misc
         $loginInfo->ui->defaultUser = new stdclass();
         $loginInfo->ui->defaultUser->server  = common::getSysURL();;
         $loginInfo->ui->defaultUser->account = $this->app->user->account;
+        $loginInfo->ui->defaultUser->lock    = false;
+        $loginInfo->ui->defaultUser->ldap    = true;
         $loginInfo = json_encode($loginInfo);
 
         $loginFile = $clientDir . 'config.json';

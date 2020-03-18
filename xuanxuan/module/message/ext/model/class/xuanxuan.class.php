@@ -20,6 +20,7 @@ class xuanxuanMessage extends messageModel
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
                 unset($_GET['onlybody']);
                 $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'xhtml');
+                $url = "xxc:openInApp/zentao-integrated/" . urlencode($url);
 
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
