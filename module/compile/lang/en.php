@@ -1,7 +1,7 @@
 <?php
-$lang->compile->common = 'Build';
-$lang->compile->browse = 'Build History';
-$lang->compile->logs   = 'Build Log';
+$lang->compile->common = 'Compile';
+$lang->compile->browse = 'History';
+$lang->compile->logs   = 'Log';
 
 $lang->compile->id     = 'ID';
 $lang->compile->name   = 'Name';
