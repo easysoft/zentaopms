@@ -57,6 +57,7 @@ class myMisc extends misc
 
             $this->view->os = $os;
 
+            /* Finish task #6990. */
             $releasedInDB = $this->dao->select('*')->from(TABLE_IM_CLIENT)->where('version')->eq($this->config->xuanxuan->version)->andWhere('status')->eq('released')->fetch();
             if($releasedInDB)
             {
