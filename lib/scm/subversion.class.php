@@ -447,7 +447,7 @@ class Subversion
 
                             $line = $lines[$i];
                             if(strpos($line, '\ No newline at end of file') === 0)continue;
-                            $sign = empty($line) ? '' : $line{0};
+                            $sign = empty($line) ? '' : $line[0];
                             $type = $sign != '-' ? $sign == '+' ? 'new' : 'all' : 'old';
                             if($sign == '-' || $sign == '+') $line = substr_replace($line, ' ', 1, 0);
 

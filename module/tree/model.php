@@ -1668,7 +1668,7 @@ class treeModel extends model
             $createdVersion = $this->dao->select($versionField)->from($table)->where('id')->eq($rootID)->fetch($versionField);
             if($createdVersion)
             {
-                if(is_numeric($createdVersion{0}) and version_compare($createdVersion, '4.1', '<=')) return false;
+                if(is_numeric($createdVersion[0]) and version_compare($createdVersion, '4.1', '<=')) return false;
                 return true;
             }
         }
