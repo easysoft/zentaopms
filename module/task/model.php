@@ -579,6 +579,7 @@ class taskModel extends model
             $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
 
+            $currentTask->assignedTo = $oldTask->assignedTo;
             if(!empty($this->post->assignedTo))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
@@ -1155,8 +1156,8 @@ class taskModel extends model
         $estimate = new stdclass();
         $estimate->date     = zget($task, 'realStarted', date(DT_DATE1));
         $estimate->task     = $taskID;
-        $estimate->consumed = zget($task, 'consumed', 0);
-        $estimate->left     = zget($task, 'left', 0);
+        $estimate->consumed = zget($_POST, 'consumed', 0);
+        $estimate->left     = zget($_POST, 'left', 0);
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
@@ -1378,14 +1379,20 @@ class taskModel extends model
         }
 
         $estimate = new stdclass();
-        $estimate->date     = zget($task, 'finishedDate', date(DT_DATE1));
+        $estimate->date     = zget($_POST, 'finishedDate', date(DT_DATE1));
         $estimate->task     = $taskID;
-        $estimate->consumed = zget($task, 'consumed', 0);
-        $estimate->left     = zget($task, 'left', 0);
+        $estimate->left     = 0;
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
-
         $estimate->consumed = $consumed;
+        if(!empty($oldTask->team))
+        {
+            foreach($oldTask->team as $teamAccount => $team)
+            {
+                if($teamAccount == $this->app->user->account) continue;
+                $estimate->left += $team->left;
+            }
+        }
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team))
