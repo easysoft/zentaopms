@@ -124,7 +124,7 @@ class GitRepo
         $branches = array();
         foreach($list as $localBranch)
         {
-            if($localBranch{0} == '*') $localBranch = substr($localBranch, 1);
+            if($localBranch[0] == '*') $localBranch = substr($localBranch, 1);
 
             $localBranch = trim($localBranch);
             if(empty($localBranch))continue;
@@ -216,7 +216,7 @@ class GitRepo
         foreach($list as $line)
         {
             if(empty($line)) continue;
-            if($line{0} == '^') $line = substr($line, 1);
+            if($line[0] == '^') $line = substr($line, 1);
             preg_match('/^([0-9a-f]{39,40})\s.*\((\S+)\s+([\d-]+)\s(.*)\s(\d+)\)(.*)$/U', $line, $matches);
 
             if(isset($matches[1]) and $matches[1] != $revision)
@@ -385,7 +385,7 @@ class GitRepo
 
                             $line = $lines[$i];
                             if(strpos($line, '\ No newline at end of file') === 0)continue;
-                            $sign = empty($line) ? '' : $line{0};
+                            $sign = empty($line) ? '' : $line[0];
                             if($sign == '-' and $newFile) $sign = '+';
                             $type = $sign != '-' ? $sign == '+' ? 'new' : 'all' : 'old';
                             if($sign == '-' || $sign == '+')

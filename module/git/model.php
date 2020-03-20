@@ -361,7 +361,7 @@ class gitModel extends model
         chdir($repo->path);
         exec("{$this->client} config core.quotepath false");
         $subPath = substr($path, strlen($repo->path));
-        if($subPath{0} == '/' or $subPath{0} == '\\') $subPath = substr($subPath, 1);
+        if($subPath[0] == '/' or $subPath[0] == '\\') $subPath = substr($subPath, 1);
 
         $encodings = explode(',', $this->config->git->encodings);
         foreach($encodings as $encoding)
@@ -402,7 +402,7 @@ class gitModel extends model
         putenv('LC_CTYPE=en_US.UTF-8');
 
         $subPath = substr($path, strlen($repo->path));
-        if($subPath{0} == '/' or $subPath{0} == '\\') $subPath = substr($subPath, 1);
+        if($subPath[0] == '/' or $subPath[0] == '\\') $subPath = substr($subPath, 1);
 
         $encodings = explode(',', $this->config->git->encodings);
         foreach($encodings as $encoding)

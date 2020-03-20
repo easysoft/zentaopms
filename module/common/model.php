@@ -254,7 +254,7 @@ class commonModel extends model
             {
                 echo '<li class="user-profile-item">';
                 echo "<a href='" . helper::createLink('my', 'profile') . "' class='" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
-                echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
+                echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
@@ -1766,7 +1766,7 @@ EOD;
         {
             $timestamp = $queryString['time'];
             if(strlen($timestamp) > 10) $timestamp = substr($timestamp, 0, 10);
-            if(strlen($timestamp) != 10 or $timestamp{0} >= '4') $this->response('ERROR_TIMESTAMP');
+            if(strlen($timestamp) != 10 or $timestamp[0] >= '4') $this->response('ERROR_TIMESTAMP');
 
             $result = $this->get->token == md5($entry->code . $entry->key . $queryString['time']);
             if($result)

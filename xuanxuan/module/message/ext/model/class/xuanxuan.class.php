@@ -19,7 +19,7 @@ class xuanxuanMessage extends messageModel
                 $server   = $this->loadModel('im')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
                 unset($_GET['onlybody']);
-                $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'xhtml');
+                $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');
                 $url = "xxc:openInApp/zentao-integrated/" . urlencode($url);
 
                 $target = '';

@@ -66,6 +66,7 @@ zentaoxx:
 	cp -r xuan/xxb/module/client zentaoxx/module/
 	cp -r xuan/xxb/module/license zentaoxx/module/
 	cp -r xuan/xxb/module/owt zentaoxx/module/
+	cp xuan/xxb/apischeme.json zentaoxx/
 	mkdir -p zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view
