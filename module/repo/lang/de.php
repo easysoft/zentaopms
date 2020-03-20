@@ -100,7 +100,7 @@ $lang->repo->split          = "Split Mark";
 
 $lang->repo->objectRule   = 'Object Rule';
 $lang->repo->objectIdRule = 'Object ID Rule';
-$lang->repo->actionRule   = 'Action RUle';
+$lang->repo->actionRule   = 'Action Rule';
 $lang->repo->manHourRule  = 'Man-hour Rule';
 $lang->repo->ruleUnit     = "Unit";
 $lang->repo->ruleSplit    = "Multiple keywords are divided by ';'. For example: task multiple keywords: Task;task";
