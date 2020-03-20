@@ -22,7 +22,7 @@ $.initSidebar();
 <div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>
 <script>
 <?php if(!isset($config->global->browserNotice)):?>
-browserNotice = '<?php echo $lang->browserNotice?>'
+browserNotice = <?php echo json_encode($lang->browserNotice)?>;
 function ajaxIgnoreBrowser(){$.get(createLink('misc', 'ajaxIgnoreBrowser'));}
 $(function(){showBrowserNotice()});
 <?php endif;?>

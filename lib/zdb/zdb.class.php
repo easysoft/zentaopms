@@ -34,10 +34,11 @@ class zdb
     /**
      * Get all tables.
      * 
+     * @param  string $type  if type is 'base', just get base table.
      * @access public
      * @return array
      */
-    public function getAllTables()
+    public function getAllTables($type = 'base')
     {
         global $config;
 
@@ -46,13 +47,40 @@ class zdb
         while($table = $stmt->fetch(PDO::FETCH_ASSOC)) 
         {
             $tableType = strtolower($table['Table_type']);
-            if($tableType != 'base table') continue;
+            if($type == 'base' and $tableType != 'base table') continue;
 
             $tableName = $table["Tables_in_{$config->db->name}"];
-            $allTables[$tableName] = 'table';
+            $allTables[$tableName] = $tableType == 'base table' ? 'table' : $tableType;
         }
 
         return $allTables;
+    }
+
+    /**
+     * Get table fields.
+     * 
+     * @param  string $table 
+     * @access public
+     * @return array
+     */
+    public function getTableFields($table)
+    {
+        try
+        {
+            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_LOWER);
+            $sql = "DESC $table";
+            $rawFields = $this->dbh->query($sql)->fetchAll();
+            $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
+        }
+        catch (PDOException $e)
+        {
+            $this->sqlError($e);
+        }
+
+        $fields = array();
+        foreach($rawFields as $field) $fields[$field->field] = $field;
+
+        return $fields;
     }
 
     /**

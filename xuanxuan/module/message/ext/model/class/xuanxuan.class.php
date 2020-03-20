@@ -20,12 +20,13 @@ class xuanxuanMessage extends messageModel
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
                 unset($_GET['onlybody']);
                 $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');
+                $url = "xxc:openInApp/zentao-integrated/" . urlencode($url);
 
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
                 $target = trim($target, ',');
-                $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->fetchAll('id');
+                $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->andWhere('account')->ne($this->app->user->account)->fetchAll('id');
                 $target = array_keys($target);
 
                 if($target) $this->loadModel('im')->messageCreateNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));

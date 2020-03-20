@@ -270,8 +270,11 @@ class productplan extends control
                 foreach($order as $id)
                 {
                     if(empty($id)) continue;
+                    if(!isset($planStories[$id])) continue;
                     $stories[$id] = $planStories[$id];
+                    unset($planStories[$id]);
                 }
+                if($planStories) $stories += $planStories;
                 $planStories = $stories;
                 unset($stories);
             }
