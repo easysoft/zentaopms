@@ -12,16 +12,16 @@
 class zdb
 {
     /**
-     * dbh 
-     * 
-     * @var object   
+     * dbh
+     *
+     * @var object
      * @access public
      */
     public $dbh;
 
     /**
-     * Construct 
-     * 
+     * Construct
+     *
      * @access public
      * @return void
      */
@@ -33,7 +33,7 @@ class zdb
 
     /**
      * Get all tables.
-     * 
+     *
      * @param  string $type  if type is 'base', just get base table.
      * @access public
      * @return array
@@ -44,7 +44,7 @@ class zdb
 
         $allTables = array();
         $stmt      = $this->dbh->query("show full tables");
-        while($table = $stmt->fetch(PDO::FETCH_ASSOC)) 
+        while($table = $stmt->fetch(PDO::FETCH_ASSOC))
         {
             $tableType = strtolower($table['Table_type']);
             if($type == 'base' and $tableType != 'base table') continue;
@@ -58,8 +58,8 @@ class zdb
 
     /**
      * Get table fields.
-     * 
-     * @param  string $table 
+     *
+     * @param  string $table
      * @access public
      * @return array
      */
@@ -74,7 +74,8 @@ class zdb
         }
         catch (PDOException $e)
         {
-            $this->sqlError($e);
+            global $dao;
+            $dao->sqlError($e);
         }
 
         $fields = array();
@@ -84,10 +85,107 @@ class zdb
     }
 
     /**
-     * Dump db. 
-     * 
-     * @param  string $fileName 
-     * @param  array  $tables 
+     * Diff current table fields with a fields array.
+     *
+     * @param  string $table
+     * @param  array  $fields
+     * @access public
+     * @return array
+     */
+    public function diffTable($table, $fields)
+    {
+        $tableFields = $this->getTableFields($table);
+
+        $diff = array_udiff_assoc($fields, $tableFields,
+            function($a, $b)
+            {
+                return (array)$a == (array)$b ? 0 : 1;
+            }
+        );
+
+        return $diff;
+    }
+
+    /**
+     * Add a column to a table, or modify a existing column.
+     *
+     * @param  string  $table
+     * @param  object  $column
+     * @param  boolean $add    if true, add $column as a new column, otherwise modify a existing column to $column.
+     * @access public
+     * @return object
+     */
+    public function updateColumn($table, $column, $add = true)
+    {
+        $return = new stdclass();
+        $return->result = true;
+        $return->error  = '';
+
+        $query = "ALTER TABLE `$table` " . ($add ? 'ADD' : 'MODIFY COLUMN') . " `$column->field` $column->type" . ($column->null == 'NO' ? ' NOT NULL' : '') . (is_null($column->default) ? '' : " DEFAULT '$column->default'") . (empty($column->extra) ? '' : " $column->extra") . ';';
+
+        try
+        {
+            $this->dbh->exec($query);
+            return $return;
+        }
+        catch(PDOException $e)
+        {
+            $return->result = false;
+            $return->error  = $e->getMessage();
+            $return->sql    = $query;
+            return $return;
+        }
+    }
+
+    /**
+     * Create a table with fields.
+     *
+     * @param  string $name
+     * @param  array  $fields
+     * @access public
+     * @return object
+     */
+    public function createTable($name, $fields)
+    {
+        $return = new stdclass();
+        $return->result = true;
+        $return->error  = '';
+        $createTableQuery = "CREATE TABLE `$name` (";
+
+        foreach($fields as $field)
+        {
+            $createColumnQuery = "`$field->field` $field->type" . ($field->null == 'NO' ? ' NOT NULL' : '') . (is_null($field->default) ? '' : " DEFAULT '$field->default'") . (empty($field->extra) ? '' : " $field->extra") . ", ";
+            if(!empty($field->key))
+            {
+                if($field->key === 'PRI') $createColumnQuery .= "PRIMARY KEY (`{$field->field}`), ";
+                if($field->key === 'MUL') $createColumnQuery .= "KEY `{$field->field}` (`{$field->field}`), ";
+                if($field->key === 'UNI') $createColumnQuery .= "UNIQUE KEY `{$field->field}` (`{$field->field}`), ";
+            }
+            $createTableQuery .= $createColumnQuery;
+        }
+
+        $createTableQuery = rtrim($createTableQuery, ', ');
+        $createTableQuery .= ") ENGINE=MyISAM DEFAULT CHARSET=utf8;";
+
+        try
+        {
+            $this->dbh->exec($createTableQuery);
+            return $return;
+        }
+        catch(PDOException $e)
+        {
+            $return->result = false;
+            $return->error  = $e->getMessage();
+            $return->sql    = $createTableQuery;
+            return $return;
+        }
+    }
+
+    /**
+     * Dump db.
+     *
+     * @param  string $fileName
+     * @param  array  $tables
      * @access public
      * @return object
      */
@@ -167,10 +265,11 @@ class zdb
     }
 
     /**
-     * Import DB 
-     * 
+     * Import DB
+     *
+     * @param  string $fileName
      * @access public
-     * @return object;
+     * @return object
      */
     public function import($fileName)
     {
@@ -238,10 +337,10 @@ class zdb
 
     /**
      * Get schema SQL.
-     * 
-     * @param  string    $table 
+     *
+     * @param  string $table
      * @access public
-     * @return string
+     * @return object
      */
     public function getSchemaSQL($table, $type = 'table')
     {
