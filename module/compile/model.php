@@ -116,12 +116,8 @@ class compileModel extends model
 
         if(!$job) return false;
 
-        $tagData = '';
-        if($compile->tag)
-        {
-            $tagData = new stdclass();
-            $tagData->PARAM_TAG = $compile->tag;
-        }
+        $tagData = new stdclass();
+        $tagData->PARAM_TAG = $compile->tag;
 
         $buildUrl = $this->getBuildUrl($job);
         $build    = new stdclass();

@@ -90,12 +90,13 @@ class jobModel extends model
     {
         $job = fixer::input('post')
             ->setDefault('atDay', '')
-            ->setIF($this->post->repoType != 'Subversion', 'svnDir', '')
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('repoType')
             ->get();
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+
+        $job->svnDir = '';
         if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
         {
             $job->svnDir = array_pop($_POST['svnDir']);
@@ -107,7 +108,7 @@ class jobModel extends model
 
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF($this->post->repoType == 'Subversion', "svnDir", 'notempty')
+            ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
 
             ->autoCheck()
             ->exec();
@@ -128,7 +129,6 @@ class jobModel extends model
     {
         $job = fixer::input('post')
             ->setDefault('atDay', '')
-            ->setIF($this->post->repoType != 'Subversion', 'svnDir', '')
             ->setIF($this->post->triggerType != 'commit', 'comment', '')
             ->setIF($this->post->triggerType != 'schedule', 'atDay', '')
             ->setIF($this->post->triggerType != 'schedule', 'atTime', '')
@@ -138,6 +138,8 @@ class jobModel extends model
             ->remove('repoType')
             ->get();
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
+
+        $job->svnDir = '';
         if($job->triggerType == 'tag' and $this->post->repoType == 'Subversion')
         {
             $job->svnDir = array_pop($_POST['svnDir']);
@@ -149,7 +151,7 @@ class jobModel extends model
 
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
-            ->batchCheckIF($this->post->repoType == 'Subversion', "svnDir", 'notempty')
+            ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
 
             ->autoCheck()
             ->where('id')->eq($id)
@@ -225,7 +227,8 @@ class jobModel extends model
         $build->name = $job->name;
 
         $now  = helper::now();
-        $data = '';
+        $data = new stdclass();
+        $data->PARAM_TAG = '';
         if($job->triggerType == 'tag')
         {
             $repo    = $this->loadModel('repo')->getRepoById($job->repo);
@@ -254,8 +257,6 @@ class jobModel extends model
             {
                 $build->tag = $lastTag;
                 $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
-
-                $data = new stdClass();
                 $data->PARAM_TAG = $lastTag;
             }
         }
