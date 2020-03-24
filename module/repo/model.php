@@ -920,7 +920,7 @@ class repoModel extends model
 
         if($scm == 'Subversion')
         {
-            $path = '"' . $path . '"';
+            $path = '"' . str_replace(array('%3A', '%2F'), array(':', '/'), urlencode($path)) . '"';
             if(stripos($path, 'https://') === 1 or stripos($path, 'svn://') === 1)
             {
                 $ssh     = true;

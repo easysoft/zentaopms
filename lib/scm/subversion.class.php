@@ -23,7 +23,7 @@ class Subversion
     public function __construct($client, $root, $account, $password, $encoding = 'UTF-8')
     {
         putenv('LC_CTYPE=en_US.UTF-8');
-        $this->root     = rtrim($root, DIRECTORY_SEPARATOR);
+        $this->root     = str_replace(array('%3A', '%2F'), array(':', '/'), urlencode(rtrim($root, '/')));
         $this->account  = $account;
         $this->password = $password;
         $this->encoding = $encoding;
