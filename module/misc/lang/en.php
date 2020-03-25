@@ -72,6 +72,7 @@ $lang->misc->tableStatus = "Status";
 $lang->misc->novice      = "New to ZenTao? Do you want to start ZenTao Tutorial?";
 $lang->misc->showAnnual  = 'Add annual summary';
 $lang->misc->annualDesc  = 'After version 12.0, the new annual report function can be viewed on the 『Report->Annual Summary』 page. <a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">See now</a>.';
+$lang->misc->remind      = 'New feature reminders';
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenTao Administrator to repair tables.</h5>
     <h5>If you are the Administrator, login your ZenTao host and create a file named <span>%s</span>.</h5>
@@ -85,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = 'Latest Version';
 $lang->misc->feature->detailed = 'Detail';
 
+$lang->misc->releaseDate['12.2']        = '2020-03-25';
 $lang->misc->releaseDate['12.1']        = '2020-03-10';
 $lang->misc->releaseDate['12.0.1']      = '2020-02-12';
 $lang->misc->releaseDate['12.0']        = '2020-01-03';
@@ -124,6 +126,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['12.2'][]   = array('title'=>'Add parent-child story, compatible xuanxuan.', 'desc' => '');
 $lang->misc->feature->all['12.1'][]   = array('title'=>'Add Integration.', 'desc' => '<p>Add integration, and build in Jenkins</p>');
 $lang->misc->feature->all['12.0.1'][] = array('title'=>'Fix Bug.', 'desc' => '');
 

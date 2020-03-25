@@ -86,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['12.2']        = '2020-03-25';
 $lang->misc->releaseDate['12.1']        = '2020-03-10';
 $lang->misc->releaseDate['12.0.1']      = '2020-02-12';
 $lang->misc->releaseDate['12.0']        = '2020-01-03';
@@ -125,6 +126,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['12.2'][]   = array('title'=>'增加父子需求，兼容最新喧喧。', 'desc' => '');
 $lang->misc->feature->all['12.1'][]   = array('title'=>'增加构建功能', 'desc' => '<p>增加构建功能，集成Jenkins进行构建</p>');
 $lang->misc->feature->all['12.0.1'][] = array('title'=>'修复Bug', 'desc' => '');
 
