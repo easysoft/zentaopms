@@ -1015,6 +1015,22 @@ $lang->extension->methodOrder[40] = 'upload';
 $lang->extension->methodOrder[45] = 'erase';
 $lang->extension->methodOrder[50] = 'upgrade';
 
+/* Webhook. */
+$lang->resource->webhook = new stdclass();
+$lang->resource->webhook->browse = 'browse';
+$lang->resource->webhook->create = 'create';
+$lang->resource->webhook->edit   = 'edit';
+$lang->resource->webhook->delete = 'delete';
+$lang->resource->webhook->log    = 'log';
+$lang->resource->webhook->bind   = 'bind';
+
+$lang->webhook->methodOrder[5]  = 'browse';
+$lang->webhook->methodOrder[10] = 'create';
+$lang->webhook->methodOrder[15] = 'edit';
+$lang->webhook->methodOrder[20] = 'delete';
+$lang->webhook->methodOrder[25] = 'log';
+$lang->webhook->methodOrder[30] = 'bind';
+
 /* Others. */
 $lang->resource->api = new stdclass();
 $lang->resource->api->getModel    = 'getModel';
