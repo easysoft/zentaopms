@@ -226,6 +226,8 @@ class zdb
         /* Open this file. */
         $fp = fopen($fileName, 'w');
         fwrite($fp, "SET NAMES utf8;\n");
+
+        $this->dbh->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
         foreach($tables as $table => $tableType)
         {
             /* Check table exists. */
