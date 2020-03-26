@@ -534,6 +534,7 @@ class treeModel extends model
         {
             $extra['tip'] = false;
             $stmt = $this->dbh->query($this->buildMenuQuery($rootID, 'task', $startModule = 0));
+            if(empty($projects) and isset($this->config->project->task->allModule)) $this->config->project->task->allModule = 1;
             return $this->getDataStructure($stmt, 'task');
         }
 
@@ -1733,6 +1734,7 @@ class treeModel extends model
             /* Ignore useless module for task. */
             $allModule = (isset($this->config->project->task->allModule) and ($this->config->project->task->allModule == 1));
             if($keepModules and !isset($keepModules[$module->id]) and !$allModule) continue;
+            if($viewType == 'task' and empty($keepModules) and !$allModule) continue;
             if(isset($parent[$module->id]))
             {
                 $module->children = $parent[$module->id]->children;

@@ -23,6 +23,9 @@
 #dropMenu.show-right-col .col-left>.list-group{width:250px;max-width:260px;}
 #dropMenu.show-right-col .col-right>.list-group{width:250px;max-width:260px;}
 #dropMenu .col-footer{width:230px;}
+#dropMenu.has-search-text .list-group{overflow-x:hidden;}
+#dropMenu.has-search-text .col-footer{display:none;}
+#dropMenu.has-search-text .col-right .list-group {margin-bottom: 0px;}
 
 .main-actions .btn-toolbar .divider {margin-right:8px !important; margin-left: 8px !important;}
 .main-actions .btn-toolbar .btn + .btn {margin-left: 8px !important;}

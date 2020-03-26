@@ -71,6 +71,7 @@ $lang->resource->my = new stdclass();
 $lang->resource->my->index          = 'index';
 $lang->resource->my->todo           = 'todo';
 $lang->resource->my->calendar       = 'calendar';
+$lang->resource->my->requirement    = 'requirement';
 $lang->resource->my->task           = 'task';
 $lang->resource->my->bug            = 'bug';
 $lang->resource->my->testTask       = 'testTask';
@@ -93,13 +94,14 @@ $lang->my->methodOrder[15] = 'bug';
 $lang->my->methodOrder[20] = 'testTask';
 $lang->my->methodOrder[25] = 'testCase';
 $lang->my->methodOrder[30] = 'story';
-$lang->my->methodOrder[35] = 'project';
-$lang->my->methodOrder[40] = 'profile';
-$lang->my->methodOrder[45] = 'dynamic';
-$lang->my->methodOrder[50] = 'editProfile';
-$lang->my->methodOrder[55] = 'changePassword';
-$lang->my->methodOrder[60] = 'unbind';
-$lang->my->methodOrder[65] = 'manageContacts';
+$lang->my->methodOrder[35] = 'requirement';
+$lang->my->methodOrder[40] = 'project';
+$lang->my->methodOrder[45] = 'profile';
+$lang->my->methodOrder[50] = 'dynamic';
+$lang->my->methodOrder[55] = 'editProfile';
+$lang->my->methodOrder[60] = 'changePassword';
+$lang->my->methodOrder[65] = 'unbind';
+$lang->my->methodOrder[70] = 'manageContacts';
 $lang->my->methodOrder[75] = 'deleteContacts';
 $lang->my->methodOrder[80] = 'score';
 
@@ -1014,6 +1016,22 @@ $lang->extension->methodOrder[35] = 'deactivate';
 $lang->extension->methodOrder[40] = 'upload';
 $lang->extension->methodOrder[45] = 'erase';
 $lang->extension->methodOrder[50] = 'upgrade';
+
+/* Webhook. */
+$lang->resource->webhook = new stdclass();
+$lang->resource->webhook->browse = 'browse';
+$lang->resource->webhook->create = 'create';
+$lang->resource->webhook->edit   = 'edit';
+$lang->resource->webhook->delete = 'delete';
+$lang->resource->webhook->log    = 'log';
+$lang->resource->webhook->bind   = 'bind';
+
+$lang->webhook->methodOrder[5]  = 'browse';
+$lang->webhook->methodOrder[10] = 'create';
+$lang->webhook->methodOrder[15] = 'edit';
+$lang->webhook->methodOrder[20] = 'delete';
+$lang->webhook->methodOrder[25] = 'log';
+$lang->webhook->methodOrder[30] = 'bind';
 
 /* Others. */
 $lang->resource->api = new stdclass();

@@ -570,6 +570,7 @@ class upgradeModel extends model
             $this->appendExec('12_0_1');
         case '12_1':
             $this->saveLogs('Execute 12_1');
+            $this->execSQL($this->getUpgradeFile('12.1'));
 
             if(!isset($this->config->isINT) or !($this->config->isINT))
             {
@@ -744,6 +745,13 @@ class upgradeModel extends model
             case '11_7' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.7'));
             case '12_0' :
             case '12_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('12.0.1'));
+            case '12_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('12.1'));
+                if(!isset($this->config->isINT) or !($this->config->isINT))
+                {
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                }
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

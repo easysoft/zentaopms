@@ -4,6 +4,7 @@ $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';
 $lang->repo->create          = 'Create';
 $lang->repo->createAction    = 'Create Repo';
+$lang->repo->maintain        = 'Repo List';
 $lang->repo->edit            = 'Edit';
 $lang->repo->editAction      = 'Edit Repo';
 $lang->repo->delete          = 'Delete Repo';

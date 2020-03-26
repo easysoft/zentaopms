@@ -10,6 +10,7 @@ $lang->my->bug            = 'Bugs';
 $lang->my->testTask       = 'Builds';
 $lang->my->testCase       = 'Meine Fälle';
 $lang->my->story          = 'Meine Storys';
+$lang->my->requirement    = 'My Requirements';
 $lang->my->myProject      = "Meine {$lang->projectCommon}";
 $lang->my->profile        = 'Meine Profil';
 $lang->my->dynamic        = 'Meine Verlauf';

@@ -86,6 +86,7 @@ class gitModel extends model
             if(!$this->setRepo($repo)) return false;
 
             $branches = $this->repo->getBranches($repo);
+            $commits  = $repo->commits;
             foreach($branches as $branch)
             {
                 $this->printLog("sync branch $branch logs.");
@@ -101,7 +102,6 @@ class gitModel extends model
                     continue;
                 }
 
-                $commits = $repo->commits;
                 $version = $lastInDB->commit;
                 $logs    = $this->repo->getUnsyncCommits($repo);
                 $objects = array();

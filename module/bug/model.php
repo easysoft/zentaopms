@@ -955,6 +955,7 @@ class bugModel extends model
             /* Check required fields. */
             foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
             {
+                if($requiredField == 'resolvedBuild') continue;
                 if(!isset($_POST[$requiredField]) or strlen(trim($_POST[$requiredField])) == 0)
                 {
                     $fieldName = $requiredField;
@@ -964,7 +965,6 @@ class bugModel extends model
             }
 
             if($bug->resolution == 'duplicate' and !$this->post->duplicateBug) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
-            if($bug->resolution == 'fixed' and !$this->post->resolvedBuild)    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->resolvedBuild);
 
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
             if(empty($bug->buildProject)) dao::$errors['buildProject'][] = sprintf($this->lang->error->notempty, $this->lang->bug->project);

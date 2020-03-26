@@ -72,6 +72,7 @@ $lang->misc->tableStatus = "狀態";
 $lang->misc->novice      = "您可能初次使用禪道，是否進入新手模式？";
 $lang->misc->showAnnual  = '新增年度總結功能';
 $lang->misc->annualDesc  = '12.0版本後，新增年度總結功能，可以到『統計->年度總結』頁面查看。 是否現在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
+$lang->misc->remind      = '新功能提醒';
 
 $lang->misc->noticeRepair = "<h5>普通用戶請聯繫管理員進行修復</h5>
     <h5>管理員請登錄禪道所在的伺服器，創建<span>%s</span>檔案。</h5>
@@ -85,6 +86,7 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '詳情';
 
+$lang->misc->releaseDate['12.2']        = '2020-03-25';
 $lang->misc->releaseDate['12.1']        = '2020-03-10';
 $lang->misc->releaseDate['12.0.1']      = '2020-02-12';
 $lang->misc->releaseDate['12.0']        = '2020-01-03';
@@ -124,6 +126,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['12.2'][]   = array('title'=>'增加父子需求，兼容最新喧喧。', 'desc' => '');
 $lang->misc->feature->all['12.1'][]   = array('title'=>'增加構建功能', 'desc' => '<p>增加構建功能，整合Jenkins進行構建</p>');
 $lang->misc->feature->all['12.0.1'][] = array('title'=>'修復Bug', 'desc' => '');
 
