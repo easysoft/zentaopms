@@ -497,11 +497,15 @@ class zentao
         {
             $this->params = array_merge($this->params, array('t' => 'json'));
             $url         .= strpos($url, '?') ? http_build_query($this->params) : '?' . http_build_query($this->params);
-        } elseif (self::ztAccessMode == 'PATH_INFO')
+        }
+        elseif (self::ztAccessMode == 'PATH_INFO')
         {
             $params = implode('-', $this->params);
             $url    = $url . '/' . $params . '.json';
         }
+
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_COOKIE, $this->tokenAuth);
         curl_setopt($ch, CURLOPT_REFERER, self::ztURL);
         curl_setopt($ch, CURLOPT_URL, $url);
@@ -521,6 +525,8 @@ class zentao
     public function postUrl($url)
     {
         $ch = curl_init();
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         curl_setopt($ch, CURLOPT_COOKIE, $this->tokenAuth);
         curl_setopt($ch, CURLOPT_REFERER, self::ztURL);
         curl_setopt($ch, CURLOPT_URL, $url);
