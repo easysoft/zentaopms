@@ -35,6 +35,10 @@
             <td><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->job->frame; ?></th>
+            <td><?php echo html::select('frame', $lang->job->frameList, '', "class='form-control chosen'"); ?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->job->triggerType; ?></th>
             <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, '', "class='form-control chosen'");?></td>
             <td colspan="2"></td>

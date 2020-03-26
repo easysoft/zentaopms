@@ -37,6 +37,10 @@
             </td>
           </tr>
           <tr>
+            <th><?php echo $lang->job->frame; ?></th>
+            <td><?php echo html::select('frame', $lang->job->frameList, $job->frame, "class='form-control chosen'"); ?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->job->triggerType; ?></th>
             <?php if($repoType == 'Subversion') $lang->job->triggerTypeList['tag'] = $lang->job->dirChange;?>
             <td><?php echo html::select('triggerType', $lang->job->triggerTypeList, $job->triggerType, "class='form-control chosen'");?></td>
