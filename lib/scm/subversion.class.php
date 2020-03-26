@@ -105,7 +105,8 @@ class Subversion
 
         ksort($dirs);
         $tags   = array();
-        $prefix = empty(trim($path, '/')) ? '/' : '/' . trim($path, '/') . '/';
+        $trimed = trim($path, '/');
+        $prefix = empty($trimed) ? '/' : '/' . $trimed . '/';
         foreach($dirs as $dirNames)
         {
             ksort($dirNames);
