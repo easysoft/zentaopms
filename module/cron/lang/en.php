@@ -38,11 +38,11 @@ $lang->cron->toggleList['stop']  = 'Deactivate';
 $lang->cron->confirmDelete = 'Do you want to delete the cron?';
 $lang->cron->confirmTurnon = 'Do you want to turn off the cron?';
 $lang->cron->introduction  = <<<EOD
-<p>Cron is to perform scheduled actions, such as update burndown chart, backup, etc.</p>
+<p>Cron is set to do scheduled actions, such as update burndown chart, backup, etc.</p>
 <p>Features of Cron need to be improved, so it is turned off by default.</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
-<p>Do you want to turn it on?<a href="%s" target='hiddenwin'><strong>Turn On Scheduled Task<strong></a></p>
+<p>Do you want to turn it on?<a href="%s" target='hiddenwin'><strong>Turn On Cron<strong></a></p>
 EOD;
 
 $lang->cron->notice = new stdclass();
@@ -51,5 +51,5 @@ $lang->cron->notice->h    = 'Range:0-23';
 $lang->cron->notice->dom  = 'Range:1-31';
 $lang->cron->notice->mon  = 'Range:1-12';
 $lang->cron->notice->dow  = 'Range:0-6';
-$lang->cron->notice->help = 'Note：If the server is restarted, or the Cron is not working, it means the Cron has stopped. You can restart it by clicking 【Restart】 or refresh this page. If the last execution time is changed, it means the Cron is running.';
+$lang->cron->notice->help = 'Note：If the server is restarted or the Cron is not working, it means the Cron has stopped. You can restart it by clicking 【Restart】 or refresh this page. If the last execution time changes, it means the Cron is running.';
 $lang->cron->notice->errorRule = '"%s" is not valid';
