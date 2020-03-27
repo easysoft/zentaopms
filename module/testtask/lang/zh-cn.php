@@ -14,6 +14,7 @@ $lang->testtask->create           = "提交测试";
 $lang->testtask->reportChart      = '报表统计';
 $lang->testtask->reportAction     = '用例报表统计';
 $lang->testtask->delete           = "删除测试单";
+$lang->testtask->importUnit       = "导入测试结果";
 $lang->testtask->view             = "概况";
 $lang->testtask->edit             = "编辑测试单";
 $lang->testtask->browse           = "测试单列表";
@@ -79,6 +80,7 @@ $lang->testtask->lastRunner     = '最后执行人';
 $lang->testtask->lastRunDate    = '最后执行时间';
 $lang->testtask->date           = '测试时间';
 $lang->testtask->deleted        = "已删除";
+$lang->testtask->resultFile     = "测试结果";
 
 $lang->testtask->beginAndEnd    = '起止时间';
 $lang->testtask->to             = '至';

@@ -46,7 +46,10 @@ $status = $this->session->testTaskVersionStatus;
       <div class='datepicker-wrapper datepicker-date'><?php echo html::input('date', $endTime, "class='form-control form-date' onchange='changeDate(\"$beginTime\", this.value, \"$condition\")'");?></div>
     </div>
   </div>
-  <div class="btn-toolbar pull-right"><?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?></div>
+  <div class="btn-toolbar pull-right">
+    <?php common::printLink('testtask', 'importUnit', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnit, '', "class='btn'");?>
+    <?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
+  </div>
 </div>
 <?php endif;?>
 <div id='mainContent' class='main-table'>

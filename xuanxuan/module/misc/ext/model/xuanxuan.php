@@ -6,6 +6,7 @@ public function getRemind()
     $this->app->loadLang('im');
     $account     = str_replace('.', '_', $this->app->user->account);
     $xxInstalled = $account . 'installed';
+    $module      = $this->app->getModuleName();
 
     if(isset($this->config->xxserver->installed) and $this->config->xuanxuan->turnon and !isset($this->config->xxclient->$xxInstalled) and $this->config->global->flow == 'full')
     {

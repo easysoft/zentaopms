@@ -300,7 +300,7 @@ $lang->testtask = new stdclass();
 $lang->testtask->menu = new stdclass();
 $lang->testtask->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testtask->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
-$lang->testtask->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testtask->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testtask', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
 $lang->testtask->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testtask->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
 $lang->testtask->menu->caselib   = array('link' => '用例库|caselib|browse');

@@ -54,7 +54,8 @@
                 if($repoType == 'Subversion' and $job->svnDir)
                 {
                     $path = '';
-                    $svnDirs = empty(trim($job->svnDir, '/')) ? '' : $job->svnDir;
+                    $svnDirs = trim($job->svnDir, '/');
+                    $svnDirs = empty($svnDirs) ? '' : $job->svnDir;
                     $svnDirs = explode('/', $svnDirs);
                     foreach($svnDirs as $i => $svnDir)
                     {

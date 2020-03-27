@@ -1493,4 +1493,127 @@ class testtaskModel extends model
         }
         return array($toList, $ccList);
     }
+
+    /**
+     * Import unit results.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return string
+     */
+    public function importUnit($productID)
+    {
+        $frame = $this->post->frame;
+        unset($_POST['frame']);
+
+        /* Parse result xml. */
+        $unitFormat = zget($this->config->testtask->unitFormat, $frame, $this->config->testtask->unitFormat->common);
+        $fileName   = $this->session->resultFile;
+        $parsedXML  = simplexml_load_file($fileName);
+
+        /* Get testcase node. */
+        $matchPaths = $unitFormat['path'];
+        $nameFields = $unitFormat['name'];
+        $failure    = $unitFormat['failure'];
+        foreach($matchPaths as $matchPath)
+        {
+            $matchNodes = $parsedXML->xpath($matchPath);
+            if(count($matchNodes) != 0) break;
+        }
+
+        /* Get cases and results by parsed node. */
+        $now     = helper::now();
+        $cases   = array();
+        $titles  = array();
+        $results = array();
+        foreach($matchNodes as $i => $matchNode)
+        {
+            $case = new stdclass();
+            $case->product    = $productID;
+            $case->title      = '';
+            $case->pri        = 3;
+            $case->type       = 'feature';
+            $case->stage      = 'unittest';
+            $case->status     = 'normal';
+            $case->openedBy   = $this->app->user->account;
+            $case->openedDate = $now;
+            $case->version    = 1;
+
+            $attributes = $matchNode->attributes();
+            foreach($nameFields as $field) $case->title .= (string)$attributes[$field] . ' ';
+            $case->title = trim($case->title);
+
+            $result = new stdclass();
+            $result->case       = 0;
+            $result->version    = 1;
+            $result->caseResult = 'pass';
+            $result->lastRunner = $this->app->user->account;
+            $result->date       = $now;
+            $result->stepResults[0]['result'] = 'pass';
+            $result->stepResults[0]['real']   = '';
+            if(isset($matchNode->$failure))
+            {
+                $result->caseResult = 'fail';
+                $result->stepResults[0]['result'] = 'fail';
+                if(is_string($matchNode->$failure))
+                {
+                    $result->stepResults[0]['real'] = (string)$matchNode->$failure;
+                }
+                else
+                {
+                    $failureAttrs = $matchNode->$failure->attributes();
+                    $result->stepResults[0]['real'] = (string)$failureAttrs['message'];
+                }
+            }
+            $result->stepResults = serialize($result->stepResults);
+            $case->lastRunner    = $this->app->user->account;
+            $case->lastRunDate   = $now;
+            $case->lastRunResult = $result->caseResult;
+
+            $titles[]  = $case->title;
+            $cases[$i] = $case;
+            $results[$i] = $result;
+        }
+
+        /* Create task. */
+        $testtaskID = $this->create();
+        unlink($fileName);
+        if(dao::isError()) return false;
+
+        /* Import cases and link task and insert result. */
+        $existCases = $this->dao->select('*')->from(TABLE_CASE)->where('title')->in($titles)->andWhere('stage')->eq('unittest')->andWhere('deleted')->eq(0)->fetchPairs('title', 'id');
+        $this->loadModel('action');
+        foreach($cases as $i => $case)
+        {
+            if(!isset($existCases[$case->title]))
+            {
+                $this->dao->insert(TABLE_CASE)->data($case)->exec();
+                $caseID = $this->dao->lastInsertID();
+                $this->action->create('case', $caseID, 'Opened');
+            }
+            else
+            {
+                $caseID = $existCases[$case->title];
+            }
+
+            $testrun = new stdclass();
+            $testrun->task          = $testtaskID;
+            $testrun->case          = $caseID;
+            $testrun->version       = $case->version;
+            $testrun->lastRunner    = $case->lastRunner;
+            $testrun->lastRunDate   = $case->lastRunDate;
+            $testrun->lastRunResult = $case->lastRunResult;
+            $testrun->status        = 'done';
+
+            $this->dao->replace(TABLE_TESTRUN)->data($testrun)->exec();
+            $runID = $this->dao->lastInsertID();
+
+            $testresult = $results[$i];
+            $testresult->run = $runID;
+            $testresult->case = $caseID;
+            $this->dao->insert(TABLE_TESTRESULT)->data($testresult)->exec();
+        }
+
+        return $testtaskID;
+    }
 }

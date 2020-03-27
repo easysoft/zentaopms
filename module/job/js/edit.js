@@ -78,7 +78,11 @@ $('#triggerType').change(function()
         var repoID = $('#repo').val();
         var type   = 'Git';
         if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
-        if(type == 'Subversion') $('.svn-fields').removeClass('hidden');
+        if(type == 'Subversion')
+        {
+            $('.svn-fields').removeClass('hidden');
+            if($('.svn-fields td .input-group select').length == 0) $('#repo').change();
+        }
     }
 });
 
