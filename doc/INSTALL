@@ -24,13 +24,15 @@ We also build an allinone package for linux systems from the xampp tool.
 3.4 cd /opt/lampp, and execute sudo ./start or sudo ./start88 to start apache in 88 port and mysql in 3308 port.
 3.5 then you can visit zentao through http://localhost/zentao/
 
-4. install the source code. 
+4. install the source code.
 
 4.1 install one AMP package.  you can install other AMP package. Make sure the version of apache, php and mysql meets the needs of zetnao.
 4.2 download our zip package.
 4.3 unpack it.
     after download our zip package, save it to the apache's htdocs path and unpack it to zentaopms. make sure the zentaopms path can be
     visited through browse.
-4.4 start the installation
+4.4 copy file: cp www/install.php.tmp www/install.php.tmp
+4.5 start the installation
     open your browser and visit the zentaopms path, for example http://192.168.1.1/zentaopms/, then the install wizard will launch, you can install it
     step by step.
+4.6 if installation success delete file www/install.php

@@ -16,3 +16,4 @@ tmp/extension/*
 .idea
 .gitignore
 .DS_Store
+vendor/
