@@ -79,6 +79,7 @@ class testtaskModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
+            $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
             if($this->config->global->flow != 'onlyTest')
             {
                 $replace = ($key == 'product') ? $selectHtml : $productID;
@@ -1515,64 +1516,100 @@ class testtaskModel extends model
         $matchPaths = $unitFormat['path'];
         $nameFields = $unitFormat['name'];
         $failure    = $unitFormat['failure'];
+        $matchNodes = array();
         foreach($matchPaths as $matchPath)
         {
             $matchNodes = $parsedXML->xpath($matchPath);
             if(count($matchNodes) != 0) break;
         }
+        if(count($matchNodes) == 0) die(js::alert($this->lang->testtask->noImportData));
+
+        $parentPath  = '';
+        $caseNode    = $matchPath;
+        $parentNodes = array($parsedXML);
+        if(strpos($matchPath, '/') !== false)
+        {
+            $explodedPath = explode('/', $matchPath);
+            $caseNode     = array_pop($explodedPath);
+            $parentPath   = implode('/', $explodedPath);
+            $parentNodes  = $parsedXML->xpath($parentPath);
+        }
 
         /* Get cases and results by parsed node. */
-        $now     = helper::now();
-        $cases   = array();
-        $titles  = array();
-        $results = array();
-        foreach($matchNodes as $i => $matchNode)
+        $now        = helper::now();
+        $cases      = array();
+        $results    = array();
+        $suites     = array();
+        $caseTitles = array();
+        $suiteNames = array();
+        foreach($parentNodes as $suiteIndex => $parentNode)
         {
-            $case = new stdclass();
-            $case->product    = $productID;
-            $case->title      = '';
-            $case->pri        = 3;
-            $case->type       = 'feature';
-            $case->stage      = 'unittest';
-            $case->status     = 'normal';
-            $case->openedBy   = $this->app->user->account;
-            $case->openedDate = $now;
-            $case->version    = 1;
-
-            $attributes = $matchNode->attributes();
-            foreach($nameFields as $field) $case->title .= (string)$attributes[$field] . ' ';
-            $case->title = trim($case->title);
-
-            $result = new stdclass();
-            $result->case       = 0;
-            $result->version    = 1;
-            $result->caseResult = 'pass';
-            $result->lastRunner = $this->app->user->account;
-            $result->date       = $now;
-            $result->stepResults[0]['result'] = 'pass';
-            $result->stepResults[0]['real']   = '';
-            if(isset($matchNode->$failure))
+            $attributes = $parentNode->attributes();
+            $suite      = '';
+            if(isset($attributes['name']))
             {
-                $result->caseResult = 'fail';
-                $result->stepResults[0]['result'] = 'fail';
-                if(is_string($matchNode->$failure))
-                {
-                    $result->stepResults[0]['real'] = (string)$matchNode->$failure;
-                }
-                else
-                {
-                    $failureAttrs = $matchNode->$failure->attributes();
-                    $result->stepResults[0]['real'] = (string)$failureAttrs['message'];
-                }
+                $suite = new stdclass();
+                $suite->product   = $productID;
+                $suite->name      = (string)$attributes['name'];
+                $suite->type      = 'unit';
+                $suite->addedBy   = $this->app->user->account;
+                $suite->addedDate = $now;
+                $suiteNames[]     = $suite->name;
             }
-            $result->stepResults = serialize($result->stepResults);
-            $case->lastRunner    = $this->app->user->account;
-            $case->lastRunDate   = $now;
-            $case->lastRunResult = $result->caseResult;
+            $suites[$suiteIndex] = $suite;
 
-            $titles[]  = $case->title;
-            $cases[$i] = $case;
-            $results[$i] = $result;
+            foreach($parentNode->xpath($caseNode) as $caseIndex => $matchNode)
+            {
+                $case = new stdclass();
+                $case->product    = $productID;
+                $case->title      = '';
+                $case->pri        = 3;
+                $case->type       = 'unit';
+                $case->stage      = 'unittest';
+                $case->status     = 'normal';
+                $case->openedBy   = $this->app->user->account;
+                $case->openedDate = $now;
+                $case->version    = 1;
+
+                $attributes = $matchNode->attributes();
+                foreach($nameFields as $field)
+                {
+                    if(!isset($attributes[$field])) continue;
+                    $case->title .= (string)$attributes[$field] . ' ';
+                }
+                $case->title = trim($case->title);
+
+                $result = new stdclass();
+                $result->case       = 0;
+                $result->version    = 1;
+                $result->caseResult = 'pass';
+                $result->lastRunner = $this->app->user->account;
+                $result->date       = $now;
+                $result->stepResults[0]['result'] = 'pass';
+                $result->stepResults[0]['real']   = '';
+                if(isset($matchNode->$failure))
+                {
+                    $result->caseResult = 'fail';
+                    $result->stepResults[0]['result'] = 'fail';
+                    if(is_string($matchNode->$failure))
+                    {
+                        $result->stepResults[0]['real'] = (string)$matchNode->$failure;
+                    }
+                    else
+                    {
+                        $failureAttrs = $matchNode->$failure->attributes();
+                        $result->stepResults[0]['real'] = (string)$failureAttrs['message'];
+                    }
+                }
+                $result->stepResults = serialize($result->stepResults);
+                $case->lastRunner    = $this->app->user->account;
+                $case->lastRunDate   = $now;
+                $case->lastRunResult = $result->caseResult;
+
+                $titles[$suiteIndex][]            = $case->title;
+                $cases[$suiteIndex][$caseIndex]   = $case;
+                $results[$suiteIndex][$caseIndex] = $result;
+            }
         }
 
         /* Create task. */
@@ -1581,37 +1618,80 @@ class testtaskModel extends model
         if(dao::isError()) return false;
 
         /* Import cases and link task and insert result. */
-        $existCases = $this->dao->select('*')->from(TABLE_CASE)->where('title')->in($titles)->andWhere('stage')->eq('unittest')->andWhere('deleted')->eq(0)->fetchPairs('title', 'id');
         $this->loadModel('action');
-        foreach($cases as $i => $case)
+        $existSuites = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('name')->in($suiteNames)->andWhere('product')->eq($productID)->andWhere('type')->eq('unit')->andWhere('deleted')->eq(0)->fetchPairs('name', 'id');
+        foreach($suites as $suiteIndex => $suite)
         {
-            if(!isset($existCases[$case->title]))
+            $suiteID = 0;
+            if($suite)
             {
-                $this->dao->insert(TABLE_CASE)->data($case)->exec();
-                $caseID = $this->dao->lastInsertID();
-                $this->action->create('case', $caseID, 'Opened');
+                if(!isset($existSuites[$suite->name]))
+                {
+                    $this->dao->insert(TABLE_TESTSUITE)->data($suite)->exec();
+                    $suiteID = $this->dao->lastInsertID();
+                    $this->action->create('testsuite', $suiteID, 'opened');
+                }
+                else
+                {
+                    $suiteID = $existSuites[$suite->name];
+                }
+            }
+
+            if($suiteID)
+            {
+                $existCases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
+                    ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+                    ->where('t1.title')->in($caseTitles[$suiteIndex])
+                    ->andWhere('t1.product')->eq($productID)
+                    ->andWhere('t1.stage')->eq('unittest')
+                    ->andWhere('t1.deleted')->eq(0)
+                    ->fetchPairs('title', 'id');
             }
             else
             {
-                $caseID = $existCases[$case->title];
+                $existCases = $this->dao->select('*')->from(TABLE_CASE)->where('title')->in($caseTitles[$suiteIndex])->andWhere('product')->eq($productID)->andWhere('stage')->eq('unittest')->andWhere('deleted')->eq(0)->fetchPairs('title', 'id');
             }
 
-            $testrun = new stdclass();
-            $testrun->task          = $testtaskID;
-            $testrun->case          = $caseID;
-            $testrun->version       = $case->version;
-            $testrun->lastRunner    = $case->lastRunner;
-            $testrun->lastRunDate   = $case->lastRunDate;
-            $testrun->lastRunResult = $case->lastRunResult;
-            $testrun->status        = 'done';
+            foreach($cases[$suiteIndex] as $i => $case)
+            {
+                if(!isset($existCases[$case->title]))
+                {
+                    $this->dao->insert(TABLE_CASE)->data($case)->exec();
+                    $caseID = $this->dao->lastInsertID();
+                    $this->action->create('case', $caseID, 'Opened');
+                }
+                else
+                {
+                    $caseID = $existCases[$case->title];
+                }
 
-            $this->dao->replace(TABLE_TESTRUN)->data($testrun)->exec();
-            $runID = $this->dao->lastInsertID();
+                if($suiteID)
+                {
+                    $suitecase = new stdclass();
+                    $suitecase->suite = $suiteID;
+                    $suitecase->case  = $caseID;
+                    $suitecase->version = $case->version;
+                    $suitecase->product = $case->product;
+                    $this->dao->replace(TABLE_SUITECASE)->data($suitecase)->exec();
+                }
 
-            $testresult = $results[$i];
-            $testresult->run = $runID;
-            $testresult->case = $caseID;
-            $this->dao->insert(TABLE_TESTRESULT)->data($testresult)->exec();
+                $testrun = new stdclass();
+                $testrun->task          = $testtaskID;
+                $testrun->case          = $caseID;
+                $testrun->version       = $case->version;
+                $testrun->lastRunner    = $case->lastRunner;
+                $testrun->lastRunDate   = $case->lastRunDate;
+                $testrun->lastRunResult = $case->lastRunResult;
+                $testrun->status        = 'done';
+
+                $this->dao->replace(TABLE_TESTRUN)->data($testrun)->exec();
+                $runID = $this->dao->lastInsertID();
+
+                $testresult = $results[$suiteIndex][$i];
+                $testresult->run  = $runID;
+                $testresult->case = $caseID;
+                $this->dao->insert(TABLE_TESTRESULT)->data($testresult)->exec();
+            }
         }
 
         return $testtaskID;

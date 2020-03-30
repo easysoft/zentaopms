@@ -91,6 +91,7 @@ class bugModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->bug->menu as $key => $menu)
         {
+            $this->loadModel('qa')->setSubMenu('bug', $key, $productID);
             if($this->config->global->flow != 'onlyTest')
             {
                 $replace = $productID;

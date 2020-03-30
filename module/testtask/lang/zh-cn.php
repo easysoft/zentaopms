@@ -116,6 +116,8 @@ $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 $lang->testtask->noticeNoOther     = '该产品还没有其他测试单';
 $lang->testtask->noTesttask        = '暂时没有测试单';
 $lang->testtask->checkLinked       = '请检查测试单的产品是否与项目相关联';
+$lang->testtask->noImportData      = '导入的XML没有解析出数据。';
+$lang->testtask->unitXMLFormat     = '请选择Junit XML 格式的文件。';
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '所有用例';

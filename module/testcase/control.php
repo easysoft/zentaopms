@@ -142,6 +142,65 @@ class testcase extends control
     }
 
     /**
+     * Browse unit cases.
+     * 
+     * @param  int    $productID 
+     * @param  string $branch 
+     * @access public
+     * @return void
+     */
+    public function unit($productID = 0, $branch = '')
+    {
+        /* Set browseType, productID, moduleID and queryID. */
+        $productID = $this->product->saveState($productID, $this->products);
+        $branch    = ($branch === '') ? (int)$this->cookie->preBranch : (int)$branch;
+
+        /* Set menu, save session. */
+        $this->testcase->setMenu($this->products, $productID, $branch);
+        $this->session->set('caseList', $this->app->getURI(true));
+
+        /* Load lang. */
+        $this->app->loadLang('testtask');
+        $this->app->loadLang('project');
+
+        /* Get test cases. */
+        $cases  = $this->loadModel('testsuite')->getProductSuiteCases($productID, $branch, 'suite,id_desc', 'unit');
+
+        /* save session .*/
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
+
+        $groupCases = array();
+        foreach($cases as $case) $groupCases[(int)$case->suite][$case->id] = $case;
+
+        $suites = $this->loadModel('testsuite')->getUnit($productID);
+
+        /* Process case for check story changed. */
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+        $cases = $this->testcase->appendData($cases);
+
+        $showModule  = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
+        $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+
+        /* Assign. */
+        $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->position[] = html::a($this->createLink('testcase', 'unit', "productID=$productID&branch=$branch"), $this->products[$productID]);
+        $this->view->position[] = $this->lang->testcase->common;
+
+        $this->view->productID   = $productID;
+        $this->view->product     = $this->product->getById($productID);
+        $this->view->productName = $this->products[$productID];
+        $this->view->summary     = $this->testcase->summary($cases);
+        $this->view->users       = $this->user->getPairs('noletter');
+        $this->view->groupCases  = $groupCases;
+        $this->view->branch      = $branch;
+        $this->view->branches    = $this->loadModel('branch')->getPairs($productID);
+        $this->view->suites      = $suites;
+        $this->view->setModule   = true;
+
+        $this->display();
+    }
+
+    /**
      * Group case.
      *
      * @param  int    $productID
