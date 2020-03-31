@@ -519,7 +519,7 @@ class block extends control
     {
         $limit = $this->viewType == 'json' ? 0 : (int)$this->params->num;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
-        $uri   = $this->server->http_referer;
+        $uri   = $this->app->getURI(true);
         $this->session->set('todoList', $uri);
         $this->session->set('bugList',  $uri);
         $this->session->set('taskList', $uri);
@@ -540,8 +540,9 @@ class block extends control
      */
     public function printTaskBlock()
     {
-        $this->session->set('taskList',  $this->server->http_referer);
-        $this->session->set('storyList', $this->server->http_referer);
+        $uri = $this->app->getURI(true);
+        $this->session->set('taskList',  $uri);
+        $this->session->set('storyList', $uri);
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->num, null, $this->params->orderBy);
     }
@@ -554,7 +555,7 @@ class block extends control
      */
     public function printBugBlock()
     {
-        $this->session->set('bugList', $this->server->http_referer);
+        $this->session->set('bugList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->view->bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $this->params->type, $this->params->orderBy, $this->viewType == 'json' ? 0 : (int)$this->params->num);
     }
@@ -567,7 +568,7 @@ class block extends control
      */
     public function printCaseBlock()
     {
-        $this->session->set('caseList', $this->server->http_referer);
+        $this->session->set('caseList', $this->app->getURI(true));
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
@@ -605,7 +606,7 @@ class block extends control
      */
     public function printTesttaskBlock()
     {
-        $this->session->set('testtaskList', $this->server->http_referer);
+        $this->session->set('testtaskList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->app->loadLang('testtask');
         $this->view->testtasks = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
@@ -630,7 +631,7 @@ class block extends control
      */
     public function printStoryBlock()
     {
-        $this->session->set('storyList', $this->server->http_referer);
+        $this->session->set('storyList', $this->app->getURI(true));
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
         $this->app->loadClass('pager', $static = true);
         $num     = isset($this->params->num) ? (int)$this->params->num : 0;
@@ -648,7 +649,7 @@ class block extends control
      */
     public function printPlanBlock()
     {
-        $this->session->set('productPlanList', $this->server->http_referer);
+        $this->session->set('productPlanList', $this->app->getURI(true));
         $this->app->loadLang('productplan');
         $this->view->plans = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -667,7 +668,7 @@ class block extends control
      */
     public function printReleaseBlock()
     {
-        $this->session->set('releaseList', $this->server->http_referer);
+        $this->session->set('releaseList', $this->app->getURI(true));
         $this->app->loadLang('release');
         $this->view->releases = $this->dao->select('t1.*,t2.name as productName,t3.name as buildName')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -687,7 +688,7 @@ class block extends control
      */
     public function printBuildBlock()
     {
-        $this->session->set('buildList', $this->server->http_referer);
+        $this->session->set('buildList', $this->app->getURI(true));
         $this->app->loadLang('build');
         $this->view->builds = $this->dao->select('t1.*, t2.name as productName')->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
