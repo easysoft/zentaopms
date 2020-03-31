@@ -22,7 +22,7 @@
       <table class='table table-form'>
         <tr>
           <th class='thWidth'><?php echo $lang->webhook->type;?></th>
-          <td style="width:550px" ><?php echo html::select('type', $lang->webhook->typeList, '', "class='form-control'");?></td>
+          <td style="width:550px" ><?php echo html::select('type', $lang->webhook->typeList, '', "class='form-control chosen'");?></td>
           <td></td>
         </tr>
         <tr>
@@ -39,18 +39,33 @@
           <th><?php echo $lang->webhook->secret;?></th>
           <td><?php echo html::input('secret', '', "class='form-control'");?></td>
         </tr>
-        <tr class='dingapiTR'>
+        <tr class='dinguserTR'>
           <th><?php echo $lang->webhook->dingAgentId;?></th>
           <td class='required'><?php echo html::input('agentId', '', "class='form-control'");?></td>
-          <td><?php echo $lang->webhook->note->dingKey;?></td>
+          <td><?php echo $lang->webhook->note->dingHelp;?></td>
         </tr>
-        <tr class='dingapiTR'>
+        <tr class='dinguserTR'>
           <th><?php echo $lang->webhook->dingAppKey;?></th>
           <td class='required'><?php echo html::input('appKey', '', "class='form-control'");?></td>
         </tr>
-        <tr class='dingapiTR'>
+        <tr class='dinguserTR'>
           <th><?php echo $lang->webhook->dingAppSecret;?></th>
           <td class='required'><?php echo html::input('appSecret', '', "class='form-control'");?></td>
+        </tr>
+        <tr class="wechatTR">
+          <th><?php echo $lang->webhook->wechatCorpId;?></th>
+          <td class='required'><?php echo html::input('wechatCorpId', '', "class='form-control'")?></td>
+          <td><?php echo $lang->webhook->note->wechatHelp;?></td>
+        </tr>
+        <tr class="wechatTR">
+          <th><?php echo $lang->webhook->wechatCorpSecret;?></th>
+          <td class='required'><?php echo html::input('wechatCorpSecret', '', "class='form-control'")?></td>
+          <td></td>
+        </tr>
+        <tr class="wechatTR">
+          <th><?php echo $lang->webhook->wechatAgentId;?></th>
+          <td class='required'><?php echo html::input('wechatAgentId', '', "class='form-control'")?></td>
+          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->webhook->domain;?></th>

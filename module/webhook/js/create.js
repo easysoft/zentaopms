@@ -3,11 +3,12 @@ $(function()
     $('#type').change(function()
     {
         var type = $(this).val();
-        $('#sendTypeTR').toggle(type != 'dingding' && type != 'dingapi');
-        $('#secretTR').toggle(type == 'dingding');
-        $('#urlTR').toggle(type != 'dingapi');
-        $('.dingapiTR').toggle(type == 'dingapi');
-        $('#paramsTR').toggle(type != 'bearychat' && type != 'dingding' && type != 'dingapi' && type != 'weixin');
+        $('#sendTypeTR').toggle(type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup');
+        $('#secretTR').toggle(type == 'dinggroup');
+        $('#urlTR').toggle(type != 'dinguser' && type != 'wechatuser');
+        $('.dinguserTR').toggle(type == 'dinguser');
+        $('.wechatTR').toggle(type == 'wechatuser');
+        $('#paramsTR').toggle(type != 'bearychat' && type != 'dinggroup' && type != 'dinguser' && type != 'wechatuser' && type != 'wechatgroup');
         $('#urlNote').html(urlNote[type]);
     });
 

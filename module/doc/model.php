@@ -447,13 +447,20 @@ class docModel extends model
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'doc', false);
         if(!$docs) return array();
 
+        $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
         foreach($docs as $index => $doc)
         {
             $docs[$index]->fileSize = 0;
             if(isset($files[$index]))
             {
-                $fileSize = 0;
-                foreach($files[$index] as $file) $fileSize += $file->size;
+                $docContent = $docContents[$index];
+                $fileSize   = 0;
+                foreach($files[$index] as $file)
+                {
+                    if(strpos(",{$docContent->files},", ",{$file->id},") === false) continue;
+                    $fileSize += $file->size;
+                }
+
                 if($fileSize < 1024)
                 {
                     $fileSize .= 'B';
@@ -611,7 +618,9 @@ class docModel extends model
             ->join('users', ',')
             ->remove('files,labels,uid')
             ->get();
-        $doc->contentMarkdown = strip_tags($this->post->contentMarkdown, $this->config->allowedTags);
+
+        /* Fix bug #2929. strip_tags($this->post->contentMarkdown, $this->config->allowedTags)*/
+        $doc->contentMarkdown = $this->post->contentMarkdown;
         if($doc->acl == 'private') $doc->users = $this->app->user->account;
         $condition = "lib = '$doc->lib' AND module = $doc->module";
 
@@ -1037,7 +1046,7 @@ class docModel extends model
         }
         else
         {
-            $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->in($productIdList)
                 ->andWhere('t2.deleted')->eq(0)
@@ -1160,7 +1169,7 @@ class docModel extends model
             }
             else
             {
-                $hasProject = $this->dao->select('DISTINCT product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject = $this->dao->select('DISTINCT t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->in($idList)
                     ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
@@ -1203,7 +1212,7 @@ class docModel extends model
             }
             else
             {
-                $hasProject  = $this->dao->select('DISTINCT product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                $hasProject  = $this->dao->select('DISTINCT t1.product, count(project) as projectCount')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                     ->where('t1.product')->eq($objectID)
                     ->beginIF(strpos($this->config->doc->custom->showLibs, 'unclosed') !== false)->andWhere('t2.status')->notin('done,closed')->fi()
@@ -1305,7 +1314,7 @@ class docModel extends model
         $searchTitle = $this->get->title;
         if($type == 'product')
         {
-            $storyIdList   = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
+            $storyIdList   = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->andWhere('type')->eq('story')->get();
             $bugIdList     = $this->dao->select('id')->from(TABLE_BUG)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $releaseIdList = $this->dao->select('id')->from(TABLE_RELEASE)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();
             $planIdList    = $this->dao->select('id')->from(TABLE_PRODUCTPLAN)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($this->app->user->view->products)->get();

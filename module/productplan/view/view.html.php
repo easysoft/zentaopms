@@ -145,7 +145,12 @@
                 <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
                 <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
                 <td class='text-left nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
-                <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($viewLink , $story->title);?></td>
+                <td class='text-left nobr' title='<?php echo $story->title?>'>
+                  <?php
+                  if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+                  echo html::a($viewLink , $story->title);
+                  ?>
+                </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
                 <td><?php echo zget($users, $story->assignedTo);?></td>
                 <td><?php echo $story->estimate;?></td>

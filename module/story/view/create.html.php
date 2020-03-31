@@ -58,7 +58,7 @@
             </td>
           </tr>
           <tr>
-            <th><?php echo $lang->story->planAB;?></th>
+            <th class='planTh'><?php echo $lang->story->planAB;?></th>
             <td colspan="2">
               <div class='input-group' id='planIdBox'>
                 <?php
@@ -205,7 +205,7 @@
         <tfoot>
           <tr>
             <td colspan="5" class="text-center form-actions">
-              <?php echo html::submitButton();?>
+              <?php echo html::hidden('type', $type) . html::submitButton();?>
               <?php echo html::backButton();?>
             </td>
           </tr>
@@ -216,4 +216,5 @@
 </div>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('storyModule', $lang->story->module);?>
+<?php js::set('storyType', $type);?>
 <?php include '../../common/view/footer.html.php';?>

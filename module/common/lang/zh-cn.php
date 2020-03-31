@@ -101,6 +101,7 @@ $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您访问的对象并不存在！';
 $lang->notPage       =  '抱歉，您访问的功能正在开发中！';
 $lang->showAll       = '[[全部显示]]';
+$lang->selectedItems = '已选择 <strong>{0}</strong> 项';
 
 $lang->future      = '未来';
 $lang->year        = '年';
@@ -122,7 +123,7 @@ $lang->menu->my      = '<span> 我的地盘</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
-$lang->menu->repo    = '代码|repo|log';
+$lang->menu->ci      = '集成|repo|browse';
 $lang->menu->doc     = '文档|doc|index';
 $lang->menu->report  = '统计|report|index';
 $lang->menu->company = '组织|company|index';
@@ -270,17 +271,23 @@ $lang->qa = new stdclass();
 $lang->qa->menu = new stdclass();
 
 $lang->qa->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->qa->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->qa->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->qa->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
 $lang->qa->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->qa->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
 $lang->qa->menu->caselib   = array('link' => '用例库|caselib|browse');
 
+$lang->qa->subMenu = new stdclass();
+$lang->qa->subMenu->testcase = new stdclass();
+$lang->qa->subMenu->testcase->feature = array('link' => '功能测试|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->qa->subMenu->testcase->unit    = array('link' => '单元测试|testcase|unit|productID=%s');
+
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
+$lang->bug->subMenu = $lang->qa->subMenu;
 
 $lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
-$lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->bug->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->bug->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
 $lang->bug->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->bug->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
@@ -288,8 +295,9 @@ $lang->bug->menu->caselib   = array('link' => '用例库|caselib|browse');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
+$lang->testcase->subMenu = $lang->qa->subMenu;
 $lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testcase->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree');
+$lang->testcase->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story', 'class' => 'dropdown dropdown-hover');
 $lang->testcase->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
 $lang->testcase->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testcase->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
@@ -297,17 +305,19 @@ $lang->testcase->menu->caselib   = array('link' => '用例库|caselib|browse');
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = new stdclass();
+$lang->testtask->subMenu = $lang->qa->subMenu;
 $lang->testtask->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testtask->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
-$lang->testtask->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
+$lang->testtask->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
+$lang->testtask->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s', 'subModule' => 'testtask', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
 $lang->testtask->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testtask->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
 $lang->testtask->menu->caselib   = array('link' => '用例库|caselib|browse');
 
 $lang->testsuite = new stdclass();
 $lang->testsuite->menu = new stdclass();
+$lang->testsuite->subMenu = $lang->qa->subMenu;
 $lang->testsuite->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testsuite->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->testsuite->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->testsuite->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
 $lang->testsuite->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s', 'alias' => 'view,create,edit,linkcase');
 $lang->testsuite->menu->report    = array('link' => '报告|testreport|browse|productID=%s');
@@ -315,8 +325,9 @@ $lang->testsuite->menu->caselib   = array('link' => '用例库|caselib|browse');
 
 $lang->testreport = new stdclass();
 $lang->testreport->menu = new stdclass();
+$lang->testreport->subMenu = $lang->qa->subMenu;
 $lang->testreport->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
-$lang->testreport->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s');
+$lang->testreport->menu->testcase  = array('link' => '用例|testcase|browse|productID=%s', 'class' => 'dropdown dropdown-hover');
 $lang->testreport->menu->testtask  = array('link' => '测试单|testtask|browse|productID=%s');
 $lang->testreport->menu->testsuite = array('link' => '套件|testsuite|browse|productID=%s');
 $lang->testreport->menu->report    = array('link' => '报告|testreport|browse|productID=%s', 'alias' => 'view,create,edit');
@@ -324,18 +335,30 @@ $lang->testreport->menu->caselib   = array('link' => '用例库|caselib|browse')
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
+$lang->caselib->subMenu = $lang->qa->subMenu;
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
-$lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|');
+$lang->caselib->menu->testcase  = array('link' => '用例|testcase|browse|', 'class' => 'dropdown dropdown-hover');
 $lang->caselib->menu->testtask  = array('link' => '测试单|testtask|browse|');
 $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '报告|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => '用例库|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
-$lang->repo = new stdclass();
-$lang->repo->menu = new stdclass();
-$lang->repo->menu->browse   = array('link' =>'浏览|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
-$lang->repo->menu->settings = '设置|repo|settings|repoID=%s';
-$lang->repo->menu->delete   = array('link' => '删除|repo|delete|repoID=%s', 'target' => 'hiddenwin');
+$lang->ci = new stdclass();
+$lang->ci->menu = new stdclass();
+$lang->ci->menu->code     = array('link' => '代码|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->ci->menu->build    = array('link' => '构建|job|browse', 'subModule' => 'compile,job');
+$lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' => 'create,edit');
+$lang->ci->menu->maintain = array('link' => '版本库|repo|maintain', 'alias' => 'create,edit');
+$lang->ci->menu->rules    = array('link' => '指令|repo|setrules');
+
+$lang->repo          = new stdclass();
+$lang->jenkins       = new stdclass();
+$lang->compile       = new stdclass();
+$lang->job           = new stdclass();
+$lang->repo->menu    = $lang->ci->menu;
+$lang->jenkins->menu = $lang->ci->menu;
+$lang->compile->menu = $lang->ci->menu;
+$lang->job->menu     = $lang->ci->menu;
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -381,7 +404,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => '集成|admin|sso');
+$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 $lang->admin->menu->translate = array('link' => '翻译|dev|translate');
@@ -475,6 +498,11 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
+$lang->menugroup->repo    = 'ci';
+$lang->menugroup->jenkins = 'ci';
+$lang->menugroup->compile = 'ci';
+$lang->menugroup->job     = 'ci';
+
 /* 错误提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";
@@ -501,6 +529,7 @@ $lang->error->pasteImg        = '您的浏览器不支持粘贴图片！';
 $lang->error->noData          = '没有数据';
 $lang->error->editedByOther   = '该记录可能已经被改动。请刷新页面重新编辑！';
 $lang->error->tutorialData    = '新手模式下不会插入数据，请退出新手模式操作';
+$lang->error->noCurlExt       = '服务器未安装Curl模块。';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -561,6 +590,7 @@ if(!defined('DT_DATE1'))      define('DT_DATE1',     'Y-m-d');
 if(!defined('DT_DATE2'))      define('DT_DATE2',     'Ymd');
 if(!defined('DT_DATE3'))      define('DT_DATE3',     'Y年m月d日');
 if(!defined('DT_DATE4'))      define('DT_DATE4',     'n月j日');
+if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
 if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
 

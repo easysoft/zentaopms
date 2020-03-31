@@ -261,6 +261,7 @@ class bug extends control
             $response['message'] = $this->lang->saveSuccess;
 
             /* Set from param if there is a object to transfer bug. */
+            setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', false, false);
             $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
             if(!$bugResult or dao::isError())
             {
@@ -427,7 +428,7 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->projects         = $this->product->getProjectPairs($productID, $branch ? "0,$branch" : 0, $params = 'nodeleted');
         $this->view->builds           = $builds;
-        $this->view->moduleID         = $moduleID;
+        $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastBugModule;
         $this->view->projectID        = $projectID;
         $this->view->taskID           = $taskID;
         $this->view->storyID          = $storyID;
@@ -540,10 +541,11 @@ class bug extends control
      * View a bug.
      *
      * @param  int    $bugID
+     * @param  string $form
      * @access public
      * @return void
      */
-    public function view($bugID)
+    public function view($bugID, $from = 'bug')
     {
         /* Judge bug exits or not. */
         $bug = $this->bug->getById($bugID, true);
@@ -554,7 +556,18 @@ class bug extends control
         if($bug->assignedTo == $this->app->user->account) $this->loadModel('action')->read('bug', $bugID);
 
         /* Set menu. */
-        $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+        if($from == 'bug')
+        {
+            $this->bug->setMenu($this->products, $bug->product, $bug->branch);
+        }
+        elseif($from == 'repo')
+        {
+            session_write_close();
+            $this->lang->set('menugroup.bug', 'repo');
+            $repos = $this->loadModel('repo')->getRepoPairs();
+            $this->repo->setMenu($repos);
+            $this->lang->bug->menu      = $this->lang->repo->menu;
+        }
 
         /* Get product info. */
         $productID   = $bug->product;
@@ -575,6 +588,7 @@ class bug extends control
         $this->view->modulePath  = $this->tree->getParents($bug->module);
         $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
         $this->view->bug         = $bug;
+        $this->view->from        = $from;
         $this->view->branchName  = $this->session->currentProductType == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->actions     = $this->action->getList('bug', $bugID);

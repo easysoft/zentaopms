@@ -65,6 +65,15 @@ if %requestType% == 'PATH_INFO' (
 echo %computeburn% > %baseDir%computeburn.bat
 echo computeburn.bat ok
 
+:: create computetaskeffort.bat
+if %requestType% == 'PATH_INFO' (
+  SET computetaskeffort= %phpcli% %baseDir%ztcli "%pmsRoot%/project-computetaskeffort"
+)else (
+  SET computetaskeffort= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=project&f=computetaskeffort"
+)
+echo %computetaskeffort% > %baseDir%computetaskeffort.bat
+echo computetaskeffort.bat ok
+
 :: create checkdb.bat
 if %requestType% == 'PATH_INFO' (
   SET checkdb= %phpcli% %baseDir%ztcli "%pmsRoot%/admin-checkdb"
@@ -119,6 +128,33 @@ if %requestType% == 'PATH_INFO' (
 echo %createcycle% > %baseDir%createcycle.bat
 echo createcycle.bat ok
 
+:: init queue.
+if %requestType% == 'PATH_INFO' (
+  SET initqueue= %phpcli% %baseDir%ztcli "%pmsRoot%/ci-initQueue"
+)else (
+  SET initqueue= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=ci&f=initQueue"
+)
+echo %initqueue% > %baseDir%initqueue.bat
+echo initqueue.bat ok
+
+:: check build status.
+if %requestType% == 'PATH_INFO' (
+  SET checkbuildstatus= %phpcli% %baseDir%ztcli "%pmsRoot%/ci-checkBuildStatus"
+)else (
+  SET checkbuildstatus= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=ci&f=checkBuildStatus"
+)
+echo %checkbuildstatus% > %baseDir%checkbuildstatus.bat
+echo checkbuildstatus.bat ok
+
+:: execute compile.
+if %requestType% == 'PATH_INFO' (
+  SET execcompile= %phpcli% %baseDir%ztcli "%pmsRoot%/ci-exec"
+)else (
+  SET execcompile= %phpcli% %baseDir%ztcli "%pmsRoot%/index.php?m=ci&f=exec"
+)
+echo %execcompile% > %baseDir%execcompile.bat
+echo execcompile.bat ok
+
 :: delete log.
 if %requestType% == 'PATH_INFO' (
   SET deletelog= %phpcli% %baseDir%ztcli "%pmsRoot%/admin-deleteLog"
@@ -146,6 +182,9 @@ echo 1-59/5 *    *   *     *     %baseDir%sendmail.bat      # async send mail.  
 echo 1-59/5 *    *   *     *     %baseDir%sendwebhook.bat   # async send webhook.       >> %sysCron%
 echo 1      1    *   *     *     %baseDir%createcycle.bat   # create cycle todo.        >> %sysCron%
 echo 30     1    *   *     *     %baseDir%deletelog.bat     # delete log.               >> %sysCron%
+echo 1      0    *   *     *     %baseDir%initqueue.bat     # init queue.               >> %sysCron%
+echo 1-59/5 *    *   *     *     %baseDir%checkbuildstatus.bat   # check build status.  >> %sysCron%
+echo 1-59/5 *    *   *     *     %baseDir%execcompile.bat        # execute compile.     >> %sysCron%
 
 :: return 0 when success.
 exit /b 0

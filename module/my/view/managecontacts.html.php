@@ -19,7 +19,7 @@
     {
         $listClass = ($id == $listID) ? 'btn btn-block active' : 'btn btn-block';
         $shareIcon = in_array($id, $globalContacts) ? '<i class="icon icon-share-sign"></i> ' : '';
-        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $shareIcon . $listName, '', "class='{$listClass}'");
+        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $shareIcon . $listName, '', "class='{$listClass}' title='$listName'");
     }
     ?>
     <?php echo html::a(inlink('managecontacts', "listID=0&mode=new"), '<i class="icon icon-plus"></i> ' . $lang->user->contacts->createList, '', "class='btn btn-block'"); ?>

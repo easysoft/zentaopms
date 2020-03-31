@@ -59,6 +59,15 @@ fi
 echo $computeburn > $basePath/computeburn.sh
 echo "computeburn.sh ok"
 
+# compute task effort.
+if [ $requestType == 'PATH_INFO' ]; then
+  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/project-computetaskeffort'";
+else
+  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=project&f=computetaskeffort'";
+fi
+echo $computetaskeffort > $basePath/computetaskeffort.sh
+echo "computetaskeffort.sh ok"
+
 # daily remind
 if [ $requestType == 'PATH_INFO' ]; then
   checkdb="$phpcli $basePath/ztcli '$pmsRoot/report-remind'";
@@ -122,6 +131,33 @@ fi
 echo $createcycle > $basePath/createcycle.sh
 echo "createcycle.sh ok"
 
+# init queue.
+if [ $requestType == 'PATH_INFO' ]; then
+  initqueue="$phpcli $basePath/ztcli '$pmsRoot/ci-initQueue'";
+else
+  initqueue="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=ci&f=initQueue'";
+fi
+echo $initqueue > $basePath/initqueue.sh
+echo "initqueue.sh ok"
+
+# check build status.
+if [ $requestType == 'PATH_INFO' ]; then
+  checkbuildstatus="$phpcli $basePath/ztcli '$pmsRoot/ci-checkBuildStatus'";
+else
+  checkbuildstatus="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=ci&f=checkBuildStatus'";
+fi
+echo $checkbuildstatus > $basePath/checkbuildstatus.sh
+echo "checkbuildstatus.sh ok"
+
+# execute compile.
+if [ $requestType == 'PATH_INFO' ]; then
+  execcompile="$phpcli $basePath/ztcli '$pmsRoot/ci-exec'";
+else
+  execcompile="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=ci&f=exec'";
+fi
+echo $execcompile > $basePath/execcompile.sh
+echo "execcompile.sh ok"
+
 # delete log.
 if [ $requestType == 'PATH_INFO' ]; then
   deletelog="$phpcli $basePath/ztcli '$pmsRoot/admin-deleteLog'";
@@ -132,7 +168,7 @@ echo $deletelog > $basePath/deletelog.sh
 echo "deletelog.sh ok"
 
 # cron
-if [ ! -d "$basePath/cron" ]; then 
+if [ ! -d "$basePath/cron" ]; then
   mkdir $basePath/cron
 fi
 echo "# system cron." > $basePath/cron/sys.cron
@@ -140,12 +176,15 @@ echo "#min   hour day month week  command." >> $basePath/cron/sys.cron
 echo "0      1    *   *     *     $basePath/dailyreminder.sh   # dailyreminder."            >> $basePath/cron/sys.cron
 echo "1      1    *   *     *     $basePath/backup.sh          # backup database and file." >> $basePath/cron/sys.cron
 echo "1      23   *   *     *     $basePath/computeburn.sh     # compute burndown chart."   >> $basePath/cron/sys.cron
-echo "1-59/2 *    *   *     *     $basePath/syncsvn.sh         # sync subversion."          >> $basePath/cron/sys.cron
-echo "1-59/2 *    *   *     *     $basePath/syncgit.sh         # sync git."                 >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/syncsvn.sh         # sync subversion."          >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/syncgit.sh         # sync git."                 >> $basePath/cron/sys.cron
 echo "1-59/5 *    *   *     *     $basePath/sendmail.sh        # async send mail."          >> $basePath/cron/sys.cron
 echo "1-59/5 *    *   *     *     $basePath/sendwebhook.sh     # async send webhook."       >> $basePath/cron/sys.cron
 echo "1      1    *   *     *     $basePath/createcycle.sh     # create cycle todo."        >> $basePath/cron/sys.cron
 echo "30     1    *   *     *     $basePath/deletelog.sh       # delete log."               >> $basePath/cron/sys.cron
+echo "1      0    *   *     *     $basePath/initqueue.sh       # init queue."               >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/checkbuildstatus.sh   # check build status."    >> $basePath/cron/sys.cron
+echo "1-59/5 *    *   *     *     $basePath/execcompile.sh        # execute compile."       >> $basePath/cron/sys.cron
 cron="$phpcli $basePath/php/crond.php"
 echo $cron > $basePath/cron.sh
 echo "cron.sh ok"

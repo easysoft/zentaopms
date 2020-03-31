@@ -23,6 +23,7 @@ common:
 	cp -fr framework zentaopms/
 	cp -fr lib zentaopms/
 	cp -fr module zentaopms/
+	cp -fr sdk zentaopms/
 	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/ 
@@ -63,12 +64,14 @@ zentaoxx:
 	cp -r xuan/xxb/db/*.sql zentaoxx/db/
 	cp -r xuan/xxb/module/im zentaoxx/module/
 	cp -r xuan/xxb/module/client zentaoxx/module/
-	cp -r xuan/xxb/module/common/ext/model/hook zentaoxx/module/common/ext/model/
+	cp -r xuan/xxb/module/license zentaoxx/module/
+	cp -r xuan/xxb/module/owt zentaoxx/module/
 	mkdir -p zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/footer.modal.html.php zentaoxx/module/common/view
 	cp -r xuan/xxb/module/common/view/version.html.php zentaoxx/module/common/view
+	cp -r xuan/xxb/module/license zentaoxx/module/
 	mkdir -p zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/markedjs zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/version.js zentaoxx/www/js/
@@ -77,10 +80,6 @@ zentaoxx:
 	cp -r xuan/xxb/module/action/ext zentaoxx/module/action
 	cp -r xuan/xxb/config/ext/xxb.php zentaoxx/config/ext/
 	cp -r xuan/xxb/config/ext/maps.php zentaoxx/config/ext/
-	cp -r xuan/xxb/apischeme.json zentaoxx/
-	cp $(XUANPATH)/xxb/config/ext/maps.php zentaoxx/config/ext/
-	cp $(XUANPATH)/xxb/module/im/model.php zentaoxx/module/im/model.php
-	cp $(XUANPATH)/xxb/apischeme.json zentaoxx/
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/module/* zentaoxx/module/
 	cp -r xuanxuan/www/* zentaoxx/www/
@@ -115,9 +114,7 @@ zentaoxx:
 	sed -i '/var currentVersion/d' zentaoxx/module/client/js/checkupgrade.js
 	sed -i '/setRequiredFields(/d' zentaoxx/module/common/view/header.modal.html.php
 	sed -i 's/header.html.php/header.lite.html.php/g' zentaoxx/module/common/view/header.modal.html.php
-	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/header.modal.html.php
 	sed -i 's/footer.html.php/footer.lite.html.php/g' zentaoxx/module/common/view/footer.modal.html.php
-	sed -i 's/getAppRoot/getModuleRoot/g' zentaoxx/module/common/view/footer.modal.html.php
 	sed -i 's/v\.//g' zentaoxx/module/im/js/debug.js
 	sed -i 's/helper::jsonEncode(/json_encode(/g' zentaoxx/framework/xuanxuan.class.php
 	sed -i "s/lang->goback,/lang->goback, '',/g" zentaoxx/module/im/view/debug.html.php

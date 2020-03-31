@@ -248,8 +248,8 @@ class report extends control
     {
         $account     = $this->app->user->account;
         $firstAction = $this->dao->select('*')->from(TABLE_ACTION)->orderBy('id')->limit(1)->fetch();
-        $firstYear   = substr($firstAction->date, 0, 4);
         $currentYear = date('Y');
+        $firstYear   = empty($firstAction) ? $currentYear : substr($firstAction->date, 0, 4);
 
         /* Get years for use zentao. */
         $years = array();

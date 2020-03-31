@@ -559,6 +559,29 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('11.7'));
             $this->adjustPriv12_0();
             $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
+            $this->appendExec('11_7');
+        case '12_0':
+            $this->saveLogs('Execute 12_0');
+            $this->appendExec('12_0');
+        case '12_0_1':
+            $this->saveLogs('Execute 12_0_1');
+            $this->execSQL($this->getUpgradeFile('12.0.1'));
+            $this->importRepoFromConfig();
+            $this->appendExec('12_0_1');
+        case '12_1':
+            $this->saveLogs('Execute 12_1');
+            $this->execSQL($this->getUpgradeFile('12.1'));
+
+            if(!isset($this->config->isINT) or !($this->config->isINT))
+            {
+                if(!$executeXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+            }
+
+            $this->appendExec('12_1');
         }
 
         $this->deletePatch();
@@ -720,6 +743,15 @@ class upgradeModel extends model
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
             case '11_7' : $confirmContent .= file_get_contents($this->getUpgradeFile('11.7'));
+            case '12_0' :
+            case '12_0_1': $confirmContent .= file_get_contents($this->getUpgradeFile('12.0.1'));
+            case '12_1':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('12.1'));
+                if(!isset($this->config->isINT) or !($this->config->isINT))
+                {
+                    $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
+                    $confirmContent .= file_get_contents($xuanxuanSql);
+                }
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -3624,6 +3656,73 @@ class upgradeModel extends model
             $this->saveLogs($this->dao->get());
         }
 
+        return true;
+    }
+
+    /**
+     * Save repo from svn and git config.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function importRepoFromConfig()
+    {
+        $this->app->loadConfig('svn');
+        if(isset($this->config->svn->repos))
+        {
+            $scm = $this->app->loadClass('scm');
+            foreach($this->config->svn->repos as $i => $repo)
+            {
+                $repoPath = $repo['path'];
+                if(empty($repoPath)) continue;
+
+                $existRepo = $this->dao->select('*')->from(TABLE_REPO)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Subversion')->fetch();
+                if($existRepo) continue;
+
+                $svnRepo = new stdclass();
+                $svnRepo->client   = $this->config->svn->client;
+                $svnRepo->name     = basename($repoPath);
+                $svnRepo->path     = $repoPath;
+                $svnRepo->SCM      = 'Subversion';
+                $svnRepo->account  = $repo['username'];
+                $svnRepo->password = $repo['password'];
+                $svnRepo->encrypt  = 'base64';
+                $svnRepo->encoding = zget($repo, 'encoding', $this->config->svn->encoding);
+
+                $scm->setEngine($svnRepo);
+                $info = $scm->info('');
+                $svnRepo->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $svnRepo->path)), '/');
+                if($svnRepo->prefix) $svnRepo->prefix = '/' . $svnRepo->prefix;
+
+                $svnRepo->password = base64_encode($repo['password']);
+                $this->dao->insert(TABLE_REPO)->data($svnRepo)->exec();
+            }
+        }
+
+        $this->app->loadConfig('git');
+        if(isset($this->config->git->repos))
+        {
+            foreach($this->config->git->repos as $i => $repo)
+            {
+                $repoPath = $repo['path'];
+                if(empty($repoPath)) continue;
+
+                $existRepo = $this->dao->select('*')->from(TABLE_REPO)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Git')->fetch();
+                if($existRepo) continue;
+
+                $gitRepo = new stdclass();
+                $gitRepo->client   = $this->config->git->client;
+                $gitRepo->name     = basename($repoPath);
+                $gitRepo->path     = $repoPath;
+                $gitRepo->prefix   = '';
+                $gitRepo->SCM      = 'Git';
+                $gitRepo->account  = '';
+                $gitRepo->password = '';
+                $gitRepo->encrypt  = 'base64';
+                $gitRepo->encoding = zget($repo, 'encoding', $this->config->git->encoding);
+                $this->dao->insert(TABLE_REPO)->data($gitRepo)->exec();
+            }
+        }
         return true;
     }
 

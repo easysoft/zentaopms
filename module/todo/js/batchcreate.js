@@ -1,19 +1,18 @@
 function updateAction(date)
 {
-  if(date.indexOf('-') != -1)
-  {
-    var datearray = date.split("-");
-    var date = '';
-    for(i=0 ; i<datearray.length ; i++)
+    if(date.indexOf('-') != -1)
     {
-      date = date + datearray[i];
+        var dateArray = date.split('-');
+        date = '';
+        for(i = 0; i < dateArray.length; i++)
+        {
+            date = date + dateArray[i];
+        }
     }
-  }
-  link = createLink('todo', 'batchCreate', 'date=' + date);
-  location.href=link;
+    location.href = createLink('todo', 'batchCreate', 'date=' + date);
 }
 
 $(function()
 {
     setBeginsAndEnds();
-})
+});

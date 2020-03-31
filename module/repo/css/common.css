@@ -1,6 +1,6 @@
 a{color:#169;}
 a:hover, a:active{ text-decoration:underline; color:#C61A1A;}
-h2,h3 {font-size:20px; padding:0 0 10px; margin: 0; clear: both;}
+h2,h3 {font-size:20px; margin: 0; clear: both;}
 h3 {font-size:16px;}
 .revision{font-size:12px; line-height:20px; text-align:right; padding-right:8px;}
 .directory{ background-image:url('theme/default/images/repo/dir.png')}
@@ -76,11 +76,11 @@ h3 {font-size:16px;}
 .repoCode tr.commented .comment-btn {display: block;}
 .repoCode tr.commented .comment-btn .icon-wrapper {background: none; border: none; width: 24px; line-height: 18px; height: 18px; left: -6px; color: #4183c4}
 .repoCode tr.commented .comment-btn .icon-wrapper:hover {border-color: #169; color: #169}
-.repoCode tr.commented .comment-btn .icon-wrapper > i:before {content: '\e750'; font-size: 18px; transform: scale(-1, 1); display: inline-block;}
+.repoCode tr.commented .comment-btn .icon-wrapper > i:before {font-size: 18px; transform: scale(-1, 1); display: inline-block;}
 .repoCode tr.commented .comment-btn .icon-wrapper:before {display: none}
 
 .repoCode tr.over.commented .comment-btn .icon-wrapper, .repoCode tr.selected.commented .comment-btn .icon-wrapper {line-height: 20px; height: 20px; background: #4183C4; color: #fff; left: -6px}
-.repoCode tr.over.commented .comment-btn .icon-wrapper > i:before {content: "\e661"; font-size: 14px;}
+.repoCode tr.over.commented .comment-btn .icon-wrapper > i:before {font-size: 14px;}
 .repoCode tr.selected.commented .comment-btn .icon-wrapper > i:before {font-size: 14px;}
 .repoCode tr.over.commented .comment-btn .icon-wrapper:before, .repoCode tr.selected.commented .comment-btn .icon-wrapper:before {display: block;}
 

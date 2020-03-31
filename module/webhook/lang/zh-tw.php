@@ -34,11 +34,12 @@ $lang->webhook->date        = '發送時間';
 $lang->webhook->data        = '數據';
 $lang->webhook->result      = '結果';
 
-$lang->webhook->typeList['']          = '';
-$lang->webhook->typeList['dingding']  = '釘釘群通知機器人';
-$lang->webhook->typeList['dingapi']   = '釘釘工作消息通知';
-$lang->webhook->typeList['weixin']    = '企業微信';
-$lang->webhook->typeList['default']   = '其他';
+$lang->webhook->typeList['']            = '';
+$lang->webhook->typeList['dinggroup']   = '釘釘群通知機器人';
+$lang->webhook->typeList['dinguser']    = '釘釘工作消息通知';
+$lang->webhook->typeList['wechatgroup'] = '企業微信群機器人';
+$lang->webhook->typeList['wechatuser']  = '企業微信應用消息';
+$lang->webhook->typeList['default']     = '其他';
 
 $lang->webhook->sendTypeList['sync']  = '同步';
 $lang->webhook->sendTypeList['async'] = '非同步';
@@ -46,8 +47,16 @@ $lang->webhook->sendTypeList['async'] = '非同步';
 $lang->webhook->dingAgentId    = '釘釘AgentId';
 $lang->webhook->dingAppKey     = '釘釘AppKey';
 $lang->webhook->dingAppSecret  = '釘釘AppSecret';
-$lang->webhook->dingUserid     = '釘釘Userid';
+$lang->webhook->dingUserid     = '釘釘用戶';
 $lang->webhook->dingBindStatus = '釘釘綁定狀態';
+
+$lang->webhook->wechatCorpId     = '企業ID';
+$lang->webhook->wechatCorpSecret = '應用的憑證密鑰';
+$lang->webhook->wechatAgentId    = '企業應用的ID';
+$lang->webhook->wechatUserid     = '微信用戶';
+$lang->webhook->wechatBindStatus = '微信綁定狀態';
+
+$lang->webhook->zentaoUser  = '禪道用戶';
 
 $lang->webhook->dingBindStatusList['0'] = '未綁定';
 $lang->webhook->dingBindStatusList['1'] = '已綁定';
@@ -67,11 +76,13 @@ $lang->webhook->confirmDelete = '您確認要刪除該webhook嗎？';
 $lang->webhook->trimWords = '了';
 
 $lang->webhook->note = new stdClass();
-$lang->webhook->note->async   = '非同步需要打開計劃任務';
-$lang->webhook->note->bind    = '只有釘釘工作通知類型才需要綁定用戶。';
+$lang->webhook->note->async   = '非同步需要打開計劃任務。';
+$lang->webhook->note->bind    = '只有[釘釘/微信]工作通知類型才需要綁定用戶。';
 $lang->webhook->note->product = "此項為空時所有{$lang->productCommon}的動作都會觸發鈎子，否則只有關聯{$lang->productCommon}的動作才會觸發。";
 $lang->webhook->note->project = "此項為空時所有{$lang->projectCommon}的動作都會觸發鈎子，否則只有關聯{$lang->projectCommon}的動作才會觸發。";
-$lang->webhook->note->dingKey = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
+
+$lang->webhook->note->dingHelp   = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
+$lang->webhook->note->wechatHelp = " <a href='http://www.zentao.net/book/zentaopmshelp/367.html' target='_blank'><i class='icon-help'></i></a>";
 
 $lang->webhook->note->typeList['bearychat'] = '請在倍洽中添加一個禪道機器人，並將其webhook填寫到此處。';
 $lang->webhook->note->typeList['dingding']  = '請在釘釘中添加一個自定義機器人，並將其webhook填寫到此處。';

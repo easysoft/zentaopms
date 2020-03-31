@@ -57,6 +57,7 @@ class testsuiteModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testsuite->menu as $key => $value)
         {
+            $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
             $replace = $productID;
             common::setMenuVars($this->lang->testsuite->menu, $key, $replace);
         }
@@ -149,6 +150,24 @@ class testsuiteModel extends model
     }
 
     /**
+     * Get unit suite.
+     * 
+     * @param  int    $productID 
+     * @param  string $orderBy 
+     * @access public
+     * @return array
+     */
+    public function getUnit($productID, $orderBy = 'id_desc')
+    {
+        return $this->dao->select("*")->from(TABLE_TESTSUITE)
+            ->where('product')->eq((int)$productID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq('unit')
+            ->orderBy($orderBy)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get test suite info by id.
      *
      * @param  int   $suiteID
@@ -162,6 +181,29 @@ class testsuiteModel extends model
         $suite = $this->loadModel('file')->replaceImgURL($suite, 'desc');
         if($setImgSize) $suite->desc = $this->file->setImgSize($suite->desc);
         return $suite;
+    }
+
+    /**
+     * Get product suite cases.
+     * 
+     * @param  int    $productID 
+     * @param  int    $branch 
+     * @param  string $orderBy 
+     * @param  string $type   nounit|unit
+     * @access public
+     * @return array
+     */
+    public function getProductSuiteCases($productID, $branch = 0, $orderBy = 'id_desc', $type = 'nounit')
+    {
+        return $this->dao->select('t1.*,t2.suite')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+            ->where('t1.product')->eq((int)$productID)
+            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
+            ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)
+            ->fetchAll('id');
     }
 
     /**

@@ -48,12 +48,11 @@
           <th class='c-project'>    <?php common::printOrderLink('project',     $orderBy, $vars, $lang->task->project);?></th>
           <th class='c-name'>       <?php common::printOrderLink('name',        $orderBy, $vars, $lang->task->name);?></th>
           <th class='c-user w-90px'><?php common::printOrderLink('openedBy',    $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='w-120px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
+          <th class='w-90px c-assignedTo'><?php common::printOrderLink('assignedTo',  $orderBy, $vars, $lang->task->assignedTo);?></th>
           <th class='c-user w-100px'><?php common::printOrderLink('finishedBy',  $orderBy, $vars, $lang->task->finishedBy);?></th>
-          <th class='c-hours w-70px'><?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
-          <th class='c-hours'>   <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
-          <th class='c-hours'>   <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
-          <th class='c-date'>    <?php common::printOrderLink('deadline',    $orderBy, $vars, $lang->task->deadlineAB);?></th>
+          <th class='c-hours w-50px'><?php common::printOrderLink('estimate',    $orderBy, $vars, $lang->task->estimateAB);?></th>
+          <th class='c-hours w-50px'>   <?php common::printOrderLink('consumed',    $orderBy, $vars, $lang->task->consumedAB);?></th>
+          <th class='c-hours w-50px'>   <?php common::printOrderLink('left',        $orderBy, $vars, $lang->task->leftAB);?></th>
           <th class='c-status'>  <?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
@@ -83,8 +82,10 @@
           <td class='c-hours'><?php echo $task->estimate;?></td>
           <td class='c-hours'><?php echo $task->consumed;?></td>
           <td class='c-hours'><?php echo $task->left;?></td>
-          <td class='c-date <?php if(isset($task->delay)) echo 'text-red';?>'><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
-          <td class='c-status'><span class="status-task status-<?php echo $task->status;?>"><?php echo $this->processStatus('task', $task);?></span></td>
+          <td class='c-status'>
+            <?php $storyChanged = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));?>
+            <?php !empty($storyChanged) ? print("<span class='status-story status-changed'>{$this->lang->story->changed}</span>") : print("<span class='status-task status-{$task->status}'> " . $this->processStatus('task', $task) . "</span>");?>
+          </td>
           <td class='c-actions'>
             <?php
             if($task->needConfirm)

@@ -52,7 +52,7 @@ class productplan extends control
 
             $this->executeHooks($planID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', '', "function(){parent.parent.$('a.refresh').click()}"));
+            if(isonlybody()) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refreshPlan()'));
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$product&branch=$branch")));
         }
 
@@ -67,7 +67,7 @@ class productplan extends control
 
             $begin = date('Y-m-d', strtotime("+$delta days", $timestamp));
         }
-        $this->view->begin = $lastPlan ? $begin : '';
+        $this->view->begin = $lastPlan ? $begin : date('Y-m-d');
         if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
@@ -270,8 +270,11 @@ class productplan extends control
                 foreach($order as $id)
                 {
                     if(empty($id)) continue;
+                    if(!isset($planStories[$id])) continue;
                     $stories[$id] = $planStories[$id];
+                    unset($planStories[$id]);
                 }
+                if($planStories) $stories += $planStories;
                 $planStories = $stories;
                 unset($stories);
             }
@@ -398,7 +401,7 @@ class productplan extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed');
+            $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed', 'story', 'id_desc', null, $hasParent = false);
         }
 
         $this->view->allStories  = $allStories;

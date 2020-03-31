@@ -118,6 +118,7 @@ class caselibModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->caselib->menu as $key => $value)
         {
+            $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
             $replace = $libID;
             common::setMenuVars($this->lang->caselib->menu, $key, $replace);
         }
@@ -579,6 +580,7 @@ class caselibModel extends model
         $this->loadModel('action');
 
         $now      = helper::now();
+        $libID    = (int)$libID;
         $cases    = fixer::input('post')->get();
         $batchNum = count(reset($cases));
 

@@ -101,6 +101,7 @@ $lang->loading       = 'Lade...';
 $lang->notFound      = 'Nicht gefunden!';
 $lang->notPage       = 'Sorry, the features you are visiting are in development!';
 $lang->showAll       = '[[Alle anzeigen]]';
+$lang->selectedItems = 'Seleted <strong>{0}</strong> items';
 
 $lang->future       = 'Warte';
 $lang->year         = 'Jahr';
@@ -122,7 +123,7 @@ $lang->menu->my      = '<span>Dashboard</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = 'Test|qa|index';
-$lang->menu->repo    = 'Code|repo|log';
+$lang->menu->ci      = 'CI|repo|browse';
 $lang->menu->doc     = 'Dokumente|doc|index';
 $lang->menu->report  = 'Berichte|report|index';
 $lang->menu->company = 'Unternehmen|company|index';
@@ -331,11 +332,22 @@ $lang->caselib->menu->testsuite = array('link' => 'Suite|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => 'Berichte|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => 'Bibliothek|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
-$lang->repo = new stdclass();
-$lang->repo->menu = new stdclass();
-$lang->repo->menu->browse   = array('link' =>'Browse|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
-$lang->repo->menu->settings = 'Settings|repo|settings|repoID=%s';
-$lang->repo->menu->delete   = array('link' => 'Delete|repo|delete|repoID=%s', 'target' => 'hiddenwin');
+$lang->ci = new stdclass();
+$lang->ci->menu = new stdclass();
+$lang->ci->menu->code     = array('link' => 'Code|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->ci->menu->build    = array('link' => 'Build|job|browse', 'subModule' => 'compile,job');
+$lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' => 'create,edit');
+$lang->ci->menu->maintain = array('link' => 'Repo|repo|maintain', 'alias' => 'create,edit');
+$lang->ci->menu->rules    = array('link' => 'Rule|repo|setrules');
+
+$lang->repo          = new stdclass();
+$lang->jenkins       = new stdclass();
+$lang->compile       = new stdclass();
+$lang->job           = new stdclass();
+$lang->repo->menu    = $lang->ci->menu;
+$lang->jenkins->menu = $lang->ci->menu;
+$lang->compile->menu = $lang->ci->menu;
+$lang->job->menu     = $lang->ci->menu;
 
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
@@ -475,6 +487,11 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
+$lang->menugroup->repo    = 'ci';
+$lang->menugroup->jenkins = 'ci';
+$lang->menugroup->compile = 'ci';
+$lang->menugroup->job     = 'ci';
+
 /* 错误提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "The domain %s cannot be found!";
@@ -501,6 +518,7 @@ $lang->error->pasteImg        = 'Image is not allowed to be pasted in your brows
 $lang->error->noData          = 'No Data';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please exit tutorial first!';
+$lang->error->noCurlExt       = 'No Curl module installed';
 
 /* 分页信息。*/
 $lang->pager = new stdclass();
@@ -561,6 +579,7 @@ if(!defined('DT_DATE1'))     define('DT_DATE1',     'Y-m-d');
 if(!defined('DT_DATE2'))     define('DT_DATE2',     'Ymd');
 if(!defined('DT_DATE3'))     define('DT_DATE3',     'Y/m/d');
 if(!defined('DT_DATE4'))     define('DT_DATE4',     'M d');
+if(!defined('DT_DATE5'))     define('DT_DATE5',     'j/n');
 if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
 

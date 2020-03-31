@@ -21,20 +21,20 @@ $lang->install->officeDomain     = 'https://www.zentao.pm';
 
 $lang->install->start            = 'Start';
 $lang->install->keepInstalling   = 'Continue installing this version';
-$lang->install->seeLatestRelease = 'View latest version';
+$lang->install->seeLatestRelease = 'View the latest version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
 $lang->install->license          = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->desc             = <<<EOT
-ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, QA Management, Document Management, Todo Management, Company Management etc. ZenTao is a perfect choice for managing software development projects.
+ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
 
-ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by Nature Easy Soft. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
+ZenTao ALM is built on PHP + MySQL + zentaoPHP which is an independent framework developed by EasyCorp. Third-party developers/organizations can develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao ALM is developed by <strong><a href='http://en.easysoft.ltd' target='_blank' class='text-danger'>Nature Easy Soft Co., LTD</a></strong>.
+ZenTao ALM is developed by <strong><a href='http://en.easysoft.ltd' target='_blank' class='text-danger'>EasyCorp</a></strong>.
 Official Website: <a href='https://www.zentao.pm' target='_blank'>https://www.zentao.pm</a>
 Technical Support: <a href='https://www.zentao.pm/forum/' target='_blank'>https://www.zentao.pm/forum/</a>
-LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>Nature Easy Soft</a>
-Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Nature Easy Soft</a>
+LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>EasyCorp</a>
+Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>EasyCorp</a>
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao ALM</a>
 
 You are installing ZenTao <strong class='text-danger'>%s</strong>.
@@ -46,11 +46,11 @@ $lang->install->checking   = 'System Checkup';
 $lang->install->ok         = 'Passed(√)';
 $lang->install->fail       = 'Failed(×)';
 $lang->install->loaded     = 'Loaded';
-$lang->install->unloaded   = 'Not Loaded';
+$lang->install->unloaded   = 'Not loaded';
 $lang->install->exists     = 'Found ';
 $lang->install->notExists  = 'Not found ';
 $lang->install->writable   = 'Writable ';
-$lang->install->notWritable= 'Not Writable ';
+$lang->install->notWritable= 'Not writable ';
 $lang->install->phpINI     = 'PHP ini File';
 $lang->install->checkItem  = 'Item';
 $lang->install->current    = 'Current Setting';
@@ -114,14 +114,14 @@ $lang->install->workingList['onlyTask']  = 'Only Task Management';
 $lang->install->errorConnectDB      = 'Connection to the database Failed. ';
 $lang->install->errorDBName         = 'Database name should exclude “.” ';
 $lang->install->errorCreateDB       = 'Failed to create the database.';
-$lang->install->errorTableExists    = 'The data table has existed. If ZenTao has been installed before, please return to last step and clear data. Then continue the installation.';
+$lang->install->errorTableExists    = 'The data table has existed. If ZenTao has been installed before, please return to the previous step and clear data, then continue the installation.';
 $lang->install->errorCreateTable    = 'Failed to create the table.';
-$lang->install->errorImportDemoData = 'Failed to import demo data.';
+$lang->install->errorImportDemoData = 'Failed to import the demo data.';
 
-$lang->install->setConfig  = 'Create configuration file';
+$lang->install->setConfig  = 'Create config file';
 $lang->install->key        = 'Item';
 $lang->install->value      = 'Value';
-$lang->install->saveConfig = 'Save config';
+$lang->install->saveConfig = 'Save config file';
 $lang->install->save2File  = '<div class="alert alert-warning">Copy the content in the text box above and save it to "<strong> %s </strong>". You can change this configuration file later.</div>';
 $lang->install->saved2File = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
@@ -161,29 +161,32 @@ $lang->install->cronList['moduleName=report&methodName=remind']       = 'Daily T
 $lang->install->cronList['moduleName=svn&methodName=run']             = 'Synchronize SVN';
 $lang->install->cronList['moduleName=git&methodName=run']             = 'Synchronize GIT';
 $lang->install->cronList['moduleName=backup&methodName=backup']       = 'Backup Data';
-$lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronize sending Message';
-$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Asynchronize sending Webhook';
-$lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete overdue logs';
+$lang->install->cronList['moduleName=mail&methodName=asyncSend']      = 'Asynchronize sending message';
+$lang->install->cronList['moduleName=webhook&methodName=asyncSend']   = 'Asynchronize sending webhook';
+$lang->install->cronList['moduleName=admin&methodName=deleteLog']     = 'Delete expired logs';
 $lang->install->cronList['moduleName=todo&methodName=createCycle']    = 'Create recurring todos';
+$lang->install->cronList['moduleName=ci&methodName=initQueue']        = 'Create recurring Jenkins';
+$lang->install->cronList['moduleName=ci&methodName=checkBuildStatus'] = 'Synchronize Jenkins Status';
+$lang->install->cronList['moduleName=ci&methodName=exec']             = 'Execute Jenkins';
 
 $lang->install->success  = "Installed!";
-$lang->install->login    = 'Login ZenTao';
-$lang->install->register = 'Register in ZenTao Community';
+$lang->install->login    = 'ZenTao Login';
+$lang->install->register = 'ZenTao Community Signup';
 
 $lang->install->joinZentao = <<<EOT
-<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php asap</strong>.</p><p>Note: In order to get the latest news of ZenTao, please register on ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php</strong>.</p><p>Note: In order to get the latest news of ZenTao, please sign up on ZenTao Community(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'ranzhi', 'ydisk', 'meshiot');
 
-$lang->install->promotion      = "Products also from Nature Easy Soft:";
+$lang->install->promotion      = "Products also from EasyCorp:";
 $lang->install->chanzhi        = new stdclass();
 $lang->install->chanzhi->name  = 'ZSITE';
 $lang->install->chanzhi->logo  = 'images/main/chanzhi.ico';
 $lang->install->chanzhi->url   = 'http://www.zsite.net';
 $lang->install->chanzhi->desc  = <<<EOD
 <ul>
-  <li>Article, Blog, Manual, Member, Shop, Forum, Feedback……</li>
+  <li>Article, Blog, Manual, Member, Shop, Forum, Feedback</li>
   <li>Customize page at will by Theme, Effect, Widget, CSS, JS and layout</li>
   <li>Support both desktop and mobile in one system</li>
   <li>Highly optimized for search engines</li>
@@ -197,8 +200,8 @@ $lang->install->ranzhi->url   = 'http://www.zdoo.org';
 $lang->install->ranzhi->desc  = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
-  <li>OA: Approve, Announce, Trip, Leave and so on. </li>
-  <li>Project，Task and Document management </li>
+  <li>OA: Approve, Announce, Trip, Leave and more </li>
+  <li>Project, Task and Document management </li>
   <li>Cash: Income, Expense, Transfer, Invest and Debt</li>
 </ul>
 EOD;
@@ -217,7 +220,7 @@ EOD;
 
 
 $lang->install->ydisk = new stdclass();
-$lang->install->ydisk->name  = 'Y Disk-Free NetDisk';
+$lang->install->ydisk->name  = 'YDisk';
 $lang->install->ydisk->logo  = 'images/main/ydisk.ico';
 $lang->install->ydisk->url   = 'http://www.ydisk.cn';
 $lang->install->ydisk->desc  = <<<EOD

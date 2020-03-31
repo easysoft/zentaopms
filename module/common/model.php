@@ -172,7 +172,7 @@ class commonModel extends model
             if($module == 'tutorial') return true;
             if($module == 'block') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
-            if($module == 'report' and $method == 'annualData') return true;
+            if($module == 'report' and $method == 'annualdata') return true;
         }
         return false;
     }
@@ -254,7 +254,7 @@ class commonModel extends model
             {
                 echo '<li class="user-profile-item">';
                 echo "<a href='" . helper::createLink('my', 'profile') . "' class='" . (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role]) ? '' : ' no-role') . "'>";
-                echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account{0}) . "</div>\n";
+                echo "<div class='avatar avatar bg-secondary avatar-circle'>" . strtoupper($app->user->account[0]) . "</div>\n";
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
@@ -662,7 +662,8 @@ class commonModel extends model
         echo '<li>' . html::a(helper::createLink('my', 'index'), $lang->zentaoPMS) . '</li>';
         if($moduleName != 'index')
         {
-            if(!isset($lang->menu->$mainMenu)) return;
+            if(!isset($lang->menu->$mainMenu)) return print("</ul>");
+
             $menuLink = $lang->menu->$mainMenu;
             list($menuLabel, $module, $method) = explode('|', $menuLink);
             echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
@@ -749,8 +750,8 @@ class commonModel extends model
     public static function printOrderLink($fieldName, $orderBy, $vars, $label, $module = '', $method = '')
     {
         global $lang, $app;
-        if(empty($module)) $module = $app->getModuleName();
-        if(empty($method)) $method = $app->getMethodName();
+        if(empty($module)) $module = isset($app->rawModule) ? $app->rawModule : $app->getModuleName();
+        if(empty($method)) $method = isset($app->rawMethod) ? $app->rawMethod : $app->getMethodName();
         $className = 'header';
         $isMobile  = $app->viewType === 'mhtml';
 
@@ -1411,6 +1412,12 @@ EOD;
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
+        if($this->app->isFlow)
+        {
+            $module = $this->app->rawModule;
+            $method = $this->app->rawMethod;
+        }
+
         if(!empty($this->app->user->modifyPassword) and (($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword')));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
@@ -1450,6 +1457,8 @@ EOD;
         $acls    = $app->user->rights['acls'];
         $module  = strtolower($module);
         $method  = strtolower($method);
+
+        if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
 
         if(isset($rights[$module][$method]))
         {
@@ -1757,7 +1766,7 @@ EOD;
         {
             $timestamp = $queryString['time'];
             if(strlen($timestamp) > 10) $timestamp = substr($timestamp, 0, 10);
-            if(strlen($timestamp) != 10 or $timestamp{0} >= '4') $this->response('ERROR_TIMESTAMP');
+            if(strlen($timestamp) != 10 or $timestamp[0] >= '4') $this->response('ERROR_TIMESTAMP');
 
             $result = $this->get->token == md5($entry->code . $entry->key . $queryString['time']);
             if($result)
@@ -1811,7 +1820,7 @@ EOD;
      * @access public
      * @return string
      */
-    public static function http($url, $data = null)
+    public static function http($url, $data = null, $optHeader = false)
     {
         global $lang, $app;
         if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
@@ -1832,6 +1841,7 @@ EOD;
         curl_setopt($curl, CURLOPT_URL, $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+        if($optHeader) curl_setopt($curl, CURLOPT_HEADER, true);
         if(!empty($data))
         {
             curl_setopt($curl, CURLOPT_POST, true);

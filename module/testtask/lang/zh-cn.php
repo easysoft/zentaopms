@@ -14,6 +14,7 @@ $lang->testtask->create           = "提交测试";
 $lang->testtask->reportChart      = '报表统计';
 $lang->testtask->reportAction     = '用例报表统计';
 $lang->testtask->delete           = "删除测试单";
+$lang->testtask->importUnit       = "导入测试结果";
 $lang->testtask->view             = "概况";
 $lang->testtask->edit             = "编辑测试单";
 $lang->testtask->browse           = "测试单列表";
@@ -79,6 +80,7 @@ $lang->testtask->lastRunner     = '最后执行人';
 $lang->testtask->lastRunDate    = '最后执行时间';
 $lang->testtask->date           = '测试时间';
 $lang->testtask->deleted        = "已删除";
+$lang->testtask->resultFile     = "测试结果";
 
 $lang->testtask->beginAndEnd    = '起止时间';
 $lang->testtask->to             = '至';
@@ -114,6 +116,8 @@ $lang->testtask->confirmUnlinkCase = '您确认要移除该用例吗？';
 $lang->testtask->noticeNoOther     = '该产品还没有其他测试单';
 $lang->testtask->noTesttask        = '暂时没有测试单';
 $lang->testtask->checkLinked       = '请检查测试单的产品是否与项目相关联';
+$lang->testtask->noImportData      = '导入的XML没有解析出数据。';
+$lang->testtask->unitXMLFormat     = '请选择Junit XML 格式的文件。';
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '所有用例';

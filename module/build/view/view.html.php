@@ -130,7 +130,12 @@ tbody tr td:first-child input{display:none;}
                   <?php endif;?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $story->title?>'><?php echo html::a($storyLink,$story->title, '', "class='iframe' data-width='1000'");?></td>
+                <td class='text-left nobr' title='<?php echo $story->title?>'>
+                  <?php
+                  if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
+                  echo html::a($storyLink,$story->title, '', "class='iframe' data-width='1000'");
+                  ?>
+                </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
                 <td><?php echo $story->estimate;?></td>
                 <td>

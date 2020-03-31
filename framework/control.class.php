@@ -58,6 +58,20 @@ class control extends baseControl
                     }
                 }
             }
+
+            /* Append editor field to this module config from workflow. */
+            $textareaFields = $this->dao->select('*')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($this->moduleName)->andWhere('control')->eq('textarea')->andWhere('buildin')->eq('0')->fetchAll('field');
+            if($textareaFields)
+            {
+                $editorIdList = array();
+                foreach($textareaFields as $textareaField) $editorIdList[] = $textareaField->field;
+
+                if(!isset($this->config->{$this->moduleName})) $this->config->{$this->moduleName} = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->editor)) $this->config->{$this->moduleName}->editor = new stdclass();
+                if(!isset($this->config->{$this->moduleName}->editor->{$this->methodName})) $this->config->{$this->moduleName}->editor->{$this->methodName} = array('id' => '', 'tools' => 'simpleTools');
+                $this->config->{$this->moduleName}->editor->{$this->methodName}['id'] .= ',' . join(',', $editorIdList);
+                trim($this->config->{$this->moduleName}->editor->{$this->methodName}['id'], ',');
+            }
         }
     }
 
@@ -293,10 +307,15 @@ class control extends baseControl
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
         $requiredFields = '';
+        $mustPostFields = '';
         foreach($fields as $field)
         {
             if($field->buildin or !$field->show or !isset($layouts[$field->field])) continue;
-            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false) $requiredFields .= ",{$field->field}";
+            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false)
+            {
+                $requiredFields .= ",{$field->field}";
+                if($field->control == 'radio' or $field->control == 'checkbox') $mustPostFields .= ",{$field->field}";
+            }
         }
 
         if($requiredFields)
@@ -306,7 +325,15 @@ class control extends baseControl
             $message = array();
             foreach(explode(',', $requiredFields) as $requiredField)
             {
-                if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')$message[$requiredField] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+                if(empty($requiredField)) continue;
+                if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')
+                {
+                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+                }
+                elseif(strpos(",{$mustPostFields},", ",{$requiredField},") !== false and !isset($_POST[$requiredField]))
+                {
+                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+                }
             }
             if($message) $this->send(array('result' => 'fail', 'message' => $message));
         }

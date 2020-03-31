@@ -42,4 +42,22 @@ class miscModel extends model
         }
         return $tables;
     }
+
+    /**
+     * Get remind.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getRemind()
+    {
+        $remind = '';
+        if(!empty($this->config->global->showAnnual) and empty($this->config->global->annualShowed))
+        {
+            $remind  = '<h4>' . $this->lang->misc->showAnnual . '</h4>';
+            $remind .= '<p>' . sprintf($this->lang->misc->annualDesc, helper::createLink('report', 'annualData')) . '</p>';
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.annualShowed", 1);
+        }
+        return $remind;
+    }
 }

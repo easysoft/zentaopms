@@ -70,8 +70,9 @@ $lang->misc->connectFail = "连接数据库失败，错误：%s，<br/> 请检�
 $lang->misc->tableName   = "表名";
 $lang->misc->tableStatus = "状态";
 $lang->misc->novice      = "您可能初次使用禅道，是否进入新手模式？";
-$lang->misc->showAnnual  = '新增年度报表功能';
-$lang->misc->annualDesc  = '12.0版本后，新增年度报表功能，可以到『统计->年度报表』页面查看。 是否现在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
+$lang->misc->showAnnual  = '新增年度总结功能';
+$lang->misc->annualDesc  = '12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
+$lang->misc->remind      = '新功能提醒';
 
 $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     <h5>管理员请登录禅道所在的服务器，创建<span>%s</span>文件。</h5>
@@ -85,6 +86,9 @@ $lang->misc->feature = new stdclass();
 $lang->misc->feature->lastest  = '最新版本';
 $lang->misc->feature->detailed = '详情';
 
+$lang->misc->releaseDate['12.2']        = '2020-03-25';
+$lang->misc->releaseDate['12.1']        = '2020-03-10';
+$lang->misc->releaseDate['12.0.1']      = '2020-02-12';
 $lang->misc->releaseDate['12.0']        = '2020-01-03';
 $lang->misc->releaseDate['11.7']        = '2019-11-28';
 $lang->misc->releaseDate['11.6.5']      = '2019-11-08';
@@ -121,6 +125,10 @@ $lang->misc->releaseDate['7.4.beta']    = '2015-11-13';
 $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
+
+$lang->misc->feature->all['12.2'][]   = array('title'=>'增加父子需求，兼容最新喧喧。', 'desc' => '');
+$lang->misc->feature->all['12.1'][]   = array('title'=>'增加构建功能', 'desc' => '<p>增加构建功能，集成Jenkins进行构建</p>');
+$lang->misc->feature->all['12.0.1'][] = array('title'=>'修复Bug', 'desc' => '');
 
 $lang->misc->feature->all['12.0'][]   = array('title'=>'将代码功能版本浏览功能转移到开源版', 'desc' => '');
 $lang->misc->feature->all['12.0'][]   = array('title'=>'增加年度总结', 'desc' => '根据角色显示年度总结。');

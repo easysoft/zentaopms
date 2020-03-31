@@ -93,6 +93,7 @@ class product extends control
      * @param  int    $productID
      * @param  string $browseType
      * @param  int    $param
+     * @param  string $storyType requirement|story
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -100,7 +101,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
@@ -145,25 +146,34 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get stories. */
-        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager);
+        $stories = $this->product->getStories($productID, $branch, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
 
         /* Process the sql, get the conditon partion, save it to session. */
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', $browseType != 'bysearch');
 
         /* Get related tasks, bugs, cases count of each story. */
         $storyIdList = array();
-        foreach($stories as $story) $storyIdList[$story->id] = $story->id;
+        foreach($stories as $story)
+        {
+            $storyIdList[$story->id] = $story->id;
+            if(!empty($story->children))
+            {
+                foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
+            }
+        }
         $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
         /* Build search form. */
-        $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
+
+        $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
 
         /* Assign. */
         $this->view->title         = $this->products[$productID]. $this->lang->colon . $this->lang->product->browse;
@@ -176,7 +186,7 @@ class product extends control
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
         $this->view->summary       = $this->product->summary($stories);
-        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', 'createStoryLink'), '', $branch);
+        $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch);
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;
         $this->view->users         = $this->user->getPairs('noletter|pofirst|nodeleted');
@@ -194,6 +204,7 @@ class product extends control
         $this->view->storyCases    = $storyCases;
         $this->view->param         = $param;
         $this->view->products      = $this->products;
+        $this->view->storyType     = $storyType;
         $this->display();
     }
 
@@ -685,6 +696,10 @@ class product extends control
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Save this url to session. */
+        $uri = $this->app->getURI(true);
+        $this->app->session->set('lineList', $uri);
 
         $this->app->loadLang('my');
         $this->view->title        = $this->lang->product->allProduct;

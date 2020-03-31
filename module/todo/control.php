@@ -448,15 +448,16 @@ class todo extends control
      */
     public function batchClose()
     {
-        if(!empty($_POST['todoIDList']))
+        $waitIdList = array();
+        foreach($_POST['todoIDList'] as $todoID)
         {
-            foreach($_POST['todoIDList'] as $todoID)
-            {
-                $todo = $this->todo->getById($todoID);
-                if($todo->status == 'done') $this->todo->close($todoID);
-            }
-            die(js::reload('parent'));
+            $todo = $this->todo->getById($todoID);
+            if($todo->status == 'done') $this->todo->close($todoID);
+            if($todo->status != 'done' and $todo->status != 'closed') $waitIdList[] = $todoID;
         }
+        if(!empty($waitIdList)) echo js::alert(sprintf($this->lang->todo->unfinishedTodo, implode(',', $waitIdList)));
+
+        die(js::reload('parent'));
     }
 
     /**

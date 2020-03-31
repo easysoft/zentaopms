@@ -133,11 +133,18 @@ $lang->action->desc->linked2bug     = '$date 由 <strong>$actor</strong> 关联�
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 关联子任务 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkchildtask      = '$date, 由 <strong>$actor</strong> 关联子任务 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkchildrentask = '$date, 由 <strong>$actor</strong> 移除子任务 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkparenttask     = '$date, 由 <strong>$actor</strong> 关联到父任务 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparenttask   = '$date, 由 <strong>$actor</strong> 从父任务<strong>$extra</strong>取消关联。' . "\n";
 $lang->action->desc->deletechildrentask = '$date, 由 <strong>$actor</strong> 删除子任务<strong>$extra</strong>。' . "\n";
+
+/* 用来描述和父子需求相关的操作历史记录。*/
+$lang->action->desc->createchildrenstory = '$date, 由 <strong>$actor</strong> 创建子需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildstory      = '$date, 由 <strong>$actor</strong> 关联子需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkchildrenstory = '$date, 由 <strong>$actor</strong> 移除子需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparentstory     = '$date, 由 <strong>$actor</strong> 关联到父需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkparentstory   = '$date, 由 <strong>$actor</strong> 从父需求<strong>$extra</strong>取消关联。' . "\n";
+$lang->action->desc->deletechildrenstory = '$date, 由 <strong>$actor</strong> 删除子需求<strong>$extra</strong>。' . "\n";
 
 /* 关联用例和移除用例时的历史操作记录。*/
 $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关联相关用例 <strong>$extra</strong>。' . "\n";
@@ -211,6 +218,12 @@ $lang->action->label->batchcreate         = "批量创建任务";
 $lang->action->label->createchildren      = "创建子任务";
 $lang->action->label->managed             = "维护";
 $lang->action->label->deletechildrentask  = "删除子任务";
+$lang->action->label->createchildrenstory = "创建子需求";
+$lang->action->label->linkchildstory      = "关联子需求";
+$lang->action->label->unlinkchildrenstory = "取消关联子需求";
+$lang->action->label->linkparentstory     = "关联到父需求";
+$lang->action->label->unlinkparentstory   = "从父需求取消关联";
+$lang->action->label->deletechildrenstory = "删除子需求";
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction = new stdclass();
@@ -286,6 +299,11 @@ $lang->action->dynamicAction->task['unlinkparenttask']     = '从父任务取消
 $lang->action->dynamicAction->task['deletechildrentask']   = '删除子任务';
 $lang->action->dynamicAction->task['linkparenttask']       = '关联到父任务';
 $lang->action->dynamicAction->task['linkchildtask']        = '关联子任务';
+$lang->action->dynamicAction->task['createchildrenstory']  = '创建子需求';
+$lang->action->dynamicAction->task['unlinkparentstory']    = '从父需求取消关联';
+$lang->action->dynamicAction->task['deletechildrenstory']  = '删除子需求';
+$lang->action->dynamicAction->task['linkparentstory']      = '关联到父需求';
+$lang->action->dynamicAction->task['linkchildstory']       = '关联子需求';
 $lang->action->dynamicAction->task['undeleted']            = '还原任务';
 $lang->action->dynamicAction->task['hidden']               = '隐藏任务';
 $lang->action->dynamicAction->task['svncommited']          = 'SVN提交';

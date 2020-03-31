@@ -149,8 +149,7 @@ class file extends control
                 /* Down the file. */
                 $fileName = $file->title;
                 if(!preg_match("/\.{$file->extension}$/", $fileName)) $fileName .= '.' . $file->extension;
-                $fileData = file_get_contents($file->realPath);
-                $this->sendDownHeader($fileName, $file->extension, $fileData);
+                $this->sendDownHeader($fileName, $file->extension, $file->realPath, 'file');
             }
         }
         else
@@ -244,9 +243,9 @@ class file extends control
      * @access public
      * @return void
      */
-    public function sendDownHeader($fileName, $fileType, $content)
+    public function sendDownHeader($fileName, $fileType, $content, $type = 'content')
     {
-        $this->file->sendDownHeader($fileName, $fileType, $content);
+        $this->file->sendDownHeader($fileName, $fileType, $content, $type);
     }
 
     /**

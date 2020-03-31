@@ -44,3 +44,54 @@ function createBug(obj)
     window.open(createLink('bug', 'create', params + ',stepIdList=' + stepIdList), '_blank');
     config.onlybody = onlybody;
 }
+
+function loadProjectRelated(projectID)
+{
+    loadProjectBuilds(projectID);
+}
+
+function loadProjectBuilds(projectID)
+{
+    selectedBuild = $('#build').val();
+    if(!selectedBuild) selectedBuild = 0;
+    link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
+    if(projectID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=resolvedBuild&build=' + selectedBuild);
+    $('#buildBox').load(link, function()
+    {
+        $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
+        $('#build').chosen();
+    });
+}
+
+/**
+ * when begin date input change and end date input is null
+ * change end date input to begin's after day
+ * 
+ * @access public
+ * @return void
+ */
+function suitEndDate()
+{
+    beginDate = $('#begin').val();
+    if(!beginDate) return;
+    endDate = $('#end').val();
+    if(endDate) return;
+    
+    endDate = convertStringToDate(beginDate).addDays(1).toString('yyyy-MM-dd');
+    $('#end').val(endDate);
+}
+
+/**
+ * Convert a date string like 2011-11-11 to date object in js.
+ * 
+ * @param  string $date 
+ * @access public
+ * @return date
+ */
+function convertStringToDate(dateString)
+{
+    dateString = dateString.split('-');
+    dateString = dateString[1] + '/' + dateString[2] + '/' + dateString[0];
+    
+    return Date.parse(dateString);
+}

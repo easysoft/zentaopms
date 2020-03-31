@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php $catLink = $this->git->buildURL('cat', $path, $revision);?>
+<?php $catLink = $this->loadModel('repo')->buildURL('cat', $path, $revision);?>
 <div class='detail'>
   <div class='detail-title'><?php echo html::a($catLink, "$path@$revision");?></div>
   <div class='detail-content'><xmp><?php echo $diff;?></xmp></div>

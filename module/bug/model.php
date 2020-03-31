@@ -91,6 +91,7 @@ class bugModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->bug->menu as $key => $menu)
         {
+            $this->loadModel('qa')->setSubMenu('bug', $key, $productID);
             if($this->config->global->flow != 'onlyTest')
             {
                 $replace = $productID;
@@ -181,6 +182,7 @@ class bugModel extends model
     {
         $this->loadModel('action');
         $branch     = (int)$branch;
+        $productID  = (int)$productID;
         $now        = helper::now();
         $actions    = array();
         $data       = fixer::input('post')->get();
@@ -954,6 +956,7 @@ class bugModel extends model
             /* Check required fields. */
             foreach(explode(',', $this->config->bug->resolve->requiredFields) as $requiredField)
             {
+                if($requiredField == 'resolvedBuild') continue;
                 if(!isset($_POST[$requiredField]) or strlen(trim($_POST[$requiredField])) == 0)
                 {
                     $fieldName = $requiredField;
@@ -963,7 +966,6 @@ class bugModel extends model
             }
 
             if($bug->resolution == 'duplicate' and !$this->post->duplicateBug) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
-            if($bug->resolution == 'fixed' and !$this->post->resolvedBuild)    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->resolvedBuild);
 
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
             if(empty($bug->buildProject)) dao::$errors['buildProject'][] = sprintf($this->lang->error->notempty, $this->lang->bug->project);

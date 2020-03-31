@@ -547,12 +547,13 @@ class productModel extends model
      * @param  string $browseType
      * @param  int    $queryID
      * @param  int    $moduleID
+     * @param  string $type requirement|story
      * @param  string $sort
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getStories($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager)
+    public function getStories($productID, $branch, $browseType, $queryID, $moduleID, $type = 'story', $sort, $pager)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
@@ -568,21 +569,22 @@ class productModel extends model
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $sort, $pager);
+            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, $pager);
         }
-        if($browseType == 'unplan')       $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $sort, $pager);
-        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $sort, $pager);
-        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $sort, $pager);
-        if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch);
-        if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
-        if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
-        if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
-        if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $sort, $pager);
-        if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $sort, $pager);
-        if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $sort, $pager);
-        if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changed', $sort, $pager);
-        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $sort, $pager);
-        if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $sort, $pager);
+        if($browseType == 'unplan')       $stories = $this->story->getByPlan($productID, $queryID, $modules, '', $type, $sort, $pager);
+        if($browseType == 'allstory')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, $pager);
+        if($browseType == 'bymodule')     $stories = $this->story->getProductStories($productID, $branch, $modules, 'all', $type, $sort, $pager);
+        if($browseType == 'bysearch')     $stories = $this->story->getBySearch($productID, $queryID, $sort, $pager, '', $branch, $type);
+        if($browseType == 'assignedtome') $stories = $this->story->getByAssignedTo($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'openedbyme')   $stories = $this->story->getByOpenedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'reviewedbyme') $stories = $this->story->getByReviewedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'closedbyme')   $stories = $this->story->getByClosedBy($productID, $branch, $modules, $this->app->user->account, $type, $sort, $pager);
+        if($browseType == 'draftstory')   $stories = $this->story->getByStatus($productID, $branch, $modules, 'draft', $type, $sort, $pager);
+        if($browseType == 'activestory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'active', $type, $sort, $pager);
+        if($browseType == 'changedstory') $stories = $this->story->getByStatus($productID, $branch, $modules, 'changed', $type, $sort, $pager);
+        if($browseType == 'willclose')    $stories = $this->story->get2BeClosed($productID, $branch, $modules, $type, $sort, $pager);
+        if($browseType == 'closedstory')  $stories = $this->story->getByStatus($productID, $branch, $modules, 'closed', $type, $sort, $pager);
+        if($browseType == 'emptysr')      $stories = $this->story->getEmptySR($productID, $branch, $modules, '', $type, $sort, $pager);
 
         return $stories;
     }
@@ -828,14 +830,19 @@ class productModel extends model
      * Get product stat by id
      *
      * @param  int    $productID
+     * @param  string $storyType
      * @access public
      * @return object|bool
      */
-    public function getStatByID($productID)
+    public function getStatByID($productID, $storyType = 'story')
     {
         if(!$this->checkPriv($productID)) return false;
         $product = $this->getById($productID);
-        $stories = $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->groupBy('product, status')->fetchAll('status');
+        $stories = $this->dao->select('product, status, count(status) AS count')->from(TABLE_STORY)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($storyType)
+            ->andWhere('product')->eq($productID)
+            ->groupBy('product, status')->fetchAll('status');
         /* Padding the stories to sure all status have records. */
         foreach(array_keys($this->lang->story->statusList) as $status)
         {
@@ -873,10 +880,11 @@ class productModel extends model
      * @param  object $pager
      * @param  string $status
      * @param  int    $line
+     * @param  string $storyType requirement|story
      * @access public
      * @return array
      */
-    public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed', $line = 0)
+    public function getStats($orderBy = 'order_desc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story')
     {
         $this->loadModel('report');
         $this->loadModel('story');
@@ -892,6 +900,7 @@ class productModel extends model
         $stories = $this->dao->select('product, status, count(status) AS count')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
+            ->andWhere('type')->eq($storyType)
             ->andWhere('product')->in(array_keys($products))
             ->groupBy('product, status')
             ->fetchGroup('product', 'status');
@@ -977,6 +986,7 @@ class productModel extends model
         $totalEstimate = 0.0;
         $storyIdList   = array();
 
+        $count = 0;
         foreach($stories as $key => $story)
         {
             $totalEstimate += $story->estimate;
@@ -988,12 +998,28 @@ class productModel extends model
             {
                 $storyIdList[] = $story->id;
             }
+
+            $count ++;
+            if(!empty($story->children))
+            {
+                foreach($story->children as $child)
+                {
+                    if(
+                        $child->status != 'closed' or
+                        ($child->status == 'closed' and ($child->closedReason == 'done' or $child->closedReason == 'postponed'))
+                    )
+                    {
+                        $storyIdList[] = $child->id;
+                    }
+                    $count ++;
+                }
+            }
         }
 
         $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll();
-        $rate  = count($stories) == 0 ? 0 : round(count($cases) / count($stories), 2);
+        $rate  = count($stories) == 0 ? 0 : round(count($cases) / $count, 2);
 
-        return sprintf($this->lang->product->storySummary, count($stories), $totalEstimate, $rate * 100 . "%");
+        return sprintf($this->lang->product->storySummary, $count, $totalEstimate, $rate * 100 . "%");
     }
 
     /**

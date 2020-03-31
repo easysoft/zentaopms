@@ -13,3 +13,6 @@ html[lang="en"] #todoBatchAddForm .col-pending {width: 90px;}
 #todoBatchAddHeader [name="date"]:disabled {color: #ccc; text-decoration: line-through;}
 .main-header > .input-group {width: 240px;}
 html[lang="en"] .main-header > .input-group {width: 250px;}
+
+#formSettingBtn {position: absolute; top: 14px; right: 20px; z-index: 1000;}
+#formSettingBtn .dropdown{margin-right:0px;}

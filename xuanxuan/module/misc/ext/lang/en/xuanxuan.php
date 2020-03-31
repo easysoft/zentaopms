@@ -12,7 +12,7 @@ $lang->misc->client->osList['win64']   = 'Windows 64';
 $lang->misc->client->osList['win32']   = 'Windows 32';
 $lang->misc->client->osList['linux64'] = 'Linux 64';
 $lang->misc->client->osList['linux32'] = 'Linux 32';
-$lang->misc->client->osList['mac']     = 'Mac';
+$lang->misc->client->osList['mac64']   = 'Mac';
 
 $lang->misc->client->errorInfo = new stdclass();
 $lang->misc->client->errorInfo->downloadError  = 'Failed to download package!';

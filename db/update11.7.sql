@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   KEY `revision` (`revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-ALTER TABLE `zt_bug` CHANGE `caseVersion` `caseVersion` smallint(6) NOT NULL AFTER `case`;
+ALTER TABLE `zt_bug` CHANGE `caseVersion` `caseVersion` smallint(6) NOT NULL DEFAULT 1 AFTER `case`;
 ALTER TABLE `zt_bug` ADD `repo` mediumint(8) unsigned NOT NULL AFTER `result`;
 ALTER TABLE `zt_bug` ADD `lines` varchar(10) COLLATE 'utf8_general_ci' NOT NULL AFTER `repo`;
 ALTER TABLE `zt_bug` ADD `v1` varchar(40) COLLATE 'utf8_general_ci' NOT NULL AFTER `lines`;

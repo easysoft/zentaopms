@@ -344,6 +344,11 @@ class userModel extends model
             }
             unset($user->group);
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
+
+            /* Fix bug #2941 */
+            $userID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('user', $userID, 'Created');
+
             if(dao::isError())
             {
                 echo js::error(dao::getError());
@@ -1584,7 +1589,7 @@ class userModel extends model
 
         $personalData = array();
         $personalData['createdTodo']  = $this->dao->select('count(*) as count')->from(TABLE_TODO)->where('account')->eq($account)->fetch('count');
-        $personalData['createdStory'] = $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $personalData['createdStory'] = $this->dao->select('count(*) as count')->from(TABLE_STORY)->where('openedBy')->eq($account)->andWhere('type')->eq('story')->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['finishedTask'] = $this->dao->select('count(*) as count')->from(TABLE_TASK)->where('finishedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['resolvedBug']  = $this->dao->select('count(*) as count')->from(TABLE_BUG)->where('resolvedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['createdCase']  = $this->dao->select('count(*) as count')->from(TABLE_CASE)->where('openedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');

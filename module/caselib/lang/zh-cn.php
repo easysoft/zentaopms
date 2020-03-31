@@ -27,9 +27,13 @@ $lang->caselib->import           = '导入';
 $lang->caselib->importAction     = '导入用例';
 $lang->caselib->showImport       = '显示导入数据';
 
-$lang->caselib->id   = '编号';
-$lang->caselib->name = '名称';
-$lang->caselib->desc = '描述';
+$lang->caselib->id             = '编号';
+$lang->caselib->name           = '名称';
+$lang->caselib->desc           = '描述';
+$lang->caselib->addedBy        = '由谁创建';
+$lang->caselib->addedDate      = '创建时间';
+$lang->caselib->lastEditedBy   = '最后编辑人';
+$lang->caselib->lastEditedDate = '最后编辑时间';
 
 $lang->caselib->legendDesc = '描述';
 

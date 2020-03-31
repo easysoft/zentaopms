@@ -101,6 +101,7 @@ $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您訪問的對象並不存在！';
 $lang->notPage       =  '抱歉，您訪問的功能正在開發中！';
 $lang->showAll       = '[[全部顯示]]';
+$lang->selectedItems = '已選擇 <strong>{0}</strong> 項';
 
 $lang->future      = '未來';
 $lang->year        = '年';
@@ -122,7 +123,7 @@ $lang->menu->my      = '<span> 我的地盤</span>|my|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '測試|qa|index';
-$lang->menu->repo    = '代碼|repo|log';
+$lang->menu->ci      = '整合|repo|browse';
 $lang->menu->doc     = '文檔|doc|index';
 $lang->menu->report  = '統計|report|index';
 $lang->menu->company = '組織|company|index';
@@ -331,11 +332,22 @@ $lang->caselib->menu->testsuite = array('link' => '套件|testsuite|browse|');
 $lang->caselib->menu->report    = array('link' => '報告|testreport|browse|');
 $lang->caselib->menu->caselib   = array('link' => '用例庫|caselib|browse|libID=%s', 'alias' => 'create,createcase,view,edit,batchcreatecase,showimport', 'subModule' => 'tree,testcase');
 
-$lang->repo = new stdclass();
-$lang->repo->menu = new stdclass();
-$lang->repo->menu->browse   = array('link' =>'瀏覽|repo|log|repoID=%s&entry=', 'alias' => 'diff,view,revision,showsynccomment');
-$lang->repo->menu->settings = '設置|repo|settings|repoID=%s';
-$lang->repo->menu->delete   = array('link' => '刪除|repo|delete|repoID=%s', 'target' => 'hiddenwin');
+$lang->ci = new stdclass();
+$lang->ci->menu = new stdclass();
+$lang->ci->menu->code     = array('link' => '代碼|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
+$lang->ci->menu->build    = array('link' => '構建|job|browse', 'subModule' => 'compile,job');
+$lang->ci->menu->jenkins  = array('link' => 'Jenkins|jenkins|browse', 'alias' => 'create,edit');
+$lang->ci->menu->maintain = array('link' => '版本庫|repo|maintain', 'alias' => 'create,edit');
+$lang->ci->menu->rules    = array('link' => '指令|repo|setrules');
+
+$lang->repo          = new stdclass();
+$lang->jenkins       = new stdclass();
+$lang->compile       = new stdclass();
+$lang->job           = new stdclass();
+$lang->repo->menu    = $lang->ci->menu;
+$lang->jenkins->menu = $lang->ci->menu;
+$lang->compile->menu = $lang->ci->menu;
+$lang->job->menu     = $lang->ci->menu;
 
 /* 文檔視圖菜單設置。*/
 $lang->doc = new stdclass();
@@ -381,7 +393,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首頁|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定義|custom|set', 'subModule' => 'custom');
-$lang->admin->menu->sso       = array('link' => '整合|admin|sso');
+$lang->admin->menu->sso       = array('link' => '整合|admin|sso', 'subModule' => '');
 $lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => '二次開發|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 $lang->admin->menu->translate = array('link' => '翻譯|dev|translate');
@@ -475,6 +487,11 @@ $lang->menugroup->entry       = 'admin';
 $lang->menugroup->webhook     = 'admin';
 $lang->menugroup->message     = 'admin';
 
+$lang->menugroup->repo    = 'ci';
+$lang->menugroup->jenkins = 'ci';
+$lang->menugroup->compile = 'ci';
+$lang->menugroup->job     = 'ci';
+
 /* 錯誤提示信息。*/
 $lang->error = new stdclass();
 $lang->error->companyNotFound = "您訪問的域名 %s 沒有對應的公司。";
@@ -501,6 +518,7 @@ $lang->error->pasteImg        = '您的瀏覽器不支持粘貼圖片！';
 $lang->error->noData          = '沒有數據';
 $lang->error->editedByOther   = '該記錄可能已經被改動。請刷新頁面重新編輯！';
 $lang->error->tutorialData    = '新手模式下不會插入數據，請退出新手模式操作';
+$lang->error->noCurlExt       = '伺服器未安裝Curl模組。';
 
 /* 分頁信息。*/
 $lang->pager = new stdclass();
@@ -561,6 +579,7 @@ if(!defined('DT_DATE1'))      define('DT_DATE1',     'Y-m-d');
 if(!defined('DT_DATE2'))      define('DT_DATE2',     'Ymd');
 if(!defined('DT_DATE3'))      define('DT_DATE3',     'Y年m月d日');
 if(!defined('DT_DATE4'))      define('DT_DATE4',     'n月j日');
+if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
 if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
 if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
 

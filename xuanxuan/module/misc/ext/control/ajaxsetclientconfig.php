@@ -19,10 +19,20 @@ class myMisc extends misc
 
         /* write login info into config file. */
         $loginInfo = new stdclass();
-        $loginInfo->ui = new stdclass();
-        $loginInfo->ui->defaultUser = new stdclass();
-        $loginInfo->ui->defaultUser->server  = common::getSysURL();;
-        $loginInfo->ui->defaultUser->account = $this->app->user->account;
+        $loginInfo->ui = array();
+        $loginInfo->ui['defaultUser']['server']  = common::getSysURL();;
+        $loginInfo->ui['defaultUser']['account'] = $this->app->user->account;
+        $loginInfo->ui['defaultUser']['lock']    = false;
+        $loginInfo->ui['defaultUser']['ldap']    = false;
+        $loginInfo->ui['login.ldap']             = true;
+
+        $ldapPath = $this->app->getModulePath('', 'ldap');
+        if(is_dir($ldapPath))
+        {
+            $ldapTurnon = $this->dao->select('*')->from(TABLE_CONFIG)->where('owner')->eq('system')->andWhere('module')->eq('ldap')->andWhere('`key`')->eq('turnon')->fetch('value');
+            $loginInfo->ui['defaultUser']['ldap'] = !empty($ldapTurnon);
+        }
+
         $loginInfo = json_encode($loginInfo);
 
         $loginFile = $clientDir . 'config.json';

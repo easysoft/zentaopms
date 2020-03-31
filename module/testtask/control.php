@@ -1023,4 +1023,53 @@ class testtask extends control
             ->exec();
         die(js::locate($this->session->caseList, 'parent'));
     }
+
+    /**
+     * Import unit results.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
+    public function importUnit($productID)
+    {
+        if($_POST)
+        {
+            $file = $this->loadModel('file')->getUpload('resultFile');
+            $file = $file[0];
+
+            $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
+            move_uploaded_file($file['tmpname'], $fileName);
+            $this->session->set('resultFile', $fileName);
+
+            $taskID = $this->testtask->importUnit($productID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('testtask', $taskID, 'opened');
+            die(js::locate($this->createLink('testtask', 'cases', "taskID=$taskID"), 'parent'));
+        }
+
+        $this->testtask->setMenu($this->products, $productID);
+
+        $this->app->loadLang('job');
+        $projects = $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)
+            ->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF('0')->andWhere('t1.branch')->in('0')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
+            ->andWhere('t2.type')->ne('ops')
+            ->orderBy('t1.project desc')
+            ->fetchPairs('id', 'name');
+
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnit;
+        $this->view->position[]  = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]  = $this->lang->testtask->importUnit;
+
+        $this->view->projects  = array('' => '') + $projects;
+        $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
+        $this->view->productID = $productID;
+        $this->display();
+    }
 }

@@ -27,11 +27,12 @@ class taskModel extends model
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
+        $projectID  = (int)$projectID;
         $taskIdList = array();
         $taskFiles  = array();
         $this->loadModel('file');
         $task = fixer::input('post')
-            ->setDefault('project', (int)$projectID)
+            ->setDefault('project', $projectID)
             ->setDefault('estimate,left,story', 0)
             ->setDefault('status', 'wait')
             ->setIF($this->post->estimate != false, 'left', $this->post->estimate)
@@ -65,7 +66,7 @@ class taskModel extends model
             /* Check duplicate task. */
             if($task->type != 'affair')
             {
-                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project=$projectID and story=$task->story");
+                $result = $this->loadModel('common')->removeDuplicate('task', $task, "project={$projectID} and story=" . (int)$task->story);
                 if($result['stop'])
                 {
                     $taskIdList[$assignedTo] = array('status' => 'exists', 'id' => $result['duplicate']);
@@ -578,6 +579,7 @@ class taskModel extends model
             $currentTask = !empty($task) ? $task : new stdclass();
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
 
+            $currentTask->assignedTo = $oldTask->assignedTo;
             if(!empty($this->post->assignedTo))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
@@ -1154,8 +1156,8 @@ class taskModel extends model
         $estimate = new stdclass();
         $estimate->date     = zget($task, 'realStarted', date(DT_DATE1));
         $estimate->task     = $taskID;
-        $estimate->consumed = zget($task, 'consumed', 0);
-        $estimate->left     = zget($task, 'left', 0);
+        $estimate->consumed = zget($_POST, 'consumed', 0);
+        $estimate->left     = zget($_POST, 'left', 0);
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
@@ -1377,14 +1379,20 @@ class taskModel extends model
         }
 
         $estimate = new stdclass();
-        $estimate->date     = zget($task, 'finishedDate', date(DT_DATE1));
+        $estimate->date     = zget($_POST, 'finishedDate', date(DT_DATE1));
         $estimate->task     = $taskID;
-        $estimate->consumed = zget($task, 'consumed', 0);
-        $estimate->left     = zget($task, 'left', 0);
+        $estimate->left     = 0;
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
-
         $estimate->consumed = $consumed;
+        if(!empty($oldTask->team))
+        {
+            foreach($oldTask->team as $teamAccount => $team)
+            {
+                if($teamAccount == $this->app->user->account) continue;
+                $estimate->left += $team->left;
+            }
+        }
         if($estimate->consumed) $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team))
@@ -2651,7 +2659,7 @@ class taskModel extends model
         $canBatchAssignTo     = common::hasPriv('task', 'batchAssignTo', !empty($task) ? $task : null);
 
         $canBatchAction = $canBatchEdit or $canBatchClose or $canBatchCancel or $canBatchChangeModule or $canBatchAssignTo;
-        $storyChanged   = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion);
+        $storyChanged   = (!empty($task->storyStatus) and $task->storyStatus == 'active' and $task->latestStoryVersion > $task->storyVersion and !in_array($task->status, array('cancel', 'closed')));
 
         $canView  = common::hasPriv('task', 'view');
         $taskLink = helper::createLink('task', 'view', "taskID=$task->id");

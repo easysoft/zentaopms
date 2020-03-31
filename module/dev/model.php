@@ -18,6 +18,8 @@ class devModel extends model
             $table = current($table);
             if(empty($this->config->db->prefix) or strpos($table, $this->config->db->prefix) !== false)
             {
+                if(strpos($table, $this->config->db->prefix . 'flow_') === 0) continue;
+
                 $subTable = substr($table, strpos($table, '_') + 1);
                 $group    = zget($this->config->dev->group, $subTable, 'other');
                 $tables[$group][$subTable] = $table;

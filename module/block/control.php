@@ -249,7 +249,7 @@ class block extends control
             $block->actionLink = '';
             if($block->block == 'overview')
             {
-                if($module == 'qa'      && common::hasPriv('testcase', 'create'))
+                if($module == 'qa' && common::hasPriv('testcase', 'create'))
                 {
                     $this->app->loadLang('testcase');
                     $block->actionLink = html::a($this->createLink('testcase', 'create', 'productID='), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->testcase->create, '', "class='btn btn-primary'");
@@ -744,9 +744,10 @@ class block extends control
      * Print product statistic block.
      *
      * @access public
+     * @param  string $storyType requirement|story
      * @return void
      */
-    public function printProductStatisticBlock()
+    public function printProductStatisticBlock($storyType = 'story')
     {
         if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) die();
 
@@ -766,6 +767,7 @@ class block extends control
         $stories = $this->dao->select('product, stage, COUNT(status) AS count')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
+            ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
             ->groupBy('product, stage')
             ->fetchGroup('product', 'stage');
         /* Padding the stories to sure all status have records. */
@@ -894,11 +896,12 @@ class block extends control
         $projectIdList = array_keys($projects);
 
 
-        /* Get tasks. */
+        /* Get tasks. Fix bug #2918.*/
         $yesterday = date('Y-m-d', strtotime('-1 day'));
         $tasks     = $this->dao->select("project, count(id) as totalTasks, count(status in ('wait','doing','pause') or null) as undoneTasks, count(finishedDate like '{$yesterday}%' or null) as yesterdayFinished, sum(if(status != 'cancel', estimate, 0)) as totalEstimate, sum(consumed) as totalConsumed, sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")->from(TABLE_TASK)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
             ->groupBy('project')
             ->fetchAll('project');
         foreach($tasks as $projectID => $task)

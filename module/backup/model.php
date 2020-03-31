@@ -77,7 +77,7 @@ class backupModel extends model
             $file = trim(str_replace($appRoot, '', $codeFile), DS);
             if(is_dir($codeFile))
             {
-                if(!is_dir($backupFile . DS . $flle)) mkdir($backupFile . DS . $flle, 0777, true);
+                if(!is_dir($backupFile . DS . $file)) mkdir($backupFile . DS . $file, 0777, true);
                 $zfile->copyDir($codeFile, $backupFile . DS . $file);
             }
             else
@@ -255,7 +255,7 @@ class backupModel extends model
     {
         $zfile = $this->app->loadClass('zfile');
         if(!is_dir($backupFile)) return $zfile->getFileSize($backupFile);
-        return $zfile->getDirSize($backupFile);
+        return 0;
     }
 
     /**

@@ -83,4 +83,17 @@ $(function()
             }
         });
     }
+
+    if($("main").is(".hide-sidebar"))
+    {
+        $(".sidebar-toggle").children().attr("class", "icon icon-angle-left");
+    }
+    else
+    {
+        $("#sidebar").bind("click", function ()
+        {
+            $(".sidebar-toggle").children().attr("class", "icon icon-angle-left");
+            $(this).unbind();
+        });
+    }
 })

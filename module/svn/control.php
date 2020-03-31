@@ -37,10 +37,9 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'diff'))
         {
-            $repos = $this->loadModel('repo')->getAllRepos();
-            foreach($repos as $repo)
+            $svnRepos = $this->loadModel('repo')->getListBySCM('Subversion', 'haspriv');
+            foreach($svnRepos as $repo)
             {
-                if($repo->SCM != 'Subversion') continue;
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0) 
                 {
                     $entry = $this->repo->encodePath(str_ireplace($repo->path, '', $url));
@@ -72,10 +71,9 @@ class svn extends control
         $url = helper::safe64Decode($url);
         if(common::hasPriv('repo', 'view'))
         {
-            $repos = $this->loadModel('repo')->getAllRepos();
+            $repos = $this->loadModel('repo')->getListBySCM('Subversion', 'haspriv');
             foreach($repos as $repo)
             {
-                if($repo->SCM != 'Subversion') continue;
                 if(strpos(strtolower($url), strtolower($repo->path)) === 0)
                 {
                     $entry = $this->repo->encodePath(str_ireplace(strtolower($repo->path), '', $url));
@@ -108,13 +106,15 @@ class svn extends control
             {
                 $parsedLogs[] = $this->svn->convertLog($entry);
             }
+            $this->loadModel('repo');
             $parsedObjects = array('stories' => array(), 'tasks' => array(), 'bugs' => array());
             foreach($parsedLogs as $log)
             {
-                $objects = $this->svn->parseComment($log->msg);
+                $objects = $this->repo->parseComment($log->msg);
+
                 if($objects)
                 {
-                    $this->svn->saveAction2PMS($objects, $log, $repoRoot);
+                    $this->repo->saveAction2PMS($objects, $log, $repoRoot);
                     if($objects['stories']) $parsedObjects['stories'] = array_merge($parsedObjects['stories'], $objects['stories']);
                     if($objects['tasks'])   $parsedObjects['tasks'  ] = array_merge($parsedObjects['tasks'],   $objects['tasks']);
                     if($objects['bugs'])    $parsedObjects['bugs']    = array_merge($parsedObjects['bugs'],    $objects['bugs']);
@@ -170,7 +170,8 @@ class svn extends control
             $parsedFiles[$action][] = $path;
         }
 
-        $objects = $this->svn->parseComment($message);
+        $objects = $this->loadModel('repo')->parseComment($message);
+
         if($objects)
         {
             $log = new stdclass();
@@ -179,7 +180,7 @@ class svn extends control
             $log->msg      = $message;
             $log->revision = $revision;
             $log->files    = $parsedFiles;
-            $this->svn->saveAction2PMS($objects, $log, $repoUrl);
+            $this->repo->saveAction2PMS($objects, $log, $repoUrl);
         }
         die();
     }

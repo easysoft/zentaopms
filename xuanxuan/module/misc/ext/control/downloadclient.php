@@ -53,9 +53,30 @@ class myMisc extends misc
             $agentOS = helper::getOS();
             if(strpos($agentOS, 'Windows') !== false) $os = 'win64';
             if(strpos($agentOS, 'Linux') !== false)   $os = 'linux64';
-            if(strpos($agentOS, 'Mac') !== false)     $os = 'mac';
+            if(strpos($agentOS, 'Mac') !== false)     $os = 'mac64';
 
             $this->view->os = $os;
+
+            /* Finish task #6990. */
+            $releasedInDB = $this->dao->select('*')->from(TABLE_IM_CLIENT)->where('version')->eq($this->config->xuanxuan->version)->andWhere('status')->eq('released')->fetch();
+            if($releasedInDB)
+            {
+                foreach(json_decode($releasedInDB->downloads) as $osKey => $link)
+                {
+                    if(empty($link))
+                    {
+                        $osKey = strtolower(str_replace('zip', '', $osKey));
+                        if(isset($this->lang->misc->client->osList[$osKey]))
+                        {
+                            unset($this->lang->misc->client->osList[$osKey]);
+                        }
+                        elseif(strpos($osKey, 'mac') === 0)
+                        {
+                            unset($this->lang->misc->client->osList['mac64']);
+                        }
+                    }
+                }
+            }
         }
 
         if($action == 'getPackage')

@@ -16,3 +16,8 @@ $(function()
         $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
 });
+
+function refreshPlan()
+{
+    $('a.refresh').click();
+}

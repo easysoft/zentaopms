@@ -10,18 +10,7 @@
  *
  * 例子：
  * $config->git->client = '/usr/bin/git';                       // c:\git\git.exe
- * $config->git->repos['pms']['path'] = '/home/user/repo/pms';  // c:\repo\pms
+ * $config->git->repos['pms']['path']     = '/home/user/repo/pms';  // c:\repo\pms
+ * $config->git->repos['pms']['encoding'] = 'utf-8';
  *
  */
-$config->git = new stdClass();
-$config->git->encodings = 'utf-8';  
-$config->git->client    = '';
-
-$i = 1;
-$config->git->repos[$i]['path']     = '';
-$config->git->repos[$i]['encoding'] = 'utf-8';
-
-/*
-$i ++;
-$config->git->repos[$i]['path'] = '';
-*/

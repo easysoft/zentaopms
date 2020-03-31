@@ -154,7 +154,7 @@ $lang->bug->lblLastEdited = '最後修改';
 $lang->bug->lblResolved   = '由誰解決';
 $lang->bug->allUsers      = '加載所有用戶';
 $lang->bug->allBuilds     = '所有';
-$lang->bug->createBuild   = '新建';
+$lang->bug->createBuild   = '創建';
 
 /* legend列表。*/
 $lang->bug->legendBasicInfo             = '基本信息';
@@ -370,7 +370,7 @@ $lang->bug->report->bugHistories->graph->xAxisName          = '處理步驟';
 /* 操作記錄。*/
 $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, 由 <strong>$actor</strong> 解決，方案為 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
-$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong>{$lang->storyCommon}</strong>，編號為 <strong>$extra</strong>。');
+$lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 轉為<strong> ' .$lang->storyCommon. '</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->totask              = array('main' => '$date, 由 <strong>$actor</strong> 導入為<strong>任務</strong>，編號為 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 關聯到計劃 <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 從計劃 <strong>$extra</strong> 移除。');

@@ -48,7 +48,7 @@ class actionModel extends model
         $action->extra      = $extra;
 
         /* Use purifier to process comment. Fix bug #2683. */
-        $action->comment  = fixer::dataStripTags($comment);
+        $action->comment  = fixer::stripDataTags($comment);
 
         /* Process action. */
         $action = $this->loadModel('file')->processImgURL($action, 'comment', $this->post->uid);
@@ -319,6 +319,11 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
             }
+            elseif($actionName == 'linkchildstory' or $actionName == 'unlinkchildrenstory' or $actionName == 'linkparentstory' or $actionName == 'unlinkparentstory' or $actionName == 'deletechildrenstory')
+            {
+                $name = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
+                if($name) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
+            }
             elseif($actionName == 'buildopened')
             {
                 $name = $this->dao->select('name')->from(TABLE_BUILD)->where('id')->eq($action->objectID)->fetch('name');
@@ -503,7 +508,14 @@ class actionModel extends model
         if(empty($actionID)) return false;
         foreach($changes as $change) 
         {
-            $change['action'] = $actionID;
+            if(is_object($change))
+            {
+                $change->action = $actionID;
+            }
+            else
+            {
+                $change['action'] = $actionID;
+            }
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
         }
     }
@@ -590,10 +602,9 @@ class actionModel extends model
     /**
      * Get actions as dynamic.
      * 
-     * @param  string $objectType 
-     * @param  string $count 
-     * @param  string $period 
-     * @param  string $orderBy 
+     * @param  string $account
+     * @param  string $period
+     * @param  string $orderBy
      * @param  object $pager
      * @param  string|int $productID   all|int(like 123)|notzero   all => include zeror, notzero, great than 0
      * @param  string|int $projectID   same as productID
@@ -656,7 +667,6 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-       
         return $this->transformActions($actions);;
     }
 

@@ -26,3 +26,31 @@ $config->repo->syncTime  = 10;
 $config->repo->batchNum  = 100;
 $config->repo->images    = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary    = '|pdf|';
+
+$config->repo->editor = new stdclass();
+$config->repo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->repo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->repo->editor->view   = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->diff   = array('id' => 'commentText', 'tools' => 'simpleTools');
+
+$config->repo->create = new stdclass();
+$config->repo->create->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->edit = new stdclass();
+$config->repo->edit->requiredFields = 'SCM,name,path,encoding,client';
+$config->repo->svn = new stdclass();
+$config->repo->svn->requiredFields = 'account,password';
+
+$config->repo->rules['module']['task']     = 'Task';
+$config->repo->rules['module']['bug']      = 'Bug';
+$config->repo->rules['task']['start']      = 'Start';
+$config->repo->rules['task']['finish']     = 'Finish';
+$config->repo->rules['task']['logEfforts'] = 'Effort';
+$config->repo->rules['task']['consumed']   = 'Cost';
+$config->repo->rules['task']['left']       = 'Left';
+$config->repo->rules['bug']['resolve']     = 'Fix';
+$config->repo->rules['id']['mark']         = '#';
+$config->repo->rules['id']['split']        = ',';
+$config->repo->rules['mark']['consumed']   = ':';
+$config->repo->rules['mark']['left']       = ':';
+$config->repo->rules['unit']['consumed']   = 'h';
+$config->repo->rules['unit']['left']       = 'h';

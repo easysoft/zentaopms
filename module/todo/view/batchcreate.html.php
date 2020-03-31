@@ -13,6 +13,12 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 
+<div id='formSettingBtn' class='pull-right btn-toolbar'>
+  <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
+  <?php include '../../common/view/customfield.html.php';?>
+  <div class="divider"></div>
+  <button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
+</div>
 <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
   <div id="mainContent">
     <div class="main-header">
@@ -27,10 +33,6 @@
           </div>
         </span>
       </div>
-      <div class="pull-right btn-toolbar">
-        <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=todo&section=custom&key=batchCreateFields')?>
-        <?php include '../../common/view/customfield.html.php';?>
-      </div>
     </div>
     <?php
     $visibleFields = array();
@@ -43,7 +45,7 @@
     <table class='table table-form table-fixed with-border'>
       <thead>
         <tr>
-          <th class='col-id'><?php echo $lang->idAB;?></th> 
+          <th class='col-id'><?php echo $lang->idAB;?></th>
           <th class='col-type<?php echo zget($visibleFields, 'type', ' hidden')?>'><?php echo $lang->todo->type;?></th>
           <th class='col-pri<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
           <th class='col-name required'><?php echo $lang->todo->name;?></th>

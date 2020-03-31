@@ -112,6 +112,7 @@ class testcaseModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testcase->menu as $key => $menu)
         {
+            $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
             if($this->config->global->flow != 'onlyTest')
             {
                 $replace = $productID;
@@ -242,6 +243,7 @@ class testcaseModel extends model
     function batchCreate($productID, $branch, $storyID)
     {
         $branch      = (int)$branch;
+        $productID   = (int)$productID;
         $now         = helper::now();
         $cases       = fixer::input('post')->get();
 
@@ -336,10 +338,11 @@ class testcaseModel extends model
      * @param  int    $moduleIdList
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $type   nounit|unit
      * @access public
      * @return array
      */
-    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $type = 'nounit')
     {
         return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
@@ -347,6 +350,8 @@ class testcaseModel extends model
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
+            ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
@@ -435,10 +440,11 @@ class testcaseModel extends model
      * @param  int    $moduleID
      * @param  string $sort
      * @param  object $pager
+     * @param  string $type   nounit|unit
      * @access public
      * @return array
      */
-    public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager)
+    public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $type = 'nounit')
     {
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
@@ -448,7 +454,7 @@ class testcaseModel extends model
         $cases = array();
         if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
         {
-            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType);
+            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $type);
         }
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
@@ -460,6 +466,8 @@ class testcaseModel extends model
                 ->andWhere('t1.product')->eq($productID)
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+                ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
+                ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
@@ -471,7 +479,7 @@ class testcaseModel extends model
         /* By search. */
         elseif($browseType == 'bysearch')
         {
-            $cases = $this->getBySearch($productID, $queryID, $sort, $pager, $branch);
+            $cases = $this->getBySearch($productID, $queryID, $sort, $pager, $branch, $type);
         }
 
         return $cases;
@@ -484,10 +492,11 @@ class testcaseModel extends model
      * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $type   nounit|unit
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0)
+    public function getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0, $type = 'nounit')
     {
         if($queryID)
         {
@@ -525,6 +534,8 @@ class testcaseModel extends model
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
             ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
+            ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
+            ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 

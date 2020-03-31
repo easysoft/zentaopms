@@ -22,7 +22,7 @@
       echo $moduleName;
       if($moduleID)
       {
-          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
+          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -33,6 +33,7 @@
     foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem)
     {
         if(isset($menuItem->hidden)) continue;
+        if($menuItem->name == 'emptysr' && $storyType == 'story') continue;
         $menuBrowseType = strpos($menuItem->name, 'QUERY') === 0 ? 'bySearch' : $menuItem->name;
         if($menuItem->name == 'more')
         {
@@ -52,27 +53,27 @@
                 foreach($lang->product->moreSelects as $key => $value)
                 {
                     $active = $key == $storyBrowseType ? 'btn-active-text' : '';
-                    echo '<li>' . html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
+                    echo '<li>' . html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$key&param=0&storyType=$storyType"), "<span class='text'>{$value}</span>", '', "class='btn btn-link $active'") . '</li>';
                 }
                 echo '</ul></div>';
             }
         }
         elseif($menuItem->name == 'QUERY')
         {
-            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s");
+            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=%s&storyType=$storyType");
             $isBySearch       = $this->session->storyBrowseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
         else
         {
-            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
+            echo html::a($this->inlink('browse', "productID=$productID&branch=$branch&browseType=$menuBrowseType&param=0&storyType=$storyType"), "<span class='text'>$menuItem->text</span>" . ($menuItem->name == $this->session->storyBrowseType ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='{$menuItem->name}Tab' class='btn btn-link" . ($this->session->storyBrowseType == $menuItem->name ? ' btn-active-text' : '') . "'");
         }
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', 'button', 'bar-chart muted'); ?>
+    <?php common::printIcon('story', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID&chartType=pie&storyType=$storyType", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
       <ul class="dropdown-menu" id='exportActionMenu'>
@@ -170,7 +171,7 @@
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
-      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars         = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       $setting = $this->datatable->getSetting('product');
@@ -198,6 +199,17 @@
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
           </tr>
+          <?php if(!empty($story->children)):?>
+          <?php $i = 0;?> 
+          <?php foreach($story->children as $key => $child):?>
+          <?php $class  = $i == 0 ? ' table-child-top' : '';?>
+          <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
+          <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
+          </tr>
+          <?php $i ++;?>
+          <?php endforeach;?>
+          <?php endif;?>
           <?php endforeach;?>
         </tbody>
       </table>

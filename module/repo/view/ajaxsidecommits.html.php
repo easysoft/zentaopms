@@ -58,8 +58,8 @@ if(isset($entry)) $pathInfo .= '&type=file';
         $prePage  = $pager->pageID == 1 ? 1 : $pager->pageID - 1;
         $nextPage = $pager->pageID == $pager->pageTotal ? $pager->pageID : $pager->pageID + 1;
         $params   = "repoID=$repoID&path=&type=$logType&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-        $preLink  = $this->repo->createLink('ajaxSideLogs', "$params&pageID=$prePage", "path=" . $this->repo->encodePath($path));
-        $nextLink = $this->repo->createLink('ajaxSideLogs', "$params&pageID=$nextPage", "path=" . $this->repo->encodePath($path));
+        $preLink  = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$prePage", "path=" . $this->repo->encodePath($path));
+        $nextLink = $this->repo->createLink('ajaxSideCommits', "$params&pageID=$nextPage", "path=" . $this->repo->encodePath($path));
         echo html::a($preLink, "<i class='icon icon-angle-left'></i>", '', "class='ajaxPager btn" . ($prePage == $pager->pageID ? ' disabled' : '') . "'");
         echo html::a($nextLink, "<i class='icon icon-angle-right'></i>", '', "class='ajaxPager btn" . ($nextPage == $pager->pageID ? ' disabled' : '') . "'");
         ?>
