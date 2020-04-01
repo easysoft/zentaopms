@@ -12,6 +12,7 @@ $lang->job->buildTag      = '打标签';
 $lang->job->id          = 'ID';
 $lang->job->name        = '名称';
 $lang->job->repo        = '代码库';
+$lang->job->product     = '关联产品';
 $lang->job->svnDir      = 'SVN监控路径';
 $lang->job->jenkins     = 'Jenkins';
 $lang->job->jkHost      = 'Jenkins服务器';

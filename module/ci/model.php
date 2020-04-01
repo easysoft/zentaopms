@@ -42,58 +42,67 @@ class ciModel extends model
             ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        foreach($compiles as $compile)
+        foreach($compiles as $compile) $this->checkStatus($compile);
+    }
+
+    /**
+     * Check status.
+     * 
+     * @param  object $compile 
+     * @access public
+     * @return void
+     */
+    public function checkStatus($compile)
+    {
+        $jenkinsServer   = $compile->url;
+        $jenkinsUser     = $compile->account;
+        $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
+
+        $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
+        $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
+        $queueUrl      = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
+
+        $response = common::http($queueUrl);
+        if(strripos($response, "404") > -1)
         {
-            $jenkinsServer   = $compile->url;
-            $jenkinsUser     = $compile->account;
-            $jenkinsPassword = $compile->token ? $compile->token : base64_decode($compile->password);
-
-            $jenkinsAuth   = '://' . $jenkinsUser . ':' . $jenkinsPassword . '@';
-            $jenkinsServer = str_replace('://', $jenkinsAuth, $jenkinsServer);
-            $queueUrl      = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
-
-            $response = common::http($queueUrl);
-            if(strripos($response, "404") > -1)
+            $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->jkJob, $compile->queue);
+            $response = common::http($infoUrl);
+            if($response)
             {
-                $infoUrl  = sprintf("%s/job/%s/api/xml?tree=builds[id,number,result,queueId]&xpath=//build[queueId=%s]", $jenkinsServer, $compile->jkJob, $compile->queue);
-                $response = common::http($infoUrl);
-                if($response)
+                $buildInfo   = simplexml_load_string($response);
+                $buildNumber = strtolower($buildInfo->number);
+                $result      = strtolower($buildInfo->result);
+                $this->updateBuildStatus($compile, $result);
+
+                $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
+                $response = common::http($logUrl);
+                $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
+            }
+        }
+        else
+        {
+            $queueInfo = json_decode($response);
+            if(!empty($queueInfo->executable))
+            {
+                $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
+                $buildUrl = str_replace('://', $jenkinsAuth, $buildUrl);
+
+                $response  = common::http($buildUrl);
+                $buildInfo = json_decode($response);
+
+                if($buildInfo->building)
                 {
-                    $buildInfo   = simplexml_load_string($response);
-                    $buildNumber = strtolower($buildInfo->number);
-                    $result      = strtolower($buildInfo->result);
+                    $this->updateBuildStatus($compile, 'building');
+                }
+                else
+                {
+                    $result = strtolower($buildInfo->result);
                     $this->updateBuildStatus($compile, $result);
 
-                    $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
+                    $logUrl   = $buildInfo->url . 'logText/progressiveText/api/json';
+                    $logUrl   = str_replace('://', $jenkinsAuth, $logUrl);
                     $response = common::http($logUrl);
                     $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
-                }
-            }
-            else
-            {
-                $queueInfo = json_decode($response);
-                if(!empty($queueInfo->executable))
-                {
-                    $buildUrl = $queueInfo->executable->url . 'api/json?pretty=true';
-                    $buildUrl = str_replace('://', $jenkinsAuth, $buildUrl);
-
-                    $response  = common::http($buildUrl);
-                    $buildInfo = json_decode($response);
-
-                    if($buildInfo->building)
-                    {
-                        $this->updateBuildStatus($compile, 'building');
-                    }
-                    else
-                    {
-                        $result = strtolower($buildInfo->result);
-                        $this->updateBuildStatus($compile, $result);
-
-                        $logUrl   = $buildInfo->url . 'logText/progressiveText/api/json';
-                        $logUrl   = str_replace('://', $jenkinsAuth, $logUrl);
-                        $response = common::http($logUrl);
-                        $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
-                    }
                 }
             }
         }

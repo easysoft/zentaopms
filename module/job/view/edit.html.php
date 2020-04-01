@@ -37,6 +37,10 @@
             </td>
           </tr>
           <tr>
+            <th><?php echo $lang->job->product; ?></th>
+            <td><?php echo html::select('product', $products, $job->product, "class='form-control chosen'"); ?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->job->frame; ?></th>
             <td><?php echo html::select('frame', $lang->job->frameList, $job->frame, "class='form-control chosen'"); ?></td>
           </tr>

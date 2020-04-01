@@ -265,13 +265,19 @@ class jobModel extends model
             $build->atTime = $job->atTime;
         }
 
-        $build->queue       = $this->loadModel('ci')->sendRequest($buildUrl, $data);
-        $build->status      = $build->queue ? 'created' : 'create_fail';
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = $now;
         $build->updateDate  = $now;
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
-        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($build->status)->where('id')->eq($job->id)->exec();
+        $compileID = $this->dao->lastInsertId();
+
+        $data->PARAM_ZENTAODATA = "compile={$compileID}";
+        $compile = new stdclass();
+        $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $compile->status = $compile->queue ? 'created' : 'create_fail';
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
+
+        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($compile->status)->where('id')->eq($job->id)->exec();
 
         return $build->status;
     }

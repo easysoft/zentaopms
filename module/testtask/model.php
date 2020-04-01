@@ -1570,6 +1570,8 @@ class testtaskModel extends model
                 $case->openedBy   = $this->app->user->account;
                 $case->openedDate = $now;
                 $case->version    = 1;
+                $case->auto       = 'unit';
+                $case->frame      = 'junit';
 
                 $attributes = $matchNode->attributes();
                 foreach($nameFields as $field)
@@ -1606,7 +1608,7 @@ class testtaskModel extends model
                 $case->lastRunDate   = $now;
                 $case->lastRunResult = $result->caseResult;
 
-                $titles[$suiteIndex][]            = $case->title;
+                $caseTitles[$suiteIndex][]        = $case->title;
                 $cases[$suiteIndex][$caseIndex]   = $case;
                 $results[$suiteIndex][$caseIndex] = $result;
             }
@@ -1617,6 +1619,23 @@ class testtaskModel extends model
         unlink($fileName);
         if(dao::isError()) return false;
 
+        return $this->saveUnit($testtaskID, $suites, $cases, $results, $suiteNames, $caseTitles);
+    }
+
+    /**
+     * Save unit.
+     * 
+     * @param  int    $testtaskID 
+     * @param  array  $suites 
+     * @param  array  $cases 
+     * @param  array  $results 
+     * @param  array  $suiteNames 
+     * @param  array  $caseTitles 
+     * @access public
+     * @return int
+     */
+    public function saveUnit($testtaskID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array())
+    {
         /* Import cases and link task and insert result. */
         $this->loadModel('action');
         $existSuites = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('name')->in($suiteNames)->andWhere('product')->eq($productID)->andWhere('type')->eq('unit')->andWhere('deleted')->eq(0)->fetchPairs('name', 'id');
@@ -1654,7 +1673,12 @@ class testtaskModel extends model
 
             foreach($cases[$suiteIndex] as $i => $case)
             {
-                if(!isset($existCases[$case->title]))
+                if(isset($case->id))
+                {
+                    $caseID = $case->id;
+                    $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
+                }
+                elseif(!isset($existCases[$case->title]))
                 {
                     $this->dao->insert(TABLE_CASE)->data($case)->exec();
                     $caseID = $this->dao->lastInsertID();
@@ -1695,5 +1719,135 @@ class testtaskModel extends model
         }
 
         return $testtaskID;
+    }
+
+    public function buildDataFromUnit($caseResults, $productID, $jobID, $compileID)
+    {
+        $now        = helper::now();
+        $cases      = array();
+        $results    = array();
+        $suites     = array();
+        $caseTitles = array();
+        $suiteNames = array();
+        $suiteIndex = 0;
+        foreach($caseResults as $caseIndex => $caseResult)
+        {
+            $suite = '';
+            if(isset($caseResult->TestSuite) and !isset($suiteNames[$suite->name]))
+            {
+                $suite = new stdclass();
+                $suite->product   = $productID;
+                $suite->name      = $caseResult->TestSuite;
+                $suite->type      = 'unit';
+                $suite->addedBy   = $this->app->user->account;
+                $suite->addedDate = $now;
+
+                $suiteNames[$suite->name] = $suite->name;
+                $suiteIndex ++;
+            }
+            if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
+
+            $case = new stdclass();
+            $case->product    = $productID;
+            $case->title      = $caseResult->TestSuite . ' ' . $caseResult->Title;
+            $case->pri        = 3;
+            $case->type       = 'unit';
+            $case->stage      = 'unittest';
+            $case->status     = 'normal';
+            $case->openedBy   = $this->app->user->account;
+            $case->openedDate = $now;
+            $case->version    = 1;
+            $case->auto       = 'unit';
+            $case->frame      = $caseResult->TestFrame;
+
+            $result = new stdclass();
+            $result->case       = 0;
+            $result->version    = 1;
+            $result->caseResult = 'pass';
+            $result->lastRunner = $this->app->user->account;
+            $result->job        = $jobID;
+            $result->compile    = $compileID;
+            $result->date       = $now;
+            $result->stepResults[0]['result'] = 'pass';
+            $result->stepResults[0]['real']   = '';
+            if(!empty($caseResult->Failure))
+            {
+                $result->caseResult = 'fail';
+                $result->stepResults[0]['result'] = 'fail';
+                $result->stepResults[0]['real']   = $caseResult->Failure->Desc;
+            }
+            $result->stepResults = serialize($result->stepResults);
+            $case->lastRunner    = $this->app->user->account;
+            $case->lastRunDate   = $now;
+            $case->lastRunResult = $result->caseResult;
+
+            $caseTitles[$suiteIndex][]        = $case->title;
+            $cases[$suiteIndex][$caseIndex]   = $case;
+            $results[$suiteIndex][$caseIndex] = $result;
+        }
+
+        return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
+    }
+
+    public function buildDataFromZtf($caseResults, $productID, $jobID, $compileID)
+    {
+        $now        = helper::now();
+        $cases      = array();
+        $results    = array();
+        $suites     = array();
+        $caseTitles = array();
+        $suiteNames = array();
+        $suiteIndex = 0;
+        foreach($caseResults as $caseIndex => $caseResult)
+        {
+            $suite = '';
+            if(!isset($suites[$suiteIndex])) $suites[$suiteIndex] = $suite;
+
+            $case = new stdclass();
+            $case->product    = $productID;
+            $case->title      = $caseResult->Title;
+            $case->pri        = 3;
+            $case->type       = 'unit';
+            $case->stage      = 'unittest';
+            $case->status     = 'normal';
+            $case->openedBy   = $this->app->user->account;
+            $case->openedDate = $now;
+            $case->version    = 1;
+            $case->auto       = 'ztf';
+            $case->frame      = $caseResult->TestFrame;
+
+            $result = new stdclass();
+            $result->case       = 0;
+            $result->version    = 1;
+            $result->caseResult = 'pass';
+            $result->lastRunner = $this->app->user->account;
+            $result->job        = $jobID;
+            $result->compile    = $compileID;
+            $result->date       = $now;
+            $result->stepResults[0]['result'] = 'pass';
+            $result->stepResults[0]['real']   = '';
+            if(!empty($caseResult->Steps))
+            {
+                $result->stepResults = array();
+                $stepStatus = 'pass';
+                foreach($caseResult->Steps as $i => $step)
+                {
+                    $result->stepResults[$i]['result'] = $step->Status ? 'pass' : 'fail';
+                    $result->stepResults[$i]['real']   = $step->Status ? '' : $step->CheckPoints[0]->Actual;
+                    if(!$step->Status) $stepStatus = 'fail';
+                }
+                $result->caseResult = $stepStatus;
+            }
+            $result->stepResults = serialize($result->stepResults);
+            $case->lastRunner    = $this->app->user->account;
+            $case->lastRunDate   = $now;
+            $case->lastRunResult = $result->caseResult;
+
+            $caseTitles[$suiteIndex][]        = $case->title;
+            $cases[$suiteIndex][$caseIndex]   = $case;
+            $results[$suiteIndex][$caseIndex] = $result;
+        }
+
+        return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
     }
 }

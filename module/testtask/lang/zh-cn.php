@@ -118,6 +118,7 @@ $lang->testtask->noTesttask        = '暂时没有测试单';
 $lang->testtask->checkLinked       = '请检查测试单的产品是否与项目相关联';
 $lang->testtask->noImportData      = '导入的XML没有解析出数据。';
 $lang->testtask->unitXMLFormat     = '请选择Junit XML 格式的文件。';
+$lang->testtask->unitTitleTemplate = "%s 单元测试";
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '所有用例';

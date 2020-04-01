@@ -71,7 +71,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>
-          <td colspan='2'><?php echo html::input('name', '', "class='form-control'");?></td>
+          <td colspan='2'><?php echo html::input('name', sprintf($lang->testtask->unitTitleTemplate, date('Y-m-d H:i:s')), "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>

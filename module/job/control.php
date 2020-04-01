@@ -84,6 +84,7 @@ class job extends control
         }
         $this->view->repoPairs  = $repoPairs;
         $this->view->repoTypes  = $repoTypes;
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs();
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
 
         $this->display();
@@ -127,6 +128,7 @@ class job extends control
         $this->view->repoTypes  = $repoTypes;
         $this->view->repoType   = zget($repoTypes, $job->repo, 'Git');
         $this->view->job        = $job;
+        $this->view->products   = array(0 => '') + $this->loadModel('product')->getPairs();
         $this->view->jkHostList = $this->loadModel('jenkins')->getPairs();
         $this->view->jkJobs     = $this->jenkins->getTasks($job->jkHost);
 
