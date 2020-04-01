@@ -1619,13 +1619,14 @@ class testtaskModel extends model
         unlink($fileName);
         if(dao::isError()) return false;
 
-        return $this->saveUnit($testtaskID, $suites, $cases, $results, $suiteNames, $caseTitles);
+        return $this->saveUnit($testtaskID, $productID, $suites, $cases, $results, $suiteNames, $caseTitles);
     }
 
     /**
      * Save unit.
      * 
      * @param  int    $testtaskID 
+     * @param  int    $productID 
      * @param  array  $suites 
      * @param  array  $cases 
      * @param  array  $results 
@@ -1634,7 +1635,7 @@ class testtaskModel extends model
      * @access public
      * @return int
      */
-    public function saveUnit($testtaskID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array())
+    public function saveUnit($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array())
     {
         /* Import cases and link task and insert result. */
         $this->loadModel('action');
@@ -1721,7 +1722,18 @@ class testtaskModel extends model
         return $testtaskID;
     }
 
-    public function buildDataFromUnit($caseResults, $productID, $jobID, $compileID)
+    /**
+     * Build data from unit.
+     * 
+     * @param  array  $caseResults 
+     * @param  string $frame 
+     * @param  int    $productID 
+     * @param  int    $jobID 
+     * @param  int    $compileID 
+     * @access public
+     * @return array
+     */
+    public function buildDataFromUnit($caseResults, $frame, $productID, $jobID, $compileID)
     {
         $now        = helper::now();
         $cases      = array();
@@ -1733,7 +1745,7 @@ class testtaskModel extends model
         foreach($caseResults as $caseIndex => $caseResult)
         {
             $suite = '';
-            if(isset($caseResult->TestSuite) and !isset($suiteNames[$suite->name]))
+            if(isset($caseResult->TestSuite) and !isset($suiteNames[$caseResult->TestSuite]))
             {
                 $suite = new stdclass();
                 $suite->product   = $productID;
@@ -1758,7 +1770,7 @@ class testtaskModel extends model
             $case->openedDate = $now;
             $case->version    = 1;
             $case->auto       = 'unit';
-            $case->frame      = $caseResult->TestFrame;
+            $case->frame      = $frame;
 
             $result = new stdclass();
             $result->case       = 0;
@@ -1789,7 +1801,18 @@ class testtaskModel extends model
         return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
     }
 
-    public function buildDataFromZtf($caseResults, $productID, $jobID, $compileID)
+    /**
+     * Build data from ztf.
+     * 
+     * @param  array  $caseResults 
+     * @param  string $frame 
+     * @param  int    $productID 
+     * @param  int    $jobID 
+     * @param  int    $compileID 
+     * @access public
+     * @return array
+     */
+    public function buildDataFromZTF($caseResults, $frame, $productID, $jobID, $compileID)
     {
         $now        = helper::now();
         $cases      = array();
@@ -1814,7 +1837,7 @@ class testtaskModel extends model
             $case->openedDate = $now;
             $case->version    = 1;
             $case->auto       = 'ztf';
-            $case->frame      = $caseResult->TestFrame;
+            $case->frame      = $frame;
 
             $result = new stdclass();
             $result->case       = 0;

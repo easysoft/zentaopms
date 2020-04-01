@@ -89,9 +89,10 @@ class ci extends control
         $post = json_decode($post);
 
         $testType   = $post->TestType;
-        $productID  = $post->ProductId;
-        $taskID     = $post->TaskId;
-        $zentaoData = $post->ZentaoData;
+        $productID  = zget($post, 'ProductId', 0);
+        $taskID     = zget($post, 'TaskId', 0);
+        $zentaoData = zget($post, 'ZentaoData', '');
+        $frame      = zget($post, 'TestFrame', 'junit');
 
         parse_str($zentaoData, $params);
         $this->loadModel('testtask');
@@ -99,7 +100,7 @@ class ci extends control
         $jobID     = 0;
         if($compileID)
         {
-            $compile = $this->dao->select('t1.*, t2.jkJob,t2,product,t2.frame,t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')->from(TABLE_COMPILE)->alias('t1')
+            $compile = $this->dao->select('t1.*, t2.jkJob,t2.product,t2.frame,t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')->from(TABLE_COMPILE)->alias('t1')
                 ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
                 ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jkHost=t3.id')
                 ->where('t1.id')->eq($compileID)
@@ -147,13 +148,15 @@ class ci extends control
 
         if($testType == 'unit')
         {
-            $data = $this->testtask->buildDataFromUnit($post->UnitCaseResults, $productID, $jobID, $compileID);
+            $data = $this->testtask->buildDataFromUnit($post->UnitCaseResults, $frame, $productID, $jobID, $compileID);
         }
         elseif($testType == 'ztf')
         {
-            $data = $this->testtask->buildDataFromZtf($post->ZtfCaseResults, $productID, $jobID, $compileID);
+            $data = $this->testtask->buildDataFromZTF($post->ZtfCaseResults, $frame, $productID, $jobID, $compileID);
         }
 
-        $taskID = $this->testtask->saveUnit($taskID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
+        $taskID = $this->testtask->saveUnit($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
+
+        die(json_encode(array('result' => 'success')));
     }
 }
