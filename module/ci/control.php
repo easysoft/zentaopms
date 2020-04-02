@@ -112,8 +112,6 @@ class ci extends control
             {
                 $this->loadModel('compile')->checkStatus($compile);
             }
-
-            $this->dao->update(TABLE_COMPILE)->set('testtask')->eq($taskID)->where('id')->eq($compile->id)->exec();
         }
 
         if(!empty($taskID))
@@ -148,6 +146,7 @@ class ci extends control
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
         }
 
+        if($compileID) $this->dao->update(TABLE_COMPILE)->set('testtask')->eq($taskID)->where('id')->eq($compileID)->exec();
         if($testType == 'unit')
         {
             $data = $this->testtask->buildDataFromUnit($post->UnitCaseResults, $frame, $productID, $jobID, $compileID);

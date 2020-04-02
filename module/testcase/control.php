@@ -486,6 +486,13 @@ class testcase extends control
     {
         $case = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
+        if($case->auto != 'no')
+        {
+            $this->lang->testcase->subMenu->testcase->feature['alias'] = '';
+            $this->lang->testcase->subMenu->testcase->unit['alias'] = 'view';
+            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
+        }
+
         if($from == 'testtask')
         {
             $run = $this->loadModel('testtask')->getRunByCase($taskID, $caseID);
@@ -495,6 +502,11 @@ class testcase extends control
             $case->lastRunResult = $run->lastRunResult;
             $case->caseStatus    = $case->status;
             $case->status        = $run->status;
+
+            $results = $this->testtask->getResults($run->id);
+            $result  = array_shift($results);
+            $case->xml      = $result->xml;
+            $case->duration = $result->duration;
         }
 
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);

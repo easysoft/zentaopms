@@ -54,6 +54,7 @@ $lang->testcase->assignedTo       = '指派给';
 $lang->testcase->colorTag         = '颜色标签';
 $lang->testcase->lastRunResult    = '结果';
 $lang->testcase->desc             = '步骤';
+$lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = '预期';
 $lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '来源Bug';

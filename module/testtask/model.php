@@ -1398,6 +1398,7 @@ class testtaskModel extends model
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
+        if($action == 'runcase' and $testtask->auto != 'no')  return false;
         if($action == 'runcase')  return isset($testtask->caseStatus) ? $testtask->caseStatus != 'wait' : $testtask->status != 'wait';
         return true;
     }
@@ -1750,7 +1751,6 @@ class testtaskModel extends model
                 {
                     $suitecase = new stdclass();
                     $suitecase->suite   = $suiteID;
-                    $suitecase->run     = $runID;
                     $suitecase->case    = $caseID;
                     $suitecase->version = $case->version;
                     $suitecase->product = $case->product;

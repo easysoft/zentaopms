@@ -118,7 +118,7 @@ class compileModel extends model
 
         $tagData = new stdclass();
         $tagData->PARAM_TAG = $compile->tag;
-        $tagData->PARAM_ZENTAODATA = "compile={$compile->id}";
+        $tagData->ZENTAO_DATA = "compile={$compile->id}";
 
         $buildUrl = $this->getBuildUrl($job);
         $build    = new stdclass();

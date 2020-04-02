@@ -271,7 +271,7 @@ class jobModel extends model
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
         $compileID = $this->dao->lastInsertId();
 
-        $data->PARAM_ZENTAODATA = "compile={$compileID}";
+        $data->ZENTAO_DATA = "compile={$compileID}";
         $compile = new stdclass();
         $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $data);
         $compile->status = $compile->queue ? 'created' : 'create_fail';
