@@ -3,6 +3,10 @@ class xuanxuanIm extends imModel
 {
     public function getExtensionList($userID)
     {
+        $clientLang = $this->app->input['lang'];
+        $this->app->clientLang = $clientLang;
+        $this->app->loadLang('im');
+
         $entries = array();
         $baseURL = $this->getServer('zentao');
 
