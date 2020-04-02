@@ -46,10 +46,10 @@ class compile extends control
         $this->view->position[] = $this->lang->compile->browse;
 
         $this->app->loadLang('job');
-        $this->view->jobID = $jobID;
-        $this->view->buildList     = $this->compile->getList($jobID, $orderBy, $pager);
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
+        $this->view->jobID     = $jobID;
+        $this->view->buildList = $this->compile->getList($jobID, $orderBy, $pager);
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
         $this->display();
     }
 

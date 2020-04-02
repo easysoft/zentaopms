@@ -350,8 +350,8 @@ class testcaseModel extends model
             ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
-            ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
-            ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
+            ->beginIF($type == 'nounit')->andWhere('t1.auto')->eq('no')->fi()
+            ->beginIF($type == 'unit')->andWhere('t1.auto')->ne('no')->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
@@ -466,8 +466,8 @@ class testcaseModel extends model
                 ->andWhere('t1.product')->eq($productID)
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
-                ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
-                ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
+                ->beginIF($type == 'nounit')->andWhere('t1.auto')->eq('no')->fi()
+                ->beginIF($type == 'unit')->andWhere('t1.auto')->ne('no')->fi()
                 ->orderBy($sort)
                 ->page($pager)
                 ->fetchAll();
@@ -534,8 +534,8 @@ class testcaseModel extends model
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
             ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
-            ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
-            ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
+            ->beginIF($type == 'nounit')->andWhere('t1.auto')->eq('no')->fi()
+            ->beginIF($type == 'unit')->andWhere('t1.auto')->ne('no')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 

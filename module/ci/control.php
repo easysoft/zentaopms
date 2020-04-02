@@ -119,6 +119,7 @@ class ci extends control
         if(!empty($taskID))
         {
             $testtask  = $this->testtask->getById($taskID);
+            $this->dao->update(TABLE_TESTTASK)->set('auto')->eq(strtolower($testType))->where('id')->eq($taskID)->exec();
             $productID = $testtask->product;
         }
         else
@@ -137,6 +138,7 @@ class ci extends control
             $testtask->owner   = $this->app->user->account;
             $testtask->project = $lastProject;
             $testtask->build   = 'trunk';
+            $testtask->auto    = strtolower($testType);
             $testtask->begin   = date('Y-m-d');
             $testtask->end     = date('Y-m-d', time() + 24 * 3600);
             $testtask->status  = 'done';

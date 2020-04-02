@@ -33,7 +33,7 @@
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
           <th class='w-80px text-center'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
           <th class='w-130px text-center'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
-          <th class='c-actions-1'><?php echo $lang->actions;?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody class='text-left'>
@@ -50,7 +50,17 @@
           <td class='text-center' title='<?php echo $buildStatus;?>'><?php echo $buildStatus;?></td>
           <td title='<?php echo $build->createdDate;?>'><?php echo $build->createdDate;?></td>
           <td class='c-actions text-center'>
-            <?php common::printIcon('compile', 'logs', "buildID=$id", '', 'list', 'file-text', '', '', '', '', $lang->compile->logs);?>
+            <?php
+            common::printIcon('compile', 'logs', "buildID=$id", '', 'list', 'file-text', '', '', '', '', $lang->compile->logs);
+            if($build->testtask)
+            {
+                common::printIcon('testtask', 'units', "taskID=$build->testtask", '', 'list', 'list-alt', '', '', '', '', $lang->compile->result);
+            }
+            else
+            {
+                echo html::a('###', "<i class='icon-testtask-units icon-list-alt'></i>", '', "class='btn disabled' title='{$lang->compile->result}'");
+            }
+            ?>
           </td>
         </tr>
         <?php endforeach; ?>

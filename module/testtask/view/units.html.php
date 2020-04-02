@@ -14,22 +14,9 @@
 include '../../common/view/header.html.php';
 include '../../common/view/treetable.html.php';
 js::set('flow', $config->global->flow);
-if(!isset($branch)) $branch = 0;
 ?>
 <?php if($config->global->flow == 'full'):?>
 <div id='mainMenu' class='clearfix'>
-  <div id="sidebarHeader">
-    <div class="title">
-      <?php
-      echo !empty($moduleID) ? $moduleName : $this->lang->tree->all;
-      if(!empty($moduleID))
-      {
-          $removeLink = $browseType == 'bymodule' ? inlink('unit', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("caseModule")';
-          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
-      }
-      ?>
-    </div>
-  </div>
   <div class='btn-toolbar pull-left'></div>
   <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
@@ -46,39 +33,6 @@ if(!isset($branch)) $branch = 0;
       ?>
       </ul>
     </div>
-    <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-    <?php if(!common::checkNotCN()):?>
-    <?php
-    if(common::hasPriv('testcase', 'batchCreate'))
-    {
-        $link = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-        echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->batchCreate, '', "class='btn btn-secondary'");
-    }
-
-    if(common::hasPriv('testcase', 'create'))
-    {
-        $link = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
-        echo html::a($link, "<i class='icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary'");
-    }
-    ?>
-    <?php else:?>
-    <div class='btn-group dropdown-hover'>
-      <?php
-      $link = common::hasPriv('testcase', 'create') ? $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '###';
-      $disabled = common::hasPriv('testcase', 'create') ? '' : "disabled";
-      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->testcase->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
-      ?>
-      <ul class='dropdown-menu'>
-        <?php $disabled = common::hasPriv('testcase', 'batchCreate') ? '' : "class='disabled'";?>
-        <li <?php echo $disabled?>>
-        <?php
-        $batchLink = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->testcase->batchCreate) . "</li>";
-        ?>
-        </li>
-      </ul>
-    </div>
-    <?php endif;?>
   </div>
 </div>
 <?php endif;?>
@@ -87,9 +41,6 @@ if(!isset($branch)) $branch = 0;
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->testcase->noCase;?></span>
-      <?php if(common::hasPriv('testcase', 'create')):?>
-      <?php echo html::a($this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule"), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-info'");?>
-      <?php endif;?>
     </p>
   </div>
   <?php else:?>
@@ -105,15 +56,13 @@ if(!isset($branch)) $branch = 0;
         <th class='c-id-sm'><?php echo $lang->idAB;?></th>
         <th class='w-pri'>  <?php echo $lang->priAB;?></th>
         <th><?php echo $lang->testcase->title;?></th>
-        <th class='w-80px'> <?php echo $lang->typeAB;?></th>
         <th class='w-80px'> <?php echo $lang->testtask->lastRunAccount;?></th>
         <th class='w-120px'><?php echo $lang->testtask->lastRunTime;?></th>
         <th class='w-80px'> <?php echo $lang->testtask->lastRunResult;?></th>
-        <th class='w-80px'> <?php echo $lang->testcase->status;?></th>
         <th class='w-30px' title='<?php echo $lang->testcase->bugs?>'><?php echo $lang->testcase->bugsAB;?></th>
         <th class='w-30px' title='<?php echo $lang->testcase->results?>'><?php echo $lang->testcase->resultsAB;?></th>
         <th class='w-30px' title='<?php echo $lang->testcase->stepNumber?>'><?php echo $lang->testcase->stepNumberAB;?></th>
-        <th class='c-actions-3'> <?php echo $lang->actions;?></th>
+        <th class='c-actions-1'> <?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -123,51 +72,33 @@ if(!isset($branch)) $branch = 0;
       $suite = zget($suites, $suiteID, '');
       $groupName = $suite ? $suite->name : '';
       ?>
-      <?php foreach($cases as $case):?>
+      <?php foreach($cases as $caseID => $case):?>
       <tr data-id='<?php echo $suiteID;?>' <?php if($i == 0) echo "class='divider-top'";?>>
         <?php if($i == 0):?>
         <td rowspan='<?php echo count($cases);?>' class='c-side text-left group-toggle text-top'>
           <div class='group-header'><?php echo html::a('###', "<i class='icon-caret-down'></i> $groupName", '', "class='text-primary'");?></div>
+          <?php echo $summary[$suiteID];?>
         </td>
         <?php endif;?>
-        <td class='c-id-sm'><?php echo sprintf('%03d', $case->id);?></td>
+        <td class='c-id-sm'><?php echo sprintf('%03d', $caseID);?></td>
         <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
-        <td class='text-left title' title='<?php echo $case->title?>'><?php if(!common::printLink('testcase', 'view', "case=$case->id", $case->title)) echo $case->title;?></td>
-        <td><?php echo zget($lang->case->typeList, $case->type, '');?></td>
+        <td class='text-left title' title='<?php echo $case->title . "\n" . htmlspecialchars($case->xml)?>'><?php if(!common::printLink('testcase', 'view', "case=$case->case&version={$case->version}&from=testtask&task=$taskID", $case->title)) echo $case->title;?></td>
         <td><?php echo zget($users, $case->lastRunner);?></td>
         <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
         <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-        <td class='<?php if(isset($run)) echo $run->status;?>'>
-          <?php
-          if($case->needconfirm)
-          {
-              echo "(<span class='warning'>{$lang->story->changed}</span> ";
-              echo html::a(helper::createLink('testcase', 'confirmStoryChange', "caseID=$case->id"), $lang->confirm, 'hiddenwin');
-              echo ")";
-          }
-          else
-          {
-              echo "<span class='status-case status-{$case->status}'>";
-              echo $this->processStatus('testcase', $case);
-              echo '</span>';
-          }
-          ?>
-        </td>
-        <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a(inlink('bugs', "runID=0&caseID={$case->id}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
-        <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID=0&caseID={$case->id}"), $case->results, '', "class='iframe'") : $case->results;?></td>
+        <td><?php echo (common::hasPriv('testcase', 'bugs') and $case->bugs) ? html::a($this->createLink('testcase', 'bugs', "runID={$case->id}&caseID={$case->case}"), $case->bugs, '', "class='iframe'") : $case->bugs;?></td>
+        <td><?php echo (common::hasPriv('testtask', 'results') and $case->results) ? html::a($this->createLink('testtask', 'results', "runID={$case->id}&caseID={$case->case}"), $case->results, '', "class='iframe'") : $case->results;?></td>
         <td><?php echo $case->stepNumber;?></td>
         <td class='c-actions'>
-          <?php common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true, "data-width='95%'");?>
-          <?php common::printIcon('testcase', 'edit', "caseID=$case->id", '', 'list');?>
-          <?php common::printIcon('testcase', 'delete', "caseID=$case->id", '', 'list', '', 'hiddenwin');?>
+          <?php common::printIcon('testtask', 'results', "runID=$case->id&caseID=$case->case", $case, 'list', '', '', 'iframe', true, "data-width='95%'");?>
         </td>
       </tr>
       <?php $i++;?>
       <?php endforeach;?>
       <tr data-id='<?php echo $suiteID;?>' class='group-toggle group-summary hidden divider-top'>
         <td class='c-side text-left'><?php echo html::a('###', "<i class='icon-caret-right'></i> $groupName");?></td>
-        <td colspan='12' class="text-left">
-          <div class="small with-padding"><span class="text-muted"><?php echo $lang->testcase->allTestcases;?></span> <?php echo $i;?></div>
+        <td colspan='10' class="text-left">
+          <div class="small with-padding"><?php echo $summary[$suiteID];?></div>
         </td>
       </tr>
       <?php endforeach;?>
@@ -175,4 +106,10 @@ if(!isset($branch)) $branch = 0;
   </table>
   <?php endif;?>
 </div>
+<script>
+$(function()
+{
+    $('#subNavbar [data-id=testcase]').addClass('active');
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

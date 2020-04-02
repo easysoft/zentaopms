@@ -184,29 +184,6 @@ class testsuiteModel extends model
     }
 
     /**
-     * Get product suite cases.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  string $orderBy 
-     * @param  string $type   nounit|unit
-     * @access public
-     * @return array
-     */
-    public function getProductSuiteCases($productID, $branch = 0, $orderBy = 'id_desc', $type = 'nounit')
-    {
-        return $this->dao->select('t1.*,t2.suite')->from(TABLE_CASE)->alias('t1')
-            ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
-            ->where('t1.product')->eq((int)$productID)
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
-            ->beginIF($type == 'nounit')->andWhere('t1.type')->ne('unit')->fi()
-            ->beginIF($type == 'unit')->andWhere('t1.type')->eq('unit')->fi()
-            ->andWhere('t1.deleted')->eq('0')
-            ->orderBy($orderBy)
-            ->fetchAll('id');
-    }
-
-    /**
      * Update a test suite.
      *
      * @param  int   $suiteID

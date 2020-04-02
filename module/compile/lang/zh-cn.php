@@ -7,6 +7,7 @@ $lang->compile->id     = 'ID';
 $lang->compile->name   = '构建名称';
 $lang->compile->status = '构建状态';
 $lang->compile->time   = '构建时间';
+$lang->compile->result = '构建结果';
 
 $lang->compile->statusList['success']     = '成功';
 $lang->compile->statusList['failure']     = '失败';
