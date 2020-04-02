@@ -1046,7 +1046,7 @@ class repoModel extends model
         $bugs    = array();
         $actions = array();
 
-        preg_match_all("/{$rules['startTaskReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['startTaskReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
@@ -1061,7 +1061,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['effortTaskReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['effortTaskReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
@@ -1076,7 +1076,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['finishTaskReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['finishTaskReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
@@ -1090,7 +1090,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['resolveBugReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['resolveBugReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
