@@ -287,7 +287,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function units($taskID, $orderBy = 'id_desc')
+    public function units($taskID, $orderBy = 'id')
     {
         $task = $this->testtask->getById($taskID);
 

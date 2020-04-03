@@ -30,7 +30,7 @@ js::set('flow', $config->global->flow);
       <?php
       $class = common::hasPriv('testcase', 'export') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=suite&taskID=0&browseType=") : '#';
+      $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=t1.id&taskID=0&browseType=") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
       ?>
       </ul>
