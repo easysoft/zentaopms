@@ -21,5 +21,5 @@ $config->testtask->datatable = new stdclass();
 $config->testtask->datatable->defaultField = array('id', 'pri', 'title', 'type', 'assignedTo', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'stepNumber','actions');
 
 $config->testtask->unitFormat = new stdclass();
-$config->testtask->unitFormat->common  = array('path' => array('testsuite/testcase', 'testcase'), 'name' => array('classname', 'name'), 'failure' => 'failure');
-$config->testtask->unitFormat->phpunit = array('path' => array('test', 'testsuite/testcase', 'testcase'), 'name' => array('className', 'methodName'), 'failure' => 'failure');
+$config->testtask->unitFormat->common  = array('path' => array('testsuite/testcase', 'testcase'), 'name' => array('classname', 'name'), 'failure' => 'failure', 'suite' => 'name', 'aliasSuite' => array('classname'));
+$config->testtask->unitFormat->phpunit = array('path' => array('test', 'testsuite/testcase', 'testcase'), 'name' => array('className', 'methodName'), 'aliasName' => array('classname', 'name'), 'failure' => 'failure', 'suite' => 'name', 'aliasSuite' => array('classname', 'className'));

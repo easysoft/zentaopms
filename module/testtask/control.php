@@ -325,6 +325,7 @@ class testtask extends control
 
         $groupCases = $this->dao->select('*')->from(TABLE_SUITECASE)->where('`case`')->in(array_keys($cases))->orderBy('case')->fetchGroup('suite', 'case');
         $summary    = array();
+        if(empty($groupCases)) $groupCases[] = $cases;
         foreach($groupCases as $suiteID => $groupCase)
         {
             $caseNum  = 0;

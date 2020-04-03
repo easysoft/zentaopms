@@ -457,7 +457,7 @@ class testcaseModel extends model
         $cases = array();
         if($browseType == 'bymodule' or $browseType == 'all' or $browseType == 'wait')
         {
-            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $type);
+            $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
         }
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
@@ -477,12 +477,12 @@ class testcaseModel extends model
         }
         elseif($browseType == 'bysuite')
         {
-            $cases = $this->getBySuite($productID, $branch, $queryID, $modules, $sort, $pager);
+            $cases = $this->getBySuite($productID, $branch, $queryID, $modules, $sort, $pager, $auto);
         }
         /* By search. */
         elseif($browseType == 'bysearch')
         {
-            $cases = $this->getBySearch($productID, $queryID, $sort, $pager, $branch, $type);
+            $cases = $this->getBySearch($productID, $queryID, $sort, $pager, $branch, $auto);
         }
 
         return $cases;

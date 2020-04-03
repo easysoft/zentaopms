@@ -1654,7 +1654,14 @@ class testtaskModel extends model
         unset($_POST['frame']);
 
         $fileName = $this->session->resultFile;
-        $data     = $this->buildDataFromXML($fileName, $productID, $frame);
+        if($frame == 'cppunit')
+        {
+            $data = $this->buildDataFromCppXML($fileName, $productID, $frame);
+        }
+        else
+        {
+            $data = $this->buildDataFromXML($fileName, $productID, $frame);
+        }
 
         /* Create task. */
         $this->post->set('auto', 'unit');
@@ -1682,6 +1689,8 @@ class testtaskModel extends model
      */
     public function saveUnit($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array())
     {
+        if(empty($cases)) die(js::alert($this->lang->testtask->noImportData));
+
         /* Import cases and link task and insert result. */
         $this->loadModel('action');
         $existSuites = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('name')->in($suiteNames)->andWhere('product')->eq($productID)->andWhere('type')->eq('unit')->andWhere('deleted')->eq(0)->fetchPairs('name', 'id');
@@ -1768,6 +1777,78 @@ class testtaskModel extends model
     }
 
     /**
+     * Build data from cppunit XML.
+     * 
+     * @param  string $fileName 
+     * @param  int    $productID 
+     * @param  string $frame 
+     * @access public
+     * @return array
+     */
+    public function buildDataFromCppXML($fileName, $productID, $frame)
+    {
+        /* Parse result xml. */
+        $parsedXML = simplexml_load_file($fileName);
+
+        /* Get testcase node. */
+        $failNodes  = $parsedXML->xpath('FailedTests/FailedTest');
+        $passNodes  = $parsedXML->xpath('SuccessfulTests/Test');
+        $matchNodes = array_merge($failNodes, $passNodes);
+        if(count($matchNodes) == 0) die(js::alert($this->lang->testtask->noImportData));
+
+        /* Get cases and results by parsed node. */
+        $now        = helper::now();
+        $cases      = array();
+        $results    = array();
+        $caseTitles = array();
+        $suiteNames = array();
+        $suiteIndex = 0;
+        $suites     = array($suiteIndex => '');
+        foreach($matchNodes as $caseIndex => $matchNode)
+        {
+            $case = new stdclass();
+            $case->product    = $productID;
+            $case->title      = (string)$matchNode->Name;
+            $case->pri        = 3;
+            $case->type       = 'unit';
+            $case->stage      = 'unittest';
+            $case->status     = 'normal';
+            $case->openedBy   = $this->app->user->account;
+            $case->openedDate = $now;
+            $case->version    = 1;
+            $case->auto       = 'unit';
+            $case->frame      = $frame ? $frame : 'junit';
+
+            $result = new stdclass();
+            $result->case       = 0;
+            $result->version    = 1;
+            $result->caseResult = 'pass';
+            $result->lastRunner = $this->app->user->account;
+            $result->date       = $now;
+            $result->duration   = 0;
+            $result->xml        = $matchNode->asXML();
+            $result->stepResults[0]['result'] = 'pass';
+            $result->stepResults[0]['real']   = '';
+            if(isset($matchNode->Message))
+            {
+                $result->caseResult = 'fail';
+                $result->stepResults[0]['result'] = 'fail';
+                $result->stepResults[0]['real']   = (string)$matchNode->Message;
+            }
+            $result->stepResults = serialize($result->stepResults);
+            $case->lastRunner    = $this->app->user->account;
+            $case->lastRunDate   = $now;
+            $case->lastRunResult = $result->caseResult;
+
+            $caseTitles[$suiteIndex][]        = $case->title;
+            $cases[$suiteIndex][$caseIndex]   = $case;
+            $results[$suiteIndex][$caseIndex] = $result;
+        }
+
+        return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
+    }
+
+    /**
      * buildDataFromXML 
      * 
      * @param  string $fileName 
@@ -1786,6 +1867,9 @@ class testtaskModel extends model
         $matchPaths = $unitFormat['path'];
         $nameFields = $unitFormat['name'];
         $failure    = $unitFormat['failure'];
+        $suiteField = $unitFormat['suite'];
+        $aliasSuite = zget($unitFormat, 'aliasSuite', array());
+        $aliasName  = zget($unitFormat, 'aliasName', array());
         $matchNodes = array();
         foreach($matchPaths as $matchPath)
         {
@@ -1817,11 +1901,11 @@ class testtaskModel extends model
             $caseNodes  = $parentNode->xpath($caseNode);
             $attributes = $parentNode->attributes();
             $suite      = '';
-            if(isset($attributes['name']))
+            if(isset($attributes[$suiteField]))
             {
                 $suite = new stdclass();
                 $suite->product   = $productID;
-                $suite->name      = (string)$attributes['name'];
+                $suite->name      = (string)$attributes[$suiteField];
                 $suite->type      = 'unit';
                 $suite->addedBy   = $this->app->user->account;
                 $suite->addedDate = $now;
@@ -1830,15 +1914,19 @@ class testtaskModel extends model
             else
             {
                 $attributes = $caseNodes[0]->attributes();
-                if(isset($attributes['classname']))
+                foreach($aliasSuite as $alias)
                 {
-                    $suite = new stdclass();
-                    $suite->product   = $productID;
-                    $suite->name      = (string)$attributes['classname'];
-                    $suite->type      = 'unit';
-                    $suite->addedBy   = $this->app->user->account;
-                    $suite->addedDate = $now;
-                    $suiteNames[]     = $suite->name;
+                    if(isset($attributes[$alias]))
+                    {
+                        $suite = new stdclass();
+                        $suite->product   = $productID;
+                        $suite->name      = (string)$attributes[$alias];
+                        $suite->type      = 'unit';
+                        $suite->addedBy   = $this->app->user->account;
+                        $suite->addedDate = $now;
+                        $suiteNames[]     = $suite->name;
+                        break;
+                    }
                 }
             }
             $suites[$suiteIndex] = $suite;
@@ -1865,6 +1953,16 @@ class testtaskModel extends model
                     $case->title .= (string)$attributes[$field] . ' ';
                 }
                 $case->title = trim($case->title);
+                if(empty($case->title))
+                {
+                    foreach($aliasName as $field)
+                    {
+                        if(!isset($attributes[$field])) continue;
+                        $case->title .= (string)$attributes[$field] . ' ';
+                    }
+                    $case->title = trim($case->title);
+                }
+                if(empty($case->title)) continue;
 
                 $result = new stdclass();
                 $result->case       = 0;
