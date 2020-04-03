@@ -1654,14 +1654,8 @@ class testtaskModel extends model
         unset($_POST['frame']);
 
         $fileName = $this->session->resultFile;
-        if($frame == 'cppunit')
-        {
-            $data = $this->buildDataFromCppXML($fileName, $productID, $frame);
-        }
-        else
-        {
-            $data = $this->buildDataFromXML($fileName, $productID, $frame);
-        }
+        $data     = $this->buildDataFromXML($fileName, $productID, $frame);
+        if($frame == 'cppunit' and empty($data['cases'])) $data = $this->buildDataFromCppXML($fileName, $productID, $frame);
 
         /* Create task. */
         $this->post->set('auto', 'unit');
@@ -1876,7 +1870,7 @@ class testtaskModel extends model
             $matchNodes = $parsedXML->xpath($matchPath);
             if(count($matchNodes) != 0) break;
         }
-        if(count($matchNodes) == 0) die(js::alert($this->lang->testtask->noImportData));
+        if(count($matchNodes) == 0) return array('suites' => array(), 'cases' => array(), 'results' => array(), 'suiteNames' => array(), 'caseTitles' => array());
 
         $parentPath  = '';
         $caseNode    = $matchPath;
