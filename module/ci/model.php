@@ -42,17 +42,17 @@ class ciModel extends model
             ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        foreach($compiles as $compile) $this->checkStatus($compile);
+        foreach($compiles as $compile) $this->syncStatus($compile);
     }
 
     /**
-     * Check status.
+     * Sync status.
      * 
      * @param  object $compile 
      * @access public
      * @return void
      */
-    public function checkStatus($compile)
+    public function syncStatus($compile)
     {
         $jenkinsServer   = $compile->url;
         $jenkinsUser     = $compile->account;

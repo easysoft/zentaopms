@@ -85,6 +85,7 @@ class ci extends control
      */
     public function commitResult()
     {
+        /* Get post data. */
         $post = file_get_contents('php://input');
         $post = json_decode($post);
 
@@ -94,6 +95,7 @@ class ci extends control
         $zentaoData = zget($post, 'ZentaoData', '');
         $frame      = zget($post, 'TestFrame', 'junit');
 
+        /* Get compileID and jobID. */
         parse_str($zentaoData, $params);
         $this->loadModel('testtask');
         $compileID = zget($params, 'compile', 0);
@@ -110,10 +112,11 @@ class ci extends control
             if(empty($productID)) $productID = $compile->product;
             if($compile->status != 'success' and $compile->status != 'fail' and $compile->status != 'create_fail' and $compile->status != 'timeout')
             {
-                $this->loadModel('compile')->checkStatus($compile);
+                $this->loadModel('compile')->syncStatus($compile);
             }
         }
 
+        /* Get testtaskID or create testtask. */
         if(!empty($taskID))
         {
             $testtask  = $this->testtask->getById($taskID);
@@ -147,6 +150,8 @@ class ci extends control
         }
 
         if($compileID) $this->dao->update(TABLE_COMPILE)->set('testtask')->eq($taskID)->where('id')->eq($compileID)->exec();
+
+        /* Build data from case results. */
         if($testType == 'unit')
         {
             $data = $this->testtask->buildDataFromUnit($post->UnitCaseResults, $frame, $productID, $jobID, $compileID);
