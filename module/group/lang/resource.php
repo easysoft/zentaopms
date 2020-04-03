@@ -712,6 +712,11 @@ $lang->repo->methodOrder[55] = 'blame';
 $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 
+$lang->resource->ci = new stdclass();
+$lang->resource->ci->commitResult = 'commitResult';
+
+$lang->ci->methodOrder[5] = 'commitResult';
+
 $lang->resource->compile = new stdclass();
 $lang->resource->compile->browse = 'browse';
 $lang->resource->compile->logs   = 'logs';
