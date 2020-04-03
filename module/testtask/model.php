@@ -1884,6 +1884,10 @@ class testtaskModel extends model
                     {
                         $result->stepResults[0]['real'] = (string)$matchNode->$failure;
                     }
+                    elseif(isset($matchNode->$failure[0]))
+                    {
+                        $result->stepResults[0]['real'] = (string)$matchNode->$failure[0];
+                    }
                     else
                     {
                         $failureAttrs = $matchNode->$failure->attributes();
@@ -1927,11 +1931,11 @@ class testtaskModel extends model
         foreach($caseResults as $caseIndex => $caseResult)
         {
             $suite = '';
-            if(isset($caseResult->TestSuite) and !isset($suiteNames[$caseResult->TestSuite]))
+            if(isset($caseResult->testSuite) and !isset($suiteNames[$caseResult->testSuite]))
             {
                 $suite = new stdclass();
                 $suite->product   = $productID;
-                $suite->name      = $caseResult->TestSuite;
+                $suite->name      = $caseResult->testSuite;
                 $suite->type      = 'unit';
                 $suite->addedBy   = $this->app->user->account;
                 $suite->addedDate = $now;
@@ -1943,7 +1947,7 @@ class testtaskModel extends model
 
             $case = new stdclass();
             $case->product    = $productID;
-            $case->title      = $caseResult->Title;
+            $case->title      = $caseResult->title;
             $case->pri        = 3;
             $case->type       = 'unit';
             $case->stage      = 'unittest';
@@ -1962,14 +1966,14 @@ class testtaskModel extends model
             $result->job        = $jobID;
             $result->compile    = $compileID;
             $result->date       = $now;
-            $result->duration   = $caseResult->Duration;
+            $result->duration   = $caseResult->duration;
             $result->stepResults[0]['result'] = 'pass';
             $result->stepResults[0]['real']   = '';
-            if(!empty($caseResult->Failure))
+            if(!empty($caseResult->failure))
             {
                 $result->caseResult = 'fail';
                 $result->stepResults[0]['result'] = 'fail';
-                $result->stepResults[0]['real']   = $caseResult->Failure->Desc;
+                $result->stepResults[0]['real']   = $caseResult->failure->desc;
             }
             $result->stepResults = serialize($result->stepResults);
             $case->lastRunner    = $this->app->user->account;
@@ -2011,7 +2015,7 @@ class testtaskModel extends model
 
             $case = new stdclass();
             $case->product    = $productID;
-            $case->title      = $caseResult->Title;
+            $case->title      = $caseResult->title;
             $case->pri        = 3;
             $case->type       = 'unit';
             $case->stage      = 'unittest';
@@ -2032,11 +2036,11 @@ class testtaskModel extends model
             $result->date       = $now;
             $result->stepResults[0]['result'] = 'pass';
             $result->stepResults[0]['real']   = '';
-            if(!empty($caseResult->Steps))
+            if(!empty($caseResult->steps))
             {
                 $result->stepResults = array();
                 $stepStatus = 'pass';
-                foreach($caseResult->Steps as $i => $step)
+                foreach($caseResult->steps as $i => $step)
                 {
                     $result->stepResults[$i]['result'] = $step->Status ? 'pass' : 'fail';
                     $result->stepResults[$i]['real']   = $step->Status ? '' : $step->CheckPoints[0]->Actual;

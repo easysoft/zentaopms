@@ -89,11 +89,11 @@ class ci extends control
         $post = file_get_contents('php://input');
         $post = json_decode($post);
 
-        $testType   = $post->TestType;
-        $productID  = zget($post, 'ProductId', 0);
-        $taskID     = zget($post, 'TaskId', 0);
-        $zentaoData = zget($post, 'ZentaoData', '');
-        $frame      = zget($post, 'TestFrame', 'junit');
+        $testType   = $post->testType;
+        $productID  = zget($post, 'productId', 0);
+        $taskID     = zget($post, 'taskId', 0);
+        $zentaoData = zget($post, 'zentaoData', '');
+        $frame      = zget($post, 'testFrame', 'junit');
 
         /* Get compileID and jobID. */
         parse_str($zentaoData, $params);
@@ -154,11 +154,11 @@ class ci extends control
         /* Build data from case results. */
         if($testType == 'unit')
         {
-            $data = $this->testtask->buildDataFromUnit($post->UnitCaseResults, $frame, $productID, $jobID, $compileID);
+            $data = $this->testtask->buildDataFromUnit($post->unitCaseResults, $frame, $productID, $jobID, $compileID);
         }
         elseif($testType == 'ztf')
         {
-            $data = $this->testtask->buildDataFromZTF($post->ZtfCaseResults, $frame, $productID, $jobID, $compileID);
+            $data = $this->testtask->buildDataFromZTF($post->ztfCaseResults, $frame, $productID, $jobID, $compileID);
         }
 
         $taskID = $this->testtask->saveUnit($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
