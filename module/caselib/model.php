@@ -118,7 +118,7 @@ class caselibModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->caselib->menu as $key => $value)
         {
-            $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
+            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('caselib', $key, $libID);
             $replace = $libID;
             common::setMenuVars($this->lang->caselib->menu, $key, $replace);
         }

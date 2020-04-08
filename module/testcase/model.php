@@ -112,7 +112,7 @@ class testcaseModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testcase->menu as $key => $menu)
         {
-            $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
+            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testcase', $key, $productID);
             if($this->config->global->flow != 'onlyTest')
             {
                 $replace = $productID;

@@ -79,7 +79,7 @@ class testtaskModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testtask->menu as $key => $value)
         {
-            $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
+            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
             if($this->config->global->flow != 'onlyTest')
             {
                 $replace = ($key == 'product') ? $selectHtml : $productID;
@@ -169,9 +169,10 @@ class testtaskModel extends model
 
         $this->lang->modulePageNav     = $pageNav;
         $this->lang->modulePageActions = $pageActions;
+        if($this->config->global->flow != 'full') $this->lang->testtask->menu = new stdclass();
         foreach($this->lang->testtask->menu as $key => $value)
         {
-            $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
+            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testtask', $key, $productID);
             if($this->config->global->flow != 'onlyTest')
             {
                 $replace = ($key == 'product') ? $selectHtml : $productID;

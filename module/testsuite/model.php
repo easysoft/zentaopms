@@ -57,7 +57,7 @@ class testsuiteModel extends model
         $this->lang->modulePageActions = $pageActions;
         foreach($this->lang->testsuite->menu as $key => $value)
         {
-            $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
+            if($this->config->global->flow == 'full') $this->loadModel('qa')->setSubMenu('testsuite', $key, $productID);
             $replace = $productID;
             common::setMenuVars($this->lang->testsuite->menu, $key, $replace);
         }
