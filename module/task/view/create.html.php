@@ -78,7 +78,7 @@
             <span id='story'><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('project', 'linkStory', "projectID=$project->id"), $lang->project->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($project->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <?php else:?>
             <div class='input-group'>
-              <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
+              <?php echo html::select('story', array($task->story => $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
             </div>
             <?php endif;?>
@@ -101,10 +101,11 @@
                 </tr>
               </thead>
               <tbody>
+                <?php $i = 0;?>
                 <?php foreach($stories as $storyID => $storyTitle):?>
                 <?php if(empty($storyID) or isset($testStoryIdList[$storyID])) continue;?>
                 <tr>
-                  <td><?php echo html::select("testStory[]", $stories, $storyID, "class='form-control chosen'");?></td>
+                  <td><?php echo html::select("testStory[]", array($storyID => $storyTitle), $storyID, "class='form-control chosen'");?></td>
                   <td><?php echo html::select("testPri[]", $lang->task->priList, $task->pri, "class='form-control chosen'");?></td>
                   <td>
                     <div class='input-group'>
@@ -122,6 +123,8 @@
                     </div>
                   </td>
                 </tr>
+                <?php $i++;?>
+                <?php if($i > 30) break;?>
                 <?php endforeach;?>
               </tbody>
             </table>
@@ -281,6 +284,8 @@
     </form>
   </div>
 </div>
+<?php js::set('stories', $stories);?>
+<?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($stories) : array());?>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('projectID', $project->id);?>
 <?php include '../../common/view/footer.html.php';?>
