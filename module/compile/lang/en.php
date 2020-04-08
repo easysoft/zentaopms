@@ -7,6 +7,7 @@ $lang->compile->id     = 'ID';
 $lang->compile->name   = 'Name';
 $lang->compile->status = 'Status';
 $lang->compile->time   = 'Time';
+$lang->compile->result = 'Result';
 
 $lang->compile->statusList['success']     = 'Done';
 $lang->compile->statusList['failure']     = 'Failed';

@@ -7,6 +7,7 @@ $lang->compile->id     = 'ID';
 $lang->compile->name   = '構建名稱';
 $lang->compile->status = '構建狀態';
 $lang->compile->time   = '構建時間';
+$lang->compile->result = '構建結果';
 
 $lang->compile->statusList['success']     = '成功';
 $lang->compile->statusList['failure']     = '失敗';

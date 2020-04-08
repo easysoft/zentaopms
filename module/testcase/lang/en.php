@@ -54,6 +54,7 @@ $lang->testcase->assignedTo       = 'AssingedTo';
 $lang->testcase->colorTag         = 'Color';
 $lang->testcase->lastRunResult    = 'Result';
 $lang->testcase->desc             = 'Steps';
+$lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = 'Expectations';
 $lang->testcase->allProduct       = "All {$lang->productCommon}s";
 $lang->testcase->fromBug          = 'From Bug';
@@ -172,6 +173,7 @@ $lang->testcase->typeList['config']      = 'Configuration';
 $lang->testcase->typeList['install']     = 'Installation';
 $lang->testcase->typeList['security']    = 'Security';
 $lang->testcase->typeList['interface']   = 'Interface';
+$lang->testcase->typeList['unit']        = 'Unit';
 $lang->testcase->typeList['other']       = 'Others';
 
 $lang->testcase->stageList['']           = '';

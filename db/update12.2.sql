@@ -8,3 +8,5 @@ ALTER TABLE `zt_job` ADD `product` mediumint(8) unsigned NOT NULL AFTER `repo`;
 ALTER TABLE `zt_testtask` ADD `auto` varchar(10) COLLATE 'utf8_general_ci' NOT NULL DEFAULT 'no' AFTER `status`;
 ALTER TABLE `zt_testresult` ADD `duration` float NOT NULL AFTER `date`;
 ALTER TABLE `zt_testresult` ADD `xml` text NOT NULL AFTER `duration`;
+
+UPDATE `zt_cron` SET `command` = 'moduleName=ci&methodName=checkCompileStatus' WHERE `command` = 'moduleName=ci&methodName=checkBuildStatus';

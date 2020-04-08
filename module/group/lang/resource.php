@@ -603,26 +603,32 @@ $lang->resource->testtask->batchRun         = 'batchRun';
 $lang->resource->testtask->activate         = 'activateAction';
 $lang->resource->testtask->block            = 'blockAction';
 $lang->resource->testtask->report           = 'reportAction';
+$lang->resource->testtask->browseUnits      = 'browseUnits';
+$lang->resource->testtask->unitCases        = 'unitCases';
+$lang->resource->testtask->importUnitResult = 'importUnitResult';
 
-$lang->testtask->methodOrder[0]  = 'index';
-$lang->testtask->methodOrder[5]  = 'create';
-$lang->testtask->methodOrder[10] = 'browse';
-$lang->testtask->methodOrder[15] = 'view';
-$lang->testtask->methodOrder[20] = 'cases';
-$lang->testtask->methodOrder[25] = 'groupCase';
-$lang->testtask->methodOrder[30] = 'edit';
-$lang->testtask->methodOrder[35] = 'start';
-$lang->testtask->methodOrder[40] = 'activate';
-$lang->testtask->methodOrder[45] = 'block';
-$lang->testtask->methodOrder[50] = 'close';
-$lang->testtask->methodOrder[55] = 'delete';
-$lang->testtask->methodOrder[60] = 'batchAssign';
-$lang->testtask->methodOrder[65] = 'linkcase';
-$lang->testtask->methodOrder[70] = 'unlinkcase';
-$lang->testtask->methodOrder[75] = 'runcase';
-$lang->testtask->methodOrder[80] = 'results';
-$lang->testtask->methodOrder[85] = 'batchUnlinkCases';
-$lang->testtask->methodOrder[90] = 'report';
+$lang->testtask->methodOrder[0]   = 'index';
+$lang->testtask->methodOrder[5]   = 'create';
+$lang->testtask->methodOrder[10]  = 'browse';
+$lang->testtask->methodOrder[15]  = 'view';
+$lang->testtask->methodOrder[20]  = 'cases';
+$lang->testtask->methodOrder[25]  = 'groupCase';
+$lang->testtask->methodOrder[30]  = 'edit';
+$lang->testtask->methodOrder[35]  = 'start';
+$lang->testtask->methodOrder[40]  = 'activate';
+$lang->testtask->methodOrder[45]  = 'block';
+$lang->testtask->methodOrder[50]  = 'close';
+$lang->testtask->methodOrder[55]  = 'delete';
+$lang->testtask->methodOrder[60]  = 'batchAssign';
+$lang->testtask->methodOrder[65]  = 'linkcase';
+$lang->testtask->methodOrder[70]  = 'unlinkcase';
+$lang->testtask->methodOrder[75]  = 'runcase';
+$lang->testtask->methodOrder[80]  = 'results';
+$lang->testtask->methodOrder[85]  = 'batchUnlinkCases';
+$lang->testtask->methodOrder[90]  = 'report';
+$lang->testtask->methodOrder[95]  = 'browseUnits';
+$lang->testtask->methodOrder[100] = 'unitCases';
+$lang->testtask->methodOrder[105] = 'importUnitResult';
 
 $lang->resource->testreport = new stdclass();
 $lang->resource->testreport->browse     = 'browse';
@@ -741,6 +747,7 @@ $lang->resource->job->create = 'create';
 $lang->resource->job->edit   = 'edit';
 $lang->resource->job->delete = 'delete';
 $lang->resource->job->exec   = 'exec';
+$lang->resource->job->view   = 'view';
 
 $lang->job->methodOrder[5]  = 'browse';
 $lang->job->methodOrder[10] = 'create';
@@ -1455,6 +1462,12 @@ $lang->changelog['10.6'][] = 'backup-setting';
 $lang->changelog['10.6'][] = 'backup-rmPHPHeader';
 
 $lang->changelog['11.6.2'][] = 'message-browser';
+
+$lang->changelog['12.3'][] = 'testtask-browseUnits';
+$lang->changelog['12.3'][] = 'testtask-unitCases';
+$lang->changelog['12.3'][] = 'testtask-importUnitResult';
+$lang->changelog['12.3'][] = 'job-view';
+$lang->changelog['12.3'][] = 'ci-commitResult';
 
 global $config;
 if($config->global->flow != 'full')

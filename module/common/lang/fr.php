@@ -277,8 +277,14 @@ $lang->qa->menu->testsuite = array('link' => 'Cahier Recette|testsuite|browse|pr
 $lang->qa->menu->report    = array('link' => 'Rapport|testreport|browse|productID=%s');
 $lang->qa->menu->caselib   = array('link' => 'Library Recette|caselib|browse');
 
+$lang->qa->subMenu = new stdclass();
+$lang->qa->subMenu->testcase = new stdclass();
+$lang->qa->subMenu->testcase->feature = array('link' => 'Functional Test|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree,story');
+$lang->qa->subMenu->testcase->unit    = array('link' => 'Unit Test|testtask|browseUnits|productID=%s');
+
 $lang->bug = new stdclass();
 $lang->bug->menu = new stdclass();
+$lang->bug->subMenu = $lang->qa->subMenu;
 
 $lang->bug->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,resolve,close,activate,report,batchedit,batchactivate,confirmbug,assignto', 'subModule' => 'tree');
 $lang->bug->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s');
@@ -289,6 +295,7 @@ $lang->bug->menu->caselib   = array('link' => 'Library Recette|caselib|browse');
 
 $lang->testcase = new stdclass();
 $lang->testcase->menu = new stdclass();
+$lang->testcase->subMenu = $lang->qa->subMenu;
 $lang->testcase->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testcase->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s', 'alias' => 'view,create,batchcreate,edit,batchedit,showimport,groupcase,importfromlib', 'subModule' => 'tree');
 $lang->testcase->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s');
@@ -298,6 +305,7 @@ $lang->testcase->menu->caselib   = array('link' => 'Library Recette|caselib|brow
 
 $lang->testtask = new stdclass();
 $lang->testtask->menu = new stdclass();
+$lang->testtask->subMenu = $lang->qa->subMenu;
 $lang->testtask->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testtask->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s');
 $lang->testtask->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s', 'alias' => 'view,create,edit,linkcase,cases,start,close,batchrun,groupcase,report');
@@ -307,6 +315,7 @@ $lang->testtask->menu->caselib   = array('link' => 'Library Recette|caselib|brow
 
 $lang->testsuite = new stdclass();
 $lang->testsuite->menu = new stdclass();
+$lang->testsuite->subMenu = $lang->qa->subMenu;
 $lang->testsuite->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testsuite->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s');
 $lang->testsuite->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s');
@@ -316,6 +325,7 @@ $lang->testsuite->menu->caselib   = array('link' => 'Library Recette|caselib|bro
 
 $lang->testreport = new stdclass();
 $lang->testreport->menu = new stdclass();
+$lang->testreport->subMenu = $lang->qa->subMenu;
 $lang->testreport->menu->bug       = array('link' => 'Bug|bug|browse|productID=%s');
 $lang->testreport->menu->testcase  = array('link' => 'CasTest|testcase|browse|productID=%s');
 $lang->testreport->menu->testtask  = array('link' => 'Recette|testtask|browse|productID=%s');
@@ -325,6 +335,7 @@ $lang->testreport->menu->caselib   = array('link' => 'Library Recette|caselib|br
 
 $lang->caselib = new stdclass();
 $lang->caselib->menu = new stdclass();
+$lang->caselib->subMenu = $lang->qa->subMenu;
 $lang->caselib->menu->bug       = array('link' => 'Bug|bug|browse|');
 $lang->caselib->menu->testcase  = array('link' => 'CasTest|testcase|browse|');
 $lang->caselib->menu->testtask  = array('link' => 'Recette|testtask|browse|');
@@ -688,7 +699,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyStory')
 
     unset($lang->menuOrder[15]);
     unset($lang->menuOrder[20]);
-    unset($lang->menuOrder[30]);
+    unset($lang->menuOrder[35]);
 
     /* Adjust sub menu of my dashboard. */
     unset($lang->my->menu->bug);
@@ -724,7 +735,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTask')
 
     unset($lang->menuOrder[10]);
     unset($lang->menuOrder[20]);
-    unset($lang->menuOrder[30]);
+    unset($lang->menuOrder[35]);
 
     /* Adjust sub menu of my dashboard. */
     unset($lang->my->menu->bug);
@@ -761,7 +772,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     unset($lang->menuOrder[15]);
     unset($lang->menuOrder[20]);
-    unset($lang->menuOrder[30]);
+    unset($lang->menuOrder[35]);
 
     /* Rename product module. */
     $lang->menu->product = "{$lang->productCommon}|product|index";
@@ -779,17 +790,19 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
     /* Add bug, testcase and testtask module. */
     $lang->menu->bug       = 'Bug|bug|index';
-    $lang->menu->testcase  = 'CasTest|testcase|index';
+    $lang->menu->testcase  = 'Functional Test|testcase|index';
+    $lang->menu->unit      = 'Unit Test|testtask|browseUnits';
     $lang->menu->testsuite = 'Cahier de Recette|testsuite|index';
     $lang->menu->testtask  = 'Recette|testtask|index';
     $lang->menu->caselib   = 'Library Recette|caselib|browse';
 
     $lang->menuOrder[6]  = 'bug';
     $lang->menuOrder[7]  = 'testcase';
-    $lang->menuOrder[8]  = 'testsuite';
-    $lang->menuOrder[9]  = 'testtask';
-    $lang->menuOrder[10] = 'caselib';
-    $lang->menuOrder[11] = 'product';
+    $lang->menuOrder[8]  = 'unit';
+    $lang->menuOrder[9]  = 'testsuite';
+    $lang->menuOrder[10] = 'testtask';
+    $lang->menuOrder[11] = 'caselib';
+    $lang->menuOrder[12] = 'product';
 
     /* Adjust sub menu of bug module. */
     $lang->bug->menu = new stdclass();
@@ -901,6 +914,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
     /* Adjust menu group. */
     $lang->menugroup->bug        = 'bug';
     $lang->menugroup->testcase   = 'testcase';
+    $lang->menugroup->case       = 'testcase';
     $lang->menugroup->testtask   = 'testtask';
     $lang->menugroup->testsuite  = 'testsuite';
     $lang->menugroup->caselib    = 'caselib';
