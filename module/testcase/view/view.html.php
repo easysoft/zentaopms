@@ -55,7 +55,7 @@
 <div id="mainContent" class="main-row">
   <div class='main-col col-8'>
     <div class='cell' style='word-break:break-all'>
-      <?php if($case->auto == 'no'):?>
+      <?php if($case->auto != 'unit'):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->precondition;?></div>
         <div class="detail-content article-content"><?php echo nl2br($case->precondition);?></div>
@@ -127,7 +127,7 @@
 
         <?php
         common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
-        if(!$isLibCase and $case->auto == 'no') common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
+        if(!$isLibCase and $case->auto != 'unit') common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
         if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
         common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', 'showinonlybody');
         ?>

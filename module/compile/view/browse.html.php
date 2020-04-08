@@ -15,7 +15,7 @@
   <div class="btn-toolbar pull-left">
     <?php
     echo html::a($this->createLink('job', 'browse'), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link'");
-    echo html::a($this->createLink('compile', 'browse'), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link btn-active-text'");
+    echo html::a($this->createLink('compile', 'browse'), "<span class='text'>" . ($jobID ? $job->name : '') . " {$lang->ci->history}</span>", '', "class='btn btn-link btn-active-text'");
     ?>
   </div>
 </div>
@@ -33,14 +33,14 @@
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
           <th class='w-80px text-center'><?php common::printOrderLink('status', $orderBy, $vars, $lang->compile->status);?></th>
           <th class='w-130px text-center'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->compile->time);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class='w-120px'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody class='text-left'>
         <?php foreach($buildList as $id => $build):?>
         <tr>
           <td class='text-center'><?php echo $id;?></td>
-          <td title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
+          <td title='<?php echo $build->name;?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$build->job}&compileID={$build->id}", 'html', true), $build->name, '', "class='iframe' data-width='90%'") : $build->name;?></td>
           <td title='<?php echo $build->repoName;?>'><?php echo $build->repoName;?></td>
           <?php $jenkins = urldecode($build->jkJob) . '@' . $build->jenkinsName;?>
           <td title='<?php echo $jenkins; ?>'><?php echo $jenkins; ?></td>
@@ -49,16 +49,12 @@
           <?php $buildStatus = zget($lang->compile->statusList, $build->status);?>
           <td class='text-center' title='<?php echo $buildStatus;?>'><?php echo $buildStatus;?></td>
           <td title='<?php echo $build->createdDate;?>'><?php echo $build->createdDate;?></td>
-          <td class='c-actions text-center'>
+          <td class='c-actions text-left'>
             <?php
-            common::printIcon('compile', 'logs', "buildID=$id", '', 'list', 'file-text', '', '', '', '', $lang->compile->logs);
+            common::printLink('compile', 'logs', "buildID=$id", $lang->compile->logs);
             if($build->testtask)
             {
-                common::printIcon('testtask', 'units', "taskID=$build->testtask", '', 'list', 'list-alt', '', '', '', '', $lang->compile->result);
-            }
-            else
-            {
-                echo html::a('###', "<i class='icon-testtask-units icon-list-alt'></i>", '', "class='btn disabled' title='{$lang->compile->result}'");
+                common::printLink('testtask', 'unitCases', "taskID=$build->testtask", $lang->compile->result, '', "class='iframe' data-width='90%'", true, true);
             }
             ?>
           </td>

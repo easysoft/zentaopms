@@ -29,7 +29,7 @@ class ciModel extends model
      * @access public
      * @return void
      */
-    public function checkBuildStatus()
+    public function checkCompileStatus()
     {
         $compiles = $this->dao->select('t1.*, t2.jkJob, t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')
             ->from(TABLE_COMPILE)->alias('t1')
@@ -42,17 +42,17 @@ class ciModel extends model
             ->andWhere('t1.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        foreach($compiles as $compile) $this->syncStatus($compile);
+        foreach($compiles as $compile) $this->syncCompileStatus($compile);
     }
 
     /**
-     * Sync status.
+     * Sync compile status.
      * 
      * @param  object $compile 
      * @access public
      * @return void
      */
-    public function syncStatus($compile)
+    public function syncCompileStatus($compile)
     {
         $jenkinsServer   = $compile->url;
         $jenkinsUser     = $compile->account;

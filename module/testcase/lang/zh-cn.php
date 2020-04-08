@@ -168,12 +168,12 @@ $lang->testcase->priList[4] = 4;
 /* Define the types. */
 $lang->testcase->typeList['']            = '';
 $lang->testcase->typeList['feature']     = '功能测试';
-$lang->testcase->typeList['unit']        = '单元测试';
 $lang->testcase->typeList['performance'] = '性能测试';
 $lang->testcase->typeList['config']      = '配置相关';
 $lang->testcase->typeList['install']     = '安装部署';
 $lang->testcase->typeList['security']    = '安全相关';
 $lang->testcase->typeList['interface']   = '接口测试';
+$lang->testcase->typeList['unit']        = '单元测试';
 $lang->testcase->typeList['other']       = '其他';
 
 $lang->testcase->stageList['']           = '';
@@ -223,6 +223,3 @@ $lang->testcase->featureBar['browse']['group']       = '分组查看';
 $lang->testcase->featureBar['browse']['suite']       = '套件';
 $lang->testcase->featureBar['browse']['zerocase']    = "零用例{$lang->storyCommon}";
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];
-
-$lang->testcase->featureBar['unit']['all']  = $lang->testcase->allCases;
-$lang->testcase->featureBar['unit']['wait'] = '待评审';

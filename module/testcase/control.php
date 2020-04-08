@@ -486,7 +486,7 @@ class testcase extends control
     {
         $case = $this->testcase->getById($caseID, $version);
         if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
-        if($case->auto != 'no')
+        if($case->auto == 'unit')
         {
             $this->lang->testcase->subMenu->testcase->feature['alias'] = '';
             $this->lang->testcase->subMenu->testcase->unit['alias'] = 'view';

@@ -20,7 +20,7 @@
   </div>
 
   <div class='main' style='word-break:break-all'>
-    <?php if($case->auto == 'no'):?>
+    <?php if($case->auto != 'unit'):?>
     <div class='detail'>
       <div class='detail-title'><?php echo $lang->testcase->precondition;?></div>
       <div class='detail-content'><?php echo $case->precondition;?></div>
@@ -28,7 +28,7 @@
     <?php endif;?>
     <div class='detail' id='casesResults'>
       <table class='table table-condensed table-hover' style='border: 1px solid #ddd; word-break:break-all'>
-        <?php if($case->auto == 'no'):?>
+        <?php if($case->auto != 'unit'):?>
         <?php $count = count($results);?>
         <caption class='text-left'>
           <strong><?php echo $lang->testcase->result?> &nbsp;<span> <?php printf($lang->testtask->showResult, $count)?></span> <span class='result-tip'></span></strong>

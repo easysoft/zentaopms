@@ -128,7 +128,7 @@ class testtaskModel extends model
     public function setUnitMenu($products, $productID, $branch = 0, $testtask = 0)
     {
         $this->loadModel('product')->setMenu($products, $productID, $branch);
-        $selectHtml = $this->product->select($products, $productID, 'testtask', 'browseUnit', '', $branch);
+        $selectHtml = $this->product->select($products, $productID, 'testtask', 'browseUnits', '', $branch);
 
         if($testtask and $this->app->viewType != 'mhtml')
         {
@@ -139,7 +139,7 @@ class testtaskModel extends model
             $selectHtml .= "<div class='btn-group'>";
             $selectHtml .= "<a data-toggle='dropdown' class='btn'>" . $testtasks[$testtask]->name . " <span class='caret'></span></a>";
             $selectHtml .= "<ul class='dropdown-menu'>";
-            foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'units', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
+            foreach($testtasks as $testtask) $selectHtml .= '<li>' . html::a(helper::createLink('testtask', 'unitCases', "taskID=$testtask->id"), "<i class='icon icon-file-o'></i> {$testtask->name}") . '</li>';
             $selectHtml .= "</ul>";
             $selectHtml .= "</div>";
             $selectHtml .= "</div>";
@@ -236,7 +236,7 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
                 ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.auto')->eq('no')
+                ->andWhere('t1.auto')->ne('unit')
                 ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
                 ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
                 ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in(('blocked,doing,wait,done'))->fi()
@@ -256,7 +256,7 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.project = t5.project and t1.product = t5.product')
 
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.auto')->eq('no')
+                ->andWhere('t1.auto')->ne('unit')
                 ->andWhere('t3.id')->in($this->app->user->view->projects)
                 ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
                 ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
@@ -293,7 +293,7 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.product')->eq($productID)
-                ->andWhere('t1.auto')->ne('no')
+                ->andWhere('t1.auto')->eq('unit')
                 ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
                 ->andWhere('t1.end')->ge($beginAndEnd['begin'])
                 ->andWhere('t1.end')->le($beginAndEnd['end'])
@@ -311,7 +311,7 @@ class testtaskModel extends model
                 ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.product')->eq($productID)
-                ->andWhere('t1.auto')->ne('no')
+                ->andWhere('t1.auto')->eq('unit')
                 ->beginIF($browseType != 'all' and $browseType != 'newest' and $beginAndEnd)
                 ->andWhere('t1.end')->ge($beginAndEnd['begin'])
                 ->andWhere('t1.end')->le($beginAndEnd['end'])
@@ -329,13 +329,13 @@ class testtaskModel extends model
         {
             $results = zget($resultGroups, $taskID, array());
 
-            $task->caseNum = count($results);
-            $task->passNum = 0;
-            $task->failNum = 0;
+            $task->caseCount = count($results);
+            $task->passCount = 0;
+            $task->failCount = 0;
             foreach($results as $result)
             {
-                if($result->caseResult == 'pass') $task->passNum ++;
-                if($result->caseResult == 'fail') $task->failNum ++;
+                if($result->caseResult == 'pass') $task->passCount ++;
+                if($result->caseResult == 'fail') $task->failCount ++;
             }
         }
 
@@ -357,7 +357,7 @@ class testtaskModel extends model
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t1.build = t2.id')
             ->where('t1.project')->eq((int)$projectID)
-            ->andWhere('t1.auto')->eq('no')
+            ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
@@ -429,7 +429,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.auto')->eq('no')
+            ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.owner')->eq($account)
             ->andWhere('t2.id')->in($this->app->user->view->projects)
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
@@ -630,7 +630,7 @@ class testtaskModel extends model
 
         return $this->dao->select('id, name')->from(TABLE_TESTTASK)
             ->where('product')->eq($productID)
-            ->andWhere('auto')->eq('no')
+            ->andWhere('auto')->ne('unit')
             ->beginIF($beginDate)->andWhere('begin')->le($beginDate)->fi()
             ->andWhere('deleted')->eq('0')
             ->andWhere('id')->notin($testTaskID)
@@ -1398,7 +1398,7 @@ class testtaskModel extends model
         if($action == 'block')    return ($testtask->status == 'doing'   || $testtask->status == 'wait');
         if($action == 'activate') return ($testtask->status == 'blocked' || $testtask->status == 'done');
         if($action == 'close')    return $testtask->status != 'done';
-        if($action == 'runcase' and $testtask->auto != 'no')  return false;
+        if($action == 'runcase' and $testtask->auto == 'unit')  return false;
         if($action == 'runcase')  return isset($testtask->caseStatus) ? $testtask->caseStatus != 'wait' : $testtask->status != 'wait';
         return true;
     }
@@ -1648,13 +1648,13 @@ class testtaskModel extends model
      * @access public
      * @return string
      */
-    public function importUnit($productID)
+    public function importUnitResult($productID)
     {
         $frame = $this->post->frame;
         unset($_POST['frame']);
 
         $fileName = $this->session->resultFile;
-        $data     = $this->buildDataFromXML($fileName, $productID, $frame);
+        $data     = $this->parseXMLResult($fileName, $productID, $frame);
         if($frame == 'cppunit' and empty($data['cases'])) $data = $this->buildDataFromCppXML($fileName, $productID, $frame);
 
         /* Create task. */
@@ -1665,11 +1665,11 @@ class testtaskModel extends model
         unset($_SESSION['resultFile']);
         if(dao::isError()) return false;
 
-        return $this->saveUnit($testtaskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
+        return $this->processAutoResult($testtaskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
     }
 
     /**
-     * Save unit.
+     * Process auto test result.
      * 
      * @param  int    $testtaskID 
      * @param  int    $productID 
@@ -1681,7 +1681,7 @@ class testtaskModel extends model
      * @access public
      * @return int
      */
-    public function saveUnit($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array())
+    public function processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array())
     {
         if(empty($cases)) die(js::alert($this->lang->testtask->noImportData));
 
@@ -1788,7 +1788,7 @@ class testtaskModel extends model
         $failNodes  = $parsedXML->xpath('FailedTests/FailedTest');
         $passNodes  = $parsedXML->xpath('SuccessfulTests/Test');
         $matchNodes = array_merge($failNodes, $passNodes);
-        if(count($matchNodes) == 0) die(js::alert($this->lang->testtask->noImportData));
+        if(count($matchNodes) == 0) return array('suites' => array(), 'cases' => array(), 'results' => array(), 'suiteNames' => array(), 'caseTitles' => array());
 
         /* Get cases and results by parsed node. */
         $now        = helper::now();
@@ -1843,7 +1843,7 @@ class testtaskModel extends model
     }
 
     /**
-     * buildDataFromXML 
+     * Parse unit result from xml.
      * 
      * @param  string $fileName 
      * @param  int    $productID 
@@ -1851,19 +1851,19 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function buildDataFromXML($fileName, $productID, $frame)
+    public function parseXMLResult($fileName, $productID, $frame)
     {
         /* Parse result xml. */
-        $unitFormat = zget($this->config->testtask->unitFormat, $frame, $this->config->testtask->unitFormat->common);
-        $parsedXML  = simplexml_load_file($fileName);
+        $rules     = zget($this->config->testtask->unitResultRules, $frame, $this->config->testtask->unitResultRules->common);
+        $parsedXML = simplexml_load_file($fileName);
 
         /* Get testcase node. */
-        $matchPaths = $unitFormat['path'];
-        $nameFields = $unitFormat['name'];
-        $failure    = $unitFormat['failure'];
-        $suiteField = $unitFormat['suite'];
-        $aliasSuite = zget($unitFormat, 'aliasSuite', array());
-        $aliasName  = zget($unitFormat, 'aliasName', array());
+        $matchPaths = $rules['path'];
+        $nameFields = $rules['name'];
+        $failure    = $rules['failure'];
+        $suiteField = $rules['suite'];
+        $aliasSuite = zget($rules, 'aliasSuite', array());
+        $aliasName  = zget($rules, 'aliasName', array());
         $matchNodes = array();
         foreach($matchPaths as $matchPath)
         {
@@ -2001,7 +2001,7 @@ class testtaskModel extends model
     }
 
     /**
-     * Build data from unit.
+     * Parse unit result from ztf.
      * 
      * @param  array  $caseResults 
      * @param  string $frame 
@@ -2011,7 +2011,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function buildDataFromUnit($caseResults, $frame, $productID, $jobID, $compileID)
+    public function parseZTFUnitResult($caseResults, $frame, $productID, $jobID, $compileID)
     {
         $now        = helper::now();
         $cases      = array();
@@ -2081,7 +2081,7 @@ class testtaskModel extends model
     }
 
     /**
-     * Build data from ztf.
+     * Parse function result from ztf.
      * 
      * @param  array  $caseResults 
      * @param  string $frame 
@@ -2091,7 +2091,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function buildDataFromZTF($caseResults, $frame, $productID, $jobID, $compileID)
+    public function parseZTFFuncResult($caseResults, $frame, $productID, $jobID, $compileID)
     {
         $now        = helper::now();
         $cases      = array();
@@ -2109,13 +2109,13 @@ class testtaskModel extends model
             $case->product    = $productID;
             $case->title      = $caseResult->title;
             $case->pri        = 3;
-            $case->type       = 'unit';
-            $case->stage      = 'unittest';
+            $case->type       = 'feature';
+            $case->stage      = 'feature';
             $case->status     = 'normal';
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = $now;
             $case->version    = 1;
-            $case->auto       = 'ztf';
+            $case->auto       = 'function';
             $case->frame      = $frame;
 
             $result = new stdclass();

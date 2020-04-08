@@ -20,11 +20,11 @@
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <?php foreach($lang->testtask->unitTag as $key => $label):?>
-    <?php echo html::a(inlink('browseUnit', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
+    <?php echo html::a(inlink('browseUnits', "productID=$productID&browseType=$key&orderBy=$orderBy"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('testtask', 'importUnit', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnit, '', "class='btn'");?>
+    <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id='mainContent' class='main-table'>
@@ -47,9 +47,9 @@
         <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
         <th class='c-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
         <th class='w-90px text-left'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->execTime);?></th>
-        <th class='w-50px text-center'><?php echo $lang->testtask->caseNum;?></th>
-        <th class='w-40px text-center'><?php echo $lang->testtask->passNum;?></th>
-        <th class='w-40px text-center'><?php echo $lang->testtask->failNum;?></th>
+        <th class='w-50px text-center'><?php echo $lang->testtask->caseCount;?></th>
+        <th class='w-40px text-center'><?php echo $lang->testtask->passCount;?></th>
+        <th class='w-40px text-center'><?php echo $lang->testtask->failCount;?></th>
         <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -57,19 +57,19 @@
     <?php foreach($tasks as $task):?>
     <tr class='text-left'>
       <td><?php printf('%03d', $task->id);?></td>
-      <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('units', "taskID=$task->id"), $task->name);?></td>
+      <td class='c-name' title="<?php echo $task->name?>"><?php echo html::a(inlink('unitCases', "taskID=$task->id"), $task->name);?></td>
       <?php if($config->global->flow != 'onlyTest'):?>
       <td class='c-name' title="<?php echo $task->projectName?>"><?php echo $task->projectName?></td>
       <?php endif;?>
       <td class='c-name'><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build",'',true), $task->buildName);?></td>
       <td><?php echo zget($users, $task->owner);?></td>
       <td><?php echo $task->end?></td>
-      <td class='text-center'><?php echo $task->caseNum?></td>
-      <td class='text-center pass'><?php echo $task->passNum?></td>
-      <td class='text-center fail'><?php echo $task->failNum?></td>
+      <td class='text-center'><?php echo $task->caseCount?></td>
+      <td class='text-center pass'><?php echo $task->passCount?></td>
+      <td class='text-center fail'><?php echo $task->failCount?></td>
       <td class='c-actions'>
         <?php
-        common::printIcon('testtask',  'units', "taskID=$task->id", '', 'list', 'list-alt','','',true);
+        common::printIcon('testtask',  'unitCases', "taskID=$task->id", '', 'list', 'list-alt','','',true);
         common::printIcon('testtask',  'edit', "taskID=$task->id", $task, 'list','','','',true);
         if(common::hasPriv('testtask', 'delete', $task))
         {

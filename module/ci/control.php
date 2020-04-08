@@ -53,7 +53,7 @@ class ci extends control
         foreach($compiles as $compile)
         {
             if($compile->atTime and date('H:i') < $compile->atTime) continue; 
-            $this->compile->execByCompile($compile);
+            $this->compile->exec($compile);
         }
         echo 'success';
     }
@@ -64,9 +64,9 @@ class ci extends control
      * @access public
      * @return void
      */
-    public function checkBuildStatus()
+    public function checkCompileStatus()
     {
-        $this->ci->checkBuildStatus();
+        $this->ci->checkCompileStatus();
         if(dao::isError())
         {
             echo json_encode(dao::getError());
@@ -112,9 +112,18 @@ class ci extends control
             if(empty($productID)) $productID = $compile->product;
             if($compile->status != 'success' and $compile->status != 'fail' and $compile->status != 'create_fail' and $compile->status != 'timeout')
             {
-                $this->loadModel('compile')->syncStatus($compile);
+                $this->loadModel('compile')->syncCompileStatus($compile);
             }
         }
+
+        /* Get productID from caseResults when productID is null. */
+        if(empty($productID) and $testType == 'ztf')
+        {
+            $caseResults = $post->ztfCaseResults;
+            $firstCase   = array_shift($caseResults);
+            $productID   = $firstCase->productId;
+        }
+        if(empty($productID)) die(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
 
         /* Get testtaskID or create testtask. */
         if(!empty($taskID))
@@ -135,7 +144,7 @@ class ci extends control
 
             $testtask = new stdclass();
             $testtask->product = $productID;
-            $testtask->name    = sprintf($this->lang->testtask->unitTitleTemplate, date('Y-m-d H:i:s'));
+            $testtask->name    = sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
             $testtask->owner   = $this->app->user->account;
             $testtask->project = $lastProject;
             $testtask->build   = 'trunk';
@@ -154,14 +163,14 @@ class ci extends control
         /* Build data from case results. */
         if($testType == 'unit')
         {
-            $data = $this->testtask->buildDataFromUnit($post->unitCaseResults, $frame, $productID, $jobID, $compileID);
+            $data = $this->testtask->parseZTFUnitResult($post->unitResult, $frame, $productID, $jobID, $compileID);
         }
-        elseif($testType == 'ztf')
+        elseif($testType == 'func')
         {
-            $data = $this->testtask->buildDataFromZTF($post->ztfCaseResults, $frame, $productID, $jobID, $compileID);
+            $data = $this->testtask->parseZTFFuncResult($post->funcResult, $frame, $productID, $jobID, $compileID);
         }
 
-        $taskID = $this->testtask->saveUnit($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
+        $taskID = $this->testtask->processAutoResult($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
 
         die(json_encode(array('result' => 'success')));
     }

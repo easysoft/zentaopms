@@ -52,6 +52,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testcase->type;?></th>
+          <?php unset($lang->testcase->typeList['unit']);?>
           <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
           <?php if(strpos(",$showFields,", 'stage') !== false):?>
           <td style='padding-left:15px'>

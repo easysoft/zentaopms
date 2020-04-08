@@ -26,6 +26,8 @@ $lang->job->lastStatus  = '最后执行状态';
 $lang->job->lastExec    = '最后执行时间';
 $lang->job->comment     = '匹配关键字';
 
+$lang->job->lblBasic = '基本信息';
+
 $lang->job->example    = '举例';
 $lang->job->commitEx   = "用于匹配创建构建任务的关键字，多个关键字用','分割";
 $lang->job->cronSample = '如 0 0 2 * * 2-6/1 表示每个工作日凌晨2点';
@@ -40,11 +42,11 @@ $lang->job->triggerTypeList['commit']   = '提交注释包含关键字';
 $lang->job->triggerTypeList['schedule'] = '定时计划';
 
 $lang->job->frameList['']        = '';
-$lang->job->frameList['junit']   = 'JUNIT';
-$lang->job->frameList['testng']  = 'TESTNG';
-$lang->job->frameList['phpunit'] = 'PHPUNIT';
-$lang->job->frameList['pytest']  = 'PYTEST';
-$lang->job->frameList['jtest']   = 'JTEST';
-$lang->job->frameList['cppunit'] = 'CPPUNIT';
-$lang->job->frameList['gtest']   = 'GTEST';
-$lang->job->frameList['qtest']   = 'QTEST';
+$lang->job->frameList['junit']   = 'JUnit';
+$lang->job->frameList['testng']  = 'TestNG';
+$lang->job->frameList['phpunit'] = 'PHPUnit';
+$lang->job->frameList['pytest']  = 'Pytest';
+$lang->job->frameList['jtest']   = 'JTest';
+$lang->job->frameList['cppunit'] = 'CppUnit';
+$lang->job->frameList['gtest']   = 'GTest';
+$lang->job->frameList['qtest']   = 'QTest';

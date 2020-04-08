@@ -92,7 +92,7 @@ class testtask extends control
     }
 
     /**
-     * Browse unit task.
+     * Browse unit tasks.
      * 
      * @param  int    $productID 
      * @param  string $browseType 
@@ -103,7 +103,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browseUnit($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseUnits($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true));
@@ -124,7 +124,7 @@ class testtask extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
-        $this->view->position[]  = html::a($this->createLink('testtask', 'browseUnit', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[]  = html::a($this->createLink('testtask', 'browseUnits', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testtask->common;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
@@ -287,7 +287,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function units($taskID, $orderBy = 'id')
+    public function unitCases($taskID, $orderBy = 'id')
     {
         $task = $this->testtask->getById($taskID);
 
@@ -328,28 +328,29 @@ class testtask extends control
         if(empty($groupCases)) $groupCases[] = $cases;
         foreach($groupCases as $suiteID => $groupCase)
         {
-            $caseNum  = 0;
-            $failNum  = 0;
-            $duration = 0;
+            $caseCount = 0;
+            $failCount = 0;
+            $duration  = 0;
             foreach($groupCase as $caseID => $suitecase)
             {
                 $case = $cases[$caseID];
                 $groupCases[$suiteID][$caseID] = $case;
                 $duration += $case->duration;
-                $caseNum ++;
-                if($case->caseResult == 'fail') $failNum ++;
+                $caseCount ++;
+                if($case->caseResult == 'fail') $failCount ++;
             }
-            $summary[$suiteID] = sprintf($this->lang->testtask->unitSummary, $caseNum, $failNum, $duration);
+            $summary[$suiteID] = sprintf($this->lang->testtask->summary, $caseCount, $failCount, $duration);
         }
 
-        $suites = $this->loadModel('testsuite')->getUnit($productID);
+        $suites = $this->loadModel('testsuite')->getUnitSuites($productID);
 
         /* Assign. */
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[] = html::a($this->createLink('testcase', 'browseUnit', "productID=$productID"), $this->products[$productID]);
+        $this->view->position[] = html::a($this->createLink('testcase', 'browseUnits', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testcase->common;
 
         $this->view->productID   = $productID;
+        $this->view->task        = $task;
         $this->view->product     = $this->product->getById($productID);
         $this->view->productName = $this->products[$productID];
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
@@ -1159,7 +1160,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function importUnit($productID)
+    public function importUnitResult($productID)
     {
         if($_POST)
         {
@@ -1170,11 +1171,11 @@ class testtask extends control
             move_uploaded_file($file['tmpname'], $fileName);
             $this->session->set('resultFile', $fileName);
 
-            $taskID = $this->testtask->importUnit($productID);
+            $taskID = $this->testtask->importUnitResult($productID);
             if(dao::isError()) die(js::error(dao::getError()));
 
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
-            die(js::locate($this->createLink('testtask', 'units', "taskID=$taskID"), 'parent'));
+            die(js::locate($this->createLink('testtask', 'unitCases', "taskID=$taskID"), 'parent'));
         }
 
         $this->testtask->setMenu($this->products, $productID);
@@ -1190,9 +1191,9 @@ class testtask extends control
             ->orderBy('t1.project desc')
             ->fetchPairs('id', 'name');
 
-        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnit;
+        $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
         $this->view->position[]  = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
-        $this->view->position[]  = $this->lang->testtask->importUnit;
+        $this->view->position[]  = $this->lang->testtask->importUnitResult;
 
         $this->view->projects  = array('' => '') + $projects;
         $this->view->builds    = $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');

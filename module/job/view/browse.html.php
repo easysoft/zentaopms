@@ -41,7 +41,7 @@
         <?php foreach($jobList as $id => $job):?>
         <tr>
           <td class='text-center'><?php echo $id; ?></td>
-          <td title='<?php echo $job->name; ?>'><?php echo $job->name; ?></td>
+          <td title='<?php echo $job->name; ?>'><?php echo common::hasPriv('job', 'view') ? html::a($this->createLink('job', 'view', "jobID={$job->id}", 'html', true), $job->name, '', "class='iframe' data-width='90%'") : $job->name;?></td>
           <td title='<?php echo $job->repoName; ?>'><?php echo $job->repoName; ?></td>
           <td><?php echo zget($lang->job->frameList, $job->frame);?></td>
           <?php $jenkins = urldecode($job->jkJob) . '@' . $job->jenkinsName;?>
@@ -52,7 +52,7 @@
           <td><?php if($job->lastStatus) echo $job->lastExec;?></td>
           <td class='c-actions text-center'>
             <?php
-            common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'file-text');
+            common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'history');
             common::printIcon('job', 'edit', "jobID=$id", '', 'list',  'edit');
             common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play', 'hiddenwin');
             if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");

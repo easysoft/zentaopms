@@ -157,7 +157,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getUnit($productID, $orderBy = 'id_desc')
+    public function getUnitSuites($productID, $orderBy = 'id_desc')
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
