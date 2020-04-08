@@ -96,7 +96,7 @@
           </table>
         </div>
       </div>
-      <?php if($case->xml):?>
+      <?php if(isset($case->xml)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->xml;?></div>
         <div class="detail-content article-content"><?php echo nl2br(htmlspecialchars($case->xml));?></div>

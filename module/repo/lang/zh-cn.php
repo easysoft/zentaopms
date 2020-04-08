@@ -104,7 +104,7 @@ $lang->repo->objectIdRule = '对象ID匹配规则';
 $lang->repo->actionRule   = '动作匹配规则';
 $lang->repo->manHourRule  = '工时匹配规则';
 $lang->repo->ruleUnit     = "单位";
-$lang->repo->ruleSplit    = "多关键字用';'分割，如：任务多关键字： Task;task";
+$lang->repo->ruleSplit    = "多关键字用';'分割，如：任务多关键字： Task;任务";
 
 $lang->repo->viewDiffList['inline'] = '直列';
 $lang->repo->viewDiffList['appose'] = '并排';
