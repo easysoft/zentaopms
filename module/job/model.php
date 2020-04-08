@@ -177,10 +177,10 @@ class jobModel extends model
             $compiles = $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($id)->andWhere('LEFT(createdDate, 10)')->eq(date('Y-m-d'))->fetchAll();
             foreach($compiles as $compile)
             {
-                if(!empty($compile->status)) return true;
+                if(!empty($compile->status)) continue;
                 $this->dao->delete()->from(TABLE_COMPILE)->where('id')->eq($compile->id)->exec();
             }
-            $this->loadModel('compile')->createByJob($id);
+            $this->loadModel('compile')->createByJob($id, $job->atTime, 'atTime');
         }
 
         if($job->triggerType == 'tag')
@@ -279,6 +279,6 @@ class jobModel extends model
 
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($compile->status)->where('id')->eq($job->id)->exec();
 
-        return $build->status;
+        return $compile->status;
     }
 }
