@@ -47,7 +47,6 @@ $status = $this->session->testTaskVersionStatus;
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('testtask', 'importUnit', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnit, '', "class='btn'");?>
     <?php common::printLink('testtask', 'create', "product=$productID", "<i class='icon icon-plus'></i> " . $lang->testtask->create, '', "class='btn btn-primary'");?>
   </div>
 </div>

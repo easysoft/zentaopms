@@ -144,11 +144,11 @@ class svnModel extends model
             foreach($jobs as $job)
             {
                 $dirs    = $this->getRepoTags($repo, $job->svnDir);
-                $isNew   = false;
+                $isNew   = empty($job->lastTag) ? true : false;
                 $lastTag = '';
                 foreach($dirs as $dir)
                 {
-                    if($dir == $job->lastTag)
+                    if(!$isNew and $dir == $job->lastTag)
                     {
                         $isNew = true;
                         continue;

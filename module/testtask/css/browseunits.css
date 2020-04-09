@@ -1,0 +1,2 @@
+td.pass{background-color:unset !important;border-color:unset !important;border-bottom: 1px solid #eee !important; color:green}
+td.fail{background-color:unset !important;border-color:unset !important;border-bottom: 1px solid #eee !important; color:red}

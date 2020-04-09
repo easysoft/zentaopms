@@ -21,6 +21,12 @@ $(document).ready(function()
     });
 })
 
+/**
+ * Adjust priBox width.
+ * 
+ * @access public
+ * @return void
+ */
 function adjustPriBoxWidth()
 {
     var boxWidth   = $('#ownerAndPriBox').width();
@@ -29,6 +35,13 @@ function adjustPriBoxWidth()
     $('#pri,#pri_chosen .chosen-single').css('width', boxWidth - beginWidth -addonWidth);
 }
 
+/**
+ * Create bug from fail case.
+ * 
+ * @param  object $obj 
+ * @access public
+ * @return void
+ */
 function createBug(obj)
 {
     var $form  = $(obj).closest('form');
@@ -45,11 +58,25 @@ function createBug(obj)
     config.onlybody = onlybody;
 }
 
+/**
+ * Load project related 
+ * 
+ * @param  int $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectRelated(projectID)
 {
     loadProjectBuilds(projectID);
 }
 
+/**
+ * Load project builds.
+ * 
+ * @param  int $projectID 
+ * @access public
+ * @return void
+ */
 function loadProjectBuilds(projectID)
 {
     selectedBuild = $('#build').val();

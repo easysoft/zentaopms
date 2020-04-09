@@ -1,0 +1,62 @@
+<?php
+/**
+ * The unit view file of testcase module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Yidong Wang <yidong@cnezsoft.com>
+ * @package     testcase
+ * @version     $Id$
+ * @link        http://www.zentao.net
+ */
+?>
+<?php
+include '../../common/view/header.html.php';
+include '../../common/view/treetable.html.php';
+js::set('flow', $config->global->flow);
+?>
+<style>
+<?php if(isonlybody()):?>
+#mainMenu {border-bottom:1px solid #ddd;}
+.main-table {padding-top:60px;}
+<?php endif;?>
+</style>
+<?php if($config->global->flow == 'full'):?>
+<div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php common::printBack($this->createLink('testtask', 'browseUnits'), 'btn btn-primary');?>
+    <?php if(isonlybody()) echo "<div class='page-title'>{$task->name}</div>";?>
+  </div>
+  <div class='btn-toolbar pull-right <?php if(isonlybody()) echo 'hidden';?>'>
+    <div class='btn-group'>
+      <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>
+        <i class='icon icon-export muted'></i> <?php echo $lang->export ?>
+        <span class='caret'></span>
+      </button>
+      <ul class='dropdown-menu' id='exportActionMenu'>
+      <?php
+      $class = common::hasPriv('testcase', 'export') ? '' : "class=disabled";
+      $misc  = common::hasPriv('testcase', 'export') ? "class='export'" : "class=disabled";
+      $link  = common::hasPriv('testcase', 'export') ?  $this->createLink('testcase', 'export', "productID=$productID&orderBy=t1.id&taskID=0&browseType=") : '#';
+      echo "<li $class>" . html::a($link, $lang->testcase->export, '', $misc) . "</li>";
+      ?>
+      </ul>
+    </div>
+  </div>
+</div>
+<?php endif;?>
+<div class="main-table" data-ride="table" data-checkable="false" data-group="true">
+  <?php include 'unitgroup.html.php';?>
+</div>
+<script>
+$(function()
+{
+    <?php if($this->config->global->flow == 'full'):?>
+    $('#subNavbar [data-id=testcase]').addClass('active');
+    <?php else:?>
+    $('#navbar li.active').removeClass('active');
+    $('#navbar li[data-id=unit]').addClass('active');
+    <?php endif;?>
+})
+</script>
+<?php include '../../common/view/footer.html.php';?>

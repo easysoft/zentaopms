@@ -153,11 +153,11 @@ class gitModel extends model
             foreach($jobs as $job)
             {
                 $tags    = $this->getRepoTags($repo);
-                $isNew   = false;
+                $isNew   = empty($job->lastTag) ? true : false;
                 $lastTag = '';
                 foreach($tags as $tag)
                 {
-                    if($tag == $job->lastTag)
+                    if(!$isNew and $tag == $job->lastTag)
                     {
                         $isNew = true;
                         continue;

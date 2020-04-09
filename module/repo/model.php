@@ -991,6 +991,7 @@ class repoModel extends model
         $stories = array();
         $tasks   = array();
         $bugs    = array();
+        $storyReg = '/' . $rules['storyReg'] . '/i';
         $taskReg  = '/' . $rules['taskReg'] . '/i';
         $bugReg   = '/' . $rules['bugReg'] . '/i';
         if(preg_match_all($taskReg, $comment, $result))
@@ -1002,6 +1003,11 @@ class repoModel extends model
         {
             $bugLinks = $this->addLink($result, 'bug');
             foreach($bugLinks as $search => $replace) $comment = str_replace($search, $replace, $comment);
+        }
+        if(preg_match_all($storyReg, $comment, $result))
+        {
+            $storyLinks = $this->addLink($result, 'story');
+            foreach($storyLinks as $search => $replace) $comment = str_replace($search, $replace, $comment);
         }
         return $comment;
     }
@@ -1046,7 +1052,7 @@ class repoModel extends model
         $bugs    = array();
         $actions = array();
 
-        preg_match_all("/{$rules['startTaskReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['startTaskReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
@@ -1061,7 +1067,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['effortTaskReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['effortTaskReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
@@ -1076,7 +1082,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['finishTaskReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['finishTaskReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
@@ -1090,7 +1096,7 @@ class repoModel extends model
             }
         }
 
-        preg_match_all("/{$rules['resolveBugReg']}/", $comment, $matches);
+        preg_match_all("/{$rules['resolveBugReg']}/i", $comment, $matches);
         if($matches[0])
         {
             foreach($matches[4] as $i => $idList)
@@ -1121,6 +1127,16 @@ class repoModel extends model
             {
                 preg_match_all('/\d+/', $idList, $idMatches);
                 foreach($idMatches[0] as $id) $bugs[$id] = $id;
+            }
+        }
+
+        preg_match_all("/{$rules['storyReg']}/i", $comment, $matches);
+        if($matches[0])
+        {
+            foreach($matches[3] as $i => $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+                foreach($idMatches[0] as $id) $stories[$id] = $id;
             }
         }
 
@@ -1169,6 +1185,7 @@ class repoModel extends model
         $costMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['consumed'], ';')));
         $lefts         = str_replace(';', '|', trim($rules['task']['left'], ';'));
         $leftMarks     = str_replace(';', '|', preg_replace('/([^;])/', '\\\\\1', trim($rules['mark']['left'], ';')));
+        $storyModule   = str_replace(';', '|', trim($rules['module']['story'], ';'));
         $taskModule    = str_replace(';', '|', trim($rules['module']['task'], ';'));
         $bugModule     = str_replace(';', '|', trim($rules['module']['bug'], ';'));
         $costUnit      = str_replace(';', '|', trim($rules['unit']['consumed'], ';'));
@@ -1178,8 +1195,9 @@ class repoModel extends model
         $effortAction  = str_replace(';', '|', trim($rules['task']['logEfforts'], ';'));
         $resolveAction = str_replace(';', '|', trim($rules['bug']['resolve'], ';'));
 
-        $taskReg  = "(($taskModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
-        $bugReg   = "(($bugModule) +(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
+        $storyReg = "(($storyModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
+        $taskReg  = "(($taskModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
+        $bugReg   = "(($bugModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $costReg  = "($costs) *(($costMarks)([0-9]+)($costUnit))";
         $leftReg  = "($lefts) *(($leftMarks)([0-9]+)($leftUnit))";
 
@@ -1189,6 +1207,7 @@ class repoModel extends model
         $resolveBugReg = "({$resolveAction}) *{$bugReg}";
 
         $reg = array();
+        $reg['storyReg']      = $storyReg;
         $reg['taskReg']       = $taskReg;
         $reg['bugReg']        = $bugReg;
         $reg['costReg']       = $costReg;

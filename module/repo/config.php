@@ -42,6 +42,7 @@ $config->repo->svn->requiredFields = 'account,password';
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';
+$config->repo->rules['module']['story']    = 'Story';
 $config->repo->rules['task']['start']      = 'Start';
 $config->repo->rules['task']['finish']     = 'Finish';
 $config->repo->rules['task']['logEfforts'] = 'Effort';

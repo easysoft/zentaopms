@@ -54,6 +54,7 @@ $lang->testcase->assignedTo       = '指派給';
 $lang->testcase->colorTag         = '顏色標籤';
 $lang->testcase->lastRunResult    = '結果';
 $lang->testcase->desc             = '步驟';
+$lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = '預期';
 $lang->testcase->allProduct       = "所有{$lang->productCommon}";
 $lang->testcase->fromBug          = '來源Bug';
@@ -172,6 +173,7 @@ $lang->testcase->typeList['config']      = '配置相關';
 $lang->testcase->typeList['install']     = '安裝部署';
 $lang->testcase->typeList['security']    = '安全相關';
 $lang->testcase->typeList['interface']   = '介面測試';
+$lang->testcase->typeList['unit']        = '單元測試';
 $lang->testcase->typeList['other']       = '其他';
 
 $lang->testcase->stageList['']           = '';

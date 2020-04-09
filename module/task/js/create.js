@@ -424,6 +424,25 @@ $(document).ready(function()
     });
 });
 
+$(document).on('click', '#testStory_chosen,#story_chosen', function()
+{
+    var $obj  = $(this).prev('select');
+    var value = $obj.val();
+    if($obj.hasClass('filled')) return false;
+
+    $obj.empty();
+    for(storyID in stories)
+    {
+      console.log(storyID);
+        pinyin = storyPinYin[storyID];
+        html   = "<option value='" + storyID + "' title='" + stories[storyID] + "' data-keys='" + pinyin + "'>" + stories[storyID] + "</option>";
+        $obj.append(html);
+    }
+    $obj.val(value);
+    $obj.addClass('filled');
+    $obj.trigger("chosen:updated");
+})
+
 $('#modalTeam .btn').click(function()
 {
     var team = '';

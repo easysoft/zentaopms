@@ -53,7 +53,7 @@ class ci extends control
         foreach($compiles as $compile)
         {
             if($compile->atTime and date('H:i') < $compile->atTime) continue; 
-            $this->compile->execByCompile($compile);
+            $this->compile->exec($compile);
         }
         echo 'success';
     }
@@ -64,9 +64,9 @@ class ci extends control
      * @access public
      * @return void
      */
-    public function checkBuildStatus()
+    public function checkCompileStatus()
     {
-        $this->ci->checkBuildStatus();
+        $this->ci->checkCompileStatus();
         if(dao::isError())
         {
             echo json_encode(dao::getError());
@@ -75,5 +75,103 @@ class ci extends control
         {
             echo 'success';
         }
+    }
+
+    /**
+     * Commit result from ztf or unit.
+     * 
+     * @access public
+     * @return void
+     */
+    public function commitResult()
+    {
+        /* Get post data. */
+        $post = file_get_contents('php://input');
+        $post = json_decode($post);
+
+        $testType   = $post->testType;
+        $productID  = zget($post, 'productId', 0);
+        $taskID     = zget($post, 'taskId', 0);
+        $zentaoData = zget($post, 'zentaoData', '');
+        $frame      = zget($post, 'testFrame', 'junit');
+
+        /* Get compileID and jobID. */
+        parse_str($zentaoData, $params);
+        $this->loadModel('testtask');
+        $compileID = zget($params, 'compile', 0);
+        $jobID     = 0;
+        if($compileID)
+        {
+            $compile = $this->dao->select('t1.*, t2.jkJob,t2.product,t2.frame,t3.name as jenkinsName,t3.url,t3.account,t3.token,t3.password')->from(TABLE_COMPILE)->alias('t1')
+                ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
+                ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t2.jkHost=t3.id')
+                ->where('t1.id')->eq($compileID)
+                ->fetch();
+
+            $jobID = $compile->job;
+            if(empty($productID)) $productID = $compile->product;
+            if($compile->status != 'success' and $compile->status != 'fail' and $compile->status != 'create_fail' and $compile->status != 'timeout')
+            {
+                $this->loadModel('compile')->syncCompileStatus($compile);
+            }
+        }
+
+        /* Get productID from caseResults when productID is null. */
+        if(empty($productID) and $testType == 'ztf')
+        {
+            $caseResults = $post->ztfCaseResults;
+            $firstCase   = array_shift($caseResults);
+            $productID   = $firstCase->productId;
+        }
+        if(empty($productID)) die(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
+
+        /* Get testtaskID or create testtask. */
+        if(!empty($taskID))
+        {
+            $testtask  = $this->testtask->getById($taskID);
+            $this->dao->update(TABLE_TESTTASK)->set('auto')->eq(strtolower($testType))->where('id')->eq($taskID)->exec();
+            $productID = $testtask->product;
+        }
+        else
+        {
+            $lastProject = $this->dao->select('t1.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($productID)
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy('project desc')
+                ->limit(1)
+                ->fetch('project');
+
+            $testtask = new stdclass();
+            $testtask->product = $productID;
+            $testtask->name    = sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
+            $testtask->owner   = $this->app->user->account;
+            $testtask->project = $lastProject;
+            $testtask->build   = 'trunk';
+            $testtask->auto    = strtolower($testType);
+            $testtask->begin   = date('Y-m-d');
+            $testtask->end     = date('Y-m-d', time() + 24 * 3600);
+            $testtask->status  = 'done';
+
+            $this->dao->insert(TABLE_TESTTASK)->data($testtask)->exec();
+            $taskID = $this->dao->lastInsertId();
+            $this->loadModel('action')->create('testtask', $taskID, 'opened');
+        }
+
+        if($compileID) $this->dao->update(TABLE_COMPILE)->set('testtask')->eq($taskID)->where('id')->eq($compileID)->exec();
+
+        /* Build data from case results. */
+        if($testType == 'unit')
+        {
+            $data = $this->testtask->parseZTFUnitResult($post->unitResult, $frame, $productID, $jobID, $compileID);
+        }
+        elseif($testType == 'func')
+        {
+            $data = $this->testtask->parseZTFFuncResult($post->funcResult, $frame, $productID, $jobID, $compileID);
+        }
+
+        $taskID = $this->testtask->processAutoResult($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
+
+        die(json_encode(array('result' => 'success')));
     }
 }

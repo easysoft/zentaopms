@@ -17,7 +17,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->testtask->importUnit;?></h2>
+      <h2><?php echo $lang->testtask->importUnitResult;?></h2>
     </div>
     <form method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
       <table class='table table-form'>
@@ -71,7 +71,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>
-          <td colspan='2'><?php echo html::input('name', '', "class='form-control'");?></td>
+          <td colspan='2'><?php echo html::input('name', sprintf($lang->testtask->titleOfAuto, date('Y-m-d H:i:s')), "class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>

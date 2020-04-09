@@ -1,12 +1,13 @@
 <?php
-$lang->compile->common = 'Build';
-$lang->compile->browse = 'Build Histories';
-$lang->compile->logs   = 'Build Logs';
+$lang->compile->common = 'Compile';
+$lang->compile->browse = 'History';
+$lang->compile->logs   = 'Logs';
 
 $lang->compile->id     = 'ID';
 $lang->compile->name   = 'Name';
-$lang->compile->status = 'Build Status';
-$lang->compile->time   = 'Build Time';
+$lang->compile->status = 'Status';
+$lang->compile->time   = 'Time';
+$lang->compile->result = 'Result';
 
 $lang->compile->statusList['success']     = 'Success';
 $lang->compile->statusList['failure']     = 'Fail';

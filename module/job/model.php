@@ -177,10 +177,10 @@ class jobModel extends model
             $compiles = $this->dao->select('*')->from(TABLE_COMPILE)->where('job')->eq($id)->andWhere('LEFT(createdDate, 10)')->eq(date('Y-m-d'))->fetchAll();
             foreach($compiles as $compile)
             {
-                if(!empty($compile->status)) return true;
+                if(!empty($compile->status)) continue;
                 $this->dao->delete()->from(TABLE_COMPILE)->where('id')->eq($compile->id)->exec();
             }
-            $this->loadModel('compile')->createByJob($id);
+            $this->loadModel('compile')->createByJob($id, $job->atTime, 'atTime');
         }
 
         if($job->triggerType == 'tag')
@@ -265,14 +265,20 @@ class jobModel extends model
             $build->atTime = $job->atTime;
         }
 
-        $build->queue       = $this->loadModel('ci')->sendRequest($buildUrl, $data);
-        $build->status      = $build->queue ? 'created' : 'create_fail';
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = $now;
         $build->updateDate  = $now;
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
-        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($build->status)->where('id')->eq($job->id)->exec();
+        $compileID = $this->dao->lastInsertId();
 
-        return $build->status;
+        $data->ZENTAO_DATA = "compile={$compileID}";
+        $compile = new stdclass();
+        $compile->queue  = $this->loadModel('ci')->sendRequest($buildUrl, $data);
+        $compile->status = $compile->queue ? 'created' : 'create_fail';
+        $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
+
+        $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($compile->status)->where('id')->eq($job->id)->exec();
+
+        return $compile->status;
     }
 }

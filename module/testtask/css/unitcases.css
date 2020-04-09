@@ -1,0 +1,4 @@
+th.c-side{width:260px;}
+td.pass{color:green}
+td.fail{color:red}
+#pageNav .btn-group.open ul.dropdown-menu{max-height:350px; overflow-y:auto;}

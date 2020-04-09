@@ -112,6 +112,10 @@ $whiteList[] = 'webhook-asyncsend';
 $whiteList[] = 'testreport-setchartdatas';
 $whiteList[] = 'chat-login';
 $whiteList[] = 'entry-visit';
+$whiteList[] = 'ci-initqueue';
+$whiteList[] = 'ci-exec';
+$whiteList[] = 'ci-checkcompilestatus';
+$whiteList[] = 'im-userlogin';
 
 /* checking actions of every module. */
 echo '-------------action checking-----------------' . "\n";

@@ -45,11 +45,12 @@ class compile extends control
         $this->view->position[] = html::a($this->createLink('job', 'browse'), $this->lang->ci->job);
         $this->view->position[] = $this->lang->compile->browse;
 
-        $this->app->loadLang('job');
-        $this->view->jobID = $jobID;
-        $this->view->buildList     = $this->compile->getList($jobID, $orderBy, $pager);
-        $this->view->orderBy       = $orderBy;
-        $this->view->pager         = $pager;
+        $this->loadModel('job');
+        if($jobID) $this->view->job = $this->job->getById($jobID);
+        $this->view->jobID     = $jobID;
+        $this->view->buildList = $this->compile->getList($jobID, $orderBy, $pager);
+        $this->view->orderBy   = $orderBy;
+        $this->view->pager     = $pager;
         $this->display();
     }
 

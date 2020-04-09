@@ -657,6 +657,7 @@ class repo extends control
 
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
+        $this->app->loadLang('story');
         if(is_string($this->config->repo->rules)) $this->config->repo->rules = json_decode($this->config->repo->rules, true);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->setRules;

@@ -35,6 +35,10 @@
             <td><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->job->product; ?></th>
+            <td><?php echo html::select('product', $products, '', "class='form-control chosen'"); ?></td>
+          </tr>
+          <tr>
             <th><?php echo $lang->job->frame; ?></th>
             <td><?php echo html::select('frame', $lang->job->frameList, '', "class='form-control chosen'"); ?></td>
           </tr>

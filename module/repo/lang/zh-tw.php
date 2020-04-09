@@ -104,7 +104,7 @@ $lang->repo->objectIdRule = '對象ID匹配規則';
 $lang->repo->actionRule   = '動作匹配規則';
 $lang->repo->manHourRule  = '工時匹配規則';
 $lang->repo->ruleUnit     = "單位";
-$lang->repo->ruleSplit    = "多關鍵字用';'分割，如：任務多關鍵字： Task;task";
+$lang->repo->ruleSplit    = "多關鍵字用';'分割，如：任務多關鍵字： Task;任務";
 
 $lang->repo->viewDiffList['inline'] = '直列';
 $lang->repo->viewDiffList['appose'] = '並排';
