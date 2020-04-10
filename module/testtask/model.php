@@ -1710,13 +1710,20 @@ class testtaskModel extends model
                     ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                     ->where('t1.title')->in($caseTitles[$suiteIndex])
                     ->andWhere('t1.product')->eq($productID)
-                    ->andWhere('t1.auto')->eq($auto)
+                    ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
                     ->andWhere('t1.deleted')->eq(0)
+                    ->orderBy('id')
                     ->fetchPairs('title', 'id');
             }
             else
             {
-                $existCases = $this->dao->select('*')->from(TABLE_CASE)->where('title')->in($caseTitles[$suiteIndex])->andWhere('auto')->eq($auto)->andWhere('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchPairs('title', 'id');
+                $existCases = $this->dao->select('*')->from(TABLE_CASE)
+                    ->where('title')->in($caseTitles[$suiteIndex])
+                    ->beginIF($auto == 'unit')->andWhere('auto')->eq($auto)->fi()
+                    ->andWhere('product')->eq($productID)
+                    ->andWhere('deleted')->eq(0)
+                    ->orderBy('id')
+                    ->fetchPairs('title', 'id');
             }
 
             foreach($cases[$suiteIndex] as $i => $case)
