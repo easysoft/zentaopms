@@ -1970,7 +1970,7 @@ class testtaskModel extends model
                 $result->caseResult = 'pass';
                 $result->lastRunner = $this->app->user->account;
                 $result->date       = $now;
-                $result->duration   = (float)$attributes['time'];
+                $result->duration   = isset($attributes['time']) ? (float)$attributes['time'] : 0;
                 $result->xml        = $matchNode->asXML();
                 $result->stepResults[0]['result'] = 'pass';
                 $result->stepResults[0]['real']   = '';
@@ -2064,14 +2064,14 @@ class testtaskModel extends model
             $result->job        = $jobID;
             $result->compile    = $compileID;
             $result->date       = $now;
-            $result->duration   = $caseResult->duration;
+            $result->duration   = zget($caseResult, 'duration', 0);
             $result->stepResults[0]['result'] = 'pass';
             $result->stepResults[0]['real']   = '';
             if(!empty($caseResult->failure))
             {
                 $result->caseResult = 'fail';
                 $result->stepResults[0]['result'] = 'fail';
-                $result->stepResults[0]['real']   = $caseResult->failure->desc;
+                $result->stepResults[0]['real']   = zget($caseResult->failure, 'desc', '');
             }
             $result->stepResults = serialize($result->stepResults);
             $case->lastRunner    = $this->app->user->account;

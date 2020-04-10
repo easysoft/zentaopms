@@ -106,7 +106,7 @@
                     <td><?php if(isset($result->version)) echo nl2br($result->version);?></td>
                     <?php if(!empty($stepResult['result'])):?>
                     <td class='<?php echo $stepResult['result'];?> text-center'><?php echo $lang->testcase->resultList[$stepResult['result']];?></td>
-                    <td><?php echo $stepResult['real'];?></td>
+                    <td><?php echo nl2br(htmlspecialchars($stepResult['real']));?></td>
                     <td class='text-center'><?php if(!empty($stepResult['files'])) echo html::a("#stepResult{$modalID}", $lang->files . $fileCount, '', "data-toggle='modal' data-type='iframe'")?></td>
                     <?php else:?>
                     <td></td>
