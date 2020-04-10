@@ -1470,8 +1470,7 @@ class testtaskModel extends model
                 echo $run->version;
                 break;
             case 'openedBy':
-                $openedBy = zget($users, $run->openedBy);
-                echo substr($openedBy, strpos($openedBy, ':') + 1);
+                echo zget($users, $run->openedBy);
                 break;
             case 'openedDate':
                 echo substr($run->openedDate, 5, 11);
@@ -1489,8 +1488,7 @@ class testtaskModel extends model
                 echo substr($run->lastEditedDate, 5, 11);
                 break;
             case 'lastRunner':
-                $lastRunner = zget($users, $run->lastRunner);
-                echo substr($lastRunner, strpos($lastRunner, ':') + 1);
+                echo zget($users, $run->lastRunner);
                 break;
             case 'lastRunDate':
                 if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));
@@ -1504,8 +1502,7 @@ class testtaskModel extends model
                 if($run->story and $run->storyTitle) echo html::a(helper::createLink('story', 'view', "storyID=$run->story"), $run->storyTitle);
                 break;
             case 'assignedTo':
-                $assignedTo = zget($users, $run->assignedTo);
-                echo substr($assignedTo, strpos($assignedTo, ':') + 1);
+                echo zget($users, $run->assignedTo);
                 break;
             case 'bugs':
                 echo (common::hasPriv('testcase', 'bugs') and $run->bugs) ? html::a(helper::createLink('testcase', 'bugs', "runID={$run->id}&caseID={$run->case}"), $run->bugs, '', "class='iframe'") : $run->bugs;

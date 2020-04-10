@@ -112,6 +112,7 @@ class svnModel extends model
                     if($objects)
                     {
                         $this->printLog('extract' .
+                            ' story:' . join(' ', $objects['stories']) .
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
                         $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'svn');

@@ -1,0 +1,10 @@
+.btn-toolbar>.btn, .btn-toolbar>.btn-group, .btn-toolbar>.dropdown {margin-right: 5px !important;}
+
+.main-actions .btn-toolbar .btn { padding-right: 5px !important; padding-left: 5px !important;}
+.main-actions .btn-toolbar .divider { margin-right: 5px !important; margin-left: 5px !important;}
+.main-actions .btn-toolbar .btn+.btn { margin-left: 0px !important;}
+.main-actions .btn-toolbar .btn+.btn-group {margin-left: 5px !important;}
+.main-actions .btn-toolbar { padding: 4px 5px;}
+
+.c-user{width:95px !important;}
+.c-hours{width:65px !important;}

@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version    = '12.2';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version    = '12.3';             // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->charset    = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife = time() + 2592000;     // Cookie的生存时间。The cookie life time.
 $config->timezone   = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
@@ -38,6 +38,7 @@ $config->langs['zh-tw']    = '繁體';
 $config->langs['en']       = 'English';
 $config->langs['de']       = 'Deutsch';
 $config->langs['fr']       = 'Français';
+$config->langs['vi']       = 'Tiếng Việt';
 
 /* 设备类型视图文件前缀。The prefix for view file for different device. */
 $config->devicePrefix['mhtml'] = '';
@@ -104,6 +105,9 @@ $config->framework->logDays        = 14;    // 日志文件保存的天数。   
 $config->framework->detectDevice['zh-cn'] = true; // 在zh-cn语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['zh-tw'] = true; // 在zh-tw语言情况下，是否启用设备检测功能。 Whether enable device detect or not.
 $config->framework->detectDevice['en']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
+$config->framework->detectDevice['de']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
+$config->framework->detectDevice['fr']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
+$config->framework->detectDevice['vi']    = true; // 在en语言情况下，是否启用设备检测功能。    Whether enable device detect or not.
 
 /* 文件上传设置。 Upload settings. */
 $config->file = new stdclass();

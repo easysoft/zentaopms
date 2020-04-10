@@ -119,6 +119,7 @@ class gitModel extends model
                         if($objects)
                         {
                             $this->printLog('extract' .
+                                ' story:' . join(' ', $objects['stories']) .
                                 ' task:' . join(' ', $objects['tasks']) .
                                 ' bug:'  . join(',', $objects['bugs']));
 
