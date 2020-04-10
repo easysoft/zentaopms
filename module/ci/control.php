@@ -78,7 +78,7 @@ class ci extends control
     }
 
     /**
-     * Commit result from ztf or unit.
+     * Commit result from ztf.
      * 
      * @access public
      * @return void
@@ -116,12 +116,12 @@ class ci extends control
             }
         }
 
-        /* Get productID from caseResults when productID is null. */
-        if(empty($productID) and $testType == 'ztf')
+        /* Get productID from caseResult when productID is null. */
+        if(empty($productID) and $testType == 'func')
         {
-            $caseResults = $post->ztfCaseResults;
-            $firstCase   = array_shift($caseResults);
-            $productID   = $firstCase->productId;
+            $caseResult = $post->funcResult;
+            $firstCase  = array_shift($caseResult);
+            $productID  = $firstCase->productId;
         }
         if(empty($productID)) die(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
 
@@ -170,7 +170,7 @@ class ci extends control
             $data = $this->testtask->parseZTFFuncResult($post->funcResult, $frame, $productID, $jobID, $compileID);
         }
 
-        $taskID = $this->testtask->processAutoResult($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
+        $taskID = $this->testtask->processAutoResult($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles'], $testType);
 
         die(json_encode(array('result' => 'success')));
     }

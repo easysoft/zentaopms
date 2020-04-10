@@ -1653,7 +1653,7 @@ class testtaskModel extends model
 
         $fileName = $this->session->resultFile;
         $data     = $this->parseXMLResult($fileName, $productID, $frame);
-        if($frame == 'cppunit' and empty($data['cases'])) $data = $this->buildDataFromCppXML($fileName, $productID, $frame);
+        if($frame == 'cppunit' and empty($data['cases'])) $data = $this->parseCppXMLResult($fileName, $productID, $frame);
 
         /* Create task. */
         $this->post->set('auto', 'unit');
@@ -1663,7 +1663,7 @@ class testtaskModel extends model
         unset($_SESSION['resultFile']);
         if(dao::isError()) return false;
 
-        return $this->processAutoResult($testtaskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles']);
+        return $this->processAutoResult($testtaskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles'], 'unit');
     }
 
     /**
@@ -1676,16 +1676,17 @@ class testtaskModel extends model
      * @param  array  $results 
      * @param  array  $suiteNames 
      * @param  array  $caseTitles 
+     * @param  string $auto     unit|func 
      * @access public
      * @return int
      */
-    public function processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array())
+    public function processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array(), $auto = 'unit')
     {
         if(empty($cases)) die(js::alert($this->lang->testtask->noImportData));
 
         /* Import cases and link task and insert result. */
         $this->loadModel('action');
-        $existSuites = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('name')->in($suiteNames)->andWhere('product')->eq($productID)->andWhere('type')->eq('unit')->andWhere('deleted')->eq(0)->fetchPairs('name', 'id');
+        $existSuites = $this->dao->select('*')->from(TABLE_TESTSUITE)->where('name')->in($suiteNames)->andWhere('product')->eq($productID)->andWhere('type')->eq($auto)->andWhere('deleted')->eq(0)->fetchPairs('name', 'id');
         foreach($suites as $suiteIndex => $suite)
         {
             $suiteID = 0;
@@ -1709,13 +1710,13 @@ class testtaskModel extends model
                     ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
                     ->where('t1.title')->in($caseTitles[$suiteIndex])
                     ->andWhere('t1.product')->eq($productID)
-                    ->andWhere('t1.stage')->eq('unittest')
+                    ->andWhere('t1.auto')->eq($auto)
                     ->andWhere('t1.deleted')->eq(0)
                     ->fetchPairs('title', 'id');
             }
             else
             {
-                $existCases = $this->dao->select('*')->from(TABLE_CASE)->where('title')->in($caseTitles[$suiteIndex])->andWhere('product')->eq($productID)->andWhere('stage')->eq('unittest')->andWhere('deleted')->eq(0)->fetchPairs('title', 'id');
+                $existCases = $this->dao->select('*')->from(TABLE_CASE)->where('title')->in($caseTitles[$suiteIndex])->andWhere('auto')->eq($auto)->andWhere('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchPairs('title', 'id');
             }
 
             foreach($cases[$suiteIndex] as $i => $case)
@@ -1769,7 +1770,7 @@ class testtaskModel extends model
     }
 
     /**
-     * Build data from cppunit XML.
+     * Parse cppunit XML result.
      * 
      * @param  string $fileName 
      * @param  int    $productID 
@@ -1777,7 +1778,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function buildDataFromCppXML($fileName, $productID, $frame)
+    public function parseCppXMLResult($fileName, $productID, $frame)
     {
         /* Parse result xml. */
         $parsedXML = simplexml_load_file($fileName);
@@ -2113,7 +2114,7 @@ class testtaskModel extends model
             $case->openedBy   = $this->app->user->account;
             $case->openedDate = $now;
             $case->version    = 1;
-            $case->auto       = 'function';
+            $case->auto       = 'func';
             $case->frame      = $frame;
 
             $result = new stdclass();
@@ -2132,9 +2133,9 @@ class testtaskModel extends model
                 $stepStatus = 'pass';
                 foreach($caseResult->steps as $i => $step)
                 {
-                    $result->stepResults[$i]['result'] = $step->Status ? 'pass' : 'fail';
-                    $result->stepResults[$i]['real']   = $step->Status ? '' : $step->CheckPoints[0]->Actual;
-                    if(!$step->Status) $stepStatus = 'fail';
+                    $result->stepResults[$i]['result'] = $step->status ? 'pass' : 'fail';
+                    $result->stepResults[$i]['real']   = $step->status ? '' : $step->checkPoints[0]->actual;
+                    if(!$step->status) $stepStatus = 'fail';
                 }
                 $result->caseResult = $stepStatus;
             }
