@@ -448,7 +448,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
   `name` varchar(50) NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
-  `frame` varchar(20) unsigned NOT NULL,
+  `frame` varchar(20) NOT NULL,
   `jkHost` mediumint(8) unsigned NOT NULL,
   `jkJob` varchar(500) NOT NULL,
   `triggerType` varchar(255) NOT NULL,
