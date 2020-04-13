@@ -148,7 +148,7 @@ $lang->testtask->mail->create->title = "%s được tạo yêu cầu test #%s:%s
 $lang->testtask->mail->edit->title   = "%s kết thúc yêu cầu test #%s:%s";
 $lang->testtask->mail->close->title  = "%s đã đóng yêu cầu test #%s:%s";
 
-$lang->testtask->action = new stdclass()
+$lang->testtask->action = new stdclass();
 $lang->testtask->action->testtaskopened  = '$date,  <strong>$actor</strong> yêu cầu Test được gửi<strong>$extra</strong>.' . "\n";
 $lang->testtask->action->testtaskstarted = '$date,  <strong>$actor</strong> yêu cầu Test được bắt đầu<strong>$extra</strong>.' . "\n";
 $lang->testtask->action->testtaskclosed  = '$date,  <strong>$actor</strong> yêu cầu Test được hoàn thành<strong>$extra</strong>.' . "\n";
