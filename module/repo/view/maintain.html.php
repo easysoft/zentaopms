@@ -29,7 +29,7 @@
         <tr>
           <td class='text-center'><?php echo $id; ?></td>
           <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
-          <td class='text' title='<?php echo $repo->name; ?>'><?php echo $repo->name; ?></td>
+          <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}"), $repo->name);?></td>
           <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
