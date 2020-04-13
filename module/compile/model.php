@@ -128,13 +128,13 @@ class compileModel extends model
 
         if(!$job) return false;
 
-        $tagData = new stdclass();
-        $tagData->PARAM_TAG = $compile->tag;
-        $tagData->ZENTAO_DATA = "compile={$compile->id}";
+        $data = new stdclass();
+        $data->PARAM_TAG = $compile->tag;
+        $data->ZENTAO_DATA = "compile={$compile->id}";
 
         $buildUrl = $this->getBuildUrl($job);
         $build    = new stdclass();
-        $build->queue      = $this->loadModel('ci')->sendRequest($buildUrl, $tagData);
+        $build->queue      = $this->loadModel('ci')->sendRequest($buildUrl, $data);
         $build->status     = $build->queue ? 'created' : 'create_fail';
         $build->updateDate = helper::now();
         $this->dao->update(TABLE_COMPILE)->data($build)->where('id')->eq($compile->id)->exec();
