@@ -2213,7 +2213,11 @@ class baseRouter
         /* 设置错误信息(Set the error info) */
         $message = htmlspecialchars($message);
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
-        $log     = "ERROR: $message in $file on line $line";
+
+        /* Only show error when debug is open. */
+        if(!$this->config->debug) die("ERROR: $message");
+
+        $log = "ERROR: $message in $file on line $line";
         if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";; 
         $trace = debug_backtrace();
         extract($trace[0]);

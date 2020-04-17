@@ -433,8 +433,7 @@ $(document).on('click', '#testStory_chosen,#story_chosen', function()
     $obj.empty();
     for(storyID in stories)
     {
-      console.log(storyID);
-        pinyin = storyPinYin[storyID];
+        pinyin = (typeof(storyPinYin) == 'undefined') ? '' : storyPinYin[storyID];
         html   = "<option value='" + storyID + "' title='" + stories[storyID] + "' data-keys='" + pinyin + "'>" + stories[storyID] + "</option>";
         $obj.append(html);
     }

@@ -665,18 +665,6 @@ CREATE TABLE IF NOT EXISTS `zt_repobranch` (
   KEY `branch` (`branch`),
   KEY `revision` (`revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-CREATE TABLE IF NOT EXISTS `zt_repohistory` (
-  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
-  `repo` mediumint(9) NOT NULL,
-  `revision` varchar(40) NOT NULL,
-  `commit` mediumint(8) unsigned NOT NULL,
-  `comment` text NOT NULL,
-  `committer` varchar(100) NOT NULL,
-  `time` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `repo` (`repo`),
-  KEY `revision` (`revision`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `repo` mediumint(8) unsigned NOT NULL,
@@ -688,6 +676,18 @@ CREATE TABLE IF NOT EXISTS `zt_repofiles` (
   PRIMARY KEY (`id`),
   KEY `path` (`path`),
   KEY `parent` (`parent`),
+  KEY `repo` (`repo`),
+  KEY `revision` (`revision`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_repohistory` (
+  `id` mediumint(9) NOT NULL AUTO_INCREMENT,
+  `repo` mediumint(9) NOT NULL,
+  `revision` varchar(40) NOT NULL,
+  `commit` mediumint(8) unsigned NOT NULL,
+  `comment` text NOT NULL,
+  `committer` varchar(100) NOT NULL,
+  `time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
   KEY `repo` (`repo`),
   KEY `revision` (`revision`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
