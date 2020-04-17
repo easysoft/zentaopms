@@ -1016,10 +1016,11 @@ class baseFixer
      * 
      * @param  string $fieldName 
      * @param  string $allowableTags 
+     * @param  array  $attributes
      * @access public
      * @return object fixer object
      */
-    public function stripTags($fieldName, $allowedTags = '')
+    public function stripTags($fieldName, $allowedTags = '', $attributes = array())
     {
         $fields = $this->processFields($fieldName);
         foreach($fields as $fieldName)
@@ -1028,7 +1029,7 @@ class baseFixer
 
             if(!isset($this->stripedFields[$fieldName]) and (!defined('RUN_MODE') or RUN_MODE != 'admin'))
             {
-                $this->data->$fieldName = self::stripDataTags($this->data->$fieldName);
+                $this->data->$fieldName = self::stripDataTags($this->data->$fieldName, $allowedTags, $attributes);
 
                 /* Code for bug #2721. */
                 $this->data->$fieldName = baseValidater::replaceSpace2Tag($this->data->$fieldName);
@@ -1043,11 +1044,12 @@ class baseFixer
      * 
      * @param  string $data 
      * @param  string $allowedTags 
+     * @param  array  $attributes
      * @static
      * @access public
      * @return string
      */
-    public static function stripDataTags($data, $allowedTags = '')
+    public static function stripDataTags($data, $allowedTags = '', $attributes = array())
     {
         if(empty($data)) return $data;
 
@@ -1069,6 +1071,15 @@ class baseFixer
                 $purifier = new HTMLPurifier($purifierConfig);
                 $def = $purifierConfig->getHTMLDefinition(true);
                 $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+
+                if(!empty($attributes))
+                {
+                    foreach($attributes as $attribute)
+                    {
+                        list($element, $attribute, $values) = explode('|', $attribute);
+                        $def->addAttribute($element, $attribute, $values);
+                    }
+                }
             }
         }
 
