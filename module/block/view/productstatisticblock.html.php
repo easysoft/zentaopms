@@ -108,8 +108,9 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
+        <?php $selected = empty($_SESSION['product']) ? key($products) : $this->session->product;?>
         <?php foreach($products as $product):?>
-        <li <?php if($product->id == $this->session->product) echo "class='active' id='activeProduct'";?> productID='<?php echo $product->id;?>'>
+        <li <?php if($product->id == $selected) echo "class='active' id='activeProduct'";?> productID='<?php echo $product->id;?>'>
           <a href="javascript:;" data-target="#tabProduct<?php echo $product->id;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>
           <?php echo html::a(helper::createLink('product', 'browse', "productID=$product->id"), "<i class='icon-arrow-right text-primary'></i>", '', "class='btn-view' title={$lang->product->browse}");?></li>
         <?php endforeach;?>
@@ -118,7 +119,7 @@ $(function()
     </div>
     <div class="col tab-content">
       <?php foreach($products as $product):?>
-      <div class="tab-pane fade <?php if($product == reset($products)) echo 'active';?> in" id="tabProduct<?php echo $product->id;?>">
+      <div class="tab-pane fade <?php if($product->id == $selected) echo 'active in';?>" id="tabProduct<?php echo $product->id;?>">
         <div class="table-row">
           <div class="col-6 text-middle">
             <div class="tile">
