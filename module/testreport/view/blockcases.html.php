@@ -15,7 +15,11 @@
   </thead>
   <?php if($cases):?>
   <tbody>
+    <?php $i = 0;?>
     <?php foreach($cases as $case):?>
+    <?php if(!isset($pager) and $i > 50):?>
+    <?php echo html::hidden('cases[]', $case->id);?>
+    <?php else:?>
     <tr>
       <td><?php echo sprintf('%03d', $case->id) . html::hidden('cases[]', $case->id)?></td>
       <td><span class='label-pri label-pri-<?php echo $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri);?></span></td>
@@ -30,13 +34,22 @@
         <span class="status-case status-<?php echo $case->status?>"><?php echo $status;?></span>
       </td>
     </tr>
+    <?php endif;?>
+    <?php $i++;?>
     <?php endforeach;?>
+    <?php if(!isset($pager) and $i > 50):?>
+    <tr>
+      <td colspan='9'><?php echo sprintf($lang->testreport->hiddenCase, count($cases) - 50);?></td>
+    </tr>
+    <?php endif;?>
   </tbody>
+  <?php if(isset($pager)):?>
   <tfoot>
     <tr>
       <td class='text-right' colspan='9'><?php $pager->show('right', 'pagerjs');?></td>
     </tr>
   </tfoot>
+  <?php endif;?>
   <?php else:?>
   <tr><td class='none-data' colspan='9'><?php echo $lang->testreport->none;?></td></tr>
   <?php endif;?>
