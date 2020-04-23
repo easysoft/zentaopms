@@ -112,7 +112,7 @@ class ci extends control
             if(empty($productID)) $productID = $compile->product;
             if($compile->status != 'success' and $compile->status != 'fail' and $compile->status != 'create_fail' and $compile->status != 'timeout')
             {
-                $this->loadModel('compile')->syncCompileStatus($compile);
+                $this->ci->syncCompileStatus($compile);
             }
         }
 

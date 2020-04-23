@@ -24,6 +24,11 @@
           <th class='w-120px'><?php echo $lang->testcase->type?></th>
           <th class='w-160px'><?php echo $lang->testcase->stage?></th>
           <th><?php echo $lang->testcase->precondition?></th>
+          <?php if(!empty($appendFields)):?>
+          <?php foreach($appendFields as $appendField):?>
+          <th class='w-100px'><?php echo $lang->testcase->{$appendField->field}?></th>
+          <?php endforeach;?>
+          <?php endif;?>
           <th class='w-300px'>
             <table class='w-p100 table-borderless'>
               <tr>
@@ -69,6 +74,12 @@
           <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control chosen'")?></td>
           <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
           <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
+          <?php if(!empty($appendFields)):?>
+          <?php $this->loadModel('flow');?>
+          <?php foreach($appendFields as $appendField):?>
+          <td><?php echo $this->flow->buildControl($appendField, $case->{$appendField->field}, "{$appendField->field}[$key]");?></td>
+          <?php endforeach;?>
+          <?php endif;?>
           <td>
             <?php if(isset($stepData[$key]['desc'])):?>
             <table class='w-p100 bd-0'>

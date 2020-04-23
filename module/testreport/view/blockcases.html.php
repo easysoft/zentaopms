@@ -32,6 +32,11 @@
     </tr>
     <?php endforeach;?>
   </tbody>
+  <tfoot>
+    <tr>
+      <td class='text-right' colspan='9'><?php $pager->show('right', 'pagerjs');?></td>
+    </tr>
+  </tfoot>
   <?php else:?>
   <tr><td class='none-data' colspan='9'><?php echo $lang->testreport->none;?></td></tr>
   <?php endif;?>

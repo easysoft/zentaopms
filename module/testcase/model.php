@@ -1097,6 +1097,15 @@ class testcaseModel extends model
                 }
             }
 
+            if(isset($this->config->testcase->appendFields))
+            {
+                foreach(explode(',', $this->config->testcase->appendFields) as $appendField)
+                {
+                    if(empty($appendField)) continue;
+                    $caseData->$appendField = $_POST[$appendField][$key];
+                }
+            }
+
             $cases[$key] = $caseData;
             $line++;
         }

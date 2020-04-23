@@ -316,17 +316,21 @@ class testreportModel extends model
      * Get task cases.
      * 
      * @param  array  $tasks 
+     * @param  string $begin 
+     * @param  string $end 
      * @param  string $idList 
+     * @param  object $pager 
      * @access public
-     * @return array
+     * @return void
      */
-    public function getTaskCases($tasks, $begin, $end, $idList = '')
+    public function getTaskCases($tasks, $begin, $end, $idList = '', $pager = null)
     {
         $cases = $this->dao->select('t2.*,t1.task,t1.assignedTo,t1.status')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('t1.task')->in(array_keys($tasks))
             ->beginIF($idList)->andWhere('t2.id')->in($idList)->fi()
             ->andWhere('t2.deleted')->eq(0)
+            ->page($pager)
             ->fetchAll('id');
 
         $results = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
