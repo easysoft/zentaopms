@@ -565,8 +565,8 @@ class testcaseModel extends model
             ->andWhere('t3.status')->ne('done')
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
