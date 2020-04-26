@@ -58,3 +58,5 @@ $lang->file->errorSuffix         = '压缩包格式错误，只能上传zip压�
 $lang->file->errorExtract        = '解压缩失败！可能文件已经损坏，或压缩包里含有非法上传文件。';
 $lang->file->uploadImagesExplain = '注：请上传"jpg, jpeg, gif, png"格式的图片，程序会以文件名作为标题，以图片作为内容。';
 $lang->file->fileNotFound        = '未找到该文件，可能物理文件已被删除！';
+$lang->file->saveAndNext         = '保存并跳转下一页';
+$lang->file->importPager         = '共有<strong>%s</strong>条记录，当前第<strong>%s</strong>页，共有<strong>%s</strong>页';

@@ -69,7 +69,8 @@
             <?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
           </td>
           <td style='overflow:visible'>
-          <?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : ''), "class='form-control chosen storyChange'")?></td>
+          <?php $storyID = isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : '');?>
+          <?php echo html::select("story[$key]", array($storyID => zget($stories, $storyID, '')), $storyID, "class='form-control chosen storyChange'")?></td>
           <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
           <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control chosen'")?></td>
           <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
@@ -111,13 +112,16 @@
             <?php
             if(!$insert)
             {
-              echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
+                echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
             }
             else
             {
-                echo html::submitButton();
+                echo html::submitButton($isEndPage ? $this->lang->save : $this->lang->file->saveAndNext);
+                echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
+                echo html::hidden('pagerID', $pagerID);
             }
             echo ' &nbsp; ' . html::backButton();
+            echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
           </td>
         </tr>

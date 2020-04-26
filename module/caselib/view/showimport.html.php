@@ -91,9 +91,12 @@
           }
           else
           {
-            echo html::submitButton();
+            echo html::submitButton($isEndPage ? $this->lang->save : $this->lang->file->saveAndNext);
+            echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
+            echo html::hidden('pagerID', $pagerID);
           }
           echo ' &nbsp; ' . html::backButton();
+          echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
           ?>
         </td>
       </tr>

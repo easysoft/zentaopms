@@ -103,7 +103,7 @@
     <?php endif;?>
   </div>
 </div>
-<?php echo js::set('tab', $tab);?>
+<?php echo js::set('activeTab', $tab);?>
 <?php if(!$this->session->notHead):?>
 <div id='mainActions' class='main-actions'>
   <nav class='container'></nav>

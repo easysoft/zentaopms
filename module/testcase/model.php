@@ -1235,8 +1235,11 @@ class testcaseModel extends model
             }
         }
 
-        unlink($this->session->importFile);
-        unset($_SESSION['importFile']);
+        if($this->post->isEndPage)
+        {
+            unlink($this->session->importFile);
+            unset($_SESSION['importFile']);
+        }
     }
 
     /**

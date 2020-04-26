@@ -349,6 +349,20 @@ class fileModel extends model
     }
 
     /**
+     * Get showImport path.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getShowImportPath()
+    {
+        $path = $this->app->getCacheRoot() . 'showimport';
+        if(!is_dir($path)) mkdir($path, 0755, true);
+
+        return $path;
+    }
+
+    /**
      * Save export template.
      *
      * @param  string $module

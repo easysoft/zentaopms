@@ -1498,20 +1498,33 @@ class testcase extends control
      * Show import data
      *
      * @param  int    $productID
+     * @param  int    $branch 
+     * @param  int    $pagerID 
      * @access public
      * @return void
      */
-    public function showImport($productID, $branch = 0)
+    public function showImport($productID, $branch = 0, $pagerID = 1)
     {
+        $file      = $this->session->importFile;
+        $cachePath = $this->loadModel('file')->getShowImportPath();
+        $cacheFile = $cachePath . DS . md5(basename($file));
+        $maxImport = $this->config->file->maxImport;
         if($_POST)
         {
             $this->testcase->createFromImport($productID, (int)$branch);
-            die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+            if($this->post->isEndPage)
+            {
+                unlink($cacheFile);
+                die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+            }
+            else
+            {
+                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . $this->post->pagerID + 1), 'parent'));
+            }
         }
 
         $this->testcase->setMenu($this->products, $productID, $branch);
 
-        $file       = $this->session->importFile;
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
         $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
@@ -1519,128 +1532,142 @@ class testcase extends control
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
 
-        $rows   = $this->loadModel('file')->parseCSV($file);
-        $header = array();
-        foreach($rows[0] as $i => $rowValue)
+        if($pagerID != 1 and file_exists($cacheFile))
         {
-            if(empty($rowValue)) break;
-            $header[$i] = $rowValue;
+            $data = unserialize(file_get_contents($cacheFile));
+            $caseData = $data['caseData'];
+            $stepData = $data['stepData'];
         }
-        unset($rows[0]);
-
-        foreach($header as $title)
+        else
         {
-            if(!isset($fields[$title])) continue;
-            $columnKey[] = $fields[$title];
-        }
-
-        $endField = end($fields);
-        $caseData = array();
-        $stepData = array();
-        $stepVars = 0;
-        foreach($rows as $row => $data)
-        {
-            $case = new stdclass();
-            foreach($columnKey as $key => $field)
+            $pagerID = 1;
+            $rows    = $this->loadModel('file')->parseCSV($file);
+            $header  = array();
+            foreach($rows[0] as $i => $rowValue)
             {
-                if(!isset($data[$key])) continue;
-                $cellValue = $data[$key];
-                if($field == 'story' or $field == 'module' or $field == 'branch')
-                {
-                    $case->$field = 0;
-                    if(strrpos($cellValue, '(#') !== false)
-                    {
-                        $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
-                        $case->$field = $id;
-                    }
-                }
-                elseif(in_array($field, $caseConfig->export->listFields))
-                {
-                    if($field == 'stage')
-                    {
-                        $stages = explode("\n", $cellValue);
-                        foreach($stages as $stage) $case->stage[] = array_search($stage, $caseLang->{$field . 'List'});
-                        $case->stage = join(',', $case->stage);
-                    }
-                    else
-                    {
-                        $case->$field = array_search($cellValue, $caseLang->{$field . 'List'});
-                    }
-                }
-                elseif($field != 'stepDesc' and $field != 'stepExpect')
-                {
-                    $case->$field = $cellValue;
-                }
-                else
-                {
-                    $steps = (array)$cellValue;
-                    if(strpos($cellValue, "\n"))
-                    {
-                        $steps = explode("\n", $cellValue);
-                    }
-                    elseif(strpos($cellValue, "\r"))
-                    {
-                        $steps = explode("\r", $cellValue);
-                    }
+                if(empty($rowValue)) break;
+                $header[$i] = $rowValue;
+            }
+            unset($rows[0]);
 
-                    $stepKey  = str_replace('step', '', strtolower($field));
-                    $caseStep = array();
+            foreach($header as $title)
+            {
+                if(!isset($fields[$title])) continue;
+                $columnKey[] = $fields[$title];
+            }
 
-                    foreach($steps as $step)
+            $endField = end($fields);
+            $caseData = array();
+            $stepData = array();
+            $stepVars = 0;
+            foreach($rows as $row => $data)
+            {
+                $case = new stdclass();
+                foreach($columnKey as $key => $field)
+                {
+                    if(!isset($data[$key])) continue;
+                    $cellValue = $data[$key];
+                    if($field == 'story' or $field == 'module' or $field == 'branch')
                     {
-                        $step = trim($step);
-                        if(empty($step)) continue;
-                        if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
+                        $case->$field = 0;
+                        if(strrpos($cellValue, '(#') !== false)
                         {
-                            $num     = $out[1];
-                            $parent  = $out[2];
-                            $sign    = $out[3];
-                            $signbit = $sign == '.' ? 1 : 3;
-                            $step    = trim(substr($step, strlen($num) + $signbit));
-                            if(!empty($step)) $caseStep[$num]['content'] = $step;
-                            $caseStep[$num]['type']    = 'item';
-                            $caseStep[$parent]['type'] = 'group';
+                            $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
+                            $case->$field = $id;
                         }
-                        elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
+                    }
+                    elseif(in_array($field, $caseConfig->export->listFields))
+                    {
+                        if($field == 'stage')
                         {
-                            $num     = $out[1];
-                            $sign    = $out[2];
-                            $signbit = $sign == '.' ? 1 : 3;
-                            $step    = trim(substr($step, strpos($step, $sign) + $signbit));
-                            if(!empty($step)) $caseStep[$num]['content'] = $step;
-                            $caseStep[$num]['type'] = 'step';
-                        }
-                        elseif(isset($num))
-                        {
-                            if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
-                            $caseStep[$num]['content'] .= "\n" . $step;
+                            $stages = explode("\n", $cellValue);
+                            foreach($stages as $stage) $case->stage[] = array_search($stage, $caseLang->{$field . 'List'});
+                            $case->stage = join(',', $case->stage);
                         }
                         else
                         {
-                            if($field == 'stepDesc')
-                            {
-                                $num = 1;
-                                $caseStep[$num]['content'] = $step;
-                                $caseStep[$num]['type']    = 'step';
-                            }
-                            if($field == 'stepExpect' and isset($stepData[$row]['desc']))
-                            {
-                                end($stepData[$row]['desc']);
-                                $num = key($stepData[$row]['desc']);
-                                $caseStep[$num]['content'] = $step;
-                            }
+                            $case->$field = array_search($cellValue, $caseLang->{$field . 'List'});
                         }
                     }
-                    unset($num);
-                    unset($sign);
-                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
-                    $stepData[$row][$stepKey] = $caseStep;
+                    elseif($field != 'stepDesc' and $field != 'stepExpect')
+                    {
+                        $case->$field = $cellValue;
+                    }
+                    else
+                    {
+                        $steps = (array)$cellValue;
+                        if(strpos($cellValue, "\n"))
+                        {
+                            $steps = explode("\n", $cellValue);
+                        }
+                        elseif(strpos($cellValue, "\r"))
+                        {
+                            $steps = explode("\r", $cellValue);
+                        }
+
+                        $stepKey  = str_replace('step', '', strtolower($field));
+                        $caseStep = array();
+
+                        foreach($steps as $step)
+                        {
+                            $step = trim($step);
+                            if(empty($step)) continue;
+                            if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out))
+                            {
+                                $num     = $out[1];
+                                $parent  = $out[2];
+                                $sign    = $out[3];
+                                $signbit = $sign == '.' ? 1 : 3;
+                                $step    = trim(substr($step, strlen($num) + $signbit));
+                                if(!empty($step)) $caseStep[$num]['content'] = $step;
+                                $caseStep[$num]['type']    = 'item';
+                                $caseStep[$parent]['type'] = 'group';
+                            }
+                            elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out))
+                            {
+                                $num     = $out[1];
+                                $sign    = $out[2];
+                                $signbit = $sign == '.' ? 1 : 3;
+                                $step    = trim(substr($step, strpos($step, $sign) + $signbit));
+                                if(!empty($step)) $caseStep[$num]['content'] = $step;
+                                $caseStep[$num]['type'] = 'step';
+                            }
+                            elseif(isset($num))
+                            {
+                                if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
+                                $caseStep[$num]['content'] .= "\n" . $step;
+                            }
+                            else
+                            {
+                                if($field == 'stepDesc')
+                                {
+                                    $num = 1;
+                                    $caseStep[$num]['content'] = $step;
+                                    $caseStep[$num]['type']    = 'step';
+                                }
+                                if($field == 'stepExpect' and isset($stepData[$row]['desc']))
+                                {
+                                    end($stepData[$row]['desc']);
+                                    $num = key($stepData[$row]['desc']);
+                                    $caseStep[$num]['content'] = $step;
+                                }
+                            }
+                        }
+                        unset($num);
+                        unset($sign);
+                        $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
+                        $stepData[$row][$stepKey] = $caseStep;
+                    }
                 }
+
+                if(empty($case->title)) continue;
+                $caseData[$row] = $case;
+                unset($case);
             }
 
-            if(empty($case->title)) continue;
-            $caseData[$row] = $case;
-            unset($case);
+            $data['caseData'] = $caseData;
+            $data['stepData'] = $stepData;
+            file_put_contents($cacheFile, serialize($data));
         }
 
         if(empty($caseData))
@@ -1648,6 +1675,11 @@ class testcase extends control
             echo js::alert($this->lang->error->noData);
             die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch")));
         }
+
+        $allCount = count($caseData);
+        $allPager = ceil($allCount / $maxImport);
+        $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        if(empty($caseData)) die(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
 
         /* Judge whether the editedTasks is too large and set session. */
         $countInputVars  = count($caseData) * 12 + $stepVars;
@@ -1664,6 +1696,10 @@ class testcase extends control
         $this->view->stepData  = $stepData;
         $this->view->productID = $productID;
         $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
+        $this->view->isEndPage = $pagerID >= $allPager;
+        $this->view->allCount  = $allCount;
+        $this->view->allPager  = ceil($allCount / $maxImport);
+        $this->view->pagerID   = $pagerID;
         $this->view->branch    = $branch;
         $this->view->product   = $this->products[$productID];
         $this->display();
