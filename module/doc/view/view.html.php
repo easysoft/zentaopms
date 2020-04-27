@@ -118,7 +118,7 @@ js::set('docID', $doc->id);
               <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
             </a>
             <span class='right-icon'>
-              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
+              <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
             </span>
           </div>
           <?php unset($doc->files[$file->id]);?>
@@ -213,5 +213,6 @@ js::set('docID', $doc->id);
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
 </div>
+<?php js::set('canDeleteFile', common::hasPriv('doc', 'deleteFile'));?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

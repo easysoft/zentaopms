@@ -40,6 +40,14 @@ $(function()
         }
         setTimeout($.resetToolbarPosition, 50);
     });
+
+    if(!canDeleteFile)
+    {
+        $('.detail-content .files-list li').each(function()
+        {
+            $(this).find('a[onclick^=deleteFile]').remove();
+        });
+    }
 })
 
 function deleteFile(fileID)

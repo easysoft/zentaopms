@@ -629,6 +629,8 @@ class repoModel extends model
             ->orderBy('time')
             ->limit(1)
             ->fetch();
+        if(empty($lastBranchLog)) return false;
+
         $stmt = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('time')->lt($lastBranchLog->time)->query();
         while($log = $stmt->fetch())
         {
