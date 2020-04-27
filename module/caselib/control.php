@@ -204,7 +204,7 @@ class caselib extends control
 
         $this->loadModel('datatable');
         $this->loadModel('tree');
-        $showModule = !empty($this->config->datatable->caselibLibrary->showModule) ? $this->config->datatable->caselibLibrary->showModule : '';
+        $showModule = !empty($this->config->datatable->caselibBrowse->showModule) ? $this->config->datatable->caselibBrowse->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($libID, 'caselib', $showModule) : array();
 
         $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $libraries[$libID];
