@@ -537,8 +537,8 @@ class testcaseModel extends model
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
             ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
-            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('auto')->ne('unit')->fi()
+            ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
