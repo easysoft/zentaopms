@@ -2736,6 +2736,7 @@ class storyModel extends model
         {
             $class = "c-{$id}";
             $title = '';
+            $style = '';
 
             if($id == 'assignedTo')
             {
@@ -2770,8 +2771,12 @@ class storyModel extends model
                 $title  = $reviewedBy;
                 $class .= ' text-ellipsis';
             }
+            else if($id == 'stage')
+            {
+                $style .= 'overflow: visible;';
+            }
 
-            echo "<td class='" . $class . "' title='$title'>";
+            echo "<td class='" . $class . "' title='$title' style='$style'>";
             if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('story', $story, $id);
             switch($id)
             {
