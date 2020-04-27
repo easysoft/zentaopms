@@ -580,7 +580,7 @@ class taskModel extends model
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
 
             $currentTask->assignedTo = $oldTask->assignedTo;
-            if(!empty($this->post->assignedTo))
+            if(!empty($_POST['assignedTo']) and is_string($_POST['assignedTo']))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
             }
