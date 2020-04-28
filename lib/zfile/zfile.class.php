@@ -16,17 +16,19 @@ class zfile
      * 
      * @param  string    $from 
      * @param  string    $to 
+     * @param  bool      $showDetails 
      * @access public
      * @return array     copied files.
      */
-    public function copyDir($from, $to)
+    public function copyDir($from, $to, $showDetails = true)
     {
         static $copiedFiles = array();
+        $count = $size = 0;
 
-        if(!is_dir($from) or !is_readable($from)) return $copiedFiles;
+        if(!is_dir($from) or !is_readable($from)) return array($copiedFiles, $count, $size);
         if(!is_dir($to))
         {
-            if(!is_writable(dirname($to))) return $copiedFiles;
+            if(!is_writable(dirname($to))) return array($copiedFiles, $count, $size);
             mkdir($to);
         }
 
@@ -41,21 +43,23 @@ class zfile
             $fullEntry = $from . $entry;
             if(is_file($fullEntry))
             {
-                if(file_exists($to . $entry))
-                {
-                    unlink($to . $entry);
-                }
+                if(file_exists($to . $entry)) unlink($to . $entry);
+
                 copy($fullEntry, $to . $entry);
-                $copiedFiles[] = $to . $entry;
+                if($showDetails) $copiedFiles[] = $to . $entry;
+                $count += 1;
+                $size  += filesize($fullEntry);
             }
             else
             {
                 $nextFrom = $from . $entry;
                 $nextTo   = $to . $entry;
-                $this->copyDir($nextFrom, $nextTo);
+                $result   = $this->copyDir($nextFrom, $nextTo, $showDetails);
+                $count   += $result[1];
+                $size    += $result[2];
             }
         }
-        return $copiedFiles;
+        return array($copiedFiles, $count, $size);
     }
 
     /**

@@ -20,8 +20,8 @@ $lang->backup->settingList['nosafe'] = 'Do not prevent downloading PHP file head
 
 $lang->backup->waitting       = '<span id="backupType"></span> In Arbeit. Bitte warten...';
 $lang->backup->progressSQL    = '<p>SQL backup: %s is backed up.</p>';
-$lang->backup->progressAttach = '<p>SQL backup is completed.</p><p>Attachment backup: %s is backed up.</p>';
-$lang->backup->progressCode   = '<p>SQL backup is completed.</p><p>Attachment backup is completed.</p><p>Code backup: %s is backed up.</p>';
+$lang->backup->progressAttach = '<p>SQL backup is completed.</p><p>Attachment backing up.</p>';
+$lang->backup->progressCode   = '<p>SQL backup is completed.</p><p>Attachment backup is completed.</p><p>Code backing up.</p>';
 $lang->backup->confirmDelete  = 'Möchten Sie das Backup löschen？';
 $lang->backup->confirmRestore = 'Möchten Sie das Backup wiederherstellen?';
 $lang->backup->holdDays       = 'Behalten der letzen %s Tage der Backups';

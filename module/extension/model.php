@@ -575,7 +575,7 @@ class extensionModel extends model
         foreach($pathes as $path)
         {
             if($path == 'db' or $path == 'doc' or $path == 'hook' or $path == '..' or $path == '.') continue;
-            $copiedFiles = $this->classFile->copyDir($extensionDir . $path, $appRoot . $path);
+            list($copiedFiles) = $this->classFile->copyDir($extensionDir . $path, $appRoot . $path);
         }
         foreach($copiedFiles as $key => $copiedFile)
         {

@@ -151,6 +151,7 @@ class backup extends control
                 {
                     $rmFunc = is_file($file) ? 'removeFile' : 'removeDir';
                     $zfile->{$rmFunc}($file);
+                    if($rmFunc == 'removeDir') $this->backup->processSummary($file, 0, 0, 'delete');
                 }
             }
         }
@@ -274,6 +275,7 @@ class backup extends control
         {
             $zfile = $this->app->loadClass('zfile');
             $zfile->removeDir($this->backupPath . $fileName . '.file');
+            $this->backup->processSummary($this->backupPath . $fileName . '.file', 0, 0, 'delete');
         }
 
         /* Delete code file. */
@@ -289,6 +291,7 @@ class backup extends control
         {
             $zfile = $this->app->loadClass('zfile');
             $zfile->removeDir($this->backupPath . $fileName . '.code');
+            $this->backup->processSummary($this->backupPath . $fileName . '.code', 0, 0, 'delete');
         }
 
         die(js::reload('parent'));
@@ -357,7 +360,7 @@ class backup extends control
     {
         session_write_close();
 
-        $files = glob($this->backupPath . '/*');
+        $files = glob($this->backupPath . '/*.*');
         rsort($files);
 
         $fileName = basename($files[0]);
@@ -373,18 +376,11 @@ class backup extends control
         }
 
         $attachFileName = $this->backup->getBackupFile($fileName, 'file');
-        if($attachFileName)
-        {
-            $fileSize = $this->backup->getBackupSize($attachFileName);
-            $message  = sprintf($this->lang->backup->progressAttach, $this->backup->processFileSize($fileSize));
-        }
+        if($attachFileName) $message = sprintf($this->lang->backup->progressAttach);
 
         $codeFileName = $this->backup->getBackupFile($fileName, 'code');
-        if($codeFileName)
-        {
-            $fileSize = $this->backup->getBackupSize($codeFileName);
-            $message  = sprintf($this->lang->backup->progressCode, $this->backup->processFileSize($fileSize));
-        }
+        if($codeFileName) $message = sprintf($this->lang->backup->progressCode);
+
         die($message);
     }
 }
