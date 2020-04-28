@@ -2215,7 +2215,7 @@ class baseRouter
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
 
         /* Only show error when debug is open. */
-        if(!$this->config->debug) die("ERROR: $message");
+        if(!$this->config->debug) die();
 
         $log = "ERROR: $message in $file on line $line";
         if(isset($_SERVER['SCRIPT_URI'])) $log .= ", request: $_SERVER[SCRIPT_URI]";; 
