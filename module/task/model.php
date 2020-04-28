@@ -1205,7 +1205,25 @@ class taskModel extends model
      */
     public function recordEstimate($taskID)
     {
-        $record       = fixer::input('post')->get();
+        $record = fixer::input('post')->get();
+        foreach($record->consumed as $item)
+        {
+            if(!is_numeric($item))
+            {
+                dao::$errors[] = $this->lang->task->error->totalNumber;
+                return false;
+            }
+        }
+
+        foreach($record->left as $item)
+        {
+            if(!is_numeric($item))
+            {
+                dao::$errors[] = $this->lang->task->error->estimateNumber;
+                return false;
+            }
+        }
+
         $estimates    = array();
         $task         = $this->getById($taskID);
         $earliestTime = '';

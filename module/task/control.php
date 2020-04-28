@@ -728,6 +728,7 @@ class task extends control
         if(!empty($_POST))
         {
             $changes = $this->task->recordEstimate($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
