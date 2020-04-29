@@ -1089,11 +1089,13 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->dao->update(TABLE_TEAM)->set('left')->eq(0)
-                ->where('root')->eq($taskID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($oldTask->assignedTo)
-                ->exec();
+            $beginTag = false;
+            foreach($oldTask->team as $account => $team)
+            {
+                if($account == $task->assignedTo) break;
+                if($account == $oldTask->assignedTo) $beginTag = true;
+                if($beginTag) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
+            }
 
             $this->dao->update(TABLE_TEAM)->set('left')->eq($task->left)
                 ->where('root')->eq($taskID)
@@ -1417,12 +1419,23 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->dao->update(TABLE_TEAM)
-                ->set('left')->eq(0)
-                ->set('consumed')->eq($task->consumed)
+            $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)
                 ->where('root')->eq((int)$taskID)
                 ->andWhere('type')->eq('task')
                 ->andWhere('account')->eq($oldTask->assignedTo)->exec();
+
+            $beginTag = false;
+            foreach($oldTask->team as $account => $team)
+            {
+                if($account == $task->assignedTo) break;
+                if($account == $oldTask->assignedTo)
+                {
+                    $beginTag = true;
+                    continue;
+                }
+
+                if($beginTag) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
+            }
 
             $task = $this->computeHours4Multiple($oldTask, $task);
         }

@@ -2462,6 +2462,40 @@ class project extends control
     }
 
     /**
+     * Ajax set unfoldID.
+     * 
+     * @param  int    $projectID 
+     * @param  string $action 
+     * @access public
+     * @return void
+     */
+    public function ajaxSetUnfoldID($projectID, $action = 'add')
+    {
+        $this->loadModel('setting');
+        $setting     = $this->setting->createDAO($this->setting->parseItemParam("owner={$this->app->user->account}&module=project&section=task&key=unfoldID"), 'select')->fetch();
+        $newUnfoldID = $this->post->newUnfoldID;
+        if(empty($newUnfoldID)) die();
+
+        $newUnfoldID  = json_decode($newUnfoldID);
+        $unfoldIdList = $setting ? json_decode($setting->value, true) : array();
+        foreach($newUnfoldID as $unfoldID)
+        {
+            unset($unfoldIdList[$projectID][$unfoldID]);
+            if($action == 'add') $unfoldIdList[$projectID][$unfoldID] = $unfoldID;
+        }
+
+        if(empty($setting))
+        {
+            $this->setting->setItem($this->app->user->account . ".project.task.unfoldID", json_encode($unfoldIdList));
+        }
+        else
+        {
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($unfoldIdList))->where('id')->eq($setting->id)->exec();
+        }
+        die('success');
+    }
+
+    /**
      * Import stories by plan.
      *
      * @param int $projectID
