@@ -4,6 +4,7 @@ $config->product->orderBy = 'isClosed,order_desc';
 
 $config->product->customBatchEditFields = 'line,PO,QD,RD,status,type,desc';
 
+$config->product->browse = new stdclass();
 $config->product->custom = new stdclass();
 $config->product->custom->batchEditFields = 'line,PO,QD,RD,status';
 

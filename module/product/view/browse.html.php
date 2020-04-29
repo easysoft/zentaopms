@@ -15,6 +15,15 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
+<?php
+/* Set unfold parent taskID. */
+$this->app->loadLang('project');
+$config->product->browse->unfoldID = isset($config->product->browse->unfoldID) ? json_decode($config->product->browse->unfoldID, true) : array();
+$config->product->browse->unfoldID = zget($config->product->browse->unfoldID, $productID, array());
+js::set('unfoldID',  $config->product->browse->unfoldID);
+js::set('unfoldAll', $lang->project->treeLevel['all']);
+js::set('foldAll',   $lang->project->treeLevel['root']);
+?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
