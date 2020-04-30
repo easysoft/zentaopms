@@ -79,7 +79,7 @@ class repo extends control
         {
             $repoID = $this->repo->create();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
@@ -111,7 +111,8 @@ class repo extends control
         if($_POST)
         {
             $noNeedSync = $this->repo->update($repoID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if(!$noNeedSync)
             {
                 $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
