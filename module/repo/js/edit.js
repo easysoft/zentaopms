@@ -1,6 +1,11 @@
 $(function()
 {
     scmChanged(scm);
+    $('#submit').mousedown(function()
+    {
+        $form = $(this).closest('form');
+        $form.css('min-height', $form.height());
+    })
 });
 
 function scmChanged(scm) {

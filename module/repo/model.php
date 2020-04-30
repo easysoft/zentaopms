@@ -189,7 +189,8 @@ class repoModel extends model
      */
     public function create()
     {
-        $this->checkConnection();
+        if(!$this->checkConnection()) return false;
+
         $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
         if(empty($data->client)) $data->client = 'svn';
@@ -221,7 +222,8 @@ class repoModel extends model
      */
     public function update($id)
     {
-        $this->checkConnection();
+        if(!$this->checkConnection()) return false;
+
         $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -922,59 +924,81 @@ class repoModel extends model
 
         if($scm == 'Subversion')
         {
+            /* Get svn version. */
+            $versionCommand = "$client --version --quiet 2>&1";
+            exec($versionCommand, $versionOutput, $versionResult);
+            if($versionResult)
+            {
+                $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, join("<br />", $versionOutput));
+                dao::$errors['client'] = $this->lang->repo->error->cmd . "<br />" . nl2br($message);
+                return false;
+            }
+            $svnVersion = end($versionOutput);
+
             $path = '"' . str_replace(array('%3A', '%2F'), array(':', '/'), urlencode($path)) . '"';
             if(stripos($path, 'https://') === 1 or stripos($path, 'svn://') === 1)
             {
-                $ssh     = true;
-                $remote  = true; 
+                if(version_compare($svnVersion, '1.6', '<'))
+                {
+                    dao::$errors['client'] = $this->lang->repo->error->version;
+                    return false;
+                }
+
                 $command = "$client info --username $account --password $password --non-interactive --trust-server-cert-failures=cn-mismatch --trust-server-cert --no-auth-cache $path 2>&1";
+                if(version_compare($svnVersion, '1.9', '<')) $command = "$client info --username $account --password $password --non-interactive --trust-server-cert --no-auth-cache $path 2>&1";
             }
             else if(stripos($path, 'file://') === 1)
             {
-                $ssh     = false;
-                $remote  = false; 
                 $command = "$client info --non-interactive --no-auth-cache $path 2>&1";
             }
             else
             {
-                $ssh     = false;
-                $remote  = true; 
                 $command = "$client info --username $account --password $password --non-interactive --no-auth-cache $path 2>&1";
             }
+
             exec($command, $output, $result);
             if($result) 
             {
-                $versionCommand = "$client --version --quiet 2>&1";
-                exec($versionCommand, $versionOutput, $versionResult);
-                if($versionResult)
+                $message = sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false)
                 {
-                    $message = sprintf($this->lang->repo->error->output, $versionCommand, $versionResult, join("\n", $versionOutput));
-                    echo $message;
-                    die(js::alert($this->lang->repo->error->cmd . '\n' . str_replace(array("\n", "'"), array('\n', '"'), $message)));
+                    dao::$errors['client'] = $this->lang->repo->error->clientVersion;
+                    return false;
                 }
-                if($ssh and version_compare(end($versionOutput), '1.6', '<')) die(js::alert($this->lang->repo->error->version));
-                $message = sprintf($this->lang->repo->error->output, $command, $result, join("\n", $output));
-                echo $message;
-                if(stripos($message, 'Expected FS format between') !== false and strpos($message, 'found format') !== false) die(js::alert($this->lang->repo->error->clientVersion));
-                if(preg_match('/[^\:\/\\A-Za-z0-9_\-\'\"]/', $path)) die(js::alert($this->lang->repo->error->encoding . '\n' . str_replace(array("\n", "'"), array('\n', '"'), $message)));
-                die(js::alert($this->lang->repo->error->connect . '\n' . str_replace(array("\n", "'"), array('\n', '"'), $message)));
+                if(preg_match('/[^\:\/\\A-Za-z0-9_\-\'\"\.]/', $path))
+                {
+                    dao::$errors['encoding'] = $this->lang->repo->error->encoding . "<br />" . nl2br($message);
+                    return false;
+                }
+
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br>" . nl2br($message);
+                return false;
             }
         }
         elseif($scm == 'Git')
         {
             if(!chdir($path))
             {
-                if(!is_dir($path)) die(js::alert(sprintf($this->lang->repo->error->noFile, $path)));
-                if(!is_executable($path)) die(js::alert(sprintf($this->lang->repo->error->noPriv, $path)));
-                die(js::alert($this->lang->repo->error->path));
+                if(!is_dir($path))
+                {
+                    dao::$errors['path'] = sprintf($this->lang->repo->error->noFile, $path);
+                    return false;
+                }
+                if(!is_executable($path))
+                {
+                    dao::$errors['path'] = sprintf($this->lang->repo->error->noPriv, $path);
+                    return false;
+                }
+                dao::$errors['path'] = $this->lang->repo->error->path;
+                return false;
             }
 
             $command = "$client tag 2>&1";
             exec($command, $output, $result);
             if($result)
             {
-                echo sprintf($this->lang->repo->error->output, $command, $result, join("\n", $output));
-                die(js::alert($this->lang->repo->error->connect));
+                dao::$errors['submit'] = $this->lang->repo->error->connect . "<br />" . sprintf($this->lang->repo->error->output, $command, $result, join("<br />", $output));
+                return false;
             }
         }
         return true;
