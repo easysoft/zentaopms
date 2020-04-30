@@ -60,7 +60,6 @@ li{line-height: 2em}
   font-size:25px;
   width: 100%;
 }
-.card.ad > .img-wrapper > img{width:35px; height:35px}
 .card.ad > .card-heading {text-align: center;}
 .card.ad > .card-reveal > .card-heading { padding: 12px 10px 10px 15px;}
 .card.ad > .card-reveal {color: #333;}

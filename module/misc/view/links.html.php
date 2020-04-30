@@ -2,7 +2,7 @@
 #zentaoLinks .col-sm-2{width:20%;}
 #zentaoLinks .col-sm-2 .others ul{padding-left: 0px;}
 #zentaoLinks .col-sm-2 .others li{list-style: none; text-align:left;}
-#zentaoLinks .col-sm-2 .others img{height:15px; padding-right:10px;}
+#zentaoLinks .col-sm-2 .others img{height:25px; padding-right:5px;}
 </style>
 <div class='container mw-900px' id="zentaoLinks">
   <div class='row'>
