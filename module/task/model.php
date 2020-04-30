@@ -1210,6 +1210,7 @@ class taskModel extends model
         $record = fixer::input('post')->get();
         foreach($record->consumed as $item)
         {
+            if(!trim($item)) continue;
             if(!is_numeric($item))
             {
                 dao::$errors[] = $this->lang->task->error->totalNumber;
@@ -1219,6 +1220,7 @@ class taskModel extends model
 
         foreach($record->left as $item)
         {
+            if(!trim($item)) continue;
             if(!is_numeric($item))
             {
                 dao::$errors[] = $this->lang->task->error->estimateNumber;
