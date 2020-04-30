@@ -398,6 +398,8 @@ class projectModel extends model
             ->where('id')->eq($projectID)
             ->limit(1)
             ->exec();
+
+        $changedAccounts = array();
         foreach($project as $fieldName => $value)
         {
             if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
@@ -413,9 +415,21 @@ class projectModel extends model
                     $member->type    = 'project';
                     $member->hours   = $this->config->project->defaultWorkhours;
                     $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+                    $changedAccounts[] = $value;
                 }
             }
         }
+
+        /* Update views for team members. */
+        $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
+        $products = $this->getProducts($projectID, false);
+        foreach($products as $productID => $productName)
+        {
+            if(empty($productID)) continue;
+            $this->user->updateUserView($productID, 'product', $changedAccounts);
+        }
+
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
@@ -1608,7 +1622,7 @@ class projectModel extends model
         $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
         foreach($stories as $key => $storyID)
         {
-            if($statusPairs[$storyID] == 'draft') continue;
+            if($statusPairs[$storyID] == 'draft' || $statusPairs[$storyID] == 'closed') continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $productID = (int)$products[$storyID];

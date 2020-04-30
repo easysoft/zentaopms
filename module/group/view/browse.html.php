@@ -40,7 +40,7 @@
         <td class='text-center'><?php echo $group->id;?></td>
         <td><?php echo $group->name;?></td>
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
-        <td title='<?php echo $users;?>'><?php echo $users;?></td>
+        <td title='<?php echo $users;?>' class="text-ellipsis"><?php echo $users;?></td>
         <td class='c-actions'>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
