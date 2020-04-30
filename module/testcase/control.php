@@ -1519,7 +1519,7 @@ class testcase extends control
             }
             else
             {
-                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . $this->post->pagerID + 1), 'parent'));
+                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1)), 'parent'));
             }
         }
 
