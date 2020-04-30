@@ -653,6 +653,7 @@ class bugModel extends model
             ->setIF($this->post->resolution  != '', 'confirmed', 1)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(!$this->post->linkBug, 'linkBug', '')
+            ->setIF($this->post->status == 'closed', 'assignedTo', 'closed')
             ->remove('comment,files,labels,uid,contactListMenu')
             ->get();
 
