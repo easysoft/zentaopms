@@ -1622,7 +1622,7 @@ class projectModel extends model
         $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
         foreach($stories as $key => $storyID)
         {
-            if($statusPairs[$storyID] == 'draft') continue;
+            if($statusPairs[$storyID] == 'draft' || $statusPairs[$storyID] == 'closed') continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $productID = (int)$products[$storyID];
