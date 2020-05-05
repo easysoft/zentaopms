@@ -119,17 +119,15 @@ $lang->common->common = 'Common Module';
 
 /* Main menu. */
 $lang->menu = new stdclass();
-$lang->menu->my      = '<span>Dashboard</span>|my|index';
-$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = 'Test|qa|index';
-$lang->menu->ci      = 'CI|repo|browse';
-$lang->menu->doc     = 'Doc|doc|index';
-$lang->menu->report  = 'Report|report|index';
-$lang->menu->company = 'Company|company|index';
-$lang->menu->admin   = 'Admin|admin|index';
+$lang->menu->my      = '<i class="icon icon-menu-my"></i> Dashboard|my|index';
+$lang->menu->product = '<i class="icon icon-menu-project"></i> Project|product|index|locate=no';
+$lang->menu->doc     = '<i class="icon icon-menu-doc"></i> Doc|doc|index';
+$lang->menu->report  = '<i class="icon icon-menu-report"></i> Report|report|index';
+$lang->menu->company = '<i class="icon icon-menu-users"></i> Company|company|index';
+$lang->menu->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index';
+$lang->menu->recent  = '<i class="icon icon-menu-recent"></i> Recent|recent|index';
 
-$lang->dividerMenu = ',qa,report,';
+$lang->dividerMenu = ',admin,recent,';
 
 /* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';

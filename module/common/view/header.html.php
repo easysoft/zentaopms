@@ -14,11 +14,20 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
+<div id='menu'>
+  <div id='menuHeader'>
+    <?php $heading = $app->company->name;?>
+    <h1 id='companyName' title='<?php echo $heading;?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo html::a(helper::createLink('index'), $heading);?></h1>
+  </div>
+  <nav id='menuNav'><?php commonModel::printMainmenu($this->moduleName);?></nav>
+  <div id='menuFooter'>
+    <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
+  </div>
+</div>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
       <hgroup id='heading'>
-        <?php $heading = $app->company->name;?>
         <h1 id='companyname' title='<?php echo $heading;?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo html::a(helper::createLink('index'), $heading);?></h1>
       </hgroup>
       <nav id='navbar'><?php commonModel::printMainmenu($this->moduleName);?></nav>

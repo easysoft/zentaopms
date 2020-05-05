@@ -119,17 +119,15 @@ $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
 $lang->menu = new stdclass();
-$lang->menu->my      = '<span> 我的地盘</span>|my|index';
-$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
-$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
-$lang->menu->qa      = '测试|qa|index';
-$lang->menu->ci      = '集成|repo|browse';
-$lang->menu->doc     = '文档|doc|index';
-$lang->menu->report  = '统计|report|index';
-$lang->menu->company = '组织|company|index';
-$lang->menu->admin   = '后台|admin|index';
+$lang->menu->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index';
+$lang->menu->product = '<i class="icon icon-menu-project"></i> 项目|product|index|locate=no';
+$lang->menu->doc     = '<i class="icon icon-menu-doc"></i> 文档|doc|index';
+$lang->menu->report  = '<i class="icon icon-menu-report"></i> 报表|report|index';
+$lang->menu->company = '<i class="icon icon-menu-users"></i> 组织|company|index';
+$lang->menu->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index';
+$lang->menu->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|index';
 
-$lang->dividerMenu = ',qa,report,';
+$lang->dividerMenu = ',admin,recent,';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';

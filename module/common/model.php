@@ -396,8 +396,8 @@ class commonModel extends model
 
     /**
      * Print admin subMenu.
-     * 
-     * @param  string    $subMenu 
+     *
+     * @param  string    $subMenu
      * @static
      * @access public
      * @return void
@@ -1783,8 +1783,8 @@ EOD;
     }
 
     /**
-     * Check Not CN Lang. 
-     * 
+     * Check Not CN Lang.
+     *
      * @static
      * @access public
      * @return bool
