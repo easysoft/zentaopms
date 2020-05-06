@@ -505,8 +505,11 @@ class testcase extends control
 
             $results = $this->testtask->getResults($run->id);
             $result  = array_shift($results);
-            $case->xml      = $result->xml;
-            $case->duration = $result->duration;
+            if($result)
+            {
+                $case->xml      = $result->xml;
+                $case->duration = $result->duration;
+            }
         }
 
         $branches  = $this->session->currentProductType == 'normal' ? array() : $this->loadModel('branch')->getPairs($case->product);

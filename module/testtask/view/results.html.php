@@ -57,7 +57,7 @@
               <table class='table table-condensed resultSteps'>
                 <thead>
                   <tr>
-                    <th class='w-50px'><?php echo $lang->testcase->stepID;?></th>
+                    <th class='w-60px'><?php echo $lang->testcase->stepID;?></th>
                     <th class='text-left'><?php echo $lang->testcase->stepDesc;?></th>
                     <th class='w-p25 text-left'><?php echo $lang->testcase->stepExpect;?></th>
                     <th class='w-p5 text-left'><?php echo $lang->testcase->stepVersion;?></th>

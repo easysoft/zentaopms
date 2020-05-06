@@ -111,27 +111,30 @@ class taskModel extends model
             {
                 $testStoryIdList = array();
                 $this->loadModel('action');
-                foreach($this->post->testStory as $storyID)
+                if($this->post->testStory)
                 {
-                    if($storyID) $testStoryIdList[$storyID] = $storyID;
-                }
-                $testStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchPairs('id', 'title');
-                foreach($this->post->testStory as $i => $storyID)
-                {
-                    if(!isset($testStories[$storyID])) continue;
+                    foreach($this->post->testStory as $storyID)
+                    {
+                        if($storyID) $testStoryIdList[$storyID] = $storyID;
+                    }
+                    $testStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchPairs('id', 'title');
+                    foreach($this->post->testStory as $i => $storyID)
+                    {
+                        if(!isset($testStories[$storyID])) continue;
 
-                    $task->parent     = $taskID;
-                    $task->story      = $storyID;
-                    $task->name       = $this->lang->task->lblTestStory . " #{$storyID} " . zget($testStories, $storyID);
-                    $task->pri        = $this->post->testPri[$i];
-                    $task->estStarted = $this->post->testEstStarted[$i];
-                    $task->deadline   = $this->post->testDeadline[$i];
-                    $task->assignedTo = $this->post->testAssignedTo[$i];
-                    $task->estimate   = $this->post->testEstimate[$i];
-                    $this->dao->insert(TABLE_TASK)->data($task)->exec();
+                        $task->parent     = $taskID;
+                        $task->story      = $storyID;
+                        $task->name       = $this->lang->task->lblTestStory . " #{$storyID} " . zget($testStories, $storyID);
+                        $task->pri        = $this->post->testPri[$i];
+                        $task->estStarted = $this->post->testEstStarted[$i];
+                        $task->deadline   = $this->post->testDeadline[$i];
+                        $task->assignedTo = $this->post->testAssignedTo[$i];
+                        $task->estimate   = $this->post->testEstimate[$i];
+                        $this->dao->insert(TABLE_TASK)->data($task)->exec();
 
-                    $childTaskID = $this->dao->lastInsertID();
-                    $this->action->create('task', $childTaskID, 'Opened');
+                        $childTaskID = $this->dao->lastInsertID();
+                        $this->action->create('task', $childTaskID, 'Opened');
+                    }
                 }
 
                 $this->computeWorkingHours($taskID);
@@ -1386,13 +1389,14 @@ class taskModel extends model
             ->remove('comment,files,labels,currentConsumed')
             ->get();
 
-        if(!is_numeric($this->post->currentConsumed))
+        $currentConsumed = trim($this->post->currentConsumed);
+        if(!is_numeric($currentConsumed))
         {
             dao::$errors[] = $this->lang->task->error->consumedNumber;
             return false;
         }
 
-        if(!$this->post->currentConsumed)
+        if(empty($currentConsumed))
         {
             dao::$errors[] = $this->lang->task->error->consumedEmpty;
             return false;
