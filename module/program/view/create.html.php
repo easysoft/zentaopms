@@ -38,21 +38,28 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->program->create;?></h2>
+      <div class="pull-right btn-toolbar">
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
+      </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->program->type;?></th>
-          <td><?php echo html::select('type', $lang->program->typeList, '', "class='form-control'");?></td><td></td><td></td>
+          <td><?php echo zget($lang->program->typeList, $type, '');?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->name;?></th>
-          <td class="col-main"><?php echo html::input('name', '', "class='form-control' required");?></td>
+          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->code;?></th>
-          <td><?php echo html::input('code', '', "class='form-control' required");?></td><td></td><td></td>
+          <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->program->category;?></th>
+          <td><?php echo html::select('category', $lang->program->categoryList, '', "class='form-control'");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->PM;?></th>
@@ -67,20 +74,32 @@
           <th><?php echo $lang->program->dateRange;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
+              <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
+              <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
             </div>
           </td>
           <td colspan='2'></td>
         </tr>
+        <?php if($type == 'scrum'):?>
+        <tr>
+          <th><?php echo $lang->project->days;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('days', '', "class='form-control'");?>
+              <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+            </div>
+          </td><td></td><td></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>
-          <td><?php echo html::input('team', '', "class='form-control'");?></td><td></td><td></td>
+          <td><?php echo html::input('team', $team, "class='form-control'");?></td><td></td><td></td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
+          <td><?php echo html::hidden('type', $type);?></td>
           <td></td>
           <td></td>
         </tr>
@@ -94,11 +113,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, 'open', "onclick='setWhite(this.value);'", 'block'));?></td>
+          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr id='whitelistBox' class='hidden'>
           <th><?php echo $lang->project->whitelist;?></th>
-          <td colspan='3'><?php echo html::checkbox('whitelist', $groups, '', '', '', 'inline');?></td>
+          <td colspan='3'><?php echo html::checkbox('whitelist', $groups, $whitelist, '', '', 'inline');?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>
@@ -111,4 +130,33 @@
     </form>
   </div>
 </div>
+<div class='modal fade modal-scroll-inside' id='copyProjectModal'>
+  <div class='modal-dialog mw-900px'>
+    <div class='modal-header'>
+      <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
+      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
+    </div>
+    <div class='modal-body'>
+      <?php if(count($programs) == 1):?>
+      <div class='alert with-icon'>
+        <i class='icon-exclamation-sign'></i>
+        <div class='content'><?php echo $lang->project->copyNoProject;?></div>
+      </div>
+      <?php else:?>
+      <div id='copyProjects' class='row'>
+      <?php foreach ($programs as $id => $name):?>
+      <?php if(empty($id)):?>
+      <?php if($copyProgramID != 0):?>
+      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
+      <?php endif;?>
+      <?php else: ?>
+      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProgramID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
+      <?php endif; ?>
+      <?php endforeach;?>
+      </div>
+      <?php endif;?>
+    </div>
+  </div>
+</div>
+<?php js::set('type', $type);?>
 <?php include '../../common/view/footer.html.php';?>

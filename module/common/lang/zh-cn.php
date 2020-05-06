@@ -130,7 +130,7 @@ $lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|i
 $lang->dividerMenu = ',admin,recent,';
 
 $lang->menu = new stdclass();
-$lang->menu->project = new stdclass();
+$lang->menu->project = '';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';

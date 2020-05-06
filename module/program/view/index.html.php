@@ -78,12 +78,13 @@
         <?php $vars = "status=$status&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
-            <th class='c-id'>
-              <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
-            </th>
-            <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
+            <th class='c-id w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
             <th class='w-120px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->code);?></th>
-            <th class='w-120px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->budget);?></th>
+            <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
+            <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->program->type);?></th>
+            <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
+            <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
+            <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->budget);?></th>
             <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PM);?></th>
             <th class='w-200px text-left'><?php echo $lang->program->desc;?></th>
             <th class='text-center w-200px'><?php echo $lang->actions;?></th>
@@ -92,13 +93,14 @@
         <tbody class='sortable' id='projectTableList'>
           <?php foreach($projectList as $project):?>
           <tr data-id='<?php echo $project->id ?>' data-order='<?php echo $project->order ?>'>
-            <td class='c-id'>
-              <?php printf('%03d', $project->id);?>
-            </td>
+            <td class='c-id'><?php printf('%03d', $project->id);?></td>
+            <td class='text-left'><?php echo $project->code;?></td>
             <td class='text-left' title='<?php echo $project->name?>'>
               <?php echo html::a($this->createLink('project', 'task', 'projectID=' . $project->id), $project->name);?>
             </td>
-            <td class='text-left'><?php echo $project->code;?></td>
+            <td class='text-center'><?php echo zget($lang->program->typeList, $project->type, '');?></td>
+            <td class='text-center'><?php echo $project->begin;?></td>
+            <td class='text-center'><?php echo $project->end;?></td>
             <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
             <td><?php echo zget($users, $project->PM);?></td>
             <td title='<?php echo strip_tags($project->desc);?>'><?php echo strip_tags($project->desc);?></td>

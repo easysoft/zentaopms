@@ -1,12 +1,35 @@
 <?php
 class programModel extends model
 {
+    public function getList($status = 'all', $orderBy = 'id_desc', $pager = NULL)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('iscat')->eq(0)
+            ->andWhere('program')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    public function getPairsByType($type)
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('iscat')->eq(0)
+            ->andWhere('type')->eq($type)
+            ->andWhere('program')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->fetchPairs();
+    }
+
     public function create()
     {
         $this->lang->project->team = $this->lang->project->teamname;
         $project = fixer::input('post')
             ->setDefault('status', 'wait')
-            ->setDefault('type', 'program')
             ->setIF($this->post->acl != 'custom', 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
@@ -28,13 +51,14 @@ class programModel extends model
         /* Add the creater to the team. */
         if(!dao::isError())
         {
-            $projectID     = $this->dao->lastInsertId();
-            $today         = helper::today();
+            $programID = $this->dao->lastInsertId();
+            $today     = helper::today();
 
             /* Save order. */
-            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->where('id')->eq($projectID)->exec();
-            $this->file->updateObjectID($this->post->uid, $projectID, 'project');
+            $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
+            $this->file->updateObjectID($this->post->uid, $programID, 'project');
 
+            /*
             $product = new stdclass();
             $product->name        = $project->name;
             $product->project     = $projectID;
@@ -46,8 +70,9 @@ class programModel extends model
 
             $productID = $this->dao->lastInsertId();
             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+            */
 
-            /* Create doc lib. */
+            /* Create doc lib.
             $this->app->loadLang('doc');
             $lib = new stdclass();
             $lib->product = $productID;
@@ -60,13 +85,13 @@ class programModel extends model
             $docLibID = $this->dao->lastInsertId();
             $this->loadModel('doc')->syncDocModule($docLibID);
 
-            /* Insert into projectproduct. */
-            //$data = new stdclass();
-            //$data->project = $projectID;
-            //$data->product = $productID;
-            //$this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->product = $productID;
+            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            */
 
-            return $projectID;
+            return $programID;
         }
     }
 

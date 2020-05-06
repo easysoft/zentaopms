@@ -3,7 +3,8 @@ $lang->program->index        = '项目主页';
 $lang->program->common       = '项目';
 $lang->program->stage        = '阶段';
 $lang->program->name         = '项目名称';
-$lang->program->type         = '项目类型';
+$lang->program->type         = '管理方式';
+$lang->program->category     = '项目类型';
 $lang->program->desc         = '项目描述';
 $lang->program->code         = '项目代号';
 $lang->program->begin        = '计划开始日期';
@@ -33,3 +34,6 @@ $lang->program->unitList['dollar'] = 'Dollars';
 
 $lang->program->typeList['scrum'] = "Scrum";
 $lang->program->typeList['cmmi']  = "瀑布";
+
+$lang->program->categoryList['single']   = "单产品项目";
+$lang->program->categoryList['multiple'] = "多产品项目";

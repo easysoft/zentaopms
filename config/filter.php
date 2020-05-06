@@ -34,6 +34,7 @@ $filter->qa         = new stdclass();
 $filter->story      = new stdclass();
 $filter->task       = new stdclass();
 $filter->testcase   = new stdclass();
+$filter->program    = new stdclass();
 $filter->project    = new stdclass();
 $filter->testreport = new stdclass();
 $filter->testsuite  = new stdclass();
@@ -68,6 +69,7 @@ $filter->file->download          = new stdclass();
 $filter->product->browse         = new stdclass();
 $filter->product->default        = new stdclass();
 $filter->product->index          = new stdclass();
+$filter->program->default        = new stdclass();
 $filter->project->default        = new stdclass();
 $filter->project->story          = new stdclass();
 $filter->project->task           = new stdclass();
@@ -127,6 +129,8 @@ $filter->product->default->cookie['lastProduct']      = 'int';
 $filter->product->default->cookie['preProductID']     = 'int';
 $filter->product->index->cookie['preBranch']          = 'int';
 $filter->product->export->cookie['checkedItem']       = 'reg::checked';
+
+$filter->program->index->cookie['programType'] = 'code';
 
 $filter->project->default->cookie['lastProject']     = 'int';
 $filter->project->default->cookie['projectMode']     = 'code';

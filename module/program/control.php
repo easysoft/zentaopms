@@ -11,20 +11,13 @@ class program extends control
     {
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary'");
 
-        //$programType = $this->cookie->programType;
-        $programType = 'bylist';
+        $programType = $this->cookie->programType;
 
-        if($programType == 'bylist')
-        {
-            $this->app->loadClass('pager', $static = true);
-            $pager = new pager($recTotal, $recPerPage, $pageID);
-            $projectList = $this->project->getProjectStats($status, 0, 0, 30, $orderBy, $pager, 'program');
-            $this->view->pager = $pager;
-        }
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->view->pager = $pager;
 
-        if(!$programType || $programType == 'bygrid') $projectList = $this->project->getList($status, 0, 0, 0, 'program');
-
-        $this->view->projectList = $projectList;
+        $this->view->projectList = $this->program->getList($status, $orderBy, $pager);
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
@@ -34,7 +27,7 @@ class program extends control
         $this->display();
     }
 
-    public function create()
+    public function create($type = 'scrum', $copyProgramID = '')
     {
         if($_POST)
         {
@@ -47,10 +40,33 @@ class program extends control
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('index')));
         }
 
-        $this->view->pmUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->title       = $this->lang->program->create;
-        $this->view->position[]  = $this->lang->program->create;
-        $this->view->groups      = $this->loadModel('group')->getPairs();
+        $name         = '';
+        $code         = '';
+        $team         = '';
+        $whitelist    = '';
+        $acl          = 'open';
+        if($copyProgramID)
+        {    
+            $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProgramID)->fetch();
+            $name        = $copyProgram->name;
+            $code        = $copyProgram->code;
+            $team        = $copyProgram->team;
+            $acl         = $copyProgram->acl;
+            $whitelist   = $copyProgram->whitelist;
+        }
+
+        $this->view->title         = $this->lang->program->create;
+        $this->view->position[]    = $this->lang->program->create;
+        $this->view->groups        = $this->loadModel('group')->getPairs();
+        $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->programs      = array('' => '') + $this->program->getPairsByType($type);
+        $this->view->type          = $type;
+        $this->view->name          = $name;
+        $this->view->code          = $code;
+        $this->view->team          = $team;
+        $this->view->acl           = $acl;
+        $this->view->whitelist     = $whitelist;
+        $this->view->copyProgramID = $copyProgramID;
         $this->display();
     }
 
