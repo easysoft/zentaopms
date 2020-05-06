@@ -155,6 +155,9 @@ class bugModel extends model
         if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
+
+        /* Fix bug3102. */
+        if(strpos($this->config->bug->create->requiredFields, 'project') !== false && $bug->project == 0) $bug->project = '';
         $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError())
         {
