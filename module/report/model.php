@@ -310,15 +310,15 @@ class reportModel extends model
         $stmt = $this->dao->select('t1.*, t2.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->notin('cancel, closed, done, pause')
+            ->andWhere('t1.status')->in('wait,doing')
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t2.status')->notin('cancel, closed, done, suspended')
+            ->andWhere('t2.status')->in('wait, doing')
             ->andWhere('assignedTo')->ne('');
 
         $allTasks = $stmt->fetchAll('id');
-        $tasks    = $stmt->beginIF($dept)->andWhere('t1.assignedTo')->in(array_keys($deptUsers))->fi()->fetchAll('id');
-
         if(empty($allTasks)) return array();
+
+        $tasks = $stmt->beginIF($dept)->andWhere('t1.assignedTo')->in(array_keys($deptUsers))->fi()->fetchAll('id');
 
         /* Fix bug for children. */
         $parents       = array();
