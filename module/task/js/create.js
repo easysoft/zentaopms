@@ -49,7 +49,7 @@ function loadProjectStories(projectID)
     {
         $('#story_chosen').remove();
         $('#story').replaceWith(data);
-        $('#story').chosen();
+        $('#story').addClass('filled').chosen();
     });
 }
 
@@ -226,7 +226,7 @@ function setStories(moduleID, projectID)
         $('#story').val(storyID);
         setPreview();
         $('#story_chosen').remove();
-        $("#story").chosen();
+        $("#story").addClass('filled').chosen();
     });
 }
 
