@@ -421,7 +421,7 @@ class projectModel extends model
             }
         }
 
-        /* Update views for team members. */
+        /* Fix bug#3074, Update views for team members. */
         $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
         $products = $this->getProducts($projectID, false);
         foreach($products as $productID => $productName)
