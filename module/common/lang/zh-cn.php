@@ -118,16 +118,19 @@ $lang->common = new stdclass();
 $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
-$lang->menu = new stdclass();
-$lang->menu->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index';
-$lang->menu->product = '<i class="icon icon-menu-project"></i> 项目|product|index|locate=no';
-$lang->menu->doc     = '<i class="icon icon-menu-doc"></i> 文档|doc|index';
-$lang->menu->report  = '<i class="icon icon-menu-report"></i> 报表|report|index';
-$lang->menu->company = '<i class="icon icon-menu-users"></i> 组织|company|index';
-$lang->menu->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index';
-$lang->menu->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|index';
+$lang->mainNav = new stdclass();
+$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
+$lang->mainNav->program = '<i class="icon icon-menu-project"></i> 项目|program|index|';
+$lang->mainNav->doc     = '<i class="icon icon-menu-doc"></i> 文档|doc|index|';
+$lang->mainNav->report  = '<i class="icon icon-menu-report"></i> 报表|report|index|';
+$lang->mainNav->company = '<i class="icon icon-menu-users"></i> 组织|company|index|';
+$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
+$lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
 
 $lang->dividerMenu = ',admin,recent,';
+
+$lang->menu = new stdclass();
+$lang->menu->project = new stdclass();
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -500,6 +503,23 @@ $lang->menugroup->repo    = 'ci';
 $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
+
+$lang->navGroup = array();
+$lang->navGroup['product']     = 'program';
+$lang->navGroup['story']       = 'program';
+$lang->navGroup['productplan'] = 'program';
+$lang->navGroup['release']     = 'program';
+$lang->navGroup['tree']        = 'program';
+$lang->navGroup['project']     = 'program';
+$lang->navGroup['task']        = 'program';
+$lang->navGroup['qa']          = 'program';
+$lang->navGroup['bug']         = 'program';
+$lang->navGroup['testcase']    = 'program';
+$lang->navGroup['testtask']    = 'program';
+$lang->navGroup['testreport']  = 'program';
+$lang->navGroup['testsuite']   = 'program';
+$lang->navGroup['caselib']     = 'program';
+$lang->navGroup['feedback']    = 'program';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

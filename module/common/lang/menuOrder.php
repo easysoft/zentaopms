@@ -1,14 +1,15 @@
 <?php
 /* Sort of main menu. */
 $lang->menuOrder[5]  = 'my';
-$lang->menuOrder[10] = 'product';
-$lang->menuOrder[15] = 'project';
-$lang->menuOrder[20] = 'qa';
-$lang->menuOrder[25] = 'ci';
-$lang->menuOrder[30] = 'doc';
-$lang->menuOrder[35] = 'report';
-$lang->menuOrder[40] = 'company';
-$lang->menuOrder[45] = 'admin';
+$lang->menuOrder[10] = 'program';
+$lang->menuOrder[15] = 'product';
+$lang->menuOrder[20] = 'project';
+$lang->menuOrder[25] = 'qa';
+$lang->menuOrder[30] = 'ci';
+$lang->menuOrder[35] = 'doc';
+$lang->menuOrder[40] = 'report';
+$lang->menuOrder[45] = 'company';
+$lang->menuOrder[50] = 'admin';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';

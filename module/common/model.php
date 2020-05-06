@@ -438,6 +438,32 @@ class commonModel extends model
     }
 
     /**
+     * Print the main nav.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printMainNav($moduleName, $methodName = '')
+    {
+        global $app, $lang;
+
+        echo "<ul class='nav nav-default'>\n";
+        foreach($lang->mainNav as $group => $nav)
+        {
+            $active = '';
+            list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
+            if($moduleName == $group) $active = 'active';
+            if(zget($lang->navGroup, $moduleName, '') == $group) $active = 'active';
+            if(common::hasPriv($currentModule, $currentMethod)) echo "<li class=$active>" . html::a(helper::createLink($currentModule, $currentMethod, $vars), $title) . '</li>';
+        }
+        echo "</ul>\n";
+    }
+
+    /**
      * Print the main menu.
      *
      * @param  string $moduleName
