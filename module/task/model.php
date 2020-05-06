@@ -1208,9 +1208,14 @@ class taskModel extends model
     public function recordEstimate($taskID)
     {
         $record = fixer::input('post')->get();
-        foreach($record->consumed as $item)
+        foreach($record->consumed as $id => $item)
         {
-            if(!trim($item)) continue;
+            if(!trim($item))
+            {
+                $record->consumed[$id] = trim($item);
+                continue;
+            }
+
             if(!is_numeric($item))
             {
                 dao::$errors[] = $this->lang->task->error->totalNumber;
@@ -1218,9 +1223,14 @@ class taskModel extends model
             }
         }
 
-        foreach($record->left as $item)
+        foreach($record->left as $id => $item)
         {
-            if(!trim($item)) continue;
+            if(!trim($item))
+            {
+                $record->left[$id] = trim($item);
+                continue;
+            }
+
             if(!is_numeric($item))
             {
                 dao::$errors[] = $this->lang->task->error->estimateNumber;
