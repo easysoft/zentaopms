@@ -17,7 +17,9 @@ class program extends control
     public function commonAction($projectID = 0, $extra = '')
     {
         /* Set menu. */
-        $selectHtml = $this->project->select('', $projectID, 0, $this->app->getModuleName(), $this->app->getMethodName(), $extra);
+        $this->projects = $this->project->getPairs('nocode');
+        $projectID  = $this->project->saveState($projectID, $this->projects);
+        $selectHtml = $this->project->select('', $projectID, 0, 'project', 'task', $extra);
         $this->lang->programSwapper = $selectHtml;
     }
 
