@@ -15,11 +15,11 @@ class program extends control
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $this->view->pager = $pager;
 
         $this->view->projectList = $this->program->getList($status, $orderBy, $pager);
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->title       = $this->lang->program->index;
         $this->view->position[]  = $this->lang->program->index;

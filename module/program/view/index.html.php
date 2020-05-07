@@ -11,23 +11,28 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('status', $status);?>
-<style>
-.footerbar .right-info{position: absolute; bottom: 10px; right: 10px;}
-.footerbar .left-info{position: absolute; bottom: 15px; left: 20px;}
-.flow-block {height: 230px;}
-.panel-body .card-content{overflow-y: scroll; height: 100px;}
-</style>
 <?php if($programType == 'bygrid'):?>
 <style>
 #mainMenu{padding-left: 10px; padding-right: 10px;}
 </style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
-  <div class="btn-group pull-left">
-    <?php echo html::a('javascript:setProgramType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title='看板' class='btn btn-icon " . ($programType == 'bygrid' ? 'text-primary' : '') . "'");?>
-    <?php echo html::a('javascript:setProgramType("bylist")', "<i class='icon icon-bars'></i>", '', "title='列表' class='btn btn-icon " . ($programType == 'bylist' ? 'text-primary' : '') . "'");?>
+  <div class="btn-toolBar pull-left">
+    <?php foreach($lang->program->featureBar as $key => $label):?>
+    <?php $active = $status == $key ? 'btn-active-text' : '';?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a(inlink('index', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
+    <?php endforeach;?>
+    <?php echo html::checkbox('mine', array('1' => $lang->program->mine), '', $this->cookie->mine ? 'checked=checked' : '');?>
   </div>
-  <div class='pull-right'><?php echo $lang->pageActions;?></div>
+  <div class='pull-right'>
+    <div class='btn-group'>
+      <?php echo html::a('javascript:setProgramType("bygrid")', "<i class='icon icon-cards-view'></i>", '', "title={$lang->program->bygrid} class='btn btn-icon " . ($programType == 'bygrid' ? 'text-primary' : '') . "'");?>
+      <?php echo html::a('javascript:setProgramType("bylist")', "<i class='icon icon-bars'></i>", '', "title={$lang->program->bylist} class='btn btn-icon " . ($programType == 'bylist' ? 'text-primary' : '') . "'");?>
+    </div>
+    <?php echo $lang->pageActions;?>
+  </div>
 </div>
 <div id='mainContent' class='main-row'>
   <?php if(empty($projectList)):?>
@@ -81,6 +86,7 @@
             <th class='c-id w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
             <th class='w-120px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->code);?></th>
             <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
+            <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
             <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->program->type);?></th>
             <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
             <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
@@ -98,7 +104,8 @@
             <td class='text-left' title='<?php echo $project->name?>'>
               <?php echo html::a($this->createLink('project', 'task', 'projectID=' . $project->id), $project->name);?>
             </td>
-            <td class='text-center'><?php echo zget($lang->program->typeList, $project->type, '');?></td>
+            <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
+            <td class='text-left'><?php echo zget($lang->program->typeList, $project->type, '');?></td>
             <td class='text-center'><?php echo $project->begin;?></td>
             <td class='text-center'><?php echo $project->end;?></td>
             <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>

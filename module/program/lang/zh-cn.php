@@ -24,6 +24,9 @@ $lang->program->dateRange    = '起止时间';
 $lang->program->to           = '至';
 $lang->program->realFinished = '实际完成日期';
 $lang->program->realStarted  = '实际开始日期';
+$lang->program->bygrid       = '看板';
+$lang->program->bylist       = '列表';
+$lang->program->mine         = '我参与的';
 
 $lang->program->durationEstimation  = '工作量估算';
 $lang->program->noProgram = '暂时没有项目';
@@ -37,3 +40,9 @@ $lang->program->typeList['cmmi']  = "瀑布";
 
 $lang->program->categoryList['single']   = "单产品项目";
 $lang->program->categoryList['multiple'] = "多产品项目";
+
+$lang->program->featureBar['all']       = '所有';
+$lang->program->featureBar['doing']     = '进行中';
+$lang->program->featureBar['wait']      = '未开始';
+$lang->program->featureBar['suspended'] = '已挂起';
+$lang->program->featureBar['closed']    = '已关闭';

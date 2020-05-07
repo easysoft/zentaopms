@@ -9,6 +9,10 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->beginIF($this->cookie->mine)
+            ->andWhere('openedBy')->eq($this->app->user->account)
+            ->orWhere('PM')->eq($this->app->user->account)
+            ->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

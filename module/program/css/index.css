@@ -1,3 +1,9 @@
 .panel-title {height:55px; padding:10px;}
 .main-table.flow-block {height:203px;}
 .main-table.panel-heading > strong,.main-table.panel-heading > span {margin-bottom:5px}
+#mainMenu .pull-left .checkbox-primary{display: inline-block; margin-left: 10px;}
+
+.footerbar .right-info{position: absolute; bottom: 10px; right: 10px;}
+.footerbar .left-info{position: absolute; bottom: 15px; left: 20px;}
+.flow-block {height: 230px;}
+.panel-body .card-content{overflow-y: scroll; height: 100px;}
