@@ -46,7 +46,7 @@ class program extends control
         $whitelist    = '';
         $acl          = 'open';
         if($copyProgramID)
-        {    
+        {
             $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProgramID)->fetch();
             $name        = $copyProgram->name;
             $code        = $copyProgram->code;
@@ -79,7 +79,7 @@ class program extends control
             $changes = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             if($changes)
-            {    
+            {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }

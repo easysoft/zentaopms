@@ -82,7 +82,7 @@ class programModel extends model
             $lib->product = $productID;
             $lib->name    = $this->lang->doclib->main['product'];
             $lib->type    = 'product';
-            $lib->main    = '1'; 
+            $lib->main    = '1';
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
@@ -114,6 +114,6 @@ class programModel extends model
 
     public function getProducts($program)
     {
-       return $this->dao->select('*')->from(TABLE_PRODUCT)->where('project')->eq($program)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_PRODUCT)->where('project')->eq($program)->fetchAll('id');
     }
 }
