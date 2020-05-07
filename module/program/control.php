@@ -7,8 +7,24 @@ class program extends control
         $this->loadModel('project');
     }
 
+    /**
+     * Common actions.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return object current object
+     */
+    public function commonAction($projectID = 0, $extra = '')
+    {
+        /* Set menu. */
+        $selectHtml = $this->project->select('', $projectID, 0, $this->app->getModuleName(), $this->app->getMethodName(), $extra);
+        $this->lang->programSwapper = $selectHtml;
+    }
+
     public function index($status = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        $this->commonAction();
+
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary'");
 
         $programType = $this->cookie->programType;
@@ -29,6 +45,8 @@ class program extends control
 
     public function create($type = 'scrum', $copyProgramID = '')
     {
+        $this->commonAction();
+
         if($_POST)
         {
             $projectID = $this->program->create();
@@ -72,6 +90,8 @@ class program extends control
 
     public function edit($projectID = 0)
     {
+        $this->commonAction();
+
         $project = $this->project->getByID($projectID);
 
         if($_POST)
