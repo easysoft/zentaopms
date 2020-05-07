@@ -127,7 +127,7 @@ $lang->mainNav->company = '<i class="icon icon-menu-users"></i> 组织|company|i
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
 $lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
 
-$lang->dividerMenu = ',admin,recent,';
+$lang->dividerMenu = ',admin,';
 
 $lang->menu = new stdclass();
 $lang->menu->project = '';

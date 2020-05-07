@@ -459,6 +459,8 @@ class commonModel extends model
             if($moduleName == $group) $active = 'active';
             if(zget($lang->navGroup, $moduleName, '') == $group) $active = 'active';
             if(common::hasPriv($currentModule, $currentMethod)) echo "<li class=$active>" . html::a(helper::createLink($currentModule, $currentMethod, $vars), $title) . '</li>';
+
+            if(strpos($lang->dividerMenu, ",{$group},") !== false) echo "<li class='divider'></li>";
         }
         echo "</ul>\n";
     }

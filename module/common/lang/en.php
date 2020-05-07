@@ -127,7 +127,7 @@ $lang->menu->company = '<i class="icon icon-menu-users"></i> Company|company|ind
 $lang->menu->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index';
 $lang->menu->recent  = '<i class="icon icon-menu-recent"></i> Recent|recent|index';
 
-$lang->dividerMenu = ',admin,recent,';
+$lang->dividerMenu = ',admin,';
 
 /* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
