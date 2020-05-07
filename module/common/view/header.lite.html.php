@@ -63,4 +63,8 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
 <?php js::import($jsRoot . 'jquery/placeholder/min.js'); ?>
 <![endif]-->
 </head>
+<?php if($this->cookie->hideMenu): ?>
+<body class='menu-hide'>
+<?php else: ?>
 <body>
+<?php endif; ?>
