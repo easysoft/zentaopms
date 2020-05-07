@@ -27,7 +27,7 @@ class program extends control
     {
         $this->commonAction();
 
-        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'");
 
         $programType = $this->cookie->programType;
 
@@ -42,6 +42,11 @@ class program extends control
         $this->view->title       = $this->lang->program->index;
         $this->view->position[]  = $this->lang->program->index;
         $this->view->programType = $programType;
+        $this->display();
+    }
+
+    public function createGuide()
+    {
         $this->display();
     }
 
