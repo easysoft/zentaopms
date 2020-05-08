@@ -23,7 +23,7 @@ class taskModel extends model
     public function create($projectID)
     {
         if($this->post->estimate < 0)
-        {    
+        {
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
@@ -79,7 +79,12 @@ class taskModel extends model
             /* Fix Bug #1525 */
             $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
             $requiredFields = "," . $this->config->task->create->requiredFields . ",";
-            if($projectType == 'ops') $requiredFields = str_replace(",story,", ',', "$requiredFields");
+            if($projectType == 'ops')
+            {
+                $requiredFields = str_replace(",story,", ',', "$requiredFields");
+                $task->story = 0;
+            }
+
             if($this->post->selectTestStory)
             {
                 $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
@@ -1211,6 +1216,8 @@ class taskModel extends model
     public function recordEstimate($taskID)
     {
         $record = fixer::input('post')->get();
+
+        /* Fix bug#3036. */
         foreach($record->consumed as $id => $item)
         {
             if(!trim($item))
