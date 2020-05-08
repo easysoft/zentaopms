@@ -7,9 +7,27 @@ class program extends control
         $this->loadModel('project');
     }
 
-    public function index($status = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    /**
+     * Common actions.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return object current object
+     */
+    public function commonAction($projectID = 0, $extra = '')
     {
-        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary'");
+        /* Set menu. */
+        $this->projects = $this->project->getPairs('nocode');
+        $projectID  = $this->project->saveState($projectID, $this->projects);
+        $selectHtml = $this->project->select('', $projectID, 0, 'project', 'task', $extra);
+        $this->lang->programSwapper = $selectHtml;
+    }
+
+    public function index($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    {
+        $this->commonAction();
+
+        if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'");
 
         $programType = $this->cookie->programType;
 
@@ -27,8 +45,15 @@ class program extends control
         $this->display();
     }
 
+    public function createGuide()
+    {
+        $this->display();
+    }
+
     public function create($type = 'scrum', $copyProgramID = '')
     {
+        $this->commonAction();
+
         if($_POST)
         {
             $projectID = $this->program->create();
@@ -46,7 +71,7 @@ class program extends control
         $whitelist    = '';
         $acl          = 'open';
         if($copyProgramID)
-        {    
+        {
             $copyProgram = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProgramID)->fetch();
             $name        = $copyProgram->name;
             $code        = $copyProgram->code;
@@ -72,6 +97,8 @@ class program extends control
 
     public function edit($projectID = 0)
     {
+        $this->commonAction();
+
         $project = $this->project->getByID($projectID);
 
         if($_POST)
@@ -79,7 +106,7 @@ class program extends control
             $changes = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             if($changes)
-            {    
+            {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }

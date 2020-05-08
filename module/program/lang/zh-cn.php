@@ -47,3 +47,12 @@ $lang->program->featureBar['doing']     = '进行中';
 $lang->program->featureBar['wait']      = '未开始';
 $lang->program->featureBar['suspended'] = '已挂起';
 $lang->program->featureBar['closed']    = '已关闭';
+
+$lang->program->chooseProgramType = '选择项目管理方式';
+$lang->program->nextStep          = '下一步';
+$lang->program->scrum             = 'Scrum';
+$lang->program->scrumTitle        = '敏捷开发全流程项目管理';
+$lang->program->scrumDesc         = '<strong>简介：</strong>小步迭代，快速发布<br><strong>包含功能点：</strong>项目概览、迭代、计划、需求等';
+$lang->program->cmmi              = 'CMMI';
+$lang->program->cmmiTitle         = '瀑布式项目管理';
+$lang->program->cmmiDesc          = '<strong>简介：</strong>按阶段规范化管理<br><strong>包含功能点：</strong>估算、计划、阶段、报告';

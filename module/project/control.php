@@ -44,8 +44,8 @@ class project extends control
 
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
-        
-        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
+
+        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
@@ -1122,7 +1122,7 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if(strpos($this->config->custom->productProject, '_2')) 
+        if(strpos($this->config->custom->productProject, '_2'))
         {
             $this->view->isSprint = true;
             unset($this->lang->project->typeList['waterfall']);
@@ -1224,7 +1224,7 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if(strpos($this->config->custom->productProject, '_2')) 
+        if(strpos($this->config->custom->productProject, '_2'))
         {
             $this->view->isSprint = true;
 
@@ -2463,9 +2463,9 @@ class project extends control
 
     /**
      * Ajax set unfoldID.
-     * 
-     * @param  int    $projectID 
-     * @param  string $action 
+     *
+     * @param  int    $projectID
+     * @param  string $action
      * @access public
      * @return void
      */
@@ -2513,9 +2513,9 @@ class project extends control
         {
             foreach($planStory as $id => $story)
             {
-                if($story->status == 'draft') 
+                if($story->status == 'draft')
                 {
-                    $count++; 
+                    $count++;
                     unset($planStory[$id]);
                     continue;
                 }

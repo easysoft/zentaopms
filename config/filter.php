@@ -25,6 +25,7 @@ $filter->default->get['HTTP_X_REQUESTED_WITH'] = 'equal::XMLHttpRequest';
 $filter->default->cookie['lang']        = 'reg::lang';
 $filter->default->cookie['theme']       = 'reg::word';
 $filter->default->cookie['fingerprint'] = 'reg::word';
+$filter->default->cookie['hideMenu']    = 'equal::true';
 
 $filter->bug        = new stdclass();
 $filter->caselib    = new stdclass();
