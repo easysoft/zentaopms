@@ -986,7 +986,8 @@ class productModel extends model
         $totalEstimate = 0.0;
         $storyIdList   = array();
 
-        $count = 0;
+        $rateCount = 0;
+        $allCount  = 0;
         foreach($stories as $key => $story)
         {
             $totalEstimate += $story->estimate;
@@ -997,9 +998,10 @@ class productModel extends model
             )
             {
                 $storyIdList[] = $story->id;
+                $rateCount ++;
             }
 
-            $count ++;
+            $allCount ++;
             if(!empty($story->children))
             {
                 foreach($story->children as $child)
@@ -1010,16 +1012,17 @@ class productModel extends model
                     )
                     {
                         $storyIdList[] = $child->id;
+                        $rateCount ++;
                     }
-                    $count ++;
+                    $allCount ++;
                 }
             }
         }
 
-        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll();
-        $rate  = count($stories) == 0 ? 0 : round(count($cases) / $count, 2);
+        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
+        $rate  = count($stories) == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
-        return sprintf($this->lang->product->storySummary, $count, $totalEstimate, $rate * 100 . "%");
+        return sprintf($this->lang->product->storySummary, $allCount, $totalEstimate, $rate * 100 . "%");
     }
 
     /**
