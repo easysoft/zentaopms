@@ -28,7 +28,9 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
-      <?php if(($moduleName == 'program' || $isProgram) && isset($lang->programSwapper)) echo $lang->programSwapper;?>
+      <div id='heading'>
+        <?php if(($moduleName == 'program' || $isProgram) && isset($lang->programSwapper)) echo $lang->programSwapper;?>
+      </div>
       <nav id='navbar'><?php $isProgram ? commonModel::printMainmenu($this->moduleName) : common::printModuleMenu($this->moduleName);?></nav>
       <div id='toolbar'>
         <div id="userMenu">

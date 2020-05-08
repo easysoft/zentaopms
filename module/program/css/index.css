@@ -1,9 +1,27 @@
-.panel-title {height:55px; padding:10px;}
-.main-table.flow-block {height:203px;}
-.main-table.panel-heading > strong,.main-table.panel-heading > span {margin-bottom:5px}
-#mainMenu .pull-left .checkbox-primary{display: inline-block; margin-left: 10px;}
+#mainMenu .pull-left .checkbox-primary {display: inline-block; margin-left: 10px;}
+#mainMenu .pull-right > .btn-group + .btn {margin-left: 10px;}
+#mainMenu .pull-right > .btn-group > .btn-icon {background: transparent;}
+#mainMenu .pull-right > .btn-group > .btn-icon:hover {background: #fff;}
 
-.footerbar .right-info{position: absolute; bottom: 10px; right: 10px;}
-.footerbar .left-info{position: absolute; bottom: 15px; left: 20px;}
-.flow-block {height: 230px;}
-.panel-body .card-content{overflow-y: scroll; height: 100px;}
+#cards {margin: 0 10px;}
+#cards > .col {width: 25%;}
+#cards .panel {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
+#cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
+#cards .panel-heading {padding: 12px 40px 10px 16px;}
+#cards .panel-body {padding: 0 16px 16px;}
+#cards .panel-actions {padding: 7px 0;}
+#cards .panel-actions .dropdown-menu > li > a {padding-left: 5px; text-align: left;}
+#cards .panel-actions .dropdown-menu > li > a > i {opacity: .5; display: inline-block; margin-right: 4px; width: 18px; text-align: center;}
+#cards .panel-actions .dropdown-menu > li > a:hover > i {opacity: 1;}
+#cards .project-type-label {padding: 1px 2px; position: relative; top: -2px}
+#cards .project-name {font-size: 16px; font-weight: normal;}
+#cards .project-infos {font-size: 12px;}
+#cards .project-infos > span {display: inline-block; line-height: 12px;}
+#cards .project-infos > span > .icon {font-size: 12px; display: inline-block; position: relative; top: -1px}
+#cards .project-infos > span + span {margin-left: 15px;}
+#cards .project-detail {position: absolute; bottom: 16px; left: 16px; right: 16px; font-size: 12px;}
+#cards .project-detail > p {margin-bottom: 8px;}
+#cards .project-detail .progress {height: 4px;}
+#cards .project-detail .progress-text-left .progress-text {width: 50px; left: -50px;}
+#cards .pager {margin: 0; float: right;}
+#cards .pager .btn{border: none}

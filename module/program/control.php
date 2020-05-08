@@ -34,7 +34,20 @@ class program extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->projectList = $this->program->getList($status, $orderBy, $pager);
+        if($programType === 'bygrid')
+        {
+            $projectList = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, 0, 0, 30, $orderBy, $pager);
+            foreach($projectList as $projectID => $project)
+            {
+                $project->teamCount  = count($this->project->getTeamMembers($projectID));
+            }
+        }
+        else
+        {
+            $projectList = $this->program->getList($status, $orderBy, $pager);
+        }
+
+        $this->view->projectList = $projectList;
         $this->view->status      = $status;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
