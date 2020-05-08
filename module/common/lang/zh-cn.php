@@ -130,7 +130,10 @@ $lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|i
 $lang->dividerMenu = ',admin,recent,';
 
 $lang->menu = new stdclass();
-$lang->menu->project = '';
+$lang->menu->program = '主页|program|index';
+$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
+$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
+$lang->menu->qa      = '测试|qa|index';
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -520,6 +523,8 @@ $lang->navGroup['testreport']  = 'program';
 $lang->navGroup['testsuite']   = 'program';
 $lang->navGroup['caselib']     = 'program';
 $lang->navGroup['feedback']    = 'program';
+
+$lang->navGroup['group'] = 'company';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

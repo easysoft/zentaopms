@@ -23,7 +23,7 @@
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center form-actions'><?php echo html::submitButton($lang->project->finish) . ' ' .  html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide'); ?></td>
+          <td colspan='3' class='text-center form-actions'><?php echo html::submitButton($lang->program->finish); ?></td>
         </tr>
       </tbody>
     </table>

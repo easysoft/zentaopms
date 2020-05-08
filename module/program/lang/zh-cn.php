@@ -9,6 +9,7 @@ $lang->program->desc         = '项目描述';
 $lang->program->code         = '项目代号';
 $lang->program->begin        = '计划开始日期';
 $lang->program->end          = '计划完成日期';
+$lang->program->status       = '项目状态';
 $lang->program->PM           = '项目负责人';
 $lang->program->create       = '添加项目';
 $lang->program->edit         = '编辑项目';

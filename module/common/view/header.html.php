@@ -14,7 +14,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php $isProgram = (isset($lang->navGroup[$moduleName]) && $lang->navGroup[$this->moduleName] == 'program');?>
+<?php $isProgram = (isset($lang->navGroup[$this->moduleName]) && $lang->navGroup[$this->moduleName] == 'program');?>
 <div id='menu'>
   <div id='menuHeader'>
     <?php $heading = $app->company->name;?>

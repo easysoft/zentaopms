@@ -139,7 +139,6 @@ class program extends control
     public function finish($projectID)
     {
         $project   = $this->project->getByID($projectID);
-        $projectID = $project->id;
 
         if(!empty($_POST))
         {
@@ -156,11 +155,11 @@ class program extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->title      = $this->lang->project->finish;
-        $this->view->position[] = $this->lang->project->finish;
+        $this->view->title      = $this->lang->program->finish;
+        $this->view->position[] = $this->lang->program->finish;
         $this->view->project    = $project;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->actions    = $this->loadModel('action')->getList('project', $projectID);
+        $this->view->actions    = $this->loadModel('action')->getList('project', $project->id);
         $this->display();
     }
 
@@ -266,6 +265,58 @@ class program extends control
         $this->display('project', 'close');
     }
 
+    /**
+     * Export program.
+     *
+     * @param  string $status
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function export($status, $orderBy)
+    {
+        if($_POST)
+        {
+            $programLang   = $this->lang->program;
+            $programConfig = $this->config->program;
+
+            /* Create field lists. */
+            $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $programConfig->list->exportFields);
+            foreach($fields as $key => $fieldName)
+            {
+                $fieldName = trim($fieldName);
+                $fields[$fieldName] = zget($programLang, $fieldName);
+                unset($fields[$key]);
+            }
+
+            $programs = $this->program->getList($status, $orderBy, null);
+            $users    = $this->loadModel('user')->getPairs('noletter');
+            foreach($programs as $i => $program)
+            {
+                $program->PM       = zget($users, $program->PM);
+                $program->status   = $this->processStatus('project', $program);
+                $program->type     = zget($programLang->typeList, $program->type);
+                $program->category = zget($programLang->categoryList, $program->category);
+                $program->budget   = $program->budget . zget($programLang->unitList, $program->budgetUnit);
+
+                if($this->post->exportType == 'selected')
+                {
+                    $checkedItem = $this->cookie->checkedItem;
+                    if(strpos(",$checkedItem,", ",{$program->id},") === false) unset($programs[$i]);
+                }
+            }
+            if(isset($this->config->bizVersion)) list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projectStats);
+
+            $this->post->set('fields', $fields);
+            $this->post->set('rows', $programs);
+            $this->post->set('kind', 'program');
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+        }
+
+        $this->display();
+    }
+
+    /*
     public function processErrors($errors)
     {
         foreach($errors as $field => $error)
@@ -275,4 +326,5 @@ class program extends control
 
         return $errors;
     }
+    */
 }

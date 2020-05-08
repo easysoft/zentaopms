@@ -8,3 +8,6 @@ $config->program->editor->start    = array('id' => 'comment', 'tools' => 'simple
 $config->program->editor->activate = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->program->editor->finish   = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->program->editor->suspend  = array('id' => 'comment', 'tools' => 'simpleTools');
+
+$config->program->list = new stdclass();
+$config->program->list->exportFields = 'id,name,code,type,category,status,begin,end,budget,PM,end,desc';

@@ -451,6 +451,7 @@ class commonModel extends model
     {
         global $app, $lang;
 
+        $lastMenu = end($lang->mainNav);
         echo "<ul class='nav nav-default'>\n";
         foreach($lang->mainNav as $group => $nav)
         {
@@ -459,6 +460,7 @@ class commonModel extends model
             if($moduleName == $group) $active = 'active';
             if(zget($lang->navGroup, $moduleName, '') == $group) $active = 'active';
             if(common::hasPriv($currentModule, $currentMethod)) echo "<li class=$active>" . html::a(helper::createLink($currentModule, $currentMethod, $vars), $title) . '</li>';
+            if(($lastMenu != $nav) && strpos($lang->dividerMenu, ",{$group},") !== false) echo "<li class='divider'></li>";
         }
         echo "</ul>\n";
     }
