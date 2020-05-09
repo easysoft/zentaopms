@@ -405,7 +405,7 @@ $lang->admin->menu->index     = array('link' => 'Home|admin|index', 'alias' => '
 $lang->admin->menu->message   = array('link' => 'Notification|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => 'Custom|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => 'Integration|admin|sso');
-
+$lang->admin->menu->extension = array('link' => 'Extension|extension|browse', 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => 'Entwicklung|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
 $lang->admin->menu->translate = array('link' => 'Translate|dev|translate');
 $lang->admin->menu->data      = array('link' => 'Data|backup|index', 'subModule' => 'backup,action');
