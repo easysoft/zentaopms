@@ -780,7 +780,7 @@ class user extends control
                     }
                     else
                     {
-                        $response['locate']  = $this->config->default->module;
+                        $response['locate']  = $this->config->webRoot;
                         $this->send($response);
                     }
                 }
