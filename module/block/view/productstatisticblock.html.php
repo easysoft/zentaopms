@@ -190,7 +190,7 @@ $(function()
               </div>
               <?php else:?>
               <div class="actions">
-                <?php common::printLink('project', 'create', '', "<i class='icon icon-plus'></i>" . $lang->project->create, '', "class='btn btn-info'");?>
+                <?php common::printLink('program', 'createguide', '', "<i class='icon icon-plus'></i>" . $lang->project->create, '', "class='btn btn-info' data-toggle='modal' data-type='ajax'");?>
               </div>
               <?php endif;?>
               <div class="type-info">
