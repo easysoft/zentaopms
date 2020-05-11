@@ -134,7 +134,7 @@ class router extends baseRouter
                 if($setting->key == 'productProject') list($productCommon, $projectCommon) = explode('_',  $setting->value);
                 if($setting->key == 'storyRequirement') $storyCommon = $setting->value;
                 if($setting->key == 'hourPoint') $hourCommon    = $setting->value;
-                if($setting->key == 'URAndSR') $config->URAndSR = $setting->value;
+                if($setting->key == 'URAndSR') $URAndSR = $setting->value;
                 if($setting->key == 'URSRName')
                 {
                     $URSRName = json_decode($setting->value, true);
@@ -143,8 +143,8 @@ class router extends baseRouter
                 }
             }
 
-            if(!empty($config->URAndSR)) $storyCommon = 0;
             $config->storyCommon = $storyCommon;
+            if($storyCommon == 0 and isset($URAndSR)) $config->URAndSR = $URAndSR;
 
             /* Set productCommon, projectCommon, storyCommon and hourCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];

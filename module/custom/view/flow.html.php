@@ -41,7 +41,8 @@
       </div>
       <?php endif;?>
       <div class="form-group">
-        <label><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
+        <label id='requirementpoint'><?php echo $lang->custom->conceptQuestions['requirementpoint'];?></label>
+        <label id='storypoint'><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
         <div class="checkbox"> <?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, zget($this->config->custom, 'hourPoint'))?> </div>
       </div>
       <div class="form-group">
