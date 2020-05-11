@@ -143,7 +143,7 @@ class bugModel extends model
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
             ->setIF($this->post->assignedTo != '', 'assignedDate', $now)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
-            ->setIF(strpos($this->config->bug->create->requiredFields, 'project') !== false && $bug->project == 0, 'project', '')
+            ->setIF(strpos($this->config->bug->create->requiredFields, 'project') !== false, 'project', $this->post->project)
             ->stripTags($this->config->bug->editor->create['id'], $this->config->allowedTags)
             ->cleanInt('product, module, severity')
             ->join('openedBuild', ',')
