@@ -185,7 +185,7 @@ class product extends control
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
-        $this->view->summary       = $this->product->summary($stories);
+        $this->view->summary       = $this->product->summary($stories, $storyType);
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch);
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;

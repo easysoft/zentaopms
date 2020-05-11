@@ -978,10 +978,11 @@ class productModel extends model
      * Get the summary of product's stories.
      *
      * @param  array    $stories
+     * @param  string   $storyType  story|requirement
      * @access public
      * @return string.
      */
-    public function summary($stories)
+    public function summary($stories, $storyType = 'story')
     {
         $totalEstimate = 0.0;
         $storyIdList   = array();
@@ -1022,7 +1023,13 @@ class productModel extends model
         $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
         $rate  = count($stories) == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
-        return sprintf($this->lang->product->storySummary, $allCount, $totalEstimate, $rate * 100 . "%");
+        $storyCommon = $this->lang->storyCommon;
+        if(!empty($this->config->URAndSR))
+        {
+            if($storyType == 'requirement') $storyCommon = $this->lang->urCommon;
+            if($storyType == 'story') $storyCommon = $this->lang->srCommon;
+        }
+        return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
     }
 
     /**
