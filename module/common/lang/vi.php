@@ -576,7 +576,6 @@ $lang->importAndInsert = "Insert";
 $lang->noResultsMatch     = "Không có results match found!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Chọn users that will be notified.";
-$lang->browserNotice      = 'The browser you currently use might not get the best browsing results. It is recommended that you use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "Bạn có thể paste images into the editor.";
 $lang->pasteImgFail       = "Lỗi paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";

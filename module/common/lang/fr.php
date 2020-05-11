@@ -576,7 +576,6 @@ $lang->importAndInsert = "Inserer";
 $lang->noResultsMatch     = "Aucun résults trouvé !";
 $lang->searchMore         = "Plus de résults ：";
 $lang->chooseUsersToMail  = "Choisissez les utilisateurs à avertir.";
-$lang->browserNotice      = "Le navigateur que vous utilisez actuellement peut ne pas vous afficher les résultats correctement. Il est recommandé d'utiliser Chrome, Palemoon, Firefox, IE9+, Opera or Safari.";
 $lang->noticePasteImg     = "Vous pouvez déposer des images dans l'éditeur.";
 $lang->pasteImgFail       = "Echec lors de la dépose des images. Essayez plus tard.";
 $lang->pasteImgUploading  = "Chargement...";

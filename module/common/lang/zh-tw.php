@@ -576,7 +576,6 @@ $lang->importAndInsert = "全新插入";
 $lang->noResultsMatch    = "沒有匹配結果";
 $lang->searchMore        = "搜索此關鍵字的更多結果：";
 $lang->chooseUsersToMail = "選擇要發信通知的用戶...";
-$lang->browserNotice     = '你目前使用的瀏覽器可能無法得到最佳瀏覽效果，建議使用Chrome、火狐、IE9+、Opera、Safari瀏覽器。';
 $lang->noticePasteImg    = "可以在編輯器直接貼圖。";
 $lang->pasteImgFail      = "貼圖失敗，請稍後重試。";
 $lang->pasteImgUploading = "正在上傳圖片，請稍後...";

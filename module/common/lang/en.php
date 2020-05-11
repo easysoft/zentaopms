@@ -576,7 +576,6 @@ $lang->importAndInsert = "Insert";
 $lang->noResultsMatch     = "No results match found!";
 $lang->searchMore         = "More results：";
 $lang->chooseUsersToMail  = "Choose users that will be notified.";
-$lang->browserNotice      = 'The browser you currently use might not get the best browsing results. It is recommended that you use Chrome, Firefox, IE9+, Opera or Safari.';
 $lang->noticePasteImg     = "You can paste images into the editor.";
 $lang->pasteImgFail       = "Failed to paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";

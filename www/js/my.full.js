@@ -486,64 +486,6 @@ function applyCssStyle(css, tag)
 }
 
 /**
- * Show browser notice
- *
- * @access public
- * @return void
- */
-function showBrowserNotice()
-{
-    userAgent = navigator.userAgent.toLowerCase();
-    $browser  = new Object();
-    $browser.msie   = /msie/.test(userAgent);
-    $browser.chrome = /chrome/.test(userAgent);
-
-    //if($browser.msie)
-    //{
-    //    match = /(msie) ([\w.]+)/.exec(userAgent);
-    //    $browser.version = match[2] || '0';
-    //}
-
-    var show = false;
-
-    /* IE 6,7. */
-    //if($browser.msie && $browser.version <= 7) show = true;
-
-    /* Souhu */
-    if(navigator.userAgent.indexOf('MetaSr') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('LBBROWSER') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('QQBrowser') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('TheWorld') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('BIDUBrowser') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('Maxthon') >= 0)
-    {
-        show = true;
-    }
-    /* 360. */
-    //else if($browser.chrome && !(window.clientInformation && window.clientInformation.mediaDevices))
-    //{
-    //    show = true;
-    //}
-
-    if(show) $('body').prepend('<div class="alert alert-info alert-dismissable" style="margin:0px;"><button type=button" onclick="ajaxIgnoreBrowser()" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-remove"></i></button><p>' + browserNotice + '</p></div>');
-}
-
-/**
  * Remove cookie by key
  *
  * @param  cookieKey $cookieKey
