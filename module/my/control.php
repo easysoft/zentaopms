@@ -455,18 +455,17 @@ class my extends control
      */
     public function manageContacts($listID = 0, $mode = '')
     {
-        $data = fixer::input('post')->get();
-        if($data)
+        if($_POST)
         {
-            if($this->post->mode == 'new')
+            $data = fixer::input('post')->get();
+            if($data->mode == 'new')
             {
-
                 $listID = $this->user->createContactList($data->newList, $data->users);
                 $this->user->setGlobalContacts($listID, isset($data->share));
                 if(isonlybody()) die(js::closeModal('parent.parent', '', ' function(){parent.parent.ajaxGetContacts(\'#mailto\')}'));
                 die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
             }
-            elseif($this->post->mode == 'edit')
+            elseif($data->mode == 'edit')
             {
                 $this->user->updateContactList($data->listID, $data->listName, $data->users);
                 $this->user->setGlobalContacts($data->listID, isset($data->share));

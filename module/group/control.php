@@ -137,8 +137,6 @@ class group extends control
         }
 
         $group = $this->group->getById($groupID);
-        if($group->acl) $group->acl = json_decode($group->acl, true);
-        if(!isset($group->acl) || !is_array($group->acl)) $group->acl = array();
 
         $this->view->title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageView;
         $this->view->position[] = $group->name;

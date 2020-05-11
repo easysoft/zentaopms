@@ -126,7 +126,10 @@ class groupModel extends model
      */
     public function getByID($groupID)
     {
-        return $this->dao->findById($groupID)->from(TABLE_GROUP)->fetch();
+        $group = $this->dao->findById($groupID)->from(TABLE_GROUP)->fetch();
+        if($group->acl) $group->acl = json_decode($group->acl, true);
+        if(!isset($group->acl) || !is_array($group->acl)) $group->acl = array();
+        return $group;
     }
 
     /**
