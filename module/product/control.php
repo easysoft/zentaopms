@@ -165,6 +165,13 @@ class product extends control
         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
+        /* Change for requirement story title. */
+        if($storyType == 'requirement' and !empty($this->config->URAndSR))
+        {
+            $this->lang->story->title = str_replace($this->lang->srCommon, $this->lang->urCommon, $this->lang->story->title);
+            $this->config->product->search['fields']['title'] = $this->lang->story->title;
+        }
+
         /* Build search form. */
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
         $this->config->product->search['onMenuBar'] = 'yes';

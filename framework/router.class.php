@@ -144,13 +144,18 @@ class router extends baseRouter
             }
 
             $config->storyCommon = $storyCommon;
-            if($storyCommon == 0 and isset($URAndSR)) $config->URAndSR = $URAndSR;
 
             /* Set productCommon, projectCommon, storyCommon and hourCommon. Default english lang. */
             $lang->productCommon = isset($this->config->productCommonList[$this->clientLang][(int)$productCommon]) ? $this->config->productCommonList[$this->clientLang][(int)$productCommon] : $this->config->productCommonList['en'][(int)$productCommon];
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][(int)$projectCommon];
             $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon]     : $this->config->storyCommonList['en'][(int)$storyCommon];
             $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]  : $this->config->hourPointCommonList['en'][(int)$hourCommon];
+
+            if($storyCommon == 0 and isset($URAndSR))
+            {
+                $config->URAndSR = $URAndSR;
+                if(!empty($URAndSR) and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
+            }
         }
 
         parent::loadLang($moduleName, $appName);
