@@ -45,7 +45,7 @@
   <?php else:?>
   <div class='main-col'>
     <?php if($programType == 'bygrid'):?>
-    <div class='row cell' id='cards'>
+    <div class='row cell auto-fade-in fade' id='cards'>
       <?php foreach ($projectList as $projectID => $project):?>
       <div class='col' data-id='<?php echo $projectID?>'>
         <div class='panel' data-url='<?php echo $this->createLink('project', 'task', "projectID=$project->id");?>'>

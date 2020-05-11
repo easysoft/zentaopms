@@ -4,7 +4,7 @@
 #mainMenu .pull-right > .btn-group > .btn-icon:hover {background: #fff;}
 
 #cards {margin: 0 10px;}
-#cards > .col {width: 25%;}
+#cards > .col {width: 20%;}
 #cards .panel {margin: 10px 0; border: 1px solid #DCDCDC; border-radius: 2px; box-shadow: none; height: 146px; cursor: pointer;}
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
