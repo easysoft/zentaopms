@@ -121,9 +121,9 @@ $lang->common->common = '公有模块';
 $lang->mainNav = new stdclass();
 $lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program = '<i class="icon icon-menu-project"></i> 项目|program|index|';
-$lang->mainNav->doc     = '<i class="icon icon-menu-doc"></i> 文档|doc|index|';
+$lang->mainNav->doclib  = '<i class="icon icon-menu-doc"></i> 文档|doc|index|';
 $lang->mainNav->report  = '<i class="icon icon-menu-report"></i> 报表|report|index|';
-$lang->mainNav->company = '<i class="icon icon-menu-users"></i> 组织|company|index|';
+$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
 $lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
 $lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
 
@@ -134,6 +134,18 @@ $lang->menu->program = '主页|program|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
+
+/* System menu. */
+$lang->system = new stdclass();
+$lang->system->menu = new stdclass();
+$lang->system->menu->estimate = array('link' => '估算|custom|estimate|');
+$lang->system->menu->stage    = array('link' => '阶段|stage|browse|');
+$lang->system->menu->settips  = array('link' => '度量|measurement|settips|', 'subModule' => ',sqlbuilder,measurement,', 'alias' => ',template,browse,');
+$lang->system->menu->auditcl  = array('link' => 'QA|auditcl|browse|');
+$lang->system->menu->cmcl     = array('link' => '配置|cmcl|browse|', 'subModule' => ',cmcl,baseline,');
+$lang->system->menu->process  = array('link' => '过程|process|browse|', 'subModule' => ',activity,output,classify,');
+$lang->system->menu->review   = array('link' => '评审|reviewcl|browse|category=PP|', 'subModule' => ',reviewsetting,');
+$lang->system->menu->subject  = array('link' => '科目|subject|browse|');
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -406,6 +418,7 @@ $lang->user->menu  = $lang->company->menu;
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->company   = array('link' => '组织|company|browse|', 'subModule' => ',user,dept,group,ldap,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
 $lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
 $lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
@@ -507,24 +520,76 @@ $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
 
-$lang->navGroup = array();
-$lang->navGroup['product']     = 'program';
-$lang->navGroup['story']       = 'program';
-$lang->navGroup['productplan'] = 'program';
-$lang->navGroup['release']     = 'program';
-$lang->navGroup['tree']        = 'program';
-$lang->navGroup['project']     = 'program';
-$lang->navGroup['task']        = 'program';
-$lang->navGroup['qa']          = 'program';
-$lang->navGroup['bug']         = 'program';
-$lang->navGroup['testcase']    = 'program';
-$lang->navGroup['testtask']    = 'program';
-$lang->navGroup['testreport']  = 'program';
-$lang->navGroup['testsuite']   = 'program';
-$lang->navGroup['caselib']     = 'program';
-$lang->navGroup['feedback']    = 'program';
+/* Nav group.*/
+$lang->navGroup = new stdclass();
+$lang->navGroup->todo   = 'my';
+$lang->navGroup->effort = 'my';
 
-$lang->navGroup['group'] = 'company';
+$lang->navGroup->product     = 'program';
+$lang->navGroup->story       = 'program';
+$lang->navGroup->branch      = 'program';
+$lang->navGroup->productplan = 'program';
+$lang->navGroup->release     = 'program';
+$lang->navGroup->tree        = 'program';
+$lang->navGroup->project     = 'program';
+$lang->navGroup->task        = 'program';
+$lang->navGroup->qa          = 'program';
+$lang->navGroup->bug         = 'program';
+$lang->navGroup->testcase    = 'program';
+$lang->navGroup->testtask    = 'program';
+$lang->navGroup->testreport  = 'program';
+$lang->navGroup->testsuite   = 'program';
+$lang->navGroup->caselib     = 'program';
+$lang->navGroup->feedback    = 'program';
+
+$lang->navGroup->programplan    = 'program';
+$lang->navGroup->workestimation = 'program';
+$lang->navGroup->review         = 'program';
+$lang->navGroup->reviewissue    = 'program';
+$lang->navGroup->weekly         = 'program';
+$lang->navGroup->milestone      = 'program';
+$lang->navGroup->pssp           = 'program';
+$lang->navGroup->design         = 'program';
+$lang->navGroup->repo           = 'program';
+$lang->navGroup->issue          = 'program';
+$lang->navGroup->risk           = 'program';
+$lang->navGroup->auditplan      = 'program';
+$lang->navGroup->cm             = 'program';
+$lang->navGroup->nc             = 'program';
+
+$lang->navGroup->doc = 'doclib';
+
+$lang->navGroup->stage         = 'system';
+$lang->navGroup->measurement   = 'system';
+$lang->navGroup->sqlbuilder    = 'system';
+$lang->navGroup->auditcl       = 'system';
+$lang->navGroup->cmcl          = 'system';
+$lang->navGroup->process       = 'system';
+$lang->navGroup->activity      = 'system';
+$lang->navGroup->output        = 'system';
+$lang->navGroup->classify      = 'system';
+$lang->navGroup->reviewcl      = 'system';
+$lang->navGroup->subject       = 'system';
+$lang->navGroup->baseline      = 'system';
+$lang->navGroup->reviewcl      = 'system';
+$lang->navGroup->reviewsetting = 'system';
+
+$lang->navGroup->leave    = 'attend';
+$lang->navGroup->makeup   = 'attend';
+$lang->navGroup->overtime = 'attend';
+$lang->navGroup->lieu     = 'attend';
+$lang->navGroup->holiday  = 'attend';
+
+$lang->navGroup->company  = 'admin';
+$lang->navGroup->dept     = 'admin';
+$lang->navGroup->ldap     = 'admin';
+$lang->navGroup->group    = 'admin';
+$lang->navGroup->user     = 'admin';
+$lang->navGroup->custom   = 'admin';
+$lang->navGroup->cron     = 'admin';
+$lang->navGroup->backup   = 'admin';
+$lang->navGroup->mail     = 'admin';
+$lang->navGroup->dev      = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();

@@ -14,7 +14,9 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php $isProgram = (isset($lang->navGroup[$this->moduleName]) && $lang->navGroup[$this->moduleName] == 'program');?>
+<?php $isProgram = (isset($lang->navGroup->{$this->moduleName}) && $lang->navGroup->{$this->moduleName} == 'program');?>
+<?php $isSystem  = (isset($lang->navGroup->{$this->moduleName}) && $lang->navGroup->{$this->moduleName} == 'system');?>
+<?php $isAdmin   = ($this->moduleName == 'company' || $this->moduleName == 'group' || $this->moduleName == 'dept' || $this->moduleName == 'user');?>
 <div id='menu'>
   <div id='menuHeader'>
     <?php $heading = $app->company->name;?>
@@ -29,9 +31,9 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
-        <?php if(($moduleName == 'program' || $isProgram) && isset($lang->programSwapper)) echo $lang->programSwapper;?>
+        <?php if($isProgram && isset($lang->programSwapper)) echo $lang->programSwapper;?>
       </div>
-      <nav id='navbar'><?php $isProgram ? commonModel::printMainmenu($this->moduleName) : common::printModuleMenu($this->moduleName);?></nav>
+      <nav id='navbar'><?php ($isProgram || $isSystem || $isAdmin) ? commonModel::printMainmenu($this->moduleName) : common::printModuleMenu($this->moduleName);?></nav>
       <div id='toolbar'>
         <div id="userMenu">
           <?php common::printSearchBox();?>
@@ -42,7 +44,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       </div>
     </div>
   </div>
-  <?php if($isProgram):?>
+  <?php if($isProgram || $isSystem || $isAdmin):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>

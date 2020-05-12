@@ -483,6 +483,11 @@ class commonModel extends model
         $mainMenu = $moduleName;
         if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
+        /* Set main menu by group. */
+        $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
+        if($group == 'system' || $group == 'admin') $lang->menu = $lang->$group->menu;
+        if($group == 'program');
+
         /* Print all main menus. */
         $menu       = customModel::getMainMenu();
         $activeName = 'active';

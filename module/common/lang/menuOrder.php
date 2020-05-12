@@ -117,6 +117,7 @@ $lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
+$lang->admin->menuOrder[6]  = 'company';
 $lang->admin->menuOrder[10] = 'message';
 $lang->admin->menuOrder[15] = 'custom';
 $lang->admin->menuOrder[20] = 'sso';

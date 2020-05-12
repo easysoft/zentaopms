@@ -10,9 +10,9 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $projectTemplates = $this->project->getTemplateOptions();?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('weekend', $config->project->weekend);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -20,11 +20,6 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <tr>
-          <th class='w-120px'><?php echo $lang->project->template;?></th>
-          <td class="col-main"><?php echo html::select('parent', $projectTemplates, $project->parent, "class='form-control' required");?></td>
-          <td></td><td></td>
-        </tr>
         <tr>
           <th class='w-120px'><?php echo $lang->program->name;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td>
@@ -51,22 +46,27 @@
           <th><?php echo $lang->program->dateRange;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('begin', $project->begin, "class='form-control form-date' placeholder='" . $lang->program->begin . "' required");?>
+              <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->program->to;?></span>
-              <?php echo html::input('end', $project->end, "class='form-control form-date' placeholder='" . $lang->program->end . "' required");?>
+              <?php echo html::input('end', $project->end, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->program->end . "' required");?>
             </div>
           </td>
           <td colspan='2'></td>
         </tr>
+        <?php if($project->type == 'scrum'):?>
+        <tr>
+          <th><?php echo $lang->project->days;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('days', $project->days, "class='form-control'");?>
+              <span class='input-group-addon'><?php echo $lang->project->day;?></span>
+            </div>
+          </td><td></td><td></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->teamname;?></th>
           <td><?php echo html::input('team', $project->team, "class='form-control'");?></td><td></td><td></td>
-        </tr>
-        <tr class='hide'>
-          <th><?php echo $lang->project->status;?></th>
-          <td><?php echo html::hidden('status', 'wait');?></td>
-          <td></td>
-          <td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->desc;?></th>
