@@ -143,10 +143,13 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        $this->loadModel('story');
+        if(!empty($this->config->URAndSR)) $this->lang->story->title = str_replace($this->lang->srCommon, $this->lang->urCommon, $this->lang->story->title);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
-        $this->view->stories    = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+        $this->view->stories    = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->type       = $type;
         $this->view->recTotal   = $recTotal;
