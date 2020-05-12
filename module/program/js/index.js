@@ -18,7 +18,6 @@ $(function()
         {
             bestColsSize++;
         }
-        console.log('bestColsSize', bestColsSize);
         $cards.children('.col').css('width', (100 / bestColsSize) + '%');
     };
     resizeCards();
