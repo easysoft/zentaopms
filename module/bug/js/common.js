@@ -438,9 +438,13 @@ function loadProductBranches(productID)
     })
 }
 
+
+var oldAssignedToTitle = $("#assignedTo").find("option:selected").text();
+var oldAssignedTo      = $("#assignedTo").find("option:selected").val();
+
 /**
  * Load team members of the project as assignedTo list.
- * 
+ *
  * @param  int     $projectID 
  * @access public
  * @return void
@@ -450,8 +454,11 @@ function loadAssignedTo(projectID)
     link = createLink('bug', 'ajaxLoadAssignedTo', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
     $.get(link, function(data)
     {
+        var defaultOption = '<option title="' + oldAssignedToTitle + '" value="' + oldAssignedTo + '" selected="selected">' + oldAssignedToTitle + '</option>';
         $('#assignedTo_chosen').remove();
         $('#assignedTo').replaceWith(data);
+        var defaultAssignedTo = $('#assignedTo').val();
+        if(defaultAssignedTo !== oldAssignedTo) $('#assignedTo').append(defaultOption);
         $('#assignedTo').chosen();
     });
 }
