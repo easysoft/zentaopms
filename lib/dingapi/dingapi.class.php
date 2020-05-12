@@ -62,7 +62,11 @@ class dingapi
         foreach($depts as $deptID => $deptName)
         {
             $response = $this->queryAPI($this->apiUrl . "user/simplelist?access_token={$this->token}&department_id={$deptID}");
-            if($this->isError()) continue;
+            if($this->isError())
+            {
+                $this->getErrors();
+                continue;
+            }
 
             foreach($response->userlist as $user) $users[$user->name] = $user->userid;
         }
