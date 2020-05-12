@@ -35,7 +35,10 @@
       <tr>
         <th class='w-150px'><?php echo $lang->backup->time?></th>
         <th><?php echo $lang->backup->files?></th>
-        <th class='w-150px'><?php echo $lang->backup->size?></th>
+        <th class='w-100px'><?php echo $lang->backup->allCount?></th>
+        <th class='w-100px'><?php echo $lang->backup->count?></th>
+        <th class='w-100px'><?php echo $lang->backup->size?></th>
+        <th class='w-100px'><?php echo $lang->backup->status?></th>
         <th class='actionWidth'><?php echo $lang->actions?></th>
       </tr>
     </thead>
@@ -44,14 +47,32 @@
       <?php $rowspan = count($backupFile->files);?>
       <?php $i = 0;?>
       <?php $isPHP = false;?>
-      <?php foreach($backupFile->files as $file => $size):?>
+      <?php foreach($backupFile->files as $file => $summary):?>
       <?php if(!$isPHP) $isPHP = strpos($file, '.php') !== false;?>
       <tr>
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>><?php echo date(DT_DATETIME1, $backupFile->time);?></td>
         <?php endif;?>
         <td class='text-left' style='padding-left:5px;'><?php echo $file;?></td>
-        <td><?php if(!empty($size)) echo $size / 1024 / 1024 >= 1024 ? round($size / 1024 / 1024 / 1024, 2) . 'GB' : ($size / 1024 >= 1024 ? round($size / 1024 / 1024, 2) . 'MB' : round($size / 1024, 2) . 'KB');?></td>
+        <td><?php echo zget($summary, 'allCount', '');?></td>
+        <td><?php echo zget($summary, 'count', '');?></td>
+        <td>
+          <?php
+          $size = zget($summary, 'size', 0);
+          if(!empty($size)) echo $this->backup->processFileSize($size);
+          ?>
+        </td>
+        <td style='overflow:visible'>
+          <?php
+          $status = zget($summary, 'count', 0) == zget($summary, 'allCount', 0) ? 'success' : 'fail';
+          if(!empty($summary['errorFiles'])) $status = 'fail';
+          if(!empty($summary['errorFiles'])):
+          ?>
+          <div class="dropdown dropdown-hover"><?php echo $lang->backup->statusList[$status];?> <span class="caret"></span><div class="dropdown-menu pull-right errorFiles"><?php echo $lang->backup->copiedFail . '<br />' . join('<br />', $summary['errorFiles']);?></div></div>
+          <?php else:?>
+          <?php echo $lang->backup->statusList[$status];?>
+          <?php endif;?>
+        </td>
         <?php if($i == 0):?>
         <td <?php if($rowspan > 1) echo "rowspan='$rowspan'"?>>
           <?php
@@ -79,7 +100,7 @@
   </h2>
 </div>
 <div class="modal fade" id="waitting" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog w-300px">
+  <div class="modal-dialog w-400px">
     <div class="modal-content">
       <div class="modal-body">
         <p><?php echo $lang->backup->waitting?></p>

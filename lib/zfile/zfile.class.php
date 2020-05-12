@@ -16,50 +16,100 @@ class zfile
      * 
      * @param  string    $from 
      * @param  string    $to 
-     * @param  bool      $showDetails 
+     * @param  bool      $logLevel
+     * @param  string    $logFile 
      * @access public
-     * @return array     copied files.
+     * @return array     copied files, count, size or message.
      */
-    public function copyDir($from, $to, $showDetails = true)
+    public function copyDir($from, $to, $logLevel = false, $logFile = '')
     {
         static $copiedFiles = array();
+        static $errorFiles  = array();
         $count = $size = 0;
 
-        if(!is_dir($from) or !is_readable($from)) return array($copiedFiles, $count, $size);
-        if(!is_dir($to))
+        $log['copiedFiles'] = array();
+        $log['count']       = 0;
+        $log['size']        = 0;
+
+        if(!is_dir($from) or !is_readable($from))
         {
-            if(!is_writable(dirname($to))) return array($copiedFiles, $count, $size);
-            mkdir($to);
+            if(!is_dir($from))      $log['message'] = "$from: Dir is not exists";
+            if(!is_readable($from)) $log['message'] = "$from: Permission denied";
         }
+        if(!is_dir($to) and !@mkdir($to, 0777, true)) $log['message'] = "$to: Permission denied";
+        if(is_dir($to)  and !is_writeable($to))       $log['message'] = "$to: Permission denied";
+        if($logFile     and !file_exists($logFile))   touch($logFile);
+        if(!empty($log['message'])) return $return;
 
-        $from    = realpath($from) . '/';
-        $to      = realpath($to) . '/';
-        $entries = scandir($from);
+        $from = realpath($from) . '/';
+        $to   = realpath($to) . '/';
 
-        foreach($entries as $entry)
+        $entries = glob($from . '/*');
+        foreach($entries as $fullEntry)
         {
-            if($entry == '.' or $entry == '..' or $entry == '.svn') continue;
-
-            $fullEntry = $from . $entry;
+            $entry = basename($fullEntry);
             if(is_file($fullEntry))
             {
                 if(file_exists($to . $entry)) unlink($to . $entry);
 
-                copy($fullEntry, $to . $entry);
-                if($showDetails) $copiedFiles[] = $to . $entry;
-                $count += 1;
-                $size  += filesize($fullEntry);
+                if(copy($fullEntry, $to . $entry))
+                {
+                    if($logLevel) $copiedFiles[] = $to . $entry;
+                    $count += 1;
+                    $size  += filesize($fullEntry);
+
+                    if($logFile and file_exists($logFile))
+                    {
+                        $summary = json_decode(file_get_contents($logFile), true);
+
+                        if(empty($summary)) $summary = array();
+                        if(empty($summary['count'])) $summary['count'] = 0;
+                        $summary['count'] += 1;
+
+                        file_put_contents($logFile, json_encode($summary));
+                    }
+                }
+                else
+                {
+                    $errorFiles[] = $fullEntry;
+                }
             }
             else
             {
-                $nextFrom = $from . $entry;
+                $nextFrom = $fullEntry;
                 $nextTo   = $to . $entry;
-                $result   = $this->copyDir($nextFrom, $nextTo, $showDetails);
-                $count   += $result[1];
-                $size    += $result[2];
+                $result   = $this->copyDir($nextFrom, $nextTo, $logLevel, $logFile);
+                $count   += $result['count'];
+                $size    += $result['size'];
             }
         }
-        return array($copiedFiles, $count, $size);
+
+        if($logLevel) $log['copiedFiles'] = $copiedFiles;
+        $log['errorFiles'] = $errorFiles;
+        $log['count']      = $count;
+        $log['size']       = $size;
+        $log['logFile']    = $logFile;
+
+        return $log;
+    }
+
+    /**
+     * Get count.
+     * 
+     * @param  string $dir 
+     * @access public
+     * @return int
+     */
+    public function getCount($dir)
+    {
+        if(!file_exists($dir)) return 0;
+        if(is_file($dir)) return 1;
+
+        $count   = 0;
+        $entries = glob($dir . '/*');
+        foreach($entries as $fullEntry) $count += $this->getCount($fullEntry);
+
+        return $count;
     }
 
     /**
