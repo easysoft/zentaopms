@@ -45,7 +45,7 @@ class project extends control
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
 
-        if(common::hasPriv('project', 'create')) $this->lang->modulePageActions = html::a($this->createLink('project', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary'");
+        if(common::hasPriv('program', 'createguide')) $this->lang->modulePageActions = html::a($this->createLink('project', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;

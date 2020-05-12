@@ -486,7 +486,7 @@ class commonModel extends model
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
         if($group == 'system' || $group == 'admin') $lang->menu = $lang->$group->menu;
-        if($group == 'program');
+        if($group == 'program') $lang->menu = self::getProgramMainMenu();
 
         /* Print all main menus. */
         $menu       = customModel::getMainMenu();
@@ -571,11 +571,15 @@ class commonModel extends model
     {
         global $config, $lang, $app;
 
+        $moduleName = $app->rawModule;
         if(!isset($lang->$moduleName->menu))
         {
             echo "<ul></ul>";
             return;
         }
+
+        $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
+        if($group == 'program') $lang->$moduleName->menu = self::getProgramModuleMenu($moduleName);
 
         /* get current module and method. */
         $isTutorialMode = commonModel::isTutorialMode();
@@ -585,7 +589,7 @@ class commonModel extends model
         $isMobile       = $app->viewType === 'mhtml';
 
         /* If this is not workflow then use rawModule and rawMethod to judge highlight. */
-        if(!$app->isFlow)
+        if($app->isFlow)
         {
             $currentModule  = $app->rawModule;
             $currentMethod  = $app->rawMethod;
@@ -1900,6 +1904,73 @@ EOD;
         }
 
         return $response;
+    }
+
+    public static function processMenus($menus)
+    {
+        global $app, $lang;
+        foreach($menus as $name => $setting)
+        {
+            $link = is_array($setting) ? $setting['link'] : $setting;
+
+            if(strpos($link, "{PRODUCT}") !== false) $link = str_replace('{PRODUCT}', $app->session->product, $link);
+            if(strpos($link, "{PROJECT}") !== false) $link = str_replace('{PROJECT}', $app->session->project, $link);
+            if(strpos($link, "{PROGRAM}") !== false) $link = str_replace('{PROGRAM}', $app->session->program, $link);
+            if(is_array($setting)) 
+            {
+                $setting['link'] = $link;
+            }
+            else
+            {
+                $setting = $link;
+            }
+
+            $menus->$name = $setting;
+        }
+
+        return $menus;
+    }
+
+    public static function getProgramMainMenu()
+    {
+        global $app, $lang;
+        $dao = new dao();
+        $program = $dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($app->session->program)->fetch();
+        if(!$program->template) return;
+        if($program->template == 'scrum') return $lang->menu;
+        if($program->template == 'cmmi')
+        {
+            $menus = $lang->menu->cmmi;
+            $lang->dividerMenu = ',story,issue,';
+            $lang->menuOrder   = $lang->cmmi->menuOrder; 
+            $lang->menugroup->release = 'release';
+            unset($lang->release->menu);
+
+            return self::processMenus($lang->menu->cmmi);
+        }
+    }
+
+    public static function getProgramModuleMenu($moduleName)
+    {
+        global $app, $lang;
+        $dao = new dao();
+        $program = $dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($app->session->program)->fetch();
+        if(!$program->template) return;
+        if($program->template == 'scrum') return $lang->$moduleName->menu;
+        if($program->template == 'cmmi')
+        {
+            return isset($lang->$moduleName->cmmi->menu) ? self::processMenus($lang->$moduleName->cmmi->menu) : $lang->$moduleName->menu;
+        }
+    }
+
+    public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_RELATION)
+            ->where('AType')->eq($AType)
+            ->andWhere('AID')->eq($AID)
+            ->andWhere('BType')->eq($BType)
+            ->beginIF($BID)->andWhere('BID')->eq($BID)->fi()
+            ->fetchAll();
     }
 }
 

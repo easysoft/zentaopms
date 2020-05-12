@@ -118,16 +118,22 @@ $lang->common = new stdclass();
 $lang->common->common = 'Common Module';
 
 /* Main menu. */
-$lang->menu = new stdclass();
-$lang->menu->my      = '<i class="icon icon-menu-my"></i> Dashboard|my|index';
-$lang->menu->product = '<i class="icon icon-menu-project"></i> Project|product|index|locate=no';
-$lang->menu->doc     = '<i class="icon icon-menu-doc"></i> Doc|doc|index';
-$lang->menu->report  = '<i class="icon icon-menu-report"></i> Report|report|index';
-$lang->menu->company = '<i class="icon icon-menu-users"></i> Company|company|index';
-$lang->menu->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index';
-$lang->menu->recent  = '<i class="icon icon-menu-recent"></i> Recent|recent|index';
+$lang->mainNav = new stdclass();
+$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> Dashboard|my|index|';
+$lang->mainNav->program = '<i class="icon icon-menu-project"></i> Project|program|index|';
+$lang->mainNav->doc     = '<i class="icon icon-menu-doc"></i> Doc|doc|index|';
+$lang->mainNav->report  = '<i class="icon icon-menu-report"></i> Report|report|index|';
+$lang->mainNav->company = '<i class="icon icon-menu-users"></i> Company|company|index|';
+$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> Admin|admin|index|';
+$lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> Recent|recent|index|';
 
 $lang->dividerMenu = ',admin,';
+
+$lang->menu = new stdclass();
+$lang->menu->program = 'Home|program|index';
+$lang->menu->product = $lang->productCommon . '|product|index|locate=no';
+$lang->menu->project = $lang->projectCommon . '|project|index|locate=no';
+$lang->menu->qa      = 'QA|qa|index';
 
 /* Object list in search form. */
 $lang->searchObjects['bug']         = 'Bug';
@@ -500,6 +506,25 @@ $lang->menugroup->repo    = 'ci';
 $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
+
+$lang->navGroup = array();
+$lang->navGroup['product']     = 'program';
+$lang->navGroup['story']       = 'program';
+$lang->navGroup['productplan'] = 'program';
+$lang->navGroup['release']     = 'program';
+$lang->navGroup['tree']        = 'program';
+$lang->navGroup['project']     = 'program';
+$lang->navGroup['task']        = 'program';
+$lang->navGroup['qa']          = 'program';
+$lang->navGroup['bug']         = 'program';
+$lang->navGroup['testcase']    = 'program';
+$lang->navGroup['testtask']    = 'program';
+$lang->navGroup['testreport']  = 'program';
+$lang->navGroup['testsuite']   = 'program';
+$lang->navGroup['caselib']     = 'program';
+$lang->navGroup['feedback']    = 'program';
+
+$lang->navGroup['group'] = 'company';
 
 /* Error info. */
 $lang->error = new stdclass();

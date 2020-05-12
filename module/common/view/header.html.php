@@ -14,15 +14,16 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php $isProgram = (isset($lang->navGroup->{$this->moduleName}) && $lang->navGroup->{$this->moduleName} == 'program');?>
-<?php $isSystem  = (isset($lang->navGroup->{$this->moduleName}) && $lang->navGroup->{$this->moduleName} == 'system');?>
-<?php $isAdmin   = ($this->moduleName == 'company' || $this->moduleName == 'group' || $this->moduleName == 'dept' || $this->moduleName == 'user');?>
+<?php $moduleName = $app->rawModule;?>
+<?php $isProgram = (isset($lang->navGroup->{$moduleName}) && $lang->navGroup->{$moduleName} == 'program');?>
+<?php $isSystem  = (isset($lang->navGroup->{$moduleName}) && $lang->navGroup->{$moduleName} == 'system');?>
+<?php $isAdmin   = ($moduleName == 'company' || $moduleName == 'group' || $moduleName == 'dept' || $moduleName == 'user');?>
 <div id='menu'>
   <div id='menuHeader'>
     <?php $heading = $app->company->name;?>
     <h1 id='companyName' title='<?php echo $heading;?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo html::a(helper::createLink('index'), $heading);?></h1>
   </div>
-  <nav id='menuNav'><?php commonModel::printMainNav($this->moduleName);?></nav>
+  <nav id='menuNav'><?php commonModel::printMainNav($moduleName);?></nav>
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
   </div>
@@ -33,7 +34,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       <div id='heading'>
         <?php if($isProgram && isset($lang->programSwapper)) echo $lang->programSwapper;?>
       </div>
-      <nav id='navbar'><?php ($isProgram || $isSystem || $isAdmin) ? commonModel::printMainmenu($this->moduleName) : common::printModuleMenu($this->moduleName);?></nav>
+      <nav id='navbar'><?php ($isProgram || $isSystem || $isAdmin) ? commonModel::printMainmenu($moduleName) : common::printModuleMenu($moduleName);?></nav>
       <div id='toolbar'>
         <div id="userMenu">
           <?php common::printSearchBox();?>
@@ -44,7 +45,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       </div>
     </div>
   </div>
-  <?php if($isProgram || $isSystem || $isAdmin):?>
+  <?php if($isProgram || $isSystem || $isAdmin && $lang->{$moduleName}->menu):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>

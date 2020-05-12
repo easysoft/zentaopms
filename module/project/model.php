@@ -114,7 +114,7 @@ class projectModel extends model
             }
             else
             {
-                if(common::hasPriv('project', 'create')) $projectIndex .= '<li>' . html::a(helper::createLink('project', 'create'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create) . '</li>';
+                if(common::hasPriv('program', 'createguide')) $projectIndex .= '<li>' . html::a(helper::createLink('program', 'createguide'), '<i class="icon icon-plus"></i> ' . $this->lang->project->create, '', " data-toggle='modal' data-type='ajax'") . '</li>';
             }
 
             $projectIndex .= '</ul></div></div>';
@@ -364,7 +364,7 @@ class projectModel extends model
                 }
             }
 
-            if(!dao::isError()) $this->loadModel('score')->create('project', 'create', $projectID);
+            if(!dao::isError()) $this->loadModel('score')->create('program', 'createguide', $projectID);
             return $projectID;
         }
     }

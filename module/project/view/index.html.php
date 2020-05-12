@@ -12,7 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if(empty($projects)):?>
 <div class="table-empty-tip">
-  <p><span class="text-muted"><?php echo $lang->project->noProject;?></span> <?php common::printLink('project', 'create', '', "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?></p>
+  <p><span class="text-muted"><?php echo $lang->project->noProject;?></span> <?php common::printLink('program', 'createguide', '', "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info' data-toggle='modal' data-type='ajax'");?></p>
 </div>
 <?php else:?>
 <?php echo $this->fetch('block', 'dashboard', 'module=project');?>
