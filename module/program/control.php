@@ -39,7 +39,7 @@ class program extends control
             $projectList = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, 0, 0, 30, $orderBy, $pager);
             foreach($projectList as $projectID => $project)
             {
-                $project->teamCount  = count($this->project->getTeamMembers($projectID));
+                $project->teamCount  = count($this->project->getTeamMembers($project->id));
             }
         }
         else
