@@ -1747,6 +1747,29 @@ class projectModel extends model
     }
 
     /**
+     * Get team slice.
+     * 
+     * @param  array  $teams 
+     * @param  string $begin 
+     * @param  string $end 
+     * @access public
+     * @return array
+     */
+    public function getTeamSlice($teams, $begin, $end)
+    {
+        $members = array();
+        foreach($teams as $account => $team)
+        {
+            if($account == $end) break;
+            if(!empty($begin) and $account != $begin and empty($members)) continue;
+
+            $members[$account] = $team;
+        }
+
+        return $members;
+    }
+
+    /**
      * Get teams which can be imported.
      *
      * @param  string $account

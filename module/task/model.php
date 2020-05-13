@@ -1097,13 +1097,8 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $beginTag = false;
-            foreach($oldTask->team as $account => $team)
-            {
-                if($account == $task->assignedTo) break;
-                if($account == $oldTask->assignedTo) $beginTag = true;
-                if($beginTag) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
-            }
+            $sliceMembers = $this->loadModel('project')->getTeamSlice($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            foreach($sliceMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $this->dao->update(TABLE_TEAM)->set('left')->eq($task->left)
                 ->where('root')->eq($taskID)
@@ -1218,35 +1213,11 @@ class taskModel extends model
         $record = fixer::input('post')->get();
 
         /* Fix bug#3036. */
-        foreach($record->consumed as $id => $item)
-        {
-            if(!trim($item))
-            {
-                $record->consumed[$id] = trim($item);
-                continue;
-            }
-
-            if(!is_numeric($item))
-            {
-                dao::$errors[] = $this->lang->task->error->totalNumber;
-                return false;
-            }
-        }
-
-        foreach($record->left as $id => $item)
-        {
-            if(!trim($item))
-            {
-                $record->left[$id] = trim($item);
-                continue;
-            }
-
-            if(!is_numeric($item))
-            {
-                dao::$errors[] = $this->lang->task->error->estimateNumber;
-                return false;
-            }
-        }
+        foreach($record->consumed as $id => $item) $record->consumed[$id] = trim($item);
+        foreach($record->left     as $id => $item) $record->left[$id]     = trim($item);
+        foreach($record->consumed as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
+        foreach($record->left     as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->estimateNumber;
+        if(dao::isError()) return false;
 
         $estimates    = array();
         $task         = $this->getById($taskID);
@@ -1447,18 +1418,8 @@ class taskModel extends model
                 ->andWhere('type')->eq('task')
                 ->andWhere('account')->eq($oldTask->assignedTo)->exec();
 
-            $beginTag = false;
-            foreach($oldTask->team as $account => $team)
-            {
-                if($account == $task->assignedTo) break;
-                if($account == $oldTask->assignedTo)
-                {
-                    $beginTag = true;
-                    continue;
-                }
-
-                if($beginTag) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
-            }
+            $sliceMembers = $this->loadModel('project')->getTeamSlice($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            foreach($sliceMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
