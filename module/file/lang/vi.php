@@ -46,15 +46,16 @@ $lang->file->extra     = 'Nhận xét';
 
 $lang->file->dragFile            = 'Drag images here.';
 $lang->file->childTaskTips       = 'It\'s a child task if there is a \'>\' before the name.';
-$lang->file->errorNotExists      = "<span class='text-red'>'%s' không là found.</span>";
-$lang->file->errorCanNotWrite    = "<span class='text-red'>'%s' không thể ghi. Vui lòng change its permission. Enter <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";
-$lang->file->confirmDelete       = " Bạn có muốn xóa nó?";
-$lang->file->errorFileSize       = " File size exceeds the limit. It cannot be uploaded!";
-$lang->file->errorFileUpload     = " Uploading failed. The file size might exceeds the limit.";
-$lang->file->errorFileFormate    = " Uploading failed. The file format không là in the prescribed scope.";
-$lang->file->errorFileMove       = " Uploading failed. An error prompts when moving file.";
-$lang->file->dangerFile          = " The file failed to be uploaded for security reasons.";
-$lang->file->errorSuffix         = 'Format is incorrect. .zip files ONLY!';
-$lang->file->errorExtract        = 'Extracting files failed. Files might be damaged or there might be invalid files in the zip package.';
 $lang->file->uploadImagesExplain = 'Ghi chú: upload .jpg, .jpeg, .gif, or .png images. The image name will be the name of the story and the image will be the description.';
-$lang->file->fileNotFound        = 'Tập tin was not found. The physical file might have been deleted!';
+
+$lang->file->errorNotExists   = "<span class='text-red'>'%s' không là found.</span>";
+$lang->file->errorCanNotWrite = "<span class='text-red'>'%s' không thể ghi. Vui lòng change its permission. Enter <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";
+$lang->file->confirmDelete    = " Bạn có muốn xóa nó?";
+$lang->file->errorFileSize    = " File size exceeds the limit. It cannot be uploaded!";
+$lang->file->errorFileUpload  = " Uploading failed. The file size might exceeds the limit.";
+$lang->file->errorFileFormate = " Uploading failed. The file format không là in the prescribed scope.";
+$lang->file->errorFileMove    = " Uploading failed. An error prompts when moving file.";
+$lang->file->dangerFile       = " The file failed to be uploaded for security reasons.";
+$lang->file->errorSuffix      = 'Format is incorrect. .zip files ONLY!';
+$lang->file->errorExtract     = 'Extracting files failed. Files might be damaged or there might be invalid files in the zip package.';
+$lang->file->fileNotFound     = 'Tập tin was not found. The physical file might have been deleted!';
