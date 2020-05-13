@@ -643,40 +643,6 @@ class product extends control
     }
 
     /**
-     * Ajax set unfoldID.
-     * 
-     * @param  int    $productID 
-     * @param  string $action 
-     * @access public
-     * @return void
-     */
-    public function ajaxSetUnfoldID($productID, $action = 'add')
-    {
-        $this->loadModel('setting');
-        $setting     = $this->setting->createDAO($this->setting->parseItemParam("owner={$this->app->user->account}&module=product&section=browse&key=unfoldID"), 'select')->fetch();
-        $newUnfoldID = $this->post->newUnfoldID;
-        if(empty($newUnfoldID)) die();
-
-        $newUnfoldID  = json_decode($newUnfoldID);
-        $unfoldIdList = $setting ? json_decode($setting->value, true) : array();
-        foreach($newUnfoldID as $unfoldID)
-        {
-            unset($unfoldIdList[$productID][$unfoldID]);
-            if($action == 'add') $unfoldIdList[$productID][$unfoldID] = $unfoldID;
-        }
-
-        if(empty($setting))
-        {
-            $this->setting->setItem($this->app->user->account . ".product.browse.unfoldID", json_encode($unfoldIdList));
-        }
-        else
-        {
-            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($unfoldIdList))->where('id')->eq($setting->id)->exec();
-        }
-        die('success');
-    }
-
-    /**
      * Update order.
      *
      * @access public

@@ -18,11 +18,11 @@
 <?php
 /* Set unfold parent taskID. */
 $this->app->loadLang('project');
-$unfoldStories = isset($config->product->browse->unfoldID) ? json_decode($config->product->browse->unfoldID, true) : array();
+$unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
-js::set('unfoldID',  $unfoldStories);
-js::set('unfoldAll', $lang->project->treeLevel['all']);
-js::set('foldAll',   $lang->project->treeLevel['root']);
+js::set('unfoldStories', $unfoldStories);
+js::set('unfoldAll',     $lang->project->treeLevel['all']);
+js::set('foldAll',       $lang->project->treeLevel['root']);
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
