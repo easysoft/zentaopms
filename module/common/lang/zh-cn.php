@@ -123,6 +123,7 @@ $lang->mainNav->my        = '<i class="icon icon-menu-my"></i> 地盘|my|index|'
 $lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|index|';
 $lang->mainNav->doclib    = '<i class="icon icon-menu-doc"></i> 文档|doc|index|';
 $lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> 报表|report|index|';
+$lang->mainNav->attend    = '<i class="icon icon-file"></i> 办公|attend|personal|';
 $lang->mainNav->system    = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
 $lang->mainNav->admin     = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
 $lang->mainNav->recent    = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
@@ -132,11 +133,12 @@ $lang->dividerMenu = ',admin,';
 
 /* Scrum menu. */
 $lang->menu = new stdclass();
-$lang->menu->program = '主页|program|index';
+//$lang->menu->program = '主页|program|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = '迭代|project|index|locate=no';
 $lang->menu->qa      = '测试|qa|index';
 
+$lang->program = new stdclass();
 
 /* System menu. */
 $lang->system = new stdclass();
@@ -152,9 +154,6 @@ $lang->system->menu->subject     = array('link' => '科目|subject|browse|');
 
 $lang->system->dividerMenu = ',measurement,reviewcl,';
 
-$lang->stage = new stdclass();
-$lang->stage->menu = $lang->system->menu;
-
 $lang->measurement = new stdclass();
 $lang->measurement->menu = $lang->system->menu;
 
@@ -162,7 +161,7 @@ $lang->sqlbuilder = new stdclass();
 $lang->sqlbuilder->menu = $lang->system->menu;
 
 $lang->auditcl = new stdclass();
-$lang->auditcl->menu = $lang->system->menu;
+$lang->auditcl->menu = new stdclass();
 
 $lang->baseline = new stdclass();
 $lang->baseline->menu = $lang->system->menu;
@@ -177,7 +176,7 @@ $lang->reviewcl = new stdclass();
 $lang->reviewcl->menu = $lang->system->menu;
 
 $lang->subject = new stdclass();
-$lang->subject->menu = $lang->system->menu;
+$lang->subject->menu = new stdclass();
 
 $lang->output = new stdclass();
 $lang->output->menu = $lang->system->menu;
@@ -191,48 +190,52 @@ $lang->classify->menu = $lang->system->menu;
 $lang->reviewsetting = new stdclass();
 $lang->reviewsetting->menu = $lang->system->menu;
 
-$lang->moduleMenu = new stdclass();
-$lang->moduleMenu->stage = new stdclass();
-$lang->moduleMenu->stage->browse  = '阶段列表|stage|browse|';
-$lang->moduleMenu->stage->settype = '阶段类型|stage|settype|';
+$lang->stage = new stdclass();
+$lang->stage->menu = new stdclass();
+$lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit');
+$lang->stage->menu->settype = '阶段类型|stage|settype|';
 
-$lang->moduleMenu->measurement = new stdclass();
-$lang->moduleMenu->measurement->settips  = '区间提示|measurement|settips|';
-$lang->moduleMenu->measurement->define   = '度量定义|measurement|browse|type=basic';
-$lang->moduleMenu->measurement->data     = array('link' => '度量数据|sqlbuilder|browsesqlview|', 'subModule' => 'sqlbuilder');
-$lang->moduleMenu->measurement->template = '报表模板|measurement|template|';
+$lang->measurement = new stdclass();
+$lang->measurement->menu = new stdclass();
+$lang->measurement->menu->settips  = '区间提示|measurement|settips|';
+$lang->measurement->menu->define   = array('link' => '度量定义|measurement|browse|type=basic', 'alias' => 'createbasic');
+$lang->measurement->menu->data     = array('link' => '度量数据|sqlbuilder|browsesqlview|', 'subModule' => 'sqlbuilder');
+$lang->measurement->menu->template = array('link' => '报表模板|measurement|template|', 'alias' => 'createtemplate');
 
-$lang->moduleMenu->sqlbuilder = new stdclass();
-$lang->moduleMenu->sqlbuilder = $lang->moduleMenu->measurement;
+$lang->sqlbuilder = new stdclass();
+$lang->sqlbuilder->menu = $lang->measurement->menu;
 
-$lang->moduleMenu->cmcl = new stdclass();
-$lang->moduleMenu->cmcl->browse   = array('link' => '审计清单|cmcl|browse|', 'subModule' => 'cmcl');
-$lang->moduleMenu->cmcl->catalog  = '文档目录|baseline|catalog|';
-$lang->moduleMenu->cmcl->template = array('link' => '文档模板|baseline|template|', 'alias' => 'createtemplate,edittemplate,view,editbook,managebook');
+$lang->cmcl = new stdclass();
+$lang->cmcl->menu = new stdclass();
+$lang->cmcl->menu->browse   = array('link' => '审计清单|cmcl|browse|', 'subModule' => 'cmcl');
+$lang->cmcl->menu->catalog  = '文档目录|baseline|catalog|';
+$lang->cmcl->menu->template = array('link' => '文档模板|baseline|template|', 'alias' => 'createtemplate,edittemplate,view,editbook,managebook');
 
-$lang->moduleMenu->baseline = new stdclass();
-$lang->moduleMenu->baseline = $lang->moduleMenu->cmcl;
+$lang->baseline = new stdclass();
+$lang->baseline->menu = $lang->cmcl->menu;
 
-$lang->moduleMenu->process = new stdclass();
-$lang->moduleMenu->process->browse   = array('link' => '标准过程|process|browse|', 'subModule' => 'process');
-$lang->moduleMenu->process->activity = array('link' => '活动|activity|browse|', 'subModule' => 'activity');
-$lang->moduleMenu->process->output   = array('link' => '文档|output|browse|', 'subModule' => 'output');
-$lang->moduleMenu->process->classify = array('link' => '分类项|classify|browse|', 'subModule' => 'classify');
+$lang->process = new stdclass();
+$lang->process->menu = new stdclass();
+$lang->process->menu->browse   = array('link' => '标准过程|process|browse|', 'subModule' => 'process');
+$lang->process->menu->activity = array('link' => '活动|activity|browse|', 'subModule' => 'activity');
+$lang->process->menu->output   = array('link' => '文档|output|browse|', 'subModule' => 'output');
+$lang->process->menu->classify = array('link' => '分类项|classify|browse|', 'subModule' => 'classify');
 
-$lang->moduleMenu->activity = new stdclass();
-$lang->moduleMenu->output   = new stdclass();
-$lang->moduleMenu->classify = new stdclass();
-$lang->moduleMenu->activity = $lang->moduleMenu->process;
-$lang->moduleMenu->output   = $lang->moduleMenu->process;
-$lang->moduleMenu->classify = $lang->moduleMenu->process;
+$lang->activity = new stdclass();
+$lang->output   = new stdclass();
+$lang->classify = new stdclass();
+$lang->activity->menu = $lang->process->menu;
+$lang->output->menu   = $lang->process->menu;
+$lang->classify->menu = $lang->process->menu;
 
-$lang->moduleMenu->reviewcl = new stdclass();
-$lang->moduleMenu->reviewcl->browse   = array('link' => '检查清单|reviewcl|browse|category=PP', 'subModule' => 'reviewcl');
-$lang->moduleMenu->reviewcl->version  = array('link' => '版本号|reviewsetting|version|');
-$lang->moduleMenu->reviewcl->reviewer = array('link' => '评审人|reviewsetting|reviewer|');
+$lang->reviewcl = new stdclass();
+$lang->reviewcl->menu = new stdclass();
+$lang->reviewcl->menu->browse   = array('link' => '检查清单|reviewcl|browse|category=PP', 'subModule' => 'reviewcl');
+$lang->reviewcl->menu->version  = array('link' => '版本号|reviewsetting|version|');
+$lang->reviewcl->menu->reviewer = array('link' => '评审人|reviewsetting|reviewer|');
 
-$lang->moduleMenu->reviewsetting = new stdclass();
-$lang->moduleMenu->reviewsetting = $lang->moduleMenu->reviewcl;
+$lang->reviewsetting = new stdclass();
+$lang->reviewsetting->menu = $lang->reviewcl->menu;
 
 /* 查询条中可以选择的对象列表。*/
 $lang->searchObjects['bug']         = 'Bug';
@@ -494,12 +497,13 @@ $lang->dept->menu    = new stdclass();
 $lang->group->menu   = new stdclass();
 $lang->user->menu    = new stdclass();
 
-$lang->moduleMenu->company = new stdclass();
-$lang->moduleMenu->company->browseUser  = array('link' => '用户|company|browse', 'subModule' => ',user,');
-$lang->moduleMenu->company->dept        = array('link' => '部门|dept|browse', 'subModule' => 'dept');
-$lang->moduleMenu->company->browseGroup = array('link' => '权限|group|browse', 'subModule' => 'group');
-$lang->moduleMenu->company->dynamic     = '动态|company|dynamic|';
-$lang->moduleMenu->company->view        = array('link' => '公司|company|view');
+$lang->company = new stdclass();
+$lang->company->menu = new stdclass();
+$lang->company->menu->browseUser  = array('link' => '用户|company|browse', 'subModule' => ',user,');
+$lang->company->menu->dept        = array('link' => '部门|dept|browse', 'subModule' => 'dept');
+$lang->company->menu->browseGroup = array('link' => '权限|group|browse', 'subModule' => 'group');
+$lang->company->menu->dynamic     = '动态|company|dynamic|';
+$lang->company->menu->view        = array('link' => '公司|company|view');
 
 $lang->moduleMenu->dept  = new stdclass();
 $lang->moduleMenu->group = new stdclass();
@@ -524,10 +528,10 @@ $lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModul
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
 $lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron');
 
-$lang->company->menu = $lang->admin->menu;
-$lang->dept->menu    = $lang->admin->menu;
-$lang->group->menu   = $lang->admin->menu;
-$lang->user->menu    = $lang->admin->menu;
+$lang->company->menu = $lang->company->menu;
+$lang->dept->menu    = $lang->company->menu;
+$lang->group->menu   = $lang->company->menu;
+$lang->user->menu    = $lang->company->menu;
 
 $lang->admin->subMenu = new stdclass();
 $lang->admin->subMenu->message = new stdclass();
@@ -567,18 +571,18 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-$lang->convert->menu   = $lang->admin->menu;
-$lang->upgrade->menu   = $lang->admin->menu;
-$lang->action->menu    = $lang->admin->menu;
-$lang->backup->menu    = $lang->admin->menu;
-$lang->cron->menu      = $lang->admin->menu;
-$lang->extension->menu = $lang->admin->menu;
-$lang->custom->menu    = $lang->admin->menu;
-$lang->mail->menu      = $lang->admin->menu;
-$lang->dev->menu       = $lang->admin->menu;
-$lang->entry->menu     = $lang->admin->menu;
-$lang->webhook->menu   = $lang->admin->menu;
-$lang->message->menu   = $lang->admin->menu;
+//$lang->convert->menu   = $lang->admin->menu;
+//$lang->upgrade->menu   = $lang->admin->menu;
+//$lang->action->menu    = $lang->admin->menu;
+//$lang->backup->menu    = $lang->admin->menu;
+//$lang->cron->menu      = $lang->admin->menu;
+//$lang->extension->menu = $lang->admin->menu;
+//$lang->custom->menu    = $lang->admin->menu;
+//$lang->mail->menu      = $lang->admin->menu;
+//$lang->dev->menu       = $lang->admin->menu;
+//$lang->entry->menu     = $lang->admin->menu;
+//$lang->webhook->menu   = $lang->admin->menu;
+//$lang->message->menu   = $lang->admin->menu;
 
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
@@ -621,23 +625,21 @@ $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
 
-
-$lang->menugroup->stage         = 'system';
-$lang->menugroup->cmcl          = 'system';
-$lang->menugroup->auditcl       = 'system';
-$lang->menugroup->measurement   = 'system';
-$lang->menugroup->sqlbuilder    = 'system';
-$lang->menugroup->baseline      = 'system';
-$lang->menugroup->activity      = 'system';
-$lang->menugroup->output        = 'system';
-$lang->menugroup->classify      = 'system';
-$lang->menugroup->reviewsetting = 'system';
-$lang->menugroup->process       = 'system';
-$lang->menugroup->reviewcl      = 'system';
-$lang->menugroup->subject       = 'system';
+//$lang->menugroup->cmcl          = 'system';
+//$lang->menugroup->auditcl       = 'system';
+//$lang->menugroup->measurement   = 'system';
+//$lang->menugroup->sqlbuilder    = 'system';
+//$lang->menugroup->baseline      = 'system';
+//$lang->menugroup->activity      = 'system';
+//$lang->menugroup->output        = 'system';
+//$lang->menugroup->classify      = 'system';
+//$lang->menugroup->reviewsetting = 'system';
+//$lang->menugroup->reviewcl      = 'system';
+//$lang->menugroup->subject       = 'system';
 
 /* Nav group.*/
 $lang->navGroup = new stdclass();
+$lang->navGroup->my     = 'my';
 $lang->navGroup->todo   = 'my';
 $lang->navGroup->effort = 'my';
 
@@ -690,22 +692,25 @@ $lang->navGroup->baseline      = 'system';
 $lang->navGroup->reviewcl      = 'system';
 $lang->navGroup->reviewsetting = 'system';
 
+$lang->navGroup->attend   = 'attend';
 $lang->navGroup->leave    = 'attend';
 $lang->navGroup->makeup   = 'attend';
 $lang->navGroup->overtime = 'attend';
 $lang->navGroup->lieu     = 'attend';
 $lang->navGroup->holiday  = 'attend';
 
-$lang->navGroup->company  = 'admin';
-$lang->navGroup->dept     = 'admin';
-$lang->navGroup->ldap     = 'admin';
-$lang->navGroup->group    = 'admin';
-$lang->navGroup->user     = 'admin';
-$lang->navGroup->custom   = 'admin';
-$lang->navGroup->cron     = 'admin';
-$lang->navGroup->backup   = 'admin';
-$lang->navGroup->mail     = 'admin';
-$lang->navGroup->dev      = 'admin';
+$lang->navGroup->admin     = 'admin';
+$lang->navGroup->company   = 'admin';
+$lang->navGroup->dept      = 'admin';
+$lang->navGroup->ldap      = 'admin';
+$lang->navGroup->group     = 'admin';
+$lang->navGroup->user      = 'admin';
+$lang->navGroup->custom    = 'admin';
+$lang->navGroup->cron      = 'admin';
+$lang->navGroup->backup    = 'admin';
+$lang->navGroup->mail      = 'admin';
+$lang->navGroup->dev       = 'admin';
+$lang->navGroup->extension = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
@@ -1152,7 +1157,6 @@ $lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'sub
 $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
 $lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';
 
-$lang->program = new stdclass();
 $lang->moduleMenu->cmmi = new stdclass();
 $lang->moduleMenu->cmmi->workestimation = new stdclass();
 $lang->moduleMenu->cmmi->programplan    = new stdclass();
@@ -1224,4 +1228,3 @@ $lang->menu->scrum->qa      = '测试|qa|index';
 $lang->moduleMenu->scrum->product     = $lang->product->menu;
 $lang->moduleMenu->scrum->project     = $lang->project->menu;
 $lang->moduleMenu->scrum->release     = $lang->product->menu;
-$lang->moduleMenu->scrum->qa          = $lang->qa->menu;
