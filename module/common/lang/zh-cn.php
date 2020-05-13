@@ -119,14 +119,15 @@ $lang->common->common = '公有模块';
 
 /* 主导航菜单。*/
 $lang->mainNav = new stdclass();
-$lang->mainNav->my      = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
-$lang->mainNav->program = '<i class="icon icon-menu-project"></i> 项目|program|index|';
-$lang->mainNav->doclib  = '<i class="icon icon-menu-doc"></i> 文档|doc|index|';
-$lang->mainNav->report  = '<i class="icon icon-menu-report"></i> 报表|report|index|';
-$lang->mainNav->system  = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
-$lang->mainNav->admin   = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
-$lang->mainNav->recent  = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
+$lang->mainNav->my        = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
+$lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|index|';
+$lang->mainNav->doclib    = '<i class="icon icon-menu-doc"></i> 文档|doc|index|';
+$lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> 报表|report|index|';
+$lang->mainNav->system    = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
+$lang->mainNav->admin     = '<i class="icon icon-menu-backend"></i> 后台|admin|index|';
+$lang->mainNav->recent    = '<i class="icon icon-menu-recent"></i> 近期|recent|index|';
 
+$lang->reporting = new stdclass();
 $lang->dividerMenu = ',admin,';
 
 /* Scrum menu. */
@@ -599,6 +600,7 @@ $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
 $lang->menugroup->doclib      = 'doc';
+$lang->menugroup->report      = 'reporting';
 $lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
 $lang->menugroup->todo        = 'my';
@@ -671,7 +673,8 @@ $lang->navGroup->auditplan      = 'program';
 $lang->navGroup->cm             = 'program';
 $lang->navGroup->nc             = 'program';
 
-$lang->navGroup->doc = 'doclib';
+$lang->navGroup->doc    = 'doclib';
+$lang->navGroup->report = 'reporting';
 
 $lang->navGroup->stage         = 'system';
 $lang->navGroup->measurement   = 'system';
@@ -1144,7 +1147,7 @@ $lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={
 $lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}');
 $lang->menu->cmmi->issue          = '问题|issue|browse|';
 $lang->menu->cmmi->risk           = '风险|risk|browse|';
-$lang->menu->cmmi->report         = '度量|report|programsummary|program={PROGRAM}';
+$lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,');
 $lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => ',auditplan,nc,');
 $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
 $lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';

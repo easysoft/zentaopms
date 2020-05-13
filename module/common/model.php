@@ -2080,7 +2080,7 @@ EOD;
         {
             if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
             if($moduleName == 'product') $lang->$moduleName->dividerMenu = ',plan,project,doc,';
-            if($moduleName == 'project') $lang->$moduleName->dividerMenu = ',story,team,product,';
+            if($moduleName == 'project') $lang->$moduleName->dividerMenu = ',story,team,';
             return self::processMenuVars($lang->moduleMenu->scrum->$moduleName);
         }
         if($program->template == 'cmmi')
