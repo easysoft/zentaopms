@@ -56,7 +56,7 @@
 <div id="mainContent" class="main-row">
   <div class='main-col col-8'>
     <div class='cell' style='word-break:break-all'>
-      <?php if($case->auto != 'unit' or empty(!$case->precondition)):?>
+      <?php if($case->auto != 'unit' and !empty($case->precondition)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->precondition;?></div>
         <div class="detail-content article-content"><?php echo nl2br($case->precondition);?></div>
