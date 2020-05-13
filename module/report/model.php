@@ -318,7 +318,18 @@ class reportModel extends model
         $allTasks = $stmt->fetchAll('id');
         if(empty($allTasks)) return array();
 
-        $tasks = $stmt->beginIF($dept)->andWhere('t1.assignedTo')->in(array_keys($deptUsers))->fi()->fetchAll('id');
+        $tasks = array();
+        if(empty($dept))
+        {
+            $tasks = $allTasks;
+        }
+        else
+        {
+            foreach($allTasks as $taskID => $task)
+            {
+                if(isset($deptUsers[$task->assignedTo])) $tasks[$taskID] = $task;
+            }
+        }
 
         /* Fix bug for children. */
         $parents       = array();
