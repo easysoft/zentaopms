@@ -8,8 +8,7 @@ $lang->menuOrder[25] = 'qa';
 $lang->menuOrder[30] = 'ci';
 $lang->menuOrder[35] = 'doc';
 $lang->menuOrder[40] = 'report';
-$lang->menuOrder[45] = 'company';
-$lang->menuOrder[50] = 'admin';
+$lang->menuOrder[45] = 'admin';
 
 /* index menu order. */
 $lang->index->menuOrder[5]  = 'product';
@@ -103,21 +102,21 @@ $lang->report->menuOrder[20] = 'test';
 $lang->report->menuOrder[25] = 'staff';
 
 /* company menu order. */
-$lang->company->menuOrder[5]  = 'browseUser';
-$lang->company->menuOrder[10] = 'dept';
-$lang->company->menuOrder[15] = 'browseGroup';
-$lang->company->menuOrder[20] = 'dynamic';
-$lang->company->menuOrder[25] = 'view';
-$lang->company->menuOrder[30] = 'addGroup';
-$lang->company->menuOrder[35] = 'batchAddUser';
-$lang->company->menuOrder[40] = 'addUser';
-$lang->dept->menuOrder        = $lang->company->menuOrder;
-$lang->group->menuOrder       = $lang->company->menuOrder;
-$lang->user->menuOrder        = $lang->company->menuOrder;
+//$lang->company->menuOrder[5]  = 'browseUser';
+//$lang->company->menuOrder[10] = 'dept';
+//$lang->company->menuOrder[15] = 'browseGroup';
+//$lang->company->menuOrder[20] = 'dynamic';
+//$lang->company->menuOrder[25] = 'view';
+//$lang->company->menuOrder[30] = 'addGroup';
+//$lang->company->menuOrder[35] = 'batchAddUser';
+//$lang->company->menuOrder[40] = 'addUser';
+//$lang->dept->menuOrder        = $lang->company->menuOrder;
+//$lang->group->menuOrder       = $lang->company->menuOrder;
+//$lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
-$lang->admin->menuOrder[6]  = 'company';
+$lang->admin->menuOrder[9]  = 'company';
 $lang->admin->menuOrder[10] = 'message';
 $lang->admin->menuOrder[15] = 'custom';
 $lang->admin->menuOrder[20] = 'sso';
@@ -127,6 +126,11 @@ $lang->admin->menuOrder[35] = 'translate';
 $lang->admin->menuOrder[40] = 'data';
 $lang->admin->menuOrder[45] = 'safe';
 $lang->admin->menuOrder[50] = 'system';
+
+$lang->dept->menuOrder    = & $lang->admin->menuOrder;
+$lang->group->menuOrder   = & $lang->admin->menuOrder;
+$lang->user->menuOrder    = & $lang->admin->menuOrder;
+$lang->company->menuOrder = & $lang->admin->menuOrder;
 
 $lang->admin->subMenuOrder = new stdclass();
 $lang->admin->subMenuOrder->message[5]  = 'mail';
