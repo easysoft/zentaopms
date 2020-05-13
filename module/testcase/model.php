@@ -81,7 +81,7 @@ class testcaseModel extends model
                     if($importPriv)
                     {
                         $link = helper::createLink('testcase', 'import', "productID=$productID&branch=$branch");
-                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->importFile, '', "class='export'") . '</li>';
+                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->fileImport, '', "class='export'") . '</li>';
                     }
                     if($importFromLibPriv)
                     {
@@ -1237,8 +1237,8 @@ class testcaseModel extends model
 
         if($this->post->isEndPage)
         {
-            unlink($this->session->importFile);
-            unset($_SESSION['importFile']);
+            unlink($this->session->fileImport);
+            unset($_SESSION['fileImport']);
         }
     }
 

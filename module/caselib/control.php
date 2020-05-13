@@ -547,7 +547,7 @@ class caselib extends control
                 if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
             }
 
-            $this->session->set('importFile', $fileName);
+            $this->session->set('fileImport', $fileName);
 
             die(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
         }
@@ -567,7 +567,7 @@ class caselib extends control
     {
         $this->loadModel('testcase');
 
-        $file    = $this->session->importFile;
+        $file    = $this->session->fileImport;
         $tmpPath = $this->loadModel('file')->getImportTmp();
         $tmpFile = $tmpPath . DS . md5(basename($file));
 
@@ -744,8 +744,8 @@ class caselib extends control
 
         if(empty($caseData))
         {
-            unlink($this->session->importFile);
-            unset($_SESSION['importFile']);
+            unlink($this->session->fileImport);
+            unset($_SESSION['fileImport']);
             echo js::alert($this->lang->error->noData);
             die(js::locate($this->createLink('caselib', 'browse', "libID=$libID")));
         }

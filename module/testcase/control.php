@@ -1419,7 +1419,7 @@ class testcase extends control
                 if(count($columnKey) == 0) die(js::alert($this->lang->testcase->errorEncode));
             }
 
-            $this->session->set('importFile', $fileName);
+            $this->session->set('fileImport', $fileName);
 
             die(js::locate(inlink('showImport', "productID=$productID&branch=$branch"), 'parent.parent'));
         }
@@ -1509,7 +1509,7 @@ class testcase extends control
      */
     public function showImport($productID, $branch = 0, $pagerID = 1, $maxImport = 0)
     {
-        $file    = $this->session->importFile;
+        $file    = $this->session->fileImport;
         $tmpPath = $this->loadModel('file')->getImportTmp();
         $tmpFile = $tmpPath . DS . md5(basename($file));
 

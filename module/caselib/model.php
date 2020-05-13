@@ -91,7 +91,7 @@ class caselibModel extends model
                 if(common::hasPriv('caselib', 'import'))
                 {
                     $link = helper::createLink('caselib', 'import', "libID=$libID");
-                    $pageActions .= html::a($link, "<i class='icon muted icon-import'> </i>" . $this->lang->testcase->importFile, '', "class='btn btn-link export'");
+                    $pageActions .= html::a($link, "<i class='icon muted icon-import'> </i>" . $this->lang->testcase->fileImport, '', "class='btn btn-link export'");
                 }
                 $pageActions .= '</div>';
                 $params = "libID=$libID&moduleID=" . (isset($moduleID) ? $moduleID : 0);
@@ -565,8 +565,8 @@ class caselibModel extends model
 
         if($this->post->isEndPage)
         {
-            unlink($this->session->importFile);
-            unset($_SESSION['importFile']);
+            unlink($this->session->fileImport);
+            unset($_SESSION['fileImport']);
         }
     }
 
