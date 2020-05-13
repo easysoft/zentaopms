@@ -321,7 +321,7 @@ class testreportModel extends model
      * @param  string $idList 
      * @param  object $pager 
      * @access public
-     * @return void
+     * @return array
      */
     public function getTaskCases($tasks, $begin, $end, $idList = '', $pager = null)
     {
