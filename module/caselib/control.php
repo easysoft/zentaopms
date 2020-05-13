@@ -763,7 +763,7 @@ class caselib extends control
         $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
         if(empty($caseData)) die(js::locate(inlink('browse', "libID=$libID")));
 
-        /* Judge whether the editedTasks is too large and set session. */
+        /* Judge whether the items is too large and set session. */
         $countInputVars  = count($caseData) * 9 + (isset($stepVars) ? $stepVars : 0);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);

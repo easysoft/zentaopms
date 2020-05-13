@@ -766,7 +766,7 @@ class testcase extends control
 
         // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
 
-        /* Judge whether the editedTasks is too large and set session. */
+        /* Judge whether the editedCases is too large and set session. */
         $countInputVars = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
@@ -1694,8 +1694,8 @@ class testcase extends control
         $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
         if(empty($caseData)) die(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
 
-        /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($caseData) * 12 + $stepVars;
+        /* Judge whether the editedCases is too large and set session. */
+        $countInputVars  = count($caseData) * 12 + (isset($stepVars) ? $stepVars : 0);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
