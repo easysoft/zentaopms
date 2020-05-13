@@ -1,11 +1,26 @@
 <?php include '../../common/view/header.html.php';?>
-<style>
-.affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
-</style>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
+<?php elseif(empty($maxImport)):?>
+<div id="mainContent" class="main-content">
+  <div class="main-header">
+    <h2><?php echo $lang->testcase->import;?></h2>
+  </div>
+  <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
+  <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>
+</div>
+<script>
+$(function()
+{
+    $('#maxImport').keyup(function()
+    {
+        if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
+    });
+    $('#import').click(function(){location.href = createLink('testcase', 'showImport', "productID=<?php echo $productID;?>&branch=<?php echo $branch?>&pageID=1&maxImport=" + $('#maxImport').val())})
+});
+</script>
 <?php else:?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">

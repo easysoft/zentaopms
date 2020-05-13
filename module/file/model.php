@@ -349,14 +349,14 @@ class fileModel extends model
     }
 
     /**
-     * Get showImport path.
+     * Get tmp import path.
      * 
      * @access public
      * @return string
      */
-    public function getShowImportPath()
+    public function getImportTmp()
     {
-        $path = $this->app->getCacheRoot() . 'showimport';
+        $path = $this->app->getTmpRoot() . 'import';
         if(!is_dir($path)) mkdir($path, 0755, true);
 
         return $path;

@@ -1397,8 +1397,8 @@ class testcase extends control
 
             if(count($columnKey) <= 3 or $this->post->encode != 'utf-8')
             {
-                $fc     = file_get_contents($fileName);
                 $encode = $this->post->encode != "utf-8" ? $this->post->encode : 'gbk';
+                $fc     = file_get_contents($fileName);
                 $fc     = helper::convertEncoding($fc, $encode, 'utf-8');
                 file_put_contents($fileName, $fc);
 
@@ -1500,29 +1500,30 @@ class testcase extends control
     /**
      * Show import data
      *
-     * @param  int    $productID
+     * @param  int    $productID 
      * @param  int    $branch 
      * @param  int    $pagerID 
+     * @param  int    $maxImport 
      * @access public
      * @return void
      */
-    public function showImport($productID, $branch = 0, $pagerID = 1)
+    public function showImport($productID, $branch = 0, $pagerID = 1, $maxImport = 0)
     {
-        $file      = $this->session->importFile;
-        $cachePath = $this->loadModel('file')->getShowImportPath();
-        $cacheFile = $cachePath . DS . md5(basename($file));
-        $maxImport = $this->config->file->maxImport;
+        $file    = $this->session->importFile;
+        $tmpPath = $this->loadModel('file')->getImportTmp();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
         if($_POST)
         {
             $this->testcase->createFromImport($productID, (int)$branch);
             if($this->post->isEndPage)
             {
-                unlink($cacheFile);
+                unlink($tmpFile);
                 die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
             }
             else
             {
-                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1)), 'parent'));
+                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport"), 'parent'));
             }
         }
 
@@ -1535,9 +1536,9 @@ class testcase extends control
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
 
-        if($pagerID != 1 and file_exists($cacheFile))
+        if(!empty($maxImport) and file_exists($tmpFile))
         {
-            $data = unserialize(file_get_contents($cacheFile));
+            $data = unserialize(file_get_contents($tmpFile));
             $caseData = $data['caseData'];
             $stepData = $data['stepData'];
         }
@@ -1670,7 +1671,7 @@ class testcase extends control
 
             $data['caseData'] = $caseData;
             $data['stepData'] = $stepData;
-            file_put_contents($cacheFile, serialize($data));
+            file_put_contents($tmpFile, serialize($data));
         }
 
         if(empty($caseData))
@@ -1680,6 +1681,15 @@ class testcase extends control
         }
 
         $allCount = count($caseData);
+        if(empty($maxImport) and $allCount > $this->config->file->maxImport)
+        {
+            $this->view->allCount  = $allCount;
+            $this->view->maxImport = $maxImport;
+            $this->view->productID = $productID;
+            $this->view->branch    = $branch;
+            die($this->display());
+        }
+
         $allPager = ceil($allCount / $maxImport);
         $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
         if(empty($caseData)) die(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
@@ -1705,6 +1715,7 @@ class testcase extends control
         $this->view->pagerID   = $pagerID;
         $this->view->branch    = $branch;
         $this->view->product   = $this->products[$productID];
+        $this->view->maxImport = $maxImport;
         $this->display();
     }
 
