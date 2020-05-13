@@ -58,6 +58,8 @@ $lang->trunk        = 'Trunk';
 $lang->sort         = 'Sắp xếp';
 $lang->required     = 'Bắt buộc';
 $lang->noData       = 'Không có dữ liệu.';
+$lang->fullscreen   = 'Fullscreen';
+$lang->retrack      = 'Retrack';
 
 $lang->actions         = 'Hành động';
 $lang->restore         = 'Thiết lập lại';

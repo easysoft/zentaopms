@@ -47,8 +47,6 @@ $lang->doc->users              = 'Người dùng';
 $lang->doc->item               = ' Items';
 $lang->doc->num             = 'Documents';
 $lang->doc->searchResult             = 'Search kết quả';
-$lang->doc->fullscreen            = 'Fullscreen';
-$lang->doc->retrack            = 'Retrack';
 
 $lang->doc->moduleDoc             = 'By Module';
 $lang->doc->searchDoc             = 'Tìm kiếm';

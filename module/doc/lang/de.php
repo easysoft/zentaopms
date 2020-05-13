@@ -47,8 +47,6 @@ $lang->doc->users          = 'Benutzer';
 $lang->doc->item           = ' Einträge';
 $lang->doc->num            = 'Doks';
 $lang->doc->searchResult   = 'Suchergebnis';
-$lang->doc->fullscreen     = 'Fullscreen';
-$lang->doc->retrack        = 'Retrack';
 
 $lang->doc->moduleDoc      = 'Nach Modulen';
 $lang->doc->searchDoc      = 'Suche';

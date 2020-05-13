@@ -58,6 +58,8 @@ $lang->trunk        = 'Trunk';
 $lang->sort         = 'Sortieren';
 $lang->required     = 'Pflicht';
 $lang->noData       = 'Kein Datensatz';
+$lang->fullscreen   = 'Fullscreen';
+$lang->retrack      = 'Retrack';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';

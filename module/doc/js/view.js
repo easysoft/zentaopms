@@ -7,37 +7,22 @@ $(function()
         setTimeout($.resetToolbarPosition, 50);
     }
 
-    if($.cookie('fullscreen') == 'true') 
-    {
-        $('body').addClass('doc-fullscreen');
-        $('.side-col').addClass('hidden');
-        $('#mainContent .fullscreen-btn').attr('title', retrack);
-        $('#mainContent .fullscreen-btn').html('<i class="icon icon-fullscreen"></i> ' + retrack);
-    }
-    else
-    {
-        $('body').removeClass('doc-feullscreen');
-        $('.side-col').removeClass('hidden');
-        $('#mainContent .fullscreen-btn').attr('title', fullscreen);
-        $('#mainContent .fullscreen-btn').html('<i class="icon icon-fullscreen"></i> ' + fullscreen);
-    }
+    var isFullscreen = $.cookie('docFullscreen') == 'true';
+    $('body').toggleClass('doc-fullscreen', isFullscreen);
+    $('.side-col').toggleClass('hidden', isFullscreen);
+    $('#mainMenu .fullscreen-btn').attr('title', isFullscreen ? retrack : fullscreen);
+    $('#mainMenu .fullscreen-btn').html('<i class="icon icon-fullscreen"></i> ' + (isFullscreen ? retrack : fullscreen));
 
-    $('#mainContent .fullscreen-btn').click(function()
+    $('#mainMenu .fullscreen-btn').click(function()
     {
         $('.side-col').toggleClass('hidden');
         $('body').toggleClass('doc-fullscreen');
-        if($('body').hasClass('doc-fullscreen')) 
-        {
-            $('#mainContent .fullscreen-btn').attr('title', retrack);
-            $('#mainContent .fullscreen-btn').html('<i class="icon icon-fullscreen"></i> ' + retrack);
-            $.cookie('fullscreen', 'true');
-        }
-        else
-        {
-            $('#mainContent .fullscreen-btn').attr('title', fullscreen);
-            $('#mainContent .fullscreen-btn').html('<i class="icon icon-fullscreen"></i> ' + fullscreen);
-            $.cookie('fullscreen', 'false');
-        }
+
+        var isFullscreen = $('body').hasClass('doc-fullscreen');
+        $('#mainMenu .fullscreen-btn').attr('title', isFullscreen ? retrack : fullscreen);
+        $('#mainMenu .fullscreen-btn').html('<i class="icon icon-fullscreen"></i> ' + (isFullscreen ? retrack : fullscreen));
+        $.cookie('docFullscreen', isFullscreen);
+
         setTimeout($.resetToolbarPosition, 50);
     });
 

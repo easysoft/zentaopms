@@ -58,6 +58,8 @@ $lang->trunk        = 'Trunk';
 $lang->sort         = 'Order';
 $lang->required     = 'Required';
 $lang->noData       = 'No data.';
+$lang->fullscreen   = 'Fullscreen';
+$lang->retrack      = 'Retrack';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Reset';

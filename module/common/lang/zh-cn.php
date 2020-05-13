@@ -58,6 +58,8 @@ $lang->trunk        = '主干';
 $lang->sort         = '排序';
 $lang->required     = '必填';
 $lang->noData       = '暂无';
+$lang->fullscreen   = '全屏';
+$lang->retrack      = '收起';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';

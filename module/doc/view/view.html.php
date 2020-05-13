@@ -15,8 +15,8 @@
 <?php echo css::internal($keTableCSS);?>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
 <?php
-js::set('fullscreen', $lang->doc->fullscreen);
-js::set('retrack', $lang->doc->retrack);
+js::set('fullscreen', $lang->fullscreen);
+js::set('retrack', $lang->retrack);
 js::set('sysurl', common::getSysUrl());
 js::set('docID', $doc->id);
 ?>
@@ -69,6 +69,9 @@ js::set('docID', $doc->id);
       </small>
       <?php endif; ?>
     </div>
+  </div>
+  <div class='btn-toolbar pull-right'>
+    <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
   </div>
 </div>
 <div id="mainContent" class="main-row">
@@ -132,7 +135,6 @@ js::set('docID', $doc->id);
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <div class='divider'></div>
-            <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->doc->retrack;?></button>
         <?php
         if(!$doc->deleted)
         {
