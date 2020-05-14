@@ -5,5 +5,5 @@ $(function()
 
 function setCopyProject(programID)
 {
-    location.href = createLink('program', 'create', 'type=' + type + '&copyProgramID=' + programID);
+    location.href = createLink('program', 'create', 'template=' + template + '&copyProgramID=' + programID);
 }

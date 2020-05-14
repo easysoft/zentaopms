@@ -39,14 +39,14 @@
     <div class='main-header'>
       <h2><?php echo $lang->program->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->program->copy;?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->program->type;?></th>
-          <td><?php echo zget($lang->program->typeList, $type, '');?></td><td></td><td></td>
+          <th class='w-120px'><?php echo $lang->program->template;?></th>
+          <td><?php echo zget($lang->program->templateList, $template, '');?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->program->name;?></th>
@@ -57,10 +57,12 @@
           <th><?php echo $lang->program->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
+        <?php if($template == 'cmmi'):?>
         <tr>
           <th><?php echo $lang->program->category;?></th>
           <td><?php echo html::select('category', $lang->program->categoryList, '', "class='form-control'");?></td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->program->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'");?></td>
@@ -81,7 +83,7 @@
           </td>
           <td colspan='2'></td>
         </tr>
-        <?php if($type == 'scrum'):?>
+        <?php if($template == 'scrum'):?>
         <tr>
           <th><?php echo $lang->project->days;?></th>
           <td>
@@ -99,7 +101,7 @@
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
-          <td><?php echo html::hidden('type', $type);?></td>
+          <td><?php echo html::hidden('template', $template);?></td>
           <td></td>
           <td></td>
         </tr>
@@ -158,5 +160,5 @@
     </div>
   </div>
 </div>
-<?php js::set('type', $type);?>
+<?php js::set('template', $template);?>
 <?php include '../../common/view/footer.html.php';?>

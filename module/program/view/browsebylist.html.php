@@ -14,7 +14,7 @@
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
         <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('category', $orderBy, $vars, $lang->program->category);?></th>
-        <th class='w-100px'><?php common::printOrderLink('type', $orderBy, $vars, $lang->program->type);?></th>
+        <th class='w-100px'><?php common::printOrderLink('template', $orderBy, $vars, $lang->program->template);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->budget);?></th>
@@ -38,11 +38,11 @@
         </td>
         <td class='text-left'><?php echo $project->code;?></td>
         <td class='text-left' title='<?php echo $project->name?>'>
-          <?php echo html::a($this->createLink('project', 'task', 'projectID=' . $project->id), $project->name);?>
+          <?php echo html::a($this->createLink('program', 'transfer', 'projectID=' . $project->id), $project->name);?>
         </td>
         <td class='c-status'><span class="status-project status-<?php echo $project->status?>"><?php echo zget($lang->project->statusList, $project->status, '');?></span></td>
         <td class='text-left'><?php echo zget($lang->program->categoryList, $project->category, '');?></td>
-        <td class='text-left'><?php echo zget($lang->program->typeList, $project->type, '');?></td>
+        <td class='text-left'><?php echo zget($lang->program->templateList, $project->template, '');?></td>
         <td class='text-center'><?php echo $project->begin;?></td>
         <td class='text-center'><?php echo $project->end;?></td>
         <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>

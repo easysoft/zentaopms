@@ -36,8 +36,8 @@ $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';
 $lang->program->unitList['dollar'] = 'Dollars';
 
-$lang->program->typeList['scrum'] = "Scrum";
-$lang->program->typeList['cmmi']  = "CMMI";
+$lang->program->templateList['scrum'] = "Scrum";
+$lang->program->templateList['cmmi']  = "CMMI";
 
 $lang->program->categoryList['single']   = "Single product";
 $lang->program->categoryList['multiple'] = "Multiple products";

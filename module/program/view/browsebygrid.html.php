@@ -2,10 +2,10 @@
 <div class='row cell' id='cards'>
   <?php foreach ($projectList as $projectID => $project):?>
   <div class='col' data-id='<?php echo $projectID?>'>
-    <div class='panel' data-url='<?php echo $this->createLink('project', 'task', "projectID=$project->id");?>'>
+    <div class='panel' data-url='<?php echo $this->createLink('program', 'transfer', "projectID=$project->id");?>'>
       <div class='panel-heading'>
         <strong class='project-name' title='<?php echo $project->name;?>'><?php echo $project->name;?></strong>
-        <?php if($project->type === 'cmmi'): ?>
+        <?php if($project->template === 'cmmi'): ?>
         <span class='project-type-label label label-warning label-outline'><?php echo $lang->program->cmmi; ?></span>
         <?php else: ?>
         <span class='project-type-label label label-info label-outline'><?php echo $lang->program->scrum; ?></span>
@@ -31,13 +31,13 @@
           <span><i class='icon icon-clock'></i> <?php printf($lang->program->hoursUnit, $project->hours->totalEstimate); ?></span>
           <span><i class='icon icon-cost'></i> <?php echo $project->budget . '' . zget($lang->program->unitList, $project->budgetUnit);?></span>
         </div>
-        <?php if($project->type === 'cmmi'): ?>
+        <?php //if($project->template === 'cmmi'): ?>
         <div class='project-detail project-stages'>
-          <p class='text-muted'><?php echo $lang->program->ongoingStage; ?></p>
+          <!--p class='text-muted'><?php echo $lang->program->ongoingStage; ?></p-->
           <div class='label label-outline'><?php echo zget($lang->project->statusList, $project->status);?></div>
         </div>
-        <?php else: ?>
-        <div class='project-detail project-iteration'>
+        <?php //else: ?>
+        <!--div class='project-detail project-iteration'>
           <p class='text-muted'><?php echo $lang->program->lastIteration; ?></p>
           <div class='row'>
             <div class='col-xs-5'><?php echo $project->name; ?></div>
@@ -49,8 +49,8 @@
             </div>
             </div>
           </div>
-        </div>
-        <?php endif; ?>
+        </div -->
+        <?php //endif; ?>
       </div>
     </div>
   </div>

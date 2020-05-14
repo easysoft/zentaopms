@@ -29,10 +29,12 @@
           <th><?php echo $lang->program->code;?></th>
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
+        <?php if($project->template == 'cmmi'):?>
         <tr>
           <th><?php echo $lang->program->category;?></th>
           <td><?php echo html::select('category', $lang->program->categoryList, $project->category, "class='form-control'");?></td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->program->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, $project->PM, "class='form-control chosen'");?></td>
@@ -53,7 +55,7 @@
           </td>
           <td colspan='2'></td>
         </tr>
-        <?php if($project->type == 'scrum'):?>
+        <?php if($project->template == 'scrum'):?>
         <tr>
           <th><?php echo $lang->project->days;?></th>
           <td>

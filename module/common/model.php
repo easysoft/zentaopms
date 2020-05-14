@@ -2078,36 +2078,6 @@ EOD;
         return $response;
     }
 
-    public static function processMenus($menus, $group)
-    {
-        global $app, $lang;
-        $processedMenus = array();
-        $moduleName = $app->rawModule;
-        if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
-        foreach($menus as $name => $setting)
-        {   
-            $vars = ''; 
-            $link = is_array($setting) ? $setting['link'] : $setting;
-            $link = explode('|', $link);
-            list($title, $module, $method) = $link;
-            if(isset($link[3])) $vars = $link[3];
-
-            $object = new stdclass();
-            $object->name      = $name;
-            $object->title     = $title;
-            $object->module    = $module;
-            $object->method    = $method;
-            $object->subModule = isset($setting['subModule']) ? $setting['subModule'] : ''; 
-            $object->alias     = isset($setting['alias']) ? $setting['alias'] : ''; 
-            $object->link      = $vars ? helper::createLink($module, $method, $vars) : helper::createLink($module, $method);
-            $object->subMenu   = isset($lang->$moduleName->subMenu->$name) ? self::processMenus($lang->$moduleName->subMenu->$name, $group) : array(); 
-
-            $processedMenus[$name] = $object;
-        }   
-
-        return $processedMenus;
-    }
-
     public static function processMenuVars($menus)
     {    
         global $app, $lang;
@@ -2136,11 +2106,10 @@ EOD;
     public static function getProgramMainMenu($moduleName)
     {
         global $app, $lang;
-        $dao = new dao();
-        $program = $dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($app->session->program)->fetch();
-        if(!$program->template) return;
-        if($program->template == 'scrum') return $lang->menu;
-        if($program->template == 'cmmi') 
+        $template = $app->session->programTemplate;
+        if(!$template) return;
+        if($template == 'scrum') return $lang->menu;
+        if($template == 'cmmi') 
         {
             unset($lang->menuOrder);
             $lang->release->menu        = new stdclass();
@@ -2154,11 +2123,9 @@ EOD;
     public static function getProgramModuleMenu($moduleName)
     {
         global $app, $lang;
-        $dao = new dao();
-        $program = $dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($app->session->program)->fetch();
-        if(!$program->template) return;
-        if($program->template == 'scrum'); //return self::processMenuVars($lang->moduleMenu->scrum->$moduleName);
-        if($program->template == 'cmmi') 
+        $template = $app->session->programTemplate;
+        if(!$template) return;
+        if($template == 'cmmi') 
         {
             $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }

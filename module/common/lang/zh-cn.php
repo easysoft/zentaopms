@@ -121,7 +121,6 @@ $lang->common->common = '公有模块';
 $lang->mainNav = new stdclass();
 $lang->mainNav->my        = '<i class="icon icon-menu-my"></i> 地盘|my|index|';
 $lang->mainNav->program   = '<i class="icon icon-menu-project"></i> 项目|program|index|';
-$lang->mainNav->doclib    = '<i class="icon icon-menu-doc"></i> 文档|doc|index|';
 $lang->mainNav->reporting = '<i class="icon icon-menu-report"></i> 报表|report|index|';
 $lang->mainNav->attend    = '<i class="icon icon-file"></i> 办公|attend|personal|';
 $lang->mainNav->system    = '<i class="icon icon-menu-users"></i> 组织|custom|estimate|';
@@ -136,6 +135,7 @@ $lang->menu = new stdclass();
 //$lang->menu->program = '主页|program|index';
 $lang->menu->product = $lang->productCommon . '|product|index|locate=no';
 $lang->menu->project = '迭代|project|index|locate=no';
+$lang->menu->doc     = '文档|doc|index|';
 $lang->menu->qa      = '测试|qa|index';
 
 $lang->program = new stdclass();
@@ -469,7 +469,6 @@ $lang->job->menu     = $lang->ci->menu;
 /* 文档视图菜单设置。*/
 $lang->doc = new stdclass();
 $lang->doc->menu = new stdclass();
-//$lang->doc->menu->createLib = array('link' => '<i class="icon icon-folder-plus"></i>&nbsp;添加文件夹|doc|createLib', 'float' => 'right');
 
 $lang->svn = new stdclass();
 $lang->git = new stdclass();
@@ -582,7 +581,6 @@ $lang->menugroup->testtask    = 'qa';
 $lang->menugroup->testsuite   = 'qa';
 $lang->menugroup->caselib     = 'qa';
 $lang->menugroup->testreport  = 'qa';
-$lang->menugroup->doclib      = 'doc';
 $lang->menugroup->report      = 'reporting';
 $lang->menugroup->people      = 'admin';
 $lang->menugroup->dept        = 'company';
@@ -620,6 +618,7 @@ $lang->navGroup->project     = 'program';
 $lang->navGroup->task        = 'program';
 $lang->navGroup->qa          = 'program';
 $lang->navGroup->bug         = 'program';
+$lang->navGroup->doc         = 'program';
 $lang->navGroup->testcase    = 'program';
 $lang->navGroup->testtask    = 'program';
 $lang->navGroup->testreport  = 'program';
@@ -642,7 +641,6 @@ $lang->navGroup->auditplan      = 'program';
 $lang->navGroup->cm             = 'program';
 $lang->navGroup->nc             = 'program';
 
-$lang->navGroup->doc    = 'doclib';
 $lang->navGroup->report = 'reporting';
 
 $lang->navGroup->stage         = 'system';
@@ -1109,9 +1107,10 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 $lang->menu->cmmi = new stdclass();
 $lang->menu->cmmi->workestimation = '估算|workestimation|index|program={PROGRAM}';
 $lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
-$lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,doc,');
+$lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->cmmi->review         = array('link' => '评审|review|browse|program={PROGRAM}', 'subModule' => ',reviewissue,');
 $lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->cmmi->doc            = array('link' => '文档|doc|index|program={PROGRAM}');
 $lang->menu->cmmi->product        = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
 $lang->menu->cmmi->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->cmmi->ci             = '集成|repo|browse|';

@@ -7,6 +7,26 @@ class program extends control
         $this->loadModel('project');
     }
 
+    public function transfer($programID = 0)
+    {   
+        $this->session->set('program', $programID);
+        $program         = $this->project->getByID($programID); 
+        $programProjects = $this->project->getPairsByProgram($programID);
+        $programProject  = key($programProjects);
+        $this->session->set('programTemplate', $program->template);
+
+        if($program->template == 'cmmi')
+        {   
+            $link = $this->createLink('programplan', 'browse', 'programID=' . $programID);
+        }   
+        if($program->template == 'scrum')
+        {   
+            $link = $programProject ? $this->createLink('project', 'task', 'projectID=' . $programProject) : $this->createLink('project', 'create', '', '', '', $programID); 
+        }   
+
+        die(js::locate($link, 'parent'));
+    }
+
     /**
      * Common actions.
      *
@@ -29,14 +49,14 @@ class program extends control
 
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'");
 
-        $programType = $this->cookie->programType;
+        $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         if($programType === 'bygrid')
         {
-            $projectList = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, 0, 0, 30, $orderBy, $pager);
+            $projectList = $this->project->getProjectStats($status == 'byproduct' ? 'all' : $status, 0, 0, 30, $orderBy, $pager, 'program');
             foreach($projectList as $projectID => $project)
             {
                 $project->teamCount  = count($this->project->getTeamMembers($project->id));
@@ -63,7 +83,7 @@ class program extends control
         $this->display();
     }
 
-    public function create($type = 'scrum', $copyProgramID = '')
+    public function create($template = 'scrum', $copyProgramID = '')
     {
         $this->commonAction();
 
@@ -97,8 +117,8 @@ class program extends control
         $this->view->position[]    = $this->lang->program->create;
         $this->view->groups        = $this->loadModel('group')->getPairs();
         $this->view->pmUsers       = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
-        $this->view->programs      = array('' => '') + $this->program->getPairsByType($type);
-        $this->view->type          = $type;
+        $this->view->programs      = array('' => '') + $this->program->getPairsByTemplate($template);
+        $this->view->template      = $template;
         $this->view->name          = $name;
         $this->view->code          = $code;
         $this->view->team          = $team;
@@ -356,7 +376,6 @@ class program extends control
         $this->display();
     }
 
-    /*
     public function processErrors($errors)
     {
         foreach($errors as $field => $error)
@@ -366,5 +385,4 @@ class program extends control
 
         return $errors;
     }
-    */
 }

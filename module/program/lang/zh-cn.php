@@ -3,10 +3,11 @@ $lang->program->index        = '项目主页';
 $lang->program->common       = '项目';
 $lang->program->stage        = '阶段';
 $lang->program->name         = '项目名称';
-$lang->program->type         = '管理方式';
+$lang->program->template     = '项目模板';
 $lang->program->category     = '项目类型';
 $lang->program->desc         = '项目描述';
 $lang->program->code         = '项目代号';
+$lang->program->copy         = '复制项目';
 $lang->program->begin        = '计划开始日期';
 $lang->program->end          = '计划完成日期';
 $lang->program->status       = '项目状态';
@@ -36,8 +37,8 @@ $lang->program->unitList[''] = '';
 $lang->program->unitList['yuan']   = '元';
 $lang->program->unitList['dollar'] = 'Dollars';
 
-$lang->program->typeList['scrum'] = "Scrum";
-$lang->program->typeList['cmmi']  = "瀑布";
+$lang->program->templateList['scrum'] = "Scrum";
+$lang->program->templateList['cmmi']  = "瀑布";
 
 $lang->program->categoryList['single']   = "单产品项目";
 $lang->program->categoryList['multiple'] = "多产品项目";

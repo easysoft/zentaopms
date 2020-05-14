@@ -10,19 +10,20 @@ class programModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF($this->cookie->mine)
-            ->andWhere('openedBy')->eq($this->app->user->account)
+            ->andWhere('openedBy', true)->eq($this->app->user->account)
             ->orWhere('PM')->eq($this->app->user->account)
+            ->markRight(1)
             ->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
     }
 
-    public function getPairsByType($type)
+    public function getPairsByTemplate($template)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('iscat')->eq(0)
-            ->andWhere('type')->eq($type)
+            ->andWhere('template')->eq($template)
             ->andWhere('program')->eq(0)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -62,38 +63,38 @@ class programModel extends model
             $this->dao->update(TABLE_PROJECT)->set('`order`')->eq($programID * 5)->where('id')->eq($programID)->exec();
             $this->file->updateObjectID($this->post->uid, $programID, 'project');
 
-            /*
-            $product = new stdclass();
-            $product->name        = $project->name;
-            $product->project     = $projectID;
-            $product->status      = 'normal';
-            $product->createdBy   = $this->app->user->account;
-            $product->createdDate = helper::now();
+            if($project->template == 'cmmi')
+            {
+                $product = new stdclass();
+                $product->name        = $project->name;
+                $product->project     = $programID;
+                $product->status      = 'normal';
+                $product->createdBy   = $this->app->user->account;
+                $product->createdDate = helper::now();
 
-            $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
+                $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
 
-            $productID = $this->dao->lastInsertId();
-            $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-            */
+                $productID = $this->dao->lastInsertId();
+                $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
-            /* Create doc lib.
-            $this->app->loadLang('doc');
-            $lib = new stdclass();
-            $lib->product = $productID;
-            $lib->name    = $this->lang->doclib->main['product'];
-            $lib->type    = 'product';
-            $lib->main    = '1';
-            $lib->acl     = 'default';
-            $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+                /* Create doc lib.  */
+                $this->app->loadLang('doc');
+                $lib = new stdclass();
+                $lib->product = $productID;
+                $lib->name    = $this->lang->doclib->main['product'];
+                $lib->type    = 'product';
+                $lib->main    = '1';
+                $lib->acl     = 'default';
+                $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            $docLibID = $this->dao->lastInsertId();
-            $this->loadModel('doc')->syncDocModule($docLibID);
+                $docLibID = $this->dao->lastInsertId();
+                $this->loadModel('doc')->syncDocModule($docLibID);
 
-            $data = new stdclass();
-            $data->project = $projectID;
-            $data->product = $productID;
-            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
-            */
+                $data = new stdclass();
+                $data->project = $programID;
+                $data->product = $productID;
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            }
 
             return $programID;
         }
