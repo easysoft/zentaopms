@@ -991,6 +991,8 @@ class productModel extends model
         $allCount  = 0;
         foreach($stories as $key => $story)
         {
+            if($story->type != $storyType) continue;
+
             $totalEstimate += $story->estimate;
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
             if(
@@ -1007,6 +1009,8 @@ class productModel extends model
             {
                 foreach($story->children as $child)
                 {
+                    if($child->type != $storyType) continue;
+
                     if(
                         $child->status != 'closed' or
                         ($child->status == 'closed' and ($child->closedReason == 'done' or $child->closedReason == 'postponed'))
