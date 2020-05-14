@@ -354,7 +354,7 @@ class fileModel extends model
      * @access public
      * @return string
      */
-    public function getImportTmp()
+    public function getPathOfImportedFile()
     {
         $path = $this->app->getTmpRoot() . 'import';
         if(!is_dir($path)) mkdir($path, 0755, true);

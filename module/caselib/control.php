@@ -568,7 +568,7 @@ class caselib extends control
         $this->loadModel('testcase');
 
         $file    = $this->session->fileImport;
-        $tmpPath = $this->loadModel('file')->getImportTmp();
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
         $tmpFile = $tmpPath . DS . md5(basename($file));
 
         if($_POST)

@@ -1510,7 +1510,7 @@ class testcase extends control
     public function showImport($productID, $branch = 0, $pagerID = 1, $maxImport = 0)
     {
         $file    = $this->session->fileImport;
-        $tmpPath = $this->loadModel('file')->getImportTmp();
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
         $tmpFile = $tmpPath . DS . md5(basename($file));
 
         if($_POST)
