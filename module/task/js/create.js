@@ -223,6 +223,8 @@ function setStories(moduleID, projectID)
         var storyID = $('#story').val();
         if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';
         $('#story').replaceWith(stories);
+        if($('#story').length == 0 && $('#storyBox').length != 0) $('#storyBox').html(stories);
+
         $('#story').val(storyID);
         setPreview();
         $('#story_chosen').remove();
