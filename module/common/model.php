@@ -477,13 +477,12 @@ class commonModel extends model
      */
     public static function printMainmenu($moduleName, $methodName = '')
     {
-        global $app, $lang;
+        global $app, $lang, $config;
 
         /* Set the main main menu. */
         $mainMenu      = $moduleName;
         $currentModule = $app->rawModule;
         $currentMethod = $app->rawMethod;
-        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
@@ -514,18 +513,19 @@ class commonModel extends model
             $lang->menu      = $lang->admin->menu;
             $lang->menuOrder = $lang->admin->menuOrder;
         }
-        if($group == 'program') $lang->menu = self::getProgramMainMenu();
+        if($group == 'program') $lang->menu = self::getProgramMainMenu($moduleName);
 
         /* Print all main menus. */
         $menu       = customModel::getMainmenu();
         $activeName = 'active';
         $lastMenu   = end($menu);
+        if(isset($lang->menugroup->$moduleName)) $mainMenu = $lang->menugroup->$moduleName;
 
         echo "<ul class='nav nav-default'>\n";
         foreach($menu as $menuItem)
         {
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
-            if($isMobile and empty($menuItem->link)) continue;
+            if(empty($menuItem->link)) continue;
             if(isset($lang->$group->dividerMenu) and strpos($lang->$group->dividerMenu, ",{$menuItem->name},") !== false) echo "<li class='divider'></li>";
 
             /* Init the these vars. */
@@ -534,7 +534,6 @@ class commonModel extends model
             $class     = isset($menuItem->class) ? $menuItem->class : '';
             $active    = $menuItem->name == $mainMenu ? "active" : '';
             if($subModule and in_array($currentModule, $subModule)) $active = 'active';
-            //if($alias and $moduleName == $currentModule and strpos(",$alias,", ",$currentMethod,") !== false) $active = 'active';
             if($menuItem->link)
             {
                 $target = '';
@@ -590,7 +589,6 @@ class commonModel extends model
                 }
 
                 $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target) . $subMenu . "</li>\n";
-                if($isMobile) $menuItemHtml = html::a($link, $menuItem->text, $target, "class='$class $active'") . "\n";
                 echo $menuItemHtml;
             }
             else
@@ -671,14 +669,9 @@ class commonModel extends model
 
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
-        //if($mainmenu == 'stage')     $lang->$moduleName->menu = $lang->my->menu;;
-        //if($group == 'system')       $lang->$moduleName->menu = $lang->system->menu;
-        //if($group == 'doclib')       return;
-        //if($group == 'reporting')    $lang->$moduleName->menu = $lang->report->menu;
-        //if($group == 'admin')        $lang->$moduleName->menu = $lang->admin->menu;
-        //if($group == 'program')      $lang->$moduleName->menu = self::getProgramMainMenu();
         if($moduleName == 'admin') return;
         if($group == 'my' || $group == 'reporting' || $group == 'attend') return;
+        if($group == 'program') self::getProgramModuleMenu($moduleName);
 
         if(!isset($lang->$moduleName->menu))
         {
@@ -2150,6 +2143,9 @@ EOD;
         if($program->template == 'cmmi') 
         {
             unset($lang->menuOrder);
+            $lang->release->menu        = new stdclass();
+            $lang->report->menu         = new stdclass();
+            $lang->menugroup->release   = '';
             $lang->program->dividerMenu = ',product,issue,';
             return self::processMenuVars($lang->menu->cmmi);
         }
@@ -2161,17 +2157,10 @@ EOD;
         $dao = new dao();
         $program = $dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($app->session->program)->fetch();
         if(!$program->template) return;
-        if($program->template == 'scrum') 
+        if($program->template == 'scrum'); //return self::processMenuVars($lang->moduleMenu->scrum->$moduleName);
+        if($program->template == 'cmmi') 
         {
-            if(isset($lang->menugroup->$moduleName)) $moduleName = $lang->menugroup->$moduleName;
-            if($moduleName == 'product') $lang->$moduleName->dividerMenu = ',plan,project,doc,';
-            if($moduleName == 'project') $lang->$moduleName->dividerMenu = ',story,team,';
-            return self::processMenuVars($lang->moduleMenu->scrum->$moduleName);
-        }
-        if($program->template == 'cmmi')
-        {
-            if($moduleName == 'project' || $moduleName == 'task' || $moduleName == 'doc')  $lang->project->dividerMenu = ',story,product,';
-            return self::processMenuVars($lang->moduleMenu->cmmi->$moduleName);
+            $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
         }
     }
 

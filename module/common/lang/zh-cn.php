@@ -152,7 +152,7 @@ $lang->system->menu->process     = array('link' => '过程|process|browse|', 'su
 $lang->system->menu->reviewcl    = array('link' => '评审|reviewcl|browse|category=PP|', 'subModule' => ',reviewcl,reviewsetting,');
 $lang->system->menu->subject     = array('link' => '科目|subject|browse|');
 
-$lang->system->dividerMenu = ',measurement,reviewcl,';
+$lang->system->dividerMenu = ',auditcl,subject,';
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = $lang->system->menu;
@@ -505,14 +505,6 @@ $lang->company->menu->browseGroup = array('link' => '权限|group|browse', 'subM
 $lang->company->menu->dynamic     = '动态|company|dynamic|';
 $lang->company->menu->view        = array('link' => '公司|company|view');
 
-$lang->moduleMenu->dept  = new stdclass();
-$lang->moduleMenu->group = new stdclass();
-$lang->moduleMenu->user  = new stdclass();
-
-$lang->moduleMenu->dept  = $lang->moduleMenu->company;
-$lang->moduleMenu->group = $lang->moduleMenu->company;
-$lang->moduleMenu->user  = $lang->moduleMenu->company;
-
 /* 后台管理菜单设置。*/
 $lang->admin = new stdclass();
 $lang->admin->menu = new stdclass();
@@ -571,19 +563,6 @@ $lang->webhook   = new stdclass();
 $lang->message   = new stdclass();
 $lang->search    = new stdclass();
 
-//$lang->convert->menu   = $lang->admin->menu;
-//$lang->upgrade->menu   = $lang->admin->menu;
-//$lang->action->menu    = $lang->admin->menu;
-//$lang->backup->menu    = $lang->admin->menu;
-//$lang->cron->menu      = $lang->admin->menu;
-//$lang->extension->menu = $lang->admin->menu;
-//$lang->custom->menu    = $lang->admin->menu;
-//$lang->mail->menu      = $lang->admin->menu;
-//$lang->dev->menu       = $lang->admin->menu;
-//$lang->entry->menu     = $lang->admin->menu;
-//$lang->webhook->menu   = $lang->admin->menu;
-//$lang->message->menu   = $lang->admin->menu;
-
 /* 菜单分组。*/
 $lang->menugroup = new stdclass();
 $lang->menugroup->release     = 'product';
@@ -624,18 +603,6 @@ $lang->menugroup->repo    = 'ci';
 $lang->menugroup->jenkins = 'ci';
 $lang->menugroup->compile = 'ci';
 $lang->menugroup->job     = 'ci';
-
-//$lang->menugroup->cmcl          = 'system';
-//$lang->menugroup->auditcl       = 'system';
-//$lang->menugroup->measurement   = 'system';
-//$lang->menugroup->sqlbuilder    = 'system';
-//$lang->menugroup->baseline      = 'system';
-//$lang->menugroup->activity      = 'system';
-//$lang->menugroup->output        = 'system';
-//$lang->menugroup->classify      = 'system';
-//$lang->menugroup->reviewsetting = 'system';
-//$lang->menugroup->reviewcl      = 'system';
-//$lang->menugroup->subject       = 'system';
 
 /* Nav group.*/
 $lang->navGroup = new stdclass();
@@ -1153,78 +1120,58 @@ $lang->menu->cmmi->release        = array('link' => '发布|release|browse|produ
 $lang->menu->cmmi->issue          = '问题|issue|browse|';
 $lang->menu->cmmi->risk           = '风险|risk|browse|';
 $lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,');
-$lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => ',auditplan,nc,');
+$lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => 'nc');
 $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
 $lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';
 
-$lang->moduleMenu->cmmi = new stdclass();
-$lang->moduleMenu->cmmi->workestimation = new stdclass();
-$lang->moduleMenu->cmmi->programplan    = new stdclass();
-$lang->moduleMenu->cmmi->programplan->gantt = '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt';
-$lang->moduleMenu->cmmi->programplan->lists = '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
+$lang->workestimation = new stdclass();
+$lang->programplan    = new stdclass();
+$lang->review         = new stdclass();
+$lang->reviewsetting  = new stdclass();
+$lang->weekly         = new stdclass();
+$lang->milestone      = new stdclass();
+$lang->product        = new stdclass();
+$lang->design         = new stdclass();
+$lang->auditplan      = new stdclass();
+$lang->cm             = new stdclass();
+$lang->nc             = new stdclass();
+$lang->pssp           = new stdclass();
+$lang->issue          = new stdclass();
+$lang->risk           = new stdclass();
+$lang->workestimation->menu = new stdclass();
+$lang->programplan->menu    = new stdclass();
+$lang->review->menu         = new stdclass();
+$lang->reviewsetting->menu  = new stdclass();
+$lang->weekly->menu         = new stdclass();
+$lang->milestone->menu      = new stdclass();
+$lang->product->menu        = new stdclass();
+$lang->design->menu         = new stdclass();
+$lang->auditplan->menu      = new stdclass();
+$lang->cm->menu             = new stdclass();
+$lang->pssp->menu           = new stdclass();
+$lang->issue->menu          = new stdclass();
+$lang->risk->menu           = new stdclass();
 
-$lang->moduleMenu->cmmi->review = new stdclass();
-$lang->moduleMenu->cmmi->review->browse = '基线评审列表|review|browse|program={PROGRAM}';
-$lang->moduleMenu->cmmi->review->issue  = '问题列表|reviewissue|issue|program={PROGRAM}';
+$lang->programplan->menu->gantt = '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt';
+$lang->programplan->menu->lists = '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
 
-$lang->moduleMenu->cmmi->reviewsetting = new stdclass();
-$lang->moduleMenu->cmmi->reviewsetting = $lang->moduleMenu->cmmi->review;
+$lang->review->menu->browse = '基线评审列表|review|browse|program={PROGRAM}';
+$lang->review->menu->issue  = '问题列表|reviewissue|issue|program={PROGRAM}';
 
-$lang->moduleMenu->cmmi->weekly = new stdclass();
-$lang->moduleMenu->cmmi->weekly->browse = '周报|weekly|index|program={PROGRAM}';
-$lang->moduleMenu->cmmi->weekly->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
+$lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
+$lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
 
-$lang->moduleMenu->cmmi->milestone = new stdclass();
-$lang->moduleMenu->cmmi->milestone = $lang->moduleMenu->cmmi->weekly;
+$lang->product->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
+$lang->product->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
+$lang->product->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
-$lang->moduleMenu->cmmi->product = new stdclass();
-$lang->moduleMenu->cmmi->product = new stdclass();
-$lang->moduleMenu->cmmi->product->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
-$lang->moduleMenu->cmmi->product->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
-$lang->moduleMenu->cmmi->product->track       = '跟踪矩阵|story|track|product={PRODUCT}';
+$lang->auditplan->menu->browse = array('link' => '质量保证计划|auditplan|browse|', 'alias' => 'create,edit');
+$lang->auditplan->menu->nc     = '不符合项|nc|browse|program={PROGRAM}';
 
-$lang->moduleMenu->cmmi->story = new stdclass();
-$lang->moduleMenu->cmmi->story = $lang->moduleMenu->cmmi->product;
+$lang->story->menu         = $lang->product->menu;
+$lang->milestone->menu     = $lang->weekly->menu;
+$lang->nc->menu            = $lang->auditplan->menu;
+$lang->reviewsetting->menu = $lang->review->menu;
 
-$lang->moduleMenu->cmmi->design = new stdclass();
-
-$lang->moduleMenu->cmmi->auditplan = new stdclass();
-$lang->moduleMenu->cmmi->auditplan->browse = '质量保证计划|auditplan|browse|';
-$lang->moduleMenu->cmmi->auditplan->nc     = '不符合项|nc|browse|program={PROGRAM}';
-
-$lang->moduleMenu->cmmi->nc    = $lang->moduleMenu->cmmi->auditplan;
-$lang->moduleMenu->cmmi->pssp  = new stdclass();
-$lang->moduleMenu->cmmi->issue = new stdclass();
-$lang->moduleMenu->cmmi->risk  = new stdclass();
-
-$lang->moduleMenu->cmmi->cm = new stdclass();
-$lang->moduleMenu->cmmi->cm->browse = '基线|cm|browse|program={PROGRAM}';
-$lang->moduleMenu->cmmi->cm->report = '基线状态报告|cm|report|program={PROGRAM}';
-
-$lang->moduleMenu->cmmi->repo = new stdclass();
-$lang->moduleMenu->cmmi->repo->code     = array('link' => '代码|repo|browse|repoID=%s', 'alias' => 'diff,view,revision,log,blame,showsynccomment');
-$lang->moduleMenu->cmmi->repo->maintain = array('link' => '版本库|repo|maintain', 'alias' => 'create,edit');
-
-$lang->moduleMenu->cmmi->bug        = $lang->qa->menu;
-$lang->moduleMenu->cmmi->testcase   = $lang->qa->menu;
-$lang->moduleMenu->cmmi->testtask   = $lang->qa->menu;
-$lang->moduleMenu->cmmi->testsuite  = $lang->qa->menu;
-$lang->moduleMenu->cmmi->testreport = $lang->qa->menu;
-$lang->moduleMenu->cmmi->caselib    = $lang->qa->menu;
-
-$lang->moduleMenu->cmmi->project = $lang->project->menu;
-$lang->moduleMenu->cmmi->task    = $lang->project->menu;
-$lang->moduleMenu->cmmi->doc     = $lang->project->menu;
-$lang->moduleMenu->cmmi->release = array();
-
-/* Scrum menu.*/
-$lang->menu->scrum = new stdclass();
-$lang->moduleMenu->scrum = new stdclass();
-
-$lang->menu->scrum->product = array('link' => $lang->productCommon . '|product|index|locate=no', 'subModule' => ',product,release,productplan,story,tree,');
-$lang->menu->scrum->project = array('link' => '迭代|project|index|locate=no', 'subModule' => ',task,project,doc,');
-$lang->menu->scrum->qa      = '测试|qa|index';
-
-$lang->moduleMenu->scrum->product     = $lang->product->menu;
-$lang->moduleMenu->scrum->project     = $lang->project->menu;
-$lang->moduleMenu->scrum->release     = $lang->product->menu;
+$lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
+$lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';

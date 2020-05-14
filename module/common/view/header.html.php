@@ -16,8 +16,6 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php $moduleName = $app->rawModule;?>
 <?php $isProgram = (isset($lang->navGroup->{$moduleName}) && $lang->navGroup->{$moduleName} == 'program');?>
-<?php $isSystem  = (isset($lang->navGroup->{$moduleName}) && $lang->navGroup->{$moduleName} == 'system');?>
-<?php $isAdmin   = ($moduleName == 'company' || $moduleName == 'group' || $moduleName == 'dept' || $moduleName == 'user');?>
 <div id='menu'>
   <div id='menuHeader'>
     <?php $heading = $app->company->name;?>
@@ -34,7 +32,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       <div id='heading'>
         <?php if($isProgram && isset($lang->programSwapper)) echo $lang->programSwapper;?>
       </div>
-      <nav id='navbar'><?php ($isProgram || $isSystem || $isAdmin) ? commonModel::printMainmenu($moduleName) : common::printModuleMenu($moduleName);?></nav>
+      <nav id='navbar'><?php commonModel::printMainmenu($moduleName);?></nav>
       <div id='toolbar'>
         <div id="userMenu">
           <?php common::printSearchBox();?>
@@ -45,7 +43,6 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       </div>
     </div>
   </div>
-  <?php if($isProgram || $isSystem || $isAdmin && $lang->{$moduleName}->menu):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
@@ -53,7 +50,6 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->modulePageActions)) echo $lang->modulePageActions;?></div></div>
     </div>
   </div>
-  <?php endif;?>
   <?php
   if(!empty($config->sso->redirect))
   {
