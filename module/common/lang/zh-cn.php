@@ -1157,6 +1157,9 @@ $lang->programplan->menu->lists = '阶段列表|programplan|browse|programID={PR
 $lang->review->menu->browse = '基线评审列表|review|browse|program={PROGRAM}';
 $lang->review->menu->issue  = '问题列表|reviewissue|issue|program={PROGRAM}';
 
+$lang->reviewissue = new stdclass();
+$lang->reviewissue->menu = $lang->review->menu;
+
 $lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
 $lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
 

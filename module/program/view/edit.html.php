@@ -67,6 +67,10 @@
         </tr>
         <?php endif;?>
         <tr>
+          <th><?php echo $lang->program->realStarted;?></th>
+          <td><?php echo html::input('realStarted', $project->realStarted, "class='form-control form-date'");?></td><td></td><td></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->project->teamname;?></th>
           <td><?php echo html::input('team', $project->team, "class='form-control'");?></td><td></td><td></td>
         </tr>
