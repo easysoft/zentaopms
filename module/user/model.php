@@ -1466,11 +1466,10 @@ class userModel extends model
         {
             foreach($objects as $objectID => $object) $stmt->orWhere("CONCAT(',', {$field}, ',')")->like("%,{$objectID},%");
         }
-        $stmt->query();
-        while($userView = $stmt->fetch())
+        $userViews = $stmt->fetchPairs('account', $field);
+
+        foreach($userViews as $account => $view)
         {
-            $view    = $userView->$field;
-            $account = $userView->account;
             foreach($objects as $objectID => $object)
             {
                 $linkedProjects = $objectType == 'product' ? zget($linkedProductProjects, $objctID, array()) : array();
@@ -1489,7 +1488,7 @@ class userModel extends model
                     if(!$hasPriv and strpos(",{$view},", ",{$objectID},") !== false) $view  = trim(str_replace(",{$objectID},", ',', ",{$view},"), ',');
                 }
             }
-            if($userView->$field != $view) $this->dao->update(TABLE_USERVIEW)->set($field)->eq($view)->where('account')->eq($account)->exec();
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set($field)->eq($view)->where('account')->eq($account)->exec();
         }
     }
 
