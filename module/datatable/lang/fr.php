@@ -24,3 +24,5 @@ $lang->datatable->showAllModule          = 'Show product modules';
 $lang->datatable->showModuleList[]       = 'N/A';
 $lang->datatable->showModuleList['base'] = 'Base Node';
 $lang->datatable->showModuleList['end']  = 'End Node';
+$lang->datatable->showAllModuleList[0]   = 'Hide';
+$lang->datatable->showAllModuleList[1]   = 'Show';

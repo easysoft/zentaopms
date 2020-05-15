@@ -47,8 +47,6 @@ $lang->doc->users          = '用戶';
 $lang->doc->item           = '項';
 $lang->doc->num            = '文檔數量';
 $lang->doc->searchResult   = '搜索結果';
-$lang->doc->fullscreen     = '全屏';
-$lang->doc->retrack        = '收起';
 
 $lang->doc->moduleDoc      = '按模組瀏覽';
 $lang->doc->searchDoc      = '搜索';

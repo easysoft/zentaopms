@@ -12,8 +12,8 @@
 $lang->admin->common        = '後台管理';
 $lang->admin->index         = '後台管理首頁';
 $lang->admin->checkDB       = '檢查資料庫';
-$lang->admin->sso           = '然之整合';
-$lang->admin->ssoAction     = '然之整合';
+$lang->admin->sso           = 'ZDOO整合';
+$lang->admin->ssoAction     = 'ZDOO整合';
 $lang->admin->safeIndex     = '安全';
 $lang->admin->checkWeak     = '弱口令檢查';
 $lang->admin->certifyMobile = '認證手機';

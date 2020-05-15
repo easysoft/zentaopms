@@ -198,6 +198,7 @@ $lang->task->createDenied          = '你不能在該項目添加任務';
 $lang->task->cannotDeleteParent    = '不能刪除父任務。';
 
 $lang->task->error                   = new stdclass();
+$lang->task->error->totalNumber      = '"總計消耗"必須為數字';
 $lang->task->error->consumedNumber   = '"本次消耗"必須為數字';
 $lang->task->error->estimateNumber   = '"預計剩餘"必須為數字';
 $lang->task->error->recordMinus      = '工時不能為負數';

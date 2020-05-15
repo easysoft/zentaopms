@@ -348,15 +348,9 @@ class projectModel extends model
             $lib->acl     = 'default';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-            if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
-            if(isset($_POST['products']))
-            {
-                foreach($this->post->products as $productID)
-                {
-                    if(empty($productID)) continue;
-                    $this->loadModel('user')->updateUserView($productID, 'product');
-                }
-            }
+            $this->loadModel('user');
+            if($project->acl != 'open') $this->user->updateUserView($projectID, 'project');
+            if(isset($_POST['products'])) $this->user->updateUserView($this->post->products, 'product');
 
             if(!dao::isError()) $this->loadModel('score')->create('project', 'create', $projectID);
             return $projectID;
@@ -398,6 +392,8 @@ class projectModel extends model
             ->where('id')->eq($projectID)
             ->limit(1)
             ->exec();
+
+        $changedAccounts = array();
         foreach($project as $fieldName => $value)
         {
             if($fieldName == 'PO' or $fieldName == 'PM' or $fieldName == 'QD' or $fieldName == 'RD' )
@@ -413,9 +409,17 @@ class projectModel extends model
                     $member->type    = 'project';
                     $member->hours   = $this->config->project->defaultWorkhours;
                     $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+                    $changedAccounts[] = $value;
                 }
             }
         }
+
+        /* Fix bug#3074, Update views for team members. */
+        $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
+        $products = $this->getProducts($projectID, false);
+        if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
+
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $projectID, 'project');
@@ -1253,9 +1257,10 @@ class projectModel extends model
         $this->loadModel('user');
         $oldProjectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->fetchGroup('product', 'branch');
         $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq((int)$projectID)->exec();
+        $members = array_keys($this->getTeamMembers($projectID));
         if(!isset($_POST['products']))
         {
-            foreach($oldProjectProducts as $productID => $branches) $this->user->updateUserView($productID, 'product');
+            $this->user->updateUserView(array_keys($oldProjectProducts), 'product', $members);
             return true;
         }
 
@@ -1288,11 +1293,7 @@ class projectModel extends model
 
         $oldProductKeys = array_keys($oldProjectProducts);
         $needUpdate = array_merge(array_diff($oldProductKeys, $products), array_diff($products, $oldProductKeys));
-        foreach($needUpdate as $productID)
-        {
-            if(empty($productID)) continue;
-            $this->user->updateUserView($productID, 'product');
-        }
+        if($needUpdate) $this->user->updateUserView($needUpdate, 'product', $members);
     }
 
     /**
@@ -1608,7 +1609,7 @@ class projectModel extends model
         $statusPairs   = $this->dao->select('id, status')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchPairs();
         foreach($stories as $key => $storyID)
         {
-            if($statusPairs[$storyID] == 'draft') continue;
+            if($statusPairs[$storyID] == 'draft' || $statusPairs[$storyID] == 'closed') continue;
             if(isset($linkedStories[$storyID])) continue;
 
             $productID = (int)$products[$storyID];
@@ -1746,6 +1747,29 @@ class projectModel extends model
     }
 
     /**
+     * Get team slice.
+     * 
+     * @param  array  $teams 
+     * @param  string $begin 
+     * @param  string $end 
+     * @access public
+     * @return array
+     */
+    public function getTeamSlice($teams, $begin, $end)
+    {
+        $members = array();
+        foreach($teams as $account => $team)
+        {
+            if($account == $end) break;
+            if(!empty($begin) and $account != $begin and empty($members)) continue;
+
+            $members[$account] = $team;
+        }
+
+        return $members;
+    }
+
+    /**
      * Get teams which can be imported.
      *
      * @param  string $account
@@ -1830,11 +1854,7 @@ class projectModel extends model
         $this->loadModel('user')->updateUserView($projectID, 'project', $changedAccounts);
 
         $products = $this->getProducts($projectID, false);
-        foreach($products as $productID => $productName)
-        {
-            if(empty($productID)) continue;
-            $this->user->updateUserView($productID, 'product', $changedAccounts);
-        }
+        if($products) $this->user->updateUserView(array_keys($products), 'product', $changedAccounts);
     }
 
     /**
@@ -1851,11 +1871,7 @@ class projectModel extends model
 
         $this->loadModel('user')->updateUserView($projectID, 'project', array($account));
         $products = $this->getProducts($projectID, false);
-        foreach($products as $productID => $productName)
-        {
-            if(empty($productID)) continue;
-            $this->user->updateUserView($productID, 'product', array($account));
-        }
+        if($products) $this->user->updateUserView(array_keys($products), 'product', array($account));
     }
 
     /**
@@ -2051,7 +2067,7 @@ class projectModel extends model
              ->andWhere('t1.id')->in(array_keys($taskIdList))
              ->orderBy($orderBy)
              ->fetchAll('id');
-        
+
         if(empty($tasks)) return array();
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
@@ -2066,7 +2082,7 @@ class projectModel extends model
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-        
+
         foreach($tasks as $task)
         {
             if($task->parent > 0) 
@@ -3009,9 +3025,6 @@ class projectModel extends model
     {
         $this->loadModel('user')->updateUserView($projectID, 'project');
         $products = $this->getProducts($projectID, $withBranch = false);
-        if(!empty($products))
-        {
-            foreach($products as $productID => $productName) $this->loadModel('user')->updateUserView($productID, 'product');
-        }
+        if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product');
     }
 }

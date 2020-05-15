@@ -1127,6 +1127,10 @@ class userModel extends model
         unset($newUser->password);
         unset($newUser->deleted);
         $newUser->company = $this->app->company->name;
+
+        /* App client will use session id as token. */
+        $newUser->token = session_id();
+
         return array('user' => $newUser);
     }
 
@@ -1378,76 +1382,113 @@ class userModel extends model
     /**
      * Update user view.
      * 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  array  $users 
+     * @param  int|array $objectID 
+     * @param  string    $objectType 
+     * @param  array     $users 
      * @access public
      * @return void
      */
-    public function updateUserView($objectID, $objectType, $users = array())
+    public function updateUserView($objectIdList, $objectType, $users = array())
     {
         $table = '';
         if($objectType == 'product') $table = TABLE_PRODUCT;
         if($objectType == 'project') $table = TABLE_PROJECT;
         if(empty($table)) return false;
 
-        $object = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-        if($object->acl == 'open') return true;
+        if(is_numeric($objectIdList)) $objectIdList = array($objectIdList);
+        if(!is_array($objectIdList)) return false;
 
         $allGroups  = $this->dao->select('account,`group`')->from(TABLE_USERGROUP)->fetchAll();
         $userGroups = array();
+        $groupUsers = array();
         foreach($allGroups as $group)
         {
             if(!isset($userGroups[$group->account])) $userGroups[$group->account] = '';
             $userGroups[$group->account] .= "{$group->group},";
+            $groupUsers[$group->group][$group->account] = $group->account;
         }
 
-        $linkedProjects = array();
+        $linkedProductProjects = array();
+        $linkedProjectProducts = array();
         if($objectType == 'product')
         {
-            $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($objectID)->query();
-            while($projectProduct = $stmt->fetch()) $linkedProjects[$projectProduct->project] = $projectProduct->project;
+            $stmt = $this->dao->select('project,product')->from(TABLE_PROJECTPRODUCT)->where('product')->in($objectIdList)->query();
+            while($projectProduct = $stmt->fetch())
+            {
+                $linkedProductProjects[$projectProduct->product][$projectProduct->project] = $projectProduct->project;
+                $linkedProjectProducts[$projectProduct->project][$projectProduct->product] = $projectProduct->product;
+            }
         }
 
-        $teams = array();
-        $stmt  = $this->dao->select('root,account')->from(TABLE_TEAM)->alias('team')
+        $teamGroups = array();
+        $stmt       = $this->dao->select('root,account')->from(TABLE_TEAM)->alias('team')
             ->leftJoin(TABLE_PROJECT)->alias('project')
             ->on('team.root=project.id')
             ->where('team.type')->eq('project')
             ->andWhere('project.deleted')->eq(0)
-            ->beginIF($objectType == 'product')->andWhere('root')->in($linkedProjects)->fi()
-            ->beginIF($objectType == 'project')->andWhere('root')->eq($objectID)->fi()
+            ->beginIF($objectType == 'product')->andWhere('root')->in(array_keys($linkedProjectProducts))->fi()
+            ->beginIF($objectType == 'project')->andWhere('root')->in($objectIdList)->fi()
             ->query();
-        while($team = $stmt->fetch()) $teams[$team->root][$team->account] = $team->account;
-
-        $field = $objectType == 'product' ? 'products' : 'projects';
-        $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)
-            ->beginIF($users)->where('account')->in($users)->fi()
-            ->query();
-
-        $userObjects = array();
-        while($userView = $stmt->fetch())
+        while($team = $stmt->fetch())
         {
-            $account = $userView->account;
             if($objectType == 'product')
             {
-                $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $teams);
-                if($hasPriv and strpos(",{$userView->products},", ",{$objectID},") === false) $userView->products .= ",{$objectID}";
-                if(!$hasPriv and strpos(",{$userView->products},", ",{$objectID},") !== false) $userView->products = trim(str_replace(",{$objectID},", ',', ",{$userView->products},"), ',');
-                $userObjects[$account]['products'] = $userView->products;
+                $productIdList = zget($linkedProjectProducts, $team->root, array());
+                foreach($productIdList as $productID) $teamGroups[$productID][$team->root][$team->account] = $team->account;
             }
             elseif($objectType == 'project')
             {
-                $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), zget($teams, $objectID));
-                if($hasPriv and strpos(",{$userView->projects},", ",{$objectID},") === false) $userView->projects .= ",{$objectID}";
-                if(!$hasPriv and strpos(",{$userView->projects},", ",{$objectID},") !== false) $userView->projects = trim(str_replace(",{$objectID},", ',', ",{$userView->projects},"), ',');
-                $userObjects[$account]['projects'] = $userView->projects;
+                $teamGroups[$team->root][$team->account] = $team->account;
             }
         }
 
-        foreach($userObjects as $account => $data)
+        $whiteList = array();
+        $objects   = $this->dao->select('*')->from($table)->where('id')->in($objectIdList)->fetchAll('id');
+        foreach($objects as $objectID => $object)
         {
-            $this->dao->update(TABLE_USERVIEW)->data($data)->where('account')->eq($account)->exec();
+            if($object->acl == 'open')
+            {
+                unset($objects[$objectID]);
+                continue;
+            }
+            if(!empty($users)) continue;
+
+            if($objectType == 'product') $whiteList += $this->getProductWhiteListUsers($object, $groupUsers, zget($linkedProductProjects, $objctID, array()), zget($teamGroups, $objectID, array()));
+            if($objectType == 'project') $whiteList += $this->getProjectWhiteListUsers($object, $groupUsers, zget($teamGroups, $objectID, array()));
+        }
+        if(empty($objects)) return true;
+
+        if($whiteList) $users = $whiteList;
+
+        $field = $objectType == 'product' ? 'products' : 'projects';
+        $stmt  = $this->dao->select("account,{$field}")->from(TABLE_USERVIEW)->where('account')->in($users);
+        if($whiteList)
+        {
+            foreach($objects as $objectID => $object) $stmt->orWhere("CONCAT(',', {$field}, ',')")->like("%,{$objectID},%");
+        }
+        $userViews = $stmt->fetchPairs('account', $field);
+
+        foreach($userViews as $account => $view)
+        {
+            foreach($objects as $objectID => $object)
+            {
+                $linkedProjects = $objectType == 'product' ? zget($linkedProductProjects, $objctID, array()) : array();
+                $members        = zget($teamGroups, $objectID, array());
+
+                if($objectType == 'product')
+                {
+                    $hasPriv = $this->checkProductPriv($object, $account, zget($userGroups, $account, ''), $linkedProjects, $members);
+                    if($hasPriv and strpos(",{$view},", ",{$objectID},") === false)  $view .= ",{$objectID}";
+                    if(!$hasPriv and strpos(",{$view},", ",{$objectID},") !== false) $view  = trim(str_replace(",{$objectID},", ',', ",{$view},"), ',');
+                }
+                elseif($objectType == 'project')
+                {
+                    $hasPriv = $this->checkProjectPriv($object, $account, zget($userGroups, $account, ''), $members);
+                    if($hasPriv and strpos(",{$view},", ",{$objectID},") === false)  $view .= ",{$objectID}";
+                    if(!$hasPriv and strpos(",{$view},", ",{$objectID},") !== false) $view  = trim(str_replace(",{$objectID},", ',', ",{$view},"), ',');
+                }
+            }
+            if($userViews[$account] != $view) $this->dao->update(TABLE_USERVIEW)->set($field)->eq($view)->where('account')->eq($account)->exec();
         }
     }
 
@@ -1489,6 +1530,45 @@ class userModel extends model
     }
 
     /**
+     * Get product white list users.
+     * 
+     * @param  object $product 
+     * @param  array  $groupUsers 
+     * @param  array  $linkedProjects 
+     * @param  array  $teams 
+     * @access public
+     * @return array
+     */
+    public function getProductWhiteListUsers($product, $groupUsers, $linkedProjects, $teams)
+    {
+        $users = array();
+
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+
+        $users[$product->PO]        = $product->PO;
+        $users[$product->QD]        = $product->QD;
+        $users[$product->RD]        = $product->RD;
+        $users[$product->createdBy] = $product->createdBy;
+        if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
+
+        if($product->acl == 'custom')
+        {
+            foreach(explode(',', $product->whitelist) as $whitelist)
+            {
+                if(empty($whitelist)) continue;
+                $users += zget($groupUsers, $whitelist, array());
+            }
+        }
+
+        if(!empty($linkedProjects))
+        {
+            foreach($linkedProjects as $projectID) $users += zget($teams, $projectID, array());
+        }
+
+        return $users;
+    }
+
+    /**
      * Check project priv.
      * 
      * @param  object    $project 
@@ -1515,6 +1595,42 @@ class userModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Get project white list users.
+     * 
+     * @param  object $project 
+     * @param  array  $groupUsers 
+     * @param  array  $teams 
+     * @access public
+     * @return array
+     */
+    public function getProjectWhiteListUsers($project, $groupUsers, $teams)
+    {
+        $users = array();
+
+        foreach(explode(',', trim($this->app->company->admins, ',')) as $admin) $users[$admin] = $admin;
+
+        $users[$project->PO]       = $project->PO;
+        $users[$project->QD]       = $project->QD;
+        $users[$project->RD]       = $project->RD;
+        $users[$project->PM]       = $project->PM;
+        $users[$project->openedBy] = $project->openedBy;
+        if(isset($project->feedback)) $users[$project->feedback] = $project->feedback;
+
+        $users += $teams;
+
+        if($project->acl == 'custom')
+        {
+            foreach(explode(',', $project->whitelist) as $whitelist)
+            {
+                if(empty($whitelist)) continue;
+                $users += zget($groupUsers, $whitelist, array());
+            }
+        }
+
+        return $users;
     }
 
     /**

@@ -9,9 +9,15 @@ $lang->backup->change      = '保留時間';
 $lang->backup->changeAB    = '修改';
 $lang->backup->rmPHPHeader = '去除安全設置';
 
-$lang->backup->time  = '備份時間';
-$lang->backup->files = '備份檔案';
-$lang->backup->size  = '大小';
+$lang->backup->time     = '備份時間';
+$lang->backup->files    = '備份檔案';
+$lang->backup->allCount = '總檔案數';
+$lang->backup->count    = '備份檔案數';
+$lang->backup->size     = '大小';
+$lang->backup->status   = '狀態';
+
+$lang->backup->statusList['success'] = '成功';
+$lang->backup->statusList['fail']    = '失敗';
 
 $lang->backup->setting    = '設置';
 $lang->backup->settingDir = '備份目錄';
@@ -20,11 +26,12 @@ $lang->backup->settingList['nosafe'] = '不需要防下載PHP檔案頭';
 
 $lang->backup->waitting        = '<span id="backupType"></span>正在進行中，請稍候...';
 $lang->backup->progressSQL     = '<p>SQL備份中，已備份%s</p>';
-$lang->backup->progressAttach  = '<p>SQL備份完成</p><p>附件備份中，已備份%s</p>';
-$lang->backup->progressCode    = '<p>SQL備份完成</p><p>附件備份完成</p><p>代碼備份中，已備份%s</p>';
+$lang->backup->progressAttach  = '<p>SQL備份完成</p><p>附件備份中，共有%s個檔案，已經備份%s個</p>';
+$lang->backup->progressCode    = '<p>SQL備份完成</p><p>附件備份完成</p><p>代碼備份中，共有%s個檔案，已經備份%s個</p>';
 $lang->backup->confirmDelete   = '是否刪除備份？';
 $lang->backup->confirmRestore  = '是否還原該備份？';
 $lang->backup->holdDays        = '備份保留最近 %s 天';
+$lang->backup->copiedFail      = '複製失敗的檔案：';
 $lang->backup->restoreTip      = '還原功能只還原附件和資料庫，如果需要還原代碼，可以手動還原。';
 
 $lang->backup->success = new stdclass();

@@ -23,7 +23,7 @@ class taskModel extends model
     public function create($projectID)
     {
         if($this->post->estimate < 0)
-        {    
+        {
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;
         }
@@ -79,7 +79,12 @@ class taskModel extends model
             /* Fix Bug #1525 */
             $projectType    = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('type');
             $requiredFields = "," . $this->config->task->create->requiredFields . ",";
-            if($projectType == 'ops') $requiredFields = str_replace(",story,", ',', "$requiredFields");
+            if($projectType == 'ops')
+            {
+                $requiredFields = str_replace(",story,", ',', "$requiredFields");
+                $task->story = 0;
+            }
+
             if($this->post->selectTestStory)
             {
                 $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
@@ -106,27 +111,30 @@ class taskModel extends model
             {
                 $testStoryIdList = array();
                 $this->loadModel('action');
-                foreach($this->post->testStory as $storyID)
+                if($this->post->testStory)
                 {
-                    if($storyID) $testStoryIdList[$storyID] = $storyID;
-                }
-                $testStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchPairs('id', 'title');
-                foreach($this->post->testStory as $i => $storyID)
-                {
-                    if(!isset($testStories[$storyID])) continue;
+                    foreach($this->post->testStory as $storyID)
+                    {
+                        if($storyID) $testStoryIdList[$storyID] = $storyID;
+                    }
+                    $testStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchPairs('id', 'title');
+                    foreach($this->post->testStory as $i => $storyID)
+                    {
+                        if(!isset($testStories[$storyID])) continue;
 
-                    $task->parent     = $taskID;
-                    $task->story      = $storyID;
-                    $task->name       = $this->lang->task->lblTestStory . " #{$storyID} " . zget($testStories, $storyID);
-                    $task->pri        = $this->post->testPri[$i];
-                    $task->estStarted = $this->post->testEstStarted[$i];
-                    $task->deadline   = $this->post->testDeadline[$i];
-                    $task->assignedTo = $this->post->testAssignedTo[$i];
-                    $task->estimate   = $this->post->testEstimate[$i];
-                    $this->dao->insert(TABLE_TASK)->data($task)->exec();
+                        $task->parent     = $taskID;
+                        $task->story      = $storyID;
+                        $task->name       = $this->lang->task->lblTestStory . " #{$storyID} " . zget($testStories, $storyID);
+                        $task->pri        = $this->post->testPri[$i];
+                        $task->estStarted = $this->post->testEstStarted[$i];
+                        $task->deadline   = $this->post->testDeadline[$i];
+                        $task->assignedTo = $this->post->testAssignedTo[$i];
+                        $task->estimate   = $this->post->testEstimate[$i];
+                        $this->dao->insert(TABLE_TASK)->data($task)->exec();
 
-                    $childTaskID = $this->dao->lastInsertID();
-                    $this->action->create('task', $childTaskID, 'Opened');
+                        $childTaskID = $this->dao->lastInsertID();
+                        $this->action->create('task', $childTaskID, 'Opened');
+                    }
                 }
 
                 $this->computeWorkingHours($taskID);
@@ -580,7 +588,7 @@ class taskModel extends model
             if(!isset($currentTask->status)) $currentTask->status = $oldTask->status;
 
             $currentTask->assignedTo = $oldTask->assignedTo;
-            if(!empty($this->post->assignedTo))
+            if(!empty($_POST['assignedTo']) and is_string($_POST['assignedTo']))
             {
                 $currentTask->assignedTo = $this->post->assignedTo;
             }
@@ -1089,11 +1097,8 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->dao->update(TABLE_TEAM)->set('left')->eq(0)
-                ->where('root')->eq($taskID)
-                ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($oldTask->assignedTo)
-                ->exec();
+            $sliceMembers = $this->loadModel('project')->getTeamSlice($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            foreach($sliceMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $this->dao->update(TABLE_TEAM)->set('left')->eq($task->left)
                 ->where('root')->eq($taskID)
@@ -1161,6 +1166,7 @@ class taskModel extends model
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = $estimate->consumed - $oldTask->consumed;
+        if($this->post->comment) $estimate->work = $this->post->comment;
         $this->addTaskEstimate($estimate);
 
         if(!empty($oldTask->team))
@@ -1204,7 +1210,15 @@ class taskModel extends model
      */
     public function recordEstimate($taskID)
     {
-        $record       = fixer::input('post')->get();
+        $record = fixer::input('post')->get();
+
+        /* Fix bug#3036. */
+        foreach($record->consumed as $id => $item) $record->consumed[$id] = trim($item);
+        foreach($record->left     as $id => $item) $record->left[$id]     = trim($item);
+        foreach($record->consumed as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->totalNumber;
+        foreach($record->left     as $id => $item) if(!is_numeric($item) and !empty($item)) dao::$errors[] = 'ID #' . $id . ' ' . $this->lang->task->error->estimateNumber;
+        if(dao::isError()) return false;
+
         $estimates    = array();
         $task         = $this->getById($taskID);
         $earliestTime = '';
@@ -1346,13 +1360,14 @@ class taskModel extends model
             ->remove('comment,files,labels,currentConsumed')
             ->get();
 
-        if(!is_numeric($this->post->currentConsumed))
+        $currentConsumed = trim($this->post->currentConsumed);
+        if(!is_numeric($currentConsumed))
         {
             dao::$errors[] = $this->lang->task->error->consumedNumber;
             return false;
         }
 
-        if(!$this->post->currentConsumed)
+        if(empty($currentConsumed))
         {
             dao::$errors[] = $this->lang->task->error->consumedEmpty;
             return false;
@@ -1385,6 +1400,7 @@ class taskModel extends model
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
         $estimate->consumed = $consumed;
+        if($this->post->comment) $estimate->work = $this->post->comment;
         if(!empty($oldTask->team))
         {
             foreach($oldTask->team as $teamAccount => $team)
@@ -1397,12 +1413,13 @@ class taskModel extends model
 
         if(!empty($oldTask->team))
         {
-            $this->dao->update(TABLE_TEAM)
-                ->set('left')->eq(0)
-                ->set('consumed')->eq($task->consumed)
+            $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)
                 ->where('root')->eq((int)$taskID)
                 ->andWhere('type')->eq('task')
                 ->andWhere('account')->eq($oldTask->assignedTo)->exec();
+
+            $sliceMembers = $this->loadModel('project')->getTeamSlice($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            foreach($sliceMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
         }

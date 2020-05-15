@@ -165,6 +165,13 @@ class product extends control
         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
+        /* Change for requirement story title. */
+        if($storyType == 'requirement' and !empty($this->config->URAndSR))
+        {
+            $this->lang->story->title = str_replace($this->lang->srCommon, $this->lang->urCommon, $this->lang->story->title);
+            $this->config->product->search['fields']['title'] = $this->lang->story->title;
+        }
+
         /* Build search form. */
         $actionURL = $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
         $this->config->product->search['onMenuBar'] = 'yes';
@@ -185,7 +192,7 @@ class product extends control
         $this->view->moduleID      = $moduleID;
         $this->view->stories       = $stories;
         $this->view->plans         = $this->loadModel('productplan')->getPairs($productID, $branch);
-        $this->view->summary       = $this->product->summary($stories);
+        $this->view->summary       = $this->product->summary($stories, $storyType);
         $this->view->moduleTree    = $this->tree->getTreeMenu($productID, $viewType = 'story', $startModuleID = 0, array('treeModel', $createModuleLink), '', $branch);
         $this->view->parentModules = $this->tree->getParents($moduleID);
         $this->view->pager         = $pager;
@@ -402,6 +409,22 @@ class product extends control
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($this->products, $productID);
 
+        /* Sort roadmaps. */
+        $roadmapGroups = $this->product->getRoadmap($productID, 0, 6);
+        $roadmaps      = array();
+        foreach($roadmapGroups as $year => $mapBranches)
+        {
+            foreach($mapBranches as $branchID => $plans)
+            {
+                foreach($plans as $plan)
+                {
+                    $date = isset($plan->begin) ? $plan->begin : $plan->date;
+                    $roadmaps[$date . $branchID] = $plan;
+                }
+            }
+        }
+        krsort($roadmaps);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
@@ -418,7 +441,7 @@ class product extends control
         $this->view->lines      = array('') + $this->loadModel('tree')->getLinePairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
         $this->view->dynamics   = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, $productID);
-        $this->view->roadmaps   = $this->product->getRoadmap($productID, 0, 6);
+        $this->view->roadmaps   = $roadmaps;
 
         $this->display();
     }

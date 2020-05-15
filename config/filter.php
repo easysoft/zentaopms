@@ -238,4 +238,4 @@ $filter->repo->default->cookie['repoBranch'] = 'reg::any';
 $filter->repo->diff->cookie['arrange']       = 'reg::word';
 $filter->repo->diff->cookie['repoPairs']     = 'array';
 $filter->repo->view->cookie['repoPairs']     = 'array';
-$filter->repo->ajaxsynccomment->cookie['syncBranch'] = 'reg::any';
+$filter->repo->ajaxsynccommit->cookie['syncBranch'] = 'reg::any';

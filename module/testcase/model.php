@@ -81,7 +81,7 @@ class testcaseModel extends model
                     if($importPriv)
                     {
                         $link = helper::createLink('testcase', 'import', "productID=$productID&branch=$branch");
-                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->importFile, '', "class='export'") . '</li>';
+                        $pageActions .= '<li>' . html::a($link, $this->lang->testcase->fileImport, '', "class='export'") . '</li>';
                     }
                     if($importFromLibPriv)
                     {
@@ -537,8 +537,8 @@ class testcaseModel extends model
 
         $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
             ->beginIF($queryProductID != 'all')->andWhere('product')->eq($productID)->fi()
-            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('auto')->ne('unit')->fi()
+            ->beginIF($auto == 'unit')->andWhere('auto')->eq('unit')->fi()
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
 
@@ -565,8 +565,8 @@ class testcaseModel extends model
             ->andWhere('t3.status')->ne('done')
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
-            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -1097,6 +1097,15 @@ class testcaseModel extends model
                 }
             }
 
+            if(isset($this->config->testcase->appendFields))
+            {
+                foreach(explode(',', $this->config->testcase->appendFields) as $appendField)
+                {
+                    if(empty($appendField)) continue;
+                    $caseData->$appendField = $_POST[$appendField][$key];
+                }
+            }
+
             $cases[$key] = $caseData;
             $line++;
         }
@@ -1206,28 +1215,34 @@ class testcaseModel extends model
                 {
                     $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    foreach($this->post->desc[$key] as $id => $desc)
+                    if($this->post->desc)
                     {
-                        $desc = trim($desc);
-                        if(empty($desc)) continue;
-                        $stepData = new stdclass();
-                        $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
-                        $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
-                        $stepData->case    = $caseID;
-                        $stepData->version = 1;
-                        $stepData->desc    = htmlspecialchars($desc);
-                        $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
-                        $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                        if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                        if($stepData->type == 'step')  $parentStepID = 0;
+                        foreach($this->post->desc[$key] as $id => $desc)
+                        {
+                            $desc = trim($desc);
+                            if(empty($desc)) continue;
+                            $stepData = new stdclass();
+                            $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
+                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                            $stepData->case    = $caseID;
+                            $stepData->version = 1;
+                            $stepData->desc    = htmlspecialchars($desc);
+                            $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
+                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                            if($stepData->type == 'step')  $parentStepID = 0;
+                        }
                     }
                     $this->action->create('case', $caseID, 'Opened');
                 }
             }
         }
 
-        unlink($this->session->importFile);
-        unset($_SESSION['importFile']);
+        if($this->post->isEndPage)
+        {
+            unlink($this->session->fileImport);
+            unset($_SESSION['fileImport']);
+        }
     }
 
     /**
@@ -1630,8 +1645,9 @@ class testcaseModel extends model
                 $data = fixer::input('post')->get();
                 foreach($data->steps as $key => $desc)
                 {
-                    $desc = trim($desc);
-                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $data->stepType[$key], 'expect' => trim($data->expects[$key]));
+                    $desc     = trim($desc);
+                    $stepType = isset($data->stepType[$key]) ? $data->stepType[$key] : 'step';
+                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $stepType, 'expect' => trim($data->expects[$key]));
                 }
 
                 /* If step count changed, case changed. */

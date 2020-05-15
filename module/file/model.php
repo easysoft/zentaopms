@@ -69,6 +69,7 @@ class fileModel extends model
     public function getById($fileID)
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
+        if(empty($file)) return false;
 
         $realPathName   = $this->getRealPathName($file->pathname);
         $file->realPath = $this->savePath . $realPathName;
@@ -346,6 +347,20 @@ class fileModel extends model
             ->markRight(1)
             ->orderBy('id')
             ->fetchAll();
+    }
+
+    /**
+     * Get tmp import path.
+     * 
+     * @access public
+     * @return string
+     */
+    public function getPathOfImportedFile()
+    {
+        $path = $this->app->getTmpRoot() . 'import';
+        if(!is_dir($path)) mkdir($path, 0755, true);
+
+        return $path;
     }
 
     /**

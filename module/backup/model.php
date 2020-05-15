@@ -33,13 +33,21 @@ class backupModel extends model
      */
     public function backFile($backupFile)
     {
+        $zfile  = $this->app->loadClass('zfile');
         $return = new stdclass();
         $return->result = true;
         $return->error  = '';
 
         if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
-        $zfile = $this->app->loadClass('zfile');
-        $zfile->copyDir($this->app->getAppRoot() . 'www/data/', $backupFile);
+
+        $tmpLogFile = $this->getTmpLogFile($backupFile);
+        $dataDir    = $this->app->getAppRoot() . 'www/data/';
+        $count      = $zfile->getCount($dataDir);
+        file_put_contents($tmpLogFile, json_encode(array('allCount' => $count)));
+
+        $result = $zfile->copyDir($dataDir, $backupFile, $logLevel = false, $tmpLogFile);
+        $this->processSummary($backupFile, $result['count'], $result['size'], $result['errorFiles'], $count);
+        unlink($tmpLogFile);
 
         return $return;
     }
@@ -53,10 +61,12 @@ class backupModel extends model
      */
     public function backCode($backupFile)
     {
+        $zfile  = $this->app->loadClass('zfile');
         $return = new stdclass();
         $return->result = true;
         $return->error  = '';
 
+        $tmpLogFile  = $this->getTmpLogFile($backupFile);
         $appRoot     = $this->app->getAppRoot();
         $fileList    = glob($appRoot . '*');
         $wwwFileList = glob($appRoot . 'www/*');
@@ -71,22 +81,43 @@ class backupModel extends model
         $fileList = array_merge($fileList, $wwwFileList);
 
         if(!is_dir($backupFile)) mkdir($backupFile, 0777, true);
-        $zfile = $this->app->loadClass('zfile');
+
+        $allCount = 0;
+        foreach($fileList as $codeFile) $allCount += $zfile->getCount($codeFile);
+        file_put_contents($tmpLogFile, json_encode(array('allCount' => $allCount)));
+
+        $copiedCount = 0;
+        $copiedSize  = 0;
+        $errorFiles  = array();
         foreach($fileList as $codeFile)
         {
             $file = trim(str_replace($appRoot, '', $codeFile), DS);
             if(is_dir($codeFile))
             {
                 if(!is_dir($backupFile . DS . $file)) mkdir($backupFile . DS . $file, 0777, true);
-                $zfile->copyDir($codeFile, $backupFile . DS . $file);
+                $result = $zfile->copyDir($codeFile, $backupFile . DS . $file, $logLevel = false, $tmpLogFile);
+                $copiedCount += $result['count'];
+                $copiedSize  += $result['size'];
+                $errorFiles  += $result['errorFiles'];
             }
             else
             {
                 $dirName = dirname($file);
                 if(!is_dir($backupFile . DS . $dirName)) mkdir($backupFile . DS . $dirName, 0777, true);
-                $zfile->copyFile($codeFile, $backupFile . DS . $file);
+                if($zfile->copyFile($codeFile, $backupFile . DS . $file))
+                {
+                    $copiedCount += 1;
+                    $copiedSize  += filesize($codeFile);
+                }
+                else
+                {
+                    $errorFiles[] = $codeFile;
+                }
             }
         }
+
+        $this->processSummary($backupFile, $copiedCount, $copiedSize, $errorFiles, $allCount);
+        unlink($tmpLogFile);
 
         return $return;
     }
@@ -153,7 +184,7 @@ class backupModel extends model
         elseif(is_dir($backupFile))
         {
             $zfile = $this->app->loadClass('zfile');
-            $zfile->copyDir($backupFile, $this->app->getAppRoot() . 'www/data/');
+            $zfile->copyDir($backupFile, $this->app->getAppRoot() . 'www/data/', $showDetails = false);
         }
 
         return $return;
@@ -247,15 +278,28 @@ class backupModel extends model
     /**
      * Get dir size.
      * 
-     * @param  string    $backupFile 
+     * @param  string    $backup 
      * @access public
      * @return int
      */
-    public function getBackupSize($backupFile)
+    public function getBackupSummary($backup)
     {
         $zfile = $this->app->loadClass('zfile');
-        if(!is_dir($backupFile)) return $zfile->getFileSize($backupFile);
-        return 0;
+        if(is_file($backup))
+        {
+            $summary = array();
+            $summary['allCount'] = 1;
+            $summary['count']    = 1;
+            $summary['size']     = $zfile->getFileSize($backup);
+
+            return $summary;
+        }
+
+        $summaryFile = dirname($backup) . DS . 'summary';
+        if(!file_exists($summaryFile)) return array();
+
+        $summary = json_decode(file_get_contents(dirname($backup) . DS . 'summary'), 'true');
+        return isset($summary[basename($backup)]) ? $summary[basename($backup)] : array();
     }
 
     /**
@@ -297,6 +341,33 @@ class backupModel extends model
     }
 
     /**
+     * Get tmp log file.
+     * 
+     * @param  string $backupFile 
+     * @access public
+     * @return string
+     */
+    public function getTmpLogFile($backupFile)
+    {
+        $backupDir  = dirname($backupFile);
+        return $backupDir . DS . basename($backupFile) . '.tmp.summary';
+    }
+
+    /**
+     * Get backup dir progress.
+     * 
+     * @param  string $backup 
+     * @access public
+     * @return array
+     */
+    public function getBackupDirProgress($backup)
+    {
+        $tmpLogFile = $this->getTmpLogFile($backup);
+        if(file_exists($tmpLogFile)) return json_decode(file_get_contents($tmpLogFile), true);
+        return array();
+    }
+
+    /**
      * Process filesize.
      * 
      * @param  int    $fileSize 
@@ -319,5 +390,44 @@ class backupModel extends model
         }
 
         return $fileSize . $bit;
+    }
+
+    /**
+     * Process backup summary.
+     * 
+     * @param  string $file 
+     * @param  int    $count 
+     * @param  int    $size 
+     * @param  array  $errorFiles 
+     * @param  int    $allCount 
+     * @param  string $action  add|delete
+     * @access public
+     * @return bool
+     */
+    public function processSummary($file, $count, $size, $errorFiles = array(), $allCount = 0, $action = 'add')
+    {
+        $backupPath = dirname($file);
+        $fileName   = basename($file);
+
+        $summaryFile = $backupPath . DS . 'summary';
+        if(!file_exists($summaryFile) and touch($summaryFile)) return false;
+
+        $summary = json_decode(file_get_contents($summaryFile), true);
+        if(empty($summary)) $summary = array();
+
+        if($action == 'add')
+        {
+            $summary[$fileName]['allCount']   = $allCount;
+            $summary[$fileName]['errorFiles'] = $errorFiles;
+            $summary[$fileName]['count']      = $count;
+            $summary[$fileName]['size']       = $size;
+        }
+        else
+        {
+            unset($summary[$fileName]);
+        }
+
+        if(file_put_contents($summaryFile, json_encode($summary))) return true;
+        return false;
     }
 }

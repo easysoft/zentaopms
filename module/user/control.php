@@ -410,6 +410,7 @@ class user extends control
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
+
         $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
         $groupList = array('' => '');
         $roleGroup = array();
@@ -431,7 +432,6 @@ class user extends control
 
         $this->display();
     }
-
 
     /**
      * Batch create users.
@@ -780,7 +780,7 @@ class user extends control
                     }
                     else
                     {
-                        $response['locate']  = $this->config->default->module;
+                        $response['locate']  = $this->config->webRoot;
                         $this->send($response);
                     }
                 }

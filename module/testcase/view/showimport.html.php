@@ -1,11 +1,26 @@
 <?php include '../../common/view/header.html.php';?>
-<style>
-.affix {position:fixed; top:0px; width:95.6%;z-index:10000;}
-</style>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
+<?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
+<div id="mainContent" class="main-content">
+  <div class="main-header">
+    <h2><?php echo $lang->testcase->import;?></h2>
+  </div>
+  <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
+  <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>
+</div>
+<script>
+$(function()
+{
+    $('#maxImport').keyup(function()
+    {
+        if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
+    });
+    $('#import').click(function(){location.href = createLink('testcase', 'showImport', "productID=<?php echo $productID;?>&branch=<?php echo $branch?>&pageID=1&maxImport=" + $('#maxImport').val())})
+});
+</script>
 <?php else:?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
@@ -24,6 +39,11 @@
           <th class='w-120px'><?php echo $lang->testcase->type?></th>
           <th class='w-160px'><?php echo $lang->testcase->stage?></th>
           <th><?php echo $lang->testcase->precondition?></th>
+          <?php if(!empty($appendFields)):?>
+          <?php foreach($appendFields as $appendField):?>
+          <th class='w-100px'><?php echo $lang->testcase->{$appendField->field}?></th>
+          <?php endforeach;?>
+          <?php endif;?>
           <th class='w-300px'>
             <table class='w-p100 table-borderless'>
               <tr>
@@ -64,11 +84,18 @@
             <?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
           </td>
           <td style='overflow:visible'>
-          <?php echo html::select("story[$key]", $stories, isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : ''), "class='form-control chosen storyChange'")?></td>
+          <?php $storyID = isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : '');?>
+          <?php echo html::select("story[$key]", array($storyID => zget($stories, $storyID, '')), $storyID, "class='form-control chosen storyChange'")?></td>
           <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
           <td><?php echo html::select("type[$key]", $lang->testcase->typeList, $case->type, "class='form-control chosen'")?></td>
           <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
           <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
+          <?php if(!empty($appendFields)):?>
+          <?php $this->loadModel('flow');?>
+          <?php foreach($appendFields as $appendField):?>
+          <td><?php echo $this->flow->buildControl($appendField, $case->{$appendField->field}, "{$appendField->field}[$key]");?></td>
+          <?php endforeach;?>
+          <?php endif;?>
           <td>
             <?php if(isset($stepData[$key]['desc'])):?>
             <table class='w-p100 bd-0'>
@@ -100,13 +127,16 @@
             <?php
             if(!$insert)
             {
-              echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
+                echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
             }
             else
             {
-                echo html::submitButton();
+                echo html::submitButton($isEndPage ? $this->lang->save : $this->lang->file->saveAndNext);
+                echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
+                echo html::hidden('pagerID', $pagerID);
             }
             echo ' &nbsp; ' . html::backButton();
+            echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
           </td>
         </tr>

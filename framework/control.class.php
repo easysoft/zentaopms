@@ -308,6 +308,7 @@ class control extends baseControl
 
         $requiredFields = '';
         $mustPostFields = '';
+        $numberFields   = '';
         foreach($fields as $field)
         {
             if($field->buildin or !$field->show or !isset($layouts[$field->field])) continue;
@@ -315,6 +316,7 @@ class control extends baseControl
             {
                 $requiredFields .= ",{$field->field}";
                 if($field->control == 'radio' or $field->control == 'checkbox') $mustPostFields .= ",{$field->field}";
+                if(strpos($field->type, 'int') !== false and $field->control == 'select') $numberFields .= ",{$field->field}";
             }
         }
 
@@ -327,6 +329,10 @@ class control extends baseControl
             {
                 if(empty($requiredField)) continue;
                 if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')
+                {
+                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
+                }
+                elseif(strpos(",{$numberFields},", ",{$requiredField},") !== false and empty($_POST[$requiredField]))
                 {
                     $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
                 }

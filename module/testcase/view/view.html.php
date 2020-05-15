@@ -47,6 +47,7 @@
   </div>
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
+    <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
     <?php common::printLink('testcase', 'create', "productID={$case->product}&branch={$case->branch}&moduleID={$case->module}", "<i class='icon icon-plus'></i>" . $lang->testcase->create, '', "class='btn btn-primary'"); ?>
   </div>
   <?php endif;?>
@@ -55,7 +56,7 @@
 <div id="mainContent" class="main-row">
   <div class='main-col col-8'>
     <div class='cell' style='word-break:break-all'>
-      <?php if($case->auto != 'unit'):?>
+      <?php if($case->auto != 'unit' and !empty($case->precondition)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->precondition;?></div>
         <div class="detail-content article-content"><?php echo nl2br($case->precondition);?></div>
@@ -105,7 +106,6 @@
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true'));?>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=left&inForm=0&inCell=1");?>
-    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -336,11 +336,16 @@
       </details>
     </div>
     <?php $this->printExtendFields($case, 'div', "position=right&inForm=0&inCell=1");?>
+    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
   </div>
 </div>
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext, $this->createLink('testcase', 'view', "caseID=%s&version=&from=$from&taskID=$taskID"));?>
 </div>
+<?php
+js::set('fullscreen', $lang->fullscreen);
+js::set('retrack', $lang->retrack);
+?>
 <script>
 $(function()
 {

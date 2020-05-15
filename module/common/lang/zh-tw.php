@@ -58,6 +58,8 @@ $lang->trunk        = '主幹';
 $lang->sort         = '排序';
 $lang->required     = '必填';
 $lang->noData       = '暫無';
+$lang->fullscreen   = '全屏';
+$lang->retrack      = '收起';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢復預設';
@@ -420,7 +422,7 @@ $lang->admin->subMenu->message->browser = array('link' => '瀏覽器|message|bro
 $lang->admin->subMenu->message->setting = array('link' => '設置|message|setting');
 
 $lang->admin->subMenu->sso = new stdclass();
-$lang->admin->subMenu->sso->ranzhi = '然之協同|admin|sso';
+$lang->admin->subMenu->sso->ranzhi = 'ZDOO|admin|sso';
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');
@@ -576,7 +578,6 @@ $lang->importAndInsert = "全新插入";
 $lang->noResultsMatch    = "沒有匹配結果";
 $lang->searchMore        = "搜索此關鍵字的更多結果：";
 $lang->chooseUsersToMail = "選擇要發信通知的用戶...";
-$lang->browserNotice     = '你目前使用的瀏覽器可能無法得到最佳瀏覽效果，建議使用Chrome、火狐、IE9+、Opera、Safari瀏覽器。';
 $lang->noticePasteImg    = "可以在編輯器直接貼圖。";
 $lang->pasteImgFail      = "貼圖失敗，請稍後重試。";
 $lang->pasteImgUploading = "正在上傳圖片，請稍後...";

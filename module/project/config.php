@@ -10,6 +10,7 @@ $config->project->list->exportFields = 'id,name,code,PM,end,status,totalEstimate
 
 global $lang, $app;
 $app->loadLang('task');
+$config->project->task   = new stdclass();
 $config->project->create = new stdclass();
 $config->project->edit   = new stdclass();
 $config->project->create->requiredFields = 'name,code,begin,end';

@@ -9,9 +9,15 @@ $lang->backup->change      = 'Editer Expiration';
 $lang->backup->changeAB    = 'Editer';
 $lang->backup->rmPHPHeader = 'Enlever PHP header';
 
-$lang->backup->time  = 'Date';
-$lang->backup->files = 'Fichiers';
-$lang->backup->size  = 'Taille';
+$lang->backup->time     = 'Date';
+$lang->backup->files    = 'Fichiers';
+$lang->backup->allCount = 'All Count';
+$lang->backup->count    = 'Backup Count';
+$lang->backup->size     = 'Taille';
+$lang->backup->status   = 'Status';
+
+$lang->backup->statusList['success'] = 'Success';
+$lang->backup->statusList['fail']    = 'Fail';
 
 $lang->backup->setting    = 'Paramétrage';
 $lang->backup->settingDir = 'Répertoire Backup';
@@ -20,11 +26,12 @@ $lang->backup->settingList['nosafe'] = 'Ne pas prévenir du téléchargement par
 
 $lang->backup->waitting       = '<span id="backupType"></span> est en cours. Patientez s´il vous plait...';
 $lang->backup->progressSQL    = '<p>SQL backup: %s est sauvegardé.</p>';
-$lang->backup->progressAttach = '<p>SQL backup est terminé.</p><p>Attachment backup: %s est sauvegardé avec succès.</p>';
-$lang->backup->progressCode   = '<p>SQL backup est terminé.</p><p>Attachment backup est terminé.</p><p>Code backup: %s est sauvegardé avec succès.</p>';
+$lang->backup->progressAttach = '<p>SQL backup est terminé.</p><p>Attachment backing up.</p>';
+$lang->backup->progressCode   = '<p>SQL backup est terminé.</p><p>Attachment backup est terminé.</p><p>Code backing up.</p>';
 $lang->backup->confirmDelete  = 'Voulez-vous supprimer la sauvegarde ?';
 $lang->backup->confirmRestore = 'Voulez-vous restaurer la sauvegarde ?';
 $lang->backup->holdDays       = 'conserver les derniers %s jours de backup';
+$lang->backup->copiedFail     = 'Copy failed files: ';
 $lang->backup->restoreTip     = 'Seulement les fichiers et les bases peuvent être restaurées en cliquant sur Restaurer. Le code doit être restauré manuellement.';
 
 $lang->backup->success = new stdclass();

@@ -383,11 +383,16 @@ class testreport extends control
     /**
      * View report.
      *
-     * @param  int    $reportID
+     * @param  int    $reportID 
+     * @param  string $from 
+     * @param  string $tab 
+     * @param  int    $recTotal 
+     * @param  int    $recPerPage 
+     * @param  int    $pageID 
      * @access public
      * @return void
      */
-    public function view($reportID, $from = 'product')
+    public function view($reportID, $from = 'product', $tab = 'basic', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $report  = $this->testreport->getById($reportID);
         if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
@@ -421,9 +426,14 @@ class testreport extends control
             if($result->caseResult == 'fail') $failResults[$result->case] = $result->case;
         }
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         $tasks   = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
         $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
-        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases);
+        $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end, $report->cases, $pager);
         $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
 
         if($report->objectType == 'testtask')
@@ -439,6 +449,8 @@ class testreport extends control
         $this->view->browseLink = $browseLink;
         $this->view->position[] = $report->title;
 
+        $this->view->tab     = $tab;
+        $this->view->pager   = $pager;
         $this->view->report  = $report;
         $this->view->project = $project;
         $this->view->stories = $stories;

@@ -198,6 +198,7 @@ $lang->task->createDenied          = 'Create Task is denied in this project';
 $lang->task->cannotDeleteParent    = 'Cannot delete parent task';
 
 $lang->task->error = new stdclass();
+$lang->task->error->totalNumber      = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber   = '"Current Cost" must be numbers.';
 $lang->task->error->estimateNumber   = '"Estimates" must be numbers.';
 $lang->task->error->recordMinus      = 'Work hours should not be negative number.';

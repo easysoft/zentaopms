@@ -15,6 +15,15 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
+<?php
+/* Set unfold parent taskID. */
+$this->app->loadLang('project');
+$unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
+$unfoldStories = zget($unfoldStories, $productID, array());
+js::set('unfoldStories', $unfoldStories);
+js::set('unfoldAll',     $lang->project->treeLevel['all']);
+js::set('foldAll',       $lang->project->treeLevel['root']);
+?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">
     <div class="title">
@@ -414,7 +423,15 @@ $('#module<?php echo $moduleID;?>').closest('li').addClass('active');
 $(function()
 {
     // Update table summary text
-    var checkedSummary = '<?php echo $lang->product->checkedSummary?>';
+    <?php
+    $storyCommon = $lang->storyCommon;
+    if(!empty($config->URAndSR))
+    {
+        if($storyType == 'requirement') $storyCommon = $lang->urCommon;
+        if($storyType == 'story') $storyCommon = $lang->srCommon;
+    }
+    ?>
+    var checkedSummary = '<?php echo str_replace('%storyCommon%', $storyCommon, $lang->product->checkedSummary)?>';
     $('#productStoryForm').table(
     {
         statisticCreator: function(table)

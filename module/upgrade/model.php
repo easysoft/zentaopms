@@ -582,6 +582,13 @@ class upgradeModel extends model
             }
 
             $this->appendExec('12_1');
+        case '12_2':
+            $this->saveLogs('Execute 12_2');
+            $this->execSQL($this->getUpgradeFile('12.2'));
+            $this->appendExec('12_2');
+        case '12_3':
+            $this->saveLogs('Execute 12_3');
+            $this->appendExec('12_3');
         }
 
         $this->deletePatch();
@@ -752,6 +759,8 @@ class upgradeModel extends model
                     $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
                     $confirmContent .= file_get_contents($xuanxuanSql);
                 }
+            case '12_2': $confirmContent .= file_get_contents($this->getUpgradeFile('12.2'));
+            case '12_3':
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }

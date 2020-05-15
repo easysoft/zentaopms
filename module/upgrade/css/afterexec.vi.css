@@ -1,0 +1,9 @@
+.adbox .panel-body{padding-right:0px;}
+
+.row .divider{height: 560px;}
+.card {width: 100%;}
+
+.card.ad > .img-wrapper {
+  height: 110px;
+  line-height:110px;
+}

@@ -486,64 +486,6 @@ function applyCssStyle(css, tag)
 }
 
 /**
- * Show browser notice
- *
- * @access public
- * @return void
- */
-function showBrowserNotice()
-{
-    userAgent = navigator.userAgent.toLowerCase();
-    $browser  = new Object();
-    $browser.msie   = /msie/.test(userAgent);
-    $browser.chrome = /chrome/.test(userAgent);
-
-    //if($browser.msie)
-    //{
-    //    match = /(msie) ([\w.]+)/.exec(userAgent);
-    //    $browser.version = match[2] || '0';
-    //}
-
-    var show = false;
-
-    /* IE 6,7. */
-    //if($browser.msie && $browser.version <= 7) show = true;
-
-    /* Souhu */
-    if(navigator.userAgent.indexOf('MetaSr') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('LBBROWSER') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('QQBrowser') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('TheWorld') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('BIDUBrowser') >= 0)
-    {
-        show = true;
-    }
-    else if(navigator.userAgent.indexOf('Maxthon') >= 0)
-    {
-        show = true;
-    }
-    /* 360. */
-    //else if($browser.chrome && !(window.clientInformation && window.clientInformation.mediaDevices))
-    //{
-    //    show = true;
-    //}
-
-    if(show) $('body').prepend('<div class="alert alert-info alert-dismissable" style="margin:0px;"><button type=button" onclick="ajaxIgnoreBrowser()" class="close" data-dismiss="alert" aria-hidden="true"><i class="icon-remove"></i></button><p>' + browserNotice + '</p></div>');
-}
-
-/**
  * Remove cookie by key
  *
  * @param  cookieKey $cookieKey
@@ -755,6 +697,78 @@ function bootAlert(message)
 {
     bootbox.alert(message);
     return false;
+}
+
+/**
+ * Toggle fold or unfold for parent.
+ * 
+ * @param  string $form 
+ * @param  array  $unfoldIdList 
+ * @param  int    $objectID 
+ * @param  string $objectType 
+ * @access public
+ * @return void
+ */
+function toggleFold(form, unfoldIdList, objectID, objectType)
+{
+    $form     = $(form);
+    $parentTd = $form.find('td.has-child');
+    if($parentTd.length == 0) return false;
+
+    var toggleClass = objectType == 'product' ? 'story-toggle' : 'task-toggle';
+    $form.find('th.c-title').append("<button type='button' id='toggleFold' class='btn btn-mini collapsed'>" + unfoldAll + "</button>");
+
+    var allUnfold = true;
+    $parentTd.each(function()
+    {
+        var dataID = $(this).closest('tr').attr('data-id');
+        if(typeof(unfoldIdList[dataID]) != 'undefined') return true;
+
+        allUnfold = false;
+        $form.find('tr.parent-' + dataID).hide();
+        $(this).find('a.' + toggleClass).addClass('collapsed')
+    })
+
+    $form.find('th.c-title #toggleFold').html(allUnfold ? foldAll : unfoldAll).toggleClass('collapsed', !allUnfold);
+
+    $(document).on('click', '#toggleFold', function()
+    {
+        var newUnfoldID = [];
+        var url         = '';
+        var collapsed   = $(this).hasClass('collapsed');
+        $parentTd.each(function()
+        {
+            var dataID = $(this).closest('tr').attr('data-id');
+            $form.find('tr.parent-' + dataID).toggle(collapsed);
+            $(this).find('a.' + toggleClass).toggleClass('collapsed', !collapsed)
+            newUnfoldID.push(dataID);
+        })
+
+        $(this).html(collapsed ? foldAll : unfoldAll).toggleClass('collapsed', !collapsed);
+        url = createLink('misc', 'ajaxSetUnfoldID', 'objectID=' + objectID + '&objectType=' + objectType + '&action=' + (collapsed ? 'add' : 'delete'));
+        $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});
+    });
+
+    $parentTd.find('a.' + toggleClass).click(function()
+    {
+        var newUnfoldID = [];
+        var url         = '';
+        var collapsed   = $(this).hasClass('collapsed');
+        var dataID      = $(this).closest('tr').attr('data-id');
+
+        $form.find('tr.parent-' + dataID).toggle(!collapsed);
+        newUnfoldID.push(dataID);
+        url = createLink('misc', 'ajaxSetUnfoldID', 'objectID=' + objectID + '&objectType=' + objectType + '&action=' + (collapsed ? 'add' : 'delete'));
+
+        $table = $(this).closest('table');
+        setTimeout(function()
+        {
+            hasCollapsed = $table.find('td.has-child a.' + toggleClass + '.collapsed').length != 0;
+            $('#toggleFold').html(hasCollapsed ? unfoldAll : foldAll).toggleClass('collapsed', hasCollapsed);
+        }, 100);
+
+        $.post(url, {'newUnfoldID': JSON.stringify(newUnfoldID)});
+    });
 }
 
 /* Ping the server every some minutes to keep the session. */

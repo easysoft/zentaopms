@@ -1,7 +1,9 @@
 $(function()
 {
     $('.tab-pane').removeClass('active');
-    $('.tab-pane:first').addClass('active');
+    activeTab = activeTab == 'basic' ? 'basic' : 'tabCase';
+    $('.tab-pane#' + activeTab).addClass('active');
+
     $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)
     {
         var href = $(e.target).data('target');

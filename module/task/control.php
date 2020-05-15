@@ -728,6 +728,7 @@ class task extends control
         if(!empty($_POST))
         {
             $changes = $this->task->recordEstimate($taskID);
+            if(dao::isError()) die(js::error(dao::getError()));
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
@@ -1057,8 +1058,9 @@ class task extends control
         if($this->post->taskIDList or $skipTaskIdList)
         {
             $taskIDList = $this->post->taskIDList;
-            $taskIDList = array_unique($taskIDList);
+            if($taskIDList)     $taskIDList = array_unique($taskIDList);
             if($skipTaskIdList) $taskIDList = $skipTaskIdList;
+
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);
             $this->loadModel('action');

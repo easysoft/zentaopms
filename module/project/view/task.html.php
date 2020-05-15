@@ -19,6 +19,13 @@ js::set('moduleID', $moduleID);
 js::set('productID', $productID);
 js::set('projectID', $projectID);
 js::set('browseType', $browseType);
+
+/* Set unfold parent taskID. */
+$unfoldTasks = isset($config->project->task->unfoldTasks) ? json_decode($config->project->task->unfoldTasks, true) : array();
+$unfoldTasks = zget($unfoldTasks, $projectID, array());
+js::set('unfoldTasks', $unfoldTasks);
+js::set('unfoldAll',   $lang->project->treeLevel['all']);
+js::set('foldAll',     $lang->project->treeLevel['root']);
 ?>
 <div id="mainMenu" class="clearfix">
   <div id="sidebarHeader">

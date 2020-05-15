@@ -106,7 +106,7 @@ class router extends baseRouter
                 $commonSettings = array();
                 try
                 {
-                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','storyRequirement','hourPoint')")->fetchAll();
+                    $commonSettings = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='system' AND `module`='custom' and `key` in ('productProject','URAndSR','URSRName','storyRequirement','hourPoint')")->fetchAll();
                 }
                 catch (PDOException $exception) 
                 {
@@ -133,7 +133,14 @@ class router extends baseRouter
             {
                 if($setting->key == 'productProject') list($productCommon, $projectCommon) = explode('_',  $setting->value);
                 if($setting->key == 'storyRequirement') $storyCommon = $setting->value;
-                if($setting->key == 'hourPoint') $hourCommon = $setting->value;
+                if($setting->key == 'hourPoint') $hourCommon    = $setting->value;
+                if($setting->key == 'URAndSR') $URAndSR = $setting->value;
+                if($setting->key == 'URSRName')
+                {
+                    $URSRName = json_decode($setting->value, true);
+                    if(isset($URSRName['urCommon'][$this->clientLang])) $lang->urCommon = $URSRName['urCommon'][$this->clientLang];
+                    if(isset($URSRName['srCommon'][$this->clientLang])) $lang->srCommon = $URSRName['srCommon'][$this->clientLang];
+                }
             }
 
             $config->storyCommon = $storyCommon;
@@ -143,6 +150,12 @@ class router extends baseRouter
             $lang->projectCommon = isset($this->config->projectCommonList[$this->clientLang][(int)$projectCommon]) ? $this->config->projectCommonList[$this->clientLang][(int)$projectCommon] : $this->config->projectCommonList['en'][(int)$projectCommon];
             $lang->storyCommon   = isset($this->config->storyCommonList[$this->clientLang][(int)$storyCommon])     ? $this->config->storyCommonList[$this->clientLang][(int)$storyCommon]     : $this->config->storyCommonList['en'][(int)$storyCommon];
             $lang->hourCommon    = isset($this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon])  ? $this->config->hourPointCommonList[$this->clientLang][(int)$hourCommon]  : $this->config->hourPointCommonList['en'][(int)$hourCommon];
+
+            if($storyCommon == 0 and isset($URAndSR))
+            {
+                $config->URAndSR = $URAndSR;
+                if(!empty($URAndSR) and !empty($lang->srCommon)) $lang->storyCommon = $lang->srCommon;
+            }
         }
 
         parent::loadLang($moduleName, $appName);

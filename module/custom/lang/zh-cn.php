@@ -149,9 +149,10 @@ $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';
 $lang->custom->moduleName['project']     = $lang->projectCommon;
 
-$lang->custom->conceptQuestions['overview']   = "1. 下述哪种组合方式更适合您公司的管理现状？";
-$lang->custom->conceptQuestions['story']      = "2. 您公司是在使用需求概念还是用户故事概念？";
-$lang->custom->conceptQuestions['storypoint'] = "3. 您公司是在使用工时还是故事点来做规模估算？";
+$lang->custom->conceptQuestions['overview']         = "1. 下述哪种组合方式更适合您公司的管理现状？";
+$lang->custom->conceptQuestions['story']            = "2. 您公司是在使用需求概念还是用户故事概念？";
+$lang->custom->conceptQuestions['requirementpoint'] = "3. 您公司是在使用工时还是功能点来做规模估算？";
+$lang->custom->conceptQuestions['storypoint']       = "3. 您公司是在使用工时还是故事点来做规模估算？";
 
 $lang->custom->conceptOptions = new stdclass;
 
@@ -162,3 +163,4 @@ $lang->custom->conceptOptions->story['1'] = '故事';
 $lang->custom->conceptOptions->hourPoint = array();
 $lang->custom->conceptOptions->hourPoint['0'] = '工时';
 $lang->custom->conceptOptions->hourPoint['1'] = '故事点';
+$lang->custom->conceptOptions->hourPoint['2'] = '功能点';

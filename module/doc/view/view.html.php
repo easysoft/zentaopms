@@ -15,8 +15,8 @@
 <?php echo css::internal($keTableCSS);?>
 <?php $browseLink = $this->session->docList ? $this->session->docList : inlink('browse');?>
 <?php
-js::set('fullscreen', $lang->doc->fullscreen);
-js::set('retrack', $lang->doc->retrack);
+js::set('fullscreen', $lang->fullscreen);
+js::set('retrack', $lang->retrack);
 js::set('sysurl', common::getSysUrl());
 js::set('docID', $doc->id);
 ?>
@@ -70,6 +70,9 @@ js::set('docID', $doc->id);
       <?php endif; ?>
     </div>
   </div>
+  <div class='btn-toolbar pull-right'>
+    <button type='button' class='btn btn-secondary fullscreen-btn' title='<?php echo $lang->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->retrack;?></button>
+  </div>
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
@@ -118,7 +121,7 @@ js::set('docID', $doc->id);
               <img onload="setImageSize(this, 0)" src="<?php echo $this->createLink('file', 'read', "fileID={$file->id}");?>" alt="<?php echo $file->title?>">
             </a>
             <span class='right-icon'>
-              <?php if(common::hasPriv('file', 'delete')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
+              <?php if(common::hasPriv('doc', 'deleteFile')) echo html::a('###', "<i class='icon icon-trash'></i>", '', "class='btn-icon' title=\"{$lang->doc->deleteFile}\" onclick='deleteFile($file->id)'");?>
             </span>
           </div>
           <?php unset($doc->files[$file->id]);?>
@@ -132,7 +135,6 @@ js::set('docID', $doc->id);
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <div class='divider'></div>
-            <button type='button' class='btn fullscreen-btn' title='<?php echo $lang->doc->retrack;?>'><i class='icon icon-fullscreen'></i><?php echo ' ' . $lang->doc->retrack;?></button>
         <?php
         if(!$doc->deleted)
         {
@@ -213,5 +215,6 @@ js::set('docID', $doc->id);
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
 </div>
+<?php js::set('canDeleteFile', common::hasPriv('doc', 'deleteFile'));?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

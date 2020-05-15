@@ -41,6 +41,9 @@ $config->productCommonList['de'][1] = 'Projekt';
 $config->productCommonList['fr'][0] = 'Product';
 $config->productCommonList['fr'][1] = 'Projet';
 
+$config->productCommonList['vi'][0] = 'Sản phẩm';
+$config->productCommonList['vi'][1] = 'Dự án';
+
 /* Project common list. */
 $config->projectCommonList['zh-cn'][0] = '项目';
 $config->projectCommonList['zh-cn'][1] = '迭代';
@@ -62,6 +65,10 @@ $config->projectCommonList['fr'][0] = 'Projet';
 $config->projectCommonList['fr'][1] = 'Iteration';
 $config->projectCommonList['fr'][2] = 'Sprint';
 
+$config->projectCommonList['vi'][0] = 'Dự án';
+$config->projectCommonList['vi'][1] = 'Lặp lại';
+$config->projectCommonList['vi'][2] = 'Sprint';
+
 /* Story common list. */
 $config->storyCommonList['zh-cn'][0] = '需求';
 $config->storyCommonList['zh-cn'][1] = '故事';
@@ -78,21 +85,33 @@ $config->storyCommonList['de'][1] = 'Story';
 $config->storyCommonList['fr'][0] = 'Story';
 $config->storyCommonList['fr'][1] = 'Story';
 
+$config->storyCommonList['vi'][0] = 'Câu chuyện';
+$config->storyCommonList['vi'][1] = 'Câu chuyện';
+
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '工时';
 $config->hourPointCommonList['zh-cn'][1] = '故事点';
+$config->hourPointCommonList['zh-cn'][2] = '功能点';
 
 $config->hourPointCommonList['zh-tw'][0] = '工时';
 $config->hourPointCommonList['zh-tw'][1] = '故事点';
+$config->hourPointCommonList['zh-tw'][2] = '功能点';
 
 $config->hourPointCommonList['en'][0] = 'hour';
 $config->hourPointCommonList['en'][1] = 'story point';
+$config->hourPointCommonList['en'][2] = 'function point';
 
 $config->hourPointCommonList['de'][0] = 'hour';
 $config->hourPointCommonList['de'][1] = 'story point';
+$config->hourPointCommonList['de'][2] = 'function point';
 
 $config->hourPointCommonList['fr'][0] = 'hour';
 $config->hourPointCommonList['fr'][1] = 'story point';
+$config->hourPointCommonList['fr'][2] = 'function point';
+
+$config->hourPointCommonList['vi'][0] = 'giờ';
+$config->hourPointCommonList['vi'][1] = 'điểm';
+$config->hourPointCommonList['vi'][2] = 'function point';
 
 /* Supported charsets. */
 $config->charsets['zh-cn']['utf-8'] = 'UTF-8';
@@ -105,6 +124,8 @@ $config->charsets['de']['utf-8']    = 'UTF-8';
 $config->charsets['de']['GBK']      = 'GBK';
 $config->charsets['fr']['utf-8']    = 'UTF-8';
 $config->charsets['fr']['GBK']      = 'GBK';
+$config->charsets['vi']['utf-8']    = 'UTF-8';
+$config->charsets['vi']['GBK']      = 'GBK';
 
 /* IP white list settings.*/
 $config->ipWhiteList = '*';

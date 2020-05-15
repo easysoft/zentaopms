@@ -177,7 +177,7 @@ $lang->install->joinZentao = <<<EOT
 <p>Vous avez installé ZenTao %s.<strong class='text-danger'> Supprimez install.php asap</strong>.</p><p>Note : Afin d'obtenir les dernières infos de ZenTao, enregistrz-vous chez ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
-$lang->install->product = array('chanzhi', 'ranzhi');
+$lang->install->product = array('chanzhi', 'zdoo');
 
 $lang->install->promotion     = "Products also from Nature Easy Soft team:";
 $lang->install->chanzhi       = new stdclass();
@@ -193,11 +193,11 @@ $lang->install->chanzhi->desc = <<<EOD
 </ul>
 EOD;
 
-$lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name = 'ZDOO';
-$lang->install->ranzhi->logo = 'images/main/ranzhi.ico';
-$lang->install->ranzhi->url  = 'http://www.zdoo.org';
-$lang->install->ranzhi->desc = <<<EOD
+$lang->install->zdoo = new stdclass();
+$lang->install->zdoo->name = 'ZDOO';
+$lang->install->zdoo->logo = 'images/main/zdoo.ico';
+$lang->install->zdoo->url  = 'http://www.zdoo.com';
+$lang->install->zdoo->desc = <<<EOD
 <ul>
   <li>CRM: Customer Management and Order Tracking</li>
   <li>OA: Approve, Announce, Trip, Leave and so on. </li>

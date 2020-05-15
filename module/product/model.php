@@ -779,7 +779,6 @@ class productModel extends model
                     $i++;
                     if($i >= $count) break;
                 }
-                krsort($newRoadmap[$year][$branch]);
             }
         }
         return $newRoadmap;
@@ -978,17 +977,21 @@ class productModel extends model
      * Get the summary of product's stories.
      *
      * @param  array    $stories
+     * @param  string   $storyType  story|requirement
      * @access public
      * @return string.
      */
-    public function summary($stories)
+    public function summary($stories, $storyType = 'story')
     {
         $totalEstimate = 0.0;
         $storyIdList   = array();
 
-        $count = 0;
+        $rateCount = 0;
+        $allCount  = 0;
         foreach($stories as $key => $story)
         {
+            if($story->type != $storyType) continue;
+
             $totalEstimate += $story->estimate;
             /* When the status is not closed or closedReason is done or postponed then add cases rate..*/
             if(
@@ -997,29 +1000,39 @@ class productModel extends model
             )
             {
                 $storyIdList[] = $story->id;
+                $rateCount ++;
             }
 
-            $count ++;
+            $allCount ++;
             if(!empty($story->children))
             {
                 foreach($story->children as $child)
                 {
+                    if($child->type != $storyType) continue;
+
                     if(
                         $child->status != 'closed' or
                         ($child->status == 'closed' and ($child->closedReason == 'done' or $child->closedReason == 'postponed'))
                     )
                     {
                         $storyIdList[] = $child->id;
+                        $rateCount ++;
                     }
-                    $count ++;
+                    $allCount ++;
                 }
             }
         }
 
-        $cases = $this->dao->select('DISTINCT story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll();
-        $rate  = count($stories) == 0 ? 0 : round(count($cases) / $count, 2);
+        $cases = $this->dao->select('story')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->fetchAll('story');
+        $rate  = count($stories) == 0 ? 0 : round(count($cases) / $rateCount, 2);
 
-        return sprintf($this->lang->product->storySummary, $count, $totalEstimate, $rate * 100 . "%");
+        $storyCommon = $this->lang->storyCommon;
+        if(!empty($this->config->URAndSR))
+        {
+            if($storyType == 'requirement') $storyCommon = $this->lang->urCommon;
+            if($storyType == 'story') $storyCommon = $this->lang->srCommon;
+        }
+        return sprintf($this->lang->product->storySummary, $allCount,  $storyCommon, $totalEstimate, $rate * 100 . "%");
     }
 
     /**

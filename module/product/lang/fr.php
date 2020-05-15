@@ -133,8 +133,8 @@ $lang->product->aclList['open']    = "Défaut (Les utilisateurs ayant des droits
 $lang->product->aclList['private'] = "{$lang->productCommon} Privé (seuls les membres de l'équipe {$lang->projectCommon} ont les droits)";
 $lang->product->aclList['custom']  = "Personnalisé (les membres de l'équipe et les membres de la Liste blanche peuvent y accéder.)";
 
-$lang->product->storySummary   = "Total de <strong>%s</strong> stories sur cette page. Estimé: <strong>%s</strong> (h), et couverture de la recette: <strong>%s</strong>.";
-$lang->product->checkedSummary = "<strong>%total%</strong> stories sélectionnées, Estimé: <strong>%estimate%</strong>, et couverture de la recette: <strong>%rate%</strong>.";
+$lang->product->storySummary   = "Total de <strong>%s</strong> %s sur cette page. Estimé: <strong>%s</strong> (h), et couverture de la recette: <strong>%s</strong>.";
+$lang->product->checkedSummary = "<strong>%total%</strong> %storyCommon% sélectionnées, Estimé: <strong>%estimate%</strong>, et couverture de la recette: <strong>%rate%</strong>.";
 $lang->product->noModule       = "<div>Vous n'avez aucun modules. </div><div>Gérer Maintenant</div>";
 $lang->product->noProduct      = "No {$lang->productCommon} à ce jour. ";
 $lang->product->noMatched      = '"%s" cannot be found.' . $lang->productCommon;

@@ -2,7 +2,7 @@
 #searchStories .searchInput .icon {position: absolute; display: block; left: 9px; top: 9px; z-index: 5; color: #808080;}
 #storySearchInput {padding-left: 30px;}
 
-#searchStories .modal-body {height: 300px; overflow-y: auto; padding: 0;}
+#searchStories .modal-body {height: 300px; overflow-y: auto !important; padding: 0;}
 #searchResult {padding-left: 0; list-style: none; width: 100%}
 #searchResult > li {display: block}
 #searchResult > li.tip {padding: 6px 15px; color: #808080}

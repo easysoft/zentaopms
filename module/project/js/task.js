@@ -8,6 +8,8 @@ $(function()
         if($td.find('.label').length > 0) labelWidth = $td.find('.label').width();
         $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
     });
+
+    toggleFold('#projectTaskForm', unfoldTasks, projectID, 'project');
 });
 
 $('#module' + moduleID).closest('li').addClass('active');

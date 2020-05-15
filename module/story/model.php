@@ -516,7 +516,7 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
-            ->setIF($this->post->plan[0] and ($oldStory->stage == 'wait'), 'stage', 'planned')
+            ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
             ->join('linkStories', ',')
@@ -555,7 +555,7 @@ class storyModel extends model
             }
             $story->stage = $minStage;
         }
-        if($oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
+        if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
@@ -2075,6 +2075,7 @@ class storyModel extends model
         $stories = $this->dao->select('id, title')->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('parent')->le(0)
+            ->andWhere('type')->eq('story')
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
             ->beginIF($append)->orWhere('id')->in($append)->fi()
@@ -2657,7 +2658,7 @@ class storyModel extends model
             ->fetchPairs('id', 'title');
 
         /* For requirement children. */
-        if($type == 'requirement' && $this->config->storyCommon == 0)
+        if($type == 'requirement' && !empty($this->config->URAndSR))
         {
             $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
               ->where('AID')->in(array_keys($stories))  
@@ -2736,6 +2737,7 @@ class storyModel extends model
         {
             $class = "c-{$id}";
             $title = '';
+            $style = '';
 
             if($id == 'assignedTo')
             {
@@ -2770,8 +2772,12 @@ class storyModel extends model
                 $title  = $reviewedBy;
                 $class .= ' text-ellipsis';
             }
+            else if($id == 'stage')
+            {
+                $style .= 'overflow: visible;';
+            }
 
-            echo "<td class='" . $class . "' title='$title'>";
+            echo "<td class='" . $class . "' title='$title' style='$style'>";
             if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('story', $story, $id);
             switch($id)
             {

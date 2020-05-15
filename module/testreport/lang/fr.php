@@ -73,6 +73,7 @@ $lang->testreport->errorTrunk     = "Vous ne pouvez pas créer un rapport de tes
 $lang->testreport->noTestTask     = "Pas de campagne de test pour ce {$lang->productCommon}, aucun rapport ne peut être généré. Choisissez un {$lang->productCommon} avec des campagnes de recette et vous pourrez produire des rapports.";
 $lang->testreport->noObjectID     = "Pas de campagne de test ou un {$lang->projectCommon} est sélectionné, aucun rapport ne peut être généré.";
 $lang->testreport->moreProduct    = "Les rapports de test ne peuvent être produits que pour le même {$lang->productCommon}.";
+$lang->testreport->hiddenCase     = "Hide %s use cases";
 
 $lang->testreport->bugSummary = <<<EOD
 Total <strong>%s</strong> Bugs signalés <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,

@@ -452,7 +452,7 @@ class project extends control
         }
         else
         {
-            $tasks2Imported = $tasks[$fromProject];
+            $tasks2Imported = zget($tasks, $fromProject, array());
         }
 
         /* Save session. */

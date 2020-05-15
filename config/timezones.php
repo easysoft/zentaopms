@@ -89,6 +89,7 @@ $timezoneList = array(
     'Asia/Dhaka'                       => '(UTC+06:00) Dhaka',
     'Asia/Yekaterinburg'               => '(UTC+06:00) Ekaterinburg',
     'Asia/Rangoon'                     => '(UTC+06:30) Rangoon',
+    'Asia/Ho_Chi_Minh'                 => '(UTC+07:00) Ho Chi Minh',
     'Asia/Bangkok'                     => '(UTC+07:00) Bangkok',
     'Asia/Jakarta'                     => '(UTC+07:00) Jakarta',
     'Asia/Novosibirsk'                 => '(UTC+07:00) Novosibirsk',
