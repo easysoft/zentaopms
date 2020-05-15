@@ -25,26 +25,22 @@
           <div class="panel-body">
             <div class="release-path">
               <ul class="release-line">
-                <?php foreach($roadmaps as $year => $mapBranches):?>
-                <?php foreach($mapBranches as $plans):?>
-                <?php foreach($plans as $plan):?>
-                <?php if(isset($plan->begin)):?>
-                <li <?php if(date('Y-m-d') < $plan->begin) echo "class='active'";?>>
-                  <a href="<?php echo $this->createLink('productplan', 'view', "planID={$plan->id}");?>">
-                    <span class="title" title='<?php echo $plan->title;?>'><?php echo $plan->title;?></span>
-                    <span class="date"><?php echo $plan->begin;?></span>
+                <?php foreach($roadmaps as $roadmap):?>
+                <?php if(isset($roadmap->begin)):?>
+                <li <?php if(date('Y-m-d') < $roadmap->begin) echo "class='active'";?>>
+                  <a href="<?php echo $this->createLink('productplan', 'view', "planID={$roadmap->id}");?>">
+                    <span class="title" title='<?php echo $roadmap->title;?>'><?php echo $roadmap->title;?></span>
+                    <span class="date"><?php echo $roadmap->begin;?></span>
                   </a>
                 </li>
                 <?php else:?>
                 <li>
-                  <a href="<?php echo $this->createLink('release', 'view', "releaseID={$plan->id}");?>">
-                    <span class="title" title='<?php echo $plan->name;?>'><?php echo $plan->name;?></span>
-                    <span class="date"><?php echo $plan->date;?></span>
+                  <a href="<?php echo $this->createLink('release', 'view', "releaseID={$roadmap->id}");?>">
+                    <span class="title" title='<?php echo $roadmap->name;?>'><?php echo $roadmap->name;?></span>
+                    <span class="date"><?php echo $roadmap->date;?></span>
                   </a>
                 </li>
                 <?php endif;?>
-                <?php endforeach;?>
-                <?php endforeach;?>
                 <?php endforeach;?>
               </ul>
             </div>
