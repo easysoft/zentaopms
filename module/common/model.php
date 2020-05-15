@@ -479,6 +479,9 @@ class commonModel extends model
     {
         global $app, $lang, $config;
 
+        /* If program, return.*/
+        if($moduleName == 'program') return;
+
         /* Set the main main menu. */
         $mainMenu      = $moduleName;
         $currentModule = $app->rawModule;
@@ -486,34 +489,7 @@ class commonModel extends model
 
         /* Set main menu by group. */
         $group = isset($lang->navGroup->$moduleName) ? $lang->navGroup->$moduleName : '';
-        if($moduleName == 'program') return;
-        if($group == 'my')        
-        {
-            $lang->menu      = $lang->my->menu;
-            $lang->menuOrder = $lang->my->menuOrder;
-        }
-        if($group == 'system')    
-        {
-            $lang->menu      = $lang->system->menu;
-            $lang->menuOrder = $lang->system->menuOrder;
-        }
-        if($group == 'doclib')    return;
-        if($group == 'reporting') 
-        {
-            $lang->menu      = $lang->report->menu;
-            $lang->menuOrder = $lang->report->menuOrder;
-        }
-        if($group == 'attend')     
-        {
-            $lang->menu      = $lang->attend->menu;
-            $lang->menuOrder = $lang->attend->menuOrder;
-        }
-        if($group == 'admin')     
-        {
-            $lang->menu      = $lang->admin->menu;
-            $lang->menuOrder = $lang->admin->menuOrder;
-        }
-        if($group == 'program') $lang->menu = self::getProgramMainMenu($moduleName);
+        self::setMainMenuByGroup($group, $moduleName, $methodName);
 
         /* Print all main menus. */
         $menu       = customModel::getMainmenu();
@@ -874,6 +850,7 @@ class commonModel extends model
             if(!isset($lang->menu->$mainMenu)) return print("</ul>");
 
             $menuLink = $lang->menu->$mainMenu;
+            if(is_array($menuLink)) $menuLink = $menuLink['link'];
             list($menuLabel, $module, $method) = explode('|', $menuLink);
             echo '<li>' . html::a(helper::createLink($module, $method), $menuLabel) . '</li>';
         }
@@ -2078,9 +2055,65 @@ EOD;
         return $response;
     }
 
+    public static function setMainMenuByGroup($group, $moduleName, $methodName)
+    {
+        global $lang;
+        if($group == 'my')        
+        {
+            $lang->menu      = $lang->my->menu;
+            $lang->menuOrder = $lang->my->menuOrder;
+        }
+        if($group == 'system')    
+        {
+            foreach($lang->system->menu as $key => $menu)
+            {   
+                self::setMenuVars($lang->system->menu, $key, $menu);
+
+                if(isset($lang->system->subMenu->{$key}))
+                {   
+                    $subMenu = self::createSubMenu($lang->system->subMenu->{$key}, $menu);
+
+                    if(!empty($subMenu))
+                    {   
+                        foreach($subMenu as $menu)
+                        {   
+                            if(($moduleName == strtolower($menu->link['module']) and $methodName == strtolower($menu->link['method'])))
+                            {   
+                                $lang->system->menu->{$key}['link'] = $menu->text . "|" . join('|', $menu->link);
+                                break;
+                            }   
+                        }   
+                        $lang->system->menu->{$key}['subMenu'] = $subMenu;
+                    }   
+                }   
+            }
+
+            $lang->menu      = $lang->system->menu;
+            $lang->menuOrder = $lang->system->menuOrder;
+        }
+        if($group == 'doclib') return;
+        if($group == 'reporting') 
+        {
+            $lang->menu      = $lang->report->menu;
+            $lang->menuOrder = $lang->report->menuOrder;
+        }
+        if($group == 'attend')     
+        {
+            $lang->menu      = $lang->attend->menu;
+            $lang->menuOrder = $lang->attend->menuOrder;
+        }
+        if($group == 'admin')     
+        {
+            $lang->menu      = $lang->admin->menu;
+            $lang->menuOrder = $lang->admin->menuOrder;
+        }
+        if($group == 'program') $lang->menu = self::getProgramMainMenu($moduleName);
+    }
+
     public static function processMenuVars($menus)
     {    
         global $app, $lang;
+        if(empty($menus)) return;
         foreach($menus as $name => $setting)
         {    
             $link = is_array($setting) ? $setting['link'] : $setting;
@@ -2088,6 +2121,7 @@ EOD;
             if(strpos($link, "{PRODUCT}") !== false) $link = str_replace('{PRODUCT}', $app->session->product, $link);
             if(strpos($link, "{PROJECT}") !== false) $link = str_replace('{PROJECT}', $app->session->project, $link);
             if(strpos($link, "{PROGRAM}") !== false) $link = str_replace('{PROGRAM}', $app->session->program, $link);
+
             if(is_array($setting)) 
             {    
                 $setting['link'] = $link;
@@ -2125,10 +2159,7 @@ EOD;
         global $app, $lang;
         $template = $app->session->programTemplate;
         if(!$template) return;
-        if($template == 'cmmi') 
-        {
-            $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
-        }
+        if($template == 'cmmi') $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
     }
 
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)

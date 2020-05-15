@@ -143,6 +143,9 @@ $lang->program = new stdclass();
 /* System menu. */
 $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
+$lang->system->subMenu = new stdclass();
+$lang->system->subMenu->setmodel = new stdclass();
+$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
 $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
@@ -151,8 +154,21 @@ $lang->system->menu->cmcl        = array('link' => '配置|cmcl|browse|', 'subMo
 $lang->system->menu->process     = array('link' => '过程|process|browse|', 'subModule' => ',activity,output,classify,');
 $lang->system->menu->reviewcl    = array('link' => '评审|reviewcl|browse|category=PP|', 'subModule' => ',reviewcl,reviewsetting,');
 $lang->system->menu->subject     = array('link' => '科目|subject|browse|');
-
+$lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
+
+if($this->cookie->systemModel == 'scrum')
+{
+    $lang->system->menu = new stdclass();
+    $lang->system->subMenu->setmodel = new stdclass();
+    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
+    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+    $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
+    
+    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
+    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
+    unset($lang->system->dividerMenu);
+}
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = $lang->system->menu;
@@ -1137,6 +1153,7 @@ $lang->nc             = new stdclass();
 $lang->pssp           = new stdclass();
 $lang->issue          = new stdclass();
 $lang->risk           = new stdclass();
+
 $lang->workestimation->menu = new stdclass();
 $lang->programplan->menu    = new stdclass();
 $lang->review->menu         = new stdclass();

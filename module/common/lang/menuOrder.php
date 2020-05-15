@@ -115,6 +115,7 @@ $lang->group->menuOrder       = $lang->company->menuOrder;
 $lang->user->menuOrder        = $lang->company->menuOrder;
 
 /* system menu order. */
+$lang->system->menuOrder[1]  = 'setmodel';
 $lang->system->menuOrder[5]  = 'estimate';
 $lang->system->menuOrder[10] = 'stage';
 $lang->system->menuOrder[15] = 'measurement';
