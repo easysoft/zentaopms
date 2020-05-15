@@ -24,7 +24,7 @@
             <div id='branches'>
               <?php foreach($branches as $branchID => $branch):?>
               <div class='input-group' data-id='<?php echo $branchID?>'>
-                <?php echo html::input("branch[$branchID]", htmlspecialchars_decode($branch), "class='form-control'")?>
+                <?php echo html::input("branch[$branchID]", $branch, "class='form-control'")?>
                 <?php if(common::hasPriv('branch', 'sort')):?>
                 <span class='input-group-addon sort-handler'><a><i class='icon icon-move'></i></a></span>
                 <?php endif;?>
