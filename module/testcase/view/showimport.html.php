@@ -3,7 +3,7 @@
 <?php js::set('branch', $branch);?>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
-<?php elseif(empty($maxImport)):?>
+<?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->import;?></h2>

@@ -1,7 +1,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
-<?php elseif(empty($maxImport)):?>
+<?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->caselib->import;?></h2>

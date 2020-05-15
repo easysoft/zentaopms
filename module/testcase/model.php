@@ -1215,20 +1215,23 @@ class testcaseModel extends model
                 {
                     $caseID       = $this->dao->lastInsertID();
                     $parentStepID = 0;
-                    foreach($this->post->desc[$key] as $id => $desc)
+                    if($this->post->desc)
                     {
-                        $desc = trim($desc);
-                        if(empty($desc)) continue;
-                        $stepData = new stdclass();
-                        $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
-                        $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
-                        $stepData->case    = $caseID;
-                        $stepData->version = 1;
-                        $stepData->desc    = htmlspecialchars($desc);
-                        $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
-                        $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                        if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                        if($stepData->type == 'step')  $parentStepID = 0;
+                        foreach($this->post->desc[$key] as $id => $desc)
+                        {
+                            $desc = trim($desc);
+                            if(empty($desc)) continue;
+                            $stepData = new stdclass();
+                            $stepData->type    = ($data->stepType[$key][$id] == 'item' and $parentStepID == 0) ? 'step' : $data->stepType[$key][$id];
+                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                            $stepData->case    = $caseID;
+                            $stepData->version = 1;
+                            $stepData->desc    = htmlspecialchars($desc);
+                            $stepData->expect  = htmlspecialchars($this->post->expect[$key][$id]);
+                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                            if($stepData->type == 'step')  $parentStepID = 0;
+                        }
                     }
                     $this->action->create('case', $caseID, 'Opened');
                 }
@@ -1642,8 +1645,9 @@ class testcaseModel extends model
                 $data = fixer::input('post')->get();
                 foreach($data->steps as $key => $desc)
                 {
-                    $desc = trim($desc);
-                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $data->stepType[$key], 'expect' => trim($data->expects[$key]));
+                    $desc     = trim($desc);
+                    $stepType = isset($data->stepType[$key]) ? $data->stepType[$key] : 'step';
+                    if(!empty($desc)) $steps[] = array('desc' => $desc, 'type' => $stepType, 'expect' => trim($data->expects[$key]));
                 }
 
                 /* If step count changed, case changed. */

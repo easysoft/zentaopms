@@ -1058,8 +1058,9 @@ class task extends control
         if($this->post->taskIDList or $skipTaskIdList)
         {
             $taskIDList = $this->post->taskIDList;
-            $taskIDList = array_unique($taskIDList);
+            if($taskIDList)     $taskIDList = array_unique($taskIDList);
             if($skipTaskIdList) $taskIDList = $skipTaskIdList;
+
             unset($_POST['taskIDList']);
             unset($_POST['assignedTo']);
             $this->loadModel('action');

@@ -751,16 +751,20 @@ class caselib extends control
         }
 
         $allCount = count($caseData);
-        if(empty($maxImport) and $allCount > $this->config->file->maxImport)
+        $allPager = 1;
+        if($allCount > $this->config->file->maxImport)
         {
-            $this->view->allCount  = $allCount;
-            $this->view->maxImport = $maxImport;
-            $this->view->libID     = $libID;
-            die($this->display());
-        }
+            if(empty($maxImport))
+            {
+                $this->view->allCount  = $allCount;
+                $this->view->maxImport = $maxImport;
+                $this->view->libID     = $libID;
+                die($this->display());
+            }
 
-        $allPager = ceil($allCount / $maxImport);
-        $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+            $allPager = ceil($allCount / $maxImport);
+            $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
         if(empty($caseData)) die(js::locate(inlink('browse', "libID=$libID")));
 
         /* Judge whether the items is too large and set session. */
@@ -778,7 +782,7 @@ class caselib extends control
         $this->view->libID     = $libID;
         $this->view->isEndPage = $pagerID >= $allPager;
         $this->view->allCount  = $allCount;
-        $this->view->allPager  = ceil($allCount / $maxImport);
+        $this->view->allPager  = $allPager;
         $this->view->pagerID   = $pagerID;
         $this->view->maxImport = $maxImport;
         $this->display();

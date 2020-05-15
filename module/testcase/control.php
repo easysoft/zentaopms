@@ -1681,17 +1681,21 @@ class testcase extends control
         }
 
         $allCount = count($caseData);
-        if(empty($maxImport) and $allCount > $this->config->file->maxImport)
+        $allPager = 1;
+        if($allCount > $this->config->file->maxImport)
         {
-            $this->view->allCount  = $allCount;
-            $this->view->maxImport = $maxImport;
-            $this->view->productID = $productID;
-            $this->view->branch    = $branch;
-            die($this->display());
-        }
+            if(empty($maxImport))
+            {
+                $this->view->allCount  = $allCount;
+                $this->view->maxImport = $maxImport;
+                $this->view->productID = $productID;
+                $this->view->branch    = $branch;
+                die($this->display());
+            }
 
-        $allPager = ceil($allCount / $maxImport);
-        $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+            $allPager = ceil($allCount / $maxImport);
+            $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
         if(empty($caseData)) die(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
 
         /* Judge whether the editedCases is too large and set session. */
@@ -1711,7 +1715,7 @@ class testcase extends control
         $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
         $this->view->isEndPage = $pagerID >= $allPager;
         $this->view->allCount  = $allCount;
-        $this->view->allPager  = ceil($allCount / $maxImport);
+        $this->view->allPager  = $allPager;
         $this->view->pagerID   = $pagerID;
         $this->view->branch    = $branch;
         $this->view->product   = $this->products[$productID];

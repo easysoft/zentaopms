@@ -1159,6 +1159,7 @@ class bugModel extends model
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('activatedDate',  $now)
+            ->setDefault('activatedCount', (int)$oldBug->activatedCount)
             ->add('resolution', '')
             ->add('status', 'active')
             ->add('resolvedDate', '0000-00-00')

@@ -516,7 +516,7 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
-            ->setIF($this->post->plan[0] and ($oldStory->stage == 'wait'), 'stage', 'planned')
+            ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
             ->join('linkStories', ',')
@@ -555,7 +555,7 @@ class storyModel extends model
             }
             $story->stage = $minStage;
         }
-        if($oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
+        if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
         $this->dao->update(TABLE_STORY)
             ->data($story)
