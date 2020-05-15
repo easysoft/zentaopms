@@ -58,6 +58,8 @@ $lang->trunk        = '主幹';
 $lang->sort         = '排序';
 $lang->required     = '必填';
 $lang->noData       = '暫無';
+$lang->fullscreen   = '全屏';
+$lang->retrack      = '收起';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢復預設';
@@ -420,7 +422,7 @@ $lang->admin->subMenu->message->browser = array('link' => '瀏覽器|message|bro
 $lang->admin->subMenu->message->setting = array('link' => '設置|message|setting');
 
 $lang->admin->subMenu->sso = new stdclass();
-$lang->admin->subMenu->sso->ranzhi = '然之協同|admin|sso';
+$lang->admin->subMenu->sso->ranzhi = 'ZDOO|admin|sso';
 
 $lang->admin->subMenu->dev = new stdclass();
 $lang->admin->subMenu->dev->api    = array('link' => 'API|dev|api');

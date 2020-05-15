@@ -73,6 +73,7 @@ $lang->testreport->errorTrunk     = "主幹版本不能創建測試報告，請�
 $lang->testreport->noTestTask     = "該{$lang->productCommon}下還沒有關聯非Trunk的測試單，不能創建報告。請先創建測試單，再創建。";
 $lang->testreport->noObjectID     = "沒有選定測試單或{$lang->projectCommon}，無法創建測試報告！";
 $lang->testreport->moreProduct    = "只能對同一個{$lang->productCommon}生成測試報告。";
+$lang->testreport->hiddenCase     = "隱藏 %s 個用例";
 
 $lang->testreport->bugSummary = <<<EOD
 共發現<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>，

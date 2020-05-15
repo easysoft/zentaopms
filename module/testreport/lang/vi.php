@@ -73,6 +73,7 @@ $lang->testreport->errorTrunk     = "Bạn không thể tạo một báo cáo th
 $lang->testreport->noTestTask     = "Không có yêu cầu thử nghiệm {$lang->productCommon} này, so no reports can be generated. Vui lòng go to {$lang->productCommon} which has test requests and then generate the report.";
 $lang->testreport->noObjectID     = "Không có yêu cầu test hoặc {$lang->projectCommon} được chọn, bởi vậy không có báo cáo có thể được tạo.";
 $lang->testreport->moreProduct    = "Báo cáo Test chỉ có thể được tạo cho cùng {$lang->productCommon}.";
+$lang->testreport->hiddenCase     = "Hide %s use cases";
 
 $lang->testreport->bugSummary = <<<EOD
 Total <strong>%s</strong> Bugs reported <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,

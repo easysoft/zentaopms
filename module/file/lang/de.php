@@ -47,6 +47,9 @@ $lang->file->extra     = 'Extra';
 $lang->file->dragFile            = 'Bitte hier ablegen.';
 $lang->file->childTaskTips       = 'It\'s a child task if there is a \'>\' before the name.';
 $lang->file->uploadImagesExplain = 'Hinweis: Beim Upload von .jpg, .jpeg, .gif, und .png Dateien. Der Dateiname wird als Titel der Story genutzt und das Bild als der Inhalt.';
+$lang->file->saveAndNext         = 'Save and Next';
+$lang->file->importPager         = 'Total: <strong>%s</strong>. Page <strong>%s</strong> of <strong>%s</strong>';
+$lang->file->importSummary       = "Import <strong id='allCount'>%s</strong> items  You can <strong>%s</strong> items/page, so you have to import <strong id='times'>%s</strong> times.";
 
 $lang->file->errorNotExists   = "<span class='text-red'>'%s' wurde nicht gefunden.</span>";
 $lang->file->errorCanNotWrite = "<span class='text-red'>'%s' ist nicht beschreibbar. Bitte passen Sie die Berechtigungen an. Befehl <span class='code'>sudo chmod -R 777 '%s'</span></span> in Linux.";

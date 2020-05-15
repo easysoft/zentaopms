@@ -198,6 +198,7 @@ $lang->task->createDenied          = 'Tạo nhiệm vụ bị từ chối trong 
 $lang->task->cannotDeleteParent    = 'Không thể xóa nhiệm vụ cha';
 
 $lang->task->error = new stdclass();
+$lang->task->error->totalNumber      = '"Total Cost" must be numbers.';
 $lang->task->error->consumedNumber   = '"Giờ làm" phải là số.';
 $lang->task->error->estimateNumber   = '"Dự tính" phải là số.';
 $lang->task->error->recordMinus      = 'Giờ làm không nên là số âm';

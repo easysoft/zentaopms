@@ -177,7 +177,7 @@ $lang->install->joinZentao = <<<EOT
 <p>您已經成功安裝禪道管理系統%s，<strong class='text-danger'>請及時刪除install.php</strong>。</p><p>友情提示：為了您及時獲得禪道的最新動態，請在禪道社區(<a href='https://www.zentao.net' class='alert-link' target='_blank'>www.zentao.net</a>)進行登記。</p>
 EOT;
 
-$lang->install->product = array('chanzhi', 'ranzhi', 'xuanxuan', 'ydisk', 'meshiot');
+$lang->install->product = array('chanzhi', 'zdoo', 'xuanxuan', 'ydisk', 'meshiot');
 
 $lang->install->promotion      = "為您推薦易軟天創旗下其他產品：";
 $lang->install->chanzhi        = new stdclass();
@@ -193,11 +193,11 @@ $lang->install->chanzhi->desc  = <<<EOD
 </ul>
 EOD;
 
-$lang->install->ranzhi = new stdclass();
-$lang->install->ranzhi->name  = '然之協同';
-$lang->install->ranzhi->logo  = 'images/main/ranzhi.ico';
-$lang->install->ranzhi->url   = 'http://www.ranzhi.org';
-$lang->install->ranzhi->desc  = <<<EOD
+$lang->install->zdoo = new stdclass();
+$lang->install->zdoo->name  = 'ZDOO';
+$lang->install->zdoo->logo  = 'images/main/zdoo.ico';
+$lang->install->zdoo->url   = 'http://www.zdoo.com';
+$lang->install->zdoo->desc  = <<<EOD
 <ul>
   <li>客戶管理，訂單跟蹤</li>
   <li>項目任務，公告文檔</li>
