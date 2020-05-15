@@ -309,18 +309,19 @@ $lang->my->menu = new stdclass();
 
 $lang->my->menu->index          = '首页|my|index';
 $lang->my->menu->calendar       = array('link' => '日程|my|calendar|', 'subModule' => 'todo', 'alias' => 'todo');
+$lang->my->menu->program        = array('link' => '项目|my|program|');
 $lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule' => 'task');
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story          = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
-$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
+//$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密码|my|changepassword';
 $lang->my->menu->manageContacts = '联系人|my|managecontacts';
 $lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
 
-$lang->my->dividerMenu = ',task,myProject,profile,';
+$lang->my->dividerMenu = ',program,story,dynamic,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -533,7 +534,7 @@ $lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' 
 $lang->admin->menu->translate = array('link' => '翻译|dev|translate');
 $lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron');
+$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -644,6 +645,7 @@ $lang->navGroup->feedback    = 'program';
 
 $lang->navGroup->programplan    = 'program';
 $lang->navGroup->workestimation = 'program';
+$lang->navGroup->budget         = 'program';
 $lang->navGroup->review         = 'program';
 $lang->navGroup->reviewissue    = 'program';
 $lang->navGroup->weekly         = 'program';
@@ -656,6 +658,8 @@ $lang->navGroup->risk           = 'program';
 $lang->navGroup->auditplan      = 'program';
 $lang->navGroup->cm             = 'program';
 $lang->navGroup->nc             = 'program';
+
+$lang->navGroup->durationestimation = 'program';
 
 $lang->navGroup->report = 'reporting';
 
@@ -692,6 +696,8 @@ $lang->navGroup->backup    = 'admin';
 $lang->navGroup->mail      = 'admin';
 $lang->navGroup->dev       = 'admin';
 $lang->navGroup->extension = 'admin';
+$lang->navGroup->action    = 'admin';
+$lang->navGroup->search    = 'admin';
 
 /* 错误提示信息。*/
 $lang->error = new stdclass();
@@ -1121,7 +1127,7 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
 /* Cmmi menu. */
 $lang->menu->cmmi = new stdclass();
-$lang->menu->cmmi->workestimation = '估算|workestimation|index|program={PROGRAM}';
+$lang->menu->cmmi->workestimation = array('link' => '估算|workestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation,budget');
 $lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
 $lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
 $lang->menu->cmmi->review         = array('link' => '评审|review|browse|program={PROGRAM}', 'subModule' => ',reviewissue,');
@@ -1140,6 +1146,7 @@ $lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={P
 $lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';
 
 $lang->workestimation = new stdclass();
+$lang->budget         = new stdclass();
 $lang->programplan    = new stdclass();
 $lang->review         = new stdclass();
 $lang->reviewsetting  = new stdclass();
@@ -1153,8 +1160,10 @@ $lang->nc             = new stdclass();
 $lang->pssp           = new stdclass();
 $lang->issue          = new stdclass();
 $lang->risk           = new stdclass();
+$lang->durationestimation = new stdclass();
 
 $lang->workestimation->menu = new stdclass();
+$lang->budget->menu         = new stdclass();
 $lang->programplan->menu    = new stdclass();
 $lang->review->menu         = new stdclass();
 $lang->reviewsetting->menu  = new stdclass();
@@ -1167,6 +1176,14 @@ $lang->cm->menu             = new stdclass();
 $lang->pssp->menu           = new stdclass();
 $lang->issue->menu          = new stdclass();
 $lang->risk->menu           = new stdclass();
+$lang->durationestimation->menu = new stdclass();
+
+$lang->workestimation->menu->index    = '工作量估算|workestimation|index|program={PROGRAM}';
+$lang->workestimation->menu->duration = array('link' => '工期估算|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->budget   = array('link' => '费用估算|budget|summary|', 'subModule' => 'budget');
+
+$lang->durationestimation->menu = $lang->workestimation->menu;
+$lang->budget->menu = $lang->workestimation->menu;
 
 $lang->programplan->menu->gantt = '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt';
 $lang->programplan->menu->lists = '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';

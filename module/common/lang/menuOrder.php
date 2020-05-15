@@ -17,15 +17,19 @@ $lang->index->menuOrder[10] = 'project';
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
-$lang->my->menuOrder[15] = 'task';
-$lang->my->menuOrder[20] = 'bug';
-$lang->my->menuOrder[25] = 'testtask';
-$lang->my->menuOrder[30] = 'story';
-$lang->my->menuOrder[35] = 'myProject';
-$lang->my->menuOrder[40] = 'dynamic';
-$lang->my->menuOrder[45] = 'profile';
-$lang->my->menuOrder[50] = 'changePassword';
-$lang->my->menuOrder[55] = 'score';
+$lang->my->menuOrder[15] = 'program';
+$lang->my->menuOrder[20] = 'review';
+$lang->my->menuOrder[25] = 'story';
+$lang->my->menuOrder[30] = 'requirement';
+$lang->my->menuOrder[35] = 'task';
+$lang->my->menuOrder[40] = 'bug';
+$lang->my->menuOrder[50] = 'testtask';
+$lang->my->menuOrder[50] = 'myProject';
+$lang->my->menuOrder[55] = 'nc';
+$lang->my->menuOrder[60] = 'dynamic';
+$lang->my->menuOrder[65] = 'profile';
+$lang->my->menuOrder[70] = 'changePassword';
+$lang->my->menuOrder[75] = 'score';
 $lang->todo->menuOrder   = $lang->my->menuOrder;
 
 /* product menu order. */
