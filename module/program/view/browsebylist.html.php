@@ -49,6 +49,7 @@
         <td><?php echo zget($users, $project->PM);?></td>
         <td title='<?php echo strip_tags($project->desc);?>'><?php echo strip_tags($project->desc);?></td>
         <td class='text-center c-actions'>
+          <?php common::printIcon('program', 'manageMembers', "projectID=$project->id", $project, 'list', 'persons');?>
           <?php common::printIcon('program', 'start', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('program', 'activate', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>
           <?php common::printIcon('program', 'suspend', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>

@@ -154,6 +154,48 @@ class program extends control
         $this->display();
     }
 
+    public function manageMembers($projectID, $dept = '')
+    {
+        if(!empty($_POST))
+        {    
+            $this->project->manageMembers($projectID);
+            die(js::locate($this->createLink('program', 'index'), 'parent'));
+        }    
+
+        /* Load model. */        
+        $this->loadModel('user');
+        $this->loadModel('dept');
+
+        $project        = $this->project->getById($projectID);
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $roles          = $this->user->getUserRoles(array_keys($users));
+        $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $currentMembers = $this->project->getTeamMembers($projectID);
+        //$members2Import = $this->project->getMembers2Import($team2Import, array_keys($currentMembers));
+        //$teams2Import   = $this->project->getTeams2Import($this->app->user->account, $projectID);
+        //$teams2Import   = array('' => '') + $teams2Import;
+
+        /* Set menu. */
+        //$this->project->setMenu($this->projects, $project->id);
+
+        $title      = $this->lang->program->manageMembers . $this->lang->colon . $project->name;
+        $position[] = $this->lang->program->manageMembers;
+
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->project        = $project;
+        $this->view->users          = $users;
+        $this->view->deptUsers      = $deptUsers;
+        $this->view->roles          = $roles;
+        $this->view->dept           = $dept;
+        $this->view->depts          = array('' => '') + $this->loadModel('dept')->getOptionMenu();
+        $this->view->currentMembers = $currentMembers;
+        //$this->view->members2Import = $members2Import;
+        //$this->view->teams2Import   = $teams2Import;
+        //$this->view->team2Import    = $team2Import;
+        $this->display();
+    }
+
     /**
      * Start project.
      *

@@ -40,7 +40,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       </div>
     </div>
   </div>
-  <?php if(!in_array($moduleName, $lang->noMenuModule)):?>
+  <?php if(!in_array($moduleName, $lang->noMenuModule) || (in_array($moduleName, $lang->noMenuModule) && in_array($methodName, $lang->haveMenuMethod))):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>

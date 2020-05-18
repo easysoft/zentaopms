@@ -149,7 +149,7 @@ $lang->system->subMenu->setmodel = new stdclass();
 $lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
-$lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
+$lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement,report');
 $lang->system->menu->auditcl     = array('link' => 'QA|auditcl|browse|', 'subModule' => 'auditcl');
 $lang->system->menu->cmcl        = array('link' => '配置|cmcl|browse|', 'subModule' => ',cmcl,baseline,');
 $lang->system->menu->process     = array('link' => '过程|process|browse|', 'subModule' => ',activity,output,classify,');
@@ -173,42 +173,6 @@ if($this->cookie->systemModel == 'scrum')
     unset($lang->system->dividerMenu);
 }
 
-$lang->measurement = new stdclass();
-$lang->measurement->menu = $lang->system->menu;
-
-$lang->sqlbuilder = new stdclass();
-$lang->sqlbuilder->menu = $lang->system->menu;
-
-$lang->auditcl = new stdclass();
-$lang->auditcl->menu = new stdclass();
-
-$lang->baseline = new stdclass();
-$lang->baseline->menu = $lang->system->menu;
-
-$lang->cmcl = new stdclass();
-$lang->cmcl->menu = $lang->system->menu;
-
-$lang->process = new stdclass();
-$lang->process->menu = $lang->system->menu;
-
-$lang->reviewcl = new stdclass();
-$lang->reviewcl->menu = $lang->system->menu;
-
-$lang->subject = new stdclass();
-$lang->subject->menu = new stdclass();
-
-$lang->output = new stdclass();
-$lang->output->menu = $lang->system->menu;
-
-$lang->activity = new stdclass();
-$lang->activity->menu = $lang->system->menu;
-
-$lang->classify = new stdclass();
-$lang->classify->menu = $lang->system->menu;
-
-$lang->reviewsetting = new stdclass();
-$lang->reviewsetting->menu = $lang->system->menu;
-
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
 $lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit');
@@ -219,7 +183,7 @@ $lang->measurement->menu = new stdclass();
 $lang->measurement->menu->settips  = '区间提示|measurement|settips|';
 $lang->measurement->menu->define   = array('link' => '度量定义|measurement|browse|type=basic', 'alias' => 'createbasic');
 $lang->measurement->menu->data     = array('link' => '度量数据|sqlbuilder|browsesqlview|', 'subModule' => 'sqlbuilder');
-$lang->measurement->menu->template = array('link' => '报表模板|measurement|template|', 'alias' => 'createtemplate');
+$lang->measurement->menu->template = array('link' => '报表模板|measurement|template|', 'subModule' => 'report', 'alias' => 'createtemplate');
 
 $lang->sqlbuilder = new stdclass();
 $lang->sqlbuilder->menu = $lang->measurement->menu;
@@ -317,7 +281,7 @@ $lang->my->menu->task           = array('link' => '任务|my|task|', 'subModule'
 $lang->my->menu->bug            = array('link' => 'Bug|my|bug|', 'subModule' => 'bug');
 $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subModule' => 'testcase,testtask', 'alias' => 'testcase');
 $lang->my->menu->story          = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
-//$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
+$lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
 $lang->my->menu->changePassword = '密码|my|changepassword';
@@ -664,10 +628,10 @@ $lang->navGroup->nc             = 'program';
 
 $lang->navGroup->durationestimation = 'program';
 
-$lang->navGroup->report = 'reporting';
 
 $lang->navGroup->stage         = 'system';
 $lang->navGroup->measurement   = 'system';
+$lang->navGroup->report        = 'system';
 $lang->navGroup->sqlbuilder    = 'system';
 $lang->navGroup->auditcl       = 'system';
 $lang->navGroup->cmcl          = 'system';
@@ -1191,8 +1155,8 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt';
 $lang->programplan->menu->lists = '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
 
-$lang->review->menu->browse = '基线评审列表|review|browse|program={PROGRAM}';
-$lang->review->menu->issue  = '问题列表|reviewissue|issue|program={PROGRAM}';
+$lang->review->menu->review = array('link' => '基线评审列表|review|browse|program={PROGRAM}', 'subModule' => 'review');
+$lang->review->menu->issue  = array('link' => '问题列表|reviewissue|issue|program={PROGRAM}', 'subModule' => 'reviewissue');
 
 $lang->reviewissue = new stdclass();
 $lang->reviewissue->menu = $lang->review->menu;
@@ -1215,4 +1179,5 @@ $lang->reviewsetting->menu = $lang->review->menu;
 $lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
 $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 
-$lang->noMenuModule = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'cron', 'issue', 'risk', 'pssp');
+$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'cron', 'issue', 'risk', 'pssp');
+$lang->haveMenuMethod   = array('custom');

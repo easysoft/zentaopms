@@ -331,8 +331,9 @@ class commonModel extends model
      * @access public
      * @return string
      */
-    public static function createMenuLink($menuItem)
+    public static function createMenuLink($menuItem, $group)
     {
+        global $app;
         $link = $menuItem->link;
         if(is_array($menuItem->link))
         {
@@ -345,6 +346,13 @@ class commonModel extends model
             else
             {
                 $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
+                //if($group == 'program')
+                //{
+                //    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->program);
+                //}
+                //else
+                //{
+                //}
             }
         }
         return $link;
@@ -515,7 +523,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem);
+                $link   = commonModel::createMenuLink($menuItem, $group);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -694,7 +702,7 @@ class commonModel extends model
                 $target = '';
                 $module = '';
                 $method = '';
-                $link   = commonModel::createMenuLink($menuItem);
+                $link   = commonModel::createMenuLink($menuItem, $group);
                 if(is_array($menuItem->link))
                 {
                     if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -2090,6 +2098,8 @@ EOD;
 
             $lang->menu      = $lang->system->menu;
             $lang->menuOrder = $lang->system->menuOrder;
+            $lang->reviewsetting->menu = $lang->reviewcl->menu;
+            $lang->report->menu = $lang->measurement->menu;
         }
         if($group == 'doclib') return;
         if($group == 'reporting') 
