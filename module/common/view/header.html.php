@@ -18,10 +18,6 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php $methodName = $app->rawMethod;?>
 <?php $isProgram  = (zget($lang->navGroup, $moduleName) == 'program');?>
 <div id='menu'>
-  <div id='menuHeader'>
-    <?php $heading = $app->company->name;?>
-    <h1 id='companyName' title='<?php echo $heading;?>'<?php if(strlen($heading) > 36) echo " class='long-name'" ?>><?php echo html::a(helper::createLink('index'), $heading);?></h1>
-  </div>
   <nav id='menuNav'><?php commonModel::printMainNav($moduleName);?></nav>
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
