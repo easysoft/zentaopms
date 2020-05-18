@@ -67,7 +67,7 @@ class programModel extends model
             {
                 $product = new stdclass();
                 $product->name        = $project->name;
-                $product->project     = $programID;
+                $product->program     = $programID;
                 $product->status      = 'normal';
                 $product->createdBy   = $this->app->user->account;
                 $product->createdDate = helper::now();

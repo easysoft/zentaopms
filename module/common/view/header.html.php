@@ -40,6 +40,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       </div>
     </div>
   </div>
+  <?php if(!in_array($moduleName, $lang->noMenuModule)):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
@@ -47,6 +48,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->modulePageActions)) echo $lang->modulePageActions;?></div></div>
     </div>
   </div>
+<?php endif;?>
   <?php
   if(!empty($config->sso->redirect))
   {
