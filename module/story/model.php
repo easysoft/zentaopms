@@ -2813,6 +2813,11 @@ class storyModel extends model
                 echo $story->sourceNote;
                 break;
             case 'status':
+                if(isset($this->config->qcVersion) && $story->storyChanged)
+                {
+                    print("<span class='status-story status-changed'>{$this->lang->story->storyChanged}</span>");
+                    break;
+                }
                 echo "<span class='status-{$story->status}'>";
                 echo $this->processStatus('story', $story);
                 echo '</span>';
@@ -2898,6 +2903,12 @@ class storyModel extends model
                 break;
             case 'actions':
                 $vars = "story={$story->id}";
+                if(isset($this->config->qcVersion) && $story->storyChanged)
+                {
+                    common::printIcon('story', 'processStoryChange', "storyID=$story->id", '', 'list', 'search', '', 'iframe', true, '', $this->lang->story->process);
+                    break;
+                }
+
                 common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
                 common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
                 common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
