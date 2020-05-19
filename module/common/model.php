@@ -345,14 +345,14 @@ class commonModel extends model
             }
             else
             {
-                $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
-                //if($group == 'program')
-                //{
-                //    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->program);
-                //}
-                //else
-                //{
-                //}
+                if($group == 'program')
+                {
+                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars, '', '', $app->session->program);
+                }
+                else
+                {
+                    $link = helper::createLink($menuItem->link['module'], $menuItem->link['method'], $vars);
+                }
             }
         }
         return $link;
@@ -1070,7 +1070,7 @@ EOD;
      * @access public
      * @return void
      */
-    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '')
+    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0)
     {
         if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
 
@@ -1096,7 +1096,7 @@ EOD;
         if(strtolower($module) == 'bug'      and strtolower($method) == 'tostory')    ($module = 'story') and ($method = 'create');
         if(strtolower($module) == 'bug'      and strtolower($method) == 'createcase') ($module = 'testcase') and ($method = 'create');
         if(!commonModel::hasPriv($module, $method, $object)) return false;
-        $link = helper::createLink($module, $method, $vars, '', $onlyBody);
+        $link = helper::createLink($module, $method, $vars, '', $onlyBody, $programID);
 
         /* Set the icon title, try search the $method defination in $module's lang or $common's lang. */
         if(empty($title))
@@ -1172,9 +1172,9 @@ EOD;
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '')
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0)
     {
-        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title);
+        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID);
     }
 
     /**
@@ -2098,7 +2098,6 @@ EOD;
 
             $lang->menu      = $lang->system->menu;
             $lang->menuOrder = $lang->system->menuOrder;
-            $lang->reviewsetting->menu = $lang->reviewcl->menu;
             $lang->report->menu = $lang->measurement->menu;
         }
         if($group == 'doclib') return;
@@ -2149,11 +2148,11 @@ EOD;
 
     public static function getProgramMainMenu($moduleName)
     {
-        global $app, $lang;
-        $template = $app->session->programTemplate;
-        if(!$template) return;
-        if($template == 'scrum') return $lang->menu;
-        if($template == 'cmmi') 
+        global $app, $lang, $dbh;
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+        if(empty($program)) return;
+        if($program->template == 'scrum') return $lang->menu;
+        if($program->template == 'cmmi') 
         {
             unset($lang->menuOrder);
             $lang->release->menu        = new stdclass();
@@ -2166,10 +2165,10 @@ EOD;
 
     public static function getProgramModuleMenu($moduleName)
     {
-        global $app, $lang;
-        $template = $app->session->programTemplate;
-        if(!$template) return;
-        if($template == 'cmmi') $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
+        global $app, $lang, $dbh;
+        $program = $dbh->query("SELECT * FROM " . TABLE_PROJECT . " WHERE `id` = '{$app->session->program}'")->fetch();
+        if(empty($program)) return;
+        if($program->template == 'cmmi') $lang->$moduleName->menu = self::processMenuVars($lang->$moduleName->menu);
     }
 
     public function getRelations($AType = '', $AID = 0, $BType = '', $BID = 0)

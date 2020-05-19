@@ -146,7 +146,7 @@ $lang->system = new stdclass();
 $lang->system->menu = new stdclass();
 $lang->system->subMenu = new stdclass();
 $lang->system->subMenu->setmodel = new stdclass();
-$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
+//$lang->system->menu->setmodel    = array('link' => 'cmmi|custom|setcmmi|', 'class' => 'dropdown dropdown-hover');
 $lang->system->menu->estimate    = array('link' => '估算|custom|estimate|');
 $lang->system->menu->stage       = array('link' => '阶段|stage|browse|', 'subModule' => 'stage');
 $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement,report');
@@ -159,19 +159,19 @@ $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
 $lang->system->subMenu->setmodel->scrum  ='scrum|custom|setscrum|';
 $lang->system->dividerMenu = ',auditcl,subject,';
 
-if($this->cookie->systemModel == 'scrum')
-{
-    $lang->system->menu = new stdclass();
-    $lang->system->subMenu->setmodel = new stdclass();
-    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
-    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
-    $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
-    $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
-    
-    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
-    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
-    unset($lang->system->dividerMenu);
-}
+//if($this->cookie->systemModel == 'scrum')
+//{
+//    $lang->system->menu = new stdclass();
+//    $lang->system->subMenu->setmodel = new stdclass();
+//    $lang->system->menu->setmodel = array('link' => 'scrum|custom|setscrum|', 'class' => 'dropdown dropdown-hover');
+//    $lang->system->menu->subject  = array('link' => '科目|subject|browse|');
+//    $lang->system->menu->measurement = array('link' => '度量|measurement|settips|', 'subModule' => 'sqlbuilder,measurement');
+//    $lang->system->menu->holiday     = array('link' => '节假日|holiday|browse|');
+//    
+//    $lang->system->subMenu->setmodel->cmmi  ='cmmi|custom|setcmmi|';
+//    $lang->mainNav->system = '<i class="icon icon-menu-users"></i> 组织|measurement|settips|';
+//    unset($lang->system->dividerMenu);
+//}
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
@@ -255,7 +255,7 @@ $lang->lang = 'Language';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
-$lang->themes['default']    = '渠成蓝（默认）';
+$lang->themes['default']    = '禅道蓝（默认）';
 $lang->themes['green']      = '叶兰绿';
 $lang->themes['red']        = '赤诚红';
 $lang->themes['purple']     = '玉烟紫';
@@ -283,7 +283,7 @@ $lang->my->menu->testtask       = array('link' => '测试|my|testtask|', 'subMod
 $lang->my->menu->story          = array('link' => "{$lang->storyCommon}|my|story|", 'subModule' => 'story');
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
-$lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
+//$lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
 //$lang->my->menu->changePassword = '密码|my|changepassword';
 $lang->my->menu->manageContacts = '联系人|my|managecontacts';
 //$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
@@ -494,7 +494,7 @@ $lang->admin->menu = new stdclass();
 $lang->admin->menu->index     = array('link' => '首页|admin|index', 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => '组织|company|browse|', 'subModule' => ',user,dept,group,', 'alias' => ',dynamic,view,');
 $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
+//$lang->admin->menu->custom    = array('link' => '自定义|custom|set', 'subModule' => 'custom');
 //$lang->admin->menu->sso       = array('link' => '集成|admin|sso', 'subModule' => '');
 //$lang->admin->menu->extension = array('link' => '插件|extension|browse', 'subModule' => 'extension');
 //$lang->admin->menu->dev       = array('link' => '二次开发|dev|api', 'alias' => 'db', 'subModule' => 'dev,entry');
@@ -609,6 +609,7 @@ $lang->navGroup->testreport  = 'program';
 $lang->navGroup->testsuite   = 'program';
 $lang->navGroup->caselib     = 'program';
 $lang->navGroup->feedback    = 'program';
+$lang->navGroup->deploy      = 'program';
 
 $lang->navGroup->programplan    = 'program';
 $lang->navGroup->workestimation = 'program';
@@ -656,6 +657,9 @@ $lang->navGroup->company   = 'admin';
 $lang->navGroup->dept      = 'admin';
 $lang->navGroup->ldap      = 'admin';
 $lang->navGroup->group     = 'admin';
+$lang->navGroup->webhook   = 'admin';
+$lang->navGroup->sms       = 'admin';
+$lang->navGroup->message   = 'admin';
 $lang->navGroup->user      = 'admin';
 $lang->navGroup->custom    = 'admin';
 $lang->navGroup->cron      = 'admin';
@@ -1104,7 +1108,7 @@ $lang->menu->cmmi->product        = array('link' => '需求|product|browse|produ
 $lang->menu->cmmi->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->cmmi->ci             = '集成|repo|browse|';
 $lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={PRODUCT}', 'subModule' => ',testcase,testtask,testsuite,testreport,caselib,');
-$lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}');
+$lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->cmmi->issue          = '问题|issue|browse|';
 $lang->menu->cmmi->risk           = '风险|risk|browse|';
 $lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,');
@@ -1116,7 +1120,6 @@ $lang->workestimation = new stdclass();
 $lang->budget         = new stdclass();
 $lang->programplan    = new stdclass();
 $lang->review         = new stdclass();
-$lang->reviewsetting  = new stdclass();
 $lang->weekly         = new stdclass();
 $lang->milestone      = new stdclass();
 $lang->product        = new stdclass();
@@ -1133,7 +1136,6 @@ $lang->workestimation->menu = new stdclass();
 $lang->budget->menu         = new stdclass();
 $lang->programplan->menu    = new stdclass();
 $lang->review->menu         = new stdclass();
-$lang->reviewsetting->menu  = new stdclass();
 $lang->weekly->menu         = new stdclass();
 $lang->milestone->menu      = new stdclass();
 $lang->product->menu        = new stdclass();
@@ -1174,10 +1176,9 @@ $lang->auditplan->menu->nc     = '不符合项|nc|browse|program={PROGRAM}';
 $lang->story->menu         = $lang->product->menu;
 $lang->milestone->menu     = $lang->weekly->menu;
 $lang->nc->menu            = $lang->auditplan->menu;
-$lang->reviewsetting->menu = $lang->review->menu;
 
 $lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
 $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 
-$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'cron', 'issue', 'risk', 'pssp');
+$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook');
 $lang->haveMenuMethod   = array('custom');

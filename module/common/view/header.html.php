@@ -16,7 +16,7 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
 <?php $moduleName = $app->rawModule;?>
 <?php $methodName = $app->rawMethod;?>
-<?php $isProgram  = (zget($lang->navGroup, $moduleName, '') == 'program');?>
+<?php $isProgram  = (zget($lang->navGroup, $moduleName) == 'program');?>
 <div id='menu'>
   <nav id='menuNav'><?php commonModel::printMainNav($moduleName);?></nav>
   <div id='menuFooter'>
