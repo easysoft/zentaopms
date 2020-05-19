@@ -50,6 +50,10 @@ $lang->program->featureBar['wait']      = '未开始';
 $lang->program->featureBar['suspended'] = '已挂起';
 $lang->program->featureBar['closed']    = '已关闭';
 
+$lang->program->aclList['open']    = "默认设置(有项目视图权限，即可访问)";
+$lang->program->aclList['private'] = "私有项目(只有项目团队成员才能访问)";
+$lang->program->aclList['custom']  = "自定义白名单(团队成员和白名单的成员可以访问)";
+
 $lang->program->chooseProgramType = '选择项目管理方式';
 $lang->program->nextStep          = '下一步';
 $lang->program->hoursUnit         = '%s工时';

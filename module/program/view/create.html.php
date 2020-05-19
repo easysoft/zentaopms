@@ -115,7 +115,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->acl;?></th>
-          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
+          <td colspan='3'><?php echo nl2br(html::radio('acl', $lang->program->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?></td>
         </tr>
         <tr id='whitelistBox' class='hidden'>
           <th><?php echo $lang->project->whitelist;?></th>

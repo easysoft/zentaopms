@@ -10,16 +10,15 @@
           </div>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='w-120px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->code);?></th>
+        <th class='w-100px'><?php common::printOrderLink('code', $orderBy, $vars, $lang->program->code);?></th>
         <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->program->name);?></th>
-        <th class='w-100px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
+        <th class='w-80px'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
         <th class='w-100px'><?php common::printOrderLink('category', $orderBy, $vars, $lang->program->category);?></th>
-        <th class='w-100px'><?php common::printOrderLink('template', $orderBy, $vars, $lang->program->template);?></th>
+        <th class='w-80px'><?php common::printOrderLink('template', $orderBy, $vars, $lang->program->template);?></th>
         <th class='w-100px'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->program->begin);?></th>
         <th class='w-100px'><?php common::printOrderLink('end', $orderBy, $vars, $lang->program->end);?></th>
         <th class='w-100px'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->program->budget);?></th>
         <th class='w-100px'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->program->PM);?></th>
-        <th class='w-200px text-left'><?php echo $lang->program->desc;?></th>
         <th class='text-center w-200px'><?php echo $lang->actions;?></th>
         <?php if($canOrder):?>
         <th class='w-60px sort-default'><?php common::printOrderLink('order', $orderBy, $vars, $lang->project->orderAB);?></th>
@@ -47,7 +46,6 @@
         <td class='text-center'><?php echo $project->end;?></td>
         <td class='text-left'><?php echo $project->budget . ' ' . zget($lang->program->unitList, $project->budgetUnit);?></td>
         <td><?php echo zget($users, $project->PM);?></td>
-        <td title='<?php echo strip_tags($project->desc);?>'><?php echo strip_tags($project->desc);?></td>
         <td class='text-center c-actions'>
           <?php common::printIcon('program', 'manageMembers', "projectID=$project->id", $project, 'list', 'persons');?>
           <?php common::printIcon('program', 'start', "projectID=$project->id", $project, 'list', '', '', 'iframe', true);?>

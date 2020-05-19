@@ -84,23 +84,12 @@ class program extends control
         $this->display();
     }
 
-    public function setPlanduration()
-    {
-        $begin                 = $this->post->begin;
-        $end                   = $this->post->end;
-        $planDuration          = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
-        $planDuration          = count($planDuration);
-        $_POST['planDuration'] = $planDuration;
-    }
-
     public function create($template = 'scrum', $copyProgramID = '')
     {
         $this->commonAction();
 
         if($_POST)
         {
-            $this->setPlanduration();
-
             $projectID = $this->program->create();
             if(dao::isError())
             {
@@ -148,8 +137,6 @@ class program extends control
 
         if($_POST)
         {
-            $this->setPlanduration();
-
             $changes = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             if($changes)
@@ -170,6 +157,7 @@ class program extends control
 
     public function manageMembers($projectID, $dept = '')
     {
+        $this->session->set('program', $projectID);
         if(!empty($_POST))
         {    
             $this->project->manageMembers($projectID);
@@ -258,13 +246,6 @@ class program extends control
 
         if(!empty($_POST))
         {
-            /* Add the realDuration. */
-            $realStarted           = $project->realStarted;
-            $realFinished          = $this->post->realFinished;
-            $realDuration          = $this->loadModel('holiday')->getActualWorkingDays($realStarted, $realFinished);
-            $realDuration          = count($realDuration);
-            $_POST['realDuration'] = $realDuration;
-
             $this->loadModel('action');
             $changes = $this->project->finish($projectID);
             if(dao::isError()) die(js::error(dao::getError()));
