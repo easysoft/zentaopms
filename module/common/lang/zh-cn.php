@@ -255,7 +255,7 @@ $lang->lang = 'Language';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
-$lang->themes['default']    = '禅道蓝（默认）';
+$lang->themes['default']    = '渠成蓝（默认）';
 $lang->themes['green']      = '叶兰绿';
 $lang->themes['red']        = '赤诚红';
 $lang->themes['purple']     = '玉烟紫';
@@ -284,9 +284,9 @@ $lang->my->menu->story          = array('link' => "{$lang->storyCommon}|my|story
 $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
 $lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
-$lang->my->menu->changePassword = '密码|my|changepassword';
+//$lang->my->menu->changePassword = '密码|my|changepassword';
 $lang->my->menu->manageContacts = '联系人|my|managecontacts';
-$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
+//$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',program,story,dynamic,';
 

@@ -992,7 +992,7 @@ class taskModel extends model
             /* Record task version.*/
             if(isset($this->config->qcVersion))
             {
-                if($oldTask->name != $data->name || $oldTask->estStarted != $data->estStarted || $oldTask->deadline != $da
+                if($oldTask->name != $data->name || $oldTask->estStarted != $data->estStarted || $oldTask->deadline != $data->deadline)
                 {
                     $task->version = $oldTask->version + 1; 
                     $taskSpec = new stdClass();
