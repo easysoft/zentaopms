@@ -17,11 +17,11 @@ $lang->index->menuOrder[10] = 'project';
 /* my menu order. */
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
-$lang->my->menuOrder[15] = 'program';
+$lang->my->menuOrder[12] = 'program';
 $lang->my->menuOrder[20] = 'myProject';
 $lang->my->menuOrder[25] = 'review';
-$lang->my->menuOrder[30] = 'story';
-$lang->my->menuOrder[35] = 'requirement';
+$lang->my->menuOrder[30] = 'requirement';
+$lang->my->menuOrder[35] = 'story';
 $lang->my->menuOrder[40] = 'task';
 $lang->my->menuOrder[45] = 'bug';
 $lang->my->menuOrder[50] = 'testtask';
