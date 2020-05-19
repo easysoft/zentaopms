@@ -285,7 +285,7 @@ $lang->my->menu->myProject      = "{$lang->projectCommon}|my|project|";
 $lang->my->menu->dynamic        = '动态|my|dynamic|';
 //$lang->my->menu->profile        = array('link' => '档案|my|profile', 'alias' => 'editprofile');
 //$lang->my->menu->changePassword = '密码|my|changepassword';
-$lang->my->menu->manageContacts = '联系人|my|managecontacts';
+//$lang->my->menu->manageContacts = '联系人|my|managecontacts';
 //$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
 
 $lang->my->dividerMenu = ',program,story,dynamic,';
@@ -501,7 +501,7 @@ $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModu
 //$lang->admin->menu->translate = array('link' => '翻译|dev|translate');
 $lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
+$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'admin,cron,search');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
@@ -1171,7 +1171,7 @@ $lang->product->menu->story       = '软件需求|product|browse|product={PRODUC
 $lang->product->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
 $lang->auditplan->menu->browse = array('link' => '质量保证计划|auditplan|browse|', 'alias' => 'create,edit');
-$lang->auditplan->menu->nc     = '不符合项|nc|browse|program={PROGRAM}';
+$lang->auditplan->menu->nc     = array('link' => '不符合项|nc|browse|program={PROGRAM}', 'subModule' => 'nc');
 
 $lang->story->menu         = $lang->product->menu;
 $lang->milestone->menu     = $lang->weekly->menu;
@@ -1180,5 +1180,5 @@ $lang->nc->menu            = $lang->auditplan->menu;
 $lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
 $lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 
-$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook');
+$lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');

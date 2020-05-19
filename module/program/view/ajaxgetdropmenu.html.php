@@ -49,7 +49,7 @@ foreach($programs as $program)
     ?>
     </div>
     <div class="col-footer">
-      <?php echo html::a(helper::createLink('program', 'createguide'), '<i class="icon icon-plus"></i>' . $lang->program->create, '', 'class="not-list-item text-primary" data-toggle="modal" data-type="ajax"'); ?>
+      <?php echo html::a(helper::createLink('program', 'create'), '<i class="icon icon-plus"></i>' . $lang->program->create, '', 'class="not-list-item text-primary"'); ?>
       <div class='pull-right'>
         <?php echo html::a(helper::createLink('program', 'index', 'status=all'), '<i class="icon icon-cards-view muted"></i> ' . $lang->project->all, '', 'class="not-list-item"'); ?>
         <span class='text-muted muted'> &nbsp; | &nbsp; </span>

@@ -17,8 +17,8 @@
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
-          <th><?php echo $lang->team->role;?></th>
           <th><?php echo $lang->team->account;?></th>
+          <th><?php echo $lang->team->role;?></th>
           <th class='w-100px'><?php echo $lang->team->days;?></th>
           <th class='w-100px'><?php echo $lang->team->hours;?></th>
           <th class='w-110px'><?php echo $lang->team->limited;?></th>
@@ -31,8 +31,8 @@
         <?php if(!isset($users[$member->account])) continue;?>
         <?php unset($users[$member->account]);?>
         <tr>
-          <td><input type='text' name='roles[]'     id='role<?php echo $i;?>'    value='<?php echo $member->role;?>' class='form-control' /></td>
           <td><input type='text' name='realnames[]' id='account<?php echo $i;?>' value='<?php echo $member->realname;?>' readonly class='form-control' /></td>
+          <td><input type='text' name='roles[]'     id='role<?php echo $i;?>'    value='<?php echo $member->role;?>' class='form-control' /></td>
           <td><input type='text' name='days[] '     id='days<?php echo $i;?>'    value='<?php echo $member->days;?>' class='form-control' /></td>
           <td>
             <input type='text'   name='hours[]' id='hours<?php echo $i;?>' value='<?php echo $member->hours;?>' class='form-control' />
@@ -50,8 +50,8 @@
         <?php foreach($deptUsers as $deptAccount => $userName):?>
         <?php if(!isset($users[$deptAccount])) continue;?>
         <tr class='addedItem'>
-          <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
           <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
           <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $project->days?>'/></td>
           <td>
             <input type='text'   name='hours[]' id='hours<?php echo $i;?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
@@ -68,8 +68,8 @@
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
-          <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
           <td><?php echo html::select("accounts[]", $users, '', "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
           <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
           <td>
             <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
@@ -92,8 +92,8 @@
   <?php $i = '%i%';?>
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
-      <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
       <td><?php echo html::select("accounts[]", $users, '', "class='form-control' onchange='setRole(this.value, $i)'");?></td>
+      <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
       <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $project->days?>'/></td>
       <td>
         <input type='text'   name='hours[]' id='hours<?php echo ($i);?>' class='form-control' value='<?php echo $config->project->defaultWorkhours?>' />
