@@ -5,6 +5,7 @@ class program extends control
     {
         parent::__construct($moduleName, $methodName);
         $this->loadModel('project');
+        $this->programs = $this->program->getPairs();
     }
 
     public function transfer($programID = 0)
@@ -37,10 +38,10 @@ class program extends control
     public function commonAction($projectID = 0, $extra = '')
     {
         /* Set menu. */
-        $this->projects = $this->project->getPairs('nocode');
-        $projectID  = $this->project->saveState($projectID, $this->projects);
-        $selectHtml = $this->project->select('', $projectID, 0, 'project', 'task', $extra);
-        $this->lang->programSwapper = $selectHtml;
+        //$this->projects = $this->project->getPairs('nocode');
+        //$projectID  = $this->project->saveState($projectID, $this->projects);
+        //$selectHtml = $this->project->select('', $projectID, 0, 'project', 'task', $extra);
+        //$this->lang->programSwapper = $selectHtml;
     }
 
     public function index($status = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
@@ -426,5 +427,20 @@ class program extends control
         }
 
         return $errors;
+    }
+
+    public function ajaxGetDropMenu($programID, $module, $method, $extra)
+    {    
+        $this->loadModel('project');
+        $this->view->link      = $this->program->getProgramLink($module, $method, $extra);
+        $this->view->programID = $programID;
+        $this->view->module    = $module;
+        $this->view->method    = $method;
+        $this->view->extra     = $extra;
+        $programs = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in(array_keys($this->programs))->orderBy('order desc')->fetchAll();
+        $programPairs = array();    
+        foreach($programs as $program) $programPairs[$program->id] = $program->name;
+        $this->view->programs = $programs;
+        $this->display();
     }
 }

@@ -19,6 +19,16 @@ class programModel extends model
             ->fetchAll('id');
     }
 
+    public function getPairs()
+    {
+        return $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('iscat')->eq(0)
+            ->andWhere('program')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->fetchPairs();
+    }
+
     public function getPairsByTemplate($template)
     {
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -98,6 +108,31 @@ class programModel extends model
 
             return $programID;
         }
+    }
+
+    public function getSwapper($programs, $programID, $currentModule, $currentMethod, $extra = '')
+    {    
+        $this->loadModel('project');
+        $currentProgramName = '';
+        if($programID)
+        {    
+            setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+            $currentProgram     = $this->project->getById($programID);
+            $currentProgramName = $currentProgram->name;
+        }    
+        else $currentProgramName = $this->lang->project->allProjects;
+
+        $dropMenuLink = helper::createLink('program', 'ajaxGetDropMenu', "objectID=$programID&module=$currentModule&method=$currentMethod&extra=$extra");
+        $output  = "<div class='btn-group' id='swapper'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProgramName}'>{$currentProgramName} <i class='icon icon-swap'></i></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';      $output .= "</div></div>";
+        //if($isMobile) $output  = "<a id='currentItem' href=\"javascript:showSearchMenu('project', '$projectID', '$currentModule', '$currentMethod', '$extra')\">{$currentProjectName} <span class='icon-caret-down'></span></a><div id='currentItemDropMenu' class='hidden affix enter-from-bottom layer'></div>";
+
+        return $output;
+    }
+
+    public function getProgramLink($module, $method, $extra)
+    {
+        return helper::createLink('program', 'transfer', "programID=%s");
     }
 
     public static function isClickable($project, $action)
