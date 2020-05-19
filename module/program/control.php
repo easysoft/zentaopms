@@ -84,18 +84,22 @@ class program extends control
         $this->display();
     }
 
+    public function setPlanduration()
+    {
+        $begin                 = $this->post->begin;
+        $end                   = $this->post->end;
+        $planDuration          = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
+        $planDuration          = count($planDuration);
+        $_POST['planDuration'] = $planDuration;
+    }
+
     public function create($template = 'scrum', $copyProgramID = '')
     {
         $this->commonAction();
 
         if($_POST)
         {
-            /* Add the planDuration. */
-            $begin                 = $this->post->begin;
-            $end                   = $this->post->end;
-            $planDuration          = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
-            $planDuration          = count($planDuration);
-            $_POST['planDuration'] = $planDuration;
+            $this->setPlanduration();
 
             $projectID = $this->program->create();
             if(dao::isError())
@@ -144,6 +148,8 @@ class program extends control
 
         if($_POST)
         {
+            $this->setPlanduration();
+
             $changes = $this->project->update($projectID);
             if(dao::isError()) $this->send(array('result' => 'fail', 'message' => $this->processErrors(dao::getError())));
             if($changes)
