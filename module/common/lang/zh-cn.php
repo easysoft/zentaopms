@@ -628,7 +628,8 @@ $lang->navGroup->risk           = 'program';
 $lang->navGroup->auditplan      = 'program';
 $lang->navGroup->cm             = 'program';
 $lang->navGroup->nc             = 'program';
-
+$lang->navGroup->job            = 'program';
+$lang->navGroup->jenkins        = 'program';
 $lang->navGroup->durationestimation = 'program';
 
 
