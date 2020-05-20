@@ -290,7 +290,7 @@ $lang->my->menu->dynamic          = '动态|my|dynamic|';
 //$lang->my->menu->manageContacts = '联系人|my|managecontacts';
 //$lang->my->menu->score          = array('link' => '积分|my|score', 'subModule' => 'score');
 
-$lang->my->dividerMenu = ',program,story,dynamic,';
+$lang->my->dividerMenu = ',program,requirement,dynamic,';
 
 $lang->todo       = new stdclass();
 $lang->todo->menu = $lang->my->menu;
@@ -503,7 +503,7 @@ $lang->admin->menu->message   = array('link' => '通知|message|index', 'subModu
 //$lang->admin->menu->translate = array('link' => '翻译|dev|translate');
 $lang->admin->menu->data      = array('link' => '数据|backup|index', 'subModule' => 'backup,action');
 $lang->admin->menu->safe      = array('link' => '安全|admin|safe', 'alias' => 'checkweak');
-$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'admin,cron,search');
+$lang->admin->menu->system    = array('link' => '系统|cron|index', 'subModule' => 'cron,search');
 
 $lang->company->menu = $lang->company->menu;
 $lang->dept->menu    = $lang->company->menu;
