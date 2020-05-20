@@ -120,3 +120,4 @@ $lang->upgrade->fromVersions['12_0']       = '12.0';
 $lang->upgrade->fromVersions['12_0_1']     = '12.0.1';
 $lang->upgrade->fromVersions['12_1']       = '12.1';
 $lang->upgrade->fromVersions['12_2']       = '12.2';
+$lang->upgrade->fromVersions['15_0']       = '15.0';

@@ -127,6 +127,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['15.0'][]   = array('title'=>'增加项目模板，兼容渠成', 'desc' => '');
 $lang->misc->feature->all['12.3'][]   = array('title'=>'集成单元测试，打通持续集成闭环。', 'desc' => '');
 $lang->misc->feature->all['12.2'][]   = array('title'=>'增加父子需求，兼容最新喧喧。', 'desc' => '');
 $lang->misc->feature->all['12.1'][]   = array('title'=>'增加构建功能', 'desc' => '<p>增加构建功能，集成Jenkins进行构建</p>');
