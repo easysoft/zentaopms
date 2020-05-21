@@ -55,7 +55,11 @@ class testreport extends control
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
         if($extra) $task = $this->testtask->getById($extra);
-        $name = $extra ? $task->name : $object->name;
+
+        if(isset($task->name))
+            $name = $extra ? $task->name : $object->name;
+        else
+            $name = '';
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -96,7 +100,7 @@ class testreport extends control
         if($tasks)    $tasks    = $this->dao->select('id,name')->from(TABLE_TESTTASK)->where('id')->in($tasks)->fetchPairs('id', 'name');
 
         $this->view->title      = $name . $this->lang->colon . $this->lang->testreport->common;
-        $this->view->position[] = html::a(inlink('browse', "objectID=$objectID&objectType=$objectType&extra=$extra"), $extra ? $task->name : $object->name);
+        $this->view->position[] = html::a(inlink('browse', "objectID=$objectID&objectType=$objectType&extra=$extra"), $extra ? $task->name : isset($object->name) ? $object->name : '');
         $this->view->position[] = $this->lang->testreport->browse;
 
         $this->view->reports    = $reports;

@@ -1122,7 +1122,7 @@ class project extends control
         }
 
         $this->view->isSprint = false;
-        if(strpos($this->config->custom->productProject, '_2'))
+        if(isset($this->config->custom->productProject) and strpos($this->config->custom->productProject, '_2'))
         {
             $this->view->isSprint = true;
             unset($this->lang->project->typeList['waterfall']);
