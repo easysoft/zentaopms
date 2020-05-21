@@ -14,11 +14,9 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php $moduleName = $app->rawModule;?>
-<?php $methodName = $app->rawMethod;?>
-<?php $isProgram  = (zget($lang->navGroup, $moduleName) == 'program');?>
+<?php $isProgram = (zget($lang->navGroup, $app->rawModule) == 'program');?>
 <div id='menu'>
-  <nav id='menuNav'><?php commonModel::printMainNav($moduleName);?></nav>
+  <nav id='menuNav'><?php commonModel::printMainNav($app->rawModule);?></nav>
   <div id='menuFooter'>
     <button type='button' id='menuToggle'><i class='icon icon-sm icon-menu-collapse'></i></button>
   </div>
@@ -27,9 +25,9 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
   <div id='mainHeader'>
     <div class='container'>
       <div id='heading'>
-        <?php if($isProgram) echo $this->loadModel('program')->getSwapper($this->program->getPairs(), $this->session->program, $moduleName, $methodName);?>
+        <?php if($isProgram) echo $this->loadModel('program')->getSwapper($this->program->getPairs(), $this->session->program, $app->rawModule, $app->rawMethod);?>
       </div>
-      <nav id='navbar'><?php commonModel::printMainmenu($moduleName, $methodName);?></nav>
+      <nav id='navbar'><?php commonModel::printMainmenu($app->rawModule, $app->rawMethod);?></nav>
       <div id='toolbar'>
         <div id="userMenu">
           <?php common::printSearchBox();?>
@@ -40,11 +38,11 @@ if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
       </div>
     </div>
   </div>
-  <?php if(!in_array($moduleName, $lang->noMenuModule) || (in_array($moduleName, $lang->noMenuModule) && in_array($methodName, $lang->haveMenuMethod))):?>
+  <?php if(!in_array($app->rawModule, $lang->noMenuModule) || (in_array($app->rawModule, $lang->noMenuModule) && in_array($app->rawMethod, $lang->haveMenuMethod))):?>
   <div id='subHeader'>
     <div class='container'>
       <div id="pageNav" class='btn-toolbar'><?php if(isset($lang->modulePageNav)) echo $lang->modulePageNav;?></div>
-      <nav id='subNavbar'><?php common::printModuleMenu($this->moduleName);?></nav>
+      <nav id='subNavbar'><?php common::printModuleMenu($app->rawModule);?></nav>
       <div id="pageActions"><div class='btn-toolbar'><?php if(isset($lang->modulePageActions)) echo $lang->modulePageActions;?></div></div>
     </div>
   </div>
