@@ -415,7 +415,7 @@ class projectModel extends model
                     $member->account = $value;
                     $member->join    = helper::today();
                     $member->role    = $this->lang->project->$fieldName;
-                    $member->days    = $project->days;
+                    $member->days    = isset($project->days)?$project->days:0;
                     $member->type    = 'project';
                     $member->hours   = $this->config->project->defaultWorkhours;
                     $this->dao->replace(TABLE_TEAM)->data($member)->exec();
