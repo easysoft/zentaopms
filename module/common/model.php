@@ -993,10 +993,10 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
+    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null, $programID = 0)
     {
         if(!commonModel::hasPriv($module, $method, $object)) return false;
-        echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
+        echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody, $programID), $label, $target, $misc, $newline);
         return true;
     }
 
