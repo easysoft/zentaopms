@@ -39,15 +39,17 @@ class zfile
         if(!is_dir($to) and !@mkdir($to, 0777, true)) $log['message'] = "$to: Permission denied";
         if(is_dir($to)  and !is_writeable($to))       $log['message'] = "$to: Permission denied";
         if($logFile     and !file_exists($logFile))   touch($logFile);
-        if(!empty($log['message'])) return $return;
+        if(!empty($log['message'])) return $log;
 
         $from = realpath($from) . '/';
         $to   = realpath($to) . '/';
 
-        $entries = glob($from . '/*');
-        foreach($entries as $fullEntry)
+        $entries = scandir($from);
+        foreach($entries as $entry)
         {
-            $entry = basename($fullEntry);
+            if($entry == '.' or $entry == '..' or $entry == '.svn' or $entry == '.git') continue;
+
+            $fullEntry = $from . $entry;
             if(is_file($fullEntry))
             {
                 if(file_exists($to . $entry)) unlink($to . $entry);
@@ -106,8 +108,14 @@ class zfile
         if(is_file($dir)) return 1;
 
         $count   = 0;
-        $entries = glob($dir . '/*');
-        foreach($entries as $fullEntry) $count += $this->getCount($fullEntry);
+        $entries = scandir($dir);
+        foreach($entries as $entry)
+        {
+            if($entry == '.' or $entry == '..' or $entry == '.svn' or $entry == '.git') continue;
+
+            $fullEntry = $dir . '/' . $entry;
+            $count += $this->getCount($fullEntry);
+        }
 
         return $count;
     }
