@@ -172,6 +172,7 @@ class storyModel extends model
             ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
+            ->setDefault('program', $this->session->program)
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
