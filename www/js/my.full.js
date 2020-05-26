@@ -716,7 +716,8 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
     if($parentTd.length == 0) return false;
 
     var toggleClass = objectType == 'product' ? 'story-toggle' : 'task-toggle';
-    $form.find('th.c-title').append("<button type='button' id='toggleFold' class='btn btn-mini collapsed'>" + unfoldAll + "</button>");
+    var nameClass   = objectType == 'product' ? 'c-title'      : 'c-name';
+    $form.find('th.' + nameClass).append("<button type='button' id='toggleFold' class='btn btn-mini collapsed'>" + unfoldAll + "</button>");
 
     var allUnfold = true;
     $parentTd.each(function()
@@ -729,7 +730,7 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
         $(this).find('a.' + toggleClass).addClass('collapsed')
     })
 
-    $form.find('th.c-title #toggleFold').html(allUnfold ? foldAll : unfoldAll).toggleClass('collapsed', !allUnfold);
+    $form.find('th.' + nameClass + ' #toggleFold').html(allUnfold ? foldAll : unfoldAll).toggleClass('collapsed', !allUnfold);
 
     $(document).on('click', '#toggleFold', function()
     {
