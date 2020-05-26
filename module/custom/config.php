@@ -9,6 +9,8 @@ $config->custom->canAdd['todo']     = 'priList,typeList';
 $config->custom->canAdd['user']     = 'roleList';
 $config->custom->canAdd['block']    = '';
 
+$config->custom->noModuleMenu = array();
+
 $config->custom->requiredModules[15] = 'product';
 $config->custom->requiredModules[20] = 'story';
 $config->custom->requiredModules[25] = 'productplan';

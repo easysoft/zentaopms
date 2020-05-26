@@ -92,7 +92,8 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $selected = empty($_SESSION['project']) ? key($projects) : $this->session->project;?>
+        <?php $selected = empty($_SESSION['project'])  ? key($projects) : $this->session->project;?>
+        <?php $selected = !isset($projects[$selected]) ? key($projects) : $selected;?>
         <?php foreach($projects as $project):?>
         <li <?php if($project->id == $selected) echo "class='active' id='activeProject'";?> projectID='<?php echo $project->id;?>'>
           <a href="###" data-target="#tab3Content<?php echo $project->id;?>" data-toggle="tab"><?php echo $project->name;?></a>

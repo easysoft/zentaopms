@@ -46,7 +46,7 @@
         <?php endif;?>
         <th class='text-left'>        <?php common::printOrderLink('build',   $orderBy, $vars, $lang->testtask->build);?></th>
         <th class='c-user text-left'> <?php common::printOrderLink('owner',   $orderBy, $vars, $lang->testtask->owner);?></th>
-        <th class='w-90px text-left'><?php common::printOrderLink('end',     $orderBy, $vars, $lang->testtask->execTime);?></th>
+        <th class='w-90px text-left'> <?php common::printOrderLink('begin',   $orderBy, $vars, $lang->testtask->execTime);?></th>
         <th class='w-50px text-center'><?php echo $lang->testtask->caseCount;?></th>
         <th class='w-40px text-center'><?php echo $lang->testtask->passCount;?></th>
         <th class='w-40px text-center'><?php echo $lang->testtask->failCount;?></th>

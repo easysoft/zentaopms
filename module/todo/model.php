@@ -37,6 +37,13 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove('bug, task, story, uid, feedback')
             ->get();
+
+        if($todo->end <= $todo->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            return false;
+        }
+
         if(empty($todo->cycle)) unset($todo->config);
         if(!empty($todo->cycle))
         {
@@ -58,6 +65,7 @@ class todoModel extends model
                 unset($todo->config['week']);
                 $todo->config['month'] = join(',', $todo->config['month']);
             }
+            $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
             $todo->config = json_encode($todo->config);
             $todo->type   = 'cycle';
         }
@@ -118,6 +126,8 @@ class todoModel extends model
                 if($todo->type == 'task')  $todo->idvalue = isset($todos->tasks[$i + 1]) ? $todos->tasks[$i + 1] : 0;
                 if($todo->type == 'story') $todo->idvalue = isset($todos->storys[$i + 1]) ? $todos->storys[$i + 1] : 0;
 
+                if($todo->end <= $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+
                 $this->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
                 if(dao::isError())
                 {
@@ -162,6 +172,13 @@ class todoModel extends model
             ->stripTags($this->config->todo->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid')
             ->get();
+
+        if($todo->end <= $todo->begin)
+        {
+            dao::$errors[] = sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin);
+            return false;
+        }
+
         if(!empty($oldTodo->cycle))
         {
             $todo->config['begin'] = $todo->date;
@@ -182,6 +199,7 @@ class todoModel extends model
                 unset($todo->config['week']);
                 $todo->config['month'] = join(',', $todo->config['month']);
             }
+            $todo->config['beforeDays'] = (int)$todo->config['beforeDays'];
             $todo->config = json_encode($todo->config);
         }
 
@@ -228,6 +246,8 @@ class todoModel extends model
                 if($todo->type == 'task') $todo->idvalue = isset($data->tasks[$todoID]) ? $data->tasks[$todoID] : 0;
                 if($todo->type == 'bug')  $todo->idvalue = isset($data->bugs[$todoID]) ? $data->bugs[$todoID] : 0;
                 if($todo->type == 'story')$todo->idvalue = isset($data->storys[$todoID]) ? $data->storys[$todoID] : 0;
+
+                if($todo->end <= $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $todos[$todoID] = $todo;
             }

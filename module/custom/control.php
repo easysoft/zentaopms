@@ -460,8 +460,13 @@ class custom extends control
             }
             if($module !== 'main')
             {
-                $menu['module']     = customModel::getModuleMenu($module, true);
-                $menu['feature']    = customModel::getFeatureMenu($module, $method);
+                $menu['module']  = array();
+                $menu['feature'] = array();
+                if(!isset($this->config->custom->noModuleMenu[$module]))
+                {
+                    $menu['module']  = customModel::getModuleMenu($module, true);
+                    $menu['feature'] = customModel::getFeatureMenu($module, $method);
+                }
                 $menu['moduleName'] = $module;
                 $menu['methodName'] = $method;
             }

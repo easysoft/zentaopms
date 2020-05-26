@@ -1453,7 +1453,7 @@ class userModel extends model
             }
             if(!empty($users)) continue;
 
-            if($objectType == 'product') $whiteList += $this->getProductWhiteListUsers($object, $groupUsers, zget($linkedProductProjects, $objctID, array()), zget($teamGroups, $objectID, array()));
+            if($objectType == 'product') $whiteList += $this->getProductWhiteListUsers($object, $groupUsers, zget($linkedProductProjects, $objectID, array()), zget($teamGroups, $objectID, array()));
             if($objectType == 'project') $whiteList += $this->getProjectWhiteListUsers($object, $groupUsers, zget($teamGroups, $objectID, array()));
         }
         if(empty($objects)) return true;
@@ -1472,7 +1472,7 @@ class userModel extends model
         {
             foreach($objects as $objectID => $object)
             {
-                $linkedProjects = $objectType == 'product' ? zget($linkedProductProjects, $objctID, array()) : array();
+                $linkedProjects = $objectType == 'product' ? zget($linkedProductProjects, $objectID, array()) : array();
                 $members        = zget($teamGroups, $objectID, array());
 
                 if($objectType == 'product')

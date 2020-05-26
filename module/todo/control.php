@@ -142,7 +142,7 @@ class todo extends control
                 $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::locate($this->session->todoList, 'parent'));
+            die(js::locate($this->session->todoList, 'parent.parent'));
         }
 
         /* Judge a private todo or not, If private, die. */

@@ -108,7 +108,8 @@ $(function()
     <div class="col col-nav">
       <ul class="nav nav-stacked nav-secondary scrollbar-hover" id='<?php echo $blockNavId;?>'>
         <li class='switch-icon prev'><a><i class='icon icon-arrow-left'></i></a></li>
-        <?php $selected = empty($_SESSION['product']) ? key($products) : $this->session->product;?>
+        <?php $selected = empty($_SESSION['product'])  ? key($products) : $this->session->product;?>
+        <?php $selected = !isset($products[$selected]) ? key($products) : $selected;?>
         <?php foreach($products as $product):?>
         <li <?php if($product->id == $selected) echo "class='active' id='activeProduct'";?> productID='<?php echo $product->id;?>'>
           <a href="javascript:;" data-target="#tabProduct<?php echo $product->id;?>" data-toggle="tab" title='<?php echo $product->name;?>'><?php echo $product->name;?></a>

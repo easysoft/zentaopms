@@ -20,7 +20,7 @@
   <div class="modal-header">
     <h4 class='modal-title pull-left'><?php echo html::a($this->createLink('todo', 'view', 'todo=' . $todo->id), "TODO #{$todo->id} {$todo->name}");?></h4>
   </div>
-  <form class='modal-body form-horizontal' method='post' id='dataform'>
+  <form class='modal-body form-horizontal' target='hiddenwin' method='post' id='dataform'>
     <div class="row form-group">
       <label class="col-sm-1"><?php echo $lang->todo->date;?></label>
       <div class="col-sm-10">
@@ -66,7 +66,7 @@
           </div>
         </div>
         <?php echo html::hidden('config[type]', $todo->config->type)?>
-        <div class='input-group' style='width:200px; padding-top:5px;'>
+        <div class='input-group' style='width:250px; padding-top:5px;'>
         <?php printf($lang->todo->beforeDays, html::input('config[beforeDays]', $todo->config->beforeDays, "class='form-control'"));?>
         </div>
       </div>
