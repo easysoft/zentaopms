@@ -57,6 +57,18 @@ class router extends baseRouter
     public $isFlow = false;
 
     /**
+     * Get the $moduleRoot var.
+     * 
+     * @param  string $appName 
+     * @access public
+     * @return string
+     */
+    public function getModuleRoot($appName = '')
+    {
+        return $this->moduleRoot;
+    }
+
+    /**
      * Merge system and translated langs.
      *
      * @param   string $lang  zh-cn|zh-tw|en
