@@ -71,7 +71,9 @@ class ciModel extends model
             {
                 $buildInfo   = simplexml_load_string($response);
                 $buildNumber = strtolower($buildInfo->number);
-                $result      = strtolower($buildInfo->result);
+                if(empty($buildNumber)) return false;
+
+                $result = strtolower($buildInfo->result);
                 $this->updateBuildStatus($compile, $result);
 
                 $logUrl   = sprintf('%s/job/%s/%s/consoleText', $jenkinsServer, $compile->jkJob, $buildNumber);
