@@ -20,17 +20,17 @@ $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
 
-$lang->zentaoPMS      = '渠成';
+$lang->zentaoPMS      = '禅道';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
 $lang->logout         = '退出';
 $lang->login          = '登录';
 $lang->help           = '帮助';
-$lang->aboutZenTao    = '关于渠成';
+$lang->aboutZenTao    = '关于禅道';
 $lang->profile        = '个人档案';
 $lang->changePassword = '更改密码';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>时间: %s 毫秒, 内存: %s KB, 查询: %s.  </div></div>";
-$lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩渠成软件的任何标志及链接。</span>";
+$lang->agreement      = "已阅读并同意<a href='http://zpl.pub/page/zplv12.html' target='_blank'>《Z PUBLIC LICENSE授权协议1.2》</a>。<span class='text-danger'>未经许可，不得去除、隐藏或遮掩禅道软件的任何标志及链接。</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'>Designed by <strong>艾体验</strong></a>";
 
 $lang->reset        = '重填';
@@ -175,7 +175,7 @@ $lang->system->dividerMenu = ',auditcl,subject,';
 
 $lang->stage = new stdclass();
 $lang->stage->menu = new stdclass();
-$lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit');
+$lang->stage->menu->browse  = array('link' => '阶段列表|stage|browse|', 'alias' => 'create,edit,batchcreate');
 $lang->stage->menu->settype = '阶段类型|stage|settype|';
 
 $lang->measurement = new stdclass();
@@ -255,7 +255,7 @@ $lang->lang = 'Language';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
-$lang->themes['default']    = '渠成蓝（默认）';
+$lang->themes['default']    = '禅道蓝（默认）';
 $lang->themes['green']      = '叶兰绿';
 $lang->themes['red']        = '赤诚红';
 $lang->themes['purple']     = '玉烟紫';
@@ -630,8 +630,8 @@ $lang->navGroup->cm             = 'program';
 $lang->navGroup->nc             = 'program';
 $lang->navGroup->job            = 'program';
 $lang->navGroup->jenkins        = 'program';
-$lang->navGroup->durationestimation = 'program';
 
+$lang->navGroup->durationestimation = 'program';
 
 $lang->navGroup->stage         = 'system';
 $lang->navGroup->measurement   = 'system';
@@ -1101,12 +1101,12 @@ if(isset($config->global->flow) and $config->global->flow == 'onlyTest')
 
 /* Cmmi menu. */
 $lang->menu->cmmi = new stdclass();
-$lang->menu->cmmi->workestimation = array('link' => '估算|workestimation|index|programID={PROGRAM}', 'subModule' => 'durationestimation,budget');
-$lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|programID={PROGRAM}', 'subModule' => 'programplan');
+$lang->menu->cmmi->workestimation = array('link' => '估算|workestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation,budget');
+$lang->menu->cmmi->programplan    = array('link' => '计划|programplan|browse|program={PROGRAM}', 'subModule' => 'programplan');
 $lang->menu->cmmi->project        = array('link' => $lang->projectCommon . '|project|task|projectID={PROJECT}', 'subModule' => ',project,task,');
-$lang->menu->cmmi->review         = array('link' => '评审|review|browse|programID={PROGRAM}', 'subModule' => ',reviewissue,');
-$lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|programID={PROGRAM}', 'subModule' => ',milestone,');
-$lang->menu->cmmi->doc            = array('link' => '文档|doc|index|programID={PROGRAM}');
+$lang->menu->cmmi->review         = array('link' => '评审|review|browse|program={PROGRAM}', 'subModule' => ',reviewissue,');
+$lang->menu->cmmi->weekly         = array('link' => '报告|weekly|index|program={PROGRAM}', 'subModule' => ',milestone,');
+$lang->menu->cmmi->doc            = array('link' => '文档|doc|index|program={PROGRAM}');
 $lang->menu->cmmi->product        = array('link' => '需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement', 'subModule' => ',story,');
 $lang->menu->cmmi->design         = '设计|design|browse|product={PRODUCT}';
 $lang->menu->cmmi->ci             = '集成|repo|browse|';
@@ -1114,10 +1114,10 @@ $lang->menu->cmmi->qa             = array('link' => '测试|bug|browse|product={
 $lang->menu->cmmi->release        = array('link' => '发布|release|browse|product={PRODUCT}', 'subModule' => 'release');
 $lang->menu->cmmi->issue          = '问题|issue|browse|';
 $lang->menu->cmmi->risk           = '风险|risk|browse|';
-$lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|programID={PROGRAM}', 'subModule' => ',report,');
+$lang->menu->cmmi->report         = array('link' => '度量|report|programsummary|program={PROGRAM}', 'subModule' => ',report,');
 $lang->menu->cmmi->auditplan      = array('link' => 'QA|auditplan|browse|', 'subModule' => 'nc');
-$lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|programID={PROGRAM}', 'subModule' => 'cm');
-$lang->menu->cmmi->pssp           = '过程|pssp|browse|programID={PROGRAM}';
+$lang->menu->cmmi->cm             = array('link' => '配置|cm|browse|program={PROGRAM}', 'subModule' => 'cm');
+$lang->menu->cmmi->pssp           = '过程|pssp|browse|program={PROGRAM}';
 
 $lang->workestimation = new stdclass();
 $lang->budget         = new stdclass();
@@ -1150,8 +1150,8 @@ $lang->issue->menu          = new stdclass();
 $lang->risk->menu           = new stdclass();
 $lang->durationestimation->menu = new stdclass();
 
-$lang->workestimation->menu->index    = '工作量估算|workestimation|index|programID={PROGRAM}';
-$lang->workestimation->menu->duration = array('link' => '工期估算|durationestimation|index|programID={PROGRAM}', 'subModule' => 'durationestimation');
+$lang->workestimation->menu->index    = '工作量估算|workestimation|index|program={PROGRAM}';
+$lang->workestimation->menu->duration = array('link' => '工期估算|durationestimation|index|program={PROGRAM}', 'subModule' => 'durationestimation');
 $lang->workestimation->menu->budget   = array('link' => '费用估算|budget|summary|', 'subModule' => 'budget');
 
 $lang->durationestimation->menu = $lang->workestimation->menu;
@@ -1160,28 +1160,28 @@ $lang->budget->menu = $lang->workestimation->menu;
 $lang->programplan->menu->gantt = '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt';
 $lang->programplan->menu->lists = '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
 
-$lang->review->menu->review = array('link' => '基线评审列表|review|browse|programID={PROGRAM}', 'subModule' => 'review');
-$lang->review->menu->issue  = array('link' => '问题列表|reviewissue|issue|programID={PROGRAM}', 'subModule' => 'reviewissue');
+$lang->review->menu->review = array('link' => '基线评审列表|review|browse|program={PROGRAM}', 'subModule' => 'review');
+$lang->review->menu->issue  = array('link' => '问题列表|reviewissue|issue|program={PROGRAM}', 'subModule' => 'reviewissue');
 
 $lang->reviewissue = new stdclass();
 $lang->reviewissue->menu = $lang->review->menu;
 
-$lang->weekly->menu->browse = '周报|weekly|index|programID={PROGRAM}';
-$lang->weekly->menu->issue  = '里程碑报告|milestone|index|programID={PROGRAM}';
+$lang->weekly->menu->browse = '周报|weekly|index|program={PROGRAM}';
+$lang->weekly->menu->issue  = '里程碑报告|milestone|index|program={PROGRAM}';
 
 $lang->product->menu->requirement = '用户需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=requirement';
 $lang->product->menu->story       = '软件需求|product|browse|product={PRODUCT}&branch=&browseType=unclosed&queryID=0&storyType=story';
 $lang->product->menu->track       = '跟踪矩阵|story|track|product={PRODUCT}';
 
 $lang->auditplan->menu->browse = array('link' => '质量保证计划|auditplan|browse|', 'alias' => 'create,edit');
-$lang->auditplan->menu->nc     = array('link' => '不符合项|nc|browse|programID={PROGRAM}', 'subModule' => 'nc');
+$lang->auditplan->menu->nc     = array('link' => '不符合项|nc|browse|program={PROGRAM}', 'subModule' => 'nc');
 
 $lang->story->menu         = $lang->product->menu;
 $lang->milestone->menu     = $lang->weekly->menu;
 $lang->nc->menu            = $lang->auditplan->menu;
 
-$lang->cm->menu->browse = array('link' => '基线|cm|browse|programID={PROGRAM}', 'alias' => 'create,edit');
-$lang->cm->menu->report = '基线状态报告|cm|report|programID={PROGRAM}';
+$lang->cm->menu->browse = array('link' => '基线|cm|browse|program={PROGRAM}', 'alias' => 'create,edit');
+$lang->cm->menu->report = '基线状态报告|cm|report|program={PROGRAM}';
 
 $lang->noMenuModule     = array('my', 'todo', 'effort', 'program', 'report', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'holiday', 'custom', 'auditcl', 'subject', 'admin', 'mail', 'extension', 'dev', 'backup', 'cron', 'issue', 'risk', 'pssp', 'sms', 'message', 'webhook', 'search');
 $lang->haveMenuMethod   = array('custom');
