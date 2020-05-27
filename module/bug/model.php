@@ -36,25 +36,25 @@ class bugModel extends model
         if($isMobile)
         {
             $this->app->loadLang('qa');
-            $pageNav  = html::a(helper::createLink('qa', 'index'), $this->lang->qa->index) . $this->lang->colon;
+            $pageNav  = html::a(helper::createLink('qa', 'index', '', '', '', $this->session->program), $this->lang->qa->index) . $this->lang->colon;
         }
         else
         {
             if($this->config->global->flow == 'full')
             {
                 $this->app->loadLang('qa');
-                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no'), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
+                $pageNav = '<div class="btn-group angle-btn"><div class="btn-group">' . html::a(helper::createLink('qa', 'index', 'locate=no', '', '', $this->session->program), $this->lang->qa->index, '', "class='btn'") . '</div></div>';
             }
             else
             {
                 if(common::hasPriv('bug', 'report'))
                 {
-                    $link = helper::createLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID");
+                    $link = helper::createLink('bug', 'report', "productID=$productID&browseType=$browseType&branchID=$branch&moduleID=$moduleID", '', '', $this->session->program);
                     $pageActions .= html::a($link, "<i class='icon-common-report icon-bar-chart muted'></i> <span class='text'>" . $this->lang->bug->report->common . '</span>', '', "class='btn btn-link'");
                 }
                 if(common::hasPriv('bug', 'export'))
                 {
-                    $link = helper::createLink('bug', 'export', "productID=$productID&orderBy=$orderBy");
+                    $link = helper::createLink('bug', 'export', "productID=$productID&orderBy=$orderBy", '', '', $this->session->program);
                     $pageActions .= "<div class='btn-group'>";
                     $pageActions .= "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'>";
                     $pageActions .= "<i class='icon icon-export muted'></i><span class='text'>{$this->lang->export}</span><span class='caret'></span></button>";
@@ -66,20 +66,20 @@ class bugModel extends model
                 }
                 if(common::hasPriv('bug', 'batchCreate'))
                 {
-                    $link = helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
+                    $link = helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", '', '', $this->session->program);
                     $pageActions .= html::a($link, "<i class='icon icon-plus'></i>" . $this->lang->bug->batchCreate, '', "class='btn btn-secondary'");
                 }
                 if(commonModel::isTutorialMode())
                 {
                     $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-                    $link         = helper::createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
+                    $link         = helper::createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams", '', '', $this->session->program);
                     $pageActions .= html::a($link, "<i class='icon-plus'></i>" . $this->lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
                 }
                 else
                 {
                     if(common::hasPriv('bug', 'create'))
                     {
-                        $link = helper::createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+                        $link = helper::createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", '', '', $this->session->program);
                         $pageActions .= html::a($link, "<i class='icon icon-plus'></i>" . $this->lang->bug->create, '', "class='btn btn-primary'");
                     }
                 }
@@ -135,6 +135,7 @@ class bugModel extends model
     {
         $now = helper::now();
         $bug = fixer::input('post')
+            ->setDefault('program', $this->session->program)
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setDefault('project,story,task', 0)
@@ -285,6 +286,7 @@ class bugModel extends model
                 }
             }
 
+            $bug->program = $this->session->program;
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
@@ -415,7 +417,7 @@ class bugModel extends model
         {
             echo(js::alert($this->lang->bug->projectAccessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('bug', 'index')));
+            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('bug', 'index', '', '', '', $this->session->program)));
             die(js::locate('back'));
         }
     }
@@ -2476,7 +2478,7 @@ class bugModel extends model
             }
         }
 
-        $bugLink = inlink('view', "bugID=$bug->id");
+        $bugLink = helper::createLink('bug', 'view', "bugID=$bug->id", '', '', $this->session->program);
         $account = $this->app->user->account;
         $id = $col->id;
         if($col->show)
@@ -2517,7 +2519,7 @@ class bugModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));
+                    echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id", '', '', $this->session->program), sprintf('%03d', $bug->id));
                 }
                 else
                 {
@@ -2561,14 +2563,14 @@ class bugModel extends model
                 if(isset($stories[$bug->story]))
                 {
                     $story = $stories[$bug->story];
-                    echo common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$story->id", 'html', true), $story->title, '', "class='iframe'") : $story->title;
+                    echo common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$story->id", 'html', true, $this->session->program), $story->title, '', "class='iframe'") : $story->title;
                 }
                 break;
             case 'task':
                 if(isset($tasks[$bug->task]))
                 {
                     $task = $tasks[$bug->task];
-                    echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true), $task->name, '', "class='iframe'") : $task->name;
+                    echo common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$task->id", 'html', true, $this->session->program), $task->name, '', "class='iframe'") : $task->name;
                 }
                 break;
             case 'type':
@@ -2623,7 +2625,7 @@ class bugModel extends model
                     }
                     elseif($buildID and common::hasPriv('build', 'view'))
                     {
-                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'");
+                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID", '', '', $this->session->program), $build, '', "title='$bug->openedBuild'");
                     }
                     else
                     {
@@ -2666,11 +2668,11 @@ class bugModel extends model
                 break;
             case 'actions':
                 $params = "bugID=$bug->id";
-                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true);
-                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-                common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true);
-                common::printIcon('bug', 'edit',       $params, $bug, 'list');
-                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
+                common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'confirm', '', 'iframe', true, '', '', $this->session->program);
+                common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true, '', '', $this->session->program);
+                common::printIcon('bug', 'close',      $params, $bug, 'list', '', '', 'iframe', true, '', '', $this->session->program);
+                common::printIcon('bug', 'edit',       $params, $bug, 'list', '', '', '', '', '', '', $this->session->program);
+                common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy', '', '', '', '', '', $this->session->program);
                 break;
             }
             echo '</td>';
@@ -2695,7 +2697,7 @@ class bugModel extends model
         $btnClass     = $bug->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
 
-        $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true);
+        $assignToLink = helper::createLink('bug', 'assignTo', "bugID=$bug->id", '', true, $this->session->program);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $bug->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('bug', 'assignTo', $bug) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
@@ -2727,7 +2729,7 @@ class bugModel extends model
             if($id)
             {
                 $name  = $this->dao->select('title')->from(TABLE_BUG)->where('id')->eq($id)->fetch('title');
-                if($name) $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id", 'html'), "#$id " . $name);
+                if($name) $action->appendLink = html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink($action->objectType, 'view', "id=$id", 'html', '', $this->session->program), "#$id " . $name);
             }
         }
 

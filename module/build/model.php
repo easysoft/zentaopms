@@ -199,6 +199,7 @@ class buildModel extends model
         $build->bugs    = '';
 
         $build = fixer::input('post')
+            ->setDefault('program', $this->session->program)
             ->setDefault('product', 0)
             ->setDefault('branch', 0)
             ->cleanInt('product,branch')

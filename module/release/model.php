@@ -132,6 +132,7 @@ class releaseModel extends model
             else
             {
                 $build = new stdclass();
+                $build->program = $this->session->program;
                 $build->product = (int)$productID;
                 $build->branch  = (int)$branch;
                 $build->name    = $this->post->name;
@@ -152,6 +153,7 @@ class releaseModel extends model
 
         if($this->post->build) $branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($this->post->build)->fetch('branch');
         $release = fixer::input('post')
+            ->add('program', $this->session->program)
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setDefault('stories', '')
