@@ -102,7 +102,7 @@ class product extends control
      * @return void
      */
     public function browse($productID = 0, $branch = '', $browseType = 'unclosed', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
-    {die();
+    {
         /* Lower browse type. */
         $browseType = strtolower($browseType);
 

@@ -42,7 +42,7 @@
         <p>
           <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
           <?php if(common::hasPriv('release', 'create')):?>
-          <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branchKey"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+          <?php echo html::a($this->createLink('release', 'create', "productID=$product->id&branch=$branchKey", '', '', $this->session->program), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
           <?php endif;?>
         </p>
       </div>
@@ -60,7 +60,7 @@
         <ul class="release-line">
           <?php foreach($roadmapData as $roadmap):?>
           <li <?php if(isset($roadmap->build) && date('Y-m-d') < $roadmap->date) echo "class='active'";?>>
-            <?php $viewLink = isset($roadmap->build) ? $this->createLink('release', 'view', "releaseID=$roadmap->id") : $this->createLink('productplan', 'view', "planID=$roadmap->id");?>
+            <?php $viewLink = isset($roadmap->build) ? $this->createLink('release', 'view', "releaseID=$roadmap->id", '', '', $this->session->program) : $this->createLink('productplan', 'view', "planID=$roadmap->id", '', '', $this->session->program);?>
             <a href="<?php echo $viewLink;?>">
               <?php if(!empty($roadmap->marker)):?>
               <i class="icon icon-flag text-primary"></i>

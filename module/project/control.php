@@ -24,8 +24,8 @@ class project extends control
         if($this->methodName != 'computeburn')
         {
             $this->projects = $this->project->getPairs('nocode');
-            if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create'));
-            if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() == 'mhtml') $this->locate($this->createLink('project', 'index'));
+            if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('project', 'create', '', '', '', $this->session->program));
+            if(!$this->projects and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() == 'mhtml') $this->locate($this->createLink('project', 'index', '', '', '', $this->session->program));
         }
     }
 
@@ -40,12 +40,12 @@ class project extends control
      */
     public function index($locate = 'auto', $projectID = 0)
     {
-        if($locate == 'yes') $this->locate($this->createLink('project', 'task'));
+        if($locate == 'yes') $this->locate($this->createLink('project', 'task', '', '', '', $this->session->program));
 
         if($this->app->viewType != 'mhtml') unset($this->lang->project->menu->index);
         $this->commonAction($projectID);
 
-        if(common::hasPriv('program', 'createguide')) $this->lang->modulePageActions = html::a($this->createLink('project', 'createguide'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'");
+        if(common::hasPriv('program', 'createguide')) $this->lang->modulePageActions = html::a($this->createLink('project', 'createguide', '', '', '', $this->session->program), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->project->create, '', "class='btn btn-primary' data-toggle='modal' data-type='ajax'");
 
         $this->view->title         = $this->lang->project->index;
         $this->view->position[]    = $this->lang->project->index;
@@ -62,7 +62,7 @@ class project extends control
      */
     public function browse($projectID = 0)
     {
-        $this->locate($this->createLink($this->moduleName, 'task', "projectID=$projectID"));
+        $this->locate($this->createLink($this->moduleName, 'task', "projectID=$projectID", '', '', $this->session->program));
     }
 
     /**
@@ -169,7 +169,7 @@ class project extends control
 
         /* Header and position. */
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->task;
-        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID", '', '', $this->session->program), $project->name);
         $this->view->position[] = $this->lang->project->task;
 
         /* Load pager and get tasks. */
@@ -181,7 +181,7 @@ class project extends control
         $tasks = $this->project->getTasks($productID, $projectID, $this->projects, $browseType, $queryID, $moduleID, $sort, $pager);
 
        /* Build the search form. */
-        $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID");
+        $actionURL = $this->createLink('project', 'task', "projectID=$projectID&status=bySearch&param=myQueryID", '', '', $this->session->program);
         $this->config->project->search['onMenuBar'] = 'yes';
         $this->project->buildTaskSearchForm($projectID, $this->projects, $queryID, $actionURL);
 
@@ -238,7 +238,7 @@ class project extends control
 
         /* Header and session. */
         $this->view->title      = $project->name . $this->lang->colon . $this->lang->project->task;
-        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID"), $project->name);
+        $this->view->position[] = html::a($this->createLink('project', 'browse', "projectID=$projectID", '', '', $this->session->program), $project->name);
         $this->view->position[] = $this->lang->project->task;
 
         /* Get tasks and group them. */
