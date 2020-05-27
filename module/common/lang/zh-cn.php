@@ -630,6 +630,7 @@ $lang->navGroup->cm             = 'program';
 $lang->navGroup->nc             = 'program';
 $lang->navGroup->job            = 'program';
 $lang->navGroup->jenkins        = 'program';
+$lang->navGroup->compile        = 'program';
 
 $lang->navGroup->durationestimation = 'program';
 
