@@ -172,6 +172,7 @@ class storyModel extends model
             ->add('assignedDate', 0)
             ->add('version', 1)
             ->add('status', 'draft')
+            ->setDefault('program', $this->session->program)
             ->setDefault('plan,verify', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
@@ -2909,12 +2910,12 @@ class storyModel extends model
                     break;
                 }
 
-                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork');
-                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses');
-                common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                common::printIcon('story', 'edit',       $vars, $story, 'list');
-                if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap');
-                common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=0&storyID=$story->id", $story, 'list', 'treemap-alt', '', '', '', '', $this->lang->story->subdivide);
+                common::printIcon('story', 'change',     $vars, $story, 'list', 'fork', '', '', '', '', '', $this->session->program);
+                common::printIcon('story', 'review',     $vars, $story, 'list', 'glasses', '', '', '', '', '', $this->session->program);
+                common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true, '', '', $this->session->program);
+                common::printIcon('story', 'edit',       $vars, $story, 'list', '', '', '', '', '', '', $this->session->program);
+                if($this->config->global->flow != 'onlyStory') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', '', '', '', $this->session->program);
+                common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=0&storyID=$story->id", $story, 'list', 'treemap-alt', '', '', '', '', $this->lang->story->subdivide, $this->session->program);
                 break;
             }
             echo '</td>';

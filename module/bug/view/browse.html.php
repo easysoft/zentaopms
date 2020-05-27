@@ -36,7 +36,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       echo $moduleName;
       if($moduleID)
       {
-          $removeLink = $browseType == 'bymodule' ? inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+          $removeLink = $browseType == 'bymodule' ? $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}", '', '', $this->session->program) : 'javascript:removeCookieByKey("bugModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
       }
       ?>
@@ -62,13 +62,13 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             foreach($lang->bug->mySelects as $key => $value)
             {
                 echo '<li' . ($key == $currentBrowseType ? " class='active'" : '') . '>';
-                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$key"), $value);
+                echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$key", '', '', $this->session->program), $value);
             }
             echo '</ul></li>';
         }
         elseif($menuItem->name == 'QUERY')
         {
-            $searchBrowseLink = inlink('browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
+            $searchBrowseLink = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&param=%s", '', '', $this->session->program);
             $isBySearch       = $browseType == 'bysearch';
             include '../../common/view/querymenu.html.php';
         }
@@ -88,14 +88,14 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 foreach($lang->bug->moreSelects as $menuBrowseType => $label)
                 {
                     $active = $menuBrowseType == $browseType ? 'btn-active-text' : '';
-                    echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'") . '</li>';
+                    echo '<li>' . html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType", '', '', $this->session->program), "<span class='text'>{$label}</span>", '', "class='btn btn-link $active'") . '</li>';
                 }
                 echo '</ul></div>';
             }
         }
         else
         {
-            echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType"), $label, '', "class='btn btn-link $active'");
+            echo html::a($this->createLink('bug', 'browse', "productid=$productID&branch=$branch&browseType=$menuBrowseType", '', '', $this->session->program), $label, '', "class='btn btn-link $active'");
         }
     }
     ?>
@@ -111,22 +111,22 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <?php
         $class = common::hasPriv('bug', 'export') ? "" : "class='disabled'";
         $misc  = common::hasPriv('bug', 'export') ? "class='export'" : "class='disabled'";
-        $link  = common::hasPriv('bug', 'export') ? $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=$browseType") : '#';
+        $link  = common::hasPriv('bug', 'export') ? $this->createLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=$browseType", '', '', $this->session->program) : '#';
         echo "<li $class>" . html::a($link, $lang->bug->export, '', $misc) . "</li>";
         ?>
       </ul>
     </div>
     <?php if(!common::checkNotCN()):?>
     <?php
-    common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'");
+    common::printLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate, '', "class='btn btn-secondary'", '', '', '', $this->session->program);
     if(commonModel::isTutorialMode())
     {
         $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-        echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams"), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
+        echo html::a($this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams", '', '', $this->session->program), "<i class='icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary btn-bug-create'");
     }
     else
     {
-        common::printLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'");
+        common::printLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", "<i class='icon icon-plus'></i>" . $lang->bug->create, '', "class='btn btn-primary'", '', '', '', $this->session->program);
     }
     ?>
     <?php else:?>
@@ -135,12 +135,12 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       if(commonModel::isTutorialMode())
       {
           $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-          $link = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
+          $link = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams", '', '', $this->session->program);
           echo html::a($link, "<i class='icon icon-plus'></i> {$lang->bug->create} </span><span class='caret'>", '', "class='btn btn-primary btn-bug-create'");
       }
       else
       {
-          $link     = $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+          $link     = $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", '', '', $this->session->program);
           $disabled = '';
           if(!common::hasPriv('bug', 'create'))
           {
@@ -154,7 +154,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <?php $disabled = common::hasPriv('bug', 'batchCreate') ? '' : "class='disabled'";?>
         <li <?php echo $disabled?>>
         <?php
-          $batchLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID");
+          $batchLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&projectID=0&moduleID=$moduleID", '', '', $this->session->program);
           echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i>" . $lang->bug->batchCreate) . "</li>";
         ?>
         </li>
@@ -175,7 +175,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php common::printLink('tree', 'browse', "productID=$productID&view=bug", $lang->tree->manage, '', "class='btn btn-info btn-wide'", '', '', '', $this->session->program);?>
         <hr class="space-sm" />
       </div>
     </div>
@@ -187,7 +187,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <p>
         <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
         <?php if(common::hasPriv('bug', 'create')):?>
-        <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID", '', '', $this->session->program), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>
@@ -241,7 +241,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <div class="table-actions btn-toolbar">
           <div class='btn-group dropup'>
             <?php
-            $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");
+            $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch", '', '', $this->session->program);
             $misc       = common::hasPriv('bug', 'batchEdit') ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
@@ -249,15 +249,15 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <ul class='dropdown-menu'>
               <?php
               $class = "class='disabled'";
-              $actionLink = $this->createLink('bug', 'batchConfirm');
+              $actionLink = $this->createLink('bug', 'batchConfirm', '', '', '', $this->session->program);
               $misc = common::hasPriv('bug', 'batchConfirm') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
               if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
 
-              $actionLink = $this->createLink('bug', 'batchClose');
+              $actionLink = $this->createLink('bug', 'batchClose', '', '', '', $this->session->program);
               $misc = common::hasPriv('bug', 'batchClose') ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : $class;
               if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
 
-              $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
+              $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch", '', '', $this->session->program);
               $misc = common::hasPriv('bug', 'batchActivate') ? "onclick=\"setFormAction('$actionLink')\"" : $class;
               if($misc) echo "<li>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
@@ -271,7 +271,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                   unset($lang->bug->resolutionList['tostory']);
                   foreach($lang->bug->resolutionList as $key => $resolution)
                   {
-                      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key");
+                      $actionLink = $this->createLink('bug', 'batchResolve', "resolution=$key", '', '', $this->session->program);
                       if($key == 'fixed')
                       {
                           $withSearch = count($builds) > 4;
@@ -282,7 +282,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                           unset($builds['']);
                           foreach($builds as $key => $build)
                           {
-                              $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
+                              $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key", '', '', $this->session->program);
                               echo "<li class='option' data-key='$key'>";
                               echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
                               echo "</li>";
@@ -321,7 +321,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 foreach($branches as $branchID => $branchName)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($branchsPinYin, $branchName, '') . '"') : '';
-                    $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID");
+                    $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID", '', '', $this->session->program);
                     echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$branchID'");
                 }
                 ?>
@@ -349,7 +349,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 foreach($modules as $moduleId => $module)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
-                    $actionLink = $this->createLink('bug', 'batchChangeModule', "moduleID=$moduleId");
+                    $actionLink = $this->createLink('bug', 'batchChangeModule', "moduleID=$moduleId", '', '', $this->session->program);
                     echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$moduleID'");
                 }
                 ?>
@@ -374,7 +374,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <?php endif;?>
               <div class="list-group">
                 <?php
-                $actionLink = $this->createLink('bug', 'batchAssignTo', "productID={$productID}&type=product");
+                $actionLink = $this->createLink('bug', 'batchAssignTo', "productID={$productID}&type=product", '', '', $this->session->program);
                 echo html::select('assignedTo', $memberPairs, '', 'class="hidden"');
                 foreach ($memberPairs as $key => $value)
                 {

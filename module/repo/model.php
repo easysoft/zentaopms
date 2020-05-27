@@ -190,7 +190,11 @@ class repoModel extends model
     public function create()
     {
         $this->checkConnection();
-        $data = fixer::input('post')->skipSpecial('path,client,account,password')->get();
+        $data = fixer::input('post')
+            ->skipSpecial('path,client,account,password')
+            ->add('program', $this->session->program)
+            ->get();
+
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
         if(empty($data->client)) $data->client = 'svn';
 

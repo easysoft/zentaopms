@@ -85,7 +85,7 @@ class caselibModel extends model
                 $pageActions .= "<div class='btn-group'>";
                 if(common::hasPriv('caselib', 'exportTemplet'))
                 {
-                    $link = helper::createLink('caselib', 'exportTemplet', "libID=$libID");
+                    $link = helper::createLink('caselib', 'exportTemplet', "libID=$libID", '', '', $this->session->program);
                     $pageActions .= html::a($link, "<i class='icon icon-export muted'> </i>" . $this->lang->caselib->exportTemplet, '', "class='btn btn-link export'");
                 }
                 if(common::hasPriv('caselib', 'import'))
@@ -235,6 +235,7 @@ class caselibModel extends model
         $lib = fixer::input('post')
             ->stripTags($this->config->caselib->editor->create['id'], $this->config->allowedTags)
             ->setForce('type', 'library')
+            ->add('program', $this->session->program)
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', helper::now())
             ->remove('uid')
