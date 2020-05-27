@@ -302,21 +302,47 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
         if(empty($_POST)) return false;
 
-        $fields       = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
-        $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+        $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
+        $layouts = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
+        $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
 
         $requiredFields = '';
         $mustPostFields = '';
         $numberFields   = '';
+        $message        = array();
         foreach($fields as $field)
         {
             if($field->buildin or !$field->show or !isset($layouts[$field->field])) continue;
-            if($notEmptyRule && strpos(",$field->rules,", ",$notEmptyRule->id,") !== false)
+
+            $fieldRules = explode(',', trim($field->rules, ','));
+            $fieldRules = array_unique($fieldRules);
+            foreach($fieldRules as $ruleID)
             {
-                $requiredFields .= ",{$field->field}";
-                if($field->control == 'radio' or $field->control == 'checkbox') $mustPostFields .= ",{$field->field}";
-                if(strpos($field->type, 'int') !== false and $field->control == 'select') $numberFields .= ",{$field->field}";
+                if(!isset($rules[$ruleID])) continue;
+
+                $rule = $rules[$ruleID];
+                if($rule->type == 'system' and $rule->rule == 'notempty')
+                {
+                    $requiredFields .= ",{$field->field}";
+                    if($field->control == 'radio' or $field->control == 'checkbox') $mustPostFields .= ",{$field->field}";
+                    if(strpos($field->type, 'int') !== false and $field->control == 'select') $numberFields .= ",{$field->field}";
+                }
+                elseif($rule->type == 'system' and isset($_POST[$field->field]))
+                {
+                    $checkFunc = 'check' . $rule->rule;
+                    if(!validater::$checkFunc($_POST[$field->field]))
+                    {
+                        $error = zget($this->lang->error, $rule->rule, '');
+                        if($error) $error = sprintf($error, $field->name);
+                        if(empty($error)) $error = sprintf($this->lang->error->reg, $field->name, $rule->rule);
+
+                        $message[$field->field][] = $error;
+                    }
+                }
+                elseif($rule->type == 'regex' and isset($_POST[$field->field]))
+                {
+                    if(!validater::checkREG($_POST[$field->field], $rule->rule)) $message[$field->field][] = sprintf($this->lang->error->reg, $field->name, $rule->rule);
+                }
             }
         }
 
@@ -324,7 +350,6 @@ class control extends baseControl
         {
             if(isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $requiredFields .= ',' . $this->config->{$this->moduleName}->{$this->methodName}->requiredFields;
 
-            $message = array();
             foreach(explode(',', $requiredFields) as $requiredField)
             {
                 if(empty($requiredField)) continue;
@@ -341,7 +366,7 @@ class control extends baseControl
                     $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
                 }
             }
-            if($message) $this->send(array('result' => 'fail', 'message' => $message));
         }
+        if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
 }
