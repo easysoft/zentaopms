@@ -33,7 +33,7 @@
           }
           ?>
           <td colspan="2">
-            <?php echo '<span class="label label-badge label-primary label-outline">' . $useridPairs[$userid] . '</span>';?>
+            <?php echo '<span class="label label-badge label-primary label-outline">' . zget($useridPairs, $userid) . '</span>';?>
             <?php echo html::input("userid[{$user->account}]", $userid, 'class="form-control hidden"');?>
           </td>
           <td class='text-center c-actions'><?php echo '<button class="btn bind" type="button" data-value="userid[' . $user->account . ']"><i class="icon-common-edit icon-edit"></i></button>';?></td>

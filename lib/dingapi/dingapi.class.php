@@ -85,8 +85,47 @@ class dingapi
         $response = $this->queryAPI($this->apiUrl . "department/list?access_token={$this->token}");
         if($this->isError()) return false;
 
+        $whiteList = array();
+        if($whiteList)
+        {
+            $parentIdList    = array();
+            $whiteListParent = array();
+            foreach($response->department as $dept)
+            {
+                if(!empty($dept->parentid)) $parentIdList[$dept->id] = $dept->parentid;
+                if(in_array($dept->name, $whiteList)) $whiteListParent[$dept->id] = $dept->id;
+            }
+        }
+
         $deptPairs = array();
-        foreach($response->department as $dept) $deptPairs[$dept->id] = $dept->name;
+        foreach($response->department as $dept)
+        {
+            if($whiteList)
+            {
+                if(empty($dept->parentid)) continue;
+                if(isset($whiteListParent[$dept->id]))
+                {
+                    $deptPairs[$dept->id] = $dept->name;
+                    continue;
+                }
+
+                $isWhiteList = false;
+                $parentID    = $dept->parentid;
+                while(isset($parentIdList[$parentID]))
+                {
+                    if(isset($whiteListParent[$parentID]))
+                    {
+                        $isWhiteList = true;
+                        break;
+                    }
+
+                    $parentID = $parentIdList[$parentID];
+                }
+                if(!$isWhiteList) continue;
+            }
+
+            $deptPairs[$dept->id] = $dept->name;
+        }
         return $deptPairs;
     }
 
