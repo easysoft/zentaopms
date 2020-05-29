@@ -66,6 +66,10 @@
             <th class='w-100px<?php echo zget($visibleFields, 'canceledBy',   ' hidden') . zget($requiredFields, 'canceledBy',   '', ' required');?>'><?php echo $lang->task->canceledBy;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'closedBy',     ' hidden') . zget($requiredFields, 'closedBy',     '', ' required');?>'><?php echo $lang->task->closedBy;?></th>
             <th class='w-100px<?php echo zget($visibleFields, 'closedReason', ' hidden') . zget($requiredFields, 'closedReason', '', ' required');?>'><?php echo $lang->task->closedReason;?></th>
+            <?php
+            $extendFields = $this->task->getFlowExtendFields();
+            foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+            ?>
           </tr>
         </thead>
         <tbody>
@@ -111,6 +115,7 @@
             <td class='text-left<?php echo zget($visibleFields, 'canceledBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("canceledBys[$taskID]", $members, $tasks[$taskID]->canceledBy, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("closedBys[$taskID]",   $members, $tasks[$taskID]->closedBy, "class='form-control chosen'");?></td>
             <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>><?php echo html::select("closedReasons[$taskID]", $lang->task->reasonList, $tasks[$taskID]->closedReason, 'class=form-control');?></td>
+            <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $tasks[$taskID], $extendField->field . "[{$taskID}]") . "</td>";?>
           </tr>
           <?php endforeach;?>
         </tbody>

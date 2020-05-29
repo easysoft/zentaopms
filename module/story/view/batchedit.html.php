@@ -53,6 +53,10 @@ foreach(explode(',', $showFields) as $field)
           <th class='w-130px<?php  echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo $lang->story->closedBy;?></th>
           <th class='w-100px<?php  echo zget($visibleFields, 'closedReason', ' hidden')?>'> <?php echo $lang->story->closedReason;?></th>
           <th class='w-80px<?php   echo zget($visibleFields, 'keywords', ' hidden')?>'><?php echo $lang->story->keywords;?></th>
+          <?php
+          $extendFields = $this->story->getFlowExtendFields();
+          foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+          ?>
         </tr>
       </thead>
       <tbody>
@@ -143,6 +147,7 @@ foreach(explode(',', $showFields) as $field)
           <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>><?php echo html::select("closedReasons[$storyID]", $reasonList, $story->closedReason, 'class="form-control" disabled="disabled"');?></td>
           <?php endif;?>
           <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$storyID]", $story->keywords, 'class="form-control"');?></td>
+          <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $story, $extendField->field . "[{$storyID}]") . "</td>";?>
         </tr>
         <?php endforeach;?>
       </tbody>

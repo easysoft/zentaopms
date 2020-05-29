@@ -301,8 +301,9 @@ class storyModel extends model
 
         if(isset($stories->uploadImage)) $this->loadModel('file');
 
-        $forceReview = $this->checkForceReview();
-        $data        = array();
+        $extendFields = $this->getFlowExtendFields();
+        $forceReview  = $this->checkForceReview();
+        $data         = array();
         foreach($stories->title as $i => $title)
         {
             if(empty($title)) continue;
@@ -322,6 +323,13 @@ class storyModel extends model
             $story->openedBy   = $this->app->user->account;
             $story->openedDate = $now;
             $story->version    = 1;
+
+            foreach($extendFields as $extendField)
+            {
+                $story->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
 
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
             {
@@ -364,7 +372,7 @@ class storyModel extends model
                 unset($file['realpath']);
 
                 if(!is_dir($this->file->savePath)) mkdir($this->file->savePath, 0777, true);
-                if(rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
+                if($realPath and rename($realPath, $this->file->savePath . $this->file->getSaveName($file['pathname'])))
                 {
                     $file['addedBy']    = $this->app->user->account;
                     $file['addedDate']  = $now;
@@ -386,6 +394,8 @@ class storyModel extends model
             }
 
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
+
+            $this->executeHooks($storyID);
 
             $actionID = $this->action->create('story', $storyID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('story', 'create',$storyID);
@@ -796,6 +806,7 @@ class storyModel extends model
                 if(isset($data->closedReasons[$storyID])) $prev['closedReason'] = $data->closedReasons[$storyID];
             }
 
+            $extendFields = $this->getFlowExtendFields();
             foreach($storyIdList as $storyID)
             {
                 $oldStory = $oldStories[$storyID];
@@ -830,6 +841,13 @@ class storyModel extends model
                 if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
                 if($story->closedReason != false  and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
 
+                foreach($extendFields as $extendField)
+                {
+                    $story->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                    $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
+                    if($message) die(js::alert($message));
+                }
+
                 $stories[$storyID] = $story;
             }
 
@@ -857,6 +875,8 @@ class storyModel extends model
 
                 if(!dao::isError())
                 {
+                    $this->executeHooks($storyID);
+
                     $this->setStage($storyID);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);

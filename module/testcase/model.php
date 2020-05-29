@@ -272,6 +272,7 @@ class testcaseModel extends model
         }
 
         $this->loadModel('story');
+        $extendFields   = $this->getFlowExtendFields();
         $storyVersions  = array();
         $forceNotReview = $this->forceNotReview();
         $data           = array();
@@ -304,6 +305,13 @@ class testcaseModel extends model
                 $storyVersions[$caseStory] = $data[$i]->storyVersion;
             }
 
+            foreach($extendFields as $extendField)
+            {
+                $data[$i]->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
+
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -324,7 +332,10 @@ class testcaseModel extends model
                 die(js::reload('parent'));
             }
 
-            $caseID   = $this->dao->lastInsertID();
+            $caseID = $this->dao->lastInsertID();
+
+            $this->executeHooks($caseID);
+
             $this->loadModel('score')->create('testcase', 'create', $caseID);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
         }
@@ -840,6 +851,7 @@ class testcaseModel extends model
         }
 
         /* Initialize cases from the post data.*/
+        $extendFields = $this->getFlowExtendFields();
         foreach($caseIDList as $caseID)
         {
             $case = new stdclass();
@@ -857,6 +869,13 @@ class testcaseModel extends model
             $case->type           = $data->types[$caseID];
             $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
 
+            foreach($extendFields as $extendField)
+            {
+                $case->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
+
             $cases[$caseID] = $case;
             unset($case);
         }
@@ -873,6 +892,8 @@ class testcaseModel extends model
 
             if(!dao::isError())
             {
+                $this->executeHooks($caseID);
+
                 unset($oldCase->steps);
                 $allChanges[$caseID] = common::createChanges($oldCase, $case);
             }

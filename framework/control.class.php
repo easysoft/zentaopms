@@ -235,9 +235,8 @@ class control extends baseControl
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        $flow   = $this->loadModel('workflow')->getByModule($this->moduleName);
-        $action = $this->loadModel('workflowaction')->getByModuleAndAction($this->moduleName, $this->methodName);
-        if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
+        $moduleName = $this->moduleName;
+        return $this->$moduleName->executeHooks($objectID);
     }
 
     /**

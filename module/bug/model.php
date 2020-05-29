@@ -221,6 +221,7 @@ class bugModel extends model
         }
 
         if(isset($data->uploadImage)) $this->loadModel('file');
+        $extendFields = $this->getFlowExtendFields();
         $bugs = array();
         foreach($data->title as $i => $title)
         {
@@ -249,6 +250,13 @@ class bugModel extends model
             {
                 $bug->assignedTo   = $moduleOwners[$bug->module];
                 $bug->assignedDate = $now;
+            }
+
+            foreach($extendFields as $extendField)
+            {
+                $bug->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
+                if($message) die(js::alert($message));
             }
 
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
@@ -294,6 +302,9 @@ class bugModel extends model
             if(dao::isError()) die(js::error(dao::getError()));
 
             $bugID = $this->dao->lastInsertID();
+
+            $this->executeHooks($bugID);
+
             $this->loadModel('score')->create('bug', 'create', $bugID);
             if(!empty($data->uploadImage[$i]) and !empty($file))
             {
@@ -719,6 +730,7 @@ class bugModel extends model
             }
 
             /* Initialize bugs from the post data.*/
+            $extendFields = $this->getFlowExtendFields();
             $oldBugs = $bugIDList ? $this->getByList($bugIDList) : array();
             foreach($bugIDList as $bugID)
             {
@@ -758,6 +770,13 @@ class bugModel extends model
                     $bug->assignedDate = $now;
                 }
 
+                foreach($extendFields as $extendField)
+                {
+                    $bug->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                    $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
+                    if($message) die(js::alert($message));
+                }
+
                 $bugs[$bugID] = $bug;
                 unset($bug);
             }
@@ -778,6 +797,9 @@ class bugModel extends model
                 if(!dao::isError())
                 {
                     if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
+
+                    $this->executeHooks($bugID);
+
                     $allChanges[$bugID] = common::createChanges($oldBug, $bug);
                 }
                 else

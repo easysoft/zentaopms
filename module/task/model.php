@@ -246,7 +246,8 @@ class taskModel extends model
         $assignedTo = '';
 
         /* Get task data. */
-        $data = array();
+        $extendFields = $this->getFlowExtendFields();
+        $data         = array();
         foreach($tasks->name as $i => $name)
         {
             $story      = !isset($tasks->story[$i]) || $tasks->story[$i]           == 'ditto' ? $story     : $tasks->story[$i];
@@ -278,6 +279,17 @@ class taskModel extends model
             if($assignedTo) $data[$i]->assignedDate = $now;
             if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($tasks->estStarted[$i])) $data[$i]->estStarted = '';
             if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($tasks->deadline[$i]))     $data[$i]->deadline   = '';
+
+            foreach($extendFields as $extendField)
+            {
+                $data[$i]->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
+                if($message)
+                {
+                    dao::$errors['message'][] = sprintf($message);
+                    return false;
+                }
+            }
         }
 
         /* Fix bug #1525*/
@@ -289,7 +301,6 @@ class taskModel extends model
         /* check data. */
         foreach($data as $i => $task)
         {
-
             if($task->deadline != '0000-00-00' and $task->deadline < $task->estStarted)
             {
                 dao::$errors['message'][] = $this->lang->task->error->deadlineSmall;
@@ -327,6 +338,9 @@ class taskModel extends model
             $taskID = $this->dao->lastInsertID();
             $childTasks .= $taskID . ',';
             if($story) $this->story->setStage($task->story);
+
+            $this->executeHooks($taskID);
+
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
 
@@ -905,7 +919,8 @@ class taskModel extends model
         }
 
         /* Initialize tasks from the post data.*/
-        $oldTasks = $taskIDList ? $this->getByList($taskIDList) : array();
+        $extendFields = $this->getFlowExtendFields();
+        $oldTasks     = $taskIDList ? $this->getByList($taskIDList) : array();
         foreach($taskIDList as $taskID)
         {
             $oldTask = $oldTasks[$taskID];
@@ -933,6 +948,13 @@ class taskModel extends model
             $task->lastEditedBy   = $this->app->user->account;
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
+
+            foreach($extendFields as $extendField)
+            {
+                $task->{$extendField->field} = htmlspecialchars($this->post->{$extendField->field}[$i]);
+                $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
 
             if($data->consumeds[$taskID])
             {

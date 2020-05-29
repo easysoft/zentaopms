@@ -65,4 +65,53 @@ class model extends baseModel
 
         return $this->loadModel('workflowfield')->processSubStatus($module, $record);
     }
+
+    /**
+     * Get flow extend fields.
+     * 
+     * @access public
+     * @return array
+     */
+    public function getFlowExtendFields()
+    {
+        if(!isset($this->config->bizVersion)) return array();
+
+        return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName());
+    }
+
+    /**
+     * Check flow rule.
+     * 
+     * @param  object $field 
+     * @param  string $value 
+     * @access public
+     * @return bool|string
+     */
+    public function checkFlowRule($field, $value)
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        return $this->loadModel('flow')->checkRule($field, $value);
+    }
+
+    /**
+     * Execute Hooks 
+     * 
+     * @param  int    $objectID 
+     * @access public
+     * @return void
+     */
+    public function executeHooks($objectID)
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+
+        $action = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName);
+        if($action and $action->extensionType == 'none') return false;
+
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
+    }
 }
