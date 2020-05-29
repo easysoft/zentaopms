@@ -1280,9 +1280,13 @@ class repoModel extends model
                 $action->project    = $productsAndProjects[$taskID]['project'];
                 foreach($taskActions as $taskAction => $params)
                 {
+                    $_POST = array();
                     foreach($params as $field => $param) $this->post->set($field, $param);
+
                     if($taskAction == 'start')
                     {
+                        $task = $this->task->getById($taskID);
+                        $this->post->set('consumed', $this->post->consumed + $task->consumed);
                         $this->post->set('realStarted', date('Y-m-d'));
                         $changes = $this->task->start($taskID);
                         foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
@@ -1349,6 +1353,7 @@ class repoModel extends model
                 $action->project    = $productsAndProjects[$bugID]->project;
                 foreach($bugActions as $bugAction => $params)
                 {
+                    $_POST = array();
                     if($bugAction == 'resolve')
                     {
                         $this->post->set('resolvedBuild', 'trunk');
