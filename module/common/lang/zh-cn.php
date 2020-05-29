@@ -214,7 +214,7 @@ $lang->classify->menu = $lang->process->menu;
 $lang->reviewcl = new stdclass();
 $lang->reviewcl->menu = new stdclass();
 $lang->reviewcl->menu->browse   = array('link' => '检查清单|reviewcl|browse|category=PP', 'subModule' => 'reviewcl');
-$lang->reviewcl->menu->version  = array('link' => '版本号|reviewsetting|version|');
+$lang->reviewcl->menu->version  = array('link' => '版本规则|reviewsetting|version|');
 $lang->reviewcl->menu->reviewer = array('link' => '评审人|reviewsetting|reviewer|');
 
 $lang->reviewsetting = new stdclass();
