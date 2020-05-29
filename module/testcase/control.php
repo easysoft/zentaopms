@@ -1500,14 +1500,15 @@ class testcase extends control
     /**
      * Show import data
      *
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  int    $pagerID 
-     * @param  int    $maxImport 
+     * @param  int        $productID 
+     * @param  int        $branch 
+     * @param  int        $pagerID 
+     * @param  int        $maxImport 
+     * @param  string|int $insert     0 is covered old, 1 is insert new.
      * @access public
      * @return void
      */
-    public function showImport($productID, $branch = 0, $pagerID = 1, $maxImport = 0)
+    public function showImport($productID, $branch = 0, $pagerID = 1, $maxImport = 0, $insert = '')
     {
         $file    = $this->session->fileImport;
         $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
@@ -1523,7 +1524,7 @@ class testcase extends control
             }
             else
             {
-                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport"), 'parent'));
+                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
             }
         }
 
@@ -1706,20 +1707,21 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->position[] = $this->lang->testcase->showImport;
 
-        $this->view->stories   = $stories;
-        $this->view->modules   = $modules;
-        $this->view->cases     = $this->dao->select('id, module, story, stage, status, pri, type')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
-        $this->view->caseData  = $caseData;
-        $this->view->stepData  = $stepData;
-        $this->view->productID = $productID;
-        $this->view->branches  = $this->loadModel('branch')->getPairs($productID);
-        $this->view->isEndPage = $pagerID >= $allPager;
-        $this->view->allCount  = $allCount;
-        $this->view->allPager  = $allPager;
-        $this->view->pagerID   = $pagerID;
-        $this->view->branch    = $branch;
-        $this->view->product   = $this->products[$productID];
-        $this->view->maxImport = $maxImport;
+        $this->view->stories    = $stories;
+        $this->view->modules    = $modules;
+        $this->view->cases      = $this->dao->select('id, module, story, stage, status, pri, type')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $this->view->caseData   = $caseData;
+        $this->view->stepData   = $stepData;
+        $this->view->productID  = $productID;
+        $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->isEndPage  = $pagerID >= $allPager;
+        $this->view->allCount   = $allCount;
+        $this->view->allPager   = $allPager;
+        $this->view->pagerID    = $pagerID;
+        $this->view->branch     = $branch;
+        $this->view->product    = $this->products[$productID];
+        $this->view->maxImport  = $maxImport;
+        $this->view->dataInsert = $insert;
         $this->display();
     }
 

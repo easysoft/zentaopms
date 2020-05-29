@@ -100,13 +100,15 @@ $(function()
         <tr>
           <td colspan='9' class='text-center form-actions'>
             <?php
-            if(!$insert)
+            $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
+            if(!$insert and $dataInsert === '')
             {
-              echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$lang->save}</button>";
+              echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$submitText}</button>";
             }
             else
             {
-              echo html::submitButton($isEndPage ? $this->lang->save : $this->lang->file->saveAndNext);
+              echo html::submitButton($submitText);
+              if($dataInsert !== '') echo html::hidden('insert', $dataInsert);
               echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
               echo html::hidden('pagerID', $pagerID);
             }
@@ -117,7 +119,7 @@ $(function()
         </tr>
       </tfoot>
     </table>
-    <?php if(!$insert) include '../../common/view/noticeimport.html.php';?>
+    <?php if(!$insert and $dataInsert === '') include '../../common/view/noticeimport.html.php';?>
   </form>
 </div>
 <?php endif;?>

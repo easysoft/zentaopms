@@ -557,13 +557,14 @@ class caselib extends control
     /**
      * Show import case.
      *
-     * @param  int    $libID 
-     * @param  int    $pagerID 
-     * @param  int    $maxImport 
+     * @param  int        $libID 
+     * @param  int        $pagerID 
+     * @param  int        $maxImport 
+     * @param  string|int $insert  0 is covered old, 1 is insert new.
      * @access public
      * @return void
      */
-    public function showImport($libID, $pagerID = 1, $maxImport = 0)
+    public function showImport($libID, $pagerID = 1, $maxImport = 0, $insert = '')
     {
         $this->loadModel('testcase');
 
@@ -581,7 +582,7 @@ class caselib extends control
             }
             else
             {
-                die(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport"), 'parent'));
+                die(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
             }
         }
 
@@ -775,16 +776,17 @@ class caselib extends control
         $this->view->title      = $this->lang->caselib->common . $this->lang->colon . $this->lang->testcase->showImport;
         $this->view->position[] = $this->lang->testcase->showImport;
 
-        $this->view->modules   = $modules;
-        $this->view->cases     = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
-        $this->view->caseData  = $caseData;
-        $this->view->stepData  = $stepData;
-        $this->view->libID     = $libID;
-        $this->view->isEndPage = $pagerID >= $allPager;
-        $this->view->allCount  = $allCount;
-        $this->view->allPager  = $allPager;
-        $this->view->pagerID   = $pagerID;
-        $this->view->maxImport = $maxImport;
+        $this->view->modules    = $modules;
+        $this->view->cases      = $this->dao->select('id,module,stage,status,pri,type')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('deleted')->eq(0)->andWhere('product')->eq(0)->fetchAll('id');
+        $this->view->caseData   = $caseData;
+        $this->view->stepData   = $stepData;
+        $this->view->libID      = $libID;
+        $this->view->isEndPage  = $pagerID >= $allPager;
+        $this->view->allCount   = $allCount;
+        $this->view->allPager   = $allPager;
+        $this->view->pagerID    = $pagerID;
+        $this->view->maxImport  = $maxImport;
+        $this->view->dataInsert = $insert;
         $this->display();
     }
 }
