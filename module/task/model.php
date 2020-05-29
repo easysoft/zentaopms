@@ -1132,12 +1132,13 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
         if(!empty($oldTask->team))
         {
-            if($this->post->consumed < $oldTask->team[$this->app->user->account]->consumed) die(js::error($this->lang->task->error->consumedSmall));
+            if($this->post->consumed < $oldTask->team[$this->app->user->account]->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
         }
         else
         {
-            if($this->post->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+            if($this->post->consumed < $oldTask->consumed) dao::$errors['consumed'] = $this->lang->task->error->consumedSmall;
         }
+        if(dao::isError()) return false;
 
         $now  = helper::now();
         $task = fixer::input('post')
