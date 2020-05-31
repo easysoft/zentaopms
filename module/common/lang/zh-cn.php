@@ -1158,7 +1158,7 @@ $lang->workestimation->menu->budget   = array('link' => '费用估算|budget|sum
 $lang->durationestimation->menu = $lang->workestimation->menu;
 $lang->budget->menu = $lang->workestimation->menu;
 
-$lang->programplan->menu->gantt = '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt';
+$lang->programplan->menu->gantt = array('link' => '甘特图|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=gantt');
 $lang->programplan->menu->lists = '阶段列表|programplan|browse|programID={PROGRAM}&productID={PRODUCT}&type=lists';
 
 $lang->review->menu->review = array('link' => '基线评审列表|review|browse|program={PROGRAM}', 'subModule' => 'review');
