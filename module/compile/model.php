@@ -40,6 +40,7 @@ class compileModel extends model
             ->leftJoin(TABLE_JENKINS)->alias('t4')->on('t2.jkHost=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.job')->ne('0')
+            ->andWhere('t1.program')->ne($this->session->program)
             ->beginIF(!empty($jobID))->andWhere('t1.job')->eq($jobID)->fi()
             ->orderBy($orderBy)
             ->page($pager)

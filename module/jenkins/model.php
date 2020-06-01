@@ -39,6 +39,7 @@ class jenkinsModel extends model
     {
         return $this->dao->select('*')->from(TABLE_JENKINS)
             ->where('deleted')->eq('0')
+            ->andWhere('program')->eq($this->session->program)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -51,7 +52,10 @@ class jenkinsModel extends model
      */
     public function getPairs()
     {
-        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)->where('deleted')->eq('0')->orderBy('id')->fetchPairs('id', 'name');
+        $jenkins = $this->dao->select('id,name')->from(TABLE_JENKINS)
+            ->where('deleted')->eq('0')
+            ->andWhere('program')->eq($this->session->program)
+            ->orderBy('id')->fetchPairs('id', 'name');
         $jenkins = array('' => '') + $jenkins;
         return $jenkins;
     }

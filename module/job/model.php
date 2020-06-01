@@ -37,6 +37,7 @@ class jobModel extends model
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
             ->leftJoin(TABLE_JENKINS)->alias('t3')->on('t1.jkHost=t3.id')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.program')->eq($this->session->program)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
