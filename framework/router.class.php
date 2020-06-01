@@ -48,6 +48,14 @@ class router extends baseRouter
     public $rawParams;
 
     /**
+     * 原始URI 
+     * 
+     * @var string   
+     * @access public
+     */
+    public $rawURI;
+
+    /**
      * 标记是否是工作流
      * Whether the tag is a workflow
      *
@@ -422,6 +430,8 @@ class router extends baseRouter
      */
     public function setFlowURI($moduleName, $methodName)
     {
+        $this->rawURI = $this->URI;
+
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
 
@@ -493,6 +503,25 @@ class router extends baseRouter
         parent::parseGET();
 
         if($this->get->display == 'card') $this->viewType = 'xhtml';
+    }
+
+    /**
+     * 获取$URL。
+     * Get the $URL.
+     * 
+     * @param  bool $full  true, the URI contains the webRoot, else only hte URI.
+     * @access public
+     * @return string
+     */
+    public function getURI($full = false)
+    {
+        $URI = !empty($this->rawURI) ? $this->rawURI : $this->URI;
+        if($full and $this->config->requestType == 'PATH_INFO')
+        {
+            if($URI) return $this->config->webRoot . $URI . '.' . $this->viewType;
+            return $this->config->webRoot;
+        }
+        return $URI;
     }
 
     /**
