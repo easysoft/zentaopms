@@ -1203,7 +1203,14 @@ class testcase extends control
                 $case->stepExpect = '';
                 $case->real       = '';
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
-                $case->real = empty($result) ? '' : $result[0]['real'];
+
+                $case->real = '';
+                if(!empty($result))
+                {
+                    $firstStep  = reset($result);
+                    $case->real = $firstStep['real'];
+                }
+
                 if(isset($relatedSteps[$case->id]))
                 {
                     $i = $childId = 0;

@@ -303,7 +303,7 @@ class control extends baseControl
 
         $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
         $layouts = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
-        $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->where('deleted')->eq(0)->orderBy('id_desc')->fetchAll('id');
+        $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
 
         $requiredFields = '';
         $mustPostFields = '';
