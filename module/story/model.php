@@ -320,6 +320,7 @@ class storyModel extends model
             $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
             $story->keywords   = $stories->keywords[$i];
             $story->product    = $productID;
+            $story->program    = $this->session->program;
             $story->openedBy   = $this->app->user->account;
             $story->openedDate = $now;
             $story->version    = 1;
