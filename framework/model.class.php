@@ -109,7 +109,7 @@ class model extends baseModel
         $methodName = $this->app->getMethodName();
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName);
-        if($action and $action->extensionType == 'none') return false;
+        if(empty($action) or $action->extensionType == 'none') return false;
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
