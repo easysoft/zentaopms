@@ -753,7 +753,7 @@ class repo extends control
         }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
-        if(empty($commitCount))
+        if(empty($commitCount) or ($type == 'batch' and $commitCount < $this->config->repo->batchNum))
         {
             if(!$repo->synced)
             {
@@ -813,7 +813,7 @@ class repo extends control
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
-        if(empty($commitCount))
+        if(empty($commitCount) or $commitCount < $this->config->repo->batchNum)
         {
             if($branch) $this->repo->saveExistCommits4Branch($repo->id, $branch);
 
