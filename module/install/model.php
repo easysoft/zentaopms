@@ -462,6 +462,7 @@ class installModel extends model
             }
 
             $table = str_replace('__DELIMITER__', ';', $table);
+            $table = str_replace('__TABLE__', $this->config->db->name, $table);
 
             /* Skip sql that is note. */
             if(strpos($table, '--') === 0) continue;

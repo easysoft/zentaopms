@@ -1378,6 +1378,7 @@ class upgradeModel extends model
 
             $sql = str_replace('zt_', $this->config->db->prefix, $sql);
             $sql = str_replace('__DELIMITER__', ';', $sql);
+            $sql = str_replace('__TABLE__', $this->config->db->name, $sql);
             try
             {
                 $this->saveLogs($sql);
