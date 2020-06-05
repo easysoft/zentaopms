@@ -481,7 +481,7 @@ class storyModel extends model
                 $data->title   = $story->title;
                 $data->spec    = $story->spec;
                 $data->verify  = $story->verify;
-                $this->dao->insert(TABLE_STORYSPEC)->data($data)->exec();
+                $this->dao->replace(TABLE_STORYSPEC)->data($data)->exec();
             }
             else
             {
