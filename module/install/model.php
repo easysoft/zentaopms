@@ -461,6 +461,8 @@ class installModel extends model
                 $table = str_replace('--', '', $table);
             }
 
+            $table = str_replace('__DELIMITER__', ';', $table);
+
             /* Skip sql that is note. */
             if(strpos($table, '--') === 0) continue;
 
