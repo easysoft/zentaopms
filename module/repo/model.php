@@ -1374,6 +1374,23 @@ class repoModel extends model
         $action->action = $scm == 'svn' ? 'svncommited' : 'gitcommited';
         $changes = $this->createActionChanges($log, $repoRoot, $scm);
 
+        if($objects['stories'])
+        {
+            $productsAndProjects = $this->getTaskProductsAndProjects($objects['stories']);
+            foreach($objects['stories'] as $storyID)
+            {
+                $storyID = (int)$storyID;
+                if(!isset($productsAndProjects[$storyID])) continue;
+
+                $action->objectType = 'story';
+                $action->objectID   = $storyID;
+                $action->product    = $productsAndProjects[$storyID]['product'];
+                $action->project    = $productsAndProjects[$storyID]['project'];
+
+                $this->saveRecord($action, $changes);
+            }
+        }
+
         if($objects['tasks'])
         {
             $productsAndProjects = $this->getTaskProductsAndProjects($objects['tasks']);

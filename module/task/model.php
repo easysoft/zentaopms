@@ -117,19 +117,21 @@ class taskModel extends model
                     {
                         if($storyID) $testStoryIdList[$storyID] = $storyID;
                     }
-                    $testStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchPairs('id', 'title');
+                    $testStories = $this->dao->select('id,title,version')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
                     foreach($this->post->testStory as $i => $storyID)
                     {
                         if(!isset($testStories[$storyID])) continue;
 
-                        $task->parent     = $taskID;
-                        $task->story      = $storyID;
-                        $task->name       = $this->lang->task->lblTestStory . " #{$storyID} " . zget($testStories, $storyID);
-                        $task->pri        = $this->post->testPri[$i];
-                        $task->estStarted = $this->post->testEstStarted[$i];
-                        $task->deadline   = $this->post->testDeadline[$i];
-                        $task->assignedTo = $this->post->testAssignedTo[$i];
-                        $task->estimate   = $this->post->testEstimate[$i];
+                        $task->parent       = $taskID;
+                        $task->story        = $storyID;
+                        $task->storyVersion = $testStories[$storyID]->version;
+                        $task->name         = $this->lang->task->lblTestStory . " #{$storyID} " . $testStories[$storyID]->title;
+                        $task->pri          = $this->post->testPri[$i];
+                        $task->estStarted   = $this->post->testEstStarted[$i];
+                        $task->deadline     = $this->post->testDeadline[$i];
+                        $task->assignedTo   = $this->post->testAssignedTo[$i];
+                        $task->estimate     = $this->post->testEstimate[$i];
+                        $task->left         = $this->post->testEstimate[$i];
                         $this->dao->insert(TABLE_TASK)->data($task)->exec();
 
                         $childTaskID = $this->dao->lastInsertID();
