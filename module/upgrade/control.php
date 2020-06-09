@@ -23,8 +23,21 @@ class upgrade extends control
         $upgradeFile = $this->app->wwwRoot . 'upgrade.php';
         if(!file_exists($upgradeFile)) $this->locate($this->createLink('my', 'index'));
 
+        if(version_compare($this->config->installedVersion, '15', '<')) $this->locate(inlink('to15'));
         if(version_compare($this->config->installedVersion, '6.4', '<=')) $this->locate(inlink('license'));
         $this->locate(inlink('backup'));
+    }
+
+    /**
+     * Upgrade to 15 version.
+     * 
+     * @access public
+     * @return void
+     */
+    public function to15()
+    {
+        $this->view->title = $this->lang->upgrade->to15Tips;
+        $this->display();
     }
 
     /**
