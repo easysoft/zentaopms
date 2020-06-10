@@ -139,10 +139,130 @@ class upgrade extends control
         $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
         $this->upgrade->execute($fromVersion);
 
-        if(!$this->upgrade->isError()) $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+        if(!$this->upgrade->isError())
+        {
+            if(version_compare(str_replace('_', '.', $fromVersion), '15', '<')) $this->locate(inlink('mergeProgram'));
+            $this->locate(inlink('afterExec', "fromVersion=$fromVersion"));
+        }
 
         $this->view->result = 'fail';
         $this->view->errors = $this->upgrade->getError();
+        $this->display();
+    }
+
+    public function mergeProgram($type = 'productline')
+    {
+        if($_POST)
+        {
+        }
+
+        $this->view->type = $type;
+        if($type == 'productline')
+        {
+            $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->fetchAll('id');
+            $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('line')->in(array_keys($productlines))->andWhere('deleted')->eq(0)->fetchAll('id');
+            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=product'));
+
+            $noMergedProjects = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+                ->where('t1.program')->eq(0)
+                ->andWhere('t1.template')->eq('')
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.product')->in(array_keys($noMergedProducts))
+                ->fetchAll('id');
+
+            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
+            foreach($projectProducts as $projectID => $products)
+            {
+                if(count($products) > 1) unset($noMergedProjects[$projectID]);
+            }
+
+            $lineGroups = array();
+            foreach($noMergedProducts as $product) $lineGroups[$product->line][$product->id] = $product;
+
+            $productGroups = array();
+            foreach($noMergedProjects as $project)
+            {
+                $projectProduct = zget($projectProducts, $project->id, array());
+                if(empty($projectProduct)) continue;
+
+                $productID = key($projectProduct);
+                $productGroups[$productID][$project->id] = $project;
+            }
+
+            $productlines;
+            $this->view->productlines  = $productlines;
+            $this->view->lineGroups    = $lineGroups;
+            $this->view->productGroups = $productGroups;
+        }
+        if($type == 'product')
+        {
+            $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetchAll('id');
+            if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=project'));
+
+            $noMergedProjects = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
+                ->where('t1.program')->eq(0)
+                ->andWhere('t1.template')->eq('')
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.product')->in(array_keys($noMergedProducts))
+                ->fetchAll('id');
+
+            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
+            foreach($projectProducts as $projectID => $products)
+            {
+                if(count($products) > 1) unset($noMergedProjects[$projectID]);
+            }
+
+            $productGroups = array();
+            foreach($noMergedProjects as $project)
+            {
+                $projectProduct = zget($projectProducts, $project->id, array());
+                if(empty($projectProduct)) continue;
+
+                $productID = key($projectProduct);
+                $productGroups[$productID][$project->id] = $project;
+            }
+            $this->view->noMergedProducts = $noMergedProducts;
+            $this->view->productGroups    = $productGroups;
+        }
+        if($type == 'project')
+        {
+            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
+            $projectProducts  = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
+            foreach($projectProducts as $projectID => $products) unset($noMergedProjects[$projectID]);
+
+            $this->view->noMergedProjects = $noMergedProjects;
+        }
+        if($type == 'moreLink')
+        {
+            $noMergedProjects = $this->dao->select('*')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('template')->eq('')->andWhere('deleted')->eq(0)->fetchAll('id');
+            $projectProducts  = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedProjects))->fetchGroup('project', 'product');
+
+            $productPairs = array();
+            foreach($projectProducts as $projectID => $products)
+            {
+                foreach($products as $productID => $data) $productPairs[$productID] = $productID;
+            }
+
+            $programes = $this->dao->select('t1.*,t2.id as productID')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.id=t2.program')
+                ->where('t2.id')->in($productPairs)
+                ->fetchAll('productID');
+
+            foreach($noMergedProjects as $projectID => $project)
+            {
+                $products = zget($projectProducts, $projectID, array());
+                foreach($projects as $productID => $data)
+                {
+                    $program = zget($programs, $productID, '');
+                    if($program) $project->programs[$program->id] = $program->name;
+                }
+            }
+
+            $this->view->noMergedProjects = $noMergedProjects;
+        }
+
         $this->display();
     }
 

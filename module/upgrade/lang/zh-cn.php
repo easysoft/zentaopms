@@ -47,6 +47,7 @@ $lang->upgrade->forbiddenExt  = '以下插件与新版本不兼容，已经自�
 $lang->upgrade->updateFile    = '需要更新附件信息。';
 $lang->upgrade->noticeSQL     = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
 $lang->upgrade->afterDeleted  = '以上文件未能删除， 删除后刷新！';
+$lang->upgrade->mergeProgram  = '数据归并';
 $lang->upgrade->to15Tips      = '禅道15版本升级提示';
 $lang->upgrade->to15Button    = '我已经做好备份，开始升级吧！';
 $lang->upgrade->to15Desc      = <<<EOD
@@ -72,5 +73,15 @@ $lang->upgrade->to15Desc      = <<<EOD
   </ol>
 </div>
 EOD;
+
+$lang->upgrade->line    = '产品线';
+$lang->upgrade->program = '项目名称';
+$lang->upgrade->product = $lang->productCommon;
+$lang->upgrade->project = $lang->projectCommon;
+
+$lang->upgrade->mergeByProductLine = "以产品线组织的产品和迭代：将整个产品线及其下面的产品和迭代归并到一个大项目中。";
+$lang->upgrade->mergeByProduct     = "以产品组织的迭代：可以选择多个产品及其下面的迭代归并到一个大项目中，也可以选择某一个产品将其下面所属的迭代归并到大项目中。";
+$lang->upgrade->mergeByProject     = "独立的迭代：可以选择若干迭代归并到一个大项目中，也可以独立归并。";
+$lang->upgrade->mergeByMoreLink    = "关联多个产品的迭代：选择这个迭代归属于哪一个产品。";
 
 include dirname(__FILE__) . '/version.php';
