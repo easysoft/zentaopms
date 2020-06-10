@@ -42,6 +42,7 @@
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
         <td title='<?php echo $users;?>'><?php echo $users;?></td>
         <td class='c-actions'>
+          <?php if($group->role != 'prgadmin'):?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
           <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
           <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
@@ -60,6 +61,15 @@
               echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
           }
           ?>
+          <?php else:?>
+          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', 'disabled');?>
+          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php $lang->group->managemember = $lang->group->manageMember;?>
+          <?php common::printIcon('group', 'managePgmAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
+          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', 'disabled');?>
+          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', 'disabled');?>
+          <?php echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";?>
+          <?php endif;?>
         </td>
       </tr>
       <?php endforeach;?>

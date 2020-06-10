@@ -261,6 +261,42 @@ class group extends control
     }
 
     /**
+     * Manage members of a group.
+     * 
+     * @param  int    $groupID 
+     * @param  int    $deptID
+     * @access public
+     * @return void
+     */
+    public function managePgmAdmin($groupID, $deptID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $this->group->updatePgmAdmin($groupID);
+            die(js::locate(inlink('managePgmAdmin', "group=$groupID"), 'parent'));
+        }
+        $group        = $this->group->getById($groupID);
+        $groupUsers   = $this->group->getUserPairs($groupID);
+        $userPrograms = $this->group->getUserPrograms($groupID);
+        $allUsers     = array('' => '') + $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
+
+        $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
+        $position[] = $group->name;
+        $position[] = $this->lang->group->manageMember;
+
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->allUsers     = $allUsers;
+        $this->view->group        = $group;
+        $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('program')->eq(0)->andWhere('deleted')->eq(0)->fetchPairs();
+        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManagePgmAdminLink'), $groupID);
+        $this->view->groupUsers   = $groupUsers;
+        $this->view->userPrograms = $userPrograms;
+
+        $this->display();
+    }
+
+    /**
      * Delete a group.
      * 
      * @param  int    $groupID 

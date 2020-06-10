@@ -6,3 +6,7 @@ ADD `budget` varchar(30) NOT NULL DEFAULT '0' AFTER `program`,
 ADD `budgetUnit` char(30) NOT NULL  DEFAULT 'yuan' AFTER `budget`,
 ADD `realStarted` date NOT NULL AFTER `end`,
 ADD `realFinished` date NOT NULL AFTER `realStarted`;
+
+INSERT INTO `zt_group` (`name`, `role`, `desc`, `acl`, `developer`) VALUES ('项目管理员', 'prgadmin', '项目管理员可以维护项目的权限', NULL, '1');
+
+ALTER TABLE `zt_usergroup` ADD `program` text NOT NULL;

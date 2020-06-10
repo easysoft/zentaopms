@@ -891,14 +891,15 @@ $lang->dept->methodOrder[25] = 'delete';
 
 /* Group. */
 $lang->resource->group = new stdclass();
-$lang->resource->group->browse       = 'browse';
-$lang->resource->group->create       = 'create';
-$lang->resource->group->edit         = 'edit';
-$lang->resource->group->copy         = 'copy';
-$lang->resource->group->delete       = 'delete';
-$lang->resource->group->manageView   = 'manageView';
-$lang->resource->group->managePriv   = 'managePriv';
-$lang->resource->group->manageMember = 'manageMember';
+$lang->resource->group->browse         = 'browse';
+$lang->resource->group->create         = 'create';
+$lang->resource->group->edit           = 'edit';
+$lang->resource->group->copy           = 'copy';
+$lang->resource->group->delete         = 'delete';
+$lang->resource->group->manageView     = 'manageView';
+$lang->resource->group->managePriv     = 'managePriv';
+$lang->resource->group->manageMember   = 'manageMember';
+$lang->resource->group->managePgmAdmin = 'managePgmAdmin';
 
 $lang->group->methodOrder[5]  = 'browse';
 $lang->group->methodOrder[10] = 'create';
@@ -907,6 +908,7 @@ $lang->group->methodOrder[20] = 'copy';
 $lang->group->methodOrder[25] = 'delete';
 $lang->group->methodOrder[30] = 'managePriv';
 $lang->group->methodOrder[35] = 'manageMember';
+$lang->group->methodOrder[40] = 'managePgmAdmin';
 
 /* User. */
 $lang->resource->user = new stdclass();

@@ -233,6 +233,19 @@ class deptModel extends model
     }
 
     /**
+     * Create the group manage program admin link.
+     * 
+     * @param  int    $dept 
+     * @param  int    $groupID
+     * @access public
+     * @return string 
+     */
+    public function createManagePgmAdminLink($dept, $groupID)
+    {
+        return html::a(helper::createLink('group', 'managePgmAdmin', "groupID=$groupID&deptID={$dept->id}"), $dept->name, '_self', "id='dept{$dept->id}'");
+    }
+
+    /**
      * Get sons of a department.
      * 
      * @param  int    $deptID 
